@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="{{ app.getLocale()|replace({'_':'-'}) }}">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
+	{% block head %}
+	<link rel="stylesheet" href="{{asset('css/app.css')}}?v=1.0.0" />
+	<title>{% block title %}Laravel{% endblock %}</title>
+	{% endblock %}
+</head>
+
+<body>
+	<div id="content"> {% block content %}{% endblock %}
+	</div>
+	<div id="footer">
+		{% block footer %}
+		&copy; Copyright 2011 by
+		<a href="http://domain.invalid/">you</a>.
+		{% endblock %}
+		
+	</div>
+</body>
+
+</html>
