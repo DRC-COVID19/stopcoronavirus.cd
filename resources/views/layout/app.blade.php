@@ -33,7 +33,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class=" py-2 App-Header--notice">
             <div class="container">
                 <p class="text-white m-0 text-right">
-                    Rester à la maison
+                    Restez à la maison
                 </p>
             </div>
         </div>
