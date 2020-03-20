@@ -1,0 +1,22 @@
+.PreventativeMeasure--Wrapper {
+    .PreventativeMeasure--Item {
+        .PreventativeMeasure--Item__title {
+            font-weight: 400;
+        }
+        .PreventativeMeasure--Item__image {
+        }
+        .PreventativeMeasure--Item_image_placeholder {
+            width: 100%;
+            height: 235px;
+            display: block;
+            background-color: #f1f1f1;
+        }
+    }
+}
+.OfficialMeasures--Wrapper {
+    article {
+        ol {
+            padding-left: 2rem;
+        }
+    }
+}
