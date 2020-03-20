@@ -27,6 +27,7 @@ class PostController extends AdminController
     {
         $grid = new Grid(new Post());
 
+        $grid->column('image_path', __('#'))->image('', 50, 50);
         $grid->column('title', __('Title'));
         $grid->column('category_id', __('Category'))->display(function ($category_id) {
             $category = Category::find($category_id);
@@ -72,6 +73,7 @@ class PostController extends AdminController
         $form->text('title', __('Title'));
         $form->textarea('content', __('Content'));
         $form->text('slug', __('Slug'));
+        $form->image('image_path', __("Illustration image"));
         $form->select('category_id', __('Category'))->options(function () {
             return Category::pluck('name', 'id');
         });
