@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
+        "orangehill/iseed": "^2.6",
         "rcrowe/twigbridge": "^0.11.3"
     },
     "require-dev": {
