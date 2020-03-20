@@ -12,6 +12,18 @@
   font-weight: bold;
 }
 
+@media screen and (max-width: 575px) {
+  .App-Header .App-Header--navbar a {
+    display: block;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .display-4 {
+    font-size: 2.5rem;
+  }
+}
+
 .PreventativeMeasure--Wrapper .PreventativeMeasure--Item .PreventativeMeasure--Item__title {
   font-weight: 400;
 }

@@ -12,5 +12,19 @@
                 font-weight: bold;
             }
         }
+
+        @media screen and (max-width: 575px) {
+            a {
+                display: block;
+            }
+        }
+    }
+}
+
+.display-4 {
+    @media screen and (max-width: 575px) {
+        & {
+            font-size: 2.5rem;
+        }
     }
 }

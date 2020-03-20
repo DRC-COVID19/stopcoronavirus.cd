@@ -7,30 +7,21 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title> Stop Coronavirus COVID-19 RDC
-    </title>
-
+    <title> Stop Coronavirus COVID-19 RDC</title>
     <!-- Scripts -->
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/rs.css">
     <link rel="stylesheet" href="css/rs.color.css">
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,600" rel="stylesheet">
-
-    <link href="https://fonts.googleapis.com/css?family=Rubik:400,900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css?family=Rubik:400,700,900&display=swap" rel="stylesheet">
     <link rel="icon" href="img/logo2.png"/>
-
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style type="text/css">
-
-    h1, h2, h3, h4, h5, h6, *{font-family: 'Rubik', sans-serif}
-
+        h1, h2, h3, h4, h5, h6, *{font-family: 'Rubik', sans-serif}
     </style>
 </head>
 <body>
@@ -43,7 +34,7 @@
             </div>
         </div>
 
-        <div class="pt-3 px-5">
+        <div class="pt-3">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-5">
@@ -54,11 +45,10 @@
                         </div>
                     </div>
                     <div class="col-lg-7">
-                        <div class="d-flex flex-row justify-content-end mb-3 App-Header--navbar">
-                            <a href="{{route('preventativeMeasures')}}" class="px-2">Mesures de protection</a>
-                            <a href="{{route('officialMeasure')}}" class="px-2">Mesures Officielles</a>
-                            <a href="{{route('home')}}" class="px-2">Alertes SMS</a>
-                            <a href="{{route('stereotypes')}}" class="px-2">Idées reçues</a>
+                        <div class="d-flex flex-md-row flex-column justify-content-end mb-3 App-Header--navbar">
+                            <a href="{{route('preventativeMeasures')}}" class="px-md-2">Mesures de protection</a>
+                            <a href="{{route('officialMeasure')}}" class="px-md-2">Mesures Officielles</a>
+                            <a href="{{route('stereotypes')}}" class="px-md-2">Idées reçues</a>
                         </div>
                     </div>
                 </div>

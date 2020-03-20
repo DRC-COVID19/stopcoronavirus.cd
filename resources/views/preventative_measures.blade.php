@@ -2,10 +2,20 @@
 @section('content')
 <div class="jumbotron">
     <div class="container">
-    <h1 class="display-4">
+    <h1>
         Mesures de protection essentielles contre le nouveau coronavirus
     </h1>
   </div>
+</div>
+<div class="container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{route('home')}}">Accueil</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                 Mesures de protection essentielles contre le nouveau coronavirus
+            </li>
+        </ol>
+    </nav>
 </div>
 <div class="container">
     <div class="row">
@@ -31,6 +41,9 @@
                     <h4 class="mb-4 PreventativeMeasure--Item__title">
                         {{$preventativeMeasure->title}}
                     </h4>
+                    <p>
+                        <?php echo $preventativeMeasure->content; ?>
+                    </p>
                 </div>
             </div>
         @endforeach

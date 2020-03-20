@@ -3,10 +3,16 @@
 
 <div class="jumbotron">
     <div class="container">
-    <h1 class="display-4">Stop Coronavirus COVID-19 RDC
-    </h1>
-    <p class="lead w-50">Site officiel où vous trouverez des informations et des conseils concernant la maladie à coronavirus 2019 (COVID-19) en RDC.</p>
+    <h1>Stop Coronavirus COVID-19 RDC</h1>
+    <p class="lead">Site officiel où vous trouverez des informations et des conseils concernant la maladie à coronavirus 2019 (COVID-19) en RDC.</p>
   </div>
+</div>
+<div class="container mb-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">Accueil</li>
+        </ol>
+    </nav>
 </div>
 
     <div class="container mb-5">
@@ -31,6 +37,9 @@
                         <h4 class="mb-4 PreventativeMeasure--Item__title">
                             {{$preventativeMeasure->title}}
                         </h4>
+                        <p>
+                            <?php echo $preventativeMeasure->content; ?>
+                        </p>
                     </div>
                 </div>
             @endforeach
