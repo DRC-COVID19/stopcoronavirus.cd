@@ -1,5 +1,8 @@
 <?php
 
+use App\Admin\Controllers\AlertController;
+use App\Admin\Controllers\CategoryController;
+use App\Admin\Controllers\PostController;
 use Illuminate\Routing\Router;
 
 Admin::routes();
@@ -11,5 +14,7 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('admin.home');
-
+    $router->resource('posts', "PostController");
+    $router->resource('alerts', "AlertController");
+    $router->resource('categories', "CategoryController");
 });

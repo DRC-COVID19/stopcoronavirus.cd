@@ -9,12 +9,15 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "cviebrock/eloquent-sluggable": "^7.0",
         "encore/laravel-admin": "^1.7",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
+        "laravel-admin-ext/summernote": "^1.0",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
+        "orangehill/iseed": "^2.6",
         "rcrowe/twigbridge": "^0.11.3"
     },
     "require-dev": {
