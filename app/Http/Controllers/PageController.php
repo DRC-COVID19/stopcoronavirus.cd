@@ -24,7 +24,7 @@ class PageController extends Controller
 
     public function preventativeMeasures()
     {
-        $preventativeMeasures = Post::where('category_id', 1)->limit(6)->get();
+        $preventativeMeasures = Post::where('category_id', 1)->limit(12)->get();
         return view('preventative_measures', compact('preventativeMeasures'));
     }
 
