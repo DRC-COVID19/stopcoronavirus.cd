@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Category;
 use App\Post;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -15,7 +16,7 @@ class PostController extends AdminController
      *
      * @var string
      */
-    protected $title = 'App\Post';
+    protected $title = 'Gestion des contenus';
 
     /**
      * Make a grid builder.
@@ -26,7 +27,12 @@ class PostController extends AdminController
     {
         $grid = new Grid(new Post());
 
-
+        $grid->column('title', __('Title'));
+        $grid->column('category_id', __('Category'))->display(function ($category_id) {
+            $category = Category::find($category_id);
+            return $category->name;
+        });
+        $grid->column('created_at', __('Created at'));
 
         return $grid;
     }
@@ -41,7 +47,15 @@ class PostController extends AdminController
     {
         $show = new Show(Post::findOrFail($id));
 
-
+        $show->field('title', __('Title'));
+        $show->field('content', __('Content'));
+        $show->field('slug', __('Slug'));
+        $show->field('category_id', __('Category id'))->display(function ($category_id) {
+            $category = Category::find($category_id);
+            return $category->name;
+        });
+        $show->field('created_at', __('Created at'));
+        $show->field('updated_at', __('Updated at'));
 
         return $show;
     }
@@ -55,7 +69,12 @@ class PostController extends AdminController
     {
         $form = new Form(new Post());
 
-
+        $form->text('title', __('Title'));
+        $form->textarea('content', __('Content'));
+        $form->text('slug', __('Slug'));
+        $form->select('category_id', __('Category'))->options(function () {
+            return Category::pluck('name', 'id');
+        });
 
         return $form;
     }

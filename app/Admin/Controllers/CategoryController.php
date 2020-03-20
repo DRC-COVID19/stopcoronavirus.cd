@@ -15,7 +15,7 @@ class CategoryController extends AdminController
      *
      * @var string
      */
-    protected $title = 'App\Category';
+    protected $title = 'Gestion des catégories';
 
     /**
      * Make a grid builder.
@@ -26,7 +26,8 @@ class CategoryController extends AdminController
     {
         $grid = new Grid(new Category());
 
-
+        $grid->column('name', __('Name'));
+        $grid->column('updated_at', __('Updated at'));
 
         return $grid;
     }
@@ -41,7 +42,12 @@ class CategoryController extends AdminController
     {
         $show = new Show(Category::findOrFail($id));
 
-
+        $show->field('id', __('Id'));
+        $show->field('name', __('Name'));
+        $show->field('icon', __('Icon'));
+        $show->field('slug', __('Slug'));
+        $show->field('created_at', __('Created at'));
+        $show->field('updated_at', __('Updated at'));
 
         return $show;
     }
@@ -55,7 +61,9 @@ class CategoryController extends AdminController
     {
         $form = new Form(new Category());
 
-
+        $form->text('name', __('Name'));
+        $form->text('icon', __('Icon'));
+        $form->text('slug', __('Slug'));
 
         return $form;
     }

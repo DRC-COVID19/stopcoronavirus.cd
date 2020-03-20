@@ -15,7 +15,7 @@ class AlertController extends AdminController
      *
      * @var string
      */
-    protected $title = 'App\Alert';
+    protected $title = 'Gestion des alertes';
 
     /**
      * Make a grid builder.
@@ -26,7 +26,9 @@ class AlertController extends AdminController
     {
         $grid = new Grid(new Alert());
 
-
+        $grid->column('title', __('Title'));
+        $grid->column('content', __('Content'));
+        $grid->column('created_at', __('Created at'));
 
         return $grid;
     }
@@ -41,7 +43,11 @@ class AlertController extends AdminController
     {
         $show = new Show(Alert::findOrFail($id));
 
-
+        $show->field('id', __('Id'));
+        $show->field('title', __('Title'));
+        $show->field('content', __('Content'));
+        $show->field('created_at', __('Created at'));
+        $show->field('updated_at', __('Updated at'));
 
         return $show;
     }
@@ -55,7 +61,8 @@ class AlertController extends AdminController
     {
         $form = new Form(new Alert());
 
-
+        $form->text('title', __('Title'));
+        $form->textarea('content', __('Content'));
 
         return $form;
     }
