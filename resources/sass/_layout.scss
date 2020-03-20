@@ -1,0 +1,16 @@
+.App-Header {
+    .App-Header--notice {
+        background-color: $success;
+    }
+    .App-Header--logo {
+    }
+
+    .App-Header--navbar {
+        a {
+            color: $dark;
+            &.active {
+                font-weight: bold;
+            }
+        }
+    }
+}

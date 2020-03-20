@@ -1,61 +1,8 @@
-// colors
-/*
-$body-bg: #fff;
-$body-color: rgba(24, 0, 39, 0.87);
-
-$inverse-bg: rgb(24, 0, 39);
-$inverse-color: rgba(255, 255, 255, 0.87);
-
-$footer-bg: #000117;
-$contact-form-bg: #1d1b25;
- */
-
 $primary: #ff5347;
-$secondary: $a0d0ff;
-//$primary-2: lighten($primary, 20%);
-
-/*
-$white: #fff;
-$black: #111;
-$yellow-light: #FFEF41;
-$yellow-dark: #F0DC00;
-$red-light: #FF1010;
-$red-dark: #EA0000;
-$green-light: #FF79B5;
-$green-dark: #0FAE2C;
-$blue-light: #00A9E7;
-$blue-dark: #0086B8;
-$orange-light: #FE9A42;
-$orange-dark: #FF7800;
-*/
-
+$secondary: #a0d0ff;
+$success: #00b065;
+$dark: #020000;
 
 // Typography
 $font-family-serif: serif;
 $font-family-sans-serif: "Helvetica", sans-serif;
-
-
-// border
-$border-radius: 0;
-$border-radius-lg: 0;
-$border-radius-sm: 0;
-
-// Inputs
-//$input-border: lighten($body-color, 40%);
-//$input-border-focus: lighten($primary, 25%);
-//$input-color-placeholder: lighten($body-color, 30%);
-
-
-// popover
-/*
-$popover-bg: lighten($body-bg, 4%);
-$popover-arrow-color: lighten($body-bg, 4%);
-*/
-
-
-// hr
-/*
-$hr-border-color: lighten($body-bg, 4%);
-$hr-border-width: 2px;
-
- */

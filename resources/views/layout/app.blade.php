@@ -34,27 +34,32 @@
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="w-100 py-2 bg-raspberry">
-            <div class="w80 mauto color-white">
-                Rester à la maison
+    <header class="App-Header">
+        <div class=" py-2 App-Header--notice">
+            <div class="container">
+                <p class="text-white m-0 text-right">
+                    Rester à la maison
+                </p>
             </div>
         </div>
 
-        <div id="header" class="w80 mauto pt-3 px-5">
-
-            <div class="row">
-                <div class="col-lg-5">
-                    <h3><a href="#" class="">STOP COVID-19 RDC
-                    </a></h3>
-                </div>
-                <div class="col-lg-7">
-                    <div class="d-flex flex-row bd-highlight mb-3">
-                        <a href="#" class="px-2">Mesures de protection</a>
-                        <a href="#" class="px-2">Mesures Officielles</a>
-                        <a href="#" class="px-2">Alertes SMS</a>
-                        <a href="#" class="px-2">Idées reçues</a>
+        <div class="pt-3 px-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="App-Header--logo">
+                        <a href="{{route('home')}}" class="">
+                            <img src="{{asset('img/logo.png')}}" class="img-fluid" alt="STOP COVID-19 RDC">
+                        </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="d-flex flex-row justify-content-end mb-3 App-Header--navbar">
+                            <a href="{{route('preventativeMeasures')}}" class="px-2">Mesures de protection</a>
+                            <a href="{{route('officialMeasure')}}" class="px-2">Mesures Officielles</a>
+                            <a href="{{route('home')}}" class="px-2">Alertes SMS</a>
+                            <a href="{{route('stereotypes')}}" class="px-2">Idées reçues</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -63,31 +68,14 @@
     </header>
 
     <main>
-
-  @yield('mainSection')
-
-    </>
-
-    <footer>
-
-        <div class="jumbotron">
-            <p class="lead">Envoyez un SMS avec le texte XXXXX au XXXX pour recevoir des alertes de mises à jour officielles.</p>
-        </div>
-
-        <div class="bg-dark">
-
+    @yield('content')
+    </main>
+    <footer class="">
+        <div class="mb-0 jumbotron">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-4"></div>
-                    <div class="col-lg-4"></div>
-                    <div class="col-lg-4"></div>
-                </div>
+                <p class="lead tect-center">Envoyez un SMS avec le texte XXXXX au XXXX pour recevoir des alertes de mises à jour officielles.</p>
             </div>
-
         </div>
-
     </footer>
-
 </body>
-
 </html>
