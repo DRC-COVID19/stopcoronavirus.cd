@@ -63,7 +63,7 @@
     <footer class="">
         <div class="mb-0 jumbotron">
             <div class="container">
-                <p class="lead tect-center">Envoyez un SMS avec le texte XXXXX au XXXX pour recevoir des alertes de mises à jour officielles.</p>
+            <img src="{{asset('img/partners.png')}}" class="img-fluid" alt="Partenaires">
             </div>
         </div>
     </footer>
