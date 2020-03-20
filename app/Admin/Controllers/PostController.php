@@ -71,7 +71,7 @@ class PostController extends AdminController
         $form = new Form(new Post());
 
         $form->text('title', __('Title'));
-        $form->textarea('content', __('Content'));
+        $form->summernote('content', __('Content'));
         $form->text('slug', __('Slug'));
         $form->image('image_path', __("Illustration image"));
         $form->select('category_id', __('Category'))->options(function () {

@@ -393,5 +393,15 @@ return [
     | https://github.com/laravel-admin-extensions.
     |
     */
-    'extensions' => [],
+    'extensions' => [
+        'summernote' => [
+            //Set to false if you want to disable this extension
+            'enable' => true,
+            // Editor configuration
+            'config' => [
+                'lang'   => 'fr-FR',
+                'height' => 500,
+            ]
+        ]
+    ],
 ];
