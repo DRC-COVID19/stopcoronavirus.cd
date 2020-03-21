@@ -35,6 +35,10 @@
   background-color: #f1f1f1;
 }
 
+.PreventativeMeasure--Wrapper ul {
+  margin-left: 1.5rem !important;
+}
+
 .OfficialMeasures--Wrapper article ol {
   padding-left: 2rem;
 }
@@ -10919,5 +10923,20 @@ a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6;
   }
+}
+
+.App-Header .App-Header--navbar .active {
+  background: #0c2544;
+  color: #fff;
+}
+
+.App-Header .App-Header--navbar a {
+  color: #020000;
+  display: inline-block;
+  background: #a0d0ff;
+  padding: 0.5rem;
+  border-radius: 2px;
+  margin-left: 0.5rem;
+  text-decoration: none;
 }
 

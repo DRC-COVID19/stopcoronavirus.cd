@@ -31,7 +31,7 @@
     </div>
     <div class="row my-4 PreventativeMeasure--Wrapper">
         @foreach($preventativeMeasures as $preventativeMeasure)
-            <div class="col-lg-4">
+    <div class="col-lg-{{$preventativeMeasure->width}}">
                 <div class="PreventativeMeasure--Item">
                     @if(!is_null($preventativeMeasure->image_path))
                         <img src="{{asset('storage/' . $preventativeMeasure->image_path)}}" class="PreventativeMeasure--Item__image img-fluid" alt="">

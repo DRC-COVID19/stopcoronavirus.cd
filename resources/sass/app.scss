@@ -1,5 +1,22 @@
 @import "variables";
 @import "layout";
 @import "preventativeMeasures";
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 //
+.App-Header {
+  .App-Header--navbar {
+    .active {
+        background: #0c2544;
+        color: #fff;
+      }
+    a {
+        color: #020000;
+        display: inline-block;
+        background: #a0d0ff;
+        padding: .5rem;
+        border-radius: 2px;
+        margin-left: .5rem;
+        text-decoration: none;
+    }
+  }
+}

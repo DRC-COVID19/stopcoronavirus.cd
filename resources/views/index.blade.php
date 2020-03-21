@@ -7,7 +7,7 @@
     <p class="lead">Site officiel où vous trouverez des informations et des conseils concernant la maladie à coronavirus 2019 (COVID-19) en RDC.</p>
   </div>
 </div>
-<div class="container mb-5">
+<div class="container">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">Accueil</li>
@@ -17,17 +17,25 @@
 
     <div class="container mb-5">
 
-        <div id="coronavirus">
-            <h3>
-                <b>Mesures de protection essentielles contre le nouveau coronavirus</b>
-            </h3>
-            <p>Tenez-vous au courant des dernières informations sur la flambée de COVID-19, disponibles sur le site Web de l’OMS et auprès des autorités de santé publique nationales et locales. La COVID-19 continue de toucher surtout la population de la Chine, même si des flambées sévissent dans d’autres pays. La plupart des personnes infectées présentent des symptômes bénins et guérissent, mais d’autres peuvent avoir une forme plus grave. Prenez soin de votre santé et protégez les autres en suivant les conseils ci-après :
-            </p>
+        <div class="row">
+            <div class="col-12">
+    
+                <div class="jumbotron">
+                    <div class="container">
+                        <h3>
+                            <b>Mesures de protection essentielles contre le nouveau coronavirus</b>
+                        </h3>
+                        <p class="lead">Tenez-vous au courant des dernières informations sur la flambée de COVID-19, disponibles sur le site Web de l’OMS et auprès des autorités de santé publique nationales et locales. La COVID-19 continue de toucher surtout la population de la Chine, même si des flambées sévissent dans d’autres pays. La plupart des personnes infectées présentent des symptômes bénins et guérissent, mais d’autres peuvent avoir une forme plus grave. Prenez soin de votre santé et protégez les autres en suivant les conseils ci-après :
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
+
 
         <div class="row my-4 PreventativeMeasure--Wrapper">
             @foreach($preventativeMeasures as $preventativeMeasure)
-                <div class="col-lg-4">
+        <div class="col-lg-{{$preventativeMeasure->width}}">
                     <div class="PreventativeMeasure--Item">
                         @if(!is_null($preventativeMeasure->image_path))
                             <img src="{{asset('storage/' . $preventativeMeasure->image_path)}}" class="PreventativeMeasure--Item__image img-fluid" alt="">
