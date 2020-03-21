@@ -15,7 +15,8 @@ class Post extends Model
         "image_path",
         "slug",
         "category_id",
-        'width'
+        'width',
+        'order'
     ];
 
     public function category()

@@ -26,8 +26,8 @@ class PostController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Post());
-
         $grid->column('image_path', __('#'))->image('', 50, 50);
+        $grid->column('order',__('Order'));
         $grid->column('title', __('Title'));
         $grid->column('category_id', __('Category'))->display(function ($category_id) {
             $category = Category::find($category_id);
@@ -50,7 +50,9 @@ class PostController extends AdminController
 
         $show->field('title', __('Title'));
         $show->field('content', __('Content'));
+        $show->field('order',__('Order'));
         $show->field('width',__('Width'));
+    
         $show->field('slug', __('Slug'));
         $show->field('category_id', __('Category id'))->display(function ($category_id) {
             $category = Category::find($category_id);
@@ -73,6 +75,7 @@ class PostController extends AdminController
 
         $form->text('title', __('Title'));
         $form->summernote('content', __('Content'));
+        $form->number('order',__('Order'));
         $form->number('width',__('Width'))->default(4)->rules(['max:12|min:1|required']);
         $form->text('slug', __('Slug'));
         $form->image('image_path', __("Illustration image"));
