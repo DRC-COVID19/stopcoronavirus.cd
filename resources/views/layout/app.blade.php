@@ -66,8 +66,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </main>
     <footer class="">
         <div class="mb-0 jumbotron">
-            <div class="container">
-            <img src="{{asset('img/partners.png')}}" class="img-fluid" alt="Partenaires">
+            <div class="container text-center">
+            <img src="{{asset('img/partners_small.png')}}" class="img-fluid" alt="Partenaires">
             </div>
         </div>
     </footer>
