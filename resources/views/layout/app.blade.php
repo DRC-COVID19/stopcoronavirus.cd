@@ -48,11 +48,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         </a>
                         </div>
                     </div>
-                    <div class="col-lg-7">
+                    <div class="col-lg-7 App-Header--navbar">
                         <div class="d-flex flex-md-row flex-column justify-content-end mb-3 App-Header--navbar">
-                            <a href="{{route('preventativeMeasures')}}" class="px-md-2">Mesures de protection</a>
-                            <a href="{{route('officialMeasure')}}" class="px-md-2">Mesures Officielles</a>
-                            <a href="{{route('stereotypes')}}" class="px-md-2">Idées reçues</a>
+                            <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">Mesures de protection</a>
+                            <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">Mesures Officielles</a>
+                            <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">Idées reçues</a>
                         </div>
                     </div>
                 </div>
