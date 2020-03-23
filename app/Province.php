@@ -12,6 +12,6 @@ class Province extends Model
 
     public function smsDiffusions()
     {
-        return $this->hasMany(SmsDiffusion::class);
+        return $this->belongsToMany(SmsDiffusion::class);
     }
 }

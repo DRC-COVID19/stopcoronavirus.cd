@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Database\Eloquent\Model;
 
 class SmsDiffusion extends Model
@@ -18,6 +19,11 @@ class SmsDiffusion extends Model
 
     public function provinces()
     {
-        return $this->hasMany(Province::class);
+        return $this->belongsToMany(Province::class);
+    }
+
+    public function viewers()
+    {
+        return $this->belongsToMany(Administrator::class);
     }
 }
