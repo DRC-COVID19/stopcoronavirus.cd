@@ -17,4 +17,6 @@ Route::group([
     $router->resource('posts', "PostController");
     $router->resource('alerts', "AlertController");
     $router->resource('categories', "CategoryController");
+    $router->resource('sms-diffusions', "SmsDiffusionController");
+    $router->resource('provinces', "ProvinceController");
 });

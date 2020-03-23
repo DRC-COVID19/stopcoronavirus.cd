@@ -137,6 +137,30 @@ class AdminMenuTableSeeder extends Seeder
                 'created_at' => '2020-03-20 15:45:03',
                 'updated_at' => '2020-03-20 15:45:16',
             ),
+            10 => 
+            array (
+                'id' => 11,
+                'parent_id' => 0,
+                'order' => 0,
+                'title' => 'Gestion des provinces',
+                'icon' => 'fa-bank',
+                'uri' => 'provinces',
+                'permission' => '*',
+                'created_at' => '2020-03-23 13:12:01',
+                'updated_at' => '2020-03-23 13:41:28',
+            ),
+            11 => 
+            array (
+                'id' => 12,
+                'parent_id' => 0,
+                'order' => 0,
+                'title' => 'Gestion des diffusions',
+                'icon' => 'fa-bars',
+                'uri' => 'sms-diffusions',
+                'permission' => '*',
+                'created_at' => '2020-03-23 13:12:41',
+                'updated_at' => '2020-03-23 13:12:41',
+            ),
         ));
         
         
