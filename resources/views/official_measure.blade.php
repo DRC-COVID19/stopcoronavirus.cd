@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', 'Directives prises par le Gouvernement')
 @section('content')
 <div class="jumbotron jumbotron-title">
     <div class="container">
