@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\AdminUserSmsDiffusion;
 use App\Province;
 use App\SmsDiffusion;
 use Encore\Admin\Controllers\AdminController;
@@ -41,6 +42,22 @@ class SmsDiffusionController extends AdminController
         return $grid;
     }
 
+
+    protected function adminViews($diffusion_id, $admin_id)
+    {
+        $adminUserSmsDiffusion = AdminUserSmsDiffusion::where('admin_user_id', $admin_id)->where('sms_diffusion_id', $diffusion_id)->get()->first();
+        if (is_null($adminUserSmsDiffusion)) {
+            $adminUserSmsDiffusion = AdminUserSmsDiffusion::create([
+                'admin_user_id' => $admin_id,
+                "sms_diffusion_id" => $diffusion_id,
+                "views" => 1
+            ]);
+        } else {
+            $adminUserSmsDiffusion->update([
+                "views" => $adminUserSmsDiffusion->views + 1
+            ]);
+        }
+    }
     /**
      * Make a show builder.
      *
@@ -49,7 +66,8 @@ class SmsDiffusionController extends AdminController
      */
     protected function detail($id)
     {
-        //TODO: Check user role here
+        $admin_id = auth('admin')->id();
+        $this->adminViews($id, $admin_id);
 
         $show = new Show(SmsDiffusion::findOrFail($id));
 

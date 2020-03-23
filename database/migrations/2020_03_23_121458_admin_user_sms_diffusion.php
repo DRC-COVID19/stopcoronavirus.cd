@@ -14,6 +14,7 @@ class AdminUserSmsDiffusion extends Migration
     public function up()
     {
         Schema::create('admin_user_sms_diffusion', function (Blueprint $table) {
+            $table->increments('id');
             $table->bigInteger('admin_user_id');
             $table->bigInteger('sms_diffusion_id');
             $table->integer('views')->default(0);
