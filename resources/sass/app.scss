@@ -1,41 +1,49 @@
 @import "variables";
-@import "layout";
-@import "preventativeMeasures";
 @import "~bootstrap/scss/bootstrap";
+@import "layout";
+@import "typography";
+@import "preventativeMeasures";
 //
 
 .App-Header {
-  .App-Header--navbar {
-    .active {
-      background: #a0d0ff;
-      font-weight: bold;
-      color: #0c2544;
+    .App-Header--navbar {
+        .active {
+            background: $secondary;
+            font-weight: bold;
+            color: $dark-blue;
+        }
+
+        a {
+            color: #020000;
+            display: inline-block;
+            background: $bg-gray;
+            padding: 0.5rem;
+            margin-left: 0.5rem;
+            text-decoration: none;
+
+            &:hover {
+                background: #a0d0ff;
+                color: #0c2544;
+            }
+
+            @media screen and (max-width: 767px) {
+                margin-bottom: 0.5rem;
+                border-radius: 0;
+            }
+            @media screen and (max-width: 575px) {
+                margin-top: 0.5rem;
+                display: block;
+            }
+        }
     }
-    a {
-      color: #020000;
-      display: inline-block;
-      background: #e9ecef;
-      padding: 0.5rem;
-      margin-left: 0.5rem;
-      text-decoration: none;
-      @media screen and (max-width: 767px) {
-        margin-bottom: 0.5rem;
-        border-radius: 0;
-      }
-      @media screen and (max-width: 575px) {
-        margin-top: 0.5rem;
-        display: block;
-      }
-    }
-  }
 }
 
 .jumbotron {
-  @media (min-width: 576px) {
-    padding: 4rem 2rem;
-  }
+    @media (min-width: 576px) {
+        padding: 4rem 2rem;
+    }
 }
 
 .jumbotron-title {
-  background-color: #a0d0ff;
+    background-color: #a0d0ff;
 }

@@ -1,0 +1,26 @@
+.lead {
+    line-height: 1.8rem;
+    font-weight: 300;
+}
+
+h1, h2, h3, h4 {
+    color: $dark-blue;
+}
+h1 {
+    font-weight: 300;
+}
+h2 {
+
+}
+h3 {
+    border-left: .8rem solid $primary;
+    padding-left: .5rem;
+
+}
+h4 {
+}
+
+ul {
+    padding-left: 0;
+}
+
