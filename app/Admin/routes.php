@@ -1,11 +1,13 @@
 <?php
 
 use App\Admin\Controllers\AlertController;
+use App\Admin\Controllers\UserController;
 use App\Admin\Controllers\CategoryController;
 use App\Admin\Controllers\PostController;
 use Illuminate\Routing\Router;
 
 Admin::routes();
+Route::resource('admin/auth/users', UserController::class)->middleware(config('admin.route.middleware'));
 
 Route::group([
     'prefix'        => config('admin.route.prefix'),
