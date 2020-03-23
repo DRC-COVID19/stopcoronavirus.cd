@@ -10926,17 +10926,27 @@ a.text-dark:focus {
 }
 
 .App-Header .App-Header--navbar .active {
-  background: #0c2544;
-  color: #fff;
+  background: #a0d0ff;
+  font-weight: bold;
+  color: #0c2544;
 }
 
 .App-Header .App-Header--navbar a {
   color: #020000;
   display: inline-block;
-  background: #a0d0ff;
+  background: #e9ecef;
   padding: 0.5rem;
-  border-radius: 2px;
   margin-left: 0.5rem;
   text-decoration: none;
+}
+
+@media (min-width: 576px) {
+  .jumbotron {
+    padding: 4rem 2rem;
+  }
+}
+
+.jumbotron-title {
+  background-color: #a0d0ff;
 }
 
