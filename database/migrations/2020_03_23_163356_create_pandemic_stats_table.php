@@ -17,6 +17,7 @@ class CreatePandemicStatsTable extends Migration
             $table->id();
             $table->string('label');
             $table->integer('value')->default(0);
+            $table->dateTime('last_update');
             $table->timestamps();
         });
     }

@@ -19,4 +19,5 @@ Route::group([
     $router->resource('categories', "CategoryController");
     $router->resource('sms-diffusions', "SmsDiffusionController");
     $router->resource('provinces', "ProvinceController");
+    $router->resource('pandemic-stats', "PandemicStatController");
 });
