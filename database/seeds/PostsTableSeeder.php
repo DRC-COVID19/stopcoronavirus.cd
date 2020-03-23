@@ -25,8 +25,10 @@ class PostsTableSeeder extends Seeder
                 'slug' => 'se-laver-frequemment-les-mains',
                 'category_id' => 1,
                 'created_at' => '2020-03-20 15:57:31',
-                'updated_at' => '2020-03-20 19:42:45',
-                'image_path' => 'images/d158964504dc61b6e8129d22628bc43f.jpg',
+                'updated_at' => '2020-03-20 20:42:23',
+                'image_path' => 'images/laver-les-mains.jpg',
+                'width' => 4,
+                'order' => 0,
             ),
             1 => 
             array (
@@ -39,8 +41,10 @@ Maintenir une distance d’au moins 1 mètre avec les autres personnes, en parti
                 'slug' => 'eviter-les-contacts-proches',
                 'category_id' => 1,
                 'created_at' => '2020-03-20 15:58:59',
-                'updated_at' => '2020-03-20 19:44:22',
-                'image_path' => NULL,
+                'updated_at' => '2020-03-20 20:42:48',
+                'image_path' => 'images/distance-1m.jpg',
+                'width' => 4,
+                'order' => 0,
             ),
             2 => 
             array (
@@ -50,8 +54,10 @@ Maintenir une distance d’au moins 1 mètre avec les autres personnes, en parti
                 'slug' => 'eviter-de-se-toucher-les-yeux-le-nez-et-la-bouche',
                 'category_id' => 1,
                 'created_at' => '2020-03-20 15:59:26',
-                'updated_at' => '2020-03-20 19:44:39',
-                'image_path' => NULL,
+                'updated_at' => '2020-03-20 20:43:06',
+                'image_path' => 'images/ne-pas-se-toucher.jpg',
+                'width' => 4,
+                'order' => 0,
             ),
             3 => 
             array (
@@ -59,12 +65,14 @@ Maintenir une distance d’au moins 1 mètre avec les autres personnes, en parti
                 'title' => 'Mesures prises par le Gouvernement 18 mars 2020',
                 'content' => '<p>
 
-Suite à son adresse à la nation de ce 18 mars 2020, voici les décisions prises ce mercredi 18 mars 2020 par le Chef de l’État Son Excellence Monsieur Félix-Antoine Tshisekedi Tshilombo, au sujet de l’épidémie au Coronavirus-COVID-19.</p><ol><li>De suspendre, jusqu’à nouvel ordre, dès ce vendredi 20 mars 2020, tous les vols en provenance des pays à risque et des pays de transit. Seuls les avions et les navires cargos et autres moyens de transport frets seront autorisés à accéder au territoire national et leurs personnels soumis aux contrôles ;</li><li>De reporter les voyages à destination de la République Démocratique du Congo de tous les passagers résidant dans les pays à risque jusqu’à nouvel </li><li>D’imposer à tous les passagers, à leur arrivée aux frontières nationales, de remplir une fiche de renseignements et de se soumettre, sans exception, à l’obligation de lavage des mains et du prélèvement de la température ;</li><li>D’imposer une mise en quarantaine de 14 jours maximum à toute personne suspectée à l’issue du test de température, pour un examen approfondi et au besoin d’interner, dans les hôpitaux prévus à cet effet, les personnes qui seront testées positives ;</li><li>De doter tous les postes d’entrée maritime, fluviale, lacustre et terrestre du territoire national du même dispositif de surveillance pour renforcer le contrôle des passagers en provenance de l’étranger ;</li><li>De soumettre systématiquement les personnes en partance de Kinshasa vers les différentes Provinces de notre pays aux mesures de contrôle dans le but d’éviter la propagation de cette pandémie sur le reste de notre pays.</li></ol><p><b><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">S’agissant des rassemblements, j’ai décidé :</span></b></p><ol><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">D’interdire tous rassemblements, réunions, célébrations, de plus de 20 personnes sur les lieux publics en dehors du domicile familial ;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">De la fermeture des écoles, des universités, des instituts supérieurs officiels et privés sur l’ensemble du territoire national à dater de ce jeudi 19 mars 2020 pour une durée de 4 semaines ;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">De suspendre tous les cultes pour une période de 4 semaines à compter de ce jeudi 19 mars 2020 ;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">De suspendre les activités sportives dans les stades et autres lieux de regroupement sportif jusqu’à nouvel </span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">D’interdire, toujours jusqu’à nouvel ordre, l’ouverture des discothèques, bars, cafés, terrasses et restaurants ;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">D’interdire, l’organisation des deuils dans les salles et les domiciles. Les dépouilles mortelles seront conduites directement de la morgue jusqu’au lieu d’inhumation et en nombre restreint d\'accompagnateurs;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">De prendre en charge aux frais du Gouvernement tous les cas testés positifs sur l’ensemble du territoire.<br><br></span><b><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e"></span></b></li></ol>',
+Suite à son adresse à la nation de ce 18 mars 2020, voici les décisions prises ce mercredi 18 mars 2020 par le Chef de l’État Son Excellence Monsieur Félix-Antoine Tshisekedi Tshilombo, au sujet de l’épidémie au Coronavirus-COVID-19.</p><h3>Mesures Générales<br></h3><ol><li>De suspendre, jusqu’à nouvel ordre, dès ce vendredi 20 mars 2020, tous les vols en provenance des pays à risque et des pays de transit. Seuls les avions et les navires cargos et autres moyens de transport frets seront autorisés à accéder au territoire national et leurs personnels soumis aux contrôles ;</li><li>De reporter les voyages à destination de la République Démocratique du Congo de tous les passagers résidant dans les pays à risque jusqu’à nouvel </li><li>D’imposer à tous les passagers, à leur arrivée aux frontières nationales, de remplir une fiche de renseignements et de se soumettre, sans exception, à l’obligation de lavage des mains et du prélèvement de la température ;</li><li>D’imposer une mise en quarantaine de 14 jours maximum à toute personne suspectée à l’issue du test de température, pour un examen approfondi et au besoin d’interner, dans les hôpitaux prévus à cet effet, les personnes qui seront testées positives ;</li><li>De doter tous les postes d’entrée maritime, fluviale, lacustre et terrestre du territoire national du même dispositif de surveillance pour renforcer le contrôle des passagers en provenance de l’étranger ;</li><li>De soumettre systématiquement les personnes en partance de Kinshasa vers les différentes Provinces de notre pays aux mesures de contrôle dans le but d’éviter la propagation de cette pandémie sur le reste de notre pays.</li></ol><h3> Mesures concernant les rassemblements</h3><p><b>Le Chef de l’État a décidé:</b><br></p><ol><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">D’interdire tous rassemblements, réunions, célébrations, de plus de 20 personnes sur les lieux publics en dehors du domicile familial ;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">De la fermeture des écoles, des universités, des instituts supérieurs officiels et privés sur l’ensemble du territoire national à dater de ce jeudi 19 mars 2020 pour une durée de 4 semaines ;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">De suspendre tous les cultes pour une période de 4 semaines à compter de ce jeudi 19 mars 2020 ;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">De suspendre les activités sportives dans les stades et autres lieux de regroupement sportif jusqu’à nouvel </span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">D’interdire, toujours jusqu’à nouvel ordre, l’ouverture des discothèques, bars, cafés, terrasses et restaurants ;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">D’interdire, l’organisation des deuils dans les salles et les domiciles. Les dépouilles mortelles seront conduites directement de la morgue jusqu’au lieu d’inhumation et en nombre restreint d\'accompagnateurs;</span></li><li><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e">De prendre en charge aux frais du Gouvernement tous les cas testés positifs sur l’ensemble du territoire.<br><br></span><b><span style="font-size: 11pt; font-family: Arial; color: rgb(0, 0, 0); background-color: transparent; font-style: normal; font-variant: normal; text-decoration: none; vertical-align: baseline; white-space: pre-wrap;" id="docs-internal-guid-953ca373-7fff-554b-2100-cfbd74310b2e"></span></b></li></ol>',
                 'slug' => 'mesures-prises-par-le-gouvernement-18-mars-2020',
                 'category_id' => 2,
                 'created_at' => '2020-03-20 18:45:26',
-                'updated_at' => '2020-03-20 18:45:26',
+                'updated_at' => '2020-03-23 16:25:19',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             4 => 
             array (
@@ -76,6 +84,8 @@ Suite à son adresse à la nation de ce 18 mars 2020, voici les décisions prise
                 'created_at' => '2020-03-20 18:53:44',
                 'updated_at' => '2020-03-20 19:00:30',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             5 => 
             array (
@@ -87,6 +97,8 @@ Suite à son adresse à la nation de ce 18 mars 2020, voici les décisions prise
                 'created_at' => '2020-03-20 18:54:33',
                 'updated_at' => '2020-03-20 18:54:33',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             6 => 
             array (
@@ -100,6 +112,8 @@ Suite à son adresse à la nation de ce 18 mars 2020, voici les décisions prise
                 'created_at' => '2020-03-20 18:55:09',
                 'updated_at' => '2020-03-20 19:00:48',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             7 => 
             array (
@@ -111,6 +125,8 @@ Suite à son adresse à la nation de ce 18 mars 2020, voici les décisions prise
                 'created_at' => '2020-03-20 19:45:27',
                 'updated_at' => '2020-03-20 19:45:27',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             8 => 
             array (
@@ -122,6 +138,8 @@ Suite à son adresse à la nation de ce 18 mars 2020, voici les décisions prise
                 'created_at' => '2020-03-20 19:46:00',
                 'updated_at' => '2020-03-20 19:46:00',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             9 => 
             array (
@@ -135,6 +153,8 @@ Suivez les conseils présentés ci-dessus.<br></li><li>Si vous commencez à vous
                 'created_at' => '2020-03-20 19:47:02',
                 'updated_at' => '2020-03-20 19:47:02',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             10 => 
             array (
@@ -148,6 +168,8 @@ Si vous êtes en bonne santé, vous ne devez utiliser un masque que si vous vous
                 'created_at' => '2020-03-20 19:47:45',
                 'updated_at' => '2020-03-20 19:47:45',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             11 => 
             array (
@@ -161,6 +183,8 @@ Avant de mettre un masque, se laver les mains avec une solution hydroalcoolique 
                 'created_at' => '2020-03-20 19:51:45',
                 'updated_at' => '2020-03-20 19:51:45',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             12 => 
             array (
@@ -172,6 +196,8 @@ Avant de mettre un masque, se laver les mains avec une solution hydroalcoolique 
                 'created_at' => '2020-03-20 20:05:15',
                 'updated_at' => '2020-03-20 20:05:15',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             13 => 
             array (
@@ -183,6 +209,8 @@ Avant de mettre un masque, se laver les mains avec une solution hydroalcoolique 
                 'created_at' => '2020-03-20 20:05:48',
                 'updated_at' => '2020-03-20 20:05:48',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             14 => 
             array (
@@ -196,6 +224,8 @@ Les lampes à UV ne doivent pas être utilisées pour se stériliser les mains o
                 'created_at' => '2020-03-20 20:06:33',
                 'updated_at' => '2020-03-20 20:06:33',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             15 => 
             array (
@@ -209,6 +239,8 @@ Les lampes à UV ne doivent pas être utilisées pour se stériliser les mains o
                 'created_at' => '2020-03-20 20:07:35',
                 'updated_at' => '2020-03-20 20:07:35',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             16 => 
             array (
@@ -220,6 +252,8 @@ Les lampes à UV ne doivent pas être utilisées pour se stériliser les mains o
                 'created_at' => '2020-03-20 20:08:04',
                 'updated_at' => '2020-03-20 20:08:04',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             17 => 
             array (
@@ -233,6 +267,8 @@ Non. Les vaccins contre la pneumonie, tels que le vaccin antipneumococcique et l
                 'created_at' => '2020-03-20 20:08:36',
                 'updated_at' => '2020-03-20 20:08:36',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             18 => 
             array (
@@ -246,6 +282,8 @@ Non. Rien ne prouve que le fait de se rincer régulièrement le nez avec une sol
                 'created_at' => '2020-03-20 20:09:05',
                 'updated_at' => '2020-03-20 20:09:05',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             19 => 
             array (
@@ -257,6 +295,8 @@ Non. Rien ne prouve que le fait de se rincer régulièrement le nez avec une sol
                 'created_at' => '2020-03-20 20:09:37',
                 'updated_at' => '2020-03-20 20:09:37',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             20 => 
             array (
@@ -268,6 +308,8 @@ Non. Rien ne prouve que le fait de se rincer régulièrement le nez avec une sol
                 'created_at' => '2020-03-20 20:10:04',
                 'updated_at' => '2020-03-20 20:10:04',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             21 => 
             array (
@@ -279,6 +321,8 @@ Non. Rien ne prouve que le fait de se rincer régulièrement le nez avec une sol
                 'created_at' => '2020-03-20 20:10:30',
                 'updated_at' => '2020-03-20 20:10:30',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             22 => 
             array (
@@ -292,6 +336,8 @@ Non, les antibiotiques n’agissent pas contre les virus, mais seulement contre 
                 'created_at' => '2020-03-20 20:11:01',
                 'updated_at' => '2020-03-20 20:11:01',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
             23 => 
             array (
@@ -303,6 +349,8 @@ Non, les antibiotiques n’agissent pas contre les virus, mais seulement contre 
                 'created_at' => '2020-03-20 20:11:30',
                 'updated_at' => '2020-03-20 20:11:30',
                 'image_path' => NULL,
+                'width' => 4,
+                'order' => 0,
             ),
         ));
         
