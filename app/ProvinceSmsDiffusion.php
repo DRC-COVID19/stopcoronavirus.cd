@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProvinceSmsDiffusion extends Model
 {
+    protected $table = "province_sms_diffusion";
     protected $fillable = [
         "province_id",
         "sms_diffusion_id"

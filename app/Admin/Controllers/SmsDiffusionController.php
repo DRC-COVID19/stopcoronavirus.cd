@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\Province;
 use App\SmsDiffusion;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
@@ -27,6 +28,12 @@ class SmsDiffusionController extends AdminController
         $grid = new Grid(new SmsDiffusion());
         $grid->column('status', __('Status'));
         $grid->column('content_fr', __('Content fr'));
+        $grid->column('provinces', __('Zone cibles'))->display(function ($provinces) {
+            $provinces = array_map(function ($role) {
+                return "<span class='label label-success'>{$role['name']}</span>";
+            }, $provinces);
+            return join(',', $provinces);
+        });
         $grid->column('date_diffusion', __('Date diffusion'));
         $grid->column('created_at', __('Date création'));
         $grid->column('updated_at', __('Date de mise à jour'));
@@ -74,6 +81,7 @@ class SmsDiffusionController extends AdminController
         $form->textarea('content_sw', __('Content (Swahili)'));
         $form->textarea('content_ts', __('Content (Tshiluba)'));
         $form->textarea('content_ki', __('Content (Kikongo)'));
+        $form->multipleSelect('provinces', __('Zones cibles'))->options(Province::all()->pluck('name', 'id'));
         $form->datetime('date_diffusion', __('Date diffusion'))->default(date('Y-m-d H:i:s'));
 
         return $form;
