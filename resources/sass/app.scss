@@ -6,17 +6,27 @@
 .App-Header {
   .App-Header--navbar {
     .active {
-        background: #0c2544;
-        color: #fff;
-      }
+      background: #a0d0ff;
+      font-weight: bold;
+      color: #0c2544;
+    }
     a {
-        color: #020000;
-        display: inline-block;
-        background: #a0d0ff;
-        padding: .5rem;
-        border-radius: 2px;
-        margin-left: .5rem;
-        text-decoration: none;
+      color: #020000;
+      display: inline-block;
+      background: #e9ecef;
+      padding: .5rem;
+      margin-left: .5rem;
+      text-decoration: none;
     }
   }
+}
+
+.jumbotron {
+  @media (min-width: 576px) {
+    padding: 4rem 2rem;
+  }
+}
+
+.jumbotron-title {
+  background-color: #a0d0ff;
 }
