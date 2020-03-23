@@ -33,8 +33,7 @@ class SmsChangeStatusMail extends Mailable
     {
         return $this
             ->subject("")
-            ->markdown(
-                'mails.smsChangeStatus.blade',
+            ->markdown('mails.smsChangeStatus',
                 ['smsDiffusion'=>$this->smsDiffusion]
             );
     }
