@@ -3,6 +3,7 @@
 @import "preventativeMeasures";
 @import "~bootstrap/scss/bootstrap";
 //
+
 .App-Header {
   .App-Header--navbar {
     .active {
@@ -14,9 +15,17 @@
       color: #020000;
       display: inline-block;
       background: #e9ecef;
-      padding: .5rem;
-      margin-left: .5rem;
+      padding: 0.5rem;
+      margin-left: 0.5rem;
       text-decoration: none;
+      @media screen and (max-width: 767px) {
+        margin-bottom: 0.5rem;
+        border-radius: 0;
+      }
+      @media screen and (max-width: 575px) {
+        margin-top: 0.5rem;
+        display: block;
+      }
     }
   }
 }

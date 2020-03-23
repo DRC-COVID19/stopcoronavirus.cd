@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', 'Mesures de protection contre le Coronavirus COVID-19')
 @section('content')
 <div class="jumbotron jumbotron-title">
     <div class="container">

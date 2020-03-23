@@ -3,11 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title> Stop Coronavirus COVID-19 RDC</title>
+    <meta property="og:title" content="Stop Coronavirus COVID-19 RDC - @yield('title')">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="http://www.stopcoronavirus.cd">
+    <meta property="og:image" content="http://www.stopcoronavirus.cd/img/og.jpg"/>
+    <title>Stop Coronavirus COVID-19 RDC - @yield('title')</title>
     <!-- icon -->
     <link rel="apple-touch-icon" sizes="57x57" href="{{asset('/apple-icon-57x57.png')}}">
 <link rel="apple-touch-icon" sizes="60x60" href="{{asset('/apple-icon-60x60.png')}}">
@@ -25,7 +27,7 @@
 <link rel="manifest" href="{{asset('/manifest.json')}}">
 <meta name="msapplication-TileColor" content="#ffffff">
 <meta name="msapplication-TileImage" content="{{asset('/ms-icon-144x144.png')}}">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#00b065">
 <!-- end icon -->
     <!-- Scripts -->
     <!-- Fonts -->
@@ -39,6 +41,14 @@
     <style type="text/css">
         h1, h2, h3, h4, h5, h6, *{font-family: 'Rubik', sans-serif}
     </style>
+
+     <!-- Google Tag Manager -->
+     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M82BXK9');</script>
+<!-- End Google Tag Manager -->
 </head>
 <body>
     <!-- Google Tag Manager (noscript) -->

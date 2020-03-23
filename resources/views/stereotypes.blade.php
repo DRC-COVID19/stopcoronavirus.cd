@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', 'En finir avec les idées reçues')
 @section('content')
 <div class="jumbotron jumbotron-title">
     <div class="container">

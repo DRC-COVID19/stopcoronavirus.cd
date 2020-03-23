@@ -24,6 +24,10 @@
   }
 }
 
+a {
+  overflow-wrap: break-word;
+}
+
 .PreventativeMeasure--Wrapper .PreventativeMeasure--Item .PreventativeMeasure--Item__title {
   font-weight: 400;
 }
@@ -10938,6 +10942,20 @@ a.text-dark:focus {
   padding: 0.5rem;
   margin-left: 0.5rem;
   text-decoration: none;
+}
+
+@media screen and (max-width: 767px) {
+  .App-Header .App-Header--navbar a {
+    margin-bottom: 0.5rem;
+    border-radius: 0;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .App-Header .App-Header--navbar a {
+    margin-top: 0.5rem;
+    display: block;
+  }
 }
 
 @media (min-width: 576px) {
