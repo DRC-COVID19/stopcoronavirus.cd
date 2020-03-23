@@ -35,7 +35,8 @@ class SmsDiffusionController extends AdminController
         $grid->column('date_diffusion', __('Date diffusion'));
         $grid->column('created_at', __('Date création'));
         $grid->column('updated_at', __('Date de mise à jour'));
-        if (Admin::user()->can('telco')) {
+
+        if (Admin::user()->isRole('telecom')) {
             $grid->model()->where('status', 'VALIDATED');
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
@@ -100,7 +101,7 @@ class SmsDiffusionController extends AdminController
                 $operators = DB::table('admin_users')
                     ->join('admin_user_permissions', 'admin_users.id', '=', 'admin_user_permissions.user_id')
                     ->join('admin_permissions', 'admin_permissions.id', 'permission_id')
-                    ->where('admin_permissions', 'telco')
+                    ->where('admin_permissions.name', 'telco')
                     ->get();
                 foreach ($operators as $value) {
                     Mail::to($value->email)->send(new SmsChangeStatusMail($form->model()));
