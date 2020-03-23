@@ -28,7 +28,6 @@ class CategoryController extends AdminController
 
         $grid->column('name', __('Name'));
         $grid->column('updated_at', __('Updated at'));
-
         return $grid;
     }
 
@@ -46,6 +45,7 @@ class CategoryController extends AdminController
         $show->field('name', __('Name'));
         $show->field('icon', __('Icon'));
         $show->field('slug', __('Slug'));
+        $show->field('description',__('Description'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -64,6 +64,7 @@ class CategoryController extends AdminController
         $form->text('name', __('Name'));
         $form->text('icon', __('Icon'));
         $form->text('slug', __('Slug'));
+        $form->summernote('description',__('Description'));
 
         return $form;
     }

@@ -11,12 +11,13 @@ class Category extends Model
     protected $fillable = [
         "name",
         "slug",
-        "icon"
+        "icon",
+        'description'
     ];
 
     public function articles()
     {
-        return $this->hasMany('App\Article');
+        return $this->hasMany(Post::class);
     }
 
     /**
