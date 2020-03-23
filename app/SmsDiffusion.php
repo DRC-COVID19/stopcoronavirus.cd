@@ -18,6 +18,6 @@ class SmsDiffusion extends Model
 
     public function provinces()
     {
-        return $this->hasMany("App\Province");
+        return $this->hasMany(Province::class);
     }
 }
