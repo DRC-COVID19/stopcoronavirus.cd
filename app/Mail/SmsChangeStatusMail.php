@@ -32,7 +32,7 @@ class SmsChangeStatusMail extends Mailable
     public function build()
     {
         return $this
-            ->subject("")
+            ->subject("[COVID-19] Nouveau SMS Validé par ANICiiS / Ministère de la Santé")
             ->markdown('mails.smsChangeStatus',
                 ['smsDiffusion'=>$this->smsDiffusion]
             );
