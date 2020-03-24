@@ -174,7 +174,7 @@ class AdminMenuTableSeeder extends Seeder
                 'updated_at' => '2020-03-23 13:12:41',
             ),
             array (
-                'id' => 13,
+                'id' => 14,
                 'parent_id' => 0,
                 'order' => 6,
                 'title' => 'Gestion des diffuesions sms',
