@@ -33,7 +33,7 @@ class AdminMenuTableSeeder extends Seeder
             array (
                 'id' => 2,
                 'parent_id' => 0,
-                'order' => 5,
+                'order' => 9,
                 'title' => 'Admin',
                 'icon' => 'fa-tasks',
                 'uri' => '',
@@ -129,7 +129,7 @@ class AdminMenuTableSeeder extends Seeder
             array (
                 'id' => 10,
                 'parent_id' => 0,
-                'order' => 4,
+                'order' => 7,
                 'title' => 'Gestion des catégories',
                 'icon' => 'fa-bars',
                 'uri' => 'categories',
@@ -141,7 +141,7 @@ class AdminMenuTableSeeder extends Seeder
             array (
                 'id' => 11,
                 'parent_id' => 0,
-                'order' => 0,
+                'order' => 8,
                 'title' => 'Gestion des provinces',
                 'icon' => 'fa-bank',
                 'uri' => 'provinces',
@@ -153,7 +153,7 @@ class AdminMenuTableSeeder extends Seeder
             array (
                 'id' => 12,
                 'parent_id' => 0,
-                'order' => 0,
+                'order' => 4,
                 'title' => 'Gestion des diffusions',
                 'icon' => 'fa-bars',
                 'uri' => 'sms-diffusions',
@@ -165,10 +165,21 @@ class AdminMenuTableSeeder extends Seeder
             array (
                 'id' => 13,
                 'parent_id' => 0,
-                'order' => 0,
+                'order' => 5,
                 'title' => 'Suivi de cas',
                 'icon' => 'fa-bars',
                 'uri' => 'pandemic-stats',
+                'permission' => '*',
+                'created_at' => '2020-03-23 13:12:41',
+                'updated_at' => '2020-03-23 13:12:41',
+            ),
+            array (
+                'id' => 13,
+                'parent_id' => 0,
+                'order' => 6,
+                'title' => 'Gestion des diffuesions sms',
+                'icon' => 'fa-bars',
+                'uri' => 'sms-diffusions',
                 'permission' => '*',
                 'created_at' => '2020-03-23 13:12:41',
                 'updated_at' => '2020-03-23 13:12:41',
