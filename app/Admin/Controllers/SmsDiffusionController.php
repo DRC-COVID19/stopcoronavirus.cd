@@ -11,10 +11,13 @@ use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Encore\Admin\Auth\Permission;
 
 class SmsDiffusionController extends AdminController
 {
+    
     /**
      * Title for current resource.
      *
@@ -29,6 +32,7 @@ class SmsDiffusionController extends AdminController
      */
     protected function grid()
     {
+
         $grid = new Grid(new SmsDiffusion());
         $grid->column('status', __('Status'));
         $grid->column('content_fr', __('Content fr'));
@@ -36,8 +40,9 @@ class SmsDiffusionController extends AdminController
         $grid->column('created_at', __('Date création'));
         $grid->column('updated_at', __('Date de mise à jour'));
 
-        if (Admin::user()->isRole('telecom')) {
+        if (!Admin::user()->isAdministrator() && Admin::user()->can('telco')) {
             $grid->model()->where('status', 'VALIDATED');
+            $grid->disableCreateButton();
             $grid->actions(function ($actions) {
                 $actions->disableDelete();
                 $actions->disableEdit();
@@ -54,7 +59,6 @@ class SmsDiffusionController extends AdminController
      */
     protected function detail($id)
     {
-        //TODO: Check user role here
 
         $show = new Show(SmsDiffusion::findOrFail($id));
 
@@ -68,6 +72,15 @@ class SmsDiffusionController extends AdminController
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
+        if (!Admin::user()->isAdministrator() && Admin::user()->can('telco')) {
+            $show->panel()
+            ->tools(function ($tools) {
+                $tools->disableEdit();
+                $tools->disableDelete();
+            });;
+        }
+        
+
         return $show;
     }
 
@@ -78,6 +91,7 @@ class SmsDiffusionController extends AdminController
      */
     protected function form()
     {
+
         $form = new Form(new SmsDiffusion());
         if (Admin::user()->can('validator_sms')) {
             $form->select('status', __('Status'))->options(["DRAFT" => "Draft", "VALIDATED" => "Validé"]);
@@ -93,18 +107,22 @@ class SmsDiffusionController extends AdminController
 
         $form->saving(function (Form $form) {
             if (Admin::user()->can('operator_sms') && is_null($form->status)) {
-                $form->status="DRAFT";
+                $form->status = "DRAFT";
             }
         });
         $form->saved(function (Form $form) {
             if (Admin::user()->can('validator_sms') && $form->model()->status == "VALIDATED") {
                 $operators = DB::table('admin_users')
-                    ->join('admin_user_permissions', 'admin_users.id', '=', 'admin_user_permissions.user_id')
-                    ->join('admin_permissions', 'admin_permissions.id', 'permission_id')
+                    ->join('admin_role_users', 'admin_users.id', '=', 'admin_role_users.user_id')
+                    ->join('admin_roles', 'admin_roles.id','=', 'admin_role_users.role_id')
+                    ->join('admin_role_permissions','admin_roles.id','=','admin_role_permissions.role_id')
+                    ->join('admin_permissions','admin_permissions.id','=','admin_role_permissions.permission_id')
                     ->where('admin_permissions.name', 'telco')
                     ->get();
                 foreach ($operators as $value) {
-                    Mail::to($value->email)->send(new SmsChangeStatusMail($form->model()));
+                    if (isset($value->email)) {
+                        Mail::to($value->email)->send(new SmsChangeStatusMail($form->model()));
+                    }
                 }
             }
         });

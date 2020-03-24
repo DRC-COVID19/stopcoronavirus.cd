@@ -18,19 +18,19 @@ class PermissionTableSeeder extends Seeder
                     'name' => 'operator_sms',
                     'slug' => 'operator_sms',
                     'http_method' => '',
-                    'http_path' => ''
+                    'http_path' => '/sms-diffusions*'
                 ],
                 [
                     'name' => 'validator_sms',
                     'slug' => 'validator_sms',
                     'http_method' => '',
-                    'http_path' => ''
+                    'http_path' => '/sms-diffusions*'
                 ],
                 [
                     'name' => 'telco',
                     'slug' => 'telco',
                     'http_method' => '',
-                    'http_path' => ''
+                    'http_path' => '/sms-diffusions*'
                 ]
             ]
         );
