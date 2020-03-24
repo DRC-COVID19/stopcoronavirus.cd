@@ -1,6 +1,16 @@
 .lead {
     line-height: 1.8rem;
     font-weight: 300;
+    .bold {
+        color: $dark-blue;
+    }
+}
+
+.bold {
+    font-weight: 700;
+}
+.bolder {
+    font-weight: 900;
 }
 
 h1, h2, h3, h4 {
@@ -10,12 +20,12 @@ h1 {
     font-weight: 300;
 }
 h2 {
-
+    border-left: .8rem solid $primary;
+    padding-left: .5rem !important;
+    font-weight: 300;
 }
 h3 {
-    border-left: .8rem solid $primary;
-    padding-left: .5rem;
-
+    font-weight: 300;
 }
 h4 {
 }

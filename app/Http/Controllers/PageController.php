@@ -11,13 +11,16 @@ use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
+    /**
+     * home
+     */
     public function index()
     {
         $alerts = Alert::orderBy('created_at', 'desc')->limit(5)->get();
-        $pandemicStats = DB::table('pandemic_stats')->selectRaw('SUM(confirmed) AS confirmed, SUM(sick) AS sick, SUM(seriously) AS seriously, SUM(healed) AS healed, SUM(dead) AS dead, SUM(imported) AS imported, SUM(local) AS local')->first();
-        $last = DB::table('pandemic_stats')->latest()->first();
-        $preventativeMeasures = Post::where('category_id', 1)->orderBy('order')->orderBy('title')->limit(6)->get();
-        return view('index', compact('alerts', 'preventativeMeasures', 'pandemicStats','last'));
+        $pandemicStats = PandemicStat::orderBy('last_update', 'DESC')->first();
+        $preventativeMeasures = Post::where('category_id', 1)->orderBy('order')->orderBy('title')->limit(3)->get();
+        $directives = Post::where('category_id', 2)->orderBy('order')->orderBy('title')->limit(1)->get();
+        return view('index', compact('alerts', 'preventativeMeasures', 'pandemicStats', 'directives'));
     }
 
 

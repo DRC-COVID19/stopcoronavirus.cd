@@ -22,7 +22,7 @@ class CreatePandemicStatsTable extends Migration
             $table->integer('dead')->nullable();
             $table->integer('imported')->nullable();
             $table->integer('local')->nullable();
-            $table->date('last_update');
+            $table->datetime('last_update');
             $table->timestamps();
         });
     }

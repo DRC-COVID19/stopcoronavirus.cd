@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+use App\PandemicStat;
+use App\Http\Resources\PandemicStat as PandemicStatResource;
+
+Route::get('/lastpandemicstat', function () {
+    return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->first());
+});

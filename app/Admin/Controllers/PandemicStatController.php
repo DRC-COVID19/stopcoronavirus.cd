@@ -77,7 +77,7 @@ class PandemicStatController extends AdminController
         $form->number('seriously',__('Grave'));
         $form->number('healed',__('Guéris'));
         $form->number('dead',__('Morts'));
-        $form->date('last_update', __('Dernière modification'))->rules(['required']);
+        $form->datetime('last_update', __('Dernière modification'))->rules(['required']);
         return $form;
     }
 }
