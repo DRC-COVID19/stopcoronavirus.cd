@@ -8,11 +8,10 @@
 .App-Header {
     .App-Header--navbar {
         .active {
-            background: $secondary;
+            background: $dark-blue-100;
             font-weight: bold;
-            color: $dark-blue;
+            color: white;
         }
-
         a {
             color: #020000;
             display: inline-block;
@@ -22,8 +21,8 @@
             text-decoration: none;
 
             &:hover {
-                background: #a0d0ff;
-                color: #0c2544;
+                background: $dark-blue-100;
+                color: white;
             }
 
             @media screen and (max-width: 767px) {
@@ -45,8 +44,12 @@
 }
 
 .jumbotron-title {
-    background-color: #a0d0ff;
+    background-color: $dark-blue-100;
     border-radius: unset;
+    color: white;
+    h1{
+        color: white;
+    }
 }
 .covid-case{
     

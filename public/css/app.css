@@ -10960,9 +10960,9 @@ ul {
 }
 
 .App-Header .App-Header--navbar .active {
-  background: #a0d0ff;
+  background: #0c1464;
   font-weight: bold;
-  color: #192a44;
+  color: white;
 }
 
 .App-Header .App-Header--navbar a {
@@ -10975,8 +10975,8 @@ ul {
 }
 
 .App-Header .App-Header--navbar a:hover {
-  background: #a0d0ff;
-  color: #0c2544;
+  background: #0c1464;
+  color: white;
 }
 
 @media screen and (max-width: 767px) {
@@ -11000,8 +11000,13 @@ ul {
 }
 
 .jumbotron-title {
-  background-color: #a0d0ff;
+  background-color: #0c1464;
   border-radius: unset;
+  color: white;
+}
+
+.jumbotron-title h1 {
+  color: white;
 }
 
 .covid-case {
