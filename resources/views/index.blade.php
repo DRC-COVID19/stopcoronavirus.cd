@@ -78,7 +78,7 @@
     </div>
     <div class="row">
         <div class="col-12 mb-5">
-            <em class="statistiques-footnote">Du fait de la difficulté de l’identification et de la confirmation biologique de l’ensemble des cas de COVID-19, les données présentées sous-estiment le nombre réel de cas.</em>
+            <em class="statistiques-footnote">Données officielles validées par le comité technique.</em>
         </div>
     </div>
 </div>
