@@ -122,7 +122,7 @@
         </div>
         <div class="PreventativeMeasure--Cta">
             <a href="{{route('preventativeMeasures')}}" class="btn btn-success">
-                Voir plus de mesures de protection
+                Voir le détail des mesures de protection
             </a>
         </div>
     </div>
