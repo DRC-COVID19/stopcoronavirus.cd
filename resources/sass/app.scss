@@ -6,8 +6,14 @@
 @import "statistiques";
 //
 
-.bg-darkgray {
+.footer-partners {
     background-color: $bg-darkgray;
+    font-size: .9rem;
+    line-height: 1.1rem;
+    color: rgba(0, 0, 0, .7);
+    a {
+        color: rgba(0, 0, 0, .7);
+    }
 }
 
 .App-Header {

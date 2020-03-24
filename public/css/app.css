@@ -10980,8 +10980,15 @@ ul {
   font-size: 0.9rem;
 }
 
-.bg-darkgray {
-  background-color: #ced0d3;
+.footer-partners {
+  background-color: #aeb9c4;
+  font-size: 0.9rem;
+  line-height: 1.1rem;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.footer-partners a {
+  color: rgba(0, 0, 0, 0.7);
 }
 
 .App-Header .App-Header--navbar .active {

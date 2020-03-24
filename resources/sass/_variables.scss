@@ -5,7 +5,7 @@ $dark: #020000;
 
 
 $bg-gray : #e9ecef;
-$bg-darkgray : #ced0d3;
+$bg-darkgray : darken($bg-gray, 20%);
 $dark-blue : #192a44;
 $dark-blue-100:#a0d0ff;
 // Typography
