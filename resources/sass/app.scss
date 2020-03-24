@@ -2,12 +2,13 @@
 @import "~bootstrap/scss/bootstrap";
 @import "layout";
 @import "typography";
+@import "btn";
 @import "preventativeMeasures";
 @import "statistiques";
 //
 
 .footer-partners {
-    background-color: $bg-darkgray;
+    background-color: $gray-500;
     font-size: .9rem;
     line-height: 1.1rem;
     color: rgba(0, 0, 0, .7);
@@ -20,11 +21,12 @@
     .App-Header--navbar {
         .active {
             background: $dark-blue-100;
-            font-weight: bold;
+            color: lighten($dark-blue-100, 70%);
+            font-weight: normal !important;
         }
         a {
-            color: #020000;
             display: inline-block;
+            color: $gray-900;
             background: $bg-gray;
             padding: 0.5rem;
             margin-left: 0.5rem;
@@ -32,6 +34,7 @@
 
             &:hover {
                 background: $dark-blue-100;
+                color: lighten($dark-blue-100, 70%);
             }
 
             @media screen and (max-width: 767px) {
@@ -54,8 +57,17 @@
 
 .jumbotron-title {
     background-color: $dark-blue-100;
+    color: rgba(255,255,255,0.85);
     border-radius: unset;
+    h1 {
+        color: lighten($dark-blue-100, 60%);
+    }
 }
+
+.card.bg-gray-200 {
+    background-color: $gray-200;
+}
+
 .covid-case{
     
     color: #fff;

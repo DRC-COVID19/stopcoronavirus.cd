@@ -4,7 +4,7 @@
     <div class="jumbotron jumbotron-title">
         <div class="container">
             <h1>Stop Coronavirus COVID-19 RDC</h1>
-            <p class="lead bold">Site officiel d'informations et de conseils</p>
+            <p class="lead">Site officiel d'informations et de conseils</p>
         </div>
     </div>
     <?php /*
@@ -26,7 +26,7 @@
             </div>
             <div class="row statistiques">
                 <div class="col-md-3 mb-3">
-                    <div class="card bg-secondary text-white">
+                    <div class="card bg-gray-200">
                         <div class="card-header">Confirmés</div>
                         <div class="card-body">
                             <h5 class="card-title">{{ $pandemicStats->confirmed }}</h5>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <div class="card bg-primary text-white">
+                    <div class="card bg-warning">
                         <div class="card-header">Actifs</div>
                         <div class="card-body">
                             <h5 class="card-title">
@@ -125,7 +125,7 @@
         <div class="row">
             <div class="col-12">
                 <h2 class="mt-5">
-                    Directives prises par le Gouvernement
+                    Dernières directives prises par le Gouvernement
                 </h2>
             </div>
         </div>
@@ -148,7 +148,7 @@
         </div>
         <div class="PreventativeMeasure--Cta text-center mt-3">
             <a href="{{route('officialMeasure')}}" class="btn btn-secondary p-4">
-                Voir le détail des directives du Gouvernement
+                Voir toutes les directives du Gouvernement
             </a>
         </div>
     </div>

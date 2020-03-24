@@ -1,12 +1,11 @@
-$primary: #fb6460;
-$secondary: #56c0f3;
+$primary: #eb1d25;
+$secondary: #1f3677;
 $success: #00b065;
 $dark: #020000;
 
 
 $bg-gray : #e9ecef;
-$bg-darkgray : darken($bg-gray, 20%);
-$dark-blue : #28345b;
+$dark-blue : darken($secondary, 10%);
 $dark-blue-100: $secondary;
 // Typography
 $font-family-serif: serif;
@@ -15,4 +14,4 @@ $font-family-sans-serif: "Helvetica", sans-serif;
 //jumbotron
 $jumbotron-bg: $bg-gray;
 
-$border-radius: 10px;
+$border-radius: 8px;

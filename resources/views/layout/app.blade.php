@@ -119,15 +119,17 @@
             <img src="{{asset('img/partners_small.png')}}" class="img-fluid" alt="Partenaires">
         </div>
     </div>
-    <div class="pt-5 footer-partners">
+    <div class="footer-partners">
         <div class="container">
             <div class="row align-items-end">
-                <div class="col-lg-8 col-md-12 col-lg-offset-2 col-md-offset-0">
+                <div class="col-lg-8 col-md-12 col-lg-offset-2 col-md-offset-0 pt-5 pb-2">
                     <p>
-                        avec l'appui d'Internews au travers du projet Médias2I de l'Union Européenne et du programme MSDA financé par l'USAID avec un financement complémentaire de la Coopération Suédoise<br>
-                        <img src="img/Logo_UE_MSDA_USAID.png" class="img-fluid" alt="Logo UE, USAID, Sverige, fhi360, Internews">
+                        avec l'appui d'Internews au travers du projet Médias2I de l'Union Européenne et du programme MSDA financé par l'USAID avec un financement complémentaire de la Coopération Suédoise
                     </p>
                     <p>
+                        <img src="img/Logo_UE_MSDA_USAID.png" class="img-fluid" alt="Logo UE, USAID, Sverige, fhi360, Internews">
+                    </pc>
+                    <p class="pt-4">
                         Ce site est offert par
                         <a href="https://www.kinshasadigital.com" target="_blank">Kinshasa Digital</a>
                     </p>
