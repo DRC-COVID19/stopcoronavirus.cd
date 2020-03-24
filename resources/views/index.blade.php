@@ -16,60 +16,70 @@
     </nav>
 </div>
  */ ?>
-    
-    <div class="container">
-        <div class="row">
-            <div class="cols-12 col-md-3 text-center covid-case">
-                <div class="background-1">
-                <h3>{{ $pandemicStats->confirmed }}</h3>
-                <span>Cas confirmé(s)</span>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>Situation actuelle en RDC</h2>
+            <p>Mise à jour le {{ \Carbon\Carbon::parse($last->created_at)->format('d-m-y H:i:s')}}</p>
+        </div>
+    </div>
+    <div class="row statistiques">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-secondary text-white">
+                <div class="card-header">Confirmé</div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ $pandemicStats->confirmed }}</h5>
                 </div>
             </div>
-            <div class="cols-12 col-md-3 text-center covid-case">
-                <div class="background-2">
-                <h3>
-                    @isset($pandemicStats->sick)
-                    {{ $pandemicStats->sick }}
-                    @else
-                    0
-                    @endisset
-                    </h3>
-                <span>Cas malade(s)</span>
-            </div>
-            </div>
-            <div class="cols-12 col-md-3 text-center covid-case">
-                <div class="background-3">
-                <h3>
-                    @isset($pandemicStats->healed)
-                    {{ $pandemicStats->healed }}
-                    @else
-                    0
-                    @endisset
-                </h3>
-                <span>Cas guéri(s)</span>
-            </div>
-            </div>
-            <div class="cols-12 col-md-3 text-center covid-case">
-                <div class="background-4">
-                <h3>
-                    @isset($pandemicStats->dead)
-                    {{ $pandemicStats->dead }}
-                    @else
-                    0
-                    @endisset
-                </h3>
-                <span>Mort(s)</span>
-            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-primary text-white">
+                <div class="card-header">Actifs</div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @isset($pandemicStats->sick)
+                        {{ $pandemicStats->sick }}
+                        @else
+                        0
+                        @endisset</h5>
+                </div>
             </div>
         </div>
-        <div class="row mt-4">
-            <div class="cols-12 col-md-12">
-                <p>
-                    Du fait de la difficulté de l’identification et de la confirmation biologique de l’ensemble des cas de COVID-19, les données présentées sous-estiment le nombre réel de cas.
-                </p>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-success text-white">
+                <div class="card-header">Guéris</div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @isset($pandemicStats->healed)
+                        {{ $pandemicStats->healed }}
+                        @else
+                        0
+                        @endisset
+                    </h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-dark text-white">
+                <div class="card-header">Décès</div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        @isset($pandemicStats->dead)
+                        {{ $pandemicStats->dead }}
+                        @else
+                        0
+                        @endisset
+                    </h5>
+                </div>
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-12 mb-5">
+            <em class="statistiques-footnote">Du fait de la difficulté de l’identification et de la confirmation biologique de l’ensemble des cas de COVID-19, les données présentées sous-estiment le nombre réel de cas.</em>
+        </div>
+    </div>
+</div>
 
     <div class="container mb-5">
 
@@ -94,7 +104,9 @@
                         @if(!is_null($preventativeMeasure->image_path))
                             <img src="{{asset('storage/' . $preventativeMeasure->image_path)}}" class="PreventativeMeasure--Item__image img-fluid" alt="">
                         @else
-                            <div class="PreventativeMeasure--Item_image_placeholder"></div>
+                        @if($preventativeMeasure->width==4)
+                        <div class="PreventativeMeasure--Item_image_placeholder"></div>
+                        @endif
                         @endif
                         <h4 class="mb-4 PreventativeMeasure--Item__title">
                             {{$preventativeMeasure->title}}

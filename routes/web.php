@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', "PageController@index")->name('home');
-Route::get('/official_measures', "PageController@officialMeasure")->name('officialMeasure');
-Route::get('/preventative_measures', "PageController@preventativeMeasures")->name('preventativeMeasures');
+Route::get('/official-measures', "PageController@officialMeasure")->name('officialMeasure');
+Route::get('/preventative-measures', "PageController@preventativeMeasures")->name('preventativeMeasures');
 Route::get('/stereotypes', "PageController@stereotypes")->name('stereotypes');
