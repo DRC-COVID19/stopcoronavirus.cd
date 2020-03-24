@@ -16,6 +16,53 @@
     </nav>
 </div>
  */ ?>
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <h2>Situation actuelle en RDC</h2>
+            <p>Mise à jour le 23 mars 2020 à 21:50</p>
+        </div>
+    </div>
+    <div class="row statistiques">
+        <div class="col-md-3 mb-3">
+            <div class="card bg-secondary">
+                <div class="card-header">Confirmé</div>
+                <div class="card-body">
+                    <h5 class="card-title">36</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-primary">
+                <div class="card-header">Actifs</div>
+                <div class="card-body">
+                    <h5 class="card-title">34</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-success">
+                <div class="card-header">Guéris</div>
+                <div class="card-body">
+                    <h5 class="card-title">0</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="card bg-dark text-white">
+                <div class="card-header">Décès</div>
+                <div class="card-body">
+                    <h5 class="card-title">2</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mb-5">
+            <em class="statistiques-footnote">Du fait de la difficulté de l’identification et de la confirmation biologique de l’ensemble des cas de COVID-19, les données présentées sous-estiment le nombre réel de cas.</em>
+        </div>
+    </div>
+</div>
 
     <div class="container mb-5">
 
