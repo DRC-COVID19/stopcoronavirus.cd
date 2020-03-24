@@ -161,6 +161,18 @@ class AdminMenuTableSeeder extends Seeder
                 'created_at' => '2020-03-23 13:12:41',
                 'updated_at' => '2020-03-23 13:12:41',
             ),
+            11 => 
+            array (
+                'id' => 13,
+                'parent_id' => 0,
+                'order' => 0,
+                'title' => 'Suivi de cas',
+                'icon' => 'fa-bars',
+                'uri' => 'pandemic-stats',
+                'permission' => '*',
+                'created_at' => '2020-03-23 13:12:41',
+                'updated_at' => '2020-03-23 13:12:41',
+            ),
         ));
         
         
