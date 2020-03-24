@@ -14,7 +14,7 @@ class EmailAdminUsers extends Migration
     public function up()
     {
         Schema::table('admin_users', function (Blueprint $table) {
-            $table->string('email');
+            $table->string('email')->nullable();
         });
     }
 
