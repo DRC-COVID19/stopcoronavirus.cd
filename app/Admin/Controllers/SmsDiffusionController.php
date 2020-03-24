@@ -84,8 +84,6 @@ class SmsDiffusionController extends AdminController
     protected function detail($id)
     {
         $admin_id = auth('admin')->id();
-        $this->adminViews($id, $admin_id);
-
         $show = new Show(SmsDiffusion::findOrFail($id));
 
         $show->field('status', __('Status'));
@@ -99,6 +97,7 @@ class SmsDiffusionController extends AdminController
         $show->field('updated_at', __('Updated at'));
 
         if (!Admin::user()->isAdministrator() && Admin::user()->can('telco')) {
+            $this->adminViews($id, $admin_id);
             $show->panel()
             ->tools(function ($tools) {
                 $tools->disableEdit();
