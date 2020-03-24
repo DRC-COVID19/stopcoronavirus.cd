@@ -26,8 +26,13 @@ class PandemicStatController extends AdminController
     {
         $grid = new Grid(new PandemicStat());
 
-        $grid->column('label', __('Libelé'));
-        $grid->column('value', __('Valeur'));
+        $grid->column('confirmed', __('Confirmés'));
+        $grid->column('local',__('Cas local'));
+        $grid->column('imported',__('Cas importés'));
+        $grid->column('sick',__('Malades'));
+        $grid->column('seriously',__('Grave'));
+        $grid->column('healed',__('Guéris'));
+        $grid->column('dead',__('Morts'));
         $grid->column('last_update', __('Dernière modification'));
 
         return $grid;
@@ -43,8 +48,13 @@ class PandemicStatController extends AdminController
     {
         $show = new Show(PandemicStat::findOrFail($id));
 
-        $show->field('label', __('Libelé'));
-        $show->field('value', __('Valeur'));
+        $show->field('confirmed', __('Confirmés'));
+        $show->field('local',__('Cas local'));
+        $show->field('imported',__('Cas importés'));
+        $show->field('sick',__('Malades'));
+        $show->field('seriously',__('Grave'));
+        $show->field('healed',__('Guéris'));
+        $show->field('dead',__('Morts'));
         $show->field('created_at', __('Created at'));
         $show->field('last_update', __('Dernière modification'));
 
@@ -60,10 +70,14 @@ class PandemicStatController extends AdminController
     {
         $form = new Form(new PandemicStat());
 
-        $form->text('label', __('Libelé'));
-        $form->number('value', __('Valeur'));
-        $form->datetime('last_update', __('Dernière modification'));
-
+        $form->number('confirmed', __('Confirmés'))->default(0);
+        $form->number('local',__('Cas local'));
+        $form->number('imported',__('Cas importés'));
+        $form->number('sick',__('Malades'));
+        $form->number('seriously',__('Grave'));
+        $form->number('healed',__('Guéris'));
+        $form->number('dead',__('Morts'));
+        $form->date('last_update', __('Dernière modification'))->rules(['required']);
         return $form;
     }
 }

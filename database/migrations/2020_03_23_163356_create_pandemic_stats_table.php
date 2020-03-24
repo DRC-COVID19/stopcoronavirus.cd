@@ -15,8 +15,13 @@ class CreatePandemicStatsTable extends Migration
     {
         Schema::create('pandemic_stats', function (Blueprint $table) {
             $table->id();
-            $table->enum('label',['CONFIRMED','SICK','HEALED','DEAD'])->nullable(false);
-            $table->integer('value')->default(0);
+            $table->integer('confirmed')->default(0);
+            $table->integer('sick')->nullable();
+            $table->integer('seriously')->nullable();
+            $table->integer('healed')->nullable();
+            $table->integer('dead')->nullable();
+            $table->integer('imported')->nullable();
+            $table->integer('local')->nullable();
             $table->date('last_update');
             $table->timestamps();
         });

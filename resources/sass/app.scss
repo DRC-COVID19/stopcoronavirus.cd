@@ -46,4 +46,30 @@
 
 .jumbotron-title {
     background-color: #a0d0ff;
+    border-radius: unset;
+}
+.covid-case{
+    
+    color: #fff;
+    .background-1{
+        background:#ed253d;
+    }
+    .background-2{
+        background: #fc8b37;
+    }
+    .background-3{
+        background: #00b065;
+    }
+    .background-4{
+        background: #000000;
+    }
+    div{
+        padding: 1.42857143rem 2.14285714rem 2.14285714rem;
+        box-shadow: 5px 5px 20px 0 rgba(0,0,0,.08);
+        border-radius: 5px;
+    }
+    h3{
+        border-left:unset;
+        color: white;
+    }
 }

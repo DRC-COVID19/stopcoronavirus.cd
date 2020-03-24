@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('content')
 
-<div class="jumbotron">
+<div class="jumbotron jumbotron-title">
     <div class="container">
     <h1>Stop Coronavirus COVID-19 RDC</h1>
     <p class="lead">Site officiel où vous trouverez des informations et des conseils concernant la maladie à coronavirus 2019 (COVID-19) en RDC.</p>
@@ -16,6 +16,60 @@
     </nav>
 </div>
  */ ?>
+    
+    <div class="container">
+        <div class="row">
+            <div class="cols-12 col-md-3 text-center covid-case">
+                <div class="background-1">
+                <h3>{{ $pandemicStats->confirmed }}</h3>
+                <span>Cas confirmé(s)</span>
+                </div>
+            </div>
+            <div class="cols-12 col-md-3 text-center covid-case">
+                <div class="background-2">
+                <h3>
+                    @isset($pandemicStats->sick)
+                    {{ $pandemicStats->sick }}
+                    @else
+                    0
+                    @endisset
+                    </h3>
+                <span>Cas malade(s)</span>
+            </div>
+            </div>
+            <div class="cols-12 col-md-3 text-center covid-case">
+                <div class="background-3">
+                <h3>
+                    @isset($pandemicStats->healed)
+                    {{ $pandemicStats->healed }}
+                    @else
+                    0
+                    @endisset
+                </h3>
+                <span>Cas guéri(s)</span>
+            </div>
+            </div>
+            <div class="cols-12 col-md-3 text-center covid-case">
+                <div class="background-4">
+                <h3>
+                    @isset($pandemicStats->dead)
+                    {{ $pandemicStats->dead }}
+                    @else
+                    0
+                    @endisset
+                </h3>
+                <span>Mort(s)</span>
+            </div>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="cols-12 col-md-12">
+                <p>
+                    Du fait de la difficulté de l’identification et de la confirmation biologique de l’ensemble des cas de COVID-19, les données présentées sous-estiment le nombre réel de cas.
+                </p>
+            </div>
+        </div>
+    </div>
 
     <div class="container mb-5">
 

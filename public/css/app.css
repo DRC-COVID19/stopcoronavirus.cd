@@ -5487,7 +5487,7 @@ a.badge-dark.focus {
 .jumbotron {
   padding: 2rem 1rem;
   margin-bottom: 2rem;
-  background-color: #f8f8f8;
+  background-color: #e9ecef;
   border-radius: 0.3rem;
 }
 
@@ -10968,7 +10968,7 @@ ul {
 .App-Header .App-Header--navbar a {
   color: #020000;
   display: inline-block;
-  background: #f8f8f8;
+  background: #e9ecef;
   padding: 0.5rem;
   margin-left: 0.5rem;
   text-decoration: none;
@@ -11001,5 +11001,37 @@ ul {
 
 .jumbotron-title {
   background-color: #a0d0ff;
+  border-radius: unset;
+}
+
+.covid-case {
+  color: #fff;
+}
+
+.covid-case .background-1 {
+  background: #ed253d;
+}
+
+.covid-case .background-2 {
+  background: #fc8b37;
+}
+
+.covid-case .background-3 {
+  background: #00b065;
+}
+
+.covid-case .background-4 {
+  background: #000000;
+}
+
+.covid-case div {
+  padding: 1.42857143rem 2.14285714rem 2.14285714rem;
+  box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+}
+
+.covid-case h3 {
+  border-left: unset;
+  color: white;
 }
 
