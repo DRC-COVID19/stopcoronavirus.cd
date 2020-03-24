@@ -17,12 +17,14 @@
 </div>
  */ ?>
 <div class="container">
+    @isset($last)
     <div class="row">
         <div class="col-12">
             <h2>Situation actuelle en RDC</h2>
             <p>Mise à jour le {{ \Carbon\Carbon::parse($last->created_at)->format('d-m-y H:i:s')}}</p>
         </div>
     </div>
+    @endisset
     <div class="row statistiques">
         <div class="col-md-3 mb-3">
             <div class="card bg-secondary text-white">
