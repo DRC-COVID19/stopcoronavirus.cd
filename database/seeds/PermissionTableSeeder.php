@@ -12,6 +12,10 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('admin_permissions')->where('name','operator_sms')->delete();
+        DB::table('admin_permissions')->where('name','validator_sms')->delete();
+        DB::table('admin_permissions')->where('name','telco')->delete();
+        
         DB::table('admin_permissions')->insert(
             [
                 [
