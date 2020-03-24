@@ -1,3 +1,67 @@
+#GZIP COMPRESSION
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/xhtml+xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE image/x-icon
+    <files *.woff>
+        SetOutputFilter DEFLATE
+    </files>
+</IfModule>
+
+# expire headers
+<IfModule mod_expires.c>
+    # Enable expirations
+    ExpiresActive On
+    # Default directive
+    ExpiresDefault "access plus 1 month"
+    # My favicon
+    ExpiresByType image/x-icon "access plus 1 year"
+    # Images
+    ExpiresByType image/gif "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    # CSS
+    ExpiresByType text/css "access plus 1 month"
+    # Javascript
+    ExpiresByType application/javascript "access plus 1 year"
+  <IfModule mod_headers.c>
+       Header unset ETag
+       Header unset Pragma
+       Header unset Last-Modified
+       Header append Cache-Control "public, no-transform, must-revalidate"
+       Header set Last-modified "Tue, 1 Oct 2014 10:10:10 GMT"
+  </IfModule>
+</IfModule>
+
+# 1 week
+<FilesMatch ".(flv|gif|jpg|jpeg|png|ico|swf|pdf)$">
+    Header set Cache-Control "max-age=604800"
+    #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
+</FilesMatch>
+
+# 3 hours
+<FilesMatch "\.(txt|js|css)$">
+    Header set Cache-Control "max-age=10800"
+    #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
+</FilesMatch>
+
+# 3 hours
+<FilesMatch ".(html|htm|xml|pl|php|cgi|spl|scgi|fcgi)$">
+    Header set Cache-Control "max-age=10800"
+    #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
+</FilesMatch>
+
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes

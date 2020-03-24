@@ -12,56 +12,66 @@
     <title>Stop Coronavirus COVID-19 RDC - @yield('title')</title>
     <!-- icon -->
     <link rel="apple-touch-icon" sizes="57x57" href="{{asset('/apple-icon-57x57.png')}}">
-<link rel="apple-touch-icon" sizes="60x60" href="{{asset('/apple-icon-60x60.png')}}">
-<link rel="apple-touch-icon" sizes="72x72" href="{{asset('/apple-icon-72x72.png')}}">
-<link rel="apple-touch-icon" sizes="76x76" href="{{asset('/apple-icon-76x76.png')}}">
-<link rel="apple-touch-icon" sizes="114x114" href="{{asset('/apple-icon-114x114.png')}}">
-<link rel="apple-touch-icon" sizes="120x120" href="{{asset('/apple-icon-120x120.png')}}">
-<link rel="apple-touch-icon" sizes="144x144" href="{{asset('/apple-icon-144x144.png')}}">
-<link rel="apple-touch-icon" sizes="152x152" href="{{asset('/apple-icon-152x152.png')}}">
-<link rel="apple-touch-icon" sizes="180x180" href="{{asset('/apple-icon-180x180.png')}}">
-<link rel="icon" type="image/png" sizes="192x192"  href="{{asset('/android-icon-192x192.png')}}">
-<link rel="icon" type="image/png" sizes="32x32" href="{{asset('/favicon-32x32.png')}}">
-<link rel="icon" type="image/png" sizes="96x96" href="{{asset('/favicon-96x96.png')}}">
-<link rel="icon" type="image/png" sizes="16x16" href="{{asset('/favicon-16x16.png')}}">
-<link rel="manifest" href="{{asset('/manifest.json')}}">
-<meta name="msapplication-TileColor" content="#ffffff">
-<meta name="msapplication-TileImage" content="{{asset('/ms-icon-144x144.png')}}">
-<meta name="theme-color" content="#00b065">
-<!-- end icon -->
+    <link rel="apple-touch-icon" sizes="60x60" href="{{asset('/apple-icon-60x60.png')}}">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{asset('/apple-icon-72x72.png')}}">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{asset('/apple-icon-76x76.png')}}">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{asset('/apple-icon-114x114.png')}}">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{asset('/apple-icon-120x120.png')}}">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{asset('/apple-icon-144x144.png')}}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{asset('/apple-icon-152x152.png')}}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{asset('/apple-icon-180x180.png')}}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{asset('/android-icon-192x192.png')}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{asset('/favicon-32x32.png')}}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{asset('/favicon-96x96.png')}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('/favicon-16x16.png')}}">
+    <link rel="manifest" href="{{asset('/manifest.json')}}">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="{{asset('/ms-icon-144x144.png')}}">
+    <meta name="theme-color" content="#00b065">
+    <!-- end icon -->
     <!-- Scripts -->
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,300,400,500,600" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Rubik:400,700,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
     <link rel="icon" href="img/logo2.png"/>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style type="text/css">
-        h1, h2, h3, h4, h5, h6, *{font-family: 'Rubik', sans-serif}
+        h1, h2, h3, h4, h5, h6, * {
+            font-family: 'Rubik', sans-serif
+        }
     </style>
 
-     <!-- Google Tag Manager -->
-     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-M82BXK9');</script>
-<!-- End Google Tag Manager -->
+    <!-- Google Tag Manager -->
+    <script>(function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l='+l : '';
+            j.async = true;
+            j.src =
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-M82BXK9');</script>
+    <!-- End Google Tag Manager -->
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M82BXK9"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- Google Tag Manager (noscript) -->
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-M82BXK9"
+            height="0" width="0" style="display:none;visibility:hidden"></iframe>
+</noscript>
 <!-- End Google Tag Manager (noscript) -->
-    <header class="App-Header">
-       <div class=" py-2 App-Header--notice">
+<header class="App-Header">
+    <div class=" py-2 App-Header--notice">
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
                     <p class="text-white m-0">
-                    {{ __('messages.0')}}
+                        {{ __('messages.0')}}
                     </p>
                 </div>
                 <div class="col-lg-6">
@@ -73,48 +83,48 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
     </div>
 
-        <div class="pt-2">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="App-Header--logo mb-1">
+    <div class="pt-2">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="App-Header--logo mb-1">
                         <a href="{{route('home')}}" class="">
                             <img src="{{asset('img/logo_stop_coronavirus_rdc.png')}}" class="img-fluid" alt="STOP COVID-19 RDC">
                         </a>
-                        </div>
                     </div>
-                    <div class="col-lg-8">
-                        <div class="d-flex flex-md-row flex-column justify-content-end mb-3 mt-2 hidden-sm">
-                            <img src="img/partners_top.png" width="200" class="img-fluid" alt="">
-                        </div>
-                        <div class="d-flex flex-md-row flex-column justify-content-end App-Header--navbar">
-                            <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">Mesures de protection</a>
-                            <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">Directives du Gouvernement</a>
-                            <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">Idées reçues</a>
-                        </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="d-flex flex-md-row flex-column justify-content-end mb-3 mt-2 hidden-sm">
+                        <img src="img/partners_top.png" width="200" class="img-fluid" alt="">
+                    </div>
+                    <div class="d-flex flex-md-row flex-column justify-content-end App-Header--navbar">
+                        <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">Mesures de protection</a>
+                        <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">Directives du Gouvernement</a>
+                        <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">Idées reçues</a>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-    </header>
+</header>
 
-    <main>
+<main>
     @yield('content')
-    </main>
-    <footer class="">
-        <div class="mb-0 jumbotron">
-            <div class="container text-center">
+</main>
+<footer class="">
+    <div class="mb-0 jumbotron">
+        <div class="container text-center">
             <img src="{{asset('img/partners_small.png')}}" class="img-fluid" alt="Partenaires">
+        </div>
+    </div>
+    <div class="py-2 bg-dark">
+        <div class="container">
+            <div class="text-right text-light">
+                Ce site est offert par <a href="https://www.kinshasadigital.com" target="_blank">Kinshasa Digital</a>
             </div>
         </div>
-        <div class="py-2 bg-dark">
-            <div class="container">
-                <div class="text-right text-light">
-                    Ce site est offert par <a href="https://www.kinshasadigital.com" target="_blank">Kinshasa Digital</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    </div>
+</footer>
 </body>
 </html>
