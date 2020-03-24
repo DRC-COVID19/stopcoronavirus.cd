@@ -6,6 +6,10 @@
 @import "statistiques";
 //
 
+.bg-darkgray {
+    background-color: $bg-darkgray;
+}
+
 .App-Header {
     .App-Header--navbar {
         .active {

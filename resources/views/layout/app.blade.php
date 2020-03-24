@@ -119,10 +119,20 @@
             <img src="{{asset('img/partners_small.png')}}" class="img-fluid" alt="Partenaires">
         </div>
     </div>
-    <div class="py-2 bg-dark">
+    <div class="py-3 bg-darkgray">
         <div class="container">
-            <div class="text-right text-light">
-                Ce site est offert par <a href="https://www.kinshasadigital.com" target="_blank">Kinshasa Digital</a>
+            <div class="row align-items-end">
+                <div class="col-md-8">
+                    <img src="img/Logo_MSDA_USAID.png" class="img-fluid" alt="Logo USAID, Sverige, fhi360, Internews">
+                </div>
+                <div class="col-md-4">
+                    <div class="text-right align-text-bottom">
+                        <small>
+                            Ce site est offert par
+                            <a href="https://www.kinshasadigital.com" target="_blank" style="color: #000">Kinshasa Digital</a>
+                        </small>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

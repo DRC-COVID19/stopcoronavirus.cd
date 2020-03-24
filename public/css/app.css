@@ -10980,6 +10980,10 @@ ul {
   font-size: 0.9rem;
 }
 
+.bg-darkgray {
+  background-color: #ced0d3;
+}
+
 .App-Header .App-Header--navbar .active {
   background: #a0d0ff;
   font-weight: bold;
