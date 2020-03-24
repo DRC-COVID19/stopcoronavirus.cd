@@ -32,6 +32,8 @@
             margin-left: 0.5rem;
             text-decoration: none;
 
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
             &:hover {
                 background: $dark-blue-100;
                 color: lighten($dark-blue-100, 70%);
@@ -39,7 +41,7 @@
 
             @media screen and (max-width: 767px) {
                 margin-bottom: 0.5rem;
-                border-radius: 0;
+                border-radius: 8px;
             }
             @media screen and (max-width: 575px) {
                 margin-top: 0.5rem;
@@ -60,7 +62,7 @@
     color: rgba(255,255,255,0.85);
     border-radius: unset;
     h1 {
-        color: lighten($dark-blue-100, 60%);
+        color: lighten($dark-blue-100, 65%);
     }
 }
 
