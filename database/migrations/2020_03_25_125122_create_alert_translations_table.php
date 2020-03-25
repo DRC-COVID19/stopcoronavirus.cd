@@ -17,7 +17,7 @@ class CreateAlertTranslationsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('locale');
-            $table->integer('alert_id')->unsigned()->index();
+            $table->bigInteger('alert_id')->unsigned()->index();
             $table->text('content')->nullable();
             $table->timestamps();
 
