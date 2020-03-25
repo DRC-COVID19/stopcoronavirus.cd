@@ -31,6 +31,7 @@ class CreateCategoryTranslationsTable extends Migration
         Schema::table('categories', function (Blueprint $table) {
             $table->dropColumn('name');
             $table->dropColumn('slug');
+            $table->dropColumn('description');
         });
     }
 
@@ -45,6 +46,7 @@ class CreateCategoryTranslationsTable extends Migration
         Schema::table('categories', function (Blueprint $table) {
             $table->string('name');
             $table->string('slug')->nullable();
+            $table->text('description');
         });
     }
 }

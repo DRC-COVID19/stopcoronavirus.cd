@@ -2,11 +2,19 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Forms\CatergoryFr;
+use App\Admin\Forms\CatergoryKg;
+use App\Admin\Forms\CatergoryLn;
+use App\Admin\Forms\CatergorySw;
+use App\Admin\Forms\CatergoryTs;
 use App\Category;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Widgets\Tab;
+use Encore\Admin\Widgets\MultipleSteps;
 
 class CategoryController extends AdminController
 {
@@ -45,7 +53,7 @@ class CategoryController extends AdminController
         $show->field('name', __('Name'));
         $show->field('icon', __('Icon'));
         $show->field('slug', __('Slug'));
-        $show->field('description',__('Description'));
+        $show->field('description', __('Description'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
 
@@ -59,13 +67,23 @@ class CategoryController extends AdminController
      */
     protected function form()
     {
-        $form = new Form(new Category());
-
-        $form->text('name', __('Name'));
+        $steps = [
+            'Français' => CatergoryFr::class,
+            'Kikongo' => CatergoryKg::class,
+            'Lingala' => CatergoryLn::class,
+            'Swahili' => CatergorySw::class,
+            'Tshiluba' => CatergoryTs::class
+        ];
+        /* $category = new Category();
+        $form = new Form($category);
         $form->text('icon', __('Icon'));
-        $form->text('slug', __('Slug'));
-        $form->summernote('description',__('Description'));
-
-        return $form;
+        $form->hasMany('translates', function (Form\NestedForm $form) {
+            $form->select('locale', __('Language'))->options(["FR" => "Français", "KG" => "Kikongo", "LN" => "Lingala", "TS" => "Tshiluba", "SW" => "Swahili"])->default("FR")->required();
+            $form->text('name', __('Name'))->required();
+            $form->text('slug', __('Slug'));
+            $unique = uniqid();
+            $form->summernote("description{$unique}", __('Description'));
+        })->required();*/
+        return Tab::forms($steps);
     }
 }

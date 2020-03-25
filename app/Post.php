@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-    
-
     protected $fillable = [
         "image_path",
         "category_id",
