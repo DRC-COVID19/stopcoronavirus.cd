@@ -11,4 +11,9 @@ class AlertTranslation extends Model
         "content",
         'local'
     ];
+
+    public function alert()
+    {
+        return $this->belongsTo(Alert::class);
+    }
 }

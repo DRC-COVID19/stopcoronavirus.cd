@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Alert extends Model
 {
-    protected $fillable = [
-        "title",
-        "content"
-    ];
+    public function translates()
+    {
+        return $this->hasMany(AlertTranslation::class);
+    }
 }
