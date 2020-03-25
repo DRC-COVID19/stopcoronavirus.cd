@@ -4,6 +4,7 @@ use App\Admin\Controllers\AlertController;
 use App\Admin\Controllers\UserController;
 use App\Admin\Controllers\CategoryController;
 use App\Admin\Controllers\PostController;
+use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
 
 Admin::routes();

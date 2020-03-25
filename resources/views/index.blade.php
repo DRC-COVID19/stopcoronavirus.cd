@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-12">
                     <h2 class="mt-5">Situation actuelle en RDC</h2>
-                    <p>Mise à jour le {{ \Carbon\Carbon::parse($pandemicStats->lastUpdate)->format('d.m.Y à H:i')}}</p>
+                    <p>Mise à jour le {{ \Carbon\Carbon::parse($pandemicStats->last_update )->format('d.m.Y à H:i')}}</p>
                 </div>
             </div>
             <div class="row statistiques">
