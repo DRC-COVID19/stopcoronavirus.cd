@@ -25,3 +25,7 @@ use App\Http\Resources\PandemicStat as PandemicStatResource;
 Route::get('/lastpandemicstat', function () {
     return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->first());
 });
+
+Route::get('/pandemicstats', function () {
+    return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->get());
+});
