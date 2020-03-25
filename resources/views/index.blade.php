@@ -26,7 +26,7 @@
             </div>
             <div class="row statistiques">
                 <div class="col-md-3 mb-3">
-                    <div class="card bg-gray-200">
+                    <div class="card">
                         <div class="card-header">Confirmés</div>
                         <div class="card-body">
                             <h5 class="card-title">{{ $pandemicStats->confirmed }}</h5>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
                 <div class="col-md-3 mb-3">
-                    <div class="card bg-warning">
+                    <div class="card bg-gray-200">
                         <div class="card-header">Actifs</div>
                         <div class="card-body">
                             <h5 class="card-title">
