@@ -13,6 +13,8 @@ class PostTranslation extends Model
         "title",
         "content",
         "slug",
+        'locale',
+        'post_id'
     ];
 
     public function post()
