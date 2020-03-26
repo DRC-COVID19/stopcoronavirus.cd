@@ -9,9 +9,11 @@ class CategoryTranslation extends Model
 {
     use Sluggable;
     protected $fillable = [
+        "locale",
         "name",
         "slug",
-        'description'
+        'description',
+        'category_id'
     ];
 
     public function category()
