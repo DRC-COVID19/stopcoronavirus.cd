@@ -48,7 +48,6 @@ class CategoryForm extends StepForm
             Db::commit();
             $this->clear();
             admin_success('Processed successfully.');
-            //return back();
             return redirect()->route('categories.index');
         } catch (\Throwable $th) {
             DB::rollback();

@@ -59,13 +59,17 @@ class CategoryController extends AdminController
         $show = new Show(Category::findOrFail($id));
 
         $show->field('id', __('Id'));
-        $show->field('name', __('Name'));
         $show->field('icon', __('Icon'));
-        $show->field('slug', __('Slug'));
-        $show->field('description', __('Description'));
         $show->field('created_at', __('Created at'));
         $show->field('updated_at', __('Updated at'));
-
+        $show->translates('translations',function ($translate)
+        {
+            $translate->name();
+            $translate->locale();
+          /*  $translate->description()->as(function ($description) {
+                return "<pre>{$description}</pre>";
+            });;*/
+        });
         return $show;
     }
 
@@ -81,19 +85,19 @@ class CategoryController extends AdminController
     {
 
         $category = Category::find($id);
-        $Fr = $category->translates()->where('locale', 'FR')->first()->toArray();
-        $Kg = $category->translates()->where('locale', 'KG')->first()->toArray();
-        $Ln = $category->translates()->where('locale', 'LN')->first()->toArray();
-        $Sw = $category->translates()->where('locale', 'SW')->first()->toArray();
-        $Ts = $category->translates()->where('locale', 'TS')->first()->toArray();
-
-        session()->put("steps.Français", $Fr);
-        session()->put("steps.Kikongo", $Kg);
-        session()->put("steps.Lingala", $Ln);
-        session()->put("steps.Swahili", $Sw);
-        session()->put("steps.Tshiluba", $Ts);
-        session()->put("steps.Info. général", $category->toArray());
-
+        if (!session()->get("steps.Info général") ||session()->get("steps.Info général")['id']!=$id ){
+            $Fr = $category->translates()->where('locale', 'FR')->first()->toArray();
+            $Kg = $category->translates()->where('locale', 'KG')->first()->toArray();
+            $Ln = $category->translates()->where('locale', 'LN')->first()->toArray();
+            $Sw = $category->translates()->where('locale', 'SW')->first()->toArray();
+            $Ts = $category->translates()->where('locale', 'TS')->first()->toArray();
+            session()->put("steps.Français", $Fr);
+            session()->put("steps.Kikongo", $Kg);
+            session()->put("steps.Lingala", $Ln);
+            session()->put("steps.Swahili", $Sw);
+            session()->put("steps.Tshiluba", $Ts);
+            session()->put("steps.Info général", $category->toArray());
+        }
         return $content
             ->title($this->title())
             ->description($this->description['edit'] ?? trans('admin.edit'))
