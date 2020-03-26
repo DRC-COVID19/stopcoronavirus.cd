@@ -34,6 +34,7 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
+    <script src="{{ asset('js/app.js') }}"></script>
     <link rel="icon" href="img/logo2.png"/>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style type="text/css">

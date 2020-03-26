@@ -75,6 +75,13 @@
                     </div>
                 </div>
             </div>
+            <!--
+            <div class="row" id="statsChartContainer">
+                <div class="col-12">
+                    <canvas id="statsChart" height="60vh"></canvas>
+                </div>
+            </div>
+            -->
             <div class="row">
                 <div class="col-12 mb-5">
                     <em class="statistiques-footnote">Données officielles validées par le comité technique.</em>

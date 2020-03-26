@@ -29,3 +29,7 @@ Route::get('/lastpandemicstat', function () {
 Route::get('/pandemicstats', function () {
     return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->get());
 });
+
+Route::get('/pandemicstatsasc', function () {
+    return new PandemicStatResource(PandemicStat::orderBy('last_update', 'ASC')->get());
+});

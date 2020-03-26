@@ -20,6 +20,8 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "bootstrap": "^4.4.1"
+        "bootstrap": "^4.4.1",
+        "chart.js": "^2.9.3",
+        "jquery": "^3.4.1"
     }
 }
