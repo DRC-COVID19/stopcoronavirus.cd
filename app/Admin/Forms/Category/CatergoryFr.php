@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Admin\Forms;
+namespace App\Admin\Forms\Category;
 
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
 use Encore\Admin\Widgets\StepForm;
 
-class CatergoryKg extends Form
+class CatergoryFr extends StepForm
 {
     /**
      * The form title.
      *
      * @var string
      */
-    public $title = 'Kikongo';
+    public $title = 'Français';
 
     /**
      * Handle the form request.
@@ -24,10 +24,8 @@ class CatergoryKg extends Form
      */
     public function handle(Request $request)
     {
-        //dump($request->all());
-
+        return $this->next($request->all());
         admin_success('Processed successfully.');
-
         return back();
     }
 
@@ -36,8 +34,12 @@ class CatergoryKg extends Form
      */
     public function form()
     {
-        $this->select('locale', __('Language'))->options(["FR" => "Français", "KG" => "Kikongo", "LN" => "Lingala", "TS" => "Tshiluba", "SW" => "Swahili"])->default("FR")->required();
-        $this->text('name', __('Name'))->required();
+        $this->html('Francais', __('Language'));
+        $this->hidden('locale')
+        ->default("fr")
+        ->value("fr");
+        $this->hidden('id');
+        $this->text('name', __('Name'))->required()->rules('required|min:3');
         $this->text('slug', __('Slug'));
         $this->summernote("description", __('Description'));
     }
@@ -49,10 +51,6 @@ class CatergoryKg extends Form
      */
     public function data()
     {
-        return [
-            'name'       => 'John Doe',
-            'email'      => 'John.Doe@gmail.com',
-            'created_at' => now(),
-        ];
+        return parent::data();
     }
 }

@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Admin\Forms;
+namespace App\Admin\Forms\Category;
 
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
 use Encore\Admin\Widgets\StepForm;
 
-class CatergoryFr extends Form
+class CatergoryLn extends StepForm
 {
     /**
      * The form title.
      *
      * @var string
      */
-    public $title = 'Français';
+    public $title = 'Lingala';
 
     /**
      * Handle the form request.
@@ -25,7 +25,6 @@ class CatergoryFr extends Form
     public function handle(Request $request)
     {
         //dump($request->all());
-
         return $this->next($request->all());
         admin_success('Processed successfully.');
 
@@ -37,8 +36,12 @@ class CatergoryFr extends Form
      */
     public function form()
     {
-        $this->select('locale', __('Language'))->options(["FR" => "Français", "KG" => "Kikongo", "LN" => "Lingala", "TS" => "Tshiluba", "SW" => "Swahili"])->default("FR")->required();
-        $this->text('name', __('Name'))->required()->rules('required|min:3');
+        $this->html('Lingala', __('Language'));
+        $this->hidden('locale')
+        ->default("ln")->rules('required')
+        ->value("ln");
+        $this->hidden('id');
+        $this->text('name', __('Name'))->required();
         $this->text('slug', __('Slug'));
         $this->summernote("description", __('Description'));
     }
@@ -50,8 +53,6 @@ class CatergoryFr extends Form
      */
     public function data()
     {
-        return [
-            
-        ];
+        return parent::data();
     }
 }
