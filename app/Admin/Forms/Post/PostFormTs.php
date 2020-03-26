@@ -3,9 +3,10 @@
 namespace App\Admin\Forms\Post;
 
 use Encore\Admin\Widgets\Form;
+use Encore\Admin\Widgets\StepForm;
 use Illuminate\Http\Request;
 
-class PostFormTs extends Form
+class PostFormTs extends StepForm
 {
     /**
      * The form title.
@@ -23,11 +24,7 @@ class PostFormTs extends Form
      */
     public function handle(Request $request)
     {
-        //dump($request->all());
-
-        admin_success('Processed successfully.');
-
-        return back();
+       return $this->next($request->all());
     }
 
     /**
@@ -35,9 +32,14 @@ class PostFormTs extends Form
      */
     public function form()
     {
-        $this->text('name')->rules('required');
-        $this->email('email')->rules('email');
-        $this->datetime('created_at');
+        $this->html('Tshiluba', __('Language'));
+        $this->hidden('locale')
+        ->default("ts")
+        ->value("ts");
+        $this->hidden('id');
+        $this->text('title', __('Title'));
+        $this->text('slug', __('Slug'));
+        $this->summernote('content', __('Content'));
     }
 
     /**
@@ -47,10 +49,6 @@ class PostFormTs extends Form
      */
     public function data()
     {
-        return [
-            'name'       => 'John Doe',
-            'email'      => 'John.Doe@gmail.com',
-            'created_at' => now(),
-        ];
+       return parent::data();
     }
 }

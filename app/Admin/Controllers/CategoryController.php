@@ -86,11 +86,11 @@ class CategoryController extends AdminController
 
         $category = Category::find($id);
         if (!session()->get("steps.Info général") ||session()->get("steps.Info général")['id']!=$id ){
-            $Fr = $category->translates()->where('locale', 'FR')->first()->toArray();
-            $Kg = $category->translates()->where('locale', 'KG')->first()->toArray();
-            $Ln = $category->translates()->where('locale', 'LN')->first()->toArray();
-            $Sw = $category->translates()->where('locale', 'SW')->first()->toArray();
-            $Ts = $category->translates()->where('locale', 'TS')->first()->toArray();
+            $Fr = $category->translates()->where('locale', 'fr')->first()->toArray();
+            $Kg = $category->translates()->where('locale', 'kg')->first()->toArray();
+            $Ln = $category->translates()->where('locale', 'ln')->first()->toArray();
+            $Sw = $category->translates()->where('locale', 'sw')->first()->toArray();
+            $Ts = $category->translates()->where('locale', 'ts')->first()->toArray();
             session()->put("steps.Français", $Fr);
             session()->put("steps.Kikongo", $Kg);
             session()->put("steps.Lingala", $Ln);
@@ -111,13 +111,14 @@ class CategoryController extends AdminController
      */
     protected function form()
     {
+        //session()->remove('steps');
         $steps = [
             'Français' => CatergoryFr::class,
             'Kikongo' => CatergoryKg::class,
             'Lingala' => CatergoryLn::class,
             'Swahili' => CatergorySw::class,
             'Tshiluba' => CatergoryTs::class,
-            'Info. général' => CategoryForm::class
+            'Info général' => CategoryForm::class
         ];
         return MultipleSteps::make($steps);
     }

@@ -25,8 +25,6 @@ class CatergoryFr extends StepForm
     public function handle(Request $request)
     {
         return $this->next($request->all());
-        admin_success('Processed successfully.');
-        return back();
     }
 
     /**
