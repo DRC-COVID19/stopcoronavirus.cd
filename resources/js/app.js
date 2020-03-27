@@ -7,7 +7,7 @@ function drawChart() {
 
     // Add a helper to format timestamp data
     Date.prototype.formatD = function () {
-        return this.getDate()+'.'+(this.getMonth()+1)+"."+this.getFullYear();
+        return this.getDate()+'.'+(this.getMonth()+1); //+"."+this.getFullYear();
     }
 
     var jsonData = $.ajax({
@@ -74,7 +74,9 @@ function drawChart() {
                 scales: {
                     xAxes: [{
                         display: true,
-
+                        gridLines: {
+                            display: false
+                        },
                         scaleLabel: {
                             display: false,
                             labelString: 'Month'
