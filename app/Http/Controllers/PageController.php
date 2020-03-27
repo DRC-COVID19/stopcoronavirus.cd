@@ -43,4 +43,12 @@ class PageController extends Controller
         $stereotypes = Post::where('category_id', 3)->get();
         return view('stereotypes', compact('stereotypes'));
     }
+
+    public function changeLang($lang)
+    {
+        if (in_array($lang, ['fr', 'ln', 'kg','sw','ts'])) {
+            session(['locale' => $lang]);
+        }
+        return back();
+    }
 }
