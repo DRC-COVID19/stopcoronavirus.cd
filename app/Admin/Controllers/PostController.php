@@ -47,7 +47,11 @@ class PostController extends AdminController
         });
         $grid->column('category_id', __('Category'))->display(function ($category_id) {
             $category = Category::find($category_id);
-            return $category->name;
+            $translate= $category->translates()->where('locale',App::getLocale())->first();
+            if ($translate) {
+               return $translate->name;
+            }
+            return $category->translates()->first()->name;
         });
         
         $grid->column('created_at', __('Created at'));
@@ -73,7 +77,11 @@ class PostController extends AdminController
         $show->field('slug', __('Slug'));
         $show->field('category_id', __('Category id'))->display(function ($category_id) {
             $category = Category::find($category_id);
-            return $category->name;
+            $translate= $category->translates()->where('locale',App::getLocale())->first();
+            if ($translate) {
+               return $translate->name;
+            }
+            return $category->translates()->first()->name;
         });
 
         
