@@ -19,9 +19,6 @@ class PostsTableSeeder extends Seeder
             0 =>
             array(
                 'id' => 1,
-                'title' => 'Se laver fréquemment les mains',
-                'content' => 'Se laver fréquemment les mains avec une solution hydroalcoolique ou à l’eau et au savon<br><b>Pourquoi?</b> Se laver les mains avec une solution hydroalcoolique ou à l’eau et au savon tue le virus s’il est présent sur vos mains.',
-                'slug' => 'se-laver-frequemment-les-mains',
                 'category_id' => 1,
                 'created_at' => '2020-03-20 15:57:31',
                 'updated_at' => '2020-03-20 20:42:23',
@@ -155,36 +152,6 @@ Suivez les conseils présentés ci-dessus.<br></li><li>Si vous commencez à vous
                 'width' => 12,
                 'order' => 6,
             ),
-//             10 =>
-//             array(
-//                 'id' => 11,
-//                 'title' => 'Quand utiliser un masque ?',
-//                 'content' => '<ul><li>
-
-// Si vous êtes en bonne santé, vous ne devez utiliser un masque que si vous vous occupez d’une personne présumée infectée par le 2019‑nCoV.</li><li>Portez un masque si vous toussez ou éternuez.</li><li>Le masque n’est efficace que s’il est associé à un lavage des mains fréquent avec une solution hydroalcoolique ou à l’eau et au savon. </li><li>Si vous portez un masque, il est important que vous sachiez l’utiliser et l’éliminer correctement.<br><br></li></ul>',
-//                 'slug' => 'quand-utiliser-un-masque',
-//                 'category_id' => 1,
-//                 'created_at' => '2020-03-20 19:47:45',
-//                 'updated_at' => '2020-03-20 19:47:45',
-//                 'image_path' => NULL,
-//                 'width' => 4,
-//                 'order' => 0,
-//             ),
-//             11 =>
-//             array(
-//                 'id' => 12,
-//                 'title' => 'Comment mettre, utiliser, enlever et éliminer un masque',
-//                 'content' => '<ul><li>
-
-// Avant de mettre un masque, se laver les mains avec une solution hydroalcoolique ou à l’eau et au savon</li><li>Appliquer le masque de façon à recouvrir le nez et la bouche et veillez à l’ajuster au mieux sur votre visage</li><li>Lorsque l’on porte un masque, éviter de le toucher; chaque fois que l’on touche un masque usagé, se laver les mains à l’aide d’une solution hydroalcoolique ou à l’eau et au savon </li><li>Lorsqu’il s’humidifie, le remplacer par un nouveau masque et ne pas réutiliser des masques à usage unique</li><li>Pour retirer le masque: l’enlever par derrière (ne pas toucher le devant du masque); le jeter immédiatement dans une poubelle fermée; se laver les mains avec une solution hydroalcoolique ou à l’eau et au savon<br><br></li></ul>',
-//                 'slug' => 'comment-mettre-utiliser-enlever-et-eliminer-un-masque',
-//                 'category_id' => 1,
-//                 'created_at' => '2020-03-20 19:51:45',
-//                 'updated_at' => '2020-03-20 19:51:45',
-//                 'image_path' => NULL,
-//                 'width' => 4,
-//                 'order' => 0,
-//             ),
             12 =>
             array(
                 'id' => 13,
@@ -352,5 +319,12 @@ Non, les antibiotiques n’agissent pas contre les virus, mais seulement contre 
                 'order' => 0,
             ),
         ));
+
+        DB::table('post_translations')->insert([
+            'title' => 'Se laver fréquemment les mains',
+            'content' => 'Se laver fréquemment les mains avec une solution hydroalcoolique ou à l’eau et au savon<br><b>Pourquoi?</b> Se laver les mains avec une solution hydroalcoolique ou à l’eau et au savon tue le virus s’il est présent sur vos mains.',
+            'slug' => 'se-laver-frequemment-les-mains',
+            'post_id'=>1
+        ]);
     }
 }
