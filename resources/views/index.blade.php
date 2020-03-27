@@ -94,20 +94,20 @@
         </div>
         <div class="row my-4 PreventativeMeasure--Wrapper">
             @foreach($preventativeMeasures as $preventativeMeasure)
-                <div class="col-lg-{{$preventativeMeasure->width}}">
+                <div class="col-lg-{{$preventativeMeasure['width']}}">
                     <div class="PreventativeMeasure--Item">
-                        @if(!is_null($preventativeMeasure->image_path))
-                            <img src="{{asset('storage/' . $preventativeMeasure->image_path)}}" class="PreventativeMeasure--Item__image img-fluid" alt="">
+                        @if(!is_null($preventativeMeasure['image_path']))
+                            <img src="{{asset('storage/' . $preventativeMeasure['image_path'])}}" class="PreventativeMeasure--Item__image img-fluid" alt="">
                         @else
-                            @if($preventativeMeasure->width==4)
+                            @if($preventativeMeasure['width']==4)
                                 <div class="PreventativeMeasure--Item_image_placeholder"></div>
                             @endif
                         @endif
                         <h4 class="mb-4 PreventativeMeasure--Item__title">
-                            {{$preventativeMeasure->title}}
+                            {{$preventativeMeasure['title']}}
                         </h4>
                         <p>
-                            <?php echo $preventativeMeasure->content; ?>
+                            <?php echo $preventativeMeasure['content']; ?>
                         </p>
                     </div>
                 </div>
@@ -131,16 +131,16 @@
         </div>
         <div class="row my-4 PreventativeMeasure--Wrapper">
             @foreach($directives as $directive)
-                <div class="col-lg-{{$directive->width}}">
+                <div class="col-lg-{{$directive['width']}}">
                     <div class="PreventativeMeasure--Item">
-                        @if(!is_null($directive->image_path))
-                            <img src="{{asset('storage/' . $directive->image_path)}}" class="PreventativeMeasure--Item__image img-fluid" alt="">
+                        @if(!is_null($directive['image_path']))
+                            <img src="{{asset('storage/' . $directive['image_path'])}}" class="PreventativeMeasure--Item__image img-fluid" alt="">
                         @endif
                         <h4 class="mb-4 PreventativeMeasure--Item__title">
-                            {{$directive->title}}
+                            {{$directive['title']}}
                         </h4>
                         <p>
-                            <?php echo $directive->content; ?>
+                            <?php echo $directive['content']; ?>
                         </p>
                     </div>
                 </div>

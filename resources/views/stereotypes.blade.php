@@ -14,10 +14,10 @@
             <div class="col-lg-12 mb-3">
                 <div class="PreventativeMeasure--Item">
                     <h3 class="mb-4 PreventativeMeasure--Item__title">
-                        {{$stereotype->title}}
+                        {{$stereotype['title']}}
                     </h3>
                     <p>
-                        <?php echo $stereotype->content; ?>
+                        <?php echo $stereotype['content']; ?>
                     </p>
                 </div>
             </div>

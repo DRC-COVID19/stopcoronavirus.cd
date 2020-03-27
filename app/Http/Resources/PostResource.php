@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\App;
 
-class CategoryResource extends JsonResource
+class PostResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,18 +15,24 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        $name = '';
-        $description = '';
+        $title = "";
+        $content = "";
+        $slug = "";
         $translate = $this->translates()->where('locale', App::getLocale())->first();
         if (!$translate) {
             $translate = $this->translates()->first();
         }
-        $name = $translate->name;
-        $description = $translate->description;
+        $title = $translate->title;
+        $content = $translate->content;
+        $slug = $translate->slug;
         return [
             'id' => $this->id,
-            'name'=> $name,
-            'description'=> $description
-        ];
+            'title' => $title,
+            'content' => $content,
+            'slug' => $slug,
+            "image_path"=>$this->image_path,
+            'width'=>$this->width,
+            'order'=>$this->order
+        ];;
     }
 }

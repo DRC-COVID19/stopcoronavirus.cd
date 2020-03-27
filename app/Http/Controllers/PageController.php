@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Alert;
 use App\Category;
+use App\Http\Resources\CategoryResource;
+use App\Http\Resources\PostResource;
 use App\PandemicStat;
 use App\Post;
 use Illuminate\Http\Request;
@@ -18,29 +20,31 @@ class PageController extends Controller
     {
         $alerts = Alert::orderBy('created_at', 'desc')->limit(5)->get();
         $pandemicStats = PandemicStat::orderBy('last_update', 'DESC')->first();
-        $preventativeMeasures = Post::where('category_id', 1)->orderBy('order')->orderBy('title')->limit(3)->get();
-        $directives = Post::where('category_id', 2)->orderBy('order')->orderBy('title')->limit(1)->get();
+        $preventativeMeasures =PostResource::collection(Post::where('category_id', 1)->orderBy('order')->limit(3)->get())->toArray(request());
+        $directives =PostResource::collection( Post::where('category_id', 2)->orderBy('order')->limit(1)->get())->toArray(request());
+        
         return view('index', compact('alerts', 'preventativeMeasures', 'pandemicStats', 'directives'));
     }
 
 
     public function officialMeasure()
     {
-        $officialMeasures = Post::where('category_id', 2)->orderBy('order')->orderBy('title')->get();
+        $officialMeasures =PostResource::collection(Post::where('category_id', 2)->orderBy('order')->get())->toArray(request());
         return view('official_measure', compact('officialMeasures'));
     }
 
     public function preventativeMeasures()
     {
-        $category = Category::find(1);
-        $preventativeMeasures = $category->articles()->orderBy('order')->limit(12)->get();
+        $category =Category::find(1);
+        $preventativeMeasures =PostResource::collection( $category->articles()->orderBy('order')->limit(12)->get())->toArray(request());
+        $category=CategoryResource::make($category)->toArray(request());
         return view('preventative_measures', compact('category', 'preventativeMeasures'));
     }
 
 
     public function stereotypes()
     {
-        $stereotypes = Post::where('category_id', 3)->get();
+        $stereotypes =PostResource::collection(Post::where('category_id', 3)->get())->toArray(request());
         return view('stereotypes', compact('stereotypes'));
     }
 
