@@ -1,3 +1,7 @@
+h1, h2, h3, h4, h5, h6, * {
+    font-family: 'Rubik', sans-serif
+}
+
 .lead {
     line-height: 1.8rem;
     font-weight: 300;
@@ -13,6 +17,13 @@
     font-weight: 900;
 }
 
+a {
+    text-decoration: underline;
+    &:hover {
+        text-decoration: none;
+    }
+}
+
 h1, h2, h3, h4 {
     color: $dark-blue;
 }
@@ -20,9 +31,16 @@ h1 {
     font-weight: 300;
 }
 h2 {
+    /*
     border-left: .8rem solid $primary;
     padding-left: .5rem !important;
+    */
+    font-size: 3rem;
     font-weight: 300;
+    i {
+        margin-right: .5rem;
+        font-size: 3.2rem;
+    }
 }
 h3 {
     font-weight: 300;

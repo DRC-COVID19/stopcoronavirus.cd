@@ -1,0 +1,35 @@
+.home-consignes {
+    > div {
+        text-align: center;
+
+        .ico {
+            font-size: 4rem;
+            color: $flag-blue;
+            display: block;
+        }
+    }
+}
+
+.container-directive {
+    background: #eee;
+}
+
+.home-directives {
+    > div {
+        text-align: center;
+
+        .ico {
+            font-size: 4rem;
+            color: darken($primary, 20%);
+            display: block;
+        }
+
+        .ico .fa-shopping-basket {
+            color: $flag-blue;
+        }
+
+        strong {
+            display: block;
+        }
+    }
+}

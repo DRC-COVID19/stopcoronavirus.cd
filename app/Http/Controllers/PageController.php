@@ -40,7 +40,7 @@ class PageController extends Controller
 
     public function stereotypes()
     {
-        $stereotypes = Post::where('category_id', 3)->get();
+        $stereotypes = Post::where('category_id', 3)->orderBy('order')->get();
         return view('stereotypes', compact('stereotypes'));
     }
 }

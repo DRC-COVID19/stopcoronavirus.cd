@@ -7,8 +7,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta property="og:title" content="Stop Coronavirus COVID-19 RDC - @yield('title')">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="http://www.stopcoronavirus.cd">
-    <meta property="og:image" content="http://www.stopcoronavirus.cd/img/og.jpg"/>
+    <meta property="og:url" content="https://www.stopcoronavirusrdc.info">
+    <meta property="og:image" content="https://www.stopcoronavirusrdc.info/img/og.jpg"/>
     <title>Stop Coronavirus COVID-19 RDC - @yield('title')</title>
     <!-- icon -->
     <link rel="apple-touch-icon" sizes="57x57" href="{{asset('/apple-icon-57x57.png')}}">
@@ -32,16 +32,10 @@
     <!-- Scripts -->
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
     <link rel="icon" href="img/logo2.png"/>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <style type="text/css">
-        h1, h2, h3, h4, h5, h6, * {
-            font-family: 'Rubik', sans-serif
-        }
-    </style>
 
     <!-- Google Tag Manager -->
     <script>(function (w, d, s, l, i) {
@@ -123,7 +117,7 @@
     <div class="footer-partners">
         <div class="container">
             <div class="row align-items-end">
-                <div class="col-lg-8 col-md-12 col-lg-offset-2 col-md-offset-0 pt-5 pb-2">
+                <div class="col-lg-8 col-md-12 col-lg-offset-2 col-md-offset-0 pb-2">
                     <p>
                         avec l'appui d'Internews au travers du projet Médias2I de l'Union Européenne et du programme MSDA financé par l'USAID avec un financement complémentaire de la Coopération Suédoise
                     </p>

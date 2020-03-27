@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', "PageController@index")->name('home');
-Route::get('/official-measures', "PageController@officialMeasure")->name('officialMeasure');
-Route::get('/preventative-measures', "PageController@preventativeMeasures")->name('preventativeMeasures');
-Route::get('/stereotypes', "PageController@stereotypes")->name('stereotypes');
+Route::get('/mesures-de-protection-contre-le-coronavirus', "PageController@officialMeasure")->name('officialMeasure');
+Route::get('/directives-prises-par-le-gouvernement', "PageController@preventativeMeasures")->name('preventativeMeasures');
+Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stereotypes');

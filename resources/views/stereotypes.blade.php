@@ -4,7 +4,7 @@
 <div class="jumbotron jumbotron-title">
     <div class="container">
         <h1>
-            En finir avec les idées reçues
+            {{ __('Idées reçues et Fake News') }}
         </h1>
     </div>
 </div>
