@@ -26,9 +26,6 @@ class CatergoryTs extends StepForm
     {
         //dump($request->all());
         return $this->next($request->all());
-        admin_success('Processed successfully.');
-
-        return back();
     }
 
     /**

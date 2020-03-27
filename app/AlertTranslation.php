@@ -9,7 +9,8 @@ class AlertTranslation extends Model
     protected $fillable=[
         "title",
         "content",
-        'local'
+        'locale',
+        'alert_id'
     ];
 
     public function alert()

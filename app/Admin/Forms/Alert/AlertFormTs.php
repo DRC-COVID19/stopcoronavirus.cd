@@ -2,17 +2,21 @@
 
 namespace App\Admin\Forms\Alert;
 
+use App\Alert;
+use App\AlertTranslation;
 use Encore\Admin\Widgets\Form;
+use Encore\Admin\Widgets\StepForm;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class AlertFormTs extends Form
+class AlertFormTs extends StepForm
 {
     /**
      * The form title.
      *
      * @var string
      */
-    public $title = '';
+    public $title = 'Tshiluba';
 
     /**
      * Handle the form request.
@@ -23,11 +27,7 @@ class AlertFormTs extends Form
      */
     public function handle(Request $request)
     {
-        //dump($request->all());
-
-        admin_success('Processed successfully.');
-
-        return back();
+       return $this->next($request->all());
     }
 
     /**
@@ -35,9 +35,13 @@ class AlertFormTs extends Form
      */
     public function form()
     {
-        $this->text('name')->rules('required');
-        $this->email('email')->rules('email');
-        $this->datetime('created_at');
+        $this->html('Tshiluba', __('Language'));
+        $this->hidden('locale')
+            ->default("ts")
+            ->value("ts");
+        $this->hidden('id');
+        $this->text('title', __('Title'))->required()->rules('required_without:content');
+        $this->textarea('content', __('Content'))->required()->rules('required_without:title');
     }
 
     /**
@@ -47,10 +51,6 @@ class AlertFormTs extends Form
      */
     public function data()
     {
-        return [
-            'name'       => 'John Doe',
-            'email'      => 'John.Doe@gmail.com',
-            'created_at' => now(),
-        ];
+       return parent::data();
     }
 }

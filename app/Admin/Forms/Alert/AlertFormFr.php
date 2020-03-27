@@ -3,16 +3,17 @@
 namespace App\Admin\Forms\Alert;
 
 use Encore\Admin\Widgets\Form;
+use Encore\Admin\Widgets\StepForm;
 use Illuminate\Http\Request;
 
-class AlertFormFr extends Form
+class AlertFormFr extends StepForm
 {
     /**
      * The form title.
      *
      * @var string
      */
-    public $title = '';
+    public $title = 'Français';
 
     /**
      * Handle the form request.
@@ -23,11 +24,7 @@ class AlertFormFr extends Form
      */
     public function handle(Request $request)
     {
-        //dump($request->all());
-
-        admin_success('Processed successfully.');
-
-        return back();
+        return $this->next($request->all());
     }
 
     /**
@@ -35,9 +32,13 @@ class AlertFormFr extends Form
      */
     public function form()
     {
-        $this->text('name')->rules('required');
-        $this->email('email')->rules('email');
-        $this->datetime('created_at');
+        $this->html('Francais', __('Language'));
+        $this->hidden('locale')
+        ->default("fr")
+        ->value("fr");
+        $this->hidden('id');
+        $this->text('title', __('Title'))->required()->rules('required_without:content');
+        $this->textarea('content', __('Content'))->required()->rules('required_without:title');
     }
 
     /**
@@ -47,10 +48,6 @@ class AlertFormFr extends Form
      */
     public function data()
     {
-        return [
-            'name'       => 'John Doe',
-            'email'      => 'John.Doe@gmail.com',
-            'created_at' => now(),
-        ];
+       return parent::data();
     }
 }
