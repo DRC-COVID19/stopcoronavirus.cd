@@ -125,7 +125,6 @@
                         <img src="img/Logo_UE_MSDA_USAID.png" class="img-fluid" alt="Logo UE, USAID, Sverige, fhi360, Internews">
                     </p>
                     <p class="pt-4">
-                        Ce site est offert par
                         <a href="https://www.kinshasadigital.com" target="_blank">Kinshasa Digital</a>
                     </p>
                 </div>

@@ -10,8 +10,19 @@
     }
 }
 
+#statsChartContainer {
+    height: 30vh;
+    @media screen and (max-width: 767px) {
+        height: 50vh;
+    }
+    @media screen and (max-width: 575px) {
+    }
+    #statsChart {
+    }
+}
+
 .container-directive {
-    background: #eee;
+        background: #eee;
 }
 
 .home-directives {

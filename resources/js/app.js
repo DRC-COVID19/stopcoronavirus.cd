@@ -22,7 +22,7 @@ function drawChart() {
             confirmed.push(d.confirmed);
             dead.push(d.dead);
             healed.push(d.healed);
-            labels.push(new Date(d.last_update).formatD());
+            labels.push(d.last_update);
         });
 
         // Create the chart.js data structure using 'labels' and 'data'
@@ -56,6 +56,7 @@ function drawChart() {
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 legend: {
                     display: false
                 },
@@ -80,6 +81,14 @@ function drawChart() {
                         scaleLabel: {
                             display: false,
                             labelString: 'Month'
+                        },
+                        type: 'time',
+                        time: {
+                            unit: 'day',
+                            unitStepSize: 1,
+                            displayFormats: {
+                                'day': 'DD.MM'
+                            }
                         }
                     }],
                     yAxes: [{
@@ -105,7 +114,7 @@ function drawChart() {
     });
 }
 
-$(document).ready(function() {
+$(document).ready(function () {
     if ($('#statsChart').length)
         drawChart();
 });

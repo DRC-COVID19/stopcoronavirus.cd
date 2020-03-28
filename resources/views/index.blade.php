@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', 'Situation Épidémiologique en RDC')
 @section('content')
 
     <div class="jumbotron jumbotron-title">
@@ -20,8 +21,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h2 class="mt-5">Situation actuelle en RDC</h2>
-                    <p>Mise à jour le {{ \Carbon\Carbon::parse($pandemicStats->last_update )->format('d.m.Y à H:i')}}</p>
+                    <h2 class="mt-5">Situation Épidémiologique en RDC</h2>
+                    <p>Mise à jour le {{ \Carbon\Carbon::parse($pandemicStats->last_update )->format('d.m.Y')}}</p>
                 </div>
             </div>
             <div class="row statistiques">
@@ -76,8 +77,8 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
-                    <canvas id="statsChart" height="60vh"></canvas>
+                <div id="statsChartContainer" class="col-12">
+                    <canvas id="statsChart"></canvas>
                 </div>
             </div>
             <div class="row">
@@ -177,6 +178,7 @@
                     </h2>
                 </div>
             </div>
+            <?php /*
             <div class="row">
                 <div class="col-12">
                     <h3>{{ __('Mesure pour la ville de Kinshasa à partir du 28 mars 2020') }}</h3>
@@ -235,7 +237,7 @@
                 </div>
             </div>
         </div>
-        <?php /*
+        */ ?>
         <div class="row my-4 PreventativeMeasure--Wrapper">
             @foreach($directives as $directive)
                 <div class="col-lg-{{$directive->width}}">
@@ -253,7 +255,6 @@
                 </div>
             @endforeach
         </div>
-        */ ?>
         <div class="PreventativeMeasure--Cta text-center mt-3">
             <a href="{{route('officialMeasure')}}" class="btn btn-secondary p-3">
                 Voir toutes les directives du Gouvernement
