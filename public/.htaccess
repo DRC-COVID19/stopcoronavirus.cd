@@ -49,9 +49,9 @@
     #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
 </FilesMatch>
 
-# 3 hours
+# 1 week
 <FilesMatch "\.(txt|js|css)$">
-    Header set Cache-Control "max-age=10800"
+    Header set Cache-Control "max-age=604800"
     #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
 </FilesMatch>
 

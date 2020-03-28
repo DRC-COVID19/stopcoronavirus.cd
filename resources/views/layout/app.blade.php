@@ -33,7 +33,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js?2') }}" defer></script>
     <link rel="icon" href="img/logo2.png"/>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
