@@ -1,6 +1,6 @@
 var $ = require("jquery");
 var Chart = require('chart.js');
-require('./bootstrap');
+//require('./bootstrap');
 
 
 function drawChart() {
