@@ -36,12 +36,8 @@
                     </a>
                   </div>
                   <p class="question-title">
-                    Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
+                    {{ $content['q'] }}
                   </p>
-              
-                  
-              
-                  
                   <p class="question-options-indication">Sélectionnez une option :</p>
                   
                   <div class="question-options">

@@ -17,4 +17,4 @@ Route::get('/', "PageController@index")->name('home');
 Route::get('/mesures-de-protection-contre-le-coronavirus', "PageController@officialMeasure")->name('officialMeasure');
 Route::get('/directives-prises-par-le-gouvernement', "PageController@preventativeMeasures")->name('preventativeMeasures');
 Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stereotypes');
-Route::get('/selt-test', 'PageController@seltTest');
+Route::get('/selt-test/{step?}', 'PageController@seltTest');
