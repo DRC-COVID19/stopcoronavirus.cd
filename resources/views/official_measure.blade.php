@@ -8,14 +8,6 @@
             </h1>
         </div>
     </div>
-    {{-- <div class="container">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{route('home')}}">Accueil</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Mesures prises par le Gouvernement</li>
-            </ol>
-        </nav>
-    </div> --}}
     <div class="container">
         <div class="row my-4 OfficialMeasures--Wrapper">
             @foreach($officialMeasures as $officialMeasure)
