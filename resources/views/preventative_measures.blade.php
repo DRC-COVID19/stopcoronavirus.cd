@@ -8,16 +8,6 @@
     </h1>
 </div>
 </div>
-{{-- <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{route('home')}}">Accueil</a></li>
-            <li class="breadcrumb-item active" aria-current="page">
-                 Mesures de protection essentielles contre le nouveau coronavirus
-            </li>
-        </ol>
-    </nav>
-</div> --}}
 <div class="container">
     <div class="row">
         <div class="col-12">

@@ -36,10 +36,16 @@ h2 {
     padding-left: .5rem !important;
     */
     font-size: 3rem;
+    @media screen and (max-width: 575px) {
+        font-size: 2.5rem;
+    }
     font-weight: 300;
     i {
         margin-right: .5rem;
         font-size: 3.2rem;
+        @media screen and (max-width: 575px){
+            font-size: 2.8rem;
+        }
     }
 }
 h3 {
