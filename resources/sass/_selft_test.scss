@@ -1,0 +1,191 @@
+.stepper {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 30px auto 25px;
+  max-width: 1200px;
+  @media (min-width: 576px) {
+    margin: 50px auto 30px;
+  }
+  .step {
+    align-items: center;
+    display: none;
+    justify-content: center;
+    margin: 0 20px;
+    @media (min-width: 576px) {
+      display: flex;
+    }
+    .active {
+      display: flex;
+    }
+  }
+  .step-circle {
+    margin-right: 10px;
+    height: 28px;
+    width: 28px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    p {
+      margin: 0;
+    }
+  }
+  .step-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+  }
+}
+.question {
+  a {
+    text-decoration: unset;
+  }
+  padding: 39px 8px 8px;
+  background: $bg-gray;
+  .question-header {
+    align-items: center;
+    color: #0069cc;
+    display: flex;
+    font-size: 16px;
+    font-weight: bold;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+    padding: 0 40px;
+    width: 100%;
+  }
+  .question-title {
+    color: #333;
+    font-size: 26px;
+    margin-bottom: 35px;
+    padding: 0 40px;
+    font-weight: 600;
+    @media (min-width: 480px) {
+      min-height: 110px;
+    }
+  }
+  .question-options-indication {
+    color: #8b8b8b;
+    font-weight: 500;
+    margin-bottom: 21px;
+    padding: 0 40px;
+  }
+  .question-options {
+    align-items: flex-start;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    font-size: 26px;
+    justify-content: space-between;
+    min-height: 186px;
+    padding: 47px 0 11px;
+    width: 100%;
+    @media (min-width: 768px) {
+      padding: 47px 40px 11px;
+    }
+    .custom-control {
+      input[type="radio"] {
+        box-sizing: border-box;
+        padding: 0;
+      }
+      margin-bottom: 36px;
+
+      [type="radio"]:checked,
+      [type="radio"]:not(:checked),
+      [type="checkbox"]:checked,
+      [type="checkbox"]:not(:checked) {
+        display: none;
+      }
+
+      [type="radio"]:checked,
+      [type="checkbox"]:checked {
+        + label {
+          &::after {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+      }
+
+      [type="radio"]:not(:checked),
+      [type="checkbox"]:not(:checked) {
+        + label {
+          &::after {
+            opacity: 0;
+            transform: scale(1);
+          }
+        }
+      }
+
+      [type="radio"]:checked,
+      [type="radio"]:not(:checked),
+      [type="checkbox"]:checked,
+      [type="checkbox"]:not(:checked) {
+        + label {
+          &::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: -6px;
+            width: 28px;
+            height: 28px;
+            border: 2px solid #333;
+            border-radius: 100%;
+            background: #fff;
+          }
+          &::after {
+            content: "";
+            width: 20px;
+            height: 20px;
+            background: #333;
+            position: absolute;
+            top: -2px;
+            left: 4px;
+            border-radius: 100%;
+            -webkit-transition: all 0.2s ease;
+            transition: all 0.2s ease;
+          }
+          position: relative;
+          padding-left: 42px;
+          cursor: pointer;
+          line-height: 20px;
+          display: inline-block;
+          color: #333;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+  .custom-control {
+    position: relative;
+    display: block;
+    min-height: 1.5rem;
+    padding-left: 1.5rem;
+  }
+  .custom-radio:first-of-type {
+    padding-left: 0;
+  }
+}
+.warning-form {
+  width: auto;
+  padding: 35px 60px;
+  background-color: #ff6f4c;
+  border-radius: 4px;
+  margin-top: 30px;
+  color: #fff;
+}
+.question-submit {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  @media (min-width: 768px) {
+    justify-content: flex-end;
+    margin: 30px 10vw 62px;
+    max-width: 1200px;
+  }
+}

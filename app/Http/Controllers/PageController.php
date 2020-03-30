@@ -43,4 +43,9 @@ class PageController extends Controller
         $stereotypes = Post::where('category_id', 3)->orderBy('order')->get();
         return view('stereotypes', compact('stereotypes'));
     }
+
+    public function seltTest(Request $request)
+    {
+        return view('selft_test');
+    }
 }
