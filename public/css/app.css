@@ -23088,7 +23088,6 @@ h3 {
   font-weight: 300;
   font-family: "Rubik", sans-serif;
   font-size: 1.3rem;
-  text-transform: uppercase;
   padding: 1rem;
   color: #1f3677;
   background: #e9ecef;
@@ -23116,7 +23115,7 @@ h3 {
 .PreventativeMeasure--Wrapper .PreventativeMeasure--Item .collapsible-content .content-inner {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem 0.5rem 1rem;
 }
 
 .PreventativeMeasure--Wrapper .PreventativeMeasure--Item .toggle:checked + .lbl-toggle::before {
@@ -23136,7 +23135,6 @@ h3 {
 .PreventativeMeasure--Wrapper .PreventativeMeasure--Item .toggle:checked + .lbl-toggle {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-  font-size: 1.4rem;
   color: #1f3677;
 }
 
@@ -23181,7 +23179,6 @@ h3 {
   font-weight: 300;
   font-family: "Rubik", sans-serif;
   font-size: 1.3rem;
-  text-transform: uppercase;
   padding: 1rem;
   color: #1f3677;
   background: #e9ecef;
@@ -23209,7 +23206,7 @@ h3 {
 .OfficialMeasures--Wrapper article .collapsible-content .content-inner {
   border-bottom-left-radius: 7px;
   border-bottom-right-radius: 7px;
-  padding: 0.5rem 1rem;
+  padding: 0 1rem 0.5rem 1rem;
 }
 
 .OfficialMeasures--Wrapper article .toggle:checked + .lbl-toggle::before {
@@ -23229,7 +23226,6 @@ h3 {
 .OfficialMeasures--Wrapper article .toggle:checked + .lbl-toggle {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
-  font-size: 1.4rem;
   color: #1f3677;
 }
 

@@ -56,9 +56,9 @@
     #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
 </FilesMatch>
 
-# 3 hours
+# 0
 <FilesMatch ".(html|htm|xml|pl|php|cgi|spl|scgi|fcgi)$">
-    Header set Cache-Control "max-age=10800"
+    Header set Cache-Control "max-age=0"
     #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
 </FilesMatch>
 

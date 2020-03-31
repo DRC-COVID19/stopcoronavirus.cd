@@ -44586,7 +44586,7 @@ function drawChart() {
             type: 'time',
             time: {
               unit: 'day',
-              unitStepSize: 1,
+              unitStepSize: 2,
               displayFormats: {
                 'day': 'DD.MM'
               }

@@ -8,7 +8,7 @@
         font-weight: 300;
         font-family: $font-family-base;
         font-size: 1.3rem;
-        text-transform: uppercase;
+        //text-transform: uppercase;
   
         padding: 1rem;
   
@@ -46,7 +46,7 @@
         .content-inner {
           border-bottom-left-radius: 7px;
           border-bottom-right-radius: 7px;
-          padding: 0.5rem 1rem;
+          padding: 0 1rem 0.5rem 1rem;
         }
       }
       .toggle:checked {
@@ -67,7 +67,7 @@
       .toggle:checked + .lbl-toggle {
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
-        font-size: 1.4rem;
+        //font-size: 1.4rem;
         color: $dark-blue-100;
       }
   
