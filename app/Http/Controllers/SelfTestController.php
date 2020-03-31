@@ -134,6 +134,7 @@ class SelfTestController extends Controller
         ];
         $content = $questions[0];
 
+        $step=$request->session()->get('test.param');
         switch ($step) {
             case 'step-2':
                 $content = $questions[1];
@@ -203,6 +204,7 @@ class SelfTestController extends Controller
                 break;
             case 'step-1':
             default:
+                $request->session()->remove('test');
                 $content = $questions[0];
                 break;
         }
@@ -213,94 +215,119 @@ class SelfTestController extends Controller
 
     public function storeSelfTest($step = null, Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'step_value' => 'required|numeric',
+            'current_step'=>'required'
         ]);
 
         if ($validator->fails()) {
             return redirect()->route('selfTest.get', ['step' => $step])->withErrors($validator);
         }
         $value = $request->get('step_value');
+        $step=$request->get('current_step');
         switch ($step) {
-            case 'step-2':
-                session('test.2', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-3']);
-            case 'step-3':
-                session('test.3', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-4']);
-            case 'step-4':
-                session('test.4', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-5']);
-            case 'step-5':
-                session('test.5', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-6']);
-            case 'step-6':
-                session('test.6', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-7']);
-            case 'step-7':
-                session('test.7', $value);
+            case '2':
+                $request->session()->push('test.2', $value);
+                $request->session()->flash('test.param','step-3');
+                return redirect()->route('selfTest.get');
+            case '3':
+                $request->session()->push('test.3', $value);
+                $request->session()->flash('test.param','step-4');
+                return redirect()->route('selfTest.get');
+            case '4':
+                $request->session()->push('test.4', $value);
+                $request->session()->flash('test.param','step-5');
+                return redirect()->route('selfTest.get');
+            case '5':
+                $request->session()->push('test.5', $value);
+                $request->session()->flash('test.param','step-6');
+                return redirect()->route('selfTest.get');
+            case '6':
+                $request->session()->push('test.6', $value);
+                $request->session()->flash('test.param','step-7');
+                return redirect()->route('selfTest.get');
+            case '7':
+                $request->session()->push('test.7', $value);
                 if ($value == 0) {
-                    return redirect()->route('selfTest.get', ['step' => 'step-9']);
+                    $request->session()->flash('test.param','step-9');
+                    return redirect()->route('selfTest.get');
                 }
-                return redirect()->route('selfTest.get', ['step' => 'step-8']);
-            case 'step-8':
-                session('test.8', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-9']);
-            case 'step-9':
-                session('test.9', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-10']);
-            case 'step-10':
-                session('test.10', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-11']);
-            case 'step-11':
-                session('test.11', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-12']);
-            case 'step-12':
-                session('test.12', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-13']);
-            case 'step-13':
-                session('test.13', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-14']);
-            case 'step-14':
-                session('test.14', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-15']);
-            case 'step-15':
-                session('test.15', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-16']);
-            case 'step-16':
-                session('test.16', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-17']);
-            case 'step-17':
-                session('test.17', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-18']);
-            case 'step-18':
-                session('test.18', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-19']);
-            case 'step-19':
-                session('test.19', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-20']);
-            case 'step-20':
-                session('test.20', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-21']);
-            case 'step-21':
-                session('test.21', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-22']);
-            case 'step-22':
-                session('test.22', $value);
-                return redirect()->route('selfTest.get', ['step' => 'step-23']);
-            case 'step-23':
-                dump(session());
+                $request->session()->flash('test.param','step-8');
+                return redirect()->route('selfTest.get');
+            case '8':
+                $request->session()->push('test.8', $value);
+                $request->session()->flash('test.param','step-9');
+                return redirect()->route('selfTest.get');
+            case '9':
+                $request->session()->push('test.9', $value);
+                $request->session()->flash('test.param','step-10');
+                return redirect()->route('selfTest.get');
+            case '10':
+                $request->session()->push('test.10', $value);
+                $request->session()->flash('test.param','step-11');
+                return redirect()->route('selfTest.get');
+            case '11':
+                $request->session()->push('test.11', $value);
+                $request->session()->flash('test.param','step-12');
+                return redirect()->route('selfTest.get');
+            case '12':
+                $request->session()->push('test.12', $value);
+                $request->session()->flash('test.param','step-13');
+                return redirect()->route('selfTest.get');
+            case '13':
+                $request->session()->push('test.13', $value);
+                $request->session()->flash('test.param','step-14');
+                return redirect()->route('selfTest.get');
+            case '14':
+                $request->session()->push('test.14', $value);
+                $request->session()->flash('test.param','step-15');
+                return redirect()->route('selfTest.get');
+            case '15':
+                $request->session()->push('test.15', $value);
+                $request->session()->flash('test.param','step-16');
+                return redirect()->route('selfTest.get');
+            case '16':
+                $request->session()->push('test.16', $value);
+                $request->session()->flash('test.param','step-17');
+                return redirect()->route('selfTest.get');
+            case '17':
+                $request->session()->push('test.17', $value);
+                $request->session()->flash('test.param','step-18');
+                return redirect()->route('selfTest.get');
+            case '18':
+                $request->session()->push('test.18', $value);
+                $request->session()->flash('test.param','step-19');
+                return redirect()->route('selfTest.get');
+            case '19':
+                $request->session()->push('test.19', $value);
+                $request->session()->flash('test.param','step-20');
+                return redirect()->route('selfTest.get');
+            case '20':
+                $request->session()->push('test.20', $value);
+                $request->session()->flash('test.param','step-21');
+                return redirect()->route('selfTest.get');
+            case '21':
+                $request->session()->push('test.21', $value);
+                $request->session()->flash('test.param','step-22');
+                return redirect()->route('selfTest.get');
+            case '22':
+                $request->session()->push('test.22', $value);
+                $request->session()->flash('test.param','step-23');
+                return redirect()->route('selfTest.get');
+            case '23':
+                $request->session()->push('test.23', $value);
+                dump($request->session()->all());
                 exit;
             break;
-            case 'step-1':
+            case '1':
             default:
-                session('test.1', $value);
+                $request->session()->push('test.1', $value);
                 if ($value == 0) {
-                    return redirect()->route('selfTest.get', ['step' => 'step-3']);
+                    $request->session()->flash('test.param','step-3');
+                    return redirect()->route('selfTest.get');
                 }
-                return redirect()->route('selfTest.get', ['step' => 'step-2']);
-                break;
+                $request->session()->flash('test.param','step-2');
+                return redirect()->route('selfTest.get');
         }
     }
 
