@@ -11,3 +11,7 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /.idea
+.vs/slnx.sqlite
+.vs/VSWorkspaceState.json
+.vs/covid19/v16/.suo
+.vs/covid19/config/applicationhost.config

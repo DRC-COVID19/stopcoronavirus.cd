@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Validator;
 
 class SelfTestController extends Controller
 {
-
     public function seltTest($step = null, Request $request)
     {
         $questions = [
@@ -72,69 +71,69 @@ class SelfTestController extends Controller
                 'id' => 12,
                 'q' => "Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.",
                 'r' => 5,
-                'r_lable'=>'ans'
+                'r_lable' => 'ans'
             ],
             [
                 'id' => 13,
                 'q' => "Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.",
                 'r' => 6,
-                'r_lable'=>'cm'
+                'r_lable' => 'cm'
             ],
             [
                 'id' => 14,
                 'q' => "Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.",
                 'r' => 7,
-                'r_label'=>'kg'
+                'r_label' => 'kg'
             ],
             [
                 'id' => 15,
                 'q' => "Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?",
-                'r'=> 2
+                'r' => 2
             ],
             [
                 'id' => 16,
                 'q' => "Êtes-vous diabétique ?",
-                'r'=> 1
+                'r' => 1
             ],
             [
                 'id' => 17,
                 'q' => "Avez-vous ou avez-vous eu un cancer ces trois dernières années ?",
-                'r'=> 1
+                'r' => 1
             ],
             [
                 'id' => 18,
                 'q' => "Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?",
-                'r'=> 1
+                'r' => 1
             ],
             [
                 'id' => 19,
                 'q' => "Avez-vous une insuffisance rénale chronique dialysée ?",
-                'r'=> 1
+                'r' => 1
             ],
             [
                 'id' => 20,
                 'q' => "Avez-vous une maladie chronique du foie ?",
-                'r'=> 1
+                'r' => 1
             ],
             [
                 'id' => 21,
                 'q' => "Êtes-vous enceinte ?",
-                'r'=> 8
+                'r' => 8
             ],
             [
                 'id' => 22,
                 'q' => "Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?",
-                'r'=> 2
+                'r' => 2
             ],
             [
                 'id' => 23,
                 'q' => "Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive).",
-                'r'=> 2
+                'r' => 2
             ]
         ];
         $content = $questions[0];
 
-        $step=$request->session()->get('test.param');
+        $step = $request->session()->get('test.param');
         switch ($step) {
             case 'step-2':
                 $content = $questions[1];
@@ -217,118 +216,261 @@ class SelfTestController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'step_value' => 'required|numeric',
-            'current_step'=>'required'
+            'current_step' => 'required'
         ]);
 
         if ($validator->fails()) {
             return redirect()->route('selfTest.get', ['step' => $step])->withErrors($validator);
         }
         $value = $request->get('step_value');
-        $step=$request->get('current_step');
+        $step = $request->get('current_step');
         switch ($step) {
             case '2':
                 $request->session()->push('test.2', $value);
-                $request->session()->flash('test.param','step-3');
+                $request->session()->flash('test.param', 'step-3');
                 return redirect()->route('selfTest.get');
             case '3':
                 $request->session()->push('test.3', $value);
-                $request->session()->flash('test.param','step-4');
+                $request->session()->flash('test.param', 'step-4');
                 return redirect()->route('selfTest.get');
             case '4':
                 $request->session()->push('test.4', $value);
-                $request->session()->flash('test.param','step-5');
+                $request->session()->flash('test.param', 'step-5');
                 return redirect()->route('selfTest.get');
             case '5':
                 $request->session()->push('test.5', $value);
-                $request->session()->flash('test.param','step-6');
+                $request->session()->flash('test.param', 'step-6');
                 return redirect()->route('selfTest.get');
             case '6':
                 $request->session()->push('test.6', $value);
-                $request->session()->flash('test.param','step-7');
+                $request->session()->flash('test.param', 'step-7');
                 return redirect()->route('selfTest.get');
             case '7':
                 $request->session()->push('test.7', $value);
                 if ($value == 0) {
-                    $request->session()->flash('test.param','step-9');
+                    $request->session()->flash('test.param', 'step-9');
                     return redirect()->route('selfTest.get');
                 }
-                $request->session()->flash('test.param','step-8');
+                $request->session()->flash('test.param', 'step-8');
                 return redirect()->route('selfTest.get');
             case '8':
                 $request->session()->push('test.8', $value);
-                $request->session()->flash('test.param','step-9');
+                $request->session()->flash('test.param', 'step-9');
                 return redirect()->route('selfTest.get');
             case '9':
                 $request->session()->push('test.9', $value);
-                $request->session()->flash('test.param','step-10');
+                $request->session()->flash('test.param', 'step-10');
                 return redirect()->route('selfTest.get');
             case '10':
                 $request->session()->push('test.10', $value);
-                $request->session()->flash('test.param','step-11');
+                $request->session()->flash('test.param', 'step-11');
                 return redirect()->route('selfTest.get');
             case '11':
                 $request->session()->push('test.11', $value);
-                $request->session()->flash('test.param','step-12');
+                $request->session()->flash('test.param', 'step-12');
                 return redirect()->route('selfTest.get');
             case '12':
                 $request->session()->push('test.12', $value);
-                $request->session()->flash('test.param','step-13');
+                $request->session()->flash('test.param', 'step-13');
                 return redirect()->route('selfTest.get');
             case '13':
                 $request->session()->push('test.13', $value);
-                $request->session()->flash('test.param','step-14');
+                $request->session()->flash('test.param', 'step-14');
                 return redirect()->route('selfTest.get');
             case '14':
                 $request->session()->push('test.14', $value);
-                $request->session()->flash('test.param','step-15');
+                $request->session()->flash('test.param', 'step-15');
                 return redirect()->route('selfTest.get');
             case '15':
                 $request->session()->push('test.15', $value);
-                $request->session()->flash('test.param','step-16');
+                $request->session()->flash('test.param', 'step-16');
                 return redirect()->route('selfTest.get');
             case '16':
                 $request->session()->push('test.16', $value);
-                $request->session()->flash('test.param','step-17');
+                $request->session()->flash('test.param', 'step-17');
                 return redirect()->route('selfTest.get');
             case '17':
                 $request->session()->push('test.17', $value);
-                $request->session()->flash('test.param','step-18');
+                $request->session()->flash('test.param', 'step-18');
                 return redirect()->route('selfTest.get');
             case '18':
                 $request->session()->push('test.18', $value);
-                $request->session()->flash('test.param','step-19');
+                $request->session()->flash('test.param', 'step-19');
                 return redirect()->route('selfTest.get');
             case '19':
                 $request->session()->push('test.19', $value);
-                $request->session()->flash('test.param','step-20');
+                $request->session()->flash('test.param', 'step-20');
                 return redirect()->route('selfTest.get');
             case '20':
                 $request->session()->push('test.20', $value);
-                $request->session()->flash('test.param','step-21');
+                $request->session()->flash('test.param', 'step-21');
                 return redirect()->route('selfTest.get');
             case '21':
                 $request->session()->push('test.21', $value);
-                $request->session()->flash('test.param','step-22');
+                $request->session()->flash('test.param', 'step-22');
                 return redirect()->route('selfTest.get');
             case '22':
                 $request->session()->push('test.22', $value);
-                $request->session()->flash('test.param','step-23');
+                $request->session()->flash('test.param', 'step-23');
                 return redirect()->route('selfTest.get');
             case '23':
                 $request->session()->push('test.23', $value);
-                dump($request->session()->all());
-                exit;
-            break;
+                $resultat= $this->result();
+                return view('selft_test_result',compact('resultat'));
+                break;
             case '1':
             default:
                 $request->session()->push('test.1', $value);
                 if ($value == 0) {
-                    $request->session()->flash('test.param','step-3');
+                    $request->session()->flash('test.param', 'step-3');
                     return redirect()->route('selfTest.get');
                 }
-                $request->session()->flash('test.param','step-2');
+                $request->session()->flash('test.param', 'step-2');
                 return redirect()->route('selfTest.get');
         }
+    }
+
+    public function result()
+    {
+        $message = "";
+        $responses = request()->session()->get('test');
+        if ($responses[1] == 1 && $responses[3] == 1) {
+            if ($this->majorGravity() >= 1) {
+                $message = "Appel 15.";
+                return $message;
+            } else {
+                if ($this->hasPronostic()) {
+                    if ($this->majorGravity() == 0) {
+                        $message = "téléconsultation ou médecin généraliste ou visite à domicile";
+                        return $message;
+                    } elseif ($this->minorGravity() == 1) {
+                        $message = "téléconsultation ou médecin généraliste ou visite à
+                    domicile";
+                        return $message;
+                    } elseif ($this->minorGravity() >= 2) {
+                        $message = "appel 15";
+                    }
+                } else {
+                    if ($this->majorGravity() == 0 && $this->minorGravity() <= 1) {
+                        $message = "téléconsultation ou médecin généraliste ou visite à domicile (SOS médecins…)";
+                        return $message;
+                    }
+                }
+            }
+        }
+        if ($responses[1] == 1 || ($responses[3] == 1 && $responses[5] == 1) || ($responses[1] == 1  && $responses[6] == 1)) {
+            if ($this->majorGravity() >= 2) {
+                $message = "Appel 15";
+                return $message;
+            }
+            if ($this->hasPronostic()) {
+                if ($this->majorGravity() == 0) {
+                    $message = "téléconsultation ou médecin généraliste ou visite à domicile";
+                    return $message;;
+                }
+                if ($this->minorGravity() == 1) {
+                    $message = "téléconsultation ou médecin généraliste ou visite à
+                    domicile";
+                    return $message;
+                }
+                if ($this->minorGravity() >= 2) {
+                    $message = "appel 15";
+                    return $message;
+                }
+            } else {
+                if ($this->majorGravity() == 0 && $this->minorGravity() == 0 &&  $responses[12] > 50) {
+                    $message = "nous vous conseillons de rester à votre domicile et
+                    de contacter votre médecin en cas d’apparition de nouveaux symptômes. Vous pourrez
+                    aussi utiliser à nouveau l’application pour réévaluer vos symptômes";
+                    return $message;
+                }
+                if ($this->majorGravity() == 0 && $this->minorGravity() <= 1 && $responses[12] >= 50 && $responses[12] <= 69) {
+                    $message = "téléconsultation ou médecin généraliste ou visite à domicile (SOS médecins…)";
+                    return $message;
+                }
+            }
+        }
+        if ($responses[1] == 1 || $responses[3] == 1 || $responses[5] == 1) {
+            if ($this->majorGravity() == 0 && $this->minorGravity() == 0) {
+                $message = "Votre situation ne relève probablement pas du Covid-19. Consultez votre
+                médecin au moindre doute.";
+                return $message;
+            }
+            if ($this->majorGravity() > 0 || $this->minorGravity() > 0 || $this->hasPronostic()) {
+                $message = "Votre situation ne relève probablement pas du Covid-19. Un avis médical est
+                recommandé. Au moindre doute, appelez le 15.";
+                return $message;
+            }
+        }
+        $message="Votre situation ne relève probablement pas du Covid-19. N’hésitez pas à contacter votre
+        médecin en cas de doute. Vous pouvez refaire le test en cas de nouveau symptôme pour
+        réévaluer la situation. Pour toute information concernant le Covid-19, composer le
+        0 800 130 000.";
+        return $message;
+    }
+
+    public function hasPronostic()
+    {
+        $responses = request()->session()->get('test');
+        $imc = $responses[14] / $responses[13] / 100;
+        if ($responses[12] >= 70 || $imc >= 30 || $responses[15] == 1 || $responses[16] == 1 || $responses[17] == 1 || $responses[18] == 1 || $responses[19] == 1 || $responses[20] == 1 || $responses[21] == 1 || $responses[22] == 1 || $responses[23]) {
+            return true;
+        }
+        return false;
+    }
+
+    public function minorGravity()
+    {
+        $responses = request()->session()->get('test');
+        if ((isset($responses[2]) && $responses[2] >= 39) || (isset($responses[8]) && $responses[8] == 1) || $responses[10] == 3 || $responses[10] == 4) {
+            return 4;
+        } elseif ((isset($responses[2]) && $responses[2] >= 39) || (isset($responses[8]) && $responses[8] == 1) || $responses[10] == 3) {
+            return 3;
+        } elseif ((isset($responses[2]) && $responses[2] >= 39) || (isset($responses[8]) && $responses[8] == 1) || $responses[10] == 4) {
+            return 3;
+        } else if ((isset($responses[2]) && $responses[2] >= 39) || (isset($responses[8]) && $responses[8] == 1)) {
+            return 2;
+        } elseif ((isset($responses[2]) && $responses[2] >= 39) || $responses[10] == 3) {
+            return 2;
+        } elseif ((isset($responses[2]) && $responses[2] >= 39) || $responses[10] == 4) {
+            return 2;
+        } elseif ((isset($responses[8]) && $responses[8] == 1) || $responses[10] == 3) {
+            return 2;
+        } elseif ((isset($responses[8]) && $responses[8] == 1) || $responses[10] == 4) {
+            return 2;
+        } elseif ($responses[10] == 3 || $responses[10] == 4) {
+            return 2;
+        } elseif ((isset($responses[2]) && $responses[2] >= 39)) {
+            return 1;
+        } elseif ((isset($responses[8]) && $responses[8] == 1)) {
+            return 1;
+        } elseif ($responses[10] == 3) {
+            return 1;
+        } elseif ($responses[10] == 4) {
+            return 1;
+        }
+        return 0;
+    }
+
+    public function majorGravity()
+    {
+        $responses = request()->session()->get('test');
+        if ((isset($responses[2]) && $responses[2] <= 34.4) || $responses[9] == 1 || $responses[11] == 1) {
+            return 3;
+        } elseif ((isset($responses[2]) && $responses[2] <= 34.4) || $responses[9] == 1) {
+            return 2;
+        } elseif ((isset($responses[2]) && $responses[2] <= 34.4) || $responses[11] == 1) {
+            return 2;
+        } elseif ($responses[9] == 1 || $responses[11] == 1) {
+            return 2;
+        } elseif ((isset($responses[2]) && $responses[2] <= 34.4)) {
+            return 1;
+        } elseif ($responses[9] == 1) {
+            return 1;
+        } elseif ($responses[11] == 1) {
+            return 1;
+        }
+        return 0;
     }
 
     public function back()
