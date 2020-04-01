@@ -334,7 +334,7 @@ class SelfTestController extends Controller
     {
         $message = "";
         $responses = request()->session()->get('test');
-        if ($responses[1] == 1 && $responses[3] == 1) {
+        if ($responses[1][0] == 1 && $responses[3][0] == 1) {
             if ($this->majorGravity() >= 1) {
                 $message = "Appel 15.";
                 return $message;
@@ -358,7 +358,7 @@ class SelfTestController extends Controller
                 }
             }
         }
-        if ($responses[1] == 1 || ($responses[3] == 1 && $responses[5] == 1) || ($responses[1] == 1  && $responses[6] == 1)) {
+        if ($responses[1][0] == 1 || ($responses[3][0] == 1 && $responses[5][0] == 1) || ($responses[1][0] == 1  && $responses[6][0] == 1)) {
             if ($this->majorGravity() >= 2) {
                 $message = "Appel 15";
                 return $message;
@@ -378,19 +378,19 @@ class SelfTestController extends Controller
                     return $message;
                 }
             } else {
-                if ($this->majorGravity() == 0 && $this->minorGravity() == 0 &&  $responses[12] > 50) {
+                if ($this->majorGravity() == 0 && $this->minorGravity() == 0 &&  $responses[12][0] > 50) {
                     $message = "nous vous conseillons de rester à votre domicile et
                     de contacter votre médecin en cas d’apparition de nouveaux symptômes. Vous pourrez
                     aussi utiliser à nouveau l’application pour réévaluer vos symptômes";
                     return $message;
                 }
-                if ($this->majorGravity() == 0 && $this->minorGravity() <= 1 && $responses[12] >= 50 && $responses[12] <= 69) {
+                if ($this->majorGravity() == 0 && $this->minorGravity() <= 1 && $responses[12][0] >= 50 && $responses[12][0] <= 69) {
                     $message = "téléconsultation ou médecin généraliste ou visite à domicile (SOS médecins…)";
                     return $message;
                 }
             }
         }
-        if ($responses[1] == 1 || $responses[3] == 1 || $responses[5] == 1) {
+        if ($responses[1][0] == 1 || $responses[3][0] == 1 || $responses[5][0] == 1) {
             if ($this->majorGravity() == 0 && $this->minorGravity() == 0) {
                 $message = "Votre situation ne relève probablement pas du Covid-19. Consultez votre
                 médecin au moindre doute.";
@@ -412,8 +412,8 @@ class SelfTestController extends Controller
     public function hasPronostic()
     {
         $responses = request()->session()->get('test');
-        $imc = $responses[14] / $responses[13] / 100;
-        if ($responses[12] >= 70 || $imc >= 30 || $responses[15] == 1 || $responses[16] == 1 || $responses[17] == 1 || $responses[18] == 1 || $responses[19] == 1 || $responses[20] == 1 || $responses[21] == 1 || $responses[22] == 1 || $responses[23]) {
+        $imc = $responses[14][0] / $responses[13][0] / 100;
+        if ($responses[12][0] >= 70 || $imc >= 30 || $responses[15][0] == 1 || $responses[16][0] == 1 || $responses[17][0] == 1 || $responses[18][0] == 1 || $responses[19][0] == 1 || $responses[20][0] == 1 || $responses[21][0] == 1 || $responses[22][0] == 1 || $responses[23][0]) {
             return true;
         }
         return false;
@@ -422,31 +422,31 @@ class SelfTestController extends Controller
     public function minorGravity()
     {
         $responses = request()->session()->get('test');
-        if ((isset($responses[2]) && $responses[2] >= 39) || (isset($responses[8]) && $responses[8] == 1) || $responses[10] == 3 || $responses[10] == 4) {
+        if ((isset($responses[2][0]) && $responses[2][0] >= 39) || (isset($responses[8][0]) && $responses[8][0] == 1) || $responses[10][0] == 3 || $responses[10][0] == 4) {
             return 4;
-        } elseif ((isset($responses[2]) && $responses[2] >= 39) || (isset($responses[8]) && $responses[8] == 1) || $responses[10] == 3) {
+        } elseif ((isset($responses[2][0]) && $responses[2][0] >= 39) || (isset($responses[8][0]) && $responses[8][0] == 1) || $responses[10][0] == 3) {
             return 3;
-        } elseif ((isset($responses[2]) && $responses[2] >= 39) || (isset($responses[8]) && $responses[8] == 1) || $responses[10] == 4) {
+        } elseif ((isset($responses[2][0]) && $responses[2][0] >= 39) || (isset($responses[8][0]) && $responses[8][0] == 1) || $responses[10][0] == 4) {
             return 3;
-        } else if ((isset($responses[2]) && $responses[2] >= 39) || (isset($responses[8]) && $responses[8] == 1)) {
+        } else if ((isset($responses[2][0]) && $responses[2][0] >= 39) || (isset($responses[8][0]) && $responses[8][0] == 1)) {
             return 2;
-        } elseif ((isset($responses[2]) && $responses[2] >= 39) || $responses[10] == 3) {
+        } elseif ((isset($responses[2][0]) && $responses[2][0] >= 39) || $responses[10][0] == 3) {
             return 2;
-        } elseif ((isset($responses[2]) && $responses[2] >= 39) || $responses[10] == 4) {
+        } elseif ((isset($responses[2][0]) && $responses[2][0] >= 39) || $responses[10][0] == 4) {
             return 2;
-        } elseif ((isset($responses[8]) && $responses[8] == 1) || $responses[10] == 3) {
+        } elseif ((isset($responses[8][0]) && $responses[8][0] == 1) || $responses[10][0] == 3) {
             return 2;
-        } elseif ((isset($responses[8]) && $responses[8] == 1) || $responses[10] == 4) {
+        } elseif ((isset($responses[8][0]) && $responses[8][0] == 1) || $responses[10][0] == 4) {
             return 2;
-        } elseif ($responses[10] == 3 || $responses[10] == 4) {
+        } elseif ($responses[10][0] == 3 || $responses[10][0] == 4) {
             return 2;
-        } elseif ((isset($responses[2]) && $responses[2] >= 39)) {
+        } elseif ((isset($responses[2][0]) && $responses[2][0] >= 39)) {
             return 1;
-        } elseif ((isset($responses[8]) && $responses[8] == 1)) {
+        } elseif ((isset($responses[8][0]) && $responses[8][0] == 1)) {
             return 1;
-        } elseif ($responses[10] == 3) {
+        } elseif ($responses[10][0] == 3) {
             return 1;
-        } elseif ($responses[10] == 4) {
+        } elseif ($responses[10][0] == 4) {
             return 1;
         }
         return 0;
@@ -455,19 +455,19 @@ class SelfTestController extends Controller
     public function majorGravity()
     {
         $responses = request()->session()->get('test');
-        if ((isset($responses[2]) && $responses[2] <= 34.4) || $responses[9] == 1 || $responses[11] == 1) {
+        if ((isset($responses[2][0]) && $responses[2][0] <= 34.4) || $responses[9][0] == 1 || $responses[11][0] == 1) {
             return 3;
-        } elseif ((isset($responses[2]) && $responses[2] <= 34.4) || $responses[9] == 1) {
+        } elseif ((isset($responses[2][0]) && $responses[2][0] <= 34.4) || $responses[9][0] == 1) {
             return 2;
-        } elseif ((isset($responses[2]) && $responses[2] <= 34.4) || $responses[11] == 1) {
+        } elseif ((isset($responses[2][0]) && $responses[2][0] <= 34.4) || $responses[11][0] == 1) {
             return 2;
-        } elseif ($responses[9] == 1 || $responses[11] == 1) {
+        } elseif ($responses[9][0] == 1 || $responses[11][0] == 1) {
             return 2;
-        } elseif ((isset($responses[2]) && $responses[2] <= 34.4)) {
+        } elseif ((isset($responses[2][0]) && $responses[2][0] <= 34.4)) {
             return 1;
-        } elseif ($responses[9] == 1) {
+        } elseif ($responses[9][0] == 1) {
             return 1;
-        } elseif ($responses[11] == 1) {
+        } elseif ($responses[11][0] == 1) {
             return 1;
         }
         return 0;
