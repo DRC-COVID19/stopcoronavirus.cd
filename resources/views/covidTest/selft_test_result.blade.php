@@ -18,8 +18,8 @@
             <div class="results">
                 <div class="d-flex flex-column">
                     <div class="resultAlert">
-                        <p class="resultSubtitle font-weight-bold d-flex align-items-center">
-                            {{$resultat}}
+                        <p class="resultSubtitle font-weight-bold d-flex ">
+                           <i class="fas fa-2x fa-exclamation-triangle"></i>{{$resultat}}
                         </p>
                         <p class="resultSubtitle result-pad font-weight-bold">Restez chez vous.</p>
                         <p class="resultText">

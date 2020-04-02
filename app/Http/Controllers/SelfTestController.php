@@ -286,6 +286,14 @@ class SelfTestController extends Controller
                     $request->session()->flash('test.param', $step);
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
+                if ($value<15) {
+                    $resultat="Prenez contact avec votre médecin généraliste au moindre
+                    doute. Cette application n’est pour l’instant pas adaptée aux personnes de moins
+                    de 15 ans. En cas d’urgence, appeler le 15.";
+                    $isResultat=true;
+                    return view('covidTest.selft_test_result', compact('resultat','isResultat'));
+                }
+                
                 $request->session()->put('test.12', $value);
                 $request->session()->flash('test.param', 'step-13');
                 return redirect()->route('selfTest.get');
@@ -448,7 +456,7 @@ class SelfTestController extends Controller
         if (
             $responses[12] >= 70 ||
             $imc >= 30 ||
-            $responses[15] == 1 || $responses[16] == 1 ||
+            $responses[15] == 1 || $responses[15] == 2 || $responses[16] == 1 ||
             $responses[17] == 1 || $responses[18] == 1 ||
             $responses[19] == 1 || $responses[20] == 1 ||
             $responses[21] == 1 || $responses[22] == 1 ||
