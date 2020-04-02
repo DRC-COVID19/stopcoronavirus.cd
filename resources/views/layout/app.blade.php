@@ -80,14 +80,14 @@
     <div class="pt-2">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <div class="App-Header--logo mb-1">
                         <a href="{{route('home')}}" class="">
                             <img src="{{asset('img/logo_stop_coronavirus_rdc.png')}}" class="img-fluid" alt="STOP COVID-19 RDC">
                         </a>
                     </div>
                 </div>
-                <div class="col-lg-8">
+                <div class="col-lg-9">
                     <div class="d-flex flex-md-row flex-column justify-content-end mb-3 mt-2 hidden-sm">
                         <img src="img/partners_top.png" height="55" width="200" class="img-fluid" alt="">
                     </div>
@@ -96,6 +96,7 @@
                         <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">Mesures de protection</a>
                         <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">Directives du Gouvernement</a>
                         <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">Idées reçues</a>
+                        <a href="{{route('selfTest.get')}}" class="px-md-2 {{ Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">Test Covid-19</a>
                     </div>
                 </div>
             </div>

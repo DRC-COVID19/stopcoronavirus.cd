@@ -209,7 +209,8 @@ class SelfTestController extends Controller
         }
         $backId = $content['id'] - 1;
         $backUrl = route('selfTest.back', ['step' => $backId]);
-        return view('selft_test', compact('content', 'backUrl'));
+        $isResultat=false;
+        return view('covidTest.selft_test', compact('content', 'backUrl','isResultat'));
     }
 
     public function storeSelfTest( Request $request)
@@ -345,7 +346,8 @@ class SelfTestController extends Controller
             case '23':
                 $request->session()->put('test.23', $value);
                 $resultat = $this->result(request()->session()->get('test'));
-                return view('selft_test_result', compact('resultat'));
+                $isResultat=true;
+                return view('covidTest.selft_test_result', compact('resultat','isResultat'));
                 break;
             case '1':
             default:
@@ -370,7 +372,7 @@ class SelfTestController extends Controller
 
     public function result(array $responses)
     {
-        
+
         $message = "";
         if ($responses[1] == 1 && $responses[3] == 1) {
             if ($this->majorGravity() >= 1) {

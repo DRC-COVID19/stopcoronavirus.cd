@@ -1,29 +1,7 @@
-@extends('layout.app')
-@section('title', 'Directives prises par le Gouvernement')
-@section('content')
+@extends('covidTest.base')
+@section('title', 'Résultat test covid-19')
+@section('covid_content')
 <div class="container">
-    <div class="row">
-        <div class="stepper">
-            <div class="step">
-                <div class="step-circle">
-                    <p>1</p>
-                </div>
-                <p class="step-title">Informations</p>
-            </div>
-            <div class="step ">
-                <div class="step-circle ">
-                    <p>2</p>
-                </div>
-                <p class="step-title">Questionnaire</p>
-            </div>
-            <div class="step">
-                <div class="step-circle active">
-                    <p>3</p>
-                </div>
-                <p class="step-title">Résultats</p>
-            </div>
-        </div>
-    </div>
     <div class="row mb-5">
         <div class="col-12">
             <div class="resultHead">

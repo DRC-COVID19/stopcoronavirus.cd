@@ -23272,12 +23272,12 @@ h3 {
   margin-right: 10px;
   height: 28px;
   width: 28px;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: #e9ecef;
   border-radius: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: black;
   font-size: 12px;
   font-weight: bold;
 }
@@ -23287,13 +23287,14 @@ h3 {
 }
 
 .stepper .active {
-  background: #1f3677 !important;
+  background: #00b065 !important;
+  color: white;
 }
 
 .stepper .step-title {
   font-size: 18px;
   font-weight: 600;
-  color: #333;
+  color: white;
   margin: 0;
 }
 
