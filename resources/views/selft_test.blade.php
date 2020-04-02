@@ -10,8 +10,8 @@
               </div>
               <p class="step-title">Informations</p>
             </div>
-            <div class="step active">
-              <div class="step-circle">
+            <div class="step ">
+              <div class="step-circle active">
                 <p>2</p>
               </div>
               <p class="step-title">Questionnaire</p>
@@ -96,28 +96,28 @@
 
                       @if($content['r']==4)
                       <div class="custom-control custom-radio">
-                        <input type="radio" id="input-radio-step_fever-well" name="step_value" value="0" tabindex="1">
+                        <input type="radio" id="input-radio-step_fever-well" name="step_value" value="1" tabindex="1">
                           <label for="input-radio-step_fever-well">
                             Bien
                             <span class="hover-border"></span>
                           </label>
                       </div>
                       <div class="custom-control custom-radio">
-                        <input type="radio" id="input-radio-step_fever-enough" name="step_value" value="1"  tabindex="2">
+                        <input type="radio" id="input-radio-step_fever-enough" name="step_value" value="2"  tabindex="2">
                           <label for="input-radio-step_fever-enough">
                             Assez bien
                             <span class="hover-border"></span>
                           </label>
                       </div>
                       <div class="custom-control custom-radio">
-                        <input type="radio" id="input-radio-step_fever-bad" name="step_value" value="2" tabindex="1">
+                        <input type="radio" id="input-radio-step_fever-bad" name="step_value" value="3" tabindex="1">
                           <label for="input-radio-step_fever-bad">
                             Mal
                             <span class="hover-border"></span>
                           </label>
                       </div>
                       <div class="custom-control custom-radio">
-                        <input type="radio" id="input-radio-step_fever-very-bad" name="step_value" value="3"  tabindex="2">
+                        <input type="radio" id="input-radio-step_fever-very-bad" name="step_value" value="4"  tabindex="2">
                           <label for="input-radio-step_fever-very-bad">
                             Très mal
                             <span class="hover-border"></span>

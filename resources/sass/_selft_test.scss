@@ -35,6 +35,9 @@
       margin: 0;
     }
   }
+  .active{
+    background: $secondary !important;
+  }
   .step-title {
     font-size: 18px;
     font-weight: 600;
@@ -208,34 +211,32 @@
   }
 }
 
-.resultsContainer {
-  .resultHead {
-    background: rgba(201, 209, 218, 0.1);
-    border-left: 7px solid #c9d1da;
-    padding: 36px;
-    .resultText {
-      font-weight: 600;
-      font-size: 18px;
-      color: #333;
-      text-align: left;
-    }
+.resultHead {
+  background: rgba(201, 209, 218, 0.1);
+  border-left: 7px solid #c9d1da;
+  padding: 36px;
+  .resultText {
+    font-weight: 600;
+    font-size: 18px;
+    color: #333;
+    text-align: left;
   }
-  .results {
-    .resultTitle {
-      font-size: 26px;
-      font-weight: 600;
-      color: #333;
-      margin-bottom: 61px;
-    }
-    .resultAlert {
-      padding: 36px 61px;
-    }
-    .resultAlert {
-      background: rgba(0, 105, 204, 0.1);
-      border: 2px solid #0069cc;
-      border-radius: 4px;
-      padding: 36px 30px;
-      margin-bottom: 25px;
-    }
+}
+.results {
+  .resultTitle {
+    font-size: 26px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 61px;
+  }
+  .resultAlert {
+    padding: 36px 61px;
+  }
+  .resultAlert {
+    background: rgba(0, 105, 204, 0.1);
+    border: 2px solid #0069cc;
+    border-radius: 4px;
+    padding: 36px 30px;
+    margin-bottom: 25px;
   }
 }

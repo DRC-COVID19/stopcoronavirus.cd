@@ -10,21 +10,21 @@
                 </div>
                 <p class="step-title">Informations</p>
             </div>
-            <div class="step active">
-                <div class="step-circle">
+            <div class="step ">
+                <div class="step-circle ">
                     <p>2</p>
                 </div>
                 <p class="step-title">Questionnaire</p>
             </div>
             <div class="step">
-                <div class="step-circle">
+                <div class="step-circle active">
                     <p>3</p>
                 </div>
                 <p class="step-title">Résultats</p>
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-5">
         <div class="col-12">
             <div class="resultHead">
                 <p class="resultText">
@@ -39,9 +39,6 @@
         <div class="col-12">
             <div class="results">
                 <div class="d-flex flex-column">
-                    <span class="justify-content-center text-center resultTitle">
-                        Vos symptômes nécessitent <u>une prise en charge rapide</u>.
-                    </span>
                     <div class="resultAlert">
                         <p class="resultSubtitle font-weight-bold d-flex align-items-center">
                             {{$resultat}}
@@ -55,4 +52,10 @@
                 </div>
             </div>
         </div>
-        @endsection
+    </div>
+    <div class="row pb-5 pt-3">
+        <div class="col-12 text-center">
+            <a href="{{url()->current()}}" class="btn btn-danger" href="">Recommancez le test</a>
+        </div>
+    </div>
+    @endsection
