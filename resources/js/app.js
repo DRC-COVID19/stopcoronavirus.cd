@@ -7,7 +7,7 @@ function drawChart() {
 
     // Add a helper to format timestamp data
     Date.prototype.formatD = function () {
-        return this.getDate()+'.'+(this.getMonth()+1); //+"."+this.getFullYear();
+        return this.getDate()+'.'+('0' + (this.getMonth()+1)).slice(-2)+"."+this.getFullYear();
     }
 
     var jsonData = $.ajax({
@@ -67,6 +67,13 @@ function drawChart() {
                 tooltips: {
                     mode: 'index',
                     intersect: false,
+                    callbacks: {
+                        title: function (tooltipItem, data) {
+                            let d = new Date (tooltipItem[0].label);
+                            return d.formatD();
+                        }
+                    }
+
                 },
                 hover: {
                     mode: 'nearest',
@@ -76,7 +83,7 @@ function drawChart() {
                     xAxes: [{
                         display: true,
                         gridLines: {
-                            display: false
+                            display: true
                         },
                         scaleLabel: {
                             display: false,
