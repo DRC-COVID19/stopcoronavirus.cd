@@ -118,7 +118,7 @@
             <div class="row align-items-end">
                 <div class="col-lg-8 col-md-12 col-lg-offset-2 col-md-offset-0 pb-2">
                     <p>
-                        {{ __("avec l'appui d'Internews au travers du projet Médias2I de l'Union Européenne et du programme MSDA financé par l'USAID avec un financement complémentaire de la Coopération Suédoise") }}
+                        {{ __("Avec l'appui d'Internews au travers du projet Médias2I de l'Union Européenne et du programme MSDA financé par l'USAID avec un financement complémentaire de la Coopération Suédoise") }}
                     </p>
                     <p>
                         <img src="img/Logo_UE_MSDA_USAID.png" class="img-fluid" alt="Logo UE, USAID, Sverige, fhi360, Internews">
