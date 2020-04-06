@@ -92,7 +92,7 @@
                     @isset($smsDiffusion->content_fr)
                     <tr>
                         <td>
-                            Francais
+                            Français
                         </td>
                         <td>
                             {{ $smsDiffusion->content_fr }}
