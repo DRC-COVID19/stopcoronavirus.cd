@@ -1,22 +1,49 @@
-<p align="center"><img src="https://www.kinshasadigital.com/img/images/logo_kinshasa_digital.png?w=100" ></p>
+<p align="center"><img src="https://www.kinshasadigital.com/img/images/logo_kinshasa_digital.png?w=100"></p>
 
-# Covid-19
+## About
 
+## Installation
 
-
-## Api documentation
+Use the package manager composer to install laravel and yarn or npm to install node module.
 
 ```bash
-php artisan serve 
+    composer install
 ```
 
-[http://localhost:8000/docs](http://localhost:8000/docs)
+```bash
+    npm install or yarn install
+```
 
+Install Laravel Admin
+
+```bash
+    php artisan admin:install
+```
+
+
+initialize seeds
+
+```bash
+    php artisan db:seed
+```
+
+Compile SCSS
+
+```bash
+    yarn or npm watch
+```
+
+start server
+
+```bash
+    php artisan serve
+```
+## Api Documentation
+
+- e.g : [localhost:8000/docs](http://localhost:8000/docs)
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
-
+- [Kinshasa Digital](https://www.kinshasadigital.com)
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+
+[MIT license](https://opensource.org/licenses/MIT).

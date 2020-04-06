@@ -44510,7 +44510,7 @@ var Chart = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Ch
 function drawChart() {
   // Add a helper to format timestamp data
   Date.prototype.formatD = function () {
-    return this.getDate() + '.' + (this.getMonth() + 1); //+"."+this.getFullYear();
+    return this.getDate() + '.' + ('0' + (this.getMonth() + 1)).slice(-2) + "." + this.getFullYear();
   };
 
   var jsonData = $.ajax({
@@ -44567,7 +44567,13 @@ function drawChart() {
         },
         tooltips: {
           mode: 'index',
-          intersect: false
+          intersect: false,
+          callbacks: {
+            title: function title(tooltipItem, data) {
+              var d = new Date(tooltipItem[0].label);
+              return d.formatD();
+            }
+          }
         },
         hover: {
           mode: 'nearest',
@@ -44577,7 +44583,7 @@ function drawChart() {
           xAxes: [{
             display: true,
             gridLines: {
-              display: false
+              display: true
             },
             scaleLabel: {
               display: false,

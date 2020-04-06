@@ -22,7 +22,7 @@
 }
 
 .container-directive {
-        background: #eee;
+    background: #eee;
 }
 
 .home-directives {
@@ -41,6 +41,20 @@
 
         strong {
             display: block;
+        }
+    }
+}
+
+.home-symptome {
+    .card {
+        height: 186px;
+        background: $bg-gray;
+        .card-body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-weight: 700;
         }
     }
 }

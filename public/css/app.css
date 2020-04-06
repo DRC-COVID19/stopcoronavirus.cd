@@ -23058,6 +23058,19 @@ h3 {
   display: block;
 }
 
+.home-symptome .card {
+  height: 186px;
+  background: #e9ecef;
+}
+
+.home-symptome .card .card-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-weight: 700;
+}
+
 .statistiques .card-header {
   text-align: center;
 }
