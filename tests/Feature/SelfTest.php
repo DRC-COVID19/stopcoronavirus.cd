@@ -122,6 +122,10 @@ class SelfTest extends TestCase
             'step_value' => '0',
             'current_step' => '23'
         ]);
+        $response = $this->call("post", '/self-test', [
+            'step_value' => 'kinshasa',
+            'current_step' => '24'
+        ]);
         $view = $response->original;
         $response->assertStatus(200);
         echo "Test1: ";

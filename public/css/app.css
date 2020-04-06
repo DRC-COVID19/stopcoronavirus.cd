@@ -23464,6 +23464,18 @@ h3 {
   text-align: right;
 }
 
+.question .input-text-area {
+  height: 200px;
+  width: 100%;
+  padding: 0 16px;
+  font-size: 28px;
+  font-weight: 500;
+  color: #333;
+  outline: 3px solid #333;
+  border: 4px solid transparent;
+  box-sizing: border-box;
+}
+
 .warning-form {
   width: auto;
   padding: 35px 60px;

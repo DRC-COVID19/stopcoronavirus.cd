@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Diagnostic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -13,22 +14,47 @@ use Illuminate\Support\Facades\Validator;
 class SelfTestController extends Controller
 {
     private $message = [
-        'msg-1' => "Prenez contact avec votre médecin généraliste au moindre
-        doute. Cette application n’est pour l’instant pas adaptée aux personnes de moins
-        de 15 ans. En cas d’urgence, appeler le 15.",
-        'msg-2' => "Appel 15.",
-        'msg-3' => "Téléconsultation ou médecin généraliste ou visite à domicile",
-        'msg-4' => "Téléconsultation ou médecin généraliste ou visite à domicile (SOS médecins…)",
-        'msg-5' => "Nous vous conseillons de rester à votre domicile et
-        de contacter votre médecin en cas d’apparition de nouveaux symptômes. Vous pourrez
-        aussi utiliser à nouveau l’application pour réévaluer vos symptômes",
-        'msg-6' => "Votre situation ne relève probablement pas du Covid-19. Consultez votre
-        médecin au moindre doute.",
-        'msg-7' => "Votre situation ne relève probablement pas du Covid-19. Un avis médical est
-        recommandé. Au moindre doute, appelez le 15",
-        'msg-8' => "Votre situation ne relève probablement pas du Covid-19. N’hésitez pas à contacter votre
-        médecin en cas de doute. Vous pouvez refaire le test en cas de nouveau symptôme pour
-        réévaluer la situation."
+        'msg-1' =>
+        [
+            'text' => "Prenez contact avec votre médecin généraliste au moindre
+                        doute. Cette application n’est pour l’instant pas adaptée aux personnes de moins
+                        de 15 ans. En cas d’urgence, appeler le 15.",
+            'code' => 1
+        ],
+        'msg-2' => [
+            'text' => "Appel 15.",
+            'code' => 8
+        ],
+        'msg-3' => [
+            'text' => "Téléconsultation ou médecin généraliste ou visite à domicile",
+            'code' => 7
+        ],
+        'msg-4' => [
+            'text' => "Téléconsultation ou médecin généraliste ou visite à domicile (SOS médecins…)",
+            'code' => 6
+        ],
+        'msg-5' => [
+            'text' => "Nous vous conseillons de rester à votre domicile et
+                    de contacter votre médecin en cas d’apparition de nouveaux symptômes. Vous pourrez
+                    aussi utiliser à nouveau l’application pour réévaluer vos symptômes",
+            'code' => 5
+        ],
+        'msg-6' => [
+            'text' => "Votre situation ne relève probablement pas du Covid-19. Consultez votre
+                        médecin au moindre doute.",
+            'code' => 4
+        ],
+        'msg-7' => [
+            'text' => "Votre situation ne relève probablement pas du Covid-19. Un avis médical est
+                    recommandé. Au moindre doute, appelez le 15",
+            'code' => 3
+        ],
+        'msg-8' => [
+            'text' => "Votre situation ne relève probablement pas du Covid-19. N’hésitez pas à contacter votre
+                    médecin en cas de doute. Vous pouvez refaire le test en cas de nouveau symptôme pour
+                    réévaluer la situation.",
+            'code' => 2
+        ]
     ];
     private $questions = [
         [
@@ -150,6 +176,11 @@ class SelfTestController extends Controller
             'id' => 23,
             'q' => "Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive).",
             'r' => 2
+        ],
+        [
+            'id' => 24,
+            'q' => "Quel est votre ville et commune ? Cette information nous permet de réaliser un suivi épidémiologique.",
+            'r' => 9
         ]
     ];
     public function seltTest(Request $request)
@@ -223,6 +254,9 @@ class SelfTestController extends Controller
             case 'step-23':
                 $content = $this->questions[22];
                 break;
+            case 'step-24':
+                $content = $this->questions[23];
+                break;
             case 'step-1':
             default:
                 $request->session()->remove('test');
@@ -238,7 +272,7 @@ class SelfTestController extends Controller
     public function storeSelfTest(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'step_value' => 'required|numeric',
+            'step_value' => 'required',
             'current_step' => 'required'
         ]);
         $value = $request->get('step_value');
@@ -309,7 +343,7 @@ class SelfTestController extends Controller
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 if ($value < 15) {
-                    $resultat = $this->message['msg-1'];
+                    $resultat = $this->message['msg-1']['text'];
                     $isResultat = true;
                     return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
                 }
@@ -373,10 +407,13 @@ class SelfTestController extends Controller
                 return redirect()->route('selfTest.get');
             case '23':
                 $request->session()->put('test.q-23', $value);
+                $request->session()->flash('test.param', 'step-24');
+                return redirect()->route('selfTest.get');
+            case '24':
+                $request->session()->put('test.q-24', $value);
                 $resultat = $this->result(request()->session()->get('test'));
                 $isResultat = true;
                 return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
-                break;
             case '1':
             default:
                 $request->session()->put('test.q-1', $value);
@@ -400,67 +437,86 @@ class SelfTestController extends Controller
 
     public function result(array $responses)
     {
-
-        $message = "";
-        if ($responses['q-1'] == 1 && $responses['q-3'] == 1) {
-            if ($this->majorGravity($responses) >= 1) {
-                $message = $this->message['msg-2'];
-                return $message;
-            } else {
+        try {
+            $message = "";
+            if ($responses['q-1'] == 1 && $responses['q-3'] == 1) {
+                if ($this->majorGravity($responses) >= 1) {
+                    $message = $this->message['msg-2']['text'];
+                    $this->storeDiagnostic($responses, $this->message['msg-2']);
+                    return $message;
+                } else {
+                    if ($this->hasPronostic($responses)) {
+                        if ($this->minorGravity($responses) >= 2) {
+                            $message = $this->message['msg-2']['text'];
+                            $this->storeDiagnostic($responses, $this->message['msg-2']);
+                            return $message;
+                        }
+                        if (($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 1) || $this->majorGravity($responses) == 0) {
+                            $message = $this->message['msg-3']['text'];
+                            $this->storeDiagnostic($responses, $this->message['msg-3']);
+                            return $message;
+                        }
+                    } else {
+                        if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) <= 1) {
+                            $message = $this->message['msg-4']['text'];
+                            $this->storeDiagnostic($responses, $this->message['msg-4']);
+                            return $message;
+                        }
+                    }
+                }
+            }
+            if ($responses['q-1'] == 1 || ($responses['q-3'] == 1 && $responses['q-5'] == 1) || ($responses['q-1'] == 1  && $responses['q-6'] == 1)) {
+                if ($this->majorGravity($responses) >= 2) {
+                    $message = $this->message['msg-2']['text'];
+                    $this->storeDiagnostic($responses, $this->message['msg-2']);
+                    return $message;
+                }
                 if ($this->hasPronostic($responses)) {
                     if ($this->minorGravity($responses) >= 2) {
-                        $message = $this->message['msg-2'];
+                        $message = $this->message['msg-2']['text'];
+                        $this->storeDiagnostic($responses, $this->message['msg-2']);
                         return $message;
                     }
                     if (($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 1) || $this->majorGravity($responses) == 0) {
-                        $message = $this->message['msg-3'];
-                        return $message;
+                        $message = $this->message['msg-3']['text'];
+                        $this->storeDiagnostic($responses, $this->message['msg-3']);
+                        return $message;;
                     }
                 } else {
-                    if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) <= 1) {
-                        $message = $this->message['msg-4'];
+                    if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 0 &&  $responses['q-12'] < 50) {
+                        $message = $this->message['msg-5']['text'];
+                        $this->storeDiagnostic($responses, $this->message['msg-5']);
+                        return $message;
+                    }
+                    if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) >= 1 && $responses['q-12'] >= 50 && $responses['q-12'] <= 69) {
+                        $message = $this->message['msg-4']['text'];
+                        $this->storeDiagnostic($responses, $this->message['msg-4']);
                         return $message;
                     }
                 }
             }
-        }
-        if ($responses['q-1'] == 1 || ($responses['q-3'] == 1 && $responses['q-5'] == 1) || ($responses['q-1'] == 1  && $responses['q-6'] == 1)) {
-            if ($this->majorGravity($responses) >= 2) {
-                $message = $this->message['msg-2'];
-                return $message;
-            }
-            if ($this->hasPronostic($responses)) {
-                if ($this->minorGravity($responses) >= 2) {
-                    $message = $this->message['msg-2'];
+            if ($responses['q-1'] == 1 || $responses['q-3'] == 1 || $responses['q-5'] == 1) {
+                if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 0) {
+                    $message = $this->message['msg-6']['text'];
+                    $this->storeDiagnostic($responses, $this->message['msg-6']);
                     return $message;
                 }
-                if (($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 1) || $this->majorGravity($responses) == 0) {
-                    $message = $this->message['msg-3'];
-                    return $message;;
-                }
-            } else {
-                if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 0 &&  $responses['q-12'] < 50) {
-                    $message = $this->message['msg-5'];
-                    return $message;
-                }
-                if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) >= 1 && $responses['q-12'] >= 50 && $responses['q-12'] <= 69) {
-                    $message = $this->message['msg-4'];
+                if (($this->majorGravity($responses) > 0 || $this->minorGravity($responses) > 0) && $this->hasPronostic($responses)) {
+                    $message = $this->message['msg-7']['text'];
+                    $this->storeDiagnostic($responses, $this->message['msg-7']);
                     return $message;
                 }
             }
-        }
-        if ($responses['q-1'] == 1 || $responses['q-3'] == 1 || $responses['q-5'] == 1) {
-            if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 0) {
-                $message = $this->message['msg-6'];
-                return $message;
+
+            $message = $this->message['msg-8']['text'];
+            $this->storeDiagnostic($responses, $this->message['msg-8']);
+            return $message;
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
             }
-            if (($this->majorGravity($responses) > 0 || $this->minorGravity($responses) > 0) && $this->hasPronostic($responses)) {
-                $message = $this->message['msg-7'];
-                return $message;
-            }
+            return response($th->getMessage())->setStatusCode(500);
         }
-        $message = $this->message['msg-8'];
-        return $message;
     }
 
     public function hasPronostic(array $responses)
@@ -520,6 +576,13 @@ class SelfTestController extends Controller
         return 0;
     }
 
+    public function storeDiagnostic(array $responses, array $message)
+    {
+        $responses['results_code'] = $message['code'];
+        $responses['results_message'] = $message['text'];
+        Diagnostic::create($responses);
+    }
+
     public function back($step, Request $request)
     {
         if ($step == 0) {
@@ -531,7 +594,7 @@ class SelfTestController extends Controller
     }
 
     /**
-     * Test diagnostique covid-19
+     * Test diagnostic covid-19
      * @bodyParam q-1 int required Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
      * @bodyParam q-2 int  Quelle a été votre température la plus élevée de ces dernières 48 heures ?
      * @bodyParam q-3 int required Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
@@ -555,7 +618,9 @@ class SelfTestController extends Controller
      * @bodyParam q-21 int required Êtes-vous enceinte ?
      * @bodyParam q-22 int required Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
      * @bodyParam q-23 int required Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)
-     * 
+     * @bodyParam q-23 string Quel est votre Province, ville, commune et quartier ? Cette information nous permet de réaliser un suivi épidémiologique.
+     * @bodyParam q-23 longitude
+     * @bodyParam q-23 latitude
      */
     public function apiCovidTest(Request $request)
     {
@@ -583,6 +648,9 @@ class SelfTestController extends Controller
             'q-21' => 'required|numeric|between:0,1',
             'q-22' => 'required|numeric|between:0,1',
             'q-23' => 'required|numeric|between:0,1',
+            'q-24' => 'nullable|string',
+            'latitude'=>'string|nullable',
+            'longitude'=>'string|nullable'
         ])->validate();
         try {
             if ($data["q-12"] < 15) {

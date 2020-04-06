@@ -10,7 +10,7 @@
                         <a href="{{$backUrl}}">
                             <span class="fa fa-chevron-left"></span>
                             &nbsp;
-                            Question {{ $content['id'] }} sur 23
+                            Question {{ $content['id'] }} sur 24
                         </a>
                     </div>
                     <p class="question-title">
@@ -127,6 +127,13 @@
                                 <input id="step_weight" class="input-text " type="number" name="step_value" value="" min="20" max="250" required="" tabindex="1">
 
                                 <label class="custom-text-suffix" for="step_weight">kg</label>
+                            </div>
+                            @endif
+
+                            @if($content['r']==9)
+                            <div class="custom-control custom-text">
+                            <div class="custom-text-label">{{__('Province, Ville, Commune, Quartier')}}</div>
+                                <textarea  class="input-text-area" cols="100" rows="100" name="step_value"   tabindex="1"></textarea>
                             </div>
                             @endif
                         </div>
