@@ -145,9 +145,6 @@
                     @endisset
                 </table>
                 <p>
-                    Merci de faire remonter les statistiques dans la plateforme dès que possible.
-                </p>
-                <p>
                     Bien cordialement,
                 </p>
             </td>
