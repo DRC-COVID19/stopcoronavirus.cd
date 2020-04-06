@@ -127,7 +127,7 @@
                         {{ __('Un projet réalisé avec le soutien de la Fondation Roi Baudouin et de la Loterie Nationale') }}
                     </p>
                     <p class="pt-4">
-                        <a href="https://www.kinshasadigital.com" target="_blank">Kinshasa Digital</a>
+                       Designed by <a href="https://www.kinshasadigital.com" target="_blank">Kinshasa Digital</a>
                     </p>
                 </div>
             </div>

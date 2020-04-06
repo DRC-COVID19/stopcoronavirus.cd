@@ -291,7 +291,7 @@
         </div>
     </div>
 
-    @if(count($alerts)> 0)
+    {{-- @if(count($alerts)> 0)
     <div class="container mb-5">
         <h2>
             <b>
@@ -315,6 +315,6 @@
             </a>
         </div>
     </div>
-    @endif
+    @endif --}}
 
     @endsection
