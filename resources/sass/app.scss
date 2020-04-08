@@ -1,9 +1,8 @@
 @import "variables";
 @import "mixins";
 @import "~bootstrap/scss/bootstrap";
-@import "~@fortawesome/fontawesome-free";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
-@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+// @import "~@fortawesome/fontawesome-free";
+@import "https://use.fontawesome.com/releases/v5.0.8/css/all.css";
 @import "layout";
 @import "typography";
 @import "btn";

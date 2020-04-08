@@ -28,6 +28,8 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{asset('/ms-icon-144x144.png')}}">
     <meta name="theme-color" content="#00b065">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous"/>
     <!-- end icon -->
     <!-- Scripts -->
     <!-- Fonts -->
@@ -160,5 +162,16 @@
             </div>
         </div>
     </footer>
+    <div class="contenaire-float">
+        <a href="#" class="float">
+            <i class="fa fa-comment my-float"></i>
+        </a>
+        <a href="#" class="float">
+            <i class="fa fa-facebook my-float"></i>
+        </a>
+         <a href="#" class="float">
+            <i class="fa fa-twitter my-float"></i>
+        </a>
+    </div>
 </body>
 </html>
