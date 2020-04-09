@@ -36,8 +36,8 @@ a {
 }
 .contenaire-float {
     position: fixed;
-    bottom: 0;
-    right: 0;
+    bottom: 5px;
+    right: 5px;
     .float {
         display: flex;
         margin: 5px;
@@ -53,5 +53,33 @@ a {
         align-items: center;
         justify-content: center;
         box-shadow: 2px 2px 3px #999;
+    }
+}
+.xs-share-container{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: white;
+    box-shadow: 0px 0px 2px #00874e;
+    .xs-share{
+        color: white;
+    }
+    .col-4{
+        padding: 5px;
+    }
+}
+.whatsapp{
+    background-color: #25D366 !important;
+}
+.facebook{
+    background-color: #3b5998 !important;
+}
+.twitter{
+    background-color: #76c5f5 !important;
+}
+footer{
+    @media screen and (max-width: 575px) {
+        margin-bottom: 45px;
     }
 }

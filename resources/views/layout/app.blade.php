@@ -29,7 +29,7 @@
     <meta name="msapplication-TileImage" content="{{asset('/ms-icon-144x144.png')}}">
     <meta name="theme-color" content="#00b065">
 
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous"/>
+    {{-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous"/> --}}
     <!-- end icon -->
     <!-- Scripts -->
     <!-- Fonts -->
@@ -162,16 +162,35 @@
             </div>
         </div>
     </footer>
-    <div class="contenaire-float">
-        <a href="#" class="float">
-            <i class="fa fa-comment my-float"></i>
+    <div class="contenaire-float d-none d-sm-block">
+        <a href="#" class="float whatsapp">
+            <i class="fab fa-whatsapp fa-2x"></i>
         </a>
-        <a href="#" class="float">
-            <i class="fa fa-facebook my-float"></i>
+        <a href="#" class="float facebook">
+            <i class="fab fa-facebook fa-2x"></i>
         </a>
-         <a href="#" class="float">
-            <i class="fa fa-twitter my-float"></i>
+        <a href="#" class="float twitter">
+            <i class="fab fa-twitter fa-2x"></i>
         </a>
+    </div>
+    <div class="container-fluid no-gutters xs-share-container d-sm-none">
+        <div class="row">
+            <div class="col-4 whatsapp text-center">
+                <a href="#" class="xs-share">
+                    <i class="fab fa-whatsapp fa-2x"></i>
+                </a>
+            </div>
+            <div class="col-4 facebook text-center">
+                <a href="#" class="xs-share">
+                    <i class="fab fa-facebook fa-2x"></i>
+                </a>
+            </div>
+            <div class="col-4 twitter text-center">
+                <a href="#" class="xs-share">
+                    <i class="fab fa-twitter fa-2x"></i>
+                </a>
+            </div>
+        </div>
     </div>
 </body>
 </html>
