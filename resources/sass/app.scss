@@ -4,6 +4,7 @@
 @import "~@fortawesome/fontawesome-free";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
 @import "layout";
 @import "typography";
 @import "btn";
@@ -22,6 +23,14 @@
     color: $dark;
     a {
         color: $dark;
+    }
+}
+.footer-socials {
+    background-color: $gray-900;
+    color: $white;
+    font-size: 1.2rem;
+    a {
+        color: $flag-blue;
     }
 }
 
