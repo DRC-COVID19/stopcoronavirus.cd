@@ -37,10 +37,9 @@ class CreateDiagnosticsTable extends Migration
             $table->integer('q-20');
             $table->integer('q-21');
             $table->integer('q-22');
-            $table->integer('q-23');
-            $table->string('q-24')->nullable();
+            $table->string('q-23')->nullable();
             $table->string('results_code');
-            $table->string('results_message');
+            $table->text('results_message');
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
            

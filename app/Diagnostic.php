@@ -30,7 +30,6 @@ class Diagnostic extends Model
         'q-21',
         'q-22',
         'q-23',
-        'q-24',
         'results_code',
         'results_message',
         'latitude',

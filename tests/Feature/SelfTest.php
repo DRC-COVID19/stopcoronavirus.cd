@@ -16,7 +16,7 @@ class SelfTest extends TestCase
     public function testExample()
     {
         session()->remove('test');
-        // Facteurs de gravité mineurs
+
         $response = $this->call("post", '/self-test', [
             'step_value' => '0',
             'current_step' => '1'
@@ -24,7 +24,7 @@ class SelfTest extends TestCase
         // Facteurs de gravité mineurs Fièvre > ou = 39°C
         // Facteurs de gravité majeurs Fièvre <= 35,4°C
         $response = $this->call("post", '/self-test', [
-            'step_value' => '38',
+            'step_value' => null,
             'current_step' => '2'
         ]);
 
@@ -57,33 +57,35 @@ class SelfTest extends TestCase
 
         //Facteurs de gravité majeurs Difficultés importantes pour s’alimenter ou boire depuis plus de 24h 
         $response = $this->call("post", '/self-test', [
-            'step_value' => '0',
+            'step_value' => '1',
             'current_step' => '9'
         ]);
 
-        //Facteurs de gravité mineurs Sensation de malaise 3 ou 4
-        $response = $this->call("post", '/self-test', [
-            'step_value' => '1',
+         //Facteurs de gravité majeurs Gêne respiratoire
+         $response = $this->call("post", '/self-test', [
+            'step_value' => '0',
             'current_step' => '10'
         ]);
-        //Facteurs de gravité majeurs Gêne respiratoire
-        $response = $this->call("post", '/self-test', [
-            'step_value' => '0',
-            'current_step' => '11'
-        ]);
-
+       
         //Facteur pronostique
         //Old
         $response = $this->call("post", '/self-test', [
             'step_value' => '55',
-            'current_step' => '12'
+            'current_step' => '11'
         ]);
+
+        //Taille
         $response = $this->call("post", '/self-test', [
             'step_value' => '169',
+            'current_step' => '12'
+        ]);
+        //Poids
+        $response = $this->call("post", '/self-test', [
+            'step_value' => '60',
             'current_step' => '13'
         ]);
         $response = $this->call("post", '/self-test', [
-            'step_value' => '60',
+            'step_value' => '0',
             'current_step' => '14'
         ]);
         $response = $this->call("post", '/self-test', [
@@ -121,10 +123,6 @@ class SelfTest extends TestCase
         $response = $this->call("post", '/self-test', [
             'step_value' => '0',
             'current_step' => '23'
-        ]);
-        $response = $this->call("post", '/self-test', [
-            'step_value' => 'kinshasa',
-            'current_step' => '24'
         ]);
         $view = $response->original;
         $response->assertStatus(200);

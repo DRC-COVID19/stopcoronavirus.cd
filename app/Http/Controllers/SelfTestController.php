@@ -16,45 +16,44 @@ class SelfTestController extends Controller
     private $message = [
         'msg-1' =>
         [
-            'text' => "Prenez contact avec votre médecin généraliste au moindre
-                        doute. Cette application n’est pour l’instant pas adaptée aux personnes de moins
-                        de 15 ans. En cas d’urgence, appeler le 15.",
-            'code' => 1
-        ],
-        'msg-2' => [
-            'text' => "Appel 15.",
-            'code' => 8
-        ],
-        'msg-3' => [
-            'text' => "Téléconsultation ou médecin généraliste ou visite à domicile",
+            'text' => "Appelez le 15.",
             'code' => 7
         ],
-        'msg-4' => [
-            'text' => "Téléconsultation ou médecin généraliste ou visite à domicile (SOS médecins…)",
+        'msg-2' => [
+            'text' => "Votre situation peut relever d’un COVID 19.
+            Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
+            Si vous n'arrivez pas à obtenir de consultation, appelez le 15.",
             'code' => 6
         ],
-        'msg-5' => [
-            'text' => "Nous vous conseillons de rester à votre domicile et
-                    de contacter votre médecin en cas d’apparition de nouveaux symptômes. Vous pourrez
-                    aussi utiliser à nouveau l’application pour réévaluer vos symptômes",
+        'msg-3' => [
+            'text' => "Votre situation peut relever d’un COVID 19.
+            Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile (SOS médecins, etc.)",
             'code' => 5
         ],
-        'msg-6' => [
-            'text' => "Votre situation ne relève probablement pas du Covid-19. Consultez votre
-                        médecin au moindre doute.",
+        'msg-4' => [
+            'text' => "Votre situation peut relever d’un COVID 19.
+            Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
+            Appelez le 15 si une gêne respiratoire ou des difficultés importantes pour vous alimenter ou boire apparaissent pendant plus de 24 heures.",
             'code' => 4
         ],
-        'msg-7' => [
-            'text' => "Votre situation ne relève probablement pas du Covid-19. Un avis médical est
-                    recommandé. Au moindre doute, appelez le 15",
+        'msg-5' => [
+            'text' => "Votre situation peut relever d’un COVID 19 qu’il faut surveiller. 
+            Si de nouveaux symptômes apparaissent, refaites le test ou consultez votre médecin.
+            Nous vous conseillons de rester à votre domicile.",
             'code' => 3
         ],
-        'msg-8' => [
-            'text' => "Votre situation ne relève probablement pas du Covid-19. N’hésitez pas à contacter votre
-                    médecin en cas de doute. Vous pouvez refaire le test en cas de nouveau symptôme pour
-                    réévaluer la situation.",
+        'msg-6' => [
+            'text' => "Votre situation peut relever d’un COVID 19. Un avis médical est recommandé.
+            Au moindre doute, appelez le 15. Nous vous conseillons de rester à votre domicile.",
             'code' => 2
-        ]
+        ],
+        'msg-7' => [
+            'text' => "Votre situation ne relève probablement pas du COVID 19.
+            N’hésitez pas à contacter votre médecin en cas de doute.
+            Vous pouvez refaire le test en cas de nouveau symptôme pour réévaluer la situation.
+            Pour toute information concernant le COVID 19, composer le 0 800 130 000.",
+            'code' => 1
+        ],
     ];
     private $questions = [
         [
@@ -106,79 +105,74 @@ class SelfTestController extends Controller
         ],
         [
             'id' => 10,
-            'q' => "Comment vous sentez-vous ?",
-            'r' => 4,
-        ],
-        [
-            'id' => 11,
             'q' => "Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?",
             'r' => 1,
         ],
         [
-            'id' => 12,
+            'id' => 11,
             'q' => "Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.",
             'r' => 5,
             'r_lable' => 'ans'
         ],
         [
-            'id' => 13,
+            'id' => 12,
             'q' => "Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.",
             'r' => 6,
             'r_lable' => 'cm'
         ],
         [
-            'id' => 14,
+            'id' => 13,
             'q' => "Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.",
             'r' => 7,
             'r_label' => 'kg'
         ],
         [
-            'id' => 15,
+            'id' => 14,
             'q' => "Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?",
             'r' => 2
         ],
         [
-            'id' => 16,
+            'id' => 15,
             'q' => "Êtes-vous diabétique ?",
             'r' => 1
         ],
         [
-            'id' => 17,
+            'id' => 16,
             'q' => "Avez-vous ou avez-vous eu un cancer ces trois dernières années ?",
             'r' => 1
         ],
         [
-            'id' => 18,
+            'id' => 17,
             'q' => "Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?",
             'r' => 1
         ],
         [
-            'id' => 19,
+            'id' => 18,
             'q' => "Avez-vous une insuffisance rénale chronique dialysée ?",
             'r' => 1
         ],
         [
-            'id' => 20,
+            'id' => 19,
             'q' => "Avez-vous une maladie chronique du foie ?",
             'r' => 1
         ],
         [
-            'id' => 21,
+            'id' => 20,
             'q' => "Êtes-vous enceinte ?",
             'r' => 8
         ],
         [
-            'id' => 22,
+            'id' => 21,
             'q' => "Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?",
             'r' => 2
         ],
         [
-            'id' => 23,
+            'id' => 22,
             'q' => "Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive).",
             'r' => 2
         ],
         [
-            'id' => 24,
+            'id' => 23,
             'q' => "Aidez la riposte à réaliser un suivi épidémiologique en donnant votre province, ville, commune et quartier.",
             'r' => 9
         ]
@@ -254,8 +248,6 @@ class SelfTestController extends Controller
             case 'step-23':
                 $content = $this->questions[22];
                 break;
-            case 'step-24':
-                $content = $this->questions[23];
                 break;
             case 'step-1':
             default:
@@ -287,7 +279,7 @@ class SelfTestController extends Controller
                     'step_value' => 'numeric|min:34|max:42'
                 ]);
                 if ($validator->fails()) {
-                    $request->session()->flash('test.param',"step-{$step}");
+                    $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 $request->session()->put('test.q-2', $value);
@@ -387,17 +379,6 @@ class SelfTestController extends Controller
                 return redirect()->route('selfTest.get');
             case '11':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'required'
-                ]);
-                if ($validator->fails()) {
-                    $request->session()->flash('test.param', "step-{$step}");
-                    return redirect()->route('selfTest.get')->withErrors($validator);
-                }
-                $request->session()->put('test.q-11', $value);
-                $request->session()->flash('test.param', 'step-12');
-                return redirect()->route('selfTest.get');
-            case '12':
-                $validator = Validator::make($request->all(), [
                     'step_value' => 'required|numeric|min:1|max:120'
                 ]);
                 if ($validator->fails()) {
@@ -409,13 +390,23 @@ class SelfTestController extends Controller
                     $isResultat = true;
                     return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
                 }
-
+                $request->session()->put('test.q-11', $value);
+                $request->session()->flash('test.param', 'step-12');
+                return redirect()->route('selfTest.get');
+            case '12':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required|numeric|min:80|max:250'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-12', $value);
                 $request->session()->flash('test.param', 'step-13');
                 return redirect()->route('selfTest.get');
             case '13':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'required|numeric|min:80|max:250'
+                    'step_value' => 'required|numeric|min:20|max:250'
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -426,12 +417,8 @@ class SelfTestController extends Controller
                 return redirect()->route('selfTest.get');
             case '14':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'required|numeric|min:20|max:250'
+                    'step_value' => 'required'
                 ]);
-                if ($validator->fails()) {
-                    $request->session()->flash('test.param', "step-{$step}");
-                    return redirect()->route('selfTest.get')->withErrors($validator);
-                }
                 $request->session()->put('test.q-14', $value);
                 $request->session()->flash('test.param', 'step-15');
                 return redirect()->route('selfTest.get');
@@ -524,18 +511,7 @@ class SelfTestController extends Controller
                 $request->session()->flash('test.param', 'step-23');
                 return redirect()->route('selfTest.get');
             case '23':
-                $validator = Validator::make($request->all(), [
-                    'step_value' => 'required'
-                ]);
-                if ($validator->fails()) {
-                    $request->session()->flash('test.param', "step-{$step}");
-                    return redirect()->route('selfTest.get')->withErrors($validator);
-                }
                 $request->session()->put('test.q-23', $value);
-                $request->session()->flash('test.param', 'step-24');
-                return redirect()->route('selfTest.get');
-            case '24':
-                $request->session()->put('test.q-24', $value);
                 $resultat = $this->result(request()->session()->get('test'));
                 $isResultat = true;
                 return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
@@ -571,77 +547,125 @@ class SelfTestController extends Controller
     {
         try {
             $message = "";
-            if ($responses['q-1'] == 1 && $responses['q-3'] == 1) {
-                if ($this->majorGravity($responses) >= 1) {
-                    $message = $this->message['msg-2']['text'];
-                    $this->storeDiagnostic($responses, $this->message['msg-2']);
-                    return $message;
-                } else {
-                    if ($this->hasPronostic($responses)) {
-                        if ($this->minorGravity($responses) >= 2) {
-                            $message = $this->message['msg-2']['text'];
-                            $this->storeDiagnostic($responses, $this->message['msg-2']);
-                            return $message;
-                        }
-                        if (($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 1) || $this->majorGravity($responses) == 0) {
-                            $message = $this->message['msg-3']['text'];
-                            $this->storeDiagnostic($responses, $this->message['msg-3']);
-                            return $message;
-                        }
-                    } else {
-                        if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) <= 1) {
-                            $message = $this->message['msg-4']['text'];
-                            $this->storeDiagnostic($responses, $this->message['msg-4']);
-                            return $message;
-                        }
-                    }
-                }
+            if ($this->majorGravity($responses) >= 1) {
+                $message = $this->message['msg-1']['text'];
+                /**
+                 * Appelez le 15.
+                 */
+                $this->storeDiagnostic($responses, $this->message['msg-1']);
+                return $message;
             }
-            if ($responses['q-1'] == 1 || ($responses['q-3'] == 1 && $responses['q-5'] == 1) || ($responses['q-1'] == 1  && $responses['q-6'] == 1)) {
-                if ($this->majorGravity($responses) >= 2) {
-                    $message = $this->message['msg-2']['text'];
-                    $this->storeDiagnostic($responses, $this->message['msg-2']);
-                    return $message;
-                }
+            if ($responses['q-1'] == 1 && $responses['q-3'] == 1) {
+
                 if ($this->hasPronostic($responses)) {
                     if ($this->minorGravity($responses) >= 2) {
                         $message = $this->message['msg-2']['text'];
+                        /**
+                         * Votre situation peut relever d’un COVID 19.
+                         * Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
+                         * Si vous n'arrivez pas à obtenir de consultation, appelez le 15.
+                         */
                         $this->storeDiagnostic($responses, $this->message['msg-2']);
                         return $message;
                     }
-                    if (($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 1) || $this->majorGravity($responses) == 0) {
+                    else {
                         $message = $this->message['msg-3']['text'];
+                        /**
+                         * Votre situation peut relever d’un COVID 19.
+                         * Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile (SOS médecins, etc.)
+                         */
                         $this->storeDiagnostic($responses, $this->message['msg-3']);
+                        return $message;
+                    }
+                } else {
+                    $message = $this->message['msg-3']['text'];
+                    /**
+                     * Votre situation peut relever d’un COVID 19. 
+                     * Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile (SOS médecins, etc.)
+                     */
+                    $this->storeDiagnostic($responses, $this->message['msg-3']);
+                    return $message;
+                }
+            }
+            if ($responses['q-1'] == 1 || $responses['q-6']==1 || ($responses['q-3'] == 1 && $responses['q-5'] == 1) || ($responses['q-3'] == 1  && $responses['q-4'] == 1)) {
+                
+                if ($this->hasPronostic($responses)) {
+                    if ($this->minorGravity($responses) >= 2) {
+                        $message = $this->message['msg-2']['text'];/*Votre situation peut relever d’un COVID 19.
+                        Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
+                        Si vous n'arrivez pas à obtenir de consultation, appelez le 15.*/
+                        $this->storeDiagnostic($responses, $this->message['msg-2']);
+                        return $message;
+                    }
+                    if ($this->minorGravity($responses) <=1) {
+                        $message = $this->message['msg-4']['text']; 
+                        /*Votre situation peut relever d’un COVID 19.
+                        Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
+                        Appelez le 15 si une gêne respiratoire ou des difficultés importantes pour vous alimenter ou boire apparaissent pendant plus de 24 heures. */
+                        $this->storeDiagnostic($responses, $this->message['msg-4']);
                         return $message;;
                     }
                 } else {
-                    if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 0 &&  $responses['q-12'] < 50) {
+                    if ($this->minorGravity($responses) >= 1) {
+                        $message = $this->message['msg-4']['text'];
+                        /*
+                        Votre situation peut relever d’un COVID 19.
+                        Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
+                        Appelez le 15 si une gêne respiratoire ou des difficultés importantes pour vous alimenter ou boire apparaissent pendant plus de 24 heures.
+                         */
+                        $this->storeDiagnostic($responses, $this->message['msg-4']);
+                        return $message;
+                    }
+                    if ($this->minorGravity($responses) == 0 || $responses['q-12'] < 50) {
                         $message = $this->message['msg-5']['text'];
+                        /*Votre situation peut relever d’un COVID 19 qu’il faut surveiller. 
+                        Si de nouveaux symptômes apparaissent, refaites le test ou consultez votre médecin.
+                        Nous vous conseillons de rester à votre domicile.
+                         */
                         $this->storeDiagnostic($responses, $this->message['msg-5']);
                         return $message;
                     }
-                    if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) >= 1 && $responses['q-12'] >= 50 && $responses['q-12'] <= 69) {
+                    else{
                         $message = $this->message['msg-4']['text'];
+                        /*Votre situation peut relever d’un COVID 19.
+                        Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
+                        Appelez le 15 si une gêne respiratoire ou des difficultés importantes pour vous alimenter ou boire apparaissent pendant plus de 24 heures.
+                         */
                         $this->storeDiagnostic($responses, $this->message['msg-4']);
                         return $message;
                     }
                 }
             }
-            if ($responses['q-1'] == 1 || $responses['q-3'] == 1 || $responses['q-5'] == 1) {
-                if ($this->majorGravity($responses) == 0 && $this->minorGravity($responses) == 0) {
+            if ($responses['q-3'] == 1 || $responses['q-5'] == 1 || $responses['q-4'] == 1) {
+                if ($this->hasPronostic($responses)) {
                     $message = $this->message['msg-6']['text'];
+                    /*
+                    Votre situation peut relever d’un COVID 19. Un avis médical est recommandé.
+                    Au moindre doute, appelez le 15. Nous vous conseillons de rester à votre domicile.
+                     */
                     $this->storeDiagnostic($responses, $this->message['msg-6']);
                     return $message;
                 }
-                if (($this->majorGravity($responses) > 0 || $this->minorGravity($responses) > 0) && $this->hasPronostic($responses)) {
-                    $message = $this->message['msg-7']['text'];
-                    $this->storeDiagnostic($responses, $this->message['msg-7']);
+                else{
+                    $message = $this->message['msg-5']['text'];
+                    /*
+                    Votre situation peut relever d’un COVID 19 qu’il faut surveiller.
+                    Si de nouveaux symptômes apparaissent, refaites le test ou consultez votre médecin.
+                    Nous vous conseillons de rester à votre domicile.
+                     */
+                    $this->storeDiagnostic($responses, $this->message['msg-5']);
                     return $message;
                 }
             }
 
-            $message = $this->message['msg-8']['text'];
-            $this->storeDiagnostic($responses, $this->message['msg-8']);
+            $message = $this->message['msg-7']['text'];
+            /**
+             * Votre situation ne relève probablement pas du COVID 19.
+             * N’hésitez pas à contacter votre médecin en cas de doute.
+             * Vous pouvez refaire le test en cas de nouveau symptôme pour réévaluer la situation.
+             * Pour toute information concernant le COVID 19, composer le 0 800 130 000.
+             */
+            $this->storeDiagnostic($responses, $this->message['msg-7']);
             return $message;
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
@@ -653,15 +677,14 @@ class SelfTestController extends Controller
 
     public function hasPronostic(array $responses)
     {
-        $imc = $responses['q-14'] / (($responses['q-13'] / 100) ^ 2);
+        $imc = $responses['q-13'] / (($responses['q-12'] / 100) ^ 2);
         if (
-            $responses['q-12'] >= 70 ||
-            $imc >= 30 ||
-            $responses['q-15'] == 1 || $responses['q-15'] == 2 || $responses['q-16'] == 1 ||
+            $responses['q-11'] >= 70 ||
+            $imc >= 30 ||$responses['q-14'] == 1 ||
+            $responses['q-15'] == 1 || $responses['q-16'] == 1 ||
             $responses['q-17'] == 1 || $responses['q-18'] == 1 ||
             $responses['q-19'] == 1 || $responses['q-20'] == 1 ||
-            $responses['q-21'] == 1 || $responses['q-22'] == 1 ||
-            $responses['q-23'] == 1
+            $responses['q-21'] == 1 || $responses['q-22'] == 1
         ) {
             return true;
         }
@@ -670,17 +693,9 @@ class SelfTestController extends Controller
 
     public function minorGravity(array $responses)
     {
-        if ((isset($responses['q-2']) && $responses['q-2'] >= 39) && (isset($responses['q-8']) && $responses['q-8'] == 1) && ($responses['q-10'] == 3 || $responses['q-10'] == 4)) {
-            return 3;
-        } else if ((isset($responses['q-2']) && $responses['q-2'] >= 39) && (isset($responses['q-8']) && $responses['q-8'] == 1)) {
+        if ((isset($responses['q-2']) && ($responses['q-2'] >= 39 || $responses['q-2'] < 35.5)) && (isset($responses['q-8']) && $responses['q-8'] == 1) ) {
             return 2;
-        } else if ((isset($responses['q-2']) && $responses['q-2'] >= 39) && ($responses['q-10'] == 3 || $responses['q-10'] == 4)) {
-            return 2;
-        } else if ((isset($responses['q-8']) && $responses['q-8'] == 1) && ($responses['q-10'] == 3 || $responses['q-10'] == 4)) {
-            return 2;
-        } else if ($responses['q-10'] == 3 || $responses['q-10'] == 4) {
-            return 1;
-        } else if ((isset($responses['q-2']) && $responses['q-2'] >= 39)) {
+        } else if ((isset($responses['q-2']) && ($responses['q-2'] >= 39 || $responses['q-2'] < 35.5))) {
             return 1;
         } else if ((isset($responses['q-8']) && $responses['q-8'] == 1)) {
             return 1;
@@ -690,16 +705,8 @@ class SelfTestController extends Controller
 
     public function majorGravity(array $responses)
     {
-        if ((isset($responses['q-2']) && $responses['q-2'] < 35.5) && $responses['q-9'] == 1 && $responses['q-11'] == 1) {
-            return 3;
-        } else if ((isset($responses['q-2']) && $responses['q-2'] < 35.5) && $responses['q-9'] == 1) {
+        if ($responses['q-9'] == 1 && $responses['q-11'] == 1) {
             return 2;
-        } else if ((isset($responses['q-2']) && $responses['q-2'] < 35.5) && $responses['q-11'] == 1) {
-            return 2;
-        } else if ($responses['q-9'] == 1 && $responses['q-11'] == 1) {
-            return 2;
-        } else if ((isset($responses['q-2']) && $responses['q-2'] < 35.5)) {
-            return 1;
         } else if ($responses['q-9'] == 1) {
             return 1;
         } else if ($responses['q-11'] == 1) {
