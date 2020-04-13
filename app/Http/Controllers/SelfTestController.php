@@ -179,7 +179,7 @@ class SelfTestController extends Controller
         ],
         [
             'id' => 24,
-            'q' => "Quel est votre ville et commune ? Cette information nous permet de réaliser un suivi épidémiologique.",
+            'q' => "Aidez la riposte à réaliser un suivi épidémiologique en donnant votre province, ville, commune et quartier.",
             'r' => 9
         ]
     ];
@@ -272,7 +272,6 @@ class SelfTestController extends Controller
     public function storeSelfTest(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'step_value' => 'required',
             'current_step' => 'required'
         ]);
         $value = $request->get('step_value');
@@ -288,29 +287,64 @@ class SelfTestController extends Controller
                     'step_value' => 'numeric|min:34|max:42'
                 ]);
                 if ($validator->fails()) {
-                    $request->session()->flash('test.param', $step);
+                    $request->session()->flash('test.param',"step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 $request->session()->put('test.q-2', $value);
                 $request->session()->flash('test.param', 'step-3');
                 return redirect()->route('selfTest.get');
             case '3':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-3', $value);
                 $request->session()->flash('test.param', 'step-4');
                 return redirect()->route('selfTest.get');
             case '4':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-4', $value);
                 $request->session()->flash('test.param', 'step-5');
                 return redirect()->route('selfTest.get');
             case '5':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-5', $value);
                 $request->session()->flash('test.param', 'step-6');
                 return redirect()->route('selfTest.get');
             case '6':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-6', $value);
                 $request->session()->flash('test.param', 'step-7');
                 return redirect()->route('selfTest.get');
             case '7':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-7', $value);
                 if ($value == 0) {
                     $request->session()->flash('test.param', 'step-9');
@@ -319,27 +353,55 @@ class SelfTestController extends Controller
                 $request->session()->flash('test.param', 'step-8');
                 return redirect()->route('selfTest.get');
             case '8':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-8', $value);
                 $request->session()->flash('test.param', 'step-9');
                 return redirect()->route('selfTest.get');
             case '9':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-9', $value);
                 $request->session()->flash('test.param', 'step-10');
                 return redirect()->route('selfTest.get');
             case '10':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-10', $value);
                 $request->session()->flash('test.param', 'step-11');
                 return redirect()->route('selfTest.get');
             case '11':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-11', $value);
                 $request->session()->flash('test.param', 'step-12');
                 return redirect()->route('selfTest.get');
             case '12':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'numeric|min:1|max:120'
+                    'step_value' => 'required|numeric|min:1|max:120'
                 ]);
                 if ($validator->fails()) {
-                    $request->session()->flash('test.param', $step);
+                    $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 if ($value < 15) {
@@ -353,10 +415,10 @@ class SelfTestController extends Controller
                 return redirect()->route('selfTest.get');
             case '13':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'numeric|min:80|max:250'
+                    'step_value' => 'required|numeric|min:80|max:250'
                 ]);
                 if ($validator->fails()) {
-                    $request->session()->flash('test.param', $step);
+                    $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 $request->session()->put('test.q-13', $value);
@@ -364,48 +426,111 @@ class SelfTestController extends Controller
                 return redirect()->route('selfTest.get');
             case '14':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'numeric|min:20|max:250'
+                    'step_value' => 'required|numeric|min:20|max:250'
                 ]);
                 if ($validator->fails()) {
-                    $request->session()->flash('test.param', $step);
+                    $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 $request->session()->put('test.q-14', $value);
                 $request->session()->flash('test.param', 'step-15');
                 return redirect()->route('selfTest.get');
             case '15':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-15', $value);
                 $request->session()->flash('test.param', 'step-16');
                 return redirect()->route('selfTest.get');
             case '16':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-16', $value);
                 $request->session()->flash('test.param', 'step-17');
                 return redirect()->route('selfTest.get');
             case '17':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-17', $value);
                 $request->session()->flash('test.param', 'step-18');
                 return redirect()->route('selfTest.get');
             case '18':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-18', $value);
                 $request->session()->flash('test.param', 'step-19');
                 return redirect()->route('selfTest.get');
             case '19':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-19', $value);
                 $request->session()->flash('test.param', 'step-20');
                 return redirect()->route('selfTest.get');
             case '20':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-20', $value);
                 $request->session()->flash('test.param', 'step-21');
                 return redirect()->route('selfTest.get');
             case '21':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-21', $value);
                 $request->session()->flash('test.param', 'step-22');
                 return redirect()->route('selfTest.get');
             case '22':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-22', $value);
                 $request->session()->flash('test.param', 'step-23');
                 return redirect()->route('selfTest.get');
             case '23':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-23', $value);
                 $request->session()->flash('test.param', 'step-24');
                 return redirect()->route('selfTest.get');
@@ -416,6 +541,13 @@ class SelfTestController extends Controller
                 return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
             case '1':
             default:
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-1', $value);
                 if ($value == 0) {
                     $request->session()->flash('test.param', 'step-3');
@@ -649,8 +781,8 @@ class SelfTestController extends Controller
             'q-22' => 'required|numeric|between:0,1',
             'q-23' => 'required|numeric|between:0,1',
             'q-24' => 'nullable|string',
-            'latitude'=>'string|nullable',
-            'longitude'=>'string|nullable'
+            'latitude' => 'string|nullable',
+            'longitude' => 'string|nullable'
         ])->validate();
         try {
             if ($data["q-12"] < 15) {

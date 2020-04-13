@@ -48,7 +48,7 @@
     font-weight: bold;
     justify-content: flex-start;
     margin-bottom: 20px;
-    padding: 0 40px;
+    
     width: 100%;
     @media screen and (max-width: 575px) {
       padding: 0;
@@ -56,16 +56,13 @@
   }
   .question-title {
     color: #333;
-    font-size: 26px;
+    font-size: 22px;
     margin-bottom: 35px;
     padding: 0 40px;
     @media screen and (max-width: 575px) {
       padding: 0;
     }
     font-weight: 600;
-    @media (min-width: 480px) {
-      min-height: 110px;
-    }
   }
   .question-options-indication {
     color: #8b8b8b;
