@@ -690,15 +690,15 @@ class SelfTestController extends Controller
 
     public function majorGravity(array $responses)
     {
-        if ((isset($responses['q-2']) && $responses['q-2'] <= 34.4) && $responses['q-9'] == 1 && $responses['q-11'] == 1) {
+        if ((isset($responses['q-2']) && $responses['q-2'] < 35.5) && $responses['q-9'] == 1 && $responses['q-11'] == 1) {
             return 3;
-        } else if ((isset($responses['q-2']) && $responses['q-2'] <= 34.4) && $responses['q-9'] == 1) {
+        } else if ((isset($responses['q-2']) && $responses['q-2'] < 35.5) && $responses['q-9'] == 1) {
             return 2;
-        } else if ((isset($responses['q-2']) && $responses['q-2'] <= 34.4) && $responses['q-11'] == 1) {
+        } else if ((isset($responses['q-2']) && $responses['q-2'] < 35.5) && $responses['q-11'] == 1) {
             return 2;
         } else if ($responses['q-9'] == 1 && $responses['q-11'] == 1) {
             return 2;
-        } else if ((isset($responses['q-2']) && $responses['q-2'] <= 34.4)) {
+        } else if ((isset($responses['q-2']) && $responses['q-2'] < 35.5)) {
             return 1;
         } else if ($responses['q-9'] == 1) {
             return 1;
