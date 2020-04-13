@@ -257,7 +257,7 @@ class SelfTestController extends Controller
         }
         $backId = $content['id'] - 1;
         $backUrl = route('selfTest.back', ['step' => $backId]);
-        $isResultat = false;
+        $isResultat = 2;
         return view('covidTest.selft_test', compact('content', 'backUrl', 'isResultat'));
     }
 
@@ -513,7 +513,7 @@ class SelfTestController extends Controller
             case '23':
                 $request->session()->put('test.q-23', $value);
                 $resultat = $this->result(request()->session()->get('test'));
-                $isResultat = true;
+                $isResultat = 3;
                 return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
             case '1':
             default:
@@ -532,6 +532,12 @@ class SelfTestController extends Controller
                 $request->session()->flash('test.param', 'step-2');
                 return redirect()->route('selfTest.get');
         }
+    }
+
+    public function diagnostic()
+    {
+        $isResultat = 1;
+        return view('covidTest.self_test_welcome', compact( 'isResultat'));
     }
 
     public function redirectError($step, $validator)
@@ -725,7 +731,7 @@ class SelfTestController extends Controller
     public function back($step, Request $request)
     {
         if ($step == 0) {
-            $step = 1;
+            return redirect()->route('diagnostic');
         }
         $request->session()->pull('test.{$step}');
         $request->session()->flash('test.param', "step-{$step}");
