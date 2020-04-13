@@ -162,35 +162,10 @@
             </div>
         </div>
     </footer>
-    <div class="contenaire-float d-none d-sm-block">
+    <div class="contenaire-float">
         <a href="#" class="float whatsapp">
             <i class="fab fa-whatsapp fa-2x"></i>
         </a>
-        <a href="#" class="float facebook">
-            <i class="fab fa-facebook fa-2x"></i>
-        </a>
-        <a href="#" class="float twitter">
-            <i class="fab fa-twitter fa-2x"></i>
-        </a>
-    </div>
-    <div class="container-fluid no-gutters xs-share-container d-sm-none">
-        <div class="row">
-            <div class="col-4 whatsapp text-center">
-                <a href="#" class="xs-share">
-                    <i class="fab fa-whatsapp fa-2x"></i>
-                </a>
-            </div>
-            <div class="col-4 facebook text-center">
-                <a href="#" class="xs-share">
-                    <i class="fab fa-facebook fa-2x"></i>
-                </a>
-            </div>
-            <div class="col-4 twitter text-center">
-                <a href="#" class="xs-share">
-                    <i class="fab fa-twitter fa-2x"></i>
-                </a>
-            </div>
-        </div>
     </div>
 </body>
 </html>

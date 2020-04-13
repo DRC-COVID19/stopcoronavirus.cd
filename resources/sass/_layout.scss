@@ -36,8 +36,8 @@ a {
 }
 .contenaire-float {
     position: fixed;
-    bottom: 5px;
-    right: 5px;
+    bottom: 50px;
+    right: 30px;
     .float {
         display: flex;
         margin: 5px;
@@ -77,9 +77,4 @@ a {
 }
 .twitter{
     background-color: #76c5f5 !important;
-}
-footer{
-    @media screen and (max-width: 575px) {
-        margin-bottom: 45px;
-    }
 }

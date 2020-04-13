@@ -16979,8 +16979,8 @@ a {
 
 .contenaire-float {
   position: fixed;
-  bottom: 5px;
-  right: 5px;
+  bottom: 50px;
+  right: 30px;
 }
 
 .contenaire-float .float {
@@ -17027,12 +17027,6 @@ a {
 
 .twitter {
   background-color: #76c5f5 !important;
-}
-
-@media screen and (max-width: 575px) {
-  footer {
-    margin-bottom: 45px;
-  }
 }
 
 h1,
