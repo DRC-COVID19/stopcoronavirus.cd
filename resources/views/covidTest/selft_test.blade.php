@@ -232,7 +232,7 @@
                 <div class="question-submit d-flex justify-content-center">
 
                     <button class="btn btn-secondary">
-                        Enregistrer et continuer
+                        Continuer
                     </button>
 
                 </div>

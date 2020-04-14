@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h1>
+            <h1 class="mb-5">
                 Vous avez l'impression d'avoir des symptômes de Covid-19 et vous voulez savoir quoi faire si c'est le cas ?<br><strong>Ce questionnaire est là pour vous guider.</strong>
             </h1>
             <p>

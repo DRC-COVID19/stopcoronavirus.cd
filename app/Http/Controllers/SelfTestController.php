@@ -175,7 +175,7 @@ class SelfTestController extends Controller
         ],
         [
             'id' => 23,
-            'q' => "Aidez la riposte à réaliser un suivi épidémiologique en donnant votre province, ville, commune et quartier.",
+            'q' => "Aidez la riposte à réaliser un suivi épidémiologique en indiquant votre province, ville et commune.",
             'r' => 9
         ]
     ];
