@@ -71,17 +71,22 @@
     padding: 0 40px;
   }
   .question-options {
-    align-items: flex-start;
     background-color: #fff;
     display: flex;
     flex-direction: column;
     font-size: 26px;
     justify-content: space-between;
     min-height: 186px;
-    padding: 47px 0 11px;
+    padding: 47px 10px 11px;
     width: 100%;
     @media (min-width: 768px) {
       padding: 47px 40px 11px;
+    }
+    .custom-text-label{
+      font-size: 1.3rem;
+      @media screen and (max-width: 575px) {
+        font-size: 1rem;
+      }
     }
     .custom-control {
       input[type="radio"] {
@@ -171,7 +176,6 @@
   .input-text,
   .input-select {
     height: 64px;
-    width: auto;
     padding: 0 16px;
     font-size: 28px;
     font-weight: 500;

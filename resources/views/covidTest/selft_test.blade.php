@@ -27,15 +27,7 @@
                         </div>
                     </div>
                     @endif
-                    <p class="question-options-indication">
-                        @if($content['r']==3)
-                        Remplissez le champ :
-                        @else
-                        Sélectionnez une option :
-                        @endif
-                    </p>
-
-                    <div class="question-options">
+                <div class="question-options {{$content['r']==9?'d-md-flex justify-content-center align-items-md-center':''}}">
                         <div class="d-flex flex-column justify-content-between">
                             @if($content['r']==1 || $content['r']==2 || $content['r']==8)
                             <div class="custom-control custom-radio">
@@ -131,9 +123,104 @@
                             @endif
 
                             @if($content['r']==9)
-                            <div class="custom-control custom-text">
-                            <div class="custom-text-label">{{__('Province, Ville, Commune, Quartier')}}</div>
-                                <textarea  class="input-text-area" cols="100" rows="100" name="step_value"   tabindex="1"></textarea>
+                            <div class="form-group">
+                                <label class="custom-text-label" for="province">Dans quelle province habitez vous ?</label>
+                                <select class="form-control" name="province">
+                                    <option value="Bas-Uele">Bas-Uele</option>
+                                    <option value="Equateur">Equateur</option>
+                                    <option value="Haut-Katanga">Haut-Katanga</option>
+                                    <option value="Haut-Lomami">Haut-Lomami</option>
+                                    <option value="Haut-Uele">Haut-Uele</option>
+                                    <option value="Ituri">Ituri</option>
+                                    <option value="Kasaï">Kasaï</option>
+                                    <option value="Kasaï-Central">Kasaï-Central</option>
+                                    <option value="Kasaï-Oriental">Kasaï-Oriental</option>
+                                    <option value="Kinshasa">Kinshasa</option>
+                                    <option value="Kongo-Central">Kongo-Central</option>
+                                    <option value="Kwango">Kwango</option>
+                                    <option value="Kwilu">Kwilu</option>
+                                    <option value="Lomami">Lomami</option>
+                                    <option value="Lualaba">Lualaba</option>
+                                    <option value="Mai-Ndombe">Mai-Ndombe</option>
+                                    <option value="Maniema">Maniema</option>
+                                    <option value="Mongala">Mongala</option>
+                                    <option value="Nord-Kivu">Nord-Kivu</option>
+                                    <option value="Nord-Ubangi">Nord-Ubangi</option>
+                                    <option value="Sankuru">Sankuru</option>
+                                    <option value="Sud-Kivu">Sud-Kivu</option>
+                                    <option value="Sud-Ubangi">Sud-Ubangi</option>
+                                    <option value="Tanganyika">Tanganyika</option>
+                                    <option value="Tshopo">Tshopo</option>
+                                    <option value="Tshuapa">Tshuapa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="custom-text-label" for="town">Dans quelle ville habitez vous ?</label>
+                                <select class="form-control" name="town">
+                                    <option value="Kinshasa">Kinshasa</option>
+                                    <option value="Lubumbashi">Lubumbashi</option>
+                                    <option value="Mbuji-Mayi">Mbuji-Mayi</option>
+                                    <option value="Kananga">Kananga</option>
+                                    <option value="Kisangani">Kisangani</option>
+                                    <option value="Bukavu">Bukavu</option>
+                                    <option value="Tshikapa">Tshikapa</option>
+                                    <option value="Kolwezi">Kolwezi</option>
+                                    <option value="Likasi">Likasi</option>
+                                    <option value="Goma">Goma</option>
+                                    <option value="Kikwit">Kikwit</option>
+                                    <option value="Uvira">Uvira</option>
+                                    <option value="Bunia">Bunia</option>
+                                    <option value="Kalemie">Kalemie</option>
+                                    <option value="Mbandaka">Mbandaka</option>
+                                    <option value="Matadi">Matadi</option>
+                                    <option value="Kabinda">Kabinda</option>
+                                    <option value="Butembo">Butembo</option>
+                                    <option value="Baraka">Baraka</option>
+                                    <option value="Mwene-Ditu">Mwene-Ditu</option>
+                                    <option value="Isiro">Isiro</option>
+                                    <option value="Kindu">Kindu</option>
+                                    <option value="Boma">Boma</option>
+                                    <option value="Kamina">Kamina</option>
+                                    <option value="Gandajika">Gandajika</option>
+                                    <option value="Bandundu">Bandundu</option>
+                                    <option value="Gemena">Gemena</option>
+                                    <option value="Kipushi">Kipushi</option>
+                                    <option value="Bumba">Bumba</option>
+                                    <option value="Mbanza-Ngungu">Mbanza-Ngungu</option>
+                                    <option value="0">Autre</option>
+                                </select>
+                                <label class="custom-text-label">{{__('Si autre ville')}}</label>
+                                <input type="text" class="input-text form-control" cols="100" rows="100" name="other_town" tabindex="1"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="custom-text-label" for="township">Si vous habitez Kinshasa, dans quelle commune habitez vous ?</label>
+                                <select class="form-control" name="township">
+                                    <option value="Bandalungwa">Bandalungwa</option>
+                                    <option value="Barumbu">Barumbu</option>
+                                    <option value="Bumbu">Bumbu</option>
+                                    <option value="Gombe">Gombe</option>
+                                    <option value="Kalamu">Kalamu</option>
+                                    <option value="Kasa-Vubu">Kasa-Vubu</option>
+                                    <option value="Kimbanseke">Kimbanseke</option>
+                                    <option value="Kinshasa">Kinshasa</option>
+                                    <option value="Kintambo">Kintambo</option>
+                                    <option value="Kisenso">Kisenso</option>
+                                    <option value="Lemba">Lemba</option>
+                                    <option value="Limete">Limete</option>
+                                    <option value="Lingwala">Lingwala</option>
+                                    <option value="Makala">Makala</option>
+                                    <option value="Maluku">Maluku</option>
+                                    <option value="Masina">Masina</option>
+                                    <option value="Matete">Matete</option>
+                                    <option value="Mont-Ngafula">Mont-Ngafula</option>
+                                    <option value="Ndjili">Ndjili</option>
+                                    <option value="Ngaba">Ngaba</option>
+                                    <option value="Ngaliema">Ngaliema</option>
+                                    <option value="Ngiri-Ngiri">Ngiri-Ngiri</option>
+                                    <option value="Nsele">Nsele</option>
+                                    <option value="Selembao">Selembao</option>
+                                </select>
                             </div>
                             @endif
                         </div>
@@ -142,21 +229,6 @@
                     @csrf
 
                 </div>
-
-                {{-- <div class="row justify-content-center">
-                  <div class="cols-12 col-md-10">
-                    <div class="warning-form">
-                      <p class="warning-form-title">Anti-inflammatoires non stéroïdiens</p>
-                      <p>
-                        La prise d'anti-inflammatoires (ibuprofène, cortisone ...) pourrait être un facteur
-                        d'aggravation de l’infection. En cas de fièvre, prenez du paracétamol. Cette remarque
-                        concerte les traitements par gélules ou comprimés et ne concerne pas les formes inhalées.
-                        Si vous êtes déjà sous traitement, n'arrêtez pas ce traitement, demandez l'avis de votre
-                        médecin ou de votre pharmacien.
-                      </p>
-                    </div>
-                  </div>
-                </div> --}}
                 <div class="question-submit d-flex justify-content-center">
 
                     <button class="btn btn-secondary">
