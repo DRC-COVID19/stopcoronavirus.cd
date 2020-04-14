@@ -175,7 +175,7 @@ class SelfTestController extends Controller
         ],
         [
             'id' => 23,
-            'q' => "Aidez la riposte à réaliser un suivi épidémiologique en indiquant votre province, ville et commune.",
+            'q' => "h",
             'r' => 9
         ]
     ];
@@ -579,14 +579,21 @@ class SelfTestController extends Controller
     {
         try {
             $message = "";
+
+            /**
+             * SI >= 1 facteurs de gravité majeurs
+             */
             if ($this->majorGravity($responses) >= 1) {
                 $message = $this->message['msg-1']['text'];
                 /**
-                 * Appelez le 15.
+                 * Appelez le 101.
                  */
                 $this->storeDiagnostic($responses, $this->message['msg-1']);
                 return $message;
             }
+            /**
+             * SI fièvre ET toux
+             */
             if ($responses['q-1'] == 1 && $responses['q-3'] == 1) {
 
                 if ($this->hasPronostic($responses)) {
@@ -599,7 +606,7 @@ class SelfTestController extends Controller
                          */
                         $this->storeDiagnostic($responses, $this->message['msg-2']);
                         return $message;
-                    } else {
+                    } else { // SI < 2 facteur de gravité mineur
                         $message = $this->message['msg-3']['text'];
                         /**
                          * Votre situation peut relever d’un COVID 19.
@@ -608,7 +615,7 @@ class SelfTestController extends Controller
                         $this->storeDiagnostic($responses, $this->message['msg-3']);
                         return $message;
                     }
-                } else {
+                } else { // SI 0 facteur pronostique
                     $message = $this->message['msg-3']['text'];
                     /**
                      * Votre situation peut relever d’un COVID 19. 
@@ -618,7 +625,13 @@ class SelfTestController extends Controller
                     return $message;
                 }
             }
-            if ($responses['q-1'] == 1 || $responses['q-6'] == 1 || ($responses['q-3'] == 1 && $responses['q-5'] == 1) || ($responses['q-3'] == 1  && $responses['q-4'] == 1)) {
+            /**
+             * SI fièvre OU (pas de fièvre et (diarrhée OU (toux ET douleurs) OU (toux ET anosmie))
+             */
+            if ($responses['q-1'] == 1 ||  // fievre
+                ($responses['q-6'] == 1 ||  // diarrhée
+                    ($responses['q-3'] == 1 && $responses['q-5'] == 1) // toux et douleurs
+                    || ($responses['q-3'] == 1  && $responses['q-4'] == 1))) { // toux et anosmie
 
                 if ($this->hasPronostic($responses)) {
                     if ($this->minorGravity($responses) >= 2) {
@@ -628,7 +641,7 @@ class SelfTestController extends Controller
                         $this->storeDiagnostic($responses, $this->message['msg-2']);
                         return $message;
                     }
-                    if ($this->minorGravity($responses) <= 1) {
+                    if ($this->minorGravity($responses) < 2) {
                         $message = $this->message['msg-4']['text'];
                         /*Votre situation peut relever d’un COVID 19.
                         Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
@@ -666,6 +679,9 @@ class SelfTestController extends Controller
                     }
                 }
             }
+            /**
+             *  SI toux OU douleurs OU anosmie
+             */
             if ($responses['q-3'] == 1 || $responses['q-5'] == 1 || $responses['q-4'] == 1) {
                 if ($this->hasPronostic($responses)) {
                     $message = $this->message['msg-6']['text'];
@@ -704,6 +720,20 @@ class SelfTestController extends Controller
         }
     }
 
+    /**
+     * Facteur pronostique défavorable lié au terrain
+    OUI si l’âge est supérieur ou égal à 70 ans
+    OUI si l’indice de masse corporelle est supérieur ou égal à 30 kg/m²
+    Si OUI ou Je ne sais pas à la question sur l’hypertension artérielle
+    Si OUI pour “diabétique”
+    Si OUI pour “a ou a eu un cancer dans les trois dernières années”
+    Si OUI pour “maladie respiratoire ou suivi pneumologique”
+    Si OUI pour “insuffisance rénale”
+    Si OUI pour “maladie chronique du foie”
+    Si OUI pour “enceinte” (Non applicable : NON)
+    Si OUI pour maladie qui diminue les défenses immunitaires (Je ne sais pas : NON)
+    Si OUI pour traitement immunosuppresseur (Je ne sais pas : NON)
+     */
     public function hasPronostic(array $responses)
     {
         $imc = $responses['q-13'] / (($responses['q-12'] / 100) ^ 2);
@@ -720,28 +750,40 @@ class SelfTestController extends Controller
         return false;
     }
 
+    /**
+     * Facteurs de gravité mineurs et majeurs
+    Fièvre < 35,5°C
+    Fièvre >= 39°C
+    A indiqué de la fièvre sans renseigner de la température
+    Fatigue : alitement > 50% du temps diurne
+
+     */
     public function minorGravity(array $responses)
     {
-        if ((isset($responses['q-2']) && ($responses['q-2'] >= 39 || $responses['q-2'] < 35.5)) && (isset($responses['q-8']) && $responses['q-8'] == 1)) {
-            return 2;
-        } else if ((isset($responses['q-2']) && ($responses['q-2'] >= 39 || $responses['q-2'] < 35.5))) {
-            return 1;
-        } else if ((isset($responses['q-8']) && $responses['q-8'] == 1)) {
-            return 1;
-        }
-        return 0;
+        $r = 0;
+        if ((isset($responses['q-2']) && ($responses['q-2'] >= 39 || $responses['q-2'] < 35.5))
+            || (isset($responses['q-1']) && $responses['q-1'] == 1))
+            $r++;
+        if ((isset($responses['q-8']) && $responses['q-8'] == 1))
+            $r++;
+
+        return $r;
     }
 
+    /**
+     * Facteurs de gravité majeurs
+    Gêne respiratoire
+    Difficultés importantes pour s’alimenter ou boire depuis plus de 24 heures
+
+     */
     public function majorGravity(array $responses)
     {
-        if ($responses['q-9'] == 1 && $responses['q-11'] == 1) {
-            return 2;
-        } else if ($responses['q-9'] == 1) {
-            return 1;
-        } else if ($responses['q-11'] == 1) {
-            return 1;
-        }
-        return 0;
+        $r = 0;
+        if ($responses['q-9'] == 1)
+            $r++;
+        if ($responses['q-11'] == 1)
+            $r++;
+        return $r;
     }
 
     public function storeDiagnostic(array $responses, array $message)
