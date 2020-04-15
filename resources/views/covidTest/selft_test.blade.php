@@ -232,7 +232,7 @@
                         <div class="custom-control custom-radio">
                             <input type="radio" id="input-radio-step_fever-1" name="step_value" value="1" tabindex="1">
                             <label for="input-radio-step_fever-1">
-                                {{__('je ne sais pas')}}
+                                {{__('Je ne sais pas')}}
                                 <span class="hover-border"></span>
                             </label>
                         </div>
@@ -260,7 +260,7 @@
                         <div class="custom-control custom-radio">
                             <input type="radio" id="input-radio-step_fever-5" name="step_value" value="5" tabindex="2">
                             <label for="input-radio-step_fever-5">
-                                {{__("je n'ai pas eu de fièvre entre 35,5°C et 37,7°C")}}
+                                {{__("Je n'ai pas eu de fièvre (entre 35,5°C et 37,7°C)")}}
                                 <span class="hover-border"></span>
                             </label>
                         </div>
