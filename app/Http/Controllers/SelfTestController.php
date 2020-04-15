@@ -61,120 +61,115 @@ class SelfTestController extends Controller
         [
             'id' => 1,
             'q' => "Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?",
-            'r' => 2,
+            'r' => 10,
         ],
         [
             'id' => 2,
-            'q' => "Quelle a été votre température la plus élevée de ces dernières 48 heures ?",
-            'r' => 3
-        ],
-        [
-            'id' => 3,
             'q' => "Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?",
             'r' => 1
         ],
         [
-            'id' => 4,
+            'id' => 3,
             'q' => "Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?",
             'r' => 1
 
         ],
         [
-            'id' => 5,
+            'id' => 4,
             'q' => "Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?",
             'r' => 1,
         ],
         [
-            'id' => 6,
+            'id' => 5,
             'q' => "Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles.",
             'r' => 1,
         ],
         [
-            'id' => 7,
+            'id' => 6,
             'q' => "Ces derniers jours, avez-vous une fatigue inhabituelle ?",
             'r' => 1,
         ],
         [
-            'id' => 8,
+            'id' => 7,
             'q' => "Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?",
             'r' => 1,
 
         ],
         [
-            'id' => 9,
+            'id' => 8,
             'q' => "Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?",
             'r' => 1,
         ],
         [
-            'id' => 10,
+            'id' => 9,
             'q' => "Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?",
             'r' => 1,
         ],
         [
-            'id' => 11,
+            'id' => 10,
             'q' => "Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.",
             'r' => 5,
             'r_lable' => 'ans'
         ],
         [
-            'id' => 12,
+            'id' => 11,
             'q' => "Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.",
             'r' => 6,
             'r_lable' => 'cm'
         ],
         [
-            'id' => 13,
+            'id' => 12,
             'q' => "Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.",
             'r' => 7,
             'r_label' => 'kg'
         ],
         [
-            'id' => 14,
+            'id' => 13,
             'q' => "Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?",
             'r' => 2
         ],
         [
-            'id' => 15,
+            'id' => 14,
             'q' => "Êtes-vous diabétique ?",
             'r' => 1
         ],
         [
-            'id' => 16,
+            'id' => 15,
             'q' => "Avez-vous ou avez-vous eu un cancer ces trois dernières années ?",
             'r' => 1
         ],
         [
-            'id' => 17,
+            'id' => 16,
             'q' => "Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?",
             'r' => 1
         ],
         [
-            'id' => 18,
+            'id' => 17,
             'q' => "Avez-vous une insuffisance rénale chronique dialysée ?",
             'r' => 1
         ],
         [
-            'id' => 19,
+            'id' => 18,
             'q' => "Avez-vous une maladie chronique du foie ?",
             'r' => 1
         ],
         [
-            'id' => 20,
+            'id' => 19,
             'q' => "Êtes-vous enceinte ?",
             'r' => 8
         ],
         [
-            'id' => 21,
+            'id' => 20,
             'q' => "Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?",
             'r' => 2
         ],
         [
-            'id' => 22,
+            'id' => 21,
             'q' => "Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive).",
             'r' => 2
         ],
         [
-            'id' => 23,
+            'id' => 22,
             'q' => "Aidez la riposte à réaliser un suivi épidémiologique en donnant votre province, ville, commune et quartier.",
             'r' => 9
         ]
@@ -247,10 +242,6 @@ class SelfTestController extends Controller
             case 'step-22':
                 $content = $this->questions[21];
                 break;
-            case 'step-23':
-                $content = $this->questions[22];
-                break;
-                break;
             case 'step-1':
             default:
                 $request->session()->remove('test');
@@ -276,9 +267,10 @@ class SelfTestController extends Controller
             return redirect()->route('selfTest.get')->withErrors($validator);
         }
         switch ($step) {
+
             case '2':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'numeric|min:34|max:42'
+                    'step_value' => 'required'
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -329,6 +321,10 @@ class SelfTestController extends Controller
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 $request->session()->put('test.q-6', $value);
+                if ($value == 0) {
+                    $request->session()->flash('test.param', 'step-8');
+                    return redirect()->route('selfTest.get');
+                }
                 $request->session()->flash('test.param', 'step-7');
                 return redirect()->route('selfTest.get');
             case '7':
@@ -340,10 +336,6 @@ class SelfTestController extends Controller
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 $request->session()->put('test.q-7', $value);
-                if ($value == 0) {
-                    $request->session()->flash('test.param', 'step-9');
-                    return redirect()->route('selfTest.get');
-                }
                 $request->session()->flash('test.param', 'step-8');
                 return redirect()->route('selfTest.get');
             case '8':
@@ -370,17 +362,6 @@ class SelfTestController extends Controller
                 return redirect()->route('selfTest.get');
             case '10':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'required'
-                ]);
-                if ($validator->fails()) {
-                    $request->session()->flash('test.param', "step-{$step}");
-                    return redirect()->route('selfTest.get')->withErrors($validator);
-                }
-                $request->session()->put('test.q-10', $value);
-                $request->session()->flash('test.param', 'step-11');
-                return redirect()->route('selfTest.get');
-            case '11':
-                $validator = Validator::make($request->all(), [
                     'step_value' => 'required|numeric|min:1|max:120'
                 ]);
                 if ($validator->fails()) {
@@ -392,12 +373,23 @@ class SelfTestController extends Controller
                     $isResultat = true;
                     return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
                 }
+                $request->session()->put('test.q-10', $value);
+                $request->session()->flash('test.param', 'step-11');
+                return redirect()->route('selfTest.get');
+            case '11':
+                $validator = Validator::make($request->all(), [
+                    'step_value' => 'required|numeric|min:80|max:250'
+                ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-11', $value);
                 $request->session()->flash('test.param', 'step-12');
                 return redirect()->route('selfTest.get');
             case '12':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'required|numeric|min:80|max:250'
+                    'step_value' => 'required|numeric|min:20|max:250'
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -408,11 +400,11 @@ class SelfTestController extends Controller
                 return redirect()->route('selfTest.get');
             case '13':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'required|numeric|min:20|max:250'
+                    'step_value' => 'required'
                 ]);
-                if ($validator->fails()) {
-                    $request->session()->flash('test.param', "step-{$step}");
-                    return redirect()->route('selfTest.get')->withErrors($validator);
+
+                if ($value=="2") {
+                    $value=1;
                 }
                 $request->session()->put('test.q-13', $value);
                 $request->session()->flash('test.param', 'step-14');
@@ -421,6 +413,10 @@ class SelfTestController extends Controller
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
                 ]);
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 $request->session()->put('test.q-14', $value);
                 $request->session()->flash('test.param', 'step-15');
                 return redirect()->route('selfTest.get');
@@ -503,17 +499,6 @@ class SelfTestController extends Controller
                 return redirect()->route('selfTest.get');
             case '22':
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'required'
-                ]);
-                if ($validator->fails()) {
-                    $request->session()->flash('test.param', "step-{$step}");
-                    return redirect()->route('selfTest.get')->withErrors($validator);
-                }
-                $request->session()->put('test.q-22', $value);
-                $request->session()->flash('test.param', 'step-23');
-                return redirect()->route('selfTest.get');
-            case '23':
-                $validator = Validator::make($request->all(), [
                     'province' => 'nullable',
                     'town' => 'required_with:province',
                     'other_town' => 'required_if:town,0',
@@ -549,12 +534,7 @@ class SelfTestController extends Controller
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $value = $value == 2 ? 1 : $value;
                 $request->session()->put('test.q-1', $value);
-                if ($value == 0) {
-                    $request->session()->flash('test.param', 'step-3');
-                    return redirect()->route('selfTest.get');
-                }
                 $request->session()->flash('test.param', 'step-2');
                 return redirect()->route('selfTest.get');
         }
@@ -587,7 +567,7 @@ class SelfTestController extends Controller
                 $this->storeDiagnostic($responses, $this->message['msg-1']);
                 return $message;
             }
-            if ($responses['q-1'] == 1 && $responses['q-3'] == 1) {
+            if ($this->hasFever($responses) && $responses['q-3'] == 1) {
 
                 if ($this->hasPronostic($responses)) {
                     if ($this->minorGravity($responses) >= 2) {
@@ -618,7 +598,7 @@ class SelfTestController extends Controller
                     return $message;
                 }
             }
-            if ($responses['q-1'] == 1 || $responses['q-6'] == 1 || ($responses['q-3'] == 1 && $responses['q-5'] == 1) || ($responses['q-3'] == 1  && $responses['q-4'] == 1)) {
+            if ($this->hasFever($responses) || $responses['q-6'] == 1 || ($responses['q-3'] == 1 && $responses['q-5'] == 1) || ($responses['q-3'] == 1  && $responses['q-4'] == 1)) {
 
                 if ($this->hasPronostic($responses)) {
                     if ($this->minorGravity($responses) >= 2) {
@@ -704,6 +684,13 @@ class SelfTestController extends Controller
         }
     }
 
+    public function hasFever(array $responses)
+    {
+        if ($responses['q-1'] == 1 || $responses['q-1'] == 2 || $responses['q-1'] == 4) {
+            return true;
+        }
+        return false;
+    }
     public function hasPronostic(array $responses)
     {
         $imc = $responses['q-13'] / (($responses['q-12'] / 100) ^ 2);
@@ -724,7 +711,7 @@ class SelfTestController extends Controller
     {
         if ((isset($responses['q-2']) && ($responses['q-2'] >= 39 || $responses['q-2'] < 35.5)) && (isset($responses['q-8']) && $responses['q-8'] == 1)) {
             return 2;
-        } else if ((isset($responses['q-2']) && ($responses['q-2'] >= 39 || $responses['q-2'] < 35.5))) {
+        } else if ($responses['q-1']==2 || $responses['q-1']==4) {
             return 1;
         } else if ((isset($responses['q-8']) && $responses['q-8'] == 1)) {
             return 1;

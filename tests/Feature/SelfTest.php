@@ -17,18 +17,18 @@ class SelfTest extends TestCase
     {
         session()->remove('test');
 
+        // Facteurs de gravité mineurs Fièvre 2 ou 4
         $response = $this->call("post", '/self-test', [
             'step_value' => '0',
             'current_step' => '1'
         ]);
-        // Facteurs de gravité mineurs Fièvre > ou = 39°C
-        // Facteurs de gravité majeurs Fièvre <= 35,4°C
+        
+        //Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
         $response = $this->call("post", '/self-test', [
             'step_value' => null,
             'current_step' => '2'
         ]);
 
-        //Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
         $response = $this->call("post", '/self-test', [
             'step_value' => '0',
             'current_step' => '3'
@@ -45,41 +45,44 @@ class SelfTest extends TestCase
             'step_value' => '0',
             'current_step' => '6'
         ]);
+
+         //Facteurs de gravité mineurs  Fatigue : alitement > 50%  1
         $response = $this->call("post", '/self-test', [
             'step_value' => '0',
             'current_step' => '7'
         ]);
-        //Facteurs de gravité mineurs  Fatigue : alitement > 50%
+       
+         //Facteurs de gravité majeurs Difficultés importantes pour s’alimenter ou boire depuis plus de 24h 
         $response = $this->call("post", '/self-test', [
             'step_value' => '0',
             'current_step' => '8'
         ]);
-
-        //Facteurs de gravité majeurs Difficultés importantes pour s’alimenter ou boire depuis plus de 24h 
+       
+        //Facteurs de gravité majeurs Gêne respiratoire
         $response = $this->call("post", '/self-test', [
             'step_value' => '1',
             'current_step' => '9'
         ]);
 
-         //Facteurs de gravité majeurs Gêne respiratoire
+        //Facteur pronostique
+        //Age
          $response = $this->call("post", '/self-test', [
-            'step_value' => '0',
+            'step_value' => '45',
             'current_step' => '10'
         ]);
        
-        //Facteur pronostique
-        //Old
-        $response = $this->call("post", '/self-test', [
-            'step_value' => '55',
-            'current_step' => '11'
-        ]);
-
         //Taille
         $response = $this->call("post", '/self-test', [
             'step_value' => '169',
+            'current_step' => '11'
+        ]);
+
+         //Poids
+        $response = $this->call("post", '/self-test', [
+            'step_value' => '60',
             'current_step' => '12'
         ]);
-        //Poids
+       
         $response = $this->call("post", '/self-test', [
             'step_value' => '60',
             'current_step' => '13'
@@ -117,15 +120,11 @@ class SelfTest extends TestCase
             'current_step' => '21'
         ]);
         $response = $this->call("post", '/self-test', [
-            'step_value' => '0',
-            'current_step' => '22'
-        ]);
-        $response = $this->call("post", '/self-test', [
             'town' => '0',
             'township'=>null,
             'province'=>'Kinshasa',
             'other_town'=>'kin',
-            'current_step' => '23'
+            'current_step' => '22'
         ]);
         $view = $response->original;
         $response->assertStatus(200);

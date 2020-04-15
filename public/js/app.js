@@ -44620,7 +44620,48 @@ function drawChart() {
 
 $(document).ready(function () {
   if ($('#statsChart').length) drawChart();
+  $('#other-town').addClass('d-none');
+  $('select[name=township]').attr('required', 'required');
+  $(':radio[name=step_value]').change(function (params) {
+    $('#question-form').submit();
+  });
+  $('#town').change(function (params) {
+    var value = $(this).val();
+
+    if (value == 0) {
+      $('#other-town').removeClass('d-none');
+      $('input[name=other_town]').attr('required', 'required');
+    } else {
+      $('#other-town').addClass('d-none');
+      $('input[name=other_town]').remove('required');
+    }
+
+    if (value == "Kinshasa") {
+      $('#township').removeClass('d-none');
+      $('select[name=township]').attr('required', 'required');
+    } else {
+      $("#township").addClass('d-none');
+      $('select[name=township]').removeAttr('required');
+    }
+  });
+  var response = $('#question-form-validate-btn').data('response');
+
+  if (response == 1 || response == 2 || response == 10 || response == 8) {
+    $('#question-form-validate-btn').addClass('d-none');
+  } // get Localisation
+
+
+  if ("geolocation" in navigator) {
+    //check geolocation available 
+    //try to get user current location using getCurrentPosition() method
+    navigator.geolocation.getCurrentPosition(function (position) {
+      console.log("Found your location <br />Lat : " + position.coords.latitude + " </br>Lang :" + position.coords.longitude);
+    });
+  } else {
+    console.log("Browser doesn't support geolocation!");
+  }
 });
+$(function () {});
 
 /***/ }),
 

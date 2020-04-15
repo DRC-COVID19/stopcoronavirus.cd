@@ -67,7 +67,7 @@
             <div class=" py-2 App-Header--notice">
                 <div class="container">
                     <div class="row">
-                        <div class="col-2 d-sm-none align-items-center d-flex" >
+                        <div class="col-2 d-md-none align-items-center d-flex" >
                             <nav role="navigation" id="navigation" >
                                 <div id="menuToggle">
                                     <input type="checkbox" />

@@ -33,34 +33,41 @@ class DiagnosticController extends AdminController
             $actions->disableView();
         });
         $grid->column('id', __('Id'));
-        $grid->column('q-12', __('Age'))->filter('range');
-        $grid->column('q-1', __('Fièvre'))->bool(['1' => true, '0' => false])->filter([
+        $grid->column('q-10', __('Age'))->filter('range');
+        $grid->column('q-1', __('Fièvre'))->bool(
+            [
+                '1' => true,
+                '2' => true,
+                '3' => false,
+                '4' => true,
+                '5' => false
+            ]
+        )->filter([
+            1 => 'Ne sais pas',
+            2 => '39°C ou plus',
+            3 => 'Entre 37,8°C et 38,9°C',
+            4 => 'Moins de 35,5°C',
+            5 => 'Pas de fièvre'
+        ]);
+        // $grid->column('q-2', __('Tempéranture'))->filter('range');
+        $grid->column('q-2', __('Toux'))->bool();
+        $grid->column('q-9', __('Soufle'))->bool(['1' => true, '0' => false])->filter([
             0 => 'Non',
             1 => 'oui',
         ]);
-        $grid->column('q-2', __('Tempéranture'))->filter('range');
-        $grid->column('q-3', __('Toux'))->bool(['1' => true, '0' => false])->filter([
-            0 => 'Non',
-            1 => 'oui',
-        ]);
-        $grid->column('q-11', __('Soufle'))->bool(['1' => true, '0' => false])->filter([
-            0 => 'Non',
-            1 => 'oui',
-        ]);
-        $grid->column('q-11', __('Mal de gorge/courbatures'))->bool(['1' => true, '0' => false])->filter([
+        $grid->column('q-4', __('Mal de gorge/courbatures'))->bool(['1' => true, '0' => false])->filter([
             0 => 'Non',
             1 => 'oui',
         ]);
         $grid->column('pronostique')->display(function () {
-            $imc = $this['q-14'] / (($this['q-13'] / 100) ^ 2);
+            $imc = $this['q-13'] / (($this['q-12'] / 100) ^ 2);
             if (
-                $this['q-12'] >= 70 ||
-                $imc >= 30 ||
-                $this['q-15'] == 1 || $this['q-15'] == 2 || $this['q-16'] == 1 ||
+                $this['q-11'] >= 70 ||
+                $imc >= 30 || $this['q-14'] == 1 ||
+                $this['q-15'] == 1 || $this['q-16'] == 1 ||
                 $this['q-17'] == 1 || $this['q-18'] == 1 ||
                 $this['q-19'] == 1 || $this['q-20'] == 1 ||
-                $this['q-21'] == 1 || $this['q-22'] == 1 ||
-                $this['q-23'] == 1
+                $this['q-21'] == 1 || $this['q-22'] == 1
             ) {
                 return true;
             }
@@ -70,36 +77,20 @@ class DiagnosticController extends AdminController
             true => 'oui',
         ]);
         $grid->column('majeurs')->display(function () {
-            if ((isset($this['q-2']) && $this['q-2'] <= 34.4) && $this['q-9'] == 1 && $this['q-11'] == 1) {
-                return  "3";
-            } else if ((isset($this['q-2']) && $this['q-2'] <= 34.4) && $this['q-9'] == 1) {
-                return "2";
-            } else if ((isset($this['q-2']) && $this['q-2'] <= 34.4) && $this['q-11'] == 1) {
-                return "2";
-            } else if ($this['q-9'] == 1 && $this['q-11'] == 1) {
-                return "2";
-            } else if ((isset($this['q-2']) && $this['q-2'] <= 34.4)) {
-                return "1";
+            if ($this['q-9'] == 1 && $this['q-11'] == 1) {
+                return 2;
             } else if ($this['q-9'] == 1) {
-                return "1";
+                return 1;
             } else if ($this['q-11'] == 1) {
-                return "1";
+                return 1;
             }
-            return "0";
+            return 0;
         })->filter('range');
 
         $grid->column('mineurs')->display(function () {
-            if ((isset($this['q-2']) && $this['q-2'] >= 39) && (isset($this['q-8']) && $this['q-8'] == 1) && ($this['q-10'] == 3 || $this['q-10'] == 4)) {
-                return 3;
-            } else if ((isset($this['q-2']) && $this['q-2'] >= 39) && (isset($this['q-8']) && $this['q-8'] == 1)) {
+            if ((isset($this['q-2']) && ($this['q-2'] >= 39 || $this['q-2'] < 35.5)) && (isset($this['q-8']) && $this['q-8'] == 1)) {
                 return 2;
-            } else if ((isset($this['q-2']) && $this['q-2'] >= 39) && ($this['q-10'] == 3 || $this['q-10'] == 4)) {
-                return 2;
-            } else if ((isset($this['q-8']) && $this['q-8'] == 1) && ($this['q-10'] == 3 || $this['q-10'] == 4)) {
-                return 2;
-            } else if ($this['q-10'] == 3 || $this['q-10'] == 4) {
-                return 1;
-            } else if ((isset($this['q-2']) && $this['q-2'] >= 39)) {
+            } else if ($this['q-1']==2 || $this['q-1']==4) {
                 return 1;
             } else if ((isset($this['q-8']) && $this['q-8'] == 1)) {
                 return 1;
@@ -107,10 +98,9 @@ class DiagnosticController extends AdminController
             return 0;
         })->filter('range');
 
-        $grid->column('q-24', __('Région'))->filter('like');
+       // $grid->column('q-24', __('Région'))->filter('like');
         $grid->column('results_code', __('Results code'));
         $grid->column('created_at', __('Created at'));
-
         return $grid;
     }
 

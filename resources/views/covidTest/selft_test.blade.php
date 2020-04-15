@@ -4,13 +4,13 @@
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <form method="post" class="question-form" action="{{url()->current()}}">
+            <form method="post" class="question-form" id="question-form" action="{{url()->current()}}">
                 <div class="question">
                     <div class="question-header">
                         <a href="{{$backUrl}}">
                             <span class="fa fa-chevron-left"></span>
                             &nbsp;
-                            Question {{ $content['id'] }} sur 23
+                            Question {{ $content['id'] }} sur 22
                         </a>
                     </div>
                     <p class="question-title">
@@ -27,8 +27,8 @@
                         </div>
                     </div>
                     @endif
-                <div class="question-options {{$content['r']==9?'d-md-flex justify-content-center align-items-md-center':''}}">
-                        <div class="d-flex flex-column justify-content-between">
+                    <div class="question-options {{$content['r']==9?'d-md-flex justify-content-center align-items-md-center':''}}">
+                    <div class="d-flex flex-column justify-content-between {{ $content['r']==9?'col-md-7 col-12':'' }}">
                             @if($content['r']==1 || $content['r']==2 || $content['r']==8)
                             <div class="custom-control custom-radio">
                                 <input type="radio" id="input-radio-step_fever-on" name="step_value" value="1" tabindex="1">
@@ -135,7 +135,7 @@
                                     <option value="Kasaï">Kasaï</option>
                                     <option value="Kasaï-Central">Kasaï-Central</option>
                                     <option value="Kasaï-Oriental">Kasaï-Oriental</option>
-                                    <option value="Kinshasa">Kinshasa</option>
+                                    <option selected value="Kinshasa">Kinshasa</option>
                                     <option value="Kongo-Central">Kongo-Central</option>
                                     <option value="Kwango">Kwango</option>
                                     <option value="Kwilu">Kwilu</option>
@@ -156,8 +156,8 @@
                             </div>
                             <div class="form-group">
                                 <label class="custom-text-label" for="town">Dans quelle ville habitez vous ?</label>
-                                <select class="form-control" name="town">
-                                    <option value="Kinshasa">Kinshasa</option>
+                                <select class="form-control" name="town" id="town">
+                                    <option selected value="Kinshasa">Kinshasa</option>
                                     <option value="Lubumbashi">Lubumbashi</option>
                                     <option value="Mbuji-Mayi">Mbuji-Mayi</option>
                                     <option value="Kananga">Kananga</option>
@@ -189,13 +189,16 @@
                                     <option value="Mbanza-Ngungu">Mbanza-Ngungu</option>
                                     <option value="0">Autre</option>
                                 </select>
-                                <label class="custom-text-label">{{__('Si autre ville')}}</label>
-                                <input type="text" class="input-text form-control" cols="100" rows="100" name="other_town" tabindex="1"/>
+                                <div id="other-town">
+                                    <label class="custom-text-label">{{__('Si autre ville')}}</label>
+                                    <input type="text" class="input-text form-control" cols="100" rows="100" name="other_town" tabindex="1" />
+                                </div>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group" id="township">
                                 <label class="custom-text-label" for="township">Si vous habitez Kinshasa, dans quelle commune habitez vous ?</label>
-                                <select class="form-control" name="township">
+                                <select class="form-control" name="township" >
+                                    <option value=""></option>
                                     <option value="Bandalungwa">Bandalungwa</option>
                                     <option value="Barumbu">Barumbu</option>
                                     <option value="Bumbu">Bumbu</option>
@@ -224,14 +227,52 @@
                             </div>
                             @endif
                         </div>
+
+                        @if($content['r']==10)
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="input-radio-step_fever-1" name="step_value" value="1" tabindex="1">
+                            <label for="input-radio-step_fever-1">
+                                {{__('je ne sais pas')}}
+                                <span class="hover-border"></span>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="input-radio-step_fever-2" name="step_value" value="2" tabindex="2">
+                            <label for="input-radio-step_fever-2">
+                                {{__('39°C ou plus')}}
+                                <span class="hover-border"></span>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="input-radio-step_fever-3" name="step_value" value="3" tabindex="2">
+                            <label for="input-radio-step_fever-3">
+                                {{__('Entre 37,8°C et 38,9°C de température')}}
+                                <span class="hover-border"></span>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="input-radio-step_fever-4" name="step_value" value="4" tabindex="2">
+                            <label for="input-radio-step_fever-4">
+                                {{__('Température basse, moins de 35,5°C')}}
+                                <span class="hover-border"></span>
+                            </label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="input-radio-step_fever-5" name="step_value" value="5" tabindex="2">
+                            <label for="input-radio-step_fever-5">
+                                {{__("je n'ai pas eu de fièvre entre 35,5°C et 37,7°C")}}
+                                <span class="hover-border"></span>
+                            </label>
+                        </div>
+                        @endif
                     </div>
                     <input type="hidden" name="current_step" value="{{$content['id']}}">
                     @csrf
 
                 </div>
-                <div class="question-submit d-flex justify-content-center">
+            <div class="question-submit d-flex justify-content-center" >
 
-                    <button class="btn btn-secondary">
+                    <button class="btn btn-secondary" id="question-form-validate-btn" data-response="{{$content['r']}}">
                         Enregistrer et continuer
                     </button>
 
