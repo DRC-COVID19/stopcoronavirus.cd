@@ -17,44 +17,50 @@ class SelfTestController extends Controller
         'msg-1' =>
         [
             'text' => "Appelez le 101, 109 ou 110",
-            'code' => 7
+            'code' => "FIN5"
         ],
         'msg-2' => [
             'text' => "Votre situation peut relever d’un COVID 19.
             Demandez une consultation par téléphone à votre médecin généraliste ou à l'hôpital.
             Si vous n'arrivez pas à obtenir de consultation, appelez le 101, 109 ou 110.
             ",
-            'code' => 6
+            'code' => "FIN4"
         ],
         'msg-3' => [
             'text' => "Votre situation peut relever d'un COVID 19.
             Demandez une consultation par téléphone à votre médecin généraliste ou à l'hôpital.
             ",
-            'code' => 5
+            'code' => "FIN6"
         ],
         'msg-4' => [
             'text' => "Votre situation peut relever d'un COVID 19.
             Demandez une consultation par téléphone à votre médecin généraliste ou à l'hôpital.
             Si vous avez des difficultés à respirer ou des difficultés à manger ou à boire pendant plus de 24 heures, appelez le 101, 109 ou 110.
             ",
-            'code' => 4
+            'code' => "FIN3"
         ],
         'msg-5' => [
             'text' => "Votre situation peut relever d’un COVID 19 qu’il faut surveiller.
             Si de nouveaux symptômes apparaissent, refaites le test ou consultez votre médecin où l’hôpital.
             Nous vous conseillons de rester chez vous.",
-            'code' => 3
+            'code' => "FIN2"
         ],
         'msg-6' => [
             'text' => "Votre situation peut relever d’un COVID 19. Un avis médical est recommandé.
             Au moindre doute, appelez le 101, 109 ou 110. Nous vous conseillons de rester à votre domicile.",
-            'code' => 2
+            'code' => "FIN7"
         ],
         'msg-7' => [
             'text' => "Votre situation ne relève probablement pas du Covid-19. 
             N'hésitez pas à contacter votre médecin ou l’hôpital en cas de doute.
              Vous pouvez refaire le test en cas de nouveau symptôme pour réévaluer la situation.",
-            'code' => 1
+            'code' => "FIN8"
+        ],
+        'msg-8' => [
+            'text' => "Cette application n’est pas faite pour les personnes de moins de 15 ans. 
+            Prenez contact avec votre médecin généraliste au moindre doute. 
+            En cas d’urgence, appelez le 101, 109 ou 110.",
+            'code' => "FIN1"
         ],
     ];
     private $questions = [
@@ -369,7 +375,7 @@ class SelfTestController extends Controller
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 if ($value < 15) {
-                    $resultat = $this->message['msg-1']['text'];
+                    $resultat = $this->message['msg-8']['text'];
                     $isResultat = true;
                     return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
                 }
@@ -403,8 +409,8 @@ class SelfTestController extends Controller
                     'step_value' => 'required'
                 ]);
 
-                if ($value=="2") {
-                    $value=1;
+                if ($value == "2") {
+                    $value = 1;
                 }
                 $request->session()->put('test.q-13', $value);
                 $request->session()->flash('test.param', 'step-14');
@@ -528,7 +534,7 @@ class SelfTestController extends Controller
             case '1':
             default:
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'required'
+                    'step_value' => 'required|between:1,5'
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -608,10 +614,12 @@ class SelfTestController extends Controller
             /**
              * SI fièvre OU (pas de fièvre et (diarrhée OU (toux ET douleurs) OU (toux ET anosmie))
              */
-            if ($this->hasFever($responses) ||  // fievre
+            if (
+                $this->hasFever($responses) ||  // fievre
                 ($responses['q-6'] == 1 ||  // diarrhée
                     ($responses['q-3'] == 1 && $responses['q-5'] == 1) // toux et douleurs
-                    || ($responses['q-3'] == 1  && $responses['q-4'] == 1))) { // toux et anosmie
+                    || ($responses['q-3'] == 1  && $responses['q-4'] == 1))
+            ) { // toux et anosmie
 
                 if ($this->hasPronostic($responses)) {
                     if ($this->minorGravity($responses) >= 2) {
@@ -700,6 +708,13 @@ class SelfTestController extends Controller
         }
     }
 
+    /**
+     *  1 => 'Ne sais pas'= Oui,
+     *  2 => '39°C ou plus',
+     *  3 => 'Entre 37,8°C et 38,9°C',
+     *  4 => 'Moins de 35,5°C',
+     *  5 => 'Pas de fièvre'
+     */
     public function hasFever(array $responses)
     {
         if ($responses['q-1'] == 1 || $responses['q-1'] == 2 || $responses['q-1'] == 4) {
@@ -709,28 +724,29 @@ class SelfTestController extends Controller
     }
     /**
      * Facteur pronostique défavorable lié au terrain
-    OUI si l’âge est supérieur ou égal à 70 ans
-    OUI si l’indice de masse corporelle est supérieur ou égal à 30 kg/m²
-    Si OUI ou Je ne sais pas à la question sur l’hypertension artérielle
-    Si OUI pour “diabétique”
-    Si OUI pour “a ou a eu un cancer dans les trois dernières années”
-    Si OUI pour “maladie respiratoire ou suivi pneumologique”
-    Si OUI pour “insuffisance rénale”
-    Si OUI pour “maladie chronique du foie”
-    Si OUI pour “enceinte” (Non applicable : NON)
-    Si OUI pour maladie qui diminue les défenses immunitaires (Je ne sais pas : NON)
-    Si OUI pour traitement immunosuppresseur (Je ne sais pas : NON)
+     *OUI si l’âge est supérieur ou égal à 70 ans
+     *OUI si l’indice de masse corporelle est supérieur ou égal à 30 kg/m²
+     *Si OUI ou Je ne sais pas à la question sur l’hypertension artérielle
+     *Si OUI pour “diabétique”
+     *Si OUI pour “a ou a eu un cancer dans les trois dernières années”
+     *Si OUI pour “maladie respiratoire ou suivi pneumologique”
+     *Si OUI pour “insuffisance rénale”
+     *Si OUI pour “maladie chronique du foie”
+     *Si OUI pour “enceinte” (Non applicable : NON)
+     *Si OUI pour maladie qui diminue les défenses immunitaires (Je ne sais pas : NON)
+     *Si OUI pour traitement immunosuppresseur (Je ne sais pas : NON)
      */
     public function hasPronostic(array $responses)
     {
-        $imc = $responses['q-13'] / (($responses['q-12'] / 100) ^ 2);
+        $imc = $responses['q-12'] / (($responses['q-11'] / 100) ^ 2);
         if (
-            $responses['q-11'] >= 70 ||
-            $imc >= 30 || $responses['q-14'] == 1 ||
+            $responses['q-10'] >= 70 ||
+            $imc >= 30 || $responses['q-13'] == 1||
+            $responses['q-14'] == 1 ||
             $responses['q-15'] == 1 || $responses['q-16'] == 1 ||
             $responses['q-17'] == 1 || $responses['q-18'] == 1 ||
             $responses['q-19'] == 1 || $responses['q-20'] == 1 ||
-            $responses['q-21'] == 1 || $responses['q-22'] == 1
+            $responses['q-21'] == 1 
         ) {
             return true;
         }
@@ -739,36 +755,38 @@ class SelfTestController extends Controller
 
     /**
      * Facteurs de gravité mineurs et majeurs
-    Fièvre < 35,5°C
-    Fièvre >= 39°C
-    A indiqué de la fièvre sans renseigner de la température
-    Fatigue : alitement > 50% du temps diurne
+     *  1 => 'Ne sais pas'= Oui,
+     *  2 => '39°C ou plus',
+     *  3 => 'Entre 37,8°C et 38,9°C',
+     *  4 => 'Moins de 35,5°C',
+     *  5 => 'Pas de fièvre'
+     *Fatigue : alitement > 50% du temps diurne
 
      */
     public function minorGravity(array $responses)
     {
-        if ((isset($responses['q-2']) && ($responses['q-2'] >= 39 || $responses['q-2'] < 35.5)) && (isset($responses['q-8']) && $responses['q-8'] == 1)) {
-            return 2;
-        } else if ($responses['q-1']==2 || $responses['q-1']==4) {
-            return 1;
-        } else if ((isset($responses['q-8']) && $responses['q-8'] == 1)) {
-            return 1;
+        $r = 0;
+        if ($responses['q-1'] == 2 || $responses['q-2'] == 4) {
+            return $r++;
         }
-        return 0;
+        if ((isset($responses['q-7']) && $responses['q-7'] == 1)) {
+            return $r++;
+        }
+        return $r;
     }
 
     /**
      * Facteurs de gravité majeurs
-    Gêne respiratoire
-    Difficultés importantes pour s’alimenter ou boire depuis plus de 24 heures
+     *Gêne respiratoire
+     *Difficultés importantes pour s’alimenter ou boire depuis plus de 24 heures
 
      */
     public function majorGravity(array $responses)
     {
         $r = 0;
-        if ($responses['q-9'] == 1)
+        if ($responses['q-8'] == 1)
             $r++;
-        if ($responses['q-11'] == 1)
+        if ($responses['q-9'] == 1)
             $r++;
         return $r;
     }
@@ -792,50 +810,50 @@ class SelfTestController extends Controller
 
     /**
      * Test diagnostic covid-19
-     * @bodyParam q-1 int required Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
-     * @bodyParam q-2 int  Quelle a été votre température la plus élevée de ces dernières 48 heures ?
-     * @bodyParam q-3 int required Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
-     * @bodyParam q-4 int required Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?
-     * @bodyParam q-5 int required Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?
-     * @bodyParam q-6 int required Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles"
-     * @bodyParam q-7 int required Ces derniers jours, avez-vous une fatigue inhabituelle ?"
-     * @bodyParam q-8 int required Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?
-     * @bodyParam q-9 int required Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?
-     * @bodyParam q-10 int required Comment vous sentez-vous ?
-     * @bodyParam q-11 int required Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?
-     * @bodyParam q-12 int required Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.
-     * @bodyParam q-13 int required Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
-     * @bodyParam q-14 int required Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
-     * @bodyParam q-15 int required Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?
-     * @bodyParam q-16 int required Êtes-vous diabétique ?
-     * @bodyParam q-17 int required Avez-vous ou avez-vous eu un cancer ces trois dernières années ?
-     * @bodyParam q-18 int required Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?
-     * @bodyParam q-19 int required Avez-vous une insuffisance rénale chronique dialysée ?
-     * @bodyParam q-20 int required Avez-vous une maladie chronique du foie ?
-     * @bodyParam q-21 int required Êtes-vous enceinte ?
-     * @bodyParam q-22 int required Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
-     * @bodyParam q-23 int required Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)
-     * @bodyParam q-23 string Quel est votre Province, ville, commune et quartier ? Cette information nous permet de réaliser un suivi épidémiologique.
-     * @bodyParam q-23 longitude
-     * @bodyParam q-23 latitude
+     * @bodyParam q-1 int required between:2,5 Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
+     * @bodyParam q-2 int required between:0,1 Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
+     * @bodyParam q-3 int required between:0,1 Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?
+     * @bodyParam q-4 int required between:0,1 Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?
+     * @bodyParam q-5 int required between:0,1 Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles"
+     * @bodyParam q-6 int required between:0,1 Ces derniers jours, avez-vous une fatigue inhabituelle ?"
+     * @bodyParam q-7 int required between:0,1 Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?
+     * @bodyParam q-8 int required between:0,1 Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?
+     * @bodyParam q-9 int required between:0,1 Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?
+     * @bodyParam q-10 int required Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.
+     * @bodyParam q-11 int required Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
+     * @bodyParam q-12 int required between:20,250 Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
+     * @bodyParam q-13 int required Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?
+     * @bodyParam q-14 int required Êtes-vous diabétique ?
+     * @bodyParam q-15 int required Avez-vous ou avez-vous eu un cancer ces trois dernières années ?
+     * @bodyParam q-16 int required Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?
+     * @bodyParam q-17 int required Avez-vous une insuffisance rénale chronique dialysée ?
+     * @bodyParam q-18 int required Avez-vous une maladie chronique du foie ?
+     * @bodyParam q-19 int required Êtes-vous enceinte ?
+     * @bodyParam q-20 int required Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
+     * @bodyParam q-21 int required Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)
+     * @bodyParam province string Quel est votre Province ? Cette information nous permet de réaliser un suivi épidémiologique.
+     * @bodyParam town string Quel est votre ville ? Cette information nous permet de réaliser un suivi épidémiologique.
+     * @bodyParam township string Quel est votre commune  ? Cette information nous permet de réaliser un suivi épidémiologique.
+     * @bodyParam longitude longitude, Cette information nous permet de réaliser un suivi épidémiologique.
+     * @bodyParam latitude latitude, Cette information nous permet de réaliser un suivi épidémiologique.
      */
     public function apiCovidTest(Request $request)
     {
         $data = Validator::make($request->all(), [
-            'q-1' => 'required|numeric|between:0,1',
-            'q-2' => 'sometimes|numeric|between:34,42',
+            'q-1' => 'required|numeric|between:2,5',
+            'q-2' => 'sometimes|numeric|between:0,1',
             'q-3' => 'required|numeric|between:0,1',
             'q-4' => 'required|numeric|between:0,1',
             'q-5' => 'required|numeric|between:0,1',
             'q-6' => 'required|numeric|between:0,1',
-            'q-7' => 'required|numeric|between:0,1',
-            'q-8' => 'required_if:q-7,1|numeric|between:0,1',
+            'q-7' => 'required_if:q-6,1|numeric|between:0,1',
+            'q-8' => 'required|numeric|between:0,1',
             'q-9' => 'required|numeric|between:0,1',
-            'q-10' => 'required|numeric|between:1,4',
-            'q-11' => 'required|numeric|between:0,1',
-            'q-12' => 'required|numeric|between:1,120',
-            'q-13' => 'required|numeric|between:80,250',
-            'q-14' => 'required|numeric|between:20,250',
+            'q-10' => 'required|numeric|between:1,120',
+            'q-11' => 'required|numeric|between:80,250',
+            'q-12' => 'required|numeric|between:20,250',
+            'q-13' => 'required|numeric|between:0,1',
+            'q-14' => 'required|numeric|between:0,1',
             'q-15' => 'required|numeric|between:0,1',
             'q-16' => 'required|numeric|between:0,1',
             'q-17' => 'required|numeric|between:0,1',
@@ -843,15 +861,15 @@ class SelfTestController extends Controller
             'q-19' => 'required|numeric|between:0,1',
             'q-20' => 'required|numeric|between:0,1',
             'q-21' => 'required|numeric|between:0,1',
-            'q-22' => 'required|numeric|between:0,1',
-            'q-23' => 'required|numeric|between:0,1',
-            'q-24' => 'nullable|string',
+            'province' => 'nullable|string',
+            'town' => 'nullable|string',
+            'township'=>'nullable|string',
             'latitude' => 'string|nullable',
             'longitude' => 'string|nullable'
         ])->validate();
         try {
-            if ($data["q-12"] < 15) {
-                $resultat = $this->message['msg-1'];
+            if ($data["q-10"] < 15) {
+                $resultat = $this->message['msg-8'];
                 return response()->json(['resultat' => $resultat]);
             }
             $resultat = $this->result($data);

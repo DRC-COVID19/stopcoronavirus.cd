@@ -60,14 +60,15 @@ class DiagnosticController extends AdminController
             1 => 'oui',
         ]);
         $grid->column('pronostique')->display(function () {
-            $imc = $this['q-13'] / (($this['q-12'] / 100) ^ 2);
+            $imc = $this['q-12'] / (($this['q-11'] / 100) ^ 2);
             if (
-                $this['q-11'] >= 70 ||
-                $imc >= 30 || $this['q-14'] == 1 ||
-                $this['q-15'] == 1 || $this['q-16'] == 1 ||
-                $this['q-17'] == 1 || $this['q-18'] == 1 ||
-                $this['q-19'] == 1 || $this['q-20'] == 1 ||
-                $this['q-21'] == 1 || $this['q-22'] == 1
+                $this['q-10'] >= 70 ||
+            $imc >= 30 || $this['q-13'] == 1||
+            $this['q-14'] == 1 ||
+            $this['q-15'] == 1 || $this['q-16'] == 1 ||
+            $this['q-17'] == 1 || $this['q-18'] == 1 ||
+            $this['q-19'] == 1 || $this['q-20'] == 1 ||
+            $this['q-21'] == 1 
             ) {
                 return true;
             }
@@ -77,28 +78,26 @@ class DiagnosticController extends AdminController
             true => 'oui',
         ]);
         $grid->column('majeurs')->display(function () {
-            if ($this['q-9'] == 1 && $this['q-11'] == 1) {
-                return 2;
-            } else if ($this['q-9'] == 1) {
-                return 1;
-            } else if ($this['q-11'] == 1) {
-                return 1;
-            }
-            return 0;
+            $r = 0;
+            if ($this['q-8'] == 1)
+                $r++;
+            if ($this['q-9'] == 1)
+                $r++;
+            return $r;
         })->filter('range');
 
         $grid->column('mineurs')->display(function () {
-            if ((isset($this['q-2']) && ($this['q-2'] >= 39 || $this['q-2'] < 35.5)) && (isset($this['q-8']) && $this['q-8'] == 1)) {
-                return 2;
-            } else if ($this['q-1']==2 || $this['q-1']==4) {
-                return 1;
-            } else if ((isset($this['q-8']) && $this['q-8'] == 1)) {
-                return 1;
+            $r = 0;
+            if ($this['q-1'] == 2 || $this['q-2'] == 4) {
+                return $r++;
             }
-            return 0;
+            if ($this['q-7'] == 1) {
+                return $r++;
+            }
+            return $r;
         })->filter('range');
 
-       // $grid->column('q-24', __('Région'))->filter('like');
+        // $grid->column('q-24', __('Région'))->filter('like');
         $grid->column('results_code', __('Results code'));
         $grid->column('created_at', __('Created at'));
         return $grid;

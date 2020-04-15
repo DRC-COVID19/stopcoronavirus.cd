@@ -2,7 +2,7 @@
     "variables": [],
     "info": {
         "name": "Laravel API",
-        "_postman_id": "cf9c7123-5983-4d1f-bb5a-ce142d4664a7",
+        "_postman_id": "cfa800ae-9922-49dd-b49a-7c6a1c6836b6",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
@@ -12,7 +12,7 @@
             "description": "\nAPIs for managing users",
             "item": [
                 {
-                    "name": "Test diagnostique covid-19",
+                    "name": "Test diagnostic covid-19",
                     "request": {
                         "url": {
                             "protocol": "http",
@@ -33,7 +33,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"q-1\": 8,\n    \"q-2\": 15,\n    \"q-3\": 2,\n    \"q-4\": 19,\n    \"q-5\": 9,\n    \"q-6\": 9,\n    \"q-7\": 13,\n    \"q-8\": 14,\n    \"q-9\": 18,\n    \"q-10\": 13,\n    \"q-11\": 13,\n    \"q-12\": 9,\n    \"q-13\": 17,\n    \"q-14\": 4,\n    \"q-15\": 3,\n    \"q-16\": 14,\n    \"q-17\": 17,\n    \"q-18\": 12,\n    \"q-19\": 13,\n    \"q-20\": 10,\n    \"q-21\": 12,\n    \"q-22\": 10,\n    \"q-23\": 10\n}"
+                            "raw": "{\n    \"q-1\": 9,\n    \"q-2\": 1,\n    \"q-3\": 20,\n    \"q-4\": 12,\n    \"q-5\": 2,\n    \"q-6\": 11,\n    \"q-7\": 8,\n    \"q-8\": 13,\n    \"q-9\": 7,\n    \"q-10\": 2,\n    \"q-11\": 20,\n    \"q-12\": 2,\n    \"q-13\": 9,\n    \"q-14\": 8,\n    \"q-15\": 3,\n    \"q-16\": 11,\n    \"q-17\": 19,\n    \"q-18\": 19,\n    \"q-19\": 15,\n    \"q-20\": 4,\n    \"q-21\": 16,\n    \"province\": \"sed\",\n    \"town\": \"consectetur\",\n    \"township\": \"omnis\",\n    \"longitude\": \"aut\",\n    \"latitude\": \"autem\"\n}"
                         },
                         "description": "",
                         "response": []

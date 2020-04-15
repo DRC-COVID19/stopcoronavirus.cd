@@ -25,7 +25,7 @@ Welcome to the generated API reference.
 
 APIs for managing users
 <!-- START_60fdb642281a006b32553e18909d0533 -->
-## Test diagnostique covid-19
+## Test diagnostic covid-19
 
 > Example request:
 
@@ -40,29 +40,32 @@ let headers = {
 };
 
 let body = {
-    "q-1": 8,
-    "q-2": 15,
-    "q-3": 2,
-    "q-4": 19,
-    "q-5": 9,
-    "q-6": 9,
-    "q-7": 13,
-    "q-8": 14,
-    "q-9": 18,
-    "q-10": 13,
-    "q-11": 13,
-    "q-12": 9,
-    "q-13": 17,
-    "q-14": 4,
+    "q-1": 9,
+    "q-2": 1,
+    "q-3": 20,
+    "q-4": 12,
+    "q-5": 2,
+    "q-6": 11,
+    "q-7": 8,
+    "q-8": 13,
+    "q-9": 7,
+    "q-10": 2,
+    "q-11": 20,
+    "q-12": 2,
+    "q-13": 9,
+    "q-14": 8,
     "q-15": 3,
-    "q-16": 14,
-    "q-17": 17,
-    "q-18": 12,
-    "q-19": 13,
-    "q-20": 10,
-    "q-21": 12,
-    "q-22": 10,
-    "q-23": 10
+    "q-16": 11,
+    "q-17": 19,
+    "q-18": 19,
+    "q-19": 15,
+    "q-20": 4,
+    "q-21": 16,
+    "province": "sed",
+    "town": "consectetur",
+    "township": "omnis",
+    "longitude": "aut",
+    "latitude": "autem"
 }
 
 fetch(url, {
@@ -85,29 +88,32 @@ $response = $client->post(
             'Accept' => 'application/json',
         ],
         'json' => [
-            'q-1' => 8,
-            'q-2' => 15,
-            'q-3' => 2,
-            'q-4' => 19,
-            'q-5' => 9,
-            'q-6' => 9,
-            'q-7' => 13,
-            'q-8' => 14,
-            'q-9' => 18,
-            'q-10' => 13,
-            'q-11' => 13,
-            'q-12' => 9,
-            'q-13' => 17,
-            'q-14' => 4,
+            'q-1' => 9,
+            'q-2' => 1,
+            'q-3' => 20,
+            'q-4' => 12,
+            'q-5' => 2,
+            'q-6' => 11,
+            'q-7' => 8,
+            'q-8' => 13,
+            'q-9' => 7,
+            'q-10' => 2,
+            'q-11' => 20,
+            'q-12' => 2,
+            'q-13' => 9,
+            'q-14' => 8,
             'q-15' => 3,
-            'q-16' => 14,
-            'q-17' => 17,
-            'q-18' => 12,
-            'q-19' => 13,
-            'q-20' => 10,
-            'q-21' => 12,
-            'q-22' => 10,
-            'q-23' => 10,
+            'q-16' => 11,
+            'q-17' => 19,
+            'q-18' => 19,
+            'q-19' => 15,
+            'q-20' => 4,
+            'q-21' => 16,
+            'province' => 'sed',
+            'town' => 'consectetur',
+            'township' => 'omnis',
+            'longitude' => 'aut',
+            'latitude' => 'autem',
         ],
     ]
 );
@@ -123,29 +129,32 @@ print_r(json_decode((string) $body));
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
-    `q-1` | integer |  required  | Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
-        `q-2` | integer |  optional  | Quelle a été votre température la plus élevée de ces dernières 48 heures ?
-        `q-3` | integer |  required  | Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
-        `q-4` | integer |  required  | Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?
-        `q-5` | integer |  required  | Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?
-        `q-6` | integer |  required  | Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles"
-        `q-7` | integer |  required  | Ces derniers jours, avez-vous une fatigue inhabituelle ?"
-        `q-8` | integer |  required  | Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?
-        `q-9` | integer |  required  | Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?
-        `q-10` | integer |  required  | Comment vous sentez-vous ?
-        `q-11` | integer |  required  | Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?
-        `q-12` | integer |  required  | Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.
-        `q-13` | integer |  required  | Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
-        `q-14` | integer |  required  | Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
-        `q-15` | integer |  required  | Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?
-        `q-16` | integer |  required  | Êtes-vous diabétique ?
-        `q-17` | integer |  required  | Avez-vous ou avez-vous eu un cancer ces trois dernières années ?
-        `q-18` | integer |  required  | Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?
-        `q-19` | integer |  required  | Avez-vous une insuffisance rénale chronique dialysée ?
-        `q-20` | integer |  required  | Avez-vous une maladie chronique du foie ?
-        `q-21` | integer |  required  | Êtes-vous enceinte ?
-        `q-22` | integer |  required  | Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
-        `q-23` | integer |  required  | Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)
+    `q-1` | integer |  required  | between:2,5 Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
+        `q-2` | integer |  required  | between:0,1 Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
+        `q-3` | integer |  required  | between:0,1 Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?
+        `q-4` | integer |  required  | between:0,1 Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?
+        `q-5` | integer |  required  | between:0,1 Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles"
+        `q-6` | integer |  required  | between:0,1 Ces derniers jours, avez-vous une fatigue inhabituelle ?"
+        `q-7` | integer |  required  | between:0,1 Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?
+        `q-8` | integer |  required  | between:0,1 Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?
+        `q-9` | integer |  required  | between:0,1 Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?
+        `q-10` | integer |  required  | Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.
+        `q-11` | integer |  required  | Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
+        `q-12` | integer |  required  | between:20,250 Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
+        `q-13` | integer |  required  | Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?
+        `q-14` | integer |  required  | Êtes-vous diabétique ?
+        `q-15` | integer |  required  | Avez-vous ou avez-vous eu un cancer ces trois dernières années ?
+        `q-16` | integer |  required  | Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?
+        `q-17` | integer |  required  | Avez-vous une insuffisance rénale chronique dialysée ?
+        `q-18` | integer |  required  | Avez-vous une maladie chronique du foie ?
+        `q-19` | integer |  required  | Êtes-vous enceinte ?
+        `q-20` | integer |  required  | Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
+        `q-21` | integer |  required  | Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)
+        `province` | string |  optional  | Quel est votre Province ? Cette information nous permet de réaliser un suivi épidémiologique.
+        `town` | string |  optional  | Quel est votre ville ? Cette information nous permet de réaliser un suivi épidémiologique.
+        `township` | string |  optional  | Quel est votre commune  ? Cette information nous permet de réaliser un suivi épidémiologique.
+        `longitude` | longitude, |  optional  | Cette information nous permet de réaliser un suivi épidémiologique.
+        `latitude` | latitude, |  optional  | Cette information nous permet de réaliser un suivi épidémiologique.
     
 <!-- END_60fdb642281a006b32553e18909d0533 -->
 

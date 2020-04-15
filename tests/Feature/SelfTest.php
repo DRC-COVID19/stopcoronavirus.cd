@@ -19,13 +19,13 @@ class SelfTest extends TestCase
 
         // Facteurs de gravité mineurs Fièvre 2 ou 4
         $response = $this->call("post", '/self-test', [
-            'step_value' => '0',
+            'step_value' => '5',
             'current_step' => '1'
         ]);
         
         //Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
         $response = $this->call("post", '/self-test', [
-            'step_value' => null,
+            'step_value' => '0',
             'current_step' => '2'
         ]);
 
@@ -60,7 +60,7 @@ class SelfTest extends TestCase
        
         //Facteurs de gravité majeurs Gêne respiratoire
         $response = $this->call("post", '/self-test', [
-            'step_value' => '1',
+            'step_value' => '0',
             'current_step' => '9'
         ]);
 

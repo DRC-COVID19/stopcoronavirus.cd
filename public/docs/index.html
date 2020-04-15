@@ -51,7 +51,7 @@
 <h1>User management</h1>
 <p>APIs for managing users</p>
 <!-- START_60fdb642281a006b32553e18909d0533 -->
-<h2>Test diagnostique covid-19</h2>
+<h2>Test diagnostic covid-19</h2>
 <blockquote>
 <p>Example request:</p>
 </blockquote>
@@ -65,29 +65,32 @@ let headers = {
 };
 
 let body = {
-    "q-1": 8,
-    "q-2": 15,
-    "q-3": 2,
-    "q-4": 19,
-    "q-5": 9,
-    "q-6": 9,
-    "q-7": 13,
-    "q-8": 14,
-    "q-9": 18,
-    "q-10": 13,
-    "q-11": 13,
-    "q-12": 9,
-    "q-13": 17,
-    "q-14": 4,
+    "q-1": 9,
+    "q-2": 1,
+    "q-3": 20,
+    "q-4": 12,
+    "q-5": 2,
+    "q-6": 11,
+    "q-7": 8,
+    "q-8": 13,
+    "q-9": 7,
+    "q-10": 2,
+    "q-11": 20,
+    "q-12": 2,
+    "q-13": 9,
+    "q-14": 8,
     "q-15": 3,
-    "q-16": 14,
-    "q-17": 17,
-    "q-18": 12,
-    "q-19": 13,
-    "q-20": 10,
-    "q-21": 12,
-    "q-22": 10,
-    "q-23": 10
+    "q-16": 11,
+    "q-17": 19,
+    "q-18": 19,
+    "q-19": 15,
+    "q-20": 4,
+    "q-21": 16,
+    "province": "sed",
+    "town": "consectetur",
+    "township": "omnis",
+    "longitude": "aut",
+    "latitude": "autem"
 }
 
 fetch(url, {
@@ -107,29 +110,32 @@ $response = $client-&gt;post(
             'Accept' =&gt; 'application/json',
         ],
         'json' =&gt; [
-            'q-1' =&gt; 8,
-            'q-2' =&gt; 15,
-            'q-3' =&gt; 2,
-            'q-4' =&gt; 19,
-            'q-5' =&gt; 9,
-            'q-6' =&gt; 9,
-            'q-7' =&gt; 13,
-            'q-8' =&gt; 14,
-            'q-9' =&gt; 18,
-            'q-10' =&gt; 13,
-            'q-11' =&gt; 13,
-            'q-12' =&gt; 9,
-            'q-13' =&gt; 17,
-            'q-14' =&gt; 4,
+            'q-1' =&gt; 9,
+            'q-2' =&gt; 1,
+            'q-3' =&gt; 20,
+            'q-4' =&gt; 12,
+            'q-5' =&gt; 2,
+            'q-6' =&gt; 11,
+            'q-7' =&gt; 8,
+            'q-8' =&gt; 13,
+            'q-9' =&gt; 7,
+            'q-10' =&gt; 2,
+            'q-11' =&gt; 20,
+            'q-12' =&gt; 2,
+            'q-13' =&gt; 9,
+            'q-14' =&gt; 8,
             'q-15' =&gt; 3,
-            'q-16' =&gt; 14,
-            'q-17' =&gt; 17,
-            'q-18' =&gt; 12,
-            'q-19' =&gt; 13,
-            'q-20' =&gt; 10,
-            'q-21' =&gt; 12,
-            'q-22' =&gt; 10,
-            'q-23' =&gt; 10,
+            'q-16' =&gt; 11,
+            'q-17' =&gt; 19,
+            'q-18' =&gt; 19,
+            'q-19' =&gt; 15,
+            'q-20' =&gt; 4,
+            'q-21' =&gt; 16,
+            'province' =&gt; 'sed',
+            'town' =&gt; 'consectetur',
+            'township' =&gt; 'omnis',
+            'longitude' =&gt; 'aut',
+            'latitude' =&gt; 'autem',
         ],
     ]
 );
@@ -152,139 +158,157 @@ print_r(json_decode((string) $body));</code></pre>
 <td><code>q-1</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?</td>
+<td>between:2,5 Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?</td>
 </tr>
 <tr>
 <td><code>q-2</code></td>
 <td>integer</td>
-<td>optional</td>
-<td>Quelle a été votre température la plus élevée de ces dernières 48 heures ?</td>
+<td>required</td>
+<td>between:0,1 Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?</td>
 </tr>
 <tr>
 <td><code>q-3</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?</td>
+<td>between:0,1 Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?</td>
 </tr>
 <tr>
 <td><code>q-4</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?</td>
+<td>between:0,1 Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?</td>
 </tr>
 <tr>
 <td><code>q-5</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?</td>
+<td>between:0,1 Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles&quot;</td>
 </tr>
 <tr>
 <td><code>q-6</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles&quot;</td>
+<td>between:0,1 Ces derniers jours, avez-vous une fatigue inhabituelle ?&quot;</td>
 </tr>
 <tr>
 <td><code>q-7</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Ces derniers jours, avez-vous une fatigue inhabituelle ?&quot;</td>
+<td>between:0,1 Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?</td>
 </tr>
 <tr>
 <td><code>q-8</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?</td>
+<td>between:0,1 Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?</td>
 </tr>
 <tr>
 <td><code>q-9</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?</td>
+<td>between:0,1 Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?</td>
 </tr>
 <tr>
 <td><code>q-10</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Comment vous sentez-vous ?</td>
+<td>Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.</td>
 </tr>
 <tr>
 <td><code>q-11</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?</td>
+<td>Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.</td>
 </tr>
 <tr>
 <td><code>q-12</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.</td>
+<td>between:20,250 Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.</td>
 </tr>
 <tr>
 <td><code>q-13</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.</td>
+<td>Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?</td>
 </tr>
 <tr>
 <td><code>q-14</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.</td>
+<td>Êtes-vous diabétique ?</td>
 </tr>
 <tr>
 <td><code>q-15</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?</td>
+<td>Avez-vous ou avez-vous eu un cancer ces trois dernières années ?</td>
 </tr>
 <tr>
 <td><code>q-16</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Êtes-vous diabétique ?</td>
+<td>Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?</td>
 </tr>
 <tr>
 <td><code>q-17</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Avez-vous ou avez-vous eu un cancer ces trois dernières années ?</td>
+<td>Avez-vous une insuffisance rénale chronique dialysée ?</td>
 </tr>
 <tr>
 <td><code>q-18</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?</td>
+<td>Avez-vous une maladie chronique du foie ?</td>
 </tr>
 <tr>
 <td><code>q-19</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Avez-vous une insuffisance rénale chronique dialysée ?</td>
+<td>Êtes-vous enceinte ?</td>
 </tr>
 <tr>
 <td><code>q-20</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Avez-vous une maladie chronique du foie ?</td>
+<td>Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?</td>
 </tr>
 <tr>
 <td><code>q-21</code></td>
 <td>integer</td>
 <td>required</td>
-<td>Êtes-vous enceinte ?</td>
-</tr>
-<tr>
-<td><code>q-22</code></td>
-<td>integer</td>
-<td>required</td>
-<td>Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?</td>
-</tr>
-<tr>
-<td><code>q-23</code></td>
-<td>integer</td>
-<td>required</td>
 <td>Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)</td>
+</tr>
+<tr>
+<td><code>province</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Quel est votre Province ? Cette information nous permet de réaliser un suivi épidémiologique.</td>
+</tr>
+<tr>
+<td><code>town</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Quel est votre ville ? Cette information nous permet de réaliser un suivi épidémiologique.</td>
+</tr>
+<tr>
+<td><code>township</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Quel est votre commune  ? Cette information nous permet de réaliser un suivi épidémiologique.</td>
+</tr>
+<tr>
+<td><code>longitude</code></td>
+<td>longitude,</td>
+<td>optional</td>
+<td>Cette information nous permet de réaliser un suivi épidémiologique.</td>
+</tr>
+<tr>
+<td><code>latitude</code></td>
+<td>latitude,</td>
+<td>optional</td>
+<td>Cette information nous permet de réaliser un suivi épidémiologique.</td>
 </tr>
 </tbody>
 </table>

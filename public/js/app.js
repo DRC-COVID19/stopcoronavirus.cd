@@ -44650,16 +44650,14 @@ $(document).ready(function () {
     $('#question-form-validate-btn').addClass('d-none');
   } // get Localisation
 
+  /* if ("geolocation" in navigator) { 
+       navigator.geolocation.getCurrentPosition(function (position) {
+           console.log("Found your location <br />Lat : " + position.coords.latitude + " </br>Lang :" + position.coords.longitude);
+       });
+   } else {
+       console.log("Browser doesn't support geolocation!");
+   }*/
 
-  if ("geolocation" in navigator) {
-    //check geolocation available 
-    //try to get user current location using getCurrentPosition() method
-    navigator.geolocation.getCurrentPosition(function (position) {
-      console.log("Found your location <br />Lat : " + position.coords.latitude + " </br>Lang :" + position.coords.longitude);
-    });
-  } else {
-    console.log("Browser doesn't support geolocation!");
-  }
 });
 $(function () {});
 
@@ -44683,8 +44681,8 @@ $(function () {});
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/nicolaszanghi/Sites/KINSHASA-DIGITAL/stopcoronavirus.cd/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/nicolaszanghi/Sites/KINSHASA-DIGITAL/stopcoronavirus.cd/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Source\covid19\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Source\covid19\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

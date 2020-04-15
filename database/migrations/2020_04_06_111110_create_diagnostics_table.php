@@ -16,7 +16,7 @@ class CreateDiagnosticsTable extends Migration
         Schema::create('diagnostics', function (Blueprint $table) {
             $table->id();
             $table->integer('q-1');
-            $table->float('q-2');
+            $table->integer('q-2');
             $table->integer('q-3');
             $table->integer('q-4');
             $table->integer('q-5');
