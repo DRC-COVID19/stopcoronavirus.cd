@@ -23446,7 +23446,7 @@ h3 {
   position: relative;
   display: block;
   min-height: 1.5rem;
-  padding-left: 1.5rem;
+  padding-left: 0;
 }
 
 .question .input-text,

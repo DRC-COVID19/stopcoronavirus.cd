@@ -88,7 +88,7 @@
                                             <li> Idées reçues</li>
                                         </a>
                                         <a href="{{route('selfTest.get')}}" class="px-md-2 {{ Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">
-                                            <li> Test Covid-19</li>
+                                            <li>Orientation Médicale</li>
                                         </a>
                                     </ul>
                                 </div>
@@ -102,7 +102,7 @@
                     </div>
                 </div>
             </div>
-           
+
         </div>
         <div class="pt-2">
             <div class="container">
@@ -123,7 +123,7 @@
                             <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">Mesures de protection</a>
                             <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">Directives du Gouvernement</a>
                             <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">Idées reçues</a>
-                            <a href="{{route('diagnostic')}}" class="px-md-2 {{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">Test Covid-19</a>
+                            <a href="{{route('diagnostic')}}" class="px-md-2 {{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">Orientation Médicale</a>
                         </div>
                     </div>
                 </div>

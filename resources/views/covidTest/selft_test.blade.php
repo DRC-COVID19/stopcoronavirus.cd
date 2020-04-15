@@ -273,7 +273,7 @@
             <div class="question-submit d-flex justify-content-center" >
 
                     <button class="btn btn-secondary" id="question-form-validate-btn" data-response="{{$content['r']}}">
-                        Enregistrer et continuer
+                        Continuer
                     </button>
 
                 </div>

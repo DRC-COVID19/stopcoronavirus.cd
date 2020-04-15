@@ -18,7 +18,7 @@ Route::get('/mesures-de-protection-contre-le-coronavirus', "PageController@offic
 Route::get('/directives-prises-par-le-gouvernement', "PageController@preventativeMeasures")->name('preventativeMeasures');
 Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stereotypes');
 
-Route::get('/auto-diagnostic','SelfTestController@diagnostic')->name('diagnostic');
+Route::get('/orientation-medicale','SelfTestController@diagnostic')->name('diagnostic');
 Route::group(['prefix' => 'self-test'], function () {
     Route::get('/{step}','SelfTestController@back')->name('selfTest.back');
     Route::get('/', 'SelfTestController@seltTest')->name('selfTest.get');
