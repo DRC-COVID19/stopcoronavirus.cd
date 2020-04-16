@@ -44620,7 +44620,6 @@ function drawChart() {
 
 $(document).ready(function () {
   if ($('#statsChart').length) drawChart();
-<<<<<<< HEAD
   $('#other-town').addClass('d-none');
   $('select[name=township]').attr('required', 'required');
   $(':radio[name=step_value]').change(function (params) {
@@ -44661,9 +44660,6 @@ $(document).ready(function () {
 
 });
 $(function () {});
-=======
-});
->>>>>>> master
 
 /***/ }),
 
