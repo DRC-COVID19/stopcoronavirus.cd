@@ -88,11 +88,11 @@ class DiagnosticController extends AdminController
 
         $grid->column('mineurs')->display(function () {
             $r = 0;
-            if ($this['q-1'] == 1 || $this['q-1'] == 2 || $this['q-1'] == 4) {
-                return $r++;
+            if ($this['q-1'] == 1 || $this['q-1'] == "2" || $this['q-1'] == 4) {
+                 $r++;
             }
             if ($this['q-7'] == 1) {
-                return $r++;
+                $r++;
             }
             return $r;
         })->filter('range');
