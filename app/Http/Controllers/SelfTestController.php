@@ -619,7 +619,7 @@ class SelfTestController extends Controller
              */
             if (
                 $this->hasFever($responses) ||  // fievre
-                ($responses['q-6'] == 1 ||  // diarrhée
+                ($responses['q-5'] == 1 ||  // diarrhée
                     ($responses['q-2'] == 1 && $responses['q-4'] == 1) // toux et douleurs
                     || ($responses['q-2'] == 1  && $responses['q-3'] == 1))
             ) { // toux et anosmie
