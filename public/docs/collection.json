@@ -1,0 +1,45 @@
+{
+    "variables": [],
+    "info": {
+        "name": "Laravel API",
+        "_postman_id": "ac3c6ed0-bc1e-4073-844b-361f7b381021",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "User management",
+            "description": "\nAPIs for managing users",
+            "item": [
+                {
+                    "name": "Test diagnostic covid-19",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/self-test",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"q-1\": 10,\n    \"q-2\": 3,\n    \"q-3\": 6,\n    \"q-4\": 3,\n    \"q-5\": 19,\n    \"q-6\": 17,\n    \"q-7\": 2,\n    \"q-8\": 4,\n    \"q-9\": 15,\n    \"q-10\": 13,\n    \"q-11\": 20,\n    \"q-12\": 6,\n    \"q-13\": 8,\n    \"q-14\": 3,\n    \"q-15\": 13,\n    \"q-16\": 13,\n    \"q-17\": 9,\n    \"q-18\": 8,\n    \"q-19\": 16,\n    \"q-20\": 1,\n    \"q-21\": 10,\n    \"province\": \"et\",\n    \"town\": \"error\",\n    \"township\": \"sint\",\n    \"longitude\": \"quia\",\n    \"latitude\": \"sunt\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        }
+    ]
+}
