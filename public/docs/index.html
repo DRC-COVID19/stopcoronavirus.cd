@@ -1,0 +1,325 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>API Reference</title>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/all.js"></script>
+
+
+          <script>
+        $(function() {
+            setupLanguages(["javascript","php"]);
+        });
+      </script>
+      </head>
+
+  <body class="">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+        <img src="images/logo.png" />
+                    <div class="lang-selector">
+                                  <a href="#" data-language-name="javascript">javascript</a>
+                                  <a href="#" data-language-name="php">php</a>
+                            </div>
+                            <div class="search">
+              <input type="text" class="search" id="input-search" placeholder="Search">
+            </div>
+            <ul class="search-results"></ul>
+              <div id="toc">
+      </div>
+                    <ul class="toc-footer">
+                                  <li><a href='http://github.com/mpociot/documentarian'>Documentation Powered by Documentarian</a></li>
+                            </ul>
+            </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+          <!-- START_INFO -->
+<h1>Info</h1>
+<p>Welcome to the generated API reference.
+<a href="http://localhost:8000/docs/collection.json">Get Postman Collection</a></p>
+<!-- END_INFO -->
+<h1>User management</h1>
+<p>APIs for managing users</p>
+<!-- START_60fdb642281a006b32553e18909d0533 -->
+<h2>Test diagnostic covid-19</h2>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/self-test"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "q-1": 10,
+    "q-2": 3,
+    "q-3": 6,
+    "q-4": 3,
+    "q-5": 19,
+    "q-6": 17,
+    "q-7": 2,
+    "q-8": 4,
+    "q-9": 15,
+    "q-10": 13,
+    "q-11": 20,
+    "q-12": 6,
+    "q-13": 8,
+    "q-14": 3,
+    "q-15": 13,
+    "q-16": 13,
+    "q-17": 9,
+    "q-18": 8,
+    "q-19": 16,
+    "q-20": 1,
+    "q-21": 10,
+    "province": "et",
+    "town": "error",
+    "township": "sint",
+    "longitude": "quia",
+    "latitude": "sunt"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<pre><code class="language-php">
+$client = new \GuzzleHttp\Client();
+$response = $client-&gt;post(
+    'http://localhost:8000/api/self-test',
+    [
+        'headers' =&gt; [
+            'Content-Type' =&gt; 'application/json',
+            'Accept' =&gt; 'application/json',
+        ],
+        'json' =&gt; [
+            'q-1' =&gt; 10,
+            'q-2' =&gt; 3,
+            'q-3' =&gt; 6,
+            'q-4' =&gt; 3,
+            'q-5' =&gt; 19,
+            'q-6' =&gt; 17,
+            'q-7' =&gt; 2,
+            'q-8' =&gt; 4,
+            'q-9' =&gt; 15,
+            'q-10' =&gt; 13,
+            'q-11' =&gt; 20,
+            'q-12' =&gt; 6,
+            'q-13' =&gt; 8,
+            'q-14' =&gt; 3,
+            'q-15' =&gt; 13,
+            'q-16' =&gt; 13,
+            'q-17' =&gt; 9,
+            'q-18' =&gt; 8,
+            'q-19' =&gt; 16,
+            'q-20' =&gt; 1,
+            'q-21' =&gt; 10,
+            'province' =&gt; 'et',
+            'town' =&gt; 'error',
+            'township' =&gt; 'sint',
+            'longitude' =&gt; 'quia',
+            'latitude' =&gt; 'sunt',
+        ],
+    ]
+);
+$body = $response-&gt;getBody();
+print_r(json_decode((string) $body));</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/self-test</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>q-1</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:1,5 Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?</td>
+</tr>
+<tr>
+<td><code>q-2</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:0,1 Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?</td>
+</tr>
+<tr>
+<td><code>q-3</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:0,1 Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?</td>
+</tr>
+<tr>
+<td><code>q-4</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:0,1 Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?</td>
+</tr>
+<tr>
+<td><code>q-5</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:0,1 Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles&quot;</td>
+</tr>
+<tr>
+<td><code>q-6</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:0,1 Ces derniers jours, avez-vous une fatigue inhabituelle ?&quot;</td>
+</tr>
+<tr>
+<td><code>q-7</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:0,1 Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?</td>
+</tr>
+<tr>
+<td><code>q-8</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:0,1 Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?</td>
+</tr>
+<tr>
+<td><code>q-9</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:0,1 Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?</td>
+</tr>
+<tr>
+<td><code>q-10</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.</td>
+</tr>
+<tr>
+<td><code>q-11</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.</td>
+</tr>
+<tr>
+<td><code>q-12</code></td>
+<td>integer</td>
+<td>required</td>
+<td>between:20,250 Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.</td>
+</tr>
+<tr>
+<td><code>q-13</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?</td>
+</tr>
+<tr>
+<td><code>q-14</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Êtes-vous diabétique ?</td>
+</tr>
+<tr>
+<td><code>q-15</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Avez-vous ou avez-vous eu un cancer ces trois dernières années ?</td>
+</tr>
+<tr>
+<td><code>q-16</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?</td>
+</tr>
+<tr>
+<td><code>q-17</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Avez-vous une insuffisance rénale chronique dialysée ?</td>
+</tr>
+<tr>
+<td><code>q-18</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Avez-vous une maladie chronique du foie ?</td>
+</tr>
+<tr>
+<td><code>q-19</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Êtes-vous enceinte ?</td>
+</tr>
+<tr>
+<td><code>q-20</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?</td>
+</tr>
+<tr>
+<td><code>q-21</code></td>
+<td>integer</td>
+<td>required</td>
+<td>Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)</td>
+</tr>
+<tr>
+<td><code>province</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Quel est votre Province ? Cette information nous permet de réaliser un suivi épidémiologique.</td>
+</tr>
+<tr>
+<td><code>town</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Quel est votre ville ? Cette information nous permet de réaliser un suivi épidémiologique.</td>
+</tr>
+<tr>
+<td><code>township</code></td>
+<td>string</td>
+<td>optional</td>
+<td>Quel est votre commune  ? Cette information nous permet de réaliser un suivi épidémiologique.</td>
+</tr>
+<tr>
+<td><code>longitude</code></td>
+<td>longitude,</td>
+<td>optional</td>
+<td>Cette information nous permet de réaliser un suivi épidémiologique.</td>
+</tr>
+<tr>
+<td><code>latitude</code></td>
+<td>latitude,</td>
+<td>optional</td>
+<td>Cette information nous permet de réaliser un suivi épidémiologique.</td>
+</tr>
+</tbody>
+</table>
+<!-- END_60fdb642281a006b32553e18909d0533 -->
+      </div>
+      <div class="dark-box">
+                        <div class="lang-selector">
+                                    <a href="#" data-language-name="javascript">javascript</a>
+                                    <a href="#" data-language-name="php">php</a>
+                              </div>
+                </div>
+    </div>
+  </body>
+</html>

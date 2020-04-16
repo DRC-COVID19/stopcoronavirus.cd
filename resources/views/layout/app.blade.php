@@ -67,53 +67,54 @@
             <div class=" py-2 App-Header--notice">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-2 d-md-none align-items-center d-flex">
+                            <nav role="navigation" id="navigation">
+                                <div id="menuToggle">
+                                    <input type="checkbox" />
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <ul id="menu">
+                                        <a href="{{route('home')}}" class="px-md-2 {{ Route::currentRouteName()== 'home' ? 'active' : '' }}">
+                                            <li> Situation actuelle</li>
+                                        </a>
+                                        <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">
+                                            <li> Mesures de protection</li>
+                                        </a>
+                                        <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">
+                                            <li> Directives du Gouvernement </li>
+                                        </a>
+                                        <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">
+                                            <li> Idées reçues</li>
+                                        </a>
+                                      {{--  <a href="{{route('selfTest.get')}}" class="px-md-2 {{ Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">
+                                            <li>Orientation Médicale</li>
+                                        </a>--}}
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                        <div class="col-lg-6 col-10">
                             <p class="text-white m-0">
                                 {{ __('messages.0')}}
-                            </p>
-                        </div>
-                        <div class="col-lg-6">
-                            <p class="text-white m-0 text-right d-none">
-                                #RestezChezVous
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <nav role="navigation" id="navigation" class="d-sm-none">
-                <div id="menuToggle">
-                    <input type="checkbox" />
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <ul id="menu">
-                        <a href="{{route('home')}}" class="px-md-2 {{ Route::currentRouteName()== 'home' ? 'active' : '' }}">
-                            <li> Situation actuelle</li>
-                        </a>
-                        <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">
-                            <li> Mesures de protection</li>
-                        </a>
-                        <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">
-                            <li> Directives du Gouvernement </li>
-                        </a>
-                        <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">
-                            <li> Idées reçues</li>
-                        </a>
-                    </ul>
-                </div>
-            </nav>
+
         </div>
         <div class="pt-2">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="App-Header--logo mb-1">
                             <a href="{{route('home')}}" class="">
                                 <img src="{{asset('img/logo_stop_coronavirus_rdc.png')}}" class="img-fluid" alt="STOP COVID-19 RDC">
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-8 d-none d-md-block">
+                    <div class="col-lg-9 d-none d-md-block">
                         <div class="d-flex flex-md-row flex-column justify-content-end mb-3 mt-2 hidden-sm">
                             <img src="img/partners_top.png" height="55" width="200" class="img-fluid" alt="">
                         </div>
@@ -122,6 +123,7 @@
                             <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">Mesures de protection</a>
                             <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">Directives du Gouvernement</a>
                             <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">Idées reçues</a>
+                            {{--<a href="{{route('diagnostic')}}" class="px-md-2 {{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">Orientation Médicale</a>--}}
                         </div>
                     </div>
                 </div>
