@@ -33,7 +33,7 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/app.css?v=1') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v=3') }}" rel="stylesheet">
     <script src="{{ asset('js/app.js?v=1') }}" defer></script>
 
     <!-- Google Tag Manager -->
@@ -157,6 +157,16 @@
                         <p class="pt-4">
                             Designed by <a href="https://www.kinshasadigital.com" target="_blank">Kinshasa Digital</a>
                         </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-socials">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 p-2 text-right">
+                        <a href="https://twitter.com/aniciisrdc" target="_blank" class="mr-2"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.facebook.com/ANICiisRDC/" target="_blank"><i class="fab fa-facebook-square"></i></a>
                     </div>
                 </div>
             </div>

@@ -22898,6 +22898,25 @@ readers do not read off random characters that represent icons */
   font-weight: 900;
 }
 
+/*!
+ * Font Awesome Free 5.13.0 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ */
+
+@font-face {
+  font-family: "Font Awesome 5 Brands";
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.eot?c1868c9545d2de1cf8488f1dadd8c9d0);
+  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.eot?c1868c9545d2de1cf8488f1dadd8c9d0) format("embedded-opentype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.woff2?a06da7f0950f9dd366fc9db9d56d618a) format("woff2"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.woff?ec3cfddedb8bebd2d7a3fdf511f7c1cc) format("woff"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.ttf?13685372945d816a2b474fc082fd9aaa) format("truetype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.svg?0cb5a5c0d251c109458c85c6afeffbaa) format("svg");
+}
+
+.fab {
+  font-family: "Font Awesome 5 Brands";
+  font-weight: 400;
+}
+
 .App-Header .App-Header--notice {
   background-color: #00874e;
 }
@@ -23014,6 +23033,28 @@ h3 {
 
 .btn.btn-secondary:hover {
   border: 3px solid #e6222e;
+}
+
+.jubmotron-alert {
+  text-align: center;
+  padding: 2rem 1.5rem !important;
+  background-color: #e6222e;
+  color: #fff;
+}
+
+.jubmotron-alert i {
+  font-size: 2rem;
+}
+
+.jubmotron-alert .btn-primary {
+  color: #fff;
+  background-color: #bf1620;
+  font-weight: bold;
+}
+
+.jubmotron-alert .btn-primary:hover {
+  color: #e6222e;
+  background-color: #fff;
 }
 
 .home-consignes > div {
@@ -23662,6 +23703,16 @@ h3 {
 
 .footer-partners a {
   color: #020000;
+}
+
+.footer-socials {
+  background-color: #212529;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.footer-socials a {
+  color: #45b0e1;
 }
 
 .App-Header .App-Header--navbar .active {
