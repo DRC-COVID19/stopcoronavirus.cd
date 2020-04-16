@@ -48,7 +48,7 @@ class SelfTest extends TestCase
 
          //Facteurs de gravité mineurs  Fatigue : alitement > 50%  1
         $response = $this->call("post", '/self-test', [
-            'step_value' => '0',
+            'step_value' => '1',
             'current_step' => '7'
         ]);
        
@@ -67,7 +67,7 @@ class SelfTest extends TestCase
         //Facteur pronostique
         //Age
          $response = $this->call("post", '/self-test', [
-            'step_value' => '45',
+            'step_value' => '65',
             'current_step' => '10'
         ]);
        
@@ -84,7 +84,7 @@ class SelfTest extends TestCase
         ]);
        
         $response = $this->call("post", '/self-test', [
-            'step_value' => '60',
+            'step_value' => '0',
             'current_step' => '13'
         ]);
         $response = $this->call("post", '/self-test', [
@@ -92,7 +92,7 @@ class SelfTest extends TestCase
             'current_step' => '14'
         ]);
         $response = $this->call("post", '/self-test', [
-            'step_value' => '2',
+            'step_value' => '0',
             'current_step' => '15'
         ]);
         $response = $this->call("post", '/self-test', [

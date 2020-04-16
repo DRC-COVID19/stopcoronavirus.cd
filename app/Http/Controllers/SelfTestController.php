@@ -374,9 +374,11 @@ class SelfTestController extends Controller
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
+                // Test si le sujet à moins de 15 ans
                 if ($value < 15) {
                     $resultat = $this->message['msg-8']['text'];
                     $isResultat = true;
+                    $this->storeDiagnostic(request()->session()->get('test'), $this->message['msg-2']);
                     return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
                 }
                 $request->session()->put('test.q-10', $value);
@@ -580,7 +582,7 @@ class SelfTestController extends Controller
             /**
              * SI fièvre ET toux
              */
-            if ($this->hasFever($responses) == 1 && $responses['q-3'] == 1) {
+            if ($this->hasFever($responses) == 1 && $responses['q-2'] == 1) {
 
                 if ($this->hasPronostic($responses)) {
                     if ($this->minorGravity($responses) >= 2) {
@@ -617,8 +619,8 @@ class SelfTestController extends Controller
             if (
                 $this->hasFever($responses) ||  // fievre
                 ($responses['q-6'] == 1 ||  // diarrhée
-                    ($responses['q-3'] == 1 && $responses['q-5'] == 1) // toux et douleurs
-                    || ($responses['q-3'] == 1  && $responses['q-4'] == 1))
+                    ($responses['q-2'] == 1 && $responses['q-4'] == 1) // toux et douleurs
+                    || ($responses['q-2'] == 1  && $responses['q-3'] == 1))
             ) { // toux et anosmie
 
                 if ($this->hasPronostic($responses)) {
@@ -629,7 +631,7 @@ class SelfTestController extends Controller
                         $this->storeDiagnostic($responses, $this->message['msg-2']);
                         return $message;
                     }
-                    if ($this->minorGravity($responses) < 2) {
+                    if ($this->minorGravity($responses) <= 1) {
                         $message = $this->message['msg-4']['text'];
                         /*Votre situation peut relever d’un COVID 19.
                         Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
@@ -638,27 +640,30 @@ class SelfTestController extends Controller
                         return $message;;
                     }
                 } else {
+
+                    if ($this->minorGravity($responses) == 0) {
+                        if ($responses['q-10'] < 50) {
+                            $message = $this->message['msg-5']['text'];
+                            /*Votre situation peut relever d’un COVID 19 qu’il faut surveiller. 
+                            Si de nouveaux symptômes apparaissent, refaites le test ou consultez votre médecin.
+                            Nous vous conseillons de rester à votre domicile.
+                            */
+                            $this->storeDiagnostic($responses, $this->message['msg-5']);
+                            return $message;
+                        } else {
+                            $message = $this->message['msg-4']['text'];
+                            /*Votre situation peut relever d’un COVID 19.
+                            Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
+                            Appelez le 15 si une gêne respiratoire ou des difficultés importantes pour vous alimenter ou boire apparaissent pendant plus de 24 heures.
+                         */
+                            $this->storeDiagnostic($responses, $this->message['msg-4']);
+                            return $message;
+                        }
+                    }
                     if ($this->minorGravity($responses) >= 1) {
                         $message = $this->message['msg-4']['text'];
                         /*
                         Votre situation peut relever d’un COVID 19.
-                        Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
-                        Appelez le 15 si une gêne respiratoire ou des difficultés importantes pour vous alimenter ou boire apparaissent pendant plus de 24 heures.
-                         */
-                        $this->storeDiagnostic($responses, $this->message['msg-4']);
-                        return $message;
-                    }
-                    if ($this->minorGravity($responses) == 0 || $responses['q-12'] < 50) {
-                        $message = $this->message['msg-5']['text'];
-                        /*Votre situation peut relever d’un COVID 19 qu’il faut surveiller. 
-                        Si de nouveaux symptômes apparaissent, refaites le test ou consultez votre médecin.
-                        Nous vous conseillons de rester à votre domicile.
-                         */
-                        $this->storeDiagnostic($responses, $this->message['msg-5']);
-                        return $message;
-                    } else {
-                        $message = $this->message['msg-4']['text'];
-                        /*Votre situation peut relever d’un COVID 19.
                         Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
                         Appelez le 15 si une gêne respiratoire ou des difficultés importantes pour vous alimenter ou boire apparaissent pendant plus de 24 heures.
                          */
@@ -670,7 +675,7 @@ class SelfTestController extends Controller
             /**
              *  SI toux OU douleurs OU anosmie
              */
-            if ($responses['q-3'] == 1 || $responses['q-5'] == 1 || $responses['q-4'] == 1) {
+            if ($responses['q-2'] == 1 || $responses['q-4'] == 1 || $responses['q-3'] == 1) {
                 if ($this->hasPronostic($responses)) {
                     $message = $this->message['msg-6']['text'];
                     /*
@@ -741,12 +746,12 @@ class SelfTestController extends Controller
         $imc = $responses['q-12'] / (($responses['q-11'] / 100) ^ 2);
         if (
             $responses['q-10'] >= 70 ||
-            $imc >= 30 || $responses['q-13'] == 1||
+            $imc >= 30 || $responses['q-13'] == 1 ||
             $responses['q-14'] == 1 ||
             $responses['q-15'] == 1 || $responses['q-16'] == 1 ||
             $responses['q-17'] == 1 || $responses['q-18'] == 1 ||
             $responses['q-19'] == 1 || $responses['q-20'] == 1 ||
-            $responses['q-21'] == 1 
+            $responses['q-21'] == 1
         ) {
             return true;
         }
@@ -767,10 +772,10 @@ class SelfTestController extends Controller
     {
         $r = 0;
         if ($responses['q-1'] == 2 || $responses['q-2'] == 4) {
-            return $r++;
+            $r++;
         }
         if ((isset($responses['q-7']) && $responses['q-7'] == 1)) {
-            return $r++;
+            $r++;
         }
         return $r;
     }
@@ -863,7 +868,7 @@ class SelfTestController extends Controller
             'q-21' => 'required|numeric|between:0,1',
             'province' => 'nullable|string',
             'town' => 'nullable|string',
-            'township'=>'nullable|string',
+            'township' => 'nullable|string',
             'latitude' => 'string|nullable',
             'longitude' => 'string|nullable'
         ])->validate();
