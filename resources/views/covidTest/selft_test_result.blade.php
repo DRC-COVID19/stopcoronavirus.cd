@@ -5,9 +5,8 @@
     <div class="row mb-5">
         <div class="col-12">
             <div class="resultHead">
-                <p class="resultText">
-                    La recommandation affichée peut évoluer suivant les informations en provenance
-                    des autorités de santé et des chercheurs. Elle ne constitue pas un avis médical. En cas
+                <p class="resultText mb-0">
+                    La recommandation affichée peut évoluer suivant les informations en provenance des autorités de santé et des chercheurs. Elle ne constitue pas un avis médical.<br> En cas
                     de doute, demandez conseil à votre médecin ou pharmacien.
                 </p>
             </div>
@@ -18,10 +17,10 @@
             <div class="results">
                 <div class="d-flex flex-column">
                     <div class="resultAlert">
-                        <p class="resultSubtitle font-weight-bold d-flex ">
-                           <i class="fas fa-2x fa-exclamation-triangle"></i>{{$resultat}}
+                        <p class="resultSubtitle font-weight-bold">
+                           <i class="fas fa-2x fa-exclamation-triangle"></i><br>{{$resultat}}
                         </p>
-                        <p class="resultSubtitle result-pad font-weight-bold">Restez chez vous.</p>
+                        <!--<p class="resultSubtitle result-pad font-weight-bold">Restez chez vous.</p>-->
                         <p class="resultText">
                             #RestezChezVous - limitez les contacts avec d'autres personnes. Le virus
                             peut être propagé par des porteurs ne montrant pas de symptômes.

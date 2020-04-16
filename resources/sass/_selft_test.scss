@@ -238,14 +238,14 @@
   }
   .resultAlert {
     background: rgba(0, 105, 204, 0.1);
-    border: 2px solid #0069cc;
+    border: 2px solid $secondary;
     border-radius: 4px;
     padding: 36px 30px;
     margin-bottom: 25px;
   }
   .resultSubtitle {
     i {
-      color: #856404;
+      color: $secondary;
     }
   }
 }
