@@ -19,7 +19,7 @@ Route::get('/directives-prises-par-le-gouvernement', "PageController@preventativ
 Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stereotypes');
 
 Route::get('/orientation-medicale','SelfTestController@diagnostic')->name('diagnostic');
-Route::group(['prefix' => 'self-test'], function () {
+Route::group(['prefix' => 'orientation-medicale-test'], function () {
     Route::get('/{step}','SelfTestController@back')->name('selfTest.back');
     Route::get('/', 'SelfTestController@seltTest')->name('selfTest.get');
     Route::post('/', 'SelfTestController@storeSelfTest')->name('seltTest.post');

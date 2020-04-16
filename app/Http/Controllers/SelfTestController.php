@@ -772,7 +772,7 @@ class SelfTestController extends Controller
     public function minorGravity(array $responses)
     {
         $r = 0;
-        if ($responses['q-1'] == 2 || $responses['q-2'] == 4) {
+        if ($responses['q-1'] == 1 || $responses['q-1'] == 2 || $responses['q-2'] == 4) {
             $r++;
         }
         if ((isset($responses['q-7']) && $responses['q-7'] == 1)) {
