@@ -30,7 +30,7 @@ class DiagnosticController extends AdminController
         $grid->actions(function ($actions) {
             $actions->disableDelete();
             $actions->disableEdit();
-            $actions->disableView();
+            // $actions->disableView();
         });
         $grid->column('id', __('Id'));
         $grid->column('q-10', __('Age'))->filter('range');
@@ -63,12 +63,12 @@ class DiagnosticController extends AdminController
             $imc = $this['q-12'] / (($this['q-11'] / 100) ^ 2);
             if (
                 $this['q-10'] >= 70 ||
-            $imc >= 30 || $this['q-13'] == 1||
-            $this['q-14'] == 1 ||
-            $this['q-15'] == 1 || $this['q-16'] == 1 ||
-            $this['q-17'] == 1 || $this['q-18'] == 1 ||
-            $this['q-19'] == 1 || $this['q-20'] == 1 ||
-            $this['q-21'] == 1 
+                $imc >= 30 || $this['q-13'] == 1 ||
+                $this['q-14'] == 1 ||
+                $this['q-15'] == 1 || $this['q-16'] == 1 ||
+                $this['q-17'] == 1 || $this['q-18'] == 1 ||
+                $this['q-19'] == 1 || $this['q-20'] == 1 ||
+                $this['q-21'] == 1
             ) {
                 return true;
             }
@@ -89,7 +89,7 @@ class DiagnosticController extends AdminController
         $grid->column('mineurs')->display(function () {
             $r = 0;
             if ($this['q-1'] == 1 || $this['q-1'] == 2 || $this['q-1'] == 4) {
-                 $r++;
+                $r++;
             }
             if ($this['q-7'] == 1) {
                 $r++;
@@ -116,16 +116,56 @@ class DiagnosticController extends AdminController
             ->tools(function ($tools) {
                 $tools->disableEdit();
                 $tools->disableDelete();
-            });;
+            });
+
         $show->field('id', __('Id'));
-        $show->field('q-1', __('Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?'));
-        $show->field('q-2', __('Tempéranture'));
-        $show->field('q-2', __('Toux'));
-        $show->field('q-24', __('Région'));
+        $show->{"q-1"}(__('Fièvre ces 48 dernières heures (frissons, sueurs) ?'))->as(function ($value) {
+            $r = "";
+            switch ($value) {
+                case 1:
+                    $r = "Ne sais pas";
+                    break;
+                case 2:
+                    $r = "39°C ou plus";
+                    break;
+                case 3:
+                    $r = "Entre 37,8°C et 38,9°C";
+                    break;
+                case 4:
+                    $r = "Moins de 35,5°C";
+                    break;
+                case 5:
+                    $r = "Pas de fièvre";
+                    break;
+            }
+            return $r;
+        });
+        $show->field('q-2', __('Augmentation de votre toux habituelle '));
+        $show->field('q-3', __('Anosmie'));
+        $show->field('q-4', __('Mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles'));
+        $show->field('q-5', __('Ces dernières 24 heures, avez-vous de la diarrhée'));
+        $show->field('q-6', __('Une fatigue inhabituelle'));
+        $show->field('q-7', __('Alitement > 50% du temps diurne'));
+        $show->field('q-8', __('Impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS'));
+        $show->field('q-9', __('Manque de souffle INHABITUEL'));
+        $show->field('q-10', __('Quel est votre âge'));
+        $show->field('q-11', __('Quel est votre taille'));
+        $show->field('q-12', __('Quel est votre poids'));
+        $show->field('q-13', __('hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?'));
+        $show->field('q-14', __('Êtes-vous diabétique ?'));
+        $show->field('q-15', __('Avez-vous ou avez-vous eu un cancer ces trois dernières années ?'));
+        $show->field('q-16', __('Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?'));
+        $show->field('q-17', __('Avez-vous une insuffisance rénale chronique dialysée ?'));
+        $show->field('q-18', __('Avez-vous une maladie chronique du foie ?'));
+        $show->field('q-19', __('Êtes-vous enceinte ?'));
+        $show->field('q-20', __('Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?'));
+        $show->field('q-21', __('Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive).'));
         $show->field('results_code', __('Results code'));
         $show->field('results_message', __('Results message'));
+        $show->field('province', __('Province'));
+        $show->field('Ville', __('Ville'));
+        $show->field('Commune', __('Commune'));
         $show->field('created_at', __('Created at'));
-
         return $show;
     }
 
