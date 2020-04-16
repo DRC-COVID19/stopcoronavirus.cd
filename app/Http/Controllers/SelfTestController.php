@@ -382,7 +382,7 @@ class SelfTestController extends Controller
                     $this->storeDiagnostic(request()->session()->get('test'), $this->message['msg-2']);
                     return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
                 }
-               
+
                 $request->session()->flash('test.param', 'step-11');
                 return redirect()->route('selfTest.get');
             case '11':
@@ -816,7 +816,7 @@ class SelfTestController extends Controller
 
     /**
      * Test diagnostic covid-19
-     * @bodyParam q-1 int required between:2,5 Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
+     * @bodyParam q-1 int required between:1,5 Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
      * @bodyParam q-2 int required between:0,1 Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
      * @bodyParam q-3 int required between:0,1 Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?
      * @bodyParam q-4 int required between:0,1 Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?
@@ -846,7 +846,7 @@ class SelfTestController extends Controller
     public function apiCovidTest(Request $request)
     {
         $data = Validator::make($request->all(), [
-            'q-1' => 'required|numeric|between:2,5',
+            'q-1' => 'required|numeric|between:1,5',
             'q-2' => 'sometimes|numeric|between:0,1',
             'q-3' => 'required|numeric|between:0,1',
             'q-4' => 'required|numeric|between:0,1',
@@ -867,9 +867,10 @@ class SelfTestController extends Controller
             'q-19' => 'required|numeric|between:0,1',
             'q-20' => 'required|numeric|between:0,1',
             'q-21' => 'required|numeric|between:0,1',
-            'province' => 'nullable|string',
-            'town' => 'nullable|string',
-            'township' => 'nullable|string',
+            'province' => 'nullable',
+            'town' => 'required_with:province',
+            'other_town' => 'required_if:town,0',
+            'township' => 'required_if:town,Kinshasa',
             'latitude' => 'string|nullable',
             'longitude' => 'string|nullable'
         ])->validate();
