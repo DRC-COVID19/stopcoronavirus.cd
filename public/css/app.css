@@ -23142,7 +23142,7 @@ h3 {
 }
 
 .PreventativeMeasure--Wrapper .PreventativeMeasure--Item .toggle:checked + .lbl-toggle + .collapsible-content {
-  max-height: 100vh;
+  max-height: 100%;
 }
 
 .PreventativeMeasure--Wrapper .PreventativeMeasure--Item .toggle:checked + .lbl-toggle {
@@ -23233,7 +23233,7 @@ h3 {
 }
 
 .OfficialMeasures--Wrapper article .toggle:checked + .lbl-toggle + .collapsible-content {
-  max-height: 100vh;
+  max-height: 100%;
 }
 
 .OfficialMeasures--Wrapper article .toggle:checked + .lbl-toggle {
