@@ -42,13 +42,13 @@ class SelfTest extends TestCase
             'current_step' => '5'
         ]);
         $response = $this->call("post", 'orientation-medicale-test', [
-            'step_value' => '0',
+            'step_value' => '1',
             'current_step' => '6'
         ]);
 
          //Facteurs de gravité mineurs  Fatigue : alitement > 50%  1
         $response = $this->call("post", 'orientation-medicale-test', [
-            'step_value' => '1',
+            'step_value' => '0',
             'current_step' => '7'
         ]);
        

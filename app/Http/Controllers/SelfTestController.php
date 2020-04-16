@@ -277,6 +277,9 @@ class SelfTestController extends Controller
             case '2':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],
+                [
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -288,6 +291,8 @@ class SelfTestController extends Controller
             case '3':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -299,6 +304,8 @@ class SelfTestController extends Controller
             case '4':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -310,6 +317,8 @@ class SelfTestController extends Controller
             case '5':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -321,6 +330,8 @@ class SelfTestController extends Controller
             case '6':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -336,6 +347,8 @@ class SelfTestController extends Controller
             case '7':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -347,6 +360,8 @@ class SelfTestController extends Controller
             case '8':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -358,6 +373,8 @@ class SelfTestController extends Controller
             case '9':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -369,6 +386,9 @@ class SelfTestController extends Controller
             case '10':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required|numeric|min:1|max:120'
+                ],[
+                    'step_value.required'=>__('Veuillez entrer votre age'),
+                    'step_value.numeric'=>__('Veuillez entrer votre age')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -388,6 +408,9 @@ class SelfTestController extends Controller
             case '11':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required|numeric|min:80|max:250'
+                ],[
+                    'step_value.required'=>__('Veuillez entrer votre taille en cm'),
+                    'step_value.numeric'=>__('Veuillez entrer votre taille en cm')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -399,6 +422,9 @@ class SelfTestController extends Controller
             case '12':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required|numeric|min:20|max:250'
+                ],[
+                    'step_value.required'=>__('Veuillez entrer votre poids en Kg'),
+                    'step_value.numeric'=>__('Veuillez entrer votre poids en Kg')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -410,8 +436,13 @@ class SelfTestController extends Controller
             case '13':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
-
+                if ($validator->fails()) {
+                    $request->session()->flash('test.param', "step-{$step}");
+                    return redirect()->route('selfTest.get')->withErrors($validator);
+                }
                 if ($value == "2") {
                     $value = 1;
                 }
@@ -421,6 +452,8 @@ class SelfTestController extends Controller
             case '14':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -432,6 +465,8 @@ class SelfTestController extends Controller
             case '15':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -443,6 +478,8 @@ class SelfTestController extends Controller
             case '16':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -454,6 +491,8 @@ class SelfTestController extends Controller
             case '17':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -465,6 +504,8 @@ class SelfTestController extends Controller
             case '18':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -476,6 +517,8 @@ class SelfTestController extends Controller
             case '19':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -487,6 +530,8 @@ class SelfTestController extends Controller
             case '20':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -498,6 +543,8 @@ class SelfTestController extends Controller
             case '21':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -512,6 +559,11 @@ class SelfTestController extends Controller
                     'town' => 'required_with:province',
                     'other_town' => 'required_if:town,0',
                     'township' => 'required_if:town,Kinshasa',
+                ],
+                [
+                    'town.required_with'=>__('Le champ ville est obligatoire.'),
+                    'other_town.required_if'=>__('Le champ autre ville est obligatoire.'),
+                    'township.required_if'=>__('Le champ commune est obligatoire quand la valeur du champ ville est Kinshasa.')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -537,7 +589,10 @@ class SelfTestController extends Controller
             case '1':
             default:
                 $validator = Validator::make($request->all(), [
-                    'step_value' => 'required|between:1,5'
+                    'step_value' => 'required|between:1,5',
+
+                ],[
+                    'step_value.required'=>__('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
