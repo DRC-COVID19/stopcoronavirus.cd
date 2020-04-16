@@ -17,7 +17,7 @@
                         {{ __("Prenez deux minutes pour partager vos perceptions et réactions afin d'aider et d’orienter l'équipe de la riposte dans la lutte contre le COVID-19 :") }}
                     </p>
                     <p class="text-center mb-0">
-                        <a class="btn btn-primary" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLScgvdoM8gr1HAUHSDOA0zTLED7rmmofPsbG1Qqplj9pcxQ8XA/viewform?usp=sf_link">
+                        <a class="btn btn-secondary" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLScgvdoM8gr1HAUHSDOA0zTLED7rmmofPsbG1Qqplj9pcxQ8XA/viewform?usp=sf_link">
                             {{ __('Accédez au Sondage') }}
                         </a>
                     </p>

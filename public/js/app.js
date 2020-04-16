@@ -44620,6 +44620,7 @@ function drawChart() {
 
 $(document).ready(function () {
   if ($('#statsChart').length) drawChart();
+<<<<<<< HEAD
   $('#other-town').addClass('d-none');
   $('select[name=township]').attr('required', 'required');
   $(':radio[name=step_value]').change(function (params) {
@@ -44660,6 +44661,9 @@ $(document).ready(function () {
 
 });
 $(function () {});
+=======
+});
+>>>>>>> github/master
 
 /***/ }),
 
@@ -44681,8 +44685,13 @@ $(function () {});
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 __webpack_require__(/*! C:\Source\covid19\resources\js\app.js */"./resources/js/app.js");
 module.exports = __webpack_require__(/*! C:\Source\covid19\resources\sass\app.scss */"./resources/sass/app.scss");
+=======
+__webpack_require__(/*! /Users/nicolaszanghi/Sites/KINSHASA-DIGITAL/stopcoronavirus.cd/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/nicolaszanghi/Sites/KINSHASA-DIGITAL/stopcoronavirus.cd/resources/sass/app.scss */"./resources/sass/app.scss");
+>>>>>>> github/master
 
 
 /***/ })

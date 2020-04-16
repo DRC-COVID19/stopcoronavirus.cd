@@ -2,19 +2,10 @@
 .jubmotron-alert {
     text-align: center;
     padding: 2rem 1.5rem !important;
-    background-color: $primary;
+    background-color: $flag-blue;
     color: $white;
     i {
         font-size: 2rem;
-    }
-    .btn-primary {
-        color: $white;
-        background-color: darken($primary, 10);
-        font-weight: bold;
-        &:hover {
-            color: $primary;
-            background-color: $white;
-        }
     }
 }
 

@@ -23038,23 +23038,12 @@ h3 {
 .jubmotron-alert {
   text-align: center;
   padding: 2rem 1.5rem !important;
-  background-color: #e6222e;
+  background-color: #45b0e1;
   color: #fff;
 }
 
 .jubmotron-alert i {
   font-size: 2rem;
-}
-
-.jubmotron-alert .btn-primary {
-  color: #fff;
-  background-color: #bf1620;
-  font-weight: bold;
-}
-
-.jubmotron-alert .btn-primary:hover {
-  color: #e6222e;
-  background-color: #fff;
 }
 
 .home-consignes > div {
