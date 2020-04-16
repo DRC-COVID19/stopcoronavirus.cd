@@ -374,6 +374,7 @@ class SelfTestController extends Controller
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
+                $request->session()->put('test.q-10', $value);
                 // Test si le sujet à moins de 15 ans
                 if ($value < 15) {
                     $resultat = $this->message['msg-8']['text'];
@@ -381,7 +382,7 @@ class SelfTestController extends Controller
                     $this->storeDiagnostic(request()->session()->get('test'), $this->message['msg-2']);
                     return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
                 }
-                $request->session()->put('test.q-10', $value);
+               
                 $request->session()->flash('test.param', 'step-11');
                 return redirect()->route('selfTest.get');
             case '11':
