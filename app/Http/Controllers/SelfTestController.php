@@ -395,14 +395,6 @@ class SelfTestController extends Controller
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
                 $request->session()->put('test.q-10', $value);
-                // Test si le sujet à moins de 15 ans
-                if ($value < 15) {
-                    $resultat = $this->message['msg-8']['text'];
-                    $isResultat = true;
-                    $this->storeDiagnostic(request()->session()->get('test'), $this->message['msg-8']);
-                    return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
-                }
-
                 $request->session()->flash('test.param', 'step-11');
                 return redirect()->route('selfTest.get');
             case '11':
@@ -624,6 +616,12 @@ class SelfTestController extends Controller
         try {
             $message = "";
 
+             // Test si le sujet à moins de 15 ans
+             if ($responses['q-10'] < 15) {
+                $message = $this->message['msg-8']['text'];
+                $this->storeDiagnostic($responses, $this->message['msg-8']);
+                return $message;
+            }
             /**
              * SI >= 1 facteurs de gravité majeurs
              */
