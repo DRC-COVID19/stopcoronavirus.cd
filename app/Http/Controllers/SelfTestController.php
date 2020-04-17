@@ -617,6 +617,7 @@ class SelfTestController extends Controller
         try {
             $message = "";
 
+            $responses['imc']=$this->ComputedImc($responses);
              // Test si le sujet à moins de 15 ans
              if ($responses['q-10'] < 15) {
                 $message = $this->message['msg-8']['text'];
@@ -782,6 +783,11 @@ class SelfTestController extends Controller
         }
         return false;
     }
+
+    public function ComputedImc(array $responses)
+    {
+        return $responses['q-12'] / (($responses['q-11'] / 100) ^ 2);
+    }
     /**
      * Facteur pronostique défavorable lié au terrain
      *OUI si l’âge est supérieur ou égal à 70 ans
@@ -798,10 +804,9 @@ class SelfTestController extends Controller
      */
     public function hasPronostic(array $responses)
     {
-        $imc = $responses['q-12'] / (($responses['q-11'] / 100) ^ 2);
         if (
             $responses['q-10'] >= 70 ||
-            $imc >= 30 || $responses['q-13'] == 1 ||
+            $responses['imc'] >= 30 || $responses['q-13'] == 1 ||
             $responses['q-14'] == 1 ||
             $responses['q-15'] == 1 || $responses['q-16'] == 1 ||
             $responses['q-17'] == 1 || $responses['q-18'] == 1 ||

@@ -38,6 +38,7 @@ class Diagnostic extends Model
         'longitude',
         'algo_version',
         'form_version',
-        'duration'
+        'duration',
+        'imc'
     ];
 }
