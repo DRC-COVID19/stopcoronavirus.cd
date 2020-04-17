@@ -164,8 +164,8 @@ class DiagnosticController extends AdminController
         $show->field('results_code', __('Results code'));
         $show->field('results_message', __('Results message'));
         $show->field('province', __('Province'));
-        $show->field('Ville', __('Ville'));
-        $show->field('Commune', __('Commune'));
+        $show->field('town', __('Ville'));
+        $show->field('township', __('Commune'));
         $show->field('duration',__('Durée'));
         $show->field('algo_version',__('algo_version'));
         $show->field('created_at', __('Created at'));
