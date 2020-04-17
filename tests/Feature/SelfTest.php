@@ -37,16 +37,16 @@ class SelfTest extends TestCase
            0, // Êtes-vous enceinte ?
            0, // Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
            0,// Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive).
-           0, //Town
-           0, // Township
-           0, // province
+           "kinshasa", //Town
+           "kinshasa", // Township
+           "Bandal", // province
        ]);
     }
 
     public function code(array $input)
     {
         session()->remove('test');
-
+        session()->put('test.start_at', date('Y-m-d H:i:s'));
         // Facteurs de gravité mineurs Fièvre 2 ou 4
         $response = $this->call("post", 'orientation-medicale-test', [
             'step_value' => $input[0],

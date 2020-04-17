@@ -252,6 +252,7 @@ class SelfTestController extends Controller
             default:
                 $request->session()->remove('test');
                 $content = $this->questions[0];
+                $request->session()->put('test.start_at', date('Y-m-d H:i:s'));
                 break;
         }
         $backId = $content['id'] - 1;
@@ -854,6 +855,10 @@ class SelfTestController extends Controller
     {
         $responses['results_code'] = $message['code'];
         $responses['results_message'] = $message['text'];
+        $responses['algo_version']="2020-04-06";
+        $responses['form_version']="2020-04-06";
+        $duration=strtotime(date('Y-m-d H:i:s')) - strtotime($responses['start_at']);
+        $responses['duration']=$duration;
         Diagnostic::create($responses);
     }
 
