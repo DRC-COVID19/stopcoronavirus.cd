@@ -399,7 +399,7 @@ class SelfTestController extends Controller
                 if ($value < 15) {
                     $resultat = $this->message['msg-8']['text'];
                     $isResultat = true;
-                    $this->storeDiagnostic(request()->session()->get('test'), $this->message['msg-2']);
+                    $this->storeDiagnostic(request()->session()->get('test'), $this->message['msg-8']);
                     return view('covidTest.selft_test_result', compact('resultat', 'isResultat'));
                 }
 
