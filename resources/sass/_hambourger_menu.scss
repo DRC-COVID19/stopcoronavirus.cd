@@ -4,6 +4,7 @@
         z-index: 1;
         -webkit-user-select: none;
         user-select: none;
+        position: relative;
     }
 
     #menuToggle a {
@@ -22,14 +23,13 @@
         width: 100%;
         height: 100%;
         position: absolute;
-        top: -7px;
-        left: -5px;
-
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
         cursor: pointer;
-        z-index: 99999;
-        opacity: 0; /* hide this */
-        z-index: 2; /* and place it over the hamburger */
-
+        opacity: 0;
+        z-index: 3;
         -webkit-touch-callout: none;
     }
 
