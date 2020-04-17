@@ -1,8 +1,18 @@
 
-.jubmotron-alert {
+.jumbotron-alert {
     text-align: center;
     padding: 2rem 1.5rem !important;
     background-color: $flag-blue;
+    color: $white;
+    i {
+        font-size: 2rem;
+    }
+}
+
+.jumbotron-diagnostic {
+    text-align: center;
+    padding: 2rem 1.5rem !important;
+    background-color: $gray-600;
     color: $white;
     i {
         font-size: 2rem;
