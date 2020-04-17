@@ -36,6 +36,8 @@ class Diagnostic extends Model
         'results_message',
         'latitude',
         'longitude',
-        
+        'algo_version',
+        'form_version',
+        'duration'
     ];
 }

@@ -99,6 +99,7 @@ class DiagnosticController extends AdminController
 
         // $grid->column('q-24', __('Région'))->filter('like');
         $grid->column('results_code', __('Results code'));
+        $grid->column('duration',__('Durée'));
         $grid->column('created_at', __('Created at'));
         return $grid;
     }
@@ -165,6 +166,8 @@ class DiagnosticController extends AdminController
         $show->field('province', __('Province'));
         $show->field('Ville', __('Ville'));
         $show->field('Commune', __('Commune'));
+        $show->field('duration',__('Durée'));
+        $show->field('algo_version',__('algo_version'));
         $show->field('created_at', __('Created at'));
         return $show;
     }
