@@ -28,7 +28,7 @@ class AlgoVersionDiagnostics extends Migration
     public function down()
     {
         Schema::table('diagnostics', function (Blueprint $table) {
-            //
+            $table->dropColumn(['algo_version','form_version','duration']);
         });
     }
 }
