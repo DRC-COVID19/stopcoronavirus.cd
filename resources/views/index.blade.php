@@ -84,7 +84,7 @@
     @endisset
 
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row">
             <div class="col-md-6">
                 <div class="jumbotron jumbotron-alert">
                     <p class="lead">
@@ -98,7 +98,7 @@
                     </p>
                 </div>
             </div>
-            <div class="col-md-6 d-none">
+            <div class="col-md-6 ">
                 <div class="jumbotron jumbotron-diagnostic">
                     <p class="lead">
                         <i class="fas fa-virus"></i>
