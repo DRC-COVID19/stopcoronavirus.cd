@@ -896,7 +896,7 @@ class SelfTestController extends Controller
         if ($responses['immunosuppressant_drug']==2) {
             $responses['immunosuppressant_drug']=999;
         }
-        
+
         $responses['immunosuppressant_drug_algo'] = $responses['immunosuppressant_drug']==1;
         if ($responses['heart_disease']==2) {
             $responses['heart_disease']=999;
@@ -940,18 +940,18 @@ class SelfTestController extends Controller
      * @bodyParam tiredness_details int required between:0,1 Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?
      * @bodyParam feeding_day int required between:0,1 Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?
      * @bodyParam breathlessness int required between:0,1 Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?
-     * @bodyParam age int required Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.
-     * @bodyParam size int required Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
+     * @bodyParam age int required between:1,120 Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.
+     * @bodyParam size int required between:80,250 Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
      * @bodyParam weight int required between:20,250 Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
-     * @bodyParam heart_disease int required Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?
-     * @bodyParam diabetes int required Êtes-vous diabétique ?
-     * @bodyParam cancer int required Avez-vous ou avez-vous eu un cancer ces trois dernières années ?
-     * @bodyParam breathing_disease int required Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?
-     * @bodyParam kidney_disease int required Avez-vous une insuffisance rénale chronique dialysée ?
-     * @bodyParam liver_disease int required Avez-vous une maladie chronique du foie ?
-     * @bodyParam pregnant int required Êtes-vous enceinte ?
-     * @bodyParam immunosuppressant_disease int required Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
-     * @bodyParam immunosuppressant_drug int required Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)
+     * @bodyParam heart_disease int required between:0,2 Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?
+     * @bodyParam diabetes int required between:0,1 Êtes-vous diabétique ?
+     * @bodyParam cancer int required between:0,1 Avez-vous ou avez-vous eu un cancer ces trois dernières années ?
+     * @bodyParam breathing_disease int required between:0,1 Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?
+     * @bodyParam kidney_disease int required between:0,1 Avez-vous une insuffisance rénale chronique dialysée ?
+     * @bodyParam liver_disease int required between:0,1 Avez-vous une maladie chronique du foie ?
+     * @bodyParam pregnant int required between:0,2 Êtes-vous enceinte ?
+     * @bodyParam immunosuppressant_disease int required between:0,2 Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
+     * @bodyParam immunosuppressant_drug int required between:0,2 Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)
      * @bodyParam province string Quel est votre Province ? Cette information nous permet de réaliser un suivi épidémiologique.
      * @bodyParam town string Quel est votre ville ? Cette information nous permet de réaliser un suivi épidémiologique.
      * @bodyParam township string Quel est votre commune  ? Cette information nous permet de réaliser un suivi épidémiologique.

@@ -2,7 +2,7 @@
     "variables": [],
     "info": {
         "name": "Laravel API",
-        "_postman_id": "ac3c6ed0-bc1e-4073-844b-361f7b381021",
+        "_postman_id": "58995521-1575-4ef1-9327-cc92a805face",
         "description": "",
         "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
     },
@@ -33,7 +33,7 @@
                         ],
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"q-1\": 10,\n    \"q-2\": 3,\n    \"q-3\": 6,\n    \"q-4\": 3,\n    \"q-5\": 19,\n    \"q-6\": 17,\n    \"q-7\": 2,\n    \"q-8\": 4,\n    \"q-9\": 15,\n    \"q-10\": 13,\n    \"q-11\": 20,\n    \"q-12\": 6,\n    \"q-13\": 8,\n    \"q-14\": 3,\n    \"q-15\": 13,\n    \"q-16\": 13,\n    \"q-17\": 9,\n    \"q-18\": 8,\n    \"q-19\": 16,\n    \"q-20\": 1,\n    \"q-21\": 10,\n    \"province\": \"et\",\n    \"town\": \"error\",\n    \"township\": \"sint\",\n    \"longitude\": \"quia\",\n    \"latitude\": \"sunt\"\n}"
+                            "raw": "{\n    \"temperature_cat\": 7,\n    \"cough\": 15,\n    \"agueusia_anosmia\": 11,\n    \"sore_throat_aches\": 14,\n    \"diarrhea\": 3,\n    \"tiredness\": 18,\n    \"tiredness_details\": 9,\n    \"feeding_day\": 5,\n    \"breathlessness\": 9,\n    \"age\": 10,\n    \"size\": 9,\n    \"weight\": 7,\n    \"heart_disease\": 19,\n    \"diabetes\": 18,\n    \"cancer\": 4,\n    \"breathing_disease\": 12,\n    \"kidney_disease\": 13,\n    \"liver_disease\": 19,\n    \"pregnant\": 8,\n    \"immunosuppressant_disease\": 19,\n    \"immunosuppressant_drug\": 13,\n    \"province\": \"aut\",\n    \"town\": \"odit\",\n    \"township\": \"at\",\n    \"longitude\": \"est\",\n    \"latitude\": \"dicta\"\n}"
                         },
                         "description": "",
                         "response": []
