@@ -276,69 +276,72 @@ class SelfTestController extends Controller
         switch ($step) {
 
             case '2':
-                $validator = Validator::make($request->all(), [
-                    'step_value' => 'required'
-                ],
-                [
-                    'step_value.required'=>__('Veuillez faire un choix')
-                ]);
+                $validator = Validator::make(
+                    $request->all(),
+                    [
+                        'step_value' => 'required'
+                    ],
+                    [
+                        'step_value.required' => __('Veuillez faire un choix')
+                    ]
+                );
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-2', $value);
+                $request->session()->put('test.cough', $value);
                 $request->session()->flash('test.param', 'step-3');
                 return redirect()->route('selfTest.get');
             case '3':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-3', $value);
+                $request->session()->put('test.agueusia_anosmia', $value);
                 $request->session()->flash('test.param', 'step-4');
                 return redirect()->route('selfTest.get');
             case '4':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-4', $value);
+                $request->session()->put('test.sore_throat_aches', $value);
                 $request->session()->flash('test.param', 'step-5');
                 return redirect()->route('selfTest.get');
             case '5':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-5', $value);
+                $request->session()->put('test.diarrhea', $value);
                 $request->session()->flash('test.param', 'step-6');
                 return redirect()->route('selfTest.get');
             case '6':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-6', $value);
+                $request->session()->put('test.tiredness', $value);
                 if ($value == 0) {
                     $request->session()->flash('test.param', 'step-8');
                     return redirect()->route('selfTest.get');
@@ -348,89 +351,89 @@ class SelfTestController extends Controller
             case '7':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-7', $value);
+                $request->session()->put('test.tiredness_details', $value);
                 $request->session()->flash('test.param', 'step-8');
                 return redirect()->route('selfTest.get');
             case '8':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-8', $value);
+                $request->session()->put('test.feeding_day', $value);
                 $request->session()->flash('test.param', 'step-9');
                 return redirect()->route('selfTest.get');
             case '9':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-9', $value);
+                $request->session()->put('test.breathlessness', $value);
                 $request->session()->flash('test.param', 'step-10');
                 return redirect()->route('selfTest.get');
             case '10':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required|numeric|min:1|max:120'
-                ],[
-                    'step_value.required'=>__('Veuillez entrer votre age'),
-                    'step_value.numeric'=>__('Veuillez entrer votre age')
+                ], [
+                    'step_value.required' => __('Veuillez entrer votre age'),
+                    'step_value.numeric' => __('Veuillez entrer votre age')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-10', $value);
+                $request->session()->put('test.age', $value);
                 $request->session()->flash('test.param', 'step-11');
                 return redirect()->route('selfTest.get');
             case '11':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required|numeric|min:80|max:250'
-                ],[
-                    'step_value.required'=>__('Veuillez entrer votre taille en cm'),
-                    'step_value.numeric'=>__('Veuillez entrer votre taille en cm')
+                ], [
+                    'step_value.required' => __('Veuillez entrer votre taille en cm'),
+                    'step_value.numeric' => __('Veuillez entrer votre taille en cm')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-11', $value);
+                $request->session()->put('test.size', $value);
                 $request->session()->flash('test.param', 'step-12');
                 return redirect()->route('selfTest.get');
             case '12':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required|numeric|min:20|max:250'
-                ],[
-                    'step_value.required'=>__('Veuillez entrer votre poids en Kg'),
-                    'step_value.numeric'=>__('Veuillez entrer votre poids en Kg')
+                ], [
+                    'step_value.required' => __('Veuillez entrer votre poids en Kg'),
+                    'step_value.numeric' => __('Veuillez entrer votre poids en Kg')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-12', $value);
+                $request->session()->put('test.weight', $value);
                 $request->session()->flash('test.param', 'step-13');
                 return redirect()->route('selfTest.get');
             case '13':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
@@ -439,125 +442,128 @@ class SelfTestController extends Controller
                 if ($value == "2") {
                     $value = 1;
                 }
-                $request->session()->put('test.q-13', $value);
+                $request->session()->put('test.heart_disease', $value);
                 $request->session()->flash('test.param', 'step-14');
                 return redirect()->route('selfTest.get');
             case '14':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-14', $value);
+                $request->session()->put('test.diabetes', $value);
                 $request->session()->flash('test.param', 'step-15');
                 return redirect()->route('selfTest.get');
             case '15':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-15', $value);
+                $request->session()->put('test.cancer', $value);
                 $request->session()->flash('test.param', 'step-16');
                 return redirect()->route('selfTest.get');
             case '16':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-16', $value);
+                $request->session()->put('test.breathing_disease', $value);
                 $request->session()->flash('test.param', 'step-17');
                 return redirect()->route('selfTest.get');
             case '17':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-17', $value);
+                $request->session()->put('test.kidney_disease', $value);
                 $request->session()->flash('test.param', 'step-18');
                 return redirect()->route('selfTest.get');
             case '18':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-18', $value);
+                $request->session()->put('test.liver_disease', $value);
                 $request->session()->flash('test.param', 'step-19');
                 return redirect()->route('selfTest.get');
             case '19':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-19', $value);
+                $request->session()->put('test.pregnant', $value);
                 $request->session()->flash('test.param', 'step-20');
                 return redirect()->route('selfTest.get');
             case '20':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-20', $value);
+                $request->session()->put('test.immunosuppressant_disease', $value);
                 $request->session()->flash('test.param', 'step-21');
                 return redirect()->route('selfTest.get');
             case '21':
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required'
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-21', $value);
+                $request->session()->put('test.immunosuppressant_drug', $value);
                 $request->session()->flash('test.param', 'step-22');
                 return redirect()->route('selfTest.get');
             case '22':
-                $validator = Validator::make($request->all(), [
-                    'province' => 'nullable',
-                    'town' => 'required_with:province',
-                    'other_town' => 'required_if:town,0',
-                    'township' => 'required_if:town,Kinshasa',
-                ],
-                [
-                    'town.required_with'=>__('Le champ ville est obligatoire.'),
-                    'other_town.required_if'=>__('Le champ autre ville est obligatoire.'),
-                    'township.required_if'=>__('Le champ commune est obligatoire quand la valeur du champ ville est Kinshasa.')
-                ]);
+                $validator = Validator::make(
+                    $request->all(),
+                    [
+                        'province' => 'nullable',
+                        'town' => 'required_with:province',
+                        'other_town' => 'required_if:town,0',
+                        'township' => 'required_if:town,Kinshasa',
+                    ],
+                    [
+                        'town.required_with' => __('Le champ ville est obligatoire.'),
+                        'other_town.required_if' => __('Le champ autre ville est obligatoire.'),
+                        'township.required_if' => __('Le champ commune est obligatoire quand la valeur du champ ville est Kinshasa.')
+                    ]
+                );
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
@@ -584,14 +590,14 @@ class SelfTestController extends Controller
                 $validator = Validator::make($request->all(), [
                     'step_value' => 'required|between:1,5',
 
-                ],[
-                    'step_value.required'=>__('Veuillez faire un choix')
+                ], [
+                    'step_value.required' => __('Veuillez faire un choix')
                 ]);
                 if ($validator->fails()) {
                     $request->session()->flash('test.param', "step-{$step}");
                     return redirect()->route('selfTest.get')->withErrors($validator);
                 }
-                $request->session()->put('test.q-1', $value);
+                $request->session()->put('test.temperature_cat', $value);
                 $request->session()->flash('test.param', 'step-2');
                 return redirect()->route('selfTest.get');
         }
@@ -617,10 +623,10 @@ class SelfTestController extends Controller
         try {
             $message = "";
 
-            $responses['imc']=$this->ComputedImc($responses);
-             // Test si le sujet à moins de 15 ans
-             if ($responses['q-10'] < 15) {
-                $message = $this->message['msg-8']['text'];
+            $responses['imc'] = $this->ComputedImc($responses);
+            // Test si le sujet à moins de 15 ans
+            if ($responses['age'] < 15) {
+                $message = $this->message['msg-8'];
                 $this->storeDiagnostic($responses, $this->message['msg-8']);
                 return $message;
             }
@@ -628,7 +634,7 @@ class SelfTestController extends Controller
              * SI >= 1 facteurs de gravité majeurs
              */
             if ($this->majorGravity($responses) >= 1) {
-                $message = $this->message['msg-1']['text'];
+                $message = $this->message['msg-1'];
                 /**
                  * Appelez le 101.
                  */
@@ -638,11 +644,11 @@ class SelfTestController extends Controller
             /**
              * SI fièvre ET toux
              */
-            if ($this->hasFever($responses) == 1 && $responses['q-2'] == 1) {
+            if ($this->hasFever($responses) == 1 && $responses['cough'] == 1) {
 
                 if ($this->hasPronostic($responses)) {
                     if ($this->minorGravity($responses) >= 2) {
-                        $message = $this->message['msg-2']['text'];
+                        $message = $this->message['msg-2'];
                         /**
                          * Votre situation peut relever d’un COVID 19.
                          * Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
@@ -651,7 +657,7 @@ class SelfTestController extends Controller
                         $this->storeDiagnostic($responses, $this->message['msg-2']);
                         return $message;
                     } else { // SI < 2 facteur de gravité mineur
-                        $message = $this->message['msg-3']['text'];
+                        $message = $this->message['msg-3'];
                         /**
                          * Votre situation peut relever d’un COVID 19.
                          * Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile (SOS médecins, etc.)
@@ -660,7 +666,7 @@ class SelfTestController extends Controller
                         return $message;
                     }
                 } else { // SI 0 facteur pronostique
-                    $message = $this->message['msg-3']['text'];
+                    $message = $this->message['msg-3'];
                     /**
                      * Votre situation peut relever d’un COVID 19. 
                      * Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile (SOS médecins, etc.)
@@ -674,21 +680,21 @@ class SelfTestController extends Controller
              */
             if (
                 $this->hasFever($responses) ||  // fievre
-                ($responses['q-5'] == 1 ||  // diarrhée
-                    ($responses['q-2'] == 1 && $responses['q-4'] == 1) // toux et douleurs
-                    || ($responses['q-2'] == 1  && $responses['q-3'] == 1))
+                ($responses['diarrhea'] == 1 ||  // diarrhée
+                    ($responses['cough'] == 1 && $responses['sore_throat_aches'] == 1) // toux et douleurs
+                    || ($responses['cough'] == 1  && $responses['agueusia_anosmia'] == 1))
             ) { // toux et anosmie
 
                 if ($this->hasPronostic($responses)) {
                     if ($this->minorGravity($responses) >= 2) {
-                        $message = $this->message['msg-2']['text'];/*Votre situation peut relever d’un COVID 19.
+                        $message = $this->message['msg-2'];/*Votre situation peut relever d’un COVID 19.
                         Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
                         Si vous n'arrivez pas à obtenir de consultation, appelez le 15.*/
                         $this->storeDiagnostic($responses, $this->message['msg-2']);
                         return $message;
                     }
                     if ($this->minorGravity($responses) <= 1) {
-                        $message = $this->message['msg-4']['text'];
+                        $message = $this->message['msg-4'];
                         /*Votre situation peut relever d’un COVID 19.
                         Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
                         Appelez le 15 si une gêne respiratoire ou des difficultés importantes pour vous alimenter ou boire apparaissent pendant plus de 24 heures. */
@@ -698,8 +704,8 @@ class SelfTestController extends Controller
                 } else {
 
                     if ($this->minorGravity($responses) == 0) {
-                        if ($responses['q-10'] < 50) {
-                            $message = $this->message['msg-5']['text'];
+                        if ($responses['age'] < 50) {
+                            $message = $this->message['msg-5'];
                             /*Votre situation peut relever d’un COVID 19 qu’il faut surveiller. 
                             Si de nouveaux symptômes apparaissent, refaites le test ou consultez votre médecin.
                             Nous vous conseillons de rester à votre domicile.
@@ -707,7 +713,7 @@ class SelfTestController extends Controller
                             $this->storeDiagnostic($responses, $this->message['msg-5']);
                             return $message;
                         } else {
-                            $message = $this->message['msg-4']['text'];
+                            $message = $this->message['msg-4'];
                             /*Votre situation peut relever d’un COVID 19.
                             Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
                             Appelez le 15 si une gêne respiratoire ou des difficultés importantes pour vous alimenter ou boire apparaissent pendant plus de 24 heures.
@@ -717,7 +723,7 @@ class SelfTestController extends Controller
                         }
                     }
                     if ($this->minorGravity($responses) >= 1) {
-                        $message = $this->message['msg-4']['text'];
+                        $message = $this->message['msg-4'];
                         /*
                         Votre situation peut relever d’un COVID 19.
                         Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile.
@@ -731,9 +737,9 @@ class SelfTestController extends Controller
             /**
              *  SI toux OU douleurs OU anosmie
              */
-            if ($responses['q-2'] == 1 || $responses['q-4'] == 1 || $responses['q-3'] == 1) {
+            if ($responses['cough'] == 1 || $responses['sore_throat_aches'] == 1 || $responses['agueusia_anosmia'] == 1) {
                 if ($this->hasPronostic($responses)) {
-                    $message = $this->message['msg-6']['text'];
+                    $message = $this->message['msg-6'];
                     /*
                     Votre situation peut relever d’un COVID 19. Un avis médical est recommandé.
                     Au moindre doute, appelez le 15. Nous vous conseillons de rester à votre domicile.
@@ -741,7 +747,7 @@ class SelfTestController extends Controller
                     $this->storeDiagnostic($responses, $this->message['msg-6']);
                     return $message;
                 } else {
-                    $message = $this->message['msg-5']['text'];
+                    $message = $this->message['msg-5'];
                     /*
                     Votre situation peut relever d’un COVID 19 qu’il faut surveiller.
                     Si de nouveaux symptômes apparaissent, refaites le test ou consultez votre médecin.
@@ -752,7 +758,7 @@ class SelfTestController extends Controller
                 }
             }
 
-            $message = $this->message['msg-7']['text'];
+            $message = $this->message['msg-7'];
             /**
              * Votre situation ne relève probablement pas du COVID 19.
              * N’hésitez pas à contacter votre médecin en cas de doute.
@@ -778,7 +784,7 @@ class SelfTestController extends Controller
      */
     public function hasFever(array $responses)
     {
-        if ($responses['q-1'] == 1 || $responses['q-1'] == 2 || $responses['q-1'] == 4) {
+        if ($responses['temperature_cat'] == 1 || $responses['temperature_cat'] == 2 || $responses['temperature_cat'] == 4) {
             return true;
         }
         return false;
@@ -786,7 +792,8 @@ class SelfTestController extends Controller
 
     public function ComputedImc(array $responses)
     {
-        return $responses['q-12'] / (($responses['q-11'] / 100) ^ 2);
+        $size=($responses['size'] / 100);
+        return $responses['weight'] / ($size*$size);
     }
     /**
      * Facteur pronostique défavorable lié au terrain
@@ -805,13 +812,13 @@ class SelfTestController extends Controller
     public function hasPronostic(array $responses)
     {
         if (
-            $responses['q-10'] >= 70 ||
-            $responses['imc'] >= 30 || $responses['q-13'] == 1 ||
-            $responses['q-14'] == 1 ||
-            $responses['q-15'] == 1 || $responses['q-16'] == 1 ||
-            $responses['q-17'] == 1 || $responses['q-18'] == 1 ||
-            $responses['q-19'] == 1 || $responses['q-20'] == 1 ||
-            $responses['q-21'] == 1
+            $responses['age'] >= 70 ||
+            $responses['imc'] >= 30 || $responses['heart_disease'] == 1 ||
+            $responses['diabetes'] == 1 ||
+            $responses['cancer'] == 1 || $responses['breathing_disease'] == 1 ||
+            $responses['kidney_disease'] == 1 || $responses['liver_disease'] == 1 ||
+            $responses['pregnant'] == 1 || $responses['immunosuppressant_disease'] == 1 ||
+            $responses['immunosuppressant_drug'] == 1
         ) {
             return true;
         }
@@ -831,10 +838,10 @@ class SelfTestController extends Controller
     public function minorGravity(array $responses)
     {
         $r = 0;
-        if ($responses['q-1'] == 1 || $responses['q-1'] == 2 || $responses['q-2'] == 4) {
+        if ($responses['temperature_cat'] == 1 || $responses['temperature_cat'] == 2 || $responses['temperature_cat'] == 4) {
             $r++;
         }
-        if ((isset($responses['q-7']) && $responses['q-7'] == 1)) {
+        if ((isset($responses['tiredness_details']) && $responses['tiredness_details'] == 1)) {
             $r++;
         }
         return $r;
@@ -849,21 +856,66 @@ class SelfTestController extends Controller
     public function majorGravity(array $responses)
     {
         $r = 0;
-        if ($responses['q-8'] == 1)
+        if ($responses['feeding_day'] == 1)
             $r++;
-        if ($responses['q-9'] == 1)
+        if ($responses['breathlessness'] == 1)
             $r++;
         return $r;
     }
 
     public function storeDiagnostic(array $responses, array $message)
     {
-        $responses['results_code'] = $message['code'];
+        $responses['orientation'] = $message['code'];
         $responses['results_message'] = $message['text'];
-        $responses['algo_version']="2020-04-06";
-        $responses['form_version']="2020-04-06";
-        $duration=strtotime(date('Y-m-d H:i:s')) - strtotime($responses['start_at']);
-        $responses['duration']=$duration;
+        $responses['algo_version'] = "2020-04-06";
+        $responses['form_version'] = "2020-04-06";
+        $responses['fever_algo'] = $this->hasFever($responses);
+
+        switch ($responses['temperature_cat']) {
+            case 1:
+                $responses['temperature_cat'] = "NSP";
+                break;
+            case 2:
+                $responses['temperature_cat'] = "sup_39";
+                break;
+            case 3:
+                $responses['temperature_cat'] = "37.8-38.9";
+                break;
+            case 4:
+                $responses['temperature_cat'] = "inf_35.5";
+            case 5:
+                $responses['temperature_cat'] = "35.5-37.7";
+                break;
+        }
+
+        if ($responses['immunosuppressant_disease']==2) {
+            $responses['immunosuppressant_disease']=999;
+        }
+        $responses['immunosuppressant_disease_algo'] = $responses['immunosuppressant_disease']==1;
+
+        if ($responses['immunosuppressant_drug']==2) {
+            $responses['immunosuppressant_drug']=999;
+        }
+        
+        $responses['immunosuppressant_drug_algo'] = $responses['immunosuppressant_drug']==1;
+        if ($responses['heart_disease']==2) {
+            $responses['heart_disease']=999;
+        }
+        $responses['heart_disease_algo'] = $responses['heart_disease']==1 || $responses['heart_disease']==999;
+        $duration = strtotime(date('Y-m-d H:i:s')) - strtotime($responses['start_at']);
+        $responses['duration'] = $duration;
+        if ($responses['age'] < 15) {
+            $responses['age_range'] = "inf_15";
+        } else if ($responses['age'] >= 15 && $responses['age'] <= 49) {
+            $responses['age_range'] = "from_15_to_49";
+        } else if ($responses['age'] >= 50 && $responses['age'] <= 69) {
+            $responses['age_range'] = "from_50_to_69";
+        } else {
+            $responses['age_range'] = "sup_70";
+        }
+        if ($responses['pregnant']==2) {
+            $responses['pregnant']=888;
+        }
         Diagnostic::create($responses);
     }
 
@@ -879,27 +931,27 @@ class SelfTestController extends Controller
 
     /**
      * Test diagnostic covid-19
-     * @bodyParam q-1 int required between:1,5 Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
-     * @bodyParam q-2 int required between:0,1 Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
-     * @bodyParam q-3 int required between:0,1 Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?
-     * @bodyParam q-4 int required between:0,1 Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?
-     * @bodyParam q-5 int required between:0,1 Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles"
-     * @bodyParam q-6 int required between:0,1 Ces derniers jours, avez-vous une fatigue inhabituelle ?"
-     * @bodyParam q-7 int required between:0,1 Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?
-     * @bodyParam q-8 int required between:0,1 Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?
-     * @bodyParam q-9 int required between:0,1 Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?
-     * @bodyParam q-10 int required Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.
-     * @bodyParam q-11 int required Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
-     * @bodyParam q-12 int required between:20,250 Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
-     * @bodyParam q-13 int required Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?
-     * @bodyParam q-14 int required Êtes-vous diabétique ?
-     * @bodyParam q-15 int required Avez-vous ou avez-vous eu un cancer ces trois dernières années ?
-     * @bodyParam q-16 int required Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?
-     * @bodyParam q-17 int required Avez-vous une insuffisance rénale chronique dialysée ?
-     * @bodyParam q-18 int required Avez-vous une maladie chronique du foie ?
-     * @bodyParam q-19 int required Êtes-vous enceinte ?
-     * @bodyParam q-20 int required Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
-     * @bodyParam q-21 int required Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)
+     * @bodyParam temperature_cat int required between:1,5 Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?
+     * @bodyParam cough int required between:0,1 Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?
+     * @bodyParam agueusia_anosmia int required between:0,1 Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?
+     * @bodyParam sore_throat_aches int required between:0,1 Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?
+     * @bodyParam diarrhea int required between:0,1 Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles"
+     * @bodyParam tiredness int required between:0,1 Ces derniers jours, avez-vous une fatigue inhabituelle ?"
+     * @bodyParam tiredness_details int required between:0,1 Cette fatigue vous oblige-t-elle à vous reposer plus de la moitié de la journée ?
+     * @bodyParam feeding_day int required between:0,1 Êtes vous dans l'impossibilité de vous alimenter ou de boire DEPUIS 24 HEURES OU PLUS ?
+     * @bodyParam breathlessness int required between:0,1 Dans les dernières 24 heures, avez-vous noté un manque de souffle INHABITUEL lorsque vous parlez ou faites un petit effort ?
+     * @bodyParam age int required Quel est votre âge ? Ceci, afin de calculer un facteur de risque spécifique.
+     * @bodyParam size int required Quel est votre taille ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
+     * @bodyParam weight int required between:20,250 Quel est votre poids ? Afin de calculer l’indice de masse corporelle qui est un facteur influençant le risque de complications de l’infection.
+     * @bodyParam heart_disease int required Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?
+     * @bodyParam diabetes int required Êtes-vous diabétique ?
+     * @bodyParam cancer int required Avez-vous ou avez-vous eu un cancer ces trois dernières années ?
+     * @bodyParam breathing_disease int required Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?
+     * @bodyParam kidney_disease int required Avez-vous une insuffisance rénale chronique dialysée ?
+     * @bodyParam liver_disease int required Avez-vous une maladie chronique du foie ?
+     * @bodyParam pregnant int required Êtes-vous enceinte ?
+     * @bodyParam immunosuppressant_disease int required Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?
+     * @bodyParam immunosuppressant_drug int required Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive)
      * @bodyParam province string Quel est votre Province ? Cette information nous permet de réaliser un suivi épidémiologique.
      * @bodyParam town string Quel est votre ville ? Cette information nous permet de réaliser un suivi épidémiologique.
      * @bodyParam township string Quel est votre commune  ? Cette information nous permet de réaliser un suivi épidémiologique.
@@ -909,27 +961,27 @@ class SelfTestController extends Controller
     public function apiCovidTest(Request $request)
     {
         $data = Validator::make($request->all(), [
-            'q-1' => 'required|numeric|between:1,5',
-            'q-2' => 'sometimes|numeric|between:0,1',
-            'q-3' => 'required|numeric|between:0,1',
-            'q-4' => 'required|numeric|between:0,1',
-            'q-5' => 'required|numeric|between:0,1',
-            'q-6' => 'required|numeric|between:0,1',
-            'q-7' => 'required_if:q-6,1|numeric|between:0,1',
-            'q-8' => 'required|numeric|between:0,1',
-            'q-9' => 'required|numeric|between:0,1',
-            'q-10' => 'required|numeric|between:1,120',
-            'q-11' => 'required|numeric|between:80,250',
-            'q-12' => 'required|numeric|between:20,250',
-            'q-13' => 'required|numeric|between:0,1',
-            'q-14' => 'required|numeric|between:0,1',
-            'q-15' => 'required|numeric|between:0,1',
-            'q-16' => 'required|numeric|between:0,1',
-            'q-17' => 'required|numeric|between:0,1',
-            'q-18' => 'required|numeric|between:0,1',
-            'q-19' => 'required|numeric|between:0,1',
-            'q-20' => 'required|numeric|between:0,1',
-            'q-21' => 'required|numeric|between:0,1',
+            'temperature_cat' => 'required|numeric|between:1,5',
+            'cough' => 'sometimes|numeric|between:0,1',
+            'agueusia_anosmia' => 'required|numeric|between:0,1',
+            'sore_throat_aches' => 'required|numeric|between:0,1',
+            'diarrhea' => 'required|numeric|between:0,1',
+            'tiredness' => 'required|numeric|between:0,1',
+            'tiredness_details' => 'required_if:tiredness,1|numeric|between:0,1',
+            'feeding_day' => 'required|numeric|between:0,1',
+            'breathlessness' => 'required|numeric|between:0,1',
+            'age' => 'required|numeric|between:1,120',
+            'size' => 'required|numeric|between:80,250',
+            'weight' => 'required|numeric|between:20,250',
+            'heart_disease' => 'required|numeric|between:0,1',
+            'diabetes' => 'required|numeric|between:0,1',
+            'cancer' => 'required|numeric|between:0,1',
+            'breathing_disease' => 'required|numeric|between:0,1',
+            'kidney_disease' => 'required|numeric|between:0,1',
+            'liver_disease' => 'required|numeric|between:0,1',
+            'pregnant' => 'required|numeric|between:0,1',
+            'immunosuppressant_disease' => 'required|numeric|between:0,1',
+            'immunosuppressant_drug' => 'required|numeric|between:0,1',
             'province' => 'nullable',
             'town' => 'required_with:province',
             'other_town' => 'required_if:town,0',
@@ -938,7 +990,7 @@ class SelfTestController extends Controller
             'longitude' => 'string|nullable'
         ])->validate();
         try {
-            if ($data["q-10"] < 15) {
+            if ($data["age"] < 15) {
                 $resultat = $this->message['msg-8'];
                 return response()->json(['resultat' => $resultat]);
             }
