@@ -242,8 +242,8 @@ return [
      *
      */
     'example_languages' => [
-        'javascript',
-        'php'
+        //'javascript',
+        //'php'
     ],
 
     /*
