@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Diagnostic extends Model
 {
     protected $fillable=[
+        'age',
         'fever_algo',
         'temperature_cat',
         'cough',
