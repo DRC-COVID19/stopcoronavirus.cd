@@ -26,7 +26,7 @@ class ImcDiagnostics extends Migration
     public function down()
     {
         Schema::table('diagnostics', function (Blueprint $table) {
-            //
+            $table->dropColumn('imc');
         });
     }
 }
