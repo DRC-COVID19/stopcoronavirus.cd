@@ -15,6 +15,7 @@ class CreateDiagnosticsTable extends Migration
     {
         Schema::create('diagnostics', function (Blueprint $table) {
             $table->id();
+            $table->integer('age');
             $table->string('age_range');
             $table->boolean('sore_throat_aches');
             $table->boolean('agueusia_anosmia');
