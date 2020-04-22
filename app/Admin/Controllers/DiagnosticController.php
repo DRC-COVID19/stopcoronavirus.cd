@@ -103,6 +103,9 @@ class DiagnosticController extends AdminController
 
         // $grid->column('q-24', __('Région'))->filter('like');
         $grid->column('orientation', __('Orientation'));
+        $grid->column('province', __('Province'))->filter('like');
+        $grid->column('town', __('Ville'))->filter('like');
+        $grid->column('township', __('Commune'))->filter('like');
         $grid->column('duration', __('Durée'));
         $grid->column('created_at', __('Created at'));
         return $grid;
