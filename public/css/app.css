@@ -23707,46 +23707,29 @@ h3 {
   transform: none;
 }
 
-.sondage-items {
-  position: relative;
-  padding: 0 0 0 40px;
-}
-
-.sondage-items::before {
-  content: "";
-  position: absolute;
-  left: 10px;
-  width: 7px;
-  top: 10px;
-  bottom: 0;
-  background: #1f367785;
-}
-
 .sondage-items .sondage-item {
   font-weight: normal;
-  margin-bottom: 30px;
-  position: relative;
+  margin-bottom: 10px;
+  display: flex;
 }
 
-.sondage-items .sondage-item::before {
-  content: "";
-  position: absolute;
-  left: -39px;
-  width: 25px;
-  height: 25px;
-  background-color: #00874ea6;
-  border-radius: 50%;
+.sondage-items .sondage-item p {
+  margin: 0;
 }
 
-.sondage-items .sondage-item::after {
-  content: "";
-  position: absolute;
-  left: -32px;
-  top: 7px;
-  width: 11px;
-  height: 11px;
+.sondage-items .sondage-item span {
+  font-size: 0.9rem;
+  font-weight: 600;
+  width: 45px;
+  flex: 0 0 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 45px;
   background-color: #ffffff;
-  border-radius: 100%;
+  border-radius: 50%;
+  border: 3px solid #00874ea6;
+  margin-right: 20px;
 }
 
 .sondage-methods .sondage-methods-item {

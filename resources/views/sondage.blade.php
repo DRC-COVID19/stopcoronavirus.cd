@@ -20,19 +20,24 @@
             <h3 class="mb-4">5 principales constatations</h3>
             <div class="sondage-items">
                 <div class="sondage-item">
-                    <p>73% sont inquiet ou très inquiet</p>
+                    <span> 73%</span>
+                    <p>Sont inquiet ou très inquiet</p>
                 </div>
                 <div class="sondage-item">
-                    <p>17% ne peuvent déjà plus travailler</p>
+                    <span>17%</span>
+                    <p>Ne peuvent déjà plus travailler</p>
                 </div>
                 <div class="sondage-item">
-                    <p>39% appellerait le numéro vert en cas de symptômes</p>
+                    <span>39%</span>
+                    <p>Appellerait le numéro vert en cas de symptômes</p>
                 </div>
                 <div class="sondage-item">
-                    <p>76% constatent une augmentation des prix des denrées essentielles</p>
+                    <span>76%</span>
+                    <p>Constatent une augmentation des prix des denrées essentielles</p>
                 </div>
                 <div class="sondage-item">
-                    <p>35% ont des difficultés à trouver des masques, 29% du charbon et de la farine, 28% de la Chloroquine, 26% de la
+                    <span>35%</span>
+                    <p>Ont des difficultés à trouver des masques, 29% du charbon et de la farine, 28% de la Chloroquine, 26% de la
                         Viande et des légumes</p>
                 </div>
             </div>
