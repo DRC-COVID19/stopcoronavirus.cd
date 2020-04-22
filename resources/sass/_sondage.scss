@@ -1,0 +1,66 @@
+.sondage-items {
+    position: relative;
+    padding: 0 0 0 40px;
+    &::before {
+        content: "";
+        position: absolute;
+        left: 10px;
+        width: 7px;
+        top: 10px;
+        bottom: 0;
+        background: #1f367785;
+    }
+    .sondage-item {
+        font-weight: normal;
+        margin-bottom: 30px;
+        position: relative;
+        &::before {
+            content: "";
+            position: absolute;
+            left: -39px;
+            width: 25px;
+            height: 25px;
+            background-color: #00874ea6;
+            border-radius: 50%;
+        }
+        &::after {
+            content: "";
+            position: absolute;
+            left: -32px;
+            top: 7px;
+            width: 11px;
+            height: 11px;
+            background-color: #ffffff;
+            border-radius: 100%;
+        }
+    }
+}
+.sondage-methods {
+    .sondage-methods-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        .illustrator {
+            flex: 0 0 80px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 50%;
+            margin-right: 20px;
+            img {
+                width: 100%;
+            }
+        }
+        p{
+            margin: 0;
+        }
+    }
+}
+.btn-download{
+    border: 3px solid $bg-gray;
+    background: $success;
+    color: white;
+    &:hover{
+        color: white;
+        background: #027f4b;
+    }
+}
