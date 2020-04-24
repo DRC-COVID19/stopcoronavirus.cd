@@ -267,6 +267,7 @@
                         @endif
                     </div>
                     <input type="hidden" name="current_step" value="{{$content['id']}}">
+                    
                     @csrf
 
                 </div>
