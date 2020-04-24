@@ -33,8 +33,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/app.css?v=4.1') }}" rel="stylesheet">
-    <script src="{{ asset('js/app.js?v=1.1') }}" defer></script>
+    <link href="{{ asset('css/app.css?v=4.7') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js?v=1.6') }}" defer></script>
 
     <!-- Google Tag Manager -->
     <script>
@@ -87,9 +87,12 @@
                                         <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">
                                             <li> Idées reçues</li>
                                         </a>
-                                      {{--  <a href="{{route('selfTest.get')}}" class="px-md-2 {{ Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">
+                                        <a href="{{route('sondages')}}" class="px-md-2 {{ Route::currentRouteName()=='sondages' ? 'active' : '' }}">
+                                            <li> Sondage</li>
+                                        </a>
+                                        <a href="{{route('diagnostic')}}" class="px-md-2 {{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">
                                             <li>Orientation Médicale</li>
-                                        </a>--}}
+                                        </a>
                                     </ul>
                                 </div>
                             </nav>
@@ -118,13 +121,18 @@
                         <div class="d-flex flex-md-row flex-column justify-content-end mb-3 mt-2 hidden-sm">
                             <img src="img/partners_top.png" height="55" width="200" class="img-fluid" alt="">
                         </div>
-                        <div class="d-flex flex-md-row flex-column justify-content-end App-Header--navbar">
-                            <a href="{{route('home')}}" class="px-md-2 {{ Route::currentRouteName()== 'home' ? 'active' : '' }}">Situation actuelle</a>
-                            <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">Mesures de protection</a>
-                            <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">Directives du Gouvernement</a>
-                            <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">Idées reçues</a>
-                            {{--<a href="{{route('diagnostic')}}" class="px-md-2 {{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">Orientation Médicale</a>--}}
-                        </div>
+                        <ul class="d-flex flex-md-row flex-column justify-content-end App-Header--navbar">
+                            <li class="{{ Route::currentRouteName()== 'home' ? 'active' : '' }}"> <a href="{{route('home')}}" class="px-md-2 nav-item ">Situation actuelle</a></li>
+                            <li class="{{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}"> <a href="{{route('preventativeMeasures')}}" class="px-md-2 nav-item ">Mesures de protection</a></li>
+                            <li class="{{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}"> <a href="{{route('officialMeasure')}}" class="px-md-2 nav-item ">Directives du Gouvernement</a></li>
+                            <li class="{{ Route::currentRouteName()=='stereotypes'||Route::currentRouteName()=='sondages' ? 'active' : '' }}"> <a href="#" class="px-md-2 nav-item">{{__("Idées reçues & sondage")}} <span class="chevron fas fa-chevron-down"></span></a>
+                                <ul>
+                                    <li><a class="sub-nav-item" href="{{route('stereotypes')}}">{{__('Idées reçues')}}</a></li>
+                                    <li><a class="sub-nav-item" href="{{route('sondages')}}">{{__('Sondage')}}</a></li>
+                                </ul>
+                            </li>
+                            <li class="{{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}"> <a href="{{route('diagnostic')}}" class="px-md-2 nav-item ">Orientation Médicale</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>

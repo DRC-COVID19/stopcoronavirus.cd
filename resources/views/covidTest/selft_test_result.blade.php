@@ -18,7 +18,7 @@
                 <div class="d-flex flex-column">
                     <div class="resultAlert">
                         <p class="resultSubtitle font-weight-bold">
-                           <i class="fas fa-2x fa-exclamation-triangle"></i><br>{{$resultat}}
+                           <i class="fas fa-2x fa-exclamation-triangle"></i><br>{{$resultat['text']}}
                         </p>
                         <!--<p class="resultSubtitle result-pad font-weight-bold">Restez chez vous.</p>-->
                         <p class="resultText">

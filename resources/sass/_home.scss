@@ -1,8 +1,18 @@
 
-.jubmotron-alert {
+.jumbotron-alert {
     text-align: center;
     padding: 2rem 1.5rem !important;
     background-color: $flag-blue;
+    color: $white;
+    i {
+        font-size: 2rem;
+    }
+}
+
+.jumbotron-diagnostic {
+    text-align: center;
+    padding: 2rem 1.5rem !important;
+    background-color: $gray-600;
     color: $white;
     i {
         font-size: 2rem;
@@ -58,8 +68,11 @@
 
 .home-symptome {
     .card {
-        height: 186px;
+        height: 200px;
         background: $bg-gray;
+        @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+            height: 300px;
+        }
         .card-body {
             display: flex;
             align-items: center;
