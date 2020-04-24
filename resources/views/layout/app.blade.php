@@ -33,8 +33,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/app.css?v=4.6') }}" rel="stylesheet">
-    <script src="{{ asset('js/app.js?v=1.5') }}" defer></script>
+    <link href="{{ asset('css/app.css?v=4.7') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js?v=1.6') }}" defer></script>
 
     <!-- Google Tag Manager -->
     <script>
@@ -131,7 +131,7 @@
                                     <li><a class="sub-nav-item" href="{{route('sondages')}}">{{__('Sondage')}}</a></li>
                                 </ul>
                             </li>
-                            <li> <a href="{{route('diagnostic')}}" class="px-md-2 nav-item {{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">Orientation Médicale</a></li>
+                            <li class="{{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}"> <a href="{{route('diagnostic')}}" class="px-md-2 nav-item ">Orientation Médicale</a></li>
                         </ul>
                     </div>
                 </div>
