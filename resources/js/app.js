@@ -1,7 +1,7 @@
 var $ = require("jquery");
 var Chart = require('chart.js');
 //require('./bootstrap');
-
+import './mapBox';
 
 function drawChart() {
 
