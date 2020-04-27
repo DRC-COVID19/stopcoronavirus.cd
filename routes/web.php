@@ -18,6 +18,12 @@ Route::get('/mesures-de-protection-contre-le-coronavirus', "PageController@offic
 Route::get('/directives-prises-par-le-gouvernement', "PageController@preventativeMeasures")->name('preventativeMeasures');
 Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stereotypes');
 Route::get('/sondages', 'PageController@sondage')->name('sondages');
+Route::get('/orientation-medicale-googlemaps', function () {
+    return view('diagnosticMaps.googlemap');
+});
+Route::get('/orientation-medicale-mapbox', function () {
+    return view('diagnosticMaps.mapbox');
+});
 
 Route::get('/orientation-medicale','SelfTestController@diagnostic')->name('diagnostic');
 Route::group(['prefix' => 'orientation-medicale-test'], function () {

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Diagnostic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 /**
@@ -792,8 +793,8 @@ class SelfTestController extends Controller
 
     public function ComputedImc(array $responses)
     {
-        $size=($responses['size'] / 100);
-        return $responses['weight'] / ($size*$size);
+        $size = ($responses['size'] / 100);
+        return $responses['weight'] / ($size * $size);
     }
     /**
      * Facteur pronostique défavorable lié au terrain
@@ -888,20 +889,20 @@ class SelfTestController extends Controller
                 break;
         }
 
-        if ($responses['immunosuppressant_disease']==2) {
-            $responses['immunosuppressant_disease']=999;
+        if ($responses['immunosuppressant_disease'] == 2) {
+            $responses['immunosuppressant_disease'] = 999;
         }
-        $responses['immunosuppressant_disease_algo'] = $responses['immunosuppressant_disease']==1;
+        $responses['immunosuppressant_disease_algo'] = $responses['immunosuppressant_disease'] == 1;
 
-        if ($responses['immunosuppressant_drug']==2) {
-            $responses['immunosuppressant_drug']=999;
+        if ($responses['immunosuppressant_drug'] == 2) {
+            $responses['immunosuppressant_drug'] = 999;
         }
 
-        $responses['immunosuppressant_drug_algo'] = $responses['immunosuppressant_drug']==1;
-        if ($responses['heart_disease']==2) {
-            $responses['heart_disease']=999;
+        $responses['immunosuppressant_drug_algo'] = $responses['immunosuppressant_drug'] == 1;
+        if ($responses['heart_disease'] == 2) {
+            $responses['heart_disease'] = 999;
         }
-        $responses['heart_disease_algo'] = $responses['heart_disease']==1 || $responses['heart_disease']==999;
+        $responses['heart_disease_algo'] = $responses['heart_disease'] == 1 || $responses['heart_disease'] == 999;
         $duration = strtotime(date('Y-m-d H:i:s')) - strtotime($responses['start_at']);
         $responses['duration'] = $duration;
         if ($responses['age'] < 15) {
@@ -913,8 +914,8 @@ class SelfTestController extends Controller
         } else {
             $responses['age_range'] = "sup_70";
         }
-        if ($responses['pregnant']==2) {
-            $responses['pregnant']=888;
+        if ($responses['pregnant'] == 2) {
+            $responses['pregnant'] = 888;
         }
         Diagnostic::create($responses);
     }
@@ -1002,5 +1003,23 @@ class SelfTestController extends Controller
             }
             return response($th->getMessage())->setStatusCode(500);
         }
+    }
+
+    function getMapsStat()
+    {
+        $datafromDb= DB::table('diagnostics')->select(['town', DB::raw('COUNT(*) as count')])
+        ->groupBy('town')
+        ->get();
+        dump($datafromDb);
+        exit;
+        $data['features'] = [
+            [
+                'properties' => [
+                    'message' => 40
+                ],
+                'coordinates' => [-66.324462890625, -16.024695711685304]
+            ]
+        ];
+        return response()->json($data);
     }
 }

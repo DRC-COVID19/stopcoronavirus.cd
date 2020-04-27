@@ -35,3 +35,4 @@ Route::get('/pandemicstatsasc', function () {
 });
 
 Route::post('self-test','SelfTestController@apiCovidTest');
+Route::get('maps-stat', 'SelfTestController@getMapsStat');
