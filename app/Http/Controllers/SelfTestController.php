@@ -966,12 +966,16 @@ class SelfTestController extends Controller
             }
             $client = new \GuzzleHttp\Client();
             $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$town},{$province}.json?access_token={$MAP_BOX_KEY}&country=cd");
+
             $content = json_decode($response->getBody()->getContents());
-            $data[strtoupper($town)] = $content->features[0]->geometry->coordinates;
-            $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
-            file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
-            $this->townGeocoding = $data;
-            return $data[$town];
+            if ($content && isset($content->features[0])) {
+                $data[strtoupper($town)] = $content->features[0]->geometry->coordinates;
+                $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
+                file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
+                $this->townGeocoding = $data;
+                return $data[$town];
+            }
+            return null;
         } catch (\Throwable $th) {
             return null;
         }
