@@ -44499,6 +44499,7 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
+<<<<<<< HEAD
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -44506,13 +44507,21 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mapBox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mapBox */ "./resources/js/mapBox.js");
 /* harmony import */ var _mapBox__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_mapBox__WEBPACK_IMPORTED_MODULE_0__);
+=======
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+>>>>>>> geolog
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 var Chart = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Chart.js"); //require('./bootstrap');
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> geolog
 function drawChart() {
   // Add a helper to format timestamp data
   Date.prototype.formatD = function () {
