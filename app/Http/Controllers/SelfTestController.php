@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
  */
 class SelfTestController extends Controller
 {
+    private $townGeocoding = [];
 
     private $message = [
         'msg-1' =>
@@ -575,8 +576,8 @@ class SelfTestController extends Controller
                 $town = $request->get('town');
                 $other_town = $request->get('other_town');
                 $township = $request->get('township');
-                if ($town!="Kinshasa") {
-                    $township=$town;
+                if ($town != "Kinshasa") {
+                    $township = $town;
                 }
                 $request->session()->put('test.province', $province);
 
@@ -920,82 +921,87 @@ class SelfTestController extends Controller
         if ($responses['pregnant'] == 2) {
             $responses['pregnant'] = 888;
         }
-
+        $coordonne = $this->ExtractGeoCoding($responses);
+        if ($coordonne && is_array($coordonne) && count($coordonne) > 1) {
+            $responses["longitude"] = $coordonne[0];
+            $responses["latitude"] = $coordonne[1];
+        }
         Diagnostic::create($responses);
     }
 
     public function ExtractGeoCoding(array $responses)
     {
         try {
+
+            if (file_exists(storage_path('app/townGeocoding.json'))) {
+                $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
+                $data = json_decode($jsonString, true);
+                if (array_key_exists(strtoupper($responses['township']), $data)) {
+                    return [
+                        $data[strtoupper($responses['township'])][0],
+                        $data[strtoupper($responses['township'])][1]
+                    ];
+                } else {
+                    return $this->addTownGeoCoding($responses['town'], $responses['province']);
+                }
+            } else {
+                return $this->addTownGeoCoding($responses['town'], $responses['province']);
+            }
         } catch (\Throwable $th) {
+            return null;
         }
     }
 
-    public function geoCoding()
+    public function addTownGeoCoding($town, $province)
     {
         try {
-            $MAP_BOX_KEY=env('MAP_BOX_KEY');
-            $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
-            $data = json_decode($jsonString, true);
-            $newData = [];
-            $client = new \GuzzleHttp\Client();
-            foreach ($data as $key => $value) {
-                $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$key}.json?access_token={$MAP_BOX_KEY}&country=cd");
-                $content = json_decode($response->getBody()->getContents());
-                $newData[$key] = $content->features[0]->geometry->coordinates;
+            $MAP_BOX_KEY = env('MAP_BOX_KEY');
+            $data = [];
+            if (strtoupper($town) == strtoupper($province)) {
+                $province = null;
             }
-            // Write File
-
-            $newJsonString = json_encode($newData, JSON_PRETTY_PRINT);
-
-            file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
-        } catch (\Throwable $th) {
-            if (env('APP_DEBUG') == true) {
-                return response($th)->setStatusCode(500);
+            if (file_exists(storage_path('app/townGeocoding.json'))) {
+                $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
+                $data = json_decode($jsonString, true);
             }
-            return response($th->getMessage())->setStatusCode(500);
-        }
-    }
-
-    public function addTownGeoCoding($town)
-    {
-        try {
-            $MAP_BOX_KEY=env('MAP_BOX_KEY');
-            $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
-            $data = json_decode($jsonString, true);
             $client = new \GuzzleHttp\Client();
-            $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$town}.json?access_token={$MAP_BOX_KEY}&country=cd");
+            $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$town},{$province}.json?access_token={$MAP_BOX_KEY}&country=cd");
             $content = json_decode($response->getBody()->getContents());
-            $data[$town] = $content->features[0]->geometry->coordinates;
+            $data[strtoupper($town)] = $content->features[0]->geometry->coordinates;
             $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
             file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
-
+            $this->townGeocoding = $data;
             return $data[$town];
         } catch (\Throwable $th) {
-            if (env('APP_DEBUG') == true) {
-                return response($th)->setStatusCode(500);
-            }
-            return response($th->getMessage())->setStatusCode(500);
+            return null;
         }
     }
 
     public function updateDatabase()
     {
         try {
-            $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
-            $data = json_decode($jsonString, true);
+            $this->townGeocoding = [];
+            if (file_exists(storage_path('app/townGeocoding.json'))) {
+                $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
+                $this->townGeocoding = json_decode($jsonString, true);
+            }
             $dataFromDb = Diagnostic::get();
             foreach ($dataFromDb as $value) {
-                if ($value->township && array_key_exists(ucwords($value->township), $data)) {
-                    $value->longitude = $data[ucwords($value->township)][0];
-                    $value->latitude = $data[ucwords($value->township)][1];
-                } elseif (array_key_exists(ucwords($value->town), $data)) {
-                    $value->longitude = $data[ucwords($value->town)][0];
-                    $value->latitude = $data[ucwords($value->town)][1];
+                if (strtoupper($value->town) != "KINSHASA") {
+                    $value->township = $value->town;
+                }
+                $value->save();
+            }
+            foreach ($dataFromDb as $value) {
+                if (!is_null($this->townGeocoding) && $value->township && array_key_exists(strtoupper($value->township), $this->townGeocoding)) {
+                    $value->longitude = $this->townGeocoding[strtoupper($value->township)][0];
+                    $value->latitude = $this->townGeocoding[strtoupper($value->township)][1];
                 } else {
-                    $coordonne=$this->addTownGeoCoding(ucwords($value->town));
-                    $value->longitude = $coordonne[0];
-                    $value->latitude = $coordonne[1];
+                    $coordonne = $this->addTownGeoCoding(strtoupper($value->township), $value->province);
+                    if ($coordonne && is_array($coordonne) && count($coordonne) > 1) {
+                        $value->longitude = $coordonne[0];
+                        $value->latitude = $coordonne[1];
+                    }
                 }
                 $value->save();
             }
@@ -1095,17 +1101,12 @@ class SelfTestController extends Controller
 
     function getMapsStat()
     {
-        $datafromDb = DB::table('diagnostics')->select(['longitude','latitude', DB::raw('COUNT(*) as count')])
-            ->groupBy('longitude','latitude')
-            ->get();
-        $data['features'] = [
-            [
-                'properties' => [
-                    'message' => 40
-                ],
-                'coordinates' => [-66.324462890625, -16.024695711685304]
-            ]
-        ];
-        return response()->json($datafromDb);
+        $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', DB::raw('COUNT(*) as count')])
+            ->groupBy('longitude', 'latitude', 'township');
+        $orientation = request('orientation');
+        if ($orientation && $orientation != 'all') {
+            $datafromDb->where('orientation', $orientation);
+        }
+        return response()->json($datafromDb->get());
     }
 }

@@ -44499,7 +44499,6 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-<<<<<<< HEAD
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -44507,21 +44506,13 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mapBox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mapBox */ "./resources/js/mapBox.js");
 /* harmony import */ var _mapBox__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_mapBox__WEBPACK_IMPORTED_MODULE_0__);
-=======
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
->>>>>>> master
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 var Chart = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Chart.js"); //require('./bootstrap');
 
 
-<<<<<<< HEAD
 
 
-=======
->>>>>>> master
 function drawChart() {
   // Add a helper to format timestamp data
   Date.prototype.formatD = function () {
@@ -44678,7 +44669,6 @@ $(function () {});
 
 /***/ }),
 
-<<<<<<< HEAD
 /***/ "./resources/js/mapBox.js":
 /*!********************************!*\
   !*** ./resources/js/mapBox.js ***!
@@ -44688,33 +44678,58 @@ $(function () {});
 
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
+var AllMarkers = [];
 mapboxgl.accessToken = 'pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw';
 var map = new mapboxgl.Map({
   container: 'map',
   center: [15.31389, -4.33167],
-  zoom: 5,
+  zoom: 10,
   style: 'mapbox://styles/mapbox/streets-v11'
 });
-$.get('/api/maps-stat', function (data) {
-  data.forEach(function (marker) {
-    // create a DOM element for the marker
-    var el = document.createElement('div');
-    el.className = 'custom-clustericon custom-clustericon-2';
-    var el2 = document.createElement('div');
-    el2.className = "second-cluster-icon";
-    var elSpan = document.createElement('span');
-    elSpan.textContent = marker.count;
-    el2.appendChild(elSpan);
-    el.appendChild(el2); // add marker to map
-
-    new mapboxgl.Marker(el).setLngLat([marker.longitude, marker.latitude]).addTo(map);
+$(function () {
+  getData();
+  $('#form-map-filter').submit(function (e) {
+    e.preventDefault();
+    var dataForm = $("#form-map-filter").serialize();
+    console.log(dataForm);
+    getData(dataForm);
   });
 });
 
+function getData() {
+  var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  $('#map-waiting').removeClass('d-none');
+  $.get("/api/maps-stat?".concat(params), function (data) {
+    AllMarkers.forEach(function (marker) {
+      marker.remove();
+    });
+    var total = 0;
+    data.forEach(function (marker) {
+      // create a DOM element for the marker
+      var el = document.createElement('div');
+      el.className = 'custom-clustericon custom-clustericon-2';
+      var el2 = document.createElement('div');
+      el2.className = "second-cluster-icon";
+      var elSpan = document.createElement('span');
+      elSpan.textContent = marker.count;
+      el2.appendChild(elSpan);
+      el.appendChild(el2); // popup 
+
+      var popup = new mapboxgl.Popup({
+        offset: 25
+      }).setText(marker.township); // add marker to map
+
+      var currentMarker = new mapboxgl.Marker(el).setLngLat([marker.longitude, marker.latitude]).setPopup(popup).addTo(map);
+      AllMarkers.push(currentMarker);
+      total += marker.count;
+    });
+    $('#total-count').text(total);
+    $('#map-waiting').addClass('d-none');
+  });
+}
+
 /***/ }),
 
-=======
->>>>>>> master
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
