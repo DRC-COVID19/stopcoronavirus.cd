@@ -553,7 +553,7 @@ class SelfTestController extends Controller
                 $validator = Validator::make(
                     $request->all(),
                     [
-                        'province' => 'nullable',
+                        'province' => 'required',
                         'town' => 'required_with:province',
                         'other_town' => 'required_if:town,0',
                         'township' => 'required_if:town,Kinshasa',
@@ -573,7 +573,9 @@ class SelfTestController extends Controller
                 $town = $request->get('town');
                 $other_town = $request->get('other_town');
                 $township = $request->get('township');
-
+                if ($town!="Kinshasa") {
+                    $township=$town;
+                }
                 $request->session()->put('test.province', $province);
 
                 if ($town == "0") {
