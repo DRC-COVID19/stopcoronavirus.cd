@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
  */
 class SelfTestController extends Controller
 {
+
     private $message = [
         'msg-1' =>
         [
@@ -924,26 +925,79 @@ class SelfTestController extends Controller
     public function ExtractGeoCoding(array $responses)
     {
         try {
-
         } catch (\Throwable $th) {
-            
         }
     }
 
     public function geoCoding()
     {
         try {
+            $MAP_BOX_KEY=env('MAP_BOX_KEY');
             $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
             $data = json_decode($jsonString, true);
-            $newData=[];
+            $newData = [];
             $client = new \GuzzleHttp\Client();
             foreach ($data as $key => $value) {
-                $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$key}, Democratic Republic of the Congo.json?access_token=pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw&country=cd");
-                $content=json_decode($response->getBody()->getContents());
-                $newData[$key]=$content->features[0]->geometry->coordinates;
-                
+                $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$key}.json?access_token={$MAP_BOX_KEY}&country=cd");
+                $content = json_decode($response->getBody()->getContents());
+                $newData[$key] = $content->features[0]->geometry->coordinates;
             }
-            dump($newData);
+            // Write File
+
+            $newJsonString = json_encode($newData, JSON_PRETTY_PRINT);
+
+            file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function addTownGeoCoding($town)
+    {
+        try {
+            $MAP_BOX_KEY=env('MAP_BOX_KEY');
+            $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
+            $data = json_decode($jsonString, true);
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$town}.json?access_token={$MAP_BOX_KEY}&country=cd");
+            $content = json_decode($response->getBody()->getContents());
+            $data[$town] = $content->features[0]->geometry->coordinates;
+            $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
+            file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
+
+            return $data[$town];
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function updateDatabase()
+    {
+        try {
+            $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
+            $data = json_decode($jsonString, true);
+            $dataFromDb = Diagnostic::get();
+            foreach ($dataFromDb as $value) {
+                if ($value->township && array_key_exists(ucwords($value->township), $data)) {
+                    $value->longitude = $data[ucwords($value->township)][0];
+                    $value->latitude = $data[ucwords($value->township)][1];
+                } elseif (array_key_exists(ucwords($value->town), $data)) {
+                    $value->longitude = $data[ucwords($value->town)][0];
+                    $value->latitude = $data[ucwords($value->town)][1];
+                } else {
+                    $coordonne=$this->addTownGeoCoding(ucwords($value->town));
+                    $value->longitude = $coordonne[0];
+                    $value->latitude = $coordonne[1];
+                }
+                $value->save();
+            }
+            return response();
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -1039,11 +1093,9 @@ class SelfTestController extends Controller
 
     function getMapsStat()
     {
-        $datafromDb= DB::table('diagnostics')->select(['town', DB::raw('COUNT(*) as count')])
-        ->groupBy('town')
-        ->get();
-        dump($datafromDb);
-        exit;
+        $datafromDb = DB::table('diagnostics')->select(['longitude','latitude', DB::raw('COUNT(*) as count')])
+            ->groupBy('longitude','latitude')
+            ->get();
         $data['features'] = [
             [
                 'properties' => [
@@ -1052,6 +1104,6 @@ class SelfTestController extends Controller
                 'coordinates' => [-66.324462890625, -16.024695711685304]
             ]
         ];
-        return response()->json($data);
+        return response()->json($datafromDb);
     }
 }
