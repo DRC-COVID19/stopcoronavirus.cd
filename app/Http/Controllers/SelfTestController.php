@@ -916,7 +916,39 @@ class SelfTestController extends Controller
         if ($responses['pregnant']==2) {
             $responses['pregnant']=888;
         }
+
         Diagnostic::create($responses);
+    }
+
+    public function ExtractGeoCoding(array $responses)
+    {
+        try {
+
+        } catch (\Throwable $th) {
+            
+        }
+    }
+
+    public function geoCoding()
+    {
+        try {
+            $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
+            $data = json_decode($jsonString, true);
+            $newData=[];
+            $client = new \GuzzleHttp\Client();
+            foreach ($data as $key => $value) {
+                $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$key}, Democratic Republic of the Congo.json?access_token=pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw&country=cd");
+                $content=json_decode($response->getBody()->getContents());
+                $newData[$key]=$content->features[0]->geometry->coordinates;
+                
+            }
+            dump($newData);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     public function back($step, Request $request)
