@@ -30,6 +30,7 @@
                     </div>
                     <button class="btn btn-download btn-lg">Filtrer <span class="badge badge-success" id="total-count">0</span></button>
                 </form>
+                <div class="pie"></div>
             </div>
             <div class="col-12 col-md-9">
                 <div id='map'></div>

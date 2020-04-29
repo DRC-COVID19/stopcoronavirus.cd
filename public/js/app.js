@@ -44679,12 +44679,79 @@ $(function () {});
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 var AllMarkers = [];
+var hoveredStateId = null;
 mapboxgl.accessToken = 'pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw';
 var map = new mapboxgl.Map({
   container: 'map',
   center: [15.31389, -4.33167],
   zoom: 10,
-  style: 'mapbox://styles/mapbox/streets-v11'
+  style: 'mapbox://styles/merki230/ck9lfctvs2p2a1ilooj2fddnw'
+});
+map.addControl(new mapboxgl.NavigationControl());
+map.on('load', function () {
+  map.addSource('states', {
+    'type': 'geojson',
+    'generateId': true,
+    'data': 'https://raw.githubusercontent.com/opendatalabrdc/OSM_Exports/master/data/rd_congo_admin_4_provinces.geojson'
+  }); // The feature-state dependent fill-opacity expression will render the hover effect
+  // when a feature's hover state is set to true.
+
+  map.addLayer({
+    'id': 'state-fills',
+    'type': 'fill',
+    'source': 'states',
+    'layout': {},
+    'paint': {
+      'fill-color': '#627BC1',
+      'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 1, 0]
+    }
+  });
+  map.addLayer({
+    'id': 'state-borders',
+    'type': 'line',
+    'source': 'states',
+    'layout': {},
+    'paint': {
+      'line-color': '#627BC1',
+      'line-width': 2
+    }
+  }); // When the user moves their mouse over the state-fill layer, we'll update the
+  // feature state for the feature under the mouse.
+
+  map.on('mousemove', 'state-fills', function (e) {
+    if (e.features.length > 0) {
+      if (hoveredStateId) {
+        map.setFeatureState({
+          source: 'states',
+          id: hoveredStateId
+        }, {
+          hover: false
+        });
+      }
+
+      hoveredStateId = e.features[0].id;
+      map.setFeatureState({
+        source: 'states',
+        id: hoveredStateId
+      }, {
+        hover: true
+      });
+    }
+  }); // When the mouse leaves the state-fill layer, update the feature state of the
+  // previously hovered feature.
+
+  map.on('mouseleave', 'state-fills', function () {
+    if (hoveredStateId) {
+      map.setFeatureState({
+        source: 'states',
+        id: hoveredStateId
+      }, {
+        hover: false
+      });
+    }
+
+    hoveredStateId = null;
+  });
 });
 $(function () {
   getData();
@@ -44700,29 +44767,43 @@ function getData() {
   var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
   $('#map-waiting').removeClass('d-none');
   $.get("/api/maps-stat?".concat(params), function (data) {
+    console.log(data);
     AllMarkers.forEach(function (marker) {
       marker.remove();
     });
     var total = 0;
-    data.forEach(function (marker) {
+
+    for (var marker in data) {
+      var _data$marker$FIN, _data$marker$FIN2, _data$marker$FIN3;
+
       // create a DOM element for the marker
       var el = document.createElement('div');
-      el.className = 'custom-clustericon custom-clustericon-2';
+      el.className = 'custom-clustericon custom-clustericon-2 pie';
       var el2 = document.createElement('div');
       el2.className = "second-cluster-icon";
       var elSpan = document.createElement('span');
-      elSpan.textContent = marker.count;
+      var elSpan2 = document.createElement('span');
+      var elSpan3 = document.createElement('span');
+      elSpan.className = "fin-5";
+      elSpan2.className = "fin-8";
+      elSpan3.className = "fin";
+      elSpan.textContent = (_data$marker$FIN = data[marker].FIN5) !== null && _data$marker$FIN !== void 0 ? _data$marker$FIN : 0;
+      elSpan2.textContent = (_data$marker$FIN2 = data[marker].FIN8) !== null && _data$marker$FIN2 !== void 0 ? _data$marker$FIN2 : 0;
+      elSpan3.textContent = (_data$marker$FIN3 = data[marker].FIN) !== null && _data$marker$FIN3 !== void 0 ? _data$marker$FIN3 : 0;
       el2.appendChild(elSpan);
+      el2.appendChild(elSpan2);
+      el2.appendChild(elSpan3);
       el.appendChild(el2); // popup 
 
       var popup = new mapboxgl.Popup({
         offset: 25
-      }).setText(marker.township); // add marker to map
+      }).setText(data[marker].township); // add marker to map
 
-      var currentMarker = new mapboxgl.Marker(el).setLngLat([marker.longitude, marker.latitude]).setPopup(popup).addTo(map);
+      var currentMarker = new mapboxgl.Marker(el).setLngLat([data[marker].longitude, data[marker].latitude]).setPopup(popup).addTo(map);
       AllMarkers.push(currentMarker);
-      total += marker.count;
-    });
+      total += data[marker].count;
+    }
+
     $('#total-count').text(total);
     $('#map-waiting').addClass('d-none');
   });
