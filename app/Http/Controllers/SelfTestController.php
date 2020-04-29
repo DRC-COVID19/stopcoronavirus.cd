@@ -1118,7 +1118,7 @@ class SelfTestController extends Controller
                         $newArray[$value->township]->{'FIN8'} = $value->count;
                         break;
                     default:
-                        if ($newArray[$value->township]->FIN) {
+                        if (isset($newArray[$value->township]->FIN)) {
                             $newArray[$value->township]->FIN += $value->count;
                         } else {
                             $newArray[$value->township]->{'FIN'} = $value->count;
