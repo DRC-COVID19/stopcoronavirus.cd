@@ -1105,12 +1105,42 @@ class SelfTestController extends Controller
 
     function getMapsStat()
     {
-        $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', DB::raw('COUNT(*) as count')])
-            ->groupBy('longitude', 'latitude', 'township');
-        $orientation = request('orientation');
-        if ($orientation && $orientation != 'all') {
-            $datafromDb->where('orientation', $orientation);
+        $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', 'orientation', DB::raw('COUNT(*) as count')])
+            ->groupBy('longitude', 'latitude', 'township', 'orientation')->get();
+        $newArray = [];
+        foreach ($datafromDb as $value) {
+            if (array_key_exists($value->township, $newArray)) {
+                switch ($value->orientation) {
+                    case 'FIN5':
+                        $newArray[$value->township]->{'FIN5'} = $value->count;
+                        break;
+                    case 'FIN8':
+                        $newArray[$value->township]->{'FIN8'} = $value->count;
+                        break;
+                    default:
+                        if ($newArray[$value->township]->FIN) {
+                            $newArray[$value->township]->FIN += $value->count;
+                        } else {
+                            $newArray[$value->township]->{'FIN'} = $value->count;
+                        }
+                        break;
+                }
+            } else {
+                $newArray[$value->township] = $value;
+                switch ($value->orientation) {
+                    case 'FIN5':
+                        $newArray[$value->township]->{'FIN5'} = $value->count;
+                        break;
+                    case 'FIN8':
+                        $newArray[$value->township]->{'FIN8'} = $value->count;
+                        break;
+                    default:
+                        $newArray[$value->township]->{'FIN'} = $value->count;
+                        break;
+                }
+            }
         }
-        return response()->json($datafromDb->get());
+
+        return response()->json($newArray);
     }
 }

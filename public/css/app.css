@@ -23888,6 +23888,34 @@ h3 {
   }
 }
 
+.pie {
+  /* Basic layout */
+  display: inline-block;
+  width: 3.75em;
+  height: 3.75em;
+  border-radius: 50%;
+  /* A little styling */
+  border: 0.15em solid #fff;
+  /* fixes a minor clipping issue in Chrome */
+  background-origin: border-box;
+  background-image: conic-gradient(#ff0000c4 120deg, #ffa500c4 0 240deg, #008000c4 0);
+}
+
+.pie .fin-8 {
+  position: absolute;
+  transform: translate(-12px, 3px);
+}
+
+.pie .fin-5 {
+  position: absolute;
+  transform: translate(15px, 9px);
+}
+
+.pie .fin {
+  position: absolute;
+  transform: translate(-5px, 29px);
+}
+
 .footer-partners {
   padding: 4rem 0 0 0;
   background-color: #999;
