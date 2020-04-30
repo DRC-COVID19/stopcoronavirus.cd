@@ -957,17 +957,17 @@ class SelfTestController extends Controller
         try {
             $MAP_BOX_KEY = env('MAP_BOX_KEY');
             $data = [];
-            $provinceCopy = null;
+            $provinceCopy = $province;
 
-            if (((strtoupper($province) == "KINSHASA" && strtoupper($town) != "KINSHASA")|| strtoupper($province) == "KONGO-CENTRAL") ) {
-                $provinceCopy = $province;
+            if (strtoupper($province) == strtoupper($town)) {
+                $provinceCopy = null;
             }
             if (file_exists(storage_path('app/townGeocoding.json'))) {
                 $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
                 $data = json_decode($jsonString, true);
             }
             $client = new \GuzzleHttp\Client();
-            $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$town},{$provinceCopy}.json?access_token={$MAP_BOX_KEY}&country=cd");
+            $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$provinceCopy} {$town}.json?access_token={$MAP_BOX_KEY}&country=cd");
 
             $content = json_decode($response->getBody()->getContents());
             $dataFind = null;
