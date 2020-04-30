@@ -957,27 +957,39 @@ class SelfTestController extends Controller
         try {
             $MAP_BOX_KEY = env('MAP_BOX_KEY');
             $data = [];
-            if (strtoupper($town) == strtoupper($province)) {
-                $province = null;
-            }
-            if (strtoupper($town) != "KINSHASA") {
-                $province = null;
+            $provinceCopy = null;
+
+            if (strtoupper($town) == "KINSHASA" && strtoupper($town) != strtoupper($province)) {
+                $provinceCopy = $province;
             }
             if (file_exists(storage_path('app/townGeocoding.json'))) {
                 $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
                 $data = json_decode($jsonString, true);
             }
             $client = new \GuzzleHttp\Client();
-            $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$town},{$province}.json?access_token={$MAP_BOX_KEY}&country=cd");
+            $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$town},{$provinceCopy}.json?access_token={$MAP_BOX_KEY}&country=cd");
 
             $content = json_decode($response->getBody()->getContents());
+            $dataFind = null;
             if ($content && isset($content->features[0])) {
-                $data[strtoupper($town)] = $content->features[0]->geometry->coordinates;
+                if (count($content->features) > 1) {
+                    foreach ($content->features as $value) {
+                        if (strpos($value->place_name, strtoupper($province))) {
+                            $dataFind = $value->geometry->coordinates;
+                            break;
+                        }
+                    }
+                }
+                if ($dataFind == null) {
+                    $dataFind=$content->features[0]->geometry->coordinates;
+                }
+                $data[strtoupper($town)] = $dataFind;
                 $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
                 file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
                 $this->townGeocoding = $data;
                 return $data[$town];
             }
+           
             return null;
         } catch (\Throwable $th) {
             return null;
