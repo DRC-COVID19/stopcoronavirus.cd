@@ -1120,37 +1120,42 @@ class SelfTestController extends Controller
 
     function getMapsStat()
     {
-        $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', 'orientation', DB::raw('COUNT(*) as count')])
-            ->groupBy('longitude', 'latitude', 'township', 'orientation')->get();
+        $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', 'orientation','province', DB::raw('COUNT(*) as count')])
+            ->groupBy('longitude', 'latitude', 'township', 'orientation','province')->get();
         $newArray = [];
         foreach ($datafromDb as $value) {
-            if (array_key_exists($value->township, $newArray)) {
+            $province=str_replace('-',"_",$value->province);
+            $province=str_replace(' ',"_",$province);
+            $township=str_replace('-',"_",$value->township);
+            $township=str_replace(' ',"_",$township);
+            $index=$province."_".$township;
+            if (array_key_exists($index, $newArray)) {
                 switch ($value->orientation) {
                     case 'FIN5':
-                        $newArray[$value->township]->{'FIN5'} = $value->count;
+                        $newArray[$index]->{'FIN5'} = $value->count;
                         break;
                     case 'FIN8':
-                        $newArray[$value->township]->{'FIN8'} = $value->count;
+                        $newArray[$index]->{'FIN8'} = $value->count;
                         break;
                     default:
-                        if (isset($newArray[$value->township]->FIN)) {
-                            $newArray[$value->township]->FIN += $value->count;
+                        if (isset($newArray[$index]->FIN)) {
+                            $newArray[$index]->FIN += $value->count;
                         } else {
-                            $newArray[$value->township]->{'FIN'} = $value->count;
+                            $newArray[$index]->{'FIN'} = $value->count;
                         }
                         break;
                 }
             } else {
-                $newArray[$value->township] = $value;
+                $newArray[$index] = $value;
                 switch ($value->orientation) {
                     case 'FIN5':
-                        $newArray[$value->township]->{'FIN5'} = $value->count;
+                        $newArray[$index]->{'FIN5'} = $value->count;
                         break;
                     case 'FIN8':
-                        $newArray[$value->township]->{'FIN8'} = $value->count;
+                        $newArray[$index]->{'FIN8'} = $value->count;
                         break;
                     default:
-                        $newArray[$value->township]->{'FIN'} = $value->count;
+                        $newArray[$index]->{'FIN'} = $value->count;
                         break;
                 }
             }
