@@ -958,18 +958,19 @@ class SelfTestController extends Controller
             $MAP_BOX_KEY = env('MAP_BOX_KEY');
             $data = [];
             $provinceCopy = $province;
-
+            
             switch (strtoupper($province)) {
+
                 case 'KONGO-CENTRAL':
                     $provinceCopy = "Bas-Congo";
                     break;
                 case 'NORD-UBANGI':
                     $provinceCopy = "Équateur";
                     break;
-                case "KASAÏ":
-                case "KASAI":
-                case "KASAÏ-CENTRAL":
-                    case "KASAI-CENTRAL":
+                case "KASAï":
+                case "KASAï":
+                case "KASAï-CENTRAL":
+                case "KASAI-CENTRAL":
                 $provinceCopy="Kasaï-Occidental";
                 break;
                 default:
@@ -1022,7 +1023,7 @@ class SelfTestController extends Controller
                 $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
                 $this->townGeocoding = json_decode($jsonString, true);
             }
-            $dataFromDb = Diagnostic::get();
+            $dataFromDb = Diagnostic::orderBy('id')->get();
             foreach ($dataFromDb as $value) {
                 if (strtoupper($value->town) != "KINSHASA") {
                     $value->township = $value->town;
