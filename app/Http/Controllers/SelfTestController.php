@@ -960,6 +960,9 @@ class SelfTestController extends Controller
             if (strtoupper($town) == strtoupper($province)) {
                 $province = null;
             }
+            if (strtoupper($town) != "KINSHASA") {
+                $province = null;
+            }
             if (file_exists(storage_path('app/townGeocoding.json'))) {
                 $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
                 $data = json_decode($jsonString, true);
