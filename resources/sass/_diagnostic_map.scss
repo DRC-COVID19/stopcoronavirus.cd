@@ -1,13 +1,13 @@
 #map {
     height: 100vh;
 }
-
+/*
 .custom-clustericon-2 {
     --cluster-color: #ff9b00d9;
 }
-
+*/
 .custom-clustericon {
-    background: var(--cluster-color);
+    /*  background: var(--cluster-color);*/
     color: #fff;
     border-radius: 100%;
     font-weight: 700;
@@ -17,7 +17,7 @@
     width: 40px;
     height: 40px;
 }
-
+/*
 .custom-clustericon::before {
     padding: 16px;
 }
@@ -39,7 +39,7 @@
     opacity: 0.2;
     border-radius: 100%;
 }
-
+*/
 .second-cluster-icon {
     position: absolute;
     text-align: center;
@@ -110,17 +110,38 @@
     /* fixes a minor clipping issue in Chrome */
     background-origin: border-box;
 
-    background-image: conic-gradient(#ff0000c4 120deg, #ffa500c4 0 240deg, #008000c4 0);
+    background-image: conic-gradient($fin-5 120deg, $fin-8 0 240deg, $fin 0);
     .fin-8 {
         position: absolute;
-        transform: translate(-12px, 3px);
+        transform: translate(-10px, 7px) rotate(-58deg);
     }
     .fin-5 {
         position: absolute;
-        transform: translate(15px, 9px);
+        transform: translate(15px, 7px) rotate(61deg);
     }
     .fin {
         position: absolute;
-        transform: translate(-5px, 29px);
+        transform: translate(-1px, 30px);
+    }
+}
+.legende{
+    list-style: none;
+    div {
+        display: flex;
+        span{
+            display: block;
+            height: 20px;
+            width: 20px;
+            margin-right: 5px;
+            &.fin-8 {
+                background:$fin-8;
+            }
+            &.fin-5 {
+                background: $fin-5;
+            }
+            &.fin {
+                background: $fin;
+            }
+        }
     }
 }
