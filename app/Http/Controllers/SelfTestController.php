@@ -959,7 +959,7 @@ class SelfTestController extends Controller
             $data = [];
             $provinceCopy = null;
 
-            if (strtoupper($town) == "KINSHASA" && strtoupper($town) != strtoupper($province)) {
+            if (((strtoupper($province) == "KINSHASA" && strtoupper($town) != "KINSHASA")|| strtoupper($province) == "KONGO-CENTRAL") ) {
                 $provinceCopy = $province;
             }
             if (file_exists(storage_path('app/townGeocoding.json'))) {
