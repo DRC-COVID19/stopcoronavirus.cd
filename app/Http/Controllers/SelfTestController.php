@@ -936,10 +936,10 @@ class SelfTestController extends Controller
             if (file_exists(storage_path('app/townGeocoding.json'))) {
                 $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
                 $data = json_decode($jsonString, true);
-                if (array_key_exists(strtoupper($responses['province'].'_'.$responses['township']), $data)) {
+                if (array_key_exists(strtoupper($responses['province'] . '_' . $responses['township']), $data)) {
                     return [
-                        $data[strtoupper($responses['province'].'_'.$responses['township'])][0],
-                        $data[strtoupper($responses['province'].'_'.$responses['township'])][1]
+                        $data[strtoupper($responses['province'] . '_' . $responses['township'])][0],
+                        $data[strtoupper($responses['province'] . '_' . $responses['township'])][1]
                     ];
                 } else {
                     return $this->addTownGeoCoding($responses['town'], $responses['province']);
@@ -958,8 +958,22 @@ class SelfTestController extends Controller
             $MAP_BOX_KEY = env('MAP_BOX_KEY');
             $data = [];
             $provinceCopy = $province;
-            if (strtoupper($province)=="KONGO-CENTRAL") {
-                $provinceCopy="BaS-Congo";
+
+            switch (strtoupper($province)) {
+                case 'KONGO-CENTRAL':
+                    $provinceCopy = "Bas-Congo";
+                    break;
+                case 'NORD-UBANGI':
+                    $provinceCopy = "Équateur";
+                    break;
+                case "KASAÏ":
+                case "KASAI":
+                case "KASAÏ-CENTRAL":
+                $provinceCopy="Kasaï-Occidental";
+                break;
+                default:
+                    # code...
+                    break;
             }
 
             if (strtoupper($province) == strtoupper($town)) {
@@ -984,15 +998,15 @@ class SelfTestController extends Controller
                     }
                 }
                 if ($dataFind == null) {
-                    $dataFind=$content->features[0]->geometry->coordinates;
+                    $dataFind = $content->features[0]->geometry->coordinates;
                 }
-                $data[strtoupper($province).'_'.strtoupper($town)] = $dataFind;
+                $data[strtoupper($province) . '_' . strtoupper($town)] = $dataFind;
                 $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
                 file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
                 $this->townGeocoding = $data;
-                return $data[strtoupper($province).'_'.strtoupper($town)];
+                return $data[strtoupper($province) . '_' . strtoupper($town)];
             }
-           
+
             return null;
         } catch (\Throwable $th) {
             return null;
@@ -1015,11 +1029,11 @@ class SelfTestController extends Controller
                 $value->save();
             }
             foreach ($dataFromDb as $value) {
-                if (!is_null($this->townGeocoding) && $value->township && array_key_exists(strtoupper($value->province.'_'.$value->township), $this->townGeocoding)) {
-                    $value->longitude = $this->townGeocoding[strtoupper($value->province.'_'.$value->township)][0];
-                    $value->latitude = $this->townGeocoding[strtoupper($value->province.'_'.$value->township)][1];
+                if (!is_null($this->townGeocoding) && $value->township && array_key_exists(strtoupper($value->province . '_' . $value->township), $this->townGeocoding)) {
+                    $value->longitude = $this->townGeocoding[strtoupper($value->province . '_' . $value->township)][0];
+                    $value->latitude = $this->townGeocoding[strtoupper($value->province . '_' . $value->township)][1];
                 } else {
-                    $coordonne = $this->addTownGeoCoding(strtoupper($value->township),strtoupper($value->province));
+                    $coordonne = $this->addTownGeoCoding(strtoupper($value->township), strtoupper($value->province));
                     if ($coordonne && is_array($coordonne) && count($coordonne) > 1) {
                         $value->longitude = $coordonne[0];
                         $value->latitude = $coordonne[1];
@@ -1123,15 +1137,15 @@ class SelfTestController extends Controller
 
     function getMapsStat()
     {
-        $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', 'orientation','province', DB::raw('COUNT(*) as count')])
-            ->groupBy('longitude', 'latitude', 'township', 'orientation','province')->get();
+        $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', 'orientation', 'province', DB::raw('COUNT(*) as count')])
+            ->groupBy('longitude', 'latitude', 'township', 'orientation', 'province')->get();
         $newArray = [];
         foreach ($datafromDb as $value) {
-            $province=str_replace('-',"_",$value->province);
-            $province=str_replace(' ',"_",$province);
-            $township=str_replace('-',"_",$value->township);
-            $township=str_replace(' ',"_",$township);
-            $index=$province."_".$township;
+            $province = str_replace('-', "_", $value->province);
+            $province = str_replace(' ', "_", $province);
+            $township = str_replace('-', "_", $value->township);
+            $township = str_replace(' ', "_", $township);
+            $index = $province . "_" . $township;
             if (array_key_exists($index, $newArray)) {
                 switch ($value->orientation) {
                     case 'FIN5':
