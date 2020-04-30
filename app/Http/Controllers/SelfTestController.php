@@ -969,6 +969,7 @@ class SelfTestController extends Controller
                 case "KASAÏ":
                 case "KASAI":
                 case "KASAÏ-CENTRAL":
+                    case "KASAI-CENTRAL":
                 $provinceCopy="Kasaï-Occidental";
                 break;
                 default:
