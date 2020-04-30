@@ -1,6 +1,7 @@
 var $ = require("jquery");
 let AllMarkers = [];
 let hoveredStateId = null;
+let hoveredStateIdKin = null;
 mapboxgl.accessToken = 'pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw';
 var map = new mapboxgl.Map({
     container: 'map'
@@ -13,7 +14,12 @@ map.on('load', function () {
     map.addSource('states', {
         'type': 'geojson',
         'generateId': true,
-        'data':'https://raw.githubusercontent.com/opendatalabrdc/OSM_Exports/master/data/rd_congo_admin_4_provinces.geojson'
+        'data': `${location.protocol}storage/geojson/rd_congo_admin_4_provinces.geojson`
+    });
+
+    map.addSource('statesKin', {
+        type: "vector",
+        url: "mapbox://merki230.4airwoxt"
     });
 
     // The feature-state dependent fill-opacity expression will render the hover effect
@@ -22,6 +28,23 @@ map.on('load', function () {
         'id': 'state-fills',
         'type': 'fill',
         'source': 'states',
+        'layout': {},
+        'paint': {
+            'fill-color': '#627BC1',
+            'fill-opacity': [
+                'case',
+                ['boolean', ['feature-state', 'hover'], false],
+                0.3,
+                0
+            ]
+        }
+    });
+
+    map.addLayer({
+        'id': 'state-fills-kin',
+        'type': 'fill',
+        'source': 'statesKin',
+        "source-layer": "carte-administrative-de-la-vi-csh5cj",
         'layout': {},
         'paint': {
             'fill-color': '#627BC1',
@@ -45,10 +68,32 @@ map.on('load', function () {
         }
     });
 
+    map.addLayer({
+        'id': 'state-borders-kin',
+        'type': 'line',
+        'source': 'statesKin',
+        "source-layer": "carte-administrative-de-la-vi-csh5cj",
+        'layout': {},
+        'paint': {
+            'line-color': '#627BC1',
+            'line-width': 2
+        }
+    });
+
     // When the user moves their mouse over the state-fill layer, we'll update the
     // feature state for the feature under the mouse.
     map.on('mousemove', 'state-fills', function (e) {
         if (e.features.length > 0) {
+            if (e.features[0].properties['ISO3166-2']=="CD-KN") {
+                if (hoveredStateId) {
+                    map.setFeatureState(
+                        { source: 'states', id: hoveredStateId },
+                        { hover: false }
+                    );
+                }
+                hoveredStateId = null;
+                return;
+            }
             if (hoveredStateId) {
                 map.setFeatureState(
                     { source: 'states', id: hoveredStateId },
@@ -58,6 +103,22 @@ map.on('load', function () {
             hoveredStateId = e.features[0].id;
             map.setFeatureState(
                 { source: 'states', id: hoveredStateId },
+                { hover: true }
+            );
+        }
+    });
+
+    map.on('mousemove', 'state-fills-kin', function (e) {
+        if (e.features.length > 0) {
+            if (hoveredStateIdKin) {
+                map.setFeatureState(
+                    { source: 'statesKin', sourceLayer:'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
+                    { hover: false }
+                );
+            }
+            hoveredStateIdKin = e.features[0].id;
+            map.setFeatureState(
+                { source: 'statesKin', sourceLayer:'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
                 { hover: true }
             );
         }
@@ -74,6 +135,16 @@ map.on('load', function () {
         }
         hoveredStateId = null;
     });
+
+    map.on('mouseleave', 'state-fills-kin', function () {
+        if (hoveredStateIdKin) {
+            map.setFeatureState(
+                { source: 'statesKin', sourceLayer:'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
+                { hover: false }
+            );
+        }
+        hoveredStateIdKin = null;
+    });
 });
 $(function () {
     getData();
@@ -89,7 +160,6 @@ $(function () {
 function getData(params = null) {
     $('#map-waiting').removeClass('d-none');
     $.get(`/api/maps-stat?${params}`, function (data) {
-        console.log(data);
 
         AllMarkers.forEach(function (marker) {
             marker.remove();
