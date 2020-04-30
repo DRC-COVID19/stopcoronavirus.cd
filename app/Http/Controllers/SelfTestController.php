@@ -936,10 +936,10 @@ class SelfTestController extends Controller
             if (file_exists(storage_path('app/townGeocoding.json'))) {
                 $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
                 $data = json_decode($jsonString, true);
-                if (array_key_exists(strtoupper($responses['township']), $data)) {
+                if (array_key_exists(strtoupper($responses['province'].'_'.$responses['township']), $data)) {
                     return [
-                        $data[strtoupper($responses['township'])][0],
-                        $data[strtoupper($responses['township'])][1]
+                        $data[strtoupper($responses['province'].'_'.$responses['township'])][0],
+                        $data[strtoupper($responses['province'].'_'.$responses['township'])][1]
                     ];
                 } else {
                     return $this->addTownGeoCoding($responses['town'], $responses['province']);
@@ -983,11 +983,11 @@ class SelfTestController extends Controller
                 if ($dataFind == null) {
                     $dataFind=$content->features[0]->geometry->coordinates;
                 }
-                $data[strtoupper($town)] = $dataFind;
+                $data[strtoupper($province).'_'.strtoupper($town)] = $dataFind;
                 $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
                 file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
                 $this->townGeocoding = $data;
-                return $data[$town];
+                return $data[strtoupper($province).'_'.strtoupper($town)];
             }
            
             return null;
@@ -1012,11 +1012,11 @@ class SelfTestController extends Controller
                 $value->save();
             }
             foreach ($dataFromDb as $value) {
-                if (!is_null($this->townGeocoding) && $value->township && array_key_exists(strtoupper($value->township), $this->townGeocoding)) {
-                    $value->longitude = $this->townGeocoding[strtoupper($value->township)][0];
-                    $value->latitude = $this->townGeocoding[strtoupper($value->township)][1];
+                if (!is_null($this->townGeocoding) && $value->township && array_key_exists(strtoupper($value->province.'_'.$value->township), $this->townGeocoding)) {
+                    $value->longitude = $this->townGeocoding[strtoupper($value->province.'_'.$value->township)][0];
+                    $value->latitude = $this->townGeocoding[strtoupper($value->province.'_'.$value->township)][1];
                 } else {
-                    $coordonne = $this->addTownGeoCoding(strtoupper($value->township), $value->province);
+                    $coordonne = $this->addTownGeoCoding(strtoupper($value->township),strtoupper($value->province));
                     if ($coordonne && is_array($coordonne) && count($coordonne) > 1) {
                         $value->longitude = $coordonne[0];
                         $value->latitude = $coordonne[1];
