@@ -102,6 +102,10 @@
                                 {{ __('messages.0')}}
                             </p>
                         </div>
+                        <div class="col-lg-6 text-center text-md-right div-radio " >
+                            <hr class="d-md-none">
+                        <p class="text-white m-0"><span class="fa fa-broadcast-tower"></span> <span><strong>95.7 FM</strong> la radio du ministère de la santé</span></p>
+                        </div>
                     </div>
                 </div>
             </div>
