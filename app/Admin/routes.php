@@ -18,6 +18,9 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('admin.home');
+    $router->get('/orientation-medicale-maps', function () {
+        return view('diagnosticMaps.mapbox');
+    });
     $router->resource('posts', "PostController");
     $router->resource('alerts', "AlertController");
     $router->resource('categories', "CategoryController");

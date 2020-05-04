@@ -12,6 +12,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-md-3 mt-4">
+            <a href="{{route('admin.home')}}"><i class="fa fa-arrow-left"></i> Retour</a>
                 <h1>{{__("Carte d'orientation médicale")}}</h1>
                 <hr>
                 <h3>{{__("Legende")}}</h3>
@@ -20,6 +21,7 @@
                     <div><span class="fin"></span> {{__("Probable")}}</div>
                     <div><span class="fin-5"></span> {{__("Très probable")}}</div>
                 </div>
+                
             </div>
             <div class="col-12 col-md-9">
                 <div id='map'></div>
