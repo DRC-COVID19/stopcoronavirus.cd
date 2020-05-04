@@ -168,10 +168,19 @@ function getData(params = null) {
 
         for (const marker in data) {
             // create a DOM element for the marker
+            let item=data[marker];
             var el = document.createElement('div');
-            el.className = 'custom-clustericon custom-clustericon-2 pie';
-            var el2 = document.createElement('div');
-            el2.className = "second-cluster-icon";
+            el.className = 'pie';
+            let total=item.FIN+item.FIN8+item.FIN5;
+
+            if (total>20) {
+                el.style="width:90px;height:90px";
+            }
+            else if (total>50) {
+                el.style="width:120px;height:120px";
+            } 
+           // var el2 = document.createElement('div');
+           // el2.className = "second-cluster-icon";
             var elSpan = document.createElement('span');
             var elSpan2 = document.createElement('span');
             var elSpan3 = document.createElement('span');
@@ -181,10 +190,10 @@ function getData(params = null) {
             elSpan.textContent = data[marker].FIN5 ?? 0;
             elSpan2.textContent = data[marker].FIN8 ?? 0;
             elSpan3.textContent = data[marker].FIN ?? 0;
-            el2.appendChild(elSpan);
-            el2.appendChild(elSpan2);
-            el2.appendChild(elSpan3);
-            el.appendChild(el2);
+            el.appendChild(elSpan);
+            el.appendChild(elSpan2);
+            el.appendChild(elSpan3);
+            //el.appendChild(el2);
 
             // popup 
             var popup = new mapboxgl.Popup({ offset: 25 }).setText(
