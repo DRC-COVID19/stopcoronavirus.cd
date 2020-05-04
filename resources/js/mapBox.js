@@ -14,7 +14,7 @@ map.on('load', function () {
     map.addSource('states', {
         'type': 'geojson',
         'generateId': true,
-        'data': `${location.protocol}storage/geojson/rd_congo_admin_4_provinces.geojson`
+        'data': `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
     });
 
     map.addSource('statesKin', {
