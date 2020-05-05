@@ -28,4 +28,6 @@ Route::group([
     $router->resource('provinces', "ProvinceController");
     $router->resource('pandemic-stats', "PandemicStatController");
     $router->resource('diagnostics', "DiagnosticController");
+    $router->resource('hospitals', "HospitalController");
+    $router->resource('hospital-situations', "HospitalSituationController");
 });

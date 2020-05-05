@@ -1,7 +1,6 @@
 var $ = require("jquery");
 let AllMarkers = [];
 $(function () {
-   
     let hoveredStateId = null;
     let hoveredStateIdKin = null;
     let elementCheck = $("#map");
