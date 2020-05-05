@@ -5,7 +5,7 @@
 <div class="jumbotron jumbotron-title">
     <div class="container">
         <h1>Stop Coronavirus COVID-19 RDC</h1>
-        <p class="lead">Site officiel d'informations et de conseils &  <b class="text-white">95.7 FM</b> la radio du ministère de la santé</p>
+        <p class="lead">Site officiel d'informations et de conseils</p>
 
     </div>
 </div>
