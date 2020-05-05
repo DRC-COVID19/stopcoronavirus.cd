@@ -33,8 +33,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/app.css?v=4.7') }}" rel="stylesheet">
-    <script src="{{ asset('js/app.js?v=1.6') }}" defer></script>
+    <link href="{{ asset('css/app.css?v=4.8') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js?v=1.7') }}" defer></script>
 
     <!-- Google Tag Manager -->
     <script>
