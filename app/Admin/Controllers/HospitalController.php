@@ -28,7 +28,7 @@ class HospitalController extends AdminController
         $grid->column('name',"Nom");
         $grid->column('address',"Adresse");
         $grid->column('Beds',"Total Lits");
-        $grid->column('busy_beds',"Lits occupés");
+        $grid->column('occupied_beds',"Lits occupés");
         $grid->column('respirators',"respirateurs");
         $grid->column('masks',"Masques");
         $grid->column('busy_respirators',__('Respirateurs occupés'));
@@ -47,9 +47,9 @@ class HospitalController extends AdminController
         $show->field('name',__('Nom'));
         $show->field('address','Adresse');
         $show->field('beds',__('Total Lits'));
-        $show->field('busy_beds',__('Lits occupés'));
+        $show->field('occupied_beds',__('Lits occupés'));
         $show->field('respirators',__('Total respirateurs'));
-        $show->field('busy_respirators',__('Respirateurs occupés'));
+        $show->field('occupied_respirators',__('Respirateurs occupés'));
         $show->field('masks',__('Masque'));
         $show->field('latitude',__('Latitude'));
         $show->field('longitude',__('Longitude'));
@@ -67,12 +67,12 @@ class HospitalController extends AdminController
         $form->text('name',__('Nom'))->rules(['required']);
         $form->textarea('address','Adresse')->rules(['required']);
         $form->number('beds',__('Total Lits'))->rules(['required']);
-        $form->number('busy_beds',__('Lits occupés'))->default(0);
+        $form->number('occupied_Beds',__('Lits occupés'))->default(0);
         $form->number('respirators',__('Total respirateurs'))->default(0);
-        $form->number('busy_respirators',__('Respirateurs occupés'))->default(0);
+        $form->number('occupied_respirators',__('Respirateurs occupés'))->default(0);
         $form->number('masks',__('Masque'))->default(0);
-        $form->text('latitude',__('Latitude'));
-        $form->text('longitude',__('Longitude'));
+        $form->latlong('latitude', 'longitude', 'Position')->height(500);
+        
         return $form;
     }
 }

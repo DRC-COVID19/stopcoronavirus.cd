@@ -19,9 +19,9 @@ class CreateHospitalsTable extends Migration
             $table->string('name');
             $table->string('address');
             $table->integer('beds')->default(0);
-            $table->integer('busy_beds')->default(0);
+            $table->integer('occupied_Beds')->default(0);
             $table->integer('respirators')->default(0);
-            $table->integer('busy_respirators')->default(0);
+            $table->integer('occupied_respirators')->default(0);
             $table->integer('masks')->default(0);
             $table->string('latitude')->nullable();
             $table->string('longitude')->nullable();
