@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Diagnostic;
+use App\Http\MyTrait\GeoConding;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +15,9 @@ use Illuminate\Support\Facades\Validator;
  */
 class SelfTestController extends Controller
 {
-    private $townGeocoding = [];
+    
+    use GeoConding;
+    
 
     private $message = [
         'msg-1' =>
@@ -952,68 +955,7 @@ class SelfTestController extends Controller
         }
     }
 
-    public function addTownGeoCoding($town, $province)
-    {
-        try {
-            $MAP_BOX_KEY = env('MAP_BOX_KEY');
-            $data = [];
-            $provinceCopy = $province;
-            
-            switch (strtoupper($province)) {
-
-                case 'KONGO-CENTRAL':
-                    $provinceCopy = "Bas-Congo";
-                    break;
-                case 'NORD-UBANGI':
-                    $provinceCopy = "Équateur";
-                    break;
-                case "KASAï":
-                case "KASAï":
-                case "KASAï-CENTRAL":
-                case "KASAI-CENTRAL":
-                $provinceCopy="Kasaï-Occidental";
-                break;
-                default:
-                    # code...
-                    break;
-            }
-
-            if (strtoupper($province) == strtoupper($town)) {
-                $provinceCopy = null;
-            }
-            if (file_exists(storage_path('app/townGeocoding.json'))) {
-                $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
-                $data = json_decode($jsonString, true);
-            }
-            $client = new \GuzzleHttp\Client();
-            $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$town}, {$provinceCopy}.json?access_token={$MAP_BOX_KEY}&country=cd");
-
-            $content = json_decode($response->getBody()->getContents());
-            $dataFind = null;
-            if ($content && isset($content->features[0])) {
-                if (count($content->features) > 1) {
-                    foreach ($content->features as $value) {
-                        if (strpos($value->place_name, strtoupper($province))) {
-                            $dataFind = $value->geometry->coordinates;
-                            break;
-                        }
-                    }
-                }
-                if ($dataFind == null) {
-                    $dataFind = $content->features[0]->geometry->coordinates;
-                }
-                $data[strtoupper($province) . '_' . strtoupper($town)] = $dataFind;
-                $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
-                file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
-                $this->townGeocoding = $data;
-                return $data[strtoupper($province) . '_' . strtoupper($town)];
-            }
-
-            return null;
-        } catch (\Throwable $th) {
-            return null;
-        }
-    }
+    
 
     public function updateDatabase()
     {

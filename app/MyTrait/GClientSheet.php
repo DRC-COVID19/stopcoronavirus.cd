@@ -27,7 +27,7 @@ trait GClientSheet
         $client->setScopes(Google_Service_Sheets::SPREADSHEETS_READONLY);
         $client->setAccessType('offline');
         $client->setDeveloperKey(env('GOOGLE_KEY'));
-        $client->setAuthConfig(storage_path('app/credentials.json'));
+        // $client->setAuthConfig(storage_path('app/credentials.json'));
         //$client->setPrompt('select_account consent');
         // Load previously authorized token from a file, if it exists.
         // The file token.json stores the user's access and refresh tokens, and is
