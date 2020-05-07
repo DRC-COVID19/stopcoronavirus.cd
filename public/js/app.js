@@ -44679,6 +44679,7 @@ $(function () {});
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 var AllMarkers = [];
+var AllDianosticData = [];
 $(function () {
   var hoveredStateId = null;
   var hoveredStateIdKin = null;
@@ -44844,6 +44845,9 @@ $(function () {
     if (item.is(':checked')) {
       getHospitals(map);
     } else {
+      map.off("mouseenter", "covid9_hospitals_layer");
+      map.off("mouseleave", "covid9_hospitals_layer");
+      map.off("click", "covid9_hospitals_layer");
       map.removeLayer("covid9_hospitals_layer");
       map.removeSource('covid9_hospitals_source');
     }
@@ -44852,7 +44856,20 @@ $(function () {
     var item = $(this);
 
     if (item.is(':checked')) {
-      get;
+      getAllDianostics(map);
+      $('#orientation_result').removeAttr('disabled');
+    } else {
+      RemoveDianosticMakers();
+      $('#orientation_result').attr('disabled', 'disabled');
+    }
+  });
+  $('#orientation_result').change(function (e) {
+    var item = $(this);
+
+    if (item.val()) {
+      getUniqueDiagnostics(item.val(), map);
+    } else {
+      getAllDianostics(map);
     }
   });
 });
@@ -44926,17 +44943,47 @@ function getHospitals(map) {
     map.on("mouseleave", "covid9_hospitals_layer", function () {
       map.getCanvas().style.cursor = "";
     });
+    map.on("click", "covid9_hospitals_layer", function (e) {
+      var coordinates = e.features[0].geometry.coordinates.slice();
+      var _e$features$0$propert = e.features[0].properties,
+          name = _e$features$0$propert.name,
+          address = _e$features$0$propert.address,
+          beds = _e$features$0$propert.beds,
+          occupied_beds = _e$features$0$propert.occupied_beds,
+          masks = _e$features$0$propert.masks,
+          respirators = _e$features$0$propert.respirators,
+          occupied_respirators = _e$features$0$propert.occupied_respirators,
+          confirmed = _e$features$0$propert.confirmed,
+          dead = _e$features$0$propert.dead,
+          sick = _e$features$0$propert.sick,
+          healed = _e$features$0$propert.healed,
+          last_update = _e$features$0$propert.last_update; // computed properties
+
+      var active = confirmed - dead - healed;
+      var bedsAvailable = beds - occupied_beds;
+      var respiratorsAvailable = respirators - occupied_respirators;
+      var HTML = "\n      <div>\n        <div class=\"hospital-name\">".concat(name, "</div>\n        ").concat(address ? "<div>Adresse: ".concat(address, "</div>") : "", "\n        <hr />\n        <div>\n          <strong>Situation Epid\xE9miologique</strong>\n        </div>\n        <div class=\"confirmed\">\n          <span>Confirm\xE9s: </span>\n          <span class=\"count\">").concat(confirmed, "</span>\n        </div>\n        <div class=\"active\">\n          <span>Actifs: </span>\n          <span class=\"count\">").concat(active, "</span>\n        </div>\n        <div class=\"recovered\">\n          <span>Gu\xE9ris: </span>\n          <span class=\"count\">").concat(healed, "</span>\n        </div>\n        <div class=\"death\">\n          <span>D\xE9c\xE8s: </span>\n          <span class=\"count\">").concat(dead, "</span>\n        </div>\n        <hr />\n        <div>\n          <strong>Capacit\xE9 Hospitali\xE8re</strong>\n        </div>\n        <div>\n          <span>Lits disponibles: </span>\n          <span>").concat(bedsAvailable, " sur ").concat(beds, "</span>\n        </div>\n        <div>\n          <span>Respirateurs disponibles: </span>\n          <span>").concat(respiratorsAvailable, " sur ").concat(respirators, "</span>\n        </div>\n        <div>\n          <span>Masques N95/FFP2: </span>\n          <span>").concat(masks, "</span>\n        </div>\n      </div>\n      ");
+      new mapboxgl.Popup().setLngLat(coordinates).setHTML(HTML).addTo(map);
+    }); // Change the cursor to a pointer when the mouse is over the covid9 layer.
+
+    map.on("mouseenter", "covid9", function () {
+      map.getCanvas().style.cursor = "pointer";
+    });
     removeMapWaiting();
   });
 }
 
-function getData(map) {
-  var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+function RemoveDianosticMakers() {
+  AllMarkers.forEach(function (marker) {
+    marker.remove();
+  });
+}
+
+function getAllDianostics(map) {
   addMapWaiting();
-  $.get("/api/maps-stat?".concat(params), function (data) {
-    AllMarkers.forEach(function (marker) {
-      marker.remove();
-    });
+  $.get("/api/dashboard/orientation-medical-result?", function (data) {
+    RemoveDianosticMakers();
+    AllDianosticData = [];
     var total = 0;
 
     for (var marker in data) {
@@ -44944,6 +44991,7 @@ function getData(map) {
 
       // create a DOM element for the marker
       var item = data[marker];
+      AllDianosticData.push(item);
       var el = document.createElement('div');
       el.className = 'pie';
 
@@ -44977,9 +45025,37 @@ function getData(map) {
       _total += data[marker].count;
     }
 
-    $('#total-count').text(total);
-    $('#map-waiting').addClass('d-none');
+    removeMapWaiting();
   });
+}
+
+function getUniqueDiagnostics(orientation, map) {
+  if (AllDianosticData.length > 0) {
+    addMapWaiting();
+    RemoveDianosticMakers();
+    AllDianosticData.map(function (value) {
+      if (value[orientation] >= 0) {
+        var el = document.createElement('div');
+        el.className = "default-makers ".concat(orientation);
+
+        if (value[orientation] > 20) {
+          el.style = "width:90px;height:90px";
+        } else if (value[orientation] > 50) {
+          el.style = "width:120px;height:120px";
+        }
+
+        el.innerText = value[orientation]; // popup 
+
+        var popup = new mapboxgl.Popup({
+          offset: 25
+        }).setText(value.township); // add marker to map
+
+        var currentMarker = new mapboxgl.Marker(el).setLngLat([value.longitude, value.latitude]).setPopup(popup).addTo(map);
+        AllMarkers.push(currentMarker);
+        removeMapWaiting();
+      }
+    });
+  }
 }
 
 /***/ }),

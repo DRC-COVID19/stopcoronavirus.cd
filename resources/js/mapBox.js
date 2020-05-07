@@ -1,5 +1,6 @@
 var $ = require("jquery");
 let AllMarkers = [];
+let AllDianosticData = [];
 $(function () {
     let hoveredStateId = null;
     let hoveredStateIdKin = null;
@@ -78,7 +79,7 @@ $(function () {
             'id': 'state-borders-kin',
             'type': 'line',
             'source': 'statesKin',
-            
+
             "source-layer": "carte-administrative-de-la-vi-csh5cj",
             'layout': {},
             'paint': {
@@ -160,17 +161,35 @@ $(function () {
         if (item.is(':checked')) {
             getHospitals(map);
         } else {
+            map.off("mouseenter", "covid9_hospitals_layer");
+            map.off("mouseleave", "covid9_hospitals_layer");
+            map.off("click", "covid9_hospitals_layer");
             map.removeLayer("covid9_hospitals_layer");
             map.removeSource('covid9_hospitals_source');
         }
     });
 
-    $('#medical_orientation').change(function(e){
-        let item=$(this);
+    $('#medical_orientation').change(function (e) {
+        let item = $(this);
         if (item.is(':checked')) {
-            get
+            getAllDianostics(map);
+            $('#orientation_result').removeAttr('disabled');
+        }
+        else {
+            RemoveDianosticMakers();
+            $('#orientation_result').attr('disabled','disabled');
         }
     });
+
+    $('#orientation_result').change(function (e) {
+        let item = $(this);
+        if (item.val()) {
+            getUniqueDiagnostics(item.val(),map);
+        }else{
+            getAllDianostics(map);
+        }
+       
+    })
 });
 
 function addMapWaiting() {
@@ -242,26 +261,106 @@ function getHospitals(map) {
 
         map.on("mouseenter", "covid9_hospitals_layer", function () {
             map.getCanvas().style.cursor = "pointer";
-          });
-          map.on("mouseleave", "covid9_hospitals_layer", function () {
+        });
+        map.on("mouseleave", "covid9_hospitals_layer", function () {
             map.getCanvas().style.cursor = "";
+        });
+
+        map.on("click", "covid9_hospitals_layer", function (e) {
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const {
+                name,
+                address,
+                beds,
+                occupied_beds,
+                masks,
+                respirators,
+                occupied_respirators,
+                confirmed,
+                dead,
+                sick,
+                healed,
+                last_update,
+            } = e.features[0].properties;
+      
+           
+            // computed properties
+            const active = confirmed - dead - healed;
+            const bedsAvailable = beds - occupied_beds;
+            const respiratorsAvailable = respirators - occupied_respirators;
+
+            const HTML = `
+      <div>
+        <div class="hospital-name">${name}</div>
+        ${address ? `<div>Adresse: ${address}</div>` : ""}
+        <hr />
+        <div>
+          <strong>Situation Epidémiologique</strong>
+        </div>
+        <div class="confirmed">
+          <span>Confirmés: </span>
+          <span class="count">${confirmed}</span>
+        </div>
+        <div class="active">
+          <span>Actifs: </span>
+          <span class="count">${active}</span>
+        </div>
+        <div class="recovered">
+          <span>Guéris: </span>
+          <span class="count">${healed}</span>
+        </div>
+        <div class="death">
+          <span>Décès: </span>
+          <span class="count">${dead}</span>
+        </div>
+        <hr />
+        <div>
+          <strong>Capacité Hospitalière</strong>
+        </div>
+        <div>
+          <span>Lits disponibles: </span>
+          <span>${bedsAvailable} sur ${beds}</span>
+        </div>
+        <div>
+          <span>Respirateurs disponibles: </span>
+          <span>${respiratorsAvailable} sur ${respirators}</span>
+        </div>
+        <div>
+          <span>Masques N95/FFP2: </span>
+          <span>${masks}</span>
+        </div>
+      </div>
+      `;
+      
+            new mapboxgl.Popup().setLngLat(coordinates).setHTML(HTML).addTo(map);
           });
+      
+          // Change the cursor to a pointer when the mouse is over the covid9 layer.
+          map.on("mouseenter", "covid9", function () {
+            map.getCanvas().style.cursor = "pointer";
+          });
+
         removeMapWaiting();
     });
 
 }
-function getData(map, params = null) {
+
+function RemoveDianosticMakers() {
+    AllMarkers.forEach(function (marker) {
+        marker.remove();
+    });
+}
+function getAllDianostics(map) {
     addMapWaiting();
-    $.get(`/api/maps-stat?${params}`, function (data) {
+    $.get(`/api/dashboard/orientation-medical-result?`, function (data) {
 
-        AllMarkers.forEach(function (marker) {
-            marker.remove();
-        });
+        RemoveDianosticMakers();
+        AllDianosticData = [];
         let total = 0;
-
         for (const marker in data) {
             // create a DOM element for the marker
             let item = data[marker];
+            AllDianosticData.push(item);
             var el = document.createElement('div');
             el.className = 'pie';
             let total = item.FIN + item.FIN8 + item.FIN5;
@@ -272,9 +371,9 @@ function getData(map, params = null) {
             else if (total > 50) {
                 el.style = "width:120px;height:120px";
             }
-            var elSpan = document.createElement('span');
-            var elSpan2 = document.createElement('span');
-            var elSpan3 = document.createElement('span');
+            let elSpan = document.createElement('span');
+            let elSpan2 = document.createElement('span');
+            let elSpan3 = document.createElement('span');
             elSpan.className = "fin-5";
             elSpan2.className = "fin-8";
             elSpan3.className = "fin";
@@ -286,7 +385,7 @@ function getData(map, params = null) {
             el.appendChild(elSpan3);
 
             // popup 
-            var popup = new mapboxgl.Popup({ offset: 25 }).setText(
+            let popup = new mapboxgl.Popup({ offset: 25 }).setText(
                 data[marker].township
             );
             // add marker to map
@@ -297,7 +396,38 @@ function getData(map, params = null) {
             AllMarkers.push(currentMarker);
             total += data[marker].count;
         }
-        $('#total-count').text(total);
-        $('#map-waiting').addClass('d-none');
+        removeMapWaiting();
     });
+}
+
+function getUniqueDiagnostics(orientation,map) {
+    if (AllDianosticData.length > 0) {
+        addMapWaiting();
+        RemoveDianosticMakers();
+        AllDianosticData.map(function (value) {
+            if (value[orientation] >= 0) {
+                let el = document.createElement('div');
+                el.className = `default-makers ${orientation}`;
+                if (value[orientation] > 20) {
+                    el.style = "width:90px;height:90px";
+                }
+                else if (value[orientation] > 50) {
+                    el.style = "width:120px;height:120px";
+                }
+                el.innerText=value[orientation];
+                // popup 
+                let popup = new mapboxgl.Popup({ offset: 25 }).setText(
+                    value.township
+                );
+                // add marker to map
+                let currentMarker = new mapboxgl.Marker(el)
+                    .setLngLat([value.longitude, value.latitude])
+                    .setPopup(popup)
+                    .addTo(map);
+                AllMarkers.push(currentMarker);
+                removeMapWaiting();
+            }
+        });
+
+    }
 }
