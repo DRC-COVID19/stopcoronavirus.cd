@@ -14,7 +14,7 @@ class CategoriesDescription extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->text('description');
+            $table->text('description')->nullable();
         });
     }
 

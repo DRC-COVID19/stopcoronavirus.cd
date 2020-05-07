@@ -44693,7 +44693,7 @@ $(function () {
     container: 'map',
     center: [15.31389, -4.33167],
     zoom: 10,
-    style: 'mapbox://styles/merki230/ck9lfctvs2p2a1ilooj2fddnw'
+    style: 'mapbox://styles/merki230/ck9vd0zmy0lqk1jn3lpq81up8'
   });
   map.addControl(new mapboxgl.NavigationControl());
   map.on('load', function () {
@@ -44721,6 +44721,7 @@ $(function () {
     map.addLayer({
       'id': 'state-fills-kin',
       'type': 'fill',
+      "minzoom": 10,
       'source': 'statesKin',
       "source-layer": "carte-administrative-de-la-vi-csh5cj",
       'layout': {},
@@ -44835,13 +44836,103 @@ $(function () {
 
       hoveredStateIdKin = null;
     });
+  }); //getData(map);
+
+  $('#list_hospital').change(function (e) {
+    var item = $(this);
+
+    if (item.is(':checked')) {
+      getHospitals(map);
+    } else {
+      map.removeLayer("covid9_hospitals_layer");
+      map.removeSource('covid9_hospitals_source');
+    }
   });
-  getData(map);
+  $('#medical_orientation').change(function (e) {
+    var item = $(this);
+
+    if (item.is(':checked')) {
+      get;
+    }
+  });
 });
+
+function addMapWaiting() {
+  $('#map-waiting').removeClass('d-none');
+}
+
+function removeMapWaiting() {
+  $('#map-waiting').addClass('d-none');
+}
+
+function getHospitals(map) {
+  addMapWaiting();
+  $.get("/api/dashboard/hospitals", function (data) {
+    var hospitalData = data.map(function (value, index) {
+      return {
+        type: "Feature",
+        geometry: {
+          type: "Point",
+          coordinates: [value.longitude, value.latitude]
+        },
+        properties: {
+          name: value.name ? value.name : "Hopital",
+          address: value.address,
+          beds: value.beds,
+          occupied_beds: value.occupied_beds,
+          masks: value.masks,
+          respirators: value.respirators,
+          occupied_respirators: value.occupied_respirators,
+          confirmed: value.last_situation.confirmed,
+          dead: value.last_situation.dead,
+          sick: value.last_situation.sick,
+          healed: value.last_situation.healed,
+          last_update: value.last_situation.last_update,
+          color: "#ED5F68"
+        }
+      };
+    });
+    map.addSource("covid9_hospitals_source", {
+      type: "geojson",
+      data: {
+        type: "FeatureCollection",
+        features: hospitalData
+      }
+    });
+    map.addLayer({
+      id: "covid9_hospitals_layer",
+      type: "symbol",
+      source: "covid9_hospitals_source",
+      minzoom: 10,
+      layout: {
+        "text-line-height": 1,
+        "text-padding": 0,
+        "text-anchor": "center",
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+        "text-field": String.fromCharCode("0xf47e"),
+        "icon-optional": true,
+        "text-font": ["Font Awesome 5 Free Solid"],
+        "text-size": 30
+      },
+      paint: {
+        "text-translate-anchor": "viewport",
+        "text-color": ["get", "color"]
+      }
+    });
+    map.on("mouseenter", "covid9_hospitals_layer", function () {
+      map.getCanvas().style.cursor = "pointer";
+    });
+    map.on("mouseleave", "covid9_hospitals_layer", function () {
+      map.getCanvas().style.cursor = "";
+    });
+    removeMapWaiting();
+  });
+}
 
 function getData(map) {
   var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  $('#map-waiting').removeClass('d-none');
+  addMapWaiting();
   $.get("/api/maps-stat?".concat(params), function (data) {
     AllMarkers.forEach(function (marker) {
       marker.remove();
