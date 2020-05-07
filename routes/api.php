@@ -35,8 +35,9 @@ Route::get('/pandemicstatsasc', function () {
 });
 
 Route::group(['prefix' => 'dashboard'], function () {
-    Route::get('hospitals/','DashBoardController@getHospials');
+    Route::get('hospitals/', 'DashBoardController@getHospials');
+    Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
+    Route::get('sondages', 'DashBoardController@getSondages');
 });
 
-Route::post('self-test','SelfTestController@apiCovidTest');
-Route::get('maps-stat', 'SelfTestController@getMapsStat');
+Route::post('self-test', 'SelfTestController@apiCovidTest');

@@ -6,9 +6,11 @@ use App\Hospital;
 use App\Http\Resources\HospitalResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\MyTrait\GClientSheet;
 
 class DashBoardController extends Controller
 {
+    use GClientSheet;
     public function getHospials()
     {
         try {
@@ -66,5 +68,11 @@ class DashBoardController extends Controller
         }
 
         return response()->json($newArray);
+    }
+
+    public function getSondages()
+    {
+       $values= $this->readSheetValue(env('SONDAGE_SPREADSHEET_ID'),env('SONDAGE_SHEET_NAME'));
+       return $values;
     }
 }

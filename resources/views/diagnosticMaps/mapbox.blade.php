@@ -29,12 +29,18 @@
                         <label for="medical_orientation">{{__('Cas probable(Orientation médical)')}}</label>
                     </div>
                     <div class="group-control card-body">
-                        <select name="orientation_result" class="form-control" id="orientation_result">
+                        <select name="orientation_result" disabled class="form-control mb-3" id="orientation_result">
                             <option value=""></option>
-                            <option value="">{{__('Peu probable')}}</option>
-                            <option value="">{{__('Probable')}}</option>
-                            <option value="">{{__('Très probable')}}</option>
+                            <option value="FIN8">{{__('Peu probable')}}</option>
+                            <option value="FIN">{{__('Probable')}}</option>
+                            <option value="FIN5">{{__('Très probable')}}</option>
                         </select>
+                        <h4>Legende</h4>
+                        <div class="legende">
+                            <div><span class="fin-8"></span> Peu probale</div>
+                            <div><span class="fin"></span> Probable</div>
+                            <div><span class="fin-5"></span> Très probable</div>
+                        </div>
                     </div>
                 </div>
                 <hr>

@@ -13,6 +13,7 @@
         "encore/laravel-admin": "^1.7",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
+        "google/apiclient": "^2.4",
         "guzzlehttp/guzzle": "^6.3",
         "laravel-admin-ext/latlong": "^1.2",
         "laravel-admin-ext/summernote": "^1.0",

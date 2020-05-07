@@ -31,4 +31,10 @@ class DashBoardTest extends TestCase
         $response = $this->get('/api/dashboard/hospitals');
         $response->dump()->assertStatus(200);
     }
+
+    public function testSondage()
+    {
+        $response = $this->get('/api/dashboard/sondages');
+        $response->dump()->assertStatus(200);
+    }
 }
