@@ -7,6 +7,7 @@ namespace App\Http\MyTrait;
 trait GeoConding
 {
     private $townGeocoding = [];
+
     public function addTownGeoCoding($town, $province)
     {
         try {
@@ -38,12 +39,10 @@ trait GeoConding
             if ($province == $town) {
                 $provinceCopy = null;
             }
-            if (file_exists(storage_path('app/townGeocoding.json'))) {
-                $jsonString = file_get_contents(storage_path('app/townGeocoding.json'));
+            $geoCodingFilePath=storage_path('app/townGeocoding.json');
+            if (file_exists($geoCodingFilePath)) {
+                $jsonString = file_get_contents($geoCodingFilePath);
                 $data = json_decode($jsonString, true);
-                if (array_key_exists($index, $data)) {
-                    return $data[$index];
-                }
             }
             $client = new \GuzzleHttp\Client();
             $response = $client->request('GET', "https://api.mapbox.com/geocoding/v5/mapbox.places/{$town}, {$provinceCopy}.json?access_token={$MAP_BOX_KEY}&country=cd");
@@ -52,7 +51,7 @@ trait GeoConding
             if ($content && isset($content->features[0])) {
                 if (count($content->features) > 1) {
                     foreach ($content->features as $value) {
-                        if (strpos($value->place_name, strtoupper($province))) {
+                        if (strpos(strtoupper($value->place_name), $province)) {
                             $dataFind = $value->geometry->coordinates;
                             break;
                         }
@@ -63,13 +62,15 @@ trait GeoConding
                 }
                 $data[$index] = $dataFind;
                 $newJsonString = json_encode($data, JSON_PRETTY_PRINT);
-                file_put_contents(storage_path('app/townGeocoding.json'), stripslashes($newJsonString));
+                file_put_contents($geoCodingFilePath, stripslashes($newJsonString));
                 $this->townGeocoding = $data;
                 return $data[$index];
             }
             return null;
         } catch (\Throwable $th) {
-            return null;
+            //return null;
+            throw $th;
+            
         }
     }
 }

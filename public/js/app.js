@@ -44680,6 +44680,8 @@ var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"
 
 var AllMarkers = [];
 var AllDianosticData = [];
+var AllSondagesData = [];
+var AllSondagesMarkers = [];
 $(function () {
   var hoveredStateId = null;
   var hoveredStateIdKin = null;
@@ -44872,6 +44874,27 @@ $(function () {
       getAllDianostics(map);
     }
   });
+  $("#has_sondage").change(function (e) {
+    var item = $(this);
+
+    if (item.is(':checked')) {
+      getAllSondages();
+    }
+  });
+  $("#sondage-item input").change(function (e) {
+    var item = $(this);
+
+    if (item.is(':checked')) {
+      setMarkersSondage(item.attr('id'), map);
+    } else {
+      var sondage = item.attr('id');
+      AllSondagesMarkers.filter(function (x) {
+        return x[sondage];
+      }).map(function (item) {
+        item.remove();
+      });
+    }
+  });
 });
 
 function addMapWaiting() {
@@ -45044,6 +45067,7 @@ function getUniqueDiagnostics(orientation, map) {
           el.style = "width:120px;height:120px";
         }
 
+        el.style += "z-index:".concat(value[orientation]);
         el.innerText = value[orientation]; // popup 
 
         var popup = new mapboxgl.Popup({
@@ -45056,6 +45080,86 @@ function getUniqueDiagnostics(orientation, map) {
       }
     });
   }
+}
+
+function getAllSondages() {
+  addMapWaiting();
+  $.get("/api/dashboard/sondages", function (data) {
+    AllSondagesData = data;
+    removeMapWaiting();
+  });
+}
+
+function setMarkersSondage(sondage, map) {
+  addMapWaiting();
+  var values = AllSondagesData.filter(function (x) {
+    return x[sondage] && x[sondage] > 0;
+  });
+  values.map(function (item) {
+    var el = document.createElement('div');
+    var el2 = document.createElement('div');
+    el.className = "default-makers FIN";
+
+    if (item[sondage] > 20) {
+      el.style = "width:90px;height:90px;";
+    } else if (item[sondage] > 50) {
+      el.style = "width:120px;height:120px;";
+    }
+
+    el2.style.zIndex = item[sondage];
+    var offset = {
+      offset: [0, 0]
+    };
+    ;
+
+    switch (sondage) {
+      case 'worried':
+        offset = {
+          offset: [100, -50]
+        };
+        break;
+
+      case 'not_work':
+        offset = {
+          offset: [-100, 50]
+        };
+        break;
+
+      case 'toll_free_number':
+        offset = {
+          offset: [200, -50]
+        };
+        break;
+
+      case 'price_increase':
+        offset = {
+          offset: [-200, 50]
+        };
+        break;
+
+      case 'other_difficulty':
+        offset = {
+          offset: [300, -80]
+        };
+        break;
+
+      default:
+        break;
+    }
+
+    el.innerText = item[sondage]; // popup 
+
+    var popup = new mapboxgl.Popup({
+      offset: 25
+    }).setText(item.town);
+    el2.append(el); // add marker to map
+
+    var currentMarker = new mapboxgl.Marker(el2).setLngLat([item.longitude, item.latitude]).setPopup(popup).addTo(map);
+    currentMarker[sondage] = true;
+    AllSondagesMarkers.push(currentMarker);
+    removeMapWaiting();
+  });
+  removeMapWaiting();
 }
 
 /***/ }),
