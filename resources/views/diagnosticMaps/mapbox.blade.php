@@ -49,26 +49,26 @@
                         <input type="checkbox" class="styled-checkbox" name="has_sondage" id="has_sondage">
                         <label for="has_sondage">Sondages</label>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body " id="sondage-item">
                         <div class="group-control">
-                            <input type="checkbox" class="styled-checkbox" name="has_sondage" id="has_sondage">
-                            <label for="has_sondage">Sont inquiet ou très inquiet</label>
+                            <input type="checkbox" class="styled-checkbox" name="worried" id="worried">
+                            <label for="worried">Sont inquiet ou très inquiet</label>
                         </div>
                         <div class="group-control">
-                            <input type="checkbox" class="styled-checkbox" name="has_sondage" id="has_sondage">
-                            <label for="has_sondage">Ne peuvent déjà plus travailler</label>
+                            <input type="checkbox" class="styled-checkbox" name="not_work" id="not_work">
+                            <label for="not_work">Ne peuvent déjà plus travailler</label>
                         </div>
                         <div class="group-control">
-                            <input type="checkbox" class="styled-checkbox" name="has_sondage" id="has_sondage">
-                            <label for="has_sondage">Appellerait le numéro vert en cas de symptômes</label>
+                            <input type="checkbox" class="styled-checkbox" name="toll_free_number" id="toll_free_number">
+                            <label for="toll_free_number">Appellerait le numéro vert en cas de symptômes</label>
                         </div>
                         <div class="group-control">
-                            <input type="checkbox" class="styled-checkbox" name="has_sondage" id="has_sondage">
-                            <label for="has_sondage">Constatent une augmentation des prix des denrées essentielles</label>
+                            <input type="checkbox" class="styled-checkbox" name="price_increase" id="price_increase">
+                            <label for="price_increase">Constatent une augmentation des prix des denrées essentielles</label>
                         </div>
                         <div class="group-control">
-                            <input type="checkbox" class="styled-checkbox" name="has_sondage" id="has_sondage">
-                            <label for="has_sondage">Ont des difficultés à trouver des masques, 29% du charbon et de la farine, 28% de la Chloroquine, 26% de la Viande et des légumes</label>
+                            <input type="checkbox" class="styled-checkbox" name="other_difficulty" id="other_difficulty">
+                            <label for="other_difficulty">Ont des difficultés à trouver des masques, 29% du charbon et de la farine, 28% de la Chloroquine, 26% de la Viande et des légumes</label>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,8 @@
 var $ = require("jquery");
 let AllMarkers = [];
 let AllDianosticData = [];
+let AllSondagesData = [];
+let AllSondagesMarkers = [];
 $(function () {
     let hoveredStateId = null;
     let hoveredStateIdKin = null;
@@ -177,19 +179,39 @@ $(function () {
         }
         else {
             RemoveDianosticMakers();
-            $('#orientation_result').attr('disabled','disabled');
+            $('#orientation_result').attr('disabled', 'disabled');
         }
     });
 
     $('#orientation_result').change(function (e) {
         let item = $(this);
         if (item.val()) {
-            getUniqueDiagnostics(item.val(),map);
-        }else{
+            getUniqueDiagnostics(item.val(), map);
+        } else {
             getAllDianostics(map);
         }
-       
-    })
+
+    });
+
+    $("#has_sondage").change(function (e) {
+        let item = $(this);
+        if (item.is(':checked')) {
+            getAllSondages();
+        }
+    });
+
+    $("#sondage-item input").change(function (e) {
+        let item = $(this);
+        if (item.is(':checked')) {
+            setMarkersSondage(item.attr('id'), map);
+        } else {
+            let sondage = item.attr('id');
+            AllSondagesMarkers.filter(x => x[sondage]).map((item) => {
+                item.remove();
+            });
+        }
+    });
+
 });
 
 function addMapWaiting() {
@@ -282,8 +304,8 @@ function getHospitals(map) {
                 healed,
                 last_update,
             } = e.features[0].properties;
-      
-           
+
+
             // computed properties
             const active = confirmed - dead - healed;
             const bedsAvailable = beds - occupied_beds;
@@ -331,14 +353,14 @@ function getHospitals(map) {
         </div>
       </div>
       `;
-      
+
             new mapboxgl.Popup().setLngLat(coordinates).setHTML(HTML).addTo(map);
-          });
-      
-          // Change the cursor to a pointer when the mouse is over the covid9 layer.
-          map.on("mouseenter", "covid9", function () {
+        });
+
+        // Change the cursor to a pointer when the mouse is over the covid9 layer.
+        map.on("mouseenter", "covid9", function () {
             map.getCanvas().style.cursor = "pointer";
-          });
+        });
 
         removeMapWaiting();
     });
@@ -353,7 +375,6 @@ function RemoveDianosticMakers() {
 function getAllDianostics(map) {
     addMapWaiting();
     $.get(`/api/dashboard/orientation-medical-result?`, function (data) {
-
         RemoveDianosticMakers();
         AllDianosticData = [];
         let total = 0;
@@ -400,7 +421,7 @@ function getAllDianostics(map) {
     });
 }
 
-function getUniqueDiagnostics(orientation,map) {
+function getUniqueDiagnostics(orientation, map) {
     if (AllDianosticData.length > 0) {
         addMapWaiting();
         RemoveDianosticMakers();
@@ -414,7 +435,8 @@ function getUniqueDiagnostics(orientation,map) {
                 else if (value[orientation] > 50) {
                     el.style = "width:120px;height:120px";
                 }
-                el.innerText=value[orientation];
+                el.style += `z-index:${value[orientation]}`;
+                el.innerText = value[orientation];
                 // popup 
                 let popup = new mapboxgl.Popup({ offset: 25 }).setText(
                     value.township
@@ -430,4 +452,66 @@ function getUniqueDiagnostics(orientation,map) {
         });
 
     }
+}
+
+function getAllSondages() {
+    addMapWaiting();
+    $.get(`/api/dashboard/sondages`, function (data) {
+        AllSondagesData = data;
+        removeMapWaiting();
+    });
+}
+
+function setMarkersSondage(sondage, map) {
+    addMapWaiting();
+    let values = AllSondagesData.filter(x => x[sondage] && x[sondage] > 0);
+    values.map((item) => {
+        let el = document.createElement('div');
+        let el2 = document.createElement('div');
+        el.className = `default-makers FIN`;
+        if (item[sondage] > 20) {
+            el.style = "width:90px;height:90px;";
+        }
+        else if (item[sondage] > 50) {
+            el.style = "width:120px;height:120px;";
+        }
+        el2.style.zIndex = item[sondage];
+        let offset={offset: [0, 0]};;
+        switch (sondage) {
+            case 'worried':
+                offset={offset: [100, -50]};
+                break;
+            case 'not_work':
+                offset={offset: [-100, 50]};
+                break;
+            case 'toll_free_number':
+                offset={offset: [200, -50]};
+                break;
+            case 'price_increase':
+                offset={offset: [-200, 50]};
+                break;
+            case 'other_difficulty':
+                offset={offset: [300, -80]};
+                break;
+            default:
+                break;
+        }
+
+        el.innerText = item[sondage];
+        // popup 
+        let popup = new mapboxgl.Popup({ offset: 25 }).setText(
+            item.town
+        );
+        el2.append(el);
+        // add marker to map
+        let currentMarker = new mapboxgl.Marker(el2)
+            .setLngLat([item.longitude, item.latitude])
+            .setPopup(popup)
+            .addTo(map);
+
+        currentMarker[sondage] = true;
+        AllSondagesMarkers.push(currentMarker);
+        removeMapWaiting();
+    });
+    removeMapWaiting();
 }

@@ -30,12 +30,13 @@ class DashBoardController extends Controller
         $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', 'orientation', 'province', DB::raw('COUNT(*) as count')])
             ->groupBy('longitude', 'latitude', 'township', 'orientation', 'province')->get();
         $newArray = [];
+       
         foreach ($datafromDb as $value) {
             $province = str_replace('-', "_", $value->province);
             $province = str_replace(' ', "_", $province);
             $township = str_replace('-', "_", $value->township);
             $township = str_replace(' ', "_", $township);
-            $index = $province . "_" . $township;
+            $index =strtoupper($province . "_" . $township);
             if (array_key_exists($index, $newArray)) {
                 switch ($value->orientation) {
                     case 'FIN5':
@@ -75,24 +76,27 @@ class DashBoardController extends Controller
     {
         $sheetsValues = $this->readSheetValue(env('SONDAGE_SPREADSHEET_ID'), env('SONDAGE_SHEET_NAME'));
         $formattedArray = [];
-        $i = 0;
-        foreach ($sheetsValues as $value) {
-            if ($i == 0) {
-                $i++;
-                continue;
-            }
-            $key = "{$value[3]}_{$value[4]}";
-            if (array_key_exists($key, $formattedArray)) {
+        $countArray = count($sheetsValues);
+        $geoCodingFilePath=storage_path('app/townGeocoding.json');
+        if (file_exists($geoCodingFilePath)) {
+            $jsonString = file_get_contents($geoCodingFilePath);
+            $this->townGeocoding = json_decode($jsonString, true);
+        }
+        for ($i = 1; $i < $countArray; $i++) {
+            $value = $sheetsValues[$i];
+            $key = strtoupper("{$value[4]}_{$value[3]}");
+            if (isset($formattedArray[$key])) {
+                $formattedArray[$key] = $formattedArray[$key];
                 $formattedArray[$key]['count'] += 1;
                 if ($value[9] == "Inquiet" || $value[9] == "Très inquiet") {
-                    if (array_key_exists('worried', $formattedArray[$key])) {
+                    if (isset($formattedArray[$key]['worried'])) {
                         $formattedArray[$key]['worried'] += 1;
                     } else {
                         $formattedArray[$key]['worried'] = 1;
                     }
                 }
                 if ($value[15] == "Appeler le numéro vert") {
-                    if (array_key_exists('toll_free_number', $formattedArray[$key])) {
+                    if (isset($formattedArray[$key]['toll_free_number'])) {
                         $formattedArray[$key]['toll_free_number'] += 1;
                     } else {
                         $formattedArray[$key]['toll_free_number'] = 1;
@@ -104,33 +108,40 @@ class DashBoardController extends Controller
                     $value[20] == "Je n'ai plus de clients"
                 ) {
 
-                    if (array_key_exists('not_work', $formattedArray[$key])) {
+                    if (isset($formattedArray[$key]['not_work'])) {
                         $formattedArray[$key]['not_work'] += 1;
                     } else {
                         $formattedArray[$key]['not_work'] = 1;
                     }
                 }
-                if (strpos("Augmentation des prix", $value[22])) {
-                    if (array_key_exists('price_increase', $formattedArray[$key])) {
+                if (strpos($value[22],"Augmentation des prix")) {
+                    if (isset($formattedArray[$key]['price_increase'])) {
                         $formattedArray[$key]['price_increase'] += 1;
                     } else {
                         $formattedArray[$key]['price_increase'] = 1;
                     }
                 }
                 if (
-                    strpos("Masque", $value[18]) ||
-                    strpos("Makala", $value[18]) ||
-                    strpos("Farine", $value[18]) ||
-                    strpos("viande", $value[18])
+                    strpos( $value[18],"Masque") ||
+                    strpos($value[18],'Makala') ||
+                    strpos($value[18],'Farine') ||
+                    strpos($value[18],'viande')
                 ) {
-                    if (array_key_exists('other_difficulty', $formattedArray[$key])) {
+                    if (isset($formattedArray[$key]['other_difficulty'])) {
                         $formattedArray[$key]['other_difficulty'] += 1;
                     } else {
                         $formattedArray[$key]['other_difficulty'] = 1;
                     }
                 }
             } else {
-                $coordonne = $this->addTownGeoCoding($value[3], $value[4]);
+                $coordonne =null;
+                if (isset($this->townGeocoding[$key])) {
+                    $coordonne=$this->townGeocoding[$key];
+                }
+                else{
+                    // $coordonne = $this->addTownGeoCoding($value[4], $value[3]);
+                }
+                
                 if ($coordonne) {
                     $formattedArray[$key]['count'] = 1;
                     $formattedArray[$key]['province'] = $value[3];
@@ -161,9 +172,7 @@ class DashBoardController extends Controller
                     }
                 }
             }
-            $i++;
-            dump($i);
         }
-        return $formattedArray;
+        return response()->json(array_values($formattedArray));
     }
 }
