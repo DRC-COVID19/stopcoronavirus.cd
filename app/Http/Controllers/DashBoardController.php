@@ -139,7 +139,7 @@ class DashBoardController extends Controller
                     $coordonne=$this->townGeocoding[$key];
                 }
                 else{
-                    // $coordonne = $this->addTownGeoCoding($value[4], $value[3]);
+                     $coordonne = $this->addTownGeoCoding($value[4], $value[3]);
                 }
                 
                 if ($coordonne) {
