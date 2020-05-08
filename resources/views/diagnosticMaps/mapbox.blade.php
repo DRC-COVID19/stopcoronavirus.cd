@@ -6,7 +6,7 @@
     <title>Document</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
-    <link href="{{ asset('css/app.css?v=4.93') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v=4.94') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
@@ -88,6 +88,6 @@
         </div>
         <p>{{__("Fetching Data")}}</p>
     </div>
-    <script src="{{ asset('js/app.js?v=1.83') }}" defer></script>
+    <script src="{{ asset('js/app.js?v=1.84') }}" defer></script>
 </body>
 </html>
