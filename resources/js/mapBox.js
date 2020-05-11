@@ -505,7 +505,7 @@ function setMarkersSondage(sondage, map) {
         );
         el2.append(el);
         // add marker to map
-        let currentMarker = new mapboxgl.Marker(el2, map.getZoom()<9?{ offset: [0,0] } :offSet)
+        let currentMarker = new mapboxgl.Marker(el2, map.getZoom()<9?{ offset: [0,0] } :offset)
             .setLngLat([item.longitude, item.latitude])
             .setPopup(popup)
             .addTo(map);
