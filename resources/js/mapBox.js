@@ -156,7 +156,30 @@ $(function () {
             hoveredStateIdKin = null;
         });
     });
-    //getData(map);
+    map.on('zoomend', function () {
+        var currentZoom = map.getZoom();
+        AllSondagesMarkers.map((item) => {
+            if (currentZoom < 9) {
+                item.setOffset([0, 0]);
+            }
+            else {
+                item.setOffset(item.defaultOffset);
+            }
+        });
+
+        AllMarkers.map((item) => {
+            if (currentZoom < 9) {
+                item.setOffset([0, 0]);
+            }
+            else {
+                item.setOffset(item.defaultOffset);
+            }
+        });
+
+    });
+    $('#hospital-data-close').click(function (e) {
+        $('#hospital-data').addClass('d-none');
+    });
 
     $('#list_hospital').change(function (e) {
         let item = $(this);
@@ -168,6 +191,7 @@ $(function () {
             map.off("click", "covid9_hospitals_layer");
             map.removeLayer("covid9_hospitals_layer");
             map.removeSource('covid9_hospitals_source');
+            $('#hospital-data').addClass('d-none');
         }
     });
 
@@ -197,6 +221,9 @@ $(function () {
         let item = $(this);
         if (item.is(':checked')) {
             getAllSondages();
+            $('#sondage-item input').removeAttr('disabled');
+        } else {
+            $('#sondage-item input').attr('disabled', 'disabled');
         }
     });
 
@@ -262,7 +289,7 @@ function getHospitals(map) {
             id: "covid9_hospitals_layer",
             type: "symbol",
             source: "covid9_hospitals_source",
-            minzoom: 10,
+            // minzoom: 10,
             layout: {
                 "text-line-height": 1,
                 "text-padding": 0,
@@ -272,7 +299,11 @@ function getHospitals(map) {
                 "text-field": String.fromCharCode("0xf47e"),
                 "icon-optional": true,
                 "text-font": ["Font Awesome 5 Free Solid"],
-                "text-size": 30,
+                "text-size": [
+                    "interpolate", ["linear"], ["zoom"],
+                    5, 10,
+                    10, 25
+                ],
 
             },
             paint: {
@@ -311,50 +342,24 @@ function getHospitals(map) {
             const bedsAvailable = beds - occupied_beds;
             const respiratorsAvailable = respirators - occupied_respirators;
 
+            $('#hospital_name').text(name);
+            $('#hospital_address').text(address);
+            $('#beds').text(`${bedsAvailable} sur ${beds}`);
+            $('#masks').text(masks);
+            $('#respirators').text(`${respiratorsAvailable} sur ${respirators}`);
+            $('#sick_confirmed').text(confirmed);
+            $('#sick_active').text(active);
+            $('#sick_recovered').text(healed);
+            $('#sick_death').text(dead);
+
             const HTML = `
       <div>
         <div class="hospital-name">${name}</div>
-        ${address ? `<div>Adresse: ${address}</div>` : ""}
-        <hr />
-        <div>
-          <strong>Situation Epidémiologique</strong>
-        </div>
-        <div class="confirmed">
-          <span>Confirmés: </span>
-          <span class="count">${confirmed}</span>
-        </div>
-        <div class="active">
-          <span>Actifs: </span>
-          <span class="count">${active}</span>
-        </div>
-        <div class="recovered">
-          <span>Guéris: </span>
-          <span class="count">${healed}</span>
-        </div>
-        <div class="death">
-          <span>Décès: </span>
-          <span class="count">${dead}</span>
-        </div>
-        <hr />
-        <div>
-          <strong>Capacité Hospitalière</strong>
-        </div>
-        <div>
-          <span>Lits disponibles: </span>
-          <span>${bedsAvailable} sur ${beds}</span>
-        </div>
-        <div>
-          <span>Respirateurs disponibles: </span>
-          <span>${respiratorsAvailable} sur ${respirators}</span>
-        </div>
-        <div>
-          <span>Masques N95/FFP2: </span>
-          <span>${masks}</span>
-        </div>
       </div>
       `;
 
             new mapboxgl.Popup().setLngLat(coordinates).setHTML(HTML).addTo(map);
+            $('#hospital-data').removeClass('d-none');
         });
 
         // Change the cursor to a pointer when the mouse is over the covid9 layer.
@@ -374,7 +379,7 @@ function RemoveDianosticMakers() {
 }
 function getAllDianostics(map) {
     addMapWaiting();
-    $.get(`/api/dashboard/orientation-medical-result?`, function (data) {
+    $.get(`/api/dashboard/orientation-medical-result`, function (data) {
         RemoveDianosticMakers();
         AllDianosticData = [];
         let total = 0;
@@ -386,11 +391,8 @@ function getAllDianostics(map) {
             el.className = 'pie';
             let total = item.FIN + item.FIN8 + item.FIN5;
 
-            if (total > 20) {
-                el.style = "width:90px;height:90px";
-            }
-            else if (total > 50) {
-                el.style = "width:120px;height:120px";
+            if (total > 50) {
+                el.style = "width:40px;height:40px;";
             }
             let elSpan = document.createElement('span');
             let elSpan2 = document.createElement('span');
@@ -410,10 +412,12 @@ function getAllDianostics(map) {
                 data[marker].township
             );
             // add marker to map
-            let currentMarker = new mapboxgl.Marker(el)
+            let offSet = { offset: [-70, 30] };
+            let currentMarker = new mapboxgl.Marker(el, map.getZoom()<9?{ offset: [0,0] } :offSet)
                 .setLngLat([data[marker].longitude, data[marker].latitude])
                 .setPopup(popup)
                 .addTo(map);
+            currentMarker.defaultOffset = offSet.offset;
             AllMarkers.push(currentMarker);
             total += data[marker].count;
         }
@@ -429,11 +433,8 @@ function getUniqueDiagnostics(orientation, map) {
             if (value[orientation] >= 0) {
                 let el = document.createElement('div');
                 el.className = `default-makers ${orientation}`;
-                if (value[orientation] > 20) {
-                    el.style = "width:90px;height:90px";
-                }
-                else if (value[orientation] > 50) {
-                    el.style = "width:120px;height:120px";
+                if (value[orientation] > 50) {
+                    el.style = "width:40px;height:40px;";
                 }
                 el.style += `z-index:${value[orientation]}`;
                 el.innerText = value[orientation];
@@ -442,10 +443,12 @@ function getUniqueDiagnostics(orientation, map) {
                     value.township
                 );
                 // add marker to map
-                let currentMarker = new mapboxgl.Marker(el)
+                let offSet = { offset: [-70, 30] };
+                let currentMarker = new mapboxgl.Marker(el,map.getZoom()<9?{ offset: [0,0] } :offSet)
                     .setLngLat([value.longitude, value.latitude])
                     .setPopup(popup)
                     .addTo(map);
+                currentMarker.defaultOffset = offSet.offset;
                 AllMarkers.push(currentMarker);
                 removeMapWaiting();
             }
@@ -468,30 +471,28 @@ function setMarkersSondage(sondage, map) {
     values.map((item) => {
         let el = document.createElement('div');
         let el2 = document.createElement('div');
-        el.className = `default-makers FIN`;
-        if (item[sondage] > 20) {
-            el.style = "width:90px;height:90px;";
-        }
-        else if (item[sondage] > 50) {
-            el.style = "width:120px;height:120px;";
+        el.className = `default-makers ${sondage}`;
+        let defaultSize = "width:30px;height:30px;";
+        if (item[sondage] > 50) {
+            el.style = defaultSize;
         }
         el2.style.zIndex = item[sondage];
-        let offset={offset: [0, 0]};;
+        let offset = { offset: [0, 0] };;
         switch (sondage) {
             case 'worried':
-                offset={offset: [100, -50]};
+                offset = { offset: [10, 0] };
                 break;
             case 'not_work':
-                offset={offset: [-100, 50]};
+                offset = { offset: [20, 50] };
                 break;
             case 'toll_free_number':
-                offset={offset: [200, -50]};
+                offset = { offset: [50, 30] };
                 break;
             case 'price_increase':
-                offset={offset: [-200, 50]};
+                offset = { offset: [-20, 30] };
                 break;
             case 'other_difficulty':
-                offset={offset: [300, -80]};
+                offset = { offset: [-40, 0] };
                 break;
             default:
                 break;
@@ -504,12 +505,14 @@ function setMarkersSondage(sondage, map) {
         );
         el2.append(el);
         // add marker to map
-        let currentMarker = new mapboxgl.Marker(el2)
+        let currentMarker = new mapboxgl.Marker(el2, map.getZoom()<9?{ offset: [0,0] } :offSet)
             .setLngLat([item.longitude, item.latitude])
             .setPopup(popup)
             .addTo(map);
 
         currentMarker[sondage] = true;
+        currentMarker.defaultOffset = offset.offset;
+        currentMarker.defaultSize = defaultSize;
         AllSondagesMarkers.push(currentMarker);
         removeMapWaiting();
     });

@@ -99,13 +99,13 @@
 .pie {
     /* Basic layout */
     display: inline-block;
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     overflow: hidden;
     color: #fff;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 0.8rem;
     /* A little styling */
     border: 0.15em solid #fff;
 
@@ -288,14 +288,14 @@
     }
 }
 .default-makers {
-    width: 50px;
-    height: 50px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 0.7rem;
     &::before {
         width: 60%;
         height: 60%;
@@ -331,6 +331,65 @@
         &::before,
         &::after {
             background: $fin;
+        }
+    }
+
+    &.worried {
+        background: $worried;
+    }
+    &.not_work {
+        background: $not_work;
+    }
+    &.toll_free_number {
+        background: $toll_free_number;
+    }
+    &.price_increase {
+        background: $price_increase;
+    }
+    &.other_difficulty {
+        background: $other_difficulty;
+    }
+}
+#hospital-data {
+    position: absolute;
+    bottom: 0;
+    background: white;
+    left: 0;
+    right: 0;
+    z-index: 999999;
+    #hospital-data-close {
+        cursor: pointer;
+    }
+}
+#sondage-item {
+    #worried {
+        + label {
+            border-right: 15px solid $worried;
+            padding-right: 5px;
+        }
+    }
+    #not_work {
+        + label {
+            border-right: 15px solid $not_work;
+            padding-right: 5px;
+        }
+    }
+    #toll_free_number {
+        + label {
+            border-right: 15px solid $toll_free_number;
+            padding-right: 5px;
+        }
+    }
+    #price_increase {
+        + label {
+            border-right: 15px solid $price_increase;
+            padding-right: 5px;
+        }
+    }
+    #other_difficulty {
+        + label {
+            border-right: 15px solid $other_difficulty;
+            padding-right: 5px;
         }
     }
 }
