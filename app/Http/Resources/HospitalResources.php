@@ -19,7 +19,7 @@ class HospitalResources extends JsonResource
             'name' => $this->name,
             'address' => $this->address,
             'beds' => $this->beds,
-            'occupied_beds' => $this->occupied_beds,
+            'occupied_beds' => $this->occupied_Beds,
             'respirators' => $this->respirators,
             'occupied_respirators' => $this->occupied_respirators,
             'masks' => $this->masks,
