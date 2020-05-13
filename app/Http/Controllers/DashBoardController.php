@@ -30,13 +30,13 @@ class DashBoardController extends Controller
         $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', 'orientation', 'province', DB::raw('COUNT(*) as count')])
             ->groupBy('longitude', 'latitude', 'township', 'orientation', 'province')->get();
         $newArray = [];
-       
+
         foreach ($datafromDb as $value) {
             $province = str_replace('-', "_", $value->province);
             $province = str_replace(' ', "_", $province);
             $township = str_replace('-', "_", $value->township);
             $township = str_replace(' ', "_", $township);
-            $index =strtoupper($province . "_" . $township);
+            $index = strtoupper($province . "_" . $township);
             if (array_key_exists($index, $newArray)) {
                 switch ($value->orientation) {
                     case 'FIN5':
@@ -77,7 +77,7 @@ class DashBoardController extends Controller
         $sheetsValues = $this->readSheetValue(env('SONDAGE_SPREADSHEET_ID'), env('SONDAGE_SHEET_NAME'));
         $formattedArray = [];
         $countArray = count($sheetsValues);
-        $geoCodingFilePath=storage_path('app/townGeocoding.json');
+        $geoCodingFilePath = storage_path('app/townGeocoding.json');
         if (file_exists($geoCodingFilePath)) {
             $jsonString = file_get_contents($geoCodingFilePath);
             $this->townGeocoding = json_decode($jsonString, true);
@@ -93,6 +93,26 @@ class DashBoardController extends Controller
                         $formattedArray[$key]['worried'] += 1;
                     } else {
                         $formattedArray[$key]['worried'] = 1;
+                    }
+                }
+                if ($value[9] == "Pas très inquiet" || $value[9] == "Un peu inquiet" || $value[9] == "Pas inquiet") {
+                    if (isset($formattedArray[$key]['not_worried'])) {
+                        $formattedArray[$key]['not_worried'] += 1;
+                    } else {
+                        $formattedArray[$key]['not_worried'] = 1;
+                    }
+                }
+                if ($value[11] == "Possible" || $value[11] == "Bien sûr") {
+                    if (isset($formattedArray[$key]['catch_virus'])) {
+                        $formattedArray[$key]['catch_virus'] += 1;
+                    } else {
+                        $formattedArray[$key]['catch_virus'] = 1;
+                    }
+                } else {
+                    if (isset($formattedArray[$key]['not_catch_virus'])) {
+                        $formattedArray[$key]['not_catch_virus'] += 1;
+                    } else {
+                        $formattedArray[$key]['not_catch_virus'] = 1;
                     }
                 }
                 if ($value[15] == "Appeler le numéro vert") {
@@ -114,7 +134,7 @@ class DashBoardController extends Controller
                         $formattedArray[$key]['not_work'] = 1;
                     }
                 }
-                if (strpos($value[22],"Augmentation des prix")) {
+                if (strpos($value[22], "Augmentation des prix")) {
                     if (isset($formattedArray[$key]['price_increase'])) {
                         $formattedArray[$key]['price_increase'] += 1;
                     } else {
@@ -122,10 +142,10 @@ class DashBoardController extends Controller
                     }
                 }
                 if (
-                    strpos( $value[18],"Masque") ||
-                    strpos($value[18],'Makala') ||
-                    strpos($value[18],'Farine') ||
-                    strpos($value[18],'viande')
+                    strpos($value[18], "Masque") ||
+                    strpos($value[18], 'Makala') ||
+                    strpos($value[18], 'Farine') ||
+                    strpos($value[18], 'viande')
                 ) {
                     if (isset($formattedArray[$key]['other_difficulty'])) {
                         $formattedArray[$key]['other_difficulty'] += 1;
@@ -134,14 +154,13 @@ class DashBoardController extends Controller
                     }
                 }
             } else {
-                $coordonne =null;
+                $coordonne = null;
                 if (isset($this->townGeocoding[$key])) {
-                    $coordonne=$this->townGeocoding[$key];
+                    $coordonne = $this->townGeocoding[$key];
+                } else {
+                    //$coordonne = $this->addTownGeoCoding($value[4], $value[3]);
                 }
-                else{
-                     $coordonne = $this->addTownGeoCoding($value[4], $value[3]);
-                }
-                
+
                 if ($coordonne) {
                     $formattedArray[$key]['count'] = 1;
                     $formattedArray[$key]['province'] = $value[3];
@@ -151,8 +170,16 @@ class DashBoardController extends Controller
                     if ($value[9] == "Inquiet" || $value[9] == "Très inquiet") {
                         $formattedArray[$key]['worried'] = 1;
                     }
+                    if ($value[9] == "Pas très inquiet" || $value[9] == "Un peu inquiet") {
+                        $formattedArray[$key]['not_worried'] = 1;
+                    }
                     if ($value[15] == "Appeler le numéro vert") {
                         $formattedArray[$key]['toll_free_number'] = 1;
+                    }
+                    if ($value[11] == "Possible" || $value[11] == "Bien sûr") {
+                        $formattedArray[$key]['catch_virus'] = 1;
+                    } else {
+                        $formattedArray[$key]['not_catch_virus'] = 1;
                     }
                     if (
                         $value[20] == "Je ne peux plus travailler" ||

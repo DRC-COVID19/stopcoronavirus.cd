@@ -6,27 +6,28 @@
     <title>Document</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
-    <link href="{{ asset('css/app.css?v=4.96') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v=4.97') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 col-md-3 pb-3 column-left">
-                <h1 class="row  map-form-header mb-3"><i class="fas fa-hospital-symbol"></i> {{__('Capacité Hospitalière COVID-19')}}</h1>
+                <h1 class="row  map-form-header mb-0 justify-content-center">{{__('Dashboard COVID-19')}}</h1>
+                <div class="row mb-3 map-form-logo justify-content-center">
+                    <img src="{{asset('img/partners_top.png')}}" height="55" width="200" class="img-fluid" alt="">
+                </div>
                 {{-- <a href="{{route('admin.home')}}"><i class="fa fa-arrow-left"></i> Retour</a> --}}
 
-                <div class="card">
+                <div class="card mb-3">
                     <div class="group-control card-body">
                         <input type="checkbox" class="styled-checkbox" name="list_hospital" id="list_hospital">
                         <label for="list_hospital">{{__('Liste hôpitaux')}}</label>
                     </div>
                 </div>
-
-                <hr>
-                <div class="card">
+                <div class="card mb-3">
                     <div class="group-control card-header">
                         <input type="checkbox" class="styled-checkbox" name="medical_orientation" id="medical_orientation">
-                        <label for="medical_orientation">{{__('Cas probable(Orientation médical)')}}</label>
+                        <label for="medical_orientation">{{__("Cas probable (issu du formulaire d'orientation médical)")}}</label>
                     </div>
                     <div class="group-control card-body">
                         <select name="orientation_result" disabled class="form-control mb-3" id="orientation_result">
@@ -43,8 +44,7 @@
                         </div>
                     </div>
                 </div>
-                <hr>
-                <div class="card">
+                <div class="card mb-3">
                     <div class="group-control card-header">
                         <input type="checkbox" class="styled-checkbox" name="has_sondage" id="has_sondage">
                         <label for="has_sondage">Sondages</label>
@@ -52,16 +52,20 @@
                     <div class="card-body " id="sondage-item">
                         <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="worried" id="worried">
-                            <label for="worried">Sont inquiet ou très inquiet</label>
+                            <label for="worried">A quel point cela vous inquiète ?</label>
                         </div>
                         <div class="group-control">
+                            <input type="checkbox" class="styled-checkbox" disabled name="catch_virus" id="catch_virus">
+                            <label for="catch_virus">Est-ce que vous pensez que vous pourriez attraper le virus ?</label>
+                        </div>
+                        {{-- <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="not_work" id="not_work">
                             <label for="not_work">Ne peuvent déjà plus travailler</label>
-                        </div>
-                        <div class="group-control">
+                        </div> --}}
+                        {{-- <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="toll_free_number" id="toll_free_number">
                             <label for="toll_free_number">Appellerait le numéro vert en cas de symptômes</label>
-                        </div>
+                        </div> --}}
                         <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="price_increase" id="price_increase">
                             <label for="price_increase">Constatent une augmentation des prix des denrées essentielles</label>
@@ -136,6 +140,6 @@
         </div>
         <p>{{__("Fetching Data")}}</p>
     </div>
-    <script src="{{ asset('js/app.js?v=1.86') }}" defer></script>
+    <script src="{{ asset('js/app.js?v=1.87') }}" defer></script>
 </body>
 </html>

@@ -32,39 +32,39 @@ $(function () {
 
         // The feature-state dependent fill-opacity expression will render the hover effect
         // when a feature's hover state is set to true.
-        map.addLayer({
-            'id': 'state-fills',
-            'type': 'fill',
-            'source': 'states',
-            'layout': {},
-            'paint': {
-                'fill-color': '#627BC1',
-                'fill-opacity': [
-                    'case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    0.3,
-                    0
-                ]
-            }
-        });
+        // map.addLayer({
+        //     'id': 'state-fills',
+        //     'type': 'fill',
+        //     'source': 'states',
+        //     'layout': {},
+        //     'paint': {
+        //         'fill-color': '#627BC1',
+        //         'fill-opacity': [
+        //             'case',
+        //             ['boolean', ['feature-state', 'hover'], false],
+        //             0.3,
+        //             0
+        //         ]
+        //     }
+        // });
 
-        map.addLayer({
-            'id': 'state-fills-kin',
-            'type': 'fill',
-            "minzoom": 10,
-            'source': 'statesKin',
-            "source-layer": "carte-administrative-de-la-vi-csh5cj",
-            'layout': {},
-            'paint': {
-                'fill-color': '#627BC1',
-                'fill-opacity': [
-                    'case',
-                    ['boolean', ['feature-state', 'hover'], false],
-                    0.3,
-                    0
-                ]
-            }
-        });
+        // map.addLayer({
+        //     'id': 'state-fills-kin',
+        //     'type': 'fill',
+        //     "minzoom": 10,
+        //     'source': 'statesKin',
+        //     "source-layer": "carte-administrative-de-la-vi-csh5cj",
+        //     'layout': {},
+        //     'paint': {
+        //         'fill-color': '#627BC1',
+        //         'fill-opacity': [
+        //             'case',
+        //             ['boolean', ['feature-state', 'hover'], false],
+        //             0.3,
+        //             0
+        //         ]
+        //     }
+        // });
 
         map.addLayer({
             'id': 'state-borders',
@@ -92,80 +92,80 @@ $(function () {
 
         // When the user moves their mouse over the state-fill layer, we'll update the
         // feature state for the feature under the mouse.
-        map.on('mousemove', 'state-fills', function (e) {
-            if (e.features.length > 0) {
-                if (e.features[0].properties['ISO3166-2'] == "CD-KN") {
-                    if (hoveredStateId) {
-                        map.setFeatureState(
-                            { source: 'states', id: hoveredStateId },
-                            { hover: false }
-                        );
-                    }
-                    hoveredStateId = null;
-                    return;
-                }
-                if (hoveredStateId) {
-                    map.setFeatureState(
-                        { source: 'states', id: hoveredStateId },
-                        { hover: false }
-                    );
-                }
-                hoveredStateId = e.features[0].id;
-                map.setFeatureState(
-                    { source: 'states', id: hoveredStateId },
-                    { hover: true }
-                );
-            }
-        });
+        // map.on('mousemove', 'state-fills', function (e) {
+        //     if (e.features.length > 0) {
+        //         if (e.features[0].properties['ISO3166-2'] == "CD-KN") {
+        //             if (hoveredStateId) {
+        //                 map.setFeatureState(
+        //                     { source: 'states', id: hoveredStateId },
+        //                     { hover: false }
+        //                 );
+        //             }
+        //             hoveredStateId = null;
+        //             return;
+        //         }
+        //         if (hoveredStateId) {
+        //             map.setFeatureState(
+        //                 { source: 'states', id: hoveredStateId },
+        //                 { hover: false }
+        //             );
+        //         }
+        //         hoveredStateId = e.features[0].id;
+        //         map.setFeatureState(
+        //             { source: 'states', id: hoveredStateId },
+        //             { hover: true }
+        //         );
+        //     }
+        // });
 
-        map.on('mousemove', 'state-fills-kin', function (e) {
-            if (e.features.length > 0) {
-                if (hoveredStateIdKin) {
-                    map.setFeatureState(
-                        { source: 'statesKin', sourceLayer: 'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
-                        { hover: false }
-                    );
-                }
-                hoveredStateIdKin = e.features[0].id;
-                map.setFeatureState(
-                    { source: 'statesKin', sourceLayer: 'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
-                    { hover: true }
-                );
-            }
-        });
+        // map.on('mousemove', 'state-fills-kin', function (e) {
+        //     if (e.features.length > 0) {
+        //         if (hoveredStateIdKin) {
+        //             map.setFeatureState(
+        //                 { source: 'statesKin', sourceLayer: 'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
+        //                 { hover: false }
+        //             );
+        //         }
+        //         hoveredStateIdKin = e.features[0].id;
+        //         map.setFeatureState(
+        //             { source: 'statesKin', sourceLayer: 'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
+        //             { hover: true }
+        //         );
+        //     }
+        // });
 
         // When the mouse leaves the state-fill layer, update the feature state of the
         // previously hovered feature.
-        map.on('mouseleave', 'state-fills', function () {
-            if (hoveredStateId) {
-                map.setFeatureState(
-                    { source: 'states', id: hoveredStateId },
-                    { hover: false }
-                );
-            }
-            hoveredStateId = null;
-        });
+        // map.on('mouseleave', 'state-fills', function () {
+        //     if (hoveredStateId) {
+        //         map.setFeatureState(
+        //             { source: 'states', id: hoveredStateId },
+        //             { hover: false }
+        //         );
+        //     }
+        //     hoveredStateId = null;
+        // });
 
-        map.on('mouseleave', 'state-fills-kin', function () {
-            if (hoveredStateIdKin) {
-                map.setFeatureState(
-                    { source: 'statesKin', sourceLayer: 'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
-                    { hover: false }
-                );
-            }
-            hoveredStateIdKin = null;
-        });
+        // map.on('mouseleave', 'state-fills-kin', function () {
+        //     if (hoveredStateIdKin) {
+        //         map.setFeatureState(
+        //             { source: 'statesKin', sourceLayer: 'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
+        //             { hover: false }
+        //         );
+        //     }
+        //     hoveredStateIdKin = null;
+        // });
     });
     map.on('zoomend', function () {
         var currentZoom = map.getZoom();
-        AllSondagesMarkers.map((item) => {
-            if (currentZoom < 9) {
-                item.setOffset([0, 0]);
-            }
-            else {
-                item.setOffset(item.defaultOffset);
-            }
-        });
+        // AllSondagesMarkers.map((item) => {
+        //     if (currentZoom < 9) {
+        //         item.setOffset([0, 0]);
+        //     }
+        //     else {
+        //         item.setOffset(item.defaultOffset);
+        //     }
+        // });
 
         AllMarkers.map((item) => {
             if (currentZoom < 9) {
@@ -224,6 +224,10 @@ $(function () {
             $('#sondage-item input').removeAttr('disabled');
         } else {
             $('#sondage-item input').attr('disabled', 'disabled');
+            $('#sondage-item input').prop('checked', false);
+            AllSondagesMarkers.map((item) => {
+                item.remove();
+            });
         }
     });
 
@@ -267,11 +271,11 @@ function getHospitals(map) {
                     masks: value.masks,
                     respirators: value.respirators,
                     occupied_respirators: value.occupied_respirators,
-                    confirmed: value.last_situation? value.last_situation.confirmed:0,
-                    dead: value.last_situation?value.last_situation.dead:0,
-                    sick: value.last_situation?value.last_situation.sick:0,
-                    healed: value.last_situation?value.last_situation.healed:0,
-                    last_update:value.last_situation? value.last_situation.last_update:0,
+                    confirmed: value.last_situation ? value.last_situation.confirmed : 0,
+                    dead: value.last_situation ? value.last_situation.dead : 0,
+                    sick: value.last_situation ? value.last_situation.sick : 0,
+                    healed: value.last_situation ? value.last_situation.healed : 0,
+                    last_update: value.last_situation ? value.last_situation.last_update : 0,
                     color: "#ED5F68"
                 }
             };
@@ -407,14 +411,22 @@ function getAllDianostics(map) {
             el.appendChild(elSpan2);
             el.appendChild(elSpan3);
 
+            let longitude = data[marker].longitude;
+            let latitude = data[marker].latitude;
+
+            longitude = data[marker].longitude + (200 / 100000);
+            latitude = data[marker].latitude + (300 / 100000)
+
             // popup 
             let popup = new mapboxgl.Popup({ offset: 25 }).setText(
                 data[marker].township
             );
             // add marker to map
             let offSet = { offset: [-70, 30] };
-            let currentMarker = new mapboxgl.Marker(el, map.getZoom()<9?{ offset: [0,0] } :offSet)
-                .setLngLat([data[marker].longitude, data[marker].latitude])
+            let currentMarker = new mapboxgl.Marker(el
+                // , map.getZoom() < 9 ? { offset: [0, 0] } : offSet
+            )
+                .setLngLat([longitude, latitude])
                 .setPopup(popup)
                 .addTo(map);
             currentMarker.defaultOffset = offSet.offset;
@@ -438,14 +450,22 @@ function getUniqueDiagnostics(orientation, map) {
                 }
                 el.style += `z-index:${value[orientation]}`;
                 el.innerText = value[orientation];
+
+                let longitude = data[marker].longitude;
+                let latitude = data[marker].latitude;
+
+                longitude = data[marker].longitude + (200 / 100000);
+                latitude = data[marker].latitude + (300 / 100000)
                 // popup 
                 let popup = new mapboxgl.Popup({ offset: 25 }).setText(
                     value.township
                 );
                 // add marker to map
                 let offSet = { offset: [-70, 30] };
-                let currentMarker = new mapboxgl.Marker(el,map.getZoom()<9?{ offset: [0,0] } :offSet)
-                    .setLngLat([value.longitude, value.latitude])
+                let currentMarker = new mapboxgl.Marker(el
+                    // , map.getZoom() < 9 ? { offset: [0, 0] } : offSet
+                )
+                    .setLngLat([longitude, latitude])
                     .setPopup(popup)
                     .addTo(map);
                 currentMarker.defaultOffset = offSet.offset;
@@ -477,36 +497,66 @@ function setMarkersSondage(sondage, map) {
             el.style = defaultSize;
         }
         el2.style.zIndex = item[sondage];
-        let offset = { offset: [0, 0] };;
+        let offset = { offset: [0, 0] };
+        let longitude = item.longitude;
+        let latitude = item.latitude;
         switch (sondage) {
             case 'worried':
                 offset = { offset: [10, 0] };
+                let worried = item.worried ? item.worried : 0;
+                let not_worried = item.not_worried ? item.not_worried : 0;
+                let worried_count = worried + not_worried;
+                el.innerText = worried_count;
+                longitude = item.longitude + (100 / 100000);
+                latitude = item.latitude + (300 / 100000)
+                el.style.background = `linear-gradient(to right,#00b065 ${worried * 100 / worried_count}%, #ff3b3b ${not_worried * 100 / worried_count}%)`;
+                break;
+            case 'catch_virus':
+                offset = { offset: [10, 50] };
+                let catch_virus = item.catch_virus ? item.catch_virus : 0;
+                let not_catch_virus = item.not_catch_virus ? item.not_catch_virus : 0;
+                let catch_virus_count = catch_virus + not_catch_virus;
+                el.innerText = catch_virus_count;
+                longitude = item.longitude - (200 / 10000);
+                latitude = item.latitude - (200 / 100000)
+                el.style.background = `linear-gradient(to right,#00b065 ${catch_virus * 100 / catch_virus_count}%, #ff3b3b ${not_catch_virus * 100 / catch_virus_count}%)`;
                 break;
             case 'not_work':
                 offset = { offset: [20, 50] };
+                el.innerText = item[sondage];
                 break;
             case 'toll_free_number':
                 offset = { offset: [50, 30] };
+                el.innerText = item[sondage];
                 break;
             case 'price_increase':
                 offset = { offset: [-20, 30] };
+                el.innerText = item[sondage];
+                longitude = item.longitude - (300 / 10000);
+                latitude = item.latitude + (150 / 100000)
                 break;
             case 'other_difficulty':
                 offset = { offset: [-40, 0] };
+                el.innerText = item[sondage];
+                longitude = item.longitude - (400 / 10000);
+                latitude = item.latitude + (100 / 100000)
                 break;
             default:
                 break;
         }
 
-        el.innerText = item[sondage];
+
         // popup 
         let popup = new mapboxgl.Popup({ offset: 25 }).setText(
             item.town
         );
         el2.append(el);
         // add marker to map
-        let currentMarker = new mapboxgl.Marker(el2, map.getZoom()<9?{ offset: [0,0] } :offset)
-            .setLngLat([item.longitude, item.latitude])
+        let currentMarker = new mapboxgl.Marker(el2
+            // ,
+            //  map.getZoom() < 9 ? { offset: [0, 0] } : offset
+        )
+            .setLngLat([longitude, latitude])
             .setPopup(popup)
             .addTo(map);
 

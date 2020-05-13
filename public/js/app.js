@@ -44710,29 +44710,39 @@ $(function () {
       url: "mapbox://merki230.4airwoxt"
     }); // The feature-state dependent fill-opacity expression will render the hover effect
     // when a feature's hover state is set to true.
+    // map.addLayer({
+    //     'id': 'state-fills',
+    //     'type': 'fill',
+    //     'source': 'states',
+    //     'layout': {},
+    //     'paint': {
+    //         'fill-color': '#627BC1',
+    //         'fill-opacity': [
+    //             'case',
+    //             ['boolean', ['feature-state', 'hover'], false],
+    //             0.3,
+    //             0
+    //         ]
+    //     }
+    // });
+    // map.addLayer({
+    //     'id': 'state-fills-kin',
+    //     'type': 'fill',
+    //     "minzoom": 10,
+    //     'source': 'statesKin',
+    //     "source-layer": "carte-administrative-de-la-vi-csh5cj",
+    //     'layout': {},
+    //     'paint': {
+    //         'fill-color': '#627BC1',
+    //         'fill-opacity': [
+    //             'case',
+    //             ['boolean', ['feature-state', 'hover'], false],
+    //             0.3,
+    //             0
+    //         ]
+    //     }
+    // });
 
-    map.addLayer({
-      'id': 'state-fills',
-      'type': 'fill',
-      'source': 'states',
-      'layout': {},
-      'paint': {
-        'fill-color': '#627BC1',
-        'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.3, 0]
-      }
-    });
-    map.addLayer({
-      'id': 'state-fills-kin',
-      'type': 'fill',
-      "minzoom": 10,
-      'source': 'statesKin',
-      "source-layer": "carte-administrative-de-la-vi-csh5cj",
-      'layout': {},
-      'paint': {
-        'fill-color': '#627BC1',
-        'fill-opacity': ['case', ['boolean', ['feature-state', 'hover'], false], 0.3, 0]
-      }
-    });
     map.addLayer({
       'id': 'state-borders',
       'type': 'line',
@@ -44755,100 +44765,77 @@ $(function () {
       }
     }); // When the user moves their mouse over the state-fill layer, we'll update the
     // feature state for the feature under the mouse.
-
-    map.on('mousemove', 'state-fills', function (e) {
-      if (e.features.length > 0) {
-        if (e.features[0].properties['ISO3166-2'] == "CD-KN") {
-          if (hoveredStateId) {
-            map.setFeatureState({
-              source: 'states',
-              id: hoveredStateId
-            }, {
-              hover: false
-            });
-          }
-
-          hoveredStateId = null;
-          return;
-        }
-
-        if (hoveredStateId) {
-          map.setFeatureState({
-            source: 'states',
-            id: hoveredStateId
-          }, {
-            hover: false
-          });
-        }
-
-        hoveredStateId = e.features[0].id;
-        map.setFeatureState({
-          source: 'states',
-          id: hoveredStateId
-        }, {
-          hover: true
-        });
-      }
-    });
-    map.on('mousemove', 'state-fills-kin', function (e) {
-      if (e.features.length > 0) {
-        if (hoveredStateIdKin) {
-          map.setFeatureState({
-            source: 'statesKin',
-            sourceLayer: 'carte-administrative-de-la-vi-csh5cj',
-            id: hoveredStateIdKin
-          }, {
-            hover: false
-          });
-        }
-
-        hoveredStateIdKin = e.features[0].id;
-        map.setFeatureState({
-          source: 'statesKin',
-          sourceLayer: 'carte-administrative-de-la-vi-csh5cj',
-          id: hoveredStateIdKin
-        }, {
-          hover: true
-        });
-      }
-    }); // When the mouse leaves the state-fill layer, update the feature state of the
+    // map.on('mousemove', 'state-fills', function (e) {
+    //     if (e.features.length > 0) {
+    //         if (e.features[0].properties['ISO3166-2'] == "CD-KN") {
+    //             if (hoveredStateId) {
+    //                 map.setFeatureState(
+    //                     { source: 'states', id: hoveredStateId },
+    //                     { hover: false }
+    //                 );
+    //             }
+    //             hoveredStateId = null;
+    //             return;
+    //         }
+    //         if (hoveredStateId) {
+    //             map.setFeatureState(
+    //                 { source: 'states', id: hoveredStateId },
+    //                 { hover: false }
+    //             );
+    //         }
+    //         hoveredStateId = e.features[0].id;
+    //         map.setFeatureState(
+    //             { source: 'states', id: hoveredStateId },
+    //             { hover: true }
+    //         );
+    //     }
+    // });
+    // map.on('mousemove', 'state-fills-kin', function (e) {
+    //     if (e.features.length > 0) {
+    //         if (hoveredStateIdKin) {
+    //             map.setFeatureState(
+    //                 { source: 'statesKin', sourceLayer: 'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
+    //                 { hover: false }
+    //             );
+    //         }
+    //         hoveredStateIdKin = e.features[0].id;
+    //         map.setFeatureState(
+    //             { source: 'statesKin', sourceLayer: 'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
+    //             { hover: true }
+    //         );
+    //     }
+    // });
+    // When the mouse leaves the state-fill layer, update the feature state of the
     // previously hovered feature.
-
-    map.on('mouseleave', 'state-fills', function () {
-      if (hoveredStateId) {
-        map.setFeatureState({
-          source: 'states',
-          id: hoveredStateId
-        }, {
-          hover: false
-        });
-      }
-
-      hoveredStateId = null;
-    });
-    map.on('mouseleave', 'state-fills-kin', function () {
-      if (hoveredStateIdKin) {
-        map.setFeatureState({
-          source: 'statesKin',
-          sourceLayer: 'carte-administrative-de-la-vi-csh5cj',
-          id: hoveredStateIdKin
-        }, {
-          hover: false
-        });
-      }
-
-      hoveredStateIdKin = null;
-    });
+    // map.on('mouseleave', 'state-fills', function () {
+    //     if (hoveredStateId) {
+    //         map.setFeatureState(
+    //             { source: 'states', id: hoveredStateId },
+    //             { hover: false }
+    //         );
+    //     }
+    //     hoveredStateId = null;
+    // });
+    // map.on('mouseleave', 'state-fills-kin', function () {
+    //     if (hoveredStateIdKin) {
+    //         map.setFeatureState(
+    //             { source: 'statesKin', sourceLayer: 'carte-administrative-de-la-vi-csh5cj', id: hoveredStateIdKin },
+    //             { hover: false }
+    //         );
+    //     }
+    //     hoveredStateIdKin = null;
+    // });
   });
   map.on('zoomend', function () {
-    var currentZoom = map.getZoom();
-    AllSondagesMarkers.map(function (item) {
-      if (currentZoom < 9) {
-        item.setOffset([0, 0]);
-      } else {
-        item.setOffset(item.defaultOffset);
-      }
-    });
+    var currentZoom = map.getZoom(); // AllSondagesMarkers.map((item) => {
+    //     if (currentZoom < 9) {
+    //         item.setOffset([0, 0]);
+    //     }
+    //     else {
+    //         item.setOffset(item.defaultOffset);
+    //     }
+    // });
+
     AllMarkers.map(function (item) {
       if (currentZoom < 9) {
         item.setOffset([0, 0]);
@@ -44902,6 +44889,10 @@ $(function () {
       $('#sondage-item input').removeAttr('disabled');
     } else {
       $('#sondage-item input').attr('disabled', 'disabled');
+      $('#sondage-item input').prop('checked', false);
+      AllSondagesMarkers.map(function (item) {
+        item.remove();
+      });
     }
   });
   $("#sondage-item input").change(function (e) {
@@ -45042,11 +45033,11 @@ function getAllDianostics(map) {
     AllDianosticData = [];
     var total = 0;
 
-    for (var marker in data) {
-      var _data$marker$FIN, _data$marker$FIN2, _data$marker$FIN3;
+    for (var _marker in data) {
+      var _data$_marker$FIN, _data$_marker$FIN2, _data$_marker$FIN3;
 
       // create a DOM element for the marker
-      var item = data[marker];
+      var item = data[_marker];
       AllDianosticData.push(item);
       var el = document.createElement('div');
       el.className = 'pie';
@@ -45063,26 +45054,29 @@ function getAllDianostics(map) {
       elSpan.className = "fin-5";
       elSpan2.className = "fin-8";
       elSpan3.className = "fin";
-      elSpan.textContent = (_data$marker$FIN = data[marker].FIN5) !== null && _data$marker$FIN !== void 0 ? _data$marker$FIN : 0;
-      elSpan2.textContent = (_data$marker$FIN2 = data[marker].FIN8) !== null && _data$marker$FIN2 !== void 0 ? _data$marker$FIN2 : 0;
-      elSpan3.textContent = (_data$marker$FIN3 = data[marker].FIN) !== null && _data$marker$FIN3 !== void 0 ? _data$marker$FIN3 : 0;
+      elSpan.textContent = (_data$_marker$FIN = data[_marker].FIN5) !== null && _data$_marker$FIN !== void 0 ? _data$_marker$FIN : 0;
+      elSpan2.textContent = (_data$_marker$FIN2 = data[_marker].FIN8) !== null && _data$_marker$FIN2 !== void 0 ? _data$_marker$FIN2 : 0;
+      elSpan3.textContent = (_data$_marker$FIN3 = data[_marker].FIN) !== null && _data$_marker$FIN3 !== void 0 ? _data$_marker$FIN3 : 0;
       el.appendChild(elSpan);
       el.appendChild(elSpan2);
-      el.appendChild(elSpan3); // popup 
+      el.appendChild(elSpan3);
+      var longitude = data[_marker].longitude;
+      var latitude = data[_marker].latitude;
+      longitude = data[_marker].longitude + 200 / 100000;
+      latitude = data[_marker].latitude + 300 / 100000; // popup 
 
       var popup = new mapboxgl.Popup({
         offset: 25
-      }).setText(data[marker].township); // add marker to map
+      }).setText(data[_marker].township); // add marker to map
 
       var offSet = {
         offset: [-70, 30]
       };
-      var currentMarker = new mapboxgl.Marker(el, map.getZoom() < 9 ? {
-        offset: [0, 0]
-      } : offSet).setLngLat([data[marker].longitude, data[marker].latitude]).setPopup(popup).addTo(map);
+      var currentMarker = new mapboxgl.Marker(el // , map.getZoom() < 9 ? { offset: [0, 0] } : offSet
+      ).setLngLat([longitude, latitude]).setPopup(popup).addTo(map);
       currentMarker.defaultOffset = offSet.offset;
       AllMarkers.push(currentMarker);
-      _total += data[marker].count;
+      _total += data[_marker].count;
     }
 
     removeMapWaiting();
@@ -45103,7 +45097,11 @@ function getUniqueDiagnostics(orientation, map) {
         }
 
         el.style += "z-index:".concat(value[orientation]);
-        el.innerText = value[orientation]; // popup 
+        el.innerText = value[orientation];
+        var longitude = data[marker].longitude;
+        var latitude = data[marker].latitude;
+        longitude = data[marker].longitude + 200 / 100000;
+        latitude = data[marker].latitude + 300 / 100000; // popup 
 
         var popup = new mapboxgl.Popup({
           offset: 25
@@ -45112,9 +45110,8 @@ function getUniqueDiagnostics(orientation, map) {
         var offSet = {
           offset: [-70, 30]
         };
-        var currentMarker = new mapboxgl.Marker(el, map.getZoom() < 9 ? {
-          offset: [0, 0]
-        } : offSet).setLngLat([value.longitude, value.latitude]).setPopup(popup).addTo(map);
+        var currentMarker = new mapboxgl.Marker(el // , map.getZoom() < 9 ? { offset: [0, 0] } : offSet
+        ).setLngLat([longitude, latitude]).setPopup(popup).addTo(map);
         currentMarker.defaultOffset = offSet.offset;
         AllMarkers.push(currentMarker);
         removeMapWaiting();
@@ -45150,53 +45147,81 @@ function setMarkersSondage(sondage, map) {
     var offset = {
       offset: [0, 0]
     };
-    ;
+    var longitude = item.longitude;
+    var latitude = item.latitude;
 
     switch (sondage) {
       case 'worried':
         offset = {
           offset: [10, 0]
         };
+        var worried = item.worried ? item.worried : 0;
+        var not_worried = item.not_worried ? item.not_worried : 0;
+        var worried_count = worried + not_worried;
+        el.innerText = worried_count;
+        longitude = item.longitude + 100 / 100000;
+        latitude = item.latitude + 300 / 100000;
+        el.style.background = "linear-gradient(to right,#00b065 ".concat(worried * 100 / worried_count, "%, #ff3b3b ").concat(not_worried * 100 / worried_count, "%)");
+        break;
+
+      case 'catch_virus':
+        offset = {
+          offset: [10, 50]
+        };
+        var catch_virus = item.catch_virus ? item.catch_virus : 0;
+        var not_catch_virus = item.not_catch_virus ? item.not_catch_virus : 0;
+        var catch_virus_count = catch_virus + not_catch_virus;
+        el.innerText = catch_virus_count;
+        longitude = item.longitude - 200 / 10000;
+        latitude = item.latitude - 200 / 100000;
+        el.style.background = "linear-gradient(to right,#00b065 ".concat(catch_virus * 100 / catch_virus_count, "%, #ff3b3b ").concat(not_catch_virus * 100 / catch_virus_count, "%)");
         break;
 
       case 'not_work':
         offset = {
           offset: [20, 50]
         };
+        el.innerText = item[sondage];
         break;
 
       case 'toll_free_number':
         offset = {
           offset: [50, 30]
         };
+        el.innerText = item[sondage];
         break;
 
       case 'price_increase':
         offset = {
           offset: [-20, 30]
         };
+        el.innerText = item[sondage];
+        longitude = item.longitude - 300 / 10000;
+        latitude = item.latitude + 150 / 100000;
         break;
 
       case 'other_difficulty':
         offset = {
           offset: [-40, 0]
         };
+        el.innerText = item[sondage];
+        longitude = item.longitude - 400 / 10000;
+        latitude = item.latitude + 100 / 100000;
         break;
 
       default:
         break;
-    }
+    } // popup 
 
-    el.innerText = item[sondage]; // popup 
 
     var popup = new mapboxgl.Popup({
       offset: 25
     }).setText(item.town);
     el2.append(el); // add marker to map
 
-    var currentMarker = new mapboxgl.Marker(el2, map.getZoom() < 9 ? {
-      offset: [0, 0]
-    } : offset).setLngLat([item.longitude, item.latitude]).setPopup(popup).addTo(map);
+    var currentMarker = new mapboxgl.Marker(el2 // ,
+    //  map.getZoom() < 9 ? { offset: [0, 0] } : offset
+    ).setLngLat([longitude, latitude]).setPopup(popup).addTo(map);
     currentMarker[sondage] = true;
     currentMarker.defaultOffset = offset.offset;
     currentMarker.defaultSize = defaultSize;
