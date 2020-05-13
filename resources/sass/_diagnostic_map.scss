@@ -212,8 +212,11 @@
         );
     }
     h1 {
-        font-size: 1rem;
+        font-size: 1.3rem;
         color: white;
+    }
+    .map-form-logo{
+        background: white;
     }
     .map-form-header {
         background: #00b065;
@@ -335,19 +338,28 @@
     }
 
     &.worried {
+        border: 2px solid $worried;
         background: $worried;
     }
     &.not_work {
+        border: 2px solid $not_work;
         background: $not_work;
     }
     &.toll_free_number {
+        border: 2px solid $toll_free_number;
         background: $toll_free_number;
     }
     &.price_increase {
+        border: 2px solid $price_increase;
         background: $price_increase;
     }
     &.other_difficulty {
+        border: 2px solid $other_difficulty;
         background: $other_difficulty;
+    }
+    &.catch_virus{
+        border: 2px solid $catch_virus;
+        background: $catch_virus;
     }
 }
 #hospital-data {
@@ -389,6 +401,12 @@
     #other_difficulty {
         + label {
             border-right: 15px solid $other_difficulty;
+            padding-right: 5px;
+        }
+    }
+    #catch_virus {
+        + label {
+            border-right: 15px solid $catch_virus;
             padding-right: 5px;
         }
     }
