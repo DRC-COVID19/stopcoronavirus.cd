@@ -267,11 +267,11 @@ function getHospitals(map) {
                     masks: value.masks,
                     respirators: value.respirators,
                     occupied_respirators: value.occupied_respirators,
-                    confirmed: value.last_situation.confirmed,
-                    dead: value.last_situation.dead,
-                    sick: value.last_situation.sick,
-                    healed: value.last_situation.healed,
-                    last_update: value.last_situation.last_update,
+                    confirmed: value.last_situation? value.last_situation.confirmed:0,
+                    dead: value.last_situation?value.last_situation.dead:0,
+                    sick: value.last_situation?value.last_situation.sick:0,
+                    healed: value.last_situation?value.last_situation.healed:0,
+                    last_update:value.last_situation? value.last_situation.last_update:0,
                     color: "#ED5F68"
                 }
             };
