@@ -396,7 +396,10 @@ function getAllDianostics(map) {
             let total = item.FIN + item.FIN8 + item.FIN5;
 
             if (total > 50) {
-                el.style = "width:40px;height:40px;";
+                el.style = "width:60px;height:60px;";
+            }
+            if (total > 100) {
+                el.style = "width:75px;height:75px;";
             }
             let elSpan = document.createElement('span');
             let elSpan2 = document.createElement('span');
