@@ -460,8 +460,7 @@ function getUniqueDiagnostics(orientation, map) {
                 if (value[orientation] > 100) {
                     el.style = "width:70px;height:70px;";
                 }
-
-                el.style += `z-index:${value[orientation]}`;
+                el.style.zIndex=value[orientation];
                 el.innerText = value[orientation];
 
                 let longitude = value.longitude;
