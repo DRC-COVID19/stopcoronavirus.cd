@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-lg-6 text-center text-md-right div-radio " >
                             <hr class="d-md-none">
-                        <p class="text-white m-0"><span class="fa fa-broadcast-tower"></span> <span><strong>95.7 FM</strong> la radio du ministère de la santé</span></p>
+                        <p class="text-white m-0"><span class="fa fa-broadcast-tower"></span> <span><strong><a class="text-white" target="_blank" href="https://www.radioking.com/radio/min-sante-fm">95.7 FM</a></strong> la radio du ministère de la santé</span></p>
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@
                     </div>
                     <div class="col-lg-9 d-none d-md-block">
                         <div class="d-flex flex-md-row flex-column justify-content-end mb-3 mt-2 hidden-sm">
-                            <img src="img/partners_top.png" height="55" width="200" class="img-fluid" alt="">
+                            <img src="{{asset('img/partners_top.png')}}" height="55" width="200" class="img-fluid" alt="">
                         </div>
                         <ul class="d-flex flex-md-row flex-column justify-content-end App-Header--navbar">
                             <li class="{{ Route::currentRouteName()== 'home' ? 'active' : '' }}"> <a href="{{route('home')}}" class="px-md-2 nav-item ">Situation actuelle</a></li>
