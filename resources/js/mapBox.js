@@ -167,14 +167,14 @@ $(function () {
         //     }
         // });
 
-        AllMarkers.map((item) => {
-            if (currentZoom < 9) {
-                item.setOffset([0, 0]);
-            }
-            else {
-                item.setOffset(item.defaultOffset);
-            }
-        });
+        // AllMarkers.map((item) => {
+        //     if (currentZoom < 9) {
+        //         item.setOffset([0, 0]);
+        //     }
+        //     else {
+        //         item.setOffset(item.defaultOffset);
+        //     }
+        // });
 
     });
     $('#hospital-data-close').click(function (e) {
@@ -413,9 +413,12 @@ function getAllDianostics(map) {
 
             let longitude = data[marker].longitude;
             let latitude = data[marker].latitude;
+            
 
-            longitude = data[marker].longitude + (200 / 100000);
-            latitude = data[marker].latitude + (300 / 100000)
+            if (data[marker].province.toUpperCase() != "KINSHASA") {
+                longitude = (Number(longitude) + (500 / 100000)).toFixed(5);
+                latitude = (Number(latitude) - (300 / 100000)).toFixed(5);
+            }
 
             // popup 
             let popup = new mapboxgl.Popup({ offset: 25 }).setText(
@@ -451,11 +454,13 @@ function getUniqueDiagnostics(orientation, map) {
                 el.style += `z-index:${value[orientation]}`;
                 el.innerText = value[orientation];
 
-                let longitude = data[marker].longitude;
-                let latitude = data[marker].latitude;
+                let longitude = value.longitude;
+                let latitude = value.latitude;
 
-                longitude = data[marker].longitude + (200 / 100000);
-                latitude = data[marker].latitude + (300 / 100000)
+                if (value.province.toUpperCase() != "KINSHASA") {
+                    longitude = (Number(longitude) + (500 / 100000)).toFixed(5);
+                    latitude = (Number(latitude) - (300 / 100000)).toFixed(5);
+                }
                 // popup 
                 let popup = new mapboxgl.Popup({ offset: 25 }).setText(
                     value.township
@@ -496,6 +501,10 @@ function setMarkersSondage(sondage, map) {
         if (item[sondage] > 50) {
             el.style = defaultSize;
         }
+        if (item[sondage] > 100) {
+            defaultSize="width:50px;height:50px;";;
+            el.style = defaultSize;
+        }
         el2.style.zIndex = item[sondage];
         let offset = { offset: [0, 0] };
         let longitude = item.longitude;
@@ -508,7 +517,7 @@ function setMarkersSondage(sondage, map) {
                 let worried_count = worried + not_worried;
                 el.innerText = worried_count;
                 longitude = item.longitude + (100 / 100000);
-                latitude = item.latitude + (300 / 100000)
+                latitude = item.latitude + (500 / 100000)
                 el.style.background = `linear-gradient(to right,#00b065 ${worried * 100 / worried_count}%, #ff3b3b ${not_worried * 100 / worried_count}%)`;
                 break;
             case 'catch_virus':

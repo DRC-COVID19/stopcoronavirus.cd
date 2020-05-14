@@ -44835,14 +44835,14 @@ $(function () {
     //         item.setOffset(item.defaultOffset);
     //     }
     // });
-
-    AllMarkers.map(function (item) {
-      if (currentZoom < 9) {
-        item.setOffset([0, 0]);
-      } else {
-        item.setOffset(item.defaultOffset);
-      }
-    });
+    // AllMarkers.map((item) => {
+    //     if (currentZoom < 9) {
+    //         item.setOffset([0, 0]);
+    //     }
+    //     else {
+    //         item.setOffset(item.defaultOffset);
+    //     }
+    // });
   });
   $('#hospital-data-close').click(function (e) {
     $('#hospital-data').addClass('d-none');
@@ -45033,11 +45033,11 @@ function getAllDianostics(map) {
     AllDianosticData = [];
     var total = 0;
 
-    for (var _marker in data) {
-      var _data$_marker$FIN, _data$_marker$FIN2, _data$_marker$FIN3;
+    for (var marker in data) {
+      var _data$marker$FIN, _data$marker$FIN2, _data$marker$FIN3;
 
       // create a DOM element for the marker
-      var item = data[_marker];
+      var item = data[marker];
       AllDianosticData.push(item);
       var el = document.createElement('div');
       el.className = 'pie';
@@ -45054,20 +45054,24 @@ function getAllDianostics(map) {
       elSpan.className = "fin-5";
       elSpan2.className = "fin-8";
       elSpan3.className = "fin";
-      elSpan.textContent = (_data$_marker$FIN = data[_marker].FIN5) !== null && _data$_marker$FIN !== void 0 ? _data$_marker$FIN : 0;
-      elSpan2.textContent = (_data$_marker$FIN2 = data[_marker].FIN8) !== null && _data$_marker$FIN2 !== void 0 ? _data$_marker$FIN2 : 0;
-      elSpan3.textContent = (_data$_marker$FIN3 = data[_marker].FIN) !== null && _data$_marker$FIN3 !== void 0 ? _data$_marker$FIN3 : 0;
+      elSpan.textContent = (_data$marker$FIN = data[marker].FIN5) !== null && _data$marker$FIN !== void 0 ? _data$marker$FIN : 0;
+      elSpan2.textContent = (_data$marker$FIN2 = data[marker].FIN8) !== null && _data$marker$FIN2 !== void 0 ? _data$marker$FIN2 : 0;
+      elSpan3.textContent = (_data$marker$FIN3 = data[marker].FIN) !== null && _data$marker$FIN3 !== void 0 ? _data$marker$FIN3 : 0;
       el.appendChild(elSpan);
       el.appendChild(elSpan2);
       el.appendChild(elSpan3);
-      var longitude = data[_marker].longitude;
-      var latitude = data[_marker].latitude;
-      longitude = data[_marker].longitude + 200 / 100000;
-      latitude = data[_marker].latitude + 300 / 100000; // popup 
+      var longitude = data[marker].longitude;
+      var latitude = data[marker].latitude;
+
+      if (data[marker].province.toUpperCase() != "KINSHASA") {
+        longitude = (Number(longitude) + 500 / 100000).toFixed(5);
+        latitude = (Number(latitude) - 300 / 100000).toFixed(5);
+      } // popup 
+
 
       var popup = new mapboxgl.Popup({
         offset: 25
-      }).setText(data[_marker].township); // add marker to map
+      }).setText(data[marker].township); // add marker to map
 
       var offSet = {
         offset: [-70, 30]
@@ -45076,7 +45080,7 @@ function getAllDianostics(map) {
       ).setLngLat([longitude, latitude]).setPopup(popup).addTo(map);
       currentMarker.defaultOffset = offSet.offset;
       AllMarkers.push(currentMarker);
-      _total += data[_marker].count;
+      _total += data[marker].count;
     }
 
     removeMapWaiting();
@@ -45098,10 +45102,14 @@ function getUniqueDiagnostics(orientation, map) {
 
         el.style += "z-index:".concat(value[orientation]);
         el.innerText = value[orientation];
-        var longitude = data[marker].longitude;
-        var latitude = data[marker].latitude;
-        longitude = data[marker].longitude + 200 / 100000;
-        latitude = data[marker].latitude + 300 / 100000; // popup 
+        var longitude = value.longitude;
+        var latitude = value.latitude;
+
+        if (value.province.toUpperCase() != "KINSHASA") {
+          longitude = (Number(longitude) + 500 / 100000).toFixed(5);
+          latitude = (Number(latitude) - 300 / 100000).toFixed(5);
+        } // popup 
+
 
         var popup = new mapboxgl.Popup({
           offset: 25
@@ -45143,6 +45151,12 @@ function setMarkersSondage(sondage, map) {
       el.style = defaultSize;
     }
 
+    if (item[sondage] > 100) {
+      defaultSize = "width:50px;height:50px;";
+      ;
+      el.style = defaultSize;
+    }
+
     el2.style.zIndex = item[sondage];
     var offset = {
       offset: [0, 0]
@@ -45160,7 +45174,7 @@ function setMarkersSondage(sondage, map) {
         var worried_count = worried + not_worried;
         el.innerText = worried_count;
         longitude = item.longitude + 100 / 100000;
-        latitude = item.latitude + 300 / 100000;
+        latitude = item.latitude + 500 / 100000;
         el.style.background = "linear-gradient(to right,#00b065 ".concat(worried * 100 / worried_count, "%, #ff3b3b ").concat(not_worried * 100 / worried_count, "%)");
         break;
 
