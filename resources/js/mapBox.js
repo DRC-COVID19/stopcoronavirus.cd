@@ -451,9 +451,16 @@ function getUniqueDiagnostics(orientation, map) {
             if (value[orientation] >= 0) {
                 let el = document.createElement('div');
                 el.className = `default-makers ${orientation}`;
-                if (value[orientation] > 50) {
-                    el.style = "width:40px;height:40px;";
+                if (value[orientation] > 20) {
+                    el.style = "width:30px;height:30px;";
                 }
+                if (value[orientation] > 50) {
+                    el.style = "width:50px;height:50px;";
+                }
+                if (value[orientation] > 100) {
+                    el.style = "width:70px;height:70px;";
+                }
+
                 el.style += `z-index:${value[orientation]}`;
                 el.innerText = value[orientation];
 
