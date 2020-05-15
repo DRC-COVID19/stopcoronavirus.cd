@@ -73,7 +73,7 @@ $(function () {
             'layout': {},
             'paint': {
                 'line-color': '#627BC1',
-                'line-width': 2
+                'line-width': 1
             }
         });
 
@@ -86,7 +86,7 @@ $(function () {
             'layout': {},
             'paint': {
                 'line-color': '#627BC1',
-                'line-width': 2
+                'line-width': 1
             }
         });
 
