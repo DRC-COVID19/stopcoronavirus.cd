@@ -19,6 +19,10 @@ Route::get('/directives-prises-par-le-gouvernement', "PageController@preventativ
 Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stereotypes');
 Route::get('/sondages', 'PageController@sondage')->name('sondages');
 
+$router->get('/dashboard-maps', function () {
+    return view('diagnosticMaps.mapbox');
+});
+
 
 Route::get('/orientation-medicale','SelfTestController@diagnostic')->name('diagnostic');
 Route::group(['prefix' => 'orientation-medicale-test'], function () {
