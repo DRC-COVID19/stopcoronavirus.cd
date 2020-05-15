@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\MyTrait\GClientSheet;
 use App\Http\MyTrait\GeoConding;
+use Illuminate\Support\Str;
 
 class DashBoardController extends Controller
 {
@@ -84,7 +85,7 @@ class DashBoardController extends Controller
         }
         for ($i = 1; $i < $countArray; $i++) {
             $value = $sheetsValues[$i];
-            $key = strtoupper("{$value[4]}_{$value[3]}");
+            $key = strtoupper(Str::slug("{$value[3]}_{$value[4]}", '_'));
             if (isset($formattedArray[$key])) {
                 $formattedArray[$key] = $formattedArray[$key];
                 $formattedArray[$key]['count'] += 1;
@@ -115,13 +116,13 @@ class DashBoardController extends Controller
                         $formattedArray[$key]['not_catch_virus'] = 1;
                     }
                 }
-                if ($value[15] == "Appeler le numéro vert") {
-                    if (isset($formattedArray[$key]['toll_free_number'])) {
-                        $formattedArray[$key]['toll_free_number'] += 1;
-                    } else {
-                        $formattedArray[$key]['toll_free_number'] = 1;
-                    }
-                }
+                // if ($value[15] == "Appeler le numéro vert") {
+                //     if (isset($formattedArray[$key]['toll_free_number'])) {
+                //         $formattedArray[$key]['toll_free_number'] += 1;
+                //     } else {
+                //         $formattedArray[$key]['toll_free_number'] = 1;
+                //     }
+                // }
                 if (
                     $value[20] == "Je ne peux plus travailler" ||
                     $value[20] == "Je suis au chômage technique" ||
@@ -140,17 +141,63 @@ class DashBoardController extends Controller
                     } else {
                         $formattedArray[$key]['price_increase'] = 1;
                     }
-                }
-                if (
-                    strpos($value[18], "Masque") ||
-                    strpos($value[18], 'Makala') ||
-                    strpos($value[18], 'Farine') ||
-                    strpos($value[18], 'viande')
-                ) {
-                    if (isset($formattedArray[$key]['other_difficulty'])) {
-                        $formattedArray[$key]['other_difficulty'] += 1;
+                } else {
+                    if (isset($formattedArray[$key]['not_price_increase'])) {
+                        $formattedArray[$key]['not_price_increase'] += 1;
                     } else {
-                        $formattedArray[$key]['other_difficulty'] = 1;
+                        $formattedArray[$key]['not_price_increase'] = 1;
+                    }
+                }
+                if (strpos($value[18], "Masque")) {
+                    if (isset($formattedArray[$key]['not_mask'])) {
+                        $formattedArray[$key]['not_mask'] += 1;
+                    } else {
+                        $formattedArray[$key]['not_mask'] = 1;
+                    }
+                } else {
+                    if (isset($formattedArray[$key]['mask'])) {
+                        $formattedArray[$key]['mask'] += 1;
+                    } else {
+                        $formattedArray[$key]['mask'] = 1;
+                    }
+                }
+                if (strpos($value[18], 'Makala')) {
+                    if (isset($formattedArray[$key]['not_makala'])) {
+                        $formattedArray[$key]['not_makala'] += 1;
+                    } else {
+                        $formattedArray[$key]['not_makala'] = 1;
+                    }
+                } else {
+                    if (isset($formattedArray[$key]['makala'])) {
+                        $formattedArray[$key]['makala'] += 1;
+                    } else {
+                        $formattedArray[$key]['makala'] = 1;
+                    }
+                }
+                if (strpos($value[18], 'Farine')) {
+                    if (isset($formattedArray[$key]['not_flour'])) {
+                        $formattedArray[$key]['not_flour'] += 1;
+                    } else {
+                        $formattedArray[$key]['not_flour'] = 1;
+                    }
+                } else {
+                    if (isset($formattedArray[$key]['flour'])) {
+                        $formattedArray[$key]['flour'] += 1;
+                    } else {
+                        $formattedArray[$key]['flour'] = 1;
+                    }
+                }
+                if (strpos($value[18], 'Gel anti-bactérien')) {
+                    if (isset($formattedArray[$key]['not_antibacterial_gel'])) {
+                        $formattedArray[$key]['not_antibacterial_gel'] += 1;
+                    } else {
+                        $formattedArray[$key]['not_antibacterial_gel'] = 1;
+                    }
+                } else {
+                    if (isset($formattedArray[$key]['antibacterial_gel'])) {
+                        $formattedArray[$key]['antibacterial_gel'] += 1;
+                    } else {
+                        $formattedArray[$key]['antibacterial_gel'] = 1;
                     }
                 }
             } else {
@@ -190,12 +237,28 @@ class DashBoardController extends Controller
                     }
                     if (strpos("Augmentation des prix", $value[22])) {
                         $formattedArray[$key]['price_increase'] = 1;
+                    } else {
+                        $formattedArray[$key]['not_price_increase'] = 1;
                     }
-                    if (
-                        strpos("Masque", $value[18]) || strpos(" Makala", $value[18]) || strpos(" Farine", $value[18])
-                        || strpos("viande", $value[18])
-                    ) {
-                        $formattedArray[$key]['other_difficulty'] = 1;
+                    if (strpos($value[18], "Masque")) {
+                        $formattedArray[$key]['not_mask'] = 1;
+                    } else {
+                        $formattedArray[$key]['mask'] = 1;
+                    }
+                    if (strpos($value[18], 'Makala')) {
+                        $formattedArray[$key]['not_makala'] = 1;
+                    } else {
+                        $formattedArray[$key]['makala'] = 1;
+                    }
+                    if (strpos($value[18], 'Farine')) {
+                        $formattedArray[$key]['not_flour'] = 1;
+                    } else {
+                        $formattedArray[$key]['flour'] = 1;
+                    }
+                    if (strpos($value[18], 'Farine')) {
+                        $formattedArray[$key]['not_antibacterial_gel'] = 1;
+                    } else {
+                        $formattedArray[$key]['antibacterial_gel'] = 1;
                     }
                 }
             }

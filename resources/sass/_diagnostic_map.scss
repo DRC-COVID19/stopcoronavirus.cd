@@ -233,6 +233,7 @@
             cursor: pointer;
             padding: 0;
             padding-left: 30px;
+            width: 100%;
         }
 
         // Box.
@@ -341,25 +342,29 @@
         border: 2px solid $worried;
         background: $worried;
     }
-    &.not_work {
-        border: 2px solid $not_work;
-        background: $not_work;
+    &.mask {
+        border: 2px solid $mask;
+        background: $mask;
     }
-    &.toll_free_number {
-        border: 2px solid $toll_free_number;
-        background: $toll_free_number;
+    &.makala {
+        border: 2px solid $makala;
+        background: $makala;
     }
     &.price_increase {
         border: 2px solid $price_increase;
         background: $price_increase;
     }
-    &.other_difficulty {
-        border: 2px solid $other_difficulty;
-        background: $other_difficulty;
+    &.flour {
+        border: 2px solid $flour;
+        background: $flour;
     }
     &.catch_virus{
         border: 2px solid $catch_virus;
         background: $catch_virus;
+    }
+    &.antibacterial_gel{
+        border: 2px solid $antibacterial_gel;
+        background: $antibacterial_gel;
     }
 }
 #hospital-data {
@@ -380,15 +385,15 @@
             padding-right: 5px;
         }
     }
-    #not_work {
+    #mask {
         + label {
-            border-right: 15px solid $not_work;
+            border-right: 15px solid $mask;
             padding-right: 5px;
         }
     }
-    #toll_free_number {
+    #makala {
         + label {
-            border-right: 15px solid $toll_free_number;
+            border-right: 15px solid $makala;
             padding-right: 5px;
         }
     }
@@ -398,15 +403,21 @@
             padding-right: 5px;
         }
     }
-    #other_difficulty {
+    #flour {
         + label {
-            border-right: 15px solid $other_difficulty;
+            border-right: 15px solid $flour;
             padding-right: 5px;
         }
     }
     #catch_virus {
         + label {
             border-right: 15px solid $catch_virus;
+            padding-right: 5px;
+        }
+    }
+    #antibacterial_gel {
+        + label {
+            border-right: 15px solid $antibacterial_gel;
             padding-right: 5px;
         }
     }

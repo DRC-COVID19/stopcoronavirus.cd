@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Dashboard COVID-19 RDC</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
     <link href="{{ asset('css/app.css?v=2.2') }}" rel="stylesheet">
@@ -47,7 +47,7 @@
                 <div class="card mb-3">
                     <div class="group-control card-header">
                         <input type="checkbox" class="styled-checkbox" name="has_sondage" id="has_sondage">
-                        <label for="has_sondage">Sondages</label>
+                        <label for="has_sondage">Sondages <span id="sondage_count"></span></label>
                     </div>
                     <div class="card-body " id="sondage-item">
                         <div class="group-control">
@@ -66,13 +66,29 @@
                             <input type="checkbox" class="styled-checkbox" disabled name="toll_free_number" id="toll_free_number">
                             <label for="toll_free_number">Appellerait le numéro vert en cas de symptômes</label>
                         </div> --}}
+                        
                         <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="price_increase" id="price_increase">
                             <label for="price_increase">Constatent une augmentation des prix des denrées essentielles</label>
                         </div>
                         <div class="group-control">
-                            <input type="checkbox" class="styled-checkbox" disabled name="other_difficulty" id="other_difficulty">
-                            <label for="other_difficulty">Ont des difficultés à trouver des masques, 29% du charbon et de la farine, 28% de la Chloroquine, 26% de la Viande et des légumes</label>
+                            <label>Quels sont les denrées que vous avez du mal à trouver?</label>
+                        </div>
+                        <div class="group-control">
+                            <input type="checkbox" class="styled-checkbox" disabled name="mask" id="mask">
+                        <label for="mask">{{__('Masque')}}</label>
+                        </div>
+                        <div class="group-control">
+                            <input type="checkbox" class="styled-checkbox" disabled name="makala" id="makala">
+                        <label for="makala">{{__('Makala')}}</label>
+                        </div>
+                        <div class="group-control">
+                            <input type="checkbox" class="styled-checkbox" disabled name="flour" id="flour">
+                        <label for="flour">{{__('Farine')}}</label>
+                        </div>
+                        <div class="group-control">
+                            <input type="checkbox" class="styled-checkbox" disabled name="antibacterial_gel" id="antibacterial_gel">
+                            <label for="antibacterial_gel">Gel antibactérien</label>
                         </div>
                     </div>
                 </div>
