@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\MyTrait;
+
+use Illuminate\Support\Str;
+
 /**
  * 
  */
@@ -13,10 +16,10 @@ trait GeoConding
         try {
             $MAP_BOX_KEY = env('MAP_BOX_KEY');
             $data = [];
-            $town=strtoupper($town);
-            $province=strtoupper($province);
+            $town = strtoupper($town);
+            $province = strtoupper($province);
             $provinceCopy = $province;
-            $index=$province. '_' .$town;
+            $index = strtoupper(Str::slug($province . '_' . $town, '_'));
             switch ($province) {
 
                 case 'KONGO-CENTRAL':
@@ -29,8 +32,14 @@ trait GeoConding
                 case "KASAï":
                 case "KASAï-CENTRAL":
                 case "KASAI-CENTRAL":
-                $provinceCopy="Kasaï-Occidental";
-                break;
+                    $provinceCopy = "Kasaï-Occidental";
+                case "TSHOPO":
+                case "HAUT-UELE":
+                    $provinceCopy = "Orientale";
+                    break;
+                case "SANKURU":
+                    $provinceCopy = "Kasaï-Oriental";
+                    break;
                 default:
                     # code...
                     break;
@@ -39,7 +48,7 @@ trait GeoConding
             if ($province == $town) {
                 $provinceCopy = null;
             }
-            $geoCodingFilePath=storage_path('app/townGeocoding.json');
+            $geoCodingFilePath = storage_path('app/townGeocoding.json');
             if (file_exists($geoCodingFilePath)) {
                 $jsonString = file_get_contents($geoCodingFilePath);
                 $data = json_decode($jsonString, true);
@@ -70,7 +79,6 @@ trait GeoConding
         } catch (\Throwable $th) {
             //return null;
             throw $th;
-            
         }
     }
 }

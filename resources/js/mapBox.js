@@ -386,7 +386,7 @@ function getAllDianostics(map) {
     $.get(`/api/dashboard/orientation-medical-result`, function (data) {
         RemoveDianosticMakers();
         AllDianosticData = [];
-        let total = 0;
+        let total_count = 0;
         for (const marker in data) {
             // create a DOM element for the marker
             let item = data[marker];
@@ -416,7 +416,7 @@ function getAllDianostics(map) {
 
             let longitude = data[marker].longitude;
             let latitude = data[marker].latitude;
-            
+
 
             if (data[marker].province.toUpperCase() != "KINSHASA") {
                 longitude = (Number(longitude) + (500 / 100000)).toFixed(5);
@@ -437,8 +437,9 @@ function getAllDianostics(map) {
                 .addTo(map);
             currentMarker.defaultOffset = offSet.offset;
             AllMarkers.push(currentMarker);
-            total += data[marker].count;
+            total_count += data[marker].count;
         }
+        
         removeMapWaiting();
     });
 }
@@ -460,7 +461,7 @@ function getUniqueDiagnostics(orientation, map) {
                 if (value[orientation] > 100) {
                     el.style = "width:70px;height:70px;";
                 }
-                el.style.zIndex=value[orientation];
+                el.style.zIndex = value[orientation];
                 el.innerText = value[orientation];
 
                 let longitude = value.longitude;
@@ -495,6 +496,11 @@ function getAllSondages() {
     addMapWaiting();
     $.get(`/api/dashboard/sondages`, function (data) {
         AllSondagesData = data;
+        let total_count=0;
+        data.map((item)=>{
+            total_count+=item.count;
+        });
+        $("#sondage_count").text(`(${total_count})`);
         removeMapWaiting();
     });
 }
@@ -511,7 +517,7 @@ function setMarkersSondage(sondage, map) {
             el.style = defaultSize;
         }
         if (item[sondage] > 100) {
-            defaultSize="width:50px;height:50px;";;
+            defaultSize = "width:50px;height:50px;";;
             el.style = defaultSize;
         }
         el2.style.zIndex = item[sondage];
@@ -526,38 +532,62 @@ function setMarkersSondage(sondage, map) {
                 let worried_count = worried + not_worried;
                 el.innerText = worried_count;
                 longitude = item.longitude + (100 / 100000);
-                latitude = item.latitude + (500 / 100000)
-                el.style.background = `linear-gradient(to right,#00b065 ${worried * 100 / worried_count}%, #ff3b3b ${not_worried * 100 / worried_count}%)`;
+                latitude = item.latitude + (800 / 100000)
+                el.style.background = `linear-gradient(to right,#00b065 ${worried * 100 / worried_count}%, #ff3b3b ${worried * 100 / worried_count}%, #ff3b3b ${not_worried * 100 / worried_count}%)`;
                 break;
             case 'catch_virus':
-                offset = { offset: [10, 50] };
                 let catch_virus = item.catch_virus ? item.catch_virus : 0;
                 let not_catch_virus = item.not_catch_virus ? item.not_catch_virus : 0;
                 let catch_virus_count = catch_virus + not_catch_virus;
                 el.innerText = catch_virus_count;
                 longitude = item.longitude - (200 / 10000);
                 latitude = item.latitude - (200 / 100000)
-                el.style.background = `linear-gradient(to right,#00b065 ${catch_virus * 100 / catch_virus_count}%, #ff3b3b ${not_catch_virus * 100 / catch_virus_count}%)`;
-                break;
-            case 'not_work':
-                offset = { offset: [20, 50] };
-                el.innerText = item[sondage];
-                break;
-            case 'toll_free_number':
-                offset = { offset: [50, 30] };
-                el.innerText = item[sondage];
+                el.style.background = `linear-gradient(to right,#00b065 ${catch_virus * 100 / catch_virus_count}%, #ff3b3b ${catch_virus * 100 / catch_virus_count}%, #ff3b3b ${not_catch_virus * 100 / catch_virus_count}%)`;
                 break;
             case 'price_increase':
-                offset = { offset: [-20, 30] };
-                el.innerText = item[sondage];
+                let price_increase = item.price_increase ? item.price_increase : 0;
+                let not_price_increase = item.not_price_increase ? item.not_price_increase : 0;
+                let price_increase_count = price_increase + not_price_increase;
+                el.innerText = price_increase_count;
                 longitude = item.longitude - (300 / 10000);
-                latitude = item.latitude + (150 / 100000)
+                latitude = item.latitude + (500 / 100000);
+                el.style.background = `linear-gradient(to right,#00b065 ${price_increase * 100 / price_increase_count}%, #ff3b3b ${price_increase * 100 / price_increase_count}%, #ff3b3b ${not_price_increase * 100 / price_increase_count}%)`;
                 break;
-            case 'other_difficulty':
-                offset = { offset: [-40, 0] };
-                el.innerText = item[sondage];
-                longitude = item.longitude - (400 / 10000);
-                latitude = item.latitude + (100 / 100000)
+            case 'mask':
+                let mask = item.mask ? item.mask : 0;
+                let not_mask = item.not_mask ? item.not_mask : 0;
+                let mask_count = mask + not_mask;
+                el.innerText = mask_count;
+                longitude = item.longitude - (350 / 100000);
+                latitude = item.latitude - (300 / 100000);
+                el.style.background = `linear-gradient(to right,#00b065 ${mask * 100 / mask_count}%, #ff3b3b ${mask * 100 / mask_count}%, #ff3b3b ${not_mask * 100 / mask_count}%)`;
+                break;
+            case 'makala':
+                let makala = item.makala ? item.makala : 0;
+                let not_makala = item.not_makala ? item.not_makala : 0;
+                let makala_count = makala + not_makala;
+                el.innerText = makala_count;
+                longitude = item.longitude + (300 / 10000);
+                latitude = item.latitude + (150 / 100000);
+                el.style.background = `linear-gradient(to right,#00b065 ${makala * 100 / makala_count}%, #ff3b3b ${makala * 100 / makala_count}%, #ff3b3b ${not_makala * 100 / makala_count}%)`;
+                break;
+            case 'flour':
+                let flour = item.flour ? item.flour : 0;
+                let not_flour = item.not_flour ? item.not_flour : 0;
+                let flour_count = flour + not_flour;
+                el.innerText = flour_count;
+                longitude = item.longitude - (330 / 10000);
+                latitude = item.latitude - (250 / 100000);
+                el.style.background = `linear-gradient(to right,#00b065 ${flour * 100 / flour_count}%, #ff3b3b ${flour * 100 / flour_count}%, #ff3b3b ${not_flour * 100 / flour_count}%)`;
+                break;
+            case 'antibacterial_gel':
+                let antibacterial_gel = item.antibacterial_gel ? item.antibacterial_gel : 0;
+                let not_antibacterial_gel = item.not_antibacterial_gel ? item.not_antibacterial_gel : 0;
+                let antibacterial_gel_count = antibacterial_gel + not_antibacterial_gel;
+                el.innerText = antibacterial_gel_count;
+                longitude = item.longitude - (200 / 10000);
+                latitude = item.latitude + (800 / 100000);
+                el.style.background = `linear-gradient(to right,#00b065 ${antibacterial_gel * 100 / antibacterial_gel_count}%, #ff3b3b ${antibacterial_gel * 100 / antibacterial_gel_count}%, #ff3b3b ${not_antibacterial_gel * 100 / antibacterial_gel_count}%)`;
                 break;
             default:
                 break;
@@ -570,16 +600,11 @@ function setMarkersSondage(sondage, map) {
         );
         el2.append(el);
         // add marker to map
-        let currentMarker = new mapboxgl.Marker(el2
-            // ,
-            //  map.getZoom() < 9 ? { offset: [0, 0] } : offset
-        )
+        let currentMarker = new mapboxgl.Marker(el2)
             .setLngLat([longitude, latitude])
             .setPopup(popup)
             .addTo(map);
-
         currentMarker[sondage] = true;
-        currentMarker.defaultOffset = offset.offset;
         currentMarker.defaultSize = defaultSize;
         AllSondagesMarkers.push(currentMarker);
         removeMapWaiting();
