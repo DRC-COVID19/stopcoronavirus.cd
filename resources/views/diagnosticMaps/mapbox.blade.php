@@ -161,6 +161,6 @@
         </div>
         <p>{{__("Fetching Data")}}</p>
     </div>
-    <script src="{{ asset('js/app.js?v=2.5') }}" defer></script>
+    <script src="{{ asset('js/app.js?v=2.6') }}" defer></script>
 </body>
 </html>
