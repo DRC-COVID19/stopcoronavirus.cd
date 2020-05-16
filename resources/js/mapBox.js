@@ -437,9 +437,9 @@ function getAllDianostics(map) {
                 .addTo(map);
             currentMarker.defaultOffset = offSet.offset;
             AllMarkers.push(currentMarker);
-            total_count += data[marker].count;
+            total_count += item.FIN + item.FIN5;;
         }
-        
+        $("#medical_orientation_count").text(`(${total_count})`)
         removeMapWaiting();
     });
 }
