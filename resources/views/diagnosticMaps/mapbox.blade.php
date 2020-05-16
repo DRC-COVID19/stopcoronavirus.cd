@@ -21,7 +21,10 @@
                 <div class="card mb-3">
                     <div class="group-control card-body">
                         <input type="checkbox" class="styled-checkbox" name="list_hospital" id="list_hospital">
-                        <label for="list_hospital">{{__('Liste hôpitaux')}}</label>
+                        <label for="list_hospital">
+                            {{__('Liste hôpitaux')}}
+                            <span id="hospital_count"></span>
+                        </label>
                     </div>
                 </div>
                 <div class="card mb-3">
@@ -161,6 +164,6 @@
         </div>
         <p>{{__("Fetching Data")}}</p>
     </div>
-    <script src="{{ asset('js/app.js?v=2.6') }}" defer></script>
+    <script src="{{ asset('js/app.js?v=2.7') }}" defer></script>
 </body>
 </html>
