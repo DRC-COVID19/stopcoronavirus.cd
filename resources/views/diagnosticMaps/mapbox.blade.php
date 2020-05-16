@@ -13,8 +13,9 @@
         <div class="row">
             <div class="col-12 col-md-3 pb-3 column-left">
                 <h1 class="row  map-form-header mb-0 justify-content-center">{{__('Dashboard COVID-19')}}</h1>
-                <div class="row mb-3 map-form-logo justify-content-center">
-                    <img src="{{asset('img/partners_top.png')}}" height="55" width="200" class="img-fluid" alt="">
+                <div class="row mb-3 map-form-logo justify-content-center pt-2 pb-2">
+                    <img src="{{asset('img/partners_top.png')}}"  width="160" class="img-fluid" alt="">
+                    <img src="{{asset('img/commite_riposte.jpg')}}" width="160" class="img-fluid" alt="">
                 </div>
                 {{-- <a href="{{route('admin.home')}}"><i class="fa fa-arrow-left"></i> Retour</a> --}}
 
