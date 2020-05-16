@@ -6,7 +6,7 @@
     <title>Dashboard COVID-19 RDC</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
-    <link href="{{ asset('css/app.css?v=2.4') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v=2.5') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
@@ -27,7 +27,10 @@
                 <div class="card mb-3">
                     <div class="group-control card-header">
                         <input type="checkbox" class="styled-checkbox" name="medical_orientation" id="medical_orientation">
-                        <label for="medical_orientation">{{__("Cas probable (issu du formulaire d'orientation médical)")}}</label>
+                        <label for="medical_orientation">
+                            {{__("Cas probable (issu du formulaire d'orientation médical)")}}
+                        <span id="medical_orientation_count"></span>
+                        </label>
                     </div>
                     <div class="group-control card-body">
                         <select name="orientation_result" disabled class="form-control mb-3" id="orientation_result">
@@ -41,6 +44,8 @@
                             <div><span class="fin-8"></span> Peu probale</div>
                             <div><span class="fin"></span> Probable</div>
                             <div><span class="fin-5"></span> Très probable</div>
+                        <div class="d-block text-right"><a href="{{route('diagnostic')}}" target="_blank">{{__("Voir formulaire")}}</a></div>
+                            
                         </div>
                     </div>
                 </div>
@@ -156,6 +161,6 @@
         </div>
         <p>{{__("Fetching Data")}}</p>
     </div>
-    <script src="{{ asset('js/app.js?v=2.4') }}" defer></script>
+    <script src="{{ asset('js/app.js?v=2.5') }}" defer></script>
 </body>
 </html>
