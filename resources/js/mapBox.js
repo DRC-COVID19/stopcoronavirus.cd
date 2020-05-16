@@ -192,6 +192,7 @@ $(function () {
             map.removeLayer("covid9_hospitals_layer");
             map.removeSource('covid9_hospitals_source');
             $('#hospital-data').addClass('d-none');
+            $("#hospital_count").text('');
         }
     });
 
@@ -204,6 +205,7 @@ $(function () {
         else {
             RemoveDianosticMakers();
             $('#orientation_result').attr('disabled', 'disabled');
+            $("#medical_orientation_count").text('');
         }
     });
 
@@ -228,6 +230,7 @@ $(function () {
             AllSondagesMarkers.map((item) => {
                 item.remove();
             });
+            $("#sondage_count").text('');
         }
     });
 
@@ -280,6 +283,8 @@ function getHospitals(map) {
                 }
             };
         });
+
+        $("#hospital_count").text(`(${hospitalData.length})`);
 
         map.addSource("covid9_hospitals_source", {
             type: "geojson",
@@ -437,7 +442,7 @@ function getAllDianostics(map) {
                 .addTo(map);
             currentMarker.defaultOffset = offSet.offset;
             AllMarkers.push(currentMarker);
-            total_count += item.FIN?item.FIN:0 + item.FIN5?item.FIN5:0;
+            total_count += item.FIN ? item.FIN : 0 + item.FIN5 ? item.FIN5 : 0;
         }
         $("#medical_orientation_count").text(`(${total_count})`)
         removeMapWaiting();
@@ -496,9 +501,9 @@ function getAllSondages() {
     addMapWaiting();
     $.get(`/api/dashboard/sondages`, function (data) {
         AllSondagesData = data;
-        let total_count=0;
-        data.map((item)=>{
-            total_count+=item.count;
+        let total_count = 0;
+        data.map((item) => {
+            total_count += item.count;
         });
         $("#sondage_count").text(`(${total_count})`);
         removeMapWaiting();
