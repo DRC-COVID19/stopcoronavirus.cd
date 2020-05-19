@@ -394,7 +394,6 @@ function getAllDianostics(map) {
     $.get(`/api/dashboard/orientation-medical-result`, function (data) {
         RemoveDianosticMakers();
         AllDianosticData = [];
-        let total_count = 0;
         let total_fin = 0;
         let total_fin5 = 0;
         let total_fin8 = 0;
@@ -451,11 +450,8 @@ function getAllDianostics(map) {
             total_fin += item.FIN ?? 0;
             total_fin5 += item.FIN5 ?? 0;
             total_fin8 += item.FIN8 ?? 0;
-            total_count += total_fin;
-            total_count += total_fin5;
-            total_count += total_fin8;
         }
-        $("#medical_orientation_count").text(`(${total_count})`);
+        $("#medical_orientation_count").text(`(${total_fin+total_fin5+total_fin8})`);
         $("#medical_orientation_fin_count").text(`(${total_fin})`);
         $("#medical_orientation_fin5_count").text(`(${total_fin5})`);
         $("#medical_orientation_fin8_count").text(`(${total_fin8})`);
