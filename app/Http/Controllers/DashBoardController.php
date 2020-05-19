@@ -8,11 +8,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\MyTrait\GClientSheet;
 use App\Http\MyTrait\GeoConding;
+use App\PandemicStat;
 use Illuminate\Support\Str;
 
 class DashBoardController extends Controller
 {
     use GClientSheet, GeoConding;
+
+    public function index()
+    {
+        $pandemicStats =PandemicStat::orderBy('last_update', 'DESC')->first();
+        return view('diagnosticMaps.mapbox',compact('pandemicStats'));
+    }
+    
     public function getHospials()
     {
         try {
