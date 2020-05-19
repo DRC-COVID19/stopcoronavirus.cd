@@ -6,7 +6,7 @@
     <title>Dashboard COVID-19 RDC</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
-    <link href="{{ asset('css/app.css?v=2.5') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v=2.6') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
@@ -32,7 +32,7 @@
                         0
                         @endisset</h5>
                     </div>
-                    <div class="col-md-3 bg-success text-white text-center" >
+                    <div class="col-md-3 bg-success text-white text-center">
                         <div>Guéris</div>
                         @isset($pandemicStats->healed)
                         {{ $pandemicStats->healed }}
@@ -51,7 +51,7 @@
                     <div class="col-12">
                         <p class="text-white-50 text-right mt-2">{{__("Mise à jour le")}} {{ \Carbon\Carbon::parse($pandemicStats->last_update )->format('d.m.Y')}}</p>
                     </div>
-                    
+
                 </div>
                 <div class="card mb-3">
                     <div class="group-control card-body">
@@ -79,9 +79,21 @@
                         </select>
                         <h4>Legende</h4>
                         <div class="legende">
-                            <div><span class="fin-8"></span> Peu probale</div>
-                            <div><span class="fin"></span> Probable</div>
-                            <div><span class="fin-5"></span> Très probable</div>
+                            <div>
+                                <span class="fin-8 legende-color"></span> 
+                                <span>Peu probale</span>
+                                <span id="medical_orientation_fin8_count"></span>
+                            </div>
+                            <div>
+                                <span class="fin legende-color"></span>
+                                <span>Probable</span>
+                                <span id="medical_orientation_fin_count"></span>
+                            </div>
+                            <div>
+                                <span class="fin-5 legende-color"></span>
+                                <span>Très probable</span>
+                                <span id="medical_orientation_fin5_count"></span>
+                            </div>
                             <div class="d-block text-right"><a href="{{route('diagnostic')}}" target="_blank">{{__("Voir formulaire")}}</a></div>
 
                         </div>
@@ -199,6 +211,6 @@
         </div>
         <p>{{__("Fetching Data")}}</p>
     </div>
-    <script src="{{ asset('js/app.js?v=2.7') }}" defer></script>
+    <script src="{{ asset('js/app.js?v=2.8') }}" defer></script>
 </body>
 </html>

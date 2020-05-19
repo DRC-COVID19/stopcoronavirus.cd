@@ -206,6 +206,9 @@ $(function () {
             RemoveDianosticMakers();
             $('#orientation_result').attr('disabled', 'disabled');
             $("#medical_orientation_count").text('');
+            $("#medical_orientation_fin_count").text('');
+            $("#medical_orientation_fin5_count").text('');
+            $("#medical_orientation_fin8_count").text('');
         }
     });
 
@@ -392,6 +395,9 @@ function getAllDianostics(map) {
         RemoveDianosticMakers();
         AllDianosticData = [];
         let total_count = 0;
+        let total_fin = 0;
+        let total_fin5 = 0;
+        let total_fin8 = 0;
         for (const marker in data) {
             // create a DOM element for the marker
             let item = data[marker];
@@ -442,11 +448,18 @@ function getAllDianostics(map) {
                 .addTo(map);
             currentMarker.defaultOffset = offSet.offset;
             AllMarkers.push(currentMarker);
-            total_count += item.FIN8 ? item.FIN8 : 0;
-            total_count += item.FIN ? item.FIN : 0;
-            total_count += item.FIN5 ? item.FIN5 : 0;
+            total_fin += item.FIN ?? 0;
+            total_fin5 += item.FIN5 ?? 0;
+            total_fin8 += item.FIN8 ?? 0;
+            total_count += total_fin;
+            total_count += total_fin5;
+            total_count += total_fin8;
         }
-        $("#medical_orientation_count").text(`(${total_count})`)
+        $("#medical_orientation_count").text(`(${total_count})`);
+        $("#medical_orientation_fin_count").text(`(${total_fin})`);
+        $("#medical_orientation_fin5_count").text(`(${total_fin5})`);
+        $("#medical_orientation_fin8_count").text(`(${total_fin8})`);
+
         removeMapWaiting();
     });
 }
