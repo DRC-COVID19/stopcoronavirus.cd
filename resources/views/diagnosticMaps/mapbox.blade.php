@@ -13,12 +13,46 @@
         <div class="row">
             <div class="col-12 col-md-3 pb-3 column-left">
                 <h1 class="row  map-form-header mb-0 justify-content-center">{{__('Dashboard COVID-19')}}</h1>
-                <div class="row mb-3 map-form-logo justify-content-center pt-2 pb-2">
-                    <img src="{{asset('img/partners_top.png')}}"  width="160" class="img-fluid" alt="">
+                <div class="row  map-form-logo justify-content-center pt-2 pb-2">
+                    <img src="{{asset('img/partners_top.png')}}" width="160" class="img-fluid" alt="">
                     <img src="{{asset('img/commite_riposte.jpg')}}" width="160" class="img-fluid" alt="">
                 </div>
                 {{-- <a href="{{route('admin.home')}}"><i class="fa fa-arrow-left"></i> Retour</a> --}}
 
+                <div class="row pandemics-stat-row">
+                    <div class="col-md-3 bg-gray-200 text-center">
+                        <div>Confirmés</div>
+                        {{ $pandemicStats->confirmed }}
+                    </div>
+                    <div class="col-md-3 bg-flag-yellow text-center">
+                        <div>Actifs</div>
+                        @isset($pandemicStats->sick)
+                        {{ $pandemicStats->sick }}
+                        @else
+                        0
+                        @endisset</h5>
+                    </div>
+                    <div class="col-md-3 bg-success text-white text-center" >
+                        <div>Guéris</div>
+                        @isset($pandemicStats->healed)
+                        {{ $pandemicStats->healed }}
+                        @else
+                        0
+                        @endisset
+                    </div>
+                    <div class="col-md-3  bg-dark text-white text-center">
+                        <div>Décès</div>
+                        @isset($pandemicStats->dead)
+                        {{ $pandemicStats->dead }}
+                        @else
+                        0
+                        @endisset
+                    </div>
+                    <div class="col-12">
+                        <p class="text-white-50 text-right mt-2">{{__("Mise à jour le")}} {{ \Carbon\Carbon::parse($pandemicStats->last_update )->format('d.m.Y')}}</p>
+                    </div>
+                    
+                </div>
                 <div class="card mb-3">
                     <div class="group-control card-body">
                         <input type="checkbox" class="styled-checkbox" name="list_hospital" id="list_hospital">
@@ -33,7 +67,7 @@
                         <input type="checkbox" class="styled-checkbox" name="medical_orientation" id="medical_orientation">
                         <label for="medical_orientation">
                             {{__("Cas probable (issu du formulaire d'orientation médical)")}}
-                        <span id="medical_orientation_count"></span>
+                            <span id="medical_orientation_count"></span>
                         </label>
                     </div>
                     <div class="group-control card-body">
@@ -48,8 +82,8 @@
                             <div><span class="fin-8"></span> Peu probale</div>
                             <div><span class="fin"></span> Probable</div>
                             <div><span class="fin-5"></span> Très probable</div>
-                        <div class="d-block text-right"><a href="{{route('diagnostic')}}" target="_blank">{{__("Voir formulaire")}}</a></div>
-                            
+                            <div class="d-block text-right"><a href="{{route('diagnostic')}}" target="_blank">{{__("Voir formulaire")}}</a></div>
+
                         </div>
                     </div>
                 </div>
@@ -75,7 +109,7 @@
                             <input type="checkbox" class="styled-checkbox" disabled name="toll_free_number" id="toll_free_number">
                             <label for="toll_free_number">Appellerait le numéro vert en cas de symptômes</label>
                         </div> --}}
-                        
+
                         <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="price_increase" id="price_increase">
                             <label for="price_increase">Constatent une augmentation des prix des denrées essentielles</label>
@@ -85,15 +119,15 @@
                         </div>
                         <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="mask" id="mask">
-                        <label for="mask">{{__('Masque')}}</label>
+                            <label for="mask">{{__('Masque')}}</label>
                         </div>
                         <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="makala" id="makala">
-                        <label for="makala">{{__('Makala')}}</label>
+                            <label for="makala">{{__('Makala')}}</label>
                         </div>
                         <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="flour" id="flour">
-                        <label for="flour">{{__('Farine')}}</label>
+                            <label for="flour">{{__('Farine')}}</label>
                         </div>
                         <div class="group-control">
                             <input type="checkbox" class="styled-checkbox" disabled name="antibacterial_gel" id="antibacterial_gel">
@@ -134,7 +168,7 @@
                         </div>
                         <div class="col-6">
                             <h3>Situation Epidémiologique</h3>
-                            <div class="confirmed" >
+                            <div class="confirmed">
                                 <span>Confirmés: </span>
                                 <span class="count" id="sick_confirmed">0</span>
                             </div>
