@@ -17,10 +17,29 @@ class DashBoardController extends Controller
 
     public function index()
     {
-        $pandemicStats =PandemicStat::orderBy('last_update', 'DESC')->first();
-        return view('diagnosticMaps.mapbox',compact('pandemicStats'));
+        $pandemicStats = PandemicStat::orderBy('last_update', 'DESC')->first();
+        return view('diagnosticMaps.mapbox', compact('pandemicStats'));
     }
-    
+
+    public function getLastPandemicsRegion()
+    {
+        try {
+            $pandemics = DB::select("SELECT provinces.name, p1.confirmed, p1.sick, p1.seriously, p1.healed, p1.dead, provinces.latitude, provinces.longitude, p1.last_update 
+        FROM pandemics p1
+        INNER JOIN(
+        SELECT MAX(pandemics.last_update) AS max_date, pandemics.province_id 
+        FROM  pandemics  group by  pandemics.province_id ) p2
+        ON p2.province_id=p1.province_id AND p2.max_date=p1.last_update
+        INNER JOIN provinces ON p1.province_id=provinces.id");
+            return response()->json($pandemics);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
     public function getHospials()
     {
         try {
@@ -36,8 +55,10 @@ class DashBoardController extends Controller
 
     function getAllDiagnostics()
     {
-        $datafromDb = DB::table('diagnostics')->select(['longitude', 'latitude', 'township', 'orientation', 'province', DB::raw('COUNT(*) as count')])
-            ->groupBy('longitude', 'latitude', 'township', 'orientation', 'province')->get();
+        $datafromDb = DB::table('diagnostics')
+            ->select(['longitude', 'latitude', 'township', 'orientation', 'province', DB::raw('COUNT(*) as count')])
+            ->groupBy('longitude', 'latitude', 'township', 'orientation', 'province')
+            ->get();
         $newArray = [];
 
         foreach ($datafromDb as $value) {
