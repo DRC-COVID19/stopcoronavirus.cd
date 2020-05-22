@@ -60,9 +60,8 @@ class ProvinceController extends AdminController
     protected function form()
     {
         $form = new Form(new Province());
-
         $form->text('name', __('Name'));
-
+        $form->latlong('latitude', 'longitude', 'Position')->height(500);
         return $form;
     }
 }

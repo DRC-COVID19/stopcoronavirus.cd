@@ -215,7 +215,7 @@
         font-size: 1.3rem;
         color: white;
     }
-    .map-form-logo{
+    .map-form-logo {
         background: white;
     }
     .map-form-header {
@@ -290,7 +290,7 @@
             transform: rotate(45deg);
         }
     }
-    .pandemics-stat-row{
+    .pandemics-stat-row {
         font-size: 0.8rem;
     }
 }
@@ -361,11 +361,11 @@
         border: 2px solid $flour;
         background: $flour;
     }
-    &.catch_virus{
+    &.catch_virus {
         border: 2px solid $catch_virus;
         background: $catch_virus;
     }
-    &.antibacterial_gel{
+    &.antibacterial_gel {
         border: 2px solid $antibacterial_gel;
         background: $antibacterial_gel;
     }
@@ -423,5 +423,28 @@
             border-right: 15px solid $antibacterial_gel;
             padding-right: 5px;
         }
+    }
+}
+
+.covidCases-marker {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    &.confirmed {
+        background: $secondary;
+    }
+    &.sick {
+        background: $flag-yellow;
+    }
+    &.healed {
+        background: $success;
+    }
+    &.dead {
+        background: $dark;
     }
 }

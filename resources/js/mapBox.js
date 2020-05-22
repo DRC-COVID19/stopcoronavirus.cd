@@ -3,6 +3,8 @@ let AllMarkers = [];
 let AllDianosticData = [];
 let AllSondagesData = [];
 let AllSondagesMarkers = [];
+let AllCovideCases = [];
+let AllCovidCasesMarkers = [];
 $(function () {
     let hoveredStateId = null;
     let hoveredStateIdKin = null;
@@ -177,6 +179,31 @@ $(function () {
         // });
 
     });
+    $('#covid_case').change(function (e) {
+        let item = $(this);
+        if (item.is(':checked')) {
+            getCovideCases();
+            $('#covid_case_group_item input[type=radio]').removeAttr('disabled');
+        }
+        else {
+            AllCovidCasesMarkers.map((item) => {
+                item.remove();
+            });
+            $('#covid_case_group_item input[type=radio]').attr('disabled','disabled');
+            $('#covid_case_group_item input[type=radio]').prop("checked", false);
+        }
+    });
+
+    $('#covid_case_group_item input[type=radio]').change(function (e) {
+        let item = $(this);
+        if (item.is(':checked')) {
+            AllCovidCasesMarkers.map((item) => {
+                item.remove();
+            });
+            setMarkerCovidCases(item.attr('id'), map);
+        }
+    });
+
     $('#hospital-data-close').click(function (e) {
         $('#hospital-data').addClass('d-none');
     });
@@ -257,6 +284,57 @@ function addMapWaiting() {
 
 function removeMapWaiting() {
     $('#map-waiting').addClass('d-none');
+}
+
+function getCovideCases() {
+    addMapWaiting()
+    $.get(`/api/dashboard/cavid-cases`, function (data) {
+        AllCovideCases = data;
+        $("#confirmed").click();;
+        removeMapWaiting();
+    });
+}
+
+function setMarkerCovidCases(type, map) {
+    let data = AllCovideCases
+        .filter(x => x[type] && x[type] > 0);
+    data.map((item) => {
+        let el = document.createElement('div');
+        let el2 = document.createElement('div');
+        el2.className = `covidCases-marker ${type}`
+        el2.textContent = item[type];
+
+        if (item[type] > 3840) {
+            el2.style = `width:100px;height:100px;`;
+        } else if (item[type] > 1920) {
+            el2.style = `width:90px;height:90px;`;
+        }
+        else if (item[type] > 960) {
+            el2.style = `width:80px;height:80px;`;
+        }
+        else if (item[type] > 480) {
+            el2.style = `width:70px;height:70px;`;
+        }
+        else if (item[type] > 240) {
+            el2.style = `width:60px;height:60px;`;
+        }
+        else if (item[type] > 120) {
+            el2.style = `width:50px;height:50px;`;
+        }
+        else if (item[type] > 60) {
+            el2.style = `width:40px;height:40px;`;
+        }
+        else if (item[type] > 30) {
+            el2.style = `width:30px;height:30px;`;
+        }
+        el.append(el2);
+        let currentMarker = new mapboxgl.Marker(el)
+            .setLngLat([item.longitude, item.latitude])
+            //.setPopup(popup)
+            .addTo(map);
+        currentMarker[type] = true;
+        AllCovidCasesMarkers.push(currentMarker);
+    });
 }
 
 function getHospitals(map) {
@@ -427,7 +505,6 @@ function getAllDianostics(map) {
             let longitude = data[marker].longitude;
             let latitude = data[marker].latitude;
 
-
             if (data[marker].province.toUpperCase() != "KINSHASA") {
                 longitude = (Number(longitude) + (500 / 100000)).toFixed(5);
                 latitude = (Number(latitude) - (300 / 100000)).toFixed(5);
@@ -441,8 +518,7 @@ function getAllDianostics(map) {
             let offSet = { offset: [-70, 30] };
             let currentMarker = new mapboxgl.Marker(el
                 // , map.getZoom() < 9 ? { offset: [0, 0] } : offSet
-            )
-                .setLngLat([longitude, latitude])
+            ).setLngLat([longitude, latitude])
                 .setPopup(popup)
                 .addTo(map);
             currentMarker.defaultOffset = offSet.offset;
@@ -451,7 +527,7 @@ function getAllDianostics(map) {
             total_fin5 += item.FIN5 ?? 0;
             total_fin8 += item.FIN8 ?? 0;
         }
-        $("#medical_orientation_count").text(`(${total_fin+total_fin5+total_fin8})`);
+        $("#medical_orientation_count").text(`(${total_fin + total_fin5 + total_fin8})`);
         $("#medical_orientation_fin_count").text(`(${total_fin})`);
         $("#medical_orientation_fin5_count").text(`(${total_fin5})`);
         $("#medical_orientation_fin8_count").text(`(${total_fin8})`);

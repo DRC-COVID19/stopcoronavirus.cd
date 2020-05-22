@@ -3,6 +3,7 @@
 namespace App\Admin\Controllers;
 
 use App\Pandemic;
+use App\Province;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -25,13 +26,15 @@ class PandemicController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Pandemic());
+        $grid->column('province_id', __('Province'))->display(function ($province_id) {
+            $province = Province::find($province_id);
+            return $province->name;
+        });
         $grid->column('confirmed', __('Confirmés'));
-        $grid->column('local', __('Cas local'));
-        $grid->column('imported', __('Cas importés'));
         $grid->column('sick', __('Malades'));
         $grid->column('seriously', __('Grave'));
         $grid->column('healed', __('Guéris'));
-        $grid->column('dead', __('Morts'));
+        $grid->column('dead', __('Décès'));
         $grid->column('last_update', __('Dernière modification'));
         return $grid;
     }
@@ -45,13 +48,15 @@ class PandemicController extends AdminController
     protected function detail($id)
     {
         $show = new Show(Pandemic::findOrFail($id));
+        $show->field('province_id', __('Province'))->display(function ($province_id) {
+            $province = Province::find($province_id);
+            return $province->name;
+        });
         $show->field('confirmed', __('Confirmés'));
-        $show->field('local', __('Cas local'));
-        $show->field('imported', __('Cas importés'));
         $show->field('sick', __('Malades'));
         $show->field('seriously', __('Grave'));
         $show->field('healed', __('Guéris'));
-        $show->field('dead', __('Morts'));
+        $show->field('dead', __('Décès'));
         $show->field('created_at', __('Created at'));
         $show->field('last_update', __('Dernière modification'));
         return $show;
@@ -66,13 +71,13 @@ class PandemicController extends AdminController
     {
         $form = new Form(new Pandemic());
         $form->number('confirmed', __('Confirmés'))->default(0);
-        $form->number('local', __('Cas local'));
-        $form->number('imported', __('Cas importés'));
         $form->number('sick', __('Malades'));
         $form->number('seriously', __('Grave'));
         $form->number('healed', __('Guéris'));
-        $form->number('dead', __('Morts'));
+        $form->number('dead', __('Décès'));
+        $form->select('province_id', __('Province'))->options(Province::pluck('name', 'id'))->rules(['required']);
         $form->datetime('last_update', __('Dernière modification'))->rules(['required']);
+        
         return $form;
     }
 }

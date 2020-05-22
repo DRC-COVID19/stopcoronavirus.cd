@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\PandemicStat;
+use App\Http\Resources\PandemicStat as PandemicStatResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +19,6 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-
-use App\PandemicStat;
-use App\Http\Resources\PandemicStat as PandemicStatResource;
 
 Route::get('/lastpandemicstat', function () {
     return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->first());
@@ -38,6 +36,7 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('hospitals/', 'DashBoardController@getHospials');
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
     Route::get('sondages', 'DashBoardController@getSondages');
+    Route::get('cavid-cases', 'DashBoardController@getLastPandemicsRegion');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');

@@ -52,7 +52,6 @@ class PostController extends AdminController
         $show->field('content', __('Content'));
         $show->field('order',__('Order'));
         $show->field('width',__('Width'));
-    
         $show->field('slug', __('Slug'));
         $show->field('category_id', __('Category id'))->display(function ($category_id) {
             $category = Category::find($category_id);
