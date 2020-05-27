@@ -87,6 +87,9 @@
                                         <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">
                                             <li> Idées reçues</li>
                                         </a>
+                                        <a class="px-md-2" target="_blank" href="https://factcheck.stopcoronavirusrdc.info/">
+                                            <li>{{__('Fact-checking')}} <span class="fas fa-external-link-alt"></span></li>
+                                        </a>
                                         <a href="{{route('sondages')}}" class="px-md-2 {{ Route::currentRouteName()=='sondages' ? 'active' : '' }}">
                                             <li> Sondage</li>
                                         </a>
@@ -102,9 +105,9 @@
                                 {{ __('messages.0')}}
                             </p>
                         </div>
-                        <div class="col-lg-6 text-center text-md-right div-radio " >
+                        <div class="col-lg-6 text-center text-md-right div-radio ">
                             <hr class="d-md-none">
-                        <p class="text-white m-0"><span class="fa fa-broadcast-tower"></span> <span><strong><a class="text-white" target="_blank" href="https://www.radioking.com/radio/min-sante-fm">95.7 FM</a></strong> la radio du ministère de la santé</span></p>
+                            <p class="text-white m-0"><span class="fa fa-broadcast-tower"></span> <span><strong><a class="text-white" target="_blank" href="https://www.radioking.com/radio/min-sante-fm">95.7 FM</a></strong> la radio du ministère de la santé</span></p>
                         </div>
                     </div>
                 </div>
@@ -132,6 +135,7 @@
                             <li class="{{ Route::currentRouteName()=='stereotypes'||Route::currentRouteName()=='sondages' ? 'active' : '' }}"> <a href="#" class="px-md-2 nav-item">{{__("Idées reçues & sondage")}} <span class="chevron fas fa-chevron-down"></span></a>
                                 <ul>
                                     <li><a class="sub-nav-item" href="{{route('stereotypes')}}">{{__('Idées reçues')}}</a></li>
+                                    <li><a title="{{__('Plateforme de signallement des fakenews et de fact checking concernant le COVID-19.')}}" class="sub-nav-item" target="_blank" href="https://factcheck.stopcoronavirusrdc.info/">{{__('Fact-checking')}} <span class="fas fa-external-link-alt"></span> </a></li>
                                     <li><a class="sub-nav-item" href="{{route('sondages')}}">{{__('Sondage')}}</a></li>
                                 </ul>
                             </li>
