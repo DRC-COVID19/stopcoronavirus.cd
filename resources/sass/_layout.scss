@@ -1,9 +1,7 @@
 .App-Header {
     .App-Header--notice {
         background-color: darken($success, 8%);
-        @media screen and (max-width: 575px) {
-            padding-left: 60px;
-        }
+       
     }
     .App-Header--logo {
     }
@@ -77,4 +75,9 @@ a {
 }
 .twitter{
     background-color: #76c5f5 !important;
+}
+.div-radio{
+    img{
+        width: 20px;
+    }
 }

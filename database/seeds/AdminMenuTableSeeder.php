@@ -184,6 +184,17 @@ class AdminMenuTableSeeder extends Seeder
                 'created_at' => '2020-03-23 13:12:41',
                 'updated_at' => '2020-03-23 13:12:41',
             ),
+            array (
+                'id' => 15,
+                'parent_id' => 0,
+                'order' => 6,
+                'title' => 'Suivi de diagnostique',
+                'icon' => 'fa-bar-chart',
+                'uri' => 'diagnostics',
+                'permission' => '*',
+                'created_at' => '2020-03-23 13:12:41',
+                'updated_at' => '2020-03-23 13:12:41',
+            ),
         ));
         
         
