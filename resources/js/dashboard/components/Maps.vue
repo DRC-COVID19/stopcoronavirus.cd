@@ -6,12 +6,14 @@
     :attributionControl="false"
     @load="onMapLoaded"
   >
-    <MglAttributionControl />
     <MglNavigationControl position="top-right" />
-    <MglGeolocateControl position="top-right" />
-    <MglNavigationControl position="top-right" />
-    <MglGeolocateControl position="top-right" />
-    <MglScaleControl />
+
+    <MglGeojsonLayer :sourceId="drcSourceId" :layerId="drcSourceId" :layer="countryLayer" />
+    <MglVectorLayer
+      :sourceId="kinSourceId"
+      :layerId="kinSourceId"
+      :layer="kinLayer"
+    />
   </MglMap>
 </template>
 
@@ -20,25 +22,41 @@ import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE } from "../config/env";
 import Mapbox from "mapbox-gl";
 import {
   MglMap,
-  MglAttributionControl,
   MglNavigationControl,
-  MglGeolocateControl,
-  MglFullscreenControl,
-  MglScaleControl
+  MglGeojsonLayer,
+  MglVectorLayer
 } from "vue-mapbox";
 
 export default {
   components: {
     MglMap,
     MglNavigationControl,
-    MglGeolocateControl
+    MglGeojsonLayer,
+    MglVectorLayer
   },
   data() {
     return {
       MAPBOX_TOKEN,
       MAPBOX_DEFAULT_STYLE,
       Mapbox,
-      popupCoordinates: [15.31389, -4.33167]
+      popupCoordinates: [15.31389, -4.33167],
+      countryLayer: {
+        paint: {
+          "line-color": "#627BC1",
+          "line-width": 1
+        },
+        type: "line"
+      },
+      kinLayer: {
+        paint: {
+          "line-color": "#627BC1",
+          "line-width": 1
+        },
+        type: "line",
+        "source-layer":"carte-administrative-de-la-vi-csh5cj"
+      },
+      drcSourceId: "states",
+      kinSourceId: "statesKin"
     };
   },
   created() {
@@ -50,6 +68,16 @@ export default {
       this.map = event.map;
       // or just to store if you want have access from other components
       this.$store.map = event.map;
+      this.map.addSource(this.drcSourceId, {
+        type: "geojson",
+        generateId: true,
+        data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
+      });
+
+      this.map.addSource(this.kinSourceId, {
+        type: "vector",
+        url: "mapbox://merki230.4airwoxt"
+      });
 
       const asyncActions = event.component.actions;
       const newParams = await asyncActions.flyTo({
