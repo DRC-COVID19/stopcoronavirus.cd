@@ -191,7 +191,7 @@
         </div>
     </footer>
     <div class="contenaire-float">
-        <a href="#" class="float whatsapp">
+        <a  href="https://wa.me/243844434444?text=salut" title="Whatsapp bot" target="_blank" class="float whatsapp">
             <i class="fab fa-whatsapp fa-2x"></i>
         </a>
     </div>

@@ -51,6 +51,10 @@ a {
         align-items: center;
         justify-content: center;
         box-shadow: 2px 2px 3px #999;
+        transition: all 500ms ease;
+        &:hover{
+            transform: scale(1.03);
+        }
     }
 }
 .xs-share-container{
