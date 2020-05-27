@@ -6,6 +6,7 @@
         <h1>
             {{ __('Idées reçues et Fake News') }}
         </h1>
+    <p><a title="{{__('Plateforme de signallement des fakenews et de fact checking concernant le COVID-19.')}}" class="text-white" target="_blank" href="https://factcheck.stopcoronavirusrdc.info/">{{__('Fact-checking')}} <span class="fas fa-external-link-alt"></span> </a></p>
     </div>
 </div>
 <div class="container">
