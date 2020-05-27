@@ -1,0 +1,45 @@
+{
+    "variables": [],
+    "info": {
+        "name": "Laravel API",
+        "_postman_id": "58995521-1575-4ef1-9327-cc92a805face",
+        "description": "",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.0.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "User management",
+            "description": "\nAPIs for managing users",
+            "item": [
+                {
+                    "name": "Test diagnostic covid-19",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "host": "localhost:8000",
+                            "path": "api\/self-test",
+                            "query": []
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application\/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application\/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"temperature_cat\": 7,\n    \"cough\": 15,\n    \"agueusia_anosmia\": 11,\n    \"sore_throat_aches\": 14,\n    \"diarrhea\": 3,\n    \"tiredness\": 18,\n    \"tiredness_details\": 9,\n    \"feeding_day\": 5,\n    \"breathlessness\": 9,\n    \"age\": 10,\n    \"size\": 9,\n    \"weight\": 7,\n    \"heart_disease\": 19,\n    \"diabetes\": 18,\n    \"cancer\": 4,\n    \"breathing_disease\": 12,\n    \"kidney_disease\": 13,\n    \"liver_disease\": 19,\n    \"pregnant\": 8,\n    \"immunosuppressant_disease\": 19,\n    \"immunosuppressant_drug\": 13,\n    \"province\": \"aut\",\n    \"town\": \"odit\",\n    \"township\": \"at\",\n    \"longitude\": \"est\",\n    \"latitude\": \"dicta\"\n}"
+                        },
+                        "description": "",
+                        "response": []
+                    }
+                }
+            ]
+        }
+    ]
+}

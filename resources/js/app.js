@@ -1,13 +1,13 @@
 var $ = require("jquery");
 var Chart = require('chart.js');
 //require('./bootstrap');
-
+import './mapBox';
 
 function drawChart() {
 
     // Add a helper to format timestamp data
     Date.prototype.formatD = function () {
-        return this.getDate()+'.'+('0' + (this.getMonth()+1)).slice(-2)+"."+this.getFullYear();
+        return this.getDate() + '.' + ('0' + (this.getMonth() + 1)).slice(-2) + "." + this.getFullYear();
     }
 
     var jsonData = $.ajax({
@@ -69,7 +69,7 @@ function drawChart() {
                     intersect: false,
                     callbacks: {
                         title: function (tooltipItem, data) {
-                            let d = new Date (tooltipItem[0].label);
+                            let d = new Date(tooltipItem[0].label);
                             return d.formatD();
                         }
                     }
@@ -124,4 +124,51 @@ function drawChart() {
 $(document).ready(function () {
     if ($('#statsChart').length)
         drawChart();
+
+    $('#other-town').addClass('d-none');
+
+    $('select[name=township]').attr('required', 'required');
+
+    $(':radio[name=step_value]').change(function (params) {
+        $('#question-form').submit();
+    });
+    $('#town').change(function (params) {
+        let value = $(this).val();
+        if (value == 0) {
+            $('#other-town').removeClass('d-none');
+            $('input[name=other_town]').attr('required', 'required');
+        }
+        else {
+            $('#other-town').addClass('d-none');
+            $('input[name=other_town]').remove('required');
+        }
+
+        if (value == "Kinshasa") {
+            $('#township').removeClass('d-none');
+            $('select[name=township]').attr('required', 'required');
+        }
+        else {
+            $("#township").addClass('d-none');
+            $('select[name=township]').removeAttr('required');
+        }
+    });
+    let response = $('#question-form-validate-btn').data('response');
+    if (response == 1 || response == 2 || response == 10 || response == 8) {
+        $('#question-form-validate-btn').addClass('d-none');
+    }
+    // get Localisation
+
+   /* if ("geolocation" in navigator) { 
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log("Found your location <br />Lat : " + position.coords.latitude + " </br>Lang :" + position.coords.longitude);
+        });
+    } else {
+        console.log("Browser doesn't support geolocation!");
+    }*/
+});
+
+
+
+$(function () {
+
 });

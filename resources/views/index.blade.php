@@ -6,13 +6,17 @@
     <div class="container">
         <h1>Stop Coronavirus COVID-19 RDC</h1>
         <p class="lead">Site officiel d'informations et de conseils</p>
+
     </div>
 </div>
 @isset($pandemicStats)
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h2 class="mt-5">Situation Épidémiologique en RDC</h2>
+            <h2 class="mt-5">
+                <i class="fas fa-chart-line"></i>
+                Situation Épidémiologique en RDC
+            </h2>
             <p>Mise à jour le {{ \Carbon\Carbon::parse($pandemicStats->last_update )->format('d.m.Y')}}</p>
         </div>
     </div>
@@ -80,13 +84,47 @@
 </div>
 @endisset
 
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="jumbotron jumbotron-alert">
+                <p class="lead">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    {{ __("Prenez deux minutes pour partager vos perceptions et réactions afin d'aider et d’orienter l'équipe de la riposte dans la lutte contre le COVID-19 :") }}
+                </p>
+                <p class="text-center mb-0">
+                    <a class="btn btn-secondary" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLScgvdoM8gr1HAUHSDOA0zTLED7rmmofPsbG1Qqplj9pcxQ8XA/viewform?usp=sf_link">
+                        {{ __('Accédez au Sondage') }}
+                    </a>
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 ">
+            <div class="jumbotron jumbotron-diagnostic">
+                <p class="lead">
+                    <i class="fas fa-virus"></i>
+                    <strong>{{ __("Vous craignez d'avoir contracté le coronavirus ?") }}</strong><br>
+                    {{ __ ("Remplissez le questionnaire pour une orientation médicale et un conseil sur les étapes à suivre.") }}
+                </p>
+                <p class="text-center mb-0">
+                    <a class="btn btn-secondary" href="{{ route('diagnostic') }}">
+                        {{ __('Accédez au Questionnaire') }}
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <div class="container mb-5">
 
     <div class="row">
         <div class="col-12">
             <h2 class="mt-5">
                 <i class="fas fa-virus"></i>
-                {{ __("Quels sont les symptômes de la COVID-19 ?") }}
+                {{ __("Quels sont les symptômes du COVID-19 ?") }}
             </h2>
         </div>
     </div>
@@ -302,19 +340,19 @@
         <div class="w60 my-4">
             <h5 class="my-4">
                 {{$alert->title}}
-            </h5>
-            <p>
-                {{$alert->content}}
-            </p>
-        </div>
-        @endforeach
+    </h5>
+    <p>
+        {{$alert->content}}
+    </p>
+</div>
+@endforeach
 
-        <div>
-            <a href="{{route('home')}}" class="btn btn-success">
-                Voir toutes les alertes
-            </a>
-        </div>
-    </div>
-    @endif --}}
+<div>
+    <a href="{{route('home')}}" class="btn btn-success">
+        Voir toutes les alertes
+    </a>
+</div>
+</div>
+@endif --}}
 
-    @endsection
+@endsection

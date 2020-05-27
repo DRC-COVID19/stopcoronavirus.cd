@@ -1,0 +1,427 @@
+#map {
+    height: 100vh;
+}
+/*
+.custom-clustericon-2 {
+    --cluster-color: #ff9b00d9;
+}
+*/
+.custom-clustericon {
+    /*  background: var(--cluster-color);*/
+    color: #fff;
+    border-radius: 100%;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+}
+/*
+.custom-clustericon::before {
+    padding: 16px;
+}
+
+.custom-clustericon::after {
+    padding: 8px;
+}
+.custom-clustericon::before,
+.custom-clustericon::after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+    background: var(--cluster-color);
+    opacity: 0.2;
+    border-radius: 100%;
+}
+*/
+.second-cluster-icon {
+    text-align: center;
+    width: 40px;
+}
+.map-waiting {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #00000052;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    p {
+        color: white;
+        font-size: 1.7rem;
+    }
+
+    .lds-ring {
+        display: inline-block;
+        position: relative;
+        width: 80px;
+        height: 80px;
+    }
+    .lds-ring div {
+        box-sizing: border-box;
+        display: block;
+        position: absolute;
+        width: 64px;
+        height: 64px;
+        margin: 8px;
+        border: 8px solid #fff;
+        border-radius: 50%;
+        animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        border-color: #fff transparent transparent transparent;
+    }
+    .lds-ring div:nth-child(1) {
+        animation-delay: -0.45s;
+    }
+    .lds-ring div:nth-child(2) {
+        animation-delay: -0.3s;
+    }
+    .lds-ring div:nth-child(3) {
+        animation-delay: -0.15s;
+    }
+    @keyframes lds-ring {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}
+.pie {
+    /* Basic layout */
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.8rem;
+    /* A little styling */
+    border: 0.15em solid #fff;
+
+    /* fixes a minor clipping issue in Chrome */
+    background-origin: border-box;
+    background-image: linear-gradient(to right, $fin-8 50%, $fin 0);
+
+    &::before {
+        content: "";
+        display: block;
+        margin-left: 50%;
+        height: 112%;
+        width: 100%;
+        border-radius: 0 100% 100% 0/50%;
+        background: #ff0000c4;
+        transform-origin: left;
+        transform: rotate(0.22turn);
+    }
+
+    /* background-image: conic-gradient($fin-5 120deg, $fin-8 0 240deg, $fin 0);*/
+    .fin-8 {
+        position: absolute;
+        top: 0;
+        bottom: 50%;
+        left: 0;
+        right: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        transform: translate(-22%, 22%) rotate(-56deg);
+    }
+    .fin-5 {
+        position: absolute;
+        bottom: 0;
+        top: 50%;
+        left: 0;
+        right: 0;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ff3b3b;
+        transform: translate(5%, 0%) rotate(-11deg);
+    }
+    .fin {
+        top: 0;
+        bottom: 50%;
+        left: 0;
+        right: 0;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        transform: translate(16%, 9%) rotate(45deg);
+    }
+}
+.legende {
+    list-style: none;
+    div {
+        display: flex;
+        .legende-color {
+            display: block;
+            height: 20px;
+            width: 20px;
+            margin-right: 5px;
+            &.fin-8 {
+                background: $fin-8;
+            }
+            &.fin-5 {
+                background: $fin-5;
+            }
+            &.fin {
+                background: $fin;
+            }
+        }
+    }
+}
+.column-left {
+    background: #14244f;
+    height: 100vh;
+    overflow: auto;
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: #f5f5f5;
+    }
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        background-color: #f5f5f5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #0ae;
+
+        background-image: -webkit-gradient(
+            linear,
+            0 0,
+            0 100%,
+            color-stop(0.5, rgba(255, 255, 255, 0.2)),
+            color-stop(0.5, transparent),
+            to(transparent)
+        );
+    }
+    h1 {
+        font-size: 1.3rem;
+        color: white;
+    }
+    .map-form-logo{
+        background: white;
+    }
+    .map-form-header {
+        background: #00b065;
+        padding: 20px;
+        color: white;
+    }
+
+    .styled-checkbox {
+        position: absolute; // take it out of document flow
+        opacity: 0; // hide it
+
+        & + label {
+            position: relative;
+            cursor: pointer;
+            padding: 0;
+            padding-left: 30px;
+            width: 100%;
+        }
+
+        // Box.
+        & + label:before {
+            left: 0;
+            content: "";
+            position: absolute;
+            margin-right: 10px;
+            display: inline-block;
+            vertical-align: text-top;
+            width: 20px;
+            height: 20px;
+            background: #d2d2d2;
+        }
+
+        // Box hover
+        &:hover + label:before {
+            background: #00b065;
+        }
+
+        // Box focus
+        &:focus + label:before {
+            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+        }
+
+        // Box checked
+        &:checked + label:before {
+            background: #00b065;
+        }
+
+        // Disabled state label.
+        &:disabled + label {
+            color: #b8b8b8;
+            cursor: auto;
+        }
+
+        // Disabled box.
+        &:disabled + label:before {
+            box-shadow: none;
+            background: #ddd;
+        }
+
+        // Checkmark. Could be replaced with an image
+        &:checked + label:after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: 9px;
+            background: white;
+            width: 3px;
+            height: 3px;
+            box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white,
+                4px -8px 0 white;
+            transform: rotate(45deg);
+        }
+    }
+    .pandemics-stat-row{
+        font-size: 0.8rem;
+    }
+}
+.default-makers {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    &::before {
+        width: 60%;
+        height: 60%;
+    }
+    &::after {
+        width: 80%;
+        height: 80%;
+    }
+    &::before,
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        border-radius: 100%;
+        z-index: -1;
+    }
+    &.FIN8 {
+        background: $fin-8;
+        &::before,
+        &::after {
+            background: $fin-8;
+        }
+    }
+    &.FIN5 {
+        background: $fin-5;
+        &::before,
+        &::after {
+            background: $fin-5;
+        }
+    }
+    &.FIN {
+        background: $fin;
+        &::before,
+        &::after {
+            background: $fin;
+        }
+    }
+
+    &.worried {
+        border: 2px solid $worried;
+        background: $worried;
+    }
+    &.mask {
+        border: 2px solid $mask;
+        background: $mask;
+    }
+    &.makala {
+        border: 2px solid $makala;
+        background: $makala;
+    }
+    &.price_increase {
+        border: 2px solid $price_increase;
+        background: $price_increase;
+    }
+    &.flour {
+        border: 2px solid $flour;
+        background: $flour;
+    }
+    &.catch_virus{
+        border: 2px solid $catch_virus;
+        background: $catch_virus;
+    }
+    &.antibacterial_gel{
+        border: 2px solid $antibacterial_gel;
+        background: $antibacterial_gel;
+    }
+}
+#hospital-data {
+    position: absolute;
+    bottom: 0;
+    background: white;
+    left: 0;
+    right: 0;
+    z-index: 999999;
+    #hospital-data-close {
+        cursor: pointer;
+    }
+}
+#sondage-item {
+    #worried {
+        + label {
+            border-right: 15px solid $worried;
+            padding-right: 5px;
+        }
+    }
+    #mask {
+        + label {
+            border-right: 15px solid $mask;
+            padding-right: 5px;
+        }
+    }
+    #makala {
+        + label {
+            border-right: 15px solid $makala;
+            padding-right: 5px;
+        }
+    }
+    #price_increase {
+        + label {
+            border-right: 15px solid $price_increase;
+            padding-right: 5px;
+        }
+    }
+    #flour {
+        + label {
+            border-right: 15px solid $flour;
+            padding-right: 5px;
+        }
+    }
+    #catch_virus {
+        + label {
+            border-right: 15px solid $catch_virus;
+            padding-right: 5px;
+        }
+    }
+    #antibacterial_gel {
+        + label {
+            border-right: 15px solid $antibacterial_gel;
+            padding-right: 5px;
+        }
+    }
+}
