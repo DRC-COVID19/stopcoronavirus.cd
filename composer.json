@@ -19,6 +19,7 @@
         "laravel-admin-ext/summernote": "^1.0",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
+        "laravel/ui": "^2.0",
         "orangehill/iseed": "^2.6",
         "rcrowe/twigbridge": "^0.11.3"
     },

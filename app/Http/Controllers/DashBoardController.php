@@ -18,7 +18,7 @@ class DashBoardController extends Controller
     public function index()
     {
         $pandemicStats = PandemicStat::orderBy('last_update', 'DESC')->first();
-        return view('diagnosticMaps.mapbox', compact('pandemicStats'));
+        return view('diagnosticMaps.dashboard', compact('pandemicStats'));
     }
 
     public function getLastPandemicsRegion()
