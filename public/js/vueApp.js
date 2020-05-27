@@ -136,6 +136,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 
 
 
@@ -143,14 +145,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   components: {
     MglMap: vue_mapbox__WEBPACK_IMPORTED_MODULE_3__["MglMap"],
     MglNavigationControl: vue_mapbox__WEBPACK_IMPORTED_MODULE_3__["MglNavigationControl"],
-    MglGeolocateControl: vue_mapbox__WEBPACK_IMPORTED_MODULE_3__["MglGeolocateControl"]
+    MglGeojsonLayer: vue_mapbox__WEBPACK_IMPORTED_MODULE_3__["MglGeojsonLayer"],
+    MglVectorLayer: vue_mapbox__WEBPACK_IMPORTED_MODULE_3__["MglVectorLayer"]
   },
   data: function data() {
     return {
       MAPBOX_TOKEN: _config_env__WEBPACK_IMPORTED_MODULE_1__["MAPBOX_TOKEN"],
       MAPBOX_DEFAULT_STYLE: _config_env__WEBPACK_IMPORTED_MODULE_1__["MAPBOX_DEFAULT_STYLE"],
       Mapbox: mapbox_gl__WEBPACK_IMPORTED_MODULE_2___default.a,
-      popupCoordinates: [15.31389, -4.33167]
+      popupCoordinates: [15.31389, -4.33167],
+      countryLayer: {
+        paint: {
+          "line-color": "#627BC1",
+          "line-width": 1
+        },
+        type: "line"
+      },
+      kinLayer: {
+        paint: {
+          "line-color": "#627BC1",
+          "line-width": 1
+        },
+        type: "line",
+        "source-layer": "carte-administrative-de-la-vi-csh5cj"
+      },
+      drcSourceId: "states",
+      kinSourceId: "statesKin"
     };
   },
   created: function created() {
@@ -170,18 +190,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.map = event.map; // or just to store if you want have access from other components
 
                 _this.$store.map = event.map;
+
+                _this.map.addSource(_this.drcSourceId, {
+                  type: "geojson",
+                  generateId: true,
+                  data: "".concat(location.protocol, "//").concat(location.host, "/storage/geojson/rd_congo_admin_4_provinces.geojson")
+                });
+
+                _this.map.addSource(_this.kinSourceId, {
+                  type: "vector",
+                  url: "mapbox://merki230.4airwoxt"
+                });
+
                 asyncActions = event.component.actions;
-                _context.next = 5;
+                _context.next = 7;
                 return asyncActions.flyTo({
                   center: [15.31389, -4.33167],
                   zoom: 9,
                   speed: 1
                 });
 
-              case 5:
+              case 7:
                 newParams = _context.sent;
 
-              case 6:
+              case 8:
               case "end":
                 return _context.stop();
             }
@@ -204,6 +236,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Maps__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Maps */ "./resources/js/dashboard/components/Maps.vue");
+//
 //
 //
 //
@@ -50125,17 +50158,23 @@ var render = function() {
       }
     },
     [
-      _c("MglAttributionControl"),
-      _vm._v(" "),
       _c("MglNavigationControl", { attrs: { position: "top-right" } }),
       _vm._v(" "),
-      _c("MglGeolocateControl", { attrs: { position: "top-right" } }),
+      _c("MglGeojsonLayer", {
+        attrs: {
+          sourceId: _vm.drcSourceId,
+          layerId: _vm.drcSourceId,
+          layer: _vm.countryLayer
+        }
+      }),
       _vm._v(" "),
-      _c("MglNavigationControl", { attrs: { position: "top-right" } }),
-      _vm._v(" "),
-      _c("MglGeolocateControl", { attrs: { position: "top-right" } }),
-      _vm._v(" "),
-      _c("MglScaleControl")
+      _c("MglVectorLayer", {
+        attrs: {
+          sourceId: _vm.kinSourceId,
+          layerId: _vm.kinSourceId,
+          layer: _vm.kinLayer
+        }
+      })
     ],
     1
   )
@@ -50171,7 +50210,12 @@ var render = function() {
         [
           _c("b-col", { attrs: { cols: "12", md: "3" } }),
           _vm._v(" "),
-          _c("b-col", { attrs: { cols: "12", md: "9" } }, [_c("Maps")], 1)
+          _c(
+            "b-col",
+            { staticClass: "vh-100", attrs: { cols: "12", md: "9" } },
+            [_c("Maps")],
+            1
+          )
         ],
         1
       )
