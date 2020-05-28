@@ -9,11 +9,7 @@
     <MglNavigationControl position="top-right" />
 
     <MglGeojsonLayer :sourceId="drcSourceId" :layerId="drcSourceId" :layer="countryLayer" />
-    <MglVectorLayer
-      :sourceId="kinSourceId"
-      :layerId="kinSourceId"
-      :layer="kinLayer"
-    />
+    <MglVectorLayer :sourceId="kinSourceId" :layerId="kinSourceId" :layer="kinLayer" />
   </MglMap>
 </template>
 
@@ -34,6 +30,12 @@ export default {
     MglGeojsonLayer,
     MglVectorLayer
   },
+  props: {
+    covidCases: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
       MAPBOX_TOKEN,
@@ -53,14 +55,76 @@ export default {
           "line-width": 1
         },
         type: "line",
-        "source-layer":"carte-administrative-de-la-vi-csh5cj"
+        "source-layer": "carte-administrative-de-la-vi-csh5cj"
       },
       drcSourceId: "states",
-      kinSourceId: "statesKin"
+      kinSourceId: "statesKin",
+      covidCasesMarkers: []
     };
   },
   created() {
     this.map = null;
+  },
+  watch: {
+    covidCases() {
+      if (this.covidCases) {
+        this.map.addSource("covidCasesSource", this.covidCases);
+        this.map.addLayer({
+          id: "covidCasesLayer",
+          type: "circle",
+          source: "covidCasesSource",
+          layer: {
+            paint: {
+              // make circles larger as the user zooms from z12 to z22
+              "circle-radius": [
+                "interpolate",
+                ["linear"],
+                ["zoom"],
+                10,
+                [[">", ["get", "confirmed"], 1920], 100],
+                10,
+                [[">", ["get", "confirmed"], 3840], 90]
+              ],
+              "circle-color": "#3bb2d0"
+            }
+          }
+        });
+      } else {
+        this.map.removeSource("covidCasesSource");
+        this.map.removeLayer("covidCasesLayer");
+      }
+
+      /* this.covidCases.map(item => {
+        let el = document.createElement("div");
+        let el2 = document.createElement("div");
+        el2.className = `covidCases-marker confirmed`;
+        //el2.textContent = item[type];
+        if (item.confirmed > 3840) {
+          el2.style = `width:100px;height:100px;`;
+        } else if (item.confirmed > 1920) {
+          el2.style = `width:90px;height:90px;`;
+        } else if (item.confirmed > 960) {
+          el2.style = `width:80px;height:80px;`;
+        } else if (item.confirmed > 480) {
+          el2.style = `width:70px;height:70px;`;
+        } else if (item.confirmed > 240) {
+          el2.style = `width:60px;height:60px;`;
+        } else if (item.confirmed > 120) {
+          el2.style = `width:50px;height:50px;`;
+        } else if (item.confirmed > 60) {
+          el2.style = `width:40px;height:40px;`;
+        } else if (item.confirmed > 30) {
+          el2.style = `width:30px;height:30px;`;
+        }
+        el.append(el2);
+        let currentMarker = new Mapbox.Marker(el)
+          .setLngLat([item.longitude, item.latitude])
+          //.setPopup(popup)
+          .addTo(this.map);
+        currentMarker.confirmed = true;
+        this.covidCasesMarkers.push(currentMarker);
+      });*/
+    }
   },
   methods: {
     async onMapLoaded(event) {
