@@ -81,9 +81,9 @@ export default {
                 ["linear"],
                 ["zoom"],
                 10,
-                [[">", ["get", "confirmed"], 1920], 100],
-                10,
-                [[">", ["get", "confirmed"], 3840], 90]
+                [
+                  "case", 
+                  [">", ["get", "confirmed"], 3840], 100]
               ],
               "circle-color": "#3bb2d0"
             }
