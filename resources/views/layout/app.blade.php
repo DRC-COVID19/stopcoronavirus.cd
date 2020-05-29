@@ -28,13 +28,15 @@
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="{{asset('/ms-icon-144x144.png')}}">
     <meta name="theme-color" content="#00b065">
+
+    {{-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" integrity="sha384-3AB7yXWz4OeoZcPbieVW64vVXEwADiYyAEhwilzWsLw+9FgqpyjjStpPnpBO8o8S" crossorigin="anonymous"/> --}}
     <!-- end icon -->
     <!-- Scripts -->
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/app.css?v=4.8') }}" rel="stylesheet">
-    <script src="{{ asset('js/app.js?v=1.8') }}" defer></script>
+    <link href="{{ asset('css/app.css?v=4.9') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js?v=1.9') }}" defer></script>
 
     <!-- Google Tag Manager -->
     <script>
@@ -188,5 +190,10 @@
             </div>
         </div>
     </footer>
+    <div class="contenaire-float">
+        <a  href="https://wa.me/243844434444?text=salut" title="Whatsapp bot" target="_blank" class="float whatsapp">
+            <i class="fab fa-whatsapp fa-2x"></i>
+        </a>
+    </div>
 </body>
 </html>
