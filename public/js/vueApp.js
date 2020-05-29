@@ -2184,7 +2184,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           layer: {
             paint: {
               // make circles larger as the user zooms from z12 to z22
-              "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, [[">", ["get", "confirmed"], 1920], 100], 10, [[">", ["get", "confirmed"], 3840], 90]],
+              "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, ["case", [">", ["get", "confirmed"], 3840], 100]],
               "circle-color": "#3bb2d0"
             }
           }
