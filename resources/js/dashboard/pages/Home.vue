@@ -129,6 +129,10 @@ export default {
           .catch(() => {
             this.isLoading = false;
           });
+      }else{
+        this.hospitals=null;
+        this.hospitalCount=null;
+         this.isLoading = false;
       }
     },
     getCovidCases(checked) {
