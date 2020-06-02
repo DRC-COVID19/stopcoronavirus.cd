@@ -18124,7 +18124,7 @@ h3 {
   cursor: pointer;
   padding: 0;
   padding-left: 30px;
-  width: 80%;
+  width: 100%;
 }
 
 .column-left .styled-checkbox input[type=checkbox] + label:before {
