@@ -18,3 +18,15 @@ Route::get('/change-lang/{lang}','PageController@changeLang')->name('changeLang'
 Route::get('/official-measures', "PageController@officialMeasure")->name('officialMeasure');
 Route::get('/preventative-measures', "PageController@preventativeMeasures")->name('preventativeMeasures');
 Route::get('/stereotypes', "PageController@stereotypes")->name('stereotypes');
+Route::get('/mesures-de-protection-contre-le-coronavirus', "PageController@officialMeasure")->name('officialMeasure');
+Route::get('/directives-prises-par-le-gouvernement', "PageController@preventativeMeasures")->name('preventativeMeasures');
+Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stereotypes');
+Route::get('/sondages', 'PageController@sondage')->name('sondages');
+
+Route::get('/dashboard-maps','DashBoardController@index');
+Route::get('/orientation-medicale','SelfTestController@diagnostic')->name('diagnostic');
+Route::group(['prefix' => 'orientation-medicale-test'], function () {
+    Route::get('/{step}','SelfTestController@back')->name('selfTest.back');
+    Route::get('/', 'SelfTestController@seltTest')->name('selfTest.get');
+    Route::post('/', 'SelfTestController@storeSelfTest')->name('seltTest.post');
+});

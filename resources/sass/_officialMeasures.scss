@@ -1,0 +1,8 @@
+.OfficialMeasures--Wrapper {
+  article {
+    ol {
+      padding-left: 2rem;
+    }
+    @include collapse-content;
+  }
+}

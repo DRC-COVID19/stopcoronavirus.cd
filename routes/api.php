@@ -33,3 +33,11 @@ Route::get('/pandemicstats', function () {
 Route::get('/pandemicstatsasc', function () {
     return new PandemicStatResource(PandemicStat::orderBy('last_update', 'ASC')->get());
 });
+
+Route::group(['prefix' => 'dashboard'], function () {
+    Route::get('hospitals/', 'DashBoardController@getHospials');
+    Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
+    Route::get('sondages', 'DashBoardController@getSondages');
+});
+
+Route::post('self-test', 'SelfTestController@apiCovidTest');

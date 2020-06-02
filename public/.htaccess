@@ -8,7 +8,8 @@
     AddOutputFilterByType DEFLATE application/xhtml+xml
     AddOutputFilterByType DEFLATE application/rss+xml
     AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/x-javascript application/javascript application/ecmascript
+    AddOutputFilterByType DEFLATE application/json
     AddOutputFilterByType DEFLATE text/javascript
     AddOutputFilterByType DEFLATE image/svg+xml
     AddOutputFilterByType DEFLATE image/x-icon
@@ -49,13 +50,13 @@
     #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
 </FilesMatch>
 
-# 3 hours
+# 1 week
 <FilesMatch "\.(txt|js|css)$">
-    Header set Cache-Control "max-age=10800"
+    Header set Cache-Control "max-age=604800"
     #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
 </FilesMatch>
 
-# 3 hours
+# 3 houres
 <FilesMatch ".(html|htm|xml|pl|php|cgi|spl|scgi|fcgi)$">
     Header set Cache-Control "max-age=10800"
     #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"

@@ -1,51 +1,125 @@
 @import "variables";
+@import "mixins";
 @import "~bootstrap/scss/bootstrap";
+// @import "~@fortawesome/fontawesome-free";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/regular.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
 @import "layout";
 @import "typography";
 @import "btn";
-@import "preventativeMeasures";
+@import "home";
 @import "statistiques";
+@import "preventativeMeasures";
+@import "officialMeasures";
+@import "selft_test";
+@import "hambourger_menu";
+@import "sondage";
+@import "diagnostic_map";
 //
 
 .footer-partners {
-    background-color: $gray-500;
-    font-size: .9rem;
+    padding: 4rem 0 0 0;
+    background-color: #999;
+    font-size: 0.9rem;
     line-height: 1.1rem;
-    color: rgba(0, 0, 0, .7);
+    color: $dark;
     a {
-        color: rgba(0, 0, 0, .7);
+        color: $dark;
+    }
+}
+.footer-socials {
+    background-color: $gray-900;
+    color: $white;
+    font-size: 1.2rem;
+    a {
+        color: $flag-blue;
     }
 }
 
 .App-Header {
     .App-Header--navbar {
-        .active {
-            background: $dark-blue-100;
-            color: lighten($dark-blue-100, 70%);
-            font-weight: normal !important;
-        }
-        a {
-            display: inline-block;
+        margin: 0;
+        &>li {
+            list-style: none;
+            position: relative;
             color: $gray-900;
             background: $bg-gray;
-            padding: 0.5rem;
-            margin-left: 0.5rem;
-            text-decoration: none;
-
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
+            padding: 0.5rem;
+            margin-left: 0.5rem;
+            &.active {
+                background: $dark-blue-100;
+                color: lighten($dark-blue-100, 70%);
+                font-weight: normal !important;
+            }
+            .nav-item {
+                display: inline-block;
+                color: inherit;
+                background: inherit;
+                text-decoration: none;
+                .chevron{
+                    transition: all ease 500ms;
+                }
+                &:hover {
+                    background: $dark-blue-100;
+                    color: lighten($dark-blue-100, 70%);
+                }
+                @media screen and (max-width: 767px) {
+                    margin-bottom: 0.5rem;
+                    border-radius: 8px;
+                }
+                @media screen and (max-width: 575px) {
+                    margin-top: 0.5rem;
+                    display: block;
+                }
+            }
             &:hover {
                 background: $dark-blue-100;
                 color: lighten($dark-blue-100, 70%);
+                & > ul {
+                    display: inherit;
+                }
+                & > .nav-item > .chevron{
+                    transform: rotate(180deg);
+                }
+                
             }
-
-            @media screen and (max-width: 767px) {
-                margin-bottom: 0.5rem;
-                border-radius: 8px;
-            }
-            @media screen and (max-width: 575px) {
-                margin-top: 0.5rem;
-                display: block;
+            ul {
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 64px;
+                width: 200px;
+                z-index: 1;
+                background: white;
+                padding: 0 0 2px 0;
+                list-style: none;
+                li {
+                    background: $bg-gray;
+                    border-left: 2px;
+                    border-right: 2px;
+                    border-top: 2px;
+                    border-bottom: 0px;
+                    border-color: white;
+                    border-style: solid;
+                    list-style: none;
+                    a {
+                        display: block;
+                        color: #212529;
+                        background: transparent;
+                        padding: 0.5rem;
+                        text-decoration: none;
+                        border-radius: unset;
+                        margin: 0;
+                        &:hover {
+                            background: $dark-blue-100;
+                            color: lighten($dark-blue-100, 70%);
+                        }
+                    }
+                }
             }
         }
     }
@@ -59,39 +133,41 @@
 
 .jumbotron-title {
     background-color: $dark-blue-100;
-    color: rgba(255,255,255,0.85);
+    color: rgba(255, 255, 255, 0.85);
     border-radius: unset;
     h1 {
         color: lighten($dark-blue-100, 65%);
     }
 }
 
-.card.bg-gray-200 {
+.bg-gray-200  {
     background-color: $gray-200;
 }
+.bg-flag-yellow {
+    background-color: $flag-yellow;
+}
 
-.covid-case{
-    
+.covid-case {
     color: #fff;
-    .background-1{
-        background:#ed253d;
+    .background-1 {
+        background: #ed253d;
     }
-    .background-2{
+    .background-2 {
         background: #fc8b37;
     }
-    .background-3{
+    .background-3 {
         background: #00b065;
     }
-    .background-4{
+    .background-4 {
         background: #000000;
     }
-    div{
+    div {
         padding: 1.42857143rem 2.14285714rem 2.14285714rem;
-        box-shadow: 5px 5px 20px 0 rgba(0,0,0,.08);
+        box-shadow: 5px 5px 20px 0 rgba(0, 0, 0, 0.08);
         border-radius: 5px;
     }
-    h3{
-        border-left:unset;
+    h3 {
+        border-left: unset;
         color: white;
     }
 }

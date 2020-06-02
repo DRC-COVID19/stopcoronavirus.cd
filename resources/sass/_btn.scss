@@ -1,4 +1,11 @@
 .btn {
     font-size: 1.2rem;
-    font-weight: 700;
+    font-weight: 300;
+    text-decoration: none;
+}
+.btn.btn-secondary {
+    border: 3px solid lighten($secondary, 30%);
+    &:hover {
+        border: 3px solid $primary;
+    }
 }

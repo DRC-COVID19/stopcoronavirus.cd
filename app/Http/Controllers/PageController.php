@@ -55,4 +55,9 @@ class PageController extends Controller
         }
         return back();
     }
+
+    public function sondage()
+    {
+        return view('sondage');
+    }
 }
