@@ -34,6 +34,10 @@ export default {
     covidCases: {
       type: Object,
       default: null
+    },
+    hospitals: {
+      type: Object,
+      default: null
     }
   },
   data() {
@@ -73,25 +77,160 @@ export default {
           id: "covidCasesLayer",
           type: "circle",
           source: "covidCasesSource",
-          layer: {
-            paint: {
-              // make circles larger as the user zooms from z12 to z22
-              "circle-radius": [
-                "interpolate",
-                ["linear"],
-                ["zoom"],
-                10,
-                [
-                  "case", 
-                  [">", ["get", "confirmed"], 3840], 100]
+          paint: {
+            // make circles larger as the user zooms from z12 to z22
+            "circle-opacity": 0.7,
+            "circle-radius": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              1,
+              [
+                "case",
+                [">=", ["number", ["get", "confirmed"]], 3840],
+                6,
+                [">=", ["number", ["get", "confirmed"]], 1920],
+                5.5,
+                [">=", ["number", ["get", "confirmed"]], 960],
+                5,
+                [">=", ["number", ["get", "confirmed"]], 480],
+                4,
+                [">=", ["number", ["get", "confirmed"]], 240],
+                3.5,
+                [">=", ["number", ["get", "confirmed"]], 120],
+                3,
+                [">=", ["number", ["get", "confirmed"]], 60],
+                2.5,
+                [">=", ["number", ["get", "confirmed"]], 30],
+                1.5,
+                [">=", ["number", ["get", "confirmed"]], 15],
+                1,
+                1
               ],
-              "circle-color": "#3bb2d0"
-            }
+              3,
+              [
+                "case",
+                [">=", ["number", ["get", "confirmed"]], 3840],
+                12.5,
+                [">=", ["number", ["get", "confirmed"]], 1920],
+                11,
+                [">=", ["number", ["get", "confirmed"]], 960],
+                10,
+                [">=", ["number", ["get", "confirmed"]], 480],
+                8.75,
+                [">=", ["number", ["get", "confirmed"]], 240],
+                7.5,
+                [">=", ["number", ["get", "confirmed"]], 120],
+                6,
+                [">=", ["number", ["get", "confirmed"]], 60],
+                5,
+                [">=", ["number", ["get", "confirmed"]], 30],
+                3.25,
+                [">=", ["number", ["get", "confirmed"]], 15],
+                2.5,
+                2.5
+              ],
+              5,
+              [
+                "case",
+                [">=", ["number", ["get", "confirmed"]], 3840],
+                25,
+                [">=", ["number", ["get", "confirmed"]], 1920],
+                22.5,
+                [">=", ["number", ["get", "confirmed"]], 960],
+                20,
+                [">=", ["number", ["get", "confirmed"]], 480],
+                17.5,
+                [">=", ["number", ["get", "confirmed"]], 240],
+                15,
+                [">=", ["number", ["get", "confirmed"]], 120],
+                12.5,
+                [">=", ["number", ["get", "confirmed"]], 60],
+                10,
+                [">=", ["number", ["get", "confirmed"]], 30],
+                7.5,
+                [">=", ["number", ["get", "confirmed"]], 15],
+                5,
+                5
+              ],
+              10,
+              [
+                "case",
+                [">=", ["number", ["get", "confirmed"]], 3840],
+                50,
+                [">=", ["number", ["get", "confirmed"]], 1920],
+                45,
+                [">=", ["number", ["get", "confirmed"]], 960],
+                40,
+                [">=", ["number", ["get", "confirmed"]], 480],
+                35,
+                [">=", ["number", ["get", "confirmed"]], 240],
+                30,
+                [">=", ["number", ["get", "confirmed"]], 120],
+                25,
+                [">=", ["number", ["get", "confirmed"]], 60],
+                20,
+                [">=", ["number", ["get", "confirmed"]], 30],
+                15,
+                [">=", ["number", ["get", "confirmed"]], 15],
+                10,
+                10
+              ]
+            ],
+            "circle-color": "#f4c363"
           }
         });
+        this.map.on("mouseenter", "covidCasesLayer", () => {
+          this.map.getCanvas().style.cursor = "pointer";
+        });
+        this.map.on("mouseleave", "covidCasesLayer", () => {
+          this.map.getCanvas().style.cursor = "";
+        });
+        this.map.on("click", "covidCasesLayer", e => {
+          const coordinates = e.features[0].geometry.coordinates.slice();
+          const {
+            name,
+            confirmed,
+            dead,
+            sick,
+            healed,
+            last_update
+          } = e.features[0].properties;
+          const template = `<div class="topToolTip" >
+                            <div class="titleInfoBox">${name}</div>
+                            <div class="statLine">
+                                <div class="stat total">Nombre total de cas</div>
+                                <div class="statCount total">${confirmed}</div>
+                            </div>
+                            <div class="statLine divider"></div>
+                            <div class="statLine">
+                                <div class="legendColor ongoing"></div>
+                                <div class="stat">Actifs</div>
+                                <div class="statCount">${confirmed-healed-dead}</div>
+                            </div>
+                            <div class="statLine">
+                                <div class="legendColor recovered"></div>
+                                <div class="stat">Guérisons</div>
+                                <div class="statCount">${healed}</div>
+                            </div>
+                            <div class="statLine"> 
+                                <div class="legendColor fatal"></div>
+                                <div class="stat">Décès</div>
+                                <div class="statCount">${dead}</div>
+                            </div> 
+                            <i></i>
+                        </div>`;
+          new Mapbox.Popup()
+            .setLngLat(coordinates)
+            .setHTML(template)
+            .addTo(this.map);
+        });
       } else {
-        this.map.removeSource("covidCasesSource");
+        this.map.off("mouseenter", "covidCasesLayer");
+        this.map.off("mouseleave", "covidCasesLayer");
+        this.map.off("click", "covidCasesLayer");
         this.map.removeLayer("covidCasesLayer");
+        this.map.removeSource("covidCasesSource");
       }
 
       /* this.covidCases.map(item => {
@@ -124,6 +263,118 @@ export default {
         currentMarker.confirmed = true;
         this.covidCasesMarkers.push(currentMarker);
       });*/
+    },
+    hospitals() {
+      if (this.hospitals) {
+        this.map.addSource("covid9HospitalsSource", this.hospitals);
+
+        this.map.addLayer({
+          id: "covid9HospitalsLayer",
+          type: "symbol",
+          source: "covid9HospitalsSource",
+          // minzoom: 10,
+          layout: {
+            "text-line-height": 1,
+            "text-padding": 0,
+            "text-anchor": "center",
+            "text-allow-overlap": true,
+            "text-ignore-placement": true,
+            "text-field": String.fromCharCode("0xf47e"),
+            "icon-optional": true,
+            "text-font": ["Font Awesome 5 Free Solid"],
+            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25]
+          },
+          paint: {
+            "text-translate-anchor": "viewport",
+            "text-color": ["get", "color"]
+          }
+        });
+
+        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
+          this.map.getCanvas().style.cursor = "pointer";
+        });
+        this.map.on("mouseleave", "covid9HospitalsLayer", () => {
+          this.map.getCanvas().style.cursor = "";
+        });
+
+        this.map.on("click", "covid9HospitalsLayer", (e)=> {
+          const coordinates = e.features[0].geometry.coordinates.slice();
+          const {
+            name,
+            address,
+            beds,
+            occupied_beds,
+            masks,
+            respirators,
+            occupied_respirators,
+            confirmed,
+            dead,
+            sick,
+            healed,
+            last_update
+          } = e.features[0].properties;
+
+          // computed properties
+          const active = confirmed - dead - healed;
+          const bedsAvailable = beds - occupied_beds;
+          const respiratorsAvailable = respirators - occupied_respirators;
+
+          const template = `
+<div>
+  <div class="hospital-name">${name}</div>
+  ${address ? `<div>Commune: ${address}</div>` : ""}
+  <hr />
+  <div>
+    <strong>Situation Epidémiologique</strong>
+  </div>
+  <div class="confirmed">
+    <span>Confirmés: </span>
+    <span class="count">${confirmed}</span>
+  </div>
+  <div class="active">
+    <span>Actifs: </span>
+    <span class="count">${sick}</span>
+  </div>
+  <div class="recovered">
+    <span>Guéris: </span>
+    <span class="count">${healed}</span>
+  </div>
+  <div class="death">
+    <span>Décès: </span>
+    <span class="count">${dead}</span>
+  </div>
+  <hr />
+  <div>
+    <strong>Capacité Hospitalière</strong>
+  </div>
+  <div>
+    <span>Lits disponibles: </span>
+    <span>${bedsAvailable} sur ${beds}</span>
+  </div>
+  <div>
+    <span>Respirateurs disponibles: </span>
+    <span>${respiratorsAvailable} sur ${respirators}</span>
+  </div>
+  <div>
+    <span>Masques N95/FFP2: </span>
+    <span>${masks}</span>
+  </div>
+ 
+</div>
+`;
+
+          new Mapbox.Popup()
+            .setLngLat(coordinates)
+            .setHTML(template)
+            .addTo(this.map);
+        });
+      } else {
+        this.map.off("mouseenter", "covid9HospitalsLayer");
+        this.map.off("mouseleave", "covid9HospitalsLayer");
+        this.map.off("click", "covid9HospitalsLayer");
+        this.map.removeLayer("covid9HospitalsLayer");
+        this.map.removeSource("covid9HospitalsSource");
+      }
     }
   },
   methods: {
@@ -154,5 +405,5 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 </style>

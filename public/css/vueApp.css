@@ -26512,6 +26512,63 @@ a {
   overflow-wrap: break-word;
 }
 
+.contenaire-float {
+  position: fixed;
+  bottom: 50px;
+  right: 30px;
+}
+
+.contenaire-float .float {
+  display: flex;
+  margin: 5px;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #0c9;
+  color: #fff;
+  border-radius: 50px;
+  text-align: center;
+  text-decoration: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 2px 2px 3px #999;
+  transition: all 500ms ease;
+}
+
+.contenaire-float .float:hover {
+  transform: scale(1.03);
+}
+
+.xs-share-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: white;
+  box-shadow: 0px 0px 2px #00874e;
+}
+
+.xs-share-container .xs-share {
+  color: white;
+}
+
+.xs-share-container .col-4 {
+  padding: 5px;
+}
+
+.whatsapp {
+  background-color: #25D366 !important;
+}
+
+.facebook {
+  background-color: #3b5998 !important;
+}
+
+.twitter {
+  background-color: #76c5f5 !important;
+}
+
 .div-radio img {
   width: 20px;
 }
@@ -27560,7 +27617,7 @@ h3 {
 
 .column-left {
   background: #14244f;
-  height: 100vh;
+  height: calc(100vh - 52.5px);
   overflow: auto;
 }
 
@@ -27608,7 +27665,7 @@ h3 {
   cursor: pointer;
   padding: 0;
   padding-left: 30px;
-  width: 100%;
+  width: 80%;
 }
 
 .column-left .styled-checkbox input[type=checkbox] + label:before {
@@ -27827,5 +27884,143 @@ h3 {
 
 .covidCases-marker.dead {
   background: #020000;
+}
+
+.mapboxgl-popup-content {
+  box-sizing: border-box;
+  border: 2px solid #dddddd;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.topToolTip {
+  padding: 10px 10px;
+  color: #000000;
+  background-color: white;
+  font-weight: normal;
+  font-size: 13px;
+  z-index: 99999999;
+  display: block;
+}
+
+.topToolTip .titleInfoBox {
+  font-weight: bold;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+  color: #000000;
+  margin-bottom: 7px;
+}
+
+.topToolTip .statLine {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  min-width: 160px;
+}
+
+.topToolTip .statLine.divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.2);
+  margin: 5px 0 4px 0;
+}
+
+.topToolTip .statCount {
+  height: 20px;
+  font-size: 13px;
+  line-height: 20px;
+  text-align: right;
+  color: #767676;
+}
+
+.topToolTip .stat {
+  flex: 1;
+  margin-right: 24px;
+  height: 20px;
+  font-size: 13px;
+  line-height: 20px;
+  color: #333333;
+}
+
+.topToolTip .total {
+  color: #de3700;
+}
+
+.topToolTip .legendColor {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.topToolTip .ongoing {
+  background-color: #1f3677;
+}
+
+.topToolTip .recovered {
+  background-color: #00b065;
+}
+
+.topToolTip .fatal {
+  background-color: #020000;
+}
+
+.side-case-covid-container .stat-color {
+  height: 5px;
+  width: 5px;
+  border-radius: 6px;
+}
+
+.side-case-covid-container .confirmed {
+  flex: 1;
+}
+
+.side-case-covid-container .confirmed .stat-color {
+  background: #1f3677;
+}
+
+.side-case-covid-container .sick {
+  flex: 1;
+}
+
+.side-case-covid-container .sick .stat-color {
+  background: #eede4e;
+}
+
+.side-case-covid-container .healed {
+  flex: 1;
+}
+
+.side-case-covid-container .healed .stat-color {
+  background: #00b065;
+}
+
+.side-case-covid-container .dead {
+  flex: 1;
+}
+
+.side-case-covid-container .dead .stat-color {
+  background: #020000;
+}
+
+.side-case-covid-container .group-item {
+  height: 40vh;
+  overflow: auto;
+}
+
+.side-case-covid-container .group-item::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.side-case-covid-container .group-item::-webkit-scrollbar {
+  width: 10px;
+}
+
+.side-case-covid-container .group-item::-webkit-scrollbar-thumb {
+  background-color: #bcbab7;
+  border-radius: 8px;
+  border: solid 2px #fff;
 }
 

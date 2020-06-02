@@ -8,16 +8,11 @@
               class="styled-checkbox"
               name="covid_case"
               @change="covidCaseToggle"
-            >Cas covid-19</b-form-checkbox>
+            >Cas covid-19
+            <b-badge v-if="covidCasesCount">{{covidCasesCount}}</b-badge>
+            </b-form-checkbox>
+            
           </b-card-header>
-          <b-collapse id="covid_case_collapse">
-            <b-card-body>
-              <b-form-radio name="covid_case_item" id="confirmed">Confirmés</b-form-radio>
-              <b-form-radio name="covid_case_item" id="healed">Gueris</b-form-radio>
-              <b-form-radio name="covid_case_item" id="dead">Décès</b-form-radio>
-              <b-form-radio name="covid_case_item" id="sick">malade</b-form-radio>
-            </b-card-body>
-          </b-collapse>
         </b-card>
       </b-col>
     </b-row>
@@ -25,9 +20,11 @@
     <b-row class="mb-3">
       <b-col cols="12">
         <b-card>
-          <b-form-checkbox class="styled-checkbox" name="list_hospital">
+          <b-form-checkbox class="styled-checkbox" name="list_hospital"
+            @change="hospitalToggle"
+          >
             Liste hôpitaux
-            <span id="hospital_count"></span>
+            <b-badge v-if="hospitalCount">{{hospitalCount}}</b-badge>
           </b-form-checkbox>
         </b-card>
       </b-col>
@@ -132,6 +129,16 @@
 
 <script>
 export default {
+  props:{
+    covidCasesCount:{
+      type:Number,
+      default:null
+    },
+    hospitalCount:{
+      type:Number,
+      default:null
+    }
+  },
   data() {
     return {
       OrientationLIst: [
@@ -158,8 +165,10 @@ export default {
   },
   methods: {
     covidCaseToggle(checked) {
-      this.$root.$emit("bv::toggle::collapse", "covid_case_collapse");
       this.$emit("covidCaseChecked", checked);
+    },
+    hospitalToggle(checked){
+      this.$emit("hopitalChecked", checked);
     },
     medicalOrientationToggle(checked) {
       this.$root.$emit("bv::toggle::collapse", "orientation_result_collapse");
