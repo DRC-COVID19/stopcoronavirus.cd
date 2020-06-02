@@ -11,12 +11,30 @@
         </b-col>
       </b-row>
       <b-row align-h="end" class="position-relative">
-        <LeftColumn @covidCaseChecked="getCovidCases" />
+        <LeftColumn
+          @covidCaseChecked="getCovidCases"
+          @hopitalChecked="gethopitals"
+          :covidCasesCount="covidCasesCount"
+          :hospitalCount="hospitalCount"
+        />
+        <SideCaseCovid
+          class="col-md-3 offset-md-3 side-case-covid"
+          :covidCases="covidCases"
+          v-if=" hasCovidCases"
+        />
         <b-col cols="12" md="9">
-          <b-row class="map-container">
-            <Maps :covidCases="covidCases" />
+          <b-row class="map-container" :style="mapStyle">
+            <Maps :covidCases="covidCases" :hospitals="hospitals" />
           </b-row>
-          <b-row class="chart-container"></b-row>
+          <b-row class="chart-container" v-if="hasCovidCases">
+            <b-col>
+              <b-tabs content-class="mt-3">
+                <b-tab title="Cas covid " v-if="hasCovidCases">
+                  <CovidCaseChart :covidCasesStat="covidCasesStat" />
+                </b-tab>
+              </b-tabs>
+            </b-col>
+          </b-row>
         </b-col>
       </b-row>
     </b-container>
@@ -28,26 +46,47 @@
 import Maps from "../components/Maps";
 import LeftColumn from "../components/LeftColumn";
 import Waiting from "../components/Waiting";
+import SideCaseCovid from "../components/SideCaseCovid";
+import CovidCaseChart from "../components/CovidCaseChart";
 export default {
   components: {
     Maps,
     LeftColumn,
-    Waiting
+    Waiting,
+    SideCaseCovid,
+    CovidCaseChart
   },
   data() {
     return {
       isLoading: false,
-      covidCases: null
+      covidCases: null,
+      covidCasesStat: null,
+      covidCasesCount: null,
+      hospitals: null,
+      hospitalCount:null,
     };
   },
+  computed: {
+    hasCovidCases() {
+      return this.getHasCoviCases();
+    },
+    mapStyle() {
+      return {
+        height: this.getHasCoviCases() ? `64vh` : `calc(100vh - 52.5px)`
+      };
+    }
+  },
   methods: {
-    getCovidCases(checked) {
+    getHasCoviCases() {
+      return this.covidCases && this.covidCases.data.features.length > 0;
+    },
+    gethopitals(checked) {
       this.isLoading = true;
       if (checked) {
         axios
-          .get(`/api/dashboard/cavid-cases`)
+          .get(`/api/dashboard/hospitals`)
           .then(({ data }) => {
-            let Features = data.map(value => {
+            let Features = data.map((value, index) => {
               return {
                 type: "Feature",
                 geometry: {
@@ -55,7 +94,66 @@ export default {
                   coordinates: [value.longitude, value.latitude]
                 },
                 properties: {
-                  confirmed: value.confirmed,
+                  name: value.name ? value.name : "Hopital",
+                  address: value.address,
+                  beds: value.beds,
+                  occupied_beds: value.occupied_beds,
+                  masks: value.masks,
+                  respirators: value.respirators,
+                  occupied_respirators: value.occupied_respirators,
+                  confirmed: value.last_situation
+                    ? value.last_situation.confirmed
+                    : 0,
+                  dead: value.last_situation ? value.last_situation.dead : 0,
+                  sick: value.last_situation ? value.last_situation.sick : 0,
+                  healed: value.last_situation
+                    ? value.last_situation.healed
+                    : 0,
+                  last_update: value.last_situation
+                    ? value.last_situation.last_update
+                    : 0,
+                  color: "#ED5F68"
+                }
+              };
+            });
+            this.hospitals = {
+              type: "geojson",
+              data: {
+                type: "FeatureCollection",
+                features: Features
+              }
+            };
+            this.hospitalCount=data.length;
+            this.isLoading=false;
+          })
+          .catch(() => {
+            this.isLoading = false;
+          });
+      }
+    },
+    getCovidCases(checked) {
+      this.isLoading = true;
+      if (checked) {
+        let confirmedCount = 0;
+        axios
+          .get(`/api/dashboard/cavid-cases`)
+          .then(({ data }) => {
+            let Features = data.map(value => {
+              confirmedCount += value.confirmed;
+              return {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [value.longitude, value.latitude]
+                },
+                properties: {
+                  name: value.name,
+                  confirmed: value.confirmed ?? 0,
+                  healed: value.healed ?? 0,
+                  dead: value.dead ?? 0,
+                  sick: value.sick ?? 0,
+                  last_update: value.last_update,
+                  seriously: value.seriously ?? 0,
                   color: "#ED5F68"
                 }
               };
@@ -68,13 +166,39 @@ export default {
               }
             };
             this.isLoading = false;
+            this.covidCasesCount = confirmedCount;
           })
           .catch(response => {
-            console.log(response);
+            this.isLoading = false;
+          });
+        axios
+          .get("/api/pandemicstatsasc")
+          .then(({ data }) => {
+            let labels = [],
+              sick = [],
+              confirmed = [],
+              dead = [],
+              healed = [];
+            data.data.map(function(d) {
+              confirmed.push(d.confirmed);
+              dead.push(d.dead);
+              healed.push(d.healed);
+              labels.push(d.last_update);
+            });
+            this.covidCasesStat = {
+              confirmed,
+              dead,
+              healed,
+              labels
+            };
+          })
+          .catch(response => {
             this.isLoading = false;
           });
       } else {
         this.covidCases = null;
+        this.covidCasesStat = null;
+        this.isLoading = false;
       }
     }
   }
@@ -91,9 +215,18 @@ export default {
   }
 }
 .map-container {
-  height: 80vh;
+  height: 60vh;
 }
 .chart-container {
-  height: 20vh;
+  height: calc(40vh - 52.5px);
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
+}
+.side-case-covid {
+  position: absolute;
+  left: 0;
+  z-index: 5;
+  top: 15px;
+  height: 90vh;
+  bottom: 15px;
 }
 </style>

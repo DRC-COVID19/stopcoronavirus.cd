@@ -187,7 +187,7 @@
 }
 .column-left {
     background: #14244f;
-    height: 100vh;
+    height: calc(100vh - 52.5px);
     overflow: auto;
     &::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -235,7 +235,7 @@
                 cursor: pointer;
                 padding: 0;
                 padding-left: 30px;
-                width: 100%;
+                width: 80%;
             }
 
             // Box.
@@ -450,5 +450,122 @@
     }
     &.dead {
         background: $dark;
+    }
+}
+.mapboxgl-popup-content {
+    box-sizing: border-box;
+    border: 2px solid #dddddd;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+.topToolTip {
+    padding: 10px 10px;
+    color: #000000;
+    background-color: rgba(255, 255, 255, 1);
+    font-weight: normal;
+    font-size: 13px;
+    z-index: 99999999;
+    display: block;
+    .titleInfoBox {
+        font-weight: bold;
+        font-size: 13px;
+        line-height: 18px;
+        text-align: center;
+        color: #000000;
+        margin-bottom: 7px;
+    }
+    .statLine {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 20px;
+        min-width: 160px;
+        &.divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.2);
+            margin: 5px 0 4px 0;
+        }
+    }
+    .statCount {
+        height: 20px;
+        font-size: 13px;
+        line-height: 20px;
+        text-align: right;
+        color: #767676;
+    }
+    .stat {
+        flex: 1;
+        margin-right: 24px;
+        height: 20px;
+        font-size: 13px;
+        line-height: 20px;
+        color: #333333;
+    }
+    .total {
+        color: #de3700;
+    }
+    .legendColor {
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+    .ongoing {
+        background-color: $secondary;
+    }
+    .recovered {
+        background-color: $success;
+    }
+    .fatal {
+        background-color: $dark;
+    }
+}
+.side-case-covid-container {
+    .stat-color {
+        height: 5px;
+        width: 5px;
+        border-radius: 6px;
+    }
+    .confirmed {
+        flex: 1;
+        .stat-color {
+            background: $secondary;
+        }
+    }
+    .sick {
+        flex: 1;
+        .stat-color {
+            background: $flag-yellow;
+        }
+    }
+    .healed {
+        flex: 1;
+        .stat-color {
+            background: $success;
+        }
+    }
+    .dead {
+        flex: 1;
+        .stat-color {
+            background: $dark;
+        }
+    }
+    .group-item {
+        height: 40vh;
+        overflow: auto;
+        &::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: #bcbab7;
+            border-radius: 8px;
+            border: solid 2px #fff;
+        }
     }
 }
