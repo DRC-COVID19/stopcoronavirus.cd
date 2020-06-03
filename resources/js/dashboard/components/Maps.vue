@@ -1,35 +1,12 @@
 <template>
-  <MglMap
-    :accessToken="MAPBOX_TOKEN"
-    :mapStyle.sync="MAPBOX_DEFAULT_STYLE"
-    :mapboxGl="Mapbox"
-    :attributionControl="false"
-    @load="onMapLoaded"
-  >
-    <MglNavigationControl position="top-right" />
-
-    <MglGeojsonLayer :sourceId="drcSourceId" :layerId="drcSourceId" :layer="countryLayer" />
-    <MglVectorLayer :sourceId="kinSourceId" :layerId="kinSourceId" :layer="kinLayer" />
-  </MglMap>
+  <div id="map"></div>
 </template>
-
 <script>
 import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE } from "../config/env";
 import Mapbox from "mapbox-gl";
-import {
-  MglMap,
-  MglNavigationControl,
-  MglGeojsonLayer,
-  MglVectorLayer
-} from "vue-mapbox";
 
 export default {
-  components: {
-    MglMap,
-    MglNavigationControl,
-    MglGeojsonLayer,
-    MglVectorLayer
-  },
+  components: {},
   props: {
     covidCases: {
       type: Object,
@@ -38,13 +15,20 @@ export default {
     hospitals: {
       type: Object,
       default: null
+    },
+    medicalOrientations: {
+      type: Array,
+      default: null
+    },
+    medicalOrientationSelected: {
+      type: String,
+      default: null
     }
   },
   data() {
     return {
       MAPBOX_TOKEN,
       MAPBOX_DEFAULT_STYLE,
-      Mapbox,
       popupCoordinates: [15.31389, -4.33167],
       countryLayer: {
         paint: {
@@ -63,11 +47,57 @@ export default {
       },
       drcSourceId: "states",
       kinSourceId: "statesKin",
-      covidCasesMarkers: []
+      covidCasesMarkers: [],
+      medicalOrientationMakers: [],
+      medicalOrientationData: [],
+      map: null
     };
   },
-  created() {
-    this.map = null;
+  mounted() {
+    Mapbox.accessToken = this.MAPBOX_TOKEN;
+    window.map = new Mapbox.Map({
+      container: "map",
+      center: [15.31389, -4.33167],
+      zoom: 10,
+      style: this.MAPBOX_DEFAULT_STYLE
+    });
+    map.addControl(new Mapbox.NavigationControl());
+    map.on("load", () => {
+      map.addSource(this.drcSourceId, {
+        type: "geojson",
+        generateId: true,
+        data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
+      });
+      map.addSource(this.kinSourceId, {
+        type: "vector",
+        url: "mapbox://merki230.4airwoxt"
+      });
+
+      map.addLayer({
+        id: this.drcSourceId,
+        type: "line",
+        source: this.drcSourceId,
+        layout: {},
+        paint: {
+          "line-color": "#627BC1",
+          "line-width": 1
+        }
+      });
+
+      map.addLayer({
+        id: this.kinSourceId,
+        type: "line",
+        source: this.kinSourceId,
+
+        "source-layer": "carte-administrative-de-la-vi-csh5cj",
+        layout: {},
+        paint: {
+          "line-color": "#627BC1",
+          "line-width": 1
+        }
+      });
+    });
+    this.map = map;
   },
   watch: {
     covidCases() {
@@ -206,7 +236,9 @@ export default {
                             <div class="statLine">
                                 <div class="legendColor ongoing"></div>
                                 <div class="stat">Actifs</div>
-                                <div class="statCount">${confirmed-healed-dead}</div>
+                                <div class="statCount">${confirmed -
+                                  healed -
+                                  dead}</div>
                             </div>
                             <div class="statLine">
                                 <div class="legendColor recovered"></div>
@@ -297,7 +329,7 @@ export default {
           this.map.getCanvas().style.cursor = "";
         });
 
-        this.map.on("click", "covid9HospitalsLayer", (e)=> {
+        this.map.on("click", "covid9HospitalsLayer", e => {
           const coordinates = e.features[0].geometry.coordinates.slice();
           const {
             name,
@@ -375,31 +407,146 @@ export default {
         this.map.removeLayer("covid9HospitalsLayer");
         this.map.removeSource("covid9HospitalsSource");
       }
+    },
+    medicalOrientations() {
+      this.getMedicalOrientations();
+    },
+    medicalOrientationSelected() {
+      if (this.medicalOrientations.length == 0) {
+        return;
+      }
+      if (this.medicalOrientationSelected == "ALL") {
+        this.getMedicalOrientations();
+        return;
+      }
+      this.RemoveOrientationMakers();
+      let orientation = this.medicalOrientationSelected;
+      this.medicalOrientations.map(value => {
+        if (value[orientation] >= 0) {
+          let el = document.createElement("div");
+          el.className = `default-makers ${orientation}`;
+          if (value[orientation] > 3840) {
+            el.style = "width:100px;height:100px;";
+          } else if (value[orientation] > 1920) {
+            el.style = "width:90px;height:90px;";
+          } else if (value[orientation] > 960) {
+            el.style = "width:80px;height:80px;";
+          } else if (value[orientation] > 480) {
+            el.style = "width:70px;height:70px;";
+          } else if (value[orientation] > 240) {
+            el.style = "width:60px;height:60px;";
+          } else if (value[orientation] > 120) {
+            el.style = "width:50px;height:50px;";
+          } else if (value[orientation] > 60) {
+            el.style = "width:40px;height:40px;";
+          } else if (value[orientation] > 30) {
+            el.style = "width:30px;height:30px;";
+          } else if (value[orientation] > 15) {
+            el.style = "width:20px;height:20px;";
+          }
+          el.style.zIndex = value[orientation];
+
+          let longitude = value.longitude;
+          let latitude = value.latitude;
+
+          if (value.province.toUpperCase() != "KINSHASA") {
+            longitude = (Number(longitude) + 500 / 100000).toFixed(5);
+            latitude = (Number(latitude) - 300 / 100000).toFixed(5);
+          }
+          // popup
+          let popup = new Mapbox.Popup({ offset: 25 }).setText(value.township);
+          // add marker to map
+          let offSet = { offset: [-70, 30] };
+          let currentMarker = new Mapbox.Marker(el)
+            .setLngLat([longitude, latitude])
+            .setPopup(popup)
+            .addTo(this.map);
+          currentMarker.defaultOffset = offSet.offset;
+          this.medicalOrientationMakers.push(currentMarker);
+        }
+      });
     }
   },
   methods: {
-    async onMapLoaded(event) {
-      // in component
-      this.map = event.map;
-      // or just to store if you want have access from other components
-      this.$store.map = event.map;
-      this.map.addSource(this.drcSourceId, {
-        type: "geojson",
-        generateId: true,
-        data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
+    getMedicalOrientations(){
+      if (!this.medicalOrientations) {
+        this.RemoveOrientationMakers();
+        return;
+      }
+      this.RemoveOrientationMakers();
+      let AllDianosticData = [];
+      let total_fin = 0;
+      let total_fin5 = 0;
+      let total_fin8 = 0;
+      let AllMarkers = [];
+      this.medicalOrientations.map(item => {
+        var el = document.createElement("div");
+        el.className = "pie";
+        let total = item.FIN + item.FIN8 + item.FIN5;
+
+        if (total > 3840) {
+          el.style = "width:80px;height:80px;";
+        } else if (total > 1920) {
+          el.style = "width:75px;height:75px;";
+        } else if (total > 960) {
+          el.style = "width:70px;height:70px;";
+        } else if (total > 480) {
+          el.style = "width:65px;height:65px;";
+        } else if (total > 240) {
+          el.style = "width:60px;height:60px;";
+        } else if (total > 120) {
+          el.style = "width:55px;height:55px;";
+        } else if (total > 60) {
+          el.style = "width:50px;height:50px;";
+        } else if (total > 30) {
+          el.style = "width:45px;height:45px;";
+        } else if (total > 15) {
+          el.style = "width:40px;height:40px;";
+        }
+        let elSpan = document.createElement("span");
+        let elSpan2 = document.createElement("span");
+        let elSpan3 = document.createElement("span");
+        elSpan.className = "fin-5";
+        elSpan2.className = "fin-8";
+        elSpan3.className = "fin";
+        elSpan.textContent = item.FIN5 ?? 0;
+        elSpan2.textContent = item.FIN8 ?? 0;
+        elSpan3.textContent = item.FIN ?? 0;
+        el.appendChild(elSpan);
+        el.appendChild(elSpan2);
+        el.appendChild(elSpan3);
+
+        let longitude = item.longitude;
+        let latitude = item.latitude;
+
+        if (item.province.toUpperCase() != "KINSHASA") {
+          longitude = (Number(longitude) + 500 / 100000).toFixed(5);
+          latitude = (Number(latitude) - 300 / 100000).toFixed(5);
+        }
+
+        // popup
+        let popup = new Mapbox.Popup({ offset: 25 }).setText(item.township);
+        // add marker to map
+        let offSet = { offset: [-70, 30] };
+        let currentMarker = new Mapbox.Marker(el)
+          .setLngLat([longitude, latitude])
+          .setPopup(popup)
+          .addTo(this.map);
+        currentMarker.defaultOffset = offSet.offset;
+        AllMarkers.push(currentMarker);
+        total_fin += item.FIN ?? 0;
+        total_fin5 += item.FIN5 ?? 0;
+        total_fin8 += item.FIN8 ?? 0;
       });
 
-      this.map.addSource(this.kinSourceId, {
-        type: "vector",
-        url: "mapbox://merki230.4airwoxt"
-      });
-
-      const asyncActions = event.component.actions;
-      const newParams = await asyncActions.flyTo({
-        center: [15.31389, -4.33167],
-        zoom: 9,
-        speed: 1
-      });
+      this.medicalOrientationMakers = AllMarkers;
+    },
+    RemoveOrientationMakers() {
+      if (this.medicalOrientationMakers) {
+        this.medicalOrientationMakers.map(item => {
+          item.remove();
+        });
+      }
     }
   }
 };

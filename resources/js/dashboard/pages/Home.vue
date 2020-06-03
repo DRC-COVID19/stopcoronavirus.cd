@@ -14,27 +14,51 @@
         <LeftColumn
           @covidCaseChecked="getCovidCases"
           @hopitalChecked="gethopitals"
+          @medicalOrientationChecked="getmedicalOrientations"
+          @medicalOrientationChanged="medicalOrientationChanged"
+          @hasSondageChecked="hasSondageChecked"
           :covidCasesCount="covidCasesCount"
           :hospitalCount="hospitalCount"
+          :orientationCount="orientationCount"
+          :finCount="finCount"
+          :fin5Count="fin5Count"
+          :fin8Count="fin8Count"
         />
-        <SideCaseCovid
-          class="col-md-3 offset-md-3 side-case-covid"
-          :covidCases="covidCases"
-          v-if=" hasCovidCases"
-        />
+
+        <b-tabs
+          content-class="mt-3"
+          v-if="hasCovidCases || hasOrientation"
+          class="cols-12 col-md-3 offset-md-3 side-case-covid"
+        >
+          <b-tab title="Cas covid " v-if="hasCovidCases" :active="hasCovidCases">
+            <SideCaseCovid :covidCases="covidCases" />
+          </b-tab>
+          <b-tab title="Orientation" v-if="hasOrientation" :active="hasOrientation">
+            <SideOrientation :medicalOrientations="medicalOrientations" />
+          </b-tab>
+        </b-tabs>
+
         <b-col cols="12" md="9">
           <b-row class="map-container" :style="mapStyle">
-            <Maps :covidCases="covidCases" :hospitals="hospitals" />
+            <Maps
+              :covidCases="covidCases"
+              :hospitals="hospitals"
+              :medicalOrientations="medicalOrientations"
+              :medicalOrientationSelected="medicalOrientationSelected"
+            />
           </b-row>
-          <b-row class="chart-container" v-if="hasCovidCases">
+          <div class="chart-container" v-if="hasCovidCases || hasOrientation">
             <b-col>
               <b-tabs content-class="mt-3">
-                <b-tab title="Cas covid " v-if="hasCovidCases">
+                <b-tab title="Cas covid " v-if="hasCovidCases" :active="hasCovidCases">
                   <CovidCaseChart :covidCasesStat="covidCasesStat" />
+                </b-tab>
+                <b-tab title="Orientation" v-if="hasOrientation" :active="hasOrientation">
+                  <OrientationChart :medicalOrientationsStat="medicalOrientationsStat" />
                 </b-tab>
               </b-tabs>
             </b-col>
-          </b-row>
+          </div>
         </b-col>
       </b-row>
     </b-container>
@@ -48,13 +72,17 @@ import LeftColumn from "../components/LeftColumn";
 import Waiting from "../components/Waiting";
 import SideCaseCovid from "../components/SideCaseCovid";
 import CovidCaseChart from "../components/CovidCaseChart";
+import OrientationChart from "../components/OrientationChart";
+import SideOrientation from "../components/SideOrientation";
 export default {
   components: {
     Maps,
     LeftColumn,
     Waiting,
     SideCaseCovid,
-    CovidCaseChart
+    CovidCaseChart,
+    OrientationChart,
+    SideOrientation
   },
   data() {
     return {
@@ -63,22 +91,38 @@ export default {
       covidCasesStat: null,
       covidCasesCount: null,
       hospitals: null,
-      hospitalCount:null,
+      hospitalCount: null,
+      medicalOrientations: null,
+      medicalOrientationSelected: null,
+      medicalOrientationsStat: null,
+      orientationCount: null,
+      finCount: null,
+      fin5Count: null,
+      fin8Count: null
     };
   },
   computed: {
     hasCovidCases() {
       return this.getHasCoviCases();
     },
+    hasOrientation() {
+      return this.getHasOrientation();
+    },
     mapStyle() {
       return {
-        height: this.getHasCoviCases() ? `64vh` : `calc(100vh - 52.5px)`
+        height:
+          this.getHasCoviCases() || this.getHasOrientation()
+            ? `64vh`
+            : `calc(100vh - 52.5px)`
       };
     }
   },
   methods: {
     getHasCoviCases() {
       return this.covidCases && this.covidCases.data.features.length > 0;
+    },
+    getHasOrientation() {
+      return this.medicalOrientations && this.medicalOrientations.length > 0;
     },
     gethopitals(checked) {
       this.isLoading = true;
@@ -123,16 +167,16 @@ export default {
                 features: Features
               }
             };
-            this.hospitalCount=data.length;
-            this.isLoading=false;
+            this.hospitalCount = data.length;
+            this.isLoading = false;
           })
           .catch(() => {
             this.isLoading = false;
           });
-      }else{
-        this.hospitals=null;
-        this.hospitalCount=null;
-         this.isLoading = false;
+      } else {
+        this.hospitals = null;
+        this.hospitalCount = null;
+        this.isLoading = false;
       }
     },
     getCovidCases(checked) {
@@ -204,6 +248,63 @@ export default {
         this.covidCasesStat = null;
         this.isLoading = false;
       }
+    },
+    getmedicalOrientations(checked) {
+      this.isLoading = true;
+      if (checked) {
+        axios
+          .get(`/api/dashboard/orientation-medical-result`)
+          .then(({ data }) => {
+            this.medicalOrientations = data;
+            let total_fin = 0;
+            let total_fin5 = 0;
+            let total_fin8 = 0;
+            data.map(item => {
+              total_fin += item.FIN ?? 0;
+              total_fin5 += item.FIN5 ?? 0;
+              total_fin8 += item.FIN8 ?? 0;
+            });
+            this.finCount = total_fin;
+            this.fin5Count = total_fin5;
+            this.fin8Count = total_fin8;
+            this.isLoading = false;
+            this.orientationCount = total_fin + total_fin8 + total_fin5;
+          })
+          .catch(() => {
+            this.isLoading = false;
+            this.orientationCount = null;
+          });
+        axios
+          .get(`/api/dashboard/orientation-medical-stats`)
+          .then(({ data }) => {
+            let fin = [],
+              fin5 = [],
+              fin8 = [],
+              labels = [];
+            data.map(item => {
+              fin.push(item.FIN);
+              fin5.push(item.FIN5);
+              fin8.push(item.FIN8);
+              labels.push(item.created_at);
+            });
+            this.medicalOrientationsStat = {
+              fin,
+              fin5,
+              fin8,
+              labels
+            };
+          });
+      } else {
+        this.medicalOrientations = null;
+        this.isLoading = false;
+      }
+    },
+    medicalOrientationChanged(item) {
+      this.medicalOrientationSelected = item;
+    },
+    hasSondageChecked(checked) {
+      this.isLoading = true;
+      axios.get(`/api/dashboard/sondages`).then(({ data }) => {});
     }
   }
 };
@@ -224,13 +325,16 @@ export default {
 .chart-container {
   height: calc(40vh - 52.5px);
   border-top: 1px solid rgba(0, 0, 0, 0.125);
+  position: absolute;
+  z-index: 6;
+  left: 0;
+  right: 0;
 }
 .side-case-covid {
   position: absolute;
   left: 0;
   z-index: 5;
   top: 15px;
-  height: 90vh;
   bottom: 15px;
 }
 </style>

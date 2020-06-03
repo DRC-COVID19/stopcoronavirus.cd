@@ -23,7 +23,6 @@ export default {
       if (!this.covidCasesStat) {
         return;
       }
-      
       let tempData = {
         type: "line",
         data: {
@@ -122,6 +121,6 @@ export default {
 
 <style lang="scss" scoped>
 #CovidCaseChart{
-    height: 70%;
+    height: 64% !important;
 }
 </style>

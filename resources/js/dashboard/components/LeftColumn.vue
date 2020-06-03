@@ -40,9 +40,7 @@
               name="medical_orientation"
             >
               Cas probable (issu du formulaire d'orientation médical)
-              <span
-                id="medical_orientation_count"
-              ></span>
+              <b-badge v-if="orientationCount">{{orientationCount}}</b-badge>
             </b-form-checkbox>
           </b-card-header>
           <b-collapse id="orientation_result_collapse">
@@ -54,23 +52,24 @@
                 :options="OrientationLIst"
                 label="name"
                 :reduce="item=>item.id"
+                @input="orientationChange"
               />
               <h4>Legende</h4>
               <div class="legende">
                 <div>
                   <span class="fin-8 legende-color"></span>
                   <span>Peu probale</span>
-                  <span id="medical_orientation_fin8_count"></span>
+                  <b-badge v-if="fin8Count">{{fin8Count}}</b-badge>
                 </div>
                 <div>
                   <span class="fin legende-color"></span>
                   <span>Probable</span>
-                  <span id="medical_orientation_fin_count"></span>
+                  <b-badge v-if="finCount">{{finCount}}</b-badge>
                 </div>
                 <div>
                   <span class="fin-5 legende-color"></span>
                   <span>Très probable</span>
-                  <span id="medical_orientation_fin5_count"></span>
+                  <b-badge v-if="fin5Count">{{fin5Count}}</b-badge>
                 </div>
                 <div class="d-block text-right">
                   <a href="#" target="_blank">Voir formulaire</a>
@@ -137,6 +136,22 @@ export default {
     hospitalCount:{
       type:Number,
       default:null
+    },
+    orientationCount:{
+      type:Number,
+      default:null
+    },
+    finCount:{
+      type:Number,
+      default:null
+    },
+    fin8Count:{
+      type:Number,
+      default:null
+    },
+    fin5Count:{
+      type:Number,
+      default:null
     }
   },
   data() {
@@ -175,9 +190,14 @@ export default {
       if (checked) {
         this.orientationSelected = "ALL";
       }
+       this.$emit("medicalOrientationChecked", checked);
+    },
+    orientationChange(item){
+      this.$emit("medicalOrientationChanged", item);
     },
     hasSondageToggle(checked) {
       this.$root.$emit("bv::toggle::collapse", "has_sondage_collapse");
+      this.$emit("hasSondageChecked", checked);
     }
   }
 };

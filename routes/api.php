@@ -35,6 +35,7 @@ Route::get('/pandemicstatsasc', function () {
 Route::group(['prefix' => 'dashboard'], function () {
     Route::get('hospitals/', 'DashBoardController@getHospials');
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
+    Route::get('orientation-medical-stats','DashBoardController@getAllDiagnosticStat');
     Route::get('sondages', 'DashBoardController@getSondages');
     Route::get('cavid-cases', 'DashBoardController@getLastPandemicsRegion');
 });

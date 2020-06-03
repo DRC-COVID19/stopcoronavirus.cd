@@ -17853,7 +17853,8 @@ h3 {
 }
 
 #map {
-  height: 100vh;
+  height: 100%;
+  width: 100%;
 }
 
 /*
@@ -17914,6 +17915,7 @@ h3 {
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  z-index: 9999;
 }
 
 .map-waiting p {
