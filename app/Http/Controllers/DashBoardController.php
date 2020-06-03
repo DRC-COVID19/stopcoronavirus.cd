@@ -99,7 +99,52 @@ class DashBoardController extends Controller
             }
         }
 
-        return response()->json($newArray);
+        return response()->json(array_values($newArray));
+    }
+
+    function getAllDiagnosticStat()
+    {
+        $datafromDb = DB::table('diagnostics')
+            ->select([DB::raw('COUNT(id) as count, orientation,CAST( created_at AS DATE) as created_at')])
+            ->groupBy(DB::raw('CAST( created_at AS DATE)'), 'orientation')
+            ->get();
+        $newArray = [];
+
+        foreach ($datafromDb as $value) {
+            $index = $value->created_at;
+            if (isset($newArray[$index])) {
+                switch ($value->orientation) {
+                    case 'FIN5':
+                        $newArray[$index]->{'FIN5'} = $value->count;
+                        break;
+                    case 'FIN8':
+                        $newArray[$index]->{'FIN8'} = $value->count;
+                        break;
+                    default:
+                        if (isset($newArray[$index]->FIN)) {
+                            $newArray[$index]->FIN += $value->count;
+                        } else {
+                            $newArray[$index]->{'FIN'} = $value->count;
+                        }
+                        break;
+                }
+            } else {
+                $newArray[$index] = $value;
+                switch ($value->orientation) {
+                    case 'FIN5':
+                        $newArray[$index]->{'FIN5'} = $value->count;
+                        break;
+                    case 'FIN8':
+                        $newArray[$index]->{'FIN8'} = $value->count;
+                        break;
+                    default:
+                        $newArray[$index]->{'FIN'} = $value->count;
+                        break;
+                }
+            }
+        }
+
+        return response()->json(array_values($newArray));
     }
 
     public function getSondages()

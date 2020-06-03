@@ -1,0 +1,70 @@
+<template>
+  <b-container class="side-case-covid-container">
+    <b-row>
+        <div class="card card-body cols-12">
+          <b-list-group class="group-item">
+            <b-list-group-item v-for="(item, index) in medicalOrientations" :key="index">
+              <div class="area-name text-center mb-2">{{`${item.province} ${item.township}`}}</div>
+              <div class="area-total d-flex justify-content-around align-items-center">
+                <div class="confirmed d-flex flex-column justify-content-center align-items-center">
+                  <div class="stat-color" :style="stateColorWith(item,'FIN8')"></div>
+                  {{item.FIN8}}
+                </div>
+                <div class="healed d-flex flex-column justify-content-center align-items-center">
+                  <div class="stat-color" :style="stateColorWith(item,'FIN')"></div>
+                  {{item.FIN}}
+                </div>
+                <div class="dead d-flex flex-column justify-content-center align-items-center">
+                  <div class="stat-color" :style="stateColorWith(item,'FIN5')"></div>
+                  {{item.FIN5}}
+                </div>
+              </div>
+            </b-list-group-item>
+          </b-list-group>
+        </div>
+    </b-row>
+  </b-container>
+</template>
+
+<script>
+export default {
+  props: {
+    medicalOrientations: {
+      type: Array,
+      default: null
+    }
+  },
+  computed: {
+    CovidCasesProvince() {
+      return this.covidCases?.data.features;
+    }
+  },
+  methods: {
+    stateColorWith(item, type) {
+      let width =
+        (item[type] * 100) / (item.FIN ?? 0 + item.FIN5 ?? 0 + item.FIN8 ?? 0);
+      if (width == 0) {
+        return {
+          width: "10px"
+        };
+      }
+      return {
+        width: `${width}%`
+      };
+    }
+  }
+};
+</script>
+<style lang="scss" scoped>
+.side-case-covid-container {
+  h3 {
+    font-size: 0.8rem;
+  }
+  .area-name {
+    font-size: 0.7rem;
+  }
+  .area-total {
+    font-size: 0.7rem;
+  }
+}
+</style>
