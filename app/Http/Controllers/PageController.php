@@ -48,8 +48,9 @@ class PageController extends Controller
         return view('stereotypes', compact('stereotypes'));
     }
 
-    public function changeLang($lang)
+    public function changeLang()
     {
+        $lang=request('lang');
         if (in_array($lang, ['fr', 'ln', 'kg','sw','ts'])) {
             session(['locale' => $lang]);
         }

@@ -1,4 +1,4 @@
 <?php
 return [
-    'Site d’information officiel du Ministère de la Santé'
+    'text1'=>'Site d’information officiel du Ministère de la Santé'
 ];

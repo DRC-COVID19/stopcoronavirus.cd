@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-lg-6 col-10">
                             <p class="text-white m-0">
-                                {{ __('messages.0')}}
+                                {{ __('messages.text1')}}
                             </p>
                         </div>
                         <div class="col-lg-6 text-center text-md-right div-radio ">
@@ -182,7 +182,21 @@
         <div class="footer-socials">
             <div class="container">
                 <div class="row">
-                    <div class="col-12 p-2 text-right">
+                    <div class="col-12 col-md-6 p-2">
+                        <form action="{{route('changeLang')}}" method="post">
+                            <select name="lang" id="lang">
+                                <option value="fr">Français</option>
+                                <option value="kg">Kikongo</option>
+                                <option value="ln">Lingala</option>
+                                <option value="sw">Swahili</option>
+                                <option value="ts">Tshiluba</option>
+                            </select>
+                            @csrf
+                            <button>{{__('Envoyer')}}</button>
+                        </form>
+
+                    </div>
+                    <div class="col-12 p-2 text-right col-md-6">
                         <a href="https://twitter.com/aniciisrdc" target="_blank" class="mr-2"><i class="fab fa-twitter"></i></a>
                         <a href="https://www.facebook.com/ANICiisRDC/" target="_blank"><i class="fab fa-facebook-square"></i></a>
                     </div>
@@ -191,7 +205,7 @@
         </div>
     </footer>
     <div class="contenaire-float">
-        <a  href="https://wa.me/243844434444?text=salut" title="Whatsapp bot" target="_blank" class="float whatsapp">
+        <a href="https://wa.me/243844434444?text=salut" title="Whatsapp bot" target="_blank" class="float whatsapp">
             <i class="fab fa-whatsapp fa-2x"></i>
         </a>
     </div>

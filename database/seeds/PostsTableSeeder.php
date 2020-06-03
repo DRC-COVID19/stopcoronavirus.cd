@@ -13,7 +13,9 @@ class PostsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('posts')->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+        DB::table('posts')->truncate();
 
         DB::table('posts')->insert(array(
             0 =>
