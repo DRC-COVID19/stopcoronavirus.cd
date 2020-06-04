@@ -17,6 +17,7 @@
           @medicalOrientationChecked="getmedicalOrientations"
           @medicalOrientationChanged="medicalOrientationChanged"
           @hasSondageChecked="hasSondageChecked"
+          @worriedChecked="worriedChecked"
           :covidCasesCount="covidCasesCount"
           :hospitalCount="hospitalCount"
           :orientationCount="orientationCount"
@@ -45,6 +46,8 @@
               :hospitals="hospitals"
               :medicalOrientations="medicalOrientations"
               :medicalOrientationSelected="medicalOrientationSelected"
+              :sondages="sondages"
+              :worried="worried"
             />
           </b-row>
           <div class="chart-container" v-if="hasCovidCases || hasOrientation">
@@ -98,7 +101,9 @@ export default {
       orientationCount: null,
       finCount: null,
       fin5Count: null,
-      fin8Count: null
+      fin8Count: null,
+      sondages: null,
+      worried: false
     };
   },
   computed: {
@@ -304,7 +309,13 @@ export default {
     },
     hasSondageChecked(checked) {
       this.isLoading = true;
-      axios.get(`/api/dashboard/sondages`).then(({ data }) => {});
+      axios.get(`/api/dashboard/sondages`).then(({ data }) => {
+        this.isLoading = false;
+        this.sondages = data;
+      });
+    },
+    worriedChecked(checked) {
+      this.worried = checked;
     }
   }
 };

@@ -23,6 +23,18 @@ export default {
     medicalOrientationSelected: {
       type: String,
       default: null
+    },
+    sondages: {
+      type: Array,
+      default: null
+    },
+    worried: {
+      type: Boolean,
+      default: null
+    },
+    catchVirus: {
+      type: Boolean,
+      default: null
     }
   },
   data() {
@@ -50,7 +62,8 @@ export default {
       covidCasesMarkers: [],
       medicalOrientationMakers: [],
       medicalOrientationData: [],
-      map: null
+      map: null,
+      AllSondagesMarkers: []
     };
   },
   mounted() {
@@ -465,10 +478,28 @@ export default {
           this.medicalOrientationMakers.push(currentMarker);
         }
       });
+    },
+    sondages() {
+      if (this.sondages) {
+      }
+    },
+    worried() {
+      if (this.worried) {
+        this.setMarkersSondage("worried");
+      } else {
+        this.removeMarkersSondage("worried");
+      }
+    },
+    catchVirus() {
+      if (this.catchVirus) {
+        this.setMarkersSondage("catchVirus");
+      } else {
+        this.removeMarkersSondage("catchVirus");
+      }
     }
   },
   methods: {
-    getMedicalOrientations(){
+    getMedicalOrientations() {
       if (!this.medicalOrientations) {
         this.RemoveOrientationMakers();
         return;
@@ -547,6 +578,146 @@ export default {
           item.remove();
         });
       }
+    },
+    setMarkersSondage(sondage) {
+      let values = this.sondages.filter(x => x[sondage] && x[sondage] > 0);
+      values.map(item => {
+        let el = document.createElement("div");
+        let el2 = document.createElement("div");
+        el.className = `default-makers ${sondage}`;
+        let defaultSize = "width:30px;height:30px;";
+        if (item[sondage] > 50) {
+          el.style = defaultSize;
+        }
+        if (item[sondage] > 100) {
+          defaultSize = "width:50px;height:50px;";
+          el.style = defaultSize;
+        }
+        el2.style.zIndex = item[sondage];
+        let offset = { offset: [0, 0] };
+        let longitude = item.longitude;
+        let latitude = item.latitude;
+        switch (sondage) {
+          case "worried":
+            offset = { offset: [10, 0] };
+            let worried = item.worried ? item.worried : 0;
+            let not_worried = item.not_worried ? item.not_worried : 0;
+            let worried_count = worried + not_worried;
+            el.innerText = worried_count;
+            longitude = item.longitude + 100 / 100000;
+            latitude = item.latitude + 800 / 100000;
+            el.style.background = `linear-gradient(to right,#00b065 ${(worried *
+              100) /
+              worried_count}%, #ff3b3b ${(worried * 100) /
+              worried_count}%, #ff3b3b ${(not_worried * 100) /
+              worried_count}%)`;
+            break;
+          case "catch_virus":
+            let catch_virus = item.catch_virus ? item.catch_virus : 0;
+            let not_catch_virus = item.not_catch_virus
+              ? item.not_catch_virus
+              : 0;
+            let catch_virus_count = catch_virus + not_catch_virus;
+            el.innerText = catch_virus_count;
+            longitude = item.longitude - 200 / 10000;
+            latitude = item.latitude - 200 / 100000;
+            el.style.background = `linear-gradient(to right,#00b065 ${(catch_virus *
+              100) /
+              catch_virus_count}%, #ff3b3b ${(catch_virus * 100) /
+              catch_virus_count}%, #ff3b3b ${(not_catch_virus * 100) /
+              catch_virus_count}%)`;
+            break;
+          case "price_increase":
+            let price_increase = item.price_increase ? item.price_increase : 0;
+            let not_price_increase = item.not_price_increase
+              ? item.not_price_increase
+              : 0;
+            let price_increase_count = price_increase + not_price_increase;
+            el.innerText = price_increase_count;
+            longitude = item.longitude - 300 / 10000;
+            latitude = item.latitude + 500 / 100000;
+            el.style.background = `linear-gradient(to right,#00b065 ${(price_increase *
+              100) /
+              price_increase_count}%, #ff3b3b ${(price_increase * 100) /
+              price_increase_count}%, #ff3b3b ${(not_price_increase * 100) /
+              price_increase_count}%)`;
+            break;
+          case "mask":
+            let mask = item.mask ? item.mask : 0;
+            let not_mask = item.not_mask ? item.not_mask : 0;
+            let mask_count = mask + not_mask;
+            el.innerText = mask_count;
+            longitude = item.longitude - 350 / 100000;
+            latitude = item.latitude - 300 / 100000;
+            el.style.background = `linear-gradient(to right,#00b065 ${(mask *
+              100) /
+              mask_count}%, #ff3b3b ${(mask * 100) /
+              mask_count}%, #ff3b3b ${(not_mask * 100) / mask_count}%)`;
+            break;
+          case "makala":
+            let makala = item.makala ? item.makala : 0;
+            let not_makala = item.not_makala ? item.not_makala : 0;
+            let makala_count = makala + not_makala;
+            el.innerText = makala_count;
+            longitude = item.longitude + 300 / 10000;
+            latitude = item.latitude + 150 / 100000;
+            el.style.background = `linear-gradient(to right,#00b065 ${(makala *
+              100) /
+              makala_count}%, #ff3b3b ${(makala * 100) /
+              makala_count}%, #ff3b3b ${(not_makala * 100) / makala_count}%)`;
+            break;
+          case "flour":
+            let flour = item.flour ? item.flour : 0;
+            let not_flour = item.not_flour ? item.not_flour : 0;
+            let flour_count = flour + not_flour;
+            el.innerText = flour_count;
+            longitude = item.longitude - 330 / 10000;
+            latitude = item.latitude - 250 / 100000;
+            el.style.background = `linear-gradient(to right,#00b065 ${(flour *
+              100) /
+              flour_count}%, #ff3b3b ${(flour * 100) /
+              flour_count}%, #ff3b3b ${(not_flour * 100) / flour_count}%)`;
+            break;
+          case "antibacterial_gel":
+            let antibacterial_gel = item.antibacterial_gel
+              ? item.antibacterial_gel
+              : 0;
+            let not_antibacterial_gel = item.not_antibacterial_gel
+              ? item.not_antibacterial_gel
+              : 0;
+            let antibacterial_gel_count =
+              antibacterial_gel + not_antibacterial_gel;
+            el.innerText = antibacterial_gel_count;
+            longitude = item.longitude - 200 / 10000;
+            latitude = item.latitude + 800 / 100000;
+            el.style.background = `linear-gradient(to right,#00b065 ${(antibacterial_gel *
+              100) /
+              antibacterial_gel_count}%, #ff3b3b ${(antibacterial_gel * 100) /
+              antibacterial_gel_count}%, #ff3b3b ${(not_antibacterial_gel *
+              100) /
+              antibacterial_gel_count}%)`;
+            break;
+          default:
+            break;
+        }
+
+        // popup
+        let popup = new Mapbox.Popup({ offset: 25 }).setText(item.town);
+        el2.append(el);
+        // add marker to map
+        let currentMarker = new Mapbox.Marker(el2)
+          .setLngLat([longitude, latitude])
+          .setPopup(popup)
+          .addTo(map);
+        currentMarker[sondage] = true;
+        currentMarker.defaultSize = defaultSize;
+        this.AllSondagesMarkers.push(currentMarker);
+      });
+    },
+    removeMarkersSondage(sondage) {
+      this.AllSondagesMarkers.filter(x => x[sondage]).map(item => {
+        item.remove();
+      });
     }
   }
 };

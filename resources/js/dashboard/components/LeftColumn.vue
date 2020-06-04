@@ -4,14 +4,10 @@
       <b-col cols="12">
         <b-card no-body>
           <b-card-header>
-            <b-form-checkbox
-              class="styled-checkbox"
-              name="covid_case"
-              @change="covidCaseToggle"
-            >Cas covid-19
-            <b-badge v-if="covidCasesCount">{{covidCasesCount}}</b-badge>
+            <b-form-checkbox class="styled-checkbox" name="covid_case" @change="covidCaseToggle">
+              Cas covid-19
+              <b-badge v-if="covidCasesCount">{{covidCasesCount}}</b-badge>
             </b-form-checkbox>
-            
           </b-card-header>
         </b-card>
       </b-col>
@@ -20,9 +16,7 @@
     <b-row class="mb-3">
       <b-col cols="12">
         <b-card>
-          <b-form-checkbox class="styled-checkbox" name="list_hospital"
-            @change="hospitalToggle"
-          >
+          <b-form-checkbox class="styled-checkbox" name="list_hospital" @change="hospitalToggle">
             Liste hôpitaux
             <b-badge v-if="hospitalCount">{{hospitalCount}}</b-badge>
           </b-form-checkbox>
@@ -95,11 +89,13 @@
                 class="styled-checkbox mb-2"
                 name="worried"
                 id="worried"
+                @change="worriedToggle"
               >A quel point cela vous inquiète ?</b-form-checkbox>
               <b-form-checkbox
                 class="styled-checkbox mb-2"
                 name="catch_virus"
                 id="catch_virus"
+                @change="catchVirusToggle"
               >Est-ce que vous pensez que vous pourriez attraper le virus ?</b-form-checkbox>
               <b-form-checkbox
                 class="styled-checkbox mb-3"
@@ -128,30 +124,30 @@
 
 <script>
 export default {
-  props:{
-    covidCasesCount:{
-      type:Number,
-      default:null
+  props: {
+    covidCasesCount: {
+      type: Number,
+      default: null
     },
-    hospitalCount:{
-      type:Number,
-      default:null
+    hospitalCount: {
+      type: Number,
+      default: null
     },
-    orientationCount:{
-      type:Number,
-      default:null
+    orientationCount: {
+      type: Number,
+      default: null
     },
-    finCount:{
-      type:Number,
-      default:null
+    finCount: {
+      type: Number,
+      default: null
     },
-    fin8Count:{
-      type:Number,
-      default:null
+    fin8Count: {
+      type: Number,
+      default: null
     },
-    fin5Count:{
-      type:Number,
-      default:null
+    fin5Count: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -182,7 +178,7 @@ export default {
     covidCaseToggle(checked) {
       this.$emit("covidCaseChecked", checked);
     },
-    hospitalToggle(checked){
+    hospitalToggle(checked) {
       this.$emit("hopitalChecked", checked);
     },
     medicalOrientationToggle(checked) {
@@ -190,14 +186,20 @@ export default {
       if (checked) {
         this.orientationSelected = "ALL";
       }
-       this.$emit("medicalOrientationChecked", checked);
+      this.$emit("medicalOrientationChecked", checked);
     },
-    orientationChange(item){
+    orientationChange(item) {
       this.$emit("medicalOrientationChanged", item);
     },
     hasSondageToggle(checked) {
       this.$root.$emit("bv::toggle::collapse", "has_sondage_collapse");
       this.$emit("hasSondageChecked", checked);
+    },
+    worriedToggle(checked) {
+      this.$emit("worriedChecked", checked);
+    },
+    catchVirusToggle(checked){
+      this.$emit('catchVirusChecked',checked);
     }
   }
 };
