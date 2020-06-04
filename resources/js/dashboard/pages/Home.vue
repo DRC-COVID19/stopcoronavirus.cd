@@ -18,6 +18,7 @@
           @medicalOrientationChanged="medicalOrientationChanged"
           @hasSondageChecked="hasSondageChecked"
           @worriedChecked="worriedChecked"
+          @catchVirusChecked="catchVirusChecked"
           :covidCasesCount="covidCasesCount"
           :hospitalCount="hospitalCount"
           :orientationCount="orientationCount"
@@ -48,6 +49,7 @@
               :medicalOrientationSelected="medicalOrientationSelected"
               :sondages="sondages"
               :worried="worried"
+              :catchVirus="catchVirus"
             />
           </b-row>
           <div class="chart-container" v-if="hasCovidCases || hasOrientation">
@@ -316,6 +318,9 @@ export default {
     },
     worriedChecked(checked) {
       this.worried = checked;
+    },
+    catchVirusChecked(checked){
+      this.catchVirus=checked;
     }
   }
 };
