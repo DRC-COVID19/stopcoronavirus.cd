@@ -19,6 +19,11 @@
           @hasSondageChecked="hasSondageChecked"
           @worriedChecked="worriedChecked"
           @catchVirusChecked="catchVirusChecked"
+          @priceIncreaseChecked="priceIncreaseChecked"
+          @maskChecked="maskChecked"
+          @makalaChecked="makalaChecked"
+          @flourChecked="flourChecked"
+          @antiBacterialGelChecked="antiBacterialGelChecked"
           :covidCasesCount="covidCasesCount"
           :hospitalCount="hospitalCount"
           :orientationCount="orientationCount"
@@ -50,6 +55,11 @@
               :sondages="sondages"
               :worried="worried"
               :catchVirus="catchVirus"
+              :priceIncrease="priceIncrease"
+              :mask="mask"
+              :makala="makala"
+              :flour="flour"
+              :antiBacterialGel="antiBacterialGel"
             />
           </b-row>
           <div class="chart-container" v-if="hasCovidCases || hasOrientation">
@@ -105,7 +115,13 @@ export default {
       fin5Count: null,
       fin8Count: null,
       sondages: null,
-      worried: false
+      worried: false,
+      catchVirus: false,
+      priceIncrease: false,
+      mask: false,
+      makala: false,
+      flour: false,
+      antiBacterialGel: false
     };
   },
   computed: {
@@ -303,6 +319,7 @@ export default {
           });
       } else {
         this.medicalOrientations = null;
+        this.orientationCount = null;
         this.isLoading = false;
       }
     },
@@ -310,17 +327,36 @@ export default {
       this.medicalOrientationSelected = item;
     },
     hasSondageChecked(checked) {
-      this.isLoading = true;
-      axios.get(`/api/dashboard/sondages`).then(({ data }) => {
-        this.isLoading = false;
-        this.sondages = data;
-      });
+      if (checked) {
+        this.isLoading = true;
+        axios.get(`/api/dashboard/sondages`).then(({ data }) => {
+          this.isLoading = false;
+          this.sondages = data;
+        });
+      }else{
+        this.sondages=null;
+      }
     },
     worriedChecked(checked) {
       this.worried = checked;
     },
-    catchVirusChecked(checked){
-      this.catchVirus=checked;
+    catchVirusChecked(checked) {
+      this.catchVirus = checked;
+    },
+    priceIncreaseChecked(checked) {
+      this.priceIncrease = checked;
+    },
+    maskChecked(checked) {
+      this.mask = checked;
+    },
+    makalaChecked(checked) {
+      this.makala = checked;
+    },
+    flourChecked(checked) {
+      this.flour = checked;
+    },
+    antiBacterialGelChecked(checked) {
+      this.antiBacterialGel = checked;
     }
   }
 };

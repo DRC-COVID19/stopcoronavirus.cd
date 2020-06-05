@@ -35,6 +35,26 @@ export default {
     catchVirus: {
       type: Boolean,
       default: null
+    },
+    priceIncrease: {
+      type: Boolean,
+      default: null
+    },
+    mask: {
+      type: Boolean,
+      default: null
+    },
+    makala: {
+      type: Boolean,
+      default: null
+    },
+    flour: {
+      type: Boolean,
+      default: null
+    },
+    antiBacterialGel: {
+      type: Boolean,
+      default: null
     }
   },
   data() {
@@ -480,7 +500,10 @@ export default {
       });
     },
     sondages() {
-      if (this.sondages) {
+      if (!this.sondages) {
+        this.AllSondagesMarkers.map(item => {
+          item.remove();
+        });
       }
     },
     worried() {
@@ -492,9 +515,44 @@ export default {
     },
     catchVirus() {
       if (this.catchVirus) {
-        this.setMarkersSondage("catchVirus");
+        this.setMarkersSondage("catch_virus");
       } else {
-        this.removeMarkersSondage("catchVirus");
+        this.removeMarkersSondage("catch_virus");
+      }
+    },
+    priceIncrease() {
+      if (this.priceIncrease) {
+        this.setMarkersSondage("price_increase");
+      } else {
+        this.removeMarkersSondage("price_increase");
+      }
+    },
+    mask() {
+      if (this.mask) {
+        this.setMarkersSondage("mask");
+      } else {
+        this.removeMarkersSondage("mask");
+      }
+    },
+    makala() {
+      if (this.makala) {
+        this.setMarkersSondage("makala");
+      } else {
+        this.removeMarkersSondage("makala");
+      }
+    },
+    flour() {
+      if (this.flour) {
+        this.setMarkersSondage("flour");
+      } else {
+        this.removeMarkersSondage("flour");
+      }
+    },
+    antiBacterialGel() {
+      if (this.antiBacterialGel) {
+        this.setMarkersSondage("antibacterial_gel");
+      } else {
+        this.removeMarkersSondage("antibacterial_gel");
       }
     }
   },
