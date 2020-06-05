@@ -27721,6 +27721,10 @@ h3 {
   font-size: 0.8rem;
 }
 
+.column-left .vue-daterange-picker {
+  width: 80%;
+}
+
 .default-makers {
   width: 20px;
   height: 20px;

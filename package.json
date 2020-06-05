@@ -27,12 +27,15 @@
         "jquery": "^3.4.1",
         "mapbox-gl": "^1.10.1",
         "vue": "^2.6.11",
+        "vue-airbnb-style-datepicker": "^2.7.1",
         "vue-google-charts": "^0.3.2",
         "vue-lazyload": "^1.3.3",
         "vue-mapbox": "^0.4.1",
         "vue-meta": "^2.3.4",
+        "vue-rangedate-picker": "^1.0.0",
         "vue-router": "^3.2.0",
         "vue-select": "^3.10.3",
+        "vue2-daterange-picker": "^0.5.1",
         "vuex": "^3.4.0",
         "webpack-livereload-plugin": "^2.3.0"
     }

@@ -149,11 +149,74 @@
         </b-card>
       </b-col>
     </b-row>
+    <b-row>
+      <b-col cols="12">
+        <b-card no-body>
+          <b-card-header>
+            <b-form-checkbox
+              @change="populationFluxToggle"
+              class="styled-checkbox"
+              name="has_sondage"
+            >Mouvement populations</b-form-checkbox>
+          </b-card-header>
+          <b-collapse id="populationFluxcollapse">
+            <b-card-body>
+              <b-form>
+                <h4>Selectionnez zones</h4>
+                <b-form-group label="Origine">
+                  <v-select />
+                </b-form-group>
+                <b-form-group label="Destination">
+                  <v-select />
+                </b-form-group>
+                <hr />
+                <div>
+                  <h4>Choix périodes</h4>
+                  <label>Période de référence</label>
+                  <date-range-picker
+                    ref="picker"
+                    :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
+                    v-model="dateRangePopulationFlux"
+                    :appendToBody="true"
+                    opens="right"
+                  >
+                    <template v-slot:input="picker">{{ picker.startDate }} - {{ picker.endDate }}</template>
+                  </date-range-picker>
+                  <b-button>
+                    <span class="fa fa-times"></span>
+                  </b-button>
+                  <label>Période d'observation</label>
+                  <date-range-picker
+                    ref="picker2"
+                    :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
+                    v-model="dateRangePopulationFlux"
+                    :appendToBody="true"
+                    opens="right"
+                  >
+                    <template v-slot:input="picker">{{ picker.startDate }} - {{ picker.endDate }}</template>
+                  </date-range-picker>
+                  <b-button>
+                    <span class="fa fa-times"></span>
+                  </b-button>
+                </div>
+                <b-button class="mt-2">Envoyer</b-button>
+              </b-form>
+            </b-card-body>
+          </b-collapse>
+        </b-card>
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
 <script>
+import DateRangePicker from "vue2-daterange-picker";
+//you need to import the CSS manually (in case you want to override it)
+import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
 export default {
+  components: {
+    DateRangePicker
+  },
   props: {
     covidCasesCount: {
       type: Number,
@@ -201,7 +264,11 @@ export default {
         }
       ],
       orientationChecked: false,
-      orientationSelected: "ALL"
+      orientationSelected: "ALL",
+      dateRangePopulationFlux: {
+        startDate: null,
+        endDate: null
+      }
     };
   },
   methods: {
@@ -245,6 +312,9 @@ export default {
     },
     antibacterial_gelToggle(checked) {
       this.$emit("antiBacterialGelChecked", checked);
+    },
+    populationFluxToggle(checked) {
+      this.$root.$emit("bv::toggle::collapse", "populationFluxcollapse");
     }
   }
 };
