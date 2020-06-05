@@ -348,31 +348,31 @@
     }
 
     &.worried {
-        border: 2px solid $worried;
+        border: 5px solid $worried;
         background: $worried;
     }
     &.mask {
-        border: 2px solid $mask;
+        border: 5px solid $mask;
         background: $mask;
     }
     &.makala {
-        border: 2px solid $makala;
+        border: 5px solid $makala;
         background: $makala;
     }
     &.price_increase {
-        border: 2px solid $price_increase;
+        border: 5px solid $price_increase;
         background: $price_increase;
     }
     &.flour {
-        border: 2px solid $flour;
+        border: 5px solid $flour;
         background: $flour;
     }
     &.catch_virus {
-        border: 2px solid $catch_virus;
+        border: 5px solid $catch_virus;
         background: $catch_virus;
     }
     &.antibacterial_gel {
-        border: 2px solid $antibacterial_gel;
+        border: 5px solid $antibacterial_gel;
         background: $antibacterial_gel;
     }
 }
@@ -388,6 +388,21 @@
     }
 }
 #sondage-item {
+    .sondage-ul {
+        list-style: none;
+    }
+    .sondage-yes {
+        width: 20px;
+        height: 20px;
+        background: $success;
+        display: inline-block;
+    }
+    .sondage-no {
+        width: 20px;
+        height: 20px;
+        background: $primary;
+        display: inline-block;
+    }
     #worried {
         + label {
             border-right: 15px solid $worried;

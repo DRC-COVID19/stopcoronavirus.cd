@@ -27779,37 +27779,37 @@ h3 {
 }
 
 .default-makers.worried {
-  border: 2px solid #6610f2;
+  border: 5px solid #6610f2;
   background: #6610f2;
 }
 
 .default-makers.mask {
-  border: 2px solid #ffa500c4;
+  border: 5px solid #ffa500c4;
   background: #ffa500c4;
 }
 
 .default-makers.makala {
-  border: 2px solid #17a2b8;
+  border: 5px solid #17a2b8;
   background: #17a2b8;
 }
 
 .default-makers.price_increase {
-  border: 2px solid #e83e8c;
+  border: 5px solid #e83e8c;
   background: #e83e8c;
 }
 
 .default-makers.flour {
-  border: 2px solid #FF5722;
+  border: 5px solid #FF5722;
   background: #FF5722;
 }
 
 .default-makers.catch_virus {
-  border: 2px solid #1f3677;
+  border: 5px solid #1f3677;
   background: #1f3677;
 }
 
 .default-makers.antibacterial_gel {
-  border: 2px solid red;
+  border: 5px solid red;
   background: red;
 }
 
@@ -27824,6 +27824,24 @@ h3 {
 
 #hospital-data #hospital-data-close {
   cursor: pointer;
+}
+
+#sondage-item .sondage-ul {
+  list-style: none;
+}
+
+#sondage-item .sondage-yes {
+  width: 20px;
+  height: 20px;
+  background: #00b065;
+  display: inline-block;
+}
+
+#sondage-item .sondage-no {
+  width: 20px;
+  height: 20px;
+  background: #e6222e;
+  display: inline-block;
 }
 
 #sondage-item #worried + label {

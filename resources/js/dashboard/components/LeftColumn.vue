@@ -85,6 +85,19 @@
           </b-card-header>
           <b-collapse id="has_sondage_collapse">
             <b-card-body id="sondage-item">
+              <div>
+                <span>Legendes réponses</span>
+                <ul class="sondage-ul">
+                  <li>
+                    <div class="sondage-yes"></div>
+                    <span>Oui</span>
+                  </li>
+                  <li>
+                    <div class="sondage-no"></div>
+                    <span>Non</span>
+                  </li>
+                </ul>
+              </div>
               <b-form-checkbox
                 class="styled-checkbox mb-2"
                 name="worried"
@@ -101,18 +114,35 @@
                 class="styled-checkbox mb-3"
                 name="price_increase"
                 id="price_increase"
+                @change="price_increaseToggle"
               >Constatent une augmentation des prix des denrées essentielles</b-form-checkbox>
               <div class="group-control mb-3">
                 <label>Quels sont les denrées que vous avez du mal à trouver?</label>
               </div>
-              <b-form-checkbox class="styled-checkbox mb-2" name="mask" id="mask">Masque</b-form-checkbox>
+              <b-form-checkbox
+                class="styled-checkbox mb-2"
+                name="mask"
+                id="mask"
+                @change="maskToggle"
+              >Masque</b-form-checkbox>
 
-              <b-form-checkbox class="styled-checkbox mb-2" name="makala" id="makala">Makala</b-form-checkbox>
-              <b-form-checkbox class="styled-checkbox mb-2" name="flour" id="flour">Farine</b-form-checkbox>
+              <b-form-checkbox
+                class="styled-checkbox mb-2"
+                name="makala"
+                id="makala"
+                @change="makalaToggle"
+              >Makala</b-form-checkbox>
+              <b-form-checkbox
+                class="styled-checkbox mb-2"
+                name="flour"
+                id="flour"
+                @change="flourToggle"
+              >Farine</b-form-checkbox>
               <b-form-checkbox
                 class="styled-checkbox mb-2"
                 name="antibacterial_gel"
                 id="antibacterial_gel"
+                @change="antibacterial_gelToggle"
               >Gel antibactérien</b-form-checkbox>
             </b-card-body>
           </b-collapse>
@@ -198,8 +228,23 @@ export default {
     worriedToggle(checked) {
       this.$emit("worriedChecked", checked);
     },
-    catchVirusToggle(checked){
-      this.$emit('catchVirusChecked',checked);
+    catchVirusToggle(checked) {
+      this.$emit("catchVirusChecked", checked);
+    },
+    price_increaseToggle(checked) {
+      this.$emit("priceIncreaseChecked", checked);
+    },
+    maskToggle(checked) {
+      this.$emit("maskChecked", checked);
+    },
+    makalaToggle(checked) {
+      this.$emit("makalaChecked", checked);
+    },
+    flourToggle(checked) {
+      this.$emit("flourChecked", checked);
+    },
+    antibacterial_gelToggle(checked) {
+      this.$emit("antiBacterialGelChecked", checked);
     }
   }
 };
