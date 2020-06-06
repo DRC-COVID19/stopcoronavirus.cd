@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Flux;
 use App\Hospital;
 use App\Http\Resources\HospitalResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\MyTrait\GClientSheet;
 use App\Http\MyTrait\GeoConding;
+use App\Imports\FluxImport;
 use App\PandemicStat;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DashBoardController extends Controller
 {
@@ -338,5 +342,87 @@ class DashBoardController extends Controller
             }
         }
         return response()->json(array_values($formattedArray));
+    }
+
+    public function getFluxData(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'origin' => 'required|array',
+            'destination' => 'required|array',
+            'preference_start' => 'date',
+            'preference_end' => 'date',
+            'observation_start' => 'date|required',
+            'observation_end' => 'date|required'
+        ])->validate();
+
+        try {
+            $flux = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->groupBy('Origin', 'destination')
+                ->whereIn('Origin', $data['origin'])
+                ->whereIn('Destination', $data['destination'])->get();
+
+            $geoCodingFilePath = storage_path('app/townGeocoding.json');
+            if (file_exists($geoCodingFilePath)) {
+                $jsonString = file_get_contents($geoCodingFilePath);
+                $this->townGeocoding = json_decode($jsonString, true);
+            }
+            $fluxData = [];
+            foreach ($flux as $value) {
+                switch ($value->origin) {
+                    case 'Kintambo':
+                        $value->{'position_start'} = $this->townGeocoding["KINSHASA_KINTAMBO"];
+                        break;
+                    case 'Gombe':
+                        $value->{'position_start'} = $this->townGeocoding["KINSHASA_GOMBE"];
+                        break;
+                    case 'Ngiri-Ngiri':
+                        $value->{'position_start'} = $this->townGeocoding['KINSHASA_NGIRI-NGIRI'];
+                        break;
+                    case 'Barumbu':
+                        $value->{'position_start'} = $this->townGeocoding['KINSHASA_BARUMBU'];
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+                switch ($value->destination) {
+                    case 'Kintambo':
+                        $value->{'position_end'} = $this->townGeocoding["KINSHASA_KINTAMBO"];
+                        break;
+                    case 'Gombe':
+                        $value->{'position_end'} = $this->townGeocoding["KINSHASA_GOMBE"];
+                        break;
+                    case 'Ngiri-Ngiri':
+                        $value->{'position_end'} = $this->townGeocoding['KINSHASA_NGIRI-NGIRI'];
+                        break;
+                    case 'Barumbu':
+                        $value->{'position_end'} = $this->townGeocoding['KINSHASA_BARUMBU'];
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
+                $fluxData[] = $value;
+            }
+            return response()->json($fluxData);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getFluxZone()
+    {
+        try {
+            $zones = DB::table('flux_24')->select('origin')->distinct()->get();
+            return response()->json($zones);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 }

@@ -161,13 +161,29 @@
           </b-card-header>
           <b-collapse id="populationFluxcollapse">
             <b-card-body>
-              <b-form>
+              <b-form >
                 <h4>Selectionnez zones</h4>
-                <b-form-group label="Origine">
-                  <v-select />
+                <b-form-group>
+                   <label for="name">Origine
+                     <div class=""></div>
+                   </label>
+                  <v-select
+                    multiple
+                    name="Origine"
+                    v-model="fluxForm.origin"
+                    :options="fluxZones"
+                    label="origin"
+                    :reduce="item=>item.origin"
+                  />
                 </b-form-group>
                 <b-form-group label="Destination">
-                  <v-select />
+                  <v-select
+                    multiple
+                    v-model="fluxForm.destination"
+                    :options="fluxZones"
+                    label="origin"
+                    :reduce="item=>item.origin"
+                  />
                 </b-form-group>
                 <hr />
                 <div>
@@ -175,12 +191,15 @@
                   <label>Période de référence</label>
                   <date-range-picker
                     ref="picker"
-                    :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
-                    v-model="dateRangePopulationFlux"
+                    :locale-data="{ firstDay: 1, format: 'dd-mm-yyyy' }"
+                    v-model="dateRangePreference"
                     :appendToBody="true"
                     opens="right"
+                    @update="UpdatePreferenceDate"
                   >
-                    <template v-slot:input="picker">{{ picker.startDate }} - {{ picker.endDate }}</template>
+                    <template
+                      v-slot:input="picker"
+                    >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
                   </date-range-picker>
                   <b-button>
                     <span class="fa fa-times"></span>
@@ -188,18 +207,21 @@
                   <label>Période d'observation</label>
                   <date-range-picker
                     ref="picker2"
-                    :locale-data="{ firstDay: 1, format: 'DD-MM-YYYY HH:mm:ss' }"
-                    v-model="dateRangePopulationFlux"
+                    :locale-data="{ firstDay: 1, format: 'dd-mm-yyyy' }"
+                    v-model="dateRangeObservation"
                     :appendToBody="true"
                     opens="right"
+                    @update="UpdateObservationDate"
                   >
-                    <template v-slot:input="picker">{{ picker.startDate }} - {{ picker.endDate }}</template>
+                    <template
+                      v-slot:input="picker"
+                    >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
                   </date-range-picker>
                   <b-button>
                     <span class="fa fa-times"></span>
                   </b-button>
                 </div>
-                <b-button class="mt-2">Envoyer</b-button>
+                <b-button @click="submitFluxForm" class="mt-2">Envoyer</b-button>
               </b-form>
             </b-card-body>
           </b-collapse>
@@ -211,7 +233,7 @@
 
 <script>
 import DateRangePicker from "vue2-daterange-picker";
-//you need to import the CSS manually (in case you want to override it)
+import moment from "moment";
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
 export default {
   components: {
@@ -241,6 +263,10 @@ export default {
     fin5Count: {
       type: Number,
       default: null
+    },
+    fluxZones: {
+      type: Array,
+      default: []
     }
   },
   data() {
@@ -265,11 +291,18 @@ export default {
       ],
       orientationChecked: false,
       orientationSelected: "ALL",
-      dateRangePopulationFlux: {
+      dateRangePreference: {
         startDate: null,
         endDate: null
-      }
+      },
+      fluxForm: {},
+      dateRangeObservation: {}
     };
+  },
+  filters: {
+    date: val => {
+      return val ? moment(val).format("DD.MM.YYYY") : "";
+    }
   },
   methods: {
     covidCaseToggle(checked) {
@@ -315,6 +348,17 @@ export default {
     },
     populationFluxToggle(checked) {
       this.$root.$emit("bv::toggle::collapse", "populationFluxcollapse");
+    },
+    UpdatePreferenceDate({ startDate, endDate }) {
+      this.fluxForm.preference_start = moment(startDate).format("YYYY/MM/DD");
+      this.fluxForm.preference_end = moment(endDate).format("YYYY/MM/DD");
+    },
+    UpdateObservationDate({ startDate, endDate }) {
+      this.fluxForm.observation_start = moment(startDate).format("YYYY/MM/DD");
+      this.fluxForm.observation_end = moment(endDate).format("YYYY/MM/DD");
+    },
+    submitFluxForm() {
+      this.$emit("submitFluxForm", this.fluxForm);
     }
   }
 };

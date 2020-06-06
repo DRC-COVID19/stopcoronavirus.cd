@@ -38,6 +38,8 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('orientation-medical-stats','DashBoardController@getAllDiagnosticStat');
     Route::get('sondages', 'DashBoardController@getSondages');
     Route::get('cavid-cases', 'DashBoardController@getLastPandemicsRegion');
+    Route::post('flux-24', 'DashBoardController@getFluxData');
+    Route::get('flux-zone', 'DashBoardController@getFluxZone');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');
