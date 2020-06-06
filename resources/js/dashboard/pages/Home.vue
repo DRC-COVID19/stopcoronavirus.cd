@@ -24,17 +24,19 @@
           @makalaChecked="makalaChecked"
           @flourChecked="flourChecked"
           @antiBacterialGelChecked="antiBacterialGelChecked"
+          @submitFluxForm="submitFluxForm"
           :covidCasesCount="covidCasesCount"
           :hospitalCount="hospitalCount"
           :orientationCount="orientationCount"
           :finCount="finCount"
           :fin5Count="fin5Count"
           :fin8Count="fin8Count"
+          :fluxZones="fluxZones"
         />
 
         <b-tabs
           content-class="mt-3"
-          v-if="hasCovidCases || hasOrientation"
+          v-if="hasCovidCases || hasOrientation||hasFlux24"
           class="cols-12 col-md-3 offset-md-3 side-case-covid"
         >
           <b-tab title="Cas covid " v-if="hasCovidCases" :active="hasCovidCases">
@@ -42,6 +44,9 @@
           </b-tab>
           <b-tab title="Orientation" v-if="hasOrientation" :active="hasOrientation">
             <SideOrientation :medicalOrientations="medicalOrientations" />
+          </b-tab>
+          <b-tab title="Flux" v-if="hasFlux24" :active="hasFlux24">
+            <SideFluxChart :flux24="flux24" />
           </b-tab>
         </b-tabs>
 
@@ -60,6 +65,7 @@
               :makala="makala"
               :flour="flour"
               :antiBacterialGel="antiBacterialGel"
+              :flux24="flux24"
             />
           </b-row>
           <div class="chart-container" v-if="hasCovidCases || hasOrientation">
@@ -89,6 +95,7 @@ import SideCaseCovid from "../components/SideCaseCovid";
 import CovidCaseChart from "../components/CovidCaseChart";
 import OrientationChart from "../components/OrientationChart";
 import SideOrientation from "../components/SideOrientation";
+import SideFluxChart from "../components/SideFlux";
 export default {
   components: {
     Maps,
@@ -97,7 +104,8 @@ export default {
     SideCaseCovid,
     CovidCaseChart,
     OrientationChart,
-    SideOrientation
+    SideOrientation,
+    SideFluxChart
   },
   data() {
     return {
@@ -121,7 +129,9 @@ export default {
       mask: false,
       makala: false,
       flour: false,
-      antiBacterialGel: false
+      antiBacterialGel: false,
+      fluxZones: [],
+      flux24: []
     };
   },
   computed: {
@@ -131,6 +141,9 @@ export default {
     hasOrientation() {
       return this.getHasOrientation();
     },
+    hasFlux24() {
+      return this.flux24.length > 0;
+    },
     mapStyle() {
       return {
         height:
@@ -139,6 +152,9 @@ export default {
             : `calc(100vh - 52.5px)`
       };
     }
+  },
+  mounted() {
+    this.getFluxZone();
   },
   methods: {
     getHasCoviCases() {
@@ -333,8 +349,8 @@ export default {
           this.isLoading = false;
           this.sondages = data;
         });
-      }else{
-        this.sondages=null;
+      } else {
+        this.sondages = null;
       }
     },
     worriedChecked(checked) {
@@ -357,6 +373,18 @@ export default {
     },
     antiBacterialGelChecked(checked) {
       this.antiBacterialGel = checked;
+    },
+    getFluxZone() {
+      axios.get("api/dashboard/flux-zone").then(({ data }) => {
+        this.fluxZones = data;
+      });
+    },
+    submitFluxForm(values) {
+      this.isLoading = true;
+      axios.post("api/dashboard/flux-24", values).then(({ data }) => {
+        this.flux24 = data;
+        this.isLoading = false;
+      });
     }
   }
 };

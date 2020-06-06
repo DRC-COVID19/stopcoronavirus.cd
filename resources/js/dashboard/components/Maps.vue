@@ -4,6 +4,8 @@
 <script>
 import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE } from "../config/env";
 import Mapbox from "mapbox-gl";
+import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
+import { MapboxLayer } from "@deck.gl/mapbox";
 
 export default {
   components: {},
@@ -55,6 +57,10 @@ export default {
     antiBacterialGel: {
       type: Boolean,
       default: null
+    },
+    flux24: {
+      type: Array,
+      default: []
     }
   },
   data() {
@@ -553,6 +559,48 @@ export default {
         this.setMarkersSondage("antibacterial_gel");
       } else {
         this.removeMarkersSondage("antibacterial_gel");
+      }
+    },
+    flux24() {
+      if (this.flux24.length > 0) {
+        if (map.getLayer("arc")) {
+          map.removeLayer("arc");
+        }
+        const myDeckLayer = new MapboxLayer({
+          id: "arc",
+          data: this.flux24,
+          type: ArcLayer,
+          getSourcePosition: d => d.position_start,
+          getTargetPosition: d => d.position_end,
+          getSourceColor: d => [12, 44, 132],
+          getTargetColor: d => [177, 0, 38],
+          getWidth: d => {
+            let width = 2;
+            if (d.volume > 100) {
+              width = 5;
+            } else if (d.volume > 50) {
+              width = 4;
+            } else if (d.volume > 20) {
+              width = 3;
+            }
+            return width;
+          },
+          pickable: true,
+          onHover: () =>{
+            console.log('a');
+          },
+          onClick: (info, event) =>{
+            new Mapbox.Popup()
+            .setLngLat(info.coordinate)
+            .setHTML(`<span>${info.object.origin}=>${info.object.destination}</span>
+            <div>${info.object.volume}</div>`)
+            .addTo(this.map);
+            console.log('b');
+          } ,
+        });
+        map.addLayer(myDeckLayer);
+      } else {
+        map.removeLayer("arc");
       }
     }
   },

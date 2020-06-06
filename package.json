@@ -20,12 +20,16 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "@deck.gl/core": "^8.1.9",
+        "@deck.gl/layers": "^8.1.9",
+        "@deck.gl/mapbox": "^8.1.9",
         "@fortawesome/fontawesome-free": "^5.13.0",
         "bootstrap": "^4.4.1",
         "bootstrap-vue": "^2.15.0",
         "chart.js": "^2.9.3",
         "jquery": "^3.4.1",
         "mapbox-gl": "^1.10.1",
+        "moment": "^2.26.0",
         "vue": "^2.6.11",
         "vue-airbnb-style-datepicker": "^2.7.1",
         "vue-google-charts": "^0.3.2",
