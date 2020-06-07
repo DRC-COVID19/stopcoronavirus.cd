@@ -299,7 +299,7 @@
     .pandemics-stat-row {
         font-size: 0.8rem;
     }
-    .vue-daterange-picker{
+    .vue-daterange-picker {
         width: 80%;
     }
 }
@@ -587,5 +587,19 @@
             border-radius: 8px;
             border: solid 2px #fff;
         }
+    }
+}
+.flux-form {
+    .legend-origin {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background:rgb(12, 44, 132) ;
+    }
+    .legend-destination {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background:rgb(177, 0, 38) ;
     }
 }

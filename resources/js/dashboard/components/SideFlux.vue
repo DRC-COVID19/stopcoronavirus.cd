@@ -5,7 +5,7 @@
         <b-list-group class="group-item">
           <b-list-group-item v-for="(item, index) in flux24" :key="index">
             <div class="area-name text-center mb-2">{{item.origin}}=>{{item.destination}}</div>
-            <div class="area-total d-flex justify-content-around align-items-center">{{item.volume}}</div>
+            <div class="area-total d-flex justify-content-around align-items-center">{{item.reference_volume}}{{`<=>`}}{{item.volume}}</div>
           </b-list-group-item>
         </b-list-group>
       </div>
