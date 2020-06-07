@@ -20,15 +20,15 @@
             <h3 class="mb-4">5 principales constatations</h3>
             <div class="sondage-items">
                 <div class="sondage-item">
-                    <span> 73%</span>
+                    <span> 70%</span>
                     <p>Sont inquiet ou très inquiet</p>
                 </div>
                 <div class="sondage-item">
-                    <span>17%</span>
+                    <span>18%</span>
                     <p>Ne peuvent déjà plus travailler</p>
                 </div>
                 <div class="sondage-item">
-                    <span>39%</span>
+                    <span>36%</span>
                     <p>Appellerait le numéro vert en cas de symptômes</p>
                 </div>
                 <div class="sondage-item">
@@ -36,8 +36,8 @@
                     <p>Constatent une augmentation des prix des denrées essentielles</p>
                 </div>
                 <div class="sondage-item">
-                    <span>35%</span>
-                    <p>Ont des difficultés à trouver des masques, 29% du charbon et de la farine, 28% de la Chloroquine, 26% de la
+                    <span>34%</span>
+                    <p>Ont des difficultés à trouver des masques, 27% du charbon et de la farine, 26% de la Chloroquine, 25% de la
                         Viande et des légumes</p>
                 </div>
             </div>
@@ -49,22 +49,21 @@
                     <div class="illustrator">
                         <img src="{{ asset('/img/icon/list.png')}}" />
                     </div>
-                    <p>718 sondés</p>
+                    <p>1770 sondés</p>
                 </div>
                 <div class="sondage-methods-item">
                     <div class="illustrator">
                         <img src="{{ asset('/img/icon/calendar.png')}}" />
                     </div>
                     <p>du jeudi 2 avril au
-                        mardi 14 avril 2020</p>
+                        mardi 22 mai 2020</p>
                 </div>
                 <div class="sondage-methods-item">
                     <div class="illustrator">
                         <img src="{{ asset('/img/icon/maps.png')}}" />
                     </div>
                     <p>26 provinces représentées
-                        Icône de Fontawesome
-                        718 sondés</p>
+                        1770 sondés</p>
                 </div>
             </div>
         </div>
