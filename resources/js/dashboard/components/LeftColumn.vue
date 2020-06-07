@@ -161,23 +161,35 @@
           </b-card-header>
           <b-collapse id="populationFluxcollapse">
             <b-card-body>
-              <b-form >
+              <b-form class="flux-form">
                 <h4>Selectionnez zones</h4>
-                <b-form-group>
-                   <label for="name">Origine
-                     <div class=""></div>
-                   </label>
+                <b-form-group
+                  :invalid-feedback="flux24Errors.origin ? flux24Errors.origin[0] : null"
+                  :state="flux24Errors.origin && flux24Errors.origin.lenght>0"
+                >
+                  <label for="origine">
+                    Origine
+                    <div class="legend-origin"></div>
+                  </label>
                   <v-select
                     multiple
-                    name="Origine"
+                    name="origine"
                     v-model="fluxForm.origin"
                     :options="fluxZones"
                     label="origin"
                     :reduce="item=>item.origin"
                   />
                 </b-form-group>
-                <b-form-group label="Destination">
+                <b-form-group
+                  :invalid-feedback="flux24Errors.destination ? flux24Errors.destination[0] : null"
+                  :state="flux24Errors.destination && flux24Errors.destination.lenght>0"
+                >
+                  <label for="destination">
+                    Destination
+                    <div class="legend-destination"></div>
+                  </label>
                   <v-select
+                    name="destination"
                     multiple
                     v-model="fluxForm.destination"
                     :options="fluxZones"
@@ -188,38 +200,56 @@
                 <hr />
                 <div>
                   <h4>Choix périodes</h4>
-                  <label>Période de référence</label>
-                  <date-range-picker
-                    ref="picker"
-                    :locale-data="{ firstDay: 1, format: 'dd-mm-yyyy' }"
-                    v-model="dateRangePreference"
-                    :appendToBody="true"
-                    opens="right"
-                    @update="UpdatePreferenceDate"
+                  <b-form-group
+                    :invalid-feedback="flux24Errors.preference_start|| flux24Errors.preference_end ? `${flux24Errors.preference_start[0]} ${flux24Errors.preference_end[0]}` : null"
+                    :state="(flux24Errors.preference_start && flux24Errors.preference_start.lenght>0)|| (flux24Errors.preference_end && flux24Errors.preference_end.lenght>0)"
                   >
-                    <template
-                      v-slot:input="picker"
-                    >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
-                  </date-range-picker>
-                  <b-button>
-                    <span class="fa fa-times"></span>
-                  </b-button>
-                  <label>Période d'observation</label>
-                  <date-range-picker
-                    ref="picker2"
-                    :locale-data="{ firstDay: 1, format: 'dd-mm-yyyy' }"
-                    v-model="dateRangeObservation"
-                    :appendToBody="true"
-                    opens="right"
-                    @update="UpdateObservationDate"
+                    <label>Période de référence</label>
+                    <date-range-picker
+                      ref="picker"
+                      :locale-data="{ firstDay: 1, format: 'dd-mm-yyyy' }"
+                      v-model="dateRangePreference"
+                      :appendToBody="true"
+                      opens="right"
+                      :min-date="new Date('02/01/2020')"
+                      
+                      @update="UpdatePreferenceDate"
+                      :calculate-position="dateRangerPosition"
+                    >
+                      <template
+                        v-slot:input="picker"
+                      >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
+                    </date-range-picker>
+                    <b-button>
+                      <span class="fa fa-times"></span>
+                    </b-button>
+                  </b-form-group>
+                  <b-form-group
+                    :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start[0]} ${flux24Errors.observation_end[0]}` : null"
+                    :state="(flux24Errors.observation_start && flux24Errors.observation_start.lenght>0)|| (flux24Errors.observation_end && flux24Errors.observation_end.lenght>0)"
                   >
-                    <template
-                      v-slot:input="picker"
-                    >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
-                  </date-range-picker>
-                  <b-button>
-                    <span class="fa fa-times"></span>
-                  </b-button>
+                    <label>Période d'observation</label>
+                    <date-range-picker
+                      ref="picker2"
+                      :locale-data="{ 
+                        firstDay: 1, 
+                      format: 'dd-mm-yyyy', 
+                      drops: 'up' }"
+                      
+                      v-model="dateRangeObservation"
+                      :appendToBody="true"
+                      opens="right"
+                      @update="UpdateObservationDate"
+                      :calculate-position="dateRangerPosition"
+                    >
+                      <template
+                        v-slot:input="picker"
+                      >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
+                    </date-range-picker>
+                    <b-button>
+                      <span class="fa fa-times"></span>
+                    </b-button>
+                  </b-form-group>
                 </div>
                 <b-button @click="submitFluxForm" class="mt-2">Envoyer</b-button>
               </b-form>
@@ -267,6 +297,10 @@ export default {
     fluxZones: {
       type: Array,
       default: []
+    },
+    flux24Errors: {
+      type: Object,
+      default: () => ({})
     }
   },
   data() {
@@ -296,7 +330,10 @@ export default {
         endDate: null
       },
       fluxForm: {},
-      dateRangeObservation: {}
+      dateRangeObservation: {
+        startDate: null,
+        endDate: null
+      }
     };
   },
   filters: {
@@ -359,6 +396,12 @@ export default {
     },
     submitFluxForm() {
       this.$emit("submitFluxForm", this.fluxForm);
+    },
+    dateRangerPosition(dropdownList, component, { width, top, left, right }) {
+      
+      dropdownList.style.top = `${top-305}px`;
+      dropdownList.style.left = `${210+left}px`;
+      console.log();
     }
   }
 };

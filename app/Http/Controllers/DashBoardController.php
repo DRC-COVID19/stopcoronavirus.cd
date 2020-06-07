@@ -349,10 +349,10 @@ class DashBoardController extends Controller
         $data = Validator::make($request->all(), [
             'origin' => 'required|array',
             'destination' => 'required|array',
-            'preference_start' => 'date',
-            'preference_end' => 'date',
-            'observation_start' => 'date|required',
-            'observation_end' => 'date|required'
+            'preference_start' => 'date|before:preference_end',
+            'preference_end' => 'date|before:observation_start|required_with:preference_start',
+            'observation_start' => 'date|required|before:observation_end',
+            'observation_end' => 'date|required|after:observation_start',
         ])->validate();
 
         try {
@@ -361,6 +361,15 @@ class DashBoardController extends Controller
                 ->whereIn('Origin', $data['origin'])
                 ->whereIn('Destination', $data['destination'])->get();
 
+            $fluxRefences = null;
+            if (isset($data['preference_start']) && isset($data['preference_end'])) {
+                $fluxRefences = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                    ->groupBy('Origin', 'destination')
+                    ->whereIn('Origin', $data['origin'])
+                    ->whereIn('Destination', $data['destination'])->get();
+            }
+
+
             $geoCodingFilePath = storage_path('app/townGeocoding.json');
             if (file_exists($geoCodingFilePath)) {
                 $jsonString = file_get_contents($geoCodingFilePath);
@@ -368,6 +377,14 @@ class DashBoardController extends Controller
             }
             $fluxData = [];
             foreach ($flux as $value) {
+                if ($fluxRefences) {
+                    foreach ($fluxRefences as $item) {
+                        if ($item->origin == $value->origin && $item->destination == $value->destination) {
+                            $value->{'reference_volume'} = $item->volume;
+                            break;
+                        }
+                    }
+                }
                 switch ($value->origin) {
                     case 'Kintambo':
                         $value->{'position_start'} = $this->townGeocoding["KINSHASA_KINTAMBO"];

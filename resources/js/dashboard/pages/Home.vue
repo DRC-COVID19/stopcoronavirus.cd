@@ -32,6 +32,7 @@
           :fin5Count="fin5Count"
           :fin8Count="fin8Count"
           :fluxZones="fluxZones"
+          :flux24Errors="flux24Errors"
         />
 
         <b-tabs
@@ -131,7 +132,8 @@ export default {
       flour: false,
       antiBacterialGel: false,
       fluxZones: [],
-      flux24: []
+      flux24: [],
+      flux24Errors:{}
     };
   },
   computed: {
@@ -381,9 +383,14 @@ export default {
     },
     submitFluxForm(values) {
       this.isLoading = true;
-      axios.post("api/dashboard/flux-24", values).then(({ data }) => {
+      axios.post("api/dashboard/flux-24", values)
+      .then(({ data }) => {
         this.flux24 = data;
         this.isLoading = false;
+      }).catch(({ response })=>{
+        console.log('log', response);
+        this.flux24Errors = response.data.errors;
+        this.isLoading=false;
       });
     }
   }

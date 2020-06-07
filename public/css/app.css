@@ -18507,6 +18507,20 @@ h3 {
   border: solid 2px #fff;
 }
 
+.flux-form .legend-origin {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #0c2c84;
+}
+
+.flux-form .legend-destination {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #b10026;
+}
+
 .footer-partners {
   padding: 4rem 0 0 0;
   background-color: #999;
