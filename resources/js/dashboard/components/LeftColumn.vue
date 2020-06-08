@@ -201,7 +201,7 @@
                 <div>
                   <h4>Choix périodes</h4>
                   <b-form-group
-                    :invalid-feedback="flux24Errors.preference_start|| flux24Errors.preference_end ? `${flux24Errors.preference_start[0]} ${flux24Errors.preference_end[0]}` : null"
+                    :invalid-feedback="flux24Errors.preference_start|| flux24Errors.preference_end ? `${flux24Errors.preference_start? flux24Errors.preference_start[0]:''} ${flux24Errors.preference_end?flux24Errors.preference_end[0]:''}` : null"
                     :state="(flux24Errors.preference_start && flux24Errors.preference_start.lenght>0)|| (flux24Errors.preference_end && flux24Errors.preference_end.lenght>0)"
                   >
                     <label>Période de référence</label>
@@ -212,7 +212,6 @@
                       :appendToBody="true"
                       opens="right"
                       :min-date="new Date('02/01/2020')"
-                      
                       @update="UpdatePreferenceDate"
                       :calculate-position="dateRangerPosition"
                     >
@@ -220,12 +219,12 @@
                         v-slot:input="picker"
                       >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
                     </date-range-picker>
-                    <b-button>
+                    <b-button @click="clearPrefenceDate">
                       <span class="fa fa-times"></span>
                     </b-button>
                   </b-form-group>
                   <b-form-group
-                    :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start[0]} ${flux24Errors.observation_end[0]}` : null"
+                    :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start?flux24Errors.observation_start[0]:''} ${flux24Errors.observation_end?flux24Errors.observation_end[0]:''}` : null"
                     :state="(flux24Errors.observation_start && flux24Errors.observation_start.lenght>0)|| (flux24Errors.observation_end && flux24Errors.observation_end.lenght>0)"
                   >
                     <label>Période d'observation</label>
@@ -235,7 +234,6 @@
                         firstDay: 1, 
                       format: 'dd-mm-yyyy', 
                       drops: 'up' }"
-                      
                       v-model="dateRangeObservation"
                       :appendToBody="true"
                       opens="right"
@@ -246,7 +244,7 @@
                         v-slot:input="picker"
                       >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
                     </date-range-picker>
-                    <b-button>
+                    <b-button @click="clearObservationDate">
                       <span class="fa fa-times"></span>
                     </b-button>
                   </b-form-group>
@@ -398,10 +396,18 @@ export default {
       this.$emit("submitFluxForm", this.fluxForm);
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
-      
-      dropdownList.style.top = `${top-305}px`;
-      dropdownList.style.left = `${210+left}px`;
-      console.log();
+      dropdownList.style.top = `${top - 305}px`;
+      dropdownList.style.left = `${210 + left}px`;
+    },
+    clearPrefenceDate() {
+      this.dateRangePreference = { startDate: null, endDate: null };
+      this.fluxForm.preference_start = null;
+      this.fluxForm.preference_end = null;
+    },
+    clearObservationDate() {
+      this.dateRangeObservation = { startDate: null, endDate: null };
+      this.fluxForm.observation_start = null;
+      this.fluxForm.observation_end = null;
     }
   }
 };
