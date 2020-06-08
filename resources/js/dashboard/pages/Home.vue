@@ -388,7 +388,6 @@ export default {
         this.flux24 = data;
         this.isLoading = false;
       }).catch(({ response })=>{
-        console.log('log', response);
         this.flux24Errors = response.data.errors;
         this.isLoading=false;
       });

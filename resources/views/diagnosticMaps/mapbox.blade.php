@@ -6,7 +6,7 @@
     <title>Dashboard COVID-19 RDC</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
-    <link href="{{ asset('css/app.css?v=2.7') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v=2.8') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
@@ -241,6 +241,6 @@
         </div>
         <p>{{__("Fetching Data")}}</p>
     </div>
-    <script src="{{ asset('js/app.js?v=2.8') }}" defer></script>
+    <script src="{{ asset('js/app.js?v=2.9') }}" defer></script>
 </body>
 </html>
