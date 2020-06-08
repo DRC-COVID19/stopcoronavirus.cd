@@ -2,6 +2,10 @@
     height: 100%;
     width: 100%;
 }
+.map-container {
+    height: 100%;
+    width: 100%;
+}
 /*
 .custom-clustericon-2 {
     --cluster-color: #ff9b00d9;
@@ -594,12 +598,29 @@
         display: inline-block;
         width: 10px;
         height: 10px;
-        background:rgb(12, 44, 132) ;
+        background: rgb(12, 44, 132);
     }
     .legend-destination {
         display: inline-block;
         width: 10px;
         height: 10px;
-        background:rgb(177, 0, 38) ;
+        background: rgb(177, 0, 38);
+    }
+}
+.checkbox-zone-group {
+    height: 250px;
+    overflow: auto;
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #bcbab7;
+        border-radius: 8px;
+        border: solid 2px #fff;
     }
 }

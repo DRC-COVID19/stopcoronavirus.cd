@@ -19,3 +19,8 @@
 @import "sondage";
 @import "diagnostic_map";
 @import "https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css";
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}
