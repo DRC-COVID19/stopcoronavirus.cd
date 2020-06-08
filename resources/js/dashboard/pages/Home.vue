@@ -133,7 +133,7 @@ export default {
       antiBacterialGel: false,
       fluxZones: [],
       flux24: [],
-      flux24Errors:{}
+      flux24Errors: {}
     };
   },
   computed: {
@@ -383,14 +383,21 @@ export default {
     },
     submitFluxForm(values) {
       this.isLoading = true;
-      axios.post("api/dashboard/flux-24", values)
-      .then(({ data }) => {
-        this.flux24 = data;
-        this.isLoading = false;
-      }).catch(({ response })=>{
-        this.flux24Errors = response.data.errors;
-        this.isLoading=false;
-      });
+      this.flux24Errors = {};
+      let url = `api/dashboard/flux-24-origin`;
+      if (values.filter == "filter_2") {
+        url = `api/dashboard/flux-24`;
+      }
+      axios
+        .post(url, values)
+        .then(({ data }) => {
+          this.flux24 = data;
+          this.isLoading = false;
+        })
+        .catch(({ response }) => {
+          this.flux24Errors = response.data.errors;
+          this.isLoading = false;
+        });
     }
   }
 };

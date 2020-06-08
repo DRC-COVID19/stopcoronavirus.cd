@@ -1,14 +1,18 @@
 <template>
-  <div id="map"></div>
+  <div class="map-container">
+    <div id="map"></div>
+    <ToolTipMaps v-if="ArcLayerSelectedObject.item" :coordonnes="ArcLayerSelectedObject.coordinate" :item="ArcLayerSelectedObject.item" />
+  </div>
 </template>
 <script>
 import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE } from "../config/env";
 import Mapbox from "mapbox-gl";
 import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
+import ToolTipMaps from "./ToolTipMaps";
 
 export default {
-  components: {},
+  components: { ToolTipMaps },
   props: {
     covidCases: {
       type: Object,
@@ -89,7 +93,8 @@ export default {
       medicalOrientationMakers: [],
       medicalOrientationData: [],
       map: null,
-      AllSondagesMarkers: []
+      AllSondagesMarkers: [],
+      ArcLayerSelectedObject:{}
     };
   },
   mounted() {
@@ -303,37 +308,6 @@ export default {
         this.map.removeLayer("covidCasesLayer");
         this.map.removeSource("covidCasesSource");
       }
-
-      /* this.covidCases.map(item => {
-        let el = document.createElement("div");
-        let el2 = document.createElement("div");
-        el2.className = `covidCases-marker confirmed`;
-        //el2.textContent = item[type];
-        if (item.confirmed > 3840) {
-          el2.style = `width:100px;height:100px;`;
-        } else if (item.confirmed > 1920) {
-          el2.style = `width:90px;height:90px;`;
-        } else if (item.confirmed > 960) {
-          el2.style = `width:80px;height:80px;`;
-        } else if (item.confirmed > 480) {
-          el2.style = `width:70px;height:70px;`;
-        } else if (item.confirmed > 240) {
-          el2.style = `width:60px;height:60px;`;
-        } else if (item.confirmed > 120) {
-          el2.style = `width:50px;height:50px;`;
-        } else if (item.confirmed > 60) {
-          el2.style = `width:40px;height:40px;`;
-        } else if (item.confirmed > 30) {
-          el2.style = `width:30px;height:30px;`;
-        }
-        el.append(el2);
-        let currentMarker = new Mapbox.Marker(el)
-          .setLngLat([item.longitude, item.latitude])
-          //.setPopup(popup)
-          .addTo(this.map);
-        currentMarker.confirmed = true;
-        this.covidCasesMarkers.push(currentMarker);
-      });*/
     },
     hospitals() {
       if (this.hospitals) {
@@ -570,33 +544,46 @@ export default {
           id: "arc",
           data: this.flux24,
           type: ArcLayer,
+          stroked: false,
+          filled: true,
+          getFillColor: [0, 0, 0, 0],
           getSourcePosition: d => d.position_start,
           getTargetPosition: d => d.position_end,
           getSourceColor: d => [12, 44, 132],
           getTargetColor: d => [177, 0, 38],
           getWidth: d => {
-            let width = 2;
-            if (d.volume > 100) {
-              width = 5;
-            } else if (d.volume > 50) {
+            let width = 1;
+            if (d.volume > 5000) {
+              width = 10;
+            } else if (d.volume > 3000) {
+              width = 8;
+            } else if (d.volume > 1000) {
+              width = 6;
+            } else if (d.volume > 500) {
               width = 4;
-            } else if (d.volume > 20) {
+            } else if (d.volume > 300) {
               width = 3;
+            } else if (d.volume > 100) {
+              width = 2;
             }
             return width;
           },
           pickable: true,
-          onHover: () =>{
-            console.log('a');
+          onHover: (info, event) => {
+            this.ArcLayerSelectedObject.item=info.object;
+            this.ArcLayerSelectedObject.coordinate=info.coordinate;
           },
-          onClick: (info, event) =>{
+          onClick: (info, event) => {
+            
             new Mapbox.Popup()
-            .setLngLat(info.coordinate)
-            .setHTML(`<span>${info.object.origin}=>${info.object.destination}</span>
-            <div>${info.object.volume}</div>`)
-            .addTo(this.map);
-            console.log('b');
-          } ,
+              .setLngLat(info.coordinate)
+              .setHTML(
+                `<span>${info.object.origin}=>${info.object.destination}</span>
+            <div>${info.object.volume}</div>`
+              )
+              .addTo(this.map);
+            console.log("b");
+          }
         });
         map.addLayer(myDeckLayer);
       } else {
