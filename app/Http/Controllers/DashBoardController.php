@@ -450,8 +450,8 @@ class DashBoardController extends Controller
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->groupBy('Origin', 'destination')
-                    ->whereIn('Origin', $data['origin'])
-                    ->whereIn('Destination', $data['origin'])->get();
+                    ->whereIn('Origin', $data['filter_zone'])
+                    ->whereIn('Destination', $data['filter_zone'])->get();
             }
 
 
