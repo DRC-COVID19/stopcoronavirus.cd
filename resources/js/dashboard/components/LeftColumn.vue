@@ -164,7 +164,10 @@
               <b-form class="flux-form">
                 <h4>Selectionnez zones</h4>
                 <div>
-                  <b-form-group>
+                  <b-form-group
+                    :invalid-feedback="flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null"
+                    :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
+                  >
                     <b-form-radio name="filter" v-model="fluxForm.filter" value="filter_1">FIltre 1</b-form-radio>
                   </b-form-group>
                   <b-list-group :class="{'disabled':fluxForm.filter!='filter_1'}">
@@ -172,6 +175,11 @@
                       <b-form-input placeholder="Filtre" v-model="fluxFilterInput" />
                     </b-list-group-item>
                     <b-list-group-item class="checkbox-zone-group">
+                      <b-form-checkbox
+                        v-model="allZoneChecked"
+                        :indeterminate.sync="allZoneCheckedIndeterminate"
+                      >Sélectionnez tout</b-form-checkbox>
+                      <hr />
                       <b-form-checkbox-group
                         v-model="fluxForm.filter_zone"
                         :options="fluxZonesArray"
@@ -188,7 +196,7 @@
                 <div>
                   <b-form-group>
                     <b-form-radio
-                      class="mt-2"
+                      class="mt-3"
                       name="filter"
                       v-model="fluxForm.filter"
                       value="filter_2"
@@ -363,21 +371,53 @@ export default {
         startDate: null,
         endDate: null
       },
-      fluxForm: {},
+      fluxForm: {
+        filter: "filter_1"
+      },
       dateRangeObservation: {
         startDate: null,
         endDate: null
       },
       fluxFilterInput: "",
-      fluxZonesArray: []
+      fluxZonesArray: [],
+      allZoneChecked: false,
+      allZoneCheckedIndeterminate: false
     };
   },
+
   filters: {
     date: val => {
       return val ? moment(val).format("DD.MM.YYYY") : "";
     }
   },
   watch: {
+    allZoneChecked() {
+      if (this.allZoneChecked) {
+        this.fluxForm.filter_zone = this.fluxZones.map(x => x.origin);
+      } else {
+        this.fluxForm.filter_zone = [];
+      }
+    },
+    "fluxForm.filter_zone"() {
+      if (
+        this.fluxForm.filter_zone &&
+        this.fluxForm.filter_zone.length > 0 &&
+        this.fluxForm.filter_zone.length != this.fluxZones.length
+      ) {
+        this.allZoneCheckedIndeterminate = true;
+      } else {
+        this.allZoneCheckedIndeterminate = false;
+      }
+    },
+    "fluxForm.filter"() {
+      if (this.fluxForm.filter == "filter_1") {
+        this.fluxForm.origin = null;
+        this.fluxForm.destination = null;
+      } else {
+        this.fluxForm.filter_zone = [];
+        this.fluxFilterInput = "";
+      }
+    },
     fluxZones() {
       this.fluxZonesArray = this.fluxZones;
     },

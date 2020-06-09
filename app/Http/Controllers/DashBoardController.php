@@ -434,24 +434,32 @@ class DashBoardController extends Controller
     {
         $data = Validator::make($request->all(), [
             'filter_zone' => 'required|array',
-            'preference_start' => 'date|before:preference_end',
-            'preference_end' => 'date|before:observation_start|required_with:preference_start',
+            'preference_start' => 'nullable|date|before:preference_end',
+            'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
             'observation_start' => 'date|required|before:observation_end',
             'observation_end' => 'date|required|after:observation_start',
         ])->validate();
 
         try {
-            $flux = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+            $flux = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])
+                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->where(function ($q) use ($data) {
+                    $q->whereIn('Origin', $data['filter_zone'])
+                        ->orWhereIn('Destination', $data['filter_zone']);
+                })
                 ->groupBy('Origin', 'destination')
-                ->whereIn('Origin', $data['filter_zone'])
-                ->orWhereIn('Destination', $data['filter_zone'])->get();
+                ->get();
 
             $fluxRefences = null;
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                $fluxRefences = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])
+                    ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                    ->where(function ($q) use ($data) {
+                        $q->whereIn('Origin', $data['filter_zone'])
+                            ->orWhereIn('Destination', $data['filter_zone']);
+                    })
                     ->groupBy('Origin', 'destination')
-                    ->whereIn('Origin', $data['filter_zone'])
-                    ->whereIn('Destination', $data['filter_zone'])->get();
+                    ->get();
             }
 
 
