@@ -1,7 +1,11 @@
 <template>
-  <div class="map-container">
+  <div class="map-wrapper">
     <div id="map"></div>
-    <ToolTipMaps v-if="ArcLayerSelectedObject.item" :coordonnes="ArcLayerSelectedObject.coordinate" :item="ArcLayerSelectedObject.item" />
+    <ToolTipMaps
+      v-if="ArcLayerSelectedObject.item"
+      :position="ArcLayerSelectedObject.position"
+      :item="ArcLayerSelectedObject.item"
+    />
   </div>
 </template>
 <script>
@@ -94,7 +98,7 @@ export default {
       medicalOrientationData: [],
       map: null,
       AllSondagesMarkers: [],
-      ArcLayerSelectedObject:{}
+      ArcLayerSelectedObject: {}
     };
   },
   mounted() {
@@ -551,30 +555,47 @@ export default {
           getTargetPosition: d => d.position_end,
           getSourceColor: d => [12, 44, 132],
           getTargetColor: d => [177, 0, 38],
+          getHeight: 3,
+          getTilt: (d, { data }) => {
+            let tilt = 2;
+            let index = data.filter(
+              x => x.origin == d.destination && x.destination == d.origin
+            );
+            if (index) {
+              tilt = -2;
+            }
+            return tilt;
+          },
           getWidth: d => {
-            let width = 1;
-            if (d.volume > 5000) {
+            let width = 3;
+            if (d.volume > 20000) {
+              width = 12;
+            } else if (d.volume > 10000) {
+              width = 11;
+            } else if (d.volume > 5000) {
               width = 10;
             } else if (d.volume > 3000) {
-              width = 8;
+              width = 9;
             } else if (d.volume > 1000) {
-              width = 6;
+              width = 7;
             } else if (d.volume > 500) {
-              width = 4;
+              width = 6.5;
             } else if (d.volume > 300) {
-              width = 3;
+              width = 6;
             } else if (d.volume > 100) {
-              width = 2;
+              width = 5;
             }
             return width;
           },
           pickable: true,
           onHover: (info, event) => {
-            this.ArcLayerSelectedObject.item=info.object;
-            this.ArcLayerSelectedObject.coordinate=info.coordinate;
+            this.$set(this.ArcLayerSelectedObject, "position", {
+              top: info.y,
+              left: info.x
+            });
+            this.$set(this.ArcLayerSelectedObject, "item", info.object);
           },
           onClick: (info, event) => {
-            
             new Mapbox.Popup()
               .setLngLat(info.coordinate)
               .setHTML(

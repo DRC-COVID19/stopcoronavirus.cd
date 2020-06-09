@@ -1,24 +1,27 @@
 <template>
-  <div class="tooltip" :style="{left: coordinate.left, top: coordinate.top}">{{item.name}}</div>
+  <div class="tooltip-map" :style="{left: position.left, top: position.top}">
+    <span>{{`${item.origin} => ${item.destination}`}}</span>
+    <div class="text-center">{{item.volume}}</div>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
-    coordinate: {
+    position: {
       type: Object,
       default: () => ({ left: 0, top: 0 })
     },
     item: {
       type: Object,
-      default: {}
+      default: () => ({})
     }
   }
 };
 </script>
 
 <style scoped>
-.tooltip {
+.tooltip-map {
   pointer-events: none;
   position: absolute;
   z-index: 9;
@@ -26,7 +29,7 @@ export default {
   padding: 8px;
   background: #000;
   color: #fff;
-  min-width: 160px;
+  min-width: 80px;
   max-height: 240px;
   overflow-y: hidden;
 }

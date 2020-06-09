@@ -169,13 +169,12 @@
                   </b-form-group>
                   <b-list-group :class="{'disabled':fluxForm.filter!='filter_1'}">
                     <b-list-group-item>
-                      <b-form-input placeholder="Filtre" />
+                      <b-form-input placeholder="Filtre" v-model="fluxFilterInput" />
                     </b-list-group-item>
                     <b-list-group-item class="checkbox-zone-group">
-                      
                       <b-form-checkbox-group
                         v-model="fluxForm.filter_zone"
-                        :options="fluxZones"
+                        :options="fluxZonesArray"
                         value-field="origin"
                         text-field="origin"
                         name="flavour-1"
@@ -188,7 +187,12 @@
                 </div>
                 <div>
                   <b-form-group>
-                    <b-form-radio class="mt-2" name="filter" v-model="fluxForm.filter" value="filter_2">FIltre 2</b-form-radio>
+                    <b-form-radio
+                      class="mt-2"
+                      name="filter"
+                      v-model="fluxForm.filter"
+                      value="filter_2"
+                    >FIltre 2</b-form-radio>
                   </b-form-group>
                   <b-list-group :class="{'disabled':fluxForm.filter!='filter_2'}">
                     <b-list-group-item>
@@ -363,12 +367,24 @@ export default {
       dateRangeObservation: {
         startDate: null,
         endDate: null
-      }
+      },
+      fluxFilterInput: "",
+      fluxZonesArray: []
     };
   },
   filters: {
     date: val => {
       return val ? moment(val).format("DD.MM.YYYY") : "";
+    }
+  },
+  watch: {
+    fluxZones() {
+      this.fluxZonesArray = this.fluxZones;
+    },
+    fluxFilterInput() {
+      this.fluxZonesArray = this.fluxZones.filter(x =>
+        x.origin.toUpperCase().startsWith(this.fluxFilterInput.toUpperCase())
+      );
     }
   },
   methods: {
