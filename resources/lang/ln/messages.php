@@ -1,10 +1,10 @@
 <?php
 return [
     // Header
-    'top_header_left'=>'Site d’information officiel du Ministère de la Santé',
-    'top_header_right'=>'la radio du ministère de la santé',
+    'top_header_left'=>'Site officiel ya Minisiteli ya bokolongono bwa mboka',
+    'top_header_right'=>'la radio du ministère de la santé', //TODO:1
 
-    'menu_1'=>'Situation actuelle',
+    'menu_1'=>'likambu ya lelo',
     'menu_2'=>'Mesures de protection',
     'menu_3'=>'Directives du Gouvernement',
     'menu_4'=>'Idées reçues & sondage',
