@@ -463,10 +463,11 @@ class DashBoardController extends Controller
             }
 
 
-            $geoCodingFilePath = storage_path('app/townGeocoding.json');
+            $geoCodingFilePath = storage_path('app/fluxZones.json');
+            $geoData = [];
             if (file_exists($geoCodingFilePath)) {
                 $jsonString = file_get_contents($geoCodingFilePath);
-                $this->townGeocoding = json_decode($jsonString, true);
+                $geoData = json_decode($jsonString, true);
             }
             $fluxData = [];
             foreach ($flux as $value) {
@@ -478,39 +479,11 @@ class DashBoardController extends Controller
                         }
                     }
                 }
-                switch ($value->origin) {
-                    case 'Kintambo':
-                        $value->{'position_start'} = $this->townGeocoding["KINSHASA_KINTAMBO"];
-                        break;
-                    case 'Gombe':
-                        $value->{'position_start'} = $this->townGeocoding["KINSHASA_GOMBE"];
-                        break;
-                    case 'Ngiri-Ngiri':
-                        $value->{'position_start'} = $this->townGeocoding['KINSHASA_NGIRI-NGIRI'];
-                        break;
-                    case 'Barumbu':
-                        $value->{'position_start'} = $this->townGeocoding['KINSHASA_BARUMBU'];
-                        break;
-                    default:
-                        # code...
-                        break;
+                if (isset($geoData[strtoupper($value->origin)][0])) {
+                    $value->{'position_start'} = $geoData[strtoupper($value->origin)][0]['coordinates'];
                 }
-                switch ($value->destination) {
-                    case 'Kintambo':
-                        $value->{'position_end'} = $this->townGeocoding["KINSHASA_KINTAMBO"];
-                        break;
-                    case 'Gombe':
-                        $value->{'position_end'} = $this->townGeocoding["KINSHASA_GOMBE"];
-                        break;
-                    case 'Ngiri-Ngiri':
-                        $value->{'position_end'} = $this->townGeocoding['KINSHASA_NGIRI-NGIRI'];
-                        break;
-                    case 'Barumbu':
-                        $value->{'position_end'} = $this->townGeocoding['KINSHASA_BARUMBU'];
-                        break;
-                    default:
-                        # code...
-                        break;
+                if (isset($geoData[strtoupper($value->destination)][0])) {
+                    $value->{'position_end'} = $geoData[strtoupper($value->destination)][0]['coordinates'];
                 }
                 $fluxData[] = $value;
             }

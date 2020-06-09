@@ -107,7 +107,9 @@ export default {
       container: "map",
       center: [15.31389, -4.33167],
       zoom: 10,
-      style: this.MAPBOX_DEFAULT_STYLE
+      style: this.MAPBOX_DEFAULT_STYLE,
+      bearing: 30,
+      pitch: 30,
     });
     map.addControl(new Mapbox.NavigationControl());
     map.on("load", () => {
@@ -544,9 +546,24 @@ export default {
         if (map.getLayer("arc")) {
           map.removeLayer("arc");
         }
+        let arcData = [];
+
+        for (const key in this.flux24) {
+          const item = this.flux24[key];
+          const index = arcData.findIndex(
+            x => x.destination == item.origin && x.origin == item.destination
+          );
+          if (index != -1) {
+            arcData[index].inversed_volume = item.volume;
+          } else {
+            arcData.push(item);
+          }
+        }
+        console.log(arcData);
+
         const myDeckLayer = new MapboxLayer({
           id: "arc",
-          data: this.flux24,
+          data: arcData,
           type: ArcLayer,
           stroked: false,
           filled: true,
@@ -555,17 +572,17 @@ export default {
           getTargetPosition: d => d.position_end,
           getSourceColor: d => [12, 44, 132],
           getTargetColor: d => [177, 0, 38],
-          getHeight: 3,
-          getTilt: (d, { data }) => {
-            let tilt = 2;
-            let index = data.filter(
-              x => x.origin == d.destination && x.destination == d.origin
-            );
-            if (index) {
-              tilt = -2;
-            }
-            return tilt;
-          },
+          getHeight: 2,
+          // getTilt: (d, { data }) => {
+          //   let tilt = 2;
+          //   let index = data.filter(
+          //     x => x.origin == d.destination && x.destination == d.origin
+          //   );
+          //   if (index) {
+          //     tilt = -2;
+          //   }
+          //   return tilt;
+          // },
           getWidth: d => {
             let width = 3;
             if (d.volume > 20000) {
