@@ -5,7 +5,24 @@
         <b-list-group class="group-item">
           <b-list-group-item v-for="(item, index) in flux24" :key="index">
             <div class="area-name text-center mb-2">{{item.origin}}=>{{item.destination}}</div>
-            <div class="area-total d-flex justify-content-around align-items-center">{{item.reference_volume}}{{`<=>`}}{{item.volume}}</div>
+            <div class="area-total d-flex justify-content-around align-items-center">
+              <b-table
+                small
+                outlined
+                bordered
+                striped
+                hover
+                responsive
+                :items="[{reference:item.reference_volume, observation:item.volume }]"
+              >
+                <template v-slot:cell(reference)="data">
+                  <div class="text-right">{{ data.item.reference }}</div>
+                </template>
+                <template v-slot:cell(observation)="data">
+                  <div class="text-right">{{ data.item.observation }}</div>
+                </template>
+              </b-table>
+            </div>
           </b-list-group-item>
         </b-list-group>
       </div>
@@ -43,7 +60,7 @@ export default {
     font-size: 0.8rem;
   }
   .area-name {
-    font-size: 0.7rem;
+    font-size: 1rem;
   }
   .area-total {
     font-size: 0.7rem;

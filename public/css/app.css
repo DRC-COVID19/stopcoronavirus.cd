@@ -18545,6 +18545,10 @@ h3 {
   border: solid 2px #fff;
 }
 
+.custom-checkbox .custom-control-label::before {
+  border-radius: 0.25rem !important;
+}
+
 .footer-partners {
   padding: 4rem 0 0 0;
   background-color: #999;
