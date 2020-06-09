@@ -1,7 +1,7 @@
 <template>
   <div class="tooltip-map" :style="{left: position.left, top: position.top}">
-    <span>{{`${item.origin} => ${item.destination}`}}</span>
-    <div class="text-center">{{item.volume}}</div>
+    <div>{{`${item.origin} => ${item.destination}: ${item.volume }`}} </div>
+    <div v-if="item.inversed_volume">{{`${item.destination} => ${item.origin} : ${item.inversed_volume }`}} </div>
   </div>
 </template>
 
