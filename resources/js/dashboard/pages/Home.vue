@@ -11,7 +11,6 @@
         </b-col>
       </b-row>
       <b-row align-h="end" class="position-relative">
-        
         <LeftColumn
           @covidCaseChecked="getCovidCases"
           @hopitalChecked="gethopitals"
@@ -38,7 +37,7 @@
 
         <b-tabs
           content-class="mt-3"
-          v-if="hasCovidCases || hasOrientation||hasFlux24"
+          v-if="hasCovidCases || hasOrientation"
           class="cols-12 col-md-3 offset-md-3 side-case-covid"
         >
           <b-tab title="Cas covid " v-if="hasCovidCases" :active="hasCovidCases">
@@ -50,7 +49,9 @@
         </b-tabs>
 
         <b-col cols="12" md="9">
-          <b-button @click="seeSide">voir</b-button>
+          <b-button v-if="hasFlux24" variant="success" @click="seeSide" class="btn-see-side">
+            <span class="fa fa-table"></span> voir
+          </b-button>
           <b-row class="map-container" :style="mapStyle">
             <Maps
               :covidCases="covidCases"
@@ -84,7 +85,7 @@
       </b-row>
     </b-container>
     <Waiting v-if="isLoading" />
-    <SideFluxChart :flux24="flux24" id="side_flux" />
+    <SideFluxChart v-if="hasFlux24" :flux24="flux24" id="side_flux" />
   </div>
 </template>
 
@@ -399,8 +400,8 @@ export default {
           this.isLoading = false;
         });
     },
-    seeSide(){
-      this.$bvModal.show('side_flux')
+    seeSide() {
+      this.$bvModal.show("side_flux");
     }
   }
 };
@@ -432,5 +433,10 @@ export default {
   z-index: 5;
   top: 15px;
   bottom: 15px;
+}
+.btn-see-side {
+  position: absolute;
+  z-index: 7;
+  top: 10px;
 }
 </style>
