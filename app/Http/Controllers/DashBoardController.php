@@ -349,10 +349,10 @@ class DashBoardController extends Controller
         $data = Validator::make($request->all(), [
             'origin' => 'required|array',
             'destination' => 'required|array',
-            'preference_start' => 'date|before:preference_end',
-            'preference_end' => 'date|before:observation_start|required_with:preference_start',
-            'observation_start' => 'date|required|before:observation_end',
-            'observation_end' => 'date|required|after:observation_start',
+            'preference_start' => 'date|before_or_equal:preference_end',
+            'preference_end' => 'date|before_or_equal:observation_start|required_with:preference_start',
+            'observation_start' => 'date|required|before_or_equal:observation_end',
+            'observation_end' => 'date|required|after_or_equal:observation_start',
         ])->validate();
 
         try {
@@ -434,10 +434,10 @@ class DashBoardController extends Controller
     {
         $data = Validator::make($request->all(), [
             'filter_zone' => 'required|array',
-            'preference_start' => 'nullable|date|before:preference_end',
-            'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
-            'observation_start' => 'date|required|before:observation_end',
-            'observation_end' => 'date|required|after:observation_start',
+            'preference_start' => 'nullable|date|before_or_equal:preference_end',
+            'preference_end' => 'nullable|date|before_or_equal:observation_start|required_with:preference_start',
+            'observation_start' => 'date|required|before_or_equal:observation_end',
+            'observation_end' => 'date|required|after_or_equal:observation_start',
         ])->validate();
 
         try {
@@ -499,7 +499,7 @@ class DashBoardController extends Controller
     public function getFluxZone()
     {
         try {
-            $zones = DB::table('flux_24')->select('origin')->distinct()->get();
+            $zones =DB::select('SELECT origin FROM flux_24 UNION SELECT destination AS origin FROM flux_24 ');
             return response()->json($zones);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {

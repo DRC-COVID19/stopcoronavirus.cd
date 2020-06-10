@@ -1,33 +1,31 @@
 <template>
-  <b-container class="side-case-covid-container">
-    <b-row>
-      <div class="card card-body cols-12">
-        <b-list-group class="group-item">
-          <b-list-group-item v-for="(item, index) in flux24" :key="index">
-            <div class="area-name text-center mb-2">{{item.origin}}=>{{item.destination}}</div>
-            <div class="area-total d-flex justify-content-around align-items-center">
-              <b-table
-                small
-                outlined
-                bordered
-                striped
-                hover
-                responsive
-                :items="[{reference:item.reference_volume, observation:item.volume }]"
-              >
-                <template v-slot:cell(reference)="data">
-                  <div class="text-right">{{ data.item.reference }}</div>
-                </template>
-                <template v-slot:cell(observation)="data">
-                  <div class="text-right">{{ data.item.observation }}</div>
-                </template>
-              </b-table>
-            </div>
-          </b-list-group-item>
-        </b-list-group>
-      </div>
-    </b-row>
-  </b-container>
+  <b-modal size="xl" :id="id">
+    <b-container class="side-case-covid-container">
+      <b-row>
+        <b-col cols="12">
+          <b-table-simple small outlined bordered striped hover responsive>
+            <b-thead>
+              <b-tr>
+                <b-td v-for="(item,index) in fluxHeader" :key="index">{{item.origin}}</b-td>
+              </b-tr>
+            </b-thead>
+            <b-tbody>
+              <b-tr v-for="(item,index) in fluxDestination" :key="index">
+                <b-td>{{item.destination}}</b-td>
+                <b-td
+                  v-for="(cell,cellIndex) in item.childrens"
+                  :key="cellIndex"
+                  v-b-tooltip.hover
+                  :title="`${cell.origin}=>${cell.destination}`"
+                >{{cell.volume }}</b-td>
+              </b-tr>
+            </b-tbody>
+            <b-tbody></b-tbody>
+          </b-table-simple>
+        </b-col>
+      </b-row>
+    </b-container>
+  </b-modal>
 </template>
 
 <script>
@@ -36,9 +34,68 @@ export default {
     flux24: {
       type: Array,
       default: null
+    },
+    id: {
+      type: String,
+      default: "side_flux"
     }
   },
-  computed: {},
+  data() {
+    return {
+      fluxHeader: [],
+      fluxDestination: [],
+      fluxCartesian: []
+    };
+  },
+  watch: {
+    flux24() {
+      if (this.flux24) {
+        this.fluxHeader = [];
+        this.fluxDestination = [];
+
+        this.fluxHeader.push({ origin: "" });
+        this.flux24.map(item => {
+          const element = this.fluxHeader.find(x => x.origin == item.origin);
+          if (!element) {
+            this.fluxHeader.push(Object.assign({}, item));
+          }
+          const destination = this.fluxDestination.find(
+            x => x.destination == item.destination
+          );
+          if (!destination) {
+            this.fluxDestination.push(item);
+          }
+        });
+        for (const key in this.fluxDestination) {
+          const element = this.fluxDestination[key];
+          let items = [];
+          this.fluxHeader.map(itemOrigin => {
+            if (!itemOrigin.origin) {
+              return;
+            }
+            let value = this.flux24.find(
+              x =>
+                x.origin == itemOrigin.origin &&
+                x.destination == element.destination
+            );
+            if (value) {
+              items.push({
+                origin: itemOrigin.origin,
+                destination: element.destination,
+                volume: value.volume
+              });
+            } else {
+              items.push({
+                origin: itemOrigin.origin,
+                destination: element.destination
+              });
+            }
+          });
+          this.fluxDestination[key].childrens = items;
+        }
+      }
+    }
+  },
   methods: {
     stateColorWith(item, type) {
       let width = (item[type] * 100) / item.confirmed;
