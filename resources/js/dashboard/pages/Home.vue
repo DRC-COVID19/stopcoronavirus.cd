@@ -11,6 +11,7 @@
         </b-col>
       </b-row>
       <b-row align-h="end" class="position-relative">
+        
         <LeftColumn
           @covidCaseChecked="getCovidCases"
           @hopitalChecked="gethopitals"
@@ -46,12 +47,10 @@
           <b-tab title="Orientation" v-if="hasOrientation" :active="hasOrientation">
             <SideOrientation :medicalOrientations="medicalOrientations" />
           </b-tab>
-          <b-tab title="Flux" v-if="hasFlux24" :active="hasFlux24">
-            <SideFluxChart :flux24="flux24" />
-          </b-tab>
         </b-tabs>
 
         <b-col cols="12" md="9">
+          <b-button @click="seeSide">voir</b-button>
           <b-row class="map-container" :style="mapStyle">
             <Maps
               :covidCases="covidCases"
@@ -85,6 +84,7 @@
       </b-row>
     </b-container>
     <Waiting v-if="isLoading" />
+    <SideFluxChart :flux24="flux24" id="side_flux" />
   </div>
 </template>
 
@@ -398,6 +398,9 @@ export default {
           this.flux24Errors = response.data.errors;
           this.isLoading = false;
         });
+    },
+    seeSide(){
+      this.$bvModal.show('side_flux')
     }
   }
 };

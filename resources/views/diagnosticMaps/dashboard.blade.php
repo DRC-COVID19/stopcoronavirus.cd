@@ -20,6 +20,7 @@
             <p>Fetching Data</p>
         </div>
     </div>
-    <script src="{{ asset('js/vueApp.js?v=1.1') }}"></script>
+    <script src="{{ (env('APP_ENV') === 'local') ? mix('js/vueApp.js?v=1.1'): asset('js/vueApp.js?v=1.1') }}"></script>
+    
 </body>
 </html>
