@@ -1,5 +1,5 @@
 <template>
-  <b-modal size="xl" :id="id">
+  <b-modal size="xl" :id="id" @show="show">
     <b-container class="side-case-covid-container">
       <b-row>
         <b-col cols="12">
@@ -48,7 +48,10 @@ export default {
     };
   },
   watch: {
-    flux24() {
+  },
+  methods: {
+   async show(){
+     
       if (this.flux24) {
         this.fluxHeader = [];
         this.fluxDestination = [];
@@ -94,19 +97,6 @@ export default {
           this.fluxDestination[key].childrens = items;
         }
       }
-    }
-  },
-  methods: {
-    stateColorWith(item, type) {
-      let width = (item[type] * 100) / item.confirmed;
-      if (width == 0) {
-        return {
-          width: "10px"
-        };
-      }
-      return {
-        width: `${width}%`
-      };
     }
   }
 };
