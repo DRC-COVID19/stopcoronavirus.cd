@@ -369,12 +369,13 @@ class DashBoardController extends Controller
                     ->whereIn('Destination', $data['destination'])->get();
             }
 
-
-            $geoCodingFilePath = storage_path('app/townGeocoding.json');
+            $geoCodingFilePath = storage_path('app/fluxZones.json');
+            $geoData = [];
             if (file_exists($geoCodingFilePath)) {
                 $jsonString = file_get_contents($geoCodingFilePath);
-                $this->townGeocoding = json_decode($jsonString, true);
+                $geoData = json_decode($jsonString, true);
             }
+
             $fluxData = [];
             foreach ($flux as $value) {
                 if ($fluxRefences) {
@@ -385,43 +386,63 @@ class DashBoardController extends Controller
                         }
                     }
                 }
-                switch ($value->origin) {
-                    case 'Kintambo':
-                        $value->{'position_start'} = $this->townGeocoding["KINSHASA_KINTAMBO"];
-                        break;
-                    case 'Gombe':
-                        $value->{'position_start'} = $this->townGeocoding["KINSHASA_GOMBE"];
-                        break;
-                    case 'Ngiri-Ngiri':
-                        $value->{'position_start'} = $this->townGeocoding['KINSHASA_NGIRI-NGIRI'];
-                        break;
-                    case 'Barumbu':
-                        $value->{'position_start'} = $this->townGeocoding['KINSHASA_BARUMBU'];
-                        break;
-                    default:
-                        # code...
-                        break;
+                if (isset($geoData[strtoupper($value->origin)][0])) {
+                    $value->{'position_start'} = $geoData[strtoupper($value->origin)][0]['coordinates'];
+                } else {
+                    continue;
                 }
-                switch ($value->destination) {
-                    case 'Kintambo':
-                        $value->{'position_end'} = $this->townGeocoding["KINSHASA_KINTAMBO"];
-                        break;
-                    case 'Gombe':
-                        $value->{'position_end'} = $this->townGeocoding["KINSHASA_GOMBE"];
-                        break;
-                    case 'Ngiri-Ngiri':
-                        $value->{'position_end'} = $this->townGeocoding['KINSHASA_NGIRI-NGIRI'];
-                        break;
-                    case 'Barumbu':
-                        $value->{'position_end'} = $this->townGeocoding['KINSHASA_BARUMBU'];
-                        break;
-                    default:
-                        # code...
-                        break;
+                if (isset($geoData[strtoupper($value->destination)][0])) {
+                    $value->{'position_end'} = $geoData[strtoupper($value->destination)][0]['coordinates'];
+                } else {
+                    continue;
                 }
                 $fluxData[] = $value;
             }
             return response()->json($fluxData);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getFluxDataDaily(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'origin' => 'required|array',
+            'destination' => 'required|array',
+            'preference_start' => 'date|before_or_equal:preference_end',
+            'preference_end' => 'date|before:observation_start|required_with:preference_start',
+            'observation_start' => 'date|required|before_or_equal:observation_end',
+            'observation_end' => 'date|required|after_or_equal:observation_start',
+        ])->validate();
+
+        try {
+            $flux = Flux::select(['Date as date', DB::raw('sum(volume) as volume')])
+                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->groupBy('Date')
+                ->whereIn('Origin', $data['origin'])
+                ->whereIn('Destination', $data['destination'])->get();
+
+            $fluxRefences = [];
+            if (isset($data['preference_start']) && isset($data['preference_end'])) {
+                $fluxRefences = Flux::select(['Date as date', DB::raw('sum(volume) as volume')])
+                    ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                    ->groupBy('Date')
+                    ->whereIn('Origin', $data['origin'])
+                    ->whereIn('Destination', $data['destination'])->get();
+
+                if (count($fluxRefences) > 0) {
+                    foreach ($fluxRefences as $value) {
+                        $value->{'isReference'} = true;
+                    }
+                }
+            }
+            if (is_array($fluxRefences)) {
+                return response()->json($flux);
+            }
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -481,9 +502,13 @@ class DashBoardController extends Controller
                 }
                 if (isset($geoData[strtoupper($value->origin)][0])) {
                     $value->{'position_start'} = $geoData[strtoupper($value->origin)][0]['coordinates'];
+                } else {
+                    continue;
                 }
                 if (isset($geoData[strtoupper($value->destination)][0])) {
                     $value->{'position_end'} = $geoData[strtoupper($value->destination)][0]['coordinates'];
+                } else {
+                    continue;
                 }
                 $fluxData[] = $value;
             }
@@ -496,10 +521,55 @@ class DashBoardController extends Controller
         }
     }
 
+    public function getFluxDataFromOriginDaily(Request $request)
+    {
+        $data = Validator::make($request->all(), [
+            'filter_zone' => 'required|array',
+            'preference_start' => 'nullable|date|before_or_equal:preference_end',
+            'preference_end' => 'nullable|date|before_or_equal:observation_start|required_with:preference_start',
+            'observation_start' => 'date|required|before_or_equal:observation_end',
+            'observation_end' => 'date|required|after_or_equal:observation_start',
+        ])->validate();
+
+        try {
+            $flux = Flux::select(['Date as date', DB::raw('sum(volume)as volume')])
+                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->where(function ($q) use ($data) {
+                    $q->whereIn('Origin', $data['filter_zone'])
+                        ->orWhereIn('Destination', $data['filter_zone']);
+                })->groupBy('Date')->get();
+
+            $fluxRefences = [];
+            if (isset($data['preference_start']) && isset($data['preference_end'])) {
+                $fluxRefences = Flux::select(['Date as date', DB::raw('sum(volume)as volume')])
+                    ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                    ->where(function ($q) use ($data) {
+                        $q->whereIn('Origin', $data['filter_zone'])
+                            ->orWhereIn('Destination', $data['filter_zone']);
+                    })->groupBy('Date')->get();
+
+                if (count($fluxRefences) > 0) {
+                    foreach ($fluxRefences as $value) {
+                        $value->{'isReference'} = true;
+                    }
+                }
+            }
+            if (is_array($fluxRefences)) {
+                return response()->json($flux);
+            }
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
     public function getFluxZone()
     {
         try {
-            $zones =DB::select('SELECT origin FROM flux_24 UNION SELECT destination AS origin FROM flux_24 ');
+            $zones = DB::select('SELECT origin FROM flux_24 UNION SELECT destination AS origin FROM flux_24 ');
             return response()->json($zones);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {

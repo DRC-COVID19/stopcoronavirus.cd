@@ -85,7 +85,8 @@
       </b-row>
     </b-container>
     <Waiting v-if="isLoading" />
-    <SideFluxChart v-if="hasFlux24" :flux24="flux24" id="side_flux" />
+
+    <DataModal :flux24="flux24" :flux24Daily="flux24Daily" id="data-modal" />
   </div>
 </template>
 
@@ -98,6 +99,7 @@ import CovidCaseChart from "../components/CovidCaseChart";
 import OrientationChart from "../components/OrientationChart";
 import SideOrientation from "../components/SideOrientation";
 import SideFluxChart from "../components/SideFlux";
+import DataModal from "../components/DataModal";
 export default {
   components: {
     Maps,
@@ -107,7 +109,7 @@ export default {
     CovidCaseChart,
     OrientationChart,
     SideOrientation,
-    SideFluxChart
+    DataModal
   },
   data() {
     return {
@@ -134,7 +136,8 @@ export default {
       antiBacterialGel: false,
       fluxZones: [],
       flux24: [],
-      flux24Errors: {}
+      flux24Errors: {},
+      flux24Daily:[]
     };
   },
   computed: {
@@ -389,6 +392,7 @@ export default {
       if (values.filter == "filter_2") {
         url = `api/dashboard/flux-24`;
       }
+      this.flux24=[];
       axios
         .post(url, values)
         .then(({ data }) => {
@@ -399,9 +403,24 @@ export default {
           this.flux24Errors = response.data.errors;
           this.isLoading = false;
         });
+
+      let urlDaily = `api/dashboard/flux-24-origin-daily`;
+      if (values.filter == "filter_2") {
+        urlDaily = `api/dashboard/flux-24-daily`;
+      }
+      this.flux24Daily=[];
+      axios
+        .post(urlDaily, values)
+        .then(({ data }) => {
+          this.flux24Daily = data;
+          
+        })
+        .catch(({ response }) => {
+          
+        });
     },
     seeSide() {
-      this.$bvModal.show("side_flux");
+      this.$bvModal.show("data-modal");
     }
   }
 };
