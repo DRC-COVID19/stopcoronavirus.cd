@@ -36,6 +36,7 @@ export default {
     show() {
       return new Promise((resolver, reject) => {
         if (this.flux24Daily.length == 0) {
+            resolver(null)
           return;
         }
         const margin = { top: 20, right: 20, bottom: 90, left: 120 },
@@ -124,7 +125,7 @@ export default {
               .duration(500)
               .style("opacity", 0);
           });
-          resolver();
+          resolver(null);
       });
     }
   }
