@@ -731,7 +731,7 @@ export default {
           getTargetPosition: d => d.position_end,
           getSourceColor: d => [12, 44, 132],
           getTargetColor: d => [177, 0, 38],
-          getHeight: 2,
+          getHeight: 1,
           // getTilt: (d, { data }) => {
           //   let tilt = 2;
           //   let index = data.filter(

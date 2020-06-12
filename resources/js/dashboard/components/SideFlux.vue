@@ -2,7 +2,15 @@
   <b-container class="side-case-covid-container">
     <b-row>
       <b-col cols="12">
-        <b-table-simple small outlined bordered striped hover responsive>
+        <div v-if="!isFinished">
+          <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+        <b-table-simple small outlined bordered striped hover responsive v-else>
           <b-thead>
             <b-tr>
               <b-td v-for="(item,index) in fluxHeader" :key="index">{{item.origin}}</b-td>
@@ -16,10 +24,12 @@
                 :key="cellIndex"
                 v-b-tooltip.hover
                 :title="`${cell.origin}=>${cell.destination}`"
-              >{{cell.volume }}</b-td>
+              >
+                {{cell.reference_volume?`${cell.reference_volume}=>`:''}}
+                {{cell.volume }}
+              </b-td>
             </b-tr>
           </b-tbody>
-          <b-tbody></b-tbody>
         </b-table-simple>
       </b-col>
     </b-row>
@@ -38,60 +48,82 @@ export default {
     return {
       fluxHeader: [],
       fluxDestination: [],
-      fluxCartesian: []
+      fluxCartesian: [],
+      isFinished: false
     };
   },
+  watch: {
+    flux24() {
+      this.isFinished = false;
+      this.show().then(({ fluxHeader, fluxDestination }) => {
+        this.fluxHeader = fluxHeader;
+        this.fluxDestination = fluxDestination;
+        this.isFinished = true;
+      });
+    }
+  },
   mounted() {
-    this.show(); 
+    this.isFinished = false;
+    this.show().then(({ fluxHeader, fluxDestination }) => {
+      this.fluxHeader = fluxHeader;
+      this.fluxDestination = fluxDestination;
+      this.isFinished = true;
+    });
   },
   methods: {
     show() {
-      if (this.flux24) {
-        this.fluxHeader = [];
-        this.fluxDestination = [];
+      return new Promise((resolver, reject) => {
+        if (this.flux24) {
+          const fluxHeader = [];
+          const fluxDestination = [];
 
-        this.fluxHeader.push({ origin: "" });
-        this.flux24.map(item => {
-          const element = this.fluxHeader.find(x => x.origin == item.origin);
-          if (!element) {
-            this.fluxHeader.push(Object.assign({}, item));
-          }
-          const destination = this.fluxDestination.find(
-            x => x.destination == item.destination
-          );
-          if (!destination) {
-            this.fluxDestination.push(item);
-          }
-        });
-
-        for (const key in this.fluxDestination) {
-          const element = this.fluxDestination[key];
-          let items = [];
-          this.fluxHeader.map(itemOrigin => {
-            if (!itemOrigin.origin) {
-              return;
+          fluxHeader.push({ origin: "" });
+          for (const key in this.flux24) {
+            let item = this.flux24[key];
+            const element = fluxHeader.find(x => x.origin == item.origin);
+            if (!element) {
+              fluxHeader.push(Object.assign({}, item));
             }
-            let value = this.flux24.find(
-              x =>
-                x.origin == itemOrigin.origin &&
-                x.destination == element.destination
+            const destination = fluxDestination.find(
+              x => x.destination == item.destination
             );
-            if (value) {
-              items.push({
-                origin: itemOrigin.origin,
-                destination: element.destination,
-                volume: value.volume
-              });
-            } else {
-              items.push({
-                origin: itemOrigin.origin,
-                destination: element.destination
-              });
+            if (!destination) {
+              fluxDestination.push(item);
             }
+          }
+
+          fluxDestination.forEach(element => {
+            let items = [];
+            fluxHeader.forEach(itemOrigin => {
+              if (!itemOrigin.origin) {
+                return;
+              }
+              let value = this.flux24.find(
+                x =>
+                  x.origin == itemOrigin.origin &&
+                  x.destination == element.destination
+              );
+              if (value) {
+                items.push({
+                  origin: itemOrigin.origin,
+                  destination: element.destination,
+                  volume: value.volume
+                });
+              } else {
+                items.push({
+                  origin: itemOrigin.origin,
+                  destination: element.destination
+                });
+              }
+            });
+            element.childrens = items;
           });
-          this.fluxDestination[key].childrens = items;
+          resolver({
+            fluxHeader,
+            fluxDestination
+          });
         }
-      }
+      });
     }
   }
 };
