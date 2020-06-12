@@ -350,7 +350,7 @@ class DashBoardController extends Controller
             'origin' => 'required|array',
             'destination' => 'required|array',
             'preference_start' => 'date|before_or_equal:preference_end',
-            'preference_end' => 'date|before_or_equal:observation_start|required_with:preference_start',
+            'preference_end' => 'date|before:observation_start|required_with:preference_start',
             'observation_start' => 'date|required|before_or_equal:observation_end',
             'observation_end' => 'date|required|after_or_equal:observation_start',
         ])->validate();
@@ -456,7 +456,7 @@ class DashBoardController extends Controller
         $data = Validator::make($request->all(), [
             'filter_zone' => 'required|array',
             'preference_start' => 'nullable|date|before_or_equal:preference_end',
-            'preference_end' => 'nullable|date|before_or_equal:observation_start|required_with:preference_start',
+            'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
             'observation_start' => 'date|required|before_or_equal:observation_end',
             'observation_end' => 'date|required|after_or_equal:observation_start',
         ])->validate();
@@ -526,7 +526,7 @@ class DashBoardController extends Controller
         $data = Validator::make($request->all(), [
             'filter_zone' => 'required|array',
             'preference_start' => 'nullable|date|before_or_equal:preference_end',
-            'preference_end' => 'nullable|date|before_or_equal:observation_start|required_with:preference_start',
+            'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
             'observation_start' => 'date|required|before_or_equal:observation_end',
             'observation_end' => 'date|required|after_or_equal:observation_start',
         ])->validate();

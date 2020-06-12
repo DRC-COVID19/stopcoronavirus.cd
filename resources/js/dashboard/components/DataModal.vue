@@ -15,8 +15,8 @@
           <b-tab title="Flux data" v-if="hasFlux24">
             <SideFluxChart :flux24="flux24Local" />
           </b-tab>
-          <b-tab title="FLux chart">
-            <FluxChart :flux24Daily="flux24Local" />
+          <b-tab title="FLux chart" >
+            <FluxChart  :flux24Daily="flux24DailyLocal" />
           </b-tab>
         </b-tabs>
       </b-col>

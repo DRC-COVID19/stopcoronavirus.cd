@@ -137,7 +137,7 @@ export default {
       fluxZones: [],
       flux24: [],
       flux24Errors: {},
-      flux24Daily:[]
+      flux24Daily: []
     };
   },
   computed: {
@@ -388,11 +388,23 @@ export default {
     submitFluxForm(values) {
       this.isLoading = true;
       this.flux24Errors = {};
+
+      let urlDaily = `api/dashboard/flux-24-origin-daily`;
+      if (values.filter == "filter_2") {
+        urlDaily = `api/dashboard/flux-24-daily`;
+      }
+      this.flux24Daily = [];
+      axios
+        .post(urlDaily, values)
+        .then(({ data }) => {
+          this.flux24Daily = data;
+        })
+        .catch(({ response }) => {});
       let url = `api/dashboard/flux-24-origin`;
       if (values.filter == "filter_2") {
         url = `api/dashboard/flux-24`;
       }
-      this.flux24=[];
+      this.flux24 = [];
       axios
         .post(url, values)
         .then(({ data }) => {
@@ -402,21 +414,6 @@ export default {
         .catch(({ response }) => {
           this.flux24Errors = response.data.errors;
           this.isLoading = false;
-        });
-
-      let urlDaily = `api/dashboard/flux-24-origin-daily`;
-      if (values.filter == "filter_2") {
-        urlDaily = `api/dashboard/flux-24-daily`;
-      }
-      this.flux24Daily=[];
-      axios
-        .post(urlDaily, values)
-        .then(({ data }) => {
-          this.flux24Daily = data;
-          
-        })
-        .catch(({ response }) => {
-          
         });
     },
     seeSide() {
