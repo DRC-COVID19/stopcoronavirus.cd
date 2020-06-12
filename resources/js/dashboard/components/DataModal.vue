@@ -1,13 +1,22 @@
 <template>
-  <b-modal size="xl" :hide-footer="true" cancel-disabled ok-disabled centered :id="id" @shown="show" @hidden="hidden">
+  <b-modal
+    size="xl"
+    :hide-footer="true"
+    cancel-disabled
+    ok-disabled
+    centered
+    :id="id"
+    @shown="show"
+    @hidden="hidden"
+  >
     <b-row>
       <b-col>
         <b-tabs content-class="mt-3">
           <b-tab title="Flux data" v-if="hasFlux24">
-            <SideFluxChart  :flux24="flux24Local" />
+            <SideFluxChart :flux24="flux24Local" />
           </b-tab>
           <b-tab title="FLux chart">
-            <FluxChart  :flux24Daily="flux24Daily" />
+            <FluxChart :flux24Daily="flux24Local" />
           </b-tab>
         </b-tabs>
       </b-col>
@@ -36,11 +45,16 @@ export default {
     },
     flux24: {
       type: Array,
-      default: ()=>([])
+      default: () => []
     },
     flux24Daily: {
       type: Array,
-      default: ()=>([])
+      default: () => []
+    }
+  },
+  watch: {
+    flux24Daily() {
+      this.flux24DailyLocal = this.flux24Daily;
     }
   },
   computed: {
@@ -53,8 +67,8 @@ export default {
   },
   methods: {
     show() {
-        this.flux24Local = this.flux24;
-        this.flux24DailyLocal = this.flux24Daily;
+      this.flux24Local = this.flux24;
+      this.flux24DailyLocal = this.flux24Daily;
     },
     hidden() {
       this.flux24Local = [];
