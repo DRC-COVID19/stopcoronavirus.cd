@@ -1,31 +1,29 @@
 <template>
-  <b-modal size="xl" :id="id" @show="show">
-    <b-container class="side-case-covid-container">
-      <b-row>
-        <b-col cols="12">
-          <b-table-simple small outlined bordered striped hover responsive>
-            <b-thead>
-              <b-tr>
-                <b-td v-for="(item,index) in fluxHeader" :key="index">{{item.origin}}</b-td>
-              </b-tr>
-            </b-thead>
-            <b-tbody>
-              <b-tr v-for="(item,index) in fluxDestination" :key="index">
-                <b-td>{{item.destination}}</b-td>
-                <b-td
-                  v-for="(cell,cellIndex) in item.childrens"
-                  :key="cellIndex"
-                  v-b-tooltip.hover
-                  :title="`${cell.origin}=>${cell.destination}`"
-                >{{cell.volume }}</b-td>
-              </b-tr>
-            </b-tbody>
-            <b-tbody></b-tbody>
-          </b-table-simple>
-        </b-col>
-      </b-row>
-    </b-container>
-  </b-modal>
+  <b-container class="side-case-covid-container">
+    <b-row>
+      <b-col cols="12">
+        <b-table-simple small outlined bordered striped hover responsive>
+          <b-thead>
+            <b-tr>
+              <b-td v-for="(item,index) in fluxHeader" :key="index">{{item.origin}}</b-td>
+            </b-tr>
+          </b-thead>
+          <b-tbody>
+            <b-tr v-for="(item,index) in fluxDestination" :key="index">
+              <b-td>{{item.destination}}</b-td>
+              <b-td
+                v-for="(cell,cellIndex) in item.childrens"
+                :key="cellIndex"
+                v-b-tooltip.hover
+                :title="`${cell.origin}=>${cell.destination}`"
+              >{{cell.volume }}</b-td>
+            </b-tr>
+          </b-tbody>
+          <b-tbody></b-tbody>
+        </b-table-simple>
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -34,10 +32,6 @@ export default {
     flux24: {
       type: Array,
       default: null
-    },
-    id: {
-      type: String,
-      default: "side_flux"
     }
   },
   data() {
@@ -47,11 +41,11 @@ export default {
       fluxCartesian: []
     };
   },
-  watch: {
+  mounted() {
+    this.show(); 
   },
   methods: {
-   async show(){
-     
+    show() {
       if (this.flux24) {
         this.fluxHeader = [];
         this.fluxDestination = [];
@@ -69,6 +63,7 @@ export default {
             this.fluxDestination.push(item);
           }
         });
+
         for (const key in this.fluxDestination) {
           const element = this.fluxDestination[key];
           let items = [];

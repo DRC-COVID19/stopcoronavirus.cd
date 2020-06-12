@@ -39,9 +39,10 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('sondages', 'DashBoardController@getSondages');
     Route::get('cavid-cases', 'DashBoardController@getLastPandemicsRegion');
     Route::post('flux-24', 'DashBoardController@getFluxData');
+    Route::post('flux-24-daily', 'DashBoardController@getFluxDataDaily');
     Route::post('flux-24-origin', 'DashBoardController@getFluxDataFromOrigin');
     Route::get('flux-zone', 'DashBoardController@getFluxZone');
-
+    Route::post('flux-24-origin-daily', 'DashBoardController@getFluxDataFromOriginDaily');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');

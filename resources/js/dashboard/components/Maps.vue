@@ -109,7 +109,7 @@ export default {
       zoom: 10,
       style: this.MAPBOX_DEFAULT_STYLE,
       bearing: 30,
-      pitch: 30,
+      pitch: 30
     });
     map.addControl(new Mapbox.NavigationControl());
     map.on("load", () => {
@@ -545,7 +545,168 @@ export default {
       if (this.flux24.length > 0) {
         if (map.getLayer("arc")) {
           map.removeLayer("arc");
+          map.removeLayer("fluxCircleDataLayer");
+          map.removeSource("fluxCircleDataSource");
         }
+
+        const features = [];
+        this.flux24.map(item => {
+          let element = features.find(x => x.properties.origin == item.origin);
+          if (element) {
+            element.properties.volume += 1;
+          } else {
+            features.push({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: item.position_start
+              },
+              properties: {
+                origin: item.origin,
+                color: "#ED5F68",
+                volume: 1
+              }
+            });
+          }
+
+          const element2 = features.find(
+            x => x.properties.origin == item.destination
+          );
+          if (element2) {
+            element2.properties.volume += 1;
+          } else {
+            features.push({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: item.position_end
+              },
+              properties: {
+                origin: item.destination,
+                color: "#ED5F68",
+                volume: 1
+              }
+            });
+          }
+        });
+
+        const circleData = {
+          type: "geojson",
+          data: {
+            type: "FeatureCollection",
+            features: features
+          }
+        };
+
+        map.addSource("fluxCircleDataSource", circleData);
+        map.addLayer({
+          id: "fluxCircleDataLayer",
+          type: "circle",
+          source: "fluxCircleDataSource",
+          paint: {
+            // make circles larger as the user zooms from z12 to z22
+            "circle-opacity": 0.7,
+            "circle-radius": [
+              "interpolate",
+              ["linear"],
+              ["zoom"],
+              1,
+              [
+                "case",
+                [">=", ["number", ["get", "volume"]], 1280],
+                6,
+                [">=", ["number", ["get", "volume"]], 640],
+                5.5,
+                [">=", ["number", ["get", "volume"]], 320],
+                5,
+                [">=", ["number", ["get", "volume"]], 160],
+                4,
+                [">=", ["number", ["get", "volume"]], 80],
+                3.5,
+                [">=", ["number", ["get", "volume"]], 40],
+                3,
+                [">=", ["number", ["get", "volume"]], 20],
+                2.5,
+                [">=", ["number", ["get", "volume"]], 10],
+                1.5,
+                [">=", ["number", ["get", "volume"]], 5],
+                1,
+                1
+              ],
+              3,
+              [
+                "case",
+                [">=", ["number", ["get", "volume"]], 1280],
+                12.5,
+                [">=", ["number", ["get", "volume"]], 640],
+                11,
+                [">=", ["number", ["get", "volume"]], 320],
+                10,
+                [">=", ["number", ["get", "volume"]], 160],
+                8.75,
+                [">=", ["number", ["get", "volume"]], 80],
+                7.5,
+                [">=", ["number", ["get", "volume"]], 40],
+                6,
+                [">=", ["number", ["get", "volume"]], 20],
+                5,
+                [">=", ["number", ["get", "volume"]], 10],
+                3.25,
+                [">=", ["number", ["get", "volume"]], 5],
+                2.5,
+                2.5
+              ],
+              5,
+              [
+                "case",
+                [">=", ["number", ["get", "volume"]], 1280],
+                25,
+                [">=", ["number", ["get", "volume"]], 640],
+                22.5,
+                [">=", ["number", ["get", "volume"]], 320],
+                20,
+                [">=", ["number", ["get", "volume"]], 160],
+                17.5,
+                [">=", ["number", ["get", "volume"]], 80],
+                15,
+                [">=", ["number", ["get", "volume"]], 40],
+                12.5,
+                [">=", ["number", ["get", "volume"]], 20],
+                10,
+                [">=", ["number", ["get", "volume"]], 10],
+                7.5,
+                [">=", ["number", ["get", "volume"]], 5],
+                5,
+                5
+              ],
+              10,
+              [
+                "case",
+                [">=", ["number", ["get", "volume"]], 1280],
+                50,
+                [">=", ["number", ["get", "volume"]], 640],
+                45,
+                [">=", ["number", ["get", "volume"]], 320],
+                40,
+                [">=", ["number", ["get", "volume"]], 160],
+                35,
+                [">=", ["number", ["get", "volume"]], 80],
+                30,
+                [">=", ["number", ["get", "volume"]], 40],
+                25,
+                [">=", ["number", ["get", "volume"]], 20],
+                20,
+                [">=", ["number", ["get", "volume"]], 10],
+                15,
+                [">=", ["number", ["get", "volume"]], 5],
+                10,
+                10
+              ]
+            ],
+            "circle-color": "#f4c363"
+          }
+        });
+
         let arcData = [];
 
         for (const key in this.flux24) {
@@ -559,8 +720,6 @@ export default {
             arcData.push(item);
           }
         }
-        console.log(arcData);
-
         const myDeckLayer = new MapboxLayer({
           id: "arc",
           data: arcData,
@@ -611,21 +770,15 @@ export default {
               left: info.x
             });
             this.$set(this.ArcLayerSelectedObject, "item", info.object);
-          },
-          onClick: (info, event) => {
-            new Mapbox.Popup()
-              .setLngLat(info.coordinate)
-              .setHTML(
-                `<span>${info.object.origin}=>${info.object.destination}</span>
-            <div>${info.object.volume}</div>`
-              )
-              .addTo(this.map);
-            console.log("b");
           }
         });
         map.addLayer(myDeckLayer);
       } else {
-        map.removeLayer("arc");
+        if (map.getLayer("arc")) {
+          map.removeLayer("arc");
+          map.removeLayer("fluxCircleDataLayer");
+          map.removeSource("fluxCircleDataSource");
+        }
       }
     }
   },
