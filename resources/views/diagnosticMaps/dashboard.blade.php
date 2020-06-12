@@ -21,7 +21,7 @@
         </div>
     </div>
  
-    <script src="{{ asset('js/vueApp.js?v=1.4') }}"></script>
+    <script src="{{ asset('js/vueApp.js?v=1.5') }}"></script>
 
 </body>
 </html>
