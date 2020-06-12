@@ -34,10 +34,13 @@ export default {
   },
   methods: {
     show() {
+      console.log('before');
       
       if (this.flux24Daily.length == 0) {
         return;
       }
+      console.log(this.flux24Daily);
+      
       const margin = { top: 20, right: 20, bottom: 90, left: 120 },
         width = 800 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
@@ -50,7 +53,7 @@ export default {
       const y = d3.scaleLinear().range([height, 0]);
 
       const svg = d3
-        .select(this.$refs.my_dataviz)
+        .select("#my_dataviz")
         .append("svg")
         .attr("id", "svg")
         .attr("width", width + margin.left + margin.right)
