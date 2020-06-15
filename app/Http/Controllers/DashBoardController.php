@@ -373,7 +373,7 @@ class DashBoardController extends Controller
                     ->groupBy('Origin', 'destination')
                     ->whereIn('Origin', $data['origin'])
                     ->whereIn('Destination', $data['destination'])->get();
-
+                $fluxRefencesData=[];
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
                         $value->{'isReference'} = true;
@@ -387,10 +387,11 @@ class DashBoardController extends Controller
                         } else {
                             continue;
                         }
+                        $fluxRefencesData[]=$value;
                     }
                 }
             }
-
+            $fluxData=[];
             foreach ($flux as $value) {
                 if ($fluxRefences) {
                     foreach ($fluxRefences as $item) {
@@ -410,11 +411,12 @@ class DashBoardController extends Controller
                 } else {
                     continue;
                 }
+                $fluxData[]=$value;
             }
             if (is_array($fluxRefences)) {
-                return response()->json($flux);
+                return response()->json($fluxData);
             }
-            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+            return response()->json(array_merge($fluxRefencesData, $fluxData));
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -503,7 +505,7 @@ class DashBoardController extends Controller
                     })
                     ->groupBy('Origin', 'destination')
                     ->get();
-
+                $fluxRefencesData=[];
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
                         $value->{'isReference'} = true;
@@ -517,11 +519,13 @@ class DashBoardController extends Controller
                         } else {
                             continue;
                         }
+                        $fluxRefencesData[]=$value;
                     }
                 }
             }
 
 
+            $fluxData=[];
             foreach ($flux as $value) {
                 if ($fluxRefences) {
                     foreach ($fluxRefences as $item) {
@@ -541,11 +545,12 @@ class DashBoardController extends Controller
                 } else {
                     continue;
                 }
+                $fluxData[]=$value;
             }
             if (is_array($fluxRefences)) {
-                return response()->json($flux);
+                return response()->json($fluxData);
             }
-            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+            return response()->json(array_merge($fluxRefencesData, $fluxData));
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
