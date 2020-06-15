@@ -86,7 +86,7 @@
     </b-container>
     <Waiting v-if="isLoading" />
 
-    <DataModal :flux24="flux24" :flux24Daily="flux24Daily" id="data-modal" />
+    <DataModal :flux24="flux24WithoutReference" :flux24Daily="flux24Daily" id="data-modal" />
   </div>
 </template>
 
@@ -149,6 +149,9 @@ export default {
     },
     hasFlux24() {
       return this.flux24.length > 0;
+    },
+    flux24WithoutReference(){
+      return this.flux24.filter(x=>!x.isReference);
     },
     mapStyle() {
       return {

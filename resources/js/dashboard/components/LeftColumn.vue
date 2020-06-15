@@ -242,13 +242,13 @@
                   </b-list-group>
                 </div>
                 <hr />
-                <div>
+                <div class="flux-move">
                   <h4>Choix périodes</h4>
                   <b-form-group
                     :invalid-feedback="flux24Errors.preference_start|| flux24Errors.preference_end ? `${flux24Errors.preference_start? flux24Errors.preference_start[0]:''} ${flux24Errors.preference_end?flux24Errors.preference_end[0]:''}` : null"
                     :state="(flux24Errors.preference_start && flux24Errors.preference_start.lenght>0)|| (flux24Errors.preference_end && flux24Errors.preference_end.lenght>0)"
                   >
-                    <label>Période de référence</label>
+                    <label>Période de référence <span class="legend-reference"></span> </label>
                     <date-range-picker
                       ref="picker"
                       :locale-data="{ firstDay: 1, format: 'dd-mm-yyyy' }"
@@ -271,7 +271,7 @@
                     :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start?flux24Errors.observation_start[0]:''} ${flux24Errors.observation_end?flux24Errors.observation_end[0]:''}` : null"
                     :state="(flux24Errors.observation_start && flux24Errors.observation_start.lenght>0)|| (flux24Errors.observation_end && flux24Errors.observation_end.lenght>0)"
                   >
-                    <label>Période d'observation</label>
+                    <label>Période d'observation <span class="legend-observation"></span></label>
                     <date-range-picker
                       ref="picker2"
                       :locale-data="{ 
@@ -502,6 +502,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@~/sass/_variables';
 .column-left {
   background: #14244f;
   padding-top: 15px;
@@ -512,5 +513,18 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 2;
+  .flux-move{
+    .legend-reference,.legend-observation{
+      display: inline-block;
+        width: 10px;
+        height: 10px;
+    }
+    .legend-observation{
+      background: $success;
+    }
+    .legend-reference{
+      background: $reference;
+    }
+  }
 }
 </style>

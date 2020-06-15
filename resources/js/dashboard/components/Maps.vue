@@ -149,6 +149,11 @@ export default {
     });
     this.map = map;
   },
+  computed: {
+    flux24WithoutReference() {
+      return this.flux24.map(x => !x.isReference);
+    }
+  },
   watch: {
     covidCases() {
       if (this.covidCases) {
@@ -550,7 +555,7 @@ export default {
         }
 
         const features = [];
-        this.flux24.map(item => {
+        this.flux24WithoutReference.map(item => {
           let element = features.find(x => x.properties.origin == item.origin);
           if (element) {
             element.properties.volume += 1;
@@ -712,12 +717,25 @@ export default {
         for (const key in this.flux24) {
           const item = this.flux24[key];
           const index = arcData.findIndex(
-            x => x.destination == item.origin && x.origin == item.destination
+            x =>
+              x.destination == item.origin &&
+              x.origin == item.destination &&
+              !x.isReference
           );
           if (index != -1) {
             arcData[index].inversed_volume = item.volume;
           } else {
-            arcData.push(item);
+            const index2 = arcData.findIndex(
+              x =>
+                x.destination == item.origin &&
+                x.origin == item.destination &&
+                x.isReference
+            );
+            if (index2 != -1) {
+              arcData[index2].inversed_volume = item.volume;
+            } else {
+              arcData.push(item);
+            }
           }
         }
         const myDeckLayer = new MapboxLayer({
@@ -729,19 +747,17 @@ export default {
           getFillColor: [0, 0, 0, 0],
           getSourcePosition: d => d.position_start,
           getTargetPosition: d => d.position_end,
-          getSourceColor: d => [12, 44, 132],
-          getTargetColor: d => [177, 0, 38],
+          getSourceColor: d =>
+            d.isReference ? [158, 158, 158] : [12, 44, 132],
+          getTargetColor: d => (d.isReference ? [158, 158, 158] : [177, 0, 38]),
           getHeight: 1,
-          // getTilt: (d, { data }) => {
-          //   let tilt = 2;
-          //   let index = data.filter(
-          //     x => x.origin == d.destination && x.destination == d.origin
-          //   );
-          //   if (index) {
-          //     tilt = -2;
-          //   }
-          //   return tilt;
-          // },
+          getTilt: (d, { data }) => {
+            let tilt = 2;
+            if (d.isReference) {
+              tilt = -2;
+            }
+            return tilt;
+          },
           getWidth: d => {
             let width = 3;
             if (d.volume > 20000) {
