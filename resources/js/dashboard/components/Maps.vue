@@ -151,7 +151,7 @@ export default {
   },
   computed: {
     flux24WithoutReference() {
-      return this.flux24.map(x => !x.isReference);
+      return this.flux24.filter(x => !x.isReference);
     }
   },
   watch: {
@@ -555,7 +555,7 @@ export default {
         }
 
         const features = [];
-        this.flux24WithoutReference.map(item => {
+        this.flux24.filter(x=>!x.isReference).map(item => {
           let element = features.find(x => x.properties.origin == item.origin);
           if (element) {
             element.properties.volume += 1;
@@ -568,12 +568,11 @@ export default {
               },
               properties: {
                 origin: item.origin,
-                color: "#ED5F68",
+                color: "#ED5F68", 
                 volume: 1
               }
             });
           }
-
           const element2 = features.find(
             x => x.properties.origin == item.destination
           );
