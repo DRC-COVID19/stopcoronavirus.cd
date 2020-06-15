@@ -2,6 +2,7 @@
 
 namespace App\Admin\Controllers;
 
+use App\HealthZone;
 use App\Pandemic;
 use App\Province;
 use App\Township;
@@ -76,8 +77,7 @@ class PandemicController extends AdminController
         $form->number('seriously', __('Grave'));
         $form->number('healed', __('Guéris'));
         $form->number('dead', __('Décès'));
-        $form->select('province_id', __('Province'))->options(Province::pluck('name', 'id'))->rules(['required']);
-        $form->select('township_id', __('Commune si Kinshasa'))->options(Township::pluck('name', 'id'))->rules(['required_if:province_id,10']);
+        $form->select('health_zone_id', __('Zone de santé'))->options(HealthZone::pluck('name', 'id'))->rules(['required']);
         $form->datetime('last_update', __('Dernière modification'))->rules(['required']);
         
         return $form;
