@@ -1,27 +1,19 @@
 <template>
   <b-container class="side-case-covid-container">
     <b-row>
-        <div class="card card-body cols-12">
-          <b-list-group class="group-item">
-            <b-list-group-item v-for="(item, index) in medicalOrientations" :key="index">
-              <div class="area-name text-center mb-2">{{`${item.province} ${item.township}`}}</div>
-              <div class="area-total d-flex justify-content-around align-items-center">
-                <div class="confirmed d-flex flex-column justify-content-center align-items-center">
-                  <div class="stat-color" :style="stateColorWith(item,'FIN8')"></div>
-                  {{item.FIN8}}
-                </div>
-                <div class="healed d-flex flex-column justify-content-center align-items-center">
-                  <div class="stat-color" :style="stateColorWith(item,'FIN')"></div>
-                  {{item.FIN}}
-                </div>
-                <div class="dead d-flex flex-column justify-content-center align-items-center">
-                  <div class="stat-color" :style="stateColorWith(item,'FIN5')"></div>
-                  {{item.FIN5}}
-                </div>
-              </div>
-            </b-list-group-item>
-          </b-list-group>
-        </div>
+      <b-col>
+        <b-table striped bordered outlined hover responsive :items="medicalOrientations" :fields="fields">
+          <template v-slot:cell(FIN8)="data">
+            <div class="text-right">{{ data.item.FIN8 }}</div>
+          </template>
+          <template v-slot:cell(FIN5)="data">
+            <div class="text-right">{{ data.item.FIN5 }}</div>
+          </template>
+          <template v-slot:cell(FIN)="data">
+            <div class="text-right">{{ data.item.FIN }}</div>
+          </template>
+        </b-table>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -33,6 +25,34 @@ export default {
       type: Array,
       default: null
     }
+  },
+  data() {
+    return {
+      fields: [
+        {
+          key: "province"
+        },
+        {
+          key: "township",
+          label: "Ville/Commune"
+        },
+        {
+          key: "FIN8",
+          label: "Peu probale",
+          variant: "success"
+        },
+        {
+          key: "FIN",
+          label: "Probale",
+          variant: "warning"
+        },
+        {
+          key: "FIN5",
+          label: "Très Probale",
+          variant: "danger"
+        }
+      ]
+    };
   },
   computed: {
     CovidCasesProvince() {

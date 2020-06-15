@@ -248,7 +248,10 @@
                     :invalid-feedback="flux24Errors.preference_start|| flux24Errors.preference_end ? `${flux24Errors.preference_start? flux24Errors.preference_start[0]:''} ${flux24Errors.preference_end?flux24Errors.preference_end[0]:''}` : null"
                     :state="(flux24Errors.preference_start && flux24Errors.preference_start.lenght>0)|| (flux24Errors.preference_end && flux24Errors.preference_end.lenght>0)"
                   >
-                    <label>Période de référence <span class="legend-reference"></span> </label>
+                    <label>
+                      Période de référence
+                      <span class="legend-reference"></span>
+                    </label>
                     <date-range-picker
                       ref="picker"
                       :locale-data="{ firstDay: 1, format: 'dd-mm-yyyy' }"
@@ -271,7 +274,10 @@
                     :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start?flux24Errors.observation_start[0]:''} ${flux24Errors.observation_end?flux24Errors.observation_end[0]:''}` : null"
                     :state="(flux24Errors.observation_start && flux24Errors.observation_start.lenght>0)|| (flux24Errors.observation_end && flux24Errors.observation_end.lenght>0)"
                   >
-                    <label>Période d'observation <span class="legend-observation"></span></label>
+                    <label>
+                      Période d'observation
+                      <span class="legend-observation"></span>
+                    </label>
                     <date-range-picker
                       ref="picker2"
                       :locale-data="{ 
@@ -471,6 +477,13 @@ export default {
     },
     populationFluxToggle(checked) {
       this.$root.$emit("bv::toggle::collapse", "populationFluxcollapse");
+      this.$emit("populationFluxChecked", checked);
+      if (!checked) {
+        this.fluxForm.filter_zone = [];
+        this.fluxFilterInput = "";
+        this.fluxForm.origin = null;
+        this.fluxForm.destination = null;
+      }
     },
     UpdatePreferenceDate({ startDate, endDate }) {
       this.fluxForm.preference_start = moment(startDate).format("YYYY/MM/DD");
@@ -502,7 +515,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@~/sass/_variables';
+@import "@~/sass/_variables";
 .column-left {
   background: #14244f;
   padding-top: 15px;
@@ -513,16 +526,17 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 2;
-  .flux-move{
-    .legend-reference,.legend-observation{
+  .flux-move {
+    .legend-reference,
+    .legend-observation {
       display: inline-block;
-        width: 10px;
-        height: 10px;
+      width: 10px;
+      height: 10px;
     }
-    .legend-observation{
+    .legend-observation {
       background: $success;
     }
-    .legend-reference{
+    .legend-reference {
       background: $reference;
     }
   }

@@ -25,6 +25,7 @@
           @flourChecked="flourChecked"
           @antiBacterialGelChecked="antiBacterialGelChecked"
           @submitFluxForm="submitFluxForm"
+          @populationFluxChecked="populationFluxChecked"
           :covidCasesCount="covidCasesCount"
           :hospitalCount="hospitalCount"
           :orientationCount="orientationCount"
@@ -34,25 +35,16 @@
           :fluxZones="fluxZones"
           :flux24Errors="flux24Errors"
         />
-
-        <b-tabs
-          content-class="mt-3"
-          v-if="hasCovidCases || hasOrientation"
-          class="cols-12 col-md-3 offset-md-3 side-case-covid"
-        >
-          <b-tab title="Cas covid " v-if="hasCovidCases" :active="hasCovidCases">
-            <SideCaseCovid :covidCases="covidCases" />
-          </b-tab>
-          <b-tab title="Orientation" v-if="hasOrientation" :active="hasOrientation">
-            <SideOrientation :medicalOrientations="medicalOrientations" />
-          </b-tab>
-        </b-tabs>
-
         <b-col cols="12" md="9">
-          <b-button v-if="hasFlux24" variant="success" @click="seeSide" class="btn-see-side">
+          <b-button
+            v-if="hasFlux24||hasCovidCases||hasOrientation"
+            variant="success"
+            @click="seeSide"
+            class="btn-see-side"
+          >
             <span class="fa fa-table"></span> voir
           </b-button>
-          <b-row class="map-container" :style="mapStyle">
+          <b-row class="map-container">
             <Maps
               :covidCases="covidCases"
               :hospitals="hospitals"
@@ -69,24 +61,20 @@
               :flux24="flux24"
             />
           </b-row>
-          <div class="chart-container" v-if="hasCovidCases || hasOrientation">
-            <b-col>
-              <b-tabs content-class="mt-3">
-                <b-tab title="Cas covid " v-if="hasCovidCases" :active="hasCovidCases">
-                  <CovidCaseChart :covidCasesStat="covidCasesStat" />
-                </b-tab>
-                <b-tab title="Orientation" v-if="hasOrientation" :active="hasOrientation">
-                  <OrientationChart :medicalOrientationsStat="medicalOrientationsStat" />
-                </b-tab>
-              </b-tabs>
-            </b-col>
-          </div>
         </b-col>
       </b-row>
     </b-container>
     <Waiting v-if="isLoading" />
 
-    <DataModal :flux24="flux24WithoutReference" :flux24Daily="flux24Daily" id="data-modal" />
+    <DataModal
+      :flux24="flux24WithoutReference"
+      :flux24Daily="flux24Daily"
+      :covidCases="covidCases"
+      :covidCasesStat="covidCasesStat"
+      :medicalOrientations="medicalOrientations"
+      :medicalOrientationsStat="medicalOrientationsStat"
+      id="data-modal"
+    />
   </div>
 </template>
 
@@ -150,8 +138,8 @@ export default {
     hasFlux24() {
       return this.flux24.length > 0;
     },
-    flux24WithoutReference(){
-      return this.flux24.filter(x=>!x.isReference);
+    flux24WithoutReference() {
+      return this.flux24.filter(x => !x.isReference);
     },
     mapStyle() {
       return {
@@ -383,6 +371,12 @@ export default {
     antiBacterialGelChecked(checked) {
       this.antiBacterialGel = checked;
     },
+    populationFluxChecked(checked) {
+      if (!checked) {
+        this.flux24Daily = [];
+        this.flux24 = [];
+      }
+    },
     getFluxZone() {
       axios.get("api/dashboard/flux-zone").then(({ data }) => {
         this.fluxZones = data;
@@ -436,7 +430,7 @@ export default {
   }
 }
 .map-container {
-  height: 60vh;
+  height: calc(100vh - 52.5px);
 }
 .chart-container {
   height: calc(40vh - 52.5px);

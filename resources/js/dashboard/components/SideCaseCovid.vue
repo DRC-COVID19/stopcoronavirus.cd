@@ -1,27 +1,25 @@
 <template>
   <b-container class="side-case-covid-container">
     <b-row>
-      <div class="card card-body cols-12 ">
-        <b-list-group class="group-item">
-          <b-list-group-item v-for="(item, index) in CovidCasesProvince" :key="index">
-            <div class="area-name text-center mb-2">{{item.properties.name}}</div>
-            <div class="area-total d-flex justify-content-around align-items-center">
-              <div class="confirmed d-flex flex-column justify-content-center align-items-center">
-                <div class="stat-color" :style="stateColorWith(item.properties,'confirmed')"></div>
-                {{item.properties.confirmed}}
-              </div>
-              <div class="healed d-flex flex-column justify-content-center align-items-center">
-                <div class="stat-color" :style="stateColorWith(item.properties,'healed')"></div>
-                {{item.properties.healed}}
-              </div>
-              <div class="dead d-flex flex-column justify-content-center align-items-center">
-                <div class="stat-color" :style="stateColorWith(item.properties,'dead')"></div>
-                {{item.properties.dead}}
-              </div>
-            </div>
-          </b-list-group-item>
-        </b-list-group>
-      </div>
+      <b-col cols="12">
+        <b-table striped outlined hover responsive :items="CovidCasesProvince" :fields="fields">
+          <template v-slot:cell(name)="data">
+            <span>{{ data.item.properties.name }}</span>
+          </template>
+           <template v-slot:cell(last_update)="data">
+             <div class="text-right">{{ moment(data.item.properties.last_update).format("DD.MM.YYYY") }}</div>
+          </template>
+          <template v-slot:cell(confirmed)="data" >
+            <div class="text-right">{{ data.item.properties.confirmed }}</div>
+          </template>
+          <template v-slot:cell(healed)="data" >
+            <div class="text-right">{{ data.item.properties.healed }}</div>
+          </template>
+           <template v-slot:cell(dead)="data" >
+            <div class="text-right">{{ data.item.properties.dead }}</div>
+          </template>
+        </b-table>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -33,6 +31,36 @@ export default {
       type: Object,
       default: null
     }
+  },
+  data() {
+    return {
+      fields: [
+        {
+          key: "name",
+          label: "Nom"
+        },
+        {
+          key:'last_update',
+          label:"Mise à jour",
+          variant:"info"
+        },
+        {
+          key: "confirmed",
+          label: "Confirmés",
+          variant: "warning"
+        },
+        {
+          key: "Healed",
+          label: "Guéris",
+          variant: "success"
+        },
+        {
+          key: "dead",
+          label: "Décès",
+          variant: "danger"
+        }
+      ]
+    };
   },
   computed: {
     CovidCasesProvince() {

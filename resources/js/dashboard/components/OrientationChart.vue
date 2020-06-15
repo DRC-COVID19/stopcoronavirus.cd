@@ -17,9 +17,17 @@ export default {
   data() {
     return {};
   },
-  
+
   watch: {
     medicalOrientationsStat() {
+      this.show();
+    }
+  },
+  mounted() {
+    this.show();
+  },
+  methods: {
+    show() {
       if (!this.medicalOrientationsStat) {
         return;
       }
@@ -29,25 +37,25 @@ export default {
           labels: this.medicalOrientationsStat.labels,
           datasets: [
             {
+              label: "Peu probable",
+              fill: true,
+              borderColor: "rgba(0, 128, 0,0.2)",
+              backgroundColor: "rgba(0, 128, 0,1)",
+              data: this.medicalOrientationsStat.fin8
+            },
+            {
               label: "Probables",
               fill: true,
-              borderColor: "rgb(166,180,205)",
-              backgroundColor: "rgb(166,180,205, 0.2)",
+              borderColor: "rgb(255, 165, 0)",
+              backgroundColor: "rgb(255, 165, 0, 0.2)",
               data: this.medicalOrientationsStat.fin
             },
             {
               label: "Très probable",
               fill: true,
-              borderColor: "rgba(0,176,101,1)",
-              backgroundColor: "rgba(0,176,101,0.8)",
+              backgroundColor: "rgba(255, 0, 0,0.8)",
+              borderColor: "rgba(255, 0, 0,1)",
               data: this.medicalOrientationsStat.fin5
-            },
-            {
-              label: "Peu probable",
-              fill: true,
-              borderColor: "rgba(10,10,10,0.2)",
-              backgroundColor: "rgba(10,10,10,1)",
-              data: this.medicalOrientationsStat.fin8
             }
           ]
         },
@@ -120,7 +128,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#orientationChart{
-    height: 64% !important;
+#orientationChart {
+  height: 300px !important;
 }
 </style>
