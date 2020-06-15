@@ -361,22 +361,36 @@ class DashBoardController extends Controller
                 ->whereIn('Origin', $data['origin'])
                 ->whereIn('Destination', $data['destination'])->get();
 
-            $fluxRefences = null;
-            if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->groupBy('Origin', 'destination')
-                    ->whereIn('Origin', $data['origin'])
-                    ->whereIn('Destination', $data['destination'])->get();
-            }
-
             $geoCodingFilePath = storage_path('app/fluxZones.json');
             $geoData = [];
             if (file_exists($geoCodingFilePath)) {
                 $jsonString = file_get_contents($geoCodingFilePath);
                 $geoData = json_decode($jsonString, true);
             }
+            $fluxRefences = [];
+            if (isset($data['preference_start']) && isset($data['preference_end'])) {
+                $fluxRefences = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                    ->groupBy('Origin', 'destination')
+                    ->whereIn('Origin', $data['origin'])
+                    ->whereIn('Destination', $data['destination'])->get();
 
-            $fluxData = [];
+                if (count($fluxRefences) > 0) {
+                    foreach ($fluxRefences as $value) {
+                        $value->{'isReference'} = true;
+                        if (isset($geoData[strtoupper($value->origin)][0])) {
+                            $value->{'position_start'} = $geoData[strtoupper($value->origin)][0]['coordinates'];
+                        } else {
+                            continue;
+                        }
+                        if (isset($geoData[strtoupper($value->destination)][0])) {
+                            $value->{'position_end'} = $geoData[strtoupper($value->destination)][0]['coordinates'];
+                        } else {
+                            continue;
+                        }
+                    }
+                }
+            }
+
             foreach ($flux as $value) {
                 if ($fluxRefences) {
                     foreach ($fluxRefences as $item) {
@@ -396,9 +410,11 @@ class DashBoardController extends Controller
                 } else {
                     continue;
                 }
-                $fluxData[] = $value;
             }
-            return response()->json($fluxData);
+            if (is_array($fluxRefences)) {
+                return response()->json($flux);
+            }
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -471,7 +487,13 @@ class DashBoardController extends Controller
                 ->groupBy('Origin', 'destination')
                 ->get();
 
-            $fluxRefences = null;
+            $geoCodingFilePath = storage_path('app/fluxZones.json');
+            $geoData = [];
+            if (file_exists($geoCodingFilePath)) {
+                $jsonString = file_get_contents($geoCodingFilePath);
+                $geoData = json_decode($jsonString, true);
+            }
+            $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
@@ -481,16 +503,25 @@ class DashBoardController extends Controller
                     })
                     ->groupBy('Origin', 'destination')
                     ->get();
+
+                if (count($fluxRefences) > 0) {
+                    foreach ($fluxRefences as $value) {
+                        $value->{'isReference'} = true;
+                        if (isset($geoData[strtoupper($value->origin)][0])) {
+                            $value->{'position_start'} = $geoData[strtoupper($value->origin)][0]['coordinates'];
+                        } else {
+                            continue;
+                        }
+                        if (isset($geoData[strtoupper($value->destination)][0])) {
+                            $value->{'position_end'} = $geoData[strtoupper($value->destination)][0]['coordinates'];
+                        } else {
+                            continue;
+                        }
+                    }
+                }
             }
 
 
-            $geoCodingFilePath = storage_path('app/fluxZones.json');
-            $geoData = [];
-            if (file_exists($geoCodingFilePath)) {
-                $jsonString = file_get_contents($geoCodingFilePath);
-                $geoData = json_decode($jsonString, true);
-            }
-            $fluxData = [];
             foreach ($flux as $value) {
                 if ($fluxRefences) {
                     foreach ($fluxRefences as $item) {
@@ -510,9 +541,11 @@ class DashBoardController extends Controller
                 } else {
                     continue;
                 }
-                $fluxData[] = $value;
             }
-            return response()->json($fluxData);
+            if (is_array($fluxRefences)) {
+                return response()->json($flux);
+            }
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

@@ -24,9 +24,11 @@
                 :key="cellIndex"
                 v-b-tooltip.hover
                 :title="`${cell.origin}=>${cell.destination}`"
+                class="text-right"
               >
-                {{cell.reference_volume?`${cell.reference_volume}=>`:''}}
-                {{cell.volume }}
+                <div class="reference" v-if="cell.reference_volume">{{cell.reference_volume}}</div>
+                
+                <div class="observation">{{cell.volume }}</div>
               </b-td>
             </b-tr>
           </b-tbody>
@@ -107,7 +109,8 @@ export default {
                 items.push({
                   origin: itemOrigin.origin,
                   destination: element.destination,
-                  volume: value.volume
+                  volume: value.volume,
+                  reference_volume:value?.reference_volume
                 });
               } else {
                 items.push({
@@ -129,6 +132,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import '@~/sass/_variables';
 .side-case-covid-container {
   h3 {
     font-size: 0.8rem;
@@ -138,6 +142,12 @@ export default {
   }
   .area-total {
     font-size: 0.7rem;
+  }
+  .observation{
+    color: $success;
+  }
+  .reference{
+    color: $reference;
   }
 }
 </style>
