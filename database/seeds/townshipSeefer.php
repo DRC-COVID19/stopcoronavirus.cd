@@ -14,8 +14,8 @@ class townshipSeefer extends Seeder
     {
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
-        DB::table('provinces')->truncate();
-        DB::table('provinces')->insert([
+        DB::table('townships')->truncate();
+        DB::table('townships')->insert([
             [
                 'id'=>1,
                 'name' => 'Bandalungwa',
