@@ -4,6 +4,7 @@ namespace App\Admin\Controllers;
 
 use App\Pandemic;
 use App\Province;
+use App\Township;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
@@ -76,6 +77,7 @@ class PandemicController extends AdminController
         $form->number('healed', __('Guéris'));
         $form->number('dead', __('Décès'));
         $form->select('province_id', __('Province'))->options(Province::pluck('name', 'id'))->rules(['required']);
+        $form->select('township_id', __('Commune si Kinshasa'))->options(Township::pluck('name', 'id'))->rules(['required_if:province_id,10']);
         $form->datetime('last_update', __('Dernière modification'))->rules(['required']);
         
         return $form;

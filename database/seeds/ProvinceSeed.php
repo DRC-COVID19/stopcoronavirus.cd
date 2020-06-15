@@ -12,7 +12,9 @@ class ProvinceSeed extends Seeder
      */
     public function run()
     {
-        DB::table('provinces')->delete();
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+        DB::table('provinces')->truncate();
         DB::table('provinces')->insert([
             [
                 'id'=>1,
