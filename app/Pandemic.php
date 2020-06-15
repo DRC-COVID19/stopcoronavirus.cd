@@ -11,4 +11,9 @@ class Pandemic extends Model
     {
         return $this->belongsTo(Province::class);
     }
+
+    public function township()
+    {
+        return $this->belongsTo(Township::class);
+    }
 }
