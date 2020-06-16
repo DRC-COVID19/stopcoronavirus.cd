@@ -18,11 +18,15 @@
             <OrientationChart :medicalOrientationsStat="medicalOrientationsStat" />
           </b-tab>
           <b-tab title="FLux chart" v-if="hasFlux24Daily">
-            <FluxChart :flux24Daily="flux24Daily" />
+            <FluxChart
+              :flux24Daily="flux24Daily"
+              :flux24DailyIn="flux24DailyIn"
+              :flux24DailyOut="flux24DailyOut"
+            />
           </b-tab>
-          <b-tab title="Flux data" v-if="hasFlux24">
+          <!-- <b-tab title="Flux data" v-if="hasFlux24">
             <SideFluxChart :flux24="flux24Local" />
-          </b-tab>
+          </b-tab> -->
           <b-tab title="Cas covid-19" v-if="covidCases">
             <SideCaseCovid :covidCases="covidCases" />
           </b-tab>
@@ -59,6 +63,14 @@ export default {
       type: Array,
       default: () => []
     },
+    flux24DailyIn: {
+      type: Array,
+      default: () => []
+    },
+    flux24DailyOut: {
+      type: Array,
+      default: () => []
+    },
     covidCases: {
       type: Object,
       default: null
@@ -74,7 +86,7 @@ export default {
   },
   data() {
     return {
-      flux24Local: [],
+      flux24Local: []
     };
   },
   computed: {

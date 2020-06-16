@@ -43,6 +43,8 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::post('flux-24-origin', 'DashBoardController@getFluxDataFromOrigin');
     Route::get('flux-zone', 'DashBoardController@getFluxZone');
     Route::post('flux-24-origin-daily', 'DashBoardController@getFluxDataFromOriginDaily');
+    Route::post('flux-24-origin-daily-in', 'DashBoardController@getFluxDataFromOriginDailyIn');
+    Route::post('flux-24-origin-daily-out', 'DashBoardController@getFluxDataFromOriginDailyOut');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');

@@ -1,18 +1,59 @@
 <template>
   <b-container>
     <b-row>
-      <b-col cols="12" md="10">
-        <div ref="my_dataviz" id="my_dataviz"></div>
+      <b-col cols="12" md="6">
+        <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
+          <b-col cols="12">
+            <h3>{{item[0].destination}}</h3>
+            <b-card no-body class="mb-3">
+              <b-card-header>
+                <h5>Mobilité entrante</h5>
+                <hr />
+                <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
+                <p class="text-center percent-p">({{fluxVolumObservation(item)}} personnes de plus sont entrés de la zone )​</p>
+              </b-card-header>
+              <div>
+                <div :ref="`mobile_entrance_${index}`" :id="`mobile_entrance_${index}`"></div>
+              </div>
+            </b-card>
+            <b-card-header>
+              <h5>Zone d'origine</h5>
+            </b-card-header>
+            <b-card no-body>
+              <div>
+                <div :ref="`mobile_entrance_${index}_2`" :id="`mobile_entrance_${index}_2`"></div>
+              </div>
+            </b-card>
+            <hr />
+          </b-col>
+        </b-row>
       </b-col>
-      <b-col md="2">
-        <ul class="legend">
-          <li class="d-flex align-items-center">
-            <span class="reference"></span>Réference
-          </li>
-          <li class="d-flex align-items-center">
-            <span class="observation"></span>Observation
-          </li>
-        </ul>
+      <b-col cols="12" md="6">
+        <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
+          <b-col cols="12">
+            <h3>{{item[0].origin}}</h3>
+            <b-card no-body class="mb-3">
+              <b-card-header>
+                <h5>Mobilité sortante</h5>
+                <hr />
+                <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
+                <p class="text-center percent-p">({{fluxVolumObservation(item)}} personnes de plus sont sorties de la zone )​</p>
+              </b-card-header>
+              <div>
+                <div :ref="`mobile_out_${index}`" :id="`mobile_out_${index}`"></div>
+              </div>
+            </b-card>
+            <b-card no-body>
+              <b-card-header>
+                <h5>Zone de destination</h5>
+              </b-card-header>
+              <div>
+                <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
+              </div>
+            </b-card>
+            <hr />
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
   </b-container>
@@ -25,17 +66,453 @@ export default {
     flux24Daily: {
       type: Array,
       default: () => []
+    },
+    flux24DailyIn: {
+      type: Array,
+      default: () => []
+    },
+    flux24DailyOut: {
+      type: Array,
+      default: () => []
     }
   },
+  data() {
+    return {
+      flux24DailyInLocal: [],
+      flux24DailyOutLocal: []
+    };
+  },
   watch: {
-    async flux24Daily() {
-      await this.show();
+    flux24Daily() {},
+    async flux24DailyIn() {
+      this.flux24DailyInLocal = this.extractFlux23DailyIn();
+      await this.sleep(1000);
+      this.flux24DailyInLocal.forEach((item, index) => {
+        this.mobileEntrance(item, index);
+        this.mobileEntranceOrigin(item, index);
+      });
+    },
+    async flux24DailyOut() {
+      this.flux24DailyOutLocal = this.extractFlux23DailyOut();
+      await this.sleep(1000);
+      this.flux24DailyOutLocal.forEach((item, index) => {
+        this.mobileOut(item, index);
+        this.mobileOutDestination(item, index);
+      });
     }
   },
   async mounted() {
-    await this.show();
+    this.flux24DailyInLocal = this.extractFlux23DailyIn();
+    this.flux24DailyOutLocal = this.extractFlux23DailyOut();
+
+    await this.sleep(1000);
+    this.flux24DailyInLocal.forEach((item, index) => {
+      this.mobileEntrance(item, index);
+      this.mobileEntranceOrigin(item, index);
+    });
+    this.flux24DailyOutLocal.forEach((item, index) => {
+      this.mobileOut(item, index);
+      this.mobileOutDestination(item, index);
+    });
   },
   methods: {
+    fluxInPercent(items) {
+      let totalReference = 0;
+      items
+        .filter(x => x.isReference)
+        .map(item => {
+          totalReference += item.volume;
+        });
+      let totalObservation = 0;
+      items
+        .filter(x => !x.isReference)
+        .map(item => {
+          totalObservation += item.volume;
+        });
+      let difference = totalObservation - totalReference;
+
+      return Math.round((difference * 100) / totalReference);
+    },
+    fluxVolumObservation(items){
+      let totalReference = 0;
+      items
+        .filter(x => x.isReference)
+        .map(item => {
+          totalReference += item.volume;
+        });
+      let totalObservation = 0;
+      items
+        .filter(x => !x.isReference)
+        .map(item => {
+          totalObservation += item.volume;
+        });
+      let difference = totalObservation - totalReference;
+
+      return Math.round(difference);
+    },
+    sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    },
+    extractFlux23DailyOut() {
+      let flux24DailyOutLocal = [];
+      if (this.flux24DailyOut.length > 0) {
+        this.flux24DailyOut.forEach(item => {
+          let index = flux24DailyOutLocal.findIndex(x =>
+            x.find(y => y.origin == item.origin)
+          );
+          if (index == -1) {
+            let element = [];
+            element.push(item);
+            flux24DailyOutLocal.push(element);
+          } else {
+            flux24DailyOutLocal[index].push(item);
+          }
+        });
+      }
+      return flux24DailyOutLocal;
+    },
+    extractFlux23DailyIn() {
+      let flux24DailyInLocal = [];
+      if (this.flux24DailyIn.length > 0) {
+        this.flux24DailyIn.forEach(item => {
+          let index = flux24DailyInLocal.findIndex(x =>
+            x.find(y => y.destination == item.destination)
+          );
+          if (index == -1) {
+            let element = [];
+            element.push(item);
+            flux24DailyInLocal.push(element);
+          } else {
+            flux24DailyInLocal[index].push(item);
+          }
+        });
+      }
+      return flux24DailyInLocal;
+    },
+    mobileEntrance(dataPram, index) {
+      // set the dimensions and margins of the graph
+      var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+        width = 400 - margin.left - margin.right,
+        height = 250 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      var svg = d3
+        .select(`#mobile_entrance_${index}`)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      let data = [];
+
+      dataPram.forEach(item => {
+        let element = data.find(x => x.date == item.date);
+        if (element) {
+          element.volume += item.volume;
+        } else {
+          data.push({
+            date: item.date,
+            volume: item.volume,
+            isReference: item?.isReference
+          });
+        }
+      });
+
+      // group the data: I want to draw one line per group
+      var sumstat = d3
+        .nest() // nest function allows to group the calculation per level of a factor
+        .key(function(d) {
+          return d.isReference;
+        })
+        .entries(data);
+
+      // Add X axis --> it is a date format
+      var x = d3
+        .scaleBand()
+        .domain(data.map(d => d.date))
+        .range([0, width]);
+
+      svg
+        .append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickSize(0))
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)");
+
+      // Add Y axis
+      var y = d3
+        .scaleLinear()
+        .domain([
+          0,
+          d3.max(data, function(d) {
+            return +d.volume;
+          })
+        ])
+        .range([height, 0]);
+      svg.append("g").call(d3.axisLeft(y));
+
+      // color palette
+      var res = sumstat.map(function(d) {
+        return d.key;
+      }); // list of group names
+      var color = d3
+        .scaleOrdinal()
+        .domain(res)
+        .range([
+          "#e41a1c",
+          "#377eb8",
+          "#4daf4a",
+          "#984ea3",
+          "#ff7f00",
+          "#ffff33",
+          "#a65628",
+          "#f781bf",
+          "#999999"
+        ]);
+
+      // Draw the line
+      svg
+        .selectAll(".line")
+        .data(sumstat)
+        .enter()
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", function(d) {
+          return color(d.key);
+        })
+        .attr("stroke-width", 1.5)
+        .attr("d", function(d) {
+          return d3
+            .line()
+            .x(function(d) {
+              return x(d.date);
+            })
+            .y(function(d) {
+              return y(+d.volume);
+            })(d.values);
+        });
+    },
+    mobileEntranceOrigin(data, index) {
+      var margin = { top: 20, right: 30, bottom: 40, left: 90 },
+        width = 400 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      var svg = d3
+        .select(`#mobile_entrance_${index}_2`)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // Add X axis
+      var x = d3
+        .scaleLinear()
+        .domain([0, d3.max(data, d => d.volume)])
+        .range([0, width]);
+      svg
+        .append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
+
+      // Y axis
+      var y = d3
+        .scaleBand()
+        .range([0, height])
+        .domain(
+          data.map(function(d) {
+            return d.origin;
+          })
+        )
+        .padding(0.1);
+      svg.append("g").call(d3.axisLeft(y));
+
+      //Bars
+      svg
+        .selectAll("myRect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", x(0))
+        .attr("y", function(d) {
+          return y(d.origin);
+        })
+        .attr("width", function(d) {
+          return x(d.volume);
+        })
+        .attr("height", y.bandwidth())
+        .attr("fill", "#69b3a2");
+    },
+    mobileOut(dataPram, index) {
+      // set the dimensions and margins of the graph
+      var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+        width = 400 - margin.left - margin.right,
+        height = 250 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      var svg = d3
+        .select(`#mobile_out_${index}`)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      let data = [];
+
+      dataPram.forEach(item => {
+        let element = data.find(x => x.date == item.date);
+        if (element) {
+          element.volume += item.volume;
+        } else {
+          data.push({
+            date: item.date,
+            volume: item.volume,
+            isReference: item?.isReference
+          });
+        }
+      });
+
+      // group the data: I want to draw one line per group
+      var sumstat = d3
+        .nest() // nest function allows to group the calculation per level of a factor
+        .key(function(d) {
+          return d.isReference;
+        })
+        .entries(data);
+
+      // Add X axis --> it is a date format
+      var x = d3
+        .scaleBand()
+        .domain(data.map(d => d.date))
+        .range([0, width]);
+
+      svg
+        .append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickSize(0))
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .attr("dx", "-.8em")
+        .attr("dy", ".15em")
+        .attr("transform", "rotate(-65)");
+
+      // Add Y axis
+      var y = d3
+        .scaleLinear()
+        .domain([
+          0,
+          d3.max(data, function(d) {
+            return +d.volume;
+          })
+        ])
+        .range([height, 0]);
+      svg.append("g").call(d3.axisLeft(y));
+
+      // color palette
+      var res = sumstat.map(function(d) {
+        return d.key;
+      }); // list of group names
+      var color = d3
+        .scaleOrdinal()
+        .domain(res)
+        .range([
+          "#e41a1c",
+          "#377eb8",
+          "#4daf4a",
+          "#984ea3",
+          "#ff7f00",
+          "#ffff33",
+          "#a65628",
+          "#f781bf",
+          "#999999"
+        ]);
+
+      // Draw the line
+      svg
+        .selectAll(".line")
+        .data(sumstat)
+        .enter()
+        .append("path")
+        .attr("fill", "none")
+        .attr("stroke", function(d) {
+          return color(d.key);
+        })
+        .attr("stroke-width", 1.5)
+        .attr("d", function(d) {
+          return d3
+            .line()
+            .x(function(d) {
+              return x(d.date);
+            })
+            .y(function(d) {
+              return y(+d.volume);
+            })(d.values);
+        });
+    },
+    mobileOutDestination(data, index) {
+      var margin = { top: 20, right: 30, bottom: 40, left: 90 },
+        width = 400 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      var svg = d3
+        .select(`#mobile_out_${index}_2`)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      // Add X axis
+      var x = d3
+        .scaleLinear()
+        .domain([0, d3.max(data, d => d.volume)])
+        .range([0, width]);
+      svg
+        .append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end");
+
+      // Y axis
+      var y = d3
+        .scaleBand()
+        .range([0, height])
+        .domain(
+          data.map(function(d) {
+            return d.destination;
+          })
+        )
+        .padding(0.1);
+      svg.append("g").call(d3.axisLeft(y));
+
+      //Bars
+      svg
+        .selectAll("myRect")
+        .data(data)
+        .enter()
+        .append("rect")
+        .attr("x", x(0))
+        .attr("y", function(d) {
+          return y(d.destination);
+        })
+        .attr("width", function(d) {
+          return x(d.volume);
+        })
+        .attr("height", y.bandwidth())
+        .attr("fill", "#69b3a2");
+    },
     show() {
       return new Promise((resolver, reject) => {
         if (this.flux24Daily.length == 0) {
@@ -152,5 +629,11 @@ export default {
       }
     }
   }
+}
+.percent{
+  font-size: 2.5rem;
+}
+.percent-p{
+  font-size: 1.2rem;
 }
 </style>

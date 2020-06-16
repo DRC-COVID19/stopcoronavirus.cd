@@ -162,13 +162,13 @@
           <b-collapse id="populationFluxcollapse">
             <b-card-body>
               <b-form class="flux-form">
-                <h4>Selectionnez zones</h4>
+                <h4>PARAMETRES GEOGRAPHIQUES</h4>
                 <div>
                   <b-form-group
                     :invalid-feedback="flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null"
                     :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
                   >
-                    <b-form-radio name="filter" v-model="fluxForm.filter" value="filter_1">FIltre 1</b-form-radio>
+                    <b-form-radio name="filter" v-model="fluxForm.filter" value="filter_1">Selectionnez zones</b-form-radio>
                   </b-form-group>
                   <b-list-group :class="{'disabled':fluxForm.filter!='filter_1'}">
                     <b-list-group-item>
@@ -193,7 +193,39 @@
                     </b-list-group-item>
                   </b-list-group>
                 </div>
-                <div>
+                <div class="mt-3">
+                  <b-form-group
+                    :invalid-feedback="flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null"
+                    :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
+                  >
+                    <b-form-radio name="filter" disabled  value="filter_3">Selectionnez provinces</b-form-radio>
+                  </b-form-group>
+
+                  <b-list-group :class="{'disabled':true}">
+                    <b-list-group-item>
+                      <b-form-input placeholder="Filtre" v-model="fluxFilterInput" />
+                    </b-list-group-item>
+                    <b-list-group-item class="checkbox-zone-group">
+                      <b-form-checkbox
+                        
+                        :indeterminate.sync="allZoneCheckedIndeterminate"
+                      >Sélectionnez tout</b-form-checkbox>
+                      <hr />
+                      <b-form-checkbox-group
+                        v-model="fluxForm.filter_zone"
+                       
+                        value-field="origin"
+                        text-field="origin"
+                        name="flavour-1"
+                        stacked
+                        :invalid-feedback="flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null"
+                        :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
+                      ></b-form-checkbox-group>
+                    </b-list-group-item>
+                  </b-list-group>
+                  
+                </div>
+                <!-- <div>
                   <b-form-group>
                     <b-form-radio
                       class="mt-3"
@@ -240,7 +272,7 @@
                       </b-form-group>
                     </b-list-group-item>
                   </b-list-group>
-                </div>
+                </div> -->
                 <hr />
                 <div class="flux-move">
                   <h4>Choix périodes</h4>
