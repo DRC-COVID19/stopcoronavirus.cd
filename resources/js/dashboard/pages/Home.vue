@@ -69,6 +69,8 @@
     <DataModal
       :flux24="flux24WithoutReference"
       :flux24Daily="flux24Daily"
+      :flux24DailyOut="flux24DailyOut"
+      :flux24DailyIn="flux24DailyIn"
       :covidCases="covidCases"
       :covidCasesStat="covidCasesStat"
       :medicalOrientations="medicalOrientations"
@@ -125,7 +127,9 @@ export default {
       fluxZones: [],
       flux24: [],
       flux24Errors: {},
-      flux24Daily: []
+      flux24Daily: [],
+      flux24DailyIn: [],
+      flux24DailyOut: []
     };
   },
   computed: {
@@ -397,6 +401,32 @@ export default {
           this.flux24Daily = data;
         })
         .catch(({ response }) => {});
+
+      // get flux data in
+
+      const urlDailyIn = `api/dashboard/flux-24-origin-daily-in`;
+      this.flux24DailyIn = [];
+      axios
+        .post(urlDailyIn, values)
+        .then(({ data }) => {
+          this.flux24DailyIn = data;
+        })
+        .catch(({ response }) => {});
+
+      // get flux data out
+
+      const urlDailyOut = `api/dashboard/flux-24-origin-daily-out`;
+      this.flux24DailyOut = [];
+      axios
+        .post(urlDailyOut, values)
+        .then(({ data }) => {
+          this.flux24DailyOut = data;
+        })
+        .catch(({ response }) => {});
+
+
+
+
       let url = `api/dashboard/flux-24-origin`;
       if (values.filter == "filter_2") {
         url = `api/dashboard/flux-24`;
