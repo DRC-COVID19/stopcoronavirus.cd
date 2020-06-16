@@ -10,7 +10,9 @@
                 <h5>Mobilité entrante</h5>
                 <hr />
                 <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
-                <p class="text-center percent-p">({{fluxVolumObservation(item)}} personnes de plus sont entrés de la zone )​</p>
+                <p
+                  class="text-center percent-p"
+                >({{fluxVolumObservation(item)}} personnes de plus sont entrés de la zone )​</p>
               </b-card-header>
               <div>
                 <div :ref="`mobile_entrance_${index}`" :id="`mobile_entrance_${index}`"></div>
@@ -37,7 +39,9 @@
                 <h5>Mobilité sortante</h5>
                 <hr />
                 <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
-                <p class="text-center percent-p">({{fluxVolumObservation(item)}} personnes de plus sont sorties de la zone )​</p>
+                <p
+                  class="text-center percent-p"
+                >({{fluxVolumObservation(item)}} personnes de plus sont sorties de la zone )​</p>
               </b-card-header>
               <div>
                 <div :ref="`mobile_out_${index}`" :id="`mobile_out_${index}`"></div>
@@ -133,7 +137,7 @@ export default {
 
       return Math.round((difference * 100) / totalReference);
     },
-    fluxVolumObservation(items){
+    fluxVolumObservation(items) {
       let totalReference = 0;
       items
         .filter(x => x.isReference)
@@ -297,6 +301,30 @@ export default {
         });
     },
     mobileEntranceOrigin(data, index) {
+      let localData = [];
+      data.forEach(item => {
+        let element = localData.find(x => x.origin == item.origin);
+        if (element) {
+          if (item.isReference) {
+            element.volume_reference = item.volume;
+          } else {
+            element.volume = item.volume;
+          }
+        } else {
+          if (item.isReference) {
+            localData.push({
+              origin: item.origin,
+              volume_reference: item.volume
+            });
+          } else {
+            localData.push({
+              origin: item.origin,
+              volume: item.volume
+            });
+          }
+        }
+      });
+
       var margin = { top: 20, right: 30, bottom: 40, left: 90 },
         width = 400 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
@@ -310,46 +338,74 @@ export default {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+      var subgroups = ["origin","volume_reference", "volume", ];
+
+      // List of groups = species here = value of the first column called group -> I show them on the X axis
+      var groups = d3
+        .map(localData, function(d) {
+          return d.origin;
+        })
+        .keys();
+
       // Add X axis
       var x = d3
         .scaleLinear()
-        .domain([0, d3.max(data, d => d.volume)])
+        .domain([0, d3.max(data, d => d.volume + d.volume / 2)])
         .range([0, width]);
       svg
         .append("g")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x))
+        .call(d3.axisBottom(x).tickSizeOuter(0))
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end");
+        .style("text-anchor", "end")
+        ;
 
-      // Y axis
+      // Add Y axis
       var y = d3
         .scaleBand()
-        .range([0, height])
-        .domain(
-          data.map(function(d) {
-            return d.origin;
-          })
-        )
-        .padding(0.1);
+        .domain(groups)
+        .range([height, 0])
+        .padding([0.2]);
       svg.append("g").call(d3.axisLeft(y));
 
-      //Bars
+      // color palette = one color per subgroup
+      var color = d3
+        .scaleOrdinal()
+        .domain(subgroups)
+        .range(["#00b065","#9e9e9e"]);
+
+      //stack the data? --> stack per subgroup
+      var stackedData = d3.stack().keys(subgroups)(localData);
+
+      // Show the bars
       svg
-        .selectAll("myRect")
-        .data(data)
+        .append("g")
+        .selectAll("g")
+        // Enter in the stack data = loop key per key = group per group
+        .data(stackedData)
+        .enter()
+        .append("g")
+        .attr("fill", function(d) {
+          return color(d.key);
+        })
+        .selectAll("rect")
+        // enter a second time = loop subgroup per subgroup to add all rectangles
+        .data(function(d) {
+          return d;
+        })
         .enter()
         .append("rect")
-        .attr("x", x(0))
         .attr("y", function(d) {
-          return y(d.origin);
+          return y(d.data.origin);
+        })
+        .attr("x", function(d) {
+          return x(d[0]);
         })
         .attr("width", function(d) {
-          return x(d.volume);
+          return x(d[1]) - x(d[0]) ?? 0;
         })
-        .attr("height", y.bandwidth())
-        .attr("fill", "#69b3a2");
+        .attr("height", y.bandwidth());
     },
     mobileOut(dataPram, index) {
       // set the dimensions and margins of the graph
@@ -459,6 +515,30 @@ export default {
         });
     },
     mobileOutDestination(data, index) {
+      let localData = [];
+      data.forEach(item => {
+        let element = localData.find(x => x.destination == item.destination);
+        if (element) {
+          if (item.isReference) {
+            element.volume_reference = item.volume;
+          } else {
+            element.volume = item.volume;
+          }
+        } else {
+          if (item.isReference) {
+            localData.push({
+              destination: item.destination,
+              volume_reference: item.volume
+            });
+          } else {
+            localData.push({
+              origin: item.destination,
+              volume: item.volume
+            });
+          }
+        }
+      });
+
       var margin = { top: 20, right: 30, bottom: 40, left: 90 },
         width = 400 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
@@ -471,47 +551,77 @@ export default {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        
+      var subgroups = ["destination","volume_reference", "volume", ];
+
+      // List of groups = species here = value of the first column called group -> I show them on the X axis
+      var groups = d3
+        .map(localData, function(d) {
+          return d.destination;
+        })
+        .keys();
 
       // Add X axis
       var x = d3
         .scaleLinear()
-        .domain([0, d3.max(data, d => d.volume)])
+        .domain([0, d3.max(data, d => d.volume )])
         .range([0, width]);
       svg
         .append("g")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x))
+        .call(d3.axisBottom(x).tickSizeOuter(0))
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end");
+        .style("text-anchor", "end")
+        ;
 
-      // Y axis
+      // Add Y axis
       var y = d3
         .scaleBand()
-        .range([0, height])
-        .domain(
-          data.map(function(d) {
-            return d.destination;
-          })
-        )
-        .padding(0.1);
+        .domain(groups)
+        .range([height, 0])
+        .padding([0.2]);
       svg.append("g").call(d3.axisLeft(y));
 
-      //Bars
+      // color palette = one color per subgroup
+      var color = d3
+        .scaleOrdinal()
+        .domain(subgroups)
+        .range(["#00b065","#9e9e9e"]);
+
+      //stack the data? --> stack per subgroup
+      var stackedData = d3.stack().keys(subgroups)(localData);
+
+console.log(stackedData);
+
+      // Show the bars
       svg
-        .selectAll("myRect")
-        .data(data)
+        .append("g")
+        .selectAll("g")
+        // Enter in the stack data = loop key per key = group per group
+        .data(stackedData)
+        .enter()
+        .append("g")
+        .attr("fill", function(d) {
+          return color(d.key);
+        })
+        .selectAll("rect")
+        // enter a second time = loop subgroup per subgroup to add all rectangles
+        .data(function(d) {
+          return d;
+        })
         .enter()
         .append("rect")
-        .attr("x", x(0))
         .attr("y", function(d) {
-          return y(d.destination);
+          return y(d.data.destination);
+        })
+        .attr("x", function(d) {
+          return x(d[0]);
         })
         .attr("width", function(d) {
-          return x(d.volume);
+          return x(d[1]) - x(d[0]) ?? 0;
         })
-        .attr("height", y.bandwidth())
-        .attr("fill", "#69b3a2");
+        .attr("height", y.bandwidth());
     },
     show() {
       return new Promise((resolver, reject) => {
@@ -630,10 +740,10 @@ export default {
     }
   }
 }
-.percent{
+.percent {
   font-size: 2.5rem;
 }
-.percent-p{
+.percent-p {
   font-size: 1.2rem;
 }
 </style>
