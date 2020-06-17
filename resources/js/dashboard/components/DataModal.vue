@@ -24,9 +24,9 @@
               :flux24DailyOut="flux24DailyOut"
             />
           </b-tab>
-          <!-- <b-tab title="Flux data" v-if="hasFlux24">
+          <b-tab title="Flux data" v-if="hasFlux24">
             <SideFluxChart :flux24="flux24Local" />
-          </b-tab> -->
+          </b-tab>
           <b-tab title="Cas covid-19" v-if="covidCases">
             <SideCaseCovid :covidCases="covidCases" />
           </b-tab>
