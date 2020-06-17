@@ -592,7 +592,7 @@ export default {
       //stack the data? --> stack per subgroup
       var stackedData = d3.stack().keys(subgroups)(localData);
 
-console.log(stackedData);
+
 
       // Show the bars
       svg
@@ -619,7 +619,7 @@ console.log(stackedData);
           return x(d[0]);
         })
         .attr("width", function(d) {
-          return x(d[1]) - x(d[0]) ?? 0;
+          return x(d[1]) - x(d[0]) ;
         })
         .attr("height", y.bandwidth());
     },
