@@ -56,8 +56,8 @@
     "BIBANGA": [
         {
             "coordinates": [
-                15.6,
-                -4.866667
+                23.933333,
+                -6.25
             ],
             "place": "Bibanga, Democratic Republic of the Congo"
         }
@@ -74,10 +74,10 @@
     "BINZA": [
         {
             "coordinates": [
-                15.233333,
-                -4.35
+                15.2545888,
+                -4.3724714
             ],
-            "place": "Binza, Kinshasa, Democratic Republic of the Congo"
+            "place": "Ngaliema, Kinshasa, Democratic Republic of the Congo"
         }
     ],
     "BINZA METEO": [
@@ -384,6 +384,69 @@
                 -4.348815699999999
             ],
             "place": "Kalamu, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.317509,
+                -4.3400851
+            ],
+            "place": "Quartier Matonge, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.311655,
+                -4.355122199999999
+            ],
+            "place": "Kimbangu, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.3233633,
+                -4.3424497
+            ],
+            "place": "Camp Kauka, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.3204361,
+                -4.3524539
+            ],
+            "place": "Yolo Nord, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.317509,
+                -4.3624603
+            ],
+            "place": "Yolo Sud, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.3146088,
+                -4.3409206
+            ],
+            "place": "01 Avenue De La Victoire, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.3101915,
+                -4.324081899999999
+            ],
+            "place": "Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.314635,
+                -4.337758
+            ],
+            "place": "Quartier Matonge, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.3043378,
+                -4.344086
+            ],
+            "place": "Kasa Vubu, Kinshasa, Democratic Republic of the Congo"
         }
     ],
     "KALEMIE": [
@@ -421,20 +484,6 @@
         },
         {
             "coordinates": [
-                25.11137,
-                -6.659478
-            ],
-            "place": "Kalonda, Democratic Republic of the Congo"
-        },
-        {
-            "coordinates": [
-                24.7192,
-                -6.158195
-            ],
-            "place": "Kalonda, Democratic Republic of the Congo"
-        },
-        {
-            "coordinates": [
                 22.8069,
                 -4.14151
             ],
@@ -444,6 +493,20 @@
             "coordinates": [
                 24.75,
                 -4.516667
+            ],
+            "place": "Kalonda, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                25.11137,
+                -6.659478
+            ],
+            "place": "Kalonda, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                24.7192,
+                -6.158195
             ],
             "place": "Kalonda, Democratic Republic of the Congo"
         }
@@ -701,8 +764,8 @@
     "KINSHASA": [
         {
             "coordinates": [
-                15.312944,
-                -4.313959
+                15.2662931,
+                -4.4419311
             ],
             "place": "Kinshasa, Democratic Republic of the Congo"
         }
@@ -914,6 +977,15 @@
             "place": "Luputa, Democratic Republic of the Congo"
         }
     ],
+    "LWAMBA": [
+        {
+            "coordinates": [
+                21.758664,
+                -4.038333
+            ],
+            "place": "Democratic Republic of the Congo"
+        }
+    ],
     "MAKALA": [
         {
             "coordinates": [
@@ -976,10 +1048,10 @@
     "MASINA I": [
         {
             "coordinates": [
-                15.3950939,
-                -4.3695455
+                15.3804526,
+                -4.387259
             ],
-            "place": "Masina, Kinshasa, Democratic Republic of the Congo"
+            "place": "Masina I, Kinshasa, Democratic Republic of the Congo"
         }
     ],
     "MASINA II": [
@@ -1079,13 +1151,76 @@
                 -4.4263717
             ],
             "place": "Mont Ngafula, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.2662931,
+                -4.4419311
+            ],
+            "place": "Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.3189726,
+                -4.3960107
+            ],
+            "place": "Lemba, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.2903435,
+                -4.4134285
+            ],
+            "place": "Mont Ngafula, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.2826188,
+                -4.4307778
+            ],
+            "place": "Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.2891591,
+                -4.4114106
+            ],
+            "place": "119 Tshela, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.3014109,
+                -4.4710864
+            ],
+            "place": "Kimwenza, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.2545888,
+                -4.3724714
+            ],
+            "place": "Ngaliema, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.29141,
+                -4.42708
+            ],
+            "place": "Mont Ngafula, Kinshasa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                15.2642208,
+                -4.442483699999999
+            ],
+            "place": "By Pass, 61, Kinshasa 1534, Democratic Republic of the Congo"
         }
     ],
     "MUKANGA": [
         {
             "coordinates": [
-                27.56365,
-                -9.031946999999999
+                21.2333329,
+                -6.05
             ],
             "place": "Mukanga, Democratic Republic of the Congo"
         }
@@ -1388,15 +1523,6 @@
                 -5.3082926
             ],
             "place": "Vaku, Democratic Republic of the Congo"
-        }
-    ],
-    "VANGA KETE": [
-        {
-            "coordinates": [
-                18.4341788,
-                -4.4154529
-            ],
-            "place": "Vanga, Democratic Republic of the Congo"
         }
     ],
     "WALUNGU": [
@@ -2252,15 +2378,6 @@
             "place": "Bena Leka, Democratic Republic of the Congo"
         }
     ],
-    "LOLO": [
-        {
-            "coordinates": [
-                15.2684878,
-                -4.4898592
-            ],
-            "place": "Lola ya Bonobo, Kinshasa, Democratic Republic of the Congo"
-        }
-    ],
     "LOMELA": [
         {
             "coordinates": [
@@ -2351,15 +2468,6 @@
             "place": "Kongolo, Democratic Republic of the Congo"
         }
     ],
-    "MANONO": [
-        {
-            "coordinates": [
-                27.4321452,
-                -7.287988199999999
-            ],
-            "place": "Manono, Democratic Republic of the Congo"
-        }
-    ],
     "KAFAKUMBA": [
         {
             "coordinates": [
@@ -2376,6 +2484,247 @@
                 -3.289164
             ],
             "place": "Kitutu, Mwenga, Democratic Republic of the Congo"
+        }
+    ],
+    "KASONGO LUNDA": [
+        {
+            "coordinates": [
+                16.8119382,
+                -6.4788114
+            ],
+            "place": "Kasongo-Lunda, Democratic Republic of the Congo"
+        }
+    ],
+    "KINKONZI": [
+        {
+            "coordinates": [
+                13.033333,
+                -5.016667
+            ],
+            "place": "Kikonzi, Democratic Republic of the Congo"
+        }
+    ],
+    "BAS-UELE": [
+        {
+            "coordinates": [
+                24.9042208,
+                3.9901009
+            ],
+            "place": "Bas-Uele, Democratic Republic of the Congo"
+        }
+    ],
+    "EQUATEUR": [
+        {
+            "coordinates": [
+                20.3308814,
+                0.5640035999999999
+            ],
+            "place": "Equator, Democratic Republic of the Congo"
+        }
+    ],
+    "HAUT-KATANGA": [
+        {
+            "coordinates": [
+                27.5495846,
+                -10.4102075
+            ],
+            "place": "Haut-Katanga, Democratic Republic of the Congo"
+        }
+    ],
+    "HAUT-LOMAMI": [
+        {
+            "coordinates": [
+                24.9042208,
+                -7.705275199999999
+            ],
+            "place": "Haut-Lomami, Democratic Republic of the Congo"
+        }
+    ],
+    "ITURI": [
+        {
+            "coordinates": [
+                29.4179324,
+                1.5957682
+            ],
+            "place": "Ituri, Democratic Republic of the Congo"
+        }
+    ],
+    "KASAI": [
+        {
+            "coordinates": [
+                20.7122465,
+                -5.0471979
+            ],
+            "place": "Kasai, Democratic Republic of the Congo"
+        }
+    ],
+    "KASAI-CENTRAL": [
+        {
+            "coordinates": [
+                22.2384017,
+                -6.2514921
+            ],
+            "place": "Lulua, Democratic Republic of the Congo"
+        }
+    ],
+    "KASAI-ORIENTAL": [
+        {
+            "coordinates": [
+                23.5728501,
+                -6.033623
+            ],
+            "place": "Tshilenge District, Democratic Republic of the Congo"
+        }
+    ],
+    "KONGO-CENTRAL": [
+        {
+            "coordinates": [
+                13.914399,
+                -5.2365685
+            ],
+            "place": "Kongo Central, Democratic Republic of the Congo"
+        }
+    ],
+    "KWANGO": [
+        {
+            "coordinates": [
+                17.668887,
+                -6.4337409
+            ],
+            "place": "Kwango, Democratic Republic of the Congo"
+        }
+    ],
+    "KWILU": [
+        {
+            "coordinates": [
+                18.4276047,
+                -5.1188825
+            ],
+            "place": "Kwilu, Democratic Republic of the Congo"
+        }
+    ],
+    "LOMAMI": [
+        {
+            "coordinates": [
+                24.524264,
+                -6.1453931
+            ],
+            "place": "Lomami, Democratic Republic of the Congo"
+        }
+    ],
+    "MANIEMA": [
+        {
+            "coordinates": [
+                26.0413889,
+                -3.0730929
+            ],
+            "place": "Maniema, Democratic Republic of the Congo"
+        }
+    ],
+    "MONGALA": [
+        {
+            "coordinates": [
+                21.4752851,
+                1.9962324
+            ],
+            "place": "Mongala, Democratic Republic of the Congo"
+        }
+    ],
+    "NORD-KIVU": [
+        {
+            "coordinates": [
+                29.0459927,
+                -0.7917729
+            ],
+            "place": "North-Kivu, Democratic Republic of the Congo"
+        }
+    ],
+    "NORD-UBANGI": [
+        {
+            "coordinates": [
+                21.4752851,
+                3.7878726
+            ],
+            "place": "Nord-Ubangi, Democratic Republic of the Congo"
+        }
+    ],
+    "SUD-KIVU": [
+        {
+            "coordinates": [
+                28.299435,
+                -3.011658
+            ],
+            "place": "South-Kivu, Democratic Republic of the Congo"
+        }
+    ],
+    "SUD-UBANGI": [
+        {
+            "coordinates": [
+                19.1880047,
+                3.2299942
+            ],
+            "place": "Sud-Ubangi, Democratic Republic of the Congo"
+        }
+    ],
+    "TANGANYIKA": [
+        {
+            "coordinates": [
+                27.9249002,
+                -6.274011799999999
+            ],
+            "place": "Tanganyika, Democratic Republic of the Congo"
+        }
+    ],
+    "TSHOPO": [
+        {
+            "coordinates": [
+                24.9042208,
+                0.5455462
+            ],
+            "place": "Tshopo, Democratic Republic of the Congo"
+        }
+    ],
+    "HAUT-UELE": [
+        {
+            "coordinates": [
+                28.299435,
+                3.5845154
+            ],
+            "place": "Haut-Uele, Democratic Republic of the Congo"
+        }
+    ],
+    "MAI-NDOMBE": [
+        {
+            "coordinates": [
+                18.4276047,
+                -2.6357434
+            ],
+            "place": "Mai-Ndombe, Democratic Republic of the Congo"
+        }
+    ],
+    "SANKURU": [
+        {
+            "coordinates": [
+                23.3823545,
+                -2.8437453
+            ],
+            "place": "Sankuru, Democratic Republic of the Congo"
+        }
+    ],
+    "TSHUAPA": [
+        {
+            "coordinates": [
+                23.0288844,
+                -0.9903023
+            ],
+            "place": "Tshuapa, Democratic Republic of the Congo"
+        },
+        {
+            "coordinates": [
+                21.8568586,
+                -0.5582387999999999
+            ],
+            "place": "Tshuapa, Democratic Republic of the Congo"
         }
     ]
 }

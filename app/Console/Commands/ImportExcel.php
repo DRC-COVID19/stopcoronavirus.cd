@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Imports\Flux24ProvinceImport;
 use App\Imports\FluxImport;
 use Illuminate\Console\Command;
 
@@ -12,7 +13,7 @@ class ImportExcel extends Command
      *
      * @var string
      */
-    protected $signature = 'flux:import';
+    protected $signature = 'flux:import {--type=} {--file=} {--size=}';
 
     /**
      * The console command description.
@@ -38,11 +39,29 @@ class ImportExcel extends Command
      */
     public function handle()
     {
-        for ($i = 1; $i <= 108; $i++) {
-            $file="Flux_24h-{$i}.csv";
-            $this->output->title("Starting import {$file}");
-            (new FluxImport)->withOutput($this->output)->import(storage_path("app/flux/$file"), null, \Maatwebsite\Excel\Excel::CSV);
-            $this->output->success("Import successful {$file}");
+        $type = $this->option('type');
+        $fileName = $this->option('file');
+        $size = $this->option('size');
+        switch ($type) {
+            case 'p':
+                for ($i = 1; $i <= $size; $i++) {
+                    $file = "{$fileName}-{$i}.csv";
+                    $this->output->title("Starting import {$file}");
+                    (new Flux24ProvinceImport)->withOutput($this->output)->import(storage_path("app/flux/$file"), null, \Maatwebsite\Excel\Excel::CSV);
+                    $this->output->success("Import successful {$file}");
+                }
+                break;
+            case 'z':
+                for ($i = 1; $i <= $size; $i++) {
+                    $file = "{$fileName}-{$i}.csv";
+                    $this->output->title("Starting import {$file}");
+                    (new FluxImport)->withOutput($this->output)->import(storage_path("app/flux/$file"), null, \Maatwebsite\Excel\Excel::CSV);
+                    $this->output->success("Import successful {$file}");
+                }
+                break;
+            default:
+                # code...
+                break;
         }
     }
 }

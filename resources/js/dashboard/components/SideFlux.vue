@@ -22,21 +22,16 @@ export default {
       fluxHeader: [],
       fluxDestination: [],
       fluxCartesian: [],
-      isFinished: false
     };
   },
   watch: {
     flux24() {
-      this.isFinished = false;
-      this.show().then(({ fluxHeader, fluxDestination }) => {
-        this.fluxHeader = fluxHeader;
-        this.fluxDestination = fluxDestination;
-        this.isFinished = true;
-      });
+     this.show().then(({ fluxHeader, fluxDestination, fluxValues }) => {
+      this.drawChart(fluxValues, fluxHeader, fluxDestination);
+    });
     }
   },
   mounted() {
-    this.isFinished = false;
     this.show().then(({ fluxHeader, fluxDestination, fluxValues }) => {
       this.drawChart(fluxValues, fluxHeader, fluxDestination);
     });
@@ -134,7 +129,7 @@ export default {
       // Build color scale
       var myColor = d3
         .scaleLinear()
-        .range(["white", "#00b065"])
+        .range(["#f1f1f1", "#00b065"])
         .domain([0, d3.max(data, d => d.volume)]);
 
       // create a tooltip

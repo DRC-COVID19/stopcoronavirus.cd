@@ -41,10 +41,16 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::post('flux-24', 'DashBoardController@getFluxData');
     Route::post('flux-24-daily', 'DashBoardController@getFluxDataDaily');
     Route::post('flux-24-origin', 'DashBoardController@getFluxDataFromOrigin');
+    Route::post('flux-24-origin-provinces', 'DashBoardController@getFluxDataFromOriginProvince');
     Route::get('flux-zone', 'DashBoardController@getFluxZone');
+    Route::get('flux-provinces', 'DashBoardController@getFluxProvinces');
     Route::post('flux-24-origin-daily', 'DashBoardController@getFluxDataFromOriginDaily');
+    Route::post('flux-24-origin-daily-provinces', 'DashBoardController@getFluxDataFromOriginDailyProvince');
     Route::post('flux-24-origin-daily-in', 'DashBoardController@getFluxDataFromOriginDailyIn');
     Route::post('flux-24-origin-daily-out', 'DashBoardController@getFluxDataFromOriginDailyOut');
+
+    Route::post('flux-24-origin-daily-in-provinces', 'DashBoardController@getFluxDataFromOriginDailyInProvince');
+    Route::post('flux-24-origin-daily-out-provinces', 'DashBoardController@getFluxDataFromOriginDailyOutProvince');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');

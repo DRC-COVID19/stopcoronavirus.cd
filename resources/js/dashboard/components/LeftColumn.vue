@@ -168,7 +168,11 @@
                     :invalid-feedback="flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null"
                     :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
                   >
-                    <b-form-radio name="filter" v-model="fluxForm.filter" value="filter_1">Selectionnez zones</b-form-radio>
+                    <b-form-radio
+                      name="filter"
+                      v-model="fluxForm.filter"
+                      value="filter_1"
+                    >Selectionnez zones</b-form-radio>
                   </b-form-group>
                   <b-list-group :class="{'disabled':fluxForm.filter!='filter_1'}">
                     <b-list-group-item>
@@ -195,35 +199,38 @@
                 </div>
                 <div class="mt-3">
                   <b-form-group
-                    :invalid-feedback="flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null"
-                    :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
+                    :invalid-feedback="flux24Errors.filter_provinces ? flux24Errors.filter_provinces[0] : null"
+                    :state="flux24Errors.filter_provinces && flux24Errors.filter_provinces.lenght>0"
                   >
-                    <b-form-radio name="filter" disabled  value="filter_3">Selectionnez provinces</b-form-radio>
+                    <b-form-radio
+                      name="filter"
+                      v-model="fluxForm.filter"
+                      value="filter_3"
+                    >Selectionnez provinces</b-form-radio>
                   </b-form-group>
 
-                  <b-list-group :class="{'disabled':true}">
+                  <b-list-group :class="{'disabled':fluxForm.filter!='filter_3'}">
                     <b-list-group-item>
-                      <b-form-input placeholder="Filtre" v-model="fluxFilterInput" />
+                      <b-form-input placeholder="Filtre" v-model="fluxFilterInputProvince" />
                     </b-list-group-item>
                     <b-list-group-item class="checkbox-zone-group">
                       <b-form-checkbox
-                        
-                        :indeterminate.sync="allZoneCheckedIndeterminate"
+                        v-model="allProvinceChecked"
+                        :indeterminate.sync="allProvincesCheckedIndeterminate"
                       >Sélectionnez tout</b-form-checkbox>
                       <hr />
                       <b-form-checkbox-group
-                        v-model="fluxForm.filter_zone"
-                       
+                        v-model="fluxForm.filter_provinces"
+                        :options="fluxProvincesArray"
                         value-field="origin"
                         text-field="origin"
                         name="flavour-1"
                         stacked
-                        :invalid-feedback="flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null"
-                        :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
+                        :invalid-feedback="flux24Errors.filter_provinces ? flux24Errors.filter_provinces[0] : null"
+                        :state="flux24Errors.filter_provinces && flux24Errors.filter_provinces.lenght>0"
                       ></b-form-checkbox-group>
                     </b-list-group-item>
                   </b-list-group>
-                  
                 </div>
                 <!-- <div>
                   <b-form-group>
@@ -272,7 +279,7 @@
                       </b-form-group>
                     </b-list-group-item>
                   </b-list-group>
-                </div> -->
+                </div>-->
                 <hr />
                 <div class="flux-move">
                   <h4>Choix périodes</h4>
@@ -376,7 +383,11 @@ export default {
     },
     fluxZones: {
       type: Array,
-      default: []
+      default: () => []
+    },
+    fluxProvinces: {
+      type: Array,
+      default: () => []
     },
     flux24Errors: {
       type: Object,
@@ -417,9 +428,13 @@ export default {
         endDate: null
       },
       fluxFilterInput: "",
+      fluxFilterInputProvince: "",
       fluxZonesArray: [],
+      fluxProvincesArray: [],
       allZoneChecked: false,
-      allZoneCheckedIndeterminate: false
+      allProvinceChecked: false,
+      allZoneCheckedIndeterminate: false,
+      allProvincesCheckedIndeterminate: false
     };
   },
 
@@ -436,6 +451,13 @@ export default {
         this.fluxForm.filter_zone = [];
       }
     },
+    allProvinceChecked() {
+      if (this.allProvinceChecked) {
+        this.fluxForm.filter_provinces = this.fluxProvinces.map(x => x.origin);
+      } else {
+        this.fluxForm.filter_provinces = [];
+      }
+    },
     "fluxForm.filter_zone"() {
       if (
         this.fluxForm.filter_zone &&
@@ -447,10 +469,24 @@ export default {
         this.allZoneCheckedIndeterminate = false;
       }
     },
+    "fluxForm.filter_provinces"() {
+      if (
+        this.fluxForm.filter_provinces &&
+        this.fluxForm.filter_provinces.length > 0 &&
+        this.fluxForm.filter_provinces.length != this.fluxProvinces.length
+      ) {
+        this.allProvincesCheckedIndeterminate = true;
+      } else {
+        this.allProvincesCheckedIndeterminate = false;
+      }
+    },
     "fluxForm.filter"() {
-      if (this.fluxForm.filter == "filter_1") {
+      if (this.fluxForm.filter != "filter_2") {
         this.fluxForm.origin = null;
         this.fluxForm.destination = null;
+      } else if (this.fluxForm.filter != "filter_3") {
+        this.fluxForm.filter_provinces = [];
+        this.fluxFilterInputProvince = "";
       } else {
         this.fluxForm.filter_zone = [];
         this.fluxFilterInput = "";
@@ -459,9 +495,19 @@ export default {
     fluxZones() {
       this.fluxZonesArray = this.fluxZones;
     },
+    fluxProvinces() {
+      this.fluxProvincesArray = this.fluxProvinces;
+    },
     fluxFilterInput() {
       this.fluxZonesArray = this.fluxZones.filter(x =>
         x.origin.toUpperCase().startsWith(this.fluxFilterInput.toUpperCase())
+      );
+    },
+    fluxFilterInputProvince() {
+      this.fluxProvincesArray = this.fluxProvinces.filter(x =>
+        x.origin
+          .toUpperCase()
+          .startsWith(this.fluxFilterInputProvince.toUpperCase())
       );
     }
   },
