@@ -33,6 +33,7 @@
           :fin5Count="fin5Count"
           :fin8Count="fin8Count"
           :fluxZones="fluxZones"
+          :fluxProvinces="fluxProvinces"
           :flux24Errors="flux24Errors"
         />
         <b-col cols="12" md="9">
@@ -125,6 +126,7 @@ export default {
       flour: false,
       antiBacterialGel: false,
       fluxZones: [],
+      fluxProvinces:[],
       flux24: [],
       flux24Errors: {},
       flux24Daily: [],
@@ -156,6 +158,7 @@ export default {
   },
   mounted() {
     this.getFluxZone();
+    this.getFluxProvinces();
   },
   methods: {
     getHasCoviCases() {
@@ -386,14 +389,34 @@ export default {
         this.fluxZones = data;
       });
     },
+    getFluxProvinces() {
+      axios.get("api/dashboard/flux-provinces").then(({ data }) => {
+        this.fluxProvinces = data;
+      });
+    },
     submitFluxForm(values) {
       this.isLoading = true;
       this.flux24Errors = {};
 
       let urlDaily = `api/dashboard/flux-24-origin-daily`;
-      if (values.filter == "filter_2") {
-        urlDaily = `api/dashboard/flux-24-daily`;
+      let urlDailyIn = `api/dashboard/flux-24-origin-daily-in`;
+      let urlDailyOut = `api/dashboard/flux-24-origin-daily-out`;
+      let url = `api/dashboard/flux-24-origin`;
+      
+      switch (values.filter) {
+        case 'filter_2':
+          urlDaily = `api/dashboard/flux-24-daily`;
+          url = `api/dashboard/flux-24`;
+          break;
+        case 'filter_3':
+          urlDaily = `api/dashboard/flux-24-origin-daily-provinces`;
+          urlDailyIn = `api/dashboard/flux-24-origin-daily-in-provinces`;
+          urlDailyOut = `api/dashboard/flux-24-origin-daily-out-provinces`;
+          url = `api/dashboard/flux-24-origin-provinces`;
+        default:
+          break;
       }
+
       this.flux24Daily = [];
       axios
         .post(urlDaily, values)
@@ -403,8 +426,8 @@ export default {
         .catch(({ response }) => {});
 
       // get flux data in
-
-      const urlDailyIn = `api/dashboard/flux-24-origin-daily-in`;
+      
+      
       this.flux24DailyIn = [];
       axios
         .post(urlDailyIn, values)
@@ -415,7 +438,7 @@ export default {
 
       // get flux data out
 
-      const urlDailyOut = `api/dashboard/flux-24-origin-daily-out`;
+      
       this.flux24DailyOut = [];
       axios
         .post(urlDailyOut, values)
@@ -427,10 +450,7 @@ export default {
 
 
 
-      let url = `api/dashboard/flux-24-origin`;
-      if (values.filter == "filter_2") {
-        url = `api/dashboard/flux-24`;
-      }
+      
       this.flux24 = [];
       axios
         .post(url, values)
