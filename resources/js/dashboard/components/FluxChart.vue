@@ -717,7 +717,7 @@ export default {
   font-size: 2.5rem;
 }
 .percent-p {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 .chart-container {
   div {
