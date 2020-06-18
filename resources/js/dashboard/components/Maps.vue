@@ -713,30 +713,32 @@ export default {
 
         let arcData = [];
 
-        for (const key in this.flux24) {
-          const item = this.flux24[key];
-          const index = arcData.findIndex(
-            x =>
-              x.destination == item.origin &&
-              x.origin == item.destination &&
-              !x.isReference
-          );
-          if (index != -1) {
-            arcData[index].inversed_volume = item.volume;
-          } else {
-            const index2 = arcData.findIndex(
-              x =>
-                x.destination == item.origin &&
-                x.origin == item.destination &&
-                x.isReference
-            );
-            if (index2 != -1) {
-              arcData[index2].inversed_volume = item.volume;
-            } else {
-              arcData.push(item);
-            }
-          }
-        }
+        // for (const key in this.flux24) {
+        //   const item = this.flux24[key];
+        //   const index = arcData.findIndex(
+        //     x =>
+        //       x.destination == item.origin &&
+        //       x.origin == item.destination &&
+        //       !x.isReference
+        //   );
+        //   if (index != -1) {
+        //     arcData[index].inversed_volume = item.volume;
+        //   } else {
+        //     const index2 = arcData.findIndex(
+        //       x =>
+        //         x.destination == item.origin &&
+        //         x.origin == item.destination &&
+        //         x.isReference
+        //     );
+        //     if (index2 != -1) {
+        //       arcData[index2].inversed_volume = item.volume;
+        //     } else {
+        //       arcData.push(item);
+        //     }
+        //   }
+        // }
+
+        arcData=this.flux24.filter(x=>!x.isReference);
         const myDeckLayer = new MapboxLayer({
           id: "arc",
           data: arcData,
