@@ -10,11 +10,18 @@
                 <h5>Mobilité entrante</h5>
                 <hr />
                 <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
-                <p
-                  class="text-center percent-p"
-                >({{fluxVolumObservation(item)}} personnes de plus sont entrés de la zone )​</p>
+                <p v-if="fluxVolumObservation(item)>0" class="text-center percent-p">
+                  ({{fluxVolumObservation(item).toLocaleString(
+                  undefined,
+                  { minimumFractionDigits: 0 })}} personnes de plus sont entrés dans la zone )​
+                </p>
+                <p v-else class="text-center percent-p">
+                  ({{(fluxVolumObservation(item)*-1).toLocaleString(
+                  undefined,
+                  { minimumFractionDigits: 0 })}} personnes de moins sont entrés dans la zone )​
+                </p>
               </b-card-header>
-              <div>
+              <div class="chart-container">
                 <div :ref="`mobile_entrance_${index}`" :id="`mobile_entrance_${index}`"></div>
               </div>
             </b-card>
@@ -22,7 +29,7 @@
               <h5>Zone d'origine</h5>
             </b-card-header>
             <b-card no-body>
-              <div>
+              <div class="chart-container">
                 <div :ref="`mobile_entrance_${index}_2`" :id="`mobile_entrance_${index}_2`"></div>
               </div>
             </b-card>
@@ -40,10 +47,19 @@
                 <hr />
                 <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
                 <p
+                  v-if="fluxVolumObservation(item)>0"
                   class="text-center percent-p"
-                >({{fluxVolumObservation(item)}} personnes de plus sont sorties de la zone )​</p>
+                >({{fluxVolumObservation(item).toLocaleString(
+                  undefined,
+                  { minimumFractionDigits: 0 })}} personnes de plus sont sorties de la zone )​</p>
+                <p
+                  v-else
+                  class="text-center percent-p"
+                >({{(fluxVolumObservation(item)*-1).toLocaleString(
+                  undefined,
+                  { minimumFractionDigits: 0 })}} personnes de moins sont sorties de la zone )​</p>
               </b-card-header>
-              <div>
+              <div class="chart-container">
                 <div :ref="`mobile_out_${index}`" :id="`mobile_out_${index}`"></div>
               </div>
             </b-card>
@@ -51,7 +67,7 @@
               <b-card-header>
                 <h5>Zone de destination</h5>
               </b-card-header>
-              <div>
+              <div class="chart-container">
                 <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
               </div>
             </b-card>
@@ -111,11 +127,11 @@ export default {
 
     await this.sleep(1000);
     this.flux24DailyInLocal.forEach((item, index) => {
-      this.mobileEntrance(item, index);
+      this.mobileCalc(item, `#mobile_entrance_${index}`);
       this.mobileEntranceOrigin(item, index);
     });
     this.flux24DailyOutLocal.forEach((item, index) => {
-      this.mobileOut(item, index);
+      this.mobileCalc(item, `#mobile_out_${index}`);
       this.mobileOutDestination(item, index);
     });
   },
@@ -193,15 +209,15 @@ export default {
       }
       return flux24DailyInLocal;
     },
-    mobileEntrance(dataPram, index) {
+    mobileCalc(dataPram, ref) {
       // set the dimensions and margins of the graph
-      var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+      var margin = { top: 10, right: 30, bottom: 60, left: 80 },
         width = 400 - margin.left - margin.right,
         height = 250 - margin.top - margin.bottom;
 
       // append the svg object to the body of the page
       var svg = d3
-        .select(`#mobile_entrance_${index}`)
+        .select(ref)
         .append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
@@ -209,27 +225,47 @@ export default {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       let data = [];
+      let DataReference = [];
+      let totalReference = 0;
+      let referenceAverage = 0;
+      dataPram
+        .filter(x => x.isReference)
+        .forEach(item => {
+          let element = DataReference.find(x => x.date == item.date);
+          if (element) {
+            element.volume += item.volume;
+          } else {
+            DataReference.push({
+              date: item.date,
+              volume: item.volume
+            });
+          }
+        });
 
-      dataPram.forEach(item => {
-        let element = data.find(x => x.date == item.date);
-        if (element) {
-          element.volume += item.volume;
-        } else {
-          data.push({
-            date: item.date,
-            volume: item.volume,
-            isReference: item?.isReference
-          });
-        }
+      DataReference.forEach(item => {
+        totalReference += item.volume;
       });
 
-      // group the data: I want to draw one line per group
-      var sumstat = d3
-        .nest() // nest function allows to group the calculation per level of a factor
-        .key(function(d) {
-          return d.isReference;
-        })
-        .entries(data);
+      referenceAverage = totalReference / DataReference.length;
+
+      dataPram
+        .filter(x => !x.isReference)
+        .forEach(item => {
+          let element = data.find(x => x.date == item.date);
+          if (element) {
+            element.volume += item.volume;
+          } else {
+            data.push({
+              date: item.date,
+              volume: item.volume
+            });
+          }
+        });
+      data.forEach(item => {
+        let difference = item.volume - referenceAverage;
+        let percent = (difference * 100) / referenceAverage;
+        item.volume = percent;
+      });
 
       // Add X axis --> it is a date format
       var x = d3
@@ -247,58 +283,106 @@ export default {
         .attr("dy", ".15em")
         .attr("transform", "rotate(-65)");
 
+      // let first = 2 * referenceAverage - d3.max(data, d => d.volume);
       // Add Y axis
       var y = d3
         .scaleLinear()
-        .domain([
-          0,
-          d3.max(data, function(d) {
-            return +d.volume;
-          })
-        ])
+        .domain([-100, 100])
         .range([height, 0]);
       svg.append("g").call(d3.axisLeft(y));
 
-      // color palette
-      var res = sumstat.map(function(d) {
-        return d.key;
-      }); // list of group names
-      var color = d3
-        .scaleOrdinal()
-        .domain(res)
-        .range([
-          "#e41a1c",
-          "#377eb8",
-          "#4daf4a",
-          "#984ea3",
-          "#ff7f00",
-          "#ffff33",
-          "#a65628",
-          "#f781bf",
-          "#999999"
-        ]);
+      // create a tooltip
+      var tooltip = d3
+        .select(ref)
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "2px")
+        .style("border-radius", "5px")
+        .style("padding", "5px");
+
+      // Three function that change the tooltip when user hover / move / leave a cell
+      var mouseover = function(d) {
+        tooltip.style("opacity", 1);
+      };
+      var mousemove = function(d) {
+        tooltip
+          .html(
+            `${Math.round(
+              ((d.volume * referenceAverage) / 100)+referenceAverage
+            ).toLocaleString(undefined, { minimumFractionDigits: 0 })}`
+          )
+          .style("left", d3.mouse(this)[0] + 60 + "px")
+          .style("top", d3.mouse(this)[1] - 40 + "px")
+          .style("cursor", "pointer");
+      };
+      var mouseleave = function(d) {
+        tooltip.style("opacity", 0);
+      };
+
+      var mousemoveAverage = function(d) {
+        tooltip
+          .html(
+            `${Math.round(referenceAverage).toLocaleString(
+              undefined, // leave undefined to use the browser's locale,
+              // or use a string like 'en-US' to override it.
+              { minimumFractionDigits: 0 }
+            )}`
+          )
+          .style("left", d3.mouse(this)[0] + 60 + "px")
+          .style("top", d3.mouse(this)[1] - 40 + "px")
+          .style("cursor", "pointer");
+      };
+
+      svg
+        .append("line") // attach a line
+        .style("stroke", "#9e9e9e") // colour the line
+        .attr("x1", 0) // x position of the first end of the line
+        .attr("y1", height / 2) // y position of the first end of the line
+        .attr("x2", width) // x position of the second end of the line
+        .attr("y2", height / 2)
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemoveAverage)
+        .on("mouseleave", mouseleave);
 
       // Draw the line
       svg
-        .selectAll(".line")
-        .data(sumstat)
-        .enter()
+        .datum(data)
         .append("path")
         .attr("fill", "none")
-        .attr("stroke", function(d) {
-          return color(d.key);
-        })
+        .attr("stroke", "#00b065")
         .attr("stroke-width", 1.5)
-        .attr("d", function(d) {
-          return d3
+        .attr(
+          "d",
+          d3
             .line()
             .x(function(d) {
               return x(d.date);
             })
             .y(function(d) {
-              return y(+d.volume);
-            })(d.values);
-        });
+              return y(d.volume);
+            })
+        );
+
+      svg
+        .append("g")
+        .selectAll("dot")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) {
+          return x(d.date);
+        })
+        .attr("cy", function(d) {
+          return y(d.volume);
+        })
+        .attr("r", 5)
+        .attr("fill", "#69b3a2")
+        .on("mouseover", mouseover)
+        .on("mousemove", mousemove)
+        .on("mouseleave", mouseleave);
     },
     mobileEntranceOrigin(data, index) {
       let localData = [];
@@ -338,7 +422,7 @@ export default {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      var subgroups = ["origin","volume_reference", "volume", ];
+      var subgroups = ["origin", "volume_reference", "volume"];
 
       // List of groups = species here = value of the first column called group -> I show them on the X axis
       var groups = d3
@@ -358,8 +442,7 @@ export default {
         .call(d3.axisBottom(x).tickSizeOuter(0))
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end")
-        ;
+        .style("text-anchor", "end");
 
       // Add Y axis
       var y = d3
@@ -373,7 +456,7 @@ export default {
       var color = d3
         .scaleOrdinal()
         .domain(subgroups)
-        .range(["#00b065","#9e9e9e"]);
+        .range(["#00b065", "#9e9e9e"]);
 
       //stack the data? --> stack per subgroup
       var stackedData = d3.stack().keys(subgroups)(localData);
@@ -406,113 +489,6 @@ export default {
           return x(d[1]) - x(d[0]) ?? 0;
         })
         .attr("height", y.bandwidth());
-    },
-    mobileOut(dataPram, index) {
-      // set the dimensions and margins of the graph
-      var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-        width = 400 - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom;
-
-      // append the svg object to the body of the page
-      var svg = d3
-        .select(`#mobile_out_${index}`)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      let data = [];
-
-      dataPram.forEach(item => {
-        let element = data.find(x => x.date == item.date);
-        if (element) {
-          element.volume += item.volume;
-        } else {
-          data.push({
-            date: item.date,
-            volume: item.volume,
-            isReference: item?.isReference
-          });
-        }
-      });
-
-      // group the data: I want to draw one line per group
-      var sumstat = d3
-        .nest() // nest function allows to group the calculation per level of a factor
-        .key(function(d) {
-          return d.isReference;
-        })
-        .entries(data);
-
-      // Add X axis --> it is a date format
-      var x = d3
-        .scaleBand()
-        .domain(data.map(d => d.date))
-        .range([0, width]);
-
-      svg
-        .append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).tickSize(0))
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", "rotate(-65)");
-
-      // Add Y axis
-      var y = d3
-        .scaleLinear()
-        .domain([
-          0,
-          d3.max(data, function(d) {
-            return +d.volume;
-          })
-        ])
-        .range([height, 0]);
-      svg.append("g").call(d3.axisLeft(y));
-
-      // color palette
-      var res = sumstat.map(function(d) {
-        return d.key;
-      }); // list of group names
-      var color = d3
-        .scaleOrdinal()
-        .domain(res)
-        .range([
-          "#e41a1c",
-          "#377eb8",
-          "#4daf4a",
-          "#984ea3",
-          "#ff7f00",
-          "#ffff33",
-          "#a65628",
-          "#f781bf",
-          "#999999"
-        ]);
-
-      // Draw the line
-      svg
-        .selectAll(".line")
-        .data(sumstat)
-        .enter()
-        .append("path")
-        .attr("fill", "none")
-        .attr("stroke", function(d) {
-          return color(d.key);
-        })
-        .attr("stroke-width", 1.5)
-        .attr("d", function(d) {
-          return d3
-            .line()
-            .x(function(d) {
-              return x(d.date);
-            })
-            .y(function(d) {
-              return y(+d.volume);
-            })(d.values);
-        });
     },
     mobileOutDestination(data, index) {
       let localData = [];
@@ -551,8 +527,8 @@ export default {
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-        
-      var subgroups = ["destination","volume_reference", "volume", ];
+
+      var subgroups = ["destination", "volume_reference", "volume"];
 
       // List of groups = species here = value of the first column called group -> I show them on the X axis
       var groups = d3
@@ -564,7 +540,7 @@ export default {
       // Add X axis
       var x = d3
         .scaleLinear()
-        .domain([0, d3.max(data, d => d.volume )])
+        .domain([0, d3.max(data, d => d.volume)])
         .range([0, width]);
       svg
         .append("g")
@@ -572,8 +548,7 @@ export default {
         .call(d3.axisBottom(x).tickSizeOuter(0))
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end")
-        ;
+        .style("text-anchor", "end");
 
       // Add Y axis
       var y = d3
@@ -587,12 +562,10 @@ export default {
       var color = d3
         .scaleOrdinal()
         .domain(subgroups)
-        .range(["#00b065","#9e9e9e"]);
+        .range(["#00b065", "#9e9e9e"]);
 
       //stack the data? --> stack per subgroup
       var stackedData = d3.stack().keys(subgroups)(localData);
-
-
 
       // Show the bars
       svg
@@ -619,7 +592,7 @@ export default {
           return x(d[0]);
         })
         .attr("width", function(d) {
-          return x(d[1]) - x(d[0]) ;
+          return x(d[1]) - x(d[0]);
         })
         .attr("height", y.bandwidth());
     },
@@ -745,5 +718,10 @@ export default {
 }
 .percent-p {
   font-size: 1.2rem;
+}
+.chart-container {
+  div {
+    position: relative;
+  }
 }
 </style>

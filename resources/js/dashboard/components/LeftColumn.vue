@@ -282,8 +282,9 @@
                 </div>-->
                 <hr />
                 <div class="flux-move">
-                  <h4>Choix périodes</h4>
+                  <h4>Paramètres temporels</h4>
                   <b-form-group
+                      class="d-none"
                     :invalid-feedback="flux24Errors.preference_start|| flux24Errors.preference_end ? `${flux24Errors.preference_start? flux24Errors.preference_start[0]:''} ${flux24Errors.preference_end?flux24Errors.preference_end[0]:''}` : null"
                     :state="(flux24Errors.preference_start && flux24Errors.preference_start.lenght>0)|| (flux24Errors.preference_end && flux24Errors.preference_end.lenght>0)"
                   >
@@ -326,6 +327,7 @@
                       v-model="dateRangeObservation"
                       :appendToBody="true"
                       opens="right"
+                      :min-date="new Date('03/19/2020')"
                       @update="UpdateObservationDate"
                       :calculate-position="dateRangerPosition"
                     >
@@ -417,11 +419,13 @@ export default {
       orientationChecked: false,
       orientationSelected: "ALL",
       dateRangePreference: {
-        startDate: null,
-        endDate: null
+        startDate: new Date('02/18/2020'),
+        endDate: new Date('03/18/2020')
       },
       fluxForm: {
-        filter: "filter_1"
+        filter: "filter_1",
+        preference_start:'2020-02-18',
+        preference_end:'2020-03-18'
       },
       dateRangeObservation: {
         startDate: null,
@@ -481,16 +485,13 @@ export default {
       }
     },
     "fluxForm.filter"() {
-      if (this.fluxForm.filter != "filter_2") {
-        this.fluxForm.origin = null;
+       this.fluxForm.origin = null;
         this.fluxForm.destination = null;
-      } else if (this.fluxForm.filter != "filter_3") {
         this.fluxForm.filter_provinces = [];
         this.fluxFilterInputProvince = "";
-      } else {
-        this.fluxForm.filter_zone = [];
+         this.fluxForm.filter_zone = [];
         this.fluxFilterInput = "";
-      }
+     
     },
     fluxZones() {
       this.fluxZonesArray = this.fluxZones;
