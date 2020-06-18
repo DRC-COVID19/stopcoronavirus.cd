@@ -555,44 +555,48 @@ export default {
         }
 
         const features = [];
-        this.flux24.filter(x=>!x.isReference).map(item => {
-          let element = features.find(x => x.properties.origin == item.origin);
-          if (element) {
-            element.properties.volume += 1;
-          } else {
-            features.push({
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: item.position_start
-              },
-              properties: {
-                origin: item.origin,
-                color: "#ED5F68", 
-                volume: 1
-              }
-            });
-          }
-          const element2 = features.find(
-            x => x.properties.origin == item.destination
-          );
-          if (element2) {
-            element2.properties.volume += 1;
-          } else {
-            features.push({
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: item.position_end
-              },
-              properties: {
-                origin: item.destination,
-                color: "#ED5F68",
-                volume: 1
-              }
-            });
-          }
-        });
+        this.flux24
+          .filter(x => !x.isReference)
+          .map(item => {
+            let element = features.find(
+              x => x.properties.origin == item.origin
+            );
+            if (element) {
+              element.properties.volume += 1;
+            } else {
+              features.push({
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: item.position_start
+                },
+                properties: {
+                  origin: item.origin,
+                  color: "#ED5F68",
+                  volume: 1
+                }
+              });
+            }
+            const element2 = features.find(
+              x => x.properties.origin == item.destination
+            );
+            if (element2) {
+              element2.properties.volume += 1;
+            } else {
+              features.push({
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: item.position_end
+                },
+                properties: {
+                  origin: item.destination,
+                  color: "#ED5F68",
+                  volume: 1
+                }
+              });
+            }
+          });
 
         const circleData = {
           type: "geojson",
@@ -712,33 +716,23 @@ export default {
         });
 
         let arcData = [];
+        let FluxFiltered = this.flux24.filter(x => !x.isReference);
+        
+        for (const key in FluxFiltered) {
+          const item = FluxFiltered[key];
+          const index = arcData.findIndex(
+            x =>
+              (x.destination == item.destination && x.origin == item.origin) ||
+              (x.destination == item.origin && x.origin == item.destination)
+          );
+          if (index != -1) {
+            arcData[index].volume += item.volume;
+          } else {
+            arcData.push(item);
+          }
+        }
 
-        // for (const key in this.flux24) {
-        //   const item = this.flux24[key];
-        //   const index = arcData.findIndex(
-        //     x =>
-        //       x.destination == item.origin &&
-        //       x.origin == item.destination &&
-        //       !x.isReference
-        //   );
-        //   if (index != -1) {
-        //     arcData[index].inversed_volume = item.volume;
-        //   } else {
-        //     const index2 = arcData.findIndex(
-        //       x =>
-        //         x.destination == item.origin &&
-        //         x.origin == item.destination &&
-        //         x.isReference
-        //     );
-        //     if (index2 != -1) {
-        //       arcData[index2].inversed_volume = item.volume;
-        //     } else {
-        //       arcData.push(item);
-        //     }
-        //   }
-        // }
-
-        arcData=this.flux24.filter(x=>!x.isReference);
+        // arcData=this.flux24.filter(x=>!x.isReference);
         const myDeckLayer = new MapboxLayer({
           id: "arc",
           data: arcData,
@@ -749,8 +743,8 @@ export default {
           getSourcePosition: d => d.position_start,
           getTargetPosition: d => d.position_end,
           getSourceColor: d =>
-            d.isReference ? [158, 158, 158] : [12, 44, 132],
-          getTargetColor: d => (d.isReference ? [158, 158, 158] : [177, 0, 38]),
+            d.isReference ? [158, 158, 158] : [105, 179, 162],
+          getTargetColor: d => (d.isReference ? [158, 158, 158] : [105, 179, 162]),
           getHeight: 1,
           getTilt: (d, { data }) => {
             let tilt = 2;
