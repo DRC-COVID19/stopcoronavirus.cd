@@ -17,9 +17,19 @@ export default {
   data() {
     return {};
   },
-  
+  mounted(){
+
+    this.show();
+  },
   watch: {
     covidCasesStat() {
+
+      this.show();
+    }
+  },
+  methods: {
+   async show() {
+      await this.sleep(1000);
       if (!this.covidCasesStat) {
         return;
       }
@@ -120,7 +130,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#CovidCaseChart{
-    height: 64% !important;
+#CovidCaseChart {
+  height: 300px !important;
 }
 </style>

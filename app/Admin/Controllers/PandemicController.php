@@ -28,9 +28,9 @@ class PandemicController extends AdminController
     protected function grid()
     {
         $grid = new Grid(new Pandemic());
-        $grid->column('province_id', __('Province'))->display(function ($province_id) {
-            $province = Province::find($province_id);
-            return $province->name;
+        $grid->column('health_zone_id', __('Zone'))->display(function ($health_zone_id) {
+            $healthZone = HealthZone::find($health_zone_id);
+            return $healthZone->name;
         });
         $grid->column('confirmed', __('Confirmés'));
         $grid->column('sick', __('Malades'));
@@ -50,9 +50,9 @@ class PandemicController extends AdminController
     protected function detail($id)
     {
         $show = new Show(Pandemic::findOrFail($id));
-        $show->field('province_id', __('Province'))->display(function ($province_id) {
-            $province = Province::find($province_id);
-            return $province->name;
+        $show->field('health_zone_id', __('Zone'))->display(function ($health_zone_id) {
+            $healthZone = HealthZone::find($health_zone_id);
+            return $healthZone->name;
         });
         $show->field('confirmed', __('Confirmés'));
         $show->field('sick', __('Malades'));
@@ -79,7 +79,7 @@ class PandemicController extends AdminController
         $form->number('dead', __('Décès'));
         $form->select('health_zone_id', __('Zone de santé'))->options(HealthZone::pluck('name', 'id'))->rules(['required']);
         $form->datetime('last_update', __('Dernière modification'))->rules(['required']);
-        
+
         return $form;
     }
 }

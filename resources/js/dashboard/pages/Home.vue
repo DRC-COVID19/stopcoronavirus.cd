@@ -226,51 +226,16 @@ export default {
       this.isLoading = true;
       if (checked) {
         let confirmedCount = 0;
+        
         axios
-          .get(`/api/dashboard/cavid-cases`)
-          .then(({ data }) => {
-            let Features = data.map(value => {
-              confirmedCount += value.confirmed;
-              return {
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: [value.longitude, value.latitude]
-                },
-                properties: {
-                  name: value.name,
-                  confirmed: value.confirmed ?? 0,
-                  healed: value.healed ?? 0,
-                  dead: value.dead ?? 0,
-                  sick: value.sick ?? 0,
-                  last_update: value.last_update,
-                  seriously: value.seriously ?? 0,
-                  color: "#ED5F68"
-                }
-              };
-            });
-            this.covidCases = {
-              type: "geojson",
-              data: {
-                type: "FeatureCollection",
-                features: Features
-              }
-            };
-            this.isLoading = false;
-            this.covidCasesCount = confirmedCount;
-          })
-          .catch(response => {
-            this.isLoading = false;
-          });
-        axios
-          .get("/api/pandemicstatsasc")
+          .get("/api/dashboard/cavid-cases/statistics")
           .then(({ data }) => {
             let labels = [],
               sick = [],
               confirmed = [],
               dead = [],
               healed = [];
-            data.data.map(function(d) {
+            data.map(function(d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
               healed.push(d.healed);
@@ -284,11 +249,48 @@ export default {
             };
           })
           .catch(response => {
+          });
+          axios
+          .get(`/api/dashboard/cavid-cases`)
+          .then(({ data }) => {
+            let Features = data.map(value => {
+              confirmedCount +=Number(value.confirmed);
+              return {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [value.longitude, value.latitude]
+                },
+                properties: {
+                  name: value.name,
+                  confirmed: Number(value.confirmed ?? 0),
+                  healed: Number(value.healed ?? 0),
+                  dead: Number(value.dead ?? 0),
+                  sick: Number(value.sick ?? 0),
+                  last_update:value.last_update,
+                  seriously: Number(value.seriously ?? 0),
+                  color: "#ED5F68"
+                }
+              };
+            });
+            this.covidCases = {
+              type: "geojson",
+              data: {
+                type: "FeatureCollection",
+                features: Features
+              }
+            };
+            this.isLoading = false;
+            
+            this.covidCasesCount = confirmedCount;
+          })
+          .catch(response => {
             this.isLoading = false;
           });
       } else {
         this.covidCases = null;
         this.covidCasesStat = null;
+         this.covidCasesCount = null;
         this.isLoading = false;
       }
     },

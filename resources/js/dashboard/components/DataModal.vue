@@ -27,8 +27,11 @@
           <b-tab title="Flux data" v-if="hasFlux24">
             <SideFluxChart :flux24="flux24Local" />
           </b-tab>
-          <b-tab title="Cas covid-19" v-if="covidCases">
+          <b-tab title="Covid-19 data" v-if="covidCases">
             <SideCaseCovid :covidCases="covidCases" />
+          </b-tab>
+          <b-tab title="Covid-19 chart" v-if="covidCases">
+            <CovidCaseChart :covidCasesStat="covidCasesStat" />
           </b-tab>
         </b-tabs>
       </b-col>
@@ -40,6 +43,7 @@
 import SideFluxChart from "./SideFlux";
 import FluxChart from "./FluxChart";
 import SideCaseCovid from "./SideCaseCovid";
+import CovidCaseChart from './CovidCaseChart';
 import SideOrientation from "./SideOrientation";
 import OrientationChart from "./OrientationChart";
 export default {
@@ -48,7 +52,8 @@ export default {
     FluxChart,
     SideCaseCovid,
     SideOrientation,
-    OrientationChart
+    OrientationChart,
+    CovidCaseChart
   },
   props: {
     id: {
@@ -72,6 +77,10 @@ export default {
       default: () => []
     },
     covidCases: {
+      type: Object,
+      default: null
+    },
+    covidCasesStat: {
       type: Object,
       default: null
     },

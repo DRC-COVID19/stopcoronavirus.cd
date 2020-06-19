@@ -31,4 +31,5 @@ Route::group([
     $router->resource('hospitals', "HospitalController");
     $router->resource('hospital-situations', "HospitalSituationController");
     $router->resource('pandemics', "PandemicController");
+    $router->resource('health-zones', "HealthZoneController");
 });
