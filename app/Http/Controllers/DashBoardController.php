@@ -29,13 +29,38 @@ class DashBoardController extends Controller
     public function getLastPandemicsRegion()
     {
         try {
-            $pandemics = DB::select("SELECT health_zones.name, p1.confirmed, p1.sick, p1.seriously, p1.healed, p1.dead, p1.last_update 
-        FROM pandemics p1
-        INNER JOIN(
-        SELECT MAX(pandemics.last_update) AS max_date, pandemics.health_zone_id 
-        FROM  pandemics  group by  pandemics.health_zone_id ) p2
-        ON p2.health_zone_id=p1.health_zone_id AND p2.max_date=p1.last_update
-        INNER JOIN health_zones ON p1.health_zone_id=health_zones.id");
+            $pandemics = DB::select("SELECT max(p1.last_update) as last_update, p2.name, p2.latitude, p2.longitude, SUM(p1.confirmed) AS confirmed, SUM(p1.healed) AS healed, SUM(p1.dead) AS dead
+            FROM pandemics p1
+            INNER JOIN health_zones p2 ON p1.health_zone_id=p2.id
+            GROUP BY p2.name, p2.latitude, p2.longitude");
+            return response()->json($pandemics);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getLastPandemicsStatistics()
+    {
+        try {
+            $pandemics = DB::select("SELECT p1.last_update AS last_update, (
+                SELECT SUM(p2.confirmed)
+                FROM pandemics p2
+                WHERE p2.last_update<=p1.last_update
+                ) AS confirmed, (
+                SELECT SUM(p2.healed)
+                FROM pandemics p2
+                WHERE p2.last_update<=p1.last_update
+                ) AS healed, (
+                
+                SELECT SUM(p2.dead)
+                FROM pandemics p2
+                WHERE p2.last_update<=p1.last_update
+                ) AS dead
+                FROM pandemics p1
+                GROUP BY p1.last_update");
             return response()->json($pandemics);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
@@ -374,7 +399,7 @@ class DashBoardController extends Controller
                     ->groupBy('Origin', 'destination')
                     ->whereIn('Origin', $data['origin'])
                     ->whereIn('Destination', $data['destination'])->get();
-                $fluxRefencesData=[];
+                $fluxRefencesData = [];
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
                         $value->{'isReference'} = true;
@@ -388,11 +413,11 @@ class DashBoardController extends Controller
                         } else {
                             continue;
                         }
-                        $fluxRefencesData[]=$value;
+                        $fluxRefencesData[] = $value;
                     }
                 }
             }
-            $fluxData=[];
+            $fluxData = [];
             foreach ($flux as $value) {
                 if ($fluxRefences) {
                     foreach ($fluxRefences as $item) {
@@ -412,7 +437,7 @@ class DashBoardController extends Controller
                 } else {
                     continue;
                 }
-                $fluxData[]=$value;
+                $fluxData[] = $value;
             }
             if (is_array($fluxRefences)) {
                 return response()->json($fluxData);
@@ -506,7 +531,7 @@ class DashBoardController extends Controller
                     })
                     ->groupBy('Origin', 'destination')
                     ->get();
-                $fluxRefencesData=[];
+                $fluxRefencesData = [];
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
                         $value->{'isReference'} = true;
@@ -520,13 +545,13 @@ class DashBoardController extends Controller
                         } else {
                             continue;
                         }
-                        $fluxRefencesData[]=$value;
+                        $fluxRefencesData[] = $value;
                     }
                 }
             }
 
 
-            $fluxData=[];
+            $fluxData = [];
             foreach ($flux as $value) {
                 if ($fluxRefences) {
                     foreach ($fluxRefences as $item) {
@@ -546,7 +571,7 @@ class DashBoardController extends Controller
                 } else {
                     continue;
                 }
-                $fluxData[]=$value;
+                $fluxData[] = $value;
             }
             if (is_array($fluxRefences)) {
                 return response()->json($fluxData);
@@ -596,7 +621,7 @@ class DashBoardController extends Controller
                     })
                     ->groupBy('Origin', 'destination')
                     ->get();
-                $fluxRefencesData=[];
+                $fluxRefencesData = [];
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
                         $value->{'isReference'} = true;
@@ -610,13 +635,13 @@ class DashBoardController extends Controller
                         } else {
                             continue;
                         }
-                        $fluxRefencesData[]=$value;
+                        $fluxRefencesData[] = $value;
                     }
                 }
             }
 
 
-            $fluxData=[];
+            $fluxData = [];
             foreach ($flux as $value) {
                 if ($fluxRefences) {
                     foreach ($fluxRefences as $item) {
@@ -636,7 +661,7 @@ class DashBoardController extends Controller
                 } else {
                     continue;
                 }
-                $fluxData[]=$value;
+                $fluxData[] = $value;
             }
             if (is_array($fluxRefences)) {
                 return response()->json($fluxData);
@@ -751,19 +776,19 @@ class DashBoardController extends Controller
         ])->validate();
 
         try {
-            $flux = Flux::select(['Date as date','Destination as destination','Origin as origin', DB::raw('sum(volume)as volume')])
+            $flux = Flux::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where(function ($q) use ($data) {
                     $q->orWhereIn('Destination', $data['filter_zone']);
-                })->groupBy('Date','destination','Origin')->get();
+                })->groupBy('Date', 'destination', 'Origin')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux::select(['Date as date','Destination as destination','Origin as origin', DB::raw('sum(volume)as volume')])
+                $fluxRefences = Flux::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where(function ($q) use ($data) {
                         $q->orWhereIn('Destination', $data['filter_zone']);
-                    })->groupBy('Date','Destination','Origin')->get();
+                    })->groupBy('Date', 'Destination', 'Origin')->get();
 
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
@@ -794,19 +819,19 @@ class DashBoardController extends Controller
         ])->validate();
 
         try {
-            $flux = Flux24Province::select(['Date as date','Destination as destination','Origin as origin', DB::raw('sum(volume)as volume')])
+            $flux = Flux24Province::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where(function ($q) use ($data) {
                     $q->orWhereIn('Destination', $data['filter_provinces']);
-                })->groupBy('Date','destination','Origin')->get();
+                })->groupBy('Date', 'destination', 'Origin')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Province::select(['Date as date','Destination as destination','Origin as origin', DB::raw('sum(volume)as volume')])
+                $fluxRefences = Flux24Province::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where(function ($q) use ($data) {
                         $q->orWhereIn('Destination', $data['filter_provinces']);
-                    })->groupBy('Date','Destination','Origin')->get();
+                    })->groupBy('Date', 'Destination', 'Origin')->get();
 
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
@@ -837,19 +862,19 @@ class DashBoardController extends Controller
         ])->validate();
 
         try {
-            $flux = Flux::select(['Date as date','Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume')])
+            $flux = Flux::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where(function ($q) use ($data) {
                     $q->orWhereIn('Origin', $data['filter_zone']);
-                })->groupBy('Date','origin','Destination')->get();
+                })->groupBy('Date', 'origin', 'Destination')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux::select(['Date as date','Origin as origin', 'Destination as destination',DB::raw('sum(volume)as volume')])
+                $fluxRefences = Flux::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where(function ($q) use ($data) {
                         $q->whereIn('Origin', $data['filter_zone']);
-                    })->groupBy('Date','Destination','Origin')->get();
+                    })->groupBy('Date', 'Destination', 'Origin')->get();
 
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
@@ -880,19 +905,19 @@ class DashBoardController extends Controller
         ])->validate();
 
         try {
-            $flux = Flux24Province::select(['Date as date','Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume')])
+            $flux = Flux24Province::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where(function ($q) use ($data) {
                     $q->orWhereIn('Origin', $data['filter_provinces']);
-                })->groupBy('Date','origin','Destination')->get();
+                })->groupBy('Date', 'origin', 'Destination')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Province::select(['Date as date','Origin as origin', 'Destination as destination',DB::raw('sum(volume)as volume')])
+                $fluxRefences = Flux24Province::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where(function ($q) use ($data) {
                         $q->whereIn('Origin', $data['filter_provinces']);
-                    })->groupBy('Date','Destination','Origin')->get();
+                    })->groupBy('Date', 'Destination', 'Origin')->get();
 
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
@@ -938,3 +963,13 @@ class DashBoardController extends Controller
         }
     }
 }
+
+/*
+        SELECT health_zones.name,health_zones.latitude,health_zones.longitude, p1.confirmed, p1.sick, p1.seriously, p1.healed, p1.dead, p1.last_update 
+        FROM pandemics p1
+        INNER JOIN(
+        SELECT MAX(pandemics.last_update) AS max_date, pandemics.health_zone_id 
+        FROM  pandemics  group by  pandemics.health_zone_id ) p2
+        ON p2.health_zone_id=p1.health_zone_id AND p2.max_date=p1.last_update
+        INNER JOIN health_zones ON p1.health_zone_id=health_zones.id
+        */

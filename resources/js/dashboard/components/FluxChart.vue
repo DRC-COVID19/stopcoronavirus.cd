@@ -170,9 +170,6 @@ export default {
 
       return Math.round(difference);
     },
-    sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
-    },
     extractFlux23DailyOut() {
       let flux24DailyOutLocal = [];
       if (this.flux24DailyOut.length > 0) {
