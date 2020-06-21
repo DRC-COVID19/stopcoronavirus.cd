@@ -70,6 +70,22 @@ class DashBoardController extends Controller
         }
     }
 
+    public function getLastPandemicsStatisticsDaily()
+    {
+        try {
+            $pandemics = DB::select("SELECT SUM(p1.confirmed) as confirmed, 
+            SUM(p1.sick) as sick, sum(p1.seriously) as seriously, 
+            sum(p1.healed) as healed, sum(p1.dead) as dead, p1.last_update
+            FROM pandemics p1 GROUP BY p1.last_update");
+            return response()->json($pandemics);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
     public function getHospials()
     {
         try {

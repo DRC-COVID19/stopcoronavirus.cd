@@ -74,6 +74,7 @@
       :flux24DailyIn="flux24DailyIn"
       :covidCases="covidCases"
       :covidCasesStat="covidCasesStat"
+      :covidCasesStatDaily="covidCasesStatDaily"
       :medicalOrientations="medicalOrientations"
       :medicalOrientationsStat="medicalOrientationsStat"
       id="data-modal"
@@ -107,6 +108,7 @@ export default {
       isLoading: false,
       covidCases: null,
       covidCasesStat: null,
+      covidCasesStatDaily:null,
       covidCasesCount: null,
       hospitals: null,
       hospitalCount: null,
@@ -250,6 +252,31 @@ export default {
           })
           .catch(response => {
           });
+
+         axios
+          .get("/api/dashboard/cavid-cases/statistics/daily")
+          .then(({ data }) => {
+            let labels = [],
+              sick = [],
+              confirmed = [],
+              dead = [],
+              healed = [];
+            data.map(function(d) {
+              confirmed.push(d.confirmed);
+              dead.push(d.dead);
+              healed.push(d.healed);
+              labels.push(d.last_update);
+            });
+            this.covidCasesStatDaily = {
+              confirmed,
+              dead,
+              healed,
+              labels
+            };
+          })
+          .catch(response => {
+          });
+
           axios
           .get(`/api/dashboard/cavid-cases`)
           .then(({ data }) => {
