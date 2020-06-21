@@ -14,11 +14,10 @@ class HealthZonePandemics extends Migration
     public function up()
     {
         Schema::table('pandemics', function (Blueprint $table) {
-            $table->dropColumn('health_zone_id');
             $table->dropForeign('pandemics_province_id_foreign');
             $table->dropColumn('province_id');
             $table->dropColumn('township_id');
-            $table->bigInteger('health_zone_id')->index()->unsigned();
+            //$table->bigInteger('health_zone_id')->index()->unsigned();
         });
     }
 
