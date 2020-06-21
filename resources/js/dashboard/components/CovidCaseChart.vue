@@ -1,6 +1,13 @@
 <template>
   <div>
-    <canvas ref="CovidCaseChart" id="CovidCaseChart"></canvas>
+    <div>
+      <h5>Graphique Cumule</h5>
+      <canvas ref="CovidCaseChart" id="CovidCaseChart"></canvas>
+    </div>
+    <div class="mt-3">
+      <h5>Graphique Journalière</h5>
+      <canvas ref="covidCasesStatDaily" id="covidCasesStatDaily"></canvas>
+    </div>
   </div>
 </template>
 
@@ -12,52 +19,58 @@ export default {
     covidCasesStat: {
       type: Object,
       default: null
+    },
+    covidCasesStatDaily: {
+      type: Object,
+      default: null
     }
   },
   data() {
     return {};
   },
-  mounted(){
-
-    this.show();
+  mounted() {
+    this.show(this.covidCasesStat,this.$refs.CovidCaseChart);
+    this.show(this.covidCasesStatDaily,this.$refs.covidCasesStatDaily);
   },
   watch: {
     covidCasesStat() {
-
-      this.show();
+      this.show(this.covidCasesStat,this.$refs.CovidCaseChart);
+    },
+    covidCasesStatDaily() {
+      this.show(this.covidCasesStatDaily,this.$refs.covidCasesStatDaily);
     }
   },
   methods: {
-   async show() {
+    async show(data,ref) {
       await this.sleep(1000);
-      if (!this.covidCasesStat) {
+      if (!data) {
         return;
       }
       let tempData = {
         type: "line",
         data: {
-          labels: this.covidCasesStat.labels,
+          labels: data.labels,
           datasets: [
             {
               label: "Confirmés",
               fill: true,
               borderColor: "rgb(166,180,205)",
               backgroundColor: "rgb(166,180,205, 0.2)",
-              data: this.covidCasesStat.confirmed
+              data: data.confirmed
             },
             {
               label: "Guéris",
               fill: true,
               borderColor: "rgba(0,176,101,1)",
               backgroundColor: "rgba(0,176,101,0.8)",
-              data: this.covidCasesStat.healed
+              data: data.healed
             },
             {
               label: "Décès",
               fill: true,
               borderColor: "rgba(10,10,10,0.2)",
               backgroundColor: "rgba(10,10,10,1)",
-              data: this.covidCasesStat.dead
+              data: data.dead
             }
           ]
         },
@@ -121,7 +134,7 @@ export default {
           }
         }
       };
-      var ctx = this.$refs.CovidCaseChart;
+      var ctx = ref;
       // Instantiate a new chart
       var myLineChart = new Chart(ctx, tempData);
     }
@@ -130,7 +143,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#CovidCaseChart {
+#CovidCaseChart,#covidCasesStatDaily {
   height: 300px !important;
 }
 </style>

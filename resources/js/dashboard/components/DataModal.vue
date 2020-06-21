@@ -31,7 +31,9 @@
             <SideCaseCovid :covidCases="covidCases" />
           </b-tab>
           <b-tab title="Covid-19 chart" v-if="covidCases">
-            <CovidCaseChart :covidCasesStat="covidCasesStat" />
+            <CovidCaseChart 
+            :covidCasesStat="covidCasesStat" 
+            :covidCasesStatDaily="covidCasesStatDaily" />
           </b-tab>
         </b-tabs>
       </b-col>
@@ -81,6 +83,10 @@ export default {
       default: null
     },
     covidCasesStat: {
+      type: Object,
+      default: null
+    },
+    covidCasesStatDaily: {
       type: Object,
       default: null
     },

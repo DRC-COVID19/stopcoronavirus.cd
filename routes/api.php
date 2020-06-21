@@ -39,6 +39,7 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('sondages', 'DashBoardController@getSondages');
     Route::get('cavid-cases', 'DashBoardController@getLastPandemicsRegion');
     Route::get('cavid-cases/statistics', 'DashBoardController@getLastPandemicsStatistics');
+    Route::get('cavid-cases/statistics/daily', 'DashBoardController@getLastPandemicsStatisticsDaily');
     Route::post('flux-24', 'DashBoardController@getFluxData');
     Route::post('flux-24-daily', 'DashBoardController@getFluxDataDaily');
     Route::post('flux-24-origin', 'DashBoardController@getFluxDataFromOrigin');
