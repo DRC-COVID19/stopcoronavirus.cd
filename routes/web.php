@@ -20,7 +20,7 @@ Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stere
 Route::get('/sondages', 'PageController@sondage')->name('sondages');
 Route::get('/commité-multisectoriel-de-la-riposte', 'PageController@aboutCmr')->name('aboutCmr');
 
-Route::get('/dashboard-maps','DashBoardController@index');
+
 Route::get('/orientation-medicale','SelfTestController@diagnostic')->name('diagnostic');
 Route::group(['prefix' => 'orientation-medicale-test'], function () {
     Route::get('/{step}','SelfTestController@back')->name('selfTest.back');
