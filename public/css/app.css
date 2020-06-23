@@ -18644,7 +18644,11 @@ h3 {
   position: absolute;
   left: 0;
   top: 64px;
+<<<<<<< HEAD
   width: 215px;
+=======
+  width: 200px;
+>>>>>>> master
   z-index: 1;
   background: white;
   padding: 0 0 2px 0;

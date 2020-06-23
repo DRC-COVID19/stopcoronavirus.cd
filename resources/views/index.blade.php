@@ -4,9 +4,16 @@
 
 <div class="jumbotron jumbotron-title">
     <div class="container">
-        <h1>Stop Coronavirus COVID-19 RDC</h1>
-        <p class="lead">Site officiel d'informations et de conseils</p>
-
+        <div class="row">
+            <div class="cols-12 col-md-7">
+                <h1>Stop Coronavirus COVID-19 RDC</h1>
+                <p class="lead">Site officiel d'informations et de conseils</p>
+            </div>
+            <div class="cols-12 col-md-5">
+                <a href="https://wa.me/243844434444?text=salut" target="_blank"><img class="img-fluid" src="{{asset('/img/covid_bot.png')}}" alt="Whatsapp bot"></a>
+                
+            </div>
+        </div>
     </div>
 </div>
 @isset($pandemicStats)
@@ -165,11 +172,11 @@
             {!! __("Portez un <strong>masque médical</strong> jetable pour limiter la propagation du virus<br><small>(le masque doit être changé toutes les 3 heures)</small>") !!}
         </div>
     </div>
-<div class="PreventativeMeasure--Cta text-center mt-3">
-    <a href="{{route('preventativeMeasures')}}" class="btn btn-secondary p-3">
-        {{ __('Voir les détails des mesures de protection') }}
-    </a>
-</div>
+    <div class="PreventativeMeasure--Cta text-center mt-3">
+        <a href="{{route('preventativeMeasures')}}" class="btn btn-secondary p-3">
+            {{ __('Voir les détails des mesures de protection') }}
+        </a>
+    </div>
 </div>
 
 <div class="container-fluid container-directive py-5">
@@ -183,7 +190,7 @@
                 </h2>
             </div>
         </div>
-     
+
         <div class="row my-4 PreventativeMeasure--Wrapper">
             @foreach($directives as $directive)
             <div class="col-lg-12">
