@@ -7,6 +7,7 @@ use App\Admin\Controllers\DiagnosticController;
 use App\Admin\Controllers\PostController;
 use Encore\Admin\Facades\Admin;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 
 Admin::routes();
 Route::resource('admin/auth/users', UserController::class)->middleware(config('admin.route.middleware'));
@@ -18,7 +19,7 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('admin.home');
-    $router->get('/dashboard-maps', 'DashBoardController@index');
+    Route::get('/dashboard-maps', 'DashBoardController@index')->name('dashboard');
     $router->resource('posts', "PostController");
     $router->resource('alerts', "AlertController");
     $router->resource('categories', "CategoryController");
