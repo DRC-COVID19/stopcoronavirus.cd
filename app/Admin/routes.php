@@ -19,7 +19,7 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index')->name('admin.home');
-    Route::get('/dashboard-maps', 'DashBoardController@index');
+    Route::get('/dashboard-maps', 'DashBoardController@index')->name('dashboard');
     $router->resource('posts', "PostController");
     $router->resource('alerts', "AlertController");
     $router->resource('categories', "CategoryController");
