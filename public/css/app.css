@@ -17886,6 +17886,10 @@ h3 {
   border-radius: 5px;
 }
 
+.dash-login-title {
+  font-size: 1.8rem;
+}
+
 /*
 .custom-clustericon-2 {
     --cluster-color: #ff9b00d9;
