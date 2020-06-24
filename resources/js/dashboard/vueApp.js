@@ -7,6 +7,7 @@ import commont from './mixins/common';
 import VueLazyLoad from 'vue-lazyload';
 import vSelect from 'vue-select';
 import App from "./App.vue";
+import GlobalComponents from './globalComponents'
 
 require('./helper');
 
@@ -15,6 +16,7 @@ Vue.use(Meta);
 Vue.use(VueLazyLoad);
 Vue.component('v-select', vSelect);
 Vue.mixin(commont);
+Vue.use(GlobalComponents);
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(route => route.meta.requiresAuth) && !store.state.auth.isAuthenticated) {
