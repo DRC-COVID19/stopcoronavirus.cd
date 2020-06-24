@@ -6,6 +6,25 @@
     height: 100%;
     width: 100%;
 }
+
+.btn-dash-blue {
+    background: $dash-blue;
+    border: 3px solid $dash-blue !important;
+    border-radius: 5px;
+    &:hover,&:focus,&:active {
+        background: $dash-blue;
+        border: 3px solid $dash-red !important;
+    }
+}
+.text-dash-color {
+    color: $dash-text-100 !important;
+}
+.input-dash {
+    border: 1px solid #d2d5dc;
+    background: $dash-background;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
 /*
 .custom-clustericon-2 {
     --cluster-color: #ff9b00d9;
