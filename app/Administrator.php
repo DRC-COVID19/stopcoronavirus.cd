@@ -9,19 +9,22 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * Class Administrator.
  *
  * @property Role[] $roles
  */
-class Administrator extends Model implements AuthenticatableContract
+class Administrator extends Model implements JWTSubject, AuthenticatableContract
 {
     use Authenticatable;
     use HasPermissions;
     use DefaultDatetimeFormat;
+    use Notifiable;
 
-    protected $fillable = ['username', 'password', 'name', 'avatar','email'];
+    protected $fillable = ['username', 'password', 'name', 'avatar', 'email'];
 
     /**
      * Create a new Eloquent model instance.
@@ -90,5 +93,24 @@ class Administrator extends Model implements AuthenticatableContract
 
         return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'permission_id');
     }
-}
 
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+}
