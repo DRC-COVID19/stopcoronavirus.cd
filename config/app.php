@@ -176,6 +176,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
     ],
 

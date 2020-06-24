@@ -32,10 +32,21 @@ Route::get('/pandemicstatsasc', function () {
     return new PandemicStatResource(PandemicStat::orderBy('last_update', 'ASC')->get());
 });
 
-Route::group(['prefix' => 'dashboard'], function () {
+Route::group([
+    'prefix' => 'dashboard',
+    // 'middleware' => 'auth:dashboard',
+], function () {
+    Route::group([
+        'prefix' => 'auth'
+    ], function () {
+        Route::post('login', 'AuthController@login');
+        Route::post('logout', 'AuthController@logout');
+        Route::post('refresh', 'AuthController@refresh');
+        Route::post('me', 'AuthController@me');
+    });
     Route::get('hospitals/', 'DashBoardController@getHospials');
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
-    Route::get('orientation-medical-stats','DashBoardController@getAllDiagnosticStat');
+    Route::get('orientation-medical-stats', 'DashBoardController@getAllDiagnosticStat');
     Route::get('sondages', 'DashBoardController@getSondages');
     Route::get('cavid-cases', 'DashBoardController@getLastPandemicsRegion');
     Route::get('cavid-cases/statistics', 'DashBoardController@getLastPandemicsStatistics');

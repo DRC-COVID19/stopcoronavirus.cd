@@ -20,11 +20,14 @@ class DashBoardController extends Controller
 {
     use GClientSheet, GeoConding;
 
+    public function __construct()
+    {
+        $this->middleware('auth:dashboard')->except(['index','getFluxProvinces','getFluxZone']);
+    }
+
     public function index()
     {
-        return redirect()->route('dashboard');
-        // $pandemicStats = PandemicStat::orderBy('last_update', 'DESC')->first();
-        // return view('diagnosticMaps.dashboard', compact('pandemicStats'));
+         return view('diagnosticMaps.dashboard');
     }
 
     public function getLastPandemicsRegion()
