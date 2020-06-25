@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Administrator;
+use App\Http\Resources\AdministratorResource;
+use App\Mail\AskResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Hashids\Hashids;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -16,7 +21,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:dashboard')->except(['login']);
+        $this->middleware('auth:dashboard')->except(['login', 'asKResetPassword', 'checkResetPasswordToken']);
     }
 
     /**
@@ -30,14 +35,11 @@ class AuthController extends Controller
     {
 
         $credentials = $request->only('email', 'password');
-
-
-
         $user = Administrator::where(function ($q) use ($credentials) {
             $q->where('email', $credentials['email'])
                 ->orWhere('username', $credentials['email']);
         })->first();
-        if (!$user || !Hash::check($credentials['password'],$user->password)) {
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
         $token = auth('dashboard')->login($user);
@@ -51,7 +53,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json($this->guard()->user());
+        return response()->json(new AdministratorResource(($this->guard()->user())));
     }
 
     /**
@@ -86,9 +88,10 @@ class AuthController extends Controller
     protected function respondWithToken($token)
     {
         return response()->json([
-            'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => $this->guard()->factory()->getTTL() * 60
+            'expires_in' => $this->guard()->factory()->getTTL() * 60,
+            'token' => $token,
+            'user' => new AdministratorResource($this->guard()->user())
         ]);
     }
 
@@ -100,5 +103,61 @@ class AuthController extends Controller
     public function guard()
     {
         return Auth::guard('dashboard');
+    }
+
+    public function resetPassword($user_id)
+    {
+        if (auth()->user()->id != $user_id) {
+            return response()->json(['response' => 'unauthorized'], 401);
+        }
+        $user = Administrator::find($user_id);
+        $data = Validator::make(request()->all(), [
+            'password' => 'required|confirmed|string',
+        ])->validate();
+        $user->password = Hash::make($data['password']);
+        $user->reset_password_token = null;
+        $user->reset_password_token_date = null;
+        $user->update();
+        return response(null, 202);
+    }
+
+    public function checkResetPasswordToken($token)
+    {
+        $hashids = new Hashids("reset_pass");
+        $data = $hashids->decode($token);
+        if (!$data || count($data) != 2 || !isset($data[0]) || !isset($data[1])) {
+            return response()->json(['response' => 'Resource not found'], 410);
+        }
+        $currentDate = strtotime(date('Y-m-d H:i:s'));
+        $dateDifference = ($currentDate - $data[1]) / (60);
+
+        if ($dateDifference > 1440) {
+            return response()->json(['response' => 'token expired'], 401);
+        }
+        $user = Administrator::where('id', $data[0])->where('reset_password_token', $token)->first();
+        if (!$user) {
+            return response()->json(['response' => 'Resource not found'], 410);
+        }
+        $token = auth('dashboard')->login($user);
+        return response(['user_id' => $user->id, 'token' => $token]);
+    }
+
+    public function asKResetPassword()
+    {
+        $data = Validator::make(request()->all(), [
+            'email' => 'required|email',
+        ])->validate();
+        $hashids = new Hashids("reset_pass");
+        $user = Administrator::where('email', $data['email'])->first();
+        if (!$user) {
+            return response('user not found', 410);
+        }
+        $date = date('Y-m-d H:i:s');
+        $token = $hashids->encode([$user->id, strtotime($date)]);
+        $user->reset_password_token = $token;
+        $user->reset_password_token_date = $date;
+        $user->update();
+        Mail::to($user->email)->send(new AskResetPassword($user));
+        return response(null, 202);
     }
 }

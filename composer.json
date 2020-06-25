@@ -15,6 +15,7 @@
         "fruitcake/laravel-cors": "^1.0",
         "google/apiclient": "^2.4",
         "guzzlehttp/guzzle": "^6.3",
+        "hashids/hashids": "^4.0",
         "laravel-admin-ext/latlong": "^1.2",
         "laravel-admin-ext/summernote": "^1.0",
         "laravel/framework": "^7.0",

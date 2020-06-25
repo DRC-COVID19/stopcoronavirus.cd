@@ -17870,8 +17870,9 @@ h3 {
 
 .btn-dash-blue:hover,
 .btn-dash-blue:focus,
-.btn-dash-blue:active {
-  background: #2e5bff;
+.btn-dash-blue:active,
+.btn-dash-blue:disabled {
+  background: #2e5bff !important;
   border: 3px solid #d63649 !important;
 }
 
