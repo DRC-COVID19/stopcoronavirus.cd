@@ -43,6 +43,9 @@ Route::group([
         Route::post('logout', 'AuthController@logout');
         Route::post('refresh', 'AuthController@refresh');
         Route::post('me', 'AuthController@me');
+        Route::post('lost-password', 'AuthController@asKResetPassword');
+        Route::get('check-token/{token}', 'AuthController@checkResetPasswordToken');
+        Route::post('reset-password/{user_id}','AuthController@resetPassword');
     });
     Route::get('hospitals/', 'DashBoardController@getHospials');
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');

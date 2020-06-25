@@ -11,8 +11,8 @@
     background: $dash-blue;
     border: 3px solid $dash-blue !important;
     border-radius: 5px;
-    &:hover,&:focus,&:active {
-        background: $dash-blue;
+    &:hover,&:focus,&:active,&:disabled {
+        background: $dash-blue !important;
         border: 3px solid $dash-red !important;
     }
 }

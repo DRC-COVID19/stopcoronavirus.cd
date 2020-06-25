@@ -92,6 +92,7 @@ import OrientationChart from "../components/OrientationChart";
 import SideOrientation from "../components/SideOrientation";
 import SideFluxChart from "../components/SideFlux";
 import DataModal from "../components/DataModal";
+import { mapState, mapActions } from 'vuex';
 export default {
   components: {
     Maps,
@@ -161,8 +162,10 @@ export default {
   mounted() {
     this.getFluxZone();
     this.getFluxProvinces();
+    this.userMe();
   },
   methods: {
+    ...mapActions(['userMe']),
     getHasCoviCases() {
       return this.covidCases && this.covidCases.data.features.length > 0;
     },

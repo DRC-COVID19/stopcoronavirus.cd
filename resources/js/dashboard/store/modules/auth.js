@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export default  {
+export default {
     state: {
         user: {},
         isAuthenticating: false,
@@ -49,6 +49,15 @@ export default  {
                 });
             });
         },
+        userMe({ commit, state }) {
+            return new Promise((resolve, reject) => {
+                axios.post('/api/dashboard/auth/me', {})
+                    .then((data) => {
+                        state.user = data.user;
+                        resolve();
+                    });
+            });
+        },
         logout({ commit }) {
             return new Promise((resolve, reject) => {
                 axios.post('/api/dashboard/auth/logout', {}).then(() => {
@@ -59,7 +68,7 @@ export default  {
         }
     },
     getters: {
-        getUser:state=>{
+        getUser: state => {
             return state.user;
         },
     }
