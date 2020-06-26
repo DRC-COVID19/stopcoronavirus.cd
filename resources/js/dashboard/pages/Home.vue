@@ -1,16 +1,16 @@
 <template>
   <div>
-    <b-container fluid>
+    <b-container fluid class="dash-home-page">
       <b-row class="header">
         <b-col cols="12" md="6" class="map-form-header">
-          <h1 class="mb-0">Dashboard COVID-19</h1>
+          <h1>Dashboard Covid-19</h1>
         </b-col>
         <b-col cols="12" md="6" class="map-form-logo d-flex justify-content-end">
           <img src="/img/partners_top.png" width="100" class="img-fluid" alt />
           <img src="/img/commite_riposte.jpg" width="100" class="img-fluid" alt />
         </b-col>
       </b-row>
-      <b-row align-h="end" class="position-relative">
+      <b-row class="position-relative">
         <LeftColumn
           @covidCaseChecked="getCovidCases"
           @hopitalChecked="gethopitals"
@@ -36,7 +36,7 @@
           :fluxProvinces="fluxProvinces"
           :flux24Errors="flux24Errors"
         />
-        <b-col cols="12" md="9">
+        <b-col cols="12" offset-md="3" md="6">
           <b-button
             v-if="hasFlux24||hasCovidCases||hasOrientation"
             variant="success"
@@ -62,6 +62,35 @@
               :flux24="flux24"
             />
           </b-row>
+        </b-col>
+        <b-col cols="12" md="3" class="side-right mt-2">
+          <b-card no-body>
+            <b-tabs pills card>
+              <b-tab title="Covid-19 data" v-if="covidCases">
+                <SideCaseCovid :covidCases="covidCases" />
+              </b-tab>
+              <b-tab title="Tab 2">
+                <b-card-text>Tab contents 2</b-card-text>
+              </b-tab>
+            </b-tabs>
+          </b-card>
+        </b-col>
+      </b-row>
+      <b-row class="side-bottom" no-gutters>
+        <b-col cols="12" md="9" offset-md="3">
+          <b-card no-body>
+            <b-tabs pills card>
+              <b-tab title="Covid-19 chart" v-if="covidCases">
+                <CovidCaseChart
+                  :covidCasesStat="covidCasesStat"
+                  :covidCasesStatDaily="covidCasesStatDaily"
+                />
+              </b-tab>
+              <b-tab title="Tab 2">
+                <b-card-text>Tab contents 2</b-card-text>
+              </b-tab>
+            </b-tabs>
+          </b-card>
         </b-col>
       </b-row>
     </b-container>
@@ -92,7 +121,7 @@ import OrientationChart from "../components/OrientationChart";
 import SideOrientation from "../components/SideOrientation";
 import SideFluxChart from "../components/SideFlux";
 import DataModal from "../components/DataModal";
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from "vuex";
 export default {
   components: {
     Maps,
@@ -109,7 +138,7 @@ export default {
       isLoading: false,
       covidCases: null,
       covidCasesStat: null,
-      covidCasesStatDaily:null,
+      covidCasesStatDaily: null,
       covidCasesCount: null,
       hospitals: null,
       hospitalCount: null,
@@ -129,7 +158,7 @@ export default {
       flour: false,
       antiBacterialGel: false,
       fluxZones: [],
-      fluxProvinces:[],
+      fluxProvinces: [],
       flux24: [],
       flux24Errors: {},
       flux24Daily: [],
@@ -165,7 +194,7 @@ export default {
     this.userMe();
   },
   methods: {
-    ...mapActions(['userMe']),
+    ...mapActions(["userMe"]),
     getHasCoviCases() {
       return this.covidCases && this.covidCases.data.features.length > 0;
     },
@@ -231,7 +260,7 @@ export default {
       this.isLoading = true;
       if (checked) {
         let confirmedCount = 0;
-        
+
         axios
           .get("/api/dashboard/cavid-cases/statistics")
           .then(({ data }) => {
@@ -253,10 +282,9 @@ export default {
               labels
             };
           })
-          .catch(response => {
-          });
+          .catch(response => {});
 
-         axios
+        axios
           .get("/api/dashboard/cavid-cases/statistics/daily")
           .then(({ data }) => {
             let labels = [],
@@ -277,14 +305,13 @@ export default {
               labels
             };
           })
-          .catch(response => {
-          });
+          .catch(response => {});
 
-          axios
+        axios
           .get(`/api/dashboard/cavid-cases`)
           .then(({ data }) => {
             let Features = data.map(value => {
-              confirmedCount +=Number(value.confirmed);
+              confirmedCount += Number(value.confirmed);
               return {
                 type: "Feature",
                 geometry: {
@@ -297,7 +324,7 @@ export default {
                   healed: Number(value.healed ?? 0),
                   dead: Number(value.dead ?? 0),
                   sick: Number(value.sick ?? 0),
-                  last_update:value.last_update,
+                  last_update: value.last_update,
                   seriously: Number(value.seriously ?? 0),
                   color: "#ED5F68"
                 }
@@ -311,7 +338,7 @@ export default {
               }
             };
             this.isLoading = false;
-            
+
             this.covidCasesCount = confirmedCount;
           })
           .catch(response => {
@@ -320,7 +347,7 @@ export default {
       } else {
         this.covidCases = null;
         this.covidCasesStat = null;
-         this.covidCasesCount = null;
+        this.covidCasesCount = null;
         this.isLoading = false;
       }
     },
@@ -434,13 +461,13 @@ export default {
       let urlDailyIn = `api/dashboard/flux-24-origin-daily-in`;
       let urlDailyOut = `api/dashboard/flux-24-origin-daily-out`;
       let url = `api/dashboard/flux-24-origin`;
-      
+
       switch (values.filter) {
-        case 'filter_2':
+        case "filter_2":
           urlDaily = `api/dashboard/flux-24-daily`;
           url = `api/dashboard/flux-24`;
           break;
-        case 'filter_3':
+        case "filter_3":
           urlDaily = `api/dashboard/flux-24-origin-daily-provinces`;
           urlDailyIn = `api/dashboard/flux-24-origin-daily-in-provinces`;
           urlDailyOut = `api/dashboard/flux-24-origin-daily-out-provinces`;
@@ -458,8 +485,7 @@ export default {
         .catch(({ response }) => {});
 
       // get flux data in
-      
-      
+
       this.flux24DailyIn = [];
       axios
         .post(urlDailyIn, values)
@@ -470,7 +496,6 @@ export default {
 
       // get flux data out
 
-      
       this.flux24DailyOut = [];
       axios
         .post(urlDailyOut, values)
@@ -479,10 +504,6 @@ export default {
         })
         .catch(({ response }) => {});
 
-
-
-
-      
       this.flux24 = [];
       axios
         .post(url, values)
@@ -502,9 +523,17 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+@import "@~/sass/_variables";
+.dash-home-page {
+  height: 100vh;
+  background: $dash-background;
+  .side-bottom {
+    height: calc(20vh - 72.5px);
+  }
+}
 .header {
   padding: 12px 24px;
-  border-bottom: 1px solid #ddd;
+  background: white;
   h1 {
     font-size: 20px;
     font-weight: 600;
@@ -512,15 +541,8 @@ export default {
   }
 }
 .map-container {
-  height: calc(100vh - 52.5px);
-}
-.chart-container {
-  height: calc(40vh - 52.5px);
-  border-top: 1px solid rgba(0, 0, 0, 0.125);
-  position: absolute;
-  z-index: 6;
-  left: 0;
-  right: 0;
+  padding: 10px 10px 10px 10px;
+  height: calc(80vh - 72.5px);
 }
 .side-case-covid {
   position: absolute;

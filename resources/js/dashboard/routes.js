@@ -4,6 +4,7 @@ import LostPassword from './pages/auth/LostPassword';
 import ResetPasswordThank from './pages/auth/ResetPasswordThank';
 import ResetPasseword from './pages/auth/ResetPassword';
 import PasswordResetComplete from './pages/auth/PasswordResetComplete';
+import FilterFlux from './components/filters/Flux';
 export default [
     {
         name: "login",
@@ -31,11 +32,19 @@ export default [
         component: PasswordResetComplete
     },
     {
-        name: "home",
         path: "/dashboard-maps",
         component: Home,
         meta: {
             requiresAuth: true
-        }
+        },
+        children: [
+            {
+                path: '/',
+                name: "home",
+                components: {
+                    filter: FilterFlux,
+                }
+            }
+        ]
     }
 ];

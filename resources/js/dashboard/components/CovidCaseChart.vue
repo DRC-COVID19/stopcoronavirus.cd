@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <div>
+  <b-row>
+    <b-col cols="12" md="6">
       <h5>Graphique Cumule</h5>
       <canvas ref="CovidCaseChart" id="CovidCaseChart"></canvas>
-    </div>
-    <div class="mt-3">
+    </b-col>
+    <b-col cols="12" md="6">
       <h5>Graphique Journalière</h5>
       <canvas ref="covidCasesStatDaily" id="covidCasesStatDaily"></canvas>
-    </div>
-  </div>
+    </b-col>
+  </b-row>
 </template>
 
 <script>

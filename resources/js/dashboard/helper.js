@@ -1,6 +1,12 @@
 
-window.axios = require('axios');
+import { create } from 'axios';
 
+
+let axiosCreate = create({
+    baseURL: 'http://localhost:8000/',
+  });
+
+window.axios=axiosCreate;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
