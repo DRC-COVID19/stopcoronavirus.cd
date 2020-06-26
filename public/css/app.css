@@ -18111,9 +18111,13 @@ h3 {
 }
 
 .column-left {
-  background: #14244f;
-  height: calc(100vh - 52.5px);
+  background: white;
   overflow: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
 }
 
 .column-left::-webkit-scrollbar-track {
@@ -18133,7 +18137,6 @@ h3 {
 
 .column-left h1 {
   font-size: 1.3rem;
-  color: white;
 }
 
 .column-left .map-form-logo {
