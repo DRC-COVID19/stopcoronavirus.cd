@@ -379,36 +379,41 @@
         }
     }
 }
-.side-right{
-    .card {
+.side-right {
+    height: calc(80vh - 72.5px);
+    overflow: auto;
+    > .card {
         background: transparent;
         border-radius: unset;
         border: unset;
-
-        .card-header {
-            background: white;
-            border: unset;
-            padding: 0.5rem 1.25rem;
-            border-radius: unset;;
-            .nav-item {
-                margin-right: 20px;
-                .nav-link {
-                    background: $dash-shadow-color;
-                    color: $dash-blue;
-                    text-decoration: unset;
-                    border-radius: 5px;
-                    font-size: 0.8rem;
-                    padding-top: 0px;
-                    padding-bottom: 0px;
-                    &.active {
-                        color: white !important;
-                        background: $dash-green !important;
+        > .tabs {
+            > .card-header {
+                background: white;
+                border: unset;
+                padding: 0.5rem 1.25rem;
+                border-radius: unset;
+                .nav-item {
+                    margin-right: 20px;
+                    .nav-link {
+                        background: $dash-shadow-color;
+                        color: $dash-blue;
+                        text-decoration: unset;
+                        border-radius: 5px;
+                        font-size: 0.8rem;
+                        padding-top: 0px;
+                        padding-bottom: 0px;
+                        &.active {
+                            color: white !important;
+                            background: $dash-green !important;
+                        }
                     }
                 }
             }
-        }
-        .card-body{
-            padding: 10px 0;
+            > .tab-content {
+                > .card-body {
+                    padding: 10px 0;
+                }
+            }
         }
     }
 }

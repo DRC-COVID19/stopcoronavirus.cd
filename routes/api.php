@@ -45,7 +45,43 @@ Route::group([
         Route::post('me', 'AuthController@me');
         Route::post('lost-password', 'AuthController@asKResetPassword');
         Route::get('check-token/{token}', 'AuthController@checkResetPasswordToken');
-        Route::post('reset-password/{user_id}','AuthController@resetPassword');
+        Route::post('reset-password/{user_id}', 'AuthController@resetPassword');
+    });
+
+    Route::group(['prefix' => 'flux'], function () {
+        Route::group(['prefix' => 'predefined'], function () {
+            Route::group(['prefix' => 'zones'], function () {
+                Route::group(['prefix' => 'h-24'], function () {
+                    Route::get('/', 'DashBoardController@getFluxDataPredefined');
+                    Route::get('/daily', 'DashBoardController@getFluxDataPredefinedDaily');
+                    Route::get('/daily-in', 'DashBoardController@getFluxDataPredefinedDailyIn');
+                    Route::get('/daily-out', 'DashBoardController@getFluxDataPredefinedDailyOut');
+                });
+            });
+        });
+
+        Route::group(['prefix' => 'origin'], function () {
+            Route::group(['prefix' => 'zones'], function () {
+                Route::group(['prefix' => 'h-24'], function () {
+                    Route::get('/', 'DashBoardController@getFluxDataFromOrigin');
+                    Route::get('/daily', 'DashBoardController@getFluxDataFromOriginDaily');
+                    Route::get('daily-in', 'DashBoardController@getFluxDataFromOriginDailyIn');
+                    Route::get('daily-out', 'DashBoardController@getFluxDataFromOriginDailyOut');
+                });
+                Route::group(['prefix' => 'm-30'], function () {
+                });
+            });
+            Route::group(['prefix' => 'provinces'], function () {
+                Route::group(['prefix' => 'h-24'], function () {
+                    Route::post('/', 'DashBoardController@getFluxDataFromOriginProvince');
+                    Route::post('flux-24-origin-daily-provinces', 'DashBoardController@getFluxDataFromOriginDailyProvince');
+                    Route::post('/daily-in', 'DashBoardController@getFluxDataFromOriginDailyInProvince');
+                    Route::post('/daily-out', 'DashBoardController@getFluxDataFromOriginDailyOutProvince');
+                });
+                Route::group(['prefix' => 'm-30'], function () {
+                });
+            });
+        });
     });
     Route::get('hospitals/', 'DashBoardController@getHospials');
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
@@ -56,17 +92,8 @@ Route::group([
     Route::get('cavid-cases/statistics/daily', 'DashBoardController@getLastPandemicsStatisticsDaily');
     Route::post('flux-24', 'DashBoardController@getFluxData');
     Route::post('flux-24-daily', 'DashBoardController@getFluxDataDaily');
-    Route::post('flux-24-origin', 'DashBoardController@getFluxDataFromOrigin');
-    Route::post('flux-24-origin-provinces', 'DashBoardController@getFluxDataFromOriginProvince');
     Route::get('flux-zone', 'DashBoardController@getFluxZone');
     Route::get('flux-provinces', 'DashBoardController@getFluxProvinces');
-    Route::post('flux-24-origin-daily', 'DashBoardController@getFluxDataFromOriginDaily');
-    Route::post('flux-24-origin-daily-provinces', 'DashBoardController@getFluxDataFromOriginDailyProvince');
-    Route::post('flux-24-origin-daily-in', 'DashBoardController@getFluxDataFromOriginDailyIn');
-    Route::post('flux-24-origin-daily-out', 'DashBoardController@getFluxDataFromOriginDailyOut');
-
-    Route::post('flux-24-origin-daily-in-provinces', 'DashBoardController@getFluxDataFromOriginDailyInProvince');
-    Route::post('flux-24-origin-daily-out-provinces', 'DashBoardController@getFluxDataFromOriginDailyOutProvince');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');

@@ -26,6 +26,7 @@
           @antiBacterialGelChecked="antiBacterialGelChecked"
           @submitFluxForm="submitFluxForm"
           @populationFluxChecked="populationFluxChecked"
+          @flux::predefined::changed="fluxPredefinedChanged"
           :covidCasesCount="covidCasesCount"
           :hospitalCount="hospitalCount"
           :orientationCount="orientationCount"
@@ -36,7 +37,7 @@
           :fluxProvinces="fluxProvinces"
           :flux24Errors="flux24Errors"
         />
-        <b-col cols="12" offset-md="3" md="6">
+        <b-col cols="12" offset-md="3" md="5">
           <b-button
             v-if="hasFlux24||hasCovidCases||hasOrientation"
             variant="success"
@@ -63,14 +64,18 @@
             />
           </b-row>
         </b-col>
-        <b-col cols="12" md="3" class="side-right mt-2">
+        <b-col cols="12" md="4" class="side-right mt-2">
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 data" v-if="covidCases">
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
-              <b-tab title="Tab 2">
-                <b-card-text>Tab contents 2</b-card-text>
+              <b-tab title="FLux chart" v-if="hasFlux24Daily">
+                <FluxChart
+                  :flux24Daily="flux24Daily"
+                  :flux24DailyIn="flux24DailyIn"
+                  :flux24DailyOut="flux24DailyOut"
+                />
               </b-tab>
             </b-tabs>
           </b-card>
@@ -119,9 +124,13 @@ import SideCaseCovid from "../components/SideCaseCovid";
 import CovidCaseChart from "../components/CovidCaseChart";
 import OrientationChart from "../components/OrientationChart";
 import SideOrientation from "../components/SideOrientation";
-import SideFluxChart from "../components/SideFlux";
 import DataModal from "../components/DataModal";
+import SideFluxChart from "../components/SideFlux";
+import FluxChart from "../components/FluxChart";
 import { mapState, mapActions } from "vuex";
+
+const preference_start = "2020-02-01";
+const preference_end = "2020-03-18";
 export default {
   components: {
     Maps,
@@ -131,7 +140,9 @@ export default {
     CovidCaseChart,
     OrientationChart,
     SideOrientation,
-    DataModal
+    DataModal,
+    SideFluxChart,
+    FluxChart
   },
   data() {
     return {
@@ -175,6 +186,9 @@ export default {
     },
     hasFlux24() {
       return this.flux24.length > 0;
+    },
+    hasFlux24Daily() {
+      return this.flux24Daily.length > 0;
     },
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -457,28 +471,52 @@ export default {
       this.isLoading = true;
       this.flux24Errors = {};
 
-      let urlDaily = `api/dashboard/flux-24-origin-daily`;
-      let urlDailyIn = `api/dashboard/flux-24-origin-daily-in`;
-      let urlDailyOut = `api/dashboard/flux-24-origin-daily-out`;
-      let url = `api/dashboard/flux-24-origin`;
+      let url = `api/dashboard/flux/origin`;
+      let urlDaily = `api/dashboard/flux/origin`;
+      let urlDailyIn = `api/dashboard/flux/origin`;
+      let urlDailyOut = `api/dashboard/flux/origin`;
 
-      switch (values.filter) {
-        case "filter_2":
-          urlDaily = `api/dashboard/flux-24-daily`;
-          url = `api/dashboard/flux-24`;
+      switch (values.fluxGeoGranularity) {
+        case 1:
+          url += "/provinces";
+          urlDaily += "/provinces";
+          urlDailyIn += "/provinces";
+          urlDailyOut += "/provinces";
           break;
-        case "filter_3":
-          urlDaily = `api/dashboard/flux-24-origin-daily-provinces`;
-          urlDailyIn = `api/dashboard/flux-24-origin-daily-in-provinces`;
-          urlDailyOut = `api/dashboard/flux-24-origin-daily-out-provinces`;
-          url = `api/dashboard/flux-24-origin-provinces`;
+        case 2:
         default:
+          url += "/zones";
+          urlDaily += "/zones";
+          urlDailyIn += "/zones";
+          urlDailyOut += "/zones";
           break;
       }
 
+      switch (values.fluxTimeGranularity) {
+        case 1:
+          url += "/h-24";
+          urlDaily += "/h-24";
+          urlDailyIn += "/h-24";
+          urlDailyOut += "/h-24";
+          break;
+        case 2:
+        default:
+          url += "/m-30";
+          urlDaily += "/m-30";
+          urlDailyIn += "/m-30";
+          urlDailyOut += "/m-30";
+          break;
+      }
+
+      urlDaily += "/daily";
+      urlDailyIn += "/daily-in";
+      urlDailyOut += "/daily-out";
+
       this.flux24Daily = [];
       axios
-        .post(urlDaily, values)
+        .get(urlDaily, {
+          params: values
+        })
         .then(({ data }) => {
           this.flux24Daily = data;
         })
@@ -488,7 +526,9 @@ export default {
 
       this.flux24DailyIn = [];
       axios
-        .post(urlDailyIn, values)
+        .get(urlDailyIn, {
+          params: values
+        })
         .then(({ data }) => {
           this.flux24DailyIn = data;
         })
@@ -498,7 +538,9 @@ export default {
 
       this.flux24DailyOut = [];
       axios
-        .post(urlDailyOut, values)
+        .get(urlDailyOut, {
+          params: values
+        })
         .then(({ data }) => {
           this.flux24DailyOut = data;
         })
@@ -506,7 +548,9 @@ export default {
 
       this.flux24 = [];
       axios
-        .post(url, values)
+        .get(url, {
+          params: values
+        })
         .then(({ data }) => {
           this.flux24 = data;
           this.isLoading = false;
@@ -518,6 +562,68 @@ export default {
     },
     seeSide() {
       this.$bvModal.show("data-modal");
+    },
+    fluxPredefinedChanged(value) {
+      const values = {
+        option: value,
+        preference_start,
+        preference_end
+      };
+      this.isLoading = true;
+      this.flux24Errors = {};
+
+      let url = `api/dashboard/flux/predefined/zones/h-24/`;
+      let urlDaily = `api/dashboard/flux/predefined/zones/h-24/daily`;
+      let urlDailyIn = `api/dashboard/flux/predefined/zones/h-24/daily-in`;
+      let urlDailyOut = `api/dashboard/flux/predefined/zones/h-24/daily-out`;
+
+      this.flux24Daily = [];
+      axios
+        .get(urlDaily, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24Daily = data;
+        })
+        .catch(({ response }) => {});
+
+      // get flux data in
+
+      this.flux24DailyIn = [];
+      axios
+        .get(urlDailyIn, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24DailyIn = data;
+        })
+        .catch(({ response }) => {});
+
+      // get flux data out
+
+      this.flux24DailyOut = [];
+      axios
+        .get(urlDailyOut, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24DailyOut = data;
+        })
+        .catch(({ response }) => {});
+
+      this.flux24 = [];
+      axios
+        .get(url, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24 = data;
+          this.isLoading = false;
+        })
+        .catch(({ response }) => {
+          this.flux24Errors = response.data.errors;
+          this.isLoading = false;
+        });
     }
   }
 };
