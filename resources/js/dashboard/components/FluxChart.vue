@@ -1,34 +1,32 @@
 <template>
   <b-container>
     <b-row>
-      <b-col cols="12" md="6">
+      <b-col cols="12" md="6" class="pl-0">
         <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>{{item[0].destination}}</h3>
-            <b-card no-body class="mb-3">
-              <b-card-header>
-                <h5>Mobilité entrante</h5>
-                <hr />
-                <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
-                <p v-if="fluxVolumObservation(item)>0" class="text-center percent-p">
-                  ({{fluxVolumObservation(item).toLocaleString(
-                  undefined,
-                  { minimumFractionDigits: 0 })}} personnes de plus sont entrés dans la zone )​
-                </p>
-                <p v-else class="text-center percent-p">
-                  ({{(fluxVolumObservation(item)*-1).toLocaleString(
-                  undefined,
-                  { minimumFractionDigits: 0 })}} personnes de moins sont entrés dans la zone )​
-                </p>
-              </b-card-header>
+            <b-card class="mb-3">
+              <h5>Mobilité entrante</h5>
+            
+              <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
+              <p v-if="fluxVolumObservation(item)>0" class="text-center percent-p">
+                ({{fluxVolumObservation(item).toLocaleString(
+                undefined,
+                { minimumFractionDigits: 0 })}} personnes de plus sont entrés dans la zone )​
+              </p>
+              <p v-else class="text-center percent-p">
+                ({{(fluxVolumObservation(item)*-1).toLocaleString(
+                undefined,
+                { minimumFractionDigits: 0 })}} personnes de moins sont entrés dans la zone )​
+              </p>
+            </b-card>
+            <b-card class="mb-3">
               <div class="chart-container">
                 <div :ref="`mobile_entrance_${index}`" :id="`mobile_entrance_${index}`"></div>
               </div>
             </b-card>
-            <b-card-header>
-              <h5>Zone d'origine</h5>
-            </b-card-header>
-            <b-card no-body>
+
+            <b-card>
               <div class="chart-container">
                 <div :ref="`mobile_entrance_${index}_2`" :id="`mobile_entrance_${index}_2`"></div>
               </div>
@@ -37,36 +35,32 @@
           </b-col>
         </b-row>
       </b-col>
-      <b-col cols="12" md="6">
+      <b-col cols="12" md="6" class="pr-0">
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>{{item[0].origin}}</h3>
-            <b-card no-body class="mb-3">
-              <b-card-header>
+            <b-card  class="mb-3">
+             
                 <h5>Mobilité sortante</h5>
-                <hr />
                 <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
-                <p
-                  v-if="fluxVolumObservation(item)>0"
-                  class="text-center percent-p"
-                >({{fluxVolumObservation(item).toLocaleString(
+                <p v-if="fluxVolumObservation(item)>0" class="text-center percent-p">
+                  ({{fluxVolumObservation(item).toLocaleString(
                   undefined,
-                  { minimumFractionDigits: 0 })}} personnes de plus sont sorties de la zone )​</p>
-                <p
-                  v-else
-                  class="text-center percent-p"
-                >({{(fluxVolumObservation(item)*-1).toLocaleString(
+                  { minimumFractionDigits: 0 })}} personnes de plus sont sorties de la zone )​
+                </p>
+                <p v-else class="text-center percent-p">
+                  ({{(fluxVolumObservation(item)*-1).toLocaleString(
                   undefined,
-                  { minimumFractionDigits: 0 })}} personnes de moins sont sorties de la zone )​</p>
-              </b-card-header>
+                  { minimumFractionDigits: 0 })}} personnes de moins sont sorties de la zone )​
+                </p>
+              
+            </b-card>
+            <b-card class="mb-3">
               <div class="chart-container">
                 <div :ref="`mobile_out_${index}`" :id="`mobile_out_${index}`"></div>
               </div>
             </b-card>
             <b-card no-body>
-              <b-card-header>
-                <h5>Zone de destination</h5>
-              </b-card-header>
               <div class="chart-container">
                 <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
               </div>
@@ -108,7 +102,7 @@ export default {
       this.flux24DailyInLocal = this.extractFlux23DailyIn();
       await this.sleep(1000);
       this.flux24DailyInLocal.forEach((item, index) => {
-        this.mobileEntrance(item, index);
+        this.mobileCalc(item, `#mobile_entrance_${index}`);
         this.mobileEntranceOrigin(item, index);
       });
     },
@@ -116,7 +110,7 @@ export default {
       this.flux24DailyOutLocal = this.extractFlux23DailyOut();
       await this.sleep(1000);
       this.flux24DailyOutLocal.forEach((item, index) => {
-        this.mobileOut(item, index);
+        this.mobileCalc(item, `#mobile_out_${index}`);
         this.mobileOutDestination(item, index);
       });
     }
@@ -308,7 +302,7 @@ export default {
         tooltip
           .html(
             `${Math.round(
-              ((d.volume * referenceAverage) / 100)+referenceAverage
+              (d.volume * referenceAverage) / 100 + referenceAverage
             ).toLocaleString(undefined, { minimumFractionDigits: 0 })}`
           )
           .style("left", d3.mouse(this)[0] + 60 + "px")
