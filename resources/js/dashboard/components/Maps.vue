@@ -14,6 +14,7 @@ import Mapbox from "mapbox-gl";
 import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import ToolTipMaps from "./ToolTipMaps";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   components: { ToolTipMaps },
@@ -93,6 +94,7 @@ export default {
       },
       drcSourceId: "states",
       kinSourceId: "statesKin",
+      drcHealthZone: "drcHealthZone",
       covidCasesMarkers: [],
       medicalOrientationMakers: [],
       medicalOrientationData: [],
@@ -117,6 +119,11 @@ export default {
         type: "geojson",
         generateId: true,
         data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
+      });
+      map.addSource(this.drcHealthZone, {
+        type: "geojson",
+        generateId: true,
+        data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`
       });
       map.addSource(this.kinSourceId, {
         type: "vector",
@@ -148,8 +155,23 @@ export default {
       });
     });
     this.map = map;
+    this.$store.watch(
+      state => state.flux.fluxGeoGranularity,
+      value => {
+        this.mapGeoJsonSourceFlux(value);
+      }
+    );
   },
   computed: {
+    ...mapState({
+      fluxGeoGranularityState(state) {
+        console.log(state);
+
+        this.mapGeoJsonSourceFlux(state.flux.fluxGeoGranularity);
+        return;
+      }
+    }),
+
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
     }
@@ -558,30 +580,30 @@ export default {
         this.flux24
           .filter(x => !x.isReference)
           .map(item => {
-            let element = features.find(
-              x => x.properties.origin == item.origin
-            );
-            if (element) {
-              element.properties.volume += 1;
-            } else {
-              features.push({
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: item.position_start
-                },
-                properties: {
-                  origin: item.origin,
-                  color: "#ED5F68",
-                  volume: 1
-                }
-              });
-            }
+            // let element = features.find(
+            //   x => x.properties.origin == item.origin
+            // );
+            // if (element) {
+            //   element.properties.volume += 1;
+            // } else {
+            //   features.push({
+            //     type: "Feature",
+            //     geometry: {
+            //       type: "Point",
+            //       coordinates: item.position_start
+            //     },
+            //     properties: {
+            //       origin: item.origin,
+            //       color: "#ED5F68",
+            //       volume: 1
+            //     }
+            //   });
+            // }
             const element2 = features.find(
               x => x.properties.origin == item.destination
             );
             if (element2) {
-              element2.properties.volume += 1;
+              element2.properties.volume += item.volume;
             } else {
               features.push({
                 type: "Feature",
@@ -711,13 +733,13 @@ export default {
                 10
               ]
             ],
-            "circle-color": "#f4c363"
+            "circle-color": "#2e5bff"
           }
         });
 
         let arcData = [];
         let FluxFiltered = this.flux24.filter(x => !x.isReference);
-        
+
         for (const key in FluxFiltered) {
           const item = FluxFiltered[key];
           const index = arcData.findIndex(
@@ -744,7 +766,8 @@ export default {
           getTargetPosition: d => d.position_end,
           getSourceColor: d =>
             d.isReference ? [158, 158, 158] : [105, 179, 162],
-          getTargetColor: d => (d.isReference ? [158, 158, 158] : [105, 179, 162]),
+          getTargetColor: d =>
+            d.isReference ? [158, 158, 158] : [105, 179, 162],
           getHeight: 1,
           getTilt: (d, { data }) => {
             let tilt = 2;
@@ -794,6 +817,33 @@ export default {
     }
   },
   methods: {
+    mapGeoJsonSourceFlux(fluxGeoGranularity) {
+      map.removeLayer(this.drcSourceId);
+      if (fluxGeoGranularity == 1) {
+        map.addLayer({
+          id: this.drcSourceId,
+          type: "line",
+          source: this.drcSourceId,
+          layout: {},
+          paint: {
+            "line-color": "#627BC1",
+            "line-width": 1
+          }
+        });
+      } else {
+        map.addLayer({
+          id: this.drcSourceId,
+          type: "line",
+          source: this.drcHealthZone,
+          layout: {},
+          paint: {
+            "line-color": "#627BC1",
+            "line-width": 1
+          }
+        });
+      }
+      return;
+    },
     getMedicalOrientations() {
       if (!this.medicalOrientations) {
         this.RemoveOrientationMakers();

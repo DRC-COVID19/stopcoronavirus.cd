@@ -1,71 +1,67 @@
 <template>
-  <b-container>
-    <b-row>
-      <b-col cols="12" md="6" class="pl-0">
+  <b-container class="p-0">
+    <b-row no-gutters>
+      <b-col cols="12" md="6" class="pl-0 pr-2" ref="mobility">
         <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>{{item[0].destination}}</h3>
             <b-card class="mb-3">
-              <h5>Mobilité entrante</h5>
-            
-              <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
-              <p v-if="fluxVolumObservation(item)>0" class="text-center percent-p">
-                ({{fluxVolumObservation(item).toLocaleString(
+              <h5 class="percent-title">Mobilité entrante</h5>
+
+              <div class="percent dash-green">{{fluxInPercent(item)}}%​</div>
+              <p v-if="fluxVolumObservation(item)>0" class="percent-p text-dash-color">
+                {{fluxVolumObservation(item).toLocaleString(
                 undefined,
-                { minimumFractionDigits: 0 })}} personnes de plus sont entrés dans la zone )​
+                { minimumFractionDigits: 0 })}} personnes de plus sont entrés dans la zone
               </p>
-              <p v-else class="text-center percent-p">
-                ({{(fluxVolumObservation(item)*-1).toLocaleString(
+              <p v-else class="percent-p text-dash-color">
+                {{(fluxVolumObservation(item)*-1).toLocaleString(
                 undefined,
-                { minimumFractionDigits: 0 })}} personnes de moins sont entrés dans la zone )​
+                { minimumFractionDigits: 0 })}} personnes de moins sont entrés dans la zone
               </p>
             </b-card>
-            <b-card class="mb-3">
+            <b-card class="mb-3" :ref="`mobile_entrance_${index}_card`">
               <div class="chart-container">
                 <div :ref="`mobile_entrance_${index}`" :id="`mobile_entrance_${index}`"></div>
               </div>
             </b-card>
 
-            <b-card>
+            <b-card no-body :ref="`mobile_entrance_${index}_2_card`">
               <div class="chart-container">
                 <div :ref="`mobile_entrance_${index}_2`" :id="`mobile_entrance_${index}_2`"></div>
               </div>
             </b-card>
-            <hr />
           </b-col>
         </b-row>
       </b-col>
-      <b-col cols="12" md="6" class="pr-0">
+      <b-col cols="12" md="6" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>{{item[0].origin}}</h3>
-            <b-card  class="mb-3">
-             
-                <h5>Mobilité sortante</h5>
-                <div class="text-center percent">{{fluxInPercent(item)}}%​</div>
-                <p v-if="fluxVolumObservation(item)>0" class="text-center percent-p">
-                  ({{fluxVolumObservation(item).toLocaleString(
-                  undefined,
-                  { minimumFractionDigits: 0 })}} personnes de plus sont sorties de la zone )​
-                </p>
-                <p v-else class="text-center percent-p">
-                  ({{(fluxVolumObservation(item)*-1).toLocaleString(
-                  undefined,
-                  { minimumFractionDigits: 0 })}} personnes de moins sont sorties de la zone )​
-                </p>
-              
-            </b-card>
             <b-card class="mb-3">
+              <h5 class="percent-title">Mobilité sortante</h5>
+              <div class="percent dash-orange">{{fluxInPercent(item)}}%​</div>
+              <p v-if="fluxVolumObservation(item)>0" class="percent-p text-dash-color">
+                {{fluxVolumObservation(item).toLocaleString(
+                undefined,
+                { minimumFractionDigits: 0 })}} personnes de plus sont sorties de la zone
+              </p>
+              <p v-else class="percent-p text-dash-color">
+                {{(fluxVolumObservation(item)*-1).toLocaleString(
+                undefined,
+                { minimumFractionDigits: 0 })}} personnes de moins sont sorties de la zone
+              </p>
+            </b-card>
+            <b-card class="mb-3" :ref="`mobile_out_${index}_card`">
               <div class="chart-container">
                 <div :ref="`mobile_out_${index}`" :id="`mobile_out_${index}`"></div>
               </div>
             </b-card>
-            <b-card no-body>
+            <b-card no-body :ref="`mobile_out_${index}_2_card`">
               <div class="chart-container">
                 <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
               </div>
             </b-card>
-            <hr />
           </b-col>
         </b-row>
       </b-col>
@@ -130,6 +126,7 @@ export default {
     });
   },
   methods: {
+    
     fluxInPercent(items) {
       let totalReference = 0;
       items
@@ -202,8 +199,10 @@ export default {
     },
     mobileCalc(dataPram, ref) {
       // set the dimensions and margins of the graph
-      var margin = { top: 10, right: 30, bottom: 60, left: 80 },
-        width = 400 - margin.left - margin.right,
+      const refInput = `${ref.replace("#", "")}_card`;
+      let elementPosition = this.$refs[refInput][0].clientWidth - 20;
+      var margin = { top: 10, right: 30, bottom: 60, left: 30 },
+        width = elementPosition - margin.left - margin.right,
         height = 250 - margin.top - margin.bottom;
 
       // append the svg object to the body of the page
@@ -400,8 +399,17 @@ export default {
         }
       });
 
-      var margin = { top: 20, right: 30, bottom: 40, left: 90 },
-        width = 400 - margin.left - margin.right,
+      localData = localData.sort((a, b) => {
+        return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
+          Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
+          ? 1
+          : -1;
+      });
+
+      const refInput = `mobile_entrance_${index}_2_card`;
+      let elementPosition = this.$refs[refInput][0].clientWidth;
+      var margin = { top: 20, right: 30, bottom: 40, left: 60 },
+        width = elementPosition - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
       // append the svg object to the body of the page
@@ -422,10 +430,12 @@ export default {
         })
         .keys();
 
+      let maxData = d3.max(localData, d => d.volume_reference + d.volume);
+
       // Add X axis
       var x = d3
         .scaleLinear()
-        .domain([0, d3.max(data, d => d.volume + d.volume / 2)])
+        .domain([0, maxData])
         .range([0, width]);
       svg
         .append("g")
@@ -433,7 +443,8 @@ export default {
         .call(d3.axisBottom(x).tickSizeOuter(0))
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end");
+        .style("text-anchor", "end")
+        .style("font-size", "0.4rem");
 
       // Add Y axis
       var y = d3
@@ -441,7 +452,12 @@ export default {
         .domain(groups)
         .range([height, 0])
         .padding([0.2]);
-      svg.append("g").call(d3.axisLeft(y));
+      svg
+        .append("g")
+        .call(d3.axisLeft(y))
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .style("font-size", "0.4rem");
 
       // color palette = one color per subgroup
       var color = d3
@@ -506,8 +522,17 @@ export default {
         }
       });
 
-      var margin = { top: 20, right: 30, bottom: 40, left: 90 },
-        width = 400 - margin.left - margin.right,
+      localData = localData.sort((a, b) => {
+        return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
+          Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
+          ? 1
+          : -1;
+      });
+
+      const refInput = `mobile_out_${index}_2_card`;
+      let elementPosition = this.$refs[refInput][0].clientWidth;
+      var margin = { top: 20, right: 30, bottom: 40, left: 60 },
+        width = elementPosition - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
       // append the svg object to the body of the page
@@ -528,10 +553,12 @@ export default {
         })
         .keys();
 
+      let maxData = d3.max(localData, d => d.volume_reference + d.volume);
+
       // Add X axis
       var x = d3
         .scaleLinear()
-        .domain([0, d3.max(data, d => d.volume)])
+        .domain([0, maxData])
         .range([0, width]);
       svg
         .append("g")
@@ -539,7 +566,8 @@ export default {
         .call(d3.axisBottom(x).tickSizeOuter(0))
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end");
+        .style("text-anchor", "end")
+        .style("font-size", "0.4rem");
 
       // Add Y axis
       var y = d3
@@ -547,7 +575,12 @@ export default {
         .domain(groups)
         .range([height, 0])
         .padding([0.2]);
-      svg.append("g").call(d3.axisLeft(y));
+      svg
+        .append("g")
+        .call(d3.axisLeft(y))
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .style("font-size", "0.4rem");
 
       // color palette = one color per subgroup
       var color = d3
@@ -704,11 +737,15 @@ export default {
     }
   }
 }
+.percent-title {
+  font-size: 1rem;
+}
 .percent {
   font-size: 2.5rem;
+  font-weight: bold;
 }
 .percent-p {
-  font-size: 1.1rem;
+  font-size: 0.8rem;
 }
 .chart-container {
   div {

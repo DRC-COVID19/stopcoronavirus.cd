@@ -360,6 +360,7 @@
 <script>
 import DateRangePicker from "vue2-daterange-picker";
 import moment from "moment";
+import {mapMutations} from 'vuex';
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
 export default {
   components: {
@@ -563,6 +564,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setFluxGeoGranularity']),
     covidCaseToggle(checked) {
       this.$emit("covidCaseChecked", checked);
     },
@@ -640,6 +642,8 @@ export default {
       this.fluxForm.observation_end = null;
     },
     fluxGeoGranularityChange(value){
+      this.setFluxGeoGranularity(value);
+      this.fluxForm.fluxGeoOptions=[];
       if (value==1) {
         this.fluxGeoOptions=this.fluxProvinces;
       }
