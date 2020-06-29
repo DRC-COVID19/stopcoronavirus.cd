@@ -37,16 +37,16 @@
           :fluxProvinces="fluxProvinces"
           :flux24Errors="flux24Errors"
         />
-        <b-col cols="12" offset-md="3" md="5">
-          <b-button
+        <b-col cols="12" offset-md="3" :class="`${hasRightSide?'col-md-5':'col-md-9'}`">
+        <!--  <b-button
             v-if="hasFlux24||hasCovidCases||hasOrientation"
             variant="success"
             @click="seeSide"
             class="btn-see-side"
           >
             <span class="fa fa-table"></span> voir
-          </b-button>
-          <b-row class="map-container">
+          </b-button>-->
+          <b-row class="map-container" :class="{'map-container-100':!hasRightSide}">
             <Maps
               :covidCases="covidCases"
               :hospitals="hospitals"
@@ -64,7 +64,7 @@
             />
           </b-row>
         </b-col>
-        <b-col cols="12" md="4" class="side-right mt-2">
+        <b-col cols="12" md="4" class="side-right mt-2 pl-2" v-if="hasRightSide">
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 data" v-if="covidCases">
@@ -81,18 +81,15 @@
           </b-card>
         </b-col>
       </b-row>
-      <b-row class="side-bottom" no-gutters>
+      <b-row class="side-bottom" no-gutters v-if="hasCovidCases">
         <b-col cols="12" md="9" offset-md="3">
           <b-card no-body>
             <b-tabs pills card>
-              <b-tab title="Covid-19 chart" v-if="covidCases">
+              <b-tab title="Covid-19 chart" v-if="hasCovidCases" :active="hasCovidCases">
                 <CovidCaseChart
                   :covidCasesStat="covidCasesStat"
                   :covidCasesStatDaily="covidCasesStatDaily"
                 />
-              </b-tab>
-              <b-tab title="Tab 2">
-                <b-card-text>Tab contents 2</b-card-text>
               </b-tab>
             </b-tabs>
           </b-card>
@@ -101,7 +98,7 @@
     </b-container>
     <Waiting v-if="isLoading" />
 
-    <DataModal
+  <!--  <DataModal
       :flux24="flux24WithoutReference"
       :flux24Daily="flux24Daily"
       :flux24DailyOut="flux24DailyOut"
@@ -112,7 +109,7 @@
       :medicalOrientations="medicalOrientations"
       :medicalOrientationsStat="medicalOrientationsStat"
       id="data-modal"
-    />
+    />-->
   </div>
 </template>
 
@@ -178,6 +175,9 @@ export default {
     };
   },
   computed: {
+    hasRightSide(){
+      return this.getHasCoviCases() || this.flux24Daily.length > 0
+    },
     hasCovidCases() {
       return this.getHasCoviCases();
     },
@@ -649,6 +649,10 @@ export default {
 .map-container {
   padding: 10px 10px 10px 10px;
   height: calc(80vh - 72.5px);
+  transition: 500ms all ease;
+}
+.map-container-100{
+  height: calc(100vh - 72.5px);
 }
 .side-case-covid {
   position: absolute;

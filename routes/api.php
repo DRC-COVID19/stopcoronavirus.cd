@@ -69,16 +69,24 @@ Route::group([
                     Route::get('daily-out', 'DashBoardController@getFluxDataFromOriginDailyOut');
                 });
                 Route::group(['prefix' => 'm-30'], function () {
+                    Route::get('/', 'DashBoardController@getFlux30DataFromOrigin');
+                    Route::get('/daily', 'DashBoardController@getFlux30DataFromOriginDaily');
+                    Route::get('daily-in', 'DashBoardController@getFlux30DataFromOriginDailyIn');
+                    Route::get('daily-out', 'DashBoardController@getFlux30DataFromOriginDailyOut');
                 });
             });
             Route::group(['prefix' => 'provinces'], function () {
                 Route::group(['prefix' => 'h-24'], function () {
-                    Route::post('/', 'DashBoardController@getFluxDataFromOriginProvince');
-                    Route::post('flux-24-origin-daily-provinces', 'DashBoardController@getFluxDataFromOriginDailyProvince');
-                    Route::post('/daily-in', 'DashBoardController@getFluxDataFromOriginDailyInProvince');
-                    Route::post('/daily-out', 'DashBoardController@getFluxDataFromOriginDailyOutProvince');
+                    Route::get('/', 'DashBoardController@getFluxDataFromOriginProvince');
+                    Route::get('flux-24-origin-daily-provinces', 'DashBoardController@getFluxDataFromOriginDailyProvince');
+                    Route::get('/daily-in', 'DashBoardController@getFluxDataFromOriginDailyInProvince');
+                    Route::get('/daily-out', 'DashBoardController@getFluxDataFromOriginDailyOutProvince');
                 });
                 Route::group(['prefix' => 'm-30'], function () {
+                    Route::get('/', 'DashBoardController@getFlux30DataFromOriginProvince');
+                    Route::get('flux-24-origin-daily-provinces', 'DashBoardController@getFlux30DataFromOriginDailyProvince');
+                    Route::get('/daily-in', 'DashBoardController@getFlux30DataFromOriginDailyInProvince');
+                    Route::get('/daily-out', 'DashBoardController@getFlux30DataFromOriginDailyOutProvince');
                 });
             });
         });
