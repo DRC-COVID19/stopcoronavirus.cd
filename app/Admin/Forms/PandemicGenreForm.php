@@ -4,8 +4,9 @@ namespace App\Admin\Forms;
 
 use Encore\Admin\Widgets\Form;
 use Illuminate\Http\Request;
+use Encore\Admin\Widgets\StepForm;
 
-class PandemicGenreForm extends Form
+class PandemicGenreForm extends StepForm
 {
     /**
      * The form title.
