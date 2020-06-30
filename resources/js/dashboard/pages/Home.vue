@@ -1,15 +1,7 @@
 <template>
   <div>
     <b-container fluid class="dash-home-page">
-      <b-row class="header">
-        <b-col cols="12" md="6" class="map-form-header">
-          <h1>Dashboard Covid-19</h1>
-        </b-col>
-        <b-col cols="12" md="6" class="map-form-logo d-flex justify-content-end">
-          <img src="/img/partners_top.png" width="100" class="img-fluid" alt />
-          <img src="/img/commite_riposte.jpg" width="100" class="img-fluid" alt />
-        </b-col>
-      </b-row>
+      <Header/>
       <b-row class="position-relative">
         <LeftColumn
           @covidCaseChecked="getCovidCases"
@@ -124,6 +116,8 @@ import SideOrientation from "../components/SideOrientation";
 import DataModal from "../components/DataModal";
 import SideFluxChart from "../components/SideFlux";
 import FluxChart from "../components/FluxChart";
+import Header from '../components/Header';
+
 import { mapState, mapActions } from "vuex";
 
 const preference_start = "2020-02-01";
@@ -139,7 +133,8 @@ export default {
     SideOrientation,
     DataModal,
     SideFluxChart,
-    FluxChart
+    FluxChart,
+    Header
   },
   data() {
     return {
@@ -637,15 +632,7 @@ export default {
     height: calc(20vh - 72.5px);
   }
 }
-.header {
-  padding: 12px 24px;
-  background: white;
-  h1 {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 24px;
-  }
-}
+
 .map-container {
   padding: 10px 10px 10px 10px;
   height: calc(80vh - 72.5px);
