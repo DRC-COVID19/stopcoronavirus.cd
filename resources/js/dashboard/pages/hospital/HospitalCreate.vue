@@ -22,6 +22,10 @@
                     <b-form-input v-model="form.confirmed" v-int type="text" class="input-dash" />
                   </b-form-group>
                   <b-form-group>
+                    <label for class="text-dash-color">Hospitalisés</label>
+                    <b-form-input v-model="form.sick" v-int type="text" class="input-dash" />
+                  </b-form-group>
+                  <b-form-group>
                     <label for class="text-dash-color">Guéris</label>
                     <b-form-input v-model="form.healed" v-int type="text" class="input-dash" />
                   </b-form-group>

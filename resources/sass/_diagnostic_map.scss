@@ -382,6 +382,7 @@
 .side-right {
     height: calc(80vh - 72.5px);
     overflow: auto;
+    @include scroolsmallWhite;
     > .card {
         background: transparent;
         border-radius: unset;

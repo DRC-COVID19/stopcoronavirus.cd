@@ -109,9 +109,7 @@ export default {
       container: "map",
       center: [15.31389, -4.33167],
       zoom: 10,
-      style: this.MAPBOX_DEFAULT_STYLE,
-      bearing: 30,
-      pitch: 30
+      style: this.MAPBOX_DEFAULT_STYLE
     });
     map.addControl(new Mapbox.NavigationControl());
     map.on("load", () => {
@@ -163,15 +161,6 @@ export default {
     );
   },
   computed: {
-    ...mapState({
-      fluxGeoGranularityState(state) {
-        console.log(state);
-
-        this.mapGeoJsonSourceFlux(state.flux.fluxGeoGranularity);
-        return;
-      }
-    }),
-
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
     }
@@ -392,54 +381,13 @@ export default {
             last_update
           } = e.features[0].properties;
 
-          // computed properties
-          const active = confirmed - dead - healed;
-          const bedsAvailable = beds - occupied_beds;
-          const respiratorsAvailable = respirators - occupied_respirators;
+          this.selectHospital(e.features[0].properties);
+          // map.flyTo({
+          //   center:[15.31389, -4.33167],
+          //   essential: true // this animation is considered essential with respect to prefers-reduced-motion
+          // });
 
-          const template = `
-<div>
-  <div class="hospital-name">${name}</div>
-  ${address ? `<div>Commune: ${address}</div>` : ""}
-  <hr />
-  <div>
-    <strong>Situation Epidémiologique</strong>
-  </div>
-  <div class="confirmed">
-    <span>Confirmés: </span>
-    <span class="count">${confirmed}</span>
-  </div>
-  <div class="active">
-    <span>Actifs: </span>
-    <span class="count">${sick}</span>
-  </div>
-  <div class="recovered">
-    <span>Guéris: </span>
-    <span class="count">${healed}</span>
-  </div>
-  <div class="death">
-    <span>Décès: </span>
-    <span class="count">${dead}</span>
-  </div>
-  <hr />
-  <div>
-    <strong>Capacité Hospitalière</strong>
-  </div>
-  <div>
-    <span>Lits disponibles: </span>
-    <span>${bedsAvailable} sur ${beds}</span>
-  </div>
-  <div>
-    <span>Respirateurs disponibles: </span>
-    <span>${respiratorsAvailable} sur ${respirators}</span>
-  </div>
-  <div>
-    <span>Masques N95/FFP2: </span>
-    <span>${masks}</span>
-  </div>
- 
-</div>
-`;
+          const template = `<div><div class="hospital-name">${name}</div></div>`;
 
           new Mapbox.Popup()
             .setLngLat(coordinates)
@@ -817,6 +765,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["selectHospital"]),
     mapGeoJsonSourceFlux(fluxGeoGranularity) {
       map.removeLayer(this.drcSourceId);
       if (fluxGeoGranularity == 1) {

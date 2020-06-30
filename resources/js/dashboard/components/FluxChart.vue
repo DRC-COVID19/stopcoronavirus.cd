@@ -37,7 +37,7 @@
       <b-col cols="12" md="6" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
-            <h3>{{item[0].origin}}</h3>
+            <h3>&nbsp;</h3>
             <b-card class="mb-3">
               <h5 class="percent-title">Mobilité sortante</h5>
               <div class="percent dash-orange">{{fluxInPercent(item)}}%​</div>
