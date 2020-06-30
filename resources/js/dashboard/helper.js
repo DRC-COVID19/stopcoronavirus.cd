@@ -3,7 +3,7 @@ import { create } from 'axios';
 
 
 let axiosCreate = create({
-    baseURL: 'http://localhost:8000/',
+    baseURL: `${location.protocol}//${location.host}/`,
   });
 
 window.axios=axiosCreate;
