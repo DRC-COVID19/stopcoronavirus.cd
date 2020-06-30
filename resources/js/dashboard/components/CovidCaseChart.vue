@@ -5,7 +5,7 @@
       <canvas ref="CovidCaseChart" id="CovidCaseChart"></canvas>
     </b-col>
     <b-col cols="12" md="6">
-      <h5>Graphique Journalière</h5>
+      <h5>Graphique Journalier</h5>
       <canvas ref="covidCasesStatDaily" id="covidCasesStatDaily"></canvas>
     </b-col>
   </b-row>

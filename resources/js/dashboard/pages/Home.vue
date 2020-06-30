@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-container fluid class="dash-home-page">
-      <Header/>
+      <Header />
       <b-row class="position-relative">
         <LeftColumn
           @covidCaseChecked="getCovidCases"
@@ -30,7 +30,7 @@
           :flux24Errors="flux24Errors"
         />
         <b-col cols="12" offset-md="3" :class="`${hasRightSide?'col-md-5':'col-md-9'}`">
-        <!--  <b-button
+          <!--  <b-button
             v-if="hasFlux24||hasCovidCases||hasOrientation"
             variant="success"
             @click="seeSide"
@@ -56,10 +56,10 @@
             />
           </b-row>
         </b-col>
-        <b-col cols="12" md="4" class="side-right mt-2 pl-2" v-if="hasRightSide">
+        <b-col cols="12" md="4" class="side-right mt-2 pl-2" :class="{'side-right-100':!hasCovidCases}" v-if="hasRightSide">
           <b-card no-body>
             <b-tabs pills card>
-              <b-tab title="Covid-19 data" v-if="covidCases" :active="covidCases">
+              <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
               <b-tab title="FLux chart" v-if="hasFlux24Daily" :active="hasFlux24Daily">
@@ -68,6 +68,9 @@
                   :flux24DailyIn="flux24DailyIn"
                   :flux24DailyOut="flux24DailyOut"
                 />
+              </b-tab>
+              <b-tab title="Hôpital" v-if="!!selectedHospital" :active="!!selectedHospital">
+                <HospitalSituation />
               </b-tab>
             </b-tabs>
           </b-card>
@@ -90,7 +93,7 @@
     </b-container>
     <Waiting v-if="isLoading" />
 
-  <!--  <DataModal
+    <!--  <DataModal
       :flux24="flux24WithoutReference"
       :flux24Daily="flux24Daily"
       :flux24DailyOut="flux24DailyOut"
@@ -116,7 +119,8 @@ import SideOrientation from "../components/SideOrientation";
 import DataModal from "../components/DataModal";
 import SideFluxChart from "../components/SideFlux";
 import FluxChart from "../components/FluxChart";
-import Header from '../components/Header';
+import Header from "../components/Header";
+import HospitalSituation from "../components/HospitalSituation";
 
 import { mapState, mapActions } from "vuex";
 
@@ -134,7 +138,8 @@ export default {
     DataModal,
     SideFluxChart,
     FluxChart,
-    Header
+    Header,
+    HospitalSituation
   },
   data() {
     return {
@@ -143,8 +148,6 @@ export default {
       covidCasesStat: null,
       covidCasesStatDaily: null,
       covidCasesCount: null,
-      hospitals: null,
-      hospitalCount: null,
       medicalOrientations: null,
       medicalOrientationSelected: null,
       medicalOrientationsStat: null,
@@ -170,8 +173,13 @@ export default {
     };
   },
   computed: {
-    hasRightSide(){
-      return this.getHasCoviCases() || this.flux24Daily.length > 0
+    ...mapState({
+      hospitals: state => state.hospital.hospitalData,
+      hospitalCount: state => state.hospital.hospitalCount,
+      selectedHospital: state => state.hospital.selectedHospital
+    }),
+    hasRightSide() {
+      return this.getHasCoviCases() || this.flux24Daily.length > 0 || !!this.selectedHospital;
     },
     hasCovidCases() {
       return this.getHasCoviCases();
@@ -201,9 +209,15 @@ export default {
     this.getFluxZone();
     this.getFluxProvinces();
     this.userMe();
+    this.$store.watch(
+      state => state.hospital.isLoading,
+      value => {
+        this.isLoading = value;
+      }
+    );
   },
   methods: {
-    ...mapActions(["userMe"]),
+    ...mapActions(["userMe", "getHospitalsData"]),
     getHasCoviCases() {
       return this.covidCases && this.covidCases.data.features.length > 0;
     },
@@ -211,59 +225,7 @@ export default {
       return this.medicalOrientations && this.medicalOrientations.length > 0;
     },
     gethopitals(checked) {
-      this.isLoading = true;
-      if (checked) {
-        axios
-          .get(`/api/dashboard/hospitals`)
-          .then(({ data }) => {
-            let Features = data.map((value, index) => {
-              return {
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: [value.longitude, value.latitude]
-                },
-                properties: {
-                  name: value.name ? value.name : "Hopital",
-                  address: value.address,
-                  beds: value.beds,
-                  occupied_beds: value.occupied_beds,
-                  masks: value.masks,
-                  respirators: value.respirators,
-                  occupied_respirators: value.occupied_respirators,
-                  confirmed: value.last_situation
-                    ? value.last_situation.confirmed
-                    : 0,
-                  dead: value.last_situation ? value.last_situation.dead : 0,
-                  sick: value.last_situation ? value.last_situation.sick : 0,
-                  healed: value.last_situation
-                    ? value.last_situation.healed
-                    : 0,
-                  last_update: value.last_situation
-                    ? value.last_situation.last_update
-                    : 0,
-                  color: "#ED5F68"
-                }
-              };
-            });
-            this.hospitals = {
-              type: "geojson",
-              data: {
-                type: "FeatureCollection",
-                features: Features
-              }
-            };
-            this.hospitalCount = data.length;
-            this.isLoading = false;
-          })
-          .catch(() => {
-            this.isLoading = false;
-          });
-      } else {
-        this.hospitals = null;
-        this.hospitalCount = null;
-        this.isLoading = false;
-      }
+      this.getHospitalsData(checked);
     },
     getCovidCases(checked) {
       this.isLoading = true;
@@ -626,21 +588,22 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .dash-home-page {
-  height: 100vh;
+  // height: 100vh;
   background: $dash-background;
   .side-bottom {
-    height: calc(20vh - 72.5px);
+    // height: calc(20vh - 72.5px);
   }
 }
 
 .map-container {
   padding: 10px 10px 10px 10px;
-  height: calc(80vh - 72.5px);
+  height: calc(80vh - 56px);
   transition: 500ms all ease;
 }
-.map-container-100{
-  height: calc(100vh - 72.5px);
+.map-container-100,.side-right-100 {
+  height: calc(100vh - 56px);
 }
+
 .side-case-covid {
   position: absolute;
   left: 0;
