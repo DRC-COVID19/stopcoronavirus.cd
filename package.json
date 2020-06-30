@@ -33,6 +33,7 @@
         "moment": "^2.26.0",
         "vue": "^2.6.11",
         "vue-airbnb-style-datepicker": "^2.7.1",
+        "vue-form-wizard": "^0.8.4",
         "vue-google-charts": "^0.3.2",
         "vue-lazyload": "^1.3.3",
         "vue-mapbox": "^0.4.1",

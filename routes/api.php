@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HospitalSituationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\PandemicStat;
@@ -91,6 +92,7 @@ Route::group([
             });
         });
     });
+    Route::resource('hospital-situations', "HospitalSituationController");
     Route::get('hospitals/', 'DashBoardController@getHospials');
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
     Route::get('orientation-medical-stats', 'DashBoardController@getAllDiagnosticStat');

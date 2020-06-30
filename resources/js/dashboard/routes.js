@@ -4,7 +4,8 @@ import LostPassword from './pages/auth/LostPassword';
 import ResetPasswordThank from './pages/auth/ResetPasswordThank';
 import ResetPasseword from './pages/auth/ResetPassword';
 import PasswordResetComplete from './pages/auth/PasswordResetComplete';
-import FilterFlux from './components/filters/Flux';
+import HospitalsHome from './pages/hospital/Home';
+import HospitalsCreate from './pages/hospital/HospitalCreate';
 export default [
     {
         name: "login",
@@ -34,17 +35,25 @@ export default [
     {
         path: "/dashboard-maps",
         component: Home,
+        name: "home",
         meta: {
             requiresAuth: true
         },
-        children: [
-            {
-                path: '/',
-                name: "home",
-                components: {
-                    filter: FilterFlux,
-                }
-            }
-        ]
+    },
+    {
+        path: "/dashboard-maps/hospitals",
+        name: "hospital.home",
+        component: HospitalsHome,
+        meta: {
+            requiresAuth: true
+        },
+    },
+    {
+        path: "/dashboard-maps/hospitals/new",
+        name: "hospital.create",
+        component: HospitalsCreate,
+        meta: {
+            requiresAuth: true
+        },
     }
 ];
