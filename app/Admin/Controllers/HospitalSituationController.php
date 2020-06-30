@@ -3,14 +3,15 @@
 namespace App\Admin\Controllers;
 
 use App\Admin\Forms\PandemicForm;
+use App\Admin\Forms\PandemicGenreForm;
 use App\Hospital;
 use App\HospitalSituation;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use Encore\Admin\Layout\Content;
 use Encore\Admin\Widgets\Tab;
+use Encore\Admin\Widgets\MultipleSteps;
 
 class HospitalSituationController extends AdminController
 {
@@ -70,15 +71,13 @@ class HospitalSituationController extends AdminController
         return $show;
     }
 
-    public function settings(Content $content)
+    public function form()
     {
         $forms = [
             'basic'    => PandemicForm::class,
+            'genre'    => PandemicGenreForm::class,
         ];
-
-        return $content
-            ->title('系统设置')
-            ->body(Tab::forms($forms));
+        return MultipleSteps::make($forms);
     }
 
     /**
