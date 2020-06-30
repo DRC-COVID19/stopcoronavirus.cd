@@ -2,12 +2,15 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Forms\PandemicForm;
 use App\Hospital;
 use App\HospitalSituation;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Layout\Content;
+use Encore\Admin\Widgets\Tab;
 
 class HospitalSituationController extends AdminController
 {
@@ -67,23 +70,48 @@ class HospitalSituationController extends AdminController
         return $show;
     }
 
+    public function settings(Content $content)
+    {
+        $forms = [
+            'basic'    => PandemicForm::class,
+        ];
+
+        return $content
+            ->title('系统设置')
+            ->body(Tab::forms($forms));
+    }
+
     /**
      * Make a form builder.
      *
      * @return Form
      */
-    protected function form()
-    {
-        $form = new Form(new HospitalSituation());
-        $form->select('hospital_id', __('Hospital'))->options(function () {
-            return Hospital::pluck('name', 'id');
-        })->rules('required');
-        $form->number('confirmed', __('Confirmed'))->default(0);
-        $form->number('sick', __('Sick'))->default(0);
-        $form->number('healed', __('Healed'))->default(0);
-        $form->number('dead', __('Dead'))->default(0);
-        $form->datetime('last_update', __('Last update'))->default(date('Y-m-d H:i:s'));
+    // protected function form()
+    // {
+    //     $form = new Form(new HospitalSituation());
+    //     $form->divider(__('Informations sur la pandémie'));
+    //     $form->select('hospital_id', __('Hospital'))->options(function () {
+    //         return Hospital::pluck('name', 'id');
+    //     })->rules('required');
+    //     $form->number('confirmed', __('Confirmés'))->default(0);
+    //     $form->number('sick', __('malades'))->default(0);
+    //     $form->number('healed', __('guéris'))->default(0);
+    //     $form->number('dead', __('décès'))->default(0);
 
-        return $form;
-    }
+    //     $form->divider(__('Informations sur la pandémie par genre'));
+    //     $form->html('html contents');
+    //     $form->number('confirmed', __('Confirmed'))->default(0);
+    //     $form->number('sick', __('Sick'))->default(0);
+    //     $form->number('healed', __('Healed'))->default(0);
+    //     $form->number('dead', __('Dead'))->default(0);
+    //     $form->divider(__('Informations sur la pandémie par genre'));
+    //     $form->html('html contents');
+    //     $form->number('confirmed', __('Confirmed'))->default(0);
+    //     $form->number('sick', __('Sick'))->default(0);
+    //     $form->number('healed', __('Healed'))->default(0);
+    //     $form->number('dead', __('Dead'))->default(0);
+    //     $form->datetime('last_update', __('Last update'))->default(date('Y-m-d H:i:s'));
+
+    //     return $form;
+    // }
 }
