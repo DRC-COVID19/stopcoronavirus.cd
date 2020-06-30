@@ -10,4 +10,9 @@ class Hospital extends Model
     {
         return $this->hasMany(HospitalSituation::class);
     }
+
+    public function agent()
+    {
+        return $this->belongsTo(Administrator::class,'agent_id');
+    }
 }

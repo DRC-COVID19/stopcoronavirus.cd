@@ -35,6 +35,7 @@
         "vue-airbnb-style-datepicker": "^2.7.1",
         "vue-form-wizard": "^0.8.4",
         "vue-google-charts": "^0.3.2",
+        "vue-input-only-number": "^1.1.0",
         "vue-lazyload": "^1.3.3",
         "vue-mapbox": "^0.4.1",
         "vue-meta": "^2.3.4",

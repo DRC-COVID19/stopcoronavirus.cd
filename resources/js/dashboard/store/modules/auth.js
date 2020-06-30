@@ -52,8 +52,8 @@ export default {
         userMe({ commit, state }) {
             return new Promise((resolve, reject) => {
                 axios.post('/api/dashboard/auth/me', {})
-                    .then((data) => {
-                        state.user = data.user;
+                    .then(({data}) => {
+                        state.user = data;
                         resolve();
                     });
             });
