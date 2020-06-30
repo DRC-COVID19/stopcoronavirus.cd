@@ -94,6 +94,11 @@ class Administrator extends Model implements JWTSubject, AuthenticatableContract
         return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'permission_id');
     }
 
+    public function hospitalManager()
+    {
+        return $this->hasOne(Hospital::class, 'agent_id');
+    }
+
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *

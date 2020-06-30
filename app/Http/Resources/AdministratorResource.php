@@ -18,7 +18,10 @@ class AdministratorResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'usernmae'=>$this->username,
             'avatar' => $this->avatar,
+            'isHospitalManager'=>$this->hospitalManager()->exists(),
+            'hospital'=>$this->hospitalManager
         ];
     }
 }

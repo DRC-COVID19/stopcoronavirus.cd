@@ -6,6 +6,7 @@ use App\HospitalSituation;
 use App\Http\Resources\HospitalResources;
 use App\Http\Resources\HospitalSituationResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HospitalSituationController extends Controller
 {
@@ -16,7 +17,7 @@ class HospitalSituationController extends Controller
      */
     public function index()
     {
-        $hospitalSituation=HospitalSituation::paginate(15);
+        $hospitalSituation = HospitalSituation::where('hospital_id',$this->guard()->user()->hospitalManager->id)->orderBy('created_at','desc')->paginate(15);
         return HospitalSituationResource::collection($hospitalSituation);
     }
 
@@ -28,7 +29,18 @@ class HospitalSituationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        
+        try {
+            $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
+            $hospitalSituation = HospitalSituation::create($data);
+            return response()->json($hospitalSituation, 201);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     /**
@@ -63,5 +75,14 @@ class HospitalSituationController extends Controller
     public function destroy(HospitalSituation $hospitalSituation)
     {
         //
+    }
+     /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
+     */
+    public function guard()
+    {
+        return Auth::guard('dashboard');
     }
 }

@@ -6,6 +6,7 @@ import ResetPasseword from './pages/auth/ResetPassword';
 import PasswordResetComplete from './pages/auth/PasswordResetComplete';
 import HospitalsHome from './pages/hospital/Home';
 import HospitalsCreate from './pages/hospital/HospitalCreate';
+import HospitalsDetail from './pages/hospital/HospitalDetail';
 export default [
     {
         name: "login",
@@ -52,6 +53,14 @@ export default [
         path: "/dashboard-maps/hospitals/new",
         name: "hospital.create",
         component: HospitalsCreate,
+        meta: {
+            requiresAuth: true
+        },
+    },
+    {
+        path: "/dashboard-maps/hospitals/show/:hospital_id",
+        name: "hospital.detail",
+        component: HospitalsDetail,
         meta: {
             requiresAuth: true
         },
