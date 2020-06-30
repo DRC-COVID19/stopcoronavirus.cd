@@ -35,10 +35,9 @@ class AuthController extends Controller
     {
 
         $credentials = $request->only('email', 'password');
-        $user = Administrator::where(function ($q) use ($credentials) {
-            $q->where('email', $credentials['email'])
-                ->orWhere('username', $credentials['email']);
-        })->first();
+        $user = Administrator::where('email', $credentials['email'])
+            ->orWhere('username', $credentials['email'])
+            ->first();
         if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
