@@ -78,13 +78,13 @@ Route::group([
             Route::group(['prefix' => 'provinces'], function () {
                 Route::group(['prefix' => 'h-24'], function () {
                     Route::get('/', 'DashBoardController@getFluxDataFromOriginProvince');
-                    Route::get('flux-24-origin-daily-provinces', 'DashBoardController@getFluxDataFromOriginDailyProvince');
+                    Route::get('/daily', 'DashBoardController@getFluxDataFromOriginDailyProvince');
                     Route::get('/daily-in', 'DashBoardController@getFluxDataFromOriginDailyInProvince');
                     Route::get('/daily-out', 'DashBoardController@getFluxDataFromOriginDailyOutProvince');
                 });
                 Route::group(['prefix' => 'm-30'], function () {
                     Route::get('/', 'DashBoardController@getFlux30DataFromOriginProvince');
-                    Route::get('flux-24-origin-daily-provinces', 'DashBoardController@getFlux30DataFromOriginDailyProvince');
+                    Route::get('/daily', 'DashBoardController@getFlux30DataFromOriginDailyProvince');
                     Route::get('/daily-in', 'DashBoardController@getFlux30DataFromOriginDailyInProvince');
                     Route::get('/daily-out', 'DashBoardController@getFlux30DataFromOriginDailyOutProvince');
                 });

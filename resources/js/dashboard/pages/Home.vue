@@ -46,7 +46,7 @@
           >
             <span class="fa fa-table"></span> voir
           </b-button>-->
-          <b-row class="map-container" :class="{'map-container-100':!hasRightSide}">
+          <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
             <Maps
               :covidCases="covidCases"
               :hospitals="hospitals"
@@ -67,10 +67,10 @@
         <b-col cols="12" md="4" class="side-right mt-2 pl-2" v-if="hasRightSide">
           <b-card no-body>
             <b-tabs pills card>
-              <b-tab title="Covid-19 data" v-if="covidCases">
+              <b-tab title="Covid-19 data" v-if="covidCases" :active="covidCases">
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
-              <b-tab title="FLux chart" v-if="hasFlux24Daily">
+              <b-tab title="FLux chart" v-if="hasFlux24Daily" :active="hasFlux24Daily">
                 <FluxChart
                   :flux24Daily="flux24Daily"
                   :flux24DailyIn="flux24DailyIn"
