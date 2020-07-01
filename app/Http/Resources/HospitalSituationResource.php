@@ -42,7 +42,9 @@ class HospitalSituationResource extends JsonResource
             'hydrochloroquine' => $this->hydrochloroquine,
             'azytromicine' => $this->azytromicine,
             'Vitamince_c' => $this->Vitamince_c,
-            'last_update' => $this->last_update
+            'last_update' => $this->last_update,
+            "updated_manager_name"=>$this->updated_manager_name,
+            'created_manager_name'=>$this->created_manager_name,
         ];
     }
 }

@@ -5,8 +5,11 @@
       <b-row>
         <b-col v-if="user && user.hospital">
           <h3>Situations hospitalières</h3>
-          <p>{{`Structure: ${user.hospital.name}`}}</p>
-          <p>{{`Adresse: ${user.hospital.address}`}}</p>
+          <b-alert show variant="info">
+            <div>{{`Structure: ${user.hospital.name}`}}</div>
+            <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
+            <p v-if="hospitalManagerName">Connecté en tant que {{hospitalManagerName}}</p>
+          </b-alert>
         </b-col>
       </b-row>
       <b-row class="mt-4 mb-4">
@@ -30,6 +33,9 @@
                 <b-spinner class="align-middle" />
                 <strong>Loading...</strong>
               </div>
+            </template>
+            <template v-slot:cell(last_update)="data">
+              <span>{{moment(data.item.last_update).format('d.m.Y')}}</span>
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
@@ -67,15 +73,17 @@
         </b-col>
       </b-row>
     </b-container>
+    <ManagerUserName id="nameModal"/>
   </div>
 </template>
 
 <script>
 import Header from "../../components/hospital/Header";
+import ManagerUserName from '../../components/hospital/ManagerUserName';
 import { mapState, mapMutations } from "vuex";
 export default {
   components: {
-    Header
+    Header,ManagerUserName
   },
   data() {
     return {
@@ -91,7 +99,8 @@ export default {
   },
   computed: {
     ...mapState({
-      user: state => state.auth.user
+      user: state => state.auth.user,
+      hospitalManagerName: state => state.hospital.hospitalManagerName
     }),
     totalRows() {
       if (this.hospitalSituations.meta) {
@@ -108,9 +117,12 @@ export default {
   },
   mounted() {
     this.getHospitalSituations();
+    if (!this.hospitalManagerName) {
+      this.$bvModal.show("nameModal");
+    }
   },
   methods: {
-    ...mapMutations(["setDetailHospital"]),
+    ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
     getHospitalSituations() {
       this.ishospitalSituationLoading = true;
       axios.get("/api/dashboard/hospital-situations").then(({ data }) => {
@@ -118,7 +130,8 @@ export default {
         this.ishospitalSituationLoading = false;
       });
     },
-    onPageChange(page) {}
+    onPageChange(page) {},
+    
   }
 };
 </script>
