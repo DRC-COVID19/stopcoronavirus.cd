@@ -42,9 +42,7 @@ export default {
                                     nurses: value.nurses ?? 0,
                                     para_medicals: value.para_medicals ?? 0,
 
-                                    last_update: value.last_update
-                                        ? value.last_situation.last_update
-                                        : 0,
+                                    last_update: value.last_situation?.last_update,
                                     last_situation: value.last_situation,
                                     confirmed: value.last_situation?.confirmed ?? 0,
                                     sick: value.last_situation?.sick ?? 0,
