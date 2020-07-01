@@ -35,7 +35,7 @@
               </div>
             </template>
             <template v-slot:cell(last_update)="data">
-              <span>{{moment(data.item.last_update).format('d.m.Y')}}</span>
+              <span>{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
