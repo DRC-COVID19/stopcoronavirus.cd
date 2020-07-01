@@ -4,8 +4,13 @@
     <b-container>
       <Loading v-if="isLoading" class="h-100" />
       <b-row v-else align-h="center" class="mb-3">
-        <b-col cols="12" md="6">
-          <h3 class="mb-4 mt-4">Situation hospitalière de la mise à jour du <br> {{moment(form.last_update).format("DD.MM.Y")}}</h3>
+        <b-col cols="12" md="6" class="mt-4">
+           <b-link :to="{
+            name:'hospital.home'
+          }">
+            <span class="fa fa-chevron-left"> Retour</span>
+          </b-link>
+          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form.last_update).format("DD.MM.Y")}}</h3>
 
           <h4 class="mb-4">Données épidemologiques</h4>
           <ul>

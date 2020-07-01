@@ -9,7 +9,7 @@
           <b-form @submit.prevent="submitLogin">
             <b-alert :show="authError" variant="danger">{{error_message}}</b-alert>
             <b-form-group>
-              <label class="text-dash-color" for="email">ADRESSE E-MAIL</label>
+              <label class="text-dash-color" for="email">E-MAIL, UTILISATEUR OU TELEPHONE</label>
               <b-input
                 :disabled="isAuthenticating"
                 v-model="form.email"
