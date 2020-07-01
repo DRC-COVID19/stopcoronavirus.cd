@@ -72,7 +72,7 @@ class HospitalController extends AdminController
                 $query->where('name', 'agent-hospital');
             })->pluck('username', 'id');
         })->rules(['required']);
-        // $form->latlong('latitude', 'longitude', 'Position')->height(500);
+        $form->latlong('latitude', 'longitude', 'Position')->height(500);
 
         return $form;
     }
