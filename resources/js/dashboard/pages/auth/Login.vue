@@ -7,10 +7,7 @@
           <h1 class="dash-login-title">Connexion</h1>
           <p class="text-dash-color">Entrez vos paramètres de connexion pour continuer</p>
           <b-form @submit.prevent="submitLogin">
-            <b-alert
-              :show="authError"
-              variant="danger"
-            >Mot de passe incorrecte ou login ne correspondent à aucun utilisateur enregistré</b-alert>
+            <b-alert :show="authError" variant="danger">{{error_message}}</b-alert>
             <b-form-group>
               <label class="text-dash-color" for="email">ADRESSE E-MAIL</label>
               <b-input
@@ -54,6 +51,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import { ADMIN_DASHBOARD, AGENT_HOSPITAL } from "../../config/env";
 import Logo from "../../components/LogoComponent";
 export default {
   components: {
@@ -61,24 +59,45 @@ export default {
   },
   data() {
     return {
-      form: {}
+      form: {},
+      error_message: null
     };
   },
   computed: {
     ...mapState({
       isAuthenticating: state => state.auth.isAuthenticating,
-      authError: state => state.auth.authError
+      authError: state => state.auth.authError,
+      userRole: state => state.auth.userRole
     })
   },
   methods: {
     ...mapActions(["logUserIn"]),
     submitLogin() {
       this.logUserIn(this.form)
-      .then(() => {
-        this.$router.push({
-          name: "home"
+        .then(({ user }) => {
+          let dashboardRole = user.roles.find(x => x.name == "admin-dashboard");
+          let hospitalRole = user.roles.find(x => x.name == "agent-hospital");
+          if (dashboardRole) {
+            this.$router.push({
+              name: "home"
+            });
+          } else if (hospitalRole) {
+            this.$router
+              .push({
+                name: "hospital.home"
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          } else {
+            this.$router.push({
+              name: "acces.denied"
+            });
+          }
+        })
+        .catch(({ data }) => {
+          this.error_message = data.error;
         });
-      });
     }
   }
 };

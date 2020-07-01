@@ -1,10 +1,13 @@
 import moment from 'moment';
+import { data } from 'jquery';
+import { ADMIN_DASHBOARD, AGENT_HOSPITAL } from '../../config/env';
 
 export default {
     state: {
         user: {},
         isAuthenticating: false,
         isAuthenticated: !!localStorage.getItem('dashboard_access_token'),
+        userRole: localStorage.getItem('dashboard_access_role'),
         authError: false,
         lastAuthCheck: null
     },
@@ -15,6 +18,16 @@ export default {
             state.user = payload.user;
             state.authElocalStoragerror = false;
             state.lastAuthCheck = moment(new Date()).toISOString();
+            let dashboardRole = payload.user.roles.find(x => x.name == ADMIN_DASHBOARD);
+            let hospitalRole = payload.user.roles.find(x => x.name == AGENT_HOSPITAL);
+            if (dashboardRole) {
+                localStorage.setItem('dashboard_access_role', ADMIN_DASHBOARD);
+                state.userRole = ADMIN_DASHBOARD;
+            }
+            else if (hospitalRole) {
+                localStorage.setItem('dashboard_access_role', AGENT_HOSPITAL);
+                state.userRole = AGENT_HOSPITAL;
+            }
             if (payload.token) {
                 localStorage.setItem('dashboard_access_token', payload.token);
                 window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + payload.token;
@@ -43,18 +56,29 @@ export default {
                     password: payload.password
                 }).then(({ data }) => {
                     commit('loginSuccess', data);
-                    resolve();
-                }).catch(error => {
-                    commit('loginFail', error);
+                    resolve(data);
+                }).catch((error) => {
+                    commit('loginFail', error.response);
+                    reject(error.response)
                 });
             });
         },
         userMe({ commit, state }) {
             return new Promise((resolve, reject) => {
                 axios.post('/api/dashboard/auth/me', {})
-                    .then(({data}) => {
+                    .then(({ data }) => {
                         state.user = data;
-                        resolve();
+                        let dashboardRole = data.roles.find(x => x.name == ADMIN_DASHBOARD);
+                        let hospitalRole = data.roles.find(x => x.name == AGENT_HOSPITAL);
+                        if (dashboardRole) {
+                            localStorage.setItem('dashboard_access_role', ADMIN_DASHBOARD);
+                            state.userRole = ADMIN_DASHBOARD;
+                        }
+                        else if (hospitalRole) {
+                            localStorage.setItem('dashboard_access_role', AGENT_HOSPITAL);
+                            state.userRole = AGENT_HOSPITAL;
+                        }
+                        resolve(data);
                     });
             });
         },
