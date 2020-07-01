@@ -5,6 +5,7 @@
         <b-col cols="12">
           <h4 class="bold">{{hospital.name}}</h4>
           <hr />
+          <div v-if="hospital.last_update" class="text-right text-black-50 ">Mise à jour du {{moment(hospital.last_update).format('DD.MM.Y')}}</div>
           <h5 class="bold">Situations épidemologiques</h5>
           <div>Confirmés: {{hospital.confirmed}}</div>
           <div>Hospitalisés: {{hospital.sick}}</div>
