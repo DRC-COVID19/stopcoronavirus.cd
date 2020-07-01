@@ -70,7 +70,7 @@ class HospitalController extends AdminController
         $form->select('agent_id', __('Agent'))->options(function () {
             return Administrator::whereHas('roles', function (Builder $query) {
                 $query->where('name', 'agent-hospital');
-            })->pluck('username', 'id');
+            })->pluck('name', 'id');
         })->rules(['required']);
         $form->latlong('latitude', 'longitude', 'Position')->height(500);
 
