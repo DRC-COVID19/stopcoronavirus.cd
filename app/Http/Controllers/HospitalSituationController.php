@@ -101,6 +101,8 @@ class HospitalSituationController extends Controller
             'hydrochloroquine' => 'nullable',
             'azytromicine' => 'nullable',
             'Vitamince_c' => 'nullable',
+            'created_manager_name' => 'nullable',
+            'updated_manager_name' => 'nullable',
             'last_update' => 'date|required'
         ])->validate();
     }

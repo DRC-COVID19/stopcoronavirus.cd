@@ -29,6 +29,8 @@ class HospitalSituation extends Model
         'hydrochloroquine',
         'azytromicine',
         'Vitamince_c',
-        'last_update'
+        'last_update',
+        'created_manager_name',
+        'updated_manager_name'
     ];
 }

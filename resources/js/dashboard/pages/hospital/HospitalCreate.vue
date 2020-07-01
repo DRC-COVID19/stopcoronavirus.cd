@@ -8,6 +8,11 @@
           <b-alert variant="danger" dismissible show>{{errors.last_update[0]}}</b-alert>
         </b-col>
         <b-col>
+          <b-link :to="{
+            name:'hospital.home'
+          }">
+            <span class="fa fa-chevron-left"> Retour</span>
+          </b-link>
           <h3 v-if="$route.params.hospital_id" class="mb-4 mt-4">
             Modifier la mise à jour du
             <br />
@@ -430,6 +435,7 @@
                     <label for="last_update" class="text-dash-color">Sélectionnez la date</label>
                     <b-form-datepicker
                       v-model="form.last_update"
+                      :max="max"
                       required
                       id="last_update"
                       class="mb-2"
@@ -442,6 +448,7 @@
         </b-col>
       </b-row>
     </b-container>
+    <ManagerUserName />
   </div>
 </template>
 
@@ -449,15 +456,19 @@
 import { FormWizard, TabContent } from "vue-form-wizard";
 import Header from "../../components/hospital/Header";
 import Loading from "../../components/Loading";
+import ManagerUserName from "../../components/hospital/ManagerUserName";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
+import { mapState } from "vuex";
 export default {
   components: {
     FormWizard,
     TabContent,
     Header,
+    ManagerUserName,
     Loading
   },
   data() {
+    const now = new Date()
     return {
       form: {
         confirmed: 0,
@@ -479,26 +490,39 @@ export default {
         chloroquine: 0,
         hydrochloroquine: 0,
         azytromicine: 0,
-        Vitamince_c: 0
+        Vitamince_c: 0,
+        max: now,
       },
       errors: {},
       isLoading: false
     };
   },
+  computed: {
+    ...mapState({
+      hospitalManagerName: state => state.hospital.hospitalManagerName
+    })
+  },
   mounted() {
     if (this.$route.params.hospital_id) {
       this.getHospital();
+    }
+    if (!this.hospitalManagerName) {
+      this.$bvModal.show("nameModal");
     }
   },
   methods: {
     onComplete() {
       this.isLoading = true;
       this.errors = {};
+      this.form.created_manager_name = this.hospitalManagerName;
       axios
         .post("/api/dashboard/hospital-situations", this.form)
         .then(({ data }) => {
           this.form = {};
           this.isLoading = false;
+          this.$router.push({
+            name: "hospital.home"
+          });
         })
         .catch(({ response }) => {
           this.isLoading = false;
@@ -507,6 +531,7 @@ export default {
     },
     getHospital() {
       this.isLoading = true;
+      this.form.updated_manager_name = this.hospitalManagerName;
       axios
         .get(
           `/api/dashboard/hospital-situations/${this.$route.params.hospital_id}`

@@ -5,6 +5,7 @@ export default {
         isLoading: false,
         selectedHospital: null,
         detailHospital: null,
+        hospitalManagerName: null,
     },
     mutations: {
         selectHospital(state, payload) {
@@ -12,6 +13,9 @@ export default {
         },
         setDetailHospital(state, payload) {
             state.detailHospital = payload;
+        },
+        setHospitalManagerName(state, payload) {
+            state.hospitalManagerName = payload;
         }
     },
     actions: {

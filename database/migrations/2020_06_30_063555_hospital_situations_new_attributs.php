@@ -69,23 +69,23 @@ class HospitalSituationsNewAttributs extends Migration
             $table->integer('dead_85')->nullable();
 
 
-            $table->integer('occupied_Beds')->default(0);
-            $table->integer('occupied_respirators')->default(0);
-            $table->integer('masks')->default(0);
-            $table->integer('occupied_foam_beds')->default(0);
-            $table->integer('occupied_resuscitation_beds')->default(0);
-            $table->integer('individual_protection_equipment')->default(0);
-            $table->integer('gel_hydro_alcoolique')->default(0);
-            $table->integer('resuscitation_ventilator')->default(0);
-            $table->integer('oxygenator')->default(0);
-            $table->integer('rapid_screening')->default(0);
-            $table->integer('automate_genexpert')->default(0);
-            $table->integer('x_ray')->default(0);
-            $table->integer('check_point')->default(0);
-            $table->integer('chloroquine')->default(0);
-            $table->integer('hydrochloroquine')->default(0);
-            $table->integer('azytromicine')->default(0);
-            $table->integer('Vitamince_c')->default(0);
+            $table->integer('occupied_Beds')->default(0)->nullable();
+            $table->integer('occupied_respirators')->default(0)->nullable();
+            $table->integer('masks')->default(0)->nullable();
+            $table->integer('occupied_foam_beds')->default(0)->nullable();
+            $table->integer('occupied_resuscitation_beds')->default(0)->nullable();
+            $table->integer('individual_protection_equipment')->default(0)->nullable();
+            $table->integer('gel_hydro_alcoolique')->default(0)->nullable();
+            $table->integer('resuscitation_ventilator')->default(0)->nullable();
+            $table->integer('oxygenator')->default(0)->nullable();
+            $table->integer('rapid_screening')->default(0)->nullable();
+            $table->integer('automate_genexpert')->default(0)->nullable();
+            $table->integer('x_ray')->default(0)->nullable();
+            $table->integer('check_point')->default(0)->nullable();
+            $table->integer('chloroquine')->default(0)->nullable();
+            $table->integer('hydrochloroquine')->default(0)->nullable();
+            $table->integer('azytromicine')->default(0)->nullable();
+            $table->integer('Vitamince_c')->default(0)->nullable();
         });
     }
 
