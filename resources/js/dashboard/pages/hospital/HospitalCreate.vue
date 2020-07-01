@@ -2,10 +2,19 @@
   <div>
     <Header />
     <b-container class="mt-4">
-      <b-row>
+      <Loading v-if="isLoading" class="h-100" />
+      <b-row v-else>
+        <b-col cols="12" md="6" v-if="errors && errors.last_update">
+          <b-alert variant="danger" dismissible show>{{errors.last_update[0]}}</b-alert>
+        </b-col>
         <b-col>
+          <h3 v-if="$route.params.hospital_id" class="mb-4 mt-4">
+            Modifier la mise à jour du
+            <br />
+            {{moment(form.last_update).format("D-m-Y")}}
+          </h3>
           <form-wizard
-            title="FICHE COLLECTE DES DONNEES"
+            :title="$route.params.hospital_id?'':'FICHE DE COLLECTE DES DONNEES'"
             subtitle
             shape="tab"
             color="#2e5bff"
@@ -13,10 +22,12 @@
             backButtonText="Précédent"
             finishButtonText="Envoyer"
             @on-complete="onComplete"
+            :startIndex="4"
           >
             <tab-content>
               <b-row align-h="center">
-                <b-col cols="12" md="4">
+                <b-col cols="12" md="6">
+                  <h3 class="mb-4">Données épidemologiques</h3>
                   <b-form-group>
                     <label for class="text-dash-color">Confirmés</label>
                     <b-form-input v-model="form.confirmed" v-int type="text" class="input-dash" />
@@ -36,7 +47,8 @@
                 </b-col>
               </b-row>
             </tab-content>
-            <tab-content>
+            <!--
+              <tab-content>
               <b-row align-h="center">
                 <b-col cols="12" md="4">
                   <h3>Homme</h3>
@@ -251,15 +263,17 @@
                 </b-col>
               </b-row>
             </tab-content>
+            -->
             <tab-content>
               <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Capacité de prise en charge des patiens du COVID</h3>
+                <b-col cols="12" md="6">
+                  <h3 class="mb-4">Capacité de prise en charge des patiens</h3>
                   <b-form-group>
                     <label for class="text-dash-color">Lits avec mousse occupés</label>
                     <b-form-input
                       v-model="form.occupied_foam_beds"
                       v-int
+                      value="0"
                       type="text"
                       class="input-dash"
                     />
@@ -351,7 +365,7 @@
             </tab-content>
             <tab-content>
               <b-row align-h="center">
-                <b-col cols="12" md="4">
+                <b-col cols="12" md="6">
                   <h3>Médicaments</h3>
                   <b-form-group>
                     <label for class="text-dash-color">Chloroquine</label>
@@ -367,7 +381,7 @@
                     />
                   </b-form-group>
                   <b-form-group>
-                    <label for class="text-dash-color">azytromicine</label>
+                    <label for class="text-dash-color">Azytromicine</label>
                     <b-form-input v-model="form.azytromicine" v-int type="text" class="input-dash" />
                   </b-form-group>
 
@@ -380,11 +394,46 @@
             </tab-content>
             <tab-content>
               <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Confirmations</h3>
+                <b-col cols="12" md="6">
+                  <h3 class="mb-4">Confirmations les données entrées</h3>
+
+                  <h4 class="mb-4">Données épidemologiques</h4>
+                  <ul>
+                    <li>Confirmés : {{form.confirmed}}</li>
+                    <li>Hospitalisés : {{form.sick}}</li>
+                    <li>Guéris : {{form.healed}}</li>
+                    <li>Décès : {{form.dead}}</li>
+                  </ul>
+                  <h4 class="mb-4">Capacité de prise en charge des patiens</h4>
+                  <ul>
+                    <li>Lits avec mousse occupés: {{form.occupied_foam_beds}}</li>
+                    <li>Lits de réanimation occupés : {{form.occupied_resuscitation_beds}}</li>
+                    <li>Respirateurs occupés : {{form.occupied_respirators}}</li>
+                    <li>Ventilateur de réanimation occupés : {{form.resuscitation_ventilator}}</li>
+                    <li>Masques : {{form.masks}}</li>
+                    <li>Equipement de protection individuelle : {{form.individual_protection_equipment}}</li>
+                    <li>Oxygénérateur : {{form.oxygenator}}</li>
+                    <li>Dépistage rapide : {{form.rapid_screening}}</li>
+                    <li>Radiographie : {{form.x_ray}}</li>
+                    <li>Automate Genexpert : {{form.automate_genexpert}}</li>
+                    <li>Gel hydro alcoolique : {{form.gel_hydro_alcoolique}}</li>
+                    <li>Check point : {{form.check_point}}</li>
+                  </ul>
+                  <h4 class="mb-4">Médicaments</h4>
+                  <ul>
+                    <li>Chloroquine : {{form.chloroquine}}</li>
+                    <li>Hydrochloroquine : {{form.hydrochloroquine}}</li>
+                    <li>Azytromicine : {{form.azytromicine}}</li>
+                    <li>Vitamince c : {{form.Vitamince_c}}</li>
+                  </ul>
                   <b-form-group>
-                    <label for class="text-dash-color">Date</label>
-                    <b-calendar v-model="form.last_update" class="input-dash" />
+                    <label for="last_update" class="text-dash-color">Sélectionnez la date</label>
+                    <b-form-datepicker
+                      v-model="form.last_update"
+                      required
+                      id="last_update"
+                      class="mb-2"
+                    ></b-form-datepicker>
                   </b-form-group>
                 </b-col>
               </b-row>
@@ -399,28 +448,75 @@
 <script>
 import { FormWizard, TabContent } from "vue-form-wizard";
 import Header from "../../components/hospital/Header";
+import Loading from "../../components/Loading";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 export default {
   components: {
     FormWizard,
     TabContent,
-    Header
+    Header,
+    Loading
   },
   data() {
     return {
-      form: {},
-      errors: {}
+      form: {
+        confirmed: 0,
+        sick: 0,
+        healed: 0,
+        dead: 0,
+        occupied_foam_beds: 0,
+        occupied_resuscitation_beds: 0,
+        occupied_respirators: 0,
+        resuscitation_ventilator: 0,
+        masks: 0,
+        individual_protection_equipment: 0,
+        oxygenator: 0,
+        rapid_screening: 0,
+        x_ray: 0,
+        automate_genexpert: 0,
+        gel_hydro_alcoolique: 0,
+        check_point: 0,
+        chloroquine: 0,
+        hydrochloroquine: 0,
+        azytromicine: 0,
+        Vitamince_c: 0
+      },
+      errors: {},
+      isLoading: false
     };
+  },
+  mounted() {
+    if (this.$route.params.hospital_id) {
+      this.getHospital();
+    }
   },
   methods: {
     onComplete() {
+      this.isLoading = true;
+      this.errors = {};
       axios
         .post("/api/dashboard/hospital-situations", this.form)
         .then(({ data }) => {
           this.form = {};
+          this.isLoading = false;
         })
-        .catch(({ data }) => {
-          this.errors = data;
+        .catch(({ response }) => {
+          this.isLoading = false;
+          this.errors = response.data.errors;
+        });
+    },
+    getHospital() {
+      this.isLoading = true;
+      axios
+        .get(
+          `/api/dashboard/hospital-situations/${this.$route.params.hospital_id}`
+        )
+        .then(({ data }) => {
+          this.form = data;
+        })
+        .catch(response => {})
+        .finally(() => {
+          this.isLoading = false;
         });
     }
   }
