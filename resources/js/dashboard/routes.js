@@ -75,6 +75,15 @@ export default [
         },
     },
     {
+        path: "/dashboard-maps/hospitals/edit/:hospital_id",
+        name: "hospital.edit",
+        component: HospitalsCreate,
+        meta: {
+            requiresAuth: true,
+            role: agentHospital
+        },
+    },
+    {
         path: "/dashboard-maps/acces-denied",
         name: "acces.denied",
         component: NotAcces,

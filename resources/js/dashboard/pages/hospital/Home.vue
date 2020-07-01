@@ -3,8 +3,8 @@
     <Header />
     <b-container class="mt-4">
       <b-row>
-        <b-col v-if="user.hospital">
-          <h2>Situations hospitalières</h2>
+        <b-col v-if="user && user.hospital">
+          <h3>Situations hospitalières</h3>
           <p>{{`Structure: ${user.hospital.name}`}}</p>
           <p>{{`Adresse: ${user.hospital.address}`}}</p>
         </b-col>
@@ -32,17 +32,25 @@
               </div>
             </template>
             <template v-slot:cell(actions)="data">
-              <b-button size="sm" class="btn-dash-blue mb-1" @click="selectItem(data.item)">Details</b-button>
-              <router-link
+              <b-button
+                size="sm"
+                class="btn-dash-blue mb-1"
+                :to="{
+                  name:'hospital.detail', 
+                  params:{
+                    hospital_id:data.item.id
+                    }
+                    }"
+              >Details</b-button>
+              <b-button
                 class="btn btn-warning mb-1"
                 :to="{
-                  name: 'admin.event.participant.update',
+                  name: 'hospital.edit',
                   params: {
-                    event_id: $route.params.event_id,
-                    participant_id:data.item.id,
+                    hospital_id: data.item.id
                   }
                 }"
-              >Edit</router-link>
+              >Edit</b-button>
             </template>
           </b-table>
         </b-col>
@@ -64,7 +72,7 @@
 
 <script>
 import Header from "../../components/hospital/Header";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 export default {
   components: {
     Header
@@ -102,6 +110,7 @@ export default {
     this.getHospitalSituations();
   },
   methods: {
+    ...mapMutations(["setDetailHospital"]),
     getHospitalSituations() {
       this.ishospitalSituationLoading = true;
       axios.get("/api/dashboard/hospital-situations").then(({ data }) => {

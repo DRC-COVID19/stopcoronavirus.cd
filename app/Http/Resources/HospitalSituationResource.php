@@ -20,6 +20,7 @@ class HospitalSituationResource extends JsonResource
         $situationCumul = HospitalSituation::select([DB::raw('sum(confirmed) as confirmed_cumul,sum(healed) as healed_cumul,sum(dead) as dead_cumul')])
             ->where('hospital_id', $this->hospital_id)->first();
         return [
+            'id'=>$this->id,
             "confirmed" => $situationCumul->confirmed_cumul,
             "sick" => $this->sick,
             'healed' => $situationCumul->healed_cumul,

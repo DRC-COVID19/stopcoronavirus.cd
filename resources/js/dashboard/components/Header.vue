@@ -3,15 +3,25 @@
     <b-col cols="12" md="6" class="map-form-header">
       <h1>Dashboard Covid-19</h1>
     </b-col>
-    <b-col cols="12" md="6" class="map-form-logo d-flex justify-content-end">
+    <b-col cols="12" md="4" class="map-form-logo d-flex justify-content-end">
       <img src="/img/partners_top.png" width="100" class="img-fluid" alt />
       <img src="/img/commite_riposte.jpg" width="100" class="img-fluid" alt />
+      <div>
+        <b-img :src="user.avatar" />
+      </div>
     </b-col>
   </b-row>
 </template>
 
 <script>
-export default {};
+import { mapState } from "vuex";
+export default {
+  computed: {
+    ...mapState({
+      user: state => state.auth.user
+    })
+  }
+};
 </script>
 
 

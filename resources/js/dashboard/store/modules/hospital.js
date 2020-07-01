@@ -4,10 +4,14 @@ export default {
         hospitalCount: null,
         isLoading: false,
         selectedHospital: null,
+        detailHospital: null,
     },
     mutations: {
         selectHospital(state, payload) {
             state.selectedHospital = payload;
+        },
+        setDetailHospital(state, payload) {
+            state.detailHospital = payload;
         }
     },
     actions: {
