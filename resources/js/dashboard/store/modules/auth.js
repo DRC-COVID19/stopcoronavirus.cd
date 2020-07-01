@@ -9,7 +9,8 @@ export default {
         isAuthenticated: !!localStorage.getItem('dashboard_access_token'),
         userRole: localStorage.getItem('dashboard_access_role'),
         authError: false,
-        lastAuthCheck: null
+        lastAuthCheck: null,
+        isLogout: false,
     },
     mutations: {
         loginSuccess(state, payload) {
@@ -43,8 +44,10 @@ export default {
         },
         logoutSuccess(state) {
             state.isAuthenticated = false;
+            state.userRole = null;
             state.user = null;
             localStorage.removeItem('dashboard_access_token');
+            localStorage.removeItem('dashboard_access_role');
         }
     },
     actions: {
@@ -82,11 +85,14 @@ export default {
                     });
             });
         },
-        logout({ commit }) {
+        logout({ commit, state }) {
+            state.isLogout = true;
             return new Promise((resolve, reject) => {
                 axios.post('/api/dashboard/auth/logout', {}).then(() => {
                     commit('logoutSuccess');
                     resolve();
+                }).finally(() => {
+                    state.isLogout = false;
                 })
             });
         }

@@ -4,16 +4,69 @@
       <b-col cols="12" md="6" class="map-form-header">
         <h1>Projet control room Covid-19</h1>
       </b-col>
-      <b-col cols="12" md="6" class="map-form-logo d-flex justify-content-center justify-content-md-end">
+      <b-col
+        cols="12"
+        md="6"
+        class="map-form-logo d-flex justify-content-center justify-content-md-end"
+      >
         <img src="/img/partners_top.png" width="100" class="img-fluid" alt />
         <img src="/img/commite_riposte.jpg" width="100" class="img-fluid" alt />
+        <div
+          @mouseleave="userAvatarMouseLeave"
+          @mouseenter="userAvatarMouseEnter"
+          class="avatar-container"
+          v-if="user"
+        >
+          <b-img
+            :src="user.avatar"
+            rounded="circle"
+            fluid
+            width="30"
+            v-b-tooltip.hover
+            :title="user.username"
+          />
+          <b-card class="user-card text-center" v-if="showUserCard">
+            <p>{{user.username}}</p>
+            <p>{{user.name}}</p>
+            <p v-if="user.email">{{user.email}}</p>
+            <b-button @click="userLogout" variant="danger" block>Deconnexion</b-button>
+          </b-card>
+        </div>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-export default {};
+import { mapState, mapActions } from "vuex";
+export default {
+  data() {
+    return {
+      showUserCard: false
+    };
+  },
+  computed: {
+    ...mapState({
+      user: state => state.auth.user
+    })
+  },
+  methods: {
+    ...mapActions(["logout"]),
+    userAvatarMouseEnter() {
+      this.showUserCard = true;
+    },
+    userAvatarMouseLeave() {
+      this.showUserCard = false;
+    },
+    userLogout() {
+      this.logout().then(() => {
+        this.$router.push({
+          name: "login"
+        });
+      });
+    }
+  }
+};
 </script>
 
 
@@ -28,6 +81,18 @@ export default {};
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+  }
+  .avatar-container {
+    position: relative;
+    img {
+      cursor: pointer;
+    }
+    .user-card {
+      position: absolute;
+      right: 0;
+      top: 110%;
+      z-index: 99;
+    }
   }
 }
 </style>

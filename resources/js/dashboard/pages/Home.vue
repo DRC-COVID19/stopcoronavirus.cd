@@ -208,13 +208,6 @@ export default {
   mounted() {
     this.getFluxZone();
     this.getFluxProvinces();
-    this.userMe();
-    this.$store.watch(
-      state => state.hospital.isLoading,
-      value => {
-        this.isLoading = value;
-      }
-    );
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),

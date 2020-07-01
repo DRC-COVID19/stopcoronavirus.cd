@@ -7,6 +7,7 @@ use App\Http\Resources\HospitalResources;
 use App\Http\Resources\HospitalSituationResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class HospitalSituationController extends Controller
 {
@@ -17,7 +18,7 @@ class HospitalSituationController extends Controller
      */
     public function index()
     {
-        $hospitalSituation = HospitalSituation::where('hospital_id',$this->guard()->user()->hospitalManager->id)->orderBy('created_at','desc')->paginate(15);
+        $hospitalSituation = HospitalSituation::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('created_at', 'desc')->paginate(15);
         return HospitalSituationResource::collection($hospitalSituation);
     }
 
@@ -29,8 +30,7 @@ class HospitalSituationController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        
+        $data = $this->validator($request->all());
         try {
             $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
             $hospitalSituation = HospitalSituation::create($data);
@@ -51,7 +51,7 @@ class HospitalSituationController extends Controller
      */
     public function show(HospitalSituation $hospitalSituation)
     {
-        //
+        return response()->json(HospitalSituationResource::make($hospitalSituation));
     }
 
     /**
@@ -76,7 +76,35 @@ class HospitalSituationController extends Controller
     {
         //
     }
-     /**
+
+    function validator($data)
+    {
+        return Validator::make($data, [
+            "confirmed" => 'nullable',
+            "sick" => 'nullable',
+            'healed' => 'nullable',
+            'dead' => 'nullable',
+            'occupied_Beds' => 'nullable',
+            'occupied_respirators' => 'nullable',
+            'masks' => 'nullable',
+            'occupied_foam_beds' => 'nullable',
+            'occupied_resuscitation_beds' => 'nullable',
+            'individual_protection_equipment' => 'nullable',
+            'gel_hydro_alcoolique' => 'nullable',
+            "resuscitation_ventilator" => 'nullable',
+            "oxygenator" => 'nullable',
+            "rapid_screening" => 'nullable',
+            "automate_genexpert" => 'nullable',
+            "x_ray" => 'nullable',
+            "check_point" => 'nullable',
+            "chloroquine" => 'nullable',
+            'hydrochloroquine' => 'nullable',
+            'azytromicine' => 'nullable',
+            'Vitamince_c' => 'nullable',
+            'last_update' => 'date|required'
+        ])->validate();
+    }
+    /**
      * Get the guard to be used during authentication.
      *
      * @return \Illuminate\Contracts\Auth\Guard
