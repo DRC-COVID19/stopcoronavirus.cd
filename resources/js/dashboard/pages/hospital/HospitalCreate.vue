@@ -16,7 +16,7 @@
           <h3 v-if="$route.params.hospital_id" class="mb-4 mt-4">
             Modifier la mise à jour du
             <br />
-            {{moment(form.last_update).format("D-m-Y")}}
+            {{moment(form.last_update).format("DD.MM.Y")}}
           </h3>
           <form-wizard
             :title="$route.params.hospital_id?'':'FICHE DE COLLECTE DES DONNEES'"

@@ -30,11 +30,7 @@ class HospitalController extends AdminController
         $grid = new Grid(new Hospital());
         $grid->column('name', "Nom");
         $grid->column('address', "Adresse");
-        $grid->column('Beds', "Total Lits");
-        $grid->column('occupied_beds', "Lits occupés");
         $grid->column('respirators', "respirateurs");
-        $grid->column('masks', "Masques");
-        $grid->column('busy_respirators', __('Respirateurs occupés'));
         return $grid;
     }
 
@@ -49,11 +45,7 @@ class HospitalController extends AdminController
         $show = new Show(Hospital::findOrFail($id));
         $show->field('name', __('Nom'));
         $show->field('address', 'Adresse');
-        $show->field('beds', __('Total Lits'));
-        $show->field('occupied_beds', __('Lits occupés'));
         $show->field('respirators', __('Total respirateurs'));
-        $show->field('occupied_respirators', __('Respirateurs occupés'));
-        $show->field('masks', __('Masque'));
         $show->field('latitude', __('Latitude'));
         $show->field('longitude', __('Longitude'));
         return $show;

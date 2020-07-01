@@ -3,9 +3,9 @@
     <Header />
     <b-container>
       <Loading v-if="isLoading" class="h-100" />
-      <b-row v-else align-h="center">
+      <b-row v-else align-h="center" class="mb-3">
         <b-col cols="12" md="6">
-          <h3 class="mb-4 mt-4">Situation hospitalière de la mise à jour du <br> {{moment(form.last_update).format("D-m-Y")}}</h3>
+          <h3 class="mb-4 mt-4">Situation hospitalière de la mise à jour du <br> {{moment(form.last_update).format("DD.MM.Y")}}</h3>
 
           <h4 class="mb-4">Données épidemologiques</h4>
           <ul>
@@ -36,7 +36,8 @@
             <li>Azytromicine : {{form.azytromicine}}</li>
             <li>Vitamince c : {{form.Vitamince_c}}</li>
           </ul>
-          <div>Mise à jour du {{form.last_update}}</div>
+          <div>Données envoyées par <b> {{form.created_manager_name}}</b></div>
+          <div v-if="form.updated_manager_name">Modifier par {{form.updated_manager_name}}</div>
         </b-col>
       </b-row>
     </b-container>
