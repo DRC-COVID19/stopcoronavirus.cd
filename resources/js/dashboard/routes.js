@@ -7,6 +7,11 @@ import PasswordResetComplete from './pages/auth/PasswordResetComplete';
 import HospitalsHome from './pages/hospital/Home';
 import HospitalsCreate from './pages/hospital/HospitalCreate';
 import HospitalsDetail from './pages/hospital/HospitalDetail';
+import NotAcces from './pages/NotAccess';
+
+const adminDashboard = "admin-dashboard";
+const agentHospital = "agent-hospital";
+
 export default [
     {
         name: "login",
@@ -38,7 +43,8 @@ export default [
         component: Home,
         name: "home",
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            role: adminDashboard
         },
     },
     {
@@ -46,7 +52,8 @@ export default [
         name: "hospital.home",
         component: HospitalsHome,
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            role: agentHospital
         },
     },
     {
@@ -54,7 +61,8 @@ export default [
         name: "hospital.create",
         component: HospitalsCreate,
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            role: agentHospital
         },
     },
     {
@@ -62,7 +70,16 @@ export default [
         name: "hospital.detail",
         component: HospitalsDetail,
         meta: {
-            requiresAuth: true
+            requiresAuth: true,
+            role: agentHospital
+        },
+    },
+    {
+        path: "/dashboard-maps/acces-denied",
+        name: "acces.denied",
+        component: NotAcces,
+        meta: {
+            requiresAuth: true,
         },
     }
 ];
