@@ -126,7 +126,6 @@ export default {
     });
   },
   methods: {
-    
     fluxInPercent(items) {
       let totalReference = 0;
       items
@@ -251,22 +250,33 @@ export default {
             });
           }
         });
+      const parseTime = d3.timeParse("%Y-%m-%d");
       data.forEach(item => {
         let difference = item.volume - referenceAverage;
         let percent = (difference * 100) / referenceAverage;
         item.volume = percent;
+        item.date = parseTime(item.date);
       });
+
+      //     function(d){
+      //   return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
+      // },
 
       // Add X axis --> it is a date format
       var x = d3
-        .scaleBand()
-        .domain(data.map(d => d.date))
+        .scaleTime()
+        .domain(d3.extent(data, function(d) {
+          return d.date; }))
         .range([0, width]);
 
       svg
         .append("g")
         .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).tickSize(0))
+        .call(
+          d3
+            .axisBottom(x)
+            .tickFormat(d3.timeFormat("%d-%m"))
+        )
         .selectAll("text")
         .style("text-anchor", "end")
         .attr("dx", "-.8em")
