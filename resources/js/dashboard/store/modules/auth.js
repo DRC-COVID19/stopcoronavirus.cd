@@ -91,6 +91,7 @@ export default {
                 axios.post('/api/dashboard/auth/logout', {}).then(() => {
                     commit('logoutSuccess');
                     resolve();
+                    commit('setHospitalManagerName', null, { root: true })
                 }).finally(() => {
                     state.isLogout = false;
                 })
