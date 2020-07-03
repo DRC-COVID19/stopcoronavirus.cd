@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container fluid class="dash-home-page">
+    <b-container fluid class="dash-home-page" ref="dash_home_page" id="dash_home_page">
       <Header />
       <b-row class="position-relative">
         <LeftColumn
@@ -56,7 +56,13 @@
             />
           </b-row>
         </b-col>
-        <b-col cols="12" md="4" class="side-right mt-2 pl-2" :class="{'side-right-100':!hasCovidCases}" v-if="hasRightSide">
+        <b-col
+          cols="12"
+          md="4"
+          class="side-right mt-2 pl-2"
+          :class="{'side-right-100':!hasCovidCases}"
+          v-if="hasRightSide"
+        >
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
@@ -76,7 +82,7 @@
           </b-card>
         </b-col>
       </b-row>
-      <b-row class="side-bottom" no-gutters v-if="hasCovidCases">
+      <b-row class="side-bottom" no-gutters v-if="hasCovidCases||hasFlux24Daily">
         <b-col cols="12" md="9" offset-md="3">
           <b-card no-body>
             <b-tabs pills card>
@@ -85,6 +91,9 @@
                   :covidCasesStat="covidCasesStat"
                   :covidCasesStatDaily="covidCasesStatDaily"
                 />
+              </b-tab>
+              <b-tab title="Flux tendance">
+                <FluxTendanceChart :flux24Daily="flux24Daily" />
               </b-tab>
             </b-tabs>
           </b-card>
@@ -121,6 +130,7 @@ import SideFluxChart from "../components/SideFlux";
 import FluxChart from "../components/FluxChart";
 import Header from "../components/Header";
 import HospitalSituation from "../components/HospitalSituation";
+import FluxTendanceChart from "../components/flux/tendanceChart";
 
 import { mapState, mapActions } from "vuex";
 
@@ -139,7 +149,8 @@ export default {
     SideFluxChart,
     FluxChart,
     Header,
-    HospitalSituation
+    HospitalSituation,
+    FluxTendanceChart
   },
   data() {
     return {
@@ -169,7 +180,8 @@ export default {
       flux24Errors: {},
       flux24Daily: [],
       flux24DailyIn: [],
-      flux24DailyOut: []
+      flux24DailyOut: [],
+      menuColunmStyle: {}
     };
   },
   computed: {
@@ -179,7 +191,11 @@ export default {
       selectedHospital: state => state.hospital.selectedHospital
     }),
     hasRightSide() {
-      return this.getHasCoviCases() || this.flux24Daily.length > 0 || !!this.selectedHospital;
+      return (
+        this.getHasCoviCases() ||
+        this.flux24Daily.length > 0 ||
+        !!this.selectedHospital
+      );
     },
     hasCovidCases() {
       return this.getHasCoviCases();
@@ -205,12 +221,38 @@ export default {
       };
     }
   },
-  mounted() {
+  async mounted() {
     this.getFluxZone();
     this.getFluxProvinces();
+    // await this.sleep(2000);
+    // this.$nextTick(() => {
+    //   console.log(this.$refs.dash_home_page);
+    //   console.log(this.$refs);
+    //   this.$refs.dash_home_page.addEventListener(
+    //     "resize",
+    //     this.LeftColumnStyle()
+    //   );
+    // });
   },
+  // destroyed() {
+  //   this.$nextTick(() => {
+  //     this.$refs.dash_home_page.removeEventListener(
+  //       "resize",
+  //       this.LeftColumnStyle()
+  //     );
+  //   });
+  // },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),
+    LeftColumnStyle() {
+      let height = "100vh";
+      if (this.$refs.dash_home_page) {
+        height = this.$refs.dash_home_page.clientHeight;
+      }
+      this.menuColunmStyle = {
+        height: `calc(${height} - 70px)`
+      };
+    },
     getHasCoviCases() {
       return this.covidCases && this.covidCases.data.features.length > 0;
     },
@@ -468,6 +510,7 @@ export default {
           params: values
         })
         .then(({ data }) => {
+
           this.flux24Daily = data;
         })
         .catch(({ response }) => {});
@@ -593,7 +636,8 @@ export default {
   height: calc(80vh - 56px);
   transition: 500ms all ease;
 }
-.map-container-100,.side-right-100 {
+.map-container-100,
+.side-right-100 {
   height: calc(100vh - 56px);
 }
 

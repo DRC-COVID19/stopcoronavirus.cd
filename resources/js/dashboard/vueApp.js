@@ -10,6 +10,7 @@ import vSelect from 'vue-select';
 import App from "./App.vue";
 import GlobalComponents from './globalComponents'
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL } from './config/env';
+import "chartjs-plugin-crosshair";
 
 require('./helper');
 

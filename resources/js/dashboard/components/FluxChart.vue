@@ -20,9 +20,14 @@
                 { minimumFractionDigits: 0 })}} personnes de moins sont entrés dans la zone
               </p>
             </b-card>
-            <b-card class="mb-3" :ref="`mobile_entrance_${index}_card`">
+            <b-card no-body class="mb-3 p-2" :ref="`mobile_entrance_${index}_card`">
               <div class="chart-container">
-                <div :ref="`mobile_entrance_${index}`" :id="`mobile_entrance_${index}`"></div>
+                <canvas
+                  height="200"
+                  width="100vh"
+                  :ref="`mobile_entrance_${index}`"
+                  :id="`mobile_entrance_${index}`"
+                ></canvas>
               </div>
             </b-card>
 
@@ -52,9 +57,14 @@
                 { minimumFractionDigits: 0 })}} personnes de moins sont sorties de la zone
               </p>
             </b-card>
-            <b-card class="mb-3" :ref="`mobile_out_${index}_card`">
+            <b-card no-body class="mb-3 p-2" :ref="`mobile_out_${index}_card`">
               <div class="chart-container">
-                <div :ref="`mobile_out_${index}`" :id="`mobile_out_${index}`"></div>
+                <canvas
+                  height="200"
+                  width="100vh"
+                  :ref="`mobile_out_${index}`"
+                  :id="`mobile_out_${index}`"
+                ></canvas>
               </div>
             </b-card>
             <b-card no-body :ref="`mobile_out_${index}_2_card`">
@@ -97,17 +107,21 @@ export default {
     async flux24DailyIn() {
       this.flux24DailyInLocal = this.extractFlux23DailyIn();
       await this.sleep(1000);
-      this.flux24DailyInLocal.forEach((item, index) => {
-        this.mobileCalc(item, `#mobile_entrance_${index}`);
-        this.mobileEntranceOrigin(item, index);
+      this.$nextTick(() => {
+        this.flux24DailyInLocal.forEach((item, index) => {
+          this.mobileCalc(item, `mobile_entrance_${index}`);
+          this.mobileEntranceOrigin(item, index);
+        });
       });
     },
     async flux24DailyOut() {
       this.flux24DailyOutLocal = this.extractFlux23DailyOut();
       await this.sleep(1000);
-      this.flux24DailyOutLocal.forEach((item, index) => {
-        this.mobileCalc(item, `#mobile_out_${index}`);
-        this.mobileOutDestination(item, index);
+      this.$nextTick(() => {
+        this.flux24DailyOutLocal.forEach((item, index) => {
+          this.mobileCalc(item, `mobile_out_${index}`);
+          this.mobileOutDestination(item, index);
+        });
       });
     }
   },
@@ -116,13 +130,17 @@ export default {
     this.flux24DailyOutLocal = this.extractFlux23DailyOut();
 
     await this.sleep(1000);
-    this.flux24DailyInLocal.forEach((item, index) => {
-      this.mobileCalc(item, `#mobile_entrance_${index}`);
-      this.mobileEntranceOrigin(item, index);
+    this.$nextTick(() => {
+      this.flux24DailyInLocal.forEach((item, index) => {
+        this.mobileCalc(item, `mobile_entrance_${index}`);
+        this.mobileEntranceOrigin(item, index);
+      });
     });
-    this.flux24DailyOutLocal.forEach((item, index) => {
-      this.mobileCalc(item, `#mobile_out_${index}`);
-      this.mobileOutDestination(item, index);
+    this.$nextTick(() => {
+      this.flux24DailyOutLocal.forEach((item, index) => {
+        this.mobileCalc(item, `mobile_out_${index}`);
+        this.mobileOutDestination(item, index);
+      });
     });
   },
   methods: {
@@ -198,21 +216,6 @@ export default {
     },
     mobileCalc(dataPram, ref) {
       // set the dimensions and margins of the graph
-      const refInput = `${ref.replace("#", "")}_card`;
-      let elementPosition = this.$refs[refInput][0].clientWidth - 20;
-      var margin = { top: 10, right: 30, bottom: 60, left: 30 },
-        width = elementPosition - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom;
-
-      // append the svg object to the body of the page
-      var svg = d3
-        .select(ref)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
       let data = [];
       let DataReference = [];
       let totalReference = 0;
@@ -250,262 +253,120 @@ export default {
             });
           }
         });
-      const parseTime = d3.timeParse("%Y-%m-%d");
       data.forEach(item => {
         let difference = item.volume - referenceAverage;
         let percent = (difference * 100) / referenceAverage;
         item.volume = percent;
-        item.date = parseTime(item.date);
       });
 
-      //     function(d){
-      //   return { date : d3.timeParse("%Y-%m-%d")(d.date), value : d.value }
-      // },
-
-      // Add X axis --> it is a date format
-      var x = d3
-        .scaleTime()
-        .domain(d3.extent(data, function(d) {
-          return d.date; }))
-        .range([0, width]);
-
-      svg
-        .append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(
-          d3
-            .axisBottom(x)
-            .tickFormat(d3.timeFormat("%d-%m"))
-        )
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .attr("dx", "-.8em")
-        .attr("dy", ".15em")
-        .attr("transform", "rotate(-65)");
-
-      // let first = 2 * referenceAverage - d3.max(data, d => d.volume);
-      // Add Y axis
-      var y = d3
-        .scaleLinear()
-        .domain([-100, 100])
-        .range([height, 0]);
-      svg.append("g").call(d3.axisLeft(y));
-
-      // create a tooltip
-      var tooltip = d3
-        .select(ref)
-        .append("div")
-        .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "2px")
-        .style("border-radius", "5px")
-        .style("padding", "5px");
-
-      // Three function that change the tooltip when user hover / move / leave a cell
-      var mouseover = function(d) {
-        tooltip.style("opacity", 1);
-      };
-      var mousemove = function(d) {
-        tooltip
-          .html(
-            `${Math.round(
-              (d.volume * referenceAverage) / 100 + referenceAverage
-            ).toLocaleString(undefined, { minimumFractionDigits: 0 })}`
-          )
-          .style("left", d3.mouse(this)[0] + 60 + "px")
-          .style("top", d3.mouse(this)[1] - 40 + "px")
-          .style("cursor", "pointer");
-      };
-      var mouseleave = function(d) {
-        tooltip.style("opacity", 0);
-      };
-
-      var mousemoveAverage = function(d) {
-        tooltip
-          .html(
-            `${Math.round(referenceAverage).toLocaleString(
-              undefined, // leave undefined to use the browser's locale,
-              // or use a string like 'en-US' to override it.
-              { minimumFractionDigits: 0 }
-            )}`
-          )
-          .style("left", d3.mouse(this)[0] + 60 + "px")
-          .style("top", d3.mouse(this)[1] - 40 + "px")
-          .style("cursor", "pointer");
-      };
-
-      svg
-        .append("line") // attach a line
-        .style("stroke", "#9e9e9e") // colour the line
-        .attr("x1", 0) // x position of the first end of the line
-        .attr("y1", height / 2) // y position of the first end of the line
-        .attr("x2", width) // x position of the second end of the line
-        .attr("y2", height / 2)
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemoveAverage)
-        .on("mouseleave", mouseleave);
-
-      // Draw the line
-      svg
-        .datum(data)
-        .append("path")
-        .attr("fill", "none")
-        .attr("stroke", "#00b065")
-        .attr("stroke-width", 1.5)
-        .attr(
-          "d",
-          d3
-            .line()
-            .x(function(d) {
-              return x(d.date);
-            })
-            .y(function(d) {
-              return y(d.volume);
-            })
-        );
-
-      svg
-        .append("g")
-        .selectAll("dot")
-        .data(data)
-        .enter()
-        .append("circle")
-        .attr("cx", function(d) {
-          return x(d.date);
-        })
-        .attr("cy", function(d) {
-          return y(d.volume);
-        })
-        .attr("r", 5)
-        .attr("fill", "#69b3a2")
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave);
-    },
-    mobileEntranceOrigin(data, index) {
-      let localData = [];
-      data.forEach(item => {
-        let element = localData.find(x => x.origin == item.origin);
-        if (element) {
-          if (item.isReference) {
-            element.volume_reference = item.volume;
-          } else {
-            element.volume = item.volume;
-          }
-        } else {
-          if (item.isReference) {
-            localData.push({
-              origin: item.origin,
-              volume_reference: item.volume
-            });
-          } else {
-            localData.push({
-              origin: item.origin,
-              volume: item.volume
-            });
+      const tempData = {
+        type: "line",
+        data: {
+          labels: data.map(x => new Date(x.date)),
+          datasets: [
+            {
+              label: "Volume",
+              fill: false,
+              borderColor: "rgb(166,180,205)",
+              backgroundColor: "rgb(166,180,205, 0.2)",
+              data: data.map(x => ({ x: new Date(x.date), y: x.volume })),
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            display: false
+          },
+          title: {
+            display: false,
+            text: ""
+          },
+          plugins: {
+            crosshair: {
+              line: {
+                color: "#F66", // crosshair line color
+                width: 1, // crosshair line width
+                dashPattern: [5, 5] // crosshair line dash pattern
+              },
+              sync: {
+                enabled: false // enable trace line syncing with other charts
+              }
+            }
+          },
+          tooltips: {
+            mode: "interpolate",
+            intersect: false,
+            callbacks: {
+              title: (a, d) => {
+                return this.moment(a[0].xLabel).format("DD.MM.Y");
+              },
+              label: function(i, d) {
+                return (
+                  d.datasets[i.datasetIndex].label +
+                  ": " +
+                  Math.round(
+                    referenceAverage * i.yLabel,
+                    0
+                  ).toLocaleString(undefined, { minimumFractionDigits: 0 })
+                );
+              }
+            }
+          },
+          scales: {
+            xAxes: [
+              {
+                display: true,
+                gridLines: {
+                  display: true
+                },
+                scaleLabel: {
+                  display: false,
+                  labelString: "Month"
+                },
+                type: "time",
+                time: {
+                  unit: "day",
+                  unitStepSize: 2,
+                  displayFormats: {
+                    day: "DD.MM"
+                  }
+                }
+              }
+            ],
+            yAxes: [
+              {
+                display: true,
+                ticks: {
+                  min: -100,
+                  max: 100,
+                  callback: function(value) {
+                    return value + "%";
+                  }
+                },
+                scaleLabel: {
+                  display: false,
+                  labelString: "Percentage"
+                }
+              }
+            ]
           }
         }
-      });
+      };
+      console.log(ref);
 
-      localData = localData.sort((a, b) => {
-        return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
-          Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
-          ? 1
-          : -1;
-      });
+      console.log(this.$refs);
+      console.log(this.$refs[ref][0]);
 
-      const refInput = `mobile_entrance_${index}_2_card`;
-      let elementPosition = this.$refs[refInput][0].clientWidth;
-      var margin = { top: 20, right: 30, bottom: 40, left: 60 },
-        width = elementPosition - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
-
-      // append the svg object to the body of the page
-      var svg = d3
-        .select(`#mobile_entrance_${index}_2`)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      var subgroups = ["origin", "volume_reference", "volume"];
-
-      // List of groups = species here = value of the first column called group -> I show them on the X axis
-      var groups = d3
-        .map(localData, function(d) {
-          return d.origin;
-        })
-        .keys();
-
-      let maxData = d3.max(localData, d => d.volume_reference + d.volume);
-
-      // Add X axis
-      var x = d3
-        .scaleLinear()
-        .domain([0, maxData])
-        .range([0, width]);
-      svg
-        .append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).tickSizeOuter(0))
-        .selectAll("text")
-        .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end")
-        .style("font-size", "0.4rem");
-
-      // Add Y axis
-      var y = d3
-        .scaleBand()
-        .domain(groups)
-        .range([height, 0])
-        .padding([0.2]);
-      svg
-        .append("g")
-        .call(d3.axisLeft(y))
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .style("font-size", "0.4rem");
-
-      // color palette = one color per subgroup
-      var color = d3
-        .scaleOrdinal()
-        .domain(subgroups)
-        .range(["#00b065", "#9e9e9e"]);
-
-      //stack the data? --> stack per subgroup
-      var stackedData = d3.stack().keys(subgroups)(localData);
-
-      // Show the bars
-      svg
-        .append("g")
-        .selectAll("g")
-        // Enter in the stack data = loop key per key = group per group
-        .data(stackedData)
-        .enter()
-        .append("g")
-        .attr("fill", function(d) {
-          return color(d.key);
-        })
-        .selectAll("rect")
-        // enter a second time = loop subgroup per subgroup to add all rectangles
-        .data(function(d) {
-          return d;
-        })
-        .enter()
-        .append("rect")
-        .attr("y", function(d) {
-          return y(d.data.origin);
-        })
-        .attr("x", function(d) {
-          return x(d[0]);
-        })
-        .attr("width", function(d) {
-          return x(d[1]) - x(d[0]) ?? 0;
-        })
-        .attr("height", y.bandwidth());
+      const myLineChart = new Chart(
+        this.$refs[ref][0].getContext("2d"),
+        tempData
+      );
     },
     mobileOutDestination(data, index) {
       let localData = [];
@@ -627,6 +488,129 @@ export default {
         })
         .attr("width", function(d) {
           return x(d[1]) - x(d[0]);
+        })
+        .attr("height", y.bandwidth());
+    },
+    mobileEntranceOrigin(data, index) {
+      let localData = [];
+      data.forEach(item => {
+        let element = localData.find(x => x.origin == item.origin);
+        if (element) {
+          if (item.isReference) {
+            element.volume_reference = item.volume;
+          } else {
+            element.volume = item.volume;
+          }
+        } else {
+          if (item.isReference) {
+            localData.push({
+              origin: item.origin,
+              volume_reference: item.volume
+            });
+          } else {
+            localData.push({
+              origin: item.origin,
+              volume: item.volume
+            });
+          }
+        }
+      });
+
+      localData = localData.sort((a, b) => {
+        return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
+          Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
+          ? 1
+          : -1;
+      });
+
+      const refInput = `mobile_entrance_${index}_2_card`;
+      let elementPosition = this.$refs[refInput][0].clientWidth;
+      var margin = { top: 20, right: 30, bottom: 40, left: 60 },
+        width = elementPosition - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
+
+      // append the svg object to the body of the page
+      var svg = d3
+        .select(`#mobile_entrance_${index}_2`)
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+      var subgroups = ["origin", "volume_reference", "volume"];
+
+      // List of groups = species here = value of the first column called group -> I show them on the X axis
+      var groups = d3
+        .map(localData, function(d) {
+          return d.origin;
+        })
+        .keys();
+
+      let maxData = d3.max(localData, d => d.volume_reference + d.volume);
+
+      // Add X axis
+      var x = d3
+        .scaleLinear()
+        .domain([0, maxData])
+        .range([0, width]);
+      svg
+        .append("g")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).tickSizeOuter(0))
+        .selectAll("text")
+        .attr("transform", "translate(-10,0)rotate(-45)")
+        .style("text-anchor", "end")
+        .style("font-size", "0.4rem");
+
+      // Add Y axis
+      var y = d3
+        .scaleBand()
+        .domain(groups)
+        .range([height, 0])
+        .padding([0.2]);
+      svg
+        .append("g")
+        .call(d3.axisLeft(y))
+        .selectAll("text")
+        .style("text-anchor", "end")
+        .style("font-size", "0.4rem");
+
+      // color palette = one color per subgroup
+      var color = d3
+        .scaleOrdinal()
+        .domain(subgroups)
+        .range(["#00b065", "#9e9e9e"]);
+
+      //stack the data? --> stack per subgroup
+      var stackedData = d3.stack().keys(subgroups)(localData);
+
+      // Show the bars
+      svg
+        .append("g")
+        .selectAll("g")
+        // Enter in the stack data = loop key per key = group per group
+        .data(stackedData)
+        .enter()
+        .append("g")
+        .attr("fill", function(d) {
+          return color(d.key);
+        })
+        .selectAll("rect")
+        // enter a second time = loop subgroup per subgroup to add all rectangles
+        .data(function(d) {
+          return d;
+        })
+        .enter()
+        .append("rect")
+        .attr("y", function(d) {
+          return y(d.data.origin);
+        })
+        .attr("x", function(d) {
+          return x(d[0]);
+        })
+        .attr("width", function(d) {
+          return x(d[1]) - x(d[0]) ?? 0;
         })
         .attr("height", y.bandwidth());
     },
