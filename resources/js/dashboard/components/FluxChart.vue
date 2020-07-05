@@ -103,7 +103,6 @@ export default {
     };
   },
   watch: {
-    flux24Daily() {},
     async flux24DailyIn() {
       this.flux24DailyInLocal = this.extractFlux23DailyIn();
       await this.sleep(1000);
@@ -267,7 +266,7 @@ export default {
             {
               label: "Volume",
               fill: false,
-              borderColor: "rgb(166,180,205)",
+              borderColor: "rgb(51, 172, 46)",
               backgroundColor: "rgb(166,180,205, 0.2)",
               data: data.map(x => ({ x: new Date(x.date), y: x.volume })),
               interpolate: true,
@@ -358,11 +357,6 @@ export default {
           }
         }
       };
-      console.log(ref);
-
-      console.log(this.$refs);
-      console.log(this.$refs[ref][0]);
-
       const myLineChart = new Chart(
         this.$refs[ref][0].getContext("2d"),
         tempData

@@ -50,7 +50,7 @@ export default {
             {
               label: "Volume",
               fill: false,
-              borderColor: "rgb(166,180,205)",
+              borderColor: "rgb(51, 172, 46)",
               backgroundColor: "rgb(166,180,205, 0.2)",
               data: data.map(x => ({ x: new Date(x.date), y: x.volume })),
               interpolate: true,
@@ -113,27 +113,27 @@ export default {
               },
               label: function(i, d) {
                 return (
-                  d.datasets[i.datasetIndex].label + ": " + i.yLabel.toFixed(2)
+                  d.datasets[i.datasetIndex].label + ": " + i.yLabel.toFixed(0)
                 );
               }
             }
           },
-        //   annotation: {
-        //     annotations: [
-        //       {
-        //         type: "line",
-        //         mode: "vertical",
-        //         scaleID: "x-axis-0",
-        //         value: new Date(),
-        //         borderColor: "red",
-        //         label: {
-        //           content: "TODAY",
-        //           enabled: true,
-        //           position: "top"
-        //         }
-        //       }
-        //     ]
-        //   },
+          annotation: {
+            annotations: [
+              {
+                type: "line",
+                mode: "vertical",
+                scaleID: "x-axis-0",
+                value: new Date('2020-03-18'),
+                borderColor: "red",
+                label: {
+                  content: "Confinement",
+                  enabled: true,
+                  position: "top"
+                }
+              }
+            ]
+          },
           plugins: {
             crosshair: {
               sync: {

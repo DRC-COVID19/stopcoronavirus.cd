@@ -3,11 +3,11 @@
     <Header />
     <b-container class="mt-4">
       <Loading v-if="isLoading" class="h-100" />
-      <b-row v-else>
-        <b-col cols="12" md="6" v-if="errors && errors.last_update">
+      <b-row v-else align-h="center">
+        <b-col cols="12"  v-if="errors && errors.last_update">
           <b-alert variant="danger" dismissible show>{{errors.last_update[0]}}</b-alert>
         </b-col>
-        <b-col>
+        <b-col cols="12">
           <b-link :to="{
             name:'hospital.home'
           }">
@@ -491,8 +491,9 @@ export default {
         hydrochloroquine: 0,
         azytromicine: 0,
         Vitamince_c: 0,
-        max: now,
+       
       },
+       max: now,
       errors: {},
       isLoading: false
     };
