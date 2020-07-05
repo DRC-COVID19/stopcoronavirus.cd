@@ -669,7 +669,7 @@ export default {
   bottom: 0;
   left: 0;
   z-index: 2;
-  height: calc(100vh - 56px);
+  height: inherit;
   .flux-move {
     .legend-reference,
     .legend-observation {

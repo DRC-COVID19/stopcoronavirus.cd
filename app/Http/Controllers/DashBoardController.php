@@ -637,6 +637,27 @@ class DashBoardController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
+    public function getFluxDataFromOriginDailyCompare(Request $request)
+    {
+        $data = $this->fluxValidator($request->all());
+        try {
+            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE 
+                UNION ALL 
+                SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY destination, DATE)
+                AS t
+                WHERE DATE BETWEEN ? and ?
+                GROUP BY origin,DATE ", [$data['preference_start'], $data['observation_end']]);
+
+            return response()->json($flux);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
     public function getFluxDataFromOriginDaily(Request $request)
     {
         $data = $this->fluxValidator($request->all());
@@ -873,6 +894,29 @@ class DashBoardController extends Controller
         }
     }
 
+    public function getFluxDataFromOriginDailyProvinceCompare(Request $request)
+    {
+        $data = $this->fluxValidator($request->all());
+        try {
+            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume 
+            FROM (
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY origin, DATE 
+                UNION ALL 
+                SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY destination, DATE
+                )
+                AS t
+                WHERE DATE BETWEEN ? and ?
+                GROUP BY origin,DATE ", [$data['preference_start'], $data['observation_end']]);
+
+            return response()->json($flux);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
     public function getFluxDataFromOriginDailyInProvince(Request $request)
     {
         $data = $this->fluxValidator($request->all());
@@ -1031,14 +1075,14 @@ class DashBoardController extends Controller
 
             $fluxData = [];
             foreach ($flux as $value) {
-                if ($fluxRefences) {
-                    foreach ($fluxRefences as $item) {
-                        if ($item->origin == $value->origin && $item->destination == $value->destination) {
-                            $value->{'reference_volume'} = $item->volume;
-                            break;
-                        }
-                    }
-                }
+                // if ($fluxRefences) {
+                //     foreach ($fluxRefences as $item) {
+                //         if ($item->origin == $value->origin && $item->destination == $value->destination) {
+                //             $value->{'reference_volume'} = $item->volume;
+                //             break;
+                //         }
+                //     }
+                // }
                 if (isset($geoData[strtoupper($value->origin)][0])) {
                     $value->{'position_start'} = $geoData[strtoupper($value->origin)][0]['coordinates'];
                 } else {
@@ -1087,6 +1131,27 @@ class DashBoardController extends Controller
                 return response()->json($flux);
             }
             return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getFluxDataPredefinedDailyCompare(Request $request)
+    {
+        $data = $this->prefedenidData($request->all());
+        try {
+            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE 
+                UNION ALL 
+                SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY destination, DATE)
+                AS t
+                WHERE DATE BETWEEN ? and ?
+                GROUP BY origin,DATE ", [$data['preference_start'], $data['observation_end']]);
+
+            return response()->json($flux);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -1282,6 +1347,28 @@ class DashBoardController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
+
+    public function getFlux30DataFromOriginDailyCompare(Request $request)
+    {
+        $data = $this->fluxValidator($request->all());
+        try {
+            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_zones GROUP BY origin, DATE 
+                UNION ALL 
+                SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux30_zones GROUP BY destination, DATE)
+                AS t
+                WHERE DATE BETWEEN ? and ?
+                GROUP BY origin,DATE ", [$data['preference_start'], $data['observation_end']]);
+
+            return response()->json($flux);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
     public function getFlux30DataFromOriginDailyIn(Request $request)
     {
         $data = $this->fluxValidator($request->all());
@@ -1472,6 +1559,27 @@ class DashBoardController extends Controller
                 return response()->json($flux);
             }
             return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getFlux30DataFromOriginDailyProvinceCompare(Request $request)
+    {
+        $data = $this->fluxValidator($request->all());
+        try {
+            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_provinces GROUP BY origin, DATE 
+                UNION ALL 
+                SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux30_provinces GROUP BY destination, DATE)
+                AS t
+                WHERE DATE BETWEEN ? and ?
+                GROUP BY origin,DATE ", [$data['preference_start'], $data['observation_end']]);
+
+            return response()->json($flux);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

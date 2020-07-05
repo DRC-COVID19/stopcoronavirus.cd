@@ -55,6 +55,7 @@ Route::group([
                 Route::group(['prefix' => 'h-24'], function () {
                     Route::get('/', 'DashBoardController@getFluxDataPredefined');
                     Route::get('/daily', 'DashBoardController@getFluxDataPredefinedDaily');
+                    Route::get('/daily-compare', 'DashBoardController@getFluxDataPredefinedDailyCompare');
                     Route::get('/daily-in', 'DashBoardController@getFluxDataPredefinedDailyIn');
                     Route::get('/daily-out', 'DashBoardController@getFluxDataPredefinedDailyOut');
                 });
@@ -66,11 +67,13 @@ Route::group([
                 Route::group(['prefix' => 'h-24'], function () {
                     Route::get('/', 'DashBoardController@getFluxDataFromOrigin');
                     Route::get('/daily', 'DashBoardController@getFluxDataFromOriginDaily');
+                    Route::get('/daily-compare', 'DashBoardController@getFluxDataFromOriginDailyCompare');
                     Route::get('daily-in', 'DashBoardController@getFluxDataFromOriginDailyIn');
                     Route::get('daily-out', 'DashBoardController@getFluxDataFromOriginDailyOut');
                 });
                 Route::group(['prefix' => 'm-30'], function () {
                     Route::get('/', 'DashBoardController@getFlux30DataFromOrigin');
+                    Route::get('/daily-compare', 'DashBoardController@getFlux30DataFromOriginDailyCompare');
                     Route::get('/daily', 'DashBoardController@getFlux30DataFromOriginDaily');
                     Route::get('daily-in', 'DashBoardController@getFlux30DataFromOriginDailyIn');
                     Route::get('daily-out', 'DashBoardController@getFlux30DataFromOriginDailyOut');
@@ -80,12 +83,14 @@ Route::group([
                 Route::group(['prefix' => 'h-24'], function () {
                     Route::get('/', 'DashBoardController@getFluxDataFromOriginProvince');
                     Route::get('/daily', 'DashBoardController@getFluxDataFromOriginDailyProvince');
+                    Route::get('/daily-compare', 'DashBoardController@getFluxDataFromOriginDailyProvinceCompare');
                     Route::get('/daily-in', 'DashBoardController@getFluxDataFromOriginDailyInProvince');
                     Route::get('/daily-out', 'DashBoardController@getFluxDataFromOriginDailyOutProvince');
                 });
                 Route::group(['prefix' => 'm-30'], function () {
                     Route::get('/', 'DashBoardController@getFlux30DataFromOriginProvince');
                     Route::get('/daily', 'DashBoardController@getFlux30DataFromOriginDailyProvince');
+                    Route::get('/daily-compare', 'DashBoardController@getFlux30DataFromOriginDailyProvinceCompare');
                     Route::get('/daily-in', 'DashBoardController@getFlux30DataFromOriginDailyInProvince');
                     Route::get('/daily-out', 'DashBoardController@getFlux30DataFromOriginDailyOutProvince');
                 });

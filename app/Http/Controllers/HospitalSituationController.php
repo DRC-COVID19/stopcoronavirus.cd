@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\HospitalSituation;
 use App\Http\Resources\HospitalResources;
 use App\Http\Resources\HospitalSituationResource;
+use App\Http\Resources\HospitalSituationSingleResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -19,7 +20,7 @@ class HospitalSituationController extends Controller
     public function index()
     {
         $hospitalSituation = HospitalSituation::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('created_at', 'desc')->paginate(15);
-        return HospitalSituationResource::collection($hospitalSituation);
+        return HospitalSituationSingleResource::collection($hospitalSituation);
     }
 
     /**

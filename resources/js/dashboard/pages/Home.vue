@@ -68,7 +68,7 @@
               <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
-              <b-tab title="FLux chart" v-if="hasFlux24Daily" :active="hasFlux24Daily">
+              <b-tab title="FLux chart" v-if="hasFlux24DailyIn" :active="hasFlux24DailyIn">
                 <FluxChart
                   :flux24Daily="flux24Daily"
                   :flux24DailyIn="flux24DailyIn"
@@ -81,9 +81,13 @@
             </b-tabs>
           </b-card>
         </b-col>
-      </b-row>
-      <b-row class="side-bottom" no-gutters v-if="hasCovidCases||hasFlux24Daily">
-        <b-col cols="12" md="9" offset-md="3">
+        <b-col
+          class="side-bottom"
+          v-if="hasCovidCases||hasFlux24Daily||hasflux24DailyComparison"
+          cols="12"
+          md="9"
+          offset-md="3"
+        >
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 chart" v-if="hasCovidCases" :active="hasCovidCases">
@@ -92,28 +96,25 @@
                   :covidCasesStatDaily="covidCasesStatDaily"
                 />
               </b-tab>
-              <b-tab title="Flux tendance">
+              <b-tab title="Flux tendance" v-if="hasFlux24Daily" :active="hasFlux24Daily">
                 <FluxTendanceChart :flux24Daily="flux24Daily" />
+              </b-tab>
+              <b-tab
+                title="Flux comparaison"
+                v-if="hasflux24DailyComparison"
+                :active="hasflux24DailyComparison"
+              >
+                <FluxComparisonChart
+                  :fluxGeoOptions="fluxGeoOptions"
+                  :flux24DailyComparison="flux24DailyComparison"
+                />
               </b-tab>
             </b-tabs>
           </b-card>
         </b-col>
       </b-row>
+      <Waiting v-if="isLoading" />
     </b-container>
-    <Waiting v-if="isLoading" />
-
-    <!--  <DataModal
-      :flux24="flux24WithoutReference"
-      :flux24Daily="flux24Daily"
-      :flux24DailyOut="flux24DailyOut"
-      :flux24DailyIn="flux24DailyIn"
-      :covidCases="covidCases"
-      :covidCasesStat="covidCasesStat"
-      :covidCasesStatDaily="covidCasesStatDaily"
-      :medicalOrientations="medicalOrientations"
-      :medicalOrientationsStat="medicalOrientationsStat"
-      id="data-modal"
-    />-->
   </div>
 </template>
 
@@ -130,7 +131,8 @@ import SideFluxChart from "../components/SideFlux";
 import FluxChart from "../components/FluxChart";
 import Header from "../components/Header";
 import HospitalSituation from "../components/HospitalSituation";
-import FluxTendanceChart from "../components/flux/tendanceChart";
+import FluxTendanceChart from "../components/flux/TendanceChart";
+import FluxComparisonChart from "../components/flux/ComparisonChart";
 
 import { mapState, mapActions } from "vuex";
 
@@ -150,7 +152,8 @@ export default {
     FluxChart,
     Header,
     HospitalSituation,
-    FluxTendanceChart
+    FluxTendanceChart,
+    FluxComparisonChart
   },
   data() {
     return {
@@ -179,8 +182,10 @@ export default {
       flux24: [],
       flux24Errors: {},
       flux24Daily: [],
+      flux24DailyComparison: [],
       flux24DailyIn: [],
       flux24DailyOut: [],
+      fluxGeoOptions: [],
       menuColunmStyle: {}
     };
   },
@@ -193,7 +198,7 @@ export default {
     hasRightSide() {
       return (
         this.getHasCoviCases() ||
-        this.flux24Daily.length > 0 ||
+        this.flux24DailyIn.length > 0 ||
         !!this.selectedHospital
       );
     },
@@ -208,6 +213,12 @@ export default {
     },
     hasFlux24Daily() {
       return this.flux24Daily.length > 0;
+    },
+    hasflux24DailyComparison() {
+      return this.flux24DailyComparison.length > 0;
+    },
+    hasFlux24DailyIn() {
+      return this.flux24DailyIn.length > 0;
     },
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -447,6 +458,9 @@ export default {
       if (!checked) {
         this.flux24Daily = [];
         this.flux24 = [];
+        this.flux24DailyComparison = [];
+        this.flux24DailyIn = [];
+        this.flux24DailyOut = [];
       }
     },
     getFluxZone() {
@@ -465,6 +479,7 @@ export default {
 
       let url = `api/dashboard/flux/origin`;
       let urlDaily = `api/dashboard/flux/origin`;
+      let urlDailyCompare = `api/dashboard/flux/origin`;
       let urlDailyIn = `api/dashboard/flux/origin`;
       let urlDailyOut = `api/dashboard/flux/origin`;
 
@@ -474,6 +489,7 @@ export default {
           urlDaily += "/provinces";
           urlDailyIn += "/provinces";
           urlDailyOut += "/provinces";
+          urlDailyCompare += "/provinces";
           break;
         case 2:
         default:
@@ -481,6 +497,7 @@ export default {
           urlDaily += "/zones";
           urlDailyIn += "/zones";
           urlDailyOut += "/zones";
+          urlDailyCompare += "/zones";
           break;
       }
 
@@ -490,6 +507,7 @@ export default {
           urlDaily += "/h-24";
           urlDailyIn += "/h-24";
           urlDailyOut += "/h-24";
+          urlDailyCompare += "/h-24";
           break;
         case 2:
         default:
@@ -497,12 +515,26 @@ export default {
           urlDaily += "/m-30";
           urlDailyIn += "/m-30";
           urlDailyOut += "/m-30";
+          urlDailyCompare += "/m-30";
           break;
       }
 
       urlDaily += "/daily";
       urlDailyIn += "/daily-in";
       urlDailyOut += "/daily-out";
+      urlDailyCompare += "/daily-compare";
+
+      this.flux24DailyComparison = [];
+      this.fluxGeoOptions = [];
+      axios
+        .get(urlDailyCompare, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24DailyComparison = data;
+          this.fluxGeoOptions = values.fluxGeoOptions;
+        })
+        .catch(({ response }) => {});
 
       this.flux24Daily = [];
       axios
@@ -510,7 +542,6 @@ export default {
           params: values
         })
         .then(({ data }) => {
-
           this.flux24Daily = data;
         })
         .catch(({ response }) => {});
@@ -557,6 +588,15 @@ export default {
       this.$bvModal.show("data-modal");
     },
     fluxPredefinedChanged(value) {
+      
+      if (!value) {
+        this.flux24Daily = [];
+        this.flux24 = [];
+        this.flux24DailyComparison = [];
+        this.flux24DailyIn = [];
+        this.flux24DailyOut = [];
+        return;
+      }
       const values = {
         option: value,
         preference_start,
@@ -565,10 +605,21 @@ export default {
       this.isLoading = true;
       this.flux24Errors = {};
 
-      let url = `api/dashboard/flux/predefined/zones/h-24/`;
-      let urlDaily = `api/dashboard/flux/predefined/zones/h-24/daily`;
-      let urlDailyIn = `api/dashboard/flux/predefined/zones/h-24/daily-in`;
-      let urlDailyOut = `api/dashboard/flux/predefined/zones/h-24/daily-out`;
+      const url = `api/dashboard/flux/predefined/zones/h-24/`;
+      const urlDaily = `api/dashboard/flux/predefined/zones/h-24/daily`;
+      const urlDailyIn = `api/dashboard/flux/predefined/zones/h-24/daily-in`;
+      const urlDailyOut = `api/dashboard/flux/predefined/zones/h-24/daily-out`;
+      const urlDailyCompare = `api/dashboard/flux/predefined/zones/h-24/daily-compare`;
+
+      this.flux24DailyComparison = [];
+      axios
+        .get(urlDailyCompare, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24DailyComparison = data;
+        })
+        .catch(({ response }) => {});
 
       this.flux24Daily = [];
       axios
@@ -583,26 +634,26 @@ export default {
       // get flux data in
 
       this.flux24DailyIn = [];
-      axios
-        .get(urlDailyIn, {
-          params: values
-        })
-        .then(({ data }) => {
-          this.flux24DailyIn = data;
-        })
-        .catch(({ response }) => {});
+      // axios
+      //   .get(urlDailyIn, {
+      //     params: values
+      //   })
+      //   .then(({ data }) => {
+      //     this.flux24DailyIn = data;
+      //   })
+      //   .catch(({ response }) => {});
 
       // get flux data out
 
       this.flux24DailyOut = [];
-      axios
-        .get(urlDailyOut, {
-          params: values
-        })
-        .then(({ data }) => {
-          this.flux24DailyOut = data;
-        })
-        .catch(({ response }) => {});
+      // axios
+      //   .get(urlDailyOut, {
+      //     params: values
+      //   })
+      //   .then(({ data }) => {
+      //     this.flux24DailyOut = data;
+      //   })
+      //   .catch(({ response }) => {});
 
       this.flux24 = [];
       axios
