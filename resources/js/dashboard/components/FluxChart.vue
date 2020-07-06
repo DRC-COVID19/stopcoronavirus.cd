@@ -1,5 +1,5 @@
 <template>
-  <b-container class="p-0">
+  <b-container class="p-0 flux-chart">
     <b-row no-gutters>
       <b-col cols="12" md="6" class="pl-0 pr-2" ref="mobility">
         <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
@@ -272,7 +272,7 @@ export default {
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.2
+              lineTension: 0.4
             }
           ]
         },
@@ -393,6 +393,8 @@ export default {
           ? 1
           : -1;
       });
+
+      localData = localData.slice(0, 9);
 
       const refInput = `mobile_out_${index}_2_card`;
       let elementPosition = this.$refs[refInput][0].clientWidth;
@@ -516,7 +518,7 @@ export default {
           ? 1
           : -1;
       });
-
+      localData = localData.slice(0, 9);
       const refInput = `mobile_entrance_${index}_2_card`;
       let elementPosition = this.$refs[refInput][0].clientWidth;
       var margin = { top: 20, right: 30, bottom: 40, left: 60 },
@@ -708,6 +710,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@~/sass/_variables";
+@import "@~/sass/_mixins";
+
+.flux-chart {
+  @include card-style;
+}
 .legend {
   list-style: none;
   li {

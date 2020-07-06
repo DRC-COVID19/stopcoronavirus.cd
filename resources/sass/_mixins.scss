@@ -95,3 +95,14 @@
     border: solid 2px #fff;
   }
 }
+
+@mixin card-style {
+  .card {
+    background: white;
+    border-radius: unset;
+    border-color: $dash-shadow-color;
+    .card-header {
+      background: white;
+    }
+  }
+}

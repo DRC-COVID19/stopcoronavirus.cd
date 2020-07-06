@@ -56,7 +56,7 @@ export default {
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0,
+              lineTension: 0.5,
               xAxisID: "x-axis-0"
             }
           ]

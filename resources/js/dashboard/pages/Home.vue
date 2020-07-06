@@ -30,14 +30,10 @@
           :flux24Errors="flux24Errors"
         />
         <b-col cols="12" offset-md="3" :class="`${hasRightSide?'col-md-5':'col-md-9'}`">
-          <!--  <b-button
-            v-if="hasFlux24||hasCovidCases||hasOrientation"
-            variant="success"
-            @click="seeSide"
-            class="btn-see-side"
-          >
-            <span class="fa fa-table"></span> voir
-          </b-button>-->
+          <div class="layer-set-contenair">
+            <b-link>Arc</b-link>
+            <b-link>Hachurés</b-link>
+          </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
             <Maps
               :covidCases="covidCases"
@@ -588,7 +584,6 @@ export default {
       this.$bvModal.show("data-modal");
     },
     fluxPredefinedChanged(value) {
-      
       if (!value) {
         this.flux24Daily = [];
         this.flux24 = [];
@@ -703,5 +698,23 @@ export default {
   position: absolute;
   z-index: 7;
   top: 10px;
+}
+.layer-set-contenair {
+  background: #f4f6fc;
+  position: absolute;
+  z-index: 7;
+  top: 14px;
+  padding: 1px;
+  a {
+    display: inline-block;
+    width: 85px;
+    padding: 5px;
+    text-align: center;
+    background: #ffffff;
+    text-decoration: unset;
+    &.active{
+      background: red;
+    }
+  }
 }
 </style>
