@@ -247,14 +247,7 @@
         );
     }
 
-    .card {
-        background: white;
-        border-radius: unset;
-        border-color: $dash-shadow-color;
-        .card-header {
-            background: white;
-        }
-    }
+    @include card-style;
     .vs__dropdown-toggle {
         background: $dash-background !important;
     }
@@ -389,7 +382,7 @@
         border: unset;
         > .tabs {
             > .card-header {
-                background: white;
+                background: transparent;
                 border: unset;
                 padding: 0.5rem 1.25rem;
                 border-radius: unset;

@@ -69,9 +69,10 @@ export default {
           data: item.map(x => ({ x: new Date(x.date), y: x.volume })),
           interpolate: true,
           showLine: true,
+          hoverBorderColor:'rgb(46, 91, 255);',
           pointRadius: 0,
           borderWidth: borderWidth,
-          lineTension: 0,
+          lineTension: 0.5,
           borderDash: borderDash
           //   xAxisID: "x-axis-0"
         });
