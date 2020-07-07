@@ -9,6 +9,8 @@ export default {
         },
         setMapStyle(state, payload) {
             state.mapStyle = payload;
+            console.log(state.mapStyle);
+            
         }
     }
 

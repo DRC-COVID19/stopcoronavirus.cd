@@ -31,8 +31,8 @@
         />
         <b-col cols="12" offset-md="3" :class="`${hasRightSide?'col-md-5':'col-md-9'}`">
           <div class="layer-set-contenair">
-            <b-link>Arc</b-link>
-            <b-link>Hachurés</b-link>
+            <b-link @click="layerSetSyle(2)">Arc</b-link>
+            <b-link @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
             <Maps
@@ -130,7 +130,7 @@ import HospitalSituation from "../components/HospitalSituation";
 import FluxTendanceChart from "../components/flux/TendanceChart";
 import FluxComparisonChart from "../components/flux/ComparisonChart";
 
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 const preference_start = "2020-02-01";
 const preference_end = "2020-03-18";
@@ -251,6 +251,10 @@ export default {
   // },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),
+    ...mapMutations(["setMapStyle"]),
+    layerSetSyle(value) {
+      this.setMapStyle(value);
+    },
     LeftColumnStyle() {
       let height = "100vh";
       if (this.$refs.dash_home_page) {
@@ -712,7 +716,7 @@ export default {
     text-align: center;
     background: #ffffff;
     text-decoration: unset;
-    &.active{
+    &.active {
       background: red;
     }
   }

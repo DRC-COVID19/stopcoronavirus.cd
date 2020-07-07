@@ -15,6 +15,8 @@ import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import ToolTipMaps from "./ToolTipMaps";
 import { mapState, mapMutations } from "vuex";
+import U from "mapbox-gl-utils";
+import * as d3 from "d3";
 
 export default {
   components: { ToolTipMaps },
@@ -95,6 +97,7 @@ export default {
       drcSourceId: "states",
       kinSourceId: "statesKin",
       drcHealthZone: "drcHealthZone",
+      hashedLayerId: "hashedLayerid",
       covidCasesMarkers: [],
       medicalOrientationMakers: [],
       medicalOrientationData: [],
@@ -111,6 +114,7 @@ export default {
       zoom: 10,
       style: this.MAPBOX_DEFAULT_STYLE
     });
+    U.init(map, Mapbox);
     map.addControl(new Mapbox.NavigationControl());
     map.on("load", () => {
       map.addSource(this.drcSourceId, {
@@ -118,25 +122,32 @@ export default {
         generateId: true,
         data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
       });
+
       map.addSource(this.drcHealthZone, {
         type: "geojson",
         generateId: true,
         data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`
       });
+
       map.addSource(this.kinSourceId, {
         type: "vector",
         url: "mapbox://merki230.4airwoxt"
       });
 
-      map.addLayer({
-        id: this.drcSourceId,
-        type: "line",
-        source: this.drcSourceId,
-        layout: {},
-        paint: {
-          "line-color": "#627BC1",
-          "line-width": 1
-        }
+      // map.addLayer({
+      //   id: this.drcSourceId,
+      //   type: "line",
+      //   source: this.drcSourceId,
+      //   layout: {},
+      //   paint: {
+      //     "line-color": "#627BC1",
+      //     "line-width": 1
+      //   }
+      // });
+
+      map.U.addLine(this.drcSourceId, this.drcSourceId, {
+        lineWidth: 1,
+        lineColor: "#627BC1"
       });
 
       map.addLayer({
@@ -159,8 +170,18 @@ export default {
         this.mapGeoJsonSourceFlux(value);
       }
     );
+    this.$store.watch(
+      state => state.flux.mapStyle,
+      value => {
+        this.flux24Func();
+      }
+    );
   },
   computed: {
+    ...mapState({
+      fluxMapStyle: state => state.flux.mapStyle,
+      fluxGeoGranularity: state => state.flux.fluxGeoGranularity
+    }),
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
     }
@@ -517,255 +538,371 @@ export default {
       }
     },
     flux24() {
-      if (this.flux24.length > 0) {
-        if (map.getLayer("arc")) {
-          map.removeLayer("arc");
-          map.removeLayer("fluxCircleDataLayer");
-          map.removeSource("fluxCircleDataSource");
-        }
-
-        const features = [];
-        this.flux24
-          .filter(x => !x.isReference)
-          .map(item => {
-            // let element = features.find(
-            //   x => x.properties.origin == item.origin
-            // );
-            // if (element) {
-            //   element.properties.volume += 1;
-            // } else {
-            //   features.push({
-            //     type: "Feature",
-            //     geometry: {
-            //       type: "Point",
-            //       coordinates: item.position_start
-            //     },
-            //     properties: {
-            //       origin: item.origin,
-            //       color: "#ED5F68",
-            //       volume: 1
-            //     }
-            //   });
-            // }
-            const element2 = features.find(
-              x => x.properties.origin == item.destination
-            );
-            if (element2) {
-              element2.properties.volume += item.volume;
-            } else {
-              features.push({
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: item.position_end
-                },
-                properties: {
-                  origin: item.destination,
-                  color: "#ED5F68",
-                  volume: 1
-                }
-              });
-            }
-          });
-
-        const circleData = {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: features
-          }
-        };
-
-        map.addSource("fluxCircleDataSource", circleData);
-        map.addLayer({
-          id: "fluxCircleDataLayer",
-          type: "circle",
-          source: "fluxCircleDataSource",
-          paint: {
-            // make circles larger as the user zooms from z12 to z22
-            "circle-opacity": 0.7,
-            "circle-radius": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              1,
-              [
-                "case",
-                [">=", ["number", ["get", "volume"]], 1280],
-                6,
-                [">=", ["number", ["get", "volume"]], 640],
-                5.5,
-                [">=", ["number", ["get", "volume"]], 320],
-                5,
-                [">=", ["number", ["get", "volume"]], 160],
-                4,
-                [">=", ["number", ["get", "volume"]], 80],
-                3.5,
-                [">=", ["number", ["get", "volume"]], 40],
-                3,
-                [">=", ["number", ["get", "volume"]], 20],
-                2.5,
-                [">=", ["number", ["get", "volume"]], 10],
-                1.5,
-                [">=", ["number", ["get", "volume"]], 5],
-                1,
-                1
-              ],
-              3,
-              [
-                "case",
-                [">=", ["number", ["get", "volume"]], 1280],
-                12.5,
-                [">=", ["number", ["get", "volume"]], 640],
-                11,
-                [">=", ["number", ["get", "volume"]], 320],
-                10,
-                [">=", ["number", ["get", "volume"]], 160],
-                8.75,
-                [">=", ["number", ["get", "volume"]], 80],
-                7.5,
-                [">=", ["number", ["get", "volume"]], 40],
-                6,
-                [">=", ["number", ["get", "volume"]], 20],
-                5,
-                [">=", ["number", ["get", "volume"]], 10],
-                3.25,
-                [">=", ["number", ["get", "volume"]], 5],
-                2.5,
-                2.5
-              ],
-              5,
-              [
-                "case",
-                [">=", ["number", ["get", "volume"]], 1280],
-                25,
-                [">=", ["number", ["get", "volume"]], 640],
-                22.5,
-                [">=", ["number", ["get", "volume"]], 320],
-                20,
-                [">=", ["number", ["get", "volume"]], 160],
-                17.5,
-                [">=", ["number", ["get", "volume"]], 80],
-                15,
-                [">=", ["number", ["get", "volume"]], 40],
-                12.5,
-                [">=", ["number", ["get", "volume"]], 20],
-                10,
-                [">=", ["number", ["get", "volume"]], 10],
-                7.5,
-                [">=", ["number", ["get", "volume"]], 5],
-                5,
-                5
-              ],
-              10,
-              [
-                "case",
-                [">=", ["number", ["get", "volume"]], 1280],
-                50,
-                [">=", ["number", ["get", "volume"]], 640],
-                45,
-                [">=", ["number", ["get", "volume"]], 320],
-                40,
-                [">=", ["number", ["get", "volume"]], 160],
-                35,
-                [">=", ["number", ["get", "volume"]], 80],
-                30,
-                [">=", ["number", ["get", "volume"]], 40],
-                25,
-                [">=", ["number", ["get", "volume"]], 20],
-                20,
-                [">=", ["number", ["get", "volume"]], 10],
-                15,
-                [">=", ["number", ["get", "volume"]], 5],
-                10,
-                10
-              ]
-            ],
-            "circle-color": "#2e5bff"
-          }
-        });
-
-        let arcData = [];
-        let FluxFiltered = this.flux24.filter(x => !x.isReference);
-
-        for (const key in FluxFiltered) {
-          const item = FluxFiltered[key];
-          const index = arcData.findIndex(
-            x =>
-              (x.destination == item.destination && x.origin == item.origin) ||
-              (x.destination == item.origin && x.origin == item.destination)
-          );
-          if (index != -1) {
-            arcData[index].volume += item.volume;
-          } else {
-            arcData.push(item);
-          }
-        }
-
-        // arcData=this.flux24.filter(x=>!x.isReference);
-        const myDeckLayer = new MapboxLayer({
-          id: "arc",
-          data: arcData,
-          type: ArcLayer,
-          stroked: false,
-          filled: true,
-          getFillColor: [0, 0, 0, 0],
-          getSourcePosition: d => d.position_start,
-          getTargetPosition: d => d.position_end,
-          getSourceColor: d =>
-            d.isReference ? [158, 158, 158] : [105, 179, 162],
-          getTargetColor: d =>
-            d.isReference ? [158, 158, 158] : [105, 179, 162],
-          getHeight: 1,
-          getTilt: (d, { data }) => {
-            let tilt = 2;
-            if (d.isReference) {
-              tilt = -2;
-            }
-            return tilt;
-          },
-          getWidth: d => {
-            let width = 3;
-            if (d.volume > 20000) {
-              width = 12;
-            } else if (d.volume > 10000) {
-              width = 11;
-            } else if (d.volume > 5000) {
-              width = 10;
-            } else if (d.volume > 3000) {
-              width = 9;
-            } else if (d.volume > 1000) {
-              width = 7;
-            } else if (d.volume > 500) {
-              width = 6.5;
-            } else if (d.volume > 300) {
-              width = 6;
-            } else if (d.volume > 100) {
-              width = 5;
-            }
-            return width;
-          },
-          pickable: true,
-          onHover: (info, event) => {
-            this.$set(this.ArcLayerSelectedObject, "position", {
-              top: info.y,
-              left: info.x
-            });
-            this.$set(this.ArcLayerSelectedObject, "item", info.object);
-          }
-        });
-        map.addLayer(myDeckLayer);
-      } else {
-        if (map.getLayer("arc")) {
-          map.removeLayer("arc");
-          map.removeLayer("fluxCircleDataLayer");
-          map.removeSource("fluxCircleDataSource");
-        }
-      }
+      this.flux24Func();
     }
   },
   methods: {
     ...mapMutations(["selectHospital"]),
+    flux24Func() {
+      if (this.flux24.length > 0) {
+        switch (this.fluxMapStyle) {
+          case 2:
+            this.fluxArcStyle(this.flux24);
+            break;
+          case 1:
+          default:
+            this.fluxHatchedStyle(this.flux24);
+            break;
+        }
+      } else {
+        map.U.removeSource(["fluxCircleDataSource"]);
+        map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
+      }
+    },
+    fluxHatchedStyle(flux24Data) {
+      const localData = flux24Data.filter(x => !x.isReference);
+      const features = [];
+      localData.map(item => {
+        // let element = features.find(
+        //   x => x.properties.origin == item.origin
+        // );
+        // if (element) {
+        //   element.properties.volume += 1;
+        // } else {
+        //   features.push({
+        //     type: "Feature",
+        //     geometry: {
+        //       type: "Point",
+        //       coordinates: item.position_start
+        //     },
+        //     properties: {
+        //       origin: item.origin,
+        //       color: "#ED5F68",
+        //       volume: 1
+        //     }
+        //   });
+        // }
+        const element2 = features.find(
+          x => x.properties.origin == item.destination
+        );
+        if (element2) {
+          element2.properties.volume += item.volume;
+        } else {
+          features.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: item.position_end
+            },
+            properties: {
+              origin: item.destination,
+              color: "#ED5F68",
+              volume: item.volume
+            }
+          });
+        }
+      });
+
+      const i = d3.interpolateRgb("#33ac2e", "#ffa500");
+      const max = d3.max(localData, d => d.volume);
+
+      const colorExpression = [];
+      colorExpression.push("case");
+
+      map.U.removeSource(["fluxCircleDataSource"]);
+      map.U.removeLayer([this.hashedLayerId, "arc"]);
+
+      if (this.fluxGeoGranularity == 1) {
+        features.forEach(x => {
+          const localInter = x.properties.volume / max;
+          const color = i(localInter);
+          colorExpression.push(["==", ["get", "name"], x.properties.origin]);
+          colorExpression.push(color);
+        });
+        colorExpression.push("white");
+
+        map.U.addFill(
+          this.hashedLayerId,
+          this.drcSourceId,
+          map.U.properties({
+            fillColor: colorExpression,
+            fillOpacity: [
+              "match",
+              ["get", "name"],
+              features.map(x => x.properties.origin),
+              0.5,
+              0
+            ]
+          }),
+          this.drcSourceId
+        );
+      } else {
+
+        features.forEach(x => {
+          const localInter = x.properties.volume / max;
+          const color = i(localInter);
+          colorExpression.push([
+            "==",
+            ["get", "Zone+Peupl"],
+            x.properties.origin
+          ]);
+          colorExpression.push(color);
+        });
+
+        colorExpression.push("white");
+        map.U.addFill(
+          this.hashedLayerId,
+          this.drcHealthZone,
+          map.U.properties({
+            fillColor: colorExpression,
+            fillOpacity: [
+              "match",
+              ["get", "Zone+Peupl"],
+              features.map(x => x.properties.origin),
+              0.5,
+              0
+            ]
+          }),
+          this.drcSourceId
+        );
+      }
+    },
+    fluxArcStyle(flux24Data) {
+      map.U.removeSource(["fluxCircleDataSource"]);
+      map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
+
+      const features = [];
+      flux24Data
+        .filter(x => !x.isReference)
+        .map(item => {
+          // let element = features.find(
+          //   x => x.properties.origin == item.origin
+          // );
+          // if (element) {
+          //   element.properties.volume += 1;
+          // } else {
+          //   features.push({
+          //     type: "Feature",
+          //     geometry: {
+          //       type: "Point",
+          //       coordinates: item.position_start
+          //     },
+          //     properties: {
+          //       origin: item.origin,
+          //       color: "#ED5F68",
+          //       volume: 1
+          //     }
+          //   });
+          // }
+          const element2 = features.find(
+            x => x.properties.origin == item.destination
+          );
+          if (element2) {
+            element2.properties.volume += item.volume;
+          } else {
+            features.push({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: item.position_end
+              },
+              properties: {
+                origin: item.destination,
+                color: "#ED5F68",
+                volume: item.volume
+              }
+            });
+          }
+        });
+
+      const circleData = {
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: features
+        }
+      };
+
+      map.addSource("fluxCircleDataSource", circleData);
+      map.addLayer({
+        id: "fluxCircleDataLayer",
+        type: "circle",
+        source: "fluxCircleDataSource",
+        paint: {
+          // make circles larger as the user zooms from z12 to z22
+          "circle-opacity": 0.7,
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            1,
+            [
+              "case",
+              [">=", ["number", ["get", "volume"]], 1280],
+              6,
+              [">=", ["number", ["get", "volume"]], 640],
+              5.5,
+              [">=", ["number", ["get", "volume"]], 320],
+              5,
+              [">=", ["number", ["get", "volume"]], 160],
+              4,
+              [">=", ["number", ["get", "volume"]], 80],
+              3.5,
+              [">=", ["number", ["get", "volume"]], 40],
+              3,
+              [">=", ["number", ["get", "volume"]], 20],
+              2.5,
+              [">=", ["number", ["get", "volume"]], 10],
+              1.5,
+              [">=", ["number", ["get", "volume"]], 5],
+              1,
+              1
+            ],
+            3,
+            [
+              "case",
+              [">=", ["number", ["get", "volume"]], 1280],
+              12.5,
+              [">=", ["number", ["get", "volume"]], 640],
+              11,
+              [">=", ["number", ["get", "volume"]], 320],
+              10,
+              [">=", ["number", ["get", "volume"]], 160],
+              8.75,
+              [">=", ["number", ["get", "volume"]], 80],
+              7.5,
+              [">=", ["number", ["get", "volume"]], 40],
+              6,
+              [">=", ["number", ["get", "volume"]], 20],
+              5,
+              [">=", ["number", ["get", "volume"]], 10],
+              3.25,
+              [">=", ["number", ["get", "volume"]], 5],
+              2.5,
+              2.5
+            ],
+            5,
+            [
+              "case",
+              [">=", ["number", ["get", "volume"]], 1280],
+              25,
+              [">=", ["number", ["get", "volume"]], 640],
+              22.5,
+              [">=", ["number", ["get", "volume"]], 320],
+              20,
+              [">=", ["number", ["get", "volume"]], 160],
+              17.5,
+              [">=", ["number", ["get", "volume"]], 80],
+              15,
+              [">=", ["number", ["get", "volume"]], 40],
+              12.5,
+              [">=", ["number", ["get", "volume"]], 20],
+              10,
+              [">=", ["number", ["get", "volume"]], 10],
+              7.5,
+              [">=", ["number", ["get", "volume"]], 5],
+              5,
+              5
+            ],
+            10,
+            [
+              "case",
+              [">=", ["number", ["get", "volume"]], 1280],
+              50,
+              [">=", ["number", ["get", "volume"]], 640],
+              45,
+              [">=", ["number", ["get", "volume"]], 320],
+              40,
+              [">=", ["number", ["get", "volume"]], 160],
+              35,
+              [">=", ["number", ["get", "volume"]], 80],
+              30,
+              [">=", ["number", ["get", "volume"]], 40],
+              25,
+              [">=", ["number", ["get", "volume"]], 20],
+              20,
+              [">=", ["number", ["get", "volume"]], 10],
+              15,
+              [">=", ["number", ["get", "volume"]], 5],
+              10,
+              10
+            ]
+          ],
+          "circle-color": "#2e5bff"
+        }
+      });
+
+      let arcData = [];
+      let FluxFiltered = flux24Data.filter(x => !x.isReference);
+
+      for (const key in FluxFiltered) {
+        const item = FluxFiltered[key];
+        const index = arcData.findIndex(
+          x =>
+            (x.destination == item.destination && x.origin == item.origin) ||
+            (x.destination == item.origin && x.origin == item.destination)
+        );
+        if (index != -1) {
+          arcData[index].volume += item.volume;
+        } else {
+          arcData.push(item);
+        }
+      }
+
+      // arcData=this.flux24.filter(x=>!x.isReference);
+      const myDeckLayer = new MapboxLayer({
+        id: "arc",
+        data: arcData,
+        type: ArcLayer,
+        stroked: false,
+        filled: true,
+        getFillColor: [0, 0, 0, 0],
+        getSourcePosition: d => d.position_start,
+        getTargetPosition: d => d.position_end,
+        getSourceColor: d =>
+          d.isReference ? [158, 158, 158] : [105, 179, 162],
+        getTargetColor: d =>
+          d.isReference ? [158, 158, 158] : [105, 179, 162],
+        getHeight: 1,
+        getTilt: (d, { data }) => {
+          let tilt = 2;
+          if (d.isReference) {
+            tilt = -2;
+          }
+          return tilt;
+        },
+        getWidth: d => {
+          let width = 3;
+          if (d.volume > 20000) {
+            width = 12;
+          } else if (d.volume > 10000) {
+            width = 11;
+          } else if (d.volume > 5000) {
+            width = 10;
+          } else if (d.volume > 3000) {
+            width = 9;
+          } else if (d.volume > 1000) {
+            width = 7;
+          } else if (d.volume > 500) {
+            width = 6.5;
+          } else if (d.volume > 300) {
+            width = 6;
+          } else if (d.volume > 100) {
+            width = 5;
+          }
+          return width;
+        },
+        pickable: true,
+        onHover: (info, event) => {
+          this.$set(this.ArcLayerSelectedObject, "position", {
+            top: info.y,
+            left: info.x
+          });
+          this.$set(this.ArcLayerSelectedObject, "item", info.object);
+        }
+      });
+      map.addLayer(myDeckLayer);
+    },
     mapGeoJsonSourceFlux(fluxGeoGranularity) {
       map.removeLayer(this.drcSourceId);
       if (fluxGeoGranularity == 1) {
