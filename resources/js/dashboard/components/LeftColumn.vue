@@ -4,7 +4,7 @@
       <b-col cols="12">
         <b-card>
           <b-form-checkbox class="styled-checkbox" name="covid_case" @change="covidCaseToggle">
-            Situations épidemologique
+            Situation épidemologique
             <b-badge v-if="covidCasesCount">{{covidCasesCount}}</b-badge>
           </b-form-checkbox>
         </b-card>
@@ -17,7 +17,7 @@
             @change="populationFluxToggle"
             class="styled-checkbox"
             name="has_sondage"
-          >Mouvement populations</b-form-checkbox>
+          >Mobilité</b-form-checkbox>
 
           <b-collapse id="populationFluxcollapse">
             <hr />
@@ -179,7 +179,7 @@
                     <span class="fa fa-times"></span>
                   </b-button>
                 </b-form-group> -->
-                <p>Temporaires</p>
+                <p>Temporel</p>
                 <b-form-group
                   :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start?flux24Errors.observation_start[0]:''} ${flux24Errors.observation_end?flux24Errors.observation_end[0]:''}` : null"
                   :state="(flux24Errors.observation_start && flux24Errors.observation_start.lenght>0)|| (flux24Errors.observation_end && flux24Errors.observation_end.lenght>0)"
@@ -240,7 +240,7 @@
             class="styled-checkbox"
             name="medical_orientation"
           >
-            Cas probable (issu du formulaire d'orientation médical)
+             Cas probables (issus du formulaire d'orientation médicale)
             <b-badge v-if="orientationCount">{{orientationCount}}</b-badge>
           </b-form-checkbox>
           <b-collapse id="orientation_result_collapse">

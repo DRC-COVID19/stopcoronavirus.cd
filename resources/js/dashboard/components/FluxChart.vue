@@ -387,14 +387,14 @@ export default {
         }
       });
 
+      localData = localData.slice(0, 10);
+
       localData = localData.sort((a, b) => {
         return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
           Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
           ? 1
           : -1;
       });
-
-      localData = localData.slice(0, 9);
 
       const refInput = `mobile_out_${index}_2_card`;
       let elementPosition = this.$refs[refInput][0].clientWidth;
@@ -512,13 +512,14 @@ export default {
         }
       });
 
+      localData = localData.slice(0, 10);
       localData = localData.sort((a, b) => {
         return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
           Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
           ? 1
           : -1;
       });
-      localData = localData.slice(0, 9);
+      
       const refInput = `mobile_entrance_${index}_2_card`;
       let elementPosition = this.$refs[refInput][0].clientWidth;
       var margin = { top: 20, right: 30, bottom: 40, left: 60 },
