@@ -30,9 +30,9 @@
           :flux24Errors="flux24Errors"
         />
         <b-col cols="12" offset-md="3" :class="`${hasRightSide?'col-md-5':'col-md-9'}`">
-          <div class="layer-set-contenair">
-            <b-link @click="layerSetSyle(2)">Arc</b-link>
-            <b-link @click="layerSetSyle(1)">Hachurés</b-link>
+          <div class="layer-set-contenair" v-if="hasFlux24Daily">
+            <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arc</b-link>
+            <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
             <Maps
@@ -189,7 +189,8 @@ export default {
     ...mapState({
       hospitals: state => state.hospital.hospitalData,
       hospitalCount: state => state.hospital.hospitalCount,
-      selectedHospital: state => state.hospital.selectedHospital
+      selectedHospital: state => state.hospital.selectedHospital,
+      fluxMapStyle: state => state.flux.mapStyle,
     }),
     hasRightSide() {
       return (
@@ -716,8 +717,10 @@ export default {
     text-align: center;
     background: #ffffff;
     text-decoration: unset;
+    color:$dash-green !important;
     &.active {
-      background: red;
+      background: $dash-green;
+      color: white !important;
     }
   }
 }

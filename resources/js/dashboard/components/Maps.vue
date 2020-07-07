@@ -560,6 +560,8 @@ export default {
       }
     },
     fluxHatchedStyle(flux24Data) {
+      console.log('fluxHatchedStyle');
+      
       const localData = flux24Data.filter(x => !x.isReference);
       const features = [];
       localData.map(item => {
@@ -604,13 +606,13 @@ export default {
       });
 
       const i = d3.interpolateRgb("#33ac2e", "#ffa500");
-      const max = d3.max(localData, d => d.volume);
+      const max = d3.max(features, d => d.properties.volume);
 
       const colorExpression = [];
       colorExpression.push("case");
 
       map.U.removeSource(["fluxCircleDataSource"]);
-      map.U.removeLayer([this.hashedLayerId, "arc"]);
+      map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
 
       if (this.fluxGeoGranularity == 1) {
         features.forEach(x => {
@@ -637,7 +639,6 @@ export default {
           this.drcSourceId
         );
       } else {
-
         features.forEach(x => {
           const localInter = x.properties.volume / max;
           const color = i(localInter);
@@ -648,7 +649,6 @@ export default {
           ]);
           colorExpression.push(color);
         });
-
         colorExpression.push("white");
         map.U.addFill(
           this.hashedLayerId,
