@@ -847,6 +847,13 @@
     "@luma.gl/gltools" "8.1.3"
     probe.gl "^3.2.1"
 
+"@mapbox/expression-jamsession@^0.4.2":
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/@mapbox/expression-jamsession/-/expression-jamsession-0.4.2.tgz#5bdf3612e886ce3965c9bf4d43e86b7269d8bcf0"
+  integrity sha512-wyDUqs1Hs90jQAmxtLhfrEnooVKx/EmR5En3LARe+a3i4fO7NmQjoVTg+JMJDBsK2a3V5gZ+nTA5X10KIKxMqg==
+  dependencies:
+    jsep "^0.3.3"
+
 "@mapbox/geojson-rewind@^0.5.0":
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/@mapbox/geojson-rewind/-/geojson-rewind-0.5.0.tgz#91f0ad56008c120caa19414b644d741249f4f560"
@@ -4448,6 +4455,11 @@ js-yaml@^3.13.1:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
+jsep@^0.3.3:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/jsep/-/jsep-0.3.4.tgz#55ebd4400c5c5861cb1ff949a7a4cd97fcaacaa0"
+  integrity sha512-ovGD9wE+wvudIIYxZGrRcZCxNyZ3Cl1N7Bzyp7/j4d/tA0BaUwcVM9bu0oZaSrefMiNwv6TwZ9X15gvZosteCQ==
+
 jsesc@^2.5.1:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-2.5.2.tgz#80564d2e483dacf6e8ef209650a67df3f0c283a4"
@@ -4498,6 +4510,11 @@ kdbush@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/kdbush/-/kdbush-3.0.0.tgz#f8484794d47004cc2d85ed3a79353dbe0abc2bf0"
   integrity sha512-hRkd6/XW4HTsA9vjVpY9tuXJYLSlelnkTmVFu4M9/7MIYQtFcHpbugAU7UbOfjOiVSVYl2fqgBuJ32JUmRo5Ew==
+
+kebab-case@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/kebab-case/-/kebab-case-1.0.0.tgz#3f9e4990adcad0c686c0e701f7645868f75f91eb"
+  integrity sha1-P55JkK3K0MaGwOcB92RYaPdfkes=
 
 killable@^1.0.1:
   version "1.0.1"
@@ -4739,6 +4756,14 @@ map-visit@^1.0.0:
   integrity sha1-7Nyo8TFE5mDxtb1B8S80edmN+48=
   dependencies:
     object-visit "^1.0.0"
+
+mapbox-gl-utils@^0.32.1:
+  version "0.32.1"
+  resolved "https://registry.yarnpkg.com/mapbox-gl-utils/-/mapbox-gl-utils-0.32.1.tgz#cdaa62b2117038de55dfc2f52e2b14623d34247e"
+  integrity sha512-yqRjT3eD1S85qaIJklbKJxYLzoRpWBGjPK4Ee+2iNY4rPpN8c8M4coEfYfla5P8IJRn7Tg+KzcbVBqmNq4WZNQ==
+  dependencies:
+    "@mapbox/expression-jamsession" "^0.4.2"
+    kebab-case "^1.0.0"
 
 mapbox-gl@^1.10.1:
   version "1.10.1"
