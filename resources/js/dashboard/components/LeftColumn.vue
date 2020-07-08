@@ -380,7 +380,7 @@
 <script>
 import DateRangePicker from "vue2-daterange-picker";
 import moment from "moment";
-import { mapMutations } from "vuex";
+import { mapMutations, mapState, mapActions } from "vuex";
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
 export default {
   components: {
@@ -583,8 +583,21 @@ export default {
       );
     }
   },
+  mounted() {
+    this.$store.watch(
+      state => state.flux.fluxGeoOptions,
+      value => {
+        this.$set(this.fluxForm,'fluxGeoOptions',value);
+      }
+    );
+  },
   methods: {
-    ...mapMutations(["setFluxGeoGranularity", "setFluxGeoOptions"]),
+    ...mapMutations([
+      "setFluxGeoGranularity",
+      "setFluxGeoOptions",
+      "setFluxEnabled"
+    ]),
+    ...mapActions(["resetState"]),
     covidCaseToggle(checked) {
       this.$emit("covidCaseChecked", checked);
     },
@@ -634,6 +647,9 @@ export default {
         this.fluxFilterInput = "";
         this.fluxForm.origin = null;
         this.fluxForm.destination = null;
+        this.resetState();
+      } else {
+        this.setFluxEnabled(checked);
       }
     },
     UpdatePreferenceDate({ startDate, endDate }) {

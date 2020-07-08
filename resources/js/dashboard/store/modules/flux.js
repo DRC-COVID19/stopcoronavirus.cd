@@ -3,7 +3,8 @@ export default {
         fluxGeoGranularity: null,
         mapStyle: 1,
         fluxType: 1,
-        fluxGeoOptions: []
+        fluxGeoOptions: [],
+        fluxEnabled: false,
     },
     mutations: {
         setFluxGeoGranularity(state, payload) {
@@ -17,8 +18,19 @@ export default {
         },
         setFluxGeoOptions(state, payload) {
             state.fluxGeoOptions = payload;
+        },
+        setFluxEnabled(state, payload) {
+            state.fluxEnabled = payload;
         }
-
+    },
+    actions: {
+        resetState({ state }) {
+            state.fluxGeoGranularity = null;
+            state.mapStyle = 1;
+            state.fluxType = 1;
+            state.fluxGeoOptions = [];
+            state.fluxEnabled = false;
+        }
     }
 
 }
