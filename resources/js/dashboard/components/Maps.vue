@@ -113,7 +113,7 @@ export default {
       container: "map",
       center: [15.31389, -4.33167],
       zoom: 10,
-      pitch: 60,
+      pitch: 10,
       style: this.MAPBOX_DEFAULT_STYLE
     });
     U.init(map, Mapbox);
@@ -136,40 +136,17 @@ export default {
         url: "mapbox://merki230.4airwoxt"
       });
 
-      // map.addLayer({
-      //   id: this.drcSourceId,
-      //   type: "line",
-      //   source: this.drcSourceId,
-      //   layout: {},
-      //   paint: {
-      //     "line-color": "#627BC1",
-      //     "line-width": 1
-      //   }
-      // });
-
-      map.U.addLine(this.drcSourceId, this.drcSourceId, {
-        lineWidth: 1,
-        lineColor: "#627BC1"
-      });
-
-      map.addLayer({
-        id: this.kinSourceId,
-        type: "line",
-        source: this.kinSourceId,
-
-        "source-layer": "carte-administrative-de-la-vi-csh5cj",
-        layout: {},
-        paint: {
-          "line-color": "#627BC1",
-          "line-width": 1
-        }
-      });
+      this.addPolygoneLayer();
     });
     this.map = map;
     this.$store.watch(
       state => state.flux.fluxGeoGranularity,
       value => {
-        this.mapGeoJsonSourceFlux(value);
+        this.addPolygoneLayer();
+        if (this.fluxEnabled) {
+          this.addPolygoneHoverLayer();
+        }
+        
       }
     );
     this.$store.watch(
@@ -190,7 +167,8 @@ export default {
       fluxMapStyle: state => state.flux.mapStyle,
       fluxGeoGranularity: state => state.flux.fluxGeoGranularity,
       fluxType: state => state.flux.fluxType,
-      fluxGeoOptions: state => state.flux.fluxGeoOptions
+      fluxGeoOptions: state => state.flux.fluxGeoOptions,
+      fluxEnabled: state=>state.flux.fluxEnabled
     }),
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -552,15 +530,105 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["selectHospital"]),
+    ...mapMutations(["selectHospital", "setFluxGeoOptions"]),
+    addPolygoneLayer() {
+      map.U.removeLayer([this.drcSourceId]);
+      map.addLayer({
+        id: this.drcSourceId,
+        type: "line",
+        source:
+          this.fluxGeoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+        layout: {},
+        paint: {
+          "line-color": "#627BC1",
+          "line-width": 1
+        }
+      });
+    },
+    addPolygoneHoverLayer() {
+      map.U.removeLayer(["state-hover"]);
+      let hoveredStateId = null;
+      let hoveredStateKinId = null;
+      map.U.addFill(
+        "state-hover",
+        this.fluxGeoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+        map.U.properties({
+          "fill-opacity": [
+            "case",
+            ["boolean", ["feature-state", "hover"], false],
+            0.2,
+            0
+          ],
+          "fill-color": "#627BC1"
+        })
+      );
+
+      map.off("mouseleave", "state-hover");
+      map.off("mousemove", "state-hover");
+      map.off("click", "state-hover");
+
+      //polygone hover
+      map.on("mousemove", "state-hover", e => {
+        
+        if (e.features.length > 0) {
+          if (hoveredStateId) {
+            map.setFeatureState(
+              {
+                source:
+                  this.fluxGeoGranularity != 2
+                    ? this.drcSourceId
+                    : this.drcHealthZone,
+                id: hoveredStateId
+              },
+              { hover: false }
+            );
+          }
+          hoveredStateId = e.features[0].id;
+          map.setFeatureState(
+            {
+              source:
+                this.fluxGeoGranularity != 2
+                  ? this.drcSourceId
+                  : this.drcHealthZone,
+              id: hoveredStateId
+            },
+            { hover: true }
+          );
+        }
+      });
+
+      map.on("mouseleave", "state-hover", () => {
+        if (hoveredStateId) {
+          map.setFeatureState(
+            {
+              source:
+                this.fluxGeoGranularity != 2
+                  ? this.drcSourceId
+                  : this.drcHealthZone,
+              id: hoveredStateId
+            },
+            { hover: false }
+          );
+        }
+        hoveredStateId = null;
+      });
+
+      map.on("click", "state-hover", e => {
+        if (this.fluxGeoGranularity != 2) {
+          this.setFluxGeoOptions([e.features[0].properties.name]);
+        } else {
+          this.setFluxGeoOptions([e.features[0].properties["Zone+Peupl"]]);
+        }
+      });
+
+    },
     flux24Func() {
       if (this.flux24.length > 0) {
         switch (this.fluxMapStyle) {
           case 2:
             this.fluxArcStyle(this.flux24);
             map.flyTo({
-              
-              pitch:40,
+              pitch: 40,
               speed: 0.2, // make the flying slow
               curve: 1, // change the speed at which it zooms out
 
@@ -578,8 +646,7 @@ export default {
           default:
             this.fluxHatchedStyle(this.flux24);
             map.flyTo({
-              
-              pitch:10,
+              pitch: 10,
               speed: 0.2, // make the flying slow
               curve: 1, // change the speed at which it zooms out
 
