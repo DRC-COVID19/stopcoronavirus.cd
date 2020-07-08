@@ -25,25 +25,43 @@
               <h4>Filtres prédefinis</h4>
 
               <b-form-group>
-                  <label for="" class="text-dash-color">Option</label>
-                  <v-select @input="fluxPredefinedInputChanged" :options="fluxPredefinedInput" label="name" :reduce="item=>item.id" />
+                <label for class="text-dash-color">Option</label>
+                <v-select
+                  @input="fluxPredefinedInputChanged"
+                  :options="fluxPredefinedInput"
+                  label="name"
+                  :reduce="item=>item.id"
+                />
               </b-form-group>
 
               <h4>Paramètres détailés</h4>
               <div>
                 <p>Géographiques</p>
                 <b-form-group>
-                  <label for="" class="text-dash-color">Granularité</label>
-                  <v-select @input="fluxGeoGranularityChange" v-model="fluxForm.fluxGeoGranularity" :options="fluxGeoGranularities" label="name" :reduce="item=>item.id" />
+                  <label for class="text-dash-color">Granularité</label>
+                  <v-select
+                    @input="fluxGeoGranularityChange"
+                    v-model="fluxForm.fluxGeoGranularity"
+                    :options="fluxGeoGranularities"
+                    label="name"
+                    :reduce="item=>item.id"
+                  />
                 </b-form-group>
                 <b-form-group
                   :invalid-feedback="flux24Errors.fluxGeoOptions ? flux24Errors.fluxGeoOptions[0] : null"
                   :state="flux24Errors.fluxGeoOptions && flux24Errors.fluxGeoOptions.lenght>0"
                 >
-                  <label for="" class="text-dash-color">Option</label>
-                  <v-select v-model="fluxForm.fluxGeoOptions" multiple  :disabled="!fluxForm.fluxGeoGranularity" :options="fluxGeoOptions" label="origin" :reduce="item=>item.origin" />
+                  <label for class="text-dash-color">Option</label>
+                  <v-select
+                    v-model="fluxForm.fluxGeoOptions"
+                    multiple
+                    :disabled="!fluxForm.fluxGeoGranularity"
+                    :options="fluxGeoOptions"
+                    label="origin"
+                    :reduce="item=>item.origin"
+                  />
                 </b-form-group>
-              <!--  <b-list-group :class="{'disabled':fluxForm.filter!='filter_1'}">
+                <!--  <b-list-group :class="{'disabled':fluxForm.filter!='filter_1'}">
                   <b-list-group-item>
                     <b-form-input placeholder="Filtre" v-model="fluxFilterInput" />
                   </b-list-group-item>
@@ -64,9 +82,9 @@
                       :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
                     ></b-form-checkbox-group>
                   </b-list-group-item>
-                </b-list-group> -->
+                </b-list-group>-->
               </div>
-            <!--    <div class="mt-3">
+              <!--    <div class="mt-3">
                 <b-form-group
                   :invalid-feedback="flux24Errors.filter_provinces ? flux24Errors.filter_provinces[0] : null"
                   :state="flux24Errors.filter_provinces && flux24Errors.filter_provinces.lenght>0"
@@ -149,10 +167,9 @@
                     </b-list-group-item>
                   </b-list-group>
               </div>-->
-            
+
               <div class="flux-move">
-                
-              <!--  <b-form-group
+                <!--  <b-form-group
                   class="d-none"
                   :invalid-feedback="flux24Errors.preference_start|| flux24Errors.preference_end ? `${flux24Errors.preference_start? flux24Errors.preference_start[0]:''} ${flux24Errors.preference_end?flux24Errors.preference_end[0]:''}` : null"
                   :state="(flux24Errors.preference_start && flux24Errors.preference_start.lenght>0)|| (flux24Errors.preference_end && flux24Errors.preference_end.lenght>0)"
@@ -178,16 +195,13 @@
                   <b-button @click="clearPrefenceDate">
                     <span class="fa fa-times"></span>
                   </b-button>
-                </b-form-group> -->
+                </b-form-group>-->
                 <p>Temporel</p>
                 <b-form-group
                   :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start?flux24Errors.observation_start[0]:''} ${flux24Errors.observation_end?flux24Errors.observation_end[0]:''}` : null"
                   :state="(flux24Errors.observation_start && flux24Errors.observation_start.lenght>0)|| (flux24Errors.observation_end && flux24Errors.observation_end.lenght>0)"
                 >
-                  <label class="text-dash-color">
-                    Période d'observation
-                    
-                  </label>
+                  <label class="text-dash-color">Période d'observation</label>
                   <date-range-picker
                     ref="picker2"
                     :locale-data="{ 
@@ -210,11 +224,17 @@
                   </b-button>
                 </b-form-group>
                 <b-form-group>
-                  <label for="" class="text-dash-color">Granularité</label>
-                  <v-select required v-model="fluxForm.fluxTimeGranularity" :options="fluxTimeGranularities" label="name" :reduce="item=>item.id" />
+                  <label for class="text-dash-color">Granularité</label>
+                  <v-select
+                    required
+                    v-model="fluxForm.fluxTimeGranularity"
+                    :options="fluxTimeGranularities"
+                    label="name"
+                    :reduce="item=>item.id"
+                  />
                 </b-form-group>
               </div>
-              <b-button type="submit" block  class="mt-2 btn-dash-blue">Filtrer les données</b-button>
+              <b-button type="submit" block class="mt-2 btn-dash-blue">Filtrer les données</b-button>
             </b-form>
           </b-collapse>
         </b-card>
@@ -240,7 +260,7 @@
             class="styled-checkbox"
             name="medical_orientation"
           >
-             Cas probables (issus du formulaire d'orientation médicale)
+            Cas probables (issus du formulaire d'orientation médicale)
             <b-badge v-if="orientationCount">{{orientationCount}}</b-badge>
           </b-form-checkbox>
           <b-collapse id="orientation_result_collapse">
@@ -360,7 +380,7 @@
 <script>
 import DateRangePicker from "vue2-daterange-picker";
 import moment from "moment";
-import {mapMutations} from 'vuex';
+import { mapMutations } from "vuex";
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
 export default {
   components: {
@@ -438,55 +458,55 @@ export default {
         startDate: null,
         endDate: null
       },
-      fluxPredefinedInput:[
+      fluxPredefinedInput: [
         {
-          id:1,
-          name:"Aujourd'hui"
+          id: 1,
+          name: "Aujourd'hui"
         },
         {
-          id:2,
-          name:"Semaine en cours"
+          id: 2,
+          name: "Semaine en cours"
         },
         {
-          id:3,
-          name:"Mois en cours"
+          id: 3,
+          name: "Mois en cours"
         },
         {
-          id:4,
-          name:"Mois passé"
+          id: 4,
+          name: "Mois passé"
         },
         {
-          id:5,
-          name:"Depuis le début du confinement"
+          id: 5,
+          name: "Depuis le début du confinement"
         }
       ],
       fluxFilterInput: "",
       fluxFilterInputProvince: "",
       fluxZonesArray: [],
       fluxProvincesArray: [],
-      fluxGeoGranularity:null,
-      fluxGeoGranularities:[
+      fluxGeoGranularity: null,
+      fluxGeoGranularities: [
         {
-          id:1,
-          name:'Provinces'
+          id: 1,
+          name: "Provinces"
         },
         {
-          id:2,
-          name:'Zones des santés'
+          id: 2,
+          name: "Zones des santés"
         }
       ],
-      fluxGeoOptions:[],
-      fluxTimeGranularities:[
+      fluxGeoOptions: [],
+      fluxTimeGranularities: [
         {
-          id:1,
-          name:'24h'
+          id: 1,
+          name: "24h"
         },
         {
-          id:2,
-          name:"30'"
-        },
+          id: 2,
+          name: "30'"
+        }
       ],
-      fluxTimeGranularity:null,
+      fluxTimeGranularity: null,
       allZoneChecked: false,
       allProvinceChecked: false,
       allZoneCheckedIndeterminate: false,
@@ -564,7 +584,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setFluxGeoGranularity']),
+    ...mapMutations(["setFluxGeoGranularity", "setFluxGeoOptions"]),
     covidCaseToggle(checked) {
       this.$emit("covidCaseChecked", checked);
     },
@@ -626,6 +646,7 @@ export default {
     },
     submitFluxForm() {
       this.$emit("submitFluxForm", this.fluxForm);
+      this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top - 305}px`;
@@ -641,18 +662,17 @@ export default {
       this.fluxForm.observation_start = null;
       this.fluxForm.observation_end = null;
     },
-    fluxGeoGranularityChange(value){
+    fluxGeoGranularityChange(value) {
       this.setFluxGeoGranularity(value);
-      this.fluxForm.fluxGeoOptions=[];
-      if (value==1) {
-        this.fluxGeoOptions=this.fluxProvinces;
-      }
-      else{
-        this.fluxGeoOptions=this.fluxZones;
+      this.fluxForm.fluxGeoOptions = [];
+      if (value == 1) {
+        this.fluxGeoOptions = this.fluxProvinces;
+      } else {
+        this.fluxGeoOptions = this.fluxZones;
       }
     },
-    fluxPredefinedInputChanged(value){
-      this.$emit('flux::predefined::changed',value);
+    fluxPredefinedInputChanged(value) {
+      this.$emit("flux::predefined::changed", value);
     }
   }
 };

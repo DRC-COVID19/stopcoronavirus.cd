@@ -5,7 +5,7 @@
         <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>{{item[0].destination}}</h3>
-            <b-card class="mb-3">
+            <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==1}" @click="selectFluxType(1)">
               <h5 class="percent-title">Mobilité entrante</h5>
 
               <div class="percent dash-green">{{fluxInPercent(item)}}%​</div>
@@ -43,7 +43,7 @@
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>&nbsp;</h3>
-            <b-card class="mb-3">
+            <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==2}" @click="selectFluxType(2)">
               <h5 class="percent-title">Mobilité sortante</h5>
               <div class="percent dash-orange">{{fluxInPercent(item)}}%​</div>
               <p v-if="fluxVolumObservation(item)>0" class="percent-p text-dash-color">
@@ -81,6 +81,7 @@
 
 <script>
 import * as d3 from "d3";
+import { mapState, mapMutations } from "vuex";
 export default {
   props: {
     flux24Daily: {
@@ -101,6 +102,11 @@ export default {
       flux24DailyInLocal: [],
       flux24DailyOutLocal: []
     };
+  },
+  computed: {
+    ...mapState({
+      fluxType: state => state.flux.fluxType
+    })
   },
   watch: {
     async flux24DailyIn() {
@@ -143,6 +149,10 @@ export default {
     });
   },
   methods: {
+    ...mapMutations(["setFluxType"]),
+    selectFluxType(value) {
+      this.setFluxType(value);
+    },
     fluxInPercent(items) {
       let totalReference = 0;
       items
@@ -519,7 +529,7 @@ export default {
           ? 1
           : -1;
       });
-      
+
       const refInput = `mobile_entrance_${index}_2_card`;
       let elementPosition = this.$refs[refInput][0].clientWidth;
       var margin = { top: 20, right: 30, bottom: 40, left: 60 },
@@ -717,6 +727,13 @@ export default {
 .flux-chart {
   @include card-style;
 }
+.flux-mobility {
+  cursor: pointer;
+  &.active {
+    background: #2e5bff14;
+  }
+}
+
 .legend {
   list-style: none;
   li {
