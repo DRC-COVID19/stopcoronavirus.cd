@@ -16,6 +16,7 @@ import { MapboxLayer } from "@deck.gl/mapbox";
 import ToolTipMaps from "./ToolTipMaps";
 import { mapState, mapMutations } from "vuex";
 import U from "mapbox-gl-utils";
+import { includes } from "lodash";
 import * as d3 from "d3";
 
 export default {
@@ -112,6 +113,7 @@ export default {
       container: "map",
       center: [15.31389, -4.33167],
       zoom: 10,
+      pitch: 60,
       style: this.MAPBOX_DEFAULT_STYLE
     });
     U.init(map, Mapbox);
@@ -176,11 +178,19 @@ export default {
         this.flux24Func();
       }
     );
+    this.$store.watch(
+      state => state.flux.fluxType,
+      value => {
+        this.flux24Func();
+      }
+    );
   },
   computed: {
     ...mapState({
       fluxMapStyle: state => state.flux.mapStyle,
-      fluxGeoGranularity: state => state.flux.fluxGeoGranularity
+      fluxGeoGranularity: state => state.flux.fluxGeoGranularity,
+      fluxType: state => state.flux.fluxType,
+      fluxGeoOptions: state => state.flux.fluxGeoOptions
     }),
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -548,62 +558,95 @@ export default {
         switch (this.fluxMapStyle) {
           case 2:
             this.fluxArcStyle(this.flux24);
+            map.flyTo({
+              
+              pitch:40,
+              speed: 0.2, // make the flying slow
+              curve: 1, // change the speed at which it zooms out
+
+              // This can be any easing function: it takes a number between
+              // 0 and 1 and returns another number between 0 and 1.
+              easing: function(t) {
+                return t;
+              },
+
+              // this animation is considered essential with respect to prefers-reduced-motion
+              essential: true
+            });
             break;
           case 1:
           default:
             this.fluxHatchedStyle(this.flux24);
+            map.flyTo({
+              
+              pitch:10,
+              speed: 0.2, // make the flying slow
+              curve: 1, // change the speed at which it zooms out
+
+              // This can be any easing function: it takes a number between
+              // 0 and 1 and returns another number between 0 and 1.
+              easing: function(t) {
+                return t;
+              },
+
+              // this animation is considered essential with respect to prefers-reduced-motion
+              essential: true
+            });
             break;
         }
       } else {
         map.U.removeSource(["fluxCircleDataSource"]);
         map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
+        map.off("mouseleave", "fluxCircleDataLayer");
+        map.off("mouseleave", "fluxCircleDataLayer");
       }
     },
     fluxHatchedStyle(flux24Data) {
-      console.log('fluxHatchedStyle');
-      
       const localData = flux24Data.filter(x => !x.isReference);
       const features = [];
-      localData.map(item => {
-        // let element = features.find(
-        //   x => x.properties.origin == item.origin
-        // );
-        // if (element) {
-        //   element.properties.volume += 1;
-        // } else {
-        //   features.push({
-        //     type: "Feature",
-        //     geometry: {
-        //       type: "Point",
-        //       coordinates: item.position_start
-        //     },
-        //     properties: {
-        //       origin: item.origin,
-        //       color: "#ED5F68",
-        //       volume: 1
-        //     }
-        //   });
-        // }
-        const element2 = features.find(
-          x => x.properties.origin == item.destination
-        );
-        if (element2) {
-          element2.properties.volume += item.volume;
-        } else {
-          features.push({
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: item.position_end
-            },
-            properties: {
-              origin: item.destination,
-              color: "#ED5F68",
-              volume: item.volume
-            }
-          });
-        }
-      });
+      if (this.fluxType == 1) {
+        localData.map(item => {
+          let element = features.find(x => x.properties.origin == item.origin);
+          if (element) {
+            element.properties.volume += item.volume;
+          } else {
+            features.push({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: item.position_start
+              },
+              properties: {
+                origin: item.origin,
+                color: "#ED5F68",
+                volume: item.volume
+              }
+            });
+          }
+        });
+      } else {
+        localData.map(item => {
+          const element2 = features.find(
+            x => x.properties.origin == item.destination
+          );
+          if (element2) {
+            element2.properties.volume += item.volume;
+          } else {
+            features.push({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: item.position_end
+              },
+              properties: {
+                origin: item.destination,
+                color: "#ED5F68",
+                volume: item.volume
+              }
+            });
+          }
+        });
+      }
 
       const i = d3.interpolateRgb("#33ac2e", "#ffa500");
       const max = d3.max(features, d => d.properties.volume);
@@ -670,30 +713,42 @@ export default {
     fluxArcStyle(flux24Data) {
       map.U.removeSource(["fluxCircleDataSource"]);
       map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
-
+      map.off("mouseleave", "fluxCircleDataLayer");
+      map.off("mouseleave", "fluxCircleDataLayer");
+      const localData = flux24Data.filter(x => !x.isReference);
       const features = [];
-      flux24Data
-        .filter(x => !x.isReference)
-        .map(item => {
-          // let element = features.find(
-          //   x => x.properties.origin == item.origin
-          // );
-          // if (element) {
-          //   element.properties.volume += 1;
-          // } else {
-          //   features.push({
-          //     type: "Feature",
-          //     geometry: {
-          //       type: "Point",
-          //       coordinates: item.position_start
-          //     },
-          //     properties: {
-          //       origin: item.origin,
-          //       color: "#ED5F68",
-          //       volume: 1
-          //     }
-          //   });
-          // }
+      let color = "#33ac2e";
+      let arcData = [];
+      let FluxFiltered = flux24Data.filter(x => !x.isReference);
+
+      if (this.fluxType == 1) {
+        localData.map(item => {
+          let element = features.find(x => x.properties.origin == item.origin);
+          if (element) {
+            element.properties.volume += item.volume;
+          } else {
+            features.push({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: item.position_start
+              },
+              properties: {
+                origin: item.origin,
+                color: includes(this.fluxGeoOptions, item.origin)
+                  ? "#33ac2e"
+                  : "#ffa500",
+                volume: item.volume
+              }
+            });
+          }
+        });
+        arcData = FluxFiltered.filter(item => {
+          return includes(this.fluxGeoOptions, item.destination);
+        });
+      } else {
+        color = "#ffa500";
+        localData.map(item => {
           const element2 = features.find(
             x => x.properties.origin == item.destination
           );
@@ -708,189 +763,109 @@ export default {
               },
               properties: {
                 origin: item.destination,
-                color: "#ED5F68",
+                color: includes(this.fluxGeoOptions, item.destination)
+                  ? "#ffa500"
+                  : "#33ac2e",
                 volume: item.volume
               }
             });
           }
         });
+        arcData = FluxFiltered.filter(item => {
+          return includes(this.fluxGeoOptions, item.origin);
+        });
+      }
 
       const circleData = {
         type: "geojson",
+        generateId: true,
         data: {
           type: "FeatureCollection",
           features: features
         }
       };
 
+      const max = Math.max(...features.map(x => x.properties.volume));
+      const maxArc = Math.max(...arcData.map(x => x.volume));
+
       map.addSource("fluxCircleDataSource", circleData);
       map.addLayer({
         id: "fluxCircleDataLayer",
         type: "circle",
         source: "fluxCircleDataSource",
+
         paint: {
-          // make circles larger as the user zooms from z12 to z22
-          "circle-opacity": 0.7,
+          "circle-pitch-alignment": "map",
+          "circle-blur": 0.3,
+          "circle-opacity": [
+            "case",
+            ["boolean", ["feature-state", "hover"], false],
+            0.7,
+            0.5
+          ],
           "circle-radius": [
             "interpolate",
             ["linear"],
             ["zoom"],
-            1,
-            [
-              "case",
-              [">=", ["number", ["get", "volume"]], 1280],
-              6,
-              [">=", ["number", ["get", "volume"]], 640],
-              5.5,
-              [">=", ["number", ["get", "volume"]], 320],
-              5,
-              [">=", ["number", ["get", "volume"]], 160],
-              4,
-              [">=", ["number", ["get", "volume"]], 80],
-              3.5,
-              [">=", ["number", ["get", "volume"]], 40],
-              3,
-              [">=", ["number", ["get", "volume"]], 20],
-              2.5,
-              [">=", ["number", ["get", "volume"]], 10],
-              1.5,
-              [">=", ["number", ["get", "volume"]], 5],
-              1,
-              1
-            ],
-            3,
-            [
-              "case",
-              [">=", ["number", ["get", "volume"]], 1280],
-              12.5,
-              [">=", ["number", ["get", "volume"]], 640],
-              11,
-              [">=", ["number", ["get", "volume"]], 320],
-              10,
-              [">=", ["number", ["get", "volume"]], 160],
-              8.75,
-              [">=", ["number", ["get", "volume"]], 80],
-              7.5,
-              [">=", ["number", ["get", "volume"]], 40],
-              6,
-              [">=", ["number", ["get", "volume"]], 20],
-              5,
-              [">=", ["number", ["get", "volume"]], 10],
-              3.25,
-              [">=", ["number", ["get", "volume"]], 5],
-              2.5,
-              2.5
-            ],
-            5,
-            [
-              "case",
-              [">=", ["number", ["get", "volume"]], 1280],
-              25,
-              [">=", ["number", ["get", "volume"]], 640],
-              22.5,
-              [">=", ["number", ["get", "volume"]], 320],
-              20,
-              [">=", ["number", ["get", "volume"]], 160],
-              17.5,
-              [">=", ["number", ["get", "volume"]], 80],
-              15,
-              [">=", ["number", ["get", "volume"]], 40],
-              12.5,
-              [">=", ["number", ["get", "volume"]], 20],
-              10,
-              [">=", ["number", ["get", "volume"]], 10],
-              7.5,
-              [">=", ["number", ["get", "volume"]], 5],
-              5,
-              5
-            ],
-            10,
-            [
-              "case",
-              [">=", ["number", ["get", "volume"]], 1280],
-              50,
-              [">=", ["number", ["get", "volume"]], 640],
-              45,
-              [">=", ["number", ["get", "volume"]], 320],
-              40,
-              [">=", ["number", ["get", "volume"]], 160],
-              35,
-              [">=", ["number", ["get", "volume"]], 80],
-              30,
-              [">=", ["number", ["get", "volume"]], 40],
-              25,
-              [">=", ["number", ["get", "volume"]], 20],
-              20,
-              [">=", ["number", ["get", "volume"]], 10],
-              15,
-              [">=", ["number", ["get", "volume"]], 5],
-              10,
-              10
-            ]
+            0,
+            0.2,
+            22,
+            ["+", ["*", ["/", ["get", "volume"], max], 60], 20]
           ],
-          "circle-color": "#2e5bff"
+          "circle-color": ["get", "color"],
+          "circle-stroke-color": ["get", "color"],
+          "circle-stroke-width": 1
         }
       });
 
-      let arcData = [];
-      let FluxFiltered = flux24Data.filter(x => !x.isReference);
-
-      for (const key in FluxFiltered) {
-        const item = FluxFiltered[key];
-        const index = arcData.findIndex(
-          x =>
-            (x.destination == item.destination && x.origin == item.origin) ||
-            (x.destination == item.origin && x.origin == item.destination)
-        );
-        if (index != -1) {
-          arcData[index].volume += item.volume;
-        } else {
-          arcData.push(item);
+      let hoveredStateId = null;
+      // When the user moves their mouse over the state-fill layer, we'll update the
+      // feature state for the feature under the mouse.
+      map.on("mousemove", "fluxCircleDataLayer", e => {
+        if (e.features.length > 0) {
+          if (hoveredStateId) {
+            map.setFeatureState(
+              { source: "fluxCircleDataSource", id: hoveredStateId },
+              { hover: false }
+            );
+          }
+          hoveredStateId = e.features[0].id;
+          map.setFeatureState(
+            { source: "fluxCircleDataSource", id: hoveredStateId },
+            { hover: true }
+          );
         }
-      }
+      });
+
+      // When the mouse leaves the state-fill layer, update the feature state of the
+      // previously hovered feature.
+      map.on("mouseleave", "fluxCircleDataLayer", () => {
+        if (hoveredStateId) {
+          map.setFeatureState(
+            { source: "fluxCircleDataSource", id: hoveredStateId },
+            { hover: false }
+          );
+        }
+        hoveredStateId = null;
+      });
 
       // arcData=this.flux24.filter(x=>!x.isReference);
       const myDeckLayer = new MapboxLayer({
         id: "arc",
         data: arcData,
         type: ArcLayer,
-        stroked: false,
+        stroked: true,
         filled: true,
-        getFillColor: [0, 0, 0, 0],
         getSourcePosition: d => d.position_start,
         getTargetPosition: d => d.position_end,
-        getSourceColor: d =>
-          d.isReference ? [158, 158, 158] : [105, 179, 162],
-        getTargetColor: d =>
-          d.isReference ? [158, 158, 158] : [105, 179, 162],
+        getSourceColor: [98, 123, 193],
+        getTargetColor: [98, 123, 193],
         getHeight: 1,
-        getTilt: (d, { data }) => {
-          let tilt = 2;
-          if (d.isReference) {
-            tilt = -2;
-          }
-          return tilt;
-        },
+        getTilt: 1,
+        highlightColor: [0, 0, 128, 128],
+        autoHighlight: true,
         getWidth: d => {
-          let width = 3;
-          if (d.volume > 20000) {
-            width = 12;
-          } else if (d.volume > 10000) {
-            width = 11;
-          } else if (d.volume > 5000) {
-            width = 10;
-          } else if (d.volume > 3000) {
-            width = 9;
-          } else if (d.volume > 1000) {
-            width = 7;
-          } else if (d.volume > 500) {
-            width = 6.5;
-          } else if (d.volume > 300) {
-            width = 6;
-          } else if (d.volume > 100) {
-            width = 5;
-          }
-          return width;
+          return (d.volume / maxArc) * 9 + 3;
         },
         pickable: true,
         onHover: (info, event) => {

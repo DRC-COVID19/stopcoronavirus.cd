@@ -2,6 +2,8 @@ export default {
     state: {
         fluxGeoGranularity: null,
         mapStyle: 1,
+        fluxType: 1,
+        fluxGeoOptions: []
     },
     mutations: {
         setFluxGeoGranularity(state, payload) {
@@ -9,9 +11,14 @@ export default {
         },
         setMapStyle(state, payload) {
             state.mapStyle = payload;
-            console.log(state.mapStyle);
-            
+        },
+        setFluxType(state, payload) {
+            state.fluxType = payload
+        },
+        setFluxGeoOptions(state, payload) {
+            state.fluxGeoOptions = payload;
         }
+
     }
 
 }
