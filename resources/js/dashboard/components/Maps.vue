@@ -9,7 +9,7 @@
   </div>
 </template>
 <script>
-import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE } from "../config/env";
+import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE, PALETTE } from "../config/env";
 import Mapbox from "mapbox-gl";
 import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
@@ -138,7 +138,10 @@ export default {
 
       this.addPolygoneLayer();
     });
+
     this.map = map;
+
+    //watch store
     this.$store.watch(
       state => state.flux.fluxGeoGranularity,
       value => {
@@ -146,7 +149,6 @@ export default {
         if (this.fluxEnabled) {
           this.addPolygoneHoverLayer();
         }
-        
       }
     );
     this.$store.watch(
@@ -168,7 +170,7 @@ export default {
       fluxGeoGranularity: state => state.flux.fluxGeoGranularity,
       fluxType: state => state.flux.fluxType,
       fluxGeoOptions: state => state.flux.fluxGeoOptions,
-      fluxEnabled: state=>state.flux.fluxEnabled
+      fluxEnabled: state => state.flux.fluxEnabled
     }),
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -540,7 +542,7 @@ export default {
           this.fluxGeoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
         layout: {},
         paint: {
-          "line-color": "#627BC1",
+          "line-color": PALETTE.bordure_shape_file,
           "line-width": 1
         }
       });
@@ -569,7 +571,6 @@ export default {
 
       //polygone hover
       map.on("mousemove", "state-hover", e => {
-        
         if (e.features.length > 0) {
           if (hoveredStateId) {
             map.setFeatureState(
@@ -620,7 +621,6 @@ export default {
           this.setFluxGeoOptions([e.features[0].properties["Zone+Peupl"]]);
         }
       });
-
     },
     flux24Func() {
       if (this.flux24.length > 0) {
@@ -715,7 +715,6 @@ export default {
         });
       }
 
-      const i = d3.interpolateRgb("#33ac2e", "#ffa500");
       const max = d3.max(features, d => d.properties.volume);
 
       const colorExpression = [];
@@ -724,10 +723,21 @@ export default {
       map.U.removeSource(["fluxCircleDataSource"]);
       map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
 
+      const colorScale = d3
+        .scaleQuantile()
+        .domain(features.map(d => d.properties.volume));
+
+      if (this.fluxType == 1) {
+        colorScale.range(PALETTE.inflow);
+      } else {
+        colorScale.range(PALETTE.outflow);
+      }
+
       if (this.fluxGeoGranularity == 1) {
         features.forEach(x => {
-          const localInter = x.properties.volume / max;
-          const color = i(localInter);
+          const color = this.fluxGeoOptions.includes(x.properties.origin)
+            ? PALETTE.dash_green
+            : colorScale(x.properties.volume);
           colorExpression.push(["==", ["get", "name"], x.properties.origin]);
           colorExpression.push(color);
         });
@@ -750,8 +760,9 @@ export default {
         );
       } else {
         features.forEach(x => {
-          const localInter = x.properties.volume / max;
-          const color = i(localInter);
+          const color = this.fluxGeoOptions.includes(x.properties.origin)
+            ? PALETTE.dash_green
+            : colorScale(x.properties.volume);
           colorExpression.push([
             "==",
             ["get", "Zone+Peupl"],
@@ -760,6 +771,7 @@ export default {
           colorExpression.push(color);
         });
         colorExpression.push("white");
+
         map.U.addFill(
           this.hashedLayerId,
           this.drcHealthZone,
@@ -803,8 +815,8 @@ export default {
               properties: {
                 origin: item.origin,
                 color: includes(this.fluxGeoOptions, item.origin)
-                  ? "#33ac2e"
-                  : "#ffa500",
+                  ? PALETTE.flux_in_color
+                  : PALETTE.flux_out_color,
                 volume: item.volume
               }
             });
@@ -831,8 +843,8 @@ export default {
               properties: {
                 origin: item.destination,
                 color: includes(this.fluxGeoOptions, item.destination)
-                  ? "#ffa500"
-                  : "#33ac2e",
+                  ? PALETTE.flux_out_color
+                  : PALETTE.flux_in_color,
                 volume: item.volume
               }
             });
@@ -925,11 +937,12 @@ export default {
         filled: true,
         getSourcePosition: d => d.position_start,
         getTargetPosition: d => d.position_end,
-        getSourceColor: [98, 123, 193],
-        getTargetColor: [98, 123, 193],
+        getSourceColor: this.fluxType==1?[34, 94, 168]:[138, 69, 159],
+        getTargetColor: this.fluxType==1?[34, 94, 168]:[138, 69, 159],
         getHeight: 1,
         getTilt: 1,
-        highlightColor: [0, 0, 128, 128],
+        opacity:0.7,
+        highlightColor: [51, 172, 46],
         autoHighlight: true,
         getWidth: d => {
           return (d.volume / maxArc) * 9 + 3;
