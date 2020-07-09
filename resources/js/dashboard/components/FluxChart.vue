@@ -120,7 +120,7 @@ export default {
   watch: {
     async flux24DailyIn() {
       this.flux24DailyInLocal = this.extractFlux23DailyIn();
-      await this.sleep(1000);
+      
       this.$nextTick(() => {
         this.flux24DailyInLocal.forEach((item, index) => {
           this.mobileCalc(item, `mobile_entrance_${index}`,PALETTE.flux_in_color);
@@ -130,7 +130,7 @@ export default {
     },
     async flux24DailyOut() {
       this.flux24DailyOutLocal = this.extractFlux23DailyOut();
-      await this.sleep(1000);
+     
       this.$nextTick(() => {
         this.flux24DailyOutLocal.forEach((item, index) => {
           this.mobileCalc(item, `mobile_out_${index}`,PALETTE.flux_out_color);
@@ -143,7 +143,6 @@ export default {
     this.flux24DailyInLocal = this.extractFlux23DailyIn();
     this.flux24DailyOutLocal = this.extractFlux23DailyOut();
 
-    await this.sleep(1000);
     this.$nextTick(() => {
       this.flux24DailyInLocal.forEach((item, index) => {
         this.mobileCalc(item, `mobile_entrance_${index}`, PALETTE.flux_in_color);

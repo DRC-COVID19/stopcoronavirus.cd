@@ -752,7 +752,7 @@ export default {
               "match",
               ["get", "name"],
               features.map(x => x.properties.origin),
-              0.5,
+              0.9,
               0
             ]
           }),
@@ -781,7 +781,7 @@ export default {
               "match",
               ["get", "Zone+Peupl"],
               features.map(x => x.properties.origin),
-              0.5,
+              0.9,
               0
             ]
           }),

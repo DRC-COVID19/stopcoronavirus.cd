@@ -368,6 +368,10 @@ export default {
           name: "Mois passé"
         },
         {
+          id: 6,
+          name: "Une semaine après confinement"
+        },
+        {
           id: 5,
           name: "Depuis le début du confinement"
         }
@@ -623,6 +627,10 @@ export default {
           observation_start = "2020-03-19";
           observation_end = this.moment().format(DATEFORMAT);
           break;
+        case 6:
+          observation_start = "2020-03-19";
+          observation_end = "2020-03-28"
+          break;
       }
 
       this.fluxForm = {
@@ -639,10 +647,9 @@ export default {
         startDate: new Date(observation_start),
         endDate: new Date(observation_end)
       }),
-      
-      this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
+        this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularity(this.fluxForm.fluxGeoGranularity);
-       this.$emit("submitFluxForm", this.fluxForm);
+      this.$emit("submitFluxForm", this.fluxForm);
     },
     mobilityDetailToggle() {
       this.$root.$emit("bv::toggle::collapse", "mobilityDetail");
@@ -663,7 +670,7 @@ export default {
   left: 0;
   z-index: 2;
   height: inherit;
-  .param-detail{
+  .param-detail {
     cursor: pointer;
   }
   .flux-move {
