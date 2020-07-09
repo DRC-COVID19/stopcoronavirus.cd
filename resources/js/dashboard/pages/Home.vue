@@ -600,7 +600,7 @@ export default {
       const values = {
         option: value,
         preference_start,
-        preference_end
+        preference_end,
       };
       this.isLoading = true;
       this.flux24Errors = {};
@@ -715,9 +715,9 @@ export default {
     width: 85px;
     padding: 5px;
     text-align: center;
-    background: #ffffff;
     text-decoration: unset;
-    color:$dash-green !important;
+    background: #2e5bff3d;
+    color: #2e5bff !important;
     &.active {
       background: $dash-green;
       color: white !important;

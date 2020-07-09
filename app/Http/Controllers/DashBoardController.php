@@ -996,6 +996,7 @@ class DashBoardController extends Controller
     private function prefedenidData($inputData)
     {
         $data = Validator::make($inputData, [
+            'fluxGeoOptions' => 'required|array',
             'option' => 'required',
             'preference_start' => 'nullable|date',
             'preference_end' => 'nullable|date|required_with:preference_start',
@@ -1038,6 +1039,10 @@ class DashBoardController extends Controller
         try {
             $flux = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->where(function ($q) use ($data) {
+                    $q->whereIn('Origin', $data['fluxGeoOptions'])
+                        ->orWhereIn('Destination', $data['fluxGeoOptions']);
+                })
                 ->groupBy('Origin', 'destination')
                 ->get();
 
@@ -1051,6 +1056,10 @@ class DashBoardController extends Controller
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux::select(['origin', 'destination', DB::raw('sum(volume) as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                    ->where(function ($q) use ($data) {
+                        $q->whereIn('Origin', $data['fluxGeoOptions'])
+                            ->orWhereIn('Destination', $data['fluxGeoOptions']);
+                    })
                     ->groupBy('Origin', 'destination')
                     ->get();
                 $fluxRefencesData = [];

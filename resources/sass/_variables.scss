@@ -12,6 +12,8 @@ $dash-blue: #2e5bff;
 $dash-red: #d63649;
 $dash-text: #2e384d;
 $dash-green: #33ac2e;
+$flux-in-color:#225ea8;
+$flux-out-color:#88419d;
 $dash-background: #f4f6fc;
 $dash-text-100: #7b7f88;
 $dash-shadow-color: #2e5bff3d;
@@ -44,4 +46,10 @@ $antibacterial_gel: red;
 }
 .dash-orange {
     color: $fin;
+}
+.flux-in-color{
+    color: $flux-in-color;
+}
+.flux-out-color{
+    color: $flux-out-color;
 }
