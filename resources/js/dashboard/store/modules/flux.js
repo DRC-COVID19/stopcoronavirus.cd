@@ -5,8 +5,12 @@ export default {
         fluxType: 1,
         fluxGeoOptions: [],
         fluxEnabled: false,
+        isWatchingfluxGeoOptions: true,
     },
     mutations: {
+        setIsWatchingfluxGeoOptions(state, payload) {
+            state.isWatchingfluxGeoOptions = payload;
+        },
         setFluxGeoGranularity(state, payload) {
             state.fluxGeoGranularity = payload
         },

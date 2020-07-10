@@ -190,7 +190,7 @@ export default {
       hospitals: state => state.hospital.hospitalData,
       hospitalCount: state => state.hospital.hospitalCount,
       selectedHospital: state => state.hospital.selectedHospital,
-      fluxMapStyle: state => state.flux.mapStyle,
+      fluxMapStyle: state => state.flux.mapStyle
     }),
     hasRightSide() {
       return (
@@ -475,6 +475,9 @@ export default {
       });
     },
     submitFluxForm(values) {
+      if (this.isLoading) {
+        return;
+      }
       this.isLoading = true;
       this.flux24Errors = {};
 
@@ -600,7 +603,7 @@ export default {
       const values = {
         option: value,
         preference_start,
-        preference_end,
+        preference_end
       };
       this.isLoading = true;
       this.flux24Errors = {};

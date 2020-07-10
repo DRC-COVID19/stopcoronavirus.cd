@@ -736,3 +736,15 @@
 #data-modal___BV_modal_content_ {
     min-height: 550px;
 }
+
+.mapboxgl-popup {
+    .mapboxgl-popup-content {
+        border: 2px solid $dash-shadow-color;
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+        border-radius: unset;
+       background: white;
+    }
+    .mapboxgl-popup-tip {
+        border-top-color: white;
+    }
+}
