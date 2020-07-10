@@ -145,6 +145,8 @@ export default {
     this.$store.watch(
       state => state.flux.fluxGeoGranularity,
       value => {
+        console.log("1");
+
         this.addPolygoneLayer();
         if (this.fluxEnabled) {
           this.addPolygoneHoverLayer();
@@ -788,6 +790,46 @@ export default {
           this.drcSourceId
         );
       }
+
+      const popup = new Mapbox.Popup({
+        closeButton: false,
+        closeOnClick: false
+      });
+
+      const mouseMove = e => {
+        // Change the cursor style as a UI indicator.
+        // map.getCanvas().style.cursor = "pointer";
+
+        const coordinates = e.features[0].geometry.coordinates[0].slice();
+
+        const item = e.features[0].properties;
+
+        const name = item["Zone+Peupl"] ?? item["name"];
+        let value = null;
+        const feature = features.find(x => x.properties.origin == name);
+        if (feature) {
+          value = feature.properties.volume;
+        }
+        const HTML = `<div>${name} ${value ? `: ${value}` : ""}</div>`;
+
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(HTML)
+          .addTo(map);
+      };
+      const mouseOut = () => {
+        map.getCanvas().style.cursor = "";
+        popup.remove();
+      };
+
+      map.off("mousemove", this.hashedLayerId, mouseMove);
+      map.off("mouseout", this.hashedLayerId, mouseOut);
+
+      map.on("mousemove", this.hashedLayerId, mouseMove);
+
+      map.on("mouseout", this.hashedLayerId, mouseOut);
     },
     fluxArcStyle(flux24Data) {
       map.U.removeSource(["fluxCircleDataSource"]);
@@ -875,7 +917,7 @@ export default {
 
         paint: {
           "circle-pitch-alignment": "map",
-          "circle-blur": 0.3,
+          "circle-blur": 0.1,
           "circle-opacity": [
             "case",
             ["boolean", ["feature-state", "hover"], false],
@@ -898,8 +940,15 @@ export default {
       });
 
       let hoveredStateId = null;
+      const popup = new Mapbox.Popup({
+        closeButton: false,
+        closeOnClick: false
+      });
       // When the user moves their mouse over the state-fill layer, we'll update the
       // feature state for the feature under the mouse.
+      map.on("mouseenter", "fluxCircleDataLayer", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
       map.on("mousemove", "fluxCircleDataLayer", e => {
         if (e.features.length > 0) {
           if (hoveredStateId) {
@@ -914,11 +963,20 @@ export default {
             { hover: true }
           );
         }
+        const { origin, volume } = e.features[0].properties;
+        const HTML = `<div>${origin} ${volume ? `: ${volume}` : ""}</div>`;
+
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(HTML)
+          .addTo(map);
       });
 
       // When the mouse leaves the state-fill layer, update the feature state of the
       // previously hovered feature.
-      map.on("mouseleave", "fluxCircleDataLayer", () => {
+      map.on("mouseout", "fluxCircleDataLayer", () => {
         if (hoveredStateId) {
           map.setFeatureState(
             { source: "fluxCircleDataSource", id: hoveredStateId },
@@ -926,6 +984,8 @@ export default {
           );
         }
         hoveredStateId = null;
+        map.getCanvas().style.cursor = "";
+        popup.remove();
       });
 
       // arcData=this.flux24.filter(x=>!x.isReference);
@@ -937,11 +997,11 @@ export default {
         filled: true,
         getSourcePosition: d => d.position_start,
         getTargetPosition: d => d.position_end,
-        getSourceColor: this.fluxType==1?[34, 94, 168]:[138, 69, 159],
-        getTargetColor: this.fluxType==1?[34, 94, 168]:[138, 69, 159],
+        getSourceColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
+        getTargetColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
         getHeight: 1,
         getTilt: 1,
-        opacity:0.7,
+        opacity: 0.7,
         highlightColor: [51, 172, 46],
         autoHighlight: true,
         getWidth: d => {

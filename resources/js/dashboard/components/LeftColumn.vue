@@ -34,8 +34,14 @@
                 />
               </b-form-group>
 
-              <h4 @click="mobilityDetailToggle" class="param-detail">Paramètres détailés</h4>
-              <b-collapse id="mobilityDetail">
+              <h4 @click="mobilityDetailToggle" class="param-detail">
+                Paramètres détailés
+                <span
+                  class="chevron fa fa-chevron-down"
+                  :class="{'rotation':IsfluxParameterCollapse}"
+                ></span>
+              </h4>
+              <b-collapse id="mobilityDetail" :visible="IsfluxParameterCollapse">
                 <div>
                   <p>Géographiques</p>
                   <b-form-group>
@@ -369,11 +375,12 @@ export default {
         },
         {
           id: 6,
-          name: "Une semaine après confinement"
+          name:
+            "Mobilité à la Gombe une semaine après le debut du confinement (24h)"
         },
         {
           id: 5,
-          name: "Depuis le début du confinement"
+          name: "Mobilité à la Gombe depuis le début du confinement"
         }
       ],
       fluxFilterInput: "",
@@ -406,7 +413,8 @@ export default {
       allZoneChecked: false,
       allProvinceChecked: false,
       allZoneCheckedIndeterminate: false,
-      allProvincesCheckedIndeterminate: false
+      allProvincesCheckedIndeterminate: false,
+      IsfluxParameterCollapse: false
     };
   },
 
@@ -484,6 +492,13 @@ export default {
       state => state.flux.fluxGeoOptions,
       value => {
         this.$set(this.fluxForm, "fluxGeoOptions", value);
+        if (
+          this.fluxForm.observation_start &&
+          this.fluxForm.observation_end &&
+          this.fluxForm.fluxTimeGranularity
+        ) {
+          this.$emit("submitFluxForm", this.fluxForm);
+        }
       }
     );
   },
@@ -543,6 +558,7 @@ export default {
         this.fluxFilterInput = "";
         this.fluxForm.origin = null;
         this.fluxForm.destination = null;
+        this.IsfluxParameterCollapse = false;
         this.resetState();
       } else {
         this.setFluxEnabled(checked);
@@ -629,7 +645,7 @@ export default {
           break;
         case 6:
           observation_start = "2020-03-19";
-          observation_end = "2020-03-28"
+          observation_end = "2020-03-28";
           break;
       }
 
@@ -653,6 +669,7 @@ export default {
     },
     mobilityDetailToggle() {
       this.$root.$emit("bv::toggle::collapse", "mobilityDetail");
+      this.IsfluxParameterCollapse = !this.IsfluxParameterCollapse;
     }
   }
 };
@@ -670,6 +687,13 @@ export default {
   left: 0;
   z-index: 2;
   height: inherit;
+  .chevron {
+    transition: all 500ms ease;
+    font-size: 1rem;
+    &.rotation {
+      transform: rotate(180deg);
+    }
+  }
   .param-detail {
     cursor: pointer;
   }
