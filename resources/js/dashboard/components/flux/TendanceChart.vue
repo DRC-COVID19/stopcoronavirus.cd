@@ -75,18 +75,16 @@ export default {
             xAxes: [
               {
                 display: true,
-                gridLines: {
-                  display: true
-                },
                 id: "x-axis-0",
                 scaleLabel: {
                   display: false,
                   labelString: "Month"
                 },
                 type: "time",
+                fontSize:9,
                 time: {
                   unit: "day",
-                  unitStepSize: 2,
+                  unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM"
                   }

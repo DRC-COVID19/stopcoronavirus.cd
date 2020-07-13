@@ -120,20 +120,24 @@ export default {
   watch: {
     async flux24DailyIn() {
       this.flux24DailyInLocal = this.extractFlux23DailyIn();
-      
+
       this.$nextTick(() => {
         this.flux24DailyInLocal.forEach((item, index) => {
-          this.mobileCalc(item, `mobile_entrance_${index}`,PALETTE.flux_in_color);
+          this.mobileCalc(
+            item,
+            `mobile_entrance_${index}`,
+            PALETTE.flux_in_color
+          );
           this.mobileEntranceOrigin(item, index);
         });
       });
     },
     async flux24DailyOut() {
       this.flux24DailyOutLocal = this.extractFlux23DailyOut();
-     
+
       this.$nextTick(() => {
         this.flux24DailyOutLocal.forEach((item, index) => {
-          this.mobileCalc(item, `mobile_out_${index}`,PALETTE.flux_out_color);
+          this.mobileCalc(item, `mobile_out_${index}`, PALETTE.flux_out_color);
           this.mobileOutDestination(item, index);
         });
       });
@@ -145,7 +149,11 @@ export default {
 
     this.$nextTick(() => {
       this.flux24DailyInLocal.forEach((item, index) => {
-        this.mobileCalc(item, `mobile_entrance_${index}`, PALETTE.flux_in_color);
+        this.mobileCalc(
+          item,
+          `mobile_entrance_${index}`,
+          PALETTE.flux_in_color
+        );
         this.mobileEntranceOrigin(item, index);
       });
     });
@@ -231,7 +239,7 @@ export default {
       }
       return flux24DailyInLocal;
     },
-    mobileCalc(dataPram, ref,color) {
+    mobileCalc(dataPram, ref, color) {
       // set the dimensions and margins of the graph
       let data = [];
       let DataReference = [];
@@ -311,6 +319,9 @@ export default {
                 width: 1, // crosshair line width
                 dashPattern: [5, 5] // crosshair line dash pattern
               },
+              zoom: {
+                enabled: false
+              },
               sync: {
                 enabled: false // enable trace line syncing with other charts
               }
@@ -344,12 +355,15 @@ export default {
                 },
                 scaleLabel: {
                   display: false,
-                  labelString: "Month"
+                  labelString: "Month",
                 },
                 type: "time",
+                 ticks:{
+                   fontSize:9
+                 },
                 time: {
                   unit: "day",
-                  unitStepSize: 2,
+                  unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM"
                   }
@@ -360,6 +374,7 @@ export default {
               {
                 display: true,
                 ticks: {
+                  fontSize:9,
                   min: -100,
                   max: 100,
                   callback: function(value) {
@@ -452,7 +467,7 @@ export default {
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end")
-        .style('color','black')
+        .style("color", "black")
         .style("font-size", "0.4rem");
 
       // Add Y axis
@@ -467,15 +482,13 @@ export default {
         .selectAll("text")
         .style("text-anchor", "end")
         .style("font-size", "0.4rem")
-        .style('color','black')
-        ;
-
+        .style("color", "black");
 
       // color palette = one color per subgroup
       var color = d3
         .scaleOrdinal()
         .domain(subgroups)
-        .range([PALETTE.flux_out_color,"#e0e0e0"]);
+        .range([PALETTE.flux_out_color, "#e0e0e0"]);
 
       //stack the data? --> stack per subgroup
       var stackedData = d3.stack().keys(subgroups)(localData);
@@ -580,7 +593,7 @@ export default {
         .selectAll("text")
         .attr("transform", "translate(-10,0)rotate(-45)")
         .style("text-anchor", "end")
-        .style('color','black')
+        .style("color", "black")
         .style("font-size", "0.4rem");
 
       // Add Y axis
@@ -594,14 +607,14 @@ export default {
         .call(d3.axisLeft(y))
         .selectAll("text")
         .style("text-anchor", "end")
-        .style('color','black')
+        .style("color", "black")
         .style("font-size", "0.4rem");
 
       // color palette = one color per subgroup
       var color = d3
         .scaleOrdinal()
         .domain(subgroups)
-        .range([PALETTE.flux_in_color,"#e0e0e0"]);
+        .range([PALETTE.flux_in_color, "#e0e0e0"]);
 
       //stack the data? --> stack per subgroup
       var stackedData = d3.stack().keys(subgroups)(localData);
@@ -634,7 +647,7 @@ export default {
           return x(d[1]) - x(d[0]) ?? 0;
         })
         .attr("height", y.bandwidth());
-    },
+    }
   }
 };
 </script>
