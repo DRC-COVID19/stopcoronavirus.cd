@@ -115,7 +115,7 @@ export default {
                 type: "time",
                 time: {
                   unit: "day",
-                  unitStepSize: 2,
+                  unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM"
                   }
