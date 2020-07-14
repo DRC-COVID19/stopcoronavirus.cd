@@ -1,7 +1,7 @@
 <template>
   <b-container class="p-0 flux-chart">
     <b-row no-gutters>
-      <b-col cols="12" md="6" class="pl-0 pr-2" ref="mobility">
+      <b-col cols="12" md="4" class="pl-0 pr-2" ref="mobility">
         <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>{{item[0].destination}}</h3>
@@ -43,7 +43,7 @@
           </b-col>
         </b-row>
       </b-col>
-      <b-col cols="12" md="6" class="pr-0 pl-2">
+      <b-col cols="12" md="4" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>&nbsp;</h3>

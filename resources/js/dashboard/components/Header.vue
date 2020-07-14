@@ -1,42 +1,57 @@
 <template>
   <b-row class="header">
-    <b-col cols="12" md="6" class="map-form-header">
-      <h1>Dashboard Covid-19</h1>
-    </b-col>
-    <b-col
-      cols="12"
-      md="6"
-      class="map-form-logo d-flex justify-content-center justify-content-md-end"
-    >
-      <img src="/img/partners_top.png" width="100" class="img-fluid" alt />
-      <img src="/img/commite_riposte.jpg" width="100" class="img-fluid" alt />
-      <div
-        @mouseleave="userAvatarMouseLeave"
-        @mouseenter="userAvatarMouseEnter"
-        class="avatar-container"
-        v-if="user"
-      >
-        <b-img
-          :src="user.avatar"
-          rounded="circle"
-          fluid
-          width="30"
-          v-b-tooltip.hover
-          :title="user.username"
-        />
-        <b-card class="user-card text-center" v-if="showUserCard">
-          <p>{{user.username}}</p>
-          <p>{{user.name}}</p>
-          <p v-if="user.email">{{user.email}}</p>
-          <b-button @click="userLogout" variant="danger" block>Deconnexion</b-button>
-        </b-card>
-      </div>
+    <b-col cols="12" class="map-form-header">
+      <b-navbar toggleable="lg" type="light">
+        <b-navbar-brand class="mr-5">
+          <h1 class="title">Dashboard Covid-19</h1>
+        </b-navbar-brand>
+        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav class="nav-container">
+            <b-nav-item :class="{'active':activeMenu==1}" @click="selectMenu(1)">Mobilité</b-nav-item>
+            <b-nav-item :class="{'active':activeMenu==2}" @click="selectMenu(2)">Epidémologie</b-nav-item>
+            <b-nav-item :class="{'active':activeMenu==3}" @click="selectMenu(3)">Indicateurs</b-nav-item>
+            <b-nav-item :class="{'active':activeMenu==4}" @click="selectMenu(4)">Sondages</b-nav-item>
+            <b-nav-item :class="{'active':activeMenu==5}" @click="selectMenu(5)">Infrastructures</b-nav-item>
+            <b-nav-item :class="{'active':activeMenu==6}" @click="selectMenu(6)">Orientation</b-nav-item>
+          </b-navbar-nav>
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item>
+              <div class="map-form-logo d-flex justify-content-center justify-content-md-end">
+                <img src="/img/partners_top.png" height="30" width="100" class="img-fluid" alt />
+                <img src="/img/commite_riposte.jpg" height="30" width="100" class="img-fluid" alt />
+                <div
+                  @mouseleave="userAvatarMouseLeave"
+                  @mouseenter="userAvatarMouseEnter"
+                  class="avatar-container"
+                  v-if="user"
+                >
+                  <b-img
+                    :src="user.avatar"
+                    rounded="circle"
+                    fluid
+                    width="30"
+                    v-b-tooltip.hover
+                    :title="user.username"
+                  />
+                  <b-card class="user-card text-center" v-if="showUserCard">
+                    <p>{{user.username}}</p>
+                    <p>{{user.name}}</p>
+                    <p v-if="user.email">{{user.email}}</p>
+                    <b-button @click="userLogout" variant="danger" block>Deconnexion</b-button>
+                  </b-card>
+                </div>
+              </div>
+            </b-nav-item>
+          </b-navbar-nav>
+        </b-collapse>
+      </b-navbar>
     </b-col>
   </b-row>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -45,11 +60,13 @@ export default {
   },
   computed: {
     ...mapState({
-      user: state => state.auth.user
+      user: state => state.auth.user,
+      activeMenu: state => state.nav.activeMenu
     })
   },
   methods: {
     ...mapActions(["logout"]),
+    ...mapMutations(["setActiveMenu"]),
     userAvatarMouseEnter() {
       this.showUserCard = true;
     },
@@ -62,6 +79,9 @@ export default {
           name: "login"
         });
       });
+    },
+    selectMenu(value) {
+      this.setActiveMenu(value);
     }
   }
 };
@@ -71,14 +91,28 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .header {
-  padding: 12px 24px;
   background: white;
   border-bottom: 1px solid $dash-shadow-color;
 
-  h1 {
+  .title {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+  }
+  .nav-container {
+    a {
+      color: black;
+      text-decoration: none;
+      font-weight: bold;
+      &:hover {
+        color: $dash-blue;
+      }
+    }
+    .active {
+      a {
+        color: $dash-blue;
+      }
+    }
   }
   .avatar-container {
     position: relative;
