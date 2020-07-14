@@ -2,8 +2,40 @@
   <div>
     <b-container fluid class="dash-home-page" ref="dash_home_page" id="dash_home_page">
       <Header />
-      <b-row class="position-relative">
-        <LeftColumn
+      <b-row class="mt-2 top-menu">
+        <b-col>
+          <MenuFlux
+            v-if="activeMenu==1"
+            @submitFluxForm="submitFluxForm"
+            @populationFluxChecked="populationFluxChecked"
+            @flux::predefined::changed="fluxPredefinedChanged"
+            :fluxZones="fluxZones"
+            :fluxProvinces="fluxProvinces"
+            :flux24Errors="flux24Errors"
+          />
+          <MenuEpidemology
+            v-if="activeMenu==2"
+            @covidCaseChecked="getCovidCases"
+            :covidCasesCount="covidCasesCount"
+          />
+          <MenuInfrastructure
+            v-if="activeMenu==5"
+            :hospitalCount="hospitalCount"
+            @hopitalChecked="gethopitals"
+          />
+          <MenuOrientation
+           v-if="activeMenu==6"
+            @medicalOrientationChecked="getmedicalOrientations"
+            @medicalOrientationChanged="medicalOrientationChanged"
+            :orientationCount="orientationCount"
+            :finCount="finCount"
+            :fin5Count="fin5Count"
+            :fin8Count="fin8Count"
+          />
+        </b-col>
+      </b-row>
+      <b-row class="position-relative map-wrap">
+        <!--   <LeftColumn
           @covidCaseChecked="getCovidCases"
           @hopitalChecked="gethopitals"
           @medicalOrientationChecked="getmedicalOrientations"
@@ -28,8 +60,8 @@
           :fluxZones="fluxZones"
           :fluxProvinces="fluxProvinces"
           :flux24Errors="flux24Errors"
-        />
-        <b-col cols="12" offset-md="3" :class="`${hasRightSide?'col-md-5':'col-md-9'}`">
+        />-->
+        <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
           <div class="layer-set-contenair" v-if="hasFlux24Daily">
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arc</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
@@ -54,7 +86,7 @@
         </b-col>
         <b-col
           cols="12"
-          md="4"
+          md="6"
           class="side-right mt-2 pl-2"
           :class="{'side-right-100':!hasCovidCases}"
           v-if="hasRightSide"
@@ -77,13 +109,12 @@
             </b-tabs>
           </b-card>
         </b-col>
-        <b-col
-          class="side-bottom"
-          v-if="hasCovidCases||hasFlux24Daily||hasflux24DailyComparison"
-          cols="12"
-          md="9"
-          offset-md="3"
-        >
+      </b-row>
+      <b-row
+        class="row-side-bottom mt-2 mb-2"
+        v-if="hasCovidCases||hasFlux24Daily||hasflux24DailyComparison"
+      >
+        <b-col class="side-bottom" cols="12">
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 chart" v-if="hasCovidCases" :active="hasCovidCases">
@@ -129,6 +160,10 @@ import Header from "../components/Header";
 import HospitalSituation from "../components/HospitalSituation";
 import FluxTendanceChart from "../components/flux/TendanceChart";
 import FluxComparisonChart from "../components/flux/ComparisonChart";
+import MenuFlux from "../components/menu/Flux";
+import MenuEpidemology from "../components/menu/Epidemiology";
+import MenuInfrastructure from "../components/menu/Infrastructure";
+import MenuOrientation from "../components/menu/Orientation";
 
 import { mapState, mapActions, mapMutations } from "vuex";
 
@@ -149,7 +184,11 @@ export default {
     Header,
     HospitalSituation,
     FluxTendanceChart,
-    FluxComparisonChart
+    FluxComparisonChart,
+    MenuFlux,
+    MenuEpidemology,
+    MenuInfrastructure,
+    MenuOrientation
   },
   data() {
     return {
@@ -190,7 +229,8 @@ export default {
       hospitals: state => state.hospital.hospitalData,
       hospitalCount: state => state.hospital.hospitalCount,
       selectedHospital: state => state.hospital.selectedHospital,
-      fluxMapStyle: state => state.flux.mapStyle
+      fluxMapStyle: state => state.flux.mapStyle,
+      activeMenu: state => state.nav.activeMenu
     }),
     hasRightSide() {
       return (
@@ -687,12 +727,8 @@ export default {
 
 .map-container {
   padding: 10px 10px 10px 10px;
-  height: calc(80vh - 56px);
+  height: 100%;
   transition: 500ms all ease;
-}
-.map-container-100,
-.side-right-100 {
-  height: calc(100vh - 56px);
 }
 
 .side-case-covid {
