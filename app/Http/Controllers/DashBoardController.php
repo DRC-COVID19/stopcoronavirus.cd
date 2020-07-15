@@ -1788,18 +1788,18 @@ class DashBoardController extends Controller
     public function getFlux24PresenceDailyInProvince(Request $request)
     {
         $data = $this->fluxValidator($request->all());
-
+        
         try {
             $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->orWhereIn('Zone', $data['fluxGeoOptions'])
+                ->WhereIn('Zone', $data['fluxGeoOptions'])
                 ->groupBy('Date', 'Zone')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->orWhereIn('Zone', $data['fluxGeoOptions'])
+                    ->WhereIn('Zone', $data['fluxGeoOptions'])
                     ->groupBy('Date', 'Zone')->get();
 
                 if (count($fluxRefences) > 0) {
