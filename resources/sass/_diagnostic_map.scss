@@ -21,7 +21,8 @@
         flex: 1;
     }
     .row-side-bottom {
-        flex: 3;
+        flex: 6;
+        overflow: hidden;
     }
 }
 .btn-dash-blue {
@@ -366,10 +367,14 @@
     }
 }
 .side-bottom {
+    .canva-chart {
+        height: 100% !important;
+    }
     .card {
         background: white;
         border-radius: unset;
         border-color: $dash-blue;
+        height: 100%;
         .card-header {
             background: transparent;
             border: unset;
@@ -387,6 +392,22 @@
                     &.active {
                         color: white !important;
                         background: $dash-green !important;
+                    }
+                }
+            }
+        }
+        .tabs {
+            height: 100%;
+            .tab-content {
+                height: calc(100% - 35px);
+                .card-body {
+                    height: 100%;
+                    padding: 5px;
+                    > div {
+                        height: inherit;
+                        > div {
+                            height: inherit;
+                        }
                     }
                 }
             }

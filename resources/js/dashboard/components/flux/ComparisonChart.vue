@@ -2,7 +2,7 @@
   <b-container class="p-0" ref="tendanceContainer">
     <b-row no-gutters>
       <b-col cols="12" class="pl-0 pr-2 ">
-        <canvas height="200" width="100vh" ref="comparisonChart" id="comparisonChart" />
+        <canvas  width="100vh" ref="comparisonChart" id="comparisonChart" />
       </b-col>
     </b-row>
   </b-container>
