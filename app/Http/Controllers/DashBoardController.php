@@ -1750,22 +1750,6 @@ class DashBoardController extends Controller
         }
     }
 
-    public function getFlux24PresenceProvinceDailyCompare(Request $request)
-    {
-        $data = $this->fluxValidator($request->all());
-        try {
-            $flux = DB::select("SELECT Zone as zone,DATE, SUM(Volume) AS volume FROM flux24_presence_provinces
-                WHERE DATE BETWEEN ? and ?
-                GROUP BY Zone,DATE ", [$data['preference_start'], $data['observation_end']]);
-            return response()->json($flux);
-        } catch (\Throwable $th) {
-            if (env('APP_DEBUG') == true) {
-                return response($th)->setStatusCode(500);
-            }
-            return response($th->getMessage())->setStatusCode(500);
-        }
-    }
-
     public function getFlux24PresenceProvinceDaily(Request $request)
     {
         $data = $this->fluxValidator($request->all());
@@ -1782,6 +1766,41 @@ class DashBoardController extends Controller
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->whereIn('zone', $data['fluxGeoOptions'])
                     ->groupBy('Date')->get();
+
+                if (count($fluxRefences) > 0) {
+                    foreach ($fluxRefences as $value) {
+                        $value->{'isReference'} = true;
+                    }
+                }
+            }
+            if (is_array($fluxRefences)) {
+                return response()->json($flux);
+            }
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getFlux24PresenceDailyInProvince(Request $request)
+    {
+        $data = $this->fluxValidator($request->all());
+
+        try {
+            $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume')])
+                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->orWhereIn('Zone', $data['fluxGeoOptions'])
+                ->groupBy('Date', 'Zone')->get();
+
+            $fluxRefences = [];
+            if (isset($data['preference_start']) && isset($data['preference_end'])) {
+                $fluxRefences = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume')])
+                    ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                    ->orWhereIn('Zone', $data['fluxGeoOptions'])
+                    ->groupBy('Date', 'Zone')->get();
 
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
