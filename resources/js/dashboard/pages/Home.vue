@@ -24,7 +24,7 @@
             @hopitalChecked="gethopitals"
           />
           <MenuOrientation
-           v-if="activeMenu==6"
+            v-if="activeMenu==6"
             @medicalOrientationChecked="getmedicalOrientations"
             @medicalOrientationChanged="medicalOrientationChanged"
             :orientationCount="orientationCount"
@@ -101,6 +101,8 @@
                   :flux24Daily="flux24Daily"
                   :flux24DailyIn="flux24DailyIn"
                   :flux24DailyOut="flux24DailyOut"
+                  :flux24Presence="flux24Presence"
+                  :flux24PresenceDaily="flux24PresenceDaily"
                 />
               </b-tab>
               <b-tab title="Hôpital" v-if="!!selectedHospital" :active="!!selectedHospital">
@@ -215,13 +217,16 @@ export default {
       fluxZones: [],
       fluxProvinces: [],
       flux24: [],
+      flux24Presence: [],
       flux24Errors: {},
       flux24Daily: [],
       flux24DailyComparison: [],
       flux24DailyIn: [],
       flux24DailyOut: [],
       fluxGeoOptions: [],
-      menuColunmStyle: {}
+      menuColunmStyle: {},
+      flux24PrensenceDaily: [],
+      flux24PresenceDailyComparison: []
     };
   },
   computed: {
@@ -527,6 +532,10 @@ export default {
       let urlDailyIn = `api/dashboard/flux/origin`;
       let urlDailyOut = `api/dashboard/flux/origin`;
 
+      let urlPresence = `api/dashboard/flux/origin`;
+      let urlPresenceDaily = `api/dashboard/flux/origin`;
+      let urlPresenceDailyCompare = `api/dashboard/flux/origin`;
+
       switch (values.fluxGeoGranularity) {
         case 1:
           url += "/provinces";
@@ -534,6 +543,9 @@ export default {
           urlDailyIn += "/provinces";
           urlDailyOut += "/provinces";
           urlDailyCompare += "/provinces";
+          urlPresence += "/provinces";
+          urlPresenceDaily += "/provinces";
+          urlPresenceDailyCompare += "/provinces";
           break;
         case 2:
         default:
@@ -542,8 +554,15 @@ export default {
           urlDailyIn += "/zones";
           urlDailyOut += "/zones";
           urlDailyCompare += "/zones";
+          urlPresence += "/zones";
+          urlPresenceDaily += "/zones";
+          urlPresenceDailyCompare += "/zones";
           break;
       }
+
+      urlPresence += "/presence";
+      urlPresenceDaily += "/presence";
+      urlPresenceDailyCompare += "/presence";
 
       switch (values.fluxTimeGranularity) {
         case 1:
@@ -552,6 +571,10 @@ export default {
           urlDailyIn += "/h-24";
           urlDailyOut += "/h-24";
           urlDailyCompare += "/h-24";
+
+          urlPresence += "/h-24";
+          urlPresenceDaily += "/h-24";
+          urlPresenceDailyCompare += "/h-24";
           break;
         case 2:
         default:
@@ -560,8 +583,15 @@ export default {
           urlDailyIn += "/m-30";
           urlDailyOut += "/m-30";
           urlDailyCompare += "/m-30";
+
+          urlPresence += "/m-30";
+          urlPresenceDaily += "/m-30";
+          urlPresenceDailyCompare += "/m-30";
           break;
       }
+
+      urlPresenceDaily += "/daily";
+      urlPresenceDailyCompare += "/daily-compare";
 
       urlDaily += "/daily";
       urlDailyIn += "/daily-in";
@@ -611,6 +641,26 @@ export default {
         })
         .then(({ data }) => {
           this.flux24DailyOut = data;
+        })
+        .catch(({ response }) => {});
+
+      this.flux24Presence = [];
+      axios
+        .get(urlPresence, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24Presence = data;
+        })
+        .catch(({ response }) => {});
+
+      this.flux24PrensenceDaily = [];
+      axios
+        .get(urlPresenceDaily, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24PrensenceDaily = data;
         })
         .catch(({ response }) => {});
 

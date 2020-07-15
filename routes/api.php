@@ -104,7 +104,7 @@ Route::group([
                     Route::group(['prefix' => 'h-24'], function () {
                         Route::get('/', 'DashBoardController@getFlux24PresenceProvince');
                         Route::get('/daily', 'DashBoardController@getFlux24PresenceProvinceDaily');
-                        Route::get('/daily-compare', 'DashBoardController@getFlux24PresenceProvinceDailyCompare');
+                        Route::get('/daily-in', 'DashBoardController@getFlux24PresenceDailyInProvince');
                     });
                 });
             });

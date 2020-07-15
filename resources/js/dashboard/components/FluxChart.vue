@@ -83,6 +83,42 @@
           </b-col>
         </b-row>
       </b-col>
+      <b-col cols="12" md="4" class="pr-0 pl-2">
+        <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
+          <b-col cols="12">
+            <h3>&nbsp;</h3>
+            <b-card
+              class="mb-3 flux-mobility"
+              :class="{'active':fluxType==3}"
+              @click="selectFluxType(2)"
+            >
+              <h5 class="percent-title">Présences</h5>
+              <div class="percent flux-out-color">{{fluxInPercent(item)}}%​</div>
+              <p v-if="fluxVolumObservation(item)>0" class="percent-p text-dash-color">
+                {{fluxVolumObservation(item).toLocaleString(
+                undefined,
+                { minimumFractionDigits: 0 })}} personnes de plus étaient présentes dans la zone
+              </p>
+              <p v-else class="percent-p text-dash-color">
+                {{(fluxVolumObservation(item)*-1).toLocaleString(
+                undefined,
+                { minimumFractionDigits: 0 })}} personnes de moins étaient présentes dans la zone
+              </p>
+            </b-card>
+            <b-card no-body class="mb-3 p-2" :ref="`mobile_presence_${index}_card`">
+              <div class="chart-container">
+                <canvas
+                  height="200"
+                  width="100vh"
+                  :ref="`mobile_presence_${index}`"
+                  :id="`mobile_presence_${index}`"
+                ></canvas>
+              </div>
+            </b-card>
+            
+          </b-col>
+        </b-row>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -94,6 +130,10 @@ import { PALETTE } from "../config/env";
 export default {
   props: {
     flux24Daily: {
+      type: Array,
+      default: () => []
+    },
+    flux24PresenceDaily: {
       type: Array,
       default: () => []
     },
@@ -239,6 +279,7 @@ export default {
       }
       return flux24DailyInLocal;
     },
+    
     mobileCalc(dataPram, ref, color) {
       // set the dimensions and margins of the graph
       let data = [];
@@ -355,12 +396,12 @@ export default {
                 },
                 scaleLabel: {
                   display: false,
-                  labelString: "Month",
+                  labelString: "Month"
                 },
                 type: "time",
-                 ticks:{
-                   fontSize:9
-                 },
+                ticks: {
+                  fontSize: 9
+                },
                 time: {
                   unit: "day",
                   unitStepSize: 1,
@@ -374,7 +415,7 @@ export default {
               {
                 display: true,
                 ticks: {
-                  fontSize:9,
+                  fontSize: 9,
                   min: -100,
                   max: 100,
                   callback: function(value) {
