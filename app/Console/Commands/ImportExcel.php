@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Imports\Flux24ProvinceImport;
 use App\Imports\FluxImport;
+use App\Imports\FluxPresenceProvinceImport;
+use App\Imports\FluxPresenceZoneImport;
 use Illuminate\Console\Command;
 
 class ImportExcel extends Command
@@ -43,6 +45,22 @@ class ImportExcel extends Command
         $fileName = $this->option('file');
         $size = $this->option('size');
         switch ($type) {
+            case 'pp':
+                for ($i = 1; $i <= $size; $i++) {
+                    $file = "{$fileName}-{$i}.csv";
+                    $this->output->title("Starting import {$file}");
+                    (new FluxPresenceProvinceImport)->withOutput($this->output)->import(storage_path("app/flux/$file"), null, \Maatwebsite\Excel\Excel::CSV);
+                    $this->output->success("Import successful {$file}");
+                }
+                break;
+            case 'pz':
+                for ($i = 1; $i <= $size; $i++) {
+                    $file = "{$fileName}-{$i}.csv";
+                    $this->output->title("Starting import {$file}");
+                    (new FluxPresenceZoneImport)->withOutput($this->output)->import(storage_path("app/flux/$file"), null, \Maatwebsite\Excel\Excel::CSV);
+                    $this->output->success("Import successful {$file}");
+                }
+                break;
             case 'p':
                 for ($i = 1; $i <= $size; $i++) {
                     $file = "{$fileName}-{$i}.csv";
