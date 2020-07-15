@@ -102,7 +102,7 @@
                   :flux24DailyIn="flux24DailyIn"
                   :flux24DailyOut="flux24DailyOut"
                   :flux24Presence="flux24Presence"
-                  :flux24PresenceDaily="flux24PresenceDaily"
+                  :flux24PresenceDailyIn="flux24PresenceDailyIn"
                 />
               </b-tab>
               <b-tab title="Hôpital" v-if="!!selectedHospital" :active="!!selectedHospital">
@@ -226,7 +226,7 @@ export default {
       fluxGeoOptions: [],
       menuColunmStyle: {},
       flux24PrensenceDaily: [],
-      flux24PresenceDailyComparison: []
+      flux24PresenceDailyIn: []
     };
   },
   computed: {
@@ -534,7 +534,7 @@ export default {
 
       let urlPresence = `api/dashboard/flux/origin`;
       let urlPresenceDaily = `api/dashboard/flux/origin`;
-      let urlPresenceDailyCompare = `api/dashboard/flux/origin`;
+      let urlPresenceDailyIn = `api/dashboard/flux/origin`;
 
       switch (values.fluxGeoGranularity) {
         case 1:
@@ -545,7 +545,7 @@ export default {
           urlDailyCompare += "/provinces";
           urlPresence += "/provinces";
           urlPresenceDaily += "/provinces";
-          urlPresenceDailyCompare += "/provinces";
+          urlPresenceDailyIn += "/provinces";
           break;
         case 2:
         default:
@@ -556,13 +556,13 @@ export default {
           urlDailyCompare += "/zones";
           urlPresence += "/zones";
           urlPresenceDaily += "/zones";
-          urlPresenceDailyCompare += "/zones";
+          urlPresenceDailyIn += "/zones";
           break;
       }
 
       urlPresence += "/presence";
       urlPresenceDaily += "/presence";
-      urlPresenceDailyCompare += "/presence";
+      urlPresenceDailyIn += "/presence";
 
       switch (values.fluxTimeGranularity) {
         case 1:
@@ -574,7 +574,7 @@ export default {
 
           urlPresence += "/h-24";
           urlPresenceDaily += "/h-24";
-          urlPresenceDailyCompare += "/h-24";
+          urlPresenceDailyIn += "/h-24";
           break;
         case 2:
         default:
@@ -586,12 +586,12 @@ export default {
 
           urlPresence += "/m-30";
           urlPresenceDaily += "/m-30";
-          urlPresenceDailyCompare += "/m-30";
+          urlPresenceDailyIn += "/m-30";
           break;
       }
 
       urlPresenceDaily += "/daily";
-      urlPresenceDailyCompare += "/daily-compare";
+      urlPresenceDailyIn += "/daily-in";
 
       urlDaily += "/daily";
       urlDailyIn += "/daily-in";
@@ -661,6 +661,16 @@ export default {
         })
         .then(({ data }) => {
           this.flux24PrensenceDaily = data;
+        })
+        .catch(({ response }) => {});
+
+      this.flux24PresenceDailyIn = [];
+      axios
+        .get(urlPresenceDailyIn, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24PresenceDailyIn = data;
         })
         .catch(({ response }) => {});
 

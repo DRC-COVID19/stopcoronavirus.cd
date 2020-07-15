@@ -84,23 +84,23 @@
         </b-row>
       </b-col>
       <b-col cols="12" md="4" class="pr-0 pl-2">
-        <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
+        <b-row v-for="(item,index) in flux24DailyPresenceInLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>&nbsp;</h3>
             <b-card
               class="mb-3 flux-mobility"
               :class="{'active':fluxType==3}"
-              @click="selectFluxType(2)"
+              @click="selectFluxType(3)"
             >
               <h5 class="percent-title">Présences</h5>
-              <div class="percent flux-out-color">{{fluxInPercent(item)}}%​</div>
-              <p v-if="fluxVolumObservation(item)>0" class="percent-p text-dash-color">
-                {{fluxVolumObservation(item).toLocaleString(
+              <div class="percent flux-presence">{{fluxVolumObservationPresencePercent(item)}}%​</div>
+              <p v-if="fluxVolumObservationPresence(item)>0" class="percent-p text-dash-color">
+                {{fluxVolumObservationPresence(item).toLocaleString(
                 undefined,
                 { minimumFractionDigits: 0 })}} personnes de plus étaient présentes dans la zone
               </p>
               <p v-else class="percent-p text-dash-color">
-                {{(fluxVolumObservation(item)*-1).toLocaleString(
+                {{(fluxVolumObservationPresence(item)*-1).toLocaleString(
                 undefined,
                 { minimumFractionDigits: 0 })}} personnes de moins étaient présentes dans la zone
               </p>
@@ -115,7 +115,6 @@
                 ></canvas>
               </div>
             </b-card>
-            
           </b-col>
         </b-row>
       </b-col>
@@ -137,6 +136,10 @@ export default {
       type: Array,
       default: () => []
     },
+    flux24PresenceDailyIn: {
+      type: Array,
+      default: () => []
+    },
     flux24DailyIn: {
       type: Array,
       default: () => []
@@ -149,7 +152,8 @@ export default {
   data() {
     return {
       flux24DailyInLocal: [],
-      flux24DailyOutLocal: []
+      flux24DailyOutLocal: [],
+      flux24DailyPresenceInLocal: []
     };
   },
   computed: {
@@ -158,7 +162,7 @@ export default {
     })
   },
   watch: {
-    async flux24DailyIn() {
+    flux24DailyIn() {
       this.flux24DailyInLocal = this.extractFlux23DailyIn();
 
       this.$nextTick(() => {
@@ -172,7 +176,7 @@ export default {
         });
       });
     },
-    async flux24DailyOut() {
+    flux24DailyOut() {
       this.flux24DailyOutLocal = this.extractFlux23DailyOut();
 
       this.$nextTick(() => {
@@ -181,11 +185,24 @@ export default {
           this.mobileOutDestination(item, index);
         });
       });
+    },
+    flux24PresenceDailyIn() {
+      this.flux24DailyPresenceInLocal = this.extractFlux24PresenceDailyIn();
+      this.$nextTick(() => {
+        this.flux24DailyPresenceInLocal.forEach((item, index) => {
+          this.mobileCalc(
+            item,
+            `mobile_presence_${index}`,
+            PALETTE.flux_presence
+          );
+        });
+      });
     }
   },
-  async mounted() {
+  mounted() {
     this.flux24DailyInLocal = this.extractFlux23DailyIn();
     this.flux24DailyOutLocal = this.extractFlux23DailyOut();
+    this.flux24DailyPresenceInLocal = this.extractFlux24PresenceDailyIn();
 
     this.$nextTick(() => {
       this.flux24DailyInLocal.forEach((item, index) => {
@@ -201,6 +218,15 @@ export default {
       this.flux24DailyOutLocal.forEach((item, index) => {
         this.mobileCalc(item, `mobile_out_${index}`, PALETTE.flux_out_color);
         this.mobileOutDestination(item, index);
+      });
+    });
+    this.$nextTick(() => {
+      this.flux24DailyPresenceInLocal.forEach((item, index) => {
+        this.mobileCalc(
+          item,
+          `mobile_presence_${index}`,
+          PALETTE.flux_presence
+        );
       });
     });
   },
@@ -231,16 +257,51 @@ export default {
       items
         .filter(x => x.isReference)
         .map(item => {
-          totalReference += item.volume;
+          totalReference += Number(item.volume);
         });
       let totalObservation = 0;
       items
         .filter(x => !x.isReference)
         .map(item => {
-          totalObservation += item.volume;
+          totalObservation += Number(item.volume);
         });
       let difference = totalObservation - totalReference;
+      return Math.round(difference);
+    },
+    fluxVolumObservationPresencePercent(items) {
+      let totalReference = 0;
 
+      let averageReference = items
+        .filter(x => x.isReference)
+        .reduce((avg, value, _, { length }) => {
+          return avg + value.volume / length;
+        }, 0);
+
+      let averageObservation = items
+        .filter(x => !x.isReference)
+        .reduce((avg, value, _, { length }) => {
+          return avg + value.volume / length;
+        }, 0);
+
+      let difference = averageObservation - averageReference;
+      return Math.round((difference * 100) / averageReference);
+    },
+    fluxVolumObservationPresence(items) {
+      let totalReference = 0;
+
+      let averageReference = items
+        .filter(x => x.isReference)
+        .reduce((avg, value, _, { length }) => {
+          return avg + value.volume / length;
+        }, 0);
+
+      let averageObservation = items
+        .filter(x => !x.isReference)
+        .reduce((avg, value, _, { length }) => {
+          return avg + value.volume / length;
+        }, 0);
+
+      let difference = averageObservation - averageReference;
       return Math.round(difference);
     },
     extractFlux23DailyOut() {
@@ -279,7 +340,25 @@ export default {
       }
       return flux24DailyInLocal;
     },
-    
+    extractFlux24PresenceDailyIn() {
+      let flux24PresenceDailyInLocal = [];
+      if (this.flux24PresenceDailyIn.length > 0) {
+        this.flux24PresenceDailyIn.forEach(item => {
+          let index = flux24PresenceDailyInLocal.findIndex(x =>
+            x.find(y => y.zone == item.zone)
+          );
+          if (index == -1) {
+            let element = [];
+            element.push(Object.assign({}, item));
+            flux24PresenceDailyInLocal.push(element);
+          } else {
+            flux24PresenceDailyInLocal[index].push(Object.assign({}, item));
+          }
+        });
+      }
+      console.log(flux24PresenceDailyInLocal);
+      return flux24PresenceDailyInLocal;
+    },
     mobileCalc(dataPram, ref, color) {
       // set the dimensions and margins of the graph
       let data = [];
@@ -380,7 +459,7 @@ export default {
                   d.datasets[i.datasetIndex].label +
                   ": " +
                   Math.round(
-                    referenceAverage * i.yLabel,
+                    (referenceAverage * i.yLabel) / 100,
                     0
                   ).toLocaleString(undefined, { minimumFractionDigits: 0 })
                 );
@@ -400,7 +479,8 @@ export default {
                 },
                 type: "time",
                 ticks: {
-                  fontSize: 9
+                  fontSize: 9,
+                  beginAtZero: true
                 },
                 time: {
                   unit: "day",

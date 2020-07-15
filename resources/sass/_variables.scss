@@ -14,6 +14,7 @@ $dash-text: #2e384d;
 $dash-green: #33ac2e;
 $flux-in-color:#225ea8;
 $flux-out-color:#88419d;
+$flux-presence:#E31A1C;
 $dash-background: #f4f6fc;
 $dash-text-100: #7b7f88;
 $dash-shadow-color: #2e5bff14;
@@ -55,4 +56,7 @@ $antibacterial_gel: red;
 }
 .flux-out-color{
     color: $flux-out-color;
+}
+.flux-presence{
+    color: $flux-presence;
 }

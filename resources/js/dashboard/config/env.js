@@ -11,6 +11,7 @@ export const
         bordure_shape_file: " #BFC5D2",
         flux_out_color: "#88419d",
         flux_in_color: "#225ea8",
+        flux_presence:"#E31A1C",
         dash_green: "#33ac2e",
     },
     PREFERENCE_START = "2020-02-01",
