@@ -1679,7 +1679,7 @@ class DashBoardController extends Controller
         try {
             $flux = Flux24PresenceProvince::select(['Zone as zone', DB::raw('sum(Volume) as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->whereIn('zone', $data['fluxGeoOptions'])
+                // ->whereIn('zone', $data['fluxGeoOptions'])
                 ->groupBy('zone')
                 ->get();
 
@@ -1693,7 +1693,7 @@ class DashBoardController extends Controller
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux24PresenceProvince::select(['Zone as zone', DB::raw('sum(Volume) as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->whereIn('zone', $data['fluxGeoOptions'])
+                    // ->whereIn('zone', $data['fluxGeoOptions'])
                     ->groupBy('zone')
                     ->get();
                 $fluxRefencesData = [];
