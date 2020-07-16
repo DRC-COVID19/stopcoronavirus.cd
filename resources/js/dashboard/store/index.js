@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import auth from './modules/auth';
 import flux from './modules/flux';
 import hospital from './modules/hospital';
+import nav from './modules/nav';
 
 Vue.use(Vuex);
 
@@ -16,6 +17,7 @@ export default new Vuex.Store({
     modules: {
         auth,
         flux,
-        hospital
+        hospital,
+        nav
     }
 });
