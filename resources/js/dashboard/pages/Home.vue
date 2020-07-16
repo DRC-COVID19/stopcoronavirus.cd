@@ -81,11 +81,8 @@
               :flour="flour"
               :antiBacterialGel="antiBacterialGel"
               :flux24="flux24"
-<<<<<<< HEAD
               :isLoading="isLoading"
-=======
               :flux24Presence="flux24Presence"
->>>>>>> master
             />
             <MapsLegend></MapsLegend>
           </b-row>

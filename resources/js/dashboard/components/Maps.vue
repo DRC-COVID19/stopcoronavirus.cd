@@ -72,18 +72,16 @@ export default {
     },
     flux24: {
       type: Array,
-<<<<<<< HEAD
       default: []
     },
-    isLoading : Boolean,
-=======
+    isLoading :{ 
+      type:Boolean,
       default: ()=>([])
     },
     flux24Presence: {
       type: Array,
       default: ()=>([])
     }
->>>>>>> master
   },
   data() {
     return {

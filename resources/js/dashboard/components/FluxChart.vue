@@ -477,14 +477,9 @@ export default {
                   display: true
                 },
                 scaleLabel: {
-<<<<<<< HEAD
                   display: true,
                   labelString: "Mois",
                   fontSize:9
-=======
-                  display: false,
-                  labelString: "Month"
->>>>>>> master
                 },
                 type: "time",
                 ticks: {
