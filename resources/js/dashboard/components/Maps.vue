@@ -72,9 +72,18 @@ export default {
     },
     flux24: {
       type: Array,
+<<<<<<< HEAD
       default: []
     },
     isLoading : Boolean,
+=======
+      default: ()=>([])
+    },
+    flux24Presence: {
+      type: Array,
+      default: ()=>([])
+    }
+>>>>>>> master
   },
   data() {
     return {
@@ -657,7 +666,7 @@ export default {
             break;
           case 1:
           default:
-            this.fluxHatchedStyle(this.flux24);
+            this.fluxHatchedStyle(this.flux24, this.flux24Presence);
             map.flyTo({
               pitch: 10,
               speed: 0.2, // make the flying slow
@@ -681,15 +690,22 @@ export default {
         map.off("mouseleave", "fluxCircleDataLayer");
       }
     },
-    fluxHatchedStyle(flux24Data) {
-      const localData = flux24Data.filter(x => !x.isReference);
+    fluxHatchedStyle(flux24Data, flux24DataPresence) {
+
+      const localData =
+        this.fluxType == 3
+          ? flux24DataPresence
+              .filter(x => !x.isReference)
+              .map(x => ({ origin: x.zone, volume: x.volume }))
+          : flux24Data.filter(x => !x.isReference);
       const features = [];
-      if (this.fluxType == 1) {
+      if (this.fluxType == 1 || this.fluxType == 3) {
         localData.map(item => {
           let element = features.find(x => x.properties.origin == item.origin);
           if (element) {
             element.properties.volume += item.volume;
           } else {
+
             features.push({
               type: "Feature",
               geometry: {
@@ -705,6 +721,7 @@ export default {
           }
         });
       } else {
+
         localData.map(item => {
           const element2 = features.find(
             x => x.properties.origin == item.destination
@@ -741,10 +758,14 @@ export default {
         .domain(features.map(d => d.properties.volume));
 
       if (this.fluxType == 1) {
-        colorScale.range(PALETTE.inflow);
-      } else {
         colorScale.range(PALETTE.outflow);
+      } else if (this.fluxType == 3) {
+        colorScale.range(PALETTE.present);
+      } else {
+        colorScale.range(PALETTE.inflow);
       }
+
+      console.log(features);
 
       if (this.fluxGeoGranularity == 1) {
         features.forEach(x => {

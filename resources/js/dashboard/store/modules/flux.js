@@ -6,6 +6,7 @@ export default {
         fluxGeoOptions: [],
         fluxEnabled: false,
         isWatchingfluxGeoOptions: true,
+        legendHover : null // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
     },
     mutations: {
         setIsWatchingfluxGeoOptions(state, payload) {
@@ -25,6 +26,9 @@ export default {
         },
         setFluxEnabled(state, payload) {
             state.fluxEnabled = payload;
+        },
+        setLegendHover(state, sectionHover) {
+            state.legendHover = sectionHover
         }
     },
     actions: {
@@ -34,7 +38,14 @@ export default {
             state.fluxType = 1;
             state.fluxGeoOptions = [];
             state.fluxEnabled = false;
+            state.legendHover = null;
+        },
+        setLegendHover({state,commit}, sectionHover){
+            commit('setLegendHover', sectionHover)
         }
+    },
+    getters : {
+        fluxType : state => state.fluxType,
+        legendHover : state => state.legendHover
     }
-
 }

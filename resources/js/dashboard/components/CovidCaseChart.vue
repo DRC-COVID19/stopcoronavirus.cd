@@ -2,11 +2,11 @@
   <b-row>
     <b-col cols="12" md="6">
       <h5>Graphique Cumule</h5>
-      <canvas ref="CovidCaseChart" id="CovidCaseChart"></canvas>
+      <canvas  ref="CovidCaseChart" id="CovidCaseChart"></canvas>
     </b-col>
     <b-col cols="12" md="6">
       <h5>Graphique Journalier</h5>
-      <canvas ref="covidCasesStatDaily" id="covidCasesStatDaily"></canvas>
+      <canvas  ref="covidCasesStatDaily" id="covidCasesStatDaily"></canvas>
     </b-col>
   </b-row>
 </template>
@@ -29,20 +29,23 @@ export default {
     return {};
   },
   mounted() {
-    this.show(this.covidCasesStat,this.$refs.CovidCaseChart);
-    this.show(this.covidCasesStatDaily,this.$refs.covidCasesStatDaily);
+    this.show(this.covidCasesStat, this.$refs.CovidCaseChart);
+    this.show(this.covidCasesStatDaily, this.$refs.covidCasesStatDaily);
   },
   watch: {
     covidCasesStat() {
-      this.show(this.covidCasesStat,this.$refs.CovidCaseChart);
+      this.$nextTick(() => {
+        this.show(this.covidCasesStat, this.$refs.CovidCaseChart);
+      });
     },
     covidCasesStatDaily() {
-      this.show(this.covidCasesStatDaily,this.$refs.covidCasesStatDaily);
+      this.$nextTick(() => {
+        this.show(this.covidCasesStatDaily, this.$refs.covidCasesStatDaily);
+      });
     }
   },
   methods: {
-    async show(data,ref) {
-      await this.sleep(1000);
+    async show(data, ref) {
       if (!data) {
         return;
       }
@@ -143,7 +146,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#CovidCaseChart,#covidCasesStatDaily {
-  height: 300px !important;
+#CovidCaseChart,
+#covidCasesStatDaily {
+  height: 200px !important;
 }
 </style>
