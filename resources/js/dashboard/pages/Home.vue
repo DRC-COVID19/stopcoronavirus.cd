@@ -83,6 +83,7 @@
               :flux24="flux24"
               :flux24Presence="flux24Presence"
             />
+            <MapsLegend></MapsLegend>
           </b-row>
         </b-col>
         <b-col
@@ -150,6 +151,7 @@
 
 <script>
 import Maps from "../components/Maps";
+import MapsLegend from "../components/MapsLegend";
 import LeftColumn from "../components/LeftColumn";
 import Waiting from "../components/Waiting";
 import SideCaseCovid from "../components/SideCaseCovid";
@@ -175,6 +177,7 @@ const preference_end = "2020-03-18";
 export default {
   components: {
     Maps,
+    MapsLegend,
     LeftColumn,
     Waiting,
     SideCaseCovid,
