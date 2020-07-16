@@ -1,4 +1,24 @@
-@import url(https://fonts.googleapis.com/css2?family=Rubik);@import url(https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css);.dash-green{color:#33ac2e}.dash-orange{color:rgba(255,165,0,.77)}.flux-in-color{color:#225ea8}.flux-out-color{color:#88419d}.flux-presence{color:#e31a1c}
+@import url(https://fonts.googleapis.com/css2?family=Rubik);@import url(https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css);@charset "UTF-8";
+
+.dash-green {
+  color: #33ac2e;
+}
+
+.dash-orange {
+  color: #ffa500c4;
+}
+
+.flux-in-color {
+  color: #225ea8;
+}
+
+.flux-out-color {
+  color: #88419d;
+}
+
+.flux-presence {
+  color: #E31A1C;
+}
 
 /*!
  * Bootstrap v4.4.1 (https://getbootstrap.com/)
@@ -14450,7 +14470,7 @@ input[type=color].form-control:disabled {
 }
 
 /*!
- * Font Awesome Free 5.14.0 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 5.13.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 
@@ -15015,14 +15035,6 @@ readers do not read off random characters that represent icons */
   content: "\F7E5";
 }
 
-.fa-bacteria:before {
-  content: "\E059";
-}
-
-.fa-bacterium:before {
-  content: "\E05A";
-}
-
 .fa-bahai:before {
   content: "\F666";
 }
@@ -15276,7 +15288,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-box-tissue:before {
-  content: "\E05B";
+  content: "\F95B";
 }
 
 .fa-boxes:before {
@@ -16044,7 +16056,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-dailymotion:before {
-  content: "\E052";
+  content: "\F952";
 }
 
 .fa-dashcube:before {
@@ -16057,10 +16069,6 @@ readers do not read off random characters that represent icons */
 
 .fa-deaf:before {
   content: "\F2A4";
-}
-
-.fa-deezer:before {
-  content: "\E077";
 }
 
 .fa-delicious:before {
@@ -16307,10 +16315,6 @@ readers do not read off random characters that represent icons */
   content: "\F282";
 }
 
-.fa-edge-legacy:before {
-  content: "\E078";
-}
-
 .fa-edit:before {
   content: "\F044";
 }
@@ -16484,7 +16488,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-faucet:before {
-  content: "\E005";
+  content: "\F905";
 }
 
 .fa-fax:before {
@@ -16648,7 +16652,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-firefox-browser:before {
-  content: "\E007";
+  content: "\F907";
 }
 
 .fa-first-aid:before {
@@ -16967,10 +16971,6 @@ readers do not read off random characters that represent icons */
   content: "\F3AA";
 }
 
-.fa-google-pay:before {
-  content: "\E079";
-}
-
 .fa-google-play:before {
   content: "\F3AB";
 }
@@ -17140,7 +17140,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-hand-holding-medical:before {
-  content: "\E05C";
+  content: "\F95C";
 }
 
 .fa-hand-holding-usd:before {
@@ -17196,7 +17196,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-hand-sparkles:before {
-  content: "\E05D";
+  content: "\F95D";
 }
 
 .fa-hand-spock:before {
@@ -17212,7 +17212,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-hands-wash:before {
-  content: "\E05E";
+  content: "\F95E";
 }
 
 .fa-handshake:before {
@@ -17220,11 +17220,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-handshake-alt-slash:before {
-  content: "\E05F";
+  content: "\F95F";
 }
 
 .fa-handshake-slash:before {
-  content: "\E060";
+  content: "\F960";
 }
 
 .fa-hanukiah:before {
@@ -17256,19 +17256,19 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-head-side-cough:before {
-  content: "\E061";
+  content: "\F961";
 }
 
 .fa-head-side-cough-slash:before {
-  content: "\E062";
+  content: "\F962";
 }
 
 .fa-head-side-mask:before {
-  content: "\E063";
+  content: "\F963";
 }
 
 .fa-head-side-virus:before {
-  content: "\E064";
+  content: "\F964";
 }
 
 .fa-heading:before {
@@ -17408,7 +17408,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-house-user:before {
-  content: "\E065";
+  content: "\F965";
 }
 
 .fa-houzz:before {
@@ -17456,7 +17456,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-ideal:before {
-  content: "\E013";
+  content: "\F913";
 }
 
 .fa-igloo:before {
@@ -17504,7 +17504,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-instagram-square:before {
-  content: "\E055";
+  content: "\F955";
 }
 
 .fa-intercom:before {
@@ -17660,7 +17660,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-laptop-house:before {
-  content: "\E066";
+  content: "\F966";
 }
 
 .fa-laptop-medical:before {
@@ -17824,7 +17824,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-lungs-virus:before {
-  content: "\E067";
+  content: "\F967";
 }
 
 .fa-lyft:before {
@@ -17996,7 +17996,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-microblog:before {
-  content: "\E01A";
+  content: "\F91A";
 }
 
 .fa-microchip:before {
@@ -18052,7 +18052,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-mixer:before {
-  content: "\E056";
+  content: "\F956";
 }
 
 .fa-mizuni:before {
@@ -18372,7 +18372,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-people-arrows:before {
-  content: "\E068";
+  content: "\F968";
 }
 
 .fa-people-carry:before {
@@ -18460,7 +18460,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-pied-piper-square:before {
-  content: "\E01E";
+  content: "\F91E";
 }
 
 .fa-piggy-bank:before {
@@ -18504,7 +18504,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-plane-slash:before {
-  content: "\E069";
+  content: "\F969";
 }
 
 .fa-play:before {
@@ -18608,11 +18608,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-pump-medical:before {
-  content: "\E06A";
+  content: "\F96A";
 }
 
 .fa-pump-soap:before {
-  content: "\E06B";
+  content: "\F96B";
 }
 
 .fa-pushed:before {
@@ -18867,10 +18867,6 @@ readers do not read off random characters that represent icons */
   content: "\F156";
 }
 
-.fa-rust:before {
-  content: "\E07A";
-}
-
 .fa-sad-cry:before {
   content: "\F5B3";
 }
@@ -19000,7 +18996,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-shield-virus:before {
-  content: "\E06C";
+  content: "\F96C";
 }
 
 .fa-ship:before {
@@ -19020,7 +19016,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-shopify:before {
-  content: "\E057";
+  content: "\F957";
 }
 
 .fa-shopping-bag:before {
@@ -19077,10 +19073,6 @@ readers do not read off random characters that represent icons */
 
 .fa-simplybuilt:before {
   content: "\F215";
-}
-
-.fa-sink:before {
-  content: "\E06D";
 }
 
 .fa-sistrix:before {
@@ -19208,7 +19200,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-soap:before {
-  content: "\E06E";
+  content: "\F96E";
 }
 
 .fa-socks:before {
@@ -19432,7 +19424,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-stopwatch-20:before {
-  content: "\E06F";
+  content: "\F96F";
 }
 
 .fa-store:before {
@@ -19444,11 +19436,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-store-alt-slash:before {
-  content: "\E070";
+  content: "\F970";
 }
 
 .fa-store-slash:before {
-  content: "\E071";
+  content: "\F971";
 }
 
 .fa-strava:before {
@@ -19731,10 +19723,6 @@ readers do not read off random characters that represent icons */
   content: "\F3FF";
 }
 
-.fa-tiktok:before {
-  content: "\E07B";
-}
-
 .fa-times:before {
   content: "\F00D";
 }
@@ -19772,7 +19760,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-toilet-paper-slash:before {
-  content: "\E072";
+  content: "\F972";
 }
 
 .fa-toolbox:before {
@@ -19812,7 +19800,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-trailer:before {
-  content: "\E041";
+  content: "\F941";
 }
 
 .fa-train:before {
@@ -19960,7 +19948,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-unity:before {
-  content: "\E049";
+  content: "\F949";
 }
 
 .fa-universal-access:before {
@@ -19981,10 +19969,6 @@ readers do not read off random characters that represent icons */
 
 .fa-unlock-alt:before {
   content: "\F13E";
-}
-
-.fa-unsplash:before {
-  content: "\E07C";
 }
 
 .fa-untappd:before {
@@ -20107,10 +20091,6 @@ readers do not read off random characters that represent icons */
   content: "\F509";
 }
 
-.fa-users-slash:before {
-  content: "\E073";
-}
-
 .fa-usps:before {
   content: "\F7E1";
 }
@@ -20200,15 +20180,15 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-virus:before {
-  content: "\E074";
+  content: "\F974";
 }
 
 .fa-virus-slash:before {
-  content: "\E075";
+  content: "\F975";
 }
 
 .fa-viruses:before {
-  content: "\E076";
+  content: "\F976";
 }
 
 .fa-vk:before {
@@ -20493,7 +20473,7 @@ readers do not read off random characters that represent icons */
 }
 
 /*!
- * Font Awesome Free 5.14.0 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 5.13.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 
@@ -21048,14 +21028,6 @@ readers do not read off random characters that represent icons */
   content: "\F7E5";
 }
 
-.fa-bacteria:before {
-  content: "\E059";
-}
-
-.fa-bacterium:before {
-  content: "\E05A";
-}
-
 .fa-bahai:before {
   content: "\F666";
 }
@@ -21309,7 +21281,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-box-tissue:before {
-  content: "\E05B";
+  content: "\F95B";
 }
 
 .fa-boxes:before {
@@ -22077,7 +22049,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-dailymotion:before {
-  content: "\E052";
+  content: "\F952";
 }
 
 .fa-dashcube:before {
@@ -22090,10 +22062,6 @@ readers do not read off random characters that represent icons */
 
 .fa-deaf:before {
   content: "\F2A4";
-}
-
-.fa-deezer:before {
-  content: "\E077";
 }
 
 .fa-delicious:before {
@@ -22340,10 +22308,6 @@ readers do not read off random characters that represent icons */
   content: "\F282";
 }
 
-.fa-edge-legacy:before {
-  content: "\E078";
-}
-
 .fa-edit:before {
   content: "\F044";
 }
@@ -22517,7 +22481,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-faucet:before {
-  content: "\E005";
+  content: "\F905";
 }
 
 .fa-fax:before {
@@ -22681,7 +22645,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-firefox-browser:before {
-  content: "\E007";
+  content: "\F907";
 }
 
 .fa-first-aid:before {
@@ -23000,10 +22964,6 @@ readers do not read off random characters that represent icons */
   content: "\F3AA";
 }
 
-.fa-google-pay:before {
-  content: "\E079";
-}
-
 .fa-google-play:before {
   content: "\F3AB";
 }
@@ -23173,7 +23133,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-hand-holding-medical:before {
-  content: "\E05C";
+  content: "\F95C";
 }
 
 .fa-hand-holding-usd:before {
@@ -23229,7 +23189,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-hand-sparkles:before {
-  content: "\E05D";
+  content: "\F95D";
 }
 
 .fa-hand-spock:before {
@@ -23245,7 +23205,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-hands-wash:before {
-  content: "\E05E";
+  content: "\F95E";
 }
 
 .fa-handshake:before {
@@ -23253,11 +23213,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-handshake-alt-slash:before {
-  content: "\E05F";
+  content: "\F95F";
 }
 
 .fa-handshake-slash:before {
-  content: "\E060";
+  content: "\F960";
 }
 
 .fa-hanukiah:before {
@@ -23289,19 +23249,19 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-head-side-cough:before {
-  content: "\E061";
+  content: "\F961";
 }
 
 .fa-head-side-cough-slash:before {
-  content: "\E062";
+  content: "\F962";
 }
 
 .fa-head-side-mask:before {
-  content: "\E063";
+  content: "\F963";
 }
 
 .fa-head-side-virus:before {
-  content: "\E064";
+  content: "\F964";
 }
 
 .fa-heading:before {
@@ -23441,7 +23401,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-house-user:before {
-  content: "\E065";
+  content: "\F965";
 }
 
 .fa-houzz:before {
@@ -23489,7 +23449,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-ideal:before {
-  content: "\E013";
+  content: "\F913";
 }
 
 .fa-igloo:before {
@@ -23537,7 +23497,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-instagram-square:before {
-  content: "\E055";
+  content: "\F955";
 }
 
 .fa-intercom:before {
@@ -23693,7 +23653,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-laptop-house:before {
-  content: "\E066";
+  content: "\F966";
 }
 
 .fa-laptop-medical:before {
@@ -23857,7 +23817,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-lungs-virus:before {
-  content: "\E067";
+  content: "\F967";
 }
 
 .fa-lyft:before {
@@ -24029,7 +23989,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-microblog:before {
-  content: "\E01A";
+  content: "\F91A";
 }
 
 .fa-microchip:before {
@@ -24085,7 +24045,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-mixer:before {
-  content: "\E056";
+  content: "\F956";
 }
 
 .fa-mizuni:before {
@@ -24405,7 +24365,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-people-arrows:before {
-  content: "\E068";
+  content: "\F968";
 }
 
 .fa-people-carry:before {
@@ -24493,7 +24453,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-pied-piper-square:before {
-  content: "\E01E";
+  content: "\F91E";
 }
 
 .fa-piggy-bank:before {
@@ -24537,7 +24497,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-plane-slash:before {
-  content: "\E069";
+  content: "\F969";
 }
 
 .fa-play:before {
@@ -24641,11 +24601,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-pump-medical:before {
-  content: "\E06A";
+  content: "\F96A";
 }
 
 .fa-pump-soap:before {
-  content: "\E06B";
+  content: "\F96B";
 }
 
 .fa-pushed:before {
@@ -24900,10 +24860,6 @@ readers do not read off random characters that represent icons */
   content: "\F156";
 }
 
-.fa-rust:before {
-  content: "\E07A";
-}
-
 .fa-sad-cry:before {
   content: "\F5B3";
 }
@@ -25033,7 +24989,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-shield-virus:before {
-  content: "\E06C";
+  content: "\F96C";
 }
 
 .fa-ship:before {
@@ -25053,7 +25009,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-shopify:before {
-  content: "\E057";
+  content: "\F957";
 }
 
 .fa-shopping-bag:before {
@@ -25110,10 +25066,6 @@ readers do not read off random characters that represent icons */
 
 .fa-simplybuilt:before {
   content: "\F215";
-}
-
-.fa-sink:before {
-  content: "\E06D";
 }
 
 .fa-sistrix:before {
@@ -25241,7 +25193,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-soap:before {
-  content: "\E06E";
+  content: "\F96E";
 }
 
 .fa-socks:before {
@@ -25465,7 +25417,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-stopwatch-20:before {
-  content: "\E06F";
+  content: "\F96F";
 }
 
 .fa-store:before {
@@ -25477,11 +25429,11 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-store-alt-slash:before {
-  content: "\E070";
+  content: "\F970";
 }
 
 .fa-store-slash:before {
-  content: "\E071";
+  content: "\F971";
 }
 
 .fa-strava:before {
@@ -25764,10 +25716,6 @@ readers do not read off random characters that represent icons */
   content: "\F3FF";
 }
 
-.fa-tiktok:before {
-  content: "\E07B";
-}
-
 .fa-times:before {
   content: "\F00D";
 }
@@ -25805,7 +25753,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-toilet-paper-slash:before {
-  content: "\E072";
+  content: "\F972";
 }
 
 .fa-toolbox:before {
@@ -25845,7 +25793,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-trailer:before {
-  content: "\E041";
+  content: "\F941";
 }
 
 .fa-train:before {
@@ -25993,7 +25941,7 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-unity:before {
-  content: "\E049";
+  content: "\F949";
 }
 
 .fa-universal-access:before {
@@ -26014,10 +25962,6 @@ readers do not read off random characters that represent icons */
 
 .fa-unlock-alt:before {
   content: "\F13E";
-}
-
-.fa-unsplash:before {
-  content: "\E07C";
 }
 
 .fa-untappd:before {
@@ -26140,10 +26084,6 @@ readers do not read off random characters that represent icons */
   content: "\F509";
 }
 
-.fa-users-slash:before {
-  content: "\E073";
-}
-
 .fa-usps:before {
   content: "\F7E1";
 }
@@ -26233,15 +26173,15 @@ readers do not read off random characters that represent icons */
 }
 
 .fa-virus:before {
-  content: "\E074";
+  content: "\F974";
 }
 
 .fa-virus-slash:before {
-  content: "\E075";
+  content: "\F975";
 }
 
 .fa-viruses:before {
-  content: "\E076";
+  content: "\F976";
 }
 
 .fa-vk:before {
@@ -26526,7 +26466,7 @@ readers do not read off random characters that represent icons */
 }
 
 /*!
- * Font Awesome Free 5.14.0 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 5.13.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 
@@ -26535,8 +26475,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.eot?89bd2e38475e441a5cd70f663f921d61);
-  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.eot?89bd2e38475e441a5cd70f663f921d61) format("embedded-opentype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.woff2?c500da19d776384ba69573ae6fe274e7) format("woff2"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.woff?ee09ad7553b8ad3d81150d609d5341a0) format("woff"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.ttf?781e85bb50c8e8301c30de56b31b1f04) format("truetype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.svg?03ba7cb710104df27f1c9c46d64bee4e) format("svg");
+  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.eot?a0369ea57eb6d3843d6474c035111f29);
+  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.eot?a0369ea57eb6d3843d6474c035111f29) format("embedded-opentype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.woff2?b15db15f746f29ffa02638cb455b8ec0) format("woff2"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.woff?bea989e82b07e9687c26fc58a4805021) format("woff"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.ttf?1ab236ed440ee51810c56bd16628aef0) format("truetype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-solid-900.svg?ec763292e583294612f124c0b0def500) format("svg");
 }
 
 .fa,
@@ -26546,7 +26486,7 @@ readers do not read off random characters that represent icons */
 }
 
 /*!
- * Font Awesome Free 5.14.0 by @fontawesome - https://fontawesome.com
+ * Font Awesome Free 5.13.0 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  */
 
@@ -26555,8 +26495,8 @@ readers do not read off random characters that represent icons */
   font-style: normal;
   font-weight: 400;
   font-display: block;
-  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.eot?0fabb6606be4c45acfeedd115d0caca4);
-  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.eot?0fabb6606be4c45acfeedd115d0caca4) format("embedded-opentype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.woff2?cac68c831145804808381a7032fdc7c2) format("woff2"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.woff?dc0bd022735ed218df547742a1b2f172) format("woff"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.ttf?085b1dd8427dbeff10bd55410915a3f6) format("truetype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.svg?ccfdb9dc442be0c629d331e94497428b) format("svg");
+  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.eot?c1868c9545d2de1cf8488f1dadd8c9d0);
+  src: url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.eot?c1868c9545d2de1cf8488f1dadd8c9d0) format("embedded-opentype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.woff2?a06da7f0950f9dd366fc9db9d56d618a) format("woff2"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.woff?ec3cfddedb8bebd2d7a3fdf511f7c1cc) format("woff"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.ttf?13685372945d816a2b474fc082fd9aaa) format("truetype"), url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.svg?0cb5a5c0d251c109458c85c6afeffbaa) format("svg");
 }
 
 .fab {
@@ -27108,6 +27048,30 @@ h3 {
   width: 100%;
 }
 
+.dash-home-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-home-page .header {
+  flex: 1;
+}
+
+.dash-home-page .map-wrap {
+  flex: 13;
+  overflow: hidden;
+}
+
+.dash-home-page .top-menu {
+  flex: 1;
+}
+
+.dash-home-page .row-side-bottom {
+  flex: 6;
+  overflow: hidden;
+}
+
 .btn-dash-blue {
   background: #2e5bff;
   border: 3px solid #2e5bff !important;
@@ -27356,69 +27320,77 @@ h3 {
   background: #ffa500c4;
 }
 
-.column-left {
+.column-left,
+.top-menu {
   background: #f4f6fc;
-  overflow: auto;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 2;
 }
 
-.column-left::-webkit-scrollbar-track {
+.column-left::-webkit-scrollbar-track,
+.top-menu::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
   background-color: #f5f5f5;
 }
 
-.column-left::-webkit-scrollbar {
+.column-left::-webkit-scrollbar,
+.top-menu::-webkit-scrollbar {
   width: 10px;
   background-color: #f5f5f5;
 }
 
-.column-left::-webkit-scrollbar-thumb {
+.column-left::-webkit-scrollbar-thumb,
+.top-menu::-webkit-scrollbar-thumb {
   background-color: #0ae;
   background-image: -webkit-gradient(linear, 0 0, 0 100%, color-stop(0.5, rgba(255, 255, 255, 0.2)), color-stop(0.5, transparent), to(transparent));
 }
 
-.column-left .card {
+.column-left .card,
+.top-menu .card {
   background: white;
   border-radius: unset;
-  border-color: #2e5bff3d;
+  border-color: #2e5bff14;
 }
 
-.column-left .card .card-header {
+.column-left .card .card-header,
+.top-menu .card .card-header {
   background: white;
 }
 
-.column-left .vs__dropdown-toggle {
-  background: #f4f6fc !important;
+.column-left .vs__dropdown-toggle,
+.top-menu .vs__dropdown-toggle {
+  background: rgba(224, 231, 255, 0.2) !important;
+  border-color: #E0E7FF;
 }
 
-.column-left h1 {
+.column-left h1,
+.top-menu h1 {
   font-size: 1.3rem;
 }
 
-.column-left .map-form-logo {
+.column-left .map-form-logo,
+.top-menu .map-form-logo {
   background: white;
 }
 
-.column-left .map-form-header {
+.column-left .map-form-header,
+.top-menu .map-form-header {
   background: #00b065;
   padding: 20px;
   color: white;
 }
 
-.column-left .styled-checkbox {
+.column-left .styled-checkbox,
+.top-menu .styled-checkbox {
   padding-left: unset;
 }
 
-.column-left .styled-checkbox input[type=checkbox] {
+.column-left .styled-checkbox input[type=checkbox],
+.top-menu .styled-checkbox input[type=checkbox] {
   position: absolute;
   opacity: 0;
 }
 
-.column-left .styled-checkbox input[type=checkbox] + label {
+.column-left .styled-checkbox input[type=checkbox] + label,
+.top-menu .styled-checkbox input[type=checkbox] + label {
   position: relative;
   cursor: pointer;
   padding: 0;
@@ -27426,7 +27398,8 @@ h3 {
   width: 100%;
 }
 
-.column-left .styled-checkbox input[type=checkbox] + label:before {
+.column-left .styled-checkbox input[type=checkbox] + label:before,
+.top-menu .styled-checkbox input[type=checkbox] + label:before {
   left: 0;
   content: "";
   position: absolute;
@@ -27439,29 +27412,35 @@ h3 {
   border-radius: unset;
 }
 
-.column-left .styled-checkbox input[type=checkbox]:hover + label:before {
+.column-left .styled-checkbox input[type=checkbox]:hover + label:before,
+.top-menu .styled-checkbox input[type=checkbox]:hover + label:before {
   background: #00b065;
 }
 
-.column-left .styled-checkbox input[type=checkbox]:focus + label:before {
+.column-left .styled-checkbox input[type=checkbox]:focus + label:before,
+.top-menu .styled-checkbox input[type=checkbox]:focus + label:before {
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
 }
 
-.column-left .styled-checkbox input[type=checkbox]:checked + label:before {
+.column-left .styled-checkbox input[type=checkbox]:checked + label:before,
+.top-menu .styled-checkbox input[type=checkbox]:checked + label:before {
   background: #00b065;
 }
 
-.column-left .styled-checkbox input[type=checkbox]:disabled + label {
+.column-left .styled-checkbox input[type=checkbox]:disabled + label,
+.top-menu .styled-checkbox input[type=checkbox]:disabled + label {
   color: #b8b8b8;
   cursor: auto;
 }
 
-.column-left .styled-checkbox input[type=checkbox]:disabled + label:before {
+.column-left .styled-checkbox input[type=checkbox]:disabled + label:before,
+.top-menu .styled-checkbox input[type=checkbox]:disabled + label:before {
   box-shadow: none;
   background: #ddd;
 }
 
-.column-left .styled-checkbox input[type=checkbox]:checked + label:after {
+.column-left .styled-checkbox input[type=checkbox]:checked + label:after,
+.top-menu .styled-checkbox input[type=checkbox]:checked + label:after {
   content: "";
   position: absolute;
   left: 5px;
@@ -27473,22 +27452,42 @@ h3 {
   transform: rotate(45deg);
 }
 
-.column-left .pandemics-stat-row {
+.column-left .form-group,
+.top-menu .form-group {
+  margin-bottom: 0;
+  border-color: #E0E7FF;
+}
+
+.column-left .form-control,
+.top-menu .form-control {
+  border-radius: 4px;
+}
+
+.column-left .pandemics-stat-row,
+.top-menu .pandemics-stat-row {
   font-size: 0.8rem;
 }
 
-.column-left .vue-daterange-picker {
+.column-left .vue-daterange-picker,
+.top-menu .vue-daterange-picker {
   width: 80%;
 }
 
-.column-left .vue-daterange-picker div {
-  background: #f4f6fc;
+.column-left .vue-daterange-picker div,
+.top-menu .vue-daterange-picker div {
+  background: rgba(224, 231, 255, 0.2);
+  height: 32px;
+}
+
+.side-bottom .canva-chart {
+  height: 100% !important;
 }
 
 .side-bottom .card {
   background: white;
   border-radius: unset;
-  border-color: #2e5bff3d;
+  border-color: #2e5bff;
+  height: 100%;
 }
 
 .side-bottom .card .card-header {
@@ -27502,7 +27501,7 @@ h3 {
 }
 
 .side-bottom .card .card-header .nav-item .nav-link {
-  background: #2e5bff3d;
+  background: #2e5bff14;
   color: #2e5bff;
   text-decoration: unset;
   border-radius: 5px;
@@ -27516,8 +27515,29 @@ h3 {
   background: #33ac2e !important;
 }
 
+.side-bottom .card .tabs {
+  height: 100%;
+}
+
+.side-bottom .card .tabs .tab-content {
+  height: calc(100% - 35px);
+}
+
+.side-bottom .card .tabs .tab-content .card-body {
+  height: 100%;
+  padding: 5px;
+}
+
+.side-bottom .card .tabs .tab-content .card-body > div {
+  height: inherit;
+}
+
+.side-bottom .card .tabs .tab-content .card-body > div > div {
+  height: inherit;
+}
+
 .side-right {
-  height: calc(80vh - 72.5px);
+  height: 100%;
   overflow: auto;
 }
 
@@ -27553,7 +27573,7 @@ h3 {
 }
 
 .side-right > .card > .tabs > .card-header .nav-item .nav-link {
-  background: #2e5bff3d;
+  background: #2e5bff14;
   color: #2e5bff;
   text-decoration: unset;
   border-radius: 5px;
@@ -27936,7 +27956,7 @@ h3 {
 }
 
 .mapboxgl-popup .mapboxgl-popup-content {
-  border: 2px solid #2e5bff3d;
+  border: 2px solid #2e5bff14;
   box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
   border-radius: unset;
   background: white;
@@ -27976,7 +27996,3 @@ body::-webkit-scrollbar-thumb,
   opacity: 0.4;
 }
 
-/*!
- * Font Awesome Free 5.13.0 by @fontawesome - https://fontawesome.com
- * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
- */@font-face{font-family:Font Awesome\ 5 Brands;font-style:normal;font-weight:400;font-display:block;src:url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.eot?c1868c9545d2de1cf8488f1dadd8c9d0);src:url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.eot?c1868c9545d2de1cf8488f1dadd8c9d0) format("embedded-opentype"),url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.woff2?a06da7f0950f9dd366fc9db9d56d618a) format("woff2"),url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.woff?ec3cfddedb8bebd2d7a3fdf511f7c1cc) format("woff"),url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.ttf?13685372945d816a2b474fc082fd9aaa) format("truetype"),url(/fonts/vendor/@fortawesome/fontawesome-free/webfa-brands-400.svg?0cb5a5c0d251c109458c85c6afeffbaa) format("svg")}.fab{font-family:Font Awesome\ 5 Brands;font-weight:400}.App-Header .App-Header--notice{background-color:#00874e}.App-Header .App-Header--navbar a{color:#020000}.App-Header .App-Header--navbar a.active{font-weight:700}@media screen and (max-width:575px){.App-Header .App-Header--navbar a{display:block}}@media screen and (max-width:575px){.display-4{font-size:2.5rem}}a{overflow-wrap:break-word}.contenaire-float{position:fixed;bottom:50px;right:30px}.contenaire-float .float{display:flex;margin:5px;width:60px;height:60px;bottom:40px;right:40px;background-color:#0c9;color:#fff;border-radius:50px;text-align:center;text-decoration:none;align-items:center;justify-content:center;box-shadow:2px 2px 3px #999;transition:all .5s ease}.contenaire-float .float:hover{transform:scale(1.03)}.xs-share-container{position:fixed;bottom:0;right:0;left:0;background-color:#fff;box-shadow:0 0 2px #00874e}.xs-share-container .xs-share{color:#fff}.xs-share-container .col-4{padding:5px}.whatsapp{background-color:#25d366!important}.facebook{background-color:#3b5998!important}.twitter{background-color:#76c5f5!important}.div-radio img{width:20px}*,h1,h2,h3,h4,h5,h6{font-family:Rubik,sans-serif}.lead{line-height:1.8rem;font-weight:300}.lead .bold{color:#14244f}.bold{font-weight:700}.bolder{font-weight:900}a{text-decoration:underline}a:hover{text-decoration:none}h1,h2,h3,h4{color:#14244f}h1,h2{font-weight:300}h2{font-size:3rem}@media screen and (max-width:575px){h2{font-size:2.5rem}}h2 i{margin-right:.5rem;font-size:3.2rem}@media screen and (max-width:575px){h2 i{font-size:2.8rem}}.btn,h3{font-weight:300}.btn{font-size:1.2rem;text-decoration:none}.btn.btn-secondary{border:3px solid #5b7bd4}.btn.btn-secondary:hover{border:3px solid #e6222e}.jumbotron-alert{text-align:center;padding:2rem 1.5rem!important;background-color:#45b0e1;color:#fff}.jumbotron-alert i{font-size:2rem}.jumbotron-diagnostic{text-align:center;padding:2rem 1.5rem!important;background-color:#6c757d;color:#fff}.jumbotron-diagnostic i{font-size:2rem}.home-consignes>div{text-align:center}.home-consignes>div .ico{font-size:4rem;color:#45b0e1;display:block}#statsChartContainer{height:30vh}@media screen and (max-width:767px){#statsChartContainer{height:50vh}}.container-directive{background:#eee}.home-directives>div{text-align:center}.home-directives>div .ico{font-size:4rem;color:#921018;display:block}.home-directives>div .ico .fa-shopping-basket{color:#45b0e1}.home-directives>div strong{display:block}.home-symptome .card{height:200px;background:#e9ecef}@media only screen and (min-device-width:768px) and (max-device-width:1024px){.home-symptome .card{height:300px}}.home-symptome .card .card-body{display:flex;align-items:center;justify-content:center;text-align:center;font-weight:700}.statistiques .card-header{text-align:center}.statistiques .card-title{font-size:3rem;text-align:center}.statistiques .bg-dark{background-color:#242222!important}.statistiques .bg-dark .card-header{border-bottom:1px solid hsla(0,0%,100%,.2)}.statistiques-footnote{font-size:.9rem}.OfficialMeasures--Wrapper article ol{padding-left:2rem}.OfficialMeasures--Wrapper article input[type=checkbox]{display:none}.OfficialMeasures--Wrapper article .lbl-toggle{display:block;font-weight:300;font-family:Rubik,sans-serif;font-size:1.3rem;padding:1rem;color:#1f3677;background:#e9ecef;cursor:pointer;border-radius:7px;transition:all .25s ease-out}.OfficialMeasures--Wrapper article .lbl-toggle:hover{color:#1f3677}.OfficialMeasures--Wrapper article .lbl-toggle:before{content:" ";display:inline-block;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:5px solid;vertical-align:middle;margin-right:.7rem;transform:translateY(-2px);transition:transform .2s ease-out}.OfficialMeasures--Wrapper article .collapsible-content .content-inner{padding:0 1rem .5rem}.OfficialMeasures--Wrapper article .toggle:checked+.lbl-toggle:before{transform:rotate(90deg) translateX(-3px)}.OfficialMeasures--Wrapper article .collapsible-content{max-height:0;overflow:hidden;transition:max-height .25s ease-in-out}.OfficialMeasures--Wrapper article .toggle:checked+.lbl-toggle+.collapsible-content{max-height:100%}.OfficialMeasures--Wrapper article .toggle:checked+.lbl-toggle{border-bottom-right-radius:0;border-bottom-left-radius:0;color:#1f3677}.OfficialMeasures--Wrapper article .collapsible-content .content-inner{border-bottom-left-radius:7px;border-bottom-right-radius:7px;padding:.5rem 1rem}#navigation #menuToggle{z-index:1;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;position:relative}#navigation #menuToggle a{text-decoration:none;color:#232323;transition:color .3s ease}#navigation #menuToggle a:hover{color:tomato}#navigation #menuToggle input{display:block;width:100%;height:100%;position:absolute;top:0;left:0;right:0;bottom:0;cursor:pointer;opacity:0;z-index:3;-webkit-touch-callout:none}#navigation #menuToggle span{display:block;width:33px;height:4px;margin-bottom:5px;position:relative;background:#fff;border-radius:3px;z-index:2;transform-origin:4px 0;transition:transform .5s cubic-bezier(.77,.2,.05,1),background .5s cubic-bezier(.77,.2,.05,1),opacity .55s ease}#navigation #menuToggle span:first-child{transform-origin:0 0}#navigation #menuToggle span:nth-last-child(2){transform-origin:0 100%}#navigation #menuToggle input:checked~span{opacity:1;transform:rotate(45deg) translate(-2px,-1px);background:#232323}#navigation #menuToggle input:checked~span:nth-last-child(3){opacity:0;transform:rotate(0deg) scale(.2)}#navigation #menuToggle input:checked~span:nth-last-child(2){transform:rotate(-45deg) translateY(-1px)}#navigation #menu{position:absolute;width:300px;margin:-100px 0 0 -50px;padding:125px 50px 50px;z-index:1;background:#ededed;list-style-type:none;-webkit-font-smoothing:antialiased;transform-origin:0 0;transform:translate(-220%);transition:transform .5s cubic-bezier(.77,.2,.05,1)}#navigation #menu .active{color:#e6222e}#navigation #menu li{padding:10px 0;font-size:22px}#navigation #menuToggle input:checked~ul{transform:none}.sondage-items .sondage-item{font-weight:400;margin-bottom:10px;display:flex}.sondage-items .sondage-item p{margin:0}.sondage-items .sondage-item span{font-size:.9rem;font-weight:600;width:45px;flex:0 0 45px;display:flex;align-items:center;justify-content:center;height:45px;background-color:#fff;border-radius:50%;border:3px solid rgba(0,135,78,.65);margin-right:20px}.sondage-methods .sondage-methods-item{display:flex;align-items:center;margin-bottom:20px}.sondage-methods .sondage-methods-item .illustrator{flex:0 0 80px;padding:15px;background:#e9ecef;border-radius:50%;margin-right:20px}.sondage-methods .sondage-methods-item .illustrator img{width:100%}.sondage-methods .sondage-methods-item p{margin:0}.btn-download{border:3px solid #e9ecef;background:#00b065;color:#fff}.btn-download:hover{color:#fff;background:#027f4b}#map,.map-wrapper{height:100%;width:100%}.dash-home-page{height:100vh;display:flex;flex-direction:column}.dash-home-page .header{flex:1}.dash-home-page .map-wrap{flex:13;overflow:hidden}.dash-home-page .top-menu{flex:1}.dash-home-page .row-side-bottom{flex:6;overflow:hidden}.btn-dash-blue{background:#2e5bff;border:3px solid #2e5bff!important;border-radius:5px}.btn-dash-blue:active,.btn-dash-blue:disabled,.btn-dash-blue:focus,.btn-dash-blue:hover{background:#2e5bff!important;border:3px solid #d63649!important}.text-dash-color{color:#7b7f88!important}.input-dash{border:1px solid #d2d5dc;background:#f4f6fc;transition:all .3s ease;border-radius:5px}.dash-login-title{font-size:1.8rem}.custom-clustericon{color:#fff;border-radius:100%;font-weight:700;font-size:15px;display:flex;align-items:center;width:40px;height:40px}.second-cluster-icon{text-align:center;width:40px}.map-waiting{position:absolute;top:0;bottom:0;left:0;right:0;background:rgba(0,0,0,.32);display:flex;align-items:center;justify-content:center;flex-direction:column;z-index:9999}.map-waiting p{color:#fff;font-size:1.7rem}.map-waiting .lds-ring{display:inline-block;position:relative;width:80px;height:80px}.map-waiting .lds-ring div{box-sizing:border-box;display:block;position:absolute;width:64px;height:64px;margin:8px;border-radius:50%;-webkit-animation:lds-ring 1.2s cubic-bezier(.5,0,.5,1) infinite;animation:lds-ring 1.2s cubic-bezier(.5,0,.5,1) infinite;border:8px solid transparent;border-top-color:#fff}.map-waiting .lds-ring div:first-child{-webkit-animation-delay:-.45s;animation-delay:-.45s}.map-waiting .lds-ring div:nth-child(2){-webkit-animation-delay:-.3s;animation-delay:-.3s}.map-waiting .lds-ring div:nth-child(3){-webkit-animation-delay:-.15s;animation-delay:-.15s}@-webkit-keyframes lds-ring{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}@keyframes lds-ring{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.pie{display:inline-block;width:40px;height:40px;border-radius:50%;overflow:hidden;color:#fff;font-weight:700;font-size:.8rem;border:.15em solid #fff;background-origin:border-box;background-image:linear-gradient(90deg,rgba(0,128,0,.77) 50%,rgba(255,165,0,.77) 0)}.pie:before{content:"";display:block;margin-left:50%;height:112%;width:100%;border-radius:0 100% 100% 0/50%;background:rgba(255,0,0,.77);transform-origin:left;transform:rotate(.22turn)}.pie .fin-8{top:0;bottom:50%;transform:translate(-22%,22%) rotate(-56deg)}.pie .fin-5,.pie .fin-8{position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:center;text-align:center}.pie .fin-5{bottom:0;top:50%;background:#ff3b3b;transform:translate(5%) rotate(-11deg)}.pie .fin{top:0;bottom:50%;left:0;right:0;text-align:center;display:flex;justify-content:center;align-items:center;position:absolute;transform:translate(16%,9%) rotate(45deg)}.legende{list-style:none}.legende div{display:flex}.legende div .legende-color{display:block;height:20px;width:20px;margin-right:5px}.legende div .legende-color.fin-8{background:rgba(0,128,0,.77)}.legende div .legende-color.fin-5{background:rgba(255,0,0,.77)}.legende div .legende-color.fin{background:rgba(255,165,0,.77)}.column-left,.top-menu{background:#f4f6fc}.column-left::-webkit-scrollbar-track,.top-menu::-webkit-scrollbar-track{-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,.3);background-color:#f5f5f5}.column-left::-webkit-scrollbar,.top-menu::-webkit-scrollbar{width:10px;background-color:#f5f5f5}.column-left::-webkit-scrollbar-thumb,.top-menu::-webkit-scrollbar-thumb{background-color:#0ae;background-image:-webkit-gradient(linear,0 0,0 100%,color-stop(.5,hsla(0,0%,100%,.2)),color-stop(.5,transparent),to(transparent))}.column-left .card,.top-menu .card{background:#fff;border-radius:unset;border-color:rgba(46,91,255,.08)}.column-left .card .card-header,.top-menu .card .card-header{background:#fff}.column-left .vs__dropdown-toggle,.top-menu .vs__dropdown-toggle{background:rgba(224,231,255,.2)!important;border-color:#e0e7ff}.column-left h1,.top-menu h1{font-size:1.3rem}.column-left .map-form-logo,.top-menu .map-form-logo{background:#fff}.column-left .map-form-header,.top-menu .map-form-header{background:#00b065;padding:20px;color:#fff}.column-left .styled-checkbox,.top-menu .styled-checkbox{padding-left:unset}.column-left .styled-checkbox input[type=checkbox],.top-menu .styled-checkbox input[type=checkbox]{position:absolute;opacity:0}.column-left .styled-checkbox input[type=checkbox]+label,.top-menu .styled-checkbox input[type=checkbox]+label{position:relative;cursor:pointer;padding:0 0 0 30px;width:100%}.column-left .styled-checkbox input[type=checkbox]+label:before,.top-menu .styled-checkbox input[type=checkbox]+label:before{left:0;content:"";position:absolute;margin-right:10px;display:inline-block;vertical-align:text-top;width:20px;height:20px;background:#d2d2d2;border-radius:unset}.column-left .styled-checkbox input[type=checkbox]:hover+label:before,.top-menu .styled-checkbox input[type=checkbox]:hover+label:before{background:#00b065}.column-left .styled-checkbox input[type=checkbox]:focus+label:before,.top-menu .styled-checkbox input[type=checkbox]:focus+label:before{box-shadow:0 0 0 3px rgba(0,0,0,.12)}.column-left .styled-checkbox input[type=checkbox]:checked+label:before,.top-menu .styled-checkbox input[type=checkbox]:checked+label:before{background:#00b065}.column-left .styled-checkbox input[type=checkbox]:disabled+label,.top-menu .styled-checkbox input[type=checkbox]:disabled+label{color:#b8b8b8;cursor:auto}.column-left .styled-checkbox input[type=checkbox]:disabled+label:before,.top-menu .styled-checkbox input[type=checkbox]:disabled+label:before{box-shadow:none;background:#ddd}.column-left .styled-checkbox input[type=checkbox]:checked+label:after,.top-menu .styled-checkbox input[type=checkbox]:checked+label:after{content:"";position:absolute;left:5px;top:12px;background:#fff;width:3px;height:3px;box-shadow:2px 0 0 #fff,4px 0 0 #fff,4px -2px 0 #fff,4px -4px 0 #fff,4px -6px 0 #fff,4px -8px 0 #fff;transform:rotate(45deg)}.column-left .form-group,.top-menu .form-group{margin-bottom:0;border-color:#e0e7ff}.column-left .form-control,.top-menu .form-control{border-radius:4px}.column-left .pandemics-stat-row,.top-menu .pandemics-stat-row{font-size:.8rem}.column-left .vue-daterange-picker,.top-menu .vue-daterange-picker{width:80%}.column-left .vue-daterange-picker div,.top-menu .vue-daterange-picker div{background:rgba(224,231,255,.2);height:32px}.side-bottom .canva-chart{height:100%!important}.side-bottom .card{background:#fff;border-radius:unset;border-color:#2e5bff;height:100%}.side-bottom .card .card-header{background:transparent;border:unset;padding:.5rem 1.25rem}.side-bottom .card .card-header .nav-item{margin-right:20px}.side-bottom .card .card-header .nav-item .nav-link{background:rgba(46,91,255,.08);color:#2e5bff;text-decoration:unset;border-radius:5px;font-size:.8rem;padding-top:0;padding-bottom:0}.side-bottom .card .card-header .nav-item .nav-link.active{color:#fff!important;background:#33ac2e!important}.side-bottom .card .tabs{height:100%}.side-bottom .card .tabs .tab-content{height:calc(100% - 35px)}.side-bottom .card .tabs .tab-content .card-body{height:100%;padding:5px}.side-bottom .card .tabs .tab-content .card-body>div,.side-bottom .card .tabs .tab-content .card-body>div>div{height:inherit}.side-right{height:100%;overflow:auto}.side-right::-webkit-scrollbar-track{background-color:transparent}.side-right::-webkit-scrollbar{width:10px}.side-right::-webkit-scrollbar-thumb{background-color:#bcbab7;border-radius:8px;border:2px solid #fff}.side-right>.card,.side-right>.card>.tabs>.card-header{background:transparent;border-radius:unset;border:unset}.side-right>.card>.tabs>.card-header{padding:.5rem 1.25rem}.side-right>.card>.tabs>.card-header .nav-item{margin-right:20px}.side-right>.card>.tabs>.card-header .nav-item .nav-link{background:rgba(46,91,255,.08);color:#2e5bff;text-decoration:unset;border-radius:5px;font-size:.8rem;padding-top:0;padding-bottom:0}.side-right>.card>.tabs>.card-header .nav-item .nav-link.active{color:#fff!important;background:#33ac2e!important}.side-right>.card>.tabs>.tab-content>.card-body{padding:10px 0}.default-makers{width:20px;height:20px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem}.default-makers:before{width:60%;height:60%}.default-makers:after{width:80%;height:80%}.default-makers:after,.default-makers:before{content:"";display:block;position:absolute;border-radius:100%;z-index:-1}.default-makers.FIN8,.default-makers.FIN8:after,.default-makers.FIN8:before{background:rgba(0,128,0,.77)}.default-makers.FIN5,.default-makers.FIN5:after,.default-makers.FIN5:before{background:rgba(255,0,0,.77)}.default-makers.FIN,.default-makers.FIN:after,.default-makers.FIN:before{background:rgba(255,165,0,.77)}.default-makers.worried{border:5px solid #6610f2;background:#6610f2}.default-makers.mask{border:5px solid rgba(255,165,0,.77);background:rgba(255,165,0,.77)}.default-makers.makala{border:5px solid #17a2b8;background:#17a2b8}.default-makers.price_increase{border:5px solid #e83e8c;background:#e83e8c}.default-makers.flour{border:5px solid #ff5722;background:#ff5722}.default-makers.catch_virus{border:5px solid #1f3677;background:#1f3677}.default-makers.antibacterial_gel{border:5px solid red;background:red}#hospital-data{position:absolute;bottom:0;background:#fff;left:0;right:0;z-index:999999}#hospital-data #hospital-data-close{cursor:pointer}#sondage-item .sondage-ul{list-style:none}#sondage-item .sondage-yes{width:20px;height:20px;background:#00b065;display:inline-block}#sondage-item .sondage-no{width:20px;height:20px;background:#e6222e;display:inline-block}#sondage-item #worried+label{border-right:15px solid #6610f2;padding-right:5px}#sondage-item #mask+label{border-right:15px solid rgba(255,165,0,.77);padding-right:5px}#sondage-item #makala+label{border-right:15px solid #17a2b8;padding-right:5px}#sondage-item #price_increase+label{border-right:15px solid #e83e8c;padding-right:5px}#sondage-item #flour+label{border-right:15px solid #ff5722;padding-right:5px}#sondage-item #catch_virus+label{border-right:15px solid #1f3677;padding-right:5px}#sondage-item #antibacterial_gel+label{border-right:15px solid red;padding-right:5px}.covidCases-marker{width:20px;height:20px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem}.covidCases-marker.confirmed{background:#1f3677}.covidCases-marker.sick{background:#eede4e}.covidCases-marker.healed{background:#00b065}.covidCases-marker.dead{background:#020000}.mapboxgl-popup-content{box-sizing:border-box;border:2px solid #ddd;box-shadow:0 1px 8px rgba(0,0,0,.1);border-radius:8px}.topToolTip{padding:10px;color:#000;background-color:#fff;font-weight:400;font-size:13px;z-index:99999999;display:block}.topToolTip .titleInfoBox{font-weight:700;font-size:13px;line-height:18px;text-align:center;color:#000;margin-bottom:7px}.topToolTip .statLine{display:flex;flex-direction:row;justify-content:center;align-items:center;height:20px;min-width:160px}.topToolTip .statLine.divider{height:1px;background:rgba(0,0,0,.2);margin:5px 0 4px}.topToolTip .statCount{text-align:right;color:#767676}.topToolTip .stat,.topToolTip .statCount{height:20px;font-size:13px;line-height:20px}.topToolTip .stat{flex:1;margin-right:24px;color:#333}.topToolTip .total{color:#de3700}.topToolTip .legendColor{width:8px;height:8px;border-radius:4px;margin-right:10px}.topToolTip .ongoing{background-color:#1f3677}.topToolTip .recovered{background-color:#00b065}.topToolTip .fatal{background-color:#020000}.side-case-covid-container .stat-color{height:5px;width:5px;border-radius:6px}.side-case-covid-container .confirmed{flex:1}.side-case-covid-container .confirmed .stat-color{background:#1f3677}.side-case-covid-container .sick{flex:1}.side-case-covid-container .sick .stat-color{background:#eede4e}.side-case-covid-container .healed{flex:1}.side-case-covid-container .healed .stat-color{background:#00b065}.side-case-covid-container .dead{flex:1}.side-case-covid-container .dead .stat-color{background:#020000}.side-case-covid-container .group-item{height:40vh;overflow:auto}.side-case-covid-container .group-item::-webkit-scrollbar-track{background-color:transparent}.side-case-covid-container .group-item::-webkit-scrollbar{width:10px}.side-case-covid-container .group-item::-webkit-scrollbar-thumb{background-color:#bcbab7;border-radius:8px;border:2px solid #fff}.flux-form .legend-origin{display:inline-block;width:10px;height:10px;background:#0c2c84}.flux-form .legend-destination{display:inline-block;width:10px;height:10px;background:#b10026}.checkbox-zone-group{height:250px;overflow:auto}.checkbox-zone-group::-webkit-scrollbar-track{background-color:transparent}.checkbox-zone-group::-webkit-scrollbar{width:10px}.checkbox-zone-group::-webkit-scrollbar-thumb{background-color:#bcbab7;border-radius:8px;border:2px solid #fff}.custom-checkbox .custom-control-label:before{border-radius:.25rem!important}#data-modal___BV_modal_content_{min-height:550px}.mapboxgl-popup .mapboxgl-popup-content{border:2px solid rgba(46,91,255,.08);box-shadow:0 1px 8px rgba(0,0,0,.1);border-radius:unset;background:#fff}.mapboxgl-popup .mapboxgl-popup-tip{border-top-color:#fff}body{font-family:Rubik,sans-serif}.modal::-webkit-scrollbar-track,.table-responsive::-webkit-scrollbar-track,body::-webkit-scrollbar-track{-webkit-box-shadow:inset 0 0 6px rgba(0,0,0,.3);background-color:#f5f5f5}.modal::-webkit-scrollbar,.table-responsive::-webkit-scrollbar,body::-webkit-scrollbar{width:10px;background-color:#f5f5f5}.modal::-webkit-scrollbar-thumb,.table-responsive::-webkit-scrollbar-thumb,body::-webkit-scrollbar-thumb{background-color:#0ae;background-image:-webkit-gradient(linear,0 0,0 100%,color-stop(.5,hsla(0,0%,100%,.2)),color-stop(.5,transparent),to(transparent))}.disabled{pointer-events:none;opacity:.4}
