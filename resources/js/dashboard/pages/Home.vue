@@ -49,6 +49,7 @@
               :flour="flour"
               :antiBacterialGel="antiBacterialGel"
               :flux24="flux24"
+              :isLoading="isLoading"
             />
           </b-row>
         </b-col>
