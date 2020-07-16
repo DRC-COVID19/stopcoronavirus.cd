@@ -1,7 +1,7 @@
 <template>
   <b-container class="p-0 flux-chart">
     <b-row no-gutters>
-      <b-col cols="12" md="6" class="pl-0 pr-2" ref="mobility">
+      <b-col cols="12" md="4" class="pl-0 pr-2" ref="mobility">
         <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <h3>{{item[0].destination}}</h3>
@@ -43,7 +43,7 @@
           </b-col>
         </b-row>
       </b-col>
-      <b-col cols="12" md="6" class="pr-0 pl-2">
+      <b-col cols="12" md="4" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
             <div class="text-right">
@@ -86,6 +86,41 @@
           </b-col>
         </b-row>
       </b-col>
+      <b-col cols="12" md="4" class="pr-0 pl-2">
+        <b-row v-for="(item,index) in flux24DailyPresenceInLocal" :key="index" class="mb-3">
+          <b-col cols="12">
+            <h3>&nbsp;</h3>
+            <b-card
+              class="mb-3 flux-mobility"
+              :class="{'active':fluxType==3}"
+              @click="selectFluxType(3)"
+            >
+              <h5 class="percent-title">Présences</h5>
+              <div class="percent flux-presence">{{fluxVolumObservationPresencePercent(item)}}%​</div>
+              <p v-if="fluxVolumObservationPresence(item)>0" class="percent-p text-dash-color">
+                {{fluxVolumObservationPresence(item).toLocaleString(
+                undefined,
+                { minimumFractionDigits: 0 })}} personnes de plus étaient présentes dans la zone
+              </p>
+              <p v-else class="percent-p text-dash-color">
+                {{(fluxVolumObservationPresence(item)*-1).toLocaleString(
+                undefined,
+                { minimumFractionDigits: 0 })}} personnes de moins étaient présentes dans la zone
+              </p>
+            </b-card>
+            <b-card no-body class="mb-3 p-2" :ref="`mobile_presence_${index}_card`">
+              <div class="chart-container">
+                <canvas
+                  height="200"
+                  width="100vh"
+                  :ref="`mobile_presence_${index}`"
+                  :id="`mobile_presence_${index}`"
+                ></canvas>
+              </div>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -97,6 +132,14 @@ import { PALETTE } from "../config/env";
 export default {
   props: {
     flux24Daily: {
+      type: Array,
+      default: () => []
+    },
+    flux24PresenceDaily: {
+      type: Array,
+      default: () => []
+    },
+    flux24PresenceDailyIn: {
       type: Array,
       default: () => []
     },
@@ -112,7 +155,8 @@ export default {
   data() {
     return {
       flux24DailyInLocal: [],
-      flux24DailyOutLocal: []
+      flux24DailyOutLocal: [],
+      flux24DailyPresenceInLocal: []
     };
   },
   computed: {
@@ -121,7 +165,7 @@ export default {
     })
   },
   watch: {
-    async flux24DailyIn() {
+    flux24DailyIn() {
       this.flux24DailyInLocal = this.extractFlux23DailyIn();
 
       this.$nextTick(() => {
@@ -135,7 +179,7 @@ export default {
         });
       });
     },
-    async flux24DailyOut() {
+    flux24DailyOut() {
       this.flux24DailyOutLocal = this.extractFlux23DailyOut();
 
       this.$nextTick(() => {
@@ -144,11 +188,24 @@ export default {
           this.mobileOutDestination(item, index);
         });
       });
+    },
+    flux24PresenceDailyIn() {
+      this.flux24DailyPresenceInLocal = this.extractFlux24PresenceDailyIn();
+      this.$nextTick(() => {
+        this.flux24DailyPresenceInLocal.forEach((item, index) => {
+          this.mobileCalc(
+            item,
+            `mobile_presence_${index}`,
+            PALETTE.flux_presence
+          );
+        });
+      });
     }
   },
-  async mounted() {
+  mounted() {
     this.flux24DailyInLocal = this.extractFlux23DailyIn();
     this.flux24DailyOutLocal = this.extractFlux23DailyOut();
+    this.flux24DailyPresenceInLocal = this.extractFlux24PresenceDailyIn();
 
     this.$nextTick(() => {
       this.flux24DailyInLocal.forEach((item, index) => {
@@ -164,6 +221,15 @@ export default {
       this.flux24DailyOutLocal.forEach((item, index) => {
         this.mobileCalc(item, `mobile_out_${index}`, PALETTE.flux_out_color);
         this.mobileOutDestination(item, index);
+      });
+    });
+    this.$nextTick(() => {
+      this.flux24DailyPresenceInLocal.forEach((item, index) => {
+        this.mobileCalc(
+          item,
+          `mobile_presence_${index}`,
+          PALETTE.flux_presence
+        );
       });
     });
   },
@@ -194,16 +260,51 @@ export default {
       items
         .filter(x => x.isReference)
         .map(item => {
-          totalReference += item.volume;
+          totalReference += Number(item.volume);
         });
       let totalObservation = 0;
       items
         .filter(x => !x.isReference)
         .map(item => {
-          totalObservation += item.volume;
+          totalObservation += Number(item.volume);
         });
       let difference = totalObservation - totalReference;
+      return Math.round(difference);
+    },
+    fluxVolumObservationPresencePercent(items) {
+      let totalReference = 0;
 
+      let averageReference = items
+        .filter(x => x.isReference)
+        .reduce((avg, value, _, { length }) => {
+          return avg + value.volume / length;
+        }, 0);
+
+      let averageObservation = items
+        .filter(x => !x.isReference)
+        .reduce((avg, value, _, { length }) => {
+          return avg + value.volume / length;
+        }, 0);
+
+      let difference = averageObservation - averageReference;
+      return Math.round((difference * 100) / averageReference);
+    },
+    fluxVolumObservationPresence(items) {
+      let totalReference = 0;
+
+      let averageReference = items
+        .filter(x => x.isReference)
+        .reduce((avg, value, _, { length }) => {
+          return avg + value.volume / length;
+        }, 0);
+
+      let averageObservation = items
+        .filter(x => !x.isReference)
+        .reduce((avg, value, _, { length }) => {
+          return avg + value.volume / length;
+        }, 0);
+
+      let difference = averageObservation - averageReference;
       return Math.round(difference);
     },
     extractFlux23DailyOut() {
@@ -241,6 +342,25 @@ export default {
         });
       }
       return flux24DailyInLocal;
+    },
+    extractFlux24PresenceDailyIn() {
+      let flux24PresenceDailyInLocal = [];
+      if (this.flux24PresenceDailyIn.length > 0) {
+        this.flux24PresenceDailyIn.forEach(item => {
+          let index = flux24PresenceDailyInLocal.findIndex(x =>
+            x.find(y => y.zone == item.zone)
+          );
+          if (index == -1) {
+            let element = [];
+            element.push(Object.assign({}, item));
+            flux24PresenceDailyInLocal.push(element);
+          } else {
+            flux24PresenceDailyInLocal[index].push(Object.assign({}, item));
+          }
+        });
+      }
+      console.log(flux24PresenceDailyInLocal);
+      return flux24PresenceDailyInLocal;
     },
     mobileCalc(dataPram, ref, color) {
       // set the dimensions and margins of the graph
@@ -342,7 +462,7 @@ export default {
                   d.datasets[i.datasetIndex].label +
                   ": " +
                   Math.round(
-                    referenceAverage * i.yLabel,
+                    (referenceAverage * i.yLabel) / 100,
                     0
                   ).toLocaleString(undefined, { minimumFractionDigits: 0 })
                 );
@@ -357,14 +477,20 @@ export default {
                   display: true
                 },
                 scaleLabel: {
+<<<<<<< HEAD
                   display: true,
                   labelString: "Mois",
                   fontSize:9
+=======
+                  display: false,
+                  labelString: "Month"
+>>>>>>> master
                 },
                 type: "time",
-                 ticks:{
-                   fontSize:9
-                 },
+                ticks: {
+                  fontSize: 9,
+                  beginAtZero: true
+                },
                 time: {
                   unit: "day",
                   unitStepSize: 1,
@@ -378,7 +504,7 @@ export default {
               {
                 display: true,
                 ticks: {
-                  fontSize:9,
+                  fontSize: 9,
                   min: -100,
                   max: 100,
                   callback: function(value) {
@@ -401,6 +527,7 @@ export default {
       );
     },
     mobileOutDestination(data, index) {
+      // data=array[{origin, destination,volume,isReference}]
       let localData = [];
       data.forEach(item => {
         let element = localData.find(x => x.destination == item.destination);
@@ -528,6 +655,7 @@ export default {
         .attr("height", y.bandwidth());
     },
     mobileEntranceOrigin(data, index) {
+      // data=array[{origin,volume,isReference}]
       let localData = [];
       data.forEach(item => {
         let element = localData.find(x => x.origin == item.origin);
