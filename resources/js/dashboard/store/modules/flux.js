@@ -4,7 +4,7 @@ export default {
         mapStyle: 1,
         fluxType: 1,
         fluxGeoOptions: [],
-        fluxEnabled: false,
+        fluxEnabled: true,
         isWatchingfluxGeoOptions: true,
         legendHover : null // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
     },

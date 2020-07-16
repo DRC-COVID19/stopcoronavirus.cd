@@ -46,10 +46,7 @@
       <b-col cols="12" md="4" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
-            <div class="text-right">
-              <h5 class="m-0" style="font-size: 19px;">16 juillet 2020</h5>
-              <span class="small text-muted">Dernière mise à jour</span>
-            </div>
+            <h3>&nbsp;</h3>
             <b-card
               class="mb-3 flux-mobility"
               :class="{'active':fluxType==2}"
@@ -89,7 +86,9 @@
       <b-col cols="12" md="4" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyPresenceInLocal" :key="index" class="mb-3">
           <b-col cols="12">
-            <h3>&nbsp;</h3>
+            <h5 class="m-0" style="font-size: 19px;">16 juillet 2020</h5>
+            <span class="small text-muted">Dernière mise à jour</span>
+
             <b-card
               class="mb-3 flux-mobility"
               :class="{'active':fluxType==3}"
@@ -479,7 +478,7 @@ export default {
                 scaleLabel: {
                   display: true,
                   labelString: "Mois",
-                  fontSize:9
+                  fontSize: 9
                 },
                 type: "time",
                 ticks: {
@@ -509,7 +508,7 @@ export default {
                 scaleLabel: {
                   display: true,
                   labelString: "Pourcentage",
-                  fontSize:9
+                  fontSize: 9
                 }
               }
             ]
