@@ -76,7 +76,7 @@ export default {
     },
     isLoading :{ 
       type:Boolean,
-      default: ()=>([])
+      default:null
     },
     flux24Presence: {
       type: Array,
@@ -154,8 +154,6 @@ export default {
     this.$store.watch(
       state => state.flux.fluxGeoGranularity,
       value => {
-        console.log("1");
-
         this.addPolygoneLayer();
         if (this.fluxEnabled) {
           this.addPolygoneHoverLayer();
@@ -633,7 +631,7 @@ export default {
 
       map.on("click", "state-hover", e => {
         this.centerCoordinates = [e.lngLat.lng, e.lngLat.lat];
-        map.flyTo({center: this.centerCoordinates})
+        // map.flyTo({center: this.centerCoordinates})
 
         if (this.fluxGeoGranularity != 2) {
           this.setFluxGeoOptions([e.features[0].properties.name]);
@@ -763,7 +761,6 @@ export default {
         colorScale.range(PALETTE.inflow);
       }
 
-      console.log(features);
 
       if (this.fluxGeoGranularity == 1) {
         features.forEach(x => {
