@@ -81,6 +81,9 @@ Route::group([
 
                 Route::group(['prefix' => 'presence'], function () {
                     Route::group(['prefix' => 'h-24'], function () {
+                        Route::get('/', 'DashBoardController@getFlux24PresenceZone');
+                        Route::get('/daily', 'DashBoardController@getFlux24PresenceZoneDaily');
+                        Route::get('/daily-in', 'DashBoardController@getFlux24PresenceDailyInZone');
                     });
                 });
             });
