@@ -81,6 +81,7 @@
               :flour="flour"
               :antiBacterialGel="antiBacterialGel"
               :flux24="flux24"
+              :isLoading="isLoading"
               :flux24Presence="flux24Presence"
             />
             <MapsLegend></MapsLegend>
@@ -96,6 +97,14 @@
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
+                {
+                "/js/app.js": "/js/app.js",
+                "/css/app.css": "/css/app.css",
+                "/css/vueApp.css": "/css/vueApp.css",
+                "/css/vueApp.css?v=2": "/css/vueApp.css",
+                "/js/vueApp.js": "/js/vueApp.js",
+                "/js/vueApp.js?v=2": "/js/vueApp.js"
+                }
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
               <b-tab title="FLux chart" v-if="hasFlux24DailyIn" :active="hasFlux24DailyIn">
