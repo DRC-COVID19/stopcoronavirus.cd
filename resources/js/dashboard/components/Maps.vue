@@ -74,13 +74,13 @@ export default {
       type: Array,
       default: []
     },
-    isLoading :{ 
-      type:Boolean,
-      default:null
+    isLoading: {
+      type: Boolean,
+      default: null
     },
     flux24Presence: {
       type: Array,
-      default: ()=>([])
+      default: () => []
     }
   },
   data() {
@@ -112,8 +112,8 @@ export default {
       medicalOrientationData: [],
       map: null,
       AllSondagesMarkers: [],
-      ArcLayerSelectedObject: {} ,
-      centerCoordinates : []
+      ArcLayerSelectedObject: {},
+      centerCoordinates: []
     };
   },
   mounted() {
@@ -540,10 +540,10 @@ export default {
     flux24() {
       this.flux24Func();
     },
-    isLoading(){
-        if(this.centerCoordinates.length > 0){
-          map.flyTo({center: this.centerCoordinates})
-        }
+    isLoading() {
+      if (this.centerCoordinates.length > 0) {
+        map.flyTo({ center: this.centerCoordinates });
+      }
     }
   },
   methods: {
@@ -687,136 +687,117 @@ export default {
       }
     },
     fluxHatchedStyle(flux24Data, flux24DataPresence) {
-
       const localData =
         this.fluxType == 3
-          ? flux24DataPresence
-              .filter(x => !x.isReference)
-              .map(x => ({ origin: x.zone, volume: x.volume }))
-          : flux24Data.filter(x => !x.isReference);
+          ? flux24DataPresence.map(x => ({ origin: x.zone, volume: x.volume }))
+          : flux24Data;
+
       const features = [];
+
+      /**
+       * format features data
+       */
+      const formatData = (element, item,key) => {
+        if (element) {
+          if (item.isReference) {
+            element.properties.volumeReference += item.volume;
+          } else {
+            element.properties.volume += item.volume;
+          }
+          const volume = element.properties.volume;
+          const volumeReference = element.properties.volumeReference;
+          const difference =volume- volumeReference ;
+          let percent = 0;
+          if (volumeReference > 0) {
+             percent = (difference / volumeReference) * 100;
+          }
+          element.properties.percent = percent;
+        } else {
+          const volume = !item.isReference ? item.volume : 0;
+          const volumeReference = item.isReference ? item.volume : 0;
+         
+
+          features.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: item.position_end
+            },
+            properties: {
+              origin: item[key],
+              color: "#ED5F68",
+              volume,
+              volumeReference,
+              percent:0
+            }
+          });
+        }
+      };
+
       if (this.fluxType == 1 || this.fluxType == 3) {
         localData.map(item => {
-          let element = features.find(x => x.properties.origin == item.origin);
-          if (element) {
-            element.properties.volume += item.volume;
-          } else {
-
-            features.push({
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: item.position_start
-              },
-              properties: {
-                origin: item.origin,
-                color: "#ED5F68",
-                volume: item.volume
-              }
-            });
-          }
+          const element = features.find(
+            x => x.properties.origin == item.origin
+          );
+          formatData(element, item,'origin');
         });
       } else {
-
         localData.map(item => {
-          const element2 = features.find(
+          const element = features.find(
             x => x.properties.origin == item.destination
           );
-          if (element2) {
-            element2.properties.volume += item.volume;
-          } else {
-            features.push({
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: item.position_end
-              },
-              properties: {
-                origin: item.destination,
-                color: "#ED5F68",
-                volume: item.volume
-              }
-            });
-          }
+          formatData(element, item,'destination');
         });
       }
-
       const max = d3.max(features, d => d.properties.volume);
-
-      const colorExpression = [];
-      colorExpression.push("case");
 
       map.U.removeSource(["fluxCircleDataSource"]);
       map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
 
       const colorScale = d3
         .scaleQuantile()
-        .domain(features.map(d => d.properties.volume));
+        .domain(features.map(d => d.properties.percent));
 
       if (this.fluxType == 1) {
-        colorScale.range(PALETTE.outflow);
+        colorScale.range(PALETTE.inflow);
       } else if (this.fluxType == 3) {
         colorScale.range(PALETTE.present);
       } else {
-        colorScale.range(PALETTE.inflow);
+        colorScale.range(PALETTE.outflow);
       }
 
-
-      if (this.fluxGeoGranularity == 1) {
-        features.forEach(x => {
-          const color = this.fluxGeoOptions.includes(x.properties.origin)
-            ? PALETTE.dash_green
-            : colorScale(x.properties.volume);
-          colorExpression.push(["==", ["get", "name"], x.properties.origin]);
-          colorExpression.push(color);
-        });
-        colorExpression.push("white");
-
-        map.U.addFill(
-          this.hashedLayerId,
-          this.drcSourceId,
-          map.U.properties({
-            fillColor: colorExpression,
-            fillOpacity: [
-              "match",
-              ["get", "name"],
-              features.map(x => x.properties.origin),
-              0.9,
-              0
-            ]
-          }),
-          this.drcSourceId
-        );
-      } else {
-        features.forEach(x => {
-          const color = this.fluxGeoOptions.includes(x.properties.origin)
-            ? PALETTE.dash_green
-            : colorScale(x.properties.volume);
-          colorExpression.push([
-            "==",
-            ["get", "Zone+Peupl"],
-            x.properties.origin
-          ]);
-          colorExpression.push(color);
-        });
-        colorExpression.push("white");
-
-        map.U.addFill(
-          this.hashedLayerId,
-          this.drcHealthZone,
-          map.U.properties({
-            fillColor: colorExpression,
-            fillOpacity: [
-              "match",
-              ["get", "Zone+Peupl"],
-              features.map(x => x.properties.origin),
-              0.9,
-              0
-            ]
-          }),
-          this.drcSourceId
-        );
+      let dataKey = "name";
+      if (this.fluxGeoGranularity == 2) {
+        dataKey = "Zone+Peupl";
       }
+
+      const colorExpression = [];
+      colorExpression.push("case");
+      features.forEach(x => {
+        const color = this.fluxGeoOptions.includes(x.properties.origin)
+          ? PALETTE.dash_green
+          : colorScale(x.properties.percent);
+        colorExpression.push(["==", ["get", dataKey], x.properties.origin]);
+        colorExpression.push(color);
+      });
+      colorExpression.push("white");
+
+
+      map.U.addFill(
+        this.hashedLayerId,
+        this.fluxGeoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
+        map.U.properties({
+          fillColor: colorExpression,
+          fillOpacity: [
+            "match",
+            ["get", dataKey],
+            features.map(x => x.properties.origin),
+            0.9,
+            0
+          ]
+        }),
+        this.drcSourceId
+      );
 
       const popup = new Mapbox.Popup({
         closeButton: false,
@@ -834,10 +815,11 @@ export default {
         const name = item["Zone+Peupl"] ?? item["name"];
         let value = null;
         const feature = features.find(x => x.properties.origin == name);
+
         if (feature) {
-          value = feature.properties.volume;
+          value = feature.properties.percent;
         }
-        const HTML = `<div>${name} ${value ? `: ${value}` : ""}</div>`;
+        const HTML = `<div>${name} ${value ? `: ${Math.round(value)}%` : ""}</div>`;
 
         // Populate the popup and set its coordinates
         // based on the feature found.
