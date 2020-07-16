@@ -1756,14 +1756,14 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux24PresenceProvince::select(['Date as date', DB::raw('sum(volume)as volume')])
+            $flux = Flux24PresenceProvince::select(['Date as date', DB::raw('AVG(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->whereIn('zone', $data['fluxGeoOptions'])
                 ->groupBy('Date')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24PresenceProvince::select(['Date as date', DB::raw('sum(volume)as volume')])
+                $fluxRefences = Flux24PresenceProvince::select(['Date as date', DB::raw('AVG(volume)as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->whereIn('zone', $data['fluxGeoOptions'])
                     ->groupBy('Date')->get();
@@ -1791,14 +1791,14 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
         
         try {
-            $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume')])
+            $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('AVG(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->WhereIn('Zone', $data['fluxGeoOptions'])
                 ->groupBy('Date', 'Zone')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume')])
+                $fluxRefences = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('AVG(volume)as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->WhereIn('Zone', $data['fluxGeoOptions'])
                     ->groupBy('Date', 'Zone')->get();
