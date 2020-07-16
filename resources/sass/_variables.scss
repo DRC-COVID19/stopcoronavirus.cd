@@ -14,9 +14,13 @@ $dash-text: #2e384d;
 $dash-green: #33ac2e;
 $flux-in-color:#225ea8;
 $flux-out-color:#88419d;
+$flux-presence:#E31A1C;
 $dash-background: #f4f6fc;
 $dash-text-100: #7b7f88;
-$dash-shadow-color: #2e5bff3d;
+$dash-shadow-color: #2e5bff14;
+$dash-blue-8:#2e5bff14;
+$dash-input-backColor:rgba(224, 231, 255, 0.2);
+$dash-input-border-color:#E0E7FF;
 
 $bg-gray: #e9ecef;
 $dark-blue: darken($secondary, 10%);
@@ -52,4 +56,7 @@ $antibacterial_gel: red;
 }
 .flux-out-color{
     color: $flux-out-color;
+}
+.flux-presence{
+    color: $flux-presence;
 }
