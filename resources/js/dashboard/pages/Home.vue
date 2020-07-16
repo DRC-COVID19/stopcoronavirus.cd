@@ -2,8 +2,40 @@
   <div>
     <b-container fluid class="dash-home-page" ref="dash_home_page" id="dash_home_page">
       <Header />
-      <b-row class="position-relative">
-        <LeftColumn
+      <b-row class="mt-2 top-menu">
+        <b-col>
+          <MenuFlux
+            v-if="activeMenu==1"
+            @submitFluxForm="submitFluxForm"
+            @populationFluxChecked="populationFluxChecked"
+            @flux::predefined::changed="fluxPredefinedChanged"
+            :fluxZones="fluxZones"
+            :fluxProvinces="fluxProvinces"
+            :flux24Errors="flux24Errors"
+          />
+          <MenuEpidemology
+            v-if="activeMenu==2"
+            @covidCaseChecked="getCovidCases"
+            :covidCasesCount="covidCasesCount"
+          />
+          <MenuInfrastructure
+            v-if="activeMenu==5"
+            :hospitalCount="hospitalCount"
+            @hopitalChecked="gethopitals"
+          />
+          <MenuOrientation
+            v-if="activeMenu==6"
+            @medicalOrientationChecked="getmedicalOrientations"
+            @medicalOrientationChanged="medicalOrientationChanged"
+            :orientationCount="orientationCount"
+            :finCount="finCount"
+            :fin5Count="fin5Count"
+            :fin8Count="fin8Count"
+          />
+        </b-col>
+      </b-row>
+      <b-row class="position-relative map-wrap">
+        <!--   <LeftColumn
           @covidCaseChecked="getCovidCases"
           @hopitalChecked="gethopitals"
           @medicalOrientationChecked="getmedicalOrientations"
@@ -28,8 +60,8 @@
           :fluxZones="fluxZones"
           :fluxProvinces="fluxProvinces"
           :flux24Errors="flux24Errors"
-        />
-        <b-col cols="12" offset-md="3" :class="`${hasRightSide?'col-md-5':'col-md-9'}`">
+        />-->
+        <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
           <div class="layer-set-contenair" v-if="hasFlux24Daily">
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arc</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
@@ -49,12 +81,13 @@
               :flour="flour"
               :antiBacterialGel="antiBacterialGel"
               :flux24="flux24"
+              :flux24Presence="flux24Presence"
             />
           </b-row>
         </b-col>
         <b-col
           cols="12"
-          md="4"
+          md="6"
           class="side-right mt-2 pl-2"
           :class="{'side-right-100':!hasCovidCases}"
           v-if="hasRightSide"
@@ -69,6 +102,8 @@
                   :flux24Daily="flux24Daily"
                   :flux24DailyIn="flux24DailyIn"
                   :flux24DailyOut="flux24DailyOut"
+                  :flux24Presence="flux24Presence"
+                  :flux24PresenceDailyIn="flux24PresenceDailyIn"
                 />
               </b-tab>
               <b-tab title="Hôpital" v-if="!!selectedHospital" :active="!!selectedHospital">
@@ -77,13 +112,12 @@
             </b-tabs>
           </b-card>
         </b-col>
-        <b-col
-          class="side-bottom"
-          v-if="hasCovidCases||hasFlux24Daily||hasflux24DailyComparison"
-          cols="12"
-          md="9"
-          offset-md="3"
-        >
+      </b-row>
+      <b-row
+        class="row-side-bottom mt-2 mb-2"
+        v-if="hasCovidCases||hasFlux24Daily||hasflux24DailyComparison"
+      >
+        <b-col class="side-bottom" cols="12">
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 chart" v-if="hasCovidCases" :active="hasCovidCases">
@@ -129,6 +163,10 @@ import Header from "../components/Header";
 import HospitalSituation from "../components/HospitalSituation";
 import FluxTendanceChart from "../components/flux/TendanceChart";
 import FluxComparisonChart from "../components/flux/ComparisonChart";
+import MenuFlux from "../components/menu/Flux";
+import MenuEpidemology from "../components/menu/Epidemiology";
+import MenuInfrastructure from "../components/menu/Infrastructure";
+import MenuOrientation from "../components/menu/Orientation";
 
 import { mapState, mapActions, mapMutations } from "vuex";
 
@@ -149,7 +187,11 @@ export default {
     Header,
     HospitalSituation,
     FluxTendanceChart,
-    FluxComparisonChart
+    FluxComparisonChart,
+    MenuFlux,
+    MenuEpidemology,
+    MenuInfrastructure,
+    MenuOrientation
   },
   data() {
     return {
@@ -176,13 +218,16 @@ export default {
       fluxZones: [],
       fluxProvinces: [],
       flux24: [],
+      flux24Presence: [],
       flux24Errors: {},
       flux24Daily: [],
       flux24DailyComparison: [],
       flux24DailyIn: [],
       flux24DailyOut: [],
       fluxGeoOptions: [],
-      menuColunmStyle: {}
+      menuColunmStyle: {},
+      flux24PrensenceDaily: [],
+      flux24PresenceDailyIn: []
     };
   },
   computed: {
@@ -190,7 +235,8 @@ export default {
       hospitals: state => state.hospital.hospitalData,
       hospitalCount: state => state.hospital.hospitalCount,
       selectedHospital: state => state.hospital.selectedHospital,
-      fluxMapStyle: state => state.flux.mapStyle
+      fluxMapStyle: state => state.flux.mapStyle,
+      activeMenu: state => state.nav.activeMenu
     }),
     hasRightSide() {
       return (
@@ -487,6 +533,10 @@ export default {
       let urlDailyIn = `api/dashboard/flux/origin`;
       let urlDailyOut = `api/dashboard/flux/origin`;
 
+      let urlPresence = `api/dashboard/flux/origin`;
+      let urlPresenceDaily = `api/dashboard/flux/origin`;
+      let urlPresenceDailyIn = `api/dashboard/flux/origin`;
+
       switch (values.fluxGeoGranularity) {
         case 1:
           url += "/provinces";
@@ -494,6 +544,9 @@ export default {
           urlDailyIn += "/provinces";
           urlDailyOut += "/provinces";
           urlDailyCompare += "/provinces";
+          urlPresence += "/provinces";
+          urlPresenceDaily += "/provinces";
+          urlPresenceDailyIn += "/provinces";
           break;
         case 2:
         default:
@@ -502,8 +555,15 @@ export default {
           urlDailyIn += "/zones";
           urlDailyOut += "/zones";
           urlDailyCompare += "/zones";
+          urlPresence += "/zones";
+          urlPresenceDaily += "/zones";
+          urlPresenceDailyIn += "/zones";
           break;
       }
+
+      urlPresence += "/presence";
+      urlPresenceDaily += "/presence";
+      urlPresenceDailyIn += "/presence";
 
       switch (values.fluxTimeGranularity) {
         case 1:
@@ -512,6 +572,10 @@ export default {
           urlDailyIn += "/h-24";
           urlDailyOut += "/h-24";
           urlDailyCompare += "/h-24";
+
+          urlPresence += "/h-24";
+          urlPresenceDaily += "/h-24";
+          urlPresenceDailyIn += "/h-24";
           break;
         case 2:
         default:
@@ -520,8 +584,15 @@ export default {
           urlDailyIn += "/m-30";
           urlDailyOut += "/m-30";
           urlDailyCompare += "/m-30";
+
+          urlPresence += "/m-30";
+          urlPresenceDaily += "/m-30";
+          urlPresenceDailyIn += "/m-30";
           break;
       }
+
+      urlPresenceDaily += "/daily";
+      urlPresenceDailyIn += "/daily-in";
 
       urlDaily += "/daily";
       urlDailyIn += "/daily-in";
@@ -571,6 +642,36 @@ export default {
         })
         .then(({ data }) => {
           this.flux24DailyOut = data;
+        })
+        .catch(({ response }) => {});
+
+      this.flux24Presence = [];
+      axios
+        .get(urlPresence, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24Presence = data;
+        })
+        .catch(({ response }) => {});
+
+      this.flux24PrensenceDaily = [];
+      axios
+        .get(urlPresenceDaily, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24PrensenceDaily = data;
+        })
+        .catch(({ response }) => {});
+
+      this.flux24PresenceDailyIn = [];
+      axios
+        .get(urlPresenceDailyIn, {
+          params: values
+        })
+        .then(({ data }) => {
+          this.flux24PresenceDailyIn = data;
         })
         .catch(({ response }) => {});
 
@@ -687,12 +788,8 @@ export default {
 
 .map-container {
   padding: 10px 10px 10px 10px;
-  height: calc(80vh - 56px);
+  height: 100%;
   transition: 500ms all ease;
-}
-.map-container-100,
-.side-right-100 {
-  height: calc(100vh - 56px);
 }
 
 .side-case-covid {
