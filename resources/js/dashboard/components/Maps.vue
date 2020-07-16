@@ -689,7 +689,14 @@ export default {
     fluxHatchedStyle(flux24Data, flux24DataPresence) {
       const localData =
         this.fluxType == 3
-          ? flux24DataPresence.map(x => ({ origin: x.zone, volume: x.volume }))
+          ? flux24DataPresence.map(x => {
+              const difference = x.volume - x.reference_volume ?? 0;
+              let percent = 0;
+              if (x.reference_volume) {
+                percent = (difference / x.reference_volume) * 100;
+              }
+              return { origin: x.zone, volume: x.volume, percent };
+            })
           : flux24Data;
 
       const features = [];
@@ -697,7 +704,7 @@ export default {
       /**
        * format features data
        */
-      const formatData = (element, item,key) => {
+      const formatData = (element, item, key) => {
         if (element) {
           if (item.isReference) {
             element.properties.volumeReference += item.volume;
@@ -706,16 +713,15 @@ export default {
           }
           const volume = element.properties.volume;
           const volumeReference = element.properties.volumeReference;
-          const difference =volume- volumeReference ;
+          const difference = volume - volumeReference;
           let percent = 0;
           if (volumeReference > 0) {
-             percent = (difference / volumeReference) * 100;
+            percent = (difference / volumeReference) * 100;
           }
           element.properties.percent = percent;
         } else {
           const volume = !item.isReference ? item.volume : 0;
           const volumeReference = item.isReference ? item.volume : 0;
-         
 
           features.push({
             type: "Feature",
@@ -728,25 +734,36 @@ export default {
               color: "#ED5F68",
               volume,
               volumeReference,
-              percent:0
+              percent: 0
             }
           });
         }
       };
 
-      if (this.fluxType == 1 || this.fluxType == 3) {
+      if (this.fluxType == 1) {
         localData.map(item => {
           const element = features.find(
             x => x.properties.origin == item.origin
           );
-          formatData(element, item,'origin');
+          formatData(element, item, "origin");
+        });
+      } else if (this.fluxType == 3) {
+        localData.map(item => {
+          features.push({
+            type: "Feature",
+            geometry: { 
+              type: "Point",
+              coordinates: item.position_end
+            },
+            properties: item
+          });
         });
       } else {
         localData.map(item => {
           const element = features.find(
             x => x.properties.origin == item.destination
           );
-          formatData(element, item,'destination');
+          formatData(element, item, "destination");
         });
       }
       const max = d3.max(features, d => d.properties.volume);
@@ -774,14 +791,13 @@ export default {
       const colorExpression = [];
       colorExpression.push("case");
       features.forEach(x => {
-        const color = this.fluxGeoOptions.includes(x.properties.origin)
+        const color = this.fluxGeoOptions.includes(x.properties.origin) && this.fluxType != 3
           ? PALETTE.dash_green
           : colorScale(x.properties.percent);
         colorExpression.push(["==", ["get", dataKey], x.properties.origin]);
         colorExpression.push(color);
       });
       colorExpression.push("white");
-
 
       map.U.addFill(
         this.hashedLayerId,
@@ -819,7 +835,9 @@ export default {
         if (feature) {
           value = feature.properties.percent;
         }
-        const HTML = `<div>${name} ${value ? `: ${Math.round(value)}%` : ""}</div>`;
+        const HTML = `<div>${name} ${
+          value ? `: ${Math.round(value)}%` : ""
+        }</div>`;
 
         // Populate the popup and set its coordinates
         // based on the feature found.
