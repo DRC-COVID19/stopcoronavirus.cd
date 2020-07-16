@@ -2,7 +2,7 @@
   <b-container class="p-0" ref="tendanceContainer">
     <b-row no-gutters>
       <b-col cols="12" class="pl-0 pr-2">
-        <canvas height="200" width="100vh" ref="tendanceChart" id="tendanceChart" />
+        <canvas  width="100vh" ref="tendanceChart" id="tendanceChart" />
       </b-col>
     </b-row>
   </b-container>
@@ -254,4 +254,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#tendanceChart{
+  height: 100%;
+}
 </style>
