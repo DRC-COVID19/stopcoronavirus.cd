@@ -517,6 +517,7 @@ export default {
       );
     },
     mobileOutDestination(data, index) {
+      // data=array[{origin, destination,volume,isReference}]
       let localData = [];
       data.forEach(item => {
         let element = localData.find(x => x.destination == item.destination);
@@ -644,6 +645,7 @@ export default {
         .attr("height", y.bandwidth());
     },
     mobileEntranceOrigin(data, index) {
+      // data=array[{origin,volume,isReference}]
       let localData = [];
       data.forEach(item => {
         let element = localData.find(x => x.origin == item.origin);
