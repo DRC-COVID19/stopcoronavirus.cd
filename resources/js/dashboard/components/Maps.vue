@@ -73,7 +73,8 @@ export default {
     flux24: {
       type: Array,
       default: []
-    }
+    },
+    isLoading : Boolean,
   },
   data() {
     return {
@@ -104,7 +105,8 @@ export default {
       medicalOrientationData: [],
       map: null,
       AllSondagesMarkers: [],
-      ArcLayerSelectedObject: {}
+      ArcLayerSelectedObject: {} ,
+      centerCoordinates : []
     };
   },
   mounted() {
@@ -305,6 +307,7 @@ export default {
             healed,
             last_update
           } = e.features[0].properties;
+
           const template = `<div class="topToolTip" >
                             <div class="titleInfoBox">${name}</div>
                             <div class="statLine">
@@ -531,6 +534,11 @@ export default {
     },
     flux24() {
       this.flux24Func();
+    },
+    isLoading(){
+        if(this.centerCoordinates.length > 0){
+          map.flyTo({center: this.centerCoordinates})
+        }
     }
   },
   methods: {
@@ -617,6 +625,9 @@ export default {
       });
 
       map.on("click", "state-hover", e => {
+        this.centerCoordinates = [e.lngLat.lng, e.lngLat.lat];
+        map.flyTo({center: this.centerCoordinates})
+
         if (this.fluxGeoGranularity != 2) {
           this.setFluxGeoOptions([e.features[0].properties.name]);
         } else {
