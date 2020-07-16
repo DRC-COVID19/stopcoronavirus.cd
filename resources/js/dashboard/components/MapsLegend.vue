@@ -27,21 +27,28 @@
 <script>
 
     import {mapGetters, mapActions} from 'vuex'
+    import {PALETTE} from '../config/env'
 
     export default {
         name: "Legend" ,
+        mounted() {
+            console.log(PALETTE)
+        },
         data : function(){
             return {
                 colors : [
-                    ['#053061','#2166AC','#4393C3','#92C5DE','#F4A582','#D6604D','#B2182B','#67001F'] ,
-                    ['#67001F','#B2182B','#D6604D','#F4A582','#92C5DE','#4393C3','#2166AC','#053061'] ,
-                    ['#B35806','#E08214','#FDB863','#FEE0B6','#92C5DE','#4393C3','#2166AC','#053061']
+                    PALETTE.inflow,
+                    PALETTE.outflow,
+                    PALETTE.present
                 ],
             }
         } ,
         computed : {
             ...mapGetters(['fluxType', 'legendHover']),
             color : function(){
+                // ['#053061','#2166AC','#4393C3','#92C5DE','#F4A582','#D6604D','#B2182B','#67001F'] ,
+                //     ['#67001F','#B2182B','#D6604D','#F4A582','#92C5DE','#4393C3','#2166AC','#053061'] ,
+                //     ['#B35806','#E08214','#FDB863','#FEE0B6','#92C5DE','#4393C3','#2166AC','#053061']
                 if(this.fluxType){
                     if(this.colors[this.fluxType - 1]) return this.fluxType - 1
                     return 0
