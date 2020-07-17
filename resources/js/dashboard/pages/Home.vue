@@ -84,7 +84,7 @@
               :isLoading="isLoading"
               :flux24Presence="flux24Presence"
             />
-            <MapsLegend></MapsLegend>
+            <MapsLegend v-if="hasRightSide && activeMenu == 1"></MapsLegend>
           </b-row>
         </b-col>
         <b-col

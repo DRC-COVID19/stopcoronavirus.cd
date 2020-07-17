@@ -35,10 +35,13 @@
               </div>
             </b-card>
 
-            <b-card no-body :ref="`mobile_entrance_${index}_2_card`">
-              <div class="chart-container">
-                <div :ref="`mobile_entrance_${index}_2`" :id="`mobile_entrance_${index}_2`"></div>
-              </div>
+            <b-card no-body class="p-2">
+              <canvas
+                height="200"
+                width="100vh"
+                :ref="`mobile_entrance_${index}_2_card`"
+                :id="`mobile_entrance_${index}_2_card`"
+              ></canvas>
             </b-card>
           </b-col>
         </b-row>
@@ -46,7 +49,7 @@
       <b-col cols="12" md="4" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
-            <h3>&nbsp;</h3>
+            <h3 >&nbsp;</h3>
             <b-card
               class="mb-3 flux-mobility"
               :class="{'active':fluxType==2}"
@@ -75,10 +78,18 @@
                 ></canvas>
               </div>
             </b-card>
-            <b-card no-body :ref="`mobile_out_${index}_2_card`">
-              <div class="chart-container">
-                <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
-              </div>
+            <b-card no-body class="p-2">
+              <canvas
+                height="200"
+                width="100vh"
+                :ref="`mobile_out_${index}_2_card`"
+                :id="`mobile_out_${index}_2_card`"
+              ></canvas>
+              <!--
+                <div class="chart-container">
+                    <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
+                </div>
+              -->
             </b-card>
           </b-col>
         </b-row>
@@ -546,107 +557,81 @@ export default {
         }
       });
 
-      localData = localData.slice(0, 10);
-
       localData = localData.sort((a, b) => {
-        return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
-          Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
-          ? 1
-          : -1;
+        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
       });
 
+      localData = localData.slice(0, 10);
+
+      
+
+      const dataChart = {
+        labels: localData.map(d => d.destination),
+        datasets: [
+          {
+            label: "Référence",
+            backgroundColor: "#33ac2e",
+            borderColor: "#33ac2e",
+            borderWidth: 1,
+            data: localData.map(d => d.volume_reference)
+          },
+          {
+            label: "Observation",
+            backgroundColor: PALETTE.flux_out_color,
+            borderColor: PALETTE.flux_out_color,
+            data: localData.map(d => d.volume)
+          }
+        ]
+      };
+
       const refInput = `mobile_out_${index}_2_card`;
-      let elementPosition = this.$refs[refInput][0].clientWidth;
-      var margin = { top: 20, right: 30, bottom: 40, left: 60 },
-        width = elementPosition - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
-
-      // append the svg object to the body of the page
-      var svg = d3
-        .select(`#mobile_out_${index}_2`)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      var subgroups = ["destination", "volume_reference", "volume"];
-
-      // List of groups = species here = value of the first column called group -> I show them on the X axis
-      var groups = d3
-        .map(localData, function(d) {
-          return d.destination;
-        })
-        .keys();
-
-      let maxData = d3.max(localData, d => d.volume_reference + d.volume);
-
-      // Add X axis
-      var x = d3
-        .scaleLinear()
-        .domain([0, maxData])
-        .range([0, width]);
-      svg
-        .append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).tickSizeOuter(0))
-        .selectAll("text")
-        .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end")
-        .style("color", "black")
-        .style("font-size", "0.4rem");
-
-      // Add Y axis
-      var y = d3
-        .scaleBand()
-        .domain(groups)
-        .range([height, 0])
-        .padding([0.2]);
-      svg
-        .append("g")
-        .call(d3.axisLeft(y))
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .style("font-size", "0.4rem")
-        .style("color", "black");
-
-      // color palette = one color per subgroup
-      var color = d3
-        .scaleOrdinal()
-        .domain(subgroups)
-        .range([PALETTE.flux_out_color, "#e0e0e0"]);
-
-      //stack the data? --> stack per subgroup
-      var stackedData = d3.stack().keys(subgroups)(localData);
-
-      // Show the bars
-      svg
-        .append("g")
-        .selectAll("g")
-        // Enter in the stack data = loop key per key = group per group
-        .data(stackedData)
-        .enter()
-        .append("g")
-        .attr("fill", function(d) {
-          return color(d.key);
-        })
-        .selectAll("rect")
-        // enter a second time = loop subgroup per subgroup to add all rectangles
-        .data(function(d) {
-          return d;
-        })
-        .enter()
-        .append("rect")
-        .attr("y", function(d) {
-          return y(d.data.destination);
-        })
-        .attr("x", function(d) {
-          return x(d[0]);
-        })
-        .attr("width", function(d) {
-          return x(d[1]) - x(d[0]);
-        })
-        .attr("height", y.bandwidth());
+      const myBarChart = new Chart(this.$refs[refInput][0].getContext("2d"), {
+        type: "horizontalBar",
+        data: dataChart,
+        options: {
+          elements: {
+            rectangle: {
+              borderWidth: 2
+            }
+          },
+          responsive: true,
+          legend: {
+            position: "bottom",
+            labels: {
+              fontSize: 9
+            }
+          },
+          title: {
+            display: false,
+            text: "Rapport des sorties avant et après confinement",
+            color: "#6c757d"
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontSize: 9
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: 9
+                }
+              }
+            ]
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: false // enable trace line syncing with other charts
+              }
+            }
+          }
+        }
+      });
     },
     mobileEntranceOrigin(data, index) {
       // data=array[{origin,volume,isReference}]
@@ -674,106 +659,81 @@ export default {
         }
       });
 
-      localData = localData.slice(0, 10);
       localData = localData.sort((a, b) => {
-        return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
-          Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
-          ? 1
-          : -1;
+        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
       });
+      
+      localData = localData.slice(0, 10);
+      
+
+      const dataChart2 = {
+        labels: localData.map(d => d.origin),
+        datasets: [
+          {
+            label: "Référence",
+            backgroundColor: "#33ac2e",
+            borderColor: "#33ac2e",
+            borderWidth: 1,
+            data: localData.map(d => d.volume_reference)
+          },
+          {
+            label: "Observation",
+            backgroundColor: PALETTE.flux_in_color,
+            borderColor: PALETTE.flux_in_color,
+            data: localData.map(d => d.volume)
+          }
+        ]
+      };
 
       const refInput = `mobile_entrance_${index}_2_card`;
-      let elementPosition = this.$refs[refInput][0].clientWidth;
-      var margin = { top: 20, right: 30, bottom: 40, left: 60 },
-        width = elementPosition - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
 
-      // append the svg object to the body of the page
-      var svg = d3
-        .select(`#mobile_entrance_${index}_2`)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      var subgroups = ["origin", "volume_reference", "volume"];
-
-      // List of groups = species here = value of the first column called group -> I show them on the X axis
-      var groups = d3
-        .map(localData, function(d) {
-          return d.origin;
-        })
-        .keys();
-
-      let maxData = d3.max(localData, d => d.volume_reference + d.volume);
-
-      // Add X axis
-      var x = d3
-        .scaleLinear()
-        .domain([0, maxData])
-        .range([0, width]);
-      svg
-        .append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x).tickSizeOuter(0))
-        .selectAll("text")
-        .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end")
-        .style("color", "black")
-        .style("font-size", "0.4rem");
-
-      // Add Y axis
-      var y = d3
-        .scaleBand()
-        .domain(groups)
-        .range([height, 0])
-        .padding([0.2]);
-      svg
-        .append("g")
-        .call(d3.axisLeft(y))
-        .selectAll("text")
-        .style("text-anchor", "end")
-        .style("color", "black")
-        .style("font-size", "0.4rem");
-
-      // color palette = one color per subgroup
-      var color = d3
-        .scaleOrdinal()
-        .domain(subgroups)
-        .range([PALETTE.flux_in_color, "#e0e0e0"]);
-
-      //stack the data? --> stack per subgroup
-      var stackedData = d3.stack().keys(subgroups)(localData);
-
-      // Show the bars
-      svg
-        .append("g")
-        .selectAll("g")
-        // Enter in the stack data = loop key per key = group per group
-        .data(stackedData)
-        .enter()
-        .append("g")
-        .attr("fill", function(d) {
-          return color(d.key);
-        })
-        .selectAll("rect")
-        // enter a second time = loop subgroup per subgroup to add all rectangles
-        .data(function(d) {
-          return d;
-        })
-        .enter()
-        .append("rect")
-        .attr("y", function(d) {
-          return y(d.data.origin);
-        })
-        .attr("x", function(d) {
-          return x(d[0]);
-        })
-        .attr("width", function(d) {
-          return x(d[1]) - x(d[0]) ?? 0;
-        })
-        .attr("height", y.bandwidth());
+      const myBarChart2 = new Chart(this.$refs[refInput][0].getContext("2d"), {
+        type: "horizontalBar",
+        data: dataChart2,
+        options: {
+          elements: {
+            rectangle: {
+              borderWidth: 2
+            }
+          },
+          responsive: true,
+          legend: {
+            position: "bottom",
+            labels: {
+              fontSize: 9
+            }
+          },
+          title: {
+            display: false,
+            text: "Rapport des entrées avant et après confinement",
+            color: "#6c757d"
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontSize: 9
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: 9
+                }
+              }
+            ]
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: false // enable trace line syncing with other charts
+              }
+            }
+          }
+        }
+      });
     }
   }
 };
