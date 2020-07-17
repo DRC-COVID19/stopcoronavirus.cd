@@ -603,6 +603,13 @@ export default {
                             beginAtZero: true
                         }
                     }]
+                },
+                plugins: {
+                    crosshair: {
+                        sync: {
+                            enabled: false // enable trace line syncing with other charts
+                        }
+                    }
                 }
             }
         }
@@ -686,6 +693,13 @@ export default {
                             beginAtZero: true
                         }
                     }]
+                },
+                plugins: {
+                    crosshair: {
+                        sync: {
+                            enabled: false // enable trace line syncing with other charts
+                        }
+                    }
                 }
             }
         }
