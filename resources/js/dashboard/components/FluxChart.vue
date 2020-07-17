@@ -36,9 +36,12 @@
             </b-card>
 
             <b-card no-body class="p-2">
-                <canvas height="200" width="100vh" :ref="`mobile_entrance_${index}_2_card`"
-                    :id="`mobile_entrance_${index}_2_card`">
-                </canvas>
+              <canvas
+                height="200"
+                width="100vh"
+                :ref="`mobile_entrance_${index}_2_card`"
+                :id="`mobile_entrance_${index}_2_card`"
+              ></canvas>
             </b-card>
           </b-col>
         </b-row>
@@ -46,8 +49,7 @@
       <b-col cols="12" md="4" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
-            <h5 class="mb-0" style="font-size:19px">16 juillet 2020</h5>
-            <small class="text-muted">Dernière mise à jour</small>
+            <h3 >&nbsp;</h3>
             <b-card
               class="mb-3 flux-mobility"
               :class="{'active':fluxType==2}"
@@ -77,14 +79,17 @@
               </div>
             </b-card>
             <b-card no-body class="p-2">
-                <canvas height="200" width="100vh" :ref="`mobile_out_${index}_2_card`"
-                    :id="`mobile_out_${index}_2_card`">
-                </canvas>
-            <!--
+              <canvas
+                height="200"
+                width="100vh"
+                :ref="`mobile_out_${index}_2_card`"
+                :id="`mobile_out_${index}_2_card`"
+              ></canvas>
+              <!--
                 <div class="chart-container">
                     <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
                 </div>
-            -->
+              -->
             </b-card>
           </b-col>
         </b-row>
@@ -552,68 +557,81 @@ export default {
         }
       });
 
-      localData = localData.slice(0, 10);
-
       localData = localData.sort((a, b) => {
-        return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
-          Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
-          ? 1
-          : -1;
+        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
       });
 
+      localData = localData.slice(0, 10);
+
+      
+
       const dataChart = {
-        labels: localData.map( d=> d.destination),
-        datasets: [{
-            label: 'Avant confinement',
-            backgroundColor: '#1F77B4',
-            borderColor: '#1F77B4',
+        labels: localData.map(d => d.destination),
+        datasets: [
+          {
+            label: "Référence",
+            backgroundColor: "#33ac2e",
+            borderColor: "#33ac2e",
             borderWidth: 1,
-            data: localData.map( d=> d.volume_reference)
-        }, {
-            label: 'Après confinement',
-            backgroundColor: '#FF7F0E',
-            borderColor: '#FF7F0E',
-            data: localData.map( d=> d.volume)
-        }]
+            data: localData.map(d => d.volume_reference)
+          },
+          {
+            label: "Observation",
+            backgroundColor: PALETTE.flux_out_color,
+            borderColor: PALETTE.flux_out_color,
+            data: localData.map(d => d.volume)
+          }
+        ]
       };
 
       const refInput = `mobile_out_${index}_2_card`;
-      const myBarChart = new Chart(
-        this.$refs[refInput][0].getContext("2d"), {
-            type: 'horizontalBar',
-            data: dataChart,
-            options: {
-                elements: {
-                    rectangle: {
-                        borderWidth: 2,
-                    }
-                },
-                responsive: true,
-                legend: {
-                    position: 'bottom',
-                },
-                title: {
-                    display: true,
-                    text: 'Rapport des sorties avant et après confinement',
-                    color : '#6c757d'
-                },
-                scales: {
-                    xAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                },
-                plugins: {
-                    crosshair: {
-                        sync: {
-                            enabled: false // enable trace line syncing with other charts
-                        }
-                    }
-                }
+      const myBarChart = new Chart(this.$refs[refInput][0].getContext("2d"), {
+        type: "horizontalBar",
+        data: dataChart,
+        options: {
+          elements: {
+            rectangle: {
+              borderWidth: 2
             }
+          },
+          responsive: true,
+          legend: {
+            position: "bottom",
+            labels: {
+              fontSize: 9
+            }
+          },
+          title: {
+            display: false,
+            text: "Rapport des sorties avant et après confinement",
+            color: "#6c757d"
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontSize: 9
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: 9
+                }
+              }
+            ]
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: false // enable trace line syncing with other charts
+              }
+            }
+          }
         }
-      );
+      });
     },
     mobileEntranceOrigin(data, index) {
       // data=array[{origin,volume,isReference}]
@@ -641,69 +659,81 @@ export default {
         }
       });
 
-      localData = localData.slice(0, 10);
       localData = localData.sort((a, b) => {
-        return Number(a.volume_reference ?? 0) + Number(a.volume ?? 0) >
-          Number(b.volume_reference ?? 0) + Number(b.volume ?? 0)
-          ? 1
-          : -1;
+        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
       });
-
+      
+      localData = localData.slice(0, 10);
+      
 
       const dataChart2 = {
-        labels: localData.map( d=> d.origin),
-        datasets: [{
-            label: 'Avant confinement',
-            backgroundColor: '#1F77B4',
-            borderColor: '#1F77B4',
+        labels: localData.map(d => d.origin),
+        datasets: [
+          {
+            label: "Référence",
+            backgroundColor: "#33ac2e",
+            borderColor: "#33ac2e",
             borderWidth: 1,
-            data: localData.map( d=> d.volume_reference)
-        }, {
-            label: 'Après confinement',
-            backgroundColor: '#FF7F0E',
-            borderColor: '#FF7F0E',
-            data: localData.map( d=> d.volume)
-        }]
+            data: localData.map(d => d.volume_reference)
+          },
+          {
+            label: "Observation",
+            backgroundColor: PALETTE.flux_in_color,
+            borderColor: PALETTE.flux_in_color,
+            data: localData.map(d => d.volume)
+          }
+        ]
       };
 
       const refInput = `mobile_entrance_${index}_2_card`;
 
-      const myBarChart2 = new Chart(
-        this.$refs[refInput][0].getContext("2d"), {
-            type: 'horizontalBar',
-            data: dataChart2,
-            options: {
-                elements: {
-                    rectangle: {
-                        borderWidth: 2,
-                    }
-                },
-                responsive: true,
-                legend: {
-                    position: 'bottom',
-                },
-                title: {
-                    display: true,
-                    text: 'Rapport des entrées avant et après confinement',
-                    color : '#6c757d'
-                },
-                scales: {
-                    xAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
-                    }]
-                },
-                plugins: {
-                    crosshair: {
-                        sync: {
-                            enabled: false // enable trace line syncing with other charts
-                        }
-                    }
-                }
+      const myBarChart2 = new Chart(this.$refs[refInput][0].getContext("2d"), {
+        type: "horizontalBar",
+        data: dataChart2,
+        options: {
+          elements: {
+            rectangle: {
+              borderWidth: 2
             }
+          },
+          responsive: true,
+          legend: {
+            position: "bottom",
+            labels: {
+              fontSize: 9
+            }
+          },
+          title: {
+            display: false,
+            text: "Rapport des entrées avant et après confinement",
+            color: "#6c757d"
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontSize: 9
+                }
+              }
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: 9
+                }
+              }
+            ]
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: false // enable trace line syncing with other charts
+              }
+            }
+          }
         }
-      );
+      });
     }
   }
 };
