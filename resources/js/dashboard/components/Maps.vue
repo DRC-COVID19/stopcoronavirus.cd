@@ -547,7 +547,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["selectHospital", "setFluxGeoOptions"]),
+    ...mapMutations(["selectHospital", "setFluxGeoOptions",'setDomaineExtValues']),
     addPolygoneLayer() {
       map.U.removeLayer([this.drcSourceId]);
       map.addLayer({
@@ -751,7 +751,7 @@ export default {
         localData.map(item => {
           features.push({
             type: "Feature",
-            geometry: { 
+            geometry: {
               type: "Point",
               coordinates: item.position_end
             },
@@ -775,6 +775,11 @@ export default {
         .scaleQuantile()
         .domain(features.map(d => d.properties.percent));
 
+      const domaineMax = d3.max(features, d => d.properties.percent);
+      const domaineMin = d3.min(features, d => d.properties.percent);
+
+      this.setDomaineExtValues({ min: domaineMin, max: domaineMax });
+
       if (this.fluxType == 1) {
         colorScale.range(PALETTE.inflow);
       } else if (this.fluxType == 3) {
@@ -791,9 +796,11 @@ export default {
       const colorExpression = [];
       colorExpression.push("case");
       features.forEach(x => {
-        const color = this.fluxGeoOptions.includes(x.properties.origin) && this.fluxType != 3
-          ? PALETTE.dash_green
-          : colorScale(x.properties.percent);
+        const color =
+          this.fluxGeoOptions.includes(x.properties.origin) &&
+          this.fluxType != 3
+            ? PALETTE.dash_green
+            : colorScale(x.properties.percent);
         colorExpression.push(["==", ["get", dataKey], x.properties.origin]);
         colorExpression.push(color);
       });
