@@ -15,6 +15,7 @@
           <template v-slot:cell(healed)="data" >
             <div class="text-right">{{ data.item.properties.healed }}</div>
           </template>
+          
            <template v-slot:cell(dead)="data" >
             <div class="text-right">{{ data.item.properties.dead }}</div>
           </template>
