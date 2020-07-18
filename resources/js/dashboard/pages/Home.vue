@@ -18,6 +18,9 @@
             @covidCaseChecked="getCovidCases"
             :covidCasesCount="covidCasesCount"
           />
+          <MenuIndicateur
+            v-if="activeMenu==3"
+          />
           <MenuInfrastructure
             v-if="activeMenu==5"
             :hospitalCount="hospitalCount"
@@ -34,7 +37,7 @@
           />
         </b-col>
       </b-row>
-      <b-row class="position-relative map-wrap">
+      <b-row class="position-relative map-wrap" v-if="activeMenu != 3">
         <!--   <LeftColumn
           @covidCaseChecked="getCovidCases"
           @hopitalChecked="gethopitals"
@@ -125,7 +128,7 @@
       </b-row>
       <b-row
         class="row-side-bottom mt-2 mb-2"
-        v-if="hasCovidCases||hasFlux24Daily||hasflux24DailyComparison"
+        v-if="activeMenu != 3 && (hasCovidCases||hasFlux24Daily||hasflux24DailyComparison)"
       >
         <b-col class="side-bottom" cols="12">
           <b-card no-body>
@@ -153,6 +156,9 @@
           </b-card>
         </b-col>
       </b-row>
+
+      <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
+
       <Waiting v-if="isLoading" />
     </b-container>
   </div>
@@ -166,6 +172,7 @@ import Waiting from "../components/Waiting";
 import SideCaseCovid from "../components/SideCaseCovid";
 import CovidCaseChart from "../components/CovidCaseChart";
 import OrientationChart from "../components/OrientationChart";
+import IndicateurChart from "../components/IndicateurChart";
 import SideOrientation from "../components/SideOrientation";
 import DataModal from "../components/DataModal";
 import SideFluxChart from "../components/SideFlux";
@@ -178,6 +185,7 @@ import MenuFlux from "../components/menu/Flux";
 import MenuEpidemology from "../components/menu/Epidemiology";
 import MenuInfrastructure from "../components/menu/Infrastructure";
 import MenuOrientation from "../components/menu/Orientation";
+import MenuIndicateur from "../components/menu/Indicateur";
 
 import { mapState, mapActions, mapMutations } from "vuex";
 
@@ -192,6 +200,7 @@ export default {
     SideCaseCovid,
     CovidCaseChart,
     OrientationChart,
+    IndicateurChart,
     SideOrientation,
     DataModal,
     SideFluxChart,
@@ -203,7 +212,8 @@ export default {
     MenuFlux,
     MenuEpidemology,
     MenuInfrastructure,
-    MenuOrientation
+    MenuOrientation,
+    MenuIndicateur
   },
   data() {
     return {
