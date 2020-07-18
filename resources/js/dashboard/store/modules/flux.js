@@ -46,9 +46,6 @@ export default {
             state.fluxGeoOptions = [];
             state.fluxEnabled = false;
             state.legendHover = null;
-        },
-        setLegendHover({state,commit}, sectionHover){
-            commit('setLegendHover', sectionHover)
         }
     },
     getters : {
