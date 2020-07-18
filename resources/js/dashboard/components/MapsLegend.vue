@@ -1,7 +1,7 @@
 <template>
     <div class="legend-container">
         <div class="legend">
-            <div class="no-data">
+            <div class="no-data" :style="'background-color : ' + color_nodata">
                 <span class="lbl mb-1">Aucune donnée</span>
                 <div class="range empty"
                      :class="{hover : legendHover !== null && legendHover.de === null }"
@@ -9,15 +9,15 @@
                      @mouseleave="setLegendHover(null)"></div>
             </div>
             <div class="datas">
-                <div class="inner" v-for="(data, i) in colors[color]">
-                    <span class="lbl">{{-100 + i * 25}}%</span>
+                <div class="inner" v-for="(data, i) in colors[color]" :key="i">
+                    <span class="lbl">{{valDe(i)}}%</span>
                     <div class="range" :style="'background-color :' + data "
-                        :class="{hover : legendHover !== null && legendHover.de == i * 25 }"
-                        @mouseenter="setLegendHover({de : i * 25, a : (i-1) * 25})"
+                        :class="{hover : legendHover !== null && legendHover.de == valDe(i) }"
+                        @mouseenter="setLegendHover({de : valDe(i), a : valDe(i+1) })"
                         @mouseleave="setLegendHover(null)"></div>
                 </div>
                 <div class="inner inner-last">
-                    <span class="lbl">100%</span>
+                    <span class="lbl">{{Math.ceil(domaineExtValues.max)}}%</span>
                 </div>
             </div>
         </div>
@@ -26,14 +26,11 @@
 
 <script>
 
-    import {mapGetters, mapActions} from 'vuex'
+    import { mapGetters, mapMutations, mapState } from 'vuex';
     import {PALETTE} from '../config/env'
 
     export default {
         name: "Legend" ,
-        mounted() {
-            console.log(PALETTE)
-        },
         data : function(){
             return {
                 colors : [
@@ -41,23 +38,30 @@
                     PALETTE.outflow,
                     PALETTE.present
                 ],
+                color_nodata :  PALETTE.nodata
             }
         } ,
         computed : {
             ...mapGetters(['fluxType', 'legendHover']),
+            ...mapState({
+                domaineExtValues: state => state.flux.domaineExtValues
+            }),
             color : function(){
-                // ['#053061','#2166AC','#4393C3','#92C5DE','#F4A582','#D6604D','#B2182B','#67001F'] ,
-                //     ['#67001F','#B2182B','#D6604D','#F4A582','#92C5DE','#4393C3','#2166AC','#053061'] ,
-                //     ['#B35806','#E08214','#FDB863','#FEE0B6','#92C5DE','#4393C3','#2166AC','#053061']
                 if(this.fluxType){
                     if(this.colors[this.fluxType - 1]) return this.fluxType - 1
                     return 0
                 }
                 return 0
+            },
+            pourcent : function(){
+                return Math.abs(this.domaineExtValues.max - this.domaineExtValues.min) / 8
             }
         } ,
         methods : {
-            ...mapActions(['setLegendHover'])
+            ...mapMutations(['setLegendHover']),
+            valDe : function(i){
+                return Math.floor(this.domaineExtValues.min + i * this.pourcent)
+            }
         }
     }
 </script>
