@@ -6,10 +6,7 @@ export default {
         fluxGeoOptions: [],
         fluxEnabled: true,
         isWatchingfluxGeoOptions: true,
-        domaineExtValues:{
-            max:null,
-            min:null
-        },
+        domaineExtValues:{},
         legendHover : null // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
     },
     mutations: {
@@ -46,6 +43,10 @@ export default {
             state.fluxGeoOptions = [];
             state.fluxEnabled = false;
             state.legendHover = null;
+            state.domaineExtValues={}
+        },
+        setLegendHover({state,commit}, sectionHover){
+            commit('setLegendHover', sectionHover)
         }
     },
     getters : {

@@ -100,14 +100,7 @@
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
-                {
-                "/js/app.js": "/js/app.js",
-                "/css/app.css": "/css/app.css",
-                "/css/vueApp.css": "/css/vueApp.css",
-                "/css/vueApp.css?v=2": "/css/vueApp.css",
-                "/js/vueApp.js": "/js/vueApp.js",
-                "/js/vueApp.js?v=2": "/js/vueApp.js"
-                }
+               
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
               <b-tab title="FLux chart" v-if="hasFlux24DailyIn" :active="hasFlux24DailyIn">
@@ -300,27 +293,23 @@ export default {
       return Object.values(this.loadings).find(val => val === true ) ? true : false
     }
   },
-  async mounted() {
+  mounted() {
     this.getFluxZone();
     this.getFluxProvinces();
-    // await this.sleep(2000);
-    // this.$nextTick(() => {
-    //   console.log(this.$refs.dash_home_page);
-    //   console.log(this.$refs);
-    //   this.$refs.dash_home_page.addEventListener(
-    //     "resize",
-    //     this.LeftColumnStyle()
-    //   );
-    // });
+    this.$store.watch(
+      state => state.nav.activeMenu,
+      value => {
+        this.populationFluxChecked(false);
+        this.getCovidCases(false);
+        switch (value) {
+          case 1:
+            break;
+          case 2:
+          default:
+            break;
+        }
+      });
   },
-  // destroyed() {
-  //   this.$nextTick(() => {
-  //     this.$refs.dash_home_page.removeEventListener(
-  //       "resize",
-  //       this.LeftColumnStyle()
-  //     );
-  //   });
-  // },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),
     ...mapMutations(["setMapStyle"]),
