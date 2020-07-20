@@ -180,6 +180,8 @@ export default {
         this.flux24Func();
       }
     );
+
+    //watch activeMenu store state
     this.$store.watch(
       state => state.nav.activeMenu,
       value => {
@@ -195,6 +197,14 @@ export default {
         }
       }
     );
+
+    //watch flux legendHover store state
+    this.$store.watch(
+      state => state.flux.legendHover,
+      value => {
+        this.flux24Func();
+      }
+    );
   },
   computed: {
     ...mapState({
@@ -203,7 +213,8 @@ export default {
       fluxType: state => state.flux.fluxType,
       fluxGeoOptions: state => state.flux.fluxGeoOptions,
       fluxEnabled: state => state.flux.fluxEnabled,
-      activeMenu: state => state.nav.activeMenu
+      activeMenu: state => state.nav.activeMenu,
+      legendHover: state => state.flux.legendHover
     }),
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -658,10 +669,17 @@ export default {
         const featureName = item["Zone+Peupl"] ?? item["name"];
         const feature = features.find(x => x.properties.name == featureName);
         if (!features) {
-          return ;
+          return;
         }
-         popup.remove();
-        const { name, confirmed, dead, sick, healed, last_update } = feature.properties;
+        popup.remove();
+        const {
+          name,
+          confirmed,
+          dead,
+          sick,
+          healed,
+          last_update
+        } = feature.properties;
 
         const template = `<div class="topToolTip" >
                             <div class="titleInfoBox">${name}</div>
@@ -727,7 +745,7 @@ export default {
             break;
           case 1:
           default:
-            this.fluxHatchedStyle(this.flux24, this.flux24Presence);
+            this.fluxHatchedStyle(this.flux24, this.flux24Presence,this.legendHover);
             map.flyTo({
               pitch: 10,
               speed: 0.2, // make the flying slow
@@ -751,7 +769,7 @@ export default {
         map.off("mouseleave", "fluxCircleDataLayer");
       }
     },
-    fluxHatchedStyle(flux24Data, flux24DataPresence) {
+    fluxHatchedStyle(flux24Data, flux24DataPresence, legendHover = null) {
       const localData =
         this.fluxType == 3
           ? flux24DataPresence.map(x => {
@@ -764,7 +782,7 @@ export default {
             })
           : flux24Data;
 
-      const features = [];
+      let features = [];
 
       /**
        * format features data
@@ -869,6 +887,16 @@ export default {
       });
       colorExpression.push("white");
 
+     
+      if (legendHover) {
+        features=features.filter(x=>x.properties.percent>=legendHover.de && x.properties.percent<=legendHover.a);
+        if (features.length==0) {
+            return;
+        }
+        console.log('features',features);
+      }
+
+     
       map.U.addFill(
         this.hashedLayerId,
         this.fluxGeoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
