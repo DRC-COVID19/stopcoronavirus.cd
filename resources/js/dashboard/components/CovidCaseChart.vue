@@ -2,11 +2,11 @@
   <b-row>
     <b-col cols="12" md="6">
       <h5>Graphique Cumule</h5>
-      <canvas  ref="CovidCaseChart" id="CovidCaseChart"></canvas>
+      <canvas ref="CovidCaseChart" id="CovidCaseChart"></canvas>
     </b-col>
     <b-col cols="12" md="6">
       <h5>Graphique Journalier</h5>
-      <canvas  ref="covidCasesStatDaily" id="covidCasesStatDaily"></canvas>
+      <canvas ref="covidCasesStatDaily" id="covidCasesStatDaily"></canvas>
     </b-col>
   </b-row>
 </template>
@@ -134,6 +134,17 @@ export default {
                 }
               }
             ]
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: true,
+                group: 1
+              },
+              zoom: {
+                enabled: false // enable zooming
+              }
+            }
           }
         }
       };
