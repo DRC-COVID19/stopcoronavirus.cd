@@ -148,6 +148,6 @@ export default {
 <style lang="scss" scoped>
 #CovidCaseChart,
 #covidCasesStatDaily {
-  height: 200px !important;
+  height: 78% !important;
 }
 </style>

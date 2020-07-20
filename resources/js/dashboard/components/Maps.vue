@@ -14,7 +14,7 @@ import Mapbox from "mapbox-gl";
 import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import ToolTipMaps from "./ToolTipMaps";
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations, mapActions } from "vuex";
 import U from "mapbox-gl-utils";
 import { includes } from "lodash";
 import * as d3 from "d3";
@@ -145,7 +145,8 @@ export default {
         url: "mapbox://merki230.4airwoxt"
       });
 
-      this.addPolygoneLayer();
+      this.addPolygoneLayer(1);
+      this.addPolygoneHoverLayer(1);
     });
 
     this.map = map;
@@ -154,22 +155,44 @@ export default {
     this.$store.watch(
       state => state.flux.fluxGeoGranularity,
       value => {
-        this.addPolygoneLayer();
-        if (this.fluxEnabled) {
-          this.addPolygoneHoverLayer();
+        if (this.activeMenu != 1) {
+          return;
         }
+        this.addPolygoneLayer(value);
+        this.addPolygoneHoverLayer(value);
       }
     );
     this.$store.watch(
       state => state.flux.mapStyle,
       value => {
+        if (this.activeMenu != 1) {
+          return;
+        }
         this.flux24Func();
       }
     );
     this.$store.watch(
       state => state.flux.fluxType,
       value => {
+        if (this.activeMenu != 1) {
+          return;
+        }
         this.flux24Func();
+      }
+    );
+    this.$store.watch(
+      state => state.nav.activeMenu,
+      value => {
+        this.resetState();
+        switch (value) {
+          case 1:
+            break;
+          case 2:
+            this.addPolygoneLayer(2);
+            this.addPolygoneHoverLayer(2);
+          default:
+            break;
+        }
       }
     );
   },
@@ -179,7 +202,8 @@ export default {
       fluxGeoGranularity: state => state.flux.fluxGeoGranularity,
       fluxType: state => state.flux.fluxType,
       fluxGeoOptions: state => state.flux.fluxGeoOptions,
-      fluxEnabled: state => state.flux.fluxEnabled
+      fluxEnabled: state => state.flux.fluxEnabled,
+      activeMenu: state => state.nav.activeMenu
     }),
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -188,114 +212,8 @@ export default {
   watch: {
     covidCases() {
       if (this.covidCases) {
-        this.map.addSource("covidCasesSource", this.covidCases);
-        this.map.addLayer({
-          id: "covidCasesLayer",
-          type: "circle",
-          source: "covidCasesSource",
-          paint: {
-            // make circles larger as the user zooms from z12 to z22
-            "circle-opacity": 0.7,
-            "circle-radius": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              1,
-              [
-                "case",
-                [">=", ["number", ["get", "confirmed"]], 3840],
-                6,
-                [">=", ["number", ["get", "confirmed"]], 1920],
-                5.5,
-                [">=", ["number", ["get", "confirmed"]], 960],
-                5,
-                [">=", ["number", ["get", "confirmed"]], 480],
-                4,
-                [">=", ["number", ["get", "confirmed"]], 240],
-                3.5,
-                [">=", ["number", ["get", "confirmed"]], 120],
-                3,
-                [">=", ["number", ["get", "confirmed"]], 60],
-                2.5,
-                [">=", ["number", ["get", "confirmed"]], 30],
-                1.5,
-                [">=", ["number", ["get", "confirmed"]], 15],
-                1,
-                1
-              ],
-              3,
-              [
-                "case",
-                [">=", ["number", ["get", "confirmed"]], 3840],
-                12.5,
-                [">=", ["number", ["get", "confirmed"]], 1920],
-                11,
-                [">=", ["number", ["get", "confirmed"]], 960],
-                10,
-                [">=", ["number", ["get", "confirmed"]], 480],
-                8.75,
-                [">=", ["number", ["get", "confirmed"]], 240],
-                7.5,
-                [">=", ["number", ["get", "confirmed"]], 120],
-                6,
-                [">=", ["number", ["get", "confirmed"]], 60],
-                5,
-                [">=", ["number", ["get", "confirmed"]], 30],
-                3.25,
-                [">=", ["number", ["get", "confirmed"]], 15],
-                2.5,
-                2.5
-              ],
-              5,
-              [
-                "case",
-                [">=", ["number", ["get", "confirmed"]], 3840],
-                25,
-                [">=", ["number", ["get", "confirmed"]], 1920],
-                22.5,
-                [">=", ["number", ["get", "confirmed"]], 960],
-                20,
-                [">=", ["number", ["get", "confirmed"]], 480],
-                17.5,
-                [">=", ["number", ["get", "confirmed"]], 240],
-                15,
-                [">=", ["number", ["get", "confirmed"]], 120],
-                12.5,
-                [">=", ["number", ["get", "confirmed"]], 60],
-                10,
-                [">=", ["number", ["get", "confirmed"]], 30],
-                7.5,
-                [">=", ["number", ["get", "confirmed"]], 15],
-                5,
-                5
-              ],
-              10,
-              [
-                "case",
-                [">=", ["number", ["get", "confirmed"]], 3840],
-                50,
-                [">=", ["number", ["get", "confirmed"]], 1920],
-                45,
-                [">=", ["number", ["get", "confirmed"]], 960],
-                40,
-                [">=", ["number", ["get", "confirmed"]], 480],
-                35,
-                [">=", ["number", ["get", "confirmed"]], 240],
-                30,
-                [">=", ["number", ["get", "confirmed"]], 120],
-                25,
-                [">=", ["number", ["get", "confirmed"]], 60],
-                20,
-                [">=", ["number", ["get", "confirmed"]], 30],
-                15,
-                [">=", ["number", ["get", "confirmed"]], 15],
-                10,
-                10
-              ]
-            ],
-            "circle-color": "#f4c363"
-          }
-        });
+        this.covidHatchedStyle(this.covidCases);
+
         this.map.on("mouseenter", "covidCasesLayer", () => {
           this.map.getCanvas().style.cursor = "pointer";
         });
@@ -348,8 +266,7 @@ export default {
         this.map.off("mouseenter", "covidCasesLayer");
         this.map.off("mouseleave", "covidCasesLayer");
         this.map.off("click", "covidCasesLayer");
-        this.map.removeLayer("covidCasesLayer");
-        this.map.removeSource("covidCasesSource");
+        map.U.removeLayer([this.hashedLayerId]);
       }
     },
     hospitals() {
@@ -547,14 +464,18 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["selectHospital", "setFluxGeoOptions",'setDomaineExtValues']),
-    addPolygoneLayer() {
+    ...mapMutations([
+      "selectHospital",
+      "setFluxGeoOptions",
+      "setDomaineExtValues"
+    ]),
+    ...mapActions(["resetState"]),
+    addPolygoneLayer(geoGranularity) {
       map.U.removeLayer([this.drcSourceId]);
       map.addLayer({
         id: this.drcSourceId,
         type: "line",
-        source:
-          this.fluxGeoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+        source: geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
         layout: {},
         paint: {
           "line-color": PALETTE.bordure_shape_file,
@@ -562,13 +483,13 @@ export default {
         }
       });
     },
-    addPolygoneHoverLayer() {
+    addPolygoneHoverLayer(geoGranularity) {
       map.U.removeLayer(["state-hover"]);
       let hoveredStateId = null;
       let hoveredStateKinId = null;
       map.U.addFill(
         "state-hover",
-        this.fluxGeoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+        geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
         map.U.properties({
           "fill-opacity": [
             "case",
@@ -591,9 +512,7 @@ export default {
             map.setFeatureState(
               {
                 source:
-                  this.fluxGeoGranularity != 2
-                    ? this.drcSourceId
-                    : this.drcHealthZone,
+                  geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
                 id: hoveredStateId
               },
               { hover: false }
@@ -603,9 +522,7 @@ export default {
           map.setFeatureState(
             {
               source:
-                this.fluxGeoGranularity != 2
-                  ? this.drcSourceId
-                  : this.drcHealthZone,
+                geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
               id: hoveredStateId
             },
             { hover: true }
@@ -618,9 +535,7 @@ export default {
           map.setFeatureState(
             {
               source:
-                this.fluxGeoGranularity != 2
-                  ? this.drcSourceId
-                  : this.drcHealthZone,
+                geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
               id: hoveredStateId
             },
             { hover: false }
@@ -633,12 +548,162 @@ export default {
         this.centerCoordinates = [e.lngLat.lng, e.lngLat.lat];
         // map.flyTo({center: this.centerCoordinates})
 
-        if (this.fluxGeoGranularity != 2) {
-          this.setFluxGeoOptions([e.features[0].properties.name]);
-        } else {
-          this.setFluxGeoOptions([e.features[0].properties["Zone+Peupl"]]);
+        switch (this.activeMenu) {
+          case 1:
+            if (geoGranularity != 2) {
+              this.setFluxGeoOptions([e.features[0].properties.name]);
+            } else {
+              this.setFluxGeoOptions([e.features[0].properties["Zone+Peupl"]]);
+            }
+            break;
+
+          default:
+            break;
         }
       });
+    },
+    covidHatchedStyle(
+      covidCasesData,
+      property = "confirmed",
+      geoGranularity = 2
+    ) {
+      let features = covidCasesData.data.features;
+
+      features = features.sort((a, b) => {
+        return Number(a[property] ?? 0) < Number(b[property] ?? 0) ? 1 : -1;
+      });
+
+      //domaine
+      const domaineMax = d3.max(features, d => d.properties[property]);
+      const domaineMin = d3.min(features, d => d.properties[property]);
+
+      const colorScale = d3
+        .scaleQuantile()
+        .domain([domaineMin, domaineMax])
+        .range(["#FFFFB2", "#FECC5C", "#FD8D3C", "#E31A1C"]);
+
+      let dataKey = "name";
+      if (geoGranularity == 2) {
+        dataKey = "Zone+Peupl";
+      }
+
+      const colorExpression = [];
+      colorExpression.push("case");
+      features.forEach(x => {
+        const color = colorScale(x.properties[property]);
+        colorExpression.push(["==", ["get", dataKey], x.properties.name]);
+        colorExpression.push(color);
+      });
+      colorExpression.push("white");
+
+      //remove previous layer
+      map.U.removeLayer([this.hashedLayerId]);
+      //Added layer
+      map.U.addFill(
+        this.hashedLayerId,
+        geoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
+        map.U.properties({
+          fillColor: colorExpression,
+          fillOpacity: [
+            "match",
+            ["get", dataKey],
+            features.map(x => x.properties.name),
+            0.9,
+            0
+          ]
+        }),
+        this.drcSourceId
+      );
+
+      const popup = new Mapbox.Popup({
+        closeButton: false,
+        closeOnClick: false
+      });
+
+      const mouseMove = e => {
+        // Change the cursor style as a UI indicator.
+        // map.getCanvas().style.cursor = "pointer";
+
+        const coordinates = e.features[0].geometry.coordinates[0].slice();
+
+        const item = e.features[0].properties;
+
+        const name = item["Zone+Peupl"] ?? item["name"];
+        let value = null;
+        const feature = features.find(x => x.properties.name == name);
+
+        if (feature) {
+          value = feature.properties[property];
+        }
+        const HTML = `<div>${name} ${
+          value ? `: ${Math.round(value)} cas` : ""
+        }</div>`;
+
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(HTML)
+          .addTo(map);
+      };
+
+      const mouseOut = () => {
+        map.getCanvas().style.cursor = "";
+        popup.remove();
+      };
+
+      const mouseClick = e => {
+        const item = e.features[0].properties;
+
+        const featureName = item["Zone+Peupl"] ?? item["name"];
+        const feature = features.find(x => x.properties.name == featureName);
+        if (!features) {
+          return ;
+        }
+         popup.remove();
+        const { name, confirmed, dead, sick, healed, last_update } = feature.properties;
+
+        const template = `<div class="topToolTip" >
+                            <div class="titleInfoBox">${name}</div>
+                            <div class="statLine">
+                                <div class="stat total">Nombre total de cas</div>
+                                <div class="statCount total">${confirmed}</div>
+                            </div>
+                            <div class="statLine divider"></div>
+                            <div class="statLine">
+                                <div class="legendColor ongoing"></div>
+                                <div class="stat">Actifs</div>
+                                <div class="statCount">${confirmed -
+                                  healed -
+                                  dead}</div>
+                            </div>
+                            <div class="statLine">
+                                <div class="legendColor recovered"></div>
+                                <div class="stat">Guérisons</div>
+                                <div class="statCount">${healed}</div>
+                            </div>
+                            <div class="statLine"> 
+                                <div class="legendColor fatal"></div>
+                                <div class="stat">Décès</div>
+                                <div class="statCount">${dead}</div>
+                            </div> 
+                            <i></i>
+                        </div>`;
+        new Mapbox.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(template)
+          .addTo(this.map);
+      };
+
+      map.off("mousemove", this.hashedLayerId, mouseMove);
+      map.off("mouseout", this.hashedLayerId, mouseOut);
+      map.off("click", this.hashedLayerId, mouseClick);
+
+      map.on("click", this.hashedLayerId, mouseClick);
+
+      map.on("mousemove", this.hashedLayerId, mouseMove);
+
+      map.on("mouseout", this.hashedLayerId, mouseOut);
     },
     flux24Func() {
       if (this.flux24.length > 0) {
@@ -771,12 +836,10 @@ export default {
       map.U.removeSource(["fluxCircleDataSource"]);
       map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
 
-      const colorScale = d3
-        .scaleQuantile()
-        .domain(features.map(d => d.properties.percent));
-
       const domaineMax = d3.max(features, d => d.properties.percent);
       const domaineMin = d3.min(features, d => d.properties.percent);
+
+      const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
 
       this.setDomaineExtValues({ min: domaineMin, max: domaineMax });
 
@@ -853,6 +916,7 @@ export default {
           .setHTML(HTML)
           .addTo(map);
       };
+
       const mouseOut = () => {
         map.getCanvas().style.cursor = "";
         popup.remove();
