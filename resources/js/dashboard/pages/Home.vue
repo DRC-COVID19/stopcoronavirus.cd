@@ -18,6 +18,9 @@
             @covidCaseChecked="getCovidCases"
             :covidCasesCount="covidCasesCount"
           />
+          <MenuIndicateur
+            v-if="activeMenu==3"
+          />
           <MenuInfrastructure
             v-if="activeMenu==5"
             :hospitalCount="hospitalCount"
@@ -34,7 +37,7 @@
           />
         </b-col>
       </b-row>
-      <b-row class="position-relative map-wrap">
+      <b-row class="position-relative map-wrap" v-if="activeMenu != 3">
         <!--   <LeftColumn
           @covidCaseChecked="getCovidCases"
           @hopitalChecked="gethopitals"
@@ -118,7 +121,7 @@
       </b-row>
       <b-row
         class="row-side-bottom mt-2 mb-2"
-        v-if="hasCovidCases||hasFlux24Daily||hasflux24DailyComparison"
+        v-if="activeMenu != 3 && (hasCovidCases||hasFlux24Daily||hasflux24DailyComparison)"
       >
         <b-col class="side-bottom" cols="12">
           <b-card no-body>
@@ -146,6 +149,9 @@
           </b-card>
         </b-col>
       </b-row>
+
+      <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
+
       <Waiting v-if="isLoading" />
     </b-container>
   </div>
@@ -159,6 +165,7 @@ import Waiting from "../components/Waiting";
 import SideCaseCovid from "../components/SideCaseCovid";
 import CovidCaseChart from "../components/CovidCaseChart";
 import OrientationChart from "../components/OrientationChart";
+import IndicateurChart from "../components/IndicateurChart";
 import SideOrientation from "../components/SideOrientation";
 import DataModal from "../components/DataModal";
 import SideFluxChart from "../components/SideFlux";
@@ -171,6 +178,7 @@ import MenuFlux from "../components/menu/Flux";
 import MenuEpidemology from "../components/menu/Epidemiology";
 import MenuInfrastructure from "../components/menu/Infrastructure";
 import MenuOrientation from "../components/menu/Orientation";
+import MenuIndicateur from "../components/menu/Indicateur";
 
 import { mapState, mapActions, mapMutations } from "vuex";
 
@@ -185,6 +193,7 @@ export default {
     SideCaseCovid,
     CovidCaseChart,
     OrientationChart,
+    IndicateurChart,
     SideOrientation,
     DataModal,
     SideFluxChart,
@@ -196,11 +205,12 @@ export default {
     MenuFlux,
     MenuEpidemology,
     MenuInfrastructure,
-    MenuOrientation
+    MenuOrientation,
+    MenuIndicateur
   },
   data() {
     return {
-      isLoading: false,
+      loadings: {},
       covidCases: null,
       covidCasesStat: null,
       covidCasesStatDaily: null,
@@ -278,6 +288,9 @@ export default {
             ? `64vh`
             : `calc(100vh - 52.5px)`
       };
+    },
+    isLoading(){
+      return Object.values(this.loadings).find(val => val === true ) ? true : false
     }
   },
   mounted() {
@@ -322,10 +335,10 @@ export default {
       this.getHospitalsData(checked);
     },
     getCovidCases(checked) {
-      this.isLoading = true;
       if (checked) {
         let confirmedCount = 0;
 
+        this.$set(this.loadings, 'getCovidCases_stat', true) ;
         axios
           .get("/api/dashboard/cavid-cases/statistics")
           .then(({ data }) => {
@@ -346,9 +359,14 @@ export default {
               healed,
               labels
             };
+            this.$set(this.loadings, 'getCovidCases_stat', false) ;
           })
-          .catch(response => {});
+          .catch(response => {
+            this.$set(this.loadings, 'getCovidCases_stat', false) ;
+          });
 
+
+        this.$set(this.loadings, 'getCovidCases_statdaily', true) ;
         axios
           .get("/api/dashboard/cavid-cases/statistics/daily")
           .then(({ data }) => {
@@ -369,8 +387,13 @@ export default {
               healed,
               labels
             };
+            this.$set(this.loadings, 'getCovidCases_statdaily', false) ;
           })
-          .catch(response => {});
+          .catch(response => {
+            this.$set(this.loadings, 'getCovidCases_statdaily', false) ;
+          });
+
+        this.$set(this.loadings, 'getCovidCases_cases', true) ;
 
         axios
           .get(`/api/dashboard/cavid-cases`)
@@ -402,23 +425,23 @@ export default {
                 features: Features
               }
             };
-            this.isLoading = false;
 
             this.covidCasesCount = confirmedCount;
+            this.$set(this.loadings, 'getCovidCases_cases', false) ;
           })
           .catch(response => {
-            this.isLoading = false;
+            this.$set(this.loadings, 'getCovidCases_cases', false) ;
           });
       } else {
         this.covidCases = null;
         this.covidCasesStat = null;
         this.covidCasesCount = null;
-        this.isLoading = false;
       }
     },
     getmedicalOrientations(checked) {
-      this.isLoading = true;
       if (checked) {
+
+        this.$set(this.loadings, 'orientation_medical', true) ;
         axios
           .get(`/api/dashboard/orientation-medical-result`)
           .then(({ data }) => {
@@ -434,13 +457,16 @@ export default {
             this.finCount = total_fin;
             this.fin5Count = total_fin5;
             this.fin8Count = total_fin8;
-            this.isLoading = false;
+
+            this.$set(this.loadings, 'orientation_medical', false) ;
             this.orientationCount = total_fin + total_fin8 + total_fin5;
           })
           .catch(() => {
-            this.isLoading = false;
+            this.$set(this.loadings, 'orientation_medical', false) ;
             this.orientationCount = null;
           });
+
+        this.$set(this.loadings, 'orientation_medical_stats', true) ;
         axios
           .get(`/api/dashboard/orientation-medical-stats`)
           .then(({ data }) => {
@@ -460,11 +486,14 @@ export default {
               fin8,
               labels
             };
+            this.$set(this.loadings, 'orientation_medical_stats', false) ;
+          })
+          .catch(() => {
+            this.$set(this.loadings, 'orientation_medical_stats', false) ;
           });
       } else {
         this.medicalOrientations = null;
         this.orientationCount = null;
-        this.isLoading = false;
       }
     },
     medicalOrientationChanged(item) {
@@ -472,10 +501,14 @@ export default {
     },
     hasSondageChecked(checked) {
       if (checked) {
-        this.isLoading = true;
+
+        this.$set(this.loadings, 'hasSondageChecked', true) ;
         axios.get(`/api/dashboard/sondages`).then(({ data }) => {
-          this.isLoading = false;
+          this.$set(this.loadings, 'hasSondageChecked', false) ;
           this.sondages = data;
+        })
+        .catch(() => {
+          this.$set(this.loadings, 'hasSondageChecked', false) ;
         });
       } else {
         this.sondages = null;
@@ -525,7 +558,7 @@ export default {
       if (this.isLoading) {
         return;
       }
-      this.isLoading = true;
+
       this.flux24Errors = {};
 
       let url = `api/dashboard/flux/origin`;
@@ -602,6 +635,8 @@ export default {
 
       this.flux24DailyComparison = [];
       this.fluxGeoOptions = [];
+
+      this.$set(this.loadings, 'urlDailyCompare', true) ;
       axios
         .get(urlDailyCompare, {
           params: values
@@ -609,53 +644,73 @@ export default {
         .then(({ data }) => {
           this.flux24DailyComparison = data;
           this.fluxGeoOptions = values.fluxGeoOptions;
+          this.$set(this.loadings, 'urlDailyCompare', false) ;
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, 'urlDailyCompare', false) ;
+        });
 
       this.flux24Daily = [];
+      this.$set(this.loadings, 'urlDaily', true) ;
       axios
         .get(urlDaily, {
           params: values
         })
         .then(({ data }) => {
           this.flux24Daily = data;
+          this.$set(this.loadings, 'urlDaily', false) ;
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, 'urlDaily', false) ;
+        });
 
       // get flux data in
 
       this.flux24DailyIn = [];
+      this.$set(this.loadings, 'urlDailyIn', true) ;
       axios
         .get(urlDailyIn, {
           params: values
         })
         .then(({ data }) => {
           this.flux24DailyIn = data;
+          this.$set(this.loadings, 'urlDailyIn', false) ;
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, 'urlDailyIn', false) ;
+        });
 
       // get flux data out
 
       this.flux24DailyOut = [];
+      this.$set(this.loadings, 'urlDailyOut', true) ;
       axios
         .get(urlDailyOut, {
           params: values
         })
         .then(({ data }) => {
           this.flux24DailyOut = data;
+          this.$set(this.loadings, 'urlDailyOut', false) ;
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, 'urlDailyOut', false) ;
+        });
 
       this.flux24Presence = [];
+      this.$set(this.loadings, 'urlPresence', true) ;
       axios
         .get(urlPresence, {
           params: values
         })
         .then(({ data }) => {
           this.flux24Presence = data;
+          this.$set(this.loadings, 'urlPresence', false) ;
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, 'urlPresence', false) ;
+        });
 
+      this.$set(this.loadings, 'urlPresenceDaily', true) ;
       this.flux24PrensenceDaily = [];
       axios
         .get(urlPresenceDaily, {
@@ -663,31 +718,39 @@ export default {
         })
         .then(({ data }) => {
           this.flux24PrensenceDaily = data;
+          this.$set(this.loadings, 'urlPresenceDaily', false) ;
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, 'urlPresenceDaily', false) ;
+        });
 
       this.flux24PresenceDailyIn = [];
+      this.$set(this.loadings, 'urlPresenceDailyIn', true) ;
       axios
         .get(urlPresenceDailyIn, {
           params: values
         })
         .then(({ data }) => {
           this.flux24PresenceDailyIn = data;
+          this.$set(this.loadings, 'urlPresenceDailyIn', false) ;
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, 'urlPresenceDailyIn', false) ;
+        });
 
       this.flux24 = [];
+      this.$set(this.loadings, 'flux24', true) ;
       axios
         .get(url, {
           params: values
         })
         .then(({ data }) => {
           this.flux24 = data;
-          this.isLoading = false;
+          this.$set(this.loadings, 'flux24', false) ;
         })
         .catch(({ response }) => {
           this.flux24Errors = response.data.errors;
-          this.isLoading = false;
+          this.$set(this.loadings, 'flux24', false) ;
         });
     },
     seeSide() {
@@ -707,7 +770,6 @@ export default {
         preference_start,
         preference_end
       };
-      this.isLoading = true;
       this.flux24Errors = {};
 
       const url = `api/dashboard/flux/predefined/zones/h-24/`;
@@ -716,25 +778,32 @@ export default {
       const urlDailyOut = `api/dashboard/flux/predefined/zones/h-24/daily-out`;
       const urlDailyCompare = `api/dashboard/flux/predefined/zones/h-24/daily-compare`;
 
-      this.flux24DailyComparison = [];
+      this.$set(this.loadings, 'fluxPC_urlDailyCompare', true) ;
       axios
         .get(urlDailyCompare, {
           params: values
         })
         .then(({ data }) => {
           this.flux24DailyComparison = data;
+          this.$set(this.loadings, 'fluxPC_urlDailyCompare', false) ;
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, 'fluxPC_urlDailyCompare', false) ;
+        });
 
       this.flux24Daily = [];
+      this.$set(this.loadings, 'fluxPC_urlDaily', true) ;
       axios
         .get(urlDaily, {
           params: values
         })
         .then(({ data }) => {
           this.flux24Daily = data;
+          this.$set(this.loadings, 'fluxPC_urlDaily', false) ;
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, 'fluxPC_urlDaily', false) ;
+        });
 
       // get flux data in
 
@@ -761,17 +830,18 @@ export default {
       //   .catch(({ response }) => {});
 
       this.flux24 = [];
+      this.$set(this.loadings, 'fluxPC_flux24', true) ;
       axios
         .get(url, {
           params: values
         })
         .then(({ data }) => {
           this.flux24 = data;
-          this.isLoading = false;
+          this.$set(this.loadings, 'fluxPC_flux24', false) ;
         })
         .catch(({ response }) => {
           this.flux24Errors = response.data.errors;
-          this.isLoading = false;
+          this.$set(this.loadings, 'fluxPC_flux24', false) ;
         });
     }
   }
