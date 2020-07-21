@@ -5,9 +5,9 @@ export const
     ADMIN_DASHBOARD = "admin-dashboard",
     AGENT_HOSPITAL = "agent-hospital",
     PALETTE = {
-        inflow: ["#FFFFCC", "#A1DAB4", "#41B6C4", "#225EA8",   "#FFFFB2", "#FECC5C", "#FD8D3C", "#E31A1C"],
-        outflow: ["#EDF8FB", "#B3CDE3", "#8C96C6", "#88419D",  "#FFFFCC", "#A1DAB4", "#41B6C4", "#225EA8"],
-        present: ["#FFFFB2", "#FECC5C", "#FD8D3C", "#E31A1C",  "#EDF8FB", "#B3CDE3", "#8C96C6", "#88419D"],
+        inflow: ["#7F3B08", "#B35806", "#E08214", "#FDB863",   "#B2ABD2", "#8073AC", "#542788", "#2D004B"],
+        outflow: ["#2166AC", "#4393C3", "#92C5DE", "#D1E5F0",  "#FDDBC7", "#F4A582", "#D6604D", "#B2182B"],
+        present: ["#F4A582", "#F8D28C", "#CCEBC5", "#A8DDB5",  "#7BCCC4", "#4EB3D3", "#2B8CBE", "#08589E"],
         nodata : "#eeeeee" ,
         bordure_shape_file: " #BFC5D2",
         flux_out_color: "#88419d",
