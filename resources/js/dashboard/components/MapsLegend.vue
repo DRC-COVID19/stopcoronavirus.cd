@@ -1,9 +1,9 @@
 <template>
     <div class="legend-container">
         <div class="legend">
-            <div class="no-data" :style="'background-color : ' + color_nodata">
+            <div class="no-data">
                 <span class="lbl mb-1">Aucune donnée</span>
-                <div class="range empty"
+                <div class="range empty" :style="'background-color : ' + color_nodata"
                      :class="{hover : legendHover !== null && legendHover.de === null }"
                      @mouseenter="setLegendHover({de : null, a : null})"
                      @mouseleave="setLegendHover(null)"></div>
@@ -66,70 +66,5 @@
     }
 </script>
 
-<style scoped>
-    .legend-container{
-        position : relative ;
-        top: -50px;
-        left: 50%;
-        transform: translateX(-50%);
-        height: 0px;
-        z-index: 2;
-    }
-    .legend{
-        display : flex ;
-        align-items: flex-end;
-    }
-    .no-data{
-        margin-right: 25px;
-    }
-    .range{
-        width: 50px;
-        height: 12px;
-        border: 2px solid rgba(0, 0, 0, .3) ;
-        position: relative;
-        transition: border 0.3s ease-in-out;
-    }
-    .range.hover {
-        border: 2px solid black ;
-    }
-    .range.empty{
-        background-color: #eee ;
-    }
-    .datas .inner:nth-child(2n+1) .range::before,
-    .datas .inner:nth-last-child(2) .range::after{
-        content: "";
-        display: block;
-        height: 25px;
-        background-color: black ;
-        width: 1px;
-        position: absolute;
-        bottom: 0px;
-    }
-    .datas .inner:nth-child(2n+1) .range::before{
-        left: -2px;
-    }
-    .datas .inner:nth-last-child(2) .range::after {
-        right: -2px;
-    }
-    .datas{
-        display: flex;
-    }
-    .lbl{
-        font-size: 12px ;
-        max-width: 50px;
-        display: inline-block;
-        line-height: 12px;
-    }
-    .datas .lbl{
-        transform: translateX(-50%);
-        transform-origin: center;
-        position: relative;
-    }
-    .datas .inner-last .lbl{
-        position: relative;
-        top: 0px;
-    }
-    .datas .inner:nth-child(2n+1) .lbl {
-        top: -17px;
-    }
-</style>
+<style scoped></style>
+
