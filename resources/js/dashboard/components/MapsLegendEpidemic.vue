@@ -3,14 +3,14 @@
         <div class="legend">
             <div class="datas">
                 <div class="inner" v-for="(data, i) in colors" :key="i">
-                    <span class="lbl">{{valAt(i)}}%</span>
+                    <span class="lbl">{{valAt(i)}}</span>
                     <div class="range" :style="'background-color :' + data "
                         :class="{hover : legendEpidHover !== null && legendEpidHover.de == valAt(i) }"
                         @mouseenter="setLegendEpidHover({de : valAt(i), a : valAt(i+1) })"
                         @mouseleave="setLegendEpidHover(null)"></div>
                 </div>
                 <div class="inner inner-last">
-                    <span class="lbl">{{Math.ceil(extValues.max)}}%</span>
+                    <span class="lbl">{{Math.ceil(extValues.max)}}</span>
                 </div>
             </div>
         </div>
@@ -31,8 +31,8 @@
         } ,
         computed : {
             ...mapState({
-                extValues: state => state.flux.epidemicExtValues,
-                legendEpidHover : state => state.flux.legendEpidHover,
+                extValues: state => state.epidemic.epidemicExtValues,
+                legendEpidHover : state => state.epidemic.legendEpidHover,
             }),
             pourcent : function(){
                 //Calcul de la différence de marge entre chaque plage de la légende

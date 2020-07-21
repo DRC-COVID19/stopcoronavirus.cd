@@ -4,6 +4,7 @@ import auth from './modules/auth';
 import flux from './modules/flux';
 import hospital from './modules/hospital';
 import nav from './modules/nav';
+import epidemic from './modules/epidemic';
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
         auth,
         flux,
         hospital,
-        nav
+        nav,
+        epidemic
     }
 });

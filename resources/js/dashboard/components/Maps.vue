@@ -233,6 +233,13 @@ export default {
         this.flux24Func();
       }
     );
+
+    this.$store.watch(
+      state => state.epidemic.legendEpidHover,
+      value => {
+        this.covidHatchedStyle(this.covidCases, value);
+      }
+    );
   },
   computed: {
     ...mapState({
@@ -242,7 +249,8 @@ export default {
       fluxGeoOptions: state => state.flux.fluxGeoOptions,
       fluxEnabled: state => state.flux.fluxEnabled,
       activeMenu: state => state.nav.activeMenu,
-      legendHover: state => state.flux.legendHover
+      legendHover: state => state.flux.legendHover,
+      epidemicLengendHover: state => state.epidemic.legendEpidHover
     }),
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -251,60 +259,8 @@ export default {
   watch: {
     covidCases() {
       if (this.covidCases) {
-        this.covidHatchedStyle(this.covidCases);
-
-        this.map.on("mouseenter", "covidCasesLayer", () => {
-          this.map.getCanvas().style.cursor = "pointer";
-        });
-        this.map.on("mouseleave", "covidCasesLayer", () => {
-          this.map.getCanvas().style.cursor = "";
-        });
-        this.map.on("click", "covidCasesLayer", e => {
-          const coordinates = e.features[0].geometry.coordinates.slice();
-          const {
-            name,
-            confirmed,
-            dead,
-            sick,
-            healed,
-            last_update
-          } = e.features[0].properties;
-
-          const template = `<div class="topToolTip" >
-                            <div class="titleInfoBox">${name}</div>
-                            <div class="statLine">
-                                <div class="stat total">Nombre total de cas</div>
-                                <div class="statCount total">${confirmed}</div>
-                            </div>
-                            <div class="statLine divider"></div>
-                            <div class="statLine">
-                                <div class="legendColor ongoing"></div>
-                                <div class="stat">Actifs</div>
-                                <div class="statCount">${confirmed -
-                                  healed -
-                                  dead}</div>
-                            </div>
-                            <div class="statLine">
-                                <div class="legendColor recovered"></div>
-                                <div class="stat">Guérisons</div>
-                                <div class="statCount">${healed}</div>
-                            </div>
-                            <div class="statLine"> 
-                                <div class="legendColor fatal"></div>
-                                <div class="stat">Décès</div>
-                                <div class="statCount">${dead}</div>
-                            </div> 
-                            <i></i>
-                        </div>`;
-          new Mapbox.Popup()
-            .setLngLat(coordinates)
-            .setHTML(template)
-            .addTo(this.map);
-        });
+        this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
       } else {
-        this.map.off("mouseenter", "covidCasesLayer");
-        this.map.off("mouseleave", "covidCasesLayer");
-        this.map.off("click", "covidCasesLayer");
         map.U.removeLayer([EPIDEMIC_LAYER]);
       }
     },
@@ -506,21 +462,25 @@ export default {
     ...mapMutations([
       "selectHospital",
       "setFluxGeoOptions",
-      "setDomaineExtValues"
+      "setDomaineExtValues",
+      "setEpidemicExtValues"
     ]),
     ...mapActions(["resetState"]),
     addPolygoneLayer(geoGranularity) {
       map.U.removeLayer([this.drcSourceId]);
-      map.addLayer({
-        id: this.drcSourceId,
-        type: "line",
-        source: geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-        layout: {},
-        paint: {
-          "line-color": PALETTE.bordure_shape_file,
-          "line-width": 1
-        }
-      },map.getLayer(EPIDEMIC_LAYER)?EPIDEMIC_LAYER:null);
+      map.addLayer(
+        {
+          id: this.drcSourceId,
+          type: "line",
+          source: geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+          layout: {},
+          paint: {
+            "line-color": PALETTE.bordure_shape_file,
+            "line-width": 1
+          }
+        },
+        map.getLayer(EPIDEMIC_LAYER) ? EPIDEMIC_LAYER : null
+      );
     },
     addPolygoneHoverLayer(geoGranularity) {
       map.U.removeLayer(["state-hover"]);
@@ -689,6 +649,7 @@ export default {
     },
     covidHatchedStyle(
       covidCasesData,
+      legendHover = null,
       property = "confirmed",
       geoGranularity = 2
     ) {
@@ -702,10 +663,12 @@ export default {
       const domaineMax = d3.max(features, d => d.properties[property]);
       const domaineMin = d3.min(features, d => d.properties[property]);
 
+      this.setEpidemicExtValues({ max: domaineMax, min: domaineMin });
+
       const colorScale = d3
         .scaleQuantile()
         .domain([domaineMin, domaineMax])
-        .range(["#FFFFB2", "#FECC5C", "#FD8D3C", "#E31A1C"]);
+        .range(PALETTE.epidemic);
 
       let dataKey = "name";
       if (geoGranularity == 2) {
@@ -727,6 +690,17 @@ export default {
       const source = map.getSource(
         geoGranularity == 1 ? this.drcSourceId : this.drcHealthZone
       );
+
+      if (legendHover) {
+        features = features.filter(
+          x =>
+            x.properties[property] >= legendHover.de &&
+            x.properties[property] <= legendHover.a
+        );
+        if (features.length == 0) {
+          return;
+        }
+      }
 
       //Added layer
       // map.U.addFill(
@@ -1136,8 +1110,6 @@ export default {
 
       map.off("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
       map.off("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
-
-      
 
       map.on("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
 

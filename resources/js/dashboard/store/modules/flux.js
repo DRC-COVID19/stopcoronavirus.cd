@@ -7,9 +7,7 @@ export default {
         fluxEnabled: true,
         isWatchingfluxGeoOptions: true,
         domaineExtValues:{},
-        epidemicExtValues:{min : 0 , max : 100},
         legendHover : null , // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
-        legendEpidHover : null
     },
     mutations: {
         setIsWatchingfluxGeoOptions(state, payload) {
@@ -36,9 +34,6 @@ export default {
         setDomaineExtValues(state,payload){
             state.domaineExtValues=payload;
         },
-        setLegendEpidHover(state, sectionHover) {
-            state.legendEpidHover = sectionHover
-        }
     },
     actions: {
         resetState({ state }) {
