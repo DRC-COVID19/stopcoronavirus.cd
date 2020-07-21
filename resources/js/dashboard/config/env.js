@@ -14,7 +14,7 @@ export const
         flux_in_color: "#225ea8",
         flux_presence:"#E31A1C",
         dash_green: "#33ac2e",
-        epidemic : ["#ff0000", "#795548", "#9E9E9E", "#00BCD4"]
+        epidemic : ["#FFFFB2", "#FECC5C", "#FD8D3C", "#E31A1C"]
     },
     PREFERENCE_START = "2020-02-01",
     PREFERENCE_END = "2020-03-18",
