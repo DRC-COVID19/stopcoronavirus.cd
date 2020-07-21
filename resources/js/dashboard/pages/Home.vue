@@ -88,6 +88,7 @@
               :flux24Presence="flux24Presence"
             />
             <MapsLegend v-if="hasRightSide && activeMenu == 1"></MapsLegend>
+            <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
           </b-row>
         </b-col>
         <b-col
@@ -100,7 +101,7 @@
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
-               
+
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
               <b-tab title="FLux chart" v-if="hasFlux24DailyIn" :active="hasFlux24DailyIn">
@@ -160,6 +161,7 @@
 <script>
 import Maps from "../components/Maps";
 import MapsLegend from "../components/MapsLegend";
+import MapsLegendEpidemic from "../components/MapsLegendEpidemic";
 import LeftColumn from "../components/LeftColumn";
 import Waiting from "../components/Waiting";
 import SideCaseCovid from "../components/SideCaseCovid";
@@ -188,6 +190,7 @@ export default {
   components: {
     Maps,
     MapsLegend,
+    MapsLegendEpidemic,
     LeftColumn,
     Waiting,
     SideCaseCovid,
