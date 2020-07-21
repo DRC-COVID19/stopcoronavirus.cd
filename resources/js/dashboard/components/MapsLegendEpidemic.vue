@@ -1,19 +1,12 @@
 <template>
     <div class="legend-container">
         <div class="legend">
-            <div class="no-data">
-                <span class="lbl mb-1">Aucune donnée</span>
-                <div class="range empty" :style="'background-color : ' + color_nodata"
-                     :class="{hover : legendEpidHover !== null && legendEpidHover.de === null }"
-                     @mouseenter="setLegendEpidHover({de : null, a : null})"
-                     @mouseleave="setLegendEpidHover(null)"></div>
-            </div>
             <div class="datas">
                 <div class="inner" v-for="(data, i) in colors" :key="i">
-                    <span class="lbl">{{valDe(i)}}%</span>
+                    <span class="lbl">{{valAt(i)}}%</span>
                     <div class="range" :style="'background-color :' + data "
-                        :class="{hover : legendEpidHover !== null && legendEpidHover.de == valDe(i) }"
-                        @mouseenter="setLegendEpidHover({de : valDe(i), a : valDe(i+1) })"
+                        :class="{hover : legendEpidHover !== null && legendEpidHover.de == valAt(i) }"
+                        @mouseenter="setLegendEpidHover({de : valAt(i), a : valAt(i+1) })"
                         @mouseleave="setLegendEpidHover(null)"></div>
                 </div>
                 <div class="inner inner-last">
@@ -33,8 +26,7 @@
         name: "LegendEpidemic" ,
         data : function(){
             return {
-                colors : PALETTE.epidemic ,
-                color_nodata :  PALETTE.nodata
+                colors : PALETTE.epidemic
             }
         } ,
         computed : {
@@ -43,16 +35,18 @@
                 legendEpidHover : state => state.flux.legendEpidHover,
             }),
             pourcent : function(){
+                //Calcul de la différence de marge entre chaque plage de la légende
                 return Math.abs(this.extValues.max - this.extValues.min) / 4
             }
         } ,
         methods : {
             ...mapMutations(['setLegendEpidHover']),
-            valDe : function(i){
+            valAt : function(i){
+                //Calcul de la valeur en pourcentage de l'extrimté d'une plage à l'index i
                 return Math.floor(this.extValues.min + i * this.pourcent)
             }
         }
     }
 </script>
 
-<style scoped src="./MapsLegend.css"></style>
+<style scoped></style>

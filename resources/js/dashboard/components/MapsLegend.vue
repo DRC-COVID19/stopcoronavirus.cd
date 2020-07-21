@@ -66,4 +66,5 @@
     }
 </script>
 
-<style scoped src="./MapsLegend.css"></style>
+<style scoped></style>
+

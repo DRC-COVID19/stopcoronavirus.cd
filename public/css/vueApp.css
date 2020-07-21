@@ -28046,6 +28046,90 @@ h3 {
   border-top-color: white;
 }
 
+.legend-container {
+  position: relative;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 0px;
+  z-index: 2;
+}
+
+.legend-container .legend {
+  display: flex;
+  align-items: flex-end;
+}
+
+.legend-container .no-data {
+  margin-right: 25px;
+}
+
+.legend-container .range {
+  width: 50px;
+  height: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  position: relative;
+  transition: border 0.3s ease-in-out;
+}
+
+.legend-container .range.hover {
+  border: 2px solid black;
+}
+
+.legend-container .range.empty {
+  background-color: #eee;
+}
+
+.legend-container .datas .inner:nth-child(2n+1) .range::before,
+.legend-container .datas .inner:nth-last-child(2) .range::after {
+  content: "";
+  display: block;
+  height: 25px;
+  background-color: black;
+  width: 1px;
+  position: absolute;
+  bottom: 0px;
+}
+
+.legend-container .datas .inner:nth-child(2n+1) .range::before {
+  left: -2px;
+}
+
+.legend-container .datas .inner:nth-last-child(2) .range::after {
+  right: -2px;
+}
+
+.legend-container .datas {
+  display: flex;
+}
+
+.legend-container .lbl {
+  max-width: 50px;
+  display: inline-block;
+  line-height: 12px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 3px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  font-size: 11px;
+}
+
+.legend-container .datas .lbl {
+  transform: translateX(-50%);
+  transform-origin: center;
+  position: relative;
+  border-radius: 20px;
+}
+
+.legend-container .datas .inner-last .lbl {
+  position: relative;
+  top: 0px;
+}
+
+.legend-container .datas .inner:nth-child(2n+1) .lbl {
+  top: -17px;
+}
+
 body {
   font-family: "Rubik", sans-serif;
 }
