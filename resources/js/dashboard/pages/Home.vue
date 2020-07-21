@@ -5,7 +5,7 @@
       <b-row class="mt-2 top-menu">
         <b-col>
           <MenuFlux
-            v-if="activeMenu==1"
+            v-show="activeMenu==1"
             @submitFluxForm="submitFluxForm"
             @populationFluxChecked="populationFluxChecked"
             @flux::predefined::changed="fluxPredefinedChanged"
@@ -14,7 +14,7 @@
             :flux24Errors="flux24Errors"
           />
           <MenuEpidemology
-            v-if="activeMenu==2"
+            v-show="activeMenu==2"
             @covidCaseChecked="getCovidCases"
             :covidCasesCount="covidCasesCount"
           />
@@ -299,19 +299,19 @@ export default {
   mounted() {
     this.getFluxZone();
     this.getFluxProvinces();
-    this.$store.watch(
-      state => state.nav.activeMenu,
-      value => {
-        this.populationFluxChecked(false);
-        this.getCovidCases(false);
-        switch (value) {
-          case 1:
-            break;
-          case 2:
-          default:
-            break;
-        }
-      });
+    // this.$store.watch(
+    //   state => state.nav.activeMenu,
+    //   value => {
+    //     this.populationFluxChecked(false);
+    //     this.getCovidCases(false);
+    //     switch (value) {
+    //       case 1:
+    //         break;
+    //       case 2:
+    //       default:
+    //         break;
+    //     }
+    //   });
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),

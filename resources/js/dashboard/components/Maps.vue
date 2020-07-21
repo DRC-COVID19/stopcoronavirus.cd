@@ -18,7 +18,14 @@ import { mapState, mapMutations, mapActions } from "vuex";
 import U from "mapbox-gl-utils";
 import { includes } from "lodash";
 import * as d3 from "d3";
+import * as turf from "@turf/turf";
 
+const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
+  sourceHealthZoneGeojson = "sourceHealthZoneGeojson",
+  sourceHealthProvinceGeojsonCentered = "sourHealthProvinceGeojsonCentered",
+  sourceHealthProvinceGeojson = "sourceHealthProvinceGeojson",
+  EPIDEMIC_LAYER = "EPIDEMIC_LAYER",
+  HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER";
 export default {
   components: { ToolTipMaps },
   props: {
@@ -113,8 +120,18 @@ export default {
       map: null,
       AllSondagesMarkers: [],
       ArcLayerSelectedObject: {},
-      centerCoordinates: []
+      centerCoordinates: [],
+      healthZoneGeojson: null,
+      healthZoneGeojsonCentered: null,
+      healthProvinceGeojson: null,
+      healthProvinceGeojsonCentered: null,
+      isMapLoaded: false,
+      isZoneSourceLoaded: false,
+      isProvinceSourceLoaded: false
     };
+  },
+  created() {
+    this.loadSource();
   },
   mounted() {
     Mapbox.accessToken = this.MAPBOX_TOKEN;
@@ -127,7 +144,9 @@ export default {
     });
     U.init(map, Mapbox);
     map.addControl(new Mapbox.NavigationControl());
+    this.isMapLoaded = false;
     map.on("load", () => {
+      this.isMapLoaded = true;
       map.addSource(this.drcSourceId, {
         type: "geojson",
         generateId: true,
@@ -140,10 +159,18 @@ export default {
         data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`
       });
 
-      map.addSource(this.kinSourceId, {
-        type: "vector",
-        url: "mapbox://merki230.4airwoxt"
-      });
+      // map.addSource(this.kinSourceId, {
+      //   type: "vector",
+      //   url: "mapbox://merki230.4airwoxt"
+      // });
+
+      if (!this.isZoneSourceLoaded && this.healthZoneGeojson) {
+        this.addZoneSource();
+      }
+
+      if (!this.isProvinceSourceLoaded && this.healthProvinceGeojson) {
+        this.addProvinceSource();
+      }
 
       this.addPolygoneLayer(1);
       this.addPolygoneHoverLayer(1);
@@ -155,9 +182,9 @@ export default {
     this.$store.watch(
       state => state.flux.fluxGeoGranularity,
       value => {
-        if (this.activeMenu != 1) {
-          return;
-        }
+        // if (this.activeMenu != 1) {
+        //   return;
+        // }
         this.addPolygoneLayer(value);
         this.addPolygoneHoverLayer(value);
       }
@@ -165,44 +192,52 @@ export default {
     this.$store.watch(
       state => state.flux.mapStyle,
       value => {
-        if (this.activeMenu != 1) {
-          return;
-        }
+        // if (this.activeMenu != 1) {
+        //   return;
+        // }
+        console.log(value);
         this.flux24Func();
       }
     );
     this.$store.watch(
       state => state.flux.fluxType,
       value => {
-        if (this.activeMenu != 1) {
-          return;
-        }
+        // if (this.activeMenu != 1) {
+        //   return;
+        // }
         this.flux24Func();
       }
     );
 
     //watch activeMenu store state
-    this.$store.watch(
-      state => state.nav.activeMenu,
-      value => {
-        this.resetState();
-        switch (value) {
-          case 1:
-            break;
-          case 2:
-            this.addPolygoneLayer(2);
-            this.addPolygoneHoverLayer(2);
-          default:
-            break;
-        }
-      }
-    );
+    // this.$store.watch(
+    //   state => state.nav.activeMenu,
+    //   value => {
+    //     this.resetState();
+    //     switch (value) {
+    //       case 1:
+    //         break;
+    //       case 2:
+    //         this.addPolygoneLayer(2);
+    //         this.addPolygoneHoverLayer(2);
+    //       default:
+    //         break;
+    //     }
+    //   }
+    // );
 
     //watch flux legendHover store state
     this.$store.watch(
       state => state.flux.legendHover,
       value => {
         this.flux24Func();
+      }
+    );
+
+    this.$store.watch(
+      state => state.epidemic.legendEpidHover,
+      value => {
+        this.covidHatchedStyle(this.covidCases, value);
       }
     );
   },
@@ -214,7 +249,8 @@ export default {
       fluxGeoOptions: state => state.flux.fluxGeoOptions,
       fluxEnabled: state => state.flux.fluxEnabled,
       activeMenu: state => state.nav.activeMenu,
-      legendHover: state => state.flux.legendHover
+      legendHover: state => state.flux.legendHover,
+      epidemicLengendHover: state => state.epidemic.legendEpidHover
     }),
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -223,61 +259,9 @@ export default {
   watch: {
     covidCases() {
       if (this.covidCases) {
-        this.covidHatchedStyle(this.covidCases);
-
-        this.map.on("mouseenter", "covidCasesLayer", () => {
-          this.map.getCanvas().style.cursor = "pointer";
-        });
-        this.map.on("mouseleave", "covidCasesLayer", () => {
-          this.map.getCanvas().style.cursor = "";
-        });
-        this.map.on("click", "covidCasesLayer", e => {
-          const coordinates = e.features[0].geometry.coordinates.slice();
-          const {
-            name,
-            confirmed,
-            dead,
-            sick,
-            healed,
-            last_update
-          } = e.features[0].properties;
-
-          const template = `<div class="topToolTip" >
-                            <div class="titleInfoBox">${name}</div>
-                            <div class="statLine">
-                                <div class="stat total">Nombre total de cas</div>
-                                <div class="statCount total">${confirmed}</div>
-                            </div>
-                            <div class="statLine divider"></div>
-                            <div class="statLine">
-                                <div class="legendColor ongoing"></div>
-                                <div class="stat">Actifs</div>
-                                <div class="statCount">${confirmed -
-                                  healed -
-                                  dead}</div>
-                            </div>
-                            <div class="statLine">
-                                <div class="legendColor recovered"></div>
-                                <div class="stat">Guérisons</div>
-                                <div class="statCount">${healed}</div>
-                            </div>
-                            <div class="statLine"> 
-                                <div class="legendColor fatal"></div>
-                                <div class="stat">Décès</div>
-                                <div class="statCount">${dead}</div>
-                            </div> 
-                            <i></i>
-                        </div>`;
-          new Mapbox.Popup()
-            .setLngLat(coordinates)
-            .setHTML(template)
-            .addTo(this.map);
-        });
+        this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
       } else {
-        this.map.off("mouseenter", "covidCasesLayer");
-        this.map.off("mouseleave", "covidCasesLayer");
-        this.map.off("click", "covidCasesLayer");
-        map.U.removeLayer([this.hashedLayerId]);
+        map.U.removeLayer([EPIDEMIC_LAYER]);
       }
     },
     hospitals() {
@@ -478,21 +462,25 @@ export default {
     ...mapMutations([
       "selectHospital",
       "setFluxGeoOptions",
-      "setDomaineExtValues"
+      "setDomaineExtValues",
+      "setEpidemicExtValues"
     ]),
     ...mapActions(["resetState"]),
     addPolygoneLayer(geoGranularity) {
       map.U.removeLayer([this.drcSourceId]);
-      map.addLayer({
-        id: this.drcSourceId,
-        type: "line",
-        source: geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-        layout: {},
-        paint: {
-          "line-color": PALETTE.bordure_shape_file,
-          "line-width": 1
-        }
-      });
+      map.addLayer(
+        {
+          id: this.drcSourceId,
+          type: "line",
+          source: geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+          layout: {},
+          paint: {
+            "line-color": PALETTE.bordure_shape_file,
+            "line-width": 1
+          }
+        },
+        map.getLayer(EPIDEMIC_LAYER) ? EPIDEMIC_LAYER : null
+      );
     },
     addPolygoneHoverLayer(geoGranularity) {
       map.U.removeLayer(["state-hover"]);
@@ -573,8 +561,95 @@ export default {
         }
       });
     },
+    loadSource() {
+      axios
+        .get(
+          `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`
+        )
+        .then(({ data }) => {
+          // console.log("data", data);
+          this.isZoneSourceLoaded = false;
+          this.healthZoneGeojson = data;
+          const features = data.features.map(item => {
+            let polygone = null;
+            switch (item.geometry.type) {
+              case "MultiPolygon":
+                polygone = turf.multiPolygon(item.geometry.coordinates);
+                break;
+              case "Polygon":
+                polygone = turf.polygon(item.geometry.coordinates);
+                break;
+              default:
+                break;
+            }
+            const feature = turf.centerOfMass(polygone);
+            feature.properties = item.properties;
+            return feature;
+          });
+          this.healthZoneGeojsonCentered = {
+            type: "FeatureCollection",
+            features: features
+          };
+          // console.log(this.healthZoneGeojsonCentered);
+          this.addZoneSource();
+        });
+
+      axios
+        .get(
+          `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
+        )
+        .then(({ data }) => {
+          // console.log("data", data);
+          this.isProvinceSourceLoaded = false;
+          this.healthProvinceGeojson = data;
+          const features = data.features.map(item => {
+            let polygone = null;
+            switch (item.geometry.type) {
+              case "MultiPolygon":
+                polygone = turf.multiPolygon(item.geometry.coordinates);
+                break;
+              case "Polygon":
+                polygone = turf.polygon(item.geometry.coordinates);
+                break;
+              default:
+                break;
+            }
+            const feature = turf.centerOfMass(polygone);
+            feature.properties = item.properties;
+            return feature;
+          });
+          this.healthProvinceGeojsonCentered = {
+            type: "FeatureCollection",
+            features: features
+          };
+          this.addProvinceSource();
+        });
+    },
+    addProvinceSource() {
+      if (!this.isMapLoaded) {
+        return;
+      }
+      map.U.addGeoJSON(
+        sourceHealthProvinceGeojsonCentered,
+        this.healthProvinceGeojsonCentered
+      );
+      map.U.addGeoJSON(sourceHealthProvinceGeojson, this.healthProvinceGeojson);
+      this.isProvinceSourceLoaded = true;
+    },
+    addZoneSource() {
+      if (!this.isMapLoaded) {
+        return;
+      }
+      map.U.addGeoJSON(
+        sourceHealthZoneGeojsonCentered,
+        this.healthZoneGeojsonCentered
+      );
+      map.U.addGeoJSON(sourceHealthZoneGeojson, this.healthZoneGeojson);
+      this.isZoneSourceLoaded = true;
+    },
     covidHatchedStyle(
       covidCasesData,
+      legendHover = null,
       property = "confirmed",
       geoGranularity = 2
     ) {
@@ -588,10 +663,12 @@ export default {
       const domaineMax = d3.max(features, d => d.properties[property]);
       const domaineMin = d3.min(features, d => d.properties[property]);
 
+      this.setEpidemicExtValues({ max: domaineMax, min: domaineMin });
+
       const colorScale = d3
         .scaleQuantile()
         .domain([domaineMin, domaineMax])
-        .range(["#FFFFB2", "#FECC5C", "#FD8D3C", "#E31A1C"]);
+        .range(PALETTE.epidemic);
 
       let dataKey = "name";
       if (geoGranularity == 2) {
@@ -608,23 +685,99 @@ export default {
       colorExpression.push("white");
 
       //remove previous layer
-      map.U.removeLayer([this.hashedLayerId]);
+      map.U.removeLayer([EPIDEMIC_LAYER]);
+
+      const source = map.getSource(
+        geoGranularity == 1 ? this.drcSourceId : this.drcHealthZone
+      );
+
+      if (legendHover) {
+        features = features.filter(
+          x =>
+            x.properties[property] >= legendHover.de &&
+            x.properties[property] <= legendHover.a
+        );
+        if (features.length == 0) {
+          return;
+        }
+      }
+
       //Added layer
-      map.U.addFill(
-        this.hashedLayerId,
-        geoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
-        map.U.properties({
-          fillColor: colorExpression,
-          fillOpacity: [
+      // map.U.addFill(
+      //   this.hashedLayerId,
+      //   geoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
+      //   map.U.properties({
+      //     fillColor: colorExpression,
+      //     fillOpacity: [
+      //       "match",
+      //       ["get", dataKey],
+      //       features.map(x => x.properties.name),
+      //       0.9,
+      //       0
+      //     ]
+      //   }),
+      //   this.drcSourceId
+      // );
+
+      // map.U.addCircle(
+      //   this.hashedLayerId,
+      //   geoGranularity == 1
+      //     ? sourceHealthProvinceGeojsonCentered
+      //     : sourceHealthZoneGeojsonCentered,
+      //   map.U.properties({
+      //     circleColor: colorExpression,
+      //     circlePitchAlignment: "map",
+      //     circleBlur: 0.1,
+      //     circleRaduis: 200,
+      //     cirleOpacity: [
+      //       "match",
+      //       ["get", dataKey],
+      //       features.map(x => x.properties.name),
+      //       0.7,
+      //       0
+      //     ],
+      //   }),
+      //   this.drcSourceId
+      // );
+
+      map.addLayer({
+        id: EPIDEMIC_LAYER,
+        type: "circle",
+        source:
+          geoGranularity == 1
+            ? sourceHealthProvinceGeojsonCentered
+            : sourceHealthZoneGeojsonCentered,
+
+        paint: {
+          "circle-pitch-alignment": "map",
+          "circle-blur": 0,
+          "circle-opacity": [
             "match",
             ["get", dataKey],
             features.map(x => x.properties.name),
-            0.9,
+            0.7,
+            0
+          ],
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            0.2,
+            22,
+            20
+          ],
+          "circle-color": colorExpression,
+          "circle-stroke-color": PALETTE.dash_green,
+          "circle-stroke-width": [
+            "match",
+            ["get", dataKey],
+            features.map(x => x.properties.name),
+            0.5,
             0
           ]
-        }),
-        this.drcSourceId
-      );
+        }
+      });
 
       const popup = new Mapbox.Popup({
         closeButton: false,
@@ -713,15 +866,15 @@ export default {
           .addTo(this.map);
       };
 
-      map.off("mousemove", this.hashedLayerId, mouseMove);
-      map.off("mouseout", this.hashedLayerId, mouseOut);
-      map.off("click", this.hashedLayerId, mouseClick);
+      map.off("mousemove", EPIDEMIC_LAYER, mouseMove);
+      map.off("mouseout", EPIDEMIC_LAYER, mouseOut);
+      map.off("click", EPIDEMIC_LAYER, mouseClick);
 
-      map.on("click", this.hashedLayerId, mouseClick);
+      map.on("click", EPIDEMIC_LAYER, mouseClick);
 
-      map.on("mousemove", this.hashedLayerId, mouseMove);
+      map.on("mousemove", EPIDEMIC_LAYER, mouseMove);
 
-      map.on("mouseout", this.hashedLayerId, mouseOut);
+      map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
     },
     flux24Func() {
       if (this.flux24.length > 0) {
@@ -745,7 +898,11 @@ export default {
             break;
           case 1:
           default:
-            this.fluxHatchedStyle(this.flux24, this.flux24Presence,this.legendHover);
+            this.fluxHatchedStyle(
+              this.flux24,
+              this.flux24Presence,
+              this.legendHover
+            );
             map.flyTo({
               pitch: 10,
               speed: 0.2, // make the flying slow
@@ -852,7 +1009,7 @@ export default {
       const max = d3.max(features, d => d.properties.volume);
 
       map.U.removeSource(["fluxCircleDataSource"]);
-      map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
+      map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
 
       const domaineMax = d3.max(features, d => d.properties.percent);
       const domaineMin = d3.min(features, d => d.properties.percent);
@@ -887,18 +1044,19 @@ export default {
       });
       colorExpression.push("white");
 
-     
       if (legendHover) {
-        features=features.filter(x=>x.properties.percent>=legendHover.de && x.properties.percent<=legendHover.a);
-        if (features.length==0) {
-            return;
+        features = features.filter(
+          x =>
+            x.properties.percent >= legendHover.de &&
+            x.properties.percent <= legendHover.a
+        );
+        if (features.length == 0) {
+          return;
         }
-        console.log('features',features);
       }
 
-     
       map.U.addFill(
-        this.hashedLayerId,
+        HATCHED_MOBILITY_LAYER,
         this.fluxGeoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
         map.U.properties({
           fillColor: colorExpression,
@@ -950,12 +1108,12 @@ export default {
         popup.remove();
       };
 
-      map.off("mousemove", this.hashedLayerId, mouseMove);
-      map.off("mouseout", this.hashedLayerId, mouseOut);
+      map.off("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
+      map.off("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
 
-      map.on("mousemove", this.hashedLayerId, mouseMove);
+      map.on("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
 
-      map.on("mouseout", this.hashedLayerId, mouseOut);
+      map.on("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
     },
     fluxArcStyle(flux24Data) {
       map.U.removeSource(["fluxCircleDataSource"]);
