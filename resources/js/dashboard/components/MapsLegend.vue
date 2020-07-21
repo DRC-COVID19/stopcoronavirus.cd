@@ -1,9 +1,9 @@
 <template>
     <div class="legend-container">
         <div class="legend">
-            <div class="no-data" :style="'background-color : ' + color_nodata">
+            <div class="no-data">
                 <span class="lbl mb-1">Aucune donnée</span>
-                <div class="range empty"
+                <div class="range empty" :style="'background-color : ' + color_nodata"
                      :class="{hover : legendHover !== null && legendHover.de === null }"
                      @mouseenter="setLegendHover({de : null, a : null})"
                      @mouseleave="setLegendHover(null)"></div>
@@ -115,15 +115,20 @@
         display: flex;
     }
     .lbl{
-        font-size: 12px ;
         max-width: 50px;
         display: inline-block;
         line-height: 12px;
+        background-color: rgba(255, 255, 255, .8);
+        padding: 3px;
+        box-sizing: border-box;
+        border-radius: 5px;
+        font-size: 11px;
     }
     .datas .lbl{
         transform: translateX(-50%);
         transform-origin: center;
         position: relative;
+        border-radius: 20px;
     }
     .datas .inner-last .lbl{
         position: relative;
