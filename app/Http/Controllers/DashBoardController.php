@@ -10,6 +10,7 @@ use App\Flux30Province;
 use App\Flux30Zone;
 use App\Hospital;
 use App\Http\Resources\HospitalResources;
+use App\Http\Resources\HospitalTotauxResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\MyTrait\GClientSheet;
@@ -62,7 +63,7 @@ class DashBoardController extends Controller
                 FROM pandemics p2
                 WHERE p2.last_update<=p1.last_update
                 ) AS healed, (
-                
+
                 SELECT SUM(p2.dead)
                 FROM pandemics p2
                 WHERE p2.last_update<=p1.last_update
@@ -81,8 +82,8 @@ class DashBoardController extends Controller
     public function getLastPandemicsStatisticsDaily()
     {
         try {
-            $pandemics = DB::select("SELECT SUM(p1.confirmed) as confirmed, 
-            SUM(p1.sick) as sick, sum(p1.seriously) as seriously, 
+            $pandemics = DB::select("SELECT SUM(p1.confirmed) as confirmed,
+            SUM(p1.sick) as sick, sum(p1.seriously) as seriously,
             sum(p1.healed) as healed, sum(p1.dead) as dead, p1.last_update
             FROM pandemics p1 GROUP BY p1.last_update");
             return response()->json($pandemics);
@@ -99,6 +100,23 @@ class DashBoardController extends Controller
         try {
             $hospitals = HospitalResources::collection(Hospital::get());
             return response()->json($hospitals);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getHospitalsTotaux(){
+        try {
+            $hospitals = Hospital::with(['hospitalSituations' => function($query){
+                $query->orderBy('created_at', 'desc') ;
+                $query->limit(1) ;
+            }])->get() ;
+
+            $hospitalsResource = new HospitalTotauxResource($hospitals) ;
+            return response()->json($hospitalsResource);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -644,8 +662,8 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
         try {
             $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY destination, DATE)
                 AS t
                 WHERE DATE BETWEEN ? and ?
@@ -900,10 +918,10 @@ class DashBoardController extends Controller
     {
         $data = $this->fluxValidator($request->all());
         try {
-            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume 
+            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume
             FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY destination, DATE
                 )
                 AS t
@@ -1155,8 +1173,8 @@ class DashBoardController extends Controller
         $data = $this->prefedenidData($request->all());
         try {
             $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY destination, DATE)
                 AS t
                 WHERE DATE BETWEEN ? and ?
@@ -1364,8 +1382,8 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
         try {
             $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_zones GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_zones GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux30_zones GROUP BY destination, DATE)
                 AS t
                 WHERE DATE BETWEEN ? and ?
@@ -1583,8 +1601,8 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
         try {
             $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_provinces GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_provinces GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux30_provinces GROUP BY destination, DATE)
                 AS t
                 WHERE DATE BETWEEN ? and ?
@@ -1789,7 +1807,7 @@ class DashBoardController extends Controller
     public function getFlux24PresenceDailyInProvince(Request $request)
     {
         $data = $this->fluxValidator($request->all());
-        
+
         try {
             $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('AVG(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
@@ -1937,7 +1955,7 @@ class DashBoardController extends Controller
     public function getFlux24PresenceDailyInZone(Request $request)
     {
         $data = $this->fluxValidator($request->all());
-        
+
         try {
             $flux = Flux24PresenceZone::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
@@ -1969,14 +1987,14 @@ class DashBoardController extends Controller
         }
     }
 
-    
+
 }
 
 /*
-        SELECT health_zones.name,health_zones.latitude,health_zones.longitude, p1.confirmed, p1.sick, p1.seriously, p1.healed, p1.dead, p1.last_update 
+        SELECT health_zones.name,health_zones.latitude,health_zones.longitude, p1.confirmed, p1.sick, p1.seriously, p1.healed, p1.dead, p1.last_update
         FROM pandemics p1
         INNER JOIN(
-        SELECT MAX(pandemics.last_update) AS max_date, pandemics.health_zone_id 
+        SELECT MAX(pandemics.last_update) AS max_date, pandemics.health_zone_id
         FROM  pandemics  group by  pandemics.health_zone_id ) p2
         ON p2.health_zone_id=p1.health_zone_id AND p2.max_date=p1.last_update
         INNER JOIN health_zones ON p1.health_zone_id=health_zones.id
