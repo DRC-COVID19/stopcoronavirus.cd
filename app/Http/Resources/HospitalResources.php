@@ -15,7 +15,7 @@ class HospitalResources extends JsonResource
      */
     public function toArray($request)
     {
-       
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -27,8 +27,9 @@ class HospitalResources extends JsonResource
             'nurses' => $this->nurses,
             'para_medicals' => $this->para_medicals,
             'respirators' => $this->respirators,
-            // 'situation' => $this->hospitalSituations,
+            'situation' => $this->hospitalSituations,
             'last_situation' => HospitalSituationResource::make($this->hospitalSituations()->orderBy('created_at', 'desc')->first()),
+            'situations' => $this->hospitalSituations()->orderBy('created_at', 'desc'),
             'longitude' => $this->longitude,
             'latitude' => $this->latitude
         ];
