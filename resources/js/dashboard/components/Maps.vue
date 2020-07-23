@@ -980,7 +980,7 @@ export default {
         }
       };
 
-      if (this.fluxType == 1) {
+      if (this.fluxType == 2) {
         localData.map(item => {
           const element = features.find(
             x => x.properties.origin == item.origin

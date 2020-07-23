@@ -133,7 +133,7 @@ export default {
         endDate: new Date("03/18/2020")
       },
       fluxForm: {
-        preference_start: "2020-02-18",
+        preference_start: "2020-02-01",
         preference_end: "2020-03-18"
       },
       dateRangeObservation: {
