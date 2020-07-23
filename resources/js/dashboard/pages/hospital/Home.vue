@@ -4,7 +4,7 @@
     <b-container class="mt-4">
       <b-row>
         <b-col v-if="user && user.hospital">
-          <h3>Situations hospitalières</h3>
+          <h3>Situations hospitalières <b-link><span class="fa fa-edit"></span></b-link> </h3>
           <b-alert show variant="info">
             <div>{{`Structure: ${user.hospital.name}`}}</div>
             <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
