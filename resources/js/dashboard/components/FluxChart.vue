@@ -49,7 +49,7 @@
       <b-col cols="12" md="4" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
           <b-col cols="12">
-            <h3 >&nbsp;</h3>
+            <h3>&nbsp;</h3>
             <b-card
               class="mb-3 flux-mobility"
               :class="{'active':fluxType==2}"
@@ -282,22 +282,30 @@ export default {
       return Math.round(difference);
     },
     fluxVolumObservationPresencePercent(items) {
+
+      const itemReference = items.filter(x => x.isReference);
+
+      const itemOnbservation = items.filter(x => !x.isReference);
+
       let totalReference = 0;
+      itemReference.map(value => {
+        totalReference += value.volume;
+      });
 
-      let averageReference = items
-        .filter(x => x.isReference)
-        .reduce((avg, value, _, { length }) => {
-          return avg + value.volume / length;
-        }, 0);
+      let totalObservation = 0;
+      itemOnbservation.map(value => {
+        totalObservation += value.volume;
+      });
 
-      let averageObservation = items
-        .filter(x => !x.isReference)
-        .reduce((avg, value, _, { length }) => {
-          return avg + value.volume / length;
-        }, 0);
+      console.log('itemOnbservation',itemOnbservation);
 
-      let difference = averageObservation - averageReference;
-      return Math.round((difference * 100) / averageReference);
+      const averageObservation = totalObservation / itemOnbservation.length;
+      const averageReference = totalReference / itemReference.length;
+
+      console.log('averageObservation',averageObservation);
+      console.log('averageReference',averageReference);
+      let difference = totalObservation - totalReference;
+      return Math.round((difference * 100) / totalReference);
     },
     fluxVolumObservationPresence(items) {
       let totalReference = 0;
@@ -369,7 +377,6 @@ export default {
           }
         });
       }
-      console.log(flux24PresenceDailyInLocal);
       return flux24PresenceDailyInLocal;
     },
     mobileCalc(dataPram, ref, color) {
@@ -563,8 +570,6 @@ export default {
 
       localData = localData.slice(0, 10);
 
-      
-
       const dataChart = {
         labels: localData.map(d => d.destination),
         datasets: [
@@ -662,9 +667,8 @@ export default {
       localData = localData.sort((a, b) => {
         return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
       });
-      
+
       localData = localData.slice(0, 10);
-      
 
       const dataChart2 = {
         labels: localData.map(d => d.origin),
