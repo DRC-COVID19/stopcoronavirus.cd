@@ -114,6 +114,7 @@ Route::group([
         });
     });
     Route::resource('hospital-situations', "HospitalSituationController");
+    Route::resource('hospitals-data', 'HospitalController');
     Route::get('hospitals/', 'DashBoardController@getHospials');
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
     Route::get('orientation-medical-stats', 'DashBoardController@getAllDiagnosticStat');
