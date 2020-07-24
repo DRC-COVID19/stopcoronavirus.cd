@@ -2,10 +2,12 @@
 	<b-container class="p-0">
 		<b-row>
             <b-col cols="12 mb-2">
-                <b-card class="default-card">
-                    <h4 class="bold">{{hospital.name}}</h4>
-                    <div v-if="hospital.last_update" class="text-right text-black-50">
-                        Mise à jour du {{moment(hospital.last_update).format('DD.MM.Y')}}
+                <b-card no-body class="default-card p-3">
+                    <div class="row align-items-center">
+                        <h4 class="bold col m-0">{{hospital.name}}</h4>
+                        <div v-if="hospital.last_update" class="text-right text-black-50 col">
+                            Mise à jour du {{moment(hospital.last_update).format('DD.MM.Y')}}
+                        </div>
                     </div>
                 </b-card>
             </b-col>
@@ -114,7 +116,12 @@ import { mapState } from "vuex";
 export default {
 	data : function(){
 		return {
-			totalData : {}
+			totalData : {},
+            chartData : {
+                labels : [] ,
+                dataLits : [] ,
+                dataRespirateurs : []
+            }
 		}
 	},
 	mounted() {
@@ -122,12 +129,11 @@ export default {
 		axios
 			.get(`/api/dashboard/hospitals-totaux`)
 			.then(({ data }) => {
-				console.log(data)
 				totalDataGetted = data
 				totalDataGetted.name = "Rapport global"
 				this.totalData =  totalDataGetted ;
             })
-        this.paintStats()     
+        this.getEvolutionHospital()
 	},
     computed: {
         ...mapState({
@@ -142,8 +148,7 @@ export default {
     },
     watch: {
         selectedHospital(val) {
-            console.log(val)
-            this.paintStats()     
+            this.getEvolutionHospital()
         }
     },
 	methods : {
@@ -151,23 +156,19 @@ export default {
             const config = {
                 type: 'line',
                 data: {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    labels: [...this.chartData.labels],
                     datasets: [{
-                        label: 'Occupation lits en réanimation',
+                        label: '% occupation lits en réanimation',
                         backgroundColor: "#ff6384",
                         borderColor: "#ff6384",
-                        data: [
-                            1,2,8,4,5,7,1
-                        ],
+                        data: [...this.chartData.dataLits],
                         fill: false,
                     }, {
-                        label: 'Occupation respirateurs',
+                        label: '% occupation respirateurs',
                         fill: false,
                         backgroundColor: "#36a2eb",
                         borderColor: "#36a2eb",
-                        data: [
-                            1,5,6,8,9,10,11
-                        ],
+                        data: [...this.chartData.dataRespirateurs],
                     }]
                 },
                 options: {
@@ -189,14 +190,20 @@ export default {
                         enabled: false // enable trace line syncing with other charts
                     },
                     zoom : {
-                        enabled: false 
+                        enabled: false
                     },
                     scales: {
                         xAxes: [{
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Periode'
+                                labelString: 'Periode',
+                            },
+                            ticks : {
+                                fontSize: 9,
+                                autoSkip: false,
+                                maxRotation: 90,
+                                minRotation: 90
                             }
                         }],
                         yAxes: [{
@@ -204,13 +211,27 @@ export default {
                             scaleLabel: {
                                 display: true,
                                 labelString: 'Taux'
+                            },
+                            ticks : {
+                                callback: function(value, index, values) {
+                                    return value + '%';
+                                }
                             }
                         }]
                     }
                 }
             };
-            
+
             const linechart = new Chart(this.$refs['canvasStat'].getContext("2d"), config)
+        },
+        getEvolutionHospital(){
+            const selectedHospital = this.selectedHospital?.id ?? ''
+            axios
+			.get(`/api/dashboard/hospitals/evolution/${selectedHospital}`)
+			.then(({ data }) => {
+                this.chartData = data
+                this.paintStats()
+            })
         }
 	}
 };
