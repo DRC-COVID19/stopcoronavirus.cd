@@ -49,6 +49,7 @@
                 :disabled="isSubmitting"
                 class="input-dash"
                 name="foam_beds"
+                v-int
                 :state="errors.foam_beds && errors.foam_beds.lenght>0"
               />
             </b-form-group>
@@ -62,6 +63,7 @@
                 :disabled="isSubmitting"
                 class="input-dash"
                 name="resuscitation_beds"
+                v-int
                 :state="errors.resuscitation_beds && errors.resuscitation_beds.lenght>0"
               />
             </b-form-group>
@@ -75,6 +77,7 @@
                 :disabled="isSubmitting"
                 class="input-dash"
                 name="respirators"
+                v-int
                 :state="errors.respirators && errors.respirators.lenght>0"
               />
             </b-form-group>
@@ -88,6 +91,7 @@
                 :disabled="isSubmitting"
                 class="input-dash"
                 name="doctors"
+                v-int
                 :state="errors.doctors && errors.doctors.lenght>0"
               />
             </b-form-group>
@@ -101,6 +105,7 @@
                 :disabled="isSubmitting"
                 class="input-dash"
                 name="nurses"
+                v-int
                 :state="errors.nurses && errors.nurses.lenght>0"
               />
             </b-form-group>
@@ -114,6 +119,7 @@
                 :disabled="isSubmitting"
                 class="input-dash"
                 name="para_medicals"
+                v-int
                 :state="errors.para_medicals && errors.para_medicals.lenght>0"
               />
             </b-form-group>
@@ -161,10 +167,10 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(['userMe']),
+    ...mapActions(["userMe"]),
     submitForm() {
       this.isSubmitting = true;
-      this.form._method = "PUT";
+      this.form._method = "PUT" ;
       axios
         .post(
           `/api/dashboard/hospitals-data/${this.user.hospital.id}`,
