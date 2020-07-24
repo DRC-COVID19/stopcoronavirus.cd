@@ -116,6 +116,7 @@ Route::group([
     Route::resource('hospital-situations', "HospitalSituationController");
     Route::get('hospitals/', 'DashBoardController@getHospials');
     Route::get('hospitals-totaux/', 'DashBoardController@getHospitalsTotaux');
+    Route::get('hospitals/evolution/{hospital?}', 'DashBoardController@getHospitalEvolution');
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
     Route::get('orientation-medical-stats', 'DashBoardController@getAllDiagnosticStat');
     Route::get('sondages', 'DashBoardController@getSondages');

@@ -11,6 +11,10 @@ class Hospital extends Model
     {
         return $this->hasMany(HospitalSituation::class);
     }
+    public function hospitalLogs()
+    {
+        return $this->hasMany(HospitalLog::class);
+    }
 
     public function agent()
     {
@@ -23,8 +27,7 @@ class Hospital extends Model
 
         self::updating(function($model){
             $data = $model->getOriginal() ;
-            unset($data['created_at']);
-            unset($data['upfated_at']);
+            $data['hospital_id'] = $model->id ;
 
             HospitalLog::create($data) ;
         });

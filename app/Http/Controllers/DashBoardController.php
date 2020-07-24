@@ -9,6 +9,7 @@ use App\Flux24Province;
 use App\Flux30Province;
 use App\Flux30Zone;
 use App\Hospital;
+use App\HospitalSituation;
 use App\Http\Resources\HospitalResources;
 use App\Http\Resources\HospitalTotauxResource;
 use Illuminate\Http\Request;
@@ -117,6 +118,123 @@ class DashBoardController extends Controller
 
             $hospitalsResource = new HospitalTotauxResource($hospitals) ;
             return response()->json($hospitalsResource);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getHospitalEvolution($hospital = null){
+        try {
+            $hospitalSituations = $hospital ?
+                Hospital::find($hospital)->hospitalSituations() :
+                HospitalSituation::orderBy('created_at') ;
+
+            //On réccupère les dates où des nouvelles données ont été transmises
+            $dates = $hospitalSituations->select(DB::raw('DATE(created_at) AS created_at_date'))
+                ->get()->pluck('created_at_date')->unique() ;
+
+            //generation de la groupe by clause en fonction du type de date choisis
+            //pour le regroupement
+            //par defaut (yyyy-mm-dd)
+            $groupByClause = 'DATE(created_at)' ;
+
+            //si le nombre de date est inferieur à 32, ces dates seront nos plages sur l'axe x
+            if($dates->count() > 31){
+                //sinon ont le regroupe par année-mois (yyyy-mm)
+
+                $hospitalSituations = $hospital ?
+                Hospital::find($hospital)->hospitalSituations() :
+                HospitalSituation::orderBy('created_at') ;
+
+                $dates = $hospitalSituations
+                ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS created_at_date'))
+                ->get()->pluck('created_at_date')->unique() ;
+
+                $groupByClause = 'DATE_FORMAT(created_at, "%Y-%m")' ;
+
+                //une nouvelle fois si le nombre de date est inferieur à 25
+                //nous les prenons comme nos plages sur l'axe x
+                if($dates->count() > 24){
+                    //sinon ont le regroupe par année (yyyy)
+                    $hospitalSituations = $hospital ?
+                    Hospital::find($hospital)->hospitalSituations() :
+                    HospitalSituation::orderBy('created_at') ;
+
+                    $dates = $hospitalSituations
+                    ->select(DB::raw('YEAR(created_at) AS created_at_date'))
+                    ->get()->pluck('created_at_date')->unique() ;
+
+                    $groupByClause = "YEAR(created_at)" ;
+                }
+            }
+
+            //Réccuperation de la moyenne de pourcentage d'occupation
+            //dans les plages de date selectionné
+            $evolution = [
+                'labels' => [] ,
+                'dataLits' => [] ,
+                'dataRespirateurs' => [] ,
+            ] ;
+
+            $dates = $dates->sort()->values()->all() ;
+
+            foreach ($dates as $date) {
+                $hospitalSituations = $hospital ?
+                Hospital::find($hospital)->hospitalSituations() :
+                HospitalSituation::orderBy('created_at') ;
+
+                $evolution['labels'][] = $date  ;
+
+                //On réccupère la moyenne du taux d'occupation de lits de reanimation et respirateurs
+                //dans la periode donnée
+
+                $totaux =
+                $hospitalSituations
+                    ->select([
+                        DB::raw(
+                            'AVG(occupied_respirators * 100 /
+                                (SELECT respirators FROM
+                                    (SELECT id, updated_at, respirators from hospitals
+                                        UNION
+                                     SELECT hospital_id AS id, updated_at, respirators from hospital_logs
+                                        ORDER BY updated_at DESC
+                                    ) AS a
+                                    WHERE id = hospital_id AND (updated_at < hospital_situations.created_at OR updated_at IS NULL )
+                                    LIMIT 1
+                                )
+                            ) AS taux_respirators'
+                        ),
+                        DB::raw(
+                            'AVG(occupied_resuscitation_beds * 100 /
+                                (SELECT resuscitation_beds FROM
+                                    (SELECT id, updated_at, resuscitation_beds from hospitals
+                                        UNION
+                                     SELECT hospital_id AS id, updated_at, resuscitation_beds from hospital_logs
+                                        ORDER BY updated_at DESC
+                                    ) AS a
+                                    WHERE id = hospital_id AND (updated_at < hospital_situations.created_at  OR updated_at IS NULL)
+                                    LIMIT 1
+                                )
+                            ) AS taux_resuscitation_beds'
+                        )
+                    ])
+                    ->groupBy(DB::raw($groupByClause))
+                    ->whereRaw($groupByClause . '= "' . $date . '"')
+                    ->first() ;
+
+                if($totaux){
+                    $evolution['dataLits'][] = round($totaux->taux_resuscitation_beds) ;
+                    $evolution['dataRespirateurs'][] = round($totaux->taux_respirators) ;
+                }else{
+                    $evolution['dataLits'][] = null ;
+                    $evolution['dataRespirateurs'][] = null ;
+                }
+            }
+
+            return response()->json($evolution);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

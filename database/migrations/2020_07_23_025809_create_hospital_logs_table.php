@@ -33,6 +33,9 @@ class CreateHospitalLogsTable extends Migration
             $table->integer('para_medicals')->default(0);
 
             $table->integer('agent_id')->index()->unsigned()->nullable();
+            $table->unsignedBigInteger('hospital_id') ;
+
+            $table->foreign('hospital_id')->references('id')->on('hospitals');
         });
     }
 
