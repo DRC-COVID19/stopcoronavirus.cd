@@ -82,12 +82,12 @@ class HospitalController extends Controller
         return Validator::make($data, [
             'name' => 'required',
             'address' => 'required',
-            'foam_beds' => 'numeric|nullable',
-            'resuscitation_beds' => 'numeric|nullable',
-            'respirators' => 'numeric|nullable',
-            'doctors' => 'numeric|nullable',
-            'nurses' => 'numeric|nullable',
-            'para_medicals' => 'numeric|nullable'
+            'foam_beds' => 'numeric|required',
+            'resuscitation_beds' => 'numeric|required',
+            'respirators' => 'numeric|required',
+            'doctors' => 'numeric|required',
+            'nurses' => 'numeric|required',
+            'para_medicals' => 'numeric|required'
         ])->validate();
     }
 }
