@@ -4,7 +4,12 @@
     <b-container class="mt-4">
       <b-row>
         <b-col v-if="user && user.hospital">
-          <h3>Situations hospitalières <b-link><span class="fa fa-edit"></span></b-link> </h3>
+          <h3>
+            Situations hospitalières
+            <b-link :to="{name:'hospital.data'}">
+              <span class="fa fa-edit"></span>
+            </b-link>
+          </h3>
           <b-alert show variant="info">
             <div>{{`Structure: ${user.hospital.name}`}}</div>
             <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
@@ -73,34 +78,35 @@
         </b-col>
       </b-row>
     </b-container>
-    <ManagerUserName id="nameModal"/>
+    <ManagerUserName id="nameModal" />
   </div>
 </template>
 
 <script>
 import Header from "../../components/hospital/Header";
-import ManagerUserName from '../../components/hospital/ManagerUserName';
+import ManagerUserName from "../../components/hospital/ManagerUserName";
 import { mapState, mapMutations } from "vuex";
 export default {
   components: {
-    Header,ManagerUserName
+    Header,
+    ManagerUserName,
   },
   data() {
     return {
       fields: [
         { key: "last_update", label: "Date" },
         { key: "confirmed", label: "Confirmés" },
-        { key: "actions", label: "Actions" }
+        { key: "actions", label: "Actions" },
       ],
       hospitalSituations: {},
       ishospitalSituationLoading: false,
-      currentPage: 1
+      currentPage: 1,
     };
   },
   computed: {
     ...mapState({
-      user: state => state.auth.user,
-      hospitalManagerName: state => state.hospital.hospitalManagerName
+      user: (state) => state.auth.user,
+      hospitalManagerName: (state) => state.hospital.hospitalManagerName,
     }),
     totalRows() {
       if (this.hospitalSituations.meta) {
@@ -113,7 +119,7 @@ export default {
         return this.hospitalSituations.meta.per_page;
       }
       return 15;
-    }
+    },
   },
   mounted() {
     this.getHospitalSituations();
@@ -131,8 +137,7 @@ export default {
       });
     },
     onPageChange(page) {},
-    
-  }
+  },
 };
 </script>
 
