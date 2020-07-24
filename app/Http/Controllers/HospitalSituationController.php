@@ -7,8 +7,11 @@ use App\Http\Resources\HospitalResources;
 use App\Http\Resources\HospitalSituationResource;
 use App\Http\Resources\HospitalSituationSingleResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class HospitalSituationController extends Controller
 {
@@ -52,7 +55,7 @@ class HospitalSituationController extends Controller
      */
     public function show(HospitalSituation $hospitalSituation)
     {
-        return response()->json(HospitalSituationResource::make($hospitalSituation));
+        return response()->json(HospitalSituationSingleResource::make($hospitalSituation));
     }
 
     /**
@@ -64,7 +67,16 @@ class HospitalSituationController extends Controller
      */
     public function update(Request $request, HospitalSituation $hospitalSituation)
     {
-        //
+        $data = $this->validator($request->all(), $hospitalSituation->id);
+        try {
+            $hospitalSituation->update(Arr::except($data,['last_update','hospital_id']));
+            return $hospitalSituation;
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     /**
@@ -78,7 +90,7 @@ class HospitalSituationController extends Controller
         //
     }
 
-    function validator($data)
+    function validator($data,$id=null)
     {
         return Validator::make($data, [
             "confirmed" => 'nullable',
@@ -104,7 +116,21 @@ class HospitalSituationController extends Controller
             'Vitamince_c' => 'nullable',
             'created_manager_name' => 'nullable',
             'updated_manager_name' => 'nullable',
-            'last_update' => 'date|required'
+            'last_update' => [
+                'date',
+                'required',
+                function ($attribute, $value, $fail) use($id) {
+                    if ($id) {
+                        return;
+                    }
+                    $hospital_id = $this->guard()->user()->hospitalManager->id;
+                    $exists = HospitalSituation::where('hospital_id', $hospital_id)
+                        ->where('last_update', $value)->exists();
+                    if ($exists) {
+                        $fail("La {$value} a déjà une mise à jours");
+                    }
+                }
+            ]
         ])->validate();
     }
     /**

@@ -4,14 +4,14 @@
     <b-container class="mt-4">
       <Loading v-if="isLoading" class="h-100" />
       <b-row v-else align-h="center">
-        <b-col cols="12"  v-if="errors && errors.last_update">
+        <b-col cols="12" v-if="errors && errors.last_update">
           <b-alert variant="danger" dismissible show>{{errors.last_update[0]}}</b-alert>
         </b-col>
         <b-col cols="12">
           <b-link :to="{
             name:'hospital.home'
           }">
-            <span class="fa fa-chevron-left"> Retour</span>
+            <span class="fa fa-chevron-left">Retour</span>
           </b-link>
           <h3 v-if="$route.params.hospital_id" class="mb-4 mt-4">
             Modifier la mise à jour du
@@ -434,11 +434,14 @@
                   <b-form-group>
                     <label for="last_update" class="text-dash-color">Sélectionnez la date</label>
                     <b-form-datepicker
+                      
                       v-model="form.last_update"
                       :max="max"
                       required
                       id="last_update"
                       class="mb-2"
+                      :disabled="!!$route.params.hospital_id"
+                     
                     ></b-form-datepicker>
                   </b-form-group>
                 </b-col>
@@ -465,43 +468,42 @@ export default {
     TabContent,
     Header,
     ManagerUserName,
-    Loading
+    Loading,
   },
   data() {
-    const now = new Date()
+    const now = new Date();
     return {
       form: {
-        confirmed: 0,
-        sick: 0,
-        healed: 0,
-        dead: 0,
-        occupied_foam_beds: 0,
-        occupied_resuscitation_beds: 0,
-        occupied_respirators: 0,
-        resuscitation_ventilator: 0,
-        masks: 0,
-        individual_protection_equipment: 0,
-        oxygenator: 0,
-        rapid_screening: 0,
-        x_ray: 0,
-        automate_genexpert: 0,
-        gel_hydro_alcoolique: 0,
-        check_point: 0,
-        chloroquine: 0,
-        hydrochloroquine: 0,
-        azytromicine: 0,
-        Vitamince_c: 0,
-       
+        confirmed: null,
+        sick: null,
+        healed: null,
+        dead: null,
+        occupied_foam_beds: null,
+        occupied_resuscitation_beds: null,
+        occupied_respirators: null,
+        resuscitation_ventilator: null,
+        masks: null,
+        individual_protection_equipment: null,
+        oxygenator: null,
+        rapid_screening: null,
+        x_ray: null,
+        automate_genexpert: null,
+        gel_hydro_alcoolique: null,
+        check_point: null,
+        chloroquine: null,
+        hydrochloroquine: null,
+        azytromicine: null,
+        Vitamince_c: null,
       },
-       max: now,
+      max: now,
       errors: {},
-      isLoading: false
+      isLoading: false,
     };
   },
   computed: {
     ...mapState({
-      hospitalManagerName: state => state.hospital.hospitalManagerName
-    })
+      hospitalManagerName: (state) => state.hospital.hospitalManagerName,
+    }),
   },
   mounted() {
     if (this.$route.params.hospital_id) {
@@ -515,14 +517,24 @@ export default {
     onComplete() {
       this.isLoading = true;
       this.errors = {};
-      this.form.created_manager_name = this.hospitalManagerName;
+      
+      let url = this.$route.params.hospital_id
+        ? `/api/dashboard/hospital-situations/${this.$route.params.hospital_id}`
+        : "/api/dashboard/hospital-situations";
+        
+      if (this.$route.params.hospital_id) {
+        this.form._method = "PUT";
+        this.form.updated_manager_name = this.hospitalManagerName;
+      }else{
+        this.form.created_manager_name = this.hospitalManagerName;
+      }
       axios
-        .post("/api/dashboard/hospital-situations", this.form)
+        .post(url, this.form)
         .then(({ data }) => {
           this.form = {};
           this.isLoading = false;
           this.$router.push({
-            name: "hospital.home"
+            name: "hospital.home",
           });
         })
         .catch(({ response }) => {
@@ -540,12 +552,12 @@ export default {
         .then(({ data }) => {
           this.form = data;
         })
-        .catch(response => {})
+        .catch((response) => {})
         .finally(() => {
           this.isLoading = false;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
