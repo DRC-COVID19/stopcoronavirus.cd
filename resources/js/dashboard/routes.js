@@ -7,6 +7,7 @@ import PasswordResetComplete from './pages/auth/PasswordResetComplete';
 import HospitalsHome from './pages/hospital/Home';
 import HospitalsCreate from './pages/hospital/HospitalCreate';
 import HospitalsDetail from './pages/hospital/HospitalDetail';
+import HospitalData from './pages/hospital/HospitalData';
 import NotAcces from './pages/NotAccess';
 
 const adminDashboard = "admin-dashboard";
@@ -51,6 +52,15 @@ export default [
         path: "/dashboard-maps/hospitals",
         name: "hospital.home",
         component: HospitalsHome,
+        meta: {
+            requiresAuth: true,
+            role: agentHospital
+        },
+    },
+    {
+        path: "/dashboard-maps/hospitals/data",
+        name: "hospital.data",
+        component: HospitalData,
         meta: {
             requiresAuth: true,
             role: agentHospital
