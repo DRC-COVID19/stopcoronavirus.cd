@@ -97,7 +97,7 @@
       <b-col cols="12" md="4" class="pr-0 pl-2">
         <b-row v-for="(item,index) in flux24DailyPresenceInLocal" :key="index" class="mb-3">
           <b-col cols="12">
-            <h5 class="m-0" style="font-size: 19px;">16 juillet 2020</h5>
+            <h5 class="m-0" style="font-size: 19px;">26 avril 2020</h5>
             <span class="small text-muted">Dernière mise à jour</span>
 
             <b-card
