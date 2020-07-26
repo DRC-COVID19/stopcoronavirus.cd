@@ -34,6 +34,7 @@ export default {
                                 },
                                 properties: {
                                     name: value.name ? value.name : "Hopital",
+                                    id: value.id,
                                     address: value.address,
                                     foam_beds: value.foam_beds,
                                     respirators: value.respirators ?? 0,

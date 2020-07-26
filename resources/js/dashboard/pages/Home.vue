@@ -113,7 +113,7 @@
                   :flux24PresenceDailyIn="flux24PresenceDailyIn"
                 />
               </b-tab>
-              <b-tab title="Hôpital" v-if="!!selectedHospital" :active="!!selectedHospital">
+              <b-tab title="Hôpital" v-if="hospitalCount != null" :active="!!selectedHospital">
                 <HospitalSituation />
               </b-tab>
             </b-tabs>
@@ -260,7 +260,7 @@ export default {
       return (
         this.getHasCoviCases() ||
         this.flux24DailyIn.length > 0 ||
-        !!this.selectedHospital
+        this.hospitalCount != null
       );
     },
     hasCovidCases() {

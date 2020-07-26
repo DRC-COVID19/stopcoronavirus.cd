@@ -9,7 +9,9 @@ use App\Flux24Province;
 use App\Flux30Province;
 use App\Flux30Zone;
 use App\Hospital;
+use App\HospitalSituation;
 use App\Http\Resources\HospitalResources;
+use App\Http\Resources\HospitalTotauxResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\MyTrait\GClientSheet;
@@ -62,7 +64,7 @@ class DashBoardController extends Controller
                 FROM pandemics p2
                 WHERE p2.last_update<=p1.last_update
                 ) AS healed, (
-                
+
                 SELECT SUM(p2.dead)
                 FROM pandemics p2
                 WHERE p2.last_update<=p1.last_update
@@ -81,8 +83,8 @@ class DashBoardController extends Controller
     public function getLastPandemicsStatisticsDaily()
     {
         try {
-            $pandemics = DB::select("SELECT SUM(p1.confirmed) as confirmed, 
-            SUM(p1.sick) as sick, sum(p1.seriously) as seriously, 
+            $pandemics = DB::select("SELECT SUM(p1.confirmed) as confirmed,
+            SUM(p1.sick) as sick, sum(p1.seriously) as seriously,
             sum(p1.healed) as healed, sum(p1.dead) as dead, p1.last_update
             FROM pandemics p1 GROUP BY p1.last_update");
             return response()->json($pandemics);
@@ -99,6 +101,181 @@ class DashBoardController extends Controller
         try {
             $hospitals = HospitalResources::collection(Hospital::get());
             return response()->json($hospitals);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getHospitalsTotaux(){
+        try {
+            $hospitals = Hospital::with(['hospitalSituations' => function($query){
+                $query->orderBy('created_at', 'desc') ;
+                $query->limit(1) ;
+            }])->get() ;
+
+            $hospitalsResource = new HospitalTotauxResource($hospitals) ;
+            return response()->json($hospitalsResource);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getHospitalEvolution($hospital = null){
+        try {
+            $hospitalSituations = $hospital ?
+                Hospital::find($hospital)->hospitalSituations() :
+                HospitalSituation::orderBy('created_at') ;
+
+            //On réccupère les dates où des nouvelles données ont été transmises
+            $dates = $hospitalSituations->select(DB::raw('DATE(created_at) AS created_at_date'))
+                ->get()->pluck('created_at_date')
+                ->unique() ;
+
+            //generation de la groupe by clause en fonction du type de date choisis
+            //pour le regroupement
+            //par defaut (yyyy-mm-dd)
+            $groupByClause = 'DATE(created_at)' ;
+
+            //si le nombre de date est inferieur à 32, ces dates seront nos plages sur l'axe x
+            if($dates->count() > 31){
+                //sinon ont le regroupe par année-mois (yyyy-mm)
+
+                $hospitalSituations = $hospital ?
+                Hospital::find($hospital)->hospitalSituations() :
+                HospitalSituation::orderBy('created_at') ;
+
+                $dates = $hospitalSituations
+                ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS created_at_date'))
+                ->get()->pluck('created_at_date')
+                ->unique() ;
+
+                $groupByClause = 'DATE_FORMAT(created_at, "%Y-%m")' ;
+
+                //une nouvelle fois si le nombre de date est inferieur à 25
+                //nous les prenons comme nos plages sur l'axe x
+                if($dates->count() > 24){
+                    //sinon ont le regroupe par année (yyyy)
+                    $hospitalSituations = $hospital ?
+                    Hospital::find($hospital)->hospitalSituations() :
+                    HospitalSituation::orderBy('created_at') ;
+
+                    $dates = $hospitalSituations
+                    ->select(DB::raw('YEAR(created_at) AS created_at_date'))
+                    ->get()->pluck('created_at_date')
+                    ->unique() ;
+
+                    $groupByClause = "YEAR(created_at)" ;
+                }
+            }
+
+            //Réccuperation de la moyenne de pourcentage d'occupation
+            //dans les plages de date selectionné
+            $evolution = [
+                'labels' => [] ,
+                'dataLits' => [] ,
+                'dataRespirateurs' => [] ,
+            ] ;
+
+            $dates = $dates->sort()->values()->all() ;
+
+            foreach ($dates as $date) {
+                $hospitalSituations = $hospital ?
+                Hospital::find($hospital)->hospitalSituations() :
+                HospitalSituation::orderBy('created_at') ;
+
+                $evolution['labels'][] = $date  ;
+
+                //On réccupère la moyenne du taux d'occupation de lits de reanimation et respirateurs
+                //dans la periode donnée
+
+                $hospitalSituations
+                    ->select([
+                        DB::raw(
+                            'AVG(occupied_respirators * 100 /
+                                (SELECT respirators FROM
+                                    (SELECT id, updated_at, respirators from hospitals
+                                        UNION
+                                     SELECT hospital_id AS id, updated_at, respirators from hospital_logs
+                                    ) AS a
+                                    WHERE a.id = hospital_id AND (a.updated_at < created_at OR a.updated_at IS NULL)
+                                    ORDER BY updated_at DESC
+                                    LIMIT 1
+                                )
+                            ) AS taux_respirators'
+                        ),
+                        DB::raw(
+                            'AVG(occupied_resuscitation_beds * 100 /
+                                (SELECT resuscitation_beds FROM
+                                    (SELECT id, updated_at, resuscitation_beds from hospitals
+                                        UNION
+                                     SELECT hospital_id AS id, updated_at, resuscitation_beds from hospital_logs
+                                    ) AS a
+                                    WHERE a.id = hospital_id AND (a.updated_at < created_at OR a.updated_at IS NULL)
+                                    ORDER BY updated_at DESC
+                                    LIMIT 1
+                                )
+                            ) AS taux_resuscitation_beds'
+                        )
+                    ]) ;
+
+                // Si c'est l'evolution d'une hopital donnée à chaque plage de date correspondra toujours
+                // un ou un groupe d'hospitalSituation donc on peut faire un egalité
+                if($hospital){
+                    $hospitalSituations->whereRaw($groupByClause . '= "' . $date . '"') ;
+                    $totaux = $hospitalSituations->groupBy(DB::raw($groupByClause))->first() ;
+                }
+
+                // Si c'est l'evolution global des hopitaux
+                // certaines peuvent n'est pas avoir eu d'hospitalSituation alors que d'autres en ont eu à cette date
+                // Donc ont réccupère la dernière connue
+                else{
+                    $groupByClause2 = str_replace($groupByClause, 'created_at' , 'hospital_situations.created_at') ;
+                    $hospitalSituations->whereRaw($groupByClause . '<= "' . $date . '" AND NOT EXISTS
+                        (SELECT * FROM hospital_situations as h
+                            WHERE h.hospital_id = hospital_situations.hospital_id
+                            AND '. $groupByClause . '<= "' . $date . '"
+                            AND '. $groupByClause . ' > ' . $groupByClause2  .
+                        ')'
+                    ) ;
+
+                    //Etant donné que la condition est <= à la plage de date, Donc lors du regroupement
+                    //ON peut se retrouver avec plusieurs groupes de ce fait, on doit plutot ici
+                    //faire un get puis une autre moyenne
+                    $totaux = $hospitalSituations->groupBy(DB::raw($groupByClause))->get() ;
+
+                    $totauxLen = sizeof($totaux) ;
+                    $totaux = $totaux->reduce(function($a, $b){
+                        $init_1 = $a ? $a['taux_resuscitation_beds'] : 0 ;
+                        $init_2 = $a ? $a['taux_respirators'] : 0 ;
+                        return [
+                            'taux_resuscitation_beds' => $init_1 + $b->taux_resuscitation_beds ,
+                            'taux_respirators' => $init_2 + $b->taux_respirators
+                        ] ;
+                    }) ;
+
+                    //nouvelle moyenne
+                    $totaux['taux_resuscitation_beds'] /= $totauxLen ;
+                    $totaux['taux_respirators'] /= $totauxLen ;
+
+                }
+
+
+                if($totaux){
+                    $evolution['dataLits'][] = round($totaux['taux_resuscitation_beds']) ;
+                    $evolution['dataRespirateurs'][] = round($totaux['taux_respirators']) ;
+                }else{
+                    $evolution['dataLits'][] = null ;
+                    $evolution['dataRespirateurs'][] = null ;
+                }
+            }
+
+            return response()->json($evolution);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -644,8 +821,8 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
         try {
             $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY destination, DATE)
                 AS t
                 WHERE DATE BETWEEN ? and ?
@@ -900,10 +1077,10 @@ class DashBoardController extends Controller
     {
         $data = $this->fluxValidator($request->all());
         try {
-            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume 
+            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume
             FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY destination, DATE
                 )
                 AS t
@@ -1155,8 +1332,8 @@ class DashBoardController extends Controller
         $data = $this->prefedenidData($request->all());
         try {
             $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY destination, DATE)
                 AS t
                 WHERE DATE BETWEEN ? and ?
@@ -1364,8 +1541,8 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
         try {
             $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_zones GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_zones GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux30_zones GROUP BY destination, DATE)
                 AS t
                 WHERE DATE BETWEEN ? and ?
@@ -1583,8 +1760,8 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
         try {
             $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_provinces GROUP BY origin, DATE 
-                UNION ALL 
+                SELECT origin,DATE, SUM(volume) AS volume FROM flux30_provinces GROUP BY origin, DATE
+                UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux30_provinces GROUP BY destination, DATE)
                 AS t
                 WHERE DATE BETWEEN ? and ?
@@ -1789,7 +1966,7 @@ class DashBoardController extends Controller
     public function getFlux24PresenceDailyInProvince(Request $request)
     {
         $data = $this->fluxValidator($request->all());
-        
+
         try {
             $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
@@ -1937,7 +2114,7 @@ class DashBoardController extends Controller
     public function getFlux24PresenceDailyInZone(Request $request)
     {
         $data = $this->fluxValidator($request->all());
-        
+
         try {
             $flux = Flux24PresenceZone::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
@@ -1969,14 +2146,14 @@ class DashBoardController extends Controller
         }
     }
 
-    
+
 }
 
 /*
-        SELECT health_zones.name,health_zones.latitude,health_zones.longitude, p1.confirmed, p1.sick, p1.seriously, p1.healed, p1.dead, p1.last_update 
+        SELECT health_zones.name,health_zones.latitude,health_zones.longitude, p1.confirmed, p1.sick, p1.seriously, p1.healed, p1.dead, p1.last_update
         FROM pandemics p1
         INNER JOIN(
-        SELECT MAX(pandemics.last_update) AS max_date, pandemics.health_zone_id 
+        SELECT MAX(pandemics.last_update) AS max_date, pandemics.health_zone_id
         FROM  pandemics  group by  pandemics.health_zone_id ) p2
         ON p2.health_zone_id=p1.health_zone_id AND p2.max_date=p1.last_update
         INNER JOIN health_zones ON p1.health_zone_id=health_zones.id
