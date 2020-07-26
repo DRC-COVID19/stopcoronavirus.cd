@@ -33,4 +33,9 @@ class HospitalSituation extends Model
         'created_manager_name',
         'updated_manager_name'
     ];
+
+    public function hospital()
+    {
+        return $this->belongsTo(Hospital::class);
+    }
 }
