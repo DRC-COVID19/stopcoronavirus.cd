@@ -311,7 +311,9 @@ export default {
             dead,
             sick,
             healed,
-            last_update
+            last_update,
+            resuscitation_beds,
+            occupied_resuscitation_beds
           } = e.features[0].properties;
 
           this.selectHospital(e.features[0].properties);
@@ -320,7 +322,26 @@ export default {
           //   essential: true // this animation is considered essential with respect to prefers-reduced-motion
           // });
 
-          const template = `<div><div class="hospital-name">${name}</div></div>`;
+          const template =
+            `<div class="row">
+                <div class="col-12 bold text-center hospital-name">${name}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Lits de réanimation occupés</div>
+                <div class="col-3 bold">${occupied_resuscitation_beds}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Lits de réanimation disponibles</div>
+                <div class="col-3 bold">${resuscitation_beds - occupied_resuscitation_beds}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Respirateurs occupés</div>
+                <div class="col-3 bold">${occupied_respirators}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Respirateurs disponibles</div>
+                <div class="col-3 bold">${respirators - occupied_respirators}</div>
+            </div>`;
 
           new Mapbox.Popup()
             .setLngLat(coordinates)
@@ -853,11 +874,11 @@ export default {
                                 <div class="stat">Guérisons</div>
                                 <div class="statCount">${healed}</div>
                             </div>
-                            <div class="statLine"> 
+                            <div class="statLine">
                                 <div class="legendColor fatal"></div>
                                 <div class="stat">Décès</div>
                                 <div class="statCount">${dead}</div>
-                            </div> 
+                            </div>
                             <i></i>
                         </div>`;
         new Mapbox.Popup()
