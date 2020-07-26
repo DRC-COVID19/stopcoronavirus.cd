@@ -117,11 +117,7 @@ export default {
 	data : function(){
 		return {
 			totalData : {},
-            chartData : {
-                labels : [] ,
-                dataLits : [] ,
-                dataRespirateurs : []
-            }
+            lineChart : null
 		}
 	},
 	mounted() {
@@ -152,23 +148,27 @@ export default {
         }
     },
 	methods : {
-        paintStats(){
+        paintStats(data){
             const config = {
                 type: 'line',
                 data: {
-                    labels: [...this.chartData.labels],
+                    labels: data.labels,
                     datasets: [{
-                        label: '% occupation lits en réanimation',
+                        label: 'occupation lits en réanimation',
                         backgroundColor: "#ff6384",
                         borderColor: "#ff6384",
-                        data: [...this.chartData.dataLits],
+                        data: data.dataLits,
                         fill: false,
+                         interpolate: true,
+                        showLine: true,
+                        pointRadius: 2,
+                        lineTension: 0.4
                     }, {
-                        label: '% occupation respirateurs',
+                        label: 'occupation respirateurs',
                         fill: false,
                         backgroundColor: "#36a2eb",
                         borderColor: "#36a2eb",
-                        data: [...this.chartData.dataRespirateurs],
+                        data: data.dataRespirateurs,
                     }]
                 },
                 options: {
@@ -181,16 +181,28 @@ export default {
                     tooltips: {
                         mode: 'index',
                         intersect: false,
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                var label = data.datasets[tooltipItem.datasetIndex].label || '';
+                                if (label) label += ': '
+                                label += tooltipItem.yLabel + '%'
+                                return label;
+                            }
+                        }
+                    },
+                    plugins: {
+                        crosshair: {
+                            sync: {
+                                enabled: false // enable trace line syncing with other charts
+                            },
+                            zoom : {
+                                enabled: false
+                            }
+                        }
                     },
                     hover: {
                         mode: 'nearest',
                         intersect: true
-                    },
-                    sync: {
-                        enabled: false // enable trace line syncing with other charts
-                    },
-                    zoom : {
-                        enabled: false
                     },
                     scales: {
                         xAxes: [{
@@ -222,15 +234,16 @@ export default {
                 }
             };
 
-            const linechart = new Chart(this.$refs['canvasStat'].getContext("2d"), config)
+            if(this.linechart) this.linechart.destroy()
+            this.linechart = new Chart(this.$refs['canvasStat'].getContext("2d"), config)
         },
         getEvolutionHospital(){
             const selectedHospital = this.selectedHospital?.id ?? ''
             axios
 			.get(`/api/dashboard/hospitals/evolution/${selectedHospital}`)
 			.then(({ data }) => {
-                this.chartData = data
-                this.paintStats()
+                console.log(data)
+                this.paintStats(data)
             })
         }
 	}

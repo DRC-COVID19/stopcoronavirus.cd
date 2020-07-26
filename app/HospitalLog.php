@@ -9,7 +9,7 @@ class HospitalLog extends Model
     //
     protected $fillable = ['name', 'address', 'beds', 'respirators', 'masks', 'latitude',
     'longitude', 'foam_beds', 'resuscitation_beds', 'doctors', 'nurses', 'para_medicals',
-    'agent_id', 'hospital_id'] ;
+    'agent_id', 'hospital_id', 'created_at', 'updated_at'] ;
 
     public function agent()
     {
