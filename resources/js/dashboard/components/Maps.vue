@@ -327,20 +327,20 @@ export default {
                 <div class="col-12 bold text-center hospital-name">${name}</div>
                 <hr class="col-12 m-0 p-0">
 
-                <div class="col-9 small">Lits de réanimation occupés</div>
-                <div class="col-3 bold">${occupied_resuscitation_beds}</div>
+                <div class="col-9 small">Confirmés</div>
+                <div class="col-3 bold">${confirmed}</div>
                 <hr class="col-12 m-0 p-0">
 
-                <div class="col-9 small">Lits de réanimation disponibles</div>
-                <div class="col-3 bold">${resuscitation_beds - occupied_resuscitation_beds}</div>
+                <div class="col-9 small">Hospitalisés</div>
+                <div class="col-3 bold">${sick}</div>
                 <hr class="col-12 m-0 p-0">
 
-                <div class="col-9 small">Respirateurs occupés</div>
-                <div class="col-3 bold">${occupied_respirators}</div>
+                <div class="col-9 small">Lits de réanimation</div>
+                <div class="col-3 bold">${occupied_resuscitation_beds}/${resuscitation_beds}</div>
                 <hr class="col-12 m-0 p-0">
 
-                <div class="col-9 small">Respirateurs disponibles</div>
-                <div class="col-3 bold">${respirators - occupied_respirators}</div>
+                <div class="col-9 small">Respirateurs</div>
+                <div class="col-3 bold">${occupied_respirators}/${respirators}</div>
             </div>`;
 
           new Mapbox.Popup()

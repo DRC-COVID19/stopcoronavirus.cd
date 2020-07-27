@@ -114,7 +114,7 @@
                 />
               </b-tab>
               <b-tab title="Hôpital" v-if="hospitalCount != null" :active="!!selectedHospital">
-                <HospitalSituation />
+                <HospitalSituation :hospitalTotalData="hospitalTotalData" />
               </b-tab>
             </b-tabs>
           </b-card>
@@ -253,6 +253,7 @@ export default {
       hospitals: state => state.hospital.hospitalData,
       hospitalCount: state => state.hospital.hospitalCount,
       selectedHospital: state => state.hospital.selectedHospital,
+      hospitalTotalData: state => state.hospital.hospitalTotalData,
       fluxMapStyle: state => state.flux.mapStyle,
       activeMenu: state => state.nav.activeMenu
     }),
