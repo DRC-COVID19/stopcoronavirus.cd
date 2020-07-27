@@ -70,7 +70,7 @@ export default {
       this.isLoading = true;
       axios
         .get(
-          `/api/dashboard/hospital-situations/${this.$route.params.hospital_id}`
+          `/api/dashboard/hospital-situations/${this.$route.params.update_id}`
         )
         .then(({ data }) => {
           this.form = data;

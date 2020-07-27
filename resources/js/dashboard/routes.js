@@ -19,7 +19,8 @@ export default [
     {
         name: "login",
         path: "/dashboard-maps/login",
-        component: Login
+        component: Login,
+
     },
     {
         name: "lostPassword",
@@ -96,7 +97,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/hospitals/show/:hospital_id",
+        path: "/dashboard-maps/hospitals/:hospital_id/show/:update_id",
         name: "hospital.detail",
         component: HospitalsDetail,
         meta: {

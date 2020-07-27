@@ -113,7 +113,12 @@ Route::group([
             });
         });
     });
-    Route::resource('hospital-situations', "HospitalSituationController");
+    Route::group(['prefix' => 'hospital-situations'], function () {
+        Route::get('/by-hospital/{hospital_id}', 'HospitalSituationController@indexByHospital');
+        Route::resource('/', "HospitalSituationController");
+        Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate');
+    });
+
     Route::resource('hospitals-data', 'HospitalController');
     Route::get('hospitals/', 'DashBoardController@getHospials');
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
