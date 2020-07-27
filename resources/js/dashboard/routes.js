@@ -8,6 +8,8 @@ import HospitalsHome from './pages/hospital/Home';
 import HospitalsCreate from './pages/hospital/HospitalCreate';
 import HospitalsDetail from './pages/hospital/HospitalDetail';
 import HospitalData from './pages/hospital/HospitalData';
+import HospitalAdmin from './pages/adminHospital/Home';
+import HospitalAdminData from './pages/adminHospital/HospitalData';
 import NotAcces from './pages/NotAccess';
 
 const adminDashboard = "admin-dashboard";
@@ -45,7 +47,7 @@ export default [
         name: "home",
         meta: {
             requiresAuth: true,
-            role: adminDashboard
+            role: [adminDashboard]
         },
     },
     {
@@ -54,7 +56,25 @@ export default [
         component: HospitalsHome,
         meta: {
             requiresAuth: true,
-            role: agentHospital
+            role: [agentHospital]
+        },
+    },
+    {
+        path: "/dashboard-maps/admin/hospitals",
+        name: "hospital.admin",
+        component: HospitalAdmin,
+        meta: {
+            requiresAuth: true,
+            role: [agentHospital]
+        },
+    },
+    {
+        path: "/dashboard-maps/admin/hospitals/:hospital_id",
+        name: "hospital.admin.data",
+        component: HospitalAdminData,
+        meta: {
+            requiresAuth: true,
+            role: [agentHospital]
         },
     },
     {
@@ -63,7 +83,7 @@ export default [
         component: HospitalData,
         meta: {
             requiresAuth: true,
-            role: agentHospital
+            role: [agentHospital]
         },
     },
     {
@@ -72,7 +92,7 @@ export default [
         component: HospitalsCreate,
         meta: {
             requiresAuth: true,
-            role: agentHospital
+            role: [agentHospital]
         },
     },
     {
@@ -81,7 +101,7 @@ export default [
         component: HospitalsDetail,
         meta: {
             requiresAuth: true,
-            role: agentHospital
+            role: [agentHospital]
         },
     },
     {
@@ -90,7 +110,7 @@ export default [
         component: HospitalsCreate,
         meta: {
             requiresAuth: true,
-            role: agentHospital
+            role: [agentHospital]
         },
     },
     {
