@@ -50,7 +50,7 @@ router.beforeEach((to, from, next) => {
     }
 
 
-    if (to.meta.role != store.state.auth.userRole && to.name != "acces.denied") {
+    if (to.meta.role  && !to.meta.role.includes(store.state.auth.userRole) && to.name != "acces.denied") {
         next({ name: 'acces.denied' });
         return
     }

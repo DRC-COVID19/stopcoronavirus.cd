@@ -35,9 +35,10 @@ class HospitalController extends Controller
      * @param  \App\Hospital  $hospital
      * @return \Illuminate\Http\Response
      */
-    public function show(Hospital $hospital)
+    public function show($hospital_id)
     {
-        //
+        $hospital = Hospital::find($hospital_id);
+        return response()->json($hospital);
     }
 
     /**
@@ -50,14 +51,14 @@ class HospitalController extends Controller
     public function update(Request $request, $id)
     {
         $data = $this->validator($request->all());
-        
+
         try {
-            $hospital=Hospital::find($id);
+            $hospital = Hospital::find($id);
             if (!$hospital) {
-                return response()->json([],404);
+                return response()->json([], 404);
             }
             $hospital->update($data);
-            return response()->json($hospital,201);
+            return response()->json($hospital, 201);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

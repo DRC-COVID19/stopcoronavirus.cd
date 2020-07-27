@@ -3,7 +3,14 @@
     <Header />
     <b-container class="mt-4">
       <b-row>
-        <b-col v-if="user && user.hospital">
+        <b-col cols="12" class="mb-3">
+          <b-link :to="{
+            name:'hospital.admin'
+          }">
+            <span class="fa fa-chevron-left">Retour</span>
+          </b-link>
+        </b-col>
+        <b-col v-if="hospital.id">
           <h3>
             Situations hospitalières
             <b-link :to="{name:'hospital.data'}">
@@ -11,9 +18,8 @@
             </b-link>
           </h3>
           <b-alert show variant="info">
-            <div>{{`Structure: ${user.hospital.name}`}}</div>
-            <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
-            <p v-if="hospitalManagerName">Connecté en tant que {{hospitalManagerName}}</p>
+            <div>{{`Structure: ${hospital.name}`}}</div>
+            <p v-if="hospital.address">{{`Adresse: ${hospital.address}`}}</p>
           </b-alert>
         </b-col>
       </b-row>
@@ -44,7 +50,8 @@
                 :to="{
                   name:'hospital.detail', 
                   params:{
-                    hospital_id:data.item.id
+                      update_id:data.item.id,
+                    hospital_id: $route.params.hospital_id
                     }
                     }"
               >Details</b-button>
@@ -86,6 +93,7 @@ export default {
       hospitalSituations: {},
       ishospitalSituationLoading: false,
       currentPage: 1,
+      hospital: {},
     };
   },
   computed: {
@@ -107,15 +115,29 @@ export default {
   },
   mounted() {
     this.getHospitalSituations();
+    this.getHospital();
   },
   methods: {
     ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
     getHospitalSituations() {
       this.ishospitalSituationLoading = true;
-      axios.get("/api/dashboard/hospital-situations").then(({ data }) => {
-        this.hospitalSituations = data;
-        this.ishospitalSituationLoading = false;
-      });
+      axios
+        .get(
+          `/api/dashboard/hospital-situations/by-hospital/${this.$route.params.hospital_id}`
+        )
+        .then(({ data }) => {
+          this.hospitalSituations = data;
+        })
+        .finally(() => {
+          this.ishospitalSituationLoading = false;
+        });
+    },
+    getHospital() {
+      axios
+        .get(`/api/dashboard/hospitals-data/${this.$route.params.hospital_id}`)
+        .then(({ data }) => {
+          this.hospital = data;
+        });
     },
     onPageChange(page) {},
   },
