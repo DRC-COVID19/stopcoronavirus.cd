@@ -144,33 +144,34 @@ class DashBoardController extends Controller
 
             //si le nombre de date est inferieur à 32, ces dates seront nos plages sur l'axe x
             if($dates->count() > 31){
-                //sinon ont le regroupe par année-mois (yyyy-mm)
+                //sinon ont le regroupe par année-mois-semaine (yyyy-mm-dd)
+                //dd etant le premier jour de la semaine auquel appartient la date
 
                 $hospitalSituations = $hospital ?
                 Hospital::find($hospital)->hospitalSituations() :
                 HospitalSituation::orderBy('created_at') ;
 
                 $dates = $hospitalSituations
-                ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS created_at_date'))
+                ->select(DB::raw('SUBDATE(DATE(created_at), WEEKDAY(DATE(created_at))) AS created_at_date'))
                 ->get()->pluck('created_at_date')
                 ->unique() ;
 
-                $groupByClause = 'DATE_FORMAT(created_at, "%Y-%m")' ;
+                $groupByClause = 'SUBDATE(DATE(created_at), WEEKDAY(DATE(created_at)))' ;
 
-                //une nouvelle fois si le nombre de date est inferieur à 25
+                //une nouvelle fois si le nombre de date est inferieur à 32
                 //nous les prenons comme nos plages sur l'axe x
-                if($dates->count() > 24){
-                    //sinon ont le regroupe par année (yyyy)
+                if($dates->count() > 31){
+                    //sinon ont le regroupe par année-mois (yyyy-mm)
                     $hospitalSituations = $hospital ?
                     Hospital::find($hospital)->hospitalSituations() :
                     HospitalSituation::orderBy('created_at') ;
 
                     $dates = $hospitalSituations
-                    ->select(DB::raw('YEAR(created_at) AS created_at_date'))
+                    ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS created_at_date'))
                     ->get()->pluck('created_at_date')
                     ->unique() ;
 
-                    $groupByClause = "YEAR(created_at)" ;
+                    $groupByClause = 'DATE_FORMAT(created_at, "%Y-%m")' ;
                 }
             }
 
