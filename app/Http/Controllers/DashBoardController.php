@@ -111,13 +111,42 @@ class DashBoardController extends Controller
 
     public function getHospitalsTotaux(){
         try {
-            $hospitals = Hospital::with(['hospitalSituations' => function($query){
-                $query->orderBy('created_at', 'desc') ;
-                $query->limit(1) ;
-            }])->get() ;
+            $hospitals = Hospital::selectRaw(
+                'SUM(beds) AS beds , SUM(respirators) AS respirators, SUM(foam_beds) AS foam_beds ,
+                 SUM(resuscitation_beds) AS resuscitation_beds, SUM(doctors) AS doctors, SUM(nurses) AS nurses ,
+                 SUM(para_medicals) AS para_medicals,
 
-            $hospitalsResource = new HospitalTotauxResource($hospitals) ;
-            return response()->json($hospitalsResource);
+                 SUM(
+                     (SELECT occupied_foam_beds FROM hospital_situations
+                      WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
+                 ) AS occupied_foam_beds ,
+                 SUM(
+                    (SELECT occupied_resuscitation_beds FROM hospital_situations
+                     WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
+                 ) AS occupied_resuscitation_beds ,
+                 SUM(
+                    (SELECT occupied_respirators FROM hospital_situations
+                     WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
+                 ) AS occupied_respirators ,
+                 SUM(
+                    (SELECT resuscitation_ventilator FROM hospital_situations
+                     WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
+                 ) AS resuscitation_ventilator ,
+                 SUM(
+                    (SELECT oxygenator FROM hospital_situations
+                     WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
+                 ) AS oxygenator
+                '
+            )->first() ;
+
+
+            $hospitalsSituation = HospitalSituation::selectRaw(
+                'SUM(confirmed) as confirmed, SUM(healed) as healed, SUM(dead) as dead'
+            )->first() ;
+
+            $results = array_merge($hospitals->toArray(), $hospitalsSituation->toArray());
+
+            return response()->json($results);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -128,155 +157,59 @@ class DashBoardController extends Controller
 
     public function getHospitalEvolution($hospital = null){
         try {
-            $hospitalSituations = $hospital ?
-                Hospital::find($hospital)->hospitalSituations() :
-                HospitalSituation::orderBy('created_at') ;
 
-            //On réccupère les dates où des nouvelles données ont été transmises
-            $dates = $hospitalSituations->select(DB::raw('DATE(created_at) AS created_at_date'))
-                ->get()->pluck('created_at_date')
-                ->unique() ;
+            $hospitalSituations = HospitalSituation
+                ::where(function($query) use ($hospital) {
+                    if($hospital)
+                    $query->where('hospital_id', intval($hospital)) ;
+                })
+                ->select([ 'last_update' , 'occupied_respirators' , 'occupied_resuscitation_beds' ,
+                    DB::raw(
+                        '(occupied_respirators * 100 /
+                            (SELECT respirators FROM
+                                (SELECT id, updated_at, respirators from hospitals
+                                    UNION
+                                    SELECT hospital_id AS id, updated_at, respirators from hospital_logs
+                                ) AS a
+                                WHERE a.id = hospital_id
+                                ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
+                                LIMIT 1
+                            )
+                        ) AS taux_respirators'
+                    ),
+                    DB::raw(
+                        '(occupied_resuscitation_beds * 100 /
+                            (SELECT resuscitation_beds FROM
+                                (SELECT id, updated_at, resuscitation_beds from hospitals
+                                    UNION
+                                    SELECT hospital_id AS id, updated_at, resuscitation_beds from hospital_logs
+                                ) AS a
+                                WHERE a.id = hospital_id
+                                ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
+                                LIMIT 1
+                            )
+                        ) AS taux_resuscitation_beds'
+                    )
+                ])
+                ->orderBy('last_update')
+                ->get() ;
 
-            //generation de la groupe by clause en fonction du type de date choisis
-            //pour le regroupement
-            //par defaut (yyyy-mm-dd)
-            $groupByClause = 'DATE(created_at)' ;
-
-            //si le nombre de date est inferieur à 32, ces dates seront nos plages sur l'axe x
-            if($dates->count() > 31){
-                //sinon ont le regroupe par année-mois-semaine (yyyy-mm-dd)
-                //dd etant le premier jour de la semaine auquel appartient la date
-
-                $hospitalSituations = $hospital ?
-                Hospital::find($hospital)->hospitalSituations() :
-                HospitalSituation::orderBy('created_at') ;
-
-                $dates = $hospitalSituations
-                ->select(DB::raw('SUBDATE(DATE(created_at), WEEKDAY(DATE(created_at))) AS created_at_date'))
-                ->get()->pluck('created_at_date')
-                ->unique() ;
-
-                $groupByClause = 'SUBDATE(DATE(created_at), WEEKDAY(DATE(created_at)))' ;
-
-                //une nouvelle fois si le nombre de date est inferieur à 32
-                //nous les prenons comme nos plages sur l'axe x
-                if($dates->count() > 31){
-                    //sinon ont le regroupe par année-mois (yyyy-mm)
-                    $hospitalSituations = $hospital ?
-                    Hospital::find($hospital)->hospitalSituations() :
-                    HospitalSituation::orderBy('created_at') ;
-
-                    $dates = $hospitalSituations
-                    ->select(DB::raw('DATE_FORMAT(created_at, "%Y-%m") AS created_at_date'))
-                    ->get()->pluck('created_at_date')
-                    ->unique() ;
-
-                    $groupByClause = 'DATE_FORMAT(created_at, "%Y-%m")' ;
-                }
-            }
-
-            //Réccuperation de la moyenne de pourcentage d'occupation
-            //dans les plages de date selectionné
-            $evolution = [
-                'labels' => [] ,
-                'dataLits' => [] ,
-                'dataRespirateurs' => [] ,
+            $results = [
+                'last_update' => [] ,
+                'occupied_respirators' => [] ,
+                'occupied_resuscitation_beds' => [] ,
+                'taux_respirators' => [] ,
+                'taux_resuscitation_beds' => []
             ] ;
-
-            $dates = $dates->sort()->values()->all() ;
-
-            foreach ($dates as $date) {
-                $hospitalSituations = $hospital ?
-                Hospital::find($hospital)->hospitalSituations() :
-                HospitalSituation::orderBy('created_at') ;
-
-                $evolution['labels'][] = $date  ;
-
-                //On réccupère la moyenne du taux d'occupation de lits de reanimation et respirateurs
-                //dans la periode donnée
-
-                $hospitalSituations
-                    ->select([
-                        DB::raw(
-                            'AVG(occupied_respirators * 100 /
-                                (SELECT respirators FROM
-                                    (SELECT id, updated_at, respirators from hospitals
-                                        UNION
-                                     SELECT hospital_id AS id, updated_at, respirators from hospital_logs
-                                    ) AS a
-                                    WHERE a.id = hospital_id AND (a.updated_at < created_at OR a.updated_at IS NULL)
-                                    ORDER BY updated_at DESC
-                                    LIMIT 1
-                                )
-                            ) AS taux_respirators'
-                        ),
-                        DB::raw(
-                            'AVG(occupied_resuscitation_beds * 100 /
-                                (SELECT resuscitation_beds FROM
-                                    (SELECT id, updated_at, resuscitation_beds from hospitals
-                                        UNION
-                                     SELECT hospital_id AS id, updated_at, resuscitation_beds from hospital_logs
-                                    ) AS a
-                                    WHERE a.id = hospital_id AND (a.updated_at < created_at OR a.updated_at IS NULL)
-                                    ORDER BY updated_at DESC
-                                    LIMIT 1
-                                )
-                            ) AS taux_resuscitation_beds'
-                        )
-                    ]) ;
-
-                // Si c'est l'evolution d'une hopital donnée à chaque plage de date correspondra toujours
-                // un ou un groupe d'hospitalSituation donc on peut faire un egalité
-                if($hospital){
-                    $hospitalSituations->whereRaw($groupByClause . '= "' . $date . '"') ;
-                    $totaux = $hospitalSituations->groupBy(DB::raw($groupByClause))->first() ;
-                }
-
-                // Si c'est l'evolution global des hopitaux
-                // certaines peuvent n'est pas avoir eu d'hospitalSituation alors que d'autres en ont eu à cette date
-                // Donc ont réccupère la dernière connue
-                else{
-                    $groupByClause2 = str_replace($groupByClause, 'created_at' , 'hospital_situations.created_at') ;
-                    $hospitalSituations->whereRaw($groupByClause . '<= "' . $date . '" AND NOT EXISTS
-                        (SELECT * FROM hospital_situations as h
-                            WHERE h.hospital_id = hospital_situations.hospital_id
-                            AND '. $groupByClause . '<= "' . $date . '"
-                            AND '. $groupByClause . ' > ' . $groupByClause2  .
-                        ')'
-                    ) ;
-
-                    //Etant donné que la condition est <= à la plage de date, Donc lors du regroupement
-                    //ON peut se retrouver avec plusieurs groupes de ce fait, on doit plutot ici
-                    //faire un get puis une autre moyenne
-                    $totaux = $hospitalSituations->groupBy(DB::raw($groupByClause))->get() ;
-
-                    $totauxLen = sizeof($totaux) ;
-                    $totaux = $totaux->reduce(function($a, $b){
-                        $init_1 = $a ? $a['taux_resuscitation_beds'] : 0 ;
-                        $init_2 = $a ? $a['taux_respirators'] : 0 ;
-                        return [
-                            'taux_resuscitation_beds' => $init_1 + $b->taux_resuscitation_beds ,
-                            'taux_respirators' => $init_2 + $b->taux_respirators
-                        ] ;
-                    }) ;
-
-                    //nouvelle moyenne
-                    $totaux['taux_resuscitation_beds'] /= $totauxLen ;
-                    $totaux['taux_respirators'] /= $totauxLen ;
-
-                }
-
-
-                if($totaux){
-                    $evolution['dataLits'][] = round($totaux['taux_resuscitation_beds']) ;
-                    $evolution['dataRespirateurs'][] = round($totaux['taux_respirators']) ;
-                }else{
-                    $evolution['dataLits'][] = null ;
-                    $evolution['dataRespirateurs'][] = null ;
-                }
+            foreach($hospitalSituations as $data){
+                $results['last_update'][] = $data->last_update ;
+                $results['occupied_respirators'][] = $data->occupied_respirators ;
+                $results['occupied_resuscitation_beds'][] = $data->occupied_resuscitation_beds ;
+                $results['taux_respirators'][] = $data->taux_respirators ;
+                $results['taux_resuscitation_beds'][] = $data->taux_resuscitation_beds ;
             }
+            return response()->json($results);
 
-            return response()->json($evolution);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
