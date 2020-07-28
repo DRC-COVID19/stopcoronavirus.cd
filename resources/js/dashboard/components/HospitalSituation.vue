@@ -144,7 +144,7 @@ export default {
             }
         },
         isGlobal(){
-            return this.selectedHospital == null
+            return this.selectedHospital != null ? false : true
         }
     },
     watch: {
@@ -163,12 +163,12 @@ export default {
             const config = {
                 type: 'line',
                 data: {
-                    labels: data.labels.map(d => new Date(d)),
+                    labels: data.last_update.map(d => new Date(d)),
                     datasets: [{
                         label: 'occupation lits en réanimation',
                         backgroundColor: "#ff6384",
                         borderColor: "#ff6384",
-                        data: data.dataLits,
+                        data: data.taux_resuscitation_beds,
                         fill: false,
                         interpolate: true,
                         showLine: true,
@@ -179,7 +179,7 @@ export default {
                         fill: false,
                         backgroundColor: "#36a2eb",
                         borderColor: "#36a2eb",
-                        data: data.dataRespirateurs,
+                        data: data.taux_respirators,
                     }]
                 },
                 options: {
