@@ -12,6 +12,8 @@ use Encore\Admin\Grid;
 use Encore\Admin\Show;
 use Encore\Admin\Widgets\Tab;
 use Encore\Admin\Widgets\MultipleSteps;
+use Encore\Admin\Layout\Content;
+use Encore\Admin;
 
 class HospitalSituationController extends AdminController
 {
@@ -113,4 +115,32 @@ class HospitalSituationController extends AdminController
 
     //     return $form;
     // }
+
+    public function journalier(Content $content){
+
+        $situations = HospitalSituation::with('hospital')->whereRaw(" DATE(created_at) = DATE(NOW())")
+            ->orderBy('created_at', 'desc')->paginate(20) ;
+
+        return $content
+            ->header('Hopitaux')
+            ->description('Données jounalières')
+            ->breadcrumb(
+                ['text' => 'Dashboard', 'url' => '/admin'],
+                ['text' => 'Données journalières']
+            )
+            ->view('infrastructure.journalier', compact('situations'));
+    }
+
+    public function journalier_show(HospitalSituation $situation, Content $content){
+
+        return $content
+            ->header('Hopitaux')
+            ->description('Données jounalières')
+            ->breadcrumb(
+                ['text' => 'Dashboard', 'url' => '/admin'],
+                ['text' => 'Données journalières', 'url' => '/situation-journalier'],
+                ['text' => 'Details']
+            )
+            ->view('infrastructure.journalier-details', compact('situation'));
+    }
 }
