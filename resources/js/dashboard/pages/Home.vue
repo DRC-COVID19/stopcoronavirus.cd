@@ -20,6 +20,8 @@
           />
           <MenuIndicateur
             v-if="activeMenu==3"
+            :fluxZones="fluxZones"
+            :fluxProvinces="fluxProvinces"
           />
           <MenuInfrastructure
             v-if="activeMenu==5"
@@ -75,7 +77,6 @@
           <b-card no-body>
             <b-tabs pills card>
               <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
-
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
               <b-tab title="FLux chart" v-if="hasFlux24DailyIn" :active="hasFlux24DailyIn">
@@ -183,7 +184,7 @@ export default {
     MenuEpidemology,
     MenuInfrastructure,
     MenuOrientation,
-    MenuIndicateur
+    MenuIndicateur,
   },
   data() {
     return {
@@ -219,17 +220,17 @@ export default {
       fluxGeoOptions: [],
       menuColunmStyle: {},
       flux24PrensenceDaily: [],
-      flux24PresenceDailyIn: []
+      flux24PresenceDailyIn: [],
     };
   },
   computed: {
     ...mapState({
-      hospitals: state => state.hospital.hospitalData,
-      hospitalCount: state => state.hospital.hospitalCount,
-      selectedHospital: state => state.hospital.selectedHospital,
-      hospitalTotalData: state => state.hospital.hospitalTotalData,
-      fluxMapStyle: state => state.flux.mapStyle,
-      activeMenu: state => state.nav.activeMenu
+      hospitals: (state) => state.hospital.hospitalData,
+      hospitalCount: (state) => state.hospital.hospitalCount,
+      selectedHospital: (state) => state.hospital.selectedHospital,
+      hospitalTotalData: (state) => state.hospital.hospitalTotalData,
+      fluxMapStyle: (state) => state.flux.mapStyle,
+      activeMenu: (state) => state.nav.activeMenu,
     }),
     hasRightSide() {
       return (
@@ -257,26 +258,28 @@ export default {
       return this.flux24DailyIn.length > 0;
     },
     flux24WithoutReference() {
-      return this.flux24.filter(x => !x.isReference);
+      return this.flux24.filter((x) => !x.isReference);
     },
     mapStyle() {
       return {
         height:
           this.getHasCoviCases() || this.getHasOrientation()
             ? `64vh`
-            : `calc(100vh - 52.5px)`
+            : `calc(100vh - 52.5px)`,
       };
     },
-    isLoading(){
-      return Object.values(this.loadings).find(val => val === true ) ? true : false
-    }
+    isLoading() {
+      return Object.values(this.loadings).find((val) => val === true)
+        ? true
+        : false;
+    },
   },
   mounted() {
     this.getFluxZone();
     this.getFluxProvinces();
     this.$store.watch(
-      state => state.nav.activeMenu,
-      value => {
+      (state) => state.nav.activeMenu,
+      (value) => {
         this.gethopitals(false);
         switch (value) {
           case 1:
@@ -285,7 +288,8 @@ export default {
           default:
             break;
         }
-      });
+      }
+    );
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),
@@ -299,7 +303,7 @@ export default {
         height = this.$refs.dash_home_page.clientHeight;
       }
       this.menuColunmStyle = {
-        height: `calc(${height} - 70px)`
+        height: `calc(${height} - 70px)`,
       };
     },
     getHasCoviCases() {
@@ -315,7 +319,7 @@ export default {
       if (checked) {
         let confirmedCount = 0;
 
-        this.$set(this.loadings, 'getCovidCases_stat', true) ;
+        this.$set(this.loadings, "getCovidCases_stat", true);
         axios
           .get("/api/dashboard/cavid-cases/statistics")
           .then(({ data }) => {
@@ -324,7 +328,7 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
-            data.map(function(d) {
+            data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
               healed.push(d.healed);
@@ -334,16 +338,15 @@ export default {
               confirmed,
               dead,
               healed,
-              labels
+              labels,
             };
-            this.$set(this.loadings, 'getCovidCases_stat', false) ;
+            this.$set(this.loadings, "getCovidCases_stat", false);
           })
-          .catch(response => {
-            this.$set(this.loadings, 'getCovidCases_stat', false) ;
+          .catch((response) => {
+            this.$set(this.loadings, "getCovidCases_stat", false);
           });
 
-
-        this.$set(this.loadings, 'getCovidCases_statdaily', true) ;
+        this.$set(this.loadings, "getCovidCases_statdaily", true);
         axios
           .get("/api/dashboard/cavid-cases/statistics/daily")
           .then(({ data }) => {
@@ -352,7 +355,7 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
-            data.map(function(d) {
+            data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
               healed.push(d.healed);
@@ -362,26 +365,26 @@ export default {
               confirmed,
               dead,
               healed,
-              labels
+              labels,
             };
-            this.$set(this.loadings, 'getCovidCases_statdaily', false) ;
+            this.$set(this.loadings, "getCovidCases_statdaily", false);
           })
-          .catch(response => {
-            this.$set(this.loadings, 'getCovidCases_statdaily', false) ;
+          .catch((response) => {
+            this.$set(this.loadings, "getCovidCases_statdaily", false);
           });
 
-        this.$set(this.loadings, 'getCovidCases_cases', true) ;
+        this.$set(this.loadings, "getCovidCases_cases", true);
 
         axios
           .get(`/api/dashboard/cavid-cases`)
           .then(({ data }) => {
-            let Features = data.map(value => {
+            let Features = data.map((value) => {
               confirmedCount += Number(value.confirmed);
               return {
                 type: "Feature",
                 geometry: {
                   type: "Point",
-                  coordinates: [value.longitude, value.latitude]
+                  coordinates: [value.longitude, value.latitude],
                 },
                 properties: {
                   name: value.name,
@@ -391,23 +394,23 @@ export default {
                   sick: Number(value.sick ?? 0),
                   last_update: value.last_update,
                   seriously: Number(value.seriously ?? 0),
-                  color: "#ED5F68"
-                }
+                  color: "#ED5F68",
+                },
               };
             });
             this.covidCases = {
               type: "geojson",
               data: {
                 type: "FeatureCollection",
-                features: Features
-              }
+                features: Features,
+              },
             };
 
             this.covidCasesCount = confirmedCount;
-            this.$set(this.loadings, 'getCovidCases_cases', false) ;
+            this.$set(this.loadings, "getCovidCases_cases", false);
           })
-          .catch(response => {
-            this.$set(this.loadings, 'getCovidCases_cases', false) ;
+          .catch((response) => {
+            this.$set(this.loadings, "getCovidCases_cases", false);
           });
       } else {
         this.covidCases = null;
@@ -417,8 +420,7 @@ export default {
     },
     getmedicalOrientations(checked) {
       if (checked) {
-
-        this.$set(this.loadings, 'orientation_medical', true) ;
+        this.$set(this.loadings, "orientation_medical", true);
         axios
           .get(`/api/dashboard/orientation-medical-result`)
           .then(({ data }) => {
@@ -426,7 +428,7 @@ export default {
             let total_fin = 0;
             let total_fin5 = 0;
             let total_fin8 = 0;
-            data.map(item => {
+            data.map((item) => {
               total_fin += item.FIN ?? 0;
               total_fin5 += item.FIN5 ?? 0;
               total_fin8 += item.FIN8 ?? 0;
@@ -435,15 +437,15 @@ export default {
             this.fin5Count = total_fin5;
             this.fin8Count = total_fin8;
 
-            this.$set(this.loadings, 'orientation_medical', false) ;
+            this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = total_fin + total_fin8 + total_fin5;
           })
           .catch(() => {
-            this.$set(this.loadings, 'orientation_medical', false) ;
+            this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = null;
           });
 
-        this.$set(this.loadings, 'orientation_medical_stats', true) ;
+        this.$set(this.loadings, "orientation_medical_stats", true);
         axios
           .get(`/api/dashboard/orientation-medical-stats`)
           .then(({ data }) => {
@@ -451,7 +453,7 @@ export default {
               fin5 = [],
               fin8 = [],
               labels = [];
-            data.map(item => {
+            data.map((item) => {
               fin.push(item.FIN);
               fin5.push(item.FIN5);
               fin8.push(item.FIN8);
@@ -461,12 +463,12 @@ export default {
               fin,
               fin5,
               fin8,
-              labels
+              labels,
             };
-            this.$set(this.loadings, 'orientation_medical_stats', false) ;
+            this.$set(this.loadings, "orientation_medical_stats", false);
           })
           .catch(() => {
-            this.$set(this.loadings, 'orientation_medical_stats', false) ;
+            this.$set(this.loadings, "orientation_medical_stats", false);
           });
       } else {
         this.medicalOrientations = null;
@@ -478,15 +480,16 @@ export default {
     },
     hasSondageChecked(checked) {
       if (checked) {
-
-        this.$set(this.loadings, 'hasSondageChecked', true) ;
-        axios.get(`/api/dashboard/sondages`).then(({ data }) => {
-          this.$set(this.loadings, 'hasSondageChecked', false) ;
-          this.sondages = data;
-        })
-        .catch(() => {
-          this.$set(this.loadings, 'hasSondageChecked', false) ;
-        });
+        this.$set(this.loadings, "hasSondageChecked", true);
+        axios
+          .get(`/api/dashboard/sondages`)
+          .then(({ data }) => {
+            this.$set(this.loadings, "hasSondageChecked", false);
+            this.sondages = data;
+          })
+          .catch(() => {
+            this.$set(this.loadings, "hasSondageChecked", false);
+          });
       } else {
         this.sondages = null;
       }
@@ -613,121 +616,121 @@ export default {
       this.flux24DailyComparison = [];
       this.fluxGeoOptions = [];
 
-      this.$set(this.loadings, 'urlDailyCompare', true) ;
+      this.$set(this.loadings, "urlDailyCompare", true);
       axios
         .get(urlDailyCompare, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24DailyComparison = data;
           this.fluxGeoOptions = values.fluxGeoOptions;
-          this.$set(this.loadings, 'urlDailyCompare', false) ;
+          this.$set(this.loadings, "urlDailyCompare", false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, 'urlDailyCompare', false) ;
+          this.$set(this.loadings, "urlDailyCompare", false);
         });
 
       this.flux24Daily = [];
-      this.$set(this.loadings, 'urlDaily', true) ;
+      this.$set(this.loadings, "urlDaily", true);
       axios
         .get(urlDaily, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24Daily = data;
-          this.$set(this.loadings, 'urlDaily', false) ;
+          this.$set(this.loadings, "urlDaily", false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, 'urlDaily', false) ;
+          this.$set(this.loadings, "urlDaily", false);
         });
 
       // get flux data in
 
       this.flux24DailyIn = [];
-      this.$set(this.loadings, 'urlDailyIn', true) ;
+      this.$set(this.loadings, "urlDailyIn", true);
       axios
         .get(urlDailyIn, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24DailyIn = data;
-          this.$set(this.loadings, 'urlDailyIn', false) ;
+          this.$set(this.loadings, "urlDailyIn", false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, 'urlDailyIn', false) ;
+          this.$set(this.loadings, "urlDailyIn", false);
         });
 
       // get flux data out
 
       this.flux24DailyOut = [];
-      this.$set(this.loadings, 'urlDailyOut', true) ;
+      this.$set(this.loadings, "urlDailyOut", true);
       axios
         .get(urlDailyOut, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24DailyOut = data;
-          this.$set(this.loadings, 'urlDailyOut', false) ;
+          this.$set(this.loadings, "urlDailyOut", false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, 'urlDailyOut', false) ;
+          this.$set(this.loadings, "urlDailyOut", false);
         });
 
       this.flux24Presence = [];
-      this.$set(this.loadings, 'urlPresence', true) ;
+      this.$set(this.loadings, "urlPresence", true);
       axios
         .get(urlPresence, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24Presence = data;
-          this.$set(this.loadings, 'urlPresence', false) ;
+          this.$set(this.loadings, "urlPresence", false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, 'urlPresence', false) ;
+          this.$set(this.loadings, "urlPresence", false);
         });
 
-      this.$set(this.loadings, 'urlPresenceDaily', true) ;
+      this.$set(this.loadings, "urlPresenceDaily", true);
       this.flux24PrensenceDaily = [];
       axios
         .get(urlPresenceDaily, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24PrensenceDaily = data;
-          this.$set(this.loadings, 'urlPresenceDaily', false) ;
+          this.$set(this.loadings, "urlPresenceDaily", false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, 'urlPresenceDaily', false) ;
+          this.$set(this.loadings, "urlPresenceDaily", false);
         });
 
       this.flux24PresenceDailyIn = [];
-      this.$set(this.loadings, 'urlPresenceDailyIn', true) ;
+      this.$set(this.loadings, "urlPresenceDailyIn", true);
       axios
         .get(urlPresenceDailyIn, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24PresenceDailyIn = data;
-          this.$set(this.loadings, 'urlPresenceDailyIn', false) ;
+          this.$set(this.loadings, "urlPresenceDailyIn", false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, 'urlPresenceDailyIn', false) ;
+          this.$set(this.loadings, "urlPresenceDailyIn", false);
         });
 
       this.flux24 = [];
-      this.$set(this.loadings, 'flux24', true) ;
+      this.$set(this.loadings, "flux24", true);
       axios
         .get(url, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24 = data;
-          this.$set(this.loadings, 'flux24', false) ;
+          this.$set(this.loadings, "flux24", false);
         })
         .catch(({ response }) => {
           this.flux24Errors = response.data.errors;
-          this.$set(this.loadings, 'flux24', false) ;
+          this.$set(this.loadings, "flux24", false);
         });
     },
     seeSide() {
@@ -745,7 +748,7 @@ export default {
       const values = {
         option: value,
         preference_start,
-        preference_end
+        preference_end,
       };
       this.flux24Errors = {};
 
@@ -755,31 +758,31 @@ export default {
       const urlDailyOut = `api/dashboard/flux/predefined/zones/h-24/daily-out`;
       const urlDailyCompare = `api/dashboard/flux/predefined/zones/h-24/daily-compare`;
 
-      this.$set(this.loadings, 'fluxPC_urlDailyCompare', true) ;
+      this.$set(this.loadings, "fluxPC_urlDailyCompare", true);
       axios
         .get(urlDailyCompare, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24DailyComparison = data;
-          this.$set(this.loadings, 'fluxPC_urlDailyCompare', false) ;
+          this.$set(this.loadings, "fluxPC_urlDailyCompare", false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, 'fluxPC_urlDailyCompare', false) ;
+          this.$set(this.loadings, "fluxPC_urlDailyCompare", false);
         });
 
       this.flux24Daily = [];
-      this.$set(this.loadings, 'fluxPC_urlDaily', true) ;
+      this.$set(this.loadings, "fluxPC_urlDaily", true);
       axios
         .get(urlDaily, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24Daily = data;
-          this.$set(this.loadings, 'fluxPC_urlDaily', false) ;
+          this.$set(this.loadings, "fluxPC_urlDaily", false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, 'fluxPC_urlDaily', false) ;
+          this.$set(this.loadings, "fluxPC_urlDaily", false);
         });
 
       // get flux data in
@@ -807,21 +810,21 @@ export default {
       //   .catch(({ response }) => {});
 
       this.flux24 = [];
-      this.$set(this.loadings, 'fluxPC_flux24', true) ;
+      this.$set(this.loadings, "fluxPC_flux24", true);
       axios
         .get(url, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24 = data;
-          this.$set(this.loadings, 'fluxPC_flux24', false) ;
+          this.$set(this.loadings, "fluxPC_flux24", false);
         })
         .catch(({ response }) => {
           this.flux24Errors = response.data.errors;
-          this.$set(this.loadings, 'fluxPC_flux24', false) ;
+          this.$set(this.loadings, "fluxPC_flux24", false);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>

@@ -5,6 +5,8 @@ import flux from './modules/flux';
 import hospital from './modules/hospital';
 import nav from './modules/nav';
 import epidemic from './modules/epidemic';
+import indicator from './modules/indicator';
+import app from './modules/app';
 
 Vue.use(Vuex);
 
@@ -16,10 +18,12 @@ export default new Vuex.Store({
 
     },
     modules: {
+        app,
         auth,
         flux,
         hospital,
         nav,
-        epidemic
+        epidemic,
+        indicator
     }
 });
