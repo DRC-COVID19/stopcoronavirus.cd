@@ -7,8 +7,8 @@
           <h3>Dernières mise à jour situation épidemiologique</h3>
         </b-col>
         <b-col cols="12" md="2">
-          <b-button class="btn-dash-blue">
-            <span class="fa fa-refresh"></span>
+          <b-button class="btn-dash-blue" @click="getData()">
+            <i class="fa fa-sync"></i>
           </b-button>
         </b-col>
       </b-row>
@@ -39,11 +39,11 @@
                 size="sm"
                 class="btn-dash-blue mb-1"
                 :to="{
-                  name:'hospital.admin.data', 
+                  name:'hospital.admin.data',
                   params:{
                     hospital_id:data.item.hospital_id
-                    }
-                    }"
+                  }
+                }"
               >Details</b-button>
             </template>
           </b-table>

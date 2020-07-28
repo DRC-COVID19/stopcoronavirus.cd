@@ -88,9 +88,9 @@ class HospitalSituationController extends Controller
     public function getAgentLastUpdate()
     {
         try {
-            $lastUpdate = DB::select('SELECT p1.hospital_id, p2.name, MAX(p1.last_update) AS last_update, SUM(p1.confirmed) AS confirmed 
-            FROM hospital_situations p1 
-            INNER JOIN hospitals p2 ON p1.hospital_id=p2.id  GROUP BY hospital_id
+            $lastUpdate = DB::select('SELECT p1.hospital_id, p2.name, MAX(p1.last_update) AS last_update, SUM(p1.confirmed) AS confirmed
+            FROM hospital_situations p1
+            INNER JOIN hospitals p2 ON p1.hospital_id=p2.id  GROUP BY hospital_id,p2.name
             ORDER BY last_update desc
             ');
             return response()->json($lastUpdate);

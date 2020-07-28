@@ -9,7 +9,7 @@ import VueLazyLoad from 'vue-lazyload';
 import vSelect from 'vue-select';
 import App from "./App.vue";
 import GlobalComponents from './globalComponents'
-import { ADMIN_DASHBOARD, AGENT_HOSPITAL } from './config/env';
+import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env';
 import "chartjs-plugin-crosshair";
 
 require('./helper');
@@ -42,13 +42,15 @@ router.beforeEach((to, from, next) => {
             case AGENT_HOSPITAL:
                 next({ name: 'hospital.home' });
                 break;
+            case ADMIN_HOSPITAL:
+                next({ name: 'hospital.admin' });
+                break;
             default:
                 next({ name: 'acces.denied' });
                 break;
         }
         return
     }
-
 
     if (to.meta.role  && !to.meta.role.includes(store.state.auth.userRole) && to.name != "acces.denied") {
         next({ name: 'acces.denied' });

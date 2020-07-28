@@ -14,6 +14,7 @@ import NotAcces from './pages/NotAccess';
 
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
+const adminHospital = "admin-hospital";
 
 export default [
     {
@@ -66,7 +67,7 @@ export default [
         component: HospitalAdmin,
         meta: {
             requiresAuth: true,
-            role: [agentHospital]
+            role: [adminHospital]
         },
     },
     {
@@ -75,7 +76,7 @@ export default [
         component: HospitalAdminData,
         meta: {
             requiresAuth: true,
-            role: [agentHospital]
+            role: [adminHospital]
         },
     },
     {
@@ -102,7 +103,7 @@ export default [
         component: HospitalsDetail,
         meta: {
             requiresAuth: true,
-            role: [agentHospital]
+            role: [agentHospital,adminHospital]
         },
     },
     {
