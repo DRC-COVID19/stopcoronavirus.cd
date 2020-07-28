@@ -88,7 +88,7 @@ export default {
                     });
 
                 axios
-                    .get(`/api/dashboard/hospitals-totaux`)
+                    .get(`/api/dashboard/hospitals/totaux`)
                     .then(({ data }) => {
                         state.hospitalTotalData = data
                     })
@@ -100,17 +100,15 @@ export default {
                 state.hospitalTotalData = null;
             }
         },
-        getSituationHospital({ state }, payload){
+        getSituationHospital({ state }, payload) {
             const selectedHospital = payload ? payload : ''
             state.situationHospitalLoading = true
-
             axios
-			.get(`/api/dashboard/hospitals/evolution/${selectedHospital}`)
-			.then(({ data }) => {
-                console.log(data)
-                state.situationHospital = data
-                state.situationHospitalLoading = false
-            })
+                .get(`/api/dashboard/hospitals/evolution/${selectedHospital}`)
+                .then(({ data }) => {
+                    state.situationHospital = data
+                    state.situationHospitalLoading = false
+                })
         }
     }
 }

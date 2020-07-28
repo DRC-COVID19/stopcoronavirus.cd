@@ -38,32 +38,6 @@
         </b-col>
       </b-row>
       <b-row class="position-relative map-wrap" v-if="activeMenu != 3">
-        <!--   <LeftColumn
-          @covidCaseChecked="getCovidCases"
-          @hopitalChecked="gethopitals"
-          @medicalOrientationChecked="getmedicalOrientations"
-          @medicalOrientationChanged="medicalOrientationChanged"
-          @hasSondageChecked="hasSondageChecked"
-          @worriedChecked="worriedChecked"
-          @catchVirusChecked="catchVirusChecked"
-          @priceIncreaseChecked="priceIncreaseChecked"
-          @maskChecked="maskChecked"
-          @makalaChecked="makalaChecked"
-          @flourChecked="flourChecked"
-          @antiBacterialGelChecked="antiBacterialGelChecked"
-          @submitFluxForm="submitFluxForm"
-          @populationFluxChecked="populationFluxChecked"
-          @flux::predefined::changed="fluxPredefinedChanged"
-          :covidCasesCount="covidCasesCount"
-          :hospitalCount="hospitalCount"
-          :orientationCount="orientationCount"
-          :finCount="finCount"
-          :fin5Count="fin5Count"
-          :fin8Count="fin8Count"
-          :fluxZones="fluxZones"
-          :fluxProvinces="fluxProvinces"
-          :flux24Errors="flux24Errors"
-        />-->
         <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
           <div class="layer-set-contenair" v-if="hasFlux24Daily">
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arc</b-link>
