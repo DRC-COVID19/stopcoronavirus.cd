@@ -13,9 +13,6 @@
         <b-col v-if="hospital.id">
           <h3>
             Situations hospitalières
-            <b-link :to="{name:'hospital.data'}">
-              <span class="fa fa-edit"></span>
-            </b-link>
           </h3>
           <b-alert show variant="info">
             <div>{{`Structure: ${hospital.name}`}}</div>
@@ -48,12 +45,12 @@
                 size="sm"
                 class="btn-dash-blue mb-1"
                 :to="{
-                  name:'hospital.detail', 
+                  name:'hospital.detail',
                   params:{
-                      update_id:data.item.id,
+                    update_id:data.item.id,
                     hospital_id: $route.params.hospital_id
-                    }
-                    }"
+                  }
+                }"
               >Details</b-button>
             </template>
           </b-table>
