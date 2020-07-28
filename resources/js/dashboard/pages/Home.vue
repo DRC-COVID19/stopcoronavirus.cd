@@ -274,19 +274,18 @@ export default {
   mounted() {
     this.getFluxZone();
     this.getFluxProvinces();
-    // this.$store.watch(
-    //   state => state.nav.activeMenu,
-    //   value => {
-    //     this.populationFluxChecked(false);
-    //     this.getCovidCases(false);
-    //     switch (value) {
-    //       case 1:
-    //         break;
-    //       case 2:
-    //       default:
-    //         break;
-    //     }
-    //   });
+    this.$store.watch(
+      state => state.nav.activeMenu,
+      value => {
+        this.gethopitals(false);
+        switch (value) {
+          case 1:
+            break;
+          case 2:
+          default:
+            break;
+        }
+      });
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),
