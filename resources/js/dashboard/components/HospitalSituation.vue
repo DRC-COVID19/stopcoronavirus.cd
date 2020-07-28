@@ -1,87 +1,68 @@
 <template>
-  <b-card>
-    <b-container class="p-0">
-      <b-row>
-        <b-col cols="12">
-          <h4 class="bold">{{hospital.name}}</h4>
-          <hr />
-          <div v-if="hospital.last_update" class="text-right text-black-50 ">Mise à jour du {{moment(hospital.last_update).format('DD.MM.Y')}}</div>
-          <h5 class="bold">Situations épidemologiques</h5>
-          <div>Confirmés: {{hospital.confirmed}}</div>
-          <div>Hospitalisés: {{hospital.sick}}</div>
-          <div>Guéris: {{hospital.healed}}</div>
-          <div>décès: {{hospital.dead}}</div>
-          <hr />
+  <b-container class="p-0">
+    <b-row>
+      <b-col cols="12 mb-2">
+        <b-card no-body class="default-card p-3">
+          <div class="row align-items-center">
+            <h4 class="bold col m-0">{{hospital.name || "Rapport global"}}</h4>
+            <div
+              v-if="hospital.last_update"
+              class="text-right text-black-50 col"
+            >Mise à jour du {{moment(hospital.last_update).format('DD.MM.Y')}}</div>
+            <div class="col-12 text-right">
+              <button
+                class="btn btn-sm btn-light"
+                style="font-size: 12px;"
+                @click="backToTotalData()"
+                v-if="!isGlobal"
+              >Retour aux données globales</button>
+            </div>
+          </div>
+        </b-card>
+      </b-col>
+    </b-row>
+    <b-row no-gutters>
+      <b-col cols="12" md="6" class="pr-1"  >
+        <b-card class="col-12 default-card mb-2">
           <h5 class="bold">Capacité de prise en charge</h5>
-          <div>Lits avec mousse: {{hospital.occupied_foam_beds}}/{{hospital.foam_beds}}</div>
-          <div>Lits de réanimation: {{hospital.occupied_resuscitation_beds}}/{{hospital.resuscitation_beds}}</div>
           <div>
-            Respirateurs
-            : {{hospital.respirators}}/{{hospital.occupied_respirators}}
+            <div>Lits avec mousse: {{hospital.occupied_foam_beds}}/{{hospital.foam_beds}}</div>
+            <div>Lits de réanimation: {{hospital.occupied_resuscitation_beds}}/{{hospital.resuscitation_beds}}</div>
+            <div>Respirateurs: {{hospital.occupied_respirators}}/{{hospital.respirators}}</div>
+            <div>Ventilateur de réanimation : {{hospital.resuscitation_ventilator}}</div>
+            <div>Oxygénérateur: {{hospital.oxygenator}}</div>
+            <div
+              v-if="!isGlobal"
+            >Equipement de protection individuelle: {{hospital.individual_protection_equipment}}</div>
+            <div v-if="!isGlobal">Masques N95/FFP2: {{hospital.masks}}</div>
+            <div v-if="!isGlobal">Dépistage rapide: {{hospital.rapid_screening}}</div>
+            <div v-if="!isGlobal">Radiographie: {{hospital.x_ray}}</div>
+            <div v-if="!isGlobal">Automate Genexpert: {{hospital.automate_genexpert}}</div>
+            <div v-if="!isGlobal">Gel hydro alcoolique: {{hospital.gel_hydro_alcoolique}}</div>
+            <div v-if="!isGlobal">check point: {{hospital.check_point}}</div>
           </div>
+        </b-card>
+      </b-col>
+      <b-col cols="12" md="6" class="pl-1">
+        <b-card class="col-12 default-card mb-2">
+          <h5 class="bold">Situations épidemologiques</h5>
           <div>
-            Ventilateur de réanimation
-            : {{hospital.resuscitation_ventilator}}
+            <div>Confirmés: {{hospital.confirmed}}</div>
+            <div>Hospitalisés: {{hospital.sick}}</div>
+            <div>Guéris: {{hospital.healed}}</div>
+            <div>décès: {{hospital.dead}}</div>
           </div>
-          <div>
-            Oxygénérateur
-            : {{hospital.oxygenator}}
-          </div>
-          <div>
-            Equipement de protection individuelle
-            : {{hospital.individual_protection_equipment}}
-          </div>
-          <div>
-            Masques N95/FFP2
-            : {{hospital.masks}}
-          </div>
-          <div>
-            Dépistage rapide
-            : {{hospital.rapid_screening}}
-          </div>
-          <div>
-            Radiographie
-            : {{hospital.x_ray}}
-          </div>
-          <div>
-            Automate Genexpert
-            : {{hospital.automate_genexpert}}
-          </div>
-          <div>
-            Gel hydro alcoolique
-            : {{hospital.gel_hydro_alcoolique}}
-          </div>
-          <div>
-            check point
-            : {{hospital.check_point}}
-          </div>
-          <hr />
+        </b-card>
+        <b-card class="col-12 default-card mb-2" v-if="!isGlobal">
           <h5 class="bold">Médicaments</h5>
-          <div>
-            Chloroquine
-            : {{hospital.chloroquine}}
-          </div>
-          <div>
-            Hydrochloroquine
-            : {{hospital.hydrochloroquine
-            }}
-          </div>
-          <div>
-            Azytromicine
-            : {{hospital.azytromicine
-            }}
-          </div>
-          <div>
-            Vitamince C
-            : {{hospital.Vitamince_c
-            }}
-          </div>
-          <hr />
+          <div>Chloroquine: {{hospital.chloroquine}}</div>
+          <div>Hydrochloroquine: {{hospital.hydrochloroquine}}</div>
+          <div>Azytromicine: {{hospital.azytromicine}}</div>
+          <div>Vitamince C: {{hospital.Vitamince_c}}</div>
+        </b-card>
+        <b-card class="col-12 default-card mb-2">
           <h5 class="bold">Personnels</h5>
-          <div>
-            Médicins
-            : {{hospital.doctors}}
-          </div>
+          <div>Médicins: {{hospital.doctors}}</div>
           <div>
             Infirmiers
             : {{hospital.nurses}}
@@ -90,22 +71,184 @@
             Para Médicaux
             : {{hospital.para_medicals}}
           </div>
-        </b-col>
-      </b-row>
-    </b-container>
-  </b-card>
+        </b-card>
+      </b-col>
+    </b-row>
+
+    <b-row class="pl-3 pr-3 mb-2">
+      <b-card no-body class="default-card col-12 pt-3 pb-3 card-chart">
+        <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+        <div class="chart-container">
+          <canvas height="400" width="100vh" ref="canvasStat" id="canvasStat"></canvas>
+        </div>
+      </b-card>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
+  props: ["hospitalTotalData"],
+  data() {
+    return {
+      lineChart: null,
+      etatGlobal: true,
+    };
+  },
+  mounted() {
+    this.getSituationHospital();
+  },
   computed: {
     ...mapState({
-      hospital: state => state.hospital.selectedHospital
-    })
-  }
+      selectedHospital: (state) => state.hospital.selectedHospital,
+      situationHospitalLoading: (state) =>
+        state.hospital.situationHospitalLoading,
+      situationHospital: (state) => state.hospital.situationHospital,
+    }),
+    hospital() {
+      if (this.selectedHospital != null) return this.selectedHospital;
+      else {
+        return this.hospitalTotalData ? this.hospitalTotalData : {};
+      }
+    },
+    isGlobal() {
+      return this.selectedHospital != null ? false : true;
+    },
+  },
+  watch: {
+    selectedHospital(val) {
+      const id = val ? val.id : null;
+      this.getSituationHospital(id);
+    },
+    situationHospital(val) {
+      this.paintStats(val);
+    },
+  },
+  methods: {
+    ...mapActions(["getSituationHospital"]),
+    ...mapMutations(["selectHospital"]),
+    paintStats(data) {
+      const config = {
+        type: "line",
+        data: {
+          labels: data.last_update.map((d) => new Date(d)),
+          datasets: [
+            {
+              label: "Lits en réanimation",
+              backgroundColor: "#ff6384",
+              borderColor: "#ff6384",
+              data: data.taux_resuscitation_beds,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4,
+            },
+            {
+              label: "Respirateurs",
+              fill: false,
+              backgroundColor: "#36a2eb",
+              borderColor: "#36a2eb",
+              data: data.taux_respirators,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          title: {
+            display: false,
+            text: "Chart.js Line Chart",
+          },
+          tooltips: {
+            mode: "index",
+            intersect: false,
+            callbacks: {
+              label: function (tooltipItem, data) {
+                var label = data.datasets[tooltipItem.datasetIndex].label || "";
+                if (label) label += ": ";
+                label += tooltipItem.yLabel + "%";
+                return label;
+              },
+            },
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: false, // enable trace line syncing with other charts
+              },
+              zoom: {
+                enabled: false,
+              },
+            },
+          },
+          hover: {
+            mode: "nearest",
+            intersect: true,
+          },
+          scales: {
+            xAxes: [
+              {
+                display: true,
+                type: "time",
+                distribution: "series",
+                time: {
+                  unit: "day",
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: "Periode",
+                },
+                ticks: {
+                  fontSize: 9,
+                  autoSkip: false,
+                  maxRotation: 90,
+                  minRotation: 90,
+                },
+              },
+            ],
+            yAxes: [
+              {
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: "Taux",
+                },
+                ticks: {
+                  callback: function (value, index, values) {
+                    return value + "%";
+                  },
+                },
+              },
+            ],
+          },
+        },
+      };
+
+      if (this.linechart) this.linechart.destroy();
+      this.linechart = new Chart(
+        this.$refs["canvasStat"].getContext("2d"),
+        config
+      );
+    },
+    backToTotalData() {
+      this.selectHospital(null);
+    },
+  },
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.card-chart {
+  position: relative;
+  #canvasStat {
+    height: 400px !important ;
+  }
+  .spinner-border {
+    position: absolute;
+    top: calc(50% - 20px);
+    left: calc(50% - 20px);
+  }
+}
 </style>
