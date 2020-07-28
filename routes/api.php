@@ -115,9 +115,12 @@ Route::group([
     });
     Route::resource('hospital-situations', "HospitalSituationController");
     Route::resource('hospitals-data', 'HospitalController');
-    Route::get('hospitals/', 'DashBoardController@getHospials');
-    Route::get('hospitals-totaux/', 'DashBoardController@getHospitalsTotaux');
-    Route::get('hospitals/evolution/{hospital?}', 'DashBoardController@getHospitalEvolution');
+    Route::group(['prefix' => 'hospitals'], function () {
+        Route::get('/', 'HospitalController@getHospials');
+        Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution');
+        Route::get('/totaux', 'HospitalController@getHospitalsTotaux');
+    });
+
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
     Route::get('orientation-medical-stats', 'DashBoardController@getAllDiagnosticStat');
     Route::get('sondages', 'DashBoardController@getSondages');
