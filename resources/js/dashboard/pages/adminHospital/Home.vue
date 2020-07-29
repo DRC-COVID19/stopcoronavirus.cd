@@ -31,6 +31,12 @@
                 <strong>Loading...</strong>
               </div>
             </template>
+             <template v-slot:cell(statut)="data">
+              <span class="badge badge-pill badge-statut"
+                :style="'background-color : ' + getColor(data.item.last_update)">
+
+                </span>
+            </template>
             <template v-slot:cell(last_update)="data">
               <span>{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
             </template>
@@ -62,6 +68,7 @@ export default {
     return {
       updateData: [],
       fields: [
+        { key: "statut", label: "Statut" },
         { key: "last_update", label: "Date" },
         { key: "name", label: "Centre" },
         { key: "confirmed", label: "Confirmés" },
@@ -85,9 +92,31 @@ export default {
           this.isLoading = false;
         });
     },
+    getColor(date){
+      const dateFormat = this.moment(date)
+      const curDate = this.moment(new Date())
+
+      const diffDay = curDate.diff(dateFormat, 'days')
+
+      if(diffDay < 2) return '#8BC34A' //green
+      else if(diffDay < 3) return '#FFEB3B' //yellow
+      else return '#F44336' //red
+    }
   },
 };
 </script>
 
 <style>
+
+</style>
+<style lang="scss">
+  .badge-statut{
+    content: "";
+    display: block !important;
+    width: 20px;
+    height: 20px;
+    width: 30px;
+    height: 30px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+  }
 </style>
