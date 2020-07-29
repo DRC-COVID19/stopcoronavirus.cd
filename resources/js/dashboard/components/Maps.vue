@@ -31,64 +31,64 @@ export default {
   props: {
     covidCases: {
       type: Object,
-      default: null
+      default: null,
     },
     hospitals: {
       type: Object,
-      default: null
+      default: null,
     },
     medicalOrientations: {
       type: Array,
-      default: null
+      default: null,
     },
     medicalOrientationSelected: {
       type: String,
-      default: null
+      default: null,
     },
     sondages: {
       type: Array,
-      default: null
+      default: null,
     },
     worried: {
       type: Boolean,
-      default: null
+      default: null,
     },
     catchVirus: {
       type: Boolean,
-      default: null
+      default: null,
     },
     priceIncrease: {
       type: Boolean,
-      default: null
+      default: null,
     },
     mask: {
       type: Boolean,
-      default: null
+      default: null,
     },
     makala: {
       type: Boolean,
-      default: null
+      default: null,
     },
     flour: {
       type: Boolean,
-      default: null
+      default: null,
     },
     antiBacterialGel: {
       type: Boolean,
-      default: null
+      default: null,
     },
     flux24: {
       type: Array,
-      default: []
+      default: [],
     },
     isLoading: {
       type: Boolean,
-      default: null
+      default: null,
     },
     flux24Presence: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -98,17 +98,17 @@ export default {
       countryLayer: {
         paint: {
           "line-color": "#627BC1",
-          "line-width": 1
+          "line-width": 1,
         },
-        type: "line"
+        type: "line",
       },
       kinLayer: {
         paint: {
           "line-color": "#627BC1",
-          "line-width": 1
+          "line-width": 1,
         },
         type: "line",
-        "source-layer": "carte-administrative-de-la-vi-csh5cj"
+        "source-layer": "carte-administrative-de-la-vi-csh5cj",
       },
       drcSourceId: "states",
       kinSourceId: "statesKin",
@@ -127,7 +127,7 @@ export default {
       healthProvinceGeojsonCentered: null,
       isMapLoaded: false,
       isZoneSourceLoaded: false,
-      isProvinceSourceLoaded: false
+      isProvinceSourceLoaded: false,
     };
   },
   created() {
@@ -140,7 +140,7 @@ export default {
       center: [15.31389, -4.33167],
       zoom: 10,
       pitch: 10,
-      style: this.MAPBOX_DEFAULT_STYLE
+      style: this.MAPBOX_DEFAULT_STYLE,
     });
     U.init(map, Mapbox);
     map.addControl(new Mapbox.NavigationControl());
@@ -150,13 +150,13 @@ export default {
       map.addSource(this.drcSourceId, {
         type: "geojson",
         generateId: true,
-        data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
+        data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`,
       });
 
       map.addSource(this.drcHealthZone, {
         type: "geojson",
         generateId: true,
-        data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`
+        data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`,
       });
 
       // map.addSource(this.kinSourceId, {
@@ -180,8 +180,8 @@ export default {
 
     //watch store
     this.$store.watch(
-      state => state.flux.fluxGeoGranularity,
-      value => {
+      (state) => state.flux.fluxGeoGranularity,
+      (value) => {
         // if (this.activeMenu != 1) {
         //   return;
         // }
@@ -190,8 +190,8 @@ export default {
       }
     );
     this.$store.watch(
-      state => state.flux.mapStyle,
-      value => {
+      (state) => state.flux.mapStyle,
+      (value) => {
         // if (this.activeMenu != 1) {
         //   return;
         // }
@@ -200,8 +200,8 @@ export default {
       }
     );
     this.$store.watch(
-      state => state.flux.fluxType,
-      value => {
+      (state) => state.flux.fluxType,
+      (value) => {
         // if (this.activeMenu != 1) {
         //   return;
         // }
@@ -210,51 +210,50 @@ export default {
     );
 
     //watch activeMenu store state
-    // this.$store.watch(
-    //   state => state.nav.activeMenu,
-    //   value => {
-    //     this.resetState();
-    //     switch (value) {
-    //       case 1:
-    //         break;
-    //       case 2:
-    //         this.addPolygoneLayer(2);
-    //         this.addPolygoneHoverLayer(2);
-    //       default:
-    //         break;
-    //     }
-    //   }
-    // );
+    this.$store.watch(
+      (state) => state.nav.activeMenu,
+      (value) => {
+        switch (value) {
+          case 1:
+            break;
+          case 5:
+            this.addPolygoneLayer(2);
+            this.addPolygoneHoverLayer(2);
+          default:
+            break;
+        }
+      }
+    );
 
     //watch flux legendHover store state
     this.$store.watch(
-      state => state.flux.legendHover,
-      value => {
+      (state) => state.flux.legendHover,
+      (value) => {
         this.flux24Func();
       }
     );
 
     this.$store.watch(
-      state => state.epidemic.legendEpidHover,
-      value => {
+      (state) => state.epidemic.legendEpidHover,
+      (value) => {
         this.covidHatchedStyle(this.covidCases, value);
       }
     );
   },
   computed: {
     ...mapState({
-      fluxMapStyle: state => state.flux.mapStyle,
-      fluxGeoGranularity: state => state.flux.fluxGeoGranularity,
-      fluxType: state => state.flux.fluxType,
-      fluxGeoOptions: state => state.flux.fluxGeoOptions,
-      fluxEnabled: state => state.flux.fluxEnabled,
-      activeMenu: state => state.nav.activeMenu,
-      legendHover: state => state.flux.legendHover,
-      epidemicLengendHover: state => state.epidemic.legendEpidHover
+      fluxMapStyle: (state) => state.flux.mapStyle,
+      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularity,
+      fluxType: (state) => state.flux.fluxType,
+      fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
+      fluxEnabled: (state) => state.flux.fluxEnabled,
+      activeMenu: (state) => state.nav.activeMenu,
+      legendHover: (state) => state.flux.legendHover,
+      epidemicLengendHover: (state) => state.epidemic.legendEpidHover,
     }),
     flux24WithoutReference() {
-      return this.flux24.filter(x => !x.isReference);
-    }
+      return this.flux24.filter((x) => !x.isReference);
+    },
   },
   watch: {
     covidCases() {
@@ -282,22 +281,20 @@ export default {
             "text-field": String.fromCharCode("0xf47e"),
             "icon-optional": true,
             "text-font": ["Font Awesome 5 Free Solid"],
-            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25]
+            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25],
           },
           paint: {
             "text-translate-anchor": "viewport",
-            "text-color": ["get", "color"]
-          }
+            "text-color": ["get", "color"],
+          },
         });
 
-        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
-          this.map.getCanvas().style.cursor = "pointer";
-        });
-        this.map.on("mouseleave", "covid9HospitalsLayer", () => {
-          this.map.getCanvas().style.cursor = "";
+        const popup = new Mapbox.Popup({
+          closeButton: false,
+          closeOnClick: false,
         });
 
-        this.map.on("click", "covid9HospitalsLayer", e => {
+        const mouseMove = (e) => {
           const coordinates = e.features[0].geometry.coordinates.slice();
           const {
             name,
@@ -311,28 +308,49 @@ export default {
             dead,
             sick,
             healed,
-            last_update
+            last_update,
+            resuscitation_beds,
+            occupied_resuscitation_beds,
           } = e.features[0].properties;
 
+
+          const HTML = `<div class="row">
+                <div class="col-12 bold text-center hospital-name">${name}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Confirmés</div>
+                <div class="col-3 bold">${confirmed}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Hospitalisés</div>
+                <div class="col-3 bold">${sick}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Lits de réanimation</div>
+                <div class="col-3 bold">${occupied_resuscitation_beds}/${resuscitation_beds}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Respirateurs</div>
+                <div class="col-3 bold">${occupied_respirators}/${respirators}</div>
+            </div>`;
+          popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+        };
+
+        const mouseOut = (e) => {
+          this.map.getCanvas().style.cursor = "";
+          popup.remove();
+        };
+
+        const mouseClick=(e)=>{
           this.selectHospital(e.features[0].properties);
-          // map.flyTo({
-          //   center:[15.31389, -4.33167],
-          //   essential: true // this animation is considered essential with respect to prefers-reduced-motion
-          // });
+        }
 
-          const template = `<div><div class="hospital-name">${name}</div></div>`;
-
-          new Mapbox.Popup()
-            .setLngLat(coordinates)
-            .setHTML(template)
-            .addTo(this.map);
+        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
+          this.map.getCanvas().style.cursor = "pointer";
         });
-      } else {
-        this.map.off("mouseenter", "covid9HospitalsLayer");
-        this.map.off("mouseleave", "covid9HospitalsLayer");
-        this.map.off("click", "covid9HospitalsLayer");
-        this.map.removeLayer("covid9HospitalsLayer");
-        this.map.removeSource("covid9HospitalsSource");
+        this.map.on("mouseleave", "covid9HospitalsLayer", mouseOut);
+        this.map.on("mousemove", "covid9HospitalsLayer", mouseMove);
+        this.map.on("click", "covid9HospitalsLayer", mouseClick);
       }
     },
     medicalOrientations() {
@@ -348,7 +366,7 @@ export default {
       }
       this.RemoveOrientationMakers();
       let orientation = this.medicalOrientationSelected;
-      this.medicalOrientations.map(value => {
+      this.medicalOrientations.map((value) => {
         if (value[orientation] >= 0) {
           let el = document.createElement("div");
           el.className = `default-makers ${orientation}`;
@@ -395,7 +413,7 @@ export default {
     },
     sondages() {
       if (!this.sondages) {
-        this.AllSondagesMarkers.map(item => {
+        this.AllSondagesMarkers.map((item) => {
           item.remove();
         });
       }
@@ -456,14 +474,14 @@ export default {
       if (this.centerCoordinates.length > 0) {
         map.flyTo({ center: this.centerCoordinates });
       }
-    }
+    },
   },
   methods: {
     ...mapMutations([
       "selectHospital",
       "setFluxGeoOptions",
       "setDomaineExtValues",
-      "setEpidemicExtValues"
+      "setEpidemicExtValues",
     ]),
     ...mapActions(["resetState"]),
     addPolygoneLayer(geoGranularity) {
@@ -476,8 +494,8 @@ export default {
           layout: {},
           paint: {
             "line-color": PALETTE.bordure_shape_file,
-            "line-width": 1
-          }
+            "line-width": 1,
+          },
         },
         map.getLayer(EPIDEMIC_LAYER) ? EPIDEMIC_LAYER : null
       );
@@ -494,9 +512,9 @@ export default {
             "case",
             ["boolean", ["feature-state", "hover"], false],
             0.2,
-            0
+            0,
           ],
-          "fill-color": "#627BC1"
+          "fill-color": "#627BC1",
         })
       );
 
@@ -505,14 +523,14 @@ export default {
       map.off("click", "state-hover");
 
       //polygone hover
-      map.on("mousemove", "state-hover", e => {
+      map.on("mousemove", "state-hover", (e) => {
         if (e.features.length > 0) {
           if (hoveredStateId) {
             map.setFeatureState(
               {
                 source:
                   geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-                id: hoveredStateId
+                id: hoveredStateId,
               },
               { hover: false }
             );
@@ -522,7 +540,7 @@ export default {
             {
               source:
                 geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-              id: hoveredStateId
+              id: hoveredStateId,
             },
             { hover: true }
           );
@@ -535,7 +553,7 @@ export default {
             {
               source:
                 geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-              id: hoveredStateId
+              id: hoveredStateId,
             },
             { hover: false }
           );
@@ -543,7 +561,7 @@ export default {
         hoveredStateId = null;
       });
 
-      map.on("click", "state-hover", e => {
+      map.on("click", "state-hover", (e) => {
         this.centerCoordinates = [e.lngLat.lng, e.lngLat.lat];
         // map.flyTo({center: this.centerCoordinates})
 
@@ -570,7 +588,7 @@ export default {
           // console.log("data", data);
           this.isZoneSourceLoaded = false;
           this.healthZoneGeojson = data;
-          const features = data.features.map(item => {
+          const features = data.features.map((item) => {
             let polygone = null;
             switch (item.geometry.type) {
               case "MultiPolygon":
@@ -588,7 +606,7 @@ export default {
           });
           this.healthZoneGeojsonCentered = {
             type: "FeatureCollection",
-            features: features
+            features: features,
           };
           // console.log(this.healthZoneGeojsonCentered);
           this.addZoneSource();
@@ -602,7 +620,7 @@ export default {
           // console.log("data", data);
           this.isProvinceSourceLoaded = false;
           this.healthProvinceGeojson = data;
-          const features = data.features.map(item => {
+          const features = data.features.map((item) => {
             let polygone = null;
             switch (item.geometry.type) {
               case "MultiPolygon":
@@ -620,7 +638,7 @@ export default {
           });
           this.healthProvinceGeojsonCentered = {
             type: "FeatureCollection",
-            features: features
+            features: features,
           };
           this.addProvinceSource();
         });
@@ -660,8 +678,8 @@ export default {
       });
 
       //domaine
-      const domaineMax = d3.max(features, d => d.properties[property]);
-      const domaineMin = d3.min(features, d => d.properties[property]);
+      const domaineMax = d3.max(features, (d) => d.properties[property]);
+      const domaineMin = d3.min(features, (d) => d.properties[property]);
 
       this.setEpidemicExtValues({ max: domaineMax, min: domaineMin });
 
@@ -677,7 +695,7 @@ export default {
 
       const colorExpression = [];
       colorExpression.push("case");
-      features.forEach(x => {
+      features.forEach((x) => {
         const color = colorScale(x.properties[property]);
         colorExpression.push(["==", ["get", dataKey], x.properties.name]);
         colorExpression.push(color);
@@ -693,7 +711,7 @@ export default {
 
       if (legendHover) {
         features = features.filter(
-          x =>
+          (x) =>
             x.properties[property] >= legendHover.de &&
             x.properties[property] <= legendHover.a
         );
@@ -754,9 +772,9 @@ export default {
           "circle-opacity": [
             "match",
             ["get", dataKey],
-            features.map(x => x.properties.name),
+            features.map((x) => x.properties.name),
             0.7,
-            0
+            0,
           ],
           "circle-radius": [
             "interpolate",
@@ -765,26 +783,26 @@ export default {
             0,
             0.2,
             22,
-            20
+            20,
           ],
           "circle-color": colorExpression,
           "circle-stroke-color": PALETTE.dash_green,
           "circle-stroke-width": [
             "match",
             ["get", dataKey],
-            features.map(x => x.properties.name),
+            features.map((x) => x.properties.name),
             0.5,
-            0
-          ]
-        }
+            0,
+          ],
+        },
       });
 
       const popup = new Mapbox.Popup({
         closeButton: false,
-        closeOnClick: false
+        closeOnClick: false,
       });
 
-      const mouseMove = e => {
+      const mouseMove = (e) => {
         // Change the cursor style as a UI indicator.
         // map.getCanvas().style.cursor = "pointer";
 
@@ -794,7 +812,7 @@ export default {
 
         const name = item["Zone+Peupl"] ?? item["name"];
         let value = null;
-        const feature = features.find(x => x.properties.name == name);
+        const feature = features.find((x) => x.properties.name == name);
 
         if (feature) {
           value = feature.properties[property];
@@ -805,10 +823,7 @@ export default {
 
         // Populate the popup and set its coordinates
         // based on the feature found.
-        popup
-          .setLngLat(e.lngLat)
-          .setHTML(HTML)
-          .addTo(map);
+        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
       };
 
       const mouseOut = () => {
@@ -816,11 +831,11 @@ export default {
         popup.remove();
       };
 
-      const mouseClick = e => {
+      const mouseClick = (e) => {
         const item = e.features[0].properties;
 
         const featureName = item["Zone+Peupl"] ?? item["name"];
-        const feature = features.find(x => x.properties.name == featureName);
+        const feature = features.find((x) => x.properties.name == featureName);
         if (!features) {
           return;
         }
@@ -831,7 +846,7 @@ export default {
           dead,
           sick,
           healed,
-          last_update
+          last_update,
         } = feature.properties;
 
         const template = `<div class="topToolTip" >
@@ -844,20 +859,20 @@ export default {
                             <div class="statLine">
                                 <div class="legendColor ongoing"></div>
                                 <div class="stat">Actifs</div>
-                                <div class="statCount">${confirmed -
-                                  healed -
-                                  dead}</div>
+                                <div class="statCount">${
+                                  confirmed - healed - dead
+                                }</div>
                             </div>
                             <div class="statLine">
                                 <div class="legendColor recovered"></div>
                                 <div class="stat">Guérisons</div>
                                 <div class="statCount">${healed}</div>
                             </div>
-                            <div class="statLine"> 
+                            <div class="statLine">
                                 <div class="legendColor fatal"></div>
                                 <div class="stat">Décès</div>
                                 <div class="statCount">${dead}</div>
-                            </div> 
+                            </div>
                             <i></i>
                         </div>`;
         new Mapbox.Popup()
@@ -888,12 +903,12 @@ export default {
 
               // This can be any easing function: it takes a number between
               // 0 and 1 and returns another number between 0 and 1.
-              easing: function(t) {
+              easing: function (t) {
                 return t;
               },
 
               // this animation is considered essential with respect to prefers-reduced-motion
-              essential: true
+              essential: true,
             });
             break;
           case 1:
@@ -910,12 +925,12 @@ export default {
 
               // This can be any easing function: it takes a number between
               // 0 and 1 and returns another number between 0 and 1.
-              easing: function(t) {
+              easing: function (t) {
                 return t;
               },
 
               // this animation is considered essential with respect to prefers-reduced-motion
-              essential: true
+              essential: true,
             });
             break;
         }
@@ -929,7 +944,7 @@ export default {
     fluxHatchedStyle(flux24Data, flux24DataPresence, legendHover = null) {
       const localData =
         this.fluxType == 3
-          ? flux24DataPresence.map(x => {
+          ? flux24DataPresence.map((x) => {
               const difference = x.volume - x.reference_volume ?? 0;
               let percent = 0;
               if (x.reference_volume) {
@@ -967,52 +982,52 @@ export default {
             type: "Feature",
             geometry: {
               type: "Point",
-              coordinates: item.position_end
+              coordinates: item.position_end,
             },
             properties: {
               origin: item[key],
               color: "#ED5F68",
               volume,
               volumeReference,
-              percent: 0
-            }
+              percent: 0,
+            },
           });
         }
       };
 
       if (this.fluxType == 2) {
-        localData.map(item => {
+        localData.map((item) => {
           const element = features.find(
-            x => x.properties.origin == item.origin
+            (x) => x.properties.origin == item.origin
           );
           formatData(element, item, "origin");
         });
       } else if (this.fluxType == 3) {
-        localData.map(item => {
+        localData.map((item) => {
           features.push({
             type: "Feature",
             geometry: {
               type: "Point",
-              coordinates: item.position_end
+              coordinates: item.position_end,
             },
-            properties: item
+            properties: item,
           });
         });
       } else {
-        localData.map(item => {
+        localData.map((item) => {
           const element = features.find(
-            x => x.properties.origin == item.destination
+            (x) => x.properties.origin == item.destination
           );
           formatData(element, item, "destination");
         });
       }
-      const max = d3.max(features, d => d.properties.volume);
+      const max = d3.max(features, (d) => d.properties.volume);
 
       map.U.removeSource(["fluxCircleDataSource"]);
       map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
 
-      const domaineMax = d3.max(features, d => d.properties.percent);
-      const domaineMin = d3.min(features, d => d.properties.percent);
+      const domaineMax = d3.max(features, (d) => d.properties.percent);
+      const domaineMin = d3.min(features, (d) => d.properties.percent);
 
       const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
 
@@ -1033,7 +1048,7 @@ export default {
 
       const colorExpression = [];
       colorExpression.push("case");
-      features.forEach(x => {
+      features.forEach((x) => {
         const color =
           this.fluxGeoOptions.includes(x.properties.origin) &&
           this.fluxType != 3
@@ -1046,7 +1061,7 @@ export default {
 
       if (legendHover) {
         features = features.filter(
-          x =>
+          (x) =>
             x.properties.percent >= legendHover.de &&
             x.properties.percent <= legendHover.a
         );
@@ -1063,20 +1078,20 @@ export default {
           fillOpacity: [
             "match",
             ["get", dataKey],
-            features.map(x => x.properties.origin),
+            features.map((x) => x.properties.origin),
             0.9,
-            0
-          ]
+            0,
+          ],
         }),
         this.drcSourceId
       );
 
       const popup = new Mapbox.Popup({
         closeButton: false,
-        closeOnClick: false
+        closeOnClick: false,
       });
 
-      const mouseMove = e => {
+      const mouseMove = (e) => {
         // Change the cursor style as a UI indicator.
         // map.getCanvas().style.cursor = "pointer";
 
@@ -1086,7 +1101,7 @@ export default {
 
         const name = item["Zone+Peupl"] ?? item["name"];
         let value = null;
-        const feature = features.find(x => x.properties.origin == name);
+        const feature = features.find((x) => x.properties.origin == name);
 
         if (feature) {
           value = feature.properties.percent;
@@ -1097,10 +1112,7 @@ export default {
 
         // Populate the popup and set its coordinates
         // based on the feature found.
-        popup
-          .setLngLat(e.lngLat)
-          .setHTML(HTML)
-          .addTo(map);
+        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
       };
 
       const mouseOut = () => {
@@ -1120,15 +1132,17 @@ export default {
       map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
       map.off("mouseleave", "fluxCircleDataLayer");
       map.off("mouseleave", "fluxCircleDataLayer");
-      const localData = flux24Data.filter(x => !x.isReference);
+      const localData = flux24Data.filter((x) => !x.isReference);
       const features = [];
       let color = "#33ac2e";
       let arcData = [];
-      let FluxFiltered = flux24Data.filter(x => !x.isReference);
+      let FluxFiltered = flux24Data.filter((x) => !x.isReference);
 
       if (this.fluxType == 1) {
-        localData.map(item => {
-          let element = features.find(x => x.properties.origin == item.origin);
+        localData.map((item) => {
+          let element = features.find(
+            (x) => x.properties.origin == item.origin
+          );
           if (element) {
             element.properties.volume += item.volume;
           } else {
@@ -1136,26 +1150,26 @@ export default {
               type: "Feature",
               geometry: {
                 type: "Point",
-                coordinates: item.position_start
+                coordinates: item.position_start,
               },
               properties: {
                 origin: item.origin,
                 color: includes(this.fluxGeoOptions, item.origin)
                   ? PALETTE.flux_in_color
                   : PALETTE.flux_out_color,
-                volume: item.volume
-              }
+                volume: item.volume,
+              },
             });
           }
         });
-        arcData = FluxFiltered.filter(item => {
+        arcData = FluxFiltered.filter((item) => {
           return includes(this.fluxGeoOptions, item.destination);
         });
       } else {
         color = "#ffa500";
-        localData.map(item => {
+        localData.map((item) => {
           const element2 = features.find(
-            x => x.properties.origin == item.destination
+            (x) => x.properties.origin == item.destination
           );
           if (element2) {
             element2.properties.volume += item.volume;
@@ -1164,19 +1178,19 @@ export default {
               type: "Feature",
               geometry: {
                 type: "Point",
-                coordinates: item.position_end
+                coordinates: item.position_end,
               },
               properties: {
                 origin: item.destination,
                 color: includes(this.fluxGeoOptions, item.destination)
                   ? PALETTE.flux_out_color
                   : PALETTE.flux_in_color,
-                volume: item.volume
-              }
+                volume: item.volume,
+              },
             });
           }
         });
-        arcData = FluxFiltered.filter(item => {
+        arcData = FluxFiltered.filter((item) => {
           return includes(this.fluxGeoOptions, item.origin);
         });
       }
@@ -1186,12 +1200,12 @@ export default {
         generateId: true,
         data: {
           type: "FeatureCollection",
-          features: features
-        }
+          features: features,
+        },
       };
 
-      const max = Math.max(...features.map(x => x.properties.volume));
-      const maxArc = Math.max(...arcData.map(x => x.volume));
+      const max = Math.max(...features.map((x) => x.properties.volume));
+      const maxArc = Math.max(...arcData.map((x) => x.volume));
 
       map.addSource("fluxCircleDataSource", circleData);
       map.addLayer({
@@ -1206,7 +1220,7 @@ export default {
             "case",
             ["boolean", ["feature-state", "hover"], false],
             0.7,
-            0.5
+            0.5,
           ],
           "circle-radius": [
             "interpolate",
@@ -1215,25 +1229,25 @@ export default {
             0,
             0.2,
             22,
-            ["+", ["*", ["/", ["get", "volume"], max], 60], 20]
+            ["+", ["*", ["/", ["get", "volume"], max], 60], 20],
           ],
           "circle-color": ["get", "color"],
           "circle-stroke-color": ["get", "color"],
-          "circle-stroke-width": 1
-        }
+          "circle-stroke-width": 1,
+        },
       });
 
       let hoveredStateId = null;
       const popup = new Mapbox.Popup({
         closeButton: false,
-        closeOnClick: false
+        closeOnClick: false,
       });
       // When the user moves their mouse over the state-fill layer, we'll update the
       // feature state for the feature under the mouse.
       map.on("mouseenter", "fluxCircleDataLayer", () => {
         map.getCanvas().style.cursor = "pointer";
       });
-      map.on("mousemove", "fluxCircleDataLayer", e => {
+      map.on("mousemove", "fluxCircleDataLayer", (e) => {
         if (e.features.length > 0) {
           if (hoveredStateId) {
             map.setFeatureState(
@@ -1252,10 +1266,7 @@ export default {
 
         // Populate the popup and set its coordinates
         // based on the feature found.
-        popup
-          .setLngLat(e.lngLat)
-          .setHTML(HTML)
-          .addTo(map);
+        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
       });
 
       // When the mouse leaves the state-fill layer, update the feature state of the
@@ -1279,8 +1290,8 @@ export default {
         type: ArcLayer,
         stroked: true,
         filled: true,
-        getSourcePosition: d => d.position_start,
-        getTargetPosition: d => d.position_end,
+        getSourcePosition: (d) => d.position_start,
+        getTargetPosition: (d) => d.position_end,
         getSourceColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
         getTargetColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
         getHeight: 1,
@@ -1288,20 +1299,21 @@ export default {
         opacity: 0.7,
         highlightColor: [51, 172, 46],
         autoHighlight: true,
-        getWidth: d => {
+        getWidth: (d) => {
           return (d.volume / maxArc) * 9 + 3;
         },
         pickable: true,
         onHover: (info, event) => {
           this.$set(this.ArcLayerSelectedObject, "position", {
             top: info.y,
-            left: info.x
+            left: info.x,
           });
           this.$set(this.ArcLayerSelectedObject, "item", info.object);
-        }
+        },
       });
       map.addLayer(myDeckLayer);
     },
+    infrastructure() {},
     mapGeoJsonSourceFlux(fluxGeoGranularity) {
       map.removeLayer(this.drcSourceId);
       if (fluxGeoGranularity == 1) {
@@ -1312,8 +1324,8 @@ export default {
           layout: {},
           paint: {
             "line-color": "#627BC1",
-            "line-width": 1
-          }
+            "line-width": 1,
+          },
         });
       } else {
         map.addLayer({
@@ -1323,8 +1335,8 @@ export default {
           layout: {},
           paint: {
             "line-color": "#627BC1",
-            "line-width": 1
-          }
+            "line-width": 1,
+          },
         });
       }
       return;
@@ -1340,7 +1352,7 @@ export default {
       let total_fin5 = 0;
       let total_fin8 = 0;
       let AllMarkers = [];
-      this.medicalOrientations.map(item => {
+      this.medicalOrientations.map((item) => {
         var el = document.createElement("div");
         el.className = "pie";
         let total = item.FIN + item.FIN8 + item.FIN5;
@@ -1404,14 +1416,14 @@ export default {
     },
     RemoveOrientationMakers() {
       if (this.medicalOrientationMakers) {
-        this.medicalOrientationMakers.map(item => {
+        this.medicalOrientationMakers.map((item) => {
           item.remove();
         });
       }
     },
     setMarkersSondage(sondage) {
-      let values = this.sondages.filter(x => x[sondage] && x[sondage] > 0);
-      values.map(item => {
+      let values = this.sondages.filter((x) => x[sondage] && x[sondage] > 0);
+      values.map((item) => {
         let el = document.createElement("div");
         let el2 = document.createElement("div");
         el.className = `default-makers ${sondage}`;
@@ -1436,11 +1448,11 @@ export default {
             el.innerText = worried_count;
             longitude = item.longitude + 100 / 100000;
             latitude = item.latitude + 800 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(worried *
-              100) /
-              worried_count}%, #ff3b3b ${(worried * 100) /
-              worried_count}%, #ff3b3b ${(not_worried * 100) /
-              worried_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (worried * 100) / worried_count
+            }%, #ff3b3b ${(worried * 100) / worried_count}%, #ff3b3b ${
+              (not_worried * 100) / worried_count
+            }%)`;
             break;
           case "catch_virus":
             let catch_virus = item.catch_virus ? item.catch_virus : 0;
@@ -1451,11 +1463,11 @@ export default {
             el.innerText = catch_virus_count;
             longitude = item.longitude - 200 / 10000;
             latitude = item.latitude - 200 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(catch_virus *
-              100) /
-              catch_virus_count}%, #ff3b3b ${(catch_virus * 100) /
-              catch_virus_count}%, #ff3b3b ${(not_catch_virus * 100) /
-              catch_virus_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (catch_virus * 100) / catch_virus_count
+            }%, #ff3b3b ${(catch_virus * 100) / catch_virus_count}%, #ff3b3b ${
+              (not_catch_virus * 100) / catch_virus_count
+            }%)`;
             break;
           case "price_increase":
             let price_increase = item.price_increase ? item.price_increase : 0;
@@ -1466,11 +1478,11 @@ export default {
             el.innerText = price_increase_count;
             longitude = item.longitude - 300 / 10000;
             latitude = item.latitude + 500 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(price_increase *
-              100) /
-              price_increase_count}%, #ff3b3b ${(price_increase * 100) /
-              price_increase_count}%, #ff3b3b ${(not_price_increase * 100) /
-              price_increase_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (price_increase * 100) / price_increase_count
+            }%, #ff3b3b ${
+              (price_increase * 100) / price_increase_count
+            }%, #ff3b3b ${(not_price_increase * 100) / price_increase_count}%)`;
             break;
           case "mask":
             let mask = item.mask ? item.mask : 0;
@@ -1479,10 +1491,11 @@ export default {
             el.innerText = mask_count;
             longitude = item.longitude - 350 / 100000;
             latitude = item.latitude - 300 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(mask *
-              100) /
-              mask_count}%, #ff3b3b ${(mask * 100) /
-              mask_count}%, #ff3b3b ${(not_mask * 100) / mask_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (mask * 100) / mask_count
+            }%, #ff3b3b ${(mask * 100) / mask_count}%, #ff3b3b ${
+              (not_mask * 100) / mask_count
+            }%)`;
             break;
           case "makala":
             let makala = item.makala ? item.makala : 0;
@@ -1491,10 +1504,11 @@ export default {
             el.innerText = makala_count;
             longitude = item.longitude + 300 / 10000;
             latitude = item.latitude + 150 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(makala *
-              100) /
-              makala_count}%, #ff3b3b ${(makala * 100) /
-              makala_count}%, #ff3b3b ${(not_makala * 100) / makala_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (makala * 100) / makala_count
+            }%, #ff3b3b ${(makala * 100) / makala_count}%, #ff3b3b ${
+              (not_makala * 100) / makala_count
+            }%)`;
             break;
           case "flour":
             let flour = item.flour ? item.flour : 0;
@@ -1503,10 +1517,11 @@ export default {
             el.innerText = flour_count;
             longitude = item.longitude - 330 / 10000;
             latitude = item.latitude - 250 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(flour *
-              100) /
-              flour_count}%, #ff3b3b ${(flour * 100) /
-              flour_count}%, #ff3b3b ${(not_flour * 100) / flour_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (flour * 100) / flour_count
+            }%, #ff3b3b ${(flour * 100) / flour_count}%, #ff3b3b ${
+              (not_flour * 100) / flour_count
+            }%)`;
             break;
           case "antibacterial_gel":
             let antibacterial_gel = item.antibacterial_gel
@@ -1520,12 +1535,13 @@ export default {
             el.innerText = antibacterial_gel_count;
             longitude = item.longitude - 200 / 10000;
             latitude = item.latitude + 800 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(antibacterial_gel *
-              100) /
-              antibacterial_gel_count}%, #ff3b3b ${(antibacterial_gel * 100) /
-              antibacterial_gel_count}%, #ff3b3b ${(not_antibacterial_gel *
-              100) /
-              antibacterial_gel_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (antibacterial_gel * 100) / antibacterial_gel_count
+            }%, #ff3b3b ${
+              (antibacterial_gel * 100) / antibacterial_gel_count
+            }%, #ff3b3b ${
+              (not_antibacterial_gel * 100) / antibacterial_gel_count
+            }%)`;
             break;
           default:
             break;
@@ -1545,11 +1561,11 @@ export default {
       });
     },
     removeMarkersSondage(sondage) {
-      this.AllSondagesMarkers.filter(x => x[sondage]).map(item => {
+      this.AllSondagesMarkers.filter((x) => x[sondage]).map((item) => {
         item.remove();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

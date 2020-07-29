@@ -38,32 +38,6 @@
         </b-col>
       </b-row>
       <b-row class="position-relative map-wrap" v-if="activeMenu != 3">
-        <!--   <LeftColumn
-          @covidCaseChecked="getCovidCases"
-          @hopitalChecked="gethopitals"
-          @medicalOrientationChecked="getmedicalOrientations"
-          @medicalOrientationChanged="medicalOrientationChanged"
-          @hasSondageChecked="hasSondageChecked"
-          @worriedChecked="worriedChecked"
-          @catchVirusChecked="catchVirusChecked"
-          @priceIncreaseChecked="priceIncreaseChecked"
-          @maskChecked="maskChecked"
-          @makalaChecked="makalaChecked"
-          @flourChecked="flourChecked"
-          @antiBacterialGelChecked="antiBacterialGelChecked"
-          @submitFluxForm="submitFluxForm"
-          @populationFluxChecked="populationFluxChecked"
-          @flux::predefined::changed="fluxPredefinedChanged"
-          :covidCasesCount="covidCasesCount"
-          :hospitalCount="hospitalCount"
-          :orientationCount="orientationCount"
-          :finCount="finCount"
-          :fin5Count="fin5Count"
-          :fin8Count="fin8Count"
-          :fluxZones="fluxZones"
-          :fluxProvinces="fluxProvinces"
-          :flux24Errors="flux24Errors"
-        />-->
         <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
           <div class="layer-set-contenair" v-if="hasFlux24Daily">
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arc</b-link>
@@ -113,8 +87,8 @@
                   :flux24PresenceDailyIn="flux24PresenceDailyIn"
                 />
               </b-tab>
-              <b-tab title="Hôpital" v-if="!!selectedHospital" :active="!!selectedHospital">
-                <HospitalSituation />
+              <b-tab title="Hôpital" v-if="hospitalCount != null" :active="!!selectedHospital">
+                <HospitalSituation :hospitalTotalData="hospitalTotalData" />
               </b-tab>
             </b-tabs>
           </b-card>
@@ -253,6 +227,7 @@ export default {
       hospitals: state => state.hospital.hospitalData,
       hospitalCount: state => state.hospital.hospitalCount,
       selectedHospital: state => state.hospital.selectedHospital,
+      hospitalTotalData: state => state.hospital.hospitalTotalData,
       fluxMapStyle: state => state.flux.mapStyle,
       activeMenu: state => state.nav.activeMenu
     }),
@@ -260,7 +235,7 @@ export default {
       return (
         this.getHasCoviCases() ||
         this.flux24DailyIn.length > 0 ||
-        !!this.selectedHospital
+        this.hospitalCount != null
       );
     },
     hasCovidCases() {
@@ -299,19 +274,18 @@ export default {
   mounted() {
     this.getFluxZone();
     this.getFluxProvinces();
-    // this.$store.watch(
-    //   state => state.nav.activeMenu,
-    //   value => {
-    //     this.populationFluxChecked(false);
-    //     this.getCovidCases(false);
-    //     switch (value) {
-    //       case 1:
-    //         break;
-    //       case 2:
-    //       default:
-    //         break;
-    //     }
-    //   });
+    this.$store.watch(
+      state => state.nav.activeMenu,
+      value => {
+        this.gethopitals(false);
+        switch (value) {
+          case 1:
+            break;
+          case 2:
+          default:
+            break;
+        }
+      });
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),
