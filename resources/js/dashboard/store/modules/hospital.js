@@ -5,6 +5,9 @@ export default {
         isLoading: false,
         selectedHospital: null,
         detailHospital: null,
+        situationHospital: [],
+        situationHospitalLoading: false,
+        hospitalTotalData: null,
         hospitalManagerName: null,
     },
     mutations: {
@@ -34,6 +37,7 @@ export default {
                                 },
                                 properties: {
                                     name: value.name ? value.name : "Hopital",
+                                    id: value.id,
                                     address: value.address,
                                     foam_beds: value.foam_beds,
                                     respirators: value.respirators ?? 0,
@@ -82,12 +86,29 @@ export default {
                     .catch(() => {
                         state.isLoading = false;
                     });
+
+                axios
+                    .get(`/api/dashboard/hospitals/totaux`)
+                    .then(({ data }) => {
+                        state.hospitalTotalData = data
+                    })
             } else {
                 state.hospitalData = null;
                 state.hospitalCount = null;
                 state.isLoading = false;
                 state.selectedHospital = null;
+                state.hospitalTotalData = null;
             }
         },
+        getSituationHospital({ state }, payload) {
+            const selectedHospital = payload ? payload : ''
+            state.situationHospitalLoading = true
+            axios
+                .get(`/api/dashboard/hospitals/evolution/${selectedHospital}`)
+                .then(({ data }) => {
+                    state.situationHospital = data
+                    state.situationHospitalLoading = false
+                })
+        }
     }
 }
