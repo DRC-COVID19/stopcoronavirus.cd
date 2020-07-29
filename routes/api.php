@@ -125,7 +125,11 @@ Route::group([
         Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution');
         Route::get('/totaux', 'HospitalController@getHospitalsTotaux');
     });
-
+    Route::group(['prefix' => 'indicators'], function () {
+        Route::group(['prefix' => 'zones'], function () {
+            Route::get('/', 'IndicatorController@getIndicatorsZone');
+        });
+    });
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
     Route::get('orientation-medical-stats', 'DashBoardController@getAllDiagnosticStat');
     Route::get('sondages', 'DashBoardController@getSondages');

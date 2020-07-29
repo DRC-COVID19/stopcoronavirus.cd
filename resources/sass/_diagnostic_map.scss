@@ -790,3 +790,6 @@
         border-top-color: white;
     }
 }
+.indicateurChart{
+    @include card-style;
+}
