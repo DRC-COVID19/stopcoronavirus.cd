@@ -22,7 +22,8 @@ class AdministratorResource extends JsonResource
             'avatar' => $this->avatar,
             'roles' => $this->roles,
             'isHospitalManager' => $this->hospitalManager()->exists(),
-            'hospital' => $this->hospitalManager
+            'hospital' => $this->hospitalManager,
+            'isHospitalAdmin'=>$this->roles()->where('name','admin-hospital')->exists()
         ];
     }
 }

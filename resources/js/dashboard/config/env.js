@@ -4,6 +4,7 @@ export const
     MAPBOX_DEFAULT_STYLE = "mapbox://styles/merki230/ckas344r30gmj1ips9gar4uxw",
     ADMIN_DASHBOARD = "admin-dashboard",
     AGENT_HOSPITAL = "agent-hospital",
+    ADMIN_HOSPITAL = "admin-hospital",
     PALETTE = {
         outflow: ["#7F3B08", "#B35806", "#E08214", "#FDB863",   "#B2ABD2", "#8073AC", "#542788", "#2D004B"],
         inflow: ["#2166AC", "#4393C3", "#92C5DE", "#D1E5F0",  "#FDDBC7", "#F4A582", "#D6604D", "#B2182B"],
