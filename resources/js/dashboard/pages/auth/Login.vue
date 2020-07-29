@@ -51,7 +51,7 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
-import { ADMIN_DASHBOARD, AGENT_HOSPITAL } from "../../config/env";
+import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from "../../config/env";
 import Logo from "../../components/LogoComponent";
 export default {
   components: {
@@ -77,6 +77,8 @@ export default {
         .then(({ user }) => {
           let dashboardRole = user.roles.find(x => x.name == "admin-dashboard");
           let hospitalRole = user.roles.find(x => x.name == "agent-hospital");
+          let adminHospitalRole = user.roles.find(x => x.name == "admin-hospital");
+
           if (dashboardRole) {
             this.$router.push({
               name: "home"
@@ -89,7 +91,16 @@ export default {
               .catch(e => {
                 console.log(e);
               });
-          } else {
+          }else if (adminHospitalRole) {
+            this.$router
+              .push({
+                name: "hospital.admin"
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          }
+           else {
             this.$router.push({
               name: "acces.denied"
             });

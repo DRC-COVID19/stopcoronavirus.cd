@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { data } from 'jquery';
-import { ADMIN_DASHBOARD, AGENT_HOSPITAL } from '../../config/env';
+import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from '../../config/env';
 
 export default {
     state: {
@@ -21,6 +21,7 @@ export default {
             state.lastAuthCheck = moment(new Date()).toISOString();
             let dashboardRole = payload.user.roles.find(x => x.name == ADMIN_DASHBOARD);
             let hospitalRole = payload.user.roles.find(x => x.name == AGENT_HOSPITAL);
+            let adminHospitalRole = payload.user.roles.find(x => x.name == ADMIN_HOSPITAL);
             if (dashboardRole) {
                 localStorage.setItem('dashboard_access_role', ADMIN_DASHBOARD);
                 state.userRole = ADMIN_DASHBOARD;
@@ -28,6 +29,10 @@ export default {
             else if (hospitalRole) {
                 localStorage.setItem('dashboard_access_role', AGENT_HOSPITAL);
                 state.userRole = AGENT_HOSPITAL;
+            }
+            else if (adminHospitalRole) {
+                localStorage.setItem('dashboard_access_role', ADMIN_HOSPITAL);
+                state.userRole = ADMIN_HOSPITAL;
             }
             if (payload.token) {
                 localStorage.setItem('dashboard_access_token', payload.token);
@@ -73,6 +78,7 @@ export default {
                         state.user = data;
                         let dashboardRole = data.roles.find(x => x.name == ADMIN_DASHBOARD);
                         let hospitalRole = data.roles.find(x => x.name == AGENT_HOSPITAL);
+                        let adminHospitalRole = data.roles.find(x => x.name == ADMIN_HOSPITAL);
                         if (dashboardRole) {
                             localStorage.setItem('dashboard_access_role', ADMIN_DASHBOARD);
                             state.userRole = ADMIN_DASHBOARD;
@@ -80,6 +86,10 @@ export default {
                         else if (hospitalRole) {
                             localStorage.setItem('dashboard_access_role', AGENT_HOSPITAL);
                             state.userRole = AGENT_HOSPITAL;
+                        }
+                        else if (adminHospitalRole) {
+                            localStorage.setItem('dashboard_access_role', ADMIN_HOSPITAL);
+                            state.userRole = ADMIN_HOSPITAL;
                         }
                         resolve(data);
                     });

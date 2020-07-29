@@ -38,9 +38,10 @@ class HospitalController extends Controller
      * @param  \App\Hospital  $hospital
      * @return \Illuminate\Http\Response
      */
-    public function show(Hospital $hospital)
+    public function show($hospital_id)
     {
-        //
+        $hospital = Hospital::find($hospital_id);
+        return response()->json($hospital);
     }
 
     /**

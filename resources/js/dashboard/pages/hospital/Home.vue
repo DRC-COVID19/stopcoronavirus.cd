@@ -47,9 +47,10 @@
                 size="sm"
                 class="btn-dash-blue mb-1"
                 :to="{
-                  name:'hospital.detail', 
-                  params:{
-                    hospital_id:data.item.id
+                  name:'hospital.detail',
+                 params:{
+                      update_id:data.item.id,
+                    hospital_id: $route.params.hospital_id
                     }
                     }"
               >Details</b-button>

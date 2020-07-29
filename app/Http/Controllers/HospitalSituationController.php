@@ -26,6 +26,12 @@ class HospitalSituationController extends Controller
         return HospitalSituationSingleResource::collection($hospitalSituation);
     }
 
+    public function indexByHospital($hospital_id)
+    {
+        $hospitalSituation = HospitalSituation::where('hospital_id', $hospital_id)
+            ->orderBy('created_at', 'desc')->paginate(15);
+        return HospitalSituationSingleResource::collection($hospitalSituation);
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -69,8 +75,25 @@ class HospitalSituationController extends Controller
     {
         $data = $this->validator($request->all(), $hospitalSituation->id);
         try {
-            $hospitalSituation->update(Arr::except($data,['last_update','hospital_id']));
+            $hospitalSituation->update(Arr::except($data, ['last_update', 'hospital_id']));
             return $hospitalSituation;
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getAgentLastUpdate()
+    {
+        try {
+            $lastUpdate = DB::select('SELECT p1.hospital_id, p2.name, MAX(p1.last_update) AS last_update, SUM(p1.confirmed) AS confirmed
+            FROM hospital_situations p1
+            INNER JOIN hospitals p2 ON p1.hospital_id=p2.id  GROUP BY hospital_id,p2.name
+            ORDER BY last_update desc
+            ');
+            return response()->json($lastUpdate);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -90,7 +113,7 @@ class HospitalSituationController extends Controller
         //
     }
 
-    function validator($data,$id=null)
+    function validator($data, $id = null)
     {
         return Validator::make($data, [
             "confirmed" => 'nullable',
@@ -119,7 +142,7 @@ class HospitalSituationController extends Controller
             'last_update' => [
                 'date',
                 'required',
-                function ($attribute, $value, $fail) use($id) {
+                function ($attribute, $value, $fail) use ($id) {
                     if ($id) {
                         return;
                     }
@@ -133,6 +156,8 @@ class HospitalSituationController extends Controller
             ]
         ])->validate();
     }
+
+
     /**
      * Get the guard to be used during authentication.
      *
