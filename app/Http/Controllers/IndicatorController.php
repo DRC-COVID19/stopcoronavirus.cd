@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Flux;
+use App\Flux24Province;
+use App\Pandemic;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class IndicatorController extends Controller
@@ -18,10 +22,45 @@ class IndicatorController extends Controller
     }
 
 
-    public function getIndicatorProvicence(Request $request)
+    public function getIndicatorsZone(Request $request)
     {
+        $data = $this->validateData($request->all());
         try {
-            $data = $this->validator($request->all());
+            $axeX = [];
+            $axeY = [];
+            switch ($data['x']) {
+                case 1:
+                    $axeX = Flux::select(['Origin as name', 'Date as date', DB::raw('sum(volume)as x')])
+                        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                        ->WhereIn('Origin', $data['geoOptions'])
+                        ->groupBy('Origin', 'Date')->get();
+                    break;
+                case 2:
+                    $axeX = Flux::select(['Destination as name', 'Date as date', DB::raw('sum(volume) as x')])
+                        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                        ->WhereIn('Destination', $data['geoOptions'])
+                        ->groupBy('Destination', 'Date')->get();
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+
+            switch ($data['y']) {
+                case 1:
+                    $axeY = Pandemic::select(['health_zones.name', DB::raw('CAST(last_update AS DATE) as date,SUM(confirmed) as y')])
+                        ->join('health_zones', 'health_zones.id', '=', 'pandemics.health_zone_id')
+                        ->whereBetween('last_update', [$data['observation_start'], $data['observation_end']])
+                        ->WhereIn('health_zones.name', $data['geoOptions'])
+                        ->groupBy('health_zones.name', 'last_update')->get();
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+            $mergeArray = array_merge($axeX->toArray(), $axeY->toArray());
+
+            return response()->json($mergeArray);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -75,9 +114,11 @@ class IndicatorController extends Controller
         //
     }
 
-    public function validator($inputData)
+    public function validateData($inputData)
     {
         return  Validator::make($inputData, [
+            'x' => 'required|numeric',
+            'y' => 'required|numeric',
             'geoOptions' => 'required|array',
             'preference_start' => 'nullable|date|before_or_equal:preference_end',
             'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
