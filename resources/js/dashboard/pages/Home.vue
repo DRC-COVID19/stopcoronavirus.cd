@@ -39,13 +39,14 @@
           />
         </b-col>
       </b-row>
+      <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
       <b-row class="position-relative map-wrap" v-if="activeMenu != 3">
         <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
           <div class="layer-set-contenair" v-if="hasFlux24Daily">
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arc</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
-          <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
+          <b-row v-else class="map-container" :class="{'map-container-100':!hasCovidCases}">
             <Maps
               :covidCases="covidCases"
               :hospitals="hospitals"
@@ -125,9 +126,6 @@
           </b-card>
         </b-col>
       </b-row>
-
-      <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
-
       <Waiting v-if="isLoading" />
     </b-container>
   </div>
@@ -288,6 +286,12 @@ export default {
           default:
             break;
         }
+      }
+    );
+    this.$store.watch(
+      (state) => state.indicator.isLoading,
+      (value) => {
+        this.$set(this.loadings, "indicator", value);
       }
     );
   },

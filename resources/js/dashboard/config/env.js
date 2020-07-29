@@ -66,7 +66,7 @@ export const
             name: "30'"
         }
     ],
-    INDICATEUR_Y = [
+    INDICATEUR_X = [
         {
             id: 1,
             name: 'Mobilité entrante'
@@ -76,9 +76,15 @@ export const
             name: 'Mobilité sortante'
         }
     ],
-    INDICATEUR_X = [
+    INDICATEUR_Y = [
         {
             id: 1,
             name: 'Cas Confirmés'
         },
+    ],
+    INDICATEUR_PREDEFINED_INPUT = [
+        {
+            id: 1,
+            name: 'Mobilité vs Epidémiologie à la Gombe, une semaine après le debut du confinement'
+        }
     ]
