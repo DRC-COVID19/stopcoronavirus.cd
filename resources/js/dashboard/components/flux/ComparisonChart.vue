@@ -97,8 +97,9 @@ export default {
             display: false
           },
           title: {
-            display: false,
-            text: ""
+            display: true,
+            text: "Flux de comparaison" + this.getZone,
+            fontSize: 9
           },
           scales: {
             xAxes: [
@@ -199,6 +200,13 @@ export default {
       };
 
       const myLineChart = new Chart(ref.getContext("2d"), tempData);
+    }
+  },
+  computed: {
+    getZone(){
+      if(this.fluxGeoOptions && this.fluxGeoOptions.length > 0)
+        return ' par rapport à ' + this.fluxGeoOptions[0]
+      else return ''
     }
   }
 };
