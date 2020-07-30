@@ -46,7 +46,7 @@
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arc</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
-          <b-row v-else class="map-container" :class="{'map-container-100':!hasCovidCases}">
+          <b-row  class="map-container" :class="{'map-container-100':!hasCovidCases}">
             <Maps
               :covidCases="covidCases"
               :hospitals="hospitals"
