@@ -1,4 +1,4 @@
-<?php
+fin<?php
 
 use App\Http\Controllers\HospitalSituationController;
 use Illuminate\Http\Request;
@@ -115,9 +115,10 @@ Route::group([
     });
     Route::group(['prefix' => 'hospital-situations'], function () {
         Route::get('/by-hospital/{hospital_id}', 'HospitalSituationController@indexByHospital');
-        Route::resource('/', "HospitalSituationController");
         Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate');
     });
+
+    Route::resource('hospital-situations/', "HospitalSituationController");
 
     Route::resource('hospitals-data', 'HospitalController');
     Route::group(['prefix' => 'hospitals'], function () {
