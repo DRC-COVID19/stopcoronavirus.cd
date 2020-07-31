@@ -48,4 +48,8 @@ class PageController extends Controller
     {
         return view('sondage');
     }
+
+    public function aboutCmr(){
+        return view('about_cmr');
+    }
 }
