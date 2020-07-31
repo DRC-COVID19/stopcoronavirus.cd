@@ -19,6 +19,12 @@ Use the package manager composer to install laravel and yarn or npm to install n
 - Rename file .env.example to .env
 - Update databse information
 
+JWT token
+
+```bash
+    php artisan jwt:secret
+```
+
 Migration
 
 ```bash
@@ -29,6 +35,12 @@ Install Laravel Admin
 
 ```bash
     php artisan admin:install
+```
+
+Storage link
+
+```bash
+    php artisan storage:link
 ```
 
 

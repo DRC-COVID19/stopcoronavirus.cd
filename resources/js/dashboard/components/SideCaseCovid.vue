@@ -1,5 +1,5 @@
 <template>
-  <b-container class="side-case-covid-container">
+  <b-container class="side-case-covid-container p-0">
     <b-row>
       <b-col cols="12">
         <b-table striped outlined hover responsive :items="CovidCasesProvince" :fields="fields">
@@ -15,6 +15,7 @@
           <template v-slot:cell(healed)="data" >
             <div class="text-right">{{ data.item.properties.healed }}</div>
           </template>
+          
            <template v-slot:cell(dead)="data" >
             <div class="text-right">{{ data.item.properties.dead }}</div>
           </template>

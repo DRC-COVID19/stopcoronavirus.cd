@@ -2,33 +2,61 @@ $primary: #e6222e;
 $secondary: #1f3677;
 $success: #00b065;
 $dark: #020000;
-$reference:#9e9e9e;
+$reference: #9e9e9e;
 
-$fin-5:#ff0000c4;
-$fin:#ffa500c4;
-$fin-8:#008000c4;
+$fin-5: #ff0000c4;
+$fin: #ffa500c4;
+$fin-8: #008000c4;
 
+$dash-blue: #2e5bff;
+$dash-red: #d63649;
+$dash-text: #2e384d;
+$dash-green: #33ac2e;
+$flux-in-color:#225ea8;
+$flux-out-color:#88419d;
+$flux-presence:#E31A1C;
+$dash-background: #f4f6fc;
+$dash-text-100: #7b7f88;
+$dash-shadow-color: #2e5bff14;
+$dash-blue-8:#2e5bff14;
+$dash-input-backColor:rgba(224, 231, 255, 0.2);
+$dash-input-border-color:#E0E7FF;
 
-
-$bg-gray : #e9ecef;
-$dark-blue : darken($secondary, 10%);
+$bg-gray: #e9ecef;
+$dark-blue: darken($secondary, 10%);
 $dark-blue-100: $secondary;
 $flag-blue: #45b0e1;
 $flag-yellow: #eede4e;
 // Typography
 $font-family-serif: serif;
 $font-family-sans-serif: "Helvetica", sans-serif;
-$font-family-base:'Rubik', sans-serif;
+$font-family-base: "Rubik", sans-serif;
 
 //jumbotron
 $jumbotron-bg: $bg-gray;
 
 $border-radius: 8px;
 
-$worried:#6610f2;
-$mask:#ffa500c4;
-$makala:#17a2b8;
-$price_increase:#e83e8c;
-$flour:#FF5722;
-$catch_virus:#1f3677;
-$antibacterial_gel:red;
+$worried: #6610f2;
+$mask: #ffa500c4;
+$makala: #17a2b8;
+$price_increase: #e83e8c;
+$flour: #ff5722;
+$catch_virus: #1f3677;
+$antibacterial_gel: red;
+
+.dash-green {
+    color: $dash-green;
+}
+.dash-orange {
+    color: $fin;
+}
+.flux-in-color{
+    color: $flux-in-color;
+}
+.flux-out-color{
+    color: $flux-out-color;
+}
+.flux-presence{
+    color: $flux-presence;
+}

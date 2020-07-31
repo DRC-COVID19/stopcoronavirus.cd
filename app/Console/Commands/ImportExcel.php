@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Imports\Flux24ProvinceImport;
 use App\Imports\FluxImport;
+use App\Imports\FluxPresenceProvinceImport;
+use App\Imports\FluxPresenceZoneImport;
 use Illuminate\Console\Command;
 
 class ImportExcel extends Command
@@ -13,7 +15,7 @@ class ImportExcel extends Command
      *
      * @var string
      */
-    protected $signature = 'flux:import {--type=} {--file=} {--size=}';
+    protected $signature = 'flux:import {--type=} {--file=} {--size=} {--start=1}';
 
     /**
      * The console command description.
@@ -42,9 +44,26 @@ class ImportExcel extends Command
         $type = $this->option('type');
         $fileName = $this->option('file');
         $size = $this->option('size');
+        $start=$this->option('start');
         switch ($type) {
+            case 'pp':
+                for ($i = $start; $i <= $size; $i++) {
+                    $file = "{$fileName}-{$i}.csv";
+                    $this->output->title("Starting import {$file}");
+                    (new FluxPresenceProvinceImport)->withOutput($this->output)->import(storage_path("app/flux/$file"), null, \Maatwebsite\Excel\Excel::CSV);
+                    $this->output->success("Import successful {$file}");
+                }
+                break;
+            case 'pz':
+                for ($i = $start; $i <= $size; $i++) {
+                    $file = "{$fileName}-{$i}.csv";
+                    $this->output->title("Starting import {$file}");
+                    (new FluxPresenceZoneImport)->withOutput($this->output)->import(storage_path("app/flux/$file"), null, \Maatwebsite\Excel\Excel::CSV);
+                    $this->output->success("Import successful {$file}");
+                }
+                break;
             case 'p':
-                for ($i = 1; $i <= $size; $i++) {
+                for ($i = $start; $i <= $size; $i++) {
                     $file = "{$fileName}-{$i}.csv";
                     $this->output->title("Starting import {$file}");
                     (new Flux24ProvinceImport)->withOutput($this->output)->import(storage_path("app/flux/$file"), null, \Maatwebsite\Excel\Excel::CSV);
@@ -52,7 +71,7 @@ class ImportExcel extends Command
                 }
                 break;
             case 'z':
-                for ($i = 1; $i <= $size; $i++) {
+                for ($i = $start; $i <= $size; $i++) {
                     $file = "{$fileName}-{$i}.csv";
                     $this->output->title("Starting import {$file}");
                     (new FluxImport)->withOutput($this->output)->import(storage_path("app/flux/$file"), null, \Maatwebsite\Excel\Excel::CSV);

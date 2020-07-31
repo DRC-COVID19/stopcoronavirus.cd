@@ -1,6 +1,12 @@
 
-window.axios = require('axios');
+import { create } from 'axios';
 
+
+let axiosCreate = create({
+    baseURL: `${location.protocol}//${location.host}/`,
+  });
+
+window.axios=axiosCreate;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
@@ -12,6 +18,11 @@ let token = document.head.querySelector('meta[name="csrf-token"]');
 
 if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+    const authorization = localStorage.getItem('dashboard_access_token');
+    if (authorization) {
+        window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('dashboard_access_token');
+    }
+
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }

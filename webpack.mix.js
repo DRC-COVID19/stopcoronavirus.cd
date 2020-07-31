@@ -23,7 +23,7 @@ let LiveReloadPlugin = require('webpack-livereload-plugin');
 mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/dashboard/vueApp.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
-    .sass('resources/sass/vueApp.scss', 'public/css');
+    .sass('resources/sass/vueApp.scss', 'public/css/vueApp.css');
 
 mix.webpackConfig({
     plugins: [

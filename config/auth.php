@@ -46,6 +46,10 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+        'dashboard' => [
+            'driver' => 'jwt',
+            'provider' => 'administrators',
+        ],
     ],
 
     /*
@@ -69,6 +73,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+        'administrators' => [
+            'driver' => 'eloquent',
+            'model' => App\Administrator::class,
         ],
 
         // 'users' => [

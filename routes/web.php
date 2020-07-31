@@ -20,7 +20,8 @@ Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stere
 Route::get('/sondages', 'PageController@sondage')->name('sondages');
 Route::get('/commité-multisectoriel-de-la-riposte', 'PageController@aboutCmr')->name('aboutCmr');
 
-Route::get('/dashboard-maps','DashBoardController@index');
+Route::get('/dashboard-maps/password-reset/{any}','DashBoardController@index')->name('dashboad.password.reset');
+Route::get('/dashboard-maps/{any?}','DashBoardController@index')->where('any', '^(?!api.*$).*');;
 
 Route::get('/orientation-medicale','SelfTestController@diagnostic')->name('diagnostic');
 Route::group(['prefix' => 'orientation-medicale-test'], function () {

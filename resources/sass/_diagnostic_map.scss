@@ -6,6 +6,49 @@
     height: 100%;
     width: 100%;
 }
+.dash-home-page {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    .header {
+        flex: 1;
+    }
+    .map-wrap {
+        flex: 13;
+        overflow: hidden;
+    }
+    .top-menu {
+        flex: 1;
+    }
+    .row-side-bottom {
+        flex: 6;
+        overflow: hidden;
+    }
+}
+.btn-dash-blue {
+    background: $dash-blue;
+    border: 3px solid $dash-blue !important;
+    border-radius: 5px;
+    &:hover,
+    &:focus,
+    &:active,
+    &:disabled {
+        background: $dash-blue !important;
+        border: 3px solid $dash-red !important;
+    }
+}
+.text-dash-color {
+    color: $dash-text-100 !important;
+}
+.input-dash {
+    border: 1px solid #d2d5dc;
+    background: $dash-background;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
+.dash-login-title {
+    font-size: 1.8rem;
+}
 /*
 .custom-clustericon-2 {
     --cluster-color: #ff9b00d9;
@@ -191,10 +234,9 @@
         }
     }
 }
-.column-left {
-    background: #14244f;
-    height: calc(100vh - 52.5px);
-    overflow: auto;
+.column-left,
+.top-menu {
+    background: $dash-background;
     &::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
         background-color: #f5f5f5;
@@ -217,9 +259,15 @@
             to(transparent)
         );
     }
+
+    @include card-style;
+    .vs__dropdown-toggle {
+        background: $dash-input-backColor !important;
+        border-color: $dash-input-border-color;
+    }
+
     h1 {
         font-size: 1.3rem;
-        color: white;
     }
     .map-form-logo {
         background: white;
@@ -300,11 +348,109 @@
             }
         }
     }
+    .form-group {
+        margin-bottom: 0;
+        border-color: $dash-input-border-color;
+    }
+    .form-control {
+        border-radius: 4px;
+    }
     .pandemics-stat-row {
         font-size: 0.8rem;
     }
     .vue-daterange-picker {
         width: 80%;
+        div {
+            background: $dash-input-backColor;
+            height: 32px;
+        }
+    }
+}
+.side-bottom {
+    .canva-chart {
+        height: 100% !important;
+    }
+    .card {
+        background: white;
+        border-radius: unset;
+        border-color: $dash-blue;
+        height: 100%;
+        .card-header {
+            background: transparent;
+            border: unset;
+            padding: 0.5rem 1.25rem;
+            .nav-item {
+                margin-right: 20px;
+                .nav-link {
+                    background: $dash-shadow-color;
+                    color: $dash-blue;
+                    text-decoration: unset;
+                    border-radius: 5px;
+                    font-size: 0.8rem;
+                    padding-top: 0px;
+                    padding-bottom: 0px;
+                    &.active {
+                        color: white !important;
+                        background: $dash-green !important;
+                    }
+                }
+            }
+        }
+        .tabs {
+            height: 100%;
+            .tab-content {
+                height: calc(100% - 35px);
+                .card-body {
+                    height: 100%;
+                    padding: 5px;
+                    > div {
+                        height: inherit;
+                        > div {
+                            height: inherit;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.side-right {
+    height: 100%;
+    overflow: auto;
+    @include scroolsmallWhite;
+    > .card {
+        background: transparent;
+        border-radius: unset;
+        border: unset;
+        > .tabs {
+            > .card-header {
+                background: transparent;
+                border: unset;
+                padding: 0.5rem 1.25rem;
+                border-radius: unset;
+                .nav-item {
+                    margin-right: 20px;
+                    .nav-link {
+                        background: $dash-shadow-color;
+                        color: $dash-blue;
+                        text-decoration: unset;
+                        border-radius: 5px;
+                        font-size: 0.8rem;
+                        padding-top: 0px;
+                        padding-bottom: 0px;
+                        &.active {
+                            color: white !important;
+                            background: $dash-green !important;
+                        }
+                    }
+                }
+            }
+            > .tab-content {
+                > .card-body {
+                    padding: 10px 0;
+                }
+            }
+        }
     }
 }
 .default-makers {
@@ -631,4 +777,19 @@
 
 #data-modal___BV_modal_content_ {
     min-height: 550px;
+}
+
+.mapboxgl-popup {
+    .mapboxgl-popup-content {
+        border: 2px solid $dash-shadow-color;
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+        border-radius: unset;
+        background: white;
+    }
+    .mapboxgl-popup-tip {
+        border-top-color: white;
+    }
+}
+.indicateurChart{
+    @include card-style;
 }

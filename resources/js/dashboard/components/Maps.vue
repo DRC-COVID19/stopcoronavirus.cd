@@ -9,67 +9,86 @@
   </div>
 </template>
 <script>
-import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE } from "../config/env";
+import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE, PALETTE } from "../config/env";
 import Mapbox from "mapbox-gl";
 import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
 import ToolTipMaps from "./ToolTipMaps";
+import { mapState, mapMutations, mapActions } from "vuex";
+import U from "mapbox-gl-utils";
+import { includes } from "lodash";
+import * as d3 from "d3";
+import * as turf from "@turf/turf";
 
+const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
+  sourceHealthZoneGeojson = "sourceHealthZoneGeojson",
+  sourceHealthProvinceGeojsonCentered = "sourHealthProvinceGeojsonCentered",
+  sourceHealthProvinceGeojson = "sourceHealthProvinceGeojson",
+  EPIDEMIC_LAYER = "EPIDEMIC_LAYER",
+  HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER";
 export default {
   components: { ToolTipMaps },
   props: {
     covidCases: {
       type: Object,
-      default: null
+      default: null,
     },
     hospitals: {
       type: Object,
-      default: null
+      default: null,
     },
     medicalOrientations: {
       type: Array,
-      default: null
+      default: null,
     },
     medicalOrientationSelected: {
       type: String,
-      default: null
+      default: null,
     },
     sondages: {
       type: Array,
-      default: null
+      default: null,
     },
     worried: {
       type: Boolean,
-      default: null
+      default: null,
     },
     catchVirus: {
       type: Boolean,
-      default: null
+      default: null,
     },
     priceIncrease: {
       type: Boolean,
-      default: null
+      default: null,
     },
     mask: {
       type: Boolean,
-      default: null
+      default: null,
     },
     makala: {
       type: Boolean,
-      default: null
+      default: null,
     },
     flour: {
       type: Boolean,
-      default: null
+      default: null,
     },
     antiBacterialGel: {
       type: Boolean,
-      default: null
+      default: null,
     },
     flux24: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
+    isLoading: {
+      type: Boolean,
+      default: null,
+    },
+    flux24Presence: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -79,27 +98,40 @@ export default {
       countryLayer: {
         paint: {
           "line-color": "#627BC1",
-          "line-width": 1
+          "line-width": 1,
         },
-        type: "line"
+        type: "line",
       },
       kinLayer: {
         paint: {
           "line-color": "#627BC1",
-          "line-width": 1
+          "line-width": 1,
         },
         type: "line",
-        "source-layer": "carte-administrative-de-la-vi-csh5cj"
+        "source-layer": "carte-administrative-de-la-vi-csh5cj",
       },
       drcSourceId: "states",
       kinSourceId: "statesKin",
+      drcHealthZone: "drcHealthZone",
+      hashedLayerId: "hashedLayerid",
       covidCasesMarkers: [],
       medicalOrientationMakers: [],
       medicalOrientationData: [],
       map: null,
       AllSondagesMarkers: [],
-      ArcLayerSelectedObject: {}
+      ArcLayerSelectedObject: {},
+      centerCoordinates: [],
+      healthZoneGeojson: null,
+      healthZoneGeojsonCentered: null,
+      healthProvinceGeojson: null,
+      healthProvinceGeojsonCentered: null,
+      isMapLoaded: false,
+      isZoneSourceLoaded: false,
+      isProvinceSourceLoaded: false,
     };
+  },
+  created() {
+    this.loadSource();
   },
   mounted() {
     Mapbox.accessToken = this.MAPBOX_TOKEN;
@@ -107,217 +139,128 @@ export default {
       container: "map",
       center: [15.31389, -4.33167],
       zoom: 10,
+      pitch: 10,
       style: this.MAPBOX_DEFAULT_STYLE,
-      bearing: 30,
-      pitch: 30
     });
+    U.init(map, Mapbox);
     map.addControl(new Mapbox.NavigationControl());
+    this.isMapLoaded = false;
     map.on("load", () => {
+      this.isMapLoaded = true;
       map.addSource(this.drcSourceId, {
         type: "geojson",
         generateId: true,
-        data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
-      });
-      map.addSource(this.kinSourceId, {
-        type: "vector",
-        url: "mapbox://merki230.4airwoxt"
+        data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`,
       });
 
-      map.addLayer({
-        id: this.drcSourceId,
-        type: "line",
-        source: this.drcSourceId,
-        layout: {},
-        paint: {
-          "line-color": "#627BC1",
-          "line-width": 1
-        }
+      map.addSource(this.drcHealthZone, {
+        type: "geojson",
+        generateId: true,
+        data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`,
       });
 
-      map.addLayer({
-        id: this.kinSourceId,
-        type: "line",
-        source: this.kinSourceId,
+      // map.addSource(this.kinSourceId, {
+      //   type: "vector",
+      //   url: "mapbox://merki230.4airwoxt"
+      // });
 
-        "source-layer": "carte-administrative-de-la-vi-csh5cj",
-        layout: {},
-        paint: {
-          "line-color": "#627BC1",
-          "line-width": 1
-        }
-      });
+      if (!this.isZoneSourceLoaded && this.healthZoneGeojson) {
+        this.addZoneSource();
+      }
+
+      if (!this.isProvinceSourceLoaded && this.healthProvinceGeojson) {
+        this.addProvinceSource();
+      }
+
+      this.addPolygoneLayer(1);
+      this.addPolygoneHoverLayer(1);
     });
+
     this.map = map;
+
+    //watch store
+    this.$store.watch(
+      (state) => state.flux.fluxGeoGranularity,
+      (value) => {
+        // if (this.activeMenu != 1) {
+        //   return;
+        // }
+        this.addPolygoneLayer(value);
+        this.addPolygoneHoverLayer(value);
+      }
+    );
+    this.$store.watch(
+      (state) => state.flux.mapStyle,
+      (value) => {
+        // if (this.activeMenu != 1) {
+        //   return;
+        // }
+        console.log(value);
+        this.flux24Func();
+      }
+    );
+    this.$store.watch(
+      (state) => state.flux.fluxType,
+      (value) => {
+        // if (this.activeMenu != 1) {
+        //   return;
+        // }
+        this.flux24Func();
+      }
+    );
+
+    //watch activeMenu store state
+    this.$store.watch(
+      (state) => state.nav.activeMenu,
+      (value) => {
+        switch (value) {
+          case 1:
+            break;
+          case 5:
+            this.addPolygoneLayer(2);
+            this.addPolygoneHoverLayer(2);
+          default:
+            break;
+        }
+      }
+    );
+
+    //watch flux legendHover store state
+    this.$store.watch(
+      (state) => state.flux.legendHover,
+      (value) => {
+        this.flux24Func();
+      }
+    );
+
+    this.$store.watch(
+      (state) => state.epidemic.legendEpidHover,
+      (value) => {
+        this.covidHatchedStyle(this.covidCases, value);
+      }
+    );
   },
   computed: {
+    ...mapState({
+      fluxMapStyle: (state) => state.flux.mapStyle,
+      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularity,
+      fluxType: (state) => state.flux.fluxType,
+      fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
+      fluxEnabled: (state) => state.flux.fluxEnabled,
+      activeMenu: (state) => state.nav.activeMenu,
+      legendHover: (state) => state.flux.legendHover,
+      epidemicLengendHover: (state) => state.epidemic.legendEpidHover,
+    }),
     flux24WithoutReference() {
-      return this.flux24.filter(x => !x.isReference);
-    }
+      return this.flux24.filter((x) => !x.isReference);
+    },
   },
   watch: {
     covidCases() {
       if (this.covidCases) {
-        this.map.addSource("covidCasesSource", this.covidCases);
-        this.map.addLayer({
-          id: "covidCasesLayer",
-          type: "circle",
-          source: "covidCasesSource",
-          paint: {
-            // make circles larger as the user zooms from z12 to z22
-            "circle-opacity": 0.7,
-            "circle-radius": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              1,
-              [
-                "case",
-                [">=", ["number", ["get", "confirmed"]], 3840],
-                6,
-                [">=", ["number", ["get", "confirmed"]], 1920],
-                5.5,
-                [">=", ["number", ["get", "confirmed"]], 960],
-                5,
-                [">=", ["number", ["get", "confirmed"]], 480],
-                4,
-                [">=", ["number", ["get", "confirmed"]], 240],
-                3.5,
-                [">=", ["number", ["get", "confirmed"]], 120],
-                3,
-                [">=", ["number", ["get", "confirmed"]], 60],
-                2.5,
-                [">=", ["number", ["get", "confirmed"]], 30],
-                1.5,
-                [">=", ["number", ["get", "confirmed"]], 15],
-                1,
-                1
-              ],
-              3,
-              [
-                "case",
-                [">=", ["number", ["get", "confirmed"]], 3840],
-                12.5,
-                [">=", ["number", ["get", "confirmed"]], 1920],
-                11,
-                [">=", ["number", ["get", "confirmed"]], 960],
-                10,
-                [">=", ["number", ["get", "confirmed"]], 480],
-                8.75,
-                [">=", ["number", ["get", "confirmed"]], 240],
-                7.5,
-                [">=", ["number", ["get", "confirmed"]], 120],
-                6,
-                [">=", ["number", ["get", "confirmed"]], 60],
-                5,
-                [">=", ["number", ["get", "confirmed"]], 30],
-                3.25,
-                [">=", ["number", ["get", "confirmed"]], 15],
-                2.5,
-                2.5
-              ],
-              5,
-              [
-                "case",
-                [">=", ["number", ["get", "confirmed"]], 3840],
-                25,
-                [">=", ["number", ["get", "confirmed"]], 1920],
-                22.5,
-                [">=", ["number", ["get", "confirmed"]], 960],
-                20,
-                [">=", ["number", ["get", "confirmed"]], 480],
-                17.5,
-                [">=", ["number", ["get", "confirmed"]], 240],
-                15,
-                [">=", ["number", ["get", "confirmed"]], 120],
-                12.5,
-                [">=", ["number", ["get", "confirmed"]], 60],
-                10,
-                [">=", ["number", ["get", "confirmed"]], 30],
-                7.5,
-                [">=", ["number", ["get", "confirmed"]], 15],
-                5,
-                5
-              ],
-              10,
-              [
-                "case",
-                [">=", ["number", ["get", "confirmed"]], 3840],
-                50,
-                [">=", ["number", ["get", "confirmed"]], 1920],
-                45,
-                [">=", ["number", ["get", "confirmed"]], 960],
-                40,
-                [">=", ["number", ["get", "confirmed"]], 480],
-                35,
-                [">=", ["number", ["get", "confirmed"]], 240],
-                30,
-                [">=", ["number", ["get", "confirmed"]], 120],
-                25,
-                [">=", ["number", ["get", "confirmed"]], 60],
-                20,
-                [">=", ["number", ["get", "confirmed"]], 30],
-                15,
-                [">=", ["number", ["get", "confirmed"]], 15],
-                10,
-                10
-              ]
-            ],
-            "circle-color": "#f4c363"
-          }
-        });
-        this.map.on("mouseenter", "covidCasesLayer", () => {
-          this.map.getCanvas().style.cursor = "pointer";
-        });
-        this.map.on("mouseleave", "covidCasesLayer", () => {
-          this.map.getCanvas().style.cursor = "";
-        });
-        this.map.on("click", "covidCasesLayer", e => {
-          const coordinates = e.features[0].geometry.coordinates.slice();
-          const {
-            name,
-            confirmed,
-            dead,
-            sick,
-            healed,
-            last_update
-          } = e.features[0].properties;
-          const template = `<div class="topToolTip" >
-                            <div class="titleInfoBox">${name}</div>
-                            <div class="statLine">
-                                <div class="stat total">Nombre total de cas</div>
-                                <div class="statCount total">${confirmed}</div>
-                            </div>
-                            <div class="statLine divider"></div>
-                            <div class="statLine">
-                                <div class="legendColor ongoing"></div>
-                                <div class="stat">Actifs</div>
-                                <div class="statCount">${confirmed -
-                                  healed -
-                                  dead}</div>
-                            </div>
-                            <div class="statLine">
-                                <div class="legendColor recovered"></div>
-                                <div class="stat">Guérisons</div>
-                                <div class="statCount">${healed}</div>
-                            </div>
-                            <div class="statLine"> 
-                                <div class="legendColor fatal"></div>
-                                <div class="stat">Décès</div>
-                                <div class="statCount">${dead}</div>
-                            </div> 
-                            <i></i>
-                        </div>`;
-          new Mapbox.Popup()
-            .setLngLat(coordinates)
-            .setHTML(template)
-            .addTo(this.map);
-        });
+        this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
       } else {
-        this.map.off("mouseenter", "covidCasesLayer");
-        this.map.off("mouseleave", "covidCasesLayer");
-        this.map.off("click", "covidCasesLayer");
-        this.map.removeLayer("covidCasesLayer");
-        this.map.removeSource("covidCasesSource");
+        map.U.removeLayer([EPIDEMIC_LAYER]);
       }
     },
     hospitals() {
@@ -338,22 +281,20 @@ export default {
             "text-field": String.fromCharCode("0xf47e"),
             "icon-optional": true,
             "text-font": ["Font Awesome 5 Free Solid"],
-            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25]
+            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25],
           },
           paint: {
             "text-translate-anchor": "viewport",
-            "text-color": ["get", "color"]
-          }
+            "text-color": ["get", "color"],
+          },
         });
 
-        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
-          this.map.getCanvas().style.cursor = "pointer";
-        });
-        this.map.on("mouseleave", "covid9HospitalsLayer", () => {
-          this.map.getCanvas().style.cursor = "";
+        const popup = new Mapbox.Popup({
+          closeButton: false,
+          closeOnClick: false,
         });
 
-        this.map.on("click", "covid9HospitalsLayer", e => {
+        const mouseMove = (e) => {
           const coordinates = e.features[0].geometry.coordinates.slice();
           const {
             name,
@@ -367,69 +308,49 @@ export default {
             dead,
             sick,
             healed,
-            last_update
+            last_update,
+            resuscitation_beds,
+            occupied_resuscitation_beds,
           } = e.features[0].properties;
 
-          // computed properties
-          const active = confirmed - dead - healed;
-          const bedsAvailable = beds - occupied_beds;
-          const respiratorsAvailable = respirators - occupied_respirators;
 
-          const template = `
-<div>
-  <div class="hospital-name">${name}</div>
-  ${address ? `<div>Commune: ${address}</div>` : ""}
-  <hr />
-  <div>
-    <strong>Situation Epidémiologique</strong>
-  </div>
-  <div class="confirmed">
-    <span>Confirmés: </span>
-    <span class="count">${confirmed}</span>
-  </div>
-  <div class="active">
-    <span>Actifs: </span>
-    <span class="count">${sick}</span>
-  </div>
-  <div class="recovered">
-    <span>Guéris: </span>
-    <span class="count">${healed}</span>
-  </div>
-  <div class="death">
-    <span>Décès: </span>
-    <span class="count">${dead}</span>
-  </div>
-  <hr />
-  <div>
-    <strong>Capacité Hospitalière</strong>
-  </div>
-  <div>
-    <span>Lits disponibles: </span>
-    <span>${bedsAvailable} sur ${beds}</span>
-  </div>
-  <div>
-    <span>Respirateurs disponibles: </span>
-    <span>${respiratorsAvailable} sur ${respirators}</span>
-  </div>
-  <div>
-    <span>Masques N95/FFP2: </span>
-    <span>${masks}</span>
-  </div>
- 
-</div>
-`;
+          const HTML = `<div class="row">
+                <div class="col-12 bold text-center hospital-name">${name}</div>
+                <hr class="col-12 m-0 p-0">
 
-          new Mapbox.Popup()
-            .setLngLat(coordinates)
-            .setHTML(template)
-            .addTo(this.map);
+                <div class="col-9 small">Confirmés</div>
+                <div class="col-3 bold">${confirmed}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Hospitalisés</div>
+                <div class="col-3 bold">${sick}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Lits de réanimation</div>
+                <div class="col-3 bold">${occupied_resuscitation_beds}/${resuscitation_beds}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Respirateurs</div>
+                <div class="col-3 bold">${occupied_respirators}/${respirators}</div>
+            </div>`;
+          popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+        };
+
+        const mouseOut = (e) => {
+          this.map.getCanvas().style.cursor = "";
+          popup.remove();
+        };
+
+        const mouseClick=(e)=>{
+          this.selectHospital(e.features[0].properties);
+        }
+
+        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
+          this.map.getCanvas().style.cursor = "pointer";
         });
-      } else {
-        this.map.off("mouseenter", "covid9HospitalsLayer");
-        this.map.off("mouseleave", "covid9HospitalsLayer");
-        this.map.off("click", "covid9HospitalsLayer");
-        this.map.removeLayer("covid9HospitalsLayer");
-        this.map.removeSource("covid9HospitalsSource");
+        this.map.on("mouseleave", "covid9HospitalsLayer", mouseOut);
+        this.map.on("mousemove", "covid9HospitalsLayer", mouseMove);
+        this.map.on("click", "covid9HospitalsLayer", mouseClick);
       }
     },
     medicalOrientations() {
@@ -445,7 +366,7 @@ export default {
       }
       this.RemoveOrientationMakers();
       let orientation = this.medicalOrientationSelected;
-      this.medicalOrientations.map(value => {
+      this.medicalOrientations.map((value) => {
         if (value[orientation] >= 0) {
           let el = document.createElement("div");
           el.className = `default-makers ${orientation}`;
@@ -492,7 +413,7 @@ export default {
     },
     sondages() {
       if (!this.sondages) {
-        this.AllSondagesMarkers.map(item => {
+        this.AllSondagesMarkers.map((item) => {
           item.remove();
         });
       }
@@ -547,253 +468,879 @@ export default {
       }
     },
     flux24() {
-      if (this.flux24.length > 0) {
-        if (map.getLayer("arc")) {
-          map.removeLayer("arc");
-          map.removeLayer("fluxCircleDataLayer");
-          map.removeSource("fluxCircleDataSource");
-        }
-
-        const features = [];
-        this.flux24
-          .filter(x => !x.isReference)
-          .map(item => {
-            let element = features.find(
-              x => x.properties.origin == item.origin
-            );
-            if (element) {
-              element.properties.volume += 1;
-            } else {
-              features.push({
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: item.position_start
-                },
-                properties: {
-                  origin: item.origin,
-                  color: "#ED5F68",
-                  volume: 1
-                }
-              });
-            }
-            const element2 = features.find(
-              x => x.properties.origin == item.destination
-            );
-            if (element2) {
-              element2.properties.volume += 1;
-            } else {
-              features.push({
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: item.position_end
-                },
-                properties: {
-                  origin: item.destination,
-                  color: "#ED5F68",
-                  volume: 1
-                }
-              });
-            }
-          });
-
-        const circleData = {
-          type: "geojson",
-          data: {
-            type: "FeatureCollection",
-            features: features
-          }
-        };
-
-        map.addSource("fluxCircleDataSource", circleData);
-        map.addLayer({
-          id: "fluxCircleDataLayer",
-          type: "circle",
-          source: "fluxCircleDataSource",
-          paint: {
-            // make circles larger as the user zooms from z12 to z22
-            "circle-opacity": 0.7,
-            "circle-radius": [
-              "interpolate",
-              ["linear"],
-              ["zoom"],
-              1,
-              [
-                "case",
-                [">=", ["number", ["get", "volume"]], 1280],
-                6,
-                [">=", ["number", ["get", "volume"]], 640],
-                5.5,
-                [">=", ["number", ["get", "volume"]], 320],
-                5,
-                [">=", ["number", ["get", "volume"]], 160],
-                4,
-                [">=", ["number", ["get", "volume"]], 80],
-                3.5,
-                [">=", ["number", ["get", "volume"]], 40],
-                3,
-                [">=", ["number", ["get", "volume"]], 20],
-                2.5,
-                [">=", ["number", ["get", "volume"]], 10],
-                1.5,
-                [">=", ["number", ["get", "volume"]], 5],
-                1,
-                1
-              ],
-              3,
-              [
-                "case",
-                [">=", ["number", ["get", "volume"]], 1280],
-                12.5,
-                [">=", ["number", ["get", "volume"]], 640],
-                11,
-                [">=", ["number", ["get", "volume"]], 320],
-                10,
-                [">=", ["number", ["get", "volume"]], 160],
-                8.75,
-                [">=", ["number", ["get", "volume"]], 80],
-                7.5,
-                [">=", ["number", ["get", "volume"]], 40],
-                6,
-                [">=", ["number", ["get", "volume"]], 20],
-                5,
-                [">=", ["number", ["get", "volume"]], 10],
-                3.25,
-                [">=", ["number", ["get", "volume"]], 5],
-                2.5,
-                2.5
-              ],
-              5,
-              [
-                "case",
-                [">=", ["number", ["get", "volume"]], 1280],
-                25,
-                [">=", ["number", ["get", "volume"]], 640],
-                22.5,
-                [">=", ["number", ["get", "volume"]], 320],
-                20,
-                [">=", ["number", ["get", "volume"]], 160],
-                17.5,
-                [">=", ["number", ["get", "volume"]], 80],
-                15,
-                [">=", ["number", ["get", "volume"]], 40],
-                12.5,
-                [">=", ["number", ["get", "volume"]], 20],
-                10,
-                [">=", ["number", ["get", "volume"]], 10],
-                7.5,
-                [">=", ["number", ["get", "volume"]], 5],
-                5,
-                5
-              ],
-              10,
-              [
-                "case",
-                [">=", ["number", ["get", "volume"]], 1280],
-                50,
-                [">=", ["number", ["get", "volume"]], 640],
-                45,
-                [">=", ["number", ["get", "volume"]], 320],
-                40,
-                [">=", ["number", ["get", "volume"]], 160],
-                35,
-                [">=", ["number", ["get", "volume"]], 80],
-                30,
-                [">=", ["number", ["get", "volume"]], 40],
-                25,
-                [">=", ["number", ["get", "volume"]], 20],
-                20,
-                [">=", ["number", ["get", "volume"]], 10],
-                15,
-                [">=", ["number", ["get", "volume"]], 5],
-                10,
-                10
-              ]
-            ],
-            "circle-color": "#f4c363"
-          }
-        });
-
-        let arcData = [];
-        let FluxFiltered = this.flux24.filter(x => !x.isReference);
-        
-        for (const key in FluxFiltered) {
-          const item = FluxFiltered[key];
-          const index = arcData.findIndex(
-            x =>
-              (x.destination == item.destination && x.origin == item.origin) ||
-              (x.destination == item.origin && x.origin == item.destination)
-          );
-          if (index != -1) {
-            arcData[index].volume += item.volume;
-          } else {
-            arcData.push(item);
-          }
-        }
-
-        // arcData=this.flux24.filter(x=>!x.isReference);
-        const myDeckLayer = new MapboxLayer({
-          id: "arc",
-          data: arcData,
-          type: ArcLayer,
-          stroked: false,
-          filled: true,
-          getFillColor: [0, 0, 0, 0],
-          getSourcePosition: d => d.position_start,
-          getTargetPosition: d => d.position_end,
-          getSourceColor: d =>
-            d.isReference ? [158, 158, 158] : [105, 179, 162],
-          getTargetColor: d => (d.isReference ? [158, 158, 158] : [105, 179, 162]),
-          getHeight: 1,
-          getTilt: (d, { data }) => {
-            let tilt = 2;
-            if (d.isReference) {
-              tilt = -2;
-            }
-            return tilt;
-          },
-          getWidth: d => {
-            let width = 3;
-            if (d.volume > 20000) {
-              width = 12;
-            } else if (d.volume > 10000) {
-              width = 11;
-            } else if (d.volume > 5000) {
-              width = 10;
-            } else if (d.volume > 3000) {
-              width = 9;
-            } else if (d.volume > 1000) {
-              width = 7;
-            } else if (d.volume > 500) {
-              width = 6.5;
-            } else if (d.volume > 300) {
-              width = 6;
-            } else if (d.volume > 100) {
-              width = 5;
-            }
-            return width;
-          },
-          pickable: true,
-          onHover: (info, event) => {
-            this.$set(this.ArcLayerSelectedObject, "position", {
-              top: info.y,
-              left: info.x
-            });
-            this.$set(this.ArcLayerSelectedObject, "item", info.object);
-          }
-        });
-        map.addLayer(myDeckLayer);
-      } else {
-        if (map.getLayer("arc")) {
-          map.removeLayer("arc");
-          map.removeLayer("fluxCircleDataLayer");
-          map.removeSource("fluxCircleDataSource");
-        }
+      this.flux24Func();
+    },
+    isLoading() {
+      if (this.centerCoordinates.length > 0) {
+        map.flyTo({ center: this.centerCoordinates });
       }
-    }
+    },
   },
   methods: {
+    ...mapMutations([
+      "selectHospital",
+      "setFluxGeoOptions",
+      "setDomaineExtValues",
+      "setEpidemicExtValues",
+    ]),
+    ...mapActions(["resetState"]),
+    addPolygoneLayer(geoGranularity) {
+      map.U.removeLayer([this.drcSourceId]);
+      map.addLayer(
+        {
+          id: this.drcSourceId,
+          type: "line",
+          source: geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+          layout: {},
+          paint: {
+            "line-color": PALETTE.bordure_shape_file,
+            "line-width": 1,
+          },
+        },
+        map.getLayer(EPIDEMIC_LAYER) ? EPIDEMIC_LAYER : null
+      );
+    },
+    addPolygoneHoverLayer(geoGranularity) {
+      map.U.removeLayer(["state-hover"]);
+      let hoveredStateId = null;
+      let hoveredStateKinId = null;
+      map.U.addFill(
+        "state-hover",
+        geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+        map.U.properties({
+          "fill-opacity": [
+            "case",
+            ["boolean", ["feature-state", "hover"], false],
+            0.2,
+            0,
+          ],
+          "fill-color": "#627BC1",
+        })
+      );
+
+      map.off("mouseleave", "state-hover");
+      map.off("mousemove", "state-hover");
+      map.off("click", "state-hover");
+
+      //polygone hover
+      map.on("mousemove", "state-hover", (e) => {
+        if (e.features.length > 0) {
+          if (hoveredStateId) {
+            map.setFeatureState(
+              {
+                source:
+                  geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+                id: hoveredStateId,
+              },
+              { hover: false }
+            );
+          }
+          hoveredStateId = e.features[0].id;
+          map.setFeatureState(
+            {
+              source:
+                geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+              id: hoveredStateId,
+            },
+            { hover: true }
+          );
+        }
+      });
+
+      map.on("mouseleave", "state-hover", () => {
+        if (hoveredStateId) {
+          map.setFeatureState(
+            {
+              source:
+                geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+              id: hoveredStateId,
+            },
+            { hover: false }
+          );
+        }
+        hoveredStateId = null;
+      });
+
+      map.on("click", "state-hover", (e) => {
+        this.centerCoordinates = [e.lngLat.lng, e.lngLat.lat];
+        // map.flyTo({center: this.centerCoordinates})
+
+        switch (this.activeMenu) {
+          case 1:
+            if (geoGranularity != 2) {
+              this.setFluxGeoOptions([e.features[0].properties.name]);
+            } else {
+              this.setFluxGeoOptions([e.features[0].properties["Zone+Peupl"]]);
+            }
+            break;
+
+          default:
+            break;
+        }
+      });
+    },
+    loadSource() {
+      axios
+        .get(
+          `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`
+        )
+        .then(({ data }) => {
+          // console.log("data", data);
+          this.isZoneSourceLoaded = false;
+          this.healthZoneGeojson = data;
+          const features = data.features.map((item) => {
+            let polygone = null;
+            switch (item.geometry.type) {
+              case "MultiPolygon":
+                polygone = turf.multiPolygon(item.geometry.coordinates);
+                break;
+              case "Polygon":
+                polygone = turf.polygon(item.geometry.coordinates);
+                break;
+              default:
+                break;
+            }
+            const feature = turf.centerOfMass(polygone);
+            feature.properties = item.properties;
+            return feature;
+          });
+          this.healthZoneGeojsonCentered = {
+            type: "FeatureCollection",
+            features: features,
+          };
+          // console.log(this.healthZoneGeojsonCentered);
+          this.addZoneSource();
+        });
+
+      axios
+        .get(
+          `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
+        )
+        .then(({ data }) => {
+          // console.log("data", data);
+          this.isProvinceSourceLoaded = false;
+          this.healthProvinceGeojson = data;
+          const features = data.features.map((item) => {
+            let polygone = null;
+            switch (item.geometry.type) {
+              case "MultiPolygon":
+                polygone = turf.multiPolygon(item.geometry.coordinates);
+                break;
+              case "Polygon":
+                polygone = turf.polygon(item.geometry.coordinates);
+                break;
+              default:
+                break;
+            }
+            const feature = turf.centerOfMass(polygone);
+            feature.properties = item.properties;
+            return feature;
+          });
+          this.healthProvinceGeojsonCentered = {
+            type: "FeatureCollection",
+            features: features,
+          };
+          this.addProvinceSource();
+        });
+    },
+    addProvinceSource() {
+      if (!this.isMapLoaded) {
+        return;
+      }
+      map.U.addGeoJSON(
+        sourceHealthProvinceGeojsonCentered,
+        this.healthProvinceGeojsonCentered
+      );
+      map.U.addGeoJSON(sourceHealthProvinceGeojson, this.healthProvinceGeojson);
+      this.isProvinceSourceLoaded = true;
+    },
+    addZoneSource() {
+      if (!this.isMapLoaded) {
+        return;
+      }
+      map.U.addGeoJSON(
+        sourceHealthZoneGeojsonCentered,
+        this.healthZoneGeojsonCentered
+      );
+      map.U.addGeoJSON(sourceHealthZoneGeojson, this.healthZoneGeojson);
+      this.isZoneSourceLoaded = true;
+    },
+    covidHatchedStyle(
+      covidCasesData,
+      legendHover = null,
+      property = "confirmed",
+      geoGranularity = 2
+    ) {
+      let features = covidCasesData.data.features;
+
+      features = features.sort((a, b) => {
+        return Number(a[property] ?? 0) < Number(b[property] ?? 0) ? 1 : -1;
+      });
+
+      //domaine
+      const domaineMax = d3.max(features, (d) => d.properties[property]);
+      const domaineMin = d3.min(features, (d) => d.properties[property]);
+
+      this.setEpidemicExtValues({ max: domaineMax, min: domaineMin });
+
+      const colorScale = d3
+        .scaleQuantile()
+        .domain([domaineMin, domaineMax])
+        .range(PALETTE.epidemic);
+
+      let dataKey = "name";
+      if (geoGranularity == 2) {
+        dataKey = "Zone+Peupl";
+      }
+
+      const colorExpression = [];
+      colorExpression.push("case");
+      features.forEach((x) => {
+        const color = colorScale(x.properties[property]);
+        colorExpression.push(["==", ["get", dataKey], x.properties.name]);
+        colorExpression.push(color);
+      });
+      colorExpression.push("white");
+
+      //remove previous layer
+      map.U.removeLayer([EPIDEMIC_LAYER]);
+
+      const source = map.getSource(
+        geoGranularity == 1 ? this.drcSourceId : this.drcHealthZone
+      );
+
+      if (legendHover) {
+        features = features.filter(
+          (x) =>
+            x.properties[property] >= legendHover.de &&
+            x.properties[property] <= legendHover.a
+        );
+        if (features.length == 0) {
+          return;
+        }
+      }
+
+      //Added layer
+      // map.U.addFill(
+      //   this.hashedLayerId,
+      //   geoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
+      //   map.U.properties({
+      //     fillColor: colorExpression,
+      //     fillOpacity: [
+      //       "match",
+      //       ["get", dataKey],
+      //       features.map(x => x.properties.name),
+      //       0.9,
+      //       0
+      //     ]
+      //   }),
+      //   this.drcSourceId
+      // );
+
+      // map.U.addCircle(
+      //   this.hashedLayerId,
+      //   geoGranularity == 1
+      //     ? sourceHealthProvinceGeojsonCentered
+      //     : sourceHealthZoneGeojsonCentered,
+      //   map.U.properties({
+      //     circleColor: colorExpression,
+      //     circlePitchAlignment: "map",
+      //     circleBlur: 0.1,
+      //     circleRaduis: 200,
+      //     cirleOpacity: [
+      //       "match",
+      //       ["get", dataKey],
+      //       features.map(x => x.properties.name),
+      //       0.7,
+      //       0
+      //     ],
+      //   }),
+      //   this.drcSourceId
+      // );
+
+      map.addLayer({
+        id: EPIDEMIC_LAYER,
+        type: "circle",
+        source:
+          geoGranularity == 1
+            ? sourceHealthProvinceGeojsonCentered
+            : sourceHealthZoneGeojsonCentered,
+
+        paint: {
+          "circle-pitch-alignment": "map",
+          "circle-blur": 0,
+          "circle-opacity": [
+            "match",
+            ["get", dataKey],
+            features.map((x) => x.properties.name),
+            0.7,
+            0,
+          ],
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            0.2,
+            22,
+            20,
+          ],
+          "circle-color": colorExpression,
+          "circle-stroke-color": PALETTE.dash_green,
+          "circle-stroke-width": [
+            "match",
+            ["get", dataKey],
+            features.map((x) => x.properties.name),
+            0.5,
+            0,
+          ],
+        },
+      });
+
+      const popup = new Mapbox.Popup({
+        closeButton: false,
+        closeOnClick: false,
+      });
+
+      const mouseMove = (e) => {
+        // Change the cursor style as a UI indicator.
+        // map.getCanvas().style.cursor = "pointer";
+
+        const coordinates = e.features[0].geometry.coordinates[0].slice();
+
+        const item = e.features[0].properties;
+
+        const name = item["Zone+Peupl"] ?? item["name"];
+        let value = null;
+        const feature = features.find((x) => x.properties.name == name);
+
+        if (feature) {
+          value = feature.properties[property];
+        }
+        const HTML = `<div>${name} ${
+          value ? `: ${Math.round(value)} cas` : ""
+        }</div>`;
+
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+      };
+
+      const mouseOut = () => {
+        map.getCanvas().style.cursor = "";
+        popup.remove();
+      };
+
+      const mouseClick = (e) => {
+        const item = e.features[0].properties;
+
+        const featureName = item["Zone+Peupl"] ?? item["name"];
+        const feature = features.find((x) => x.properties.name == featureName);
+        if (!features) {
+          return;
+        }
+        popup.remove();
+        const {
+          name,
+          confirmed,
+          dead,
+          sick,
+          healed,
+          last_update,
+        } = feature.properties;
+
+        const template = `<div class="topToolTip" >
+                            <div class="titleInfoBox">${name}</div>
+                            <div class="statLine">
+                                <div class="stat total">Nombre total de cas</div>
+                                <div class="statCount total">${confirmed}</div>
+                            </div>
+                            <div class="statLine divider"></div>
+                            <div class="statLine">
+                                <div class="legendColor ongoing"></div>
+                                <div class="stat">Actifs</div>
+                                <div class="statCount">${
+                                  confirmed - healed - dead
+                                }</div>
+                            </div>
+                            <div class="statLine">
+                                <div class="legendColor recovered"></div>
+                                <div class="stat">Guérisons</div>
+                                <div class="statCount">${healed}</div>
+                            </div>
+                            <div class="statLine">
+                                <div class="legendColor fatal"></div>
+                                <div class="stat">Décès</div>
+                                <div class="statCount">${dead}</div>
+                            </div>
+                            <i></i>
+                        </div>`;
+        new Mapbox.Popup()
+          .setLngLat(e.lngLat)
+          .setHTML(template)
+          .addTo(this.map);
+      };
+
+      map.off("mousemove", EPIDEMIC_LAYER, mouseMove);
+      map.off("mouseout", EPIDEMIC_LAYER, mouseOut);
+      map.off("click", EPIDEMIC_LAYER, mouseClick);
+
+      map.on("click", EPIDEMIC_LAYER, mouseClick);
+
+      map.on("mousemove", EPIDEMIC_LAYER, mouseMove);
+
+      map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
+    },
+    flux24Func() {
+      if (this.flux24.length > 0) {
+        switch (this.fluxMapStyle) {
+          case 2:
+            this.fluxArcStyle(this.flux24);
+            map.flyTo({
+              pitch: 40,
+              speed: 0.2, // make the flying slow
+              curve: 1, // change the speed at which it zooms out
+
+              // This can be any easing function: it takes a number between
+              // 0 and 1 and returns another number between 0 and 1.
+              easing: function (t) {
+                return t;
+              },
+
+              // this animation is considered essential with respect to prefers-reduced-motion
+              essential: true,
+            });
+            break;
+          case 1:
+          default:
+            this.fluxHatchedStyle(
+              this.flux24,
+              this.flux24Presence,
+              this.legendHover
+            );
+            map.flyTo({
+              pitch: 10,
+              speed: 0.2, // make the flying slow
+              curve: 1, // change the speed at which it zooms out
+
+              // This can be any easing function: it takes a number between
+              // 0 and 1 and returns another number between 0 and 1.
+              easing: function (t) {
+                return t;
+              },
+
+              // this animation is considered essential with respect to prefers-reduced-motion
+              essential: true,
+            });
+            break;
+        }
+      } else {
+        map.U.removeSource(["fluxCircleDataSource"]);
+        map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
+        map.off("mouseleave", "fluxCircleDataLayer");
+        map.off("mouseleave", "fluxCircleDataLayer");
+      }
+    },
+    fluxHatchedStyle(flux24Data, flux24DataPresence, legendHover = null) {
+      const localData =
+        this.fluxType == 3
+          ? flux24DataPresence.map((x) => {
+              const difference = x.volume - x.reference_volume ?? 0;
+              let percent = 0;
+              if (x.reference_volume) {
+                percent = (difference / x.reference_volume) * 100;
+              }
+              return { origin: x.zone, volume: x.volume, percent };
+            })
+          : flux24Data;
+
+      let features = [];
+
+      /**
+       * format features data
+       */
+      const formatData = (element, item, key) => {
+        if (element) {
+          if (item.isReference) {
+            element.properties.volumeReference += item.volume;
+          } else {
+            element.properties.volume += item.volume;
+          }
+          const volume = element.properties.volume;
+          const volumeReference = element.properties.volumeReference;
+          const difference = volume - volumeReference;
+          let percent = 0;
+          if (volumeReference > 0) {
+            percent = (difference / volumeReference) * 100;
+          }
+          element.properties.percent = percent;
+        } else {
+          const volume = !item.isReference ? item.volume : 0;
+          const volumeReference = item.isReference ? item.volume : 0;
+
+          features.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: item.position_end,
+            },
+            properties: {
+              origin: item[key],
+              color: "#ED5F68",
+              volume,
+              volumeReference,
+              percent: 0,
+            },
+          });
+        }
+      };
+
+      if (this.fluxType == 2) {
+        localData.map((item) => {
+          const element = features.find(
+            (x) => x.properties.origin == item.origin
+          );
+          formatData(element, item, "origin");
+        });
+      } else if (this.fluxType == 3) {
+        localData.map((item) => {
+          features.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: item.position_end,
+            },
+            properties: item,
+          });
+        });
+      } else {
+        localData.map((item) => {
+          const element = features.find(
+            (x) => x.properties.origin == item.destination
+          );
+          formatData(element, item, "destination");
+        });
+      }
+      const max = d3.max(features, (d) => d.properties.volume);
+
+      map.U.removeSource(["fluxCircleDataSource"]);
+      map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
+
+      const domaineMax = d3.max(features, (d) => d.properties.percent);
+      const domaineMin = d3.min(features, (d) => d.properties.percent);
+
+      const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
+
+      this.setDomaineExtValues({ min: domaineMin, max: domaineMax });
+
+      if (this.fluxType == 1) {
+        colorScale.range(PALETTE.inflow);
+      } else if (this.fluxType == 3) {
+        colorScale.range(PALETTE.present);
+      } else {
+        colorScale.range(PALETTE.outflow);
+      }
+
+      let dataKey = "name";
+      if (this.fluxGeoGranularity == 2) {
+        dataKey = "Zone+Peupl";
+      }
+
+      const colorExpression = [];
+      colorExpression.push("case");
+      features.forEach((x) => {
+        const color =
+          this.fluxGeoOptions.includes(x.properties.origin) &&
+          this.fluxType != 3
+            ? PALETTE.dash_green
+            : colorScale(x.properties.percent);
+        colorExpression.push(["==", ["get", dataKey], x.properties.origin]);
+        colorExpression.push(color);
+      });
+      colorExpression.push("white");
+
+      if (legendHover) {
+        features = features.filter(
+          (x) =>
+            x.properties.percent >= legendHover.de &&
+            x.properties.percent <= legendHover.a
+        );
+        if (features.length == 0) {
+          return;
+        }
+      }
+
+      map.U.addFill(
+        HATCHED_MOBILITY_LAYER,
+        this.fluxGeoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
+        map.U.properties({
+          fillColor: colorExpression,
+          fillOpacity: [
+            "match",
+            ["get", dataKey],
+            features.map((x) => x.properties.origin),
+            0.9,
+            0,
+          ],
+        }),
+        this.drcSourceId
+      );
+
+      const popup = new Mapbox.Popup({
+        closeButton: false,
+        closeOnClick: false,
+      });
+
+      const mouseMove = (e) => {
+        // Change the cursor style as a UI indicator.
+        // map.getCanvas().style.cursor = "pointer";
+
+        const coordinates = e.features[0].geometry.coordinates[0].slice();
+
+        const item = e.features[0].properties;
+
+        const name = item["Zone+Peupl"] ?? item["name"];
+        let value = null;
+        const feature = features.find((x) => x.properties.origin == name);
+
+        if (feature) {
+          value = feature.properties.percent;
+        }
+        const HTML = `<div>${name} ${
+          value ? `: ${Math.round(value)}%` : ""
+        }</div>`;
+
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+      };
+
+      const mouseOut = () => {
+        map.getCanvas().style.cursor = "";
+        popup.remove();
+      };
+
+      map.off("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
+      map.off("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
+
+      map.on("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
+
+      map.on("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
+    },
+    fluxArcStyle(flux24Data) {
+      map.U.removeSource(["fluxCircleDataSource"]);
+      map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
+      map.off("mouseleave", "fluxCircleDataLayer");
+      map.off("mouseleave", "fluxCircleDataLayer");
+      const localData = flux24Data.filter((x) => !x.isReference);
+      const features = [];
+      let color = "#33ac2e";
+      let arcData = [];
+      let FluxFiltered = flux24Data.filter((x) => !x.isReference);
+
+      if (this.fluxType == 1) {
+        localData.map((item) => {
+          let element = features.find(
+            (x) => x.properties.origin == item.origin
+          );
+          if (element) {
+            element.properties.volume += item.volume;
+          } else {
+            features.push({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: item.position_start,
+              },
+              properties: {
+                origin: item.origin,
+                color: includes(this.fluxGeoOptions, item.origin)
+                  ? PALETTE.flux_in_color
+                  : PALETTE.flux_out_color,
+                volume: item.volume,
+              },
+            });
+          }
+        });
+        arcData = FluxFiltered.filter((item) => {
+          return includes(this.fluxGeoOptions, item.destination);
+        });
+      } else {
+        color = "#ffa500";
+        localData.map((item) => {
+          const element2 = features.find(
+            (x) => x.properties.origin == item.destination
+          );
+          if (element2) {
+            element2.properties.volume += item.volume;
+          } else {
+            features.push({
+              type: "Feature",
+              geometry: {
+                type: "Point",
+                coordinates: item.position_end,
+              },
+              properties: {
+                origin: item.destination,
+                color: includes(this.fluxGeoOptions, item.destination)
+                  ? PALETTE.flux_out_color
+                  : PALETTE.flux_in_color,
+                volume: item.volume,
+              },
+            });
+          }
+        });
+        arcData = FluxFiltered.filter((item) => {
+          return includes(this.fluxGeoOptions, item.origin);
+        });
+      }
+
+      const circleData = {
+        type: "geojson",
+        generateId: true,
+        data: {
+          type: "FeatureCollection",
+          features: features,
+        },
+      };
+
+      const max = Math.max(...features.map((x) => x.properties.volume));
+      const maxArc = Math.max(...arcData.map((x) => x.volume));
+
+      map.addSource("fluxCircleDataSource", circleData);
+      map.addLayer({
+        id: "fluxCircleDataLayer",
+        type: "circle",
+        source: "fluxCircleDataSource",
+
+        paint: {
+          "circle-pitch-alignment": "map",
+          "circle-blur": 0.1,
+          "circle-opacity": [
+            "case",
+            ["boolean", ["feature-state", "hover"], false],
+            0.7,
+            0.5,
+          ],
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            0.2,
+            22,
+            ["+", ["*", ["/", ["get", "volume"], max], 60], 20],
+          ],
+          "circle-color": ["get", "color"],
+          "circle-stroke-color": ["get", "color"],
+          "circle-stroke-width": 1,
+        },
+      });
+
+      let hoveredStateId = null;
+      const popup = new Mapbox.Popup({
+        closeButton: false,
+        closeOnClick: false,
+      });
+      // When the user moves their mouse over the state-fill layer, we'll update the
+      // feature state for the feature under the mouse.
+      map.on("mouseenter", "fluxCircleDataLayer", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mousemove", "fluxCircleDataLayer", (e) => {
+        if (e.features.length > 0) {
+          if (hoveredStateId) {
+            map.setFeatureState(
+              { source: "fluxCircleDataSource", id: hoveredStateId },
+              { hover: false }
+            );
+          }
+          hoveredStateId = e.features[0].id;
+          map.setFeatureState(
+            { source: "fluxCircleDataSource", id: hoveredStateId },
+            { hover: true }
+          );
+        }
+        const { origin, volume } = e.features[0].properties;
+        const HTML = `<div>${origin} ${volume ? `: ${volume}` : ""}</div>`;
+
+        // Populate the popup and set its coordinates
+        // based on the feature found.
+        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+      });
+
+      // When the mouse leaves the state-fill layer, update the feature state of the
+      // previously hovered feature.
+      map.on("mouseout", "fluxCircleDataLayer", () => {
+        if (hoveredStateId) {
+          map.setFeatureState(
+            { source: "fluxCircleDataSource", id: hoveredStateId },
+            { hover: false }
+          );
+        }
+        hoveredStateId = null;
+        map.getCanvas().style.cursor = "";
+        popup.remove();
+      });
+
+      // arcData=this.flux24.filter(x=>!x.isReference);
+      const myDeckLayer = new MapboxLayer({
+        id: "arc",
+        data: arcData,
+        type: ArcLayer,
+        stroked: true,
+        filled: true,
+        getSourcePosition: (d) => d.position_start,
+        getTargetPosition: (d) => d.position_end,
+        getSourceColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
+        getTargetColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
+        getHeight: 1,
+        getTilt: 1,
+        opacity: 0.7,
+        highlightColor: [51, 172, 46],
+        autoHighlight: true,
+        getWidth: (d) => {
+          return (d.volume / maxArc) * 9 + 3;
+        },
+        pickable: true,
+        onHover: (info, event) => {
+          this.$set(this.ArcLayerSelectedObject, "position", {
+            top: info.y,
+            left: info.x,
+          });
+          this.$set(this.ArcLayerSelectedObject, "item", info.object);
+        },
+      });
+      map.addLayer(myDeckLayer);
+    },
+    infrastructure() {},
+    mapGeoJsonSourceFlux(fluxGeoGranularity) {
+      map.removeLayer(this.drcSourceId);
+      if (fluxGeoGranularity == 1) {
+        map.addLayer({
+          id: this.drcSourceId,
+          type: "line",
+          source: this.drcSourceId,
+          layout: {},
+          paint: {
+            "line-color": "#627BC1",
+            "line-width": 1,
+          },
+        });
+      } else {
+        map.addLayer({
+          id: this.drcSourceId,
+          type: "line",
+          source: this.drcHealthZone,
+          layout: {},
+          paint: {
+            "line-color": "#627BC1",
+            "line-width": 1,
+          },
+        });
+      }
+      return;
+    },
     getMedicalOrientations() {
       if (!this.medicalOrientations) {
         this.RemoveOrientationMakers();
@@ -805,7 +1352,7 @@ export default {
       let total_fin5 = 0;
       let total_fin8 = 0;
       let AllMarkers = [];
-      this.medicalOrientations.map(item => {
+      this.medicalOrientations.map((item) => {
         var el = document.createElement("div");
         el.className = "pie";
         let total = item.FIN + item.FIN8 + item.FIN5;
@@ -869,14 +1416,14 @@ export default {
     },
     RemoveOrientationMakers() {
       if (this.medicalOrientationMakers) {
-        this.medicalOrientationMakers.map(item => {
+        this.medicalOrientationMakers.map((item) => {
           item.remove();
         });
       }
     },
     setMarkersSondage(sondage) {
-      let values = this.sondages.filter(x => x[sondage] && x[sondage] > 0);
-      values.map(item => {
+      let values = this.sondages.filter((x) => x[sondage] && x[sondage] > 0);
+      values.map((item) => {
         let el = document.createElement("div");
         let el2 = document.createElement("div");
         el.className = `default-makers ${sondage}`;
@@ -901,11 +1448,11 @@ export default {
             el.innerText = worried_count;
             longitude = item.longitude + 100 / 100000;
             latitude = item.latitude + 800 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(worried *
-              100) /
-              worried_count}%, #ff3b3b ${(worried * 100) /
-              worried_count}%, #ff3b3b ${(not_worried * 100) /
-              worried_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (worried * 100) / worried_count
+            }%, #ff3b3b ${(worried * 100) / worried_count}%, #ff3b3b ${
+              (not_worried * 100) / worried_count
+            }%)`;
             break;
           case "catch_virus":
             let catch_virus = item.catch_virus ? item.catch_virus : 0;
@@ -916,11 +1463,11 @@ export default {
             el.innerText = catch_virus_count;
             longitude = item.longitude - 200 / 10000;
             latitude = item.latitude - 200 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(catch_virus *
-              100) /
-              catch_virus_count}%, #ff3b3b ${(catch_virus * 100) /
-              catch_virus_count}%, #ff3b3b ${(not_catch_virus * 100) /
-              catch_virus_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (catch_virus * 100) / catch_virus_count
+            }%, #ff3b3b ${(catch_virus * 100) / catch_virus_count}%, #ff3b3b ${
+              (not_catch_virus * 100) / catch_virus_count
+            }%)`;
             break;
           case "price_increase":
             let price_increase = item.price_increase ? item.price_increase : 0;
@@ -931,11 +1478,11 @@ export default {
             el.innerText = price_increase_count;
             longitude = item.longitude - 300 / 10000;
             latitude = item.latitude + 500 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(price_increase *
-              100) /
-              price_increase_count}%, #ff3b3b ${(price_increase * 100) /
-              price_increase_count}%, #ff3b3b ${(not_price_increase * 100) /
-              price_increase_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (price_increase * 100) / price_increase_count
+            }%, #ff3b3b ${
+              (price_increase * 100) / price_increase_count
+            }%, #ff3b3b ${(not_price_increase * 100) / price_increase_count}%)`;
             break;
           case "mask":
             let mask = item.mask ? item.mask : 0;
@@ -944,10 +1491,11 @@ export default {
             el.innerText = mask_count;
             longitude = item.longitude - 350 / 100000;
             latitude = item.latitude - 300 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(mask *
-              100) /
-              mask_count}%, #ff3b3b ${(mask * 100) /
-              mask_count}%, #ff3b3b ${(not_mask * 100) / mask_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (mask * 100) / mask_count
+            }%, #ff3b3b ${(mask * 100) / mask_count}%, #ff3b3b ${
+              (not_mask * 100) / mask_count
+            }%)`;
             break;
           case "makala":
             let makala = item.makala ? item.makala : 0;
@@ -956,10 +1504,11 @@ export default {
             el.innerText = makala_count;
             longitude = item.longitude + 300 / 10000;
             latitude = item.latitude + 150 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(makala *
-              100) /
-              makala_count}%, #ff3b3b ${(makala * 100) /
-              makala_count}%, #ff3b3b ${(not_makala * 100) / makala_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (makala * 100) / makala_count
+            }%, #ff3b3b ${(makala * 100) / makala_count}%, #ff3b3b ${
+              (not_makala * 100) / makala_count
+            }%)`;
             break;
           case "flour":
             let flour = item.flour ? item.flour : 0;
@@ -968,10 +1517,11 @@ export default {
             el.innerText = flour_count;
             longitude = item.longitude - 330 / 10000;
             latitude = item.latitude - 250 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(flour *
-              100) /
-              flour_count}%, #ff3b3b ${(flour * 100) /
-              flour_count}%, #ff3b3b ${(not_flour * 100) / flour_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (flour * 100) / flour_count
+            }%, #ff3b3b ${(flour * 100) / flour_count}%, #ff3b3b ${
+              (not_flour * 100) / flour_count
+            }%)`;
             break;
           case "antibacterial_gel":
             let antibacterial_gel = item.antibacterial_gel
@@ -985,12 +1535,13 @@ export default {
             el.innerText = antibacterial_gel_count;
             longitude = item.longitude - 200 / 10000;
             latitude = item.latitude + 800 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${(antibacterial_gel *
-              100) /
-              antibacterial_gel_count}%, #ff3b3b ${(antibacterial_gel * 100) /
-              antibacterial_gel_count}%, #ff3b3b ${(not_antibacterial_gel *
-              100) /
-              antibacterial_gel_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${
+              (antibacterial_gel * 100) / antibacterial_gel_count
+            }%, #ff3b3b ${
+              (antibacterial_gel * 100) / antibacterial_gel_count
+            }%, #ff3b3b ${
+              (not_antibacterial_gel * 100) / antibacterial_gel_count
+            }%)`;
             break;
           default:
             break;
@@ -1010,11 +1561,11 @@ export default {
       });
     },
     removeMarkersSondage(sondage) {
-      this.AllSondagesMarkers.filter(x => x[sondage]).map(item => {
+      this.AllSondagesMarkers.filter((x) => x[sondage]).map((item) => {
         item.remove();
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

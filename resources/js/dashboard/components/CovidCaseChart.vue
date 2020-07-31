@@ -1,14 +1,14 @@
 <template>
-  <div>
-    <div>
+  <b-row>
+    <b-col cols="12" md="6">
       <h5>Graphique Cumule</h5>
       <canvas ref="CovidCaseChart" id="CovidCaseChart"></canvas>
-    </div>
-    <div class="mt-3">
-      <h5>Graphique Journalière</h5>
+    </b-col>
+    <b-col cols="12" md="6">
+      <h5>Graphique Journalier</h5>
       <canvas ref="covidCasesStatDaily" id="covidCasesStatDaily"></canvas>
-    </div>
-  </div>
+    </b-col>
+  </b-row>
 </template>
 
 <script>
@@ -29,20 +29,23 @@ export default {
     return {};
   },
   mounted() {
-    this.show(this.covidCasesStat,this.$refs.CovidCaseChart);
-    this.show(this.covidCasesStatDaily,this.$refs.covidCasesStatDaily);
+    this.show(this.covidCasesStat, this.$refs.CovidCaseChart);
+    this.show(this.covidCasesStatDaily, this.$refs.covidCasesStatDaily);
   },
   watch: {
     covidCasesStat() {
-      this.show(this.covidCasesStat,this.$refs.CovidCaseChart);
+      this.$nextTick(() => {
+        this.show(this.covidCasesStat, this.$refs.CovidCaseChart);
+      });
     },
     covidCasesStatDaily() {
-      this.show(this.covidCasesStatDaily,this.$refs.covidCasesStatDaily);
+      this.$nextTick(() => {
+        this.show(this.covidCasesStatDaily, this.$refs.covidCasesStatDaily);
+      });
     }
   },
   methods: {
-    async show(data,ref) {
-      await this.sleep(1000);
+    async show(data, ref) {
       if (!data) {
         return;
       }
@@ -131,6 +134,17 @@ export default {
                 }
               }
             ]
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: true,
+                group: 1
+              },
+              zoom: {
+                enabled: false // enable zooming
+              }
+            }
           }
         }
       };
@@ -143,7 +157,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#CovidCaseChart,#covidCasesStatDaily {
-  height: 300px !important;
+#CovidCaseChart,
+#covidCasesStatDaily {
+  height: 78% !important;
 }
 </style>
