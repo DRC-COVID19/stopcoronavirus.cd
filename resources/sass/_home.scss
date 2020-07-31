@@ -68,10 +68,10 @@
 
 .home-symptome {
     .card {
-        height: 200px;
+        height: 100px;
         background: $bg-gray;
         @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
-            height: 300px;
+            height: 200px;
         }
         .card-body {
             display: flex;
@@ -80,5 +80,10 @@
             text-align: center;
             font-weight: 700;
         }
+    }
+}
+.covid-test-title{
+    @media screen and (max-width: 575px) {
+        font-size: 1.8rem;
     }
 }
