@@ -88,4 +88,92 @@ export const
             id: 1,
             name: 'Mobilité vs Epidémiologie à la Gombe, une semaine après le debut du confinement'
         }
+    ],
+    DRC_COVID_EVENT = [
+        {
+            id: 1,
+            name: 'First case of COVID-19 confirmed (Congolese national returning from France)',
+            date: '2020-03-10',
+            zone: ['Kinshasa'],
+        },
+        {
+            id: 2,
+            name: "First restriction measures put in place for international and national travel/ flight arrivals (health information sheets and temperature/ symptom checks on arrival at airports and ports)",
+            date: '2020-03-13',
+            zone: ['Kinshasa']
+        },
+        {
+            id: 3,
+            name: 'Flights from at-risk countries suspended (exept some cargo)',
+            measures: [
+                `Flights from at-risk countries suspended (exept some cargo)`,
+                `Bars, restaurants closed; schools closed; gatherings of more than 20 people banned; religious gatherings and sports events suspended until further notice; passengers limited on public transport in Kinshasa`
+            ],
+            zone: ['Kinshasa'],
+            isImportant: true,
+            date: '2020-03-18'
+        },
+        {
+            id: 4,
+            name: 'All travel to or from Kinshasa banned (except cargo)',
+            measures: [
+                `All travel to or from Kinshasa banned (except cargo)`,
+            ],
+            zone: ['Kinshasa'],
+            date: '2020-03-19'
+        },
+        {
+            id: 5,
+            name: 'First COVID-19 related death recorded in the DRC',
+            measures: [
+                'First COVID-19 related death recorded in the DRC'
+            ],
+            zone: ['Kinshasa'],
+            date: '2020-03-21'
+        },
+        {
+            id: 6,
+            name: '48 hour lockdown (two suspected cases coming off a plane from Kinshasa)',
+            measures: [
+                '48 hour lockdown (two suspected cases coming off a plane from Kinshasa)'
+            ],
+            zone: ['Lubumbashi'],
+            date: '2020-03-23'
+        },
+        {
+            id: 7,
+            name: 'State of emergency declared by Congolese government',
+            measures: [
+                'State of emergency declared by Congolese government'
+            ],
+            zone: ['Lubumbashi'],
+            date: '2020-03-24'
+        },
+        {
+            id: 8,
+            name: 'Domestic travel between Kinshasa and the rest of the country suspended; all borders closed except for trade',
+            measures: [
+                'Domestic travel between Kinshasa and the rest of the country suspended; all borders closed except for trade'
+            ],
+            zone: ['ALL'],
+            date: '2020-03-25'
+        },
+        {
+            id: 9,
+            name: 'Prohibition of all gatherings of people in public spaces',
+            measures: [
+                'Prohibition of all gatherings of people in public spaces'
+            ],
+            zone: ['ALL'],
+            date: '2020-03-26'
+        },
+        {
+            id: 10,
+            name: 'Income tax suspension for all civil servants and other state employees for 3 months',
+            measures: [
+                'Income tax suspension for all civil servants and other state employees for 3 months'
+            ],
+            zone: ['ALL'],
+            date: '2020-03-26'
+        }
     ]
