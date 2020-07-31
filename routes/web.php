@@ -14,10 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', "PageController@index")->name('home');
-Route::get('/mesures-de-protection-contre-le-coronavirus', "PageController@officialMeasure")->name('officialMeasure');
-Route::get('/directives-prises-par-le-gouvernement', "PageController@preventativeMeasures")->name('preventativeMeasures');
+Route::get('/directives-prises-par-le-gouvernement', "PageController@officialMeasure")->name('officialMeasure');
+Route::get('/mesures-de-protection-contre-le-coronavirus', "PageController@preventativeMeasures")->name('preventativeMeasures');
 Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stereotypes');
 Route::get('/sondages', 'PageController@sondage')->name('sondages');
+Route::get('/commité-multisectoriel-de-la-riposte', 'PageController@aboutCmr')->name('aboutCmr');
 
 Route::get('/dashboard-maps/password-reset/{any}','DashBoardController@index')->name('dashboad.password.reset');
 Route::get('/dashboard-maps/{any?}','DashBoardController@index')->where('any', '^(?!api.*$).*');;
