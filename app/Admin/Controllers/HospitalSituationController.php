@@ -2,12 +2,18 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Forms\PandemicForm;
+use App\Admin\Forms\PandemicGenreForm;
 use App\Hospital;
 use App\HospitalSituation;
 use Encore\Admin\Controllers\AdminController;
 use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
+use Encore\Admin\Widgets\Tab;
+use Encore\Admin\Widgets\MultipleSteps;
+use Encore\Admin\Layout\Content;
+use Encore\Admin;
 
 class HospitalSituationController extends AdminController
 {
@@ -67,23 +73,74 @@ class HospitalSituationController extends AdminController
         return $show;
     }
 
+    public function form()
+    {
+        $forms = [
+            'basic'    => PandemicForm::class,
+            'genre'    => PandemicGenreForm::class,
+        ];
+        return MultipleSteps::make($forms);
+    }
+
     /**
      * Make a form builder.
      *
      * @return Form
      */
-    protected function form()
-    {
-        $form = new Form(new HospitalSituation());
-        $form->select('hospital_id', __('Hospital'))->options(function () {
-            return Hospital::pluck('name', 'id');
-        })->rules('required');
-        $form->number('confirmed', __('Confirmed'))->default(0);
-        $form->number('sick', __('Sick'))->default(0);
-        $form->number('healed', __('Healed'))->default(0);
-        $form->number('dead', __('Dead'))->default(0);
-        $form->datetime('last_update', __('Last update'))->default(date('Y-m-d H:i:s'));
+    // protected function form()
+    // {
+    //     $form = new Form(new HospitalSituation());
+    //     $form->divider(__('Informations sur la pandémie'));
+    //     $form->select('hospital_id', __('Hospital'))->options(function () {
+    //         return Hospital::pluck('name', 'id');
+    //     })->rules('required');
+    //     $form->number('confirmed', __('Confirmés'))->default(0);
+    //     $form->number('sick', __('malades'))->default(0);
+    //     $form->number('healed', __('guéris'))->default(0);
+    //     $form->number('dead', __('décès'))->default(0);
 
-        return $form;
+    //     $form->divider(__('Informations sur la pandémie par genre'));
+    //     $form->html('html contents');
+    //     $form->number('confirmed', __('Confirmed'))->default(0);
+    //     $form->number('sick', __('Sick'))->default(0);
+    //     $form->number('healed', __('Healed'))->default(0);
+    //     $form->number('dead', __('Dead'))->default(0);
+    //     $form->divider(__('Informations sur la pandémie par genre'));
+    //     $form->html('html contents');
+    //     $form->number('confirmed', __('Confirmed'))->default(0);
+    //     $form->number('sick', __('Sick'))->default(0);
+    //     $form->number('healed', __('Healed'))->default(0);
+    //     $form->number('dead', __('Dead'))->default(0);
+    //     $form->datetime('last_update', __('Last update'))->default(date('Y-m-d H:i:s'));
+
+    //     return $form;
+    // }
+
+    public function journalier(Content $content){
+
+        $situations = HospitalSituation::with('hospital')->whereRaw(" DATE(created_at) = DATE(NOW())")
+            ->orderBy('created_at', 'desc')->paginate(20) ;
+
+        return $content
+            ->header('Hopitaux')
+            ->description('Données jounalières')
+            ->breadcrumb(
+                ['text' => 'Dashboard', 'url' => '/admin'],
+                ['text' => 'Données journalières']
+            )
+            ->view('infrastructure.journalier', compact('situations'));
+    }
+
+    public function journalier_show(HospitalSituation $situation, Content $content){
+
+        return $content
+            ->header('Hopitaux')
+            ->description('Données jounalières')
+            ->breadcrumb(
+                ['text' => 'Dashboard', 'url' => '/admin'],
+                ['text' => 'Données journalières', 'url' => '/situation-journalier'],
+                ['text' => 'Details']
+            )
+            ->view('infrastructure.journalier-details', compact('situation'));
     }
 }

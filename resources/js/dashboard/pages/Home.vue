@@ -1,51 +1,52 @@
 <template>
   <div>
-    <b-container fluid>
-      <b-row class="header">
-        <b-col cols="12" md="6" class="map-form-header">
-          <h1 class="mb-0">Dashboard COVID-19</h1>
-        </b-col>
-        <b-col cols="12" md="6" class="map-form-logo d-flex justify-content-end">
-          <img src="/img/partners_top.png" width="100" class="img-fluid" alt />
-          <img src="/img/commite_riposte.jpg" width="100" class="img-fluid" alt />
+    <b-container fluid class="dash-home-page" ref="dash_home_page" id="dash_home_page">
+      <Header />
+      <b-row class="mt-2 top-menu">
+        <b-col>
+          <MenuFlux
+            v-show="activeMenu==1"
+            @submitFluxForm="submitFluxForm"
+            @populationFluxChecked="populationFluxChecked"
+            @flux::predefined::changed="fluxPredefinedChanged"
+            :fluxZones="fluxZones"
+            :fluxProvinces="fluxProvinces"
+            :flux24Errors="flux24Errors"
+          />
+          <MenuEpidemology
+            v-show="activeMenu==2"
+            @covidCaseChecked="getCovidCases"
+            :covidCasesCount="covidCasesCount"
+          />
+          <MenuIndicateur
+            v-if="activeMenu==3"
+            :fluxZones="fluxZones"
+            :fluxProvinces="fluxProvinces"
+          />
+          <MenuInfrastructure
+            v-if="activeMenu==5"
+            :hospitalCount="hospitalCount"
+            @hopitalChecked="gethopitals"
+          />
+          <MenuOrientation
+            v-if="activeMenu==6"
+            @medicalOrientationChecked="getmedicalOrientations"
+            @medicalOrientationChanged="medicalOrientationChanged"
+            :orientationCount="orientationCount"
+            :finCount="finCount"
+            :fin5Count="fin5Count"
+            :fin8Count="fin8Count"
+          />
         </b-col>
       </b-row>
-      <b-row align-h="end" class="position-relative">
-        <LeftColumn
-          @covidCaseChecked="getCovidCases"
-          @hopitalChecked="gethopitals"
-          @medicalOrientationChecked="getmedicalOrientations"
-          @medicalOrientationChanged="medicalOrientationChanged"
-          @hasSondageChecked="hasSondageChecked"
-          @worriedChecked="worriedChecked"
-          @catchVirusChecked="catchVirusChecked"
-          @priceIncreaseChecked="priceIncreaseChecked"
-          @maskChecked="maskChecked"
-          @makalaChecked="makalaChecked"
-          @flourChecked="flourChecked"
-          @antiBacterialGelChecked="antiBacterialGelChecked"
-          @submitFluxForm="submitFluxForm"
-          @populationFluxChecked="populationFluxChecked"
-          :covidCasesCount="covidCasesCount"
-          :hospitalCount="hospitalCount"
-          :orientationCount="orientationCount"
-          :finCount="finCount"
-          :fin5Count="fin5Count"
-          :fin8Count="fin8Count"
-          :fluxZones="fluxZones"
-          :fluxProvinces="fluxProvinces"
-          :flux24Errors="flux24Errors"
-        />
-        <b-col cols="12" md="9">
-          <b-button
-            v-if="hasFlux24||hasCovidCases||hasOrientation"
-            variant="success"
-            @click="seeSide"
-            class="btn-see-side"
-          >
-            <span class="fa fa-table"></span> voir
-          </b-button>
-          <b-row class="map-container">
+      <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
+      <b-row class="position-relative map-wrap" v-if="activeMenu != 3">
+        <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
+          <div class="layer-set-contenair" v-if="hasFlux24Daily">
+            <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arc</b-link>
+            <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
+          </div>
+          <b-row  class="map-container" :class="{'map-container-100':!hasCovidCases}">
             <Maps
               :covidCases="covidCases"
               :hospitals="hospitals"
@@ -60,58 +61,136 @@
               :flour="flour"
               :antiBacterialGel="antiBacterialGel"
               :flux24="flux24"
+              :isLoading="isLoading"
+              :flux24Presence="flux24Presence"
             />
+            <MapsLegend v-if="hasRightSide && activeMenu == 1"></MapsLegend>
+            <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
           </b-row>
         </b-col>
+        <b-col
+          cols="12"
+          md="6"
+          class="side-right mt-2 pl-2"
+          :class="{'side-right-100':!hasCovidCases}"
+          v-if="hasRightSide"
+        >
+          <b-card no-body>
+            <b-tabs pills card>
+              <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
+                <SideCaseCovid :covidCases="covidCases" />
+              </b-tab>
+              <b-tab title="FLux chart" v-if="hasFlux24DailyIn" :active="hasFlux24DailyIn">
+                <FluxChart
+                  :flux24Daily="flux24Daily"
+                  :flux24DailyIn="flux24DailyIn"
+                  :flux24DailyOut="flux24DailyOut"
+                  :flux24Presence="flux24Presence"
+                  :flux24PresenceDailyIn="flux24PresenceDailyIn"
+                />
+              </b-tab>
+              <b-tab title="Hôpital" v-if="hospitalCount != null" :active="!!selectedHospital">
+                <HospitalSituation :hospitalTotalData="hospitalTotalData" />
+              </b-tab>
+            </b-tabs>
+          </b-card>
+        </b-col>
       </b-row>
+      <b-row
+        class="row-side-bottom mt-2 mb-2"
+        v-if="activeMenu != 3 && (hasCovidCases||hasFlux24Daily||hasflux24DailyComparison)"
+      >
+        <b-col class="side-bottom" cols="12">
+          <b-card no-body>
+            <b-tabs pills card>
+              <b-tab title="Covid-19 chart" v-if="hasCovidCases" :active="hasCovidCases">
+                <CovidCaseChart
+                  :covidCasesStat="covidCasesStat"
+                  :covidCasesStatDaily="covidCasesStatDaily"
+                />
+              </b-tab>
+              <b-tab title="Flux tendance" v-if="hasFlux24Daily" :active="hasFlux24Daily">
+                <FluxTendanceChart :flux24Daily="flux24Daily" />
+              </b-tab>
+              <b-tab
+                title="Flux comparaison"
+                v-if="hasflux24DailyComparison"
+                :active="hasflux24DailyComparison"
+              >
+                <FluxComparisonChart
+                  :fluxGeoOptions="fluxGeoOptions"
+                  :flux24DailyComparison="flux24DailyComparison"
+                />
+              </b-tab>
+            </b-tabs>
+          </b-card>
+        </b-col>
+      </b-row>
+      <Waiting v-if="isLoading" />
     </b-container>
-    <Waiting v-if="isLoading" />
-
-    <DataModal
-      :flux24="flux24WithoutReference"
-      :flux24Daily="flux24Daily"
-      :flux24DailyOut="flux24DailyOut"
-      :flux24DailyIn="flux24DailyIn"
-      :covidCases="covidCases"
-      :covidCasesStat="covidCasesStat"
-      :covidCasesStatDaily="covidCasesStatDaily"
-      :medicalOrientations="medicalOrientations"
-      :medicalOrientationsStat="medicalOrientationsStat"
-      id="data-modal"
-    />
   </div>
 </template>
 
 <script>
 import Maps from "../components/Maps";
+import MapsLegend from "../components/MapsLegend";
+import MapsLegendEpidemic from "../components/MapsLegendEpidemic";
 import LeftColumn from "../components/LeftColumn";
 import Waiting from "../components/Waiting";
 import SideCaseCovid from "../components/SideCaseCovid";
 import CovidCaseChart from "../components/CovidCaseChart";
 import OrientationChart from "../components/OrientationChart";
+import IndicateurChart from "../components/IndicateurChart";
 import SideOrientation from "../components/SideOrientation";
-import SideFluxChart from "../components/SideFlux";
 import DataModal from "../components/DataModal";
+import SideFluxChart from "../components/SideFlux";
+import FluxChart from "../components/FluxChart";
+import Header from "../components/Header";
+import HospitalSituation from "../components/HospitalSituation";
+import FluxTendanceChart from "../components/flux/TendanceChart";
+import FluxComparisonChart from "../components/flux/ComparisonChart";
+import MenuFlux from "../components/menu/Flux";
+import MenuEpidemology from "../components/menu/Epidemiology";
+import MenuInfrastructure from "../components/menu/Infrastructure";
+import MenuOrientation from "../components/menu/Orientation";
+import MenuIndicateur from "../components/menu/Indicateur";
+
+import { mapState, mapActions, mapMutations } from "vuex";
+
+const preference_start = "2020-02-01";
+const preference_end = "2020-03-18";
 export default {
   components: {
     Maps,
+    MapsLegend,
+    MapsLegendEpidemic,
     LeftColumn,
     Waiting,
     SideCaseCovid,
     CovidCaseChart,
     OrientationChart,
+    IndicateurChart,
     SideOrientation,
-    DataModal
+    DataModal,
+    SideFluxChart,
+    FluxChart,
+    Header,
+    HospitalSituation,
+    FluxTendanceChart,
+    FluxComparisonChart,
+    MenuFlux,
+    MenuEpidemology,
+    MenuInfrastructure,
+    MenuOrientation,
+    MenuIndicateur,
   },
   data() {
     return {
-      isLoading: false,
+      loadings: {},
       covidCases: null,
       covidCasesStat: null,
-      covidCasesStatDaily:null,
+      covidCasesStatDaily: null,
       covidCasesCount: null,
-      hospitals: null,
-      hospitalCount: null,
       medicalOrientations: null,
       medicalOrientationSelected: null,
       medicalOrientationsStat: null,
@@ -128,15 +207,36 @@ export default {
       flour: false,
       antiBacterialGel: false,
       fluxZones: [],
-      fluxProvinces:[],
+      fluxProvinces: [],
       flux24: [],
+      flux24Presence: [],
       flux24Errors: {},
       flux24Daily: [],
+      flux24DailyComparison: [],
       flux24DailyIn: [],
-      flux24DailyOut: []
+      flux24DailyOut: [],
+      fluxGeoOptions: [],
+      menuColunmStyle: {},
+      flux24PrensenceDaily: [],
+      flux24PresenceDailyIn: [],
     };
   },
   computed: {
+    ...mapState({
+      hospitals: (state) => state.hospital.hospitalData,
+      hospitalCount: (state) => state.hospital.hospitalCount,
+      selectedHospital: (state) => state.hospital.selectedHospital,
+      hospitalTotalData: (state) => state.hospital.hospitalTotalData,
+      fluxMapStyle: (state) => state.flux.mapStyle,
+      activeMenu: (state) => state.nav.activeMenu,
+    }),
+    hasRightSide() {
+      return (
+        this.getHasCoviCases() ||
+        this.flux24DailyIn.length > 0 ||
+        this.hospitalCount != null
+      );
+    },
     hasCovidCases() {
       return this.getHasCoviCases();
     },
@@ -146,23 +246,70 @@ export default {
     hasFlux24() {
       return this.flux24.length > 0;
     },
+    hasFlux24Daily() {
+      return this.flux24Daily.length > 0;
+    },
+    hasflux24DailyComparison() {
+      return this.flux24DailyComparison.length > 0;
+    },
+    hasFlux24DailyIn() {
+      return this.flux24DailyIn.length > 0;
+    },
     flux24WithoutReference() {
-      return this.flux24.filter(x => !x.isReference);
+      return this.flux24.filter((x) => !x.isReference);
     },
     mapStyle() {
       return {
         height:
           this.getHasCoviCases() || this.getHasOrientation()
             ? `64vh`
-            : `calc(100vh - 52.5px)`
+            : `calc(100vh - 52.5px)`,
       };
-    }
+    },
+    isLoading() {
+      return Object.values(this.loadings).find((val) => val === true)
+        ? true
+        : false;
+    },
   },
   mounted() {
     this.getFluxZone();
     this.getFluxProvinces();
+    this.$store.watch(
+      (state) => state.nav.activeMenu,
+      (value) => {
+        this.gethopitals(false);
+        switch (value) {
+          case 1:
+            break;
+          case 2:
+          default:
+            break;
+        }
+      }
+    );
+    this.$store.watch(
+      (state) => state.indicator.isLoading,
+      (value) => {
+        this.$set(this.loadings, "indicator", value);
+      }
+    );
   },
   methods: {
+    ...mapActions(["userMe", "getHospitalsData"]),
+    ...mapMutations(["setMapStyle"]),
+    layerSetSyle(value) {
+      this.setMapStyle(value);
+    },
+    LeftColumnStyle() {
+      let height = "100vh";
+      if (this.$refs.dash_home_page) {
+        height = this.$refs.dash_home_page.clientHeight;
+      }
+      this.menuColunmStyle = {
+        height: `calc(${height} - 70px)`,
+      };
+    },
     getHasCoviCases() {
       return this.covidCases && this.covidCases.data.features.length > 0;
     },
@@ -170,65 +317,13 @@ export default {
       return this.medicalOrientations && this.medicalOrientations.length > 0;
     },
     gethopitals(checked) {
-      this.isLoading = true;
-      if (checked) {
-        axios
-          .get(`/api/dashboard/hospitals`)
-          .then(({ data }) => {
-            let Features = data.map((value, index) => {
-              return {
-                type: "Feature",
-                geometry: {
-                  type: "Point",
-                  coordinates: [value.longitude, value.latitude]
-                },
-                properties: {
-                  name: value.name ? value.name : "Hopital",
-                  address: value.address,
-                  beds: value.beds,
-                  occupied_beds: value.occupied_beds,
-                  masks: value.masks,
-                  respirators: value.respirators,
-                  occupied_respirators: value.occupied_respirators,
-                  confirmed: value.last_situation
-                    ? value.last_situation.confirmed
-                    : 0,
-                  dead: value.last_situation ? value.last_situation.dead : 0,
-                  sick: value.last_situation ? value.last_situation.sick : 0,
-                  healed: value.last_situation
-                    ? value.last_situation.healed
-                    : 0,
-                  last_update: value.last_situation
-                    ? value.last_situation.last_update
-                    : 0,
-                  color: "#ED5F68"
-                }
-              };
-            });
-            this.hospitals = {
-              type: "geojson",
-              data: {
-                type: "FeatureCollection",
-                features: Features
-              }
-            };
-            this.hospitalCount = data.length;
-            this.isLoading = false;
-          })
-          .catch(() => {
-            this.isLoading = false;
-          });
-      } else {
-        this.hospitals = null;
-        this.hospitalCount = null;
-        this.isLoading = false;
-      }
+      this.getHospitalsData(checked);
     },
     getCovidCases(checked) {
-      this.isLoading = true;
       if (checked) {
         let confirmedCount = 0;
-        
+
+        this.$set(this.loadings, "getCovidCases_stat", true);
         axios
           .get("/api/dashboard/cavid-cases/statistics")
           .then(({ data }) => {
@@ -237,7 +332,7 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
-            data.map(function(d) {
+            data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
               healed.push(d.healed);
@@ -247,13 +342,16 @@ export default {
               confirmed,
               dead,
               healed,
-              labels
+              labels,
             };
+            this.$set(this.loadings, "getCovidCases_stat", false);
           })
-          .catch(response => {
+          .catch((response) => {
+            this.$set(this.loadings, "getCovidCases_stat", false);
           });
 
-         axios
+        this.$set(this.loadings, "getCovidCases_statdaily", true);
+        axios
           .get("/api/dashboard/cavid-cases/statistics/daily")
           .then(({ data }) => {
             let labels = [],
@@ -261,7 +359,7 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
-            data.map(function(d) {
+            data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
               healed.push(d.healed);
@@ -271,22 +369,26 @@ export default {
               confirmed,
               dead,
               healed,
-              labels
+              labels,
             };
+            this.$set(this.loadings, "getCovidCases_statdaily", false);
           })
-          .catch(response => {
+          .catch((response) => {
+            this.$set(this.loadings, "getCovidCases_statdaily", false);
           });
 
-          axios
+        this.$set(this.loadings, "getCovidCases_cases", true);
+
+        axios
           .get(`/api/dashboard/cavid-cases`)
           .then(({ data }) => {
-            let Features = data.map(value => {
-              confirmedCount +=Number(value.confirmed);
+            let Features = data.map((value) => {
+              confirmedCount += Number(value.confirmed);
               return {
                 type: "Feature",
                 geometry: {
                   type: "Point",
-                  coordinates: [value.longitude, value.latitude]
+                  coordinates: [value.longitude, value.latitude],
                 },
                 properties: {
                   name: value.name,
@@ -294,36 +396,35 @@ export default {
                   healed: Number(value.healed ?? 0),
                   dead: Number(value.dead ?? 0),
                   sick: Number(value.sick ?? 0),
-                  last_update:value.last_update,
+                  last_update: value.last_update,
                   seriously: Number(value.seriously ?? 0),
-                  color: "#ED5F68"
-                }
+                  color: "#ED5F68",
+                },
               };
             });
             this.covidCases = {
               type: "geojson",
               data: {
                 type: "FeatureCollection",
-                features: Features
-              }
+                features: Features,
+              },
             };
-            this.isLoading = false;
-            
+
             this.covidCasesCount = confirmedCount;
+            this.$set(this.loadings, "getCovidCases_cases", false);
           })
-          .catch(response => {
-            this.isLoading = false;
+          .catch((response) => {
+            this.$set(this.loadings, "getCovidCases_cases", false);
           });
       } else {
         this.covidCases = null;
         this.covidCasesStat = null;
-         this.covidCasesCount = null;
-        this.isLoading = false;
+        this.covidCasesCount = null;
       }
     },
     getmedicalOrientations(checked) {
-      this.isLoading = true;
       if (checked) {
+        this.$set(this.loadings, "orientation_medical", true);
         axios
           .get(`/api/dashboard/orientation-medical-result`)
           .then(({ data }) => {
@@ -331,7 +432,7 @@ export default {
             let total_fin = 0;
             let total_fin5 = 0;
             let total_fin8 = 0;
-            data.map(item => {
+            data.map((item) => {
               total_fin += item.FIN ?? 0;
               total_fin5 += item.FIN5 ?? 0;
               total_fin8 += item.FIN8 ?? 0;
@@ -339,13 +440,16 @@ export default {
             this.finCount = total_fin;
             this.fin5Count = total_fin5;
             this.fin8Count = total_fin8;
-            this.isLoading = false;
+
+            this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = total_fin + total_fin8 + total_fin5;
           })
           .catch(() => {
-            this.isLoading = false;
+            this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = null;
           });
+
+        this.$set(this.loadings, "orientation_medical_stats", true);
         axios
           .get(`/api/dashboard/orientation-medical-stats`)
           .then(({ data }) => {
@@ -353,7 +457,7 @@ export default {
               fin5 = [],
               fin8 = [],
               labels = [];
-            data.map(item => {
+            data.map((item) => {
               fin.push(item.FIN);
               fin5.push(item.FIN5);
               fin8.push(item.FIN8);
@@ -363,13 +467,16 @@ export default {
               fin,
               fin5,
               fin8,
-              labels
+              labels,
             };
+            this.$set(this.loadings, "orientation_medical_stats", false);
+          })
+          .catch(() => {
+            this.$set(this.loadings, "orientation_medical_stats", false);
           });
       } else {
         this.medicalOrientations = null;
         this.orientationCount = null;
-        this.isLoading = false;
       }
     },
     medicalOrientationChanged(item) {
@@ -377,11 +484,16 @@ export default {
     },
     hasSondageChecked(checked) {
       if (checked) {
-        this.isLoading = true;
-        axios.get(`/api/dashboard/sondages`).then(({ data }) => {
-          this.isLoading = false;
-          this.sondages = data;
-        });
+        this.$set(this.loadings, "hasSondageChecked", true);
+        axios
+          .get(`/api/dashboard/sondages`)
+          .then(({ data }) => {
+            this.$set(this.loadings, "hasSondageChecked", false);
+            this.sondages = data;
+          })
+          .catch(() => {
+            this.$set(this.loadings, "hasSondageChecked", false);
+          });
       } else {
         this.sondages = null;
       }
@@ -411,6 +523,9 @@ export default {
       if (!checked) {
         this.flux24Daily = [];
         this.flux24 = [];
+        this.flux24DailyComparison = [];
+        this.flux24DailyIn = [];
+        this.flux24DailyOut = [];
       }
     },
     getFluxZone() {
@@ -424,101 +539,314 @@ export default {
       });
     },
     submitFluxForm(values) {
-      this.isLoading = true;
+      if (this.isLoading) {
+        return;
+      }
+
       this.flux24Errors = {};
 
-      let urlDaily = `api/dashboard/flux-24-origin-daily`;
-      let urlDailyIn = `api/dashboard/flux-24-origin-daily-in`;
-      let urlDailyOut = `api/dashboard/flux-24-origin-daily-out`;
-      let url = `api/dashboard/flux-24-origin`;
-      
-      switch (values.filter) {
-        case 'filter_2':
-          urlDaily = `api/dashboard/flux-24-daily`;
-          url = `api/dashboard/flux-24`;
+      let url = `api/dashboard/flux/origin`;
+      let urlDaily = `api/dashboard/flux/origin`;
+      let urlDailyCompare = `api/dashboard/flux/origin`;
+      let urlDailyIn = `api/dashboard/flux/origin`;
+      let urlDailyOut = `api/dashboard/flux/origin`;
+
+      let urlPresence = `api/dashboard/flux/origin`;
+      let urlPresenceDaily = `api/dashboard/flux/origin`;
+      let urlPresenceDailyIn = `api/dashboard/flux/origin`;
+
+      switch (values.fluxGeoGranularity) {
+        case 1:
+          url += "/provinces";
+          urlDaily += "/provinces";
+          urlDailyIn += "/provinces";
+          urlDailyOut += "/provinces";
+          urlDailyCompare += "/provinces";
+          urlPresence += "/provinces";
+          urlPresenceDaily += "/provinces";
+          urlPresenceDailyIn += "/provinces";
           break;
-        case 'filter_3':
-          urlDaily = `api/dashboard/flux-24-origin-daily-provinces`;
-          urlDailyIn = `api/dashboard/flux-24-origin-daily-in-provinces`;
-          urlDailyOut = `api/dashboard/flux-24-origin-daily-out-provinces`;
-          url = `api/dashboard/flux-24-origin-provinces`;
+        case 2:
         default:
+          url += "/zones";
+          urlDaily += "/zones";
+          urlDailyIn += "/zones";
+          urlDailyOut += "/zones";
+          urlDailyCompare += "/zones";
+          urlPresence += "/zones";
+          urlPresenceDaily += "/zones";
+          urlPresenceDailyIn += "/zones";
           break;
       }
 
-      this.flux24Daily = [];
+      urlPresence += "/presence";
+      urlPresenceDaily += "/presence";
+      urlPresenceDailyIn += "/presence";
+
+      switch (values.fluxTimeGranularity) {
+        case 1:
+          url += "/h-24";
+          urlDaily += "/h-24";
+          urlDailyIn += "/h-24";
+          urlDailyOut += "/h-24";
+          urlDailyCompare += "/h-24";
+
+          urlPresence += "/h-24";
+          urlPresenceDaily += "/h-24";
+          urlPresenceDailyIn += "/h-24";
+          break;
+        case 2:
+        default:
+          url += "/m-30";
+          urlDaily += "/m-30";
+          urlDailyIn += "/m-30";
+          urlDailyOut += "/m-30";
+          urlDailyCompare += "/m-30";
+
+          urlPresence += "/m-30";
+          urlPresenceDaily += "/m-30";
+          urlPresenceDailyIn += "/m-30";
+          break;
+      }
+
+      urlPresenceDaily += "/daily";
+      urlPresenceDailyIn += "/daily-in";
+
+      urlDaily += "/daily";
+      urlDailyIn += "/daily-in";
+      urlDailyOut += "/daily-out";
+      urlDailyCompare += "/daily-compare";
+
+      this.flux24DailyComparison = [];
+      this.fluxGeoOptions = [];
+
+      this.$set(this.loadings, "urlDailyCompare", true);
       axios
-        .post(urlDaily, values)
+        .get(urlDailyCompare, {
+          params: values,
+        })
+        .then(({ data }) => {
+          this.flux24DailyComparison = data;
+          this.fluxGeoOptions = values.fluxGeoOptions;
+          this.$set(this.loadings, "urlDailyCompare", false);
+        })
+        .catch(({ response }) => {
+          this.$set(this.loadings, "urlDailyCompare", false);
+        });
+
+      this.flux24Daily = [];
+      this.$set(this.loadings, "urlDaily", true);
+      axios
+        .get(urlDaily, {
+          params: values,
+        })
         .then(({ data }) => {
           this.flux24Daily = data;
+          this.$set(this.loadings, "urlDaily", false);
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, "urlDaily", false);
+        });
 
       // get flux data in
-      
-      
+
       this.flux24DailyIn = [];
+      this.$set(this.loadings, "urlDailyIn", true);
       axios
-        .post(urlDailyIn, values)
+        .get(urlDailyIn, {
+          params: values,
+        })
         .then(({ data }) => {
           this.flux24DailyIn = data;
+          this.$set(this.loadings, "urlDailyIn", false);
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, "urlDailyIn", false);
+        });
 
       // get flux data out
 
-      
       this.flux24DailyOut = [];
+      this.$set(this.loadings, "urlDailyOut", true);
       axios
-        .post(urlDailyOut, values)
+        .get(urlDailyOut, {
+          params: values,
+        })
         .then(({ data }) => {
           this.flux24DailyOut = data;
+          this.$set(this.loadings, "urlDailyOut", false);
         })
-        .catch(({ response }) => {});
+        .catch(({ response }) => {
+          this.$set(this.loadings, "urlDailyOut", false);
+        });
 
-
-
-
-      
-      this.flux24 = [];
+      this.flux24Presence = [];
+      this.$set(this.loadings, "urlPresence", true);
       axios
-        .post(url, values)
+        .get(urlPresence, {
+          params: values,
+        })
+        .then(({ data }) => {
+          this.flux24Presence = data;
+          this.$set(this.loadings, "urlPresence", false);
+        })
+        .catch(({ response }) => {
+          this.$set(this.loadings, "urlPresence", false);
+        });
+
+      this.$set(this.loadings, "urlPresenceDaily", true);
+      this.flux24PrensenceDaily = [];
+      axios
+        .get(urlPresenceDaily, {
+          params: values,
+        })
+        .then(({ data }) => {
+          this.flux24PrensenceDaily = data;
+          this.$set(this.loadings, "urlPresenceDaily", false);
+        })
+        .catch(({ response }) => {
+          this.$set(this.loadings, "urlPresenceDaily", false);
+        });
+
+      this.flux24PresenceDailyIn = [];
+      this.$set(this.loadings, "urlPresenceDailyIn", true);
+      axios
+        .get(urlPresenceDailyIn, {
+          params: values,
+        })
+        .then(({ data }) => {
+          this.flux24PresenceDailyIn = data;
+          this.$set(this.loadings, "urlPresenceDailyIn", false);
+        })
+        .catch(({ response }) => {
+          this.$set(this.loadings, "urlPresenceDailyIn", false);
+        });
+
+      this.flux24 = [];
+      this.$set(this.loadings, "flux24", true);
+      axios
+        .get(url, {
+          params: values,
+        })
         .then(({ data }) => {
           this.flux24 = data;
-          this.isLoading = false;
+          this.$set(this.loadings, "flux24", false);
         })
         .catch(({ response }) => {
           this.flux24Errors = response.data.errors;
-          this.isLoading = false;
+          this.$set(this.loadings, "flux24", false);
         });
     },
     seeSide() {
       this.$bvModal.show("data-modal");
-    }
-  }
+    },
+    fluxPredefinedChanged(value) {
+      if (!value) {
+        this.flux24Daily = [];
+        this.flux24 = [];
+        this.flux24DailyComparison = [];
+        this.flux24DailyIn = [];
+        this.flux24DailyOut = [];
+        return;
+      }
+      const values = {
+        option: value,
+        preference_start,
+        preference_end,
+      };
+      this.flux24Errors = {};
+
+      const url = `api/dashboard/flux/predefined/zones/h-24/`;
+      const urlDaily = `api/dashboard/flux/predefined/zones/h-24/daily`;
+      const urlDailyIn = `api/dashboard/flux/predefined/zones/h-24/daily-in`;
+      const urlDailyOut = `api/dashboard/flux/predefined/zones/h-24/daily-out`;
+      const urlDailyCompare = `api/dashboard/flux/predefined/zones/h-24/daily-compare`;
+
+      this.$set(this.loadings, "fluxPC_urlDailyCompare", true);
+      axios
+        .get(urlDailyCompare, {
+          params: values,
+        })
+        .then(({ data }) => {
+          this.flux24DailyComparison = data;
+          this.$set(this.loadings, "fluxPC_urlDailyCompare", false);
+        })
+        .catch(({ response }) => {
+          this.$set(this.loadings, "fluxPC_urlDailyCompare", false);
+        });
+
+      this.flux24Daily = [];
+      this.$set(this.loadings, "fluxPC_urlDaily", true);
+      axios
+        .get(urlDaily, {
+          params: values,
+        })
+        .then(({ data }) => {
+          this.flux24Daily = data;
+          this.$set(this.loadings, "fluxPC_urlDaily", false);
+        })
+        .catch(({ response }) => {
+          this.$set(this.loadings, "fluxPC_urlDaily", false);
+        });
+
+      // get flux data in
+
+      this.flux24DailyIn = [];
+      // axios
+      //   .get(urlDailyIn, {
+      //     params: values
+      //   })
+      //   .then(({ data }) => {
+      //     this.flux24DailyIn = data;
+      //   })
+      //   .catch(({ response }) => {});
+
+      // get flux data out
+
+      this.flux24DailyOut = [];
+      // axios
+      //   .get(urlDailyOut, {
+      //     params: values
+      //   })
+      //   .then(({ data }) => {
+      //     this.flux24DailyOut = data;
+      //   })
+      //   .catch(({ response }) => {});
+
+      this.flux24 = [];
+      this.$set(this.loadings, "fluxPC_flux24", true);
+      axios
+        .get(url, {
+          params: values,
+        })
+        .then(({ data }) => {
+          this.flux24 = data;
+          this.$set(this.loadings, "fluxPC_flux24", false);
+        })
+        .catch(({ response }) => {
+          this.flux24Errors = response.data.errors;
+          this.$set(this.loadings, "fluxPC_flux24", false);
+        });
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-.header {
-  padding: 12px 24px;
-  border-bottom: 1px solid #ddd;
-  h1 {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 24px;
+@import "@~/sass/_variables";
+.dash-home-page {
+  // height: 100vh;
+  background: $dash-background;
+  .side-bottom {
+    // height: calc(20vh - 72.5px);
   }
 }
+
 .map-container {
-  height: calc(100vh - 52.5px);
+  padding: 10px 10px 10px 10px;
+  height: 100%;
+  transition: 500ms all ease;
 }
-.chart-container {
-  height: calc(40vh - 52.5px);
-  border-top: 1px solid rgba(0, 0, 0, 0.125);
-  position: absolute;
-  z-index: 6;
-  left: 0;
-  right: 0;
-}
+
 .side-case-covid {
   position: absolute;
   left: 0;
@@ -530,5 +858,25 @@ export default {
   position: absolute;
   z-index: 7;
   top: 10px;
+}
+.layer-set-contenair {
+  background: #f4f6fc;
+  position: absolute;
+  z-index: 7;
+  top: 14px;
+  padding: 1px;
+  a {
+    display: inline-block;
+    width: 85px;
+    padding: 5px;
+    text-align: center;
+    text-decoration: unset;
+    background: #2e5bff3d;
+    color: #2e5bff !important;
+    &.active {
+      background: $dash-green;
+      color: white !important;
+    }
+  }
 }
 </style>
