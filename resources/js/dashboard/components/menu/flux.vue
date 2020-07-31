@@ -110,62 +110,62 @@ import moment from "moment";
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
 export default {
   components: {
-    DateRangePicker
+    DateRangePicker,
   },
   props: {
     fluxZones: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     fluxProvinces: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux24Errors: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
       dateRangePreference: {
         startDate: new Date("02/18/2020"),
-        endDate: new Date("03/18/2020")
+        endDate: new Date("03/18/2020"),
       },
       fluxForm: {
         preference_start: "2020-02-01",
-        preference_end: "2020-03-18"
+        preference_end: "2020-03-18",
       },
       dateRangeObservation: {
         startDate: null,
-        endDate: null
+        endDate: null,
       },
       fluxPredefinedInput: [
         {
           id: 1,
-          name: "Aujourd'hui"
+          name: "Aujourd'hui",
         },
         {
           id: 2,
-          name: "Semaine en cours"
+          name: "Semaine en cours",
         },
         {
           id: 3,
-          name: "Mois en cours"
+          name: "Mois en cours",
         },
         {
           id: 4,
-          name: "Mois passé"
+          name: "Mois passé",
         },
         {
           id: 6,
           name:
-            "Mobilité à la Gombe une semaine après le debut du confinement (24h)"
+            "Mobilité à la Gombe une semaine après le debut du confinement (24h)",
         },
         {
           id: 5,
-          name: "Mobilité à la Gombe depuis le début du confinement"
-        }
+          name: "Mobilité à la Gombe depuis le début du confinement",
+        },
       ],
       fluxFilterInput: "",
       fluxFilterInputProvince: "",
@@ -175,41 +175,41 @@ export default {
       fluxGeoGranularities: [
         {
           id: 1,
-          name: "Provinces"
+          name: "Provinces",
         },
         {
           id: 2,
-          name: "Zones des santés"
-        }
+          name: "Zones des santés",
+        },
       ],
       fluxGeoOptions: [],
       fluxTimeGranularities: [
         {
           id: 1,
-          name: "24h"
+          name: "24h",
         },
         {
           id: 2,
-          name: "30'"
-        }
+          name: "30'",
+        },
       ],
       fluxTimeGranularity: null,
       allZoneChecked: false,
       allProvinceChecked: false,
       allZoneCheckedIndeterminate: false,
       allProvincesCheckedIndeterminate: false,
-      IsfluxParameterCollapse: false
+      IsfluxParameterCollapse: false,
     };
   },
   filters: {
-    date: val => {
+    date: (val) => {
       return val ? moment(val).format("DD.MM.YYYY") : "";
-    }
+    },
   },
   mounted() {
     this.$store.watch(
-      state => state.flux.fluxGeoOptions,
-      value => {
+      (state) => state.flux.fluxGeoOptions,
+      (value) => {
         this.$set(this.fluxForm, "fluxGeoOptions", value);
         if (
           this.fluxForm.observation_start &&
@@ -220,15 +220,23 @@ export default {
         }
       }
     );
+    this.$store.watch(
+      (state) => state.flux.tendanceChartSelectedValue,
+      (value) => {
+        const date =new Date(value.x);
+        this.fluxForm.preference_end=this.moment(date.setDate(date.getDate() - 1)).format(DATEFORMAT);
+        this.fluxForm.observation_start=this.moment(value.x).format(DATEFORMAT);
+        this.$set(this.dateRangeObservation,'startDate',value.x)
+        this.submitFluxForm();
+      }
+    );
   },
-  computed: {
-   
-  },
+  computed: {},
   methods: {
-       ...mapMutations([
+    ...mapMutations([
       "setFluxGeoGranularity",
       "setFluxGeoOptions",
-      "setFluxEnabled"
+      "setFluxEnabled",
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -295,12 +303,8 @@ export default {
           observation_end = this.moment().format(DATEFORMAT);
           break;
         case 2:
-          observation_start = this.moment()
-            .startOf("week")
-            .format(DATEFORMAT);
-          observation_end = this.moment()
-            .endOf("week")
-            .format(DATEFORMAT);
+          observation_start = this.moment().startOf("week").format(DATEFORMAT);
+          observation_end = this.moment().endOf("week").format(DATEFORMAT);
           break;
         case 3:
           observation_start = this.moment(new Date())
@@ -337,12 +341,12 @@ export default {
         observation_start,
         observation_end,
         fluxTimeGranularity: 1,
-        fluxGeoGranularity: 2
+        fluxGeoGranularity: 2,
       };
 
       (this.dateRangeObservation = {
         startDate: new Date(observation_start),
-        endDate: new Date(observation_end)
+        endDate: new Date(observation_end),
       }),
         this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularity(this.fluxForm.fluxGeoGranularity);
@@ -351,8 +355,8 @@ export default {
     mobilityDetailToggle() {
       this.$root.$emit("bv::toggle::collapse", "mobilityDetail");
       this.IsfluxParameterCollapse = !this.IsfluxParameterCollapse;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
