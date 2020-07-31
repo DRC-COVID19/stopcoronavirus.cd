@@ -148,8 +148,8 @@
                             <li class="{{ Route::currentRouteName()== 'home' ? 'active' : '' }}"> <a href="{{route('home')}}" class="px-md-2 nav-item ">Situation actuelle</a></li>
                             <li class="{{ Route::currentRouteName()== 'preventativeMeasures'||Route::currentRouteName()== 'officialMeasure'  ? 'active' : '' }}"> <a href="#" class="px-md-2 nav-item"> <span> {{__("Covid-19")}}</span> <span class="chevron fas fa-chevron-down"></span></a>
                                 <ul>
-                                    <li><a class="sub-nav-item" href="#">{{__('Tout savoir sur le covid-19')}}</a></li>
-                                    <li><a class="sub-nav-item" href="{{route('preventativeMeasures')}}">{{__('Comment se protéger')}}</a></li>
+                                    <li><a class="sub-nav-item" href="{{route('preventativeMeasures')}}">{{__('Tout savoir sur le covid-19')}}</a></li>
+                                    {{-- <li><a class="sub-nav-item" >{{__('Comment se protéger')}}</a></li> --}}
                                     <li><a class="sub-nav-item" href="{{route('officialMeasure')}}">{{__('Directives du Gouvernement')}}</a></li>
                                 </ul>
                             </li>
