@@ -4,9 +4,16 @@
 
 <div class="jumbotron jumbotron-title">
     <div class="container">
-        <h1>Stop Coronavirus COVID-19 RDC</h1>
-        <p class="lead">Site officiel d'informations et de conseils</p>
-
+        <div class="row">
+            <div class="cols-12 col-md-7">
+                <h1>Stop Coronavirus COVID-19 RDC</h1>
+                <p class="lead">Site officiel d'informations et de conseils</p>
+            </div>
+            <div class="cols-12 col-md-5">
+                <a href="https://wa.me/243844434444?text=salut" target="_blank"><img class="img-fluid" src="{{asset('/img/covid_bot.png')}}" alt="Whatsapp bot"></a>
+                
+            </div>
+        </div>
     </div>
 </div>
 @isset($pandemicStats)
@@ -119,45 +126,6 @@
 
 
 <div class="container mb-5">
-
-    <div class="row">
-        <div class="col-12">
-            <h2 class="mt-5">
-                <i class="fas fa-virus"></i>
-                {{ __("Quels sont les symptômes du COVID-19 ?") }}
-            </h2>
-        </div>
-    </div>
-    <div class="row my-4 home-symptome">
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3 mb-md-5 ">
-            <div class="card">
-                <div class="card-body"> {!! __("Fièvre, fatigue, toux sèche") !!}</div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3 mb-md-5 ">
-            <div class="card">
-                <div class="card-body"> {!! __("Pour certains patients: Congestion nasale, écoulement nasal, maux de gorge ou une diarrhée") !!}</div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3 mb-md-5 ">
-            <div class="card">
-                <div class="card-body">{!! __("Pour d’autres: aucun symptome") !!}</div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3 mb-md-5 ">
-            <div class="card">
-                <div class="card-body">{!! __("Environ 80 % des personnes guérissent sans avoir besoin de traitement particulier.") !!}</div>
-            </div>
-        </div>
-        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 mb-3 mb-md-5 ">
-            <div class="card">
-                <div class="card-body">
-                    {!! __("Les personnes âgées et celles qui ont d’autres problèmes de santé (hypertension artérielle, problèmes cardiaques ou diabète) ont plus de risques de présenter des symptômes graves.") !!}
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-12">
             <h2 class="mt-5">
@@ -204,34 +172,11 @@
             {!! __("Portez un <strong>masque médical</strong> jetable pour limiter la propagation du virus<br><small>(le masque doit être changé toutes les 3 heures)</small>") !!}
         </div>
     </div>
-    <?php /*
-<div class="row my-4 PreventativeMeasure--Wrapper">
-@foreach($preventativeMeasures as $preventativeMeasure)
-    <div class="col-lg-{{$preventativeMeasure->width}}">
-        <div class="PreventativeMeasure--Item">
-            @if(!is_null($preventativeMeasure->image_path))
-                <img src="{{asset('storage/' . $preventativeMeasure->image_path)}}" class="PreventativeMeasure--Item__image img-fluid" alt="">
-            @else
-                @if($preventativeMeasure->width==4)
-                    <div class="PreventativeMeasure--Item_image_placeholder"></div>
-                @endif
-            @endif
-            <h4 class="mb-4 PreventativeMeasure--Item__title">
-                {{$preventativeMeasure->title}}
-            </h4>
-            <p>
-                <?php echo $preventativeMeasure->content; ?>
-    </p>
-</div>
-</div>
-@endforeach
-</div>
-*/ ?>
-<div class="PreventativeMeasure--Cta text-center mt-3">
-    <a href="{{route('preventativeMeasures')}}" class="btn btn-secondary p-3">
-        {{ __('Voir les détails des mesures de protection') }}
-    </a>
-</div>
+    <div class="PreventativeMeasure--Cta text-center mt-3">
+        <a href="{{route('preventativeMeasures')}}" class="btn btn-secondary p-3">
+            {{ __('Voir les détails des mesures de protection') }}
+        </a>
+    </div>
 </div>
 
 <div class="container-fluid container-directive py-5">
@@ -245,66 +190,7 @@
                 </h2>
             </div>
         </div>
-        <?php /*
-            <div class="row">
-                <div class="col-12">
-                    <h3>{{ __('Mesure pour la ville de Kinshasa à partir du 28 mars 2020') }}</h3>
-                    <p>{{ __('3 semaines de confinement par intermittence à partir du samedi 28 mars 2020') }}</p>
-                </div>
-            </div>
-            <div class="row my-4 home-directives">
-                <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="ico">
-                        <i class="fas fa-house-user"></i>
-                    </div>
-                    <strong>{{ __('28 mars 2020 au 31 mars') }}</strong>
-                    {{ __('Interdiction totale de quitter votre domicile : restez chez vous') }}
-                </div>
-                <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="ico">
-                        <i class="fas fa-shopping-basket"></i>
-                    </div>
-                    <strong>{{ __('01 avril et 02 avril') }}</strong>
-                    {!! __('Autorisation de circulation afin de s’approvisionner, <strong>en respectant les mesures de protection</strong>') !!}
-                </div>
-                <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="ico">
-                        <i class="fas fa-house-user"></i>
-                    </div>
-                    <strong>{{ __('03 avril au 06 avril') }}</strong>
-                    {{ __('Restez-chez vous') }}
-                </div>
-                <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="ico">
-                        <i class="fas fa-shopping-basket"></i>
-                    </div>
-                    <strong>{{ __('07 avril et 08 avril') }}</strong>
-                    {{ __('Autorisation de circulation pour faire vos provisions') }}
-                </div>
-                <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="ico">
-                        <i class="fas fa-house-user"></i>
-                    </div>
-                    <strong>{{ __('09 avril au 12 avril') }}</strong>
-                    {{ __('Restez-chez vous') }}
-                </div>
-                <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="ico">
-                        <i class="fas fa-shopping-basket"></i>
-                    </div>
-                    <strong>{{ __('13 avril et 14 avril') }}</strong>
-                    {{ __('Autorisation de circulation pour faire vos provisions') }}
-                </div>
-                <div class="col-lg-3 col-md-6 mb-5">
-                    <div class="ico">
-                        <i class="fas fa-house-user"></i>
-                    </div>
-                    <strong>{{ __('15 avril au 18 avril') }}</strong>
-                    {{ __('Restez-chez vous') }}
-                </div>
-            </div>
-        </div>
-        */ ?>
+
         <div class="row my-4 PreventativeMeasure--Wrapper">
             @foreach($directives as $directive)
             <div class="col-lg-12">
