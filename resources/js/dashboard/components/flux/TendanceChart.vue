@@ -1,5 +1,5 @@
 <template>
-  <b-container class="p-0" ref="tendanceContainer">
+  <b-container fluid class="p-0" ref="tendanceContainer">
     <b-row no-gutters>
       <b-col cols="12" class="pl-0 pr-2">
         <canvas width="100vh" ref="tendanceChart" id="tendanceChart" />
@@ -10,9 +10,10 @@
 
 <script>
 import * as d3 from "../../lib/d3.v5.min";
-import { DRC_COVID_EVENT } from "../../config/env";
+import { DRC_COVID_EVENT, PALETTE } from "../../config/env";
 import Chart from "chart.js";
 import "chartjs-plugin-annotation";
+import { mapState, mapMutations } from "vuex";
 export default {
   props: {
     flux24Daily: {
@@ -34,6 +35,11 @@ export default {
       }
     },
   },
+  computed: {
+    ...mapState({
+      fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
+    }),
+  },
   mounted() {
     if (this.flux24Daily.length > 0) {
       this.$nextTick(() => {
@@ -42,6 +48,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["setTendanceChartSelectedValue"]),
     drawChart(data, ref) {
       if (!data) {
         return;
@@ -68,12 +75,27 @@ export default {
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          // events: ["click"],
+          onClick: (e, argument) => {
+            if (argument.length>0) {
+              const firstPoint=argument[0];
+              const value =
+                myLineChart2.data.datasets[firstPoint._datasetIndex].data[
+                  firstPoint._index
+                ];
+              this.setTendanceChartSelectedValue(value);
+            }
+          },
           legend: {
             display: false,
           },
           title: {
             display: false,
             text: "",
+          },
+          hover: {
+            mode: "nearest",
+            intersect: true,
           },
           scales: {
             xAxes: [
@@ -102,6 +124,9 @@ export default {
                   display: false,
                   labelString: "Value",
                 },
+                ticks: {
+                  beginAtZero: false,
+                },
               },
             ],
           },
@@ -123,30 +148,38 @@ export default {
           annotation: {
             events: ["mouseenter", "mouseleave"],
             drawTime: "afterDraw",
-            annotations: DRC_COVID_EVENT.map(function (item, index) {
+            annotations: DRC_COVID_EVENT.filter((x) =>
+              x.measures.some((z) =>
+                z.zones.some((y) => [...this.fluxGeoOptions, "ALL"].includes(y))
+              )
+            ).map((item, index) => {
               return {
                 id: "line" + index,
                 type: "line",
                 mode: "vertical",
                 scaleID: "x-axis-0",
                 value: new Date(item.date),
-                borderColor: "red",
-                borderWidth: item.isImportant ? 5 : 3,
+                borderColor: PALETTE.flux_presence,
+                borderWidth: item.isImportant ? 3 : 2,
                 label: {
-                  content: "Confinement",
+                  content: item.measures
+                    .filter((x) =>
+                      x.zones.some((y) =>
+                        [...this.fluxGeoOptions, "ALL"].includes(y)
+                      )
+                    )
+                    .map((x) => x.item),
                   enabled: false,
                   position: "top",
                 },
                 onMouseenter(e) {
-                  console.log("onMouseenter", e, this);
-                  this.options.borderColor = "rgba(0,0,255,0.8)";
-                  this.options.label.enabled=true;
+                  this.options.borderColor = PALETTE.flux_in_color;
+                  this.options.label.enabled = true;
                   myLineChart2.update();
                 },
                 onMouseleave(e) {
-                  console.log("onMouseleave", e);
-                  this.options.borderColor = "red";
-                  this.options.label.enabled=false;
+                  this.options.borderColor = PALETTE.flux_presence;
+                  this.options.label.enabled = false;
                   myLineChart2.update();
                 },
               };

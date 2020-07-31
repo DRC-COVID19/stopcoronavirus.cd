@@ -1,5 +1,5 @@
 <template>
-  <b-container class="p-0" ref="tendanceContainer">
+  <b-container fluid class="p-0" ref="tendanceContainer">
     <b-row no-gutters>
       <b-col cols="12" class="pl-0 pr-2 ">
         <canvas  width="100vh" ref="comparisonChart" id="comparisonChart" />
@@ -187,7 +187,7 @@ export default {
                 enabled: false
               },
               zoom: {
-                enabled: false, // enable zooming
+                enabled: true, // enable zooming
                 zoomboxBackgroundColor: "rgba(66,133,244,0.2)", // background color of zoom box
                 zoomboxBorderColor: "#48F", // border color of zoom box
                 zoomButtonText: "Reset Zoom", // reset zoom button text
