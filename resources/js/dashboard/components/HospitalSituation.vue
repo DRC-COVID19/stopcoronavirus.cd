@@ -2,33 +2,33 @@
   <b-container class="p-0">
     <b-row>
       <b-col cols="12 mb-2">
-        <b-card no-body class="default-card p-3">
-          <div class="row align-items-center">
-            <h4 class="bold col m-0">{{hospital.name || "Rapport global"}}</h4>
-            <div
-              v-if="hospital.last_update"
-              class="text-right text-black-50 col"
-            >Mise à jour du {{moment(hospital.last_update).format('DD.MM.Y')}}</div>
-            <div class="col-12 text-right">
-              <button
-                class="btn btn-sm btn-light"
-                style="font-size: 12px;"
-                @click="backToTotalData()"
-                v-if="!isGlobal"
-              >Retour aux données globales</button>
-            </div>
+        <div class="row align-items-center">
+          <h4 class="col m-0">{{hospital.name || "Rapport global"}}</h4>
+          <div
+            class="text-right text-black-50 col"
+          >Mise à jour du {{moment(lastUpdate()).format('DD.MM.Y')}}</div>
+          <div class="col-12 text-right">
+            <button
+              class="btn btn-sm btn-primary"
+              style="font-size: 12px;"
+              @click="backToTotalData()"
+              v-if="!isGlobal"
+            >Retour aux données globales</button>
           </div>
-        </b-card>
+        </div>
       </b-col>
     </b-row>
     <b-row no-gutters>
-      <b-col cols="12" md="6" class="pr-1"  >
+      <b-col cols="12" md="6" class="row no-gutters pr-1"  >
         <b-card class="col-12 default-card mb-2">
           <h5 class="bold">Capacité de prise en charge</h5>
           <div>
-            <div>Lits avec mousse: {{hospital.occupied_foam_beds}}/{{hospital.foam_beds}}</div>
-            <div>Lits de réanimation: {{hospital.occupied_resuscitation_beds}}/{{hospital.resuscitation_beds}}</div>
-            <div>Respirateurs: {{hospital.occupied_respirators}}/{{hospital.respirators}}</div>
+            <div>Lits avec mousse: {{hospital.foam_beds}}</div>
+            <div>Lits avec mousse occupés: {{hospital.occupied_foam_beds}}</div>
+            <div>Lits de réanimation: {{hospital.resuscitation_beds}}</div>
+            <div>Lits de réanimation occupés: {{hospital.occupied_resuscitation_beds}}</div>
+            <div>Respirateurs: {{hospital.respirators}}</div>
+            <div>Respirateurs occupés: {{hospital.occupied_respirators}}</div>
             <div>Ventilateur de réanimation : {{hospital.resuscitation_ventilator}}</div>
             <div>Oxygénérateur: {{hospital.oxygenator}}</div>
             <div
@@ -76,12 +76,23 @@
     </b-row>
 
     <b-row class="pl-3 pr-3 mb-2">
-      <b-card no-body class="default-card col-12 pt-3 pb-3 card-chart">
-        <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
-        <div class="chart-container">
-          <canvas height="400" width="100vh" ref="canvasStat" id="canvasStat"></canvas>
-        </div>
-      </b-card>
+      <b-col cols="12" md="6" class="p-1">
+        <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
+          <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+          <div class="chart-container">
+            <canvas height="400" width="100vh" ref="canvasStat1" id="canvasStat1"></canvas>
+          </div>
+        </b-card>
+      </b-col>
+
+      <b-col cols="12" md="6" class="p-1">
+        <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
+          <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+          <div class="chart-container">
+            <canvas height="400" width="100vh" ref="canvasStat2" id="canvasStat2"></canvas>
+          </div>
+        </b-card>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -92,8 +103,15 @@ export default {
   props: ["hospitalTotalData"],
   data() {
     return {
-      lineChart: null,
+      lineCharts: [],
       etatGlobal: true,
+      dataGlobal: null,
+      chartLabels : [
+        {label1 : "Total des Lits en réanimation" , label2 : "Lits en réanimation occupés" ,
+          title : "Evolution du taux d'occupation des lits de réanimation" , lableY : "Lits" } ,
+        {label1 : "Total des respirateurs" , label2 : "Respirateurs occupés" ,
+          title : "Evolution du taux d'occupation des respirateurs",lableY : "Respirateurs" } ,
+      ]
     };
   },
   mounted() {
@@ -122,6 +140,7 @@ export default {
       this.getSituationHospital(id);
     },
     situationHospital(val) {
+      this.dataGlobal = val
       this.paintStats(val);
     },
   },
@@ -129,112 +148,136 @@ export default {
     ...mapActions(["getSituationHospital"]),
     ...mapMutations(["selectHospital"]),
     paintStats(data) {
-      const config = {
-        type: "line",
-        data: {
-          labels: data.last_update.map((d) => new Date(d)),
-          datasets: [
-            {
-              label: "Lits en réanimation",
-              backgroundColor: "#ff6384",
-              borderColor: "#ff6384",
-              data: data.taux_resuscitation_beds,
-              fill: false,
-              interpolate: true,
-              showLine: true,
-              pointRadius: 2,
-              lineTension: 0.4,
-            },
-            {
-              label: "Respirateurs",
-              fill: false,
-              backgroundColor: "#36a2eb",
-              borderColor: "#36a2eb",
-              data: data.taux_respirators,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          title: {
-            display: false,
-            text: "Chart.js Line Chart",
-          },
-          tooltips: {
-            mode: "index",
-            intersect: false,
-            callbacks: {
-              label: function (tooltipItem, data) {
-                var label = data.datasets[tooltipItem.datasetIndex].label || "";
-                if (label) label += ": ";
-                label += tooltipItem.yLabel + "%";
-                return label;
-              },
-            },
-          },
-          plugins: {
-            crosshair: {
-              sync: {
-                enabled: false, // enable trace line syncing with other charts
-              },
-              zoom: {
-                enabled: false,
-              },
-            },
-          },
-          hover: {
-            mode: "nearest",
-            intersect: true,
-          },
-          scales: {
-            xAxes: [
+      for (let i = 0; i < 2; i++) {
+
+        let dataset1 , dataset2
+        if(i == 0){
+          dataset1 = data.resuscitation_beds
+          dataset2 = data.occupied_resuscitation_beds
+        }else{
+          dataset1 = data.respirators
+          dataset2 = data.occupied_respirators
+        }
+
+        const config = {
+          type: "line",
+          data: {
+            labels: data.last_update.map((d) => new Date(d)),
+            datasets: [
               {
-                display: true,
-                type: "time",
-                distribution: "series",
-                time: {
-                  unit: "day",
-                },
-                scaleLabel: {
-                  display: true,
-                  labelString: "Periode",
-                },
-                ticks: {
-                  fontSize: 9,
-                  autoSkip: false,
-                  maxRotation: 90,
-                  minRotation: 90,
-                },
+                label: this.chartLabels[i].label1 ,
+                backgroundColor: "#ff6384",
+                borderColor: "#ff6384",
+                data: dataset1,
+                fill: false,
+                interpolate: true,
+                showLine: true,
+                pointRadius: 2,
+                lineTension: 0.4
+              },
+              {
+                label: this.chartLabels[i].label2 ,
+                fill: false,
+                backgroundColor: "#36a2eb",
+                borderColor: "#36a2eb",
+                data: dataset2,
+                fill: false,
+                interpolate: true,
+                showLine: true,
+                pointRadius: 2,
+                lineTension: 0.4
               },
             ],
-            yAxes: [
-              {
-                display: true,
-                scaleLabel: {
-                  display: true,
-                  labelString: "Taux",
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            title: {
+              display: true,
+              text: this.chartLabels[i].title,
+              fontSize : 11
+            },
+            tooltips: {
+              mode: "index",
+              intersect: false,
+              // callbacks: {
+              //   label: function (tooltipItem, data) {
+              //     var label = data.datasets[tooltipItem.datasetIndex].label || "";
+              //     if (label) label += ": ";
+              //     label += tooltipItem.yLabel + "%";
+              //     return label;
+              //   },
+              // },
+            },
+            plugins: {
+              crosshair: {
+                sync: {
+                  enabled: false, // enable trace line syncing with other charts
                 },
-                ticks: {
-                  callback: function (value, index, values) {
-                    return value + "%";
+                zoom: {
+                  enabled: false,
+                },
+              },
+            },
+            hover: {
+              mode: "nearest",
+              intersect: true,
+            },
+            scales: {
+              xAxes: [
+                {
+                  display: true,
+                  type: "time",
+                  distribution: "series",
+                  time: {
+                    unit: "day",
+                  },
+                  scaleLabel: {
+                    display: true,
+                    labelString: "Periode",
+                  },
+                  ticks: {
+                    fontSize: 9,
+                    autoSkip: false,
+                    maxRotation: 90,
+                    minRotation: 90,
                   },
                 },
-              },
-            ],
+              ],
+              yAxes: [
+                {
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: this.chartLabels[i].lableY,
+                  }
+                  // ,ticks: {
+                  //   callback: function (value, index, values) {
+                  //     return value + "Lits";
+                  //   },
+                  // },
+                },
+              ],
+            },
           },
-        },
-      };
+        };
 
-      if (this.linechart) this.linechart.destroy();
-      this.linechart = new Chart(
-        this.$refs["canvasStat"].getContext("2d"),
-        config
-      );
+        if (this.lineCharts[i]) this.lineCharts[i].destroy();
+        this.lineCharts[i] = new Chart(
+          this.$refs[`canvasStat${i+1}`].getContext("2d"),
+          config
+        );
+      }
     },
     backToTotalData() {
       this.selectHospital(null);
     },
+    lastUpdate(){
+      if (this.selectedHospital != null) return this.selectedHospital.last_update
+      else if(this.dataGlobal)
+        return this.dataGlobal.last_update[this.dataGlobal.last_update.length - 1]
+      else return null
+    }
   },
 };
 </script>
