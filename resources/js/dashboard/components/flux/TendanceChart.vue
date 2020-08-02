@@ -12,6 +12,8 @@
 import * as d3 from "../../lib/d3.v5.min";
 import Chart from "chart.js";
 import 'chartjs-plugin-annotation';
+import {mapState} from 'vuex' ;
+
 export default {
   props: {
     flux24Daily: {
@@ -68,8 +70,9 @@ export default {
             display: false
           },
           title: {
-            display: false,
-            text: ""
+            display: true,
+            text: "Flux de tendance" + this.getZone,
+            fontSize: 9
           },
           scales: {
             xAxes: [
@@ -248,6 +251,16 @@ export default {
               return yScale(d.volume);
             })
         );
+    }
+  },
+  computed: {
+    ...mapState({
+      fluxGeoOptions : state => state.flux.fluxGeoOptions
+    }),
+    getZone(){
+      if(this.fluxGeoOptions && this.fluxGeoOptions.length > 0)
+        return ' à ' + this.fluxGeoOptions[0]
+      else return ''
     }
   }
 };
