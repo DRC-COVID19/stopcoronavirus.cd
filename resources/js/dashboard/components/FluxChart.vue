@@ -296,14 +296,8 @@ export default {
       itemOnbservation.map(value => {
         totalObservation += value.volume;
       });
-
-      console.log('itemOnbservation',itemOnbservation);
-
       const averageObservation = totalObservation / itemOnbservation.length;
       const averageReference = totalReference / itemReference.length;
-
-      console.log('averageObservation',averageObservation);
-      console.log('averageReference',averageReference);
       let difference = totalObservation - totalReference;
       return Math.round((difference * 100) / totalReference);
     },
