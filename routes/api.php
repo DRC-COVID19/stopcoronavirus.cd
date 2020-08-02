@@ -115,9 +115,11 @@ Route::group([
     });
     Route::group(['prefix' => 'hospital-situations'], function () {
         Route::get('/by-hospital/{hospital_id}', 'HospitalSituationController@indexByHospital');
-        Route::resource('/', "HospitalSituationController");
+        
         Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate');
     });
+
+    Route::resource('hospital-situations', "HospitalSituationController");
 
     Route::resource('hospitals-data', 'HospitalController');
     Route::group(['prefix' => 'hospitals'], function () {
@@ -125,7 +127,11 @@ Route::group([
         Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution');
         Route::get('/totaux', 'HospitalController@getHospitalsTotaux');
     });
-
+    Route::group(['prefix' => 'indicators'], function () {
+        Route::group(['prefix' => 'zones'], function () {
+            Route::get('/', 'IndicatorController@getIndicatorsZone');
+        });
+    });
     Route::get('orientation-medical-result', 'DashBoardController@getAllDiagnostics');
     Route::get('orientation-medical-stats', 'DashBoardController@getAllDiagnosticStat');
     Route::get('sondages', 'DashBoardController@getSondages');
