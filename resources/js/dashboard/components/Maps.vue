@@ -313,7 +313,6 @@ export default {
             occupied_resuscitation_beds,
           } = e.features[0].properties;
 
-
           const HTML = `<div class="row">
                 <div class="col-12 bold text-center hospital-name">${name}</div>
                 <hr class="col-12 m-0 p-0">
@@ -341,9 +340,9 @@ export default {
           popup.remove();
         };
 
-        const mouseClick=(e)=>{
+        const mouseClick = (e) => {
           this.selectHospital(e.features[0].properties);
-        }
+        };
 
         this.map.on("mouseenter", "covid9HospitalsLayer", () => {
           this.map.getCanvas().style.cursor = "pointer";
@@ -895,7 +894,7 @@ export default {
       if (this.flux24.length > 0) {
         switch (this.fluxMapStyle) {
           case 2:
-            this.fluxArcStyle(this.flux24);
+            this.fluxArcStyle(this.flux24, this.fluxGeoGranularity);
             map.flyTo({
               pitch: 40,
               speed: 0.2, // make the flying slow
@@ -1021,6 +1020,9 @@ export default {
           formatData(element, item, "destination");
         });
       }
+
+      features = features.filter((x) => x.properties.volume != 0);
+
       const max = d3.max(features, (d) => d.properties.volume);
 
       map.U.removeSource(["fluxCircleDataSource"]);
@@ -1127,71 +1129,183 @@ export default {
 
       map.on("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
     },
-    fluxArcStyle(flux24Data) {
+    getHealthZoneCoordonate(value, geoGranularity) {
+      let coordinates = [];
+      let dataKey = "name";
+      if (geoGranularity == 2) {
+        dataKey = "Zone+Peupl";
+      }
+      if (geoGranularity == 1) {
+        const feature = this.healthProvinceGeojsonCentered.features.find(
+          (x) => x.properties[dataKey] == value
+        );
+        if (feature) {
+          coordinates = feature.geometry.coordinates;
+        }
+      } else {
+        const feature = this.healthZoneGeojsonCentered.features.find(
+          (x) => x.properties[dataKey] == value
+        );
+
+        if (feature) {
+          coordinates = feature.geometry.coordinates;
+        }
+      }
+      return coordinates;
+    },
+    fluxArcStyle(flux24Data, geoGranularity) {
       map.U.removeSource(["fluxCircleDataSource"]);
-      map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
+      map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
       map.off("mouseleave", "fluxCircleDataLayer");
       map.off("mouseleave", "fluxCircleDataLayer");
-      const localData = flux24Data.filter((x) => !x.isReference);
+
+      if (this.fluxType == 3) {
+        return;
+      }
+
+      const localData = flux24Data;
+
       const features = [];
       let color = "#33ac2e";
       let arcData = [];
       let FluxFiltered = flux24Data.filter((x) => !x.isReference);
 
-      if (this.fluxType == 1) {
-        localData.map((item) => {
-          let element = features.find(
+      let dataKey = "name";
+      if (geoGranularity == 2) {
+        dataKey = "Zone+Peupl";
+      }
+      /**
+       * format features data
+       */
+      const formatData = (element, item, key) => {
+        if (element) {
+          if (item.isReference) {
+            element.properties.volumeReference += item.volume;
+          } else {
+            element.properties.volume += item.volume;
+          }
+          const volume = element.properties.volume;
+          const volumeReference = element.properties.volumeReference;
+          const difference = volume - volumeReference;
+          let percent = 0;
+          if (volumeReference > 0) {
+            percent = (difference / volumeReference) * 100;
+          }
+          element.properties.percent = percent;
+        } else {
+          const volume = !item.isReference ? item.volume : 0;
+          const volumeReference = item.isReference ? item.volume : 0;
+          const coordinates = this.getHealthZoneCoordonate(
+            item[key],
+            geoGranularity
+          );
+          features.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates,
+            },
+            properties: {
+              origin: item[key],
+              color: "#ED5F68",
+              volume,
+              volumeReference,
+              percent: 0,
+            },
+          });
+        }
+      };
+
+      if (this.fluxType == 2) {
+        FluxFiltered.map((item) => {
+          const element = features.find(
             (x) => x.properties.origin == item.origin
           );
-          if (element) {
-            element.properties.volume += item.volume;
-          } else {
-            features.push({
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: item.position_start,
-              },
-              properties: {
-                origin: item.origin,
-                color: includes(this.fluxGeoOptions, item.origin)
-                  ? PALETTE.flux_in_color
-                  : PALETTE.flux_out_color,
-                volume: item.volume,
-              },
-            });
-          }
+          formatData(element, item, "origin");
         });
-        arcData = FluxFiltered.filter((item) => {
-          return includes(this.fluxGeoOptions, item.destination);
+      } else if (this.fluxType == 3) {
+        FluxFiltered.map((item) => {
+          features.push({
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: item.position_end,
+            },
+            properties: item,
+          });
         });
       } else {
-        color = "#ffa500";
-        localData.map((item) => {
-          const element2 = features.find(
+        FluxFiltered.map((item) => {
+          const element = features.find(
             (x) => x.properties.origin == item.destination
           );
-          if (element2) {
-            element2.properties.volume += item.volume;
-          } else {
-            features.push({
-              type: "Feature",
-              geometry: {
-                type: "Point",
-                coordinates: item.position_end,
-              },
-              properties: {
-                origin: item.destination,
-                color: includes(this.fluxGeoOptions, item.destination)
-                  ? PALETTE.flux_out_color
-                  : PALETTE.flux_in_color,
-                volume: item.volume,
-              },
-            });
-          }
+          formatData(element, item, "destination");
         });
+      }
+
+      // if (this.fluxType == 1) {
+      //   localData.map((item) => {
+      //     let element = features.find(
+      //       (x) => x.properties.origin == item.origin
+      //     );
+      //     if (element) {
+      //       element.properties.volume += item.volume;
+      //     } else {
+      //       features.push({
+      //         type: "Feature",
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: item.position_start,
+      //         },
+      //         properties: {
+      //           origin: item.origin,
+      //           color: includes(this.fluxGeoOptions, item.origin)
+      //             ? PALETTE.flux_in_color
+      //             : PALETTE.flux_out_color,
+      //           volume: item.volume,
+      //         },
+      //       });
+      //     }
+      //   });
+      //   arcData = FluxFiltered.filter((item) => {
+      //     return includes(this.fluxGeoOptions, item.destination);
+      //   });
+      // } else {
+      //   color = "#ffa500";
+      //   localData.map((item) => {
+      //     const element2 = features.find(
+      //       (x) => x.properties.origin == item.destination
+      //     );
+      //     if (element2) {
+      //       element2.properties.volume += item.volume;
+      //     } else {
+      //       features.push({
+      //         type: "Feature",
+      //         geometry: {
+      //           type: "Point",
+      //           coordinates: item.position_end,
+      //         },
+      //         properties: {
+      //           origin: item.destination,
+      //           color: includes(this.fluxGeoOptions, item.destination)
+      //             ? PALETTE.flux_out_color
+      //             : PALETTE.flux_in_color,
+      //           volume: item.volume,
+      //         },
+      //       });
+      //     }
+      //   });
+      //   arcData = FluxFiltered.filter((item) => {
+      //     return includes(this.fluxGeoOptions, item.origin);
+      //   });
+      // }
+      if (this.fluxType == 1) {
         arcData = FluxFiltered.filter((item) => {
           return includes(this.fluxGeoOptions, item.origin);
+        });
+      } else {
+        arcData = FluxFiltered.filter((item) => {
+          return includes(this.fluxGeoOptions, item.destination);
         });
       }
 
@@ -1229,7 +1343,7 @@ export default {
             0,
             0.2,
             22,
-            ["+", ["*", ["/", ["get", "volume"], max], 60], 20],
+            ["+", ["*", ["/", ["get", "volume"], max], 30], 10],
           ],
           "circle-color": ["get", "color"],
           "circle-stroke-color": ["get", "color"],
@@ -1290,8 +1404,20 @@ export default {
         type: ArcLayer,
         stroked: true,
         filled: true,
-        getSourcePosition: (d) => d.position_start,
-        getTargetPosition: (d) => d.position_end,
+        getSourcePosition: (d) => {
+          const coordinates = this.getHealthZoneCoordonate(
+            d.origin,
+            geoGranularity
+          );
+          return coordinates ?? d.position_start;
+        },
+        getTargetPosition: (d) => {
+          const coordinates = this.getHealthZoneCoordonate(
+            d.destination,
+            geoGranularity
+          );
+          return coordinates ?? d.position_end;
+        },
         getSourceColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
         getTargetColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
         getHeight: 1,
