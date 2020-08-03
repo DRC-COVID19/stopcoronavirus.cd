@@ -107,13 +107,14 @@ export default {
       etatGlobal: true,
       dataGlobal: null,
       chartLabels : [
-        {label1 : "Total des Lits en réanimation" , label2 : "Total des respirateurs" ,
+        {label1 : "Total des Lits de réanimation" , label2 : "Total des respirateurs" ,
           title : "Evolution du total des lits de réanimation et respirateurs" ,
           lableY : "Nombre total" } ,
 
-        {label1 : "Lits en réanimation occupés" , label2 : "Respirateurs occupés" ,
+        {label1 : "Taux d'occupation des Lits de réanimation" ,
+          label2 : "Taux d'occupation des Respirateurs" ,
           title : "Evolution du taux d'occupation des lits de réanimation et respirateurs",
-          lableY : "Nombre d'occupation" } ,
+          lableY : "Taux d'occupation" } ,
       ]
     };
   },
@@ -153,13 +154,32 @@ export default {
     paintStats(data) {
       for (let i = 0; i < 2; i++) {
 
+        let callbacks = {} , ticks = {}
         let dataset1 , dataset2
         if(i == 0){
           dataset1 = data.resuscitation_beds
           dataset2 = data.respirators
         }else{
-          dataset1 = data.occupied_resuscitation_beds
-          dataset2 = data.occupied_respirators
+          dataset1 = data.occupied_resuscitation_beds.map(
+            (a, i) => Math.round(a * 100 / data.resuscitation_beds[i] ))
+
+          dataset2 = data.occupied_respirators.map(
+            (a,i) => Math.round(a * 100 / data.respirators[i] ))
+
+          callbacks = {
+            label: function (tooltipItem, data) {
+                var label = data.datasets[tooltipItem.datasetIndex].label || "";
+                if (label) label += ": ";
+                label += tooltipItem.yLabel + "%";
+                return label;
+            }
+          }
+
+          ticks = {
+            callback: function (value, index, values) {
+                return value + "%";
+            }
+          }
         }
 
         const config = {
@@ -203,14 +223,7 @@ export default {
             tooltips: {
               mode: "index",
               intersect: false,
-              // callbacks: {
-              //   label: function (tooltipItem, data) {
-              //     var label = data.datasets[tooltipItem.datasetIndex].label || "";
-              //     if (label) label += ": ";
-              //     label += tooltipItem.yLabel + "%";
-              //     return label;
-              //   },
-              // },
+              callbacks: callbacks
             },
             plugins: {
               crosshair: {
@@ -254,11 +267,7 @@ export default {
                     display: true,
                     labelString: this.chartLabels[i].lableY,
                   }
-                  // ,ticks: {
-                  //   callback: function (value, index, values) {
-                  //     return value + "Lits";
-                  //   },
-                  // },
+                  ,ticks: ticks
                 },
               ],
             },
