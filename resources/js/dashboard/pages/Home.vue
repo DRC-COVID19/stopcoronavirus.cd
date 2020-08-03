@@ -43,7 +43,7 @@
       <b-row class="position-relative map-wrap" v-if="activeMenu != 3">
         <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
           <div class="layer-set-contenair" v-if="hasFlux24Daily">
-            <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arc</b-link>
+            <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arcs</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
@@ -869,6 +869,7 @@ export default {
     text-decoration: unset;
     background: #2e5bff3d;
     color: #2e5bff !important;
+    border-radius: 5px;
     &.active {
       background: $dash-green;
       color: white !important;
