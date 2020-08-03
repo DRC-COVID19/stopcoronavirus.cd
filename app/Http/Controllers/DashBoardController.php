@@ -96,7 +96,7 @@ class DashBoardController extends Controller
         }
     }
 
-    
+
 
     function getAllDiagnostics()
     {
@@ -694,30 +694,45 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume')])
+            $flux = Flux::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('avg(volume)as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where(function ($q) use ($data) {
                     $q->orWhereIn('Destination', $data['fluxGeoOptions']);
-                })->groupBy('Date', 'destination', 'Origin')->get();
+                })->groupBy('Date', 'day', 'destination', 'Origin')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume')])
+                $fluxRefences = Flux::select(['Destination as destination', 'Origin as origin', DB::raw('avg(volume)as volume, WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where(function ($q) use ($data) {
                         $q->orWhereIn('Destination', $data['fluxGeoOptions']);
-                    })->groupBy('Date', 'Destination', 'Origin')->get();
+                    })->groupBy('day', 'Destination', 'Origin')
+                    ->orderBy('day')
+                    ->get();
 
                 if (count($fluxRefences) > 0) {
-                    foreach ($fluxRefences as $value) {
-                        $value->{'isReference'} = true;
-                    }
                 }
             }
-            if (is_array($fluxRefences)) {
-                return response()->json($flux);
+            foreach ($flux as $value) {
+                $reference = array_filter(
+                    $fluxRefences->toArray(),
+                    function ($e) use ($value) {
+                        return $e['destination'] == $value->destination && $e['origin'] == $value->origin && $e['day'] == $value->day;
+                    }
+                );
+                if (array_values($reference)) {
+                    $reference = (object)(array_values($reference)[0]);
+                    $value->{'volume_reference'} = $reference->volume;
+                    $difference = $value->volume - $reference->volume;
+                    $value->{'difference'} = $difference;
+                    $value->{'percent'} = $difference / $reference->volume * 100;
+                } else {
+                    $value->{'volume_reference'} = 0;
+                    $value->{'difference'} = $value->volume;
+                    $value->{'percent'} = 0;
+                }
             }
-            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+            return response()->json($flux);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -730,30 +745,41 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume')])
+            $flux = Flux::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('avg(volume)as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where(function ($q) use ($data) {
                     $q->orWhereIn('Origin', $data['fluxGeoOptions']);
-                })->groupBy('Date', 'origin', 'Destination')->get();
+                })->groupBy('Date', 'day', 'origin', 'Destination')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume')])
+                $fluxRefences = Flux::select(['Origin as origin', 'Destination as destination', DB::raw('avg(volume)as volume, WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where(function ($q) use ($data) {
                         $q->whereIn('Origin', $data['fluxGeoOptions']);
-                    })->groupBy('Date', 'Destination', 'Origin')->get();
+                    })->groupBy('day', 'Destination', 'Origin')->get();
+            }
 
-                if (count($fluxRefences) > 0) {
-                    foreach ($fluxRefences as $value) {
-                        $value->{'isReference'} = true;
+            foreach ($flux as $value) {
+                $reference = array_filter(
+                    $fluxRefences->toArray(),
+                    function ($e) use ($value) {
+                        return $e['destination'] == $value->destination && $e['origin'] == $value->origin && $e['day'] == $value->day;
                     }
+                );
+                if (array_values($reference)) {
+                    $reference = (object)(array_values($reference)[0]);
+                    $value->{'volume_reference'} = $reference->volume;
+                    $difference = $value->volume - $reference->volume;
+                    $value->{'difference'} = $difference;
+                    $value->{'percent'} = $difference / $reference->volume * 100;
+                } else {
+                    $value->{'volume_reference'} = 0;
+                    $value->{'difference'} = $value->volume;
+                    $value->{'percent'} = 0;
                 }
             }
-            if (is_array($fluxRefences)) {
-                return response()->json($flux);
-            }
-            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+            return response()->json($flux);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -1959,8 +1985,6 @@ class DashBoardController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
-
-
 }
 
 /*
