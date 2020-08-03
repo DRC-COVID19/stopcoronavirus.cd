@@ -1,6 +1,6 @@
 <template>
-  <b-card no-body class="rounded-0 p-2">
-    <b-form class="flux-form" @submit.prevent="submit">
+  <b-card no-body class="menu-indicateur rounded-0 p-2">
+    <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row>
         <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
           <b-form-group>
@@ -11,6 +11,7 @@
               :reduce="item=>item.id"
               label="name"
               placeholder="Options"
+              class="style-chooser"
             />
           </b-form-group>
         </b-col>
@@ -26,6 +27,7 @@
                   label="name"
                   placeholder="Options"
                   :reduce="item=>item.id"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
@@ -38,6 +40,7 @@
                   label="name"
                   placeholder="Options"
                   :reduce="item=>item.id"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
@@ -56,6 +59,7 @@
                   label="name"
                   placeholder="Granularité"
                   :reduce="item=>item.id"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
@@ -72,13 +76,14 @@
                   placeholder="Localisation"
                   label="origin"
                   :reduce="item=>item.origin"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="2" class="pl-3 pr-3">
-          <b-button type="submit" block class="mt-2 btn-dash-blue">Filtrer les données</b-button>
+        <b-col cols="12" md="2" class="row pl-3 pr-3">
+          <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue">Filtrer les données</b-button>
         </b-col>
       </b-form-row>
     </b-form>
@@ -163,3 +168,31 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.menu-indicateur{
+  .style-chooser  .vs__selected-options {
+    width : 100% ;
+  }
+  .style-chooser  .vs__selected {
+    white-space: nowrap;
+    width : 100% ;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    display: block;
+  }
+  .style-chooser .vs__dropdown-toggle, .style-chooser .vs__dropdown-toggle {
+    height: 32px ;
+    overflow: hidden ;
+  }
+  .btn-clear-observation{
+    height: 32px;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+  }
+  .btn-submit{
+    font-size: 14px ;
+  }
+}
+</style>
