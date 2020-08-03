@@ -13,16 +13,14 @@
               <h5 class="percent-title">Mobilité entrante</h5>
 
               <div class="percent flux-in-color">{{fluxInPercent(item)}}%​</div>
-              <p v-if="fluxVolumObservation(item)>0" class="percent-p text-dash-color">
-                {{fluxVolumObservation(item).toLocaleString(
-                undefined,
-                { minimumFractionDigits: 0 })}} personnes de plus sont entrées dans la zone
-              </p>
-              <p v-else class="percent-p text-dash-color">
-                {{(fluxVolumObservation(item)*-1).toLocaleString(
-                undefined,
-                { minimumFractionDigits: 0 })}} personnes de moins sont entrées dans la zone
-              </p>
+              <p
+                v-if="fluxVolumObservation(item)>0"
+                class="percent-p text-dash-color"
+              >{{formatCash(fluxVolumObservation(item))}} personnes de plus sont entrées dans la zone</p>
+              <p
+                v-else
+                class="percent-p text-dash-color"
+              >{{formatCash(fluxVolumObservation(item)*-1) }} personnes de moins sont entrées dans la zone</p>
             </b-card>
             <b-card no-body class="mb-3 p-2" :ref="`mobile_entrance_${index}_card`">
               <div class="chart-container">
@@ -57,16 +55,14 @@
             >
               <h5 class="percent-title">Mobilité sortante</h5>
               <div class="percent flux-out-color">{{fluxInPercent(item)}}%​</div>
-              <p v-if="fluxVolumObservation(item)>0" class="percent-p text-dash-color">
-                {{fluxVolumObservation(item).toLocaleString(
-                undefined,
-                { minimumFractionDigits: 0 })}} personnes de plus sont sorties de la zone
-              </p>
-              <p v-else class="percent-p text-dash-color">
-                {{(fluxVolumObservation(item)*-1).toLocaleString(
-                undefined,
-                { minimumFractionDigits: 0 })}} personnes de moins sont sorties de la zone
-              </p>
+              <p
+                v-if="fluxVolumObservation(item)>0"
+                class="percent-p text-dash-color"
+              >{{formatCash(fluxVolumObservation(item))}} personnes de plus sont sorties de la zone</p>
+              <p
+                v-else
+                class="percent-p text-dash-color"
+              >{{formatCash(fluxVolumObservation(item)*-1)}} personnes de moins sont sorties de la zone</p>
             </b-card>
             <b-card no-body class="mb-3 p-2" :ref="`mobile_out_${index}_card`">
               <div class="chart-container">
@@ -107,16 +103,14 @@
             >
               <h5 class="percent-title">Présences</h5>
               <div class="percent flux-presence">{{fluxVolumObservationPresencePercent(item)}}%​</div>
-              <p v-if="fluxVolumObservationPresence(item)>0" class="percent-p text-dash-color">
-                {{fluxVolumObservationPresence(item).toLocaleString(
-                undefined,
-                { minimumFractionDigits: 0 })}} personnes de plus étaient présentes dans la zone
-              </p>
-              <p v-else class="percent-p text-dash-color">
-                {{(fluxVolumObservationPresence(item)*-1).toLocaleString(
-                undefined,
-                { minimumFractionDigits: 0 })}} personnes de moins étaient présentes dans la zone
-              </p>
+              <p
+                v-if="fluxVolumObservationPresence(item)>0"
+                class="percent-p text-dash-color"
+              >{{formatCash(fluxVolumObservationPresence(item))}} personnes de plus étaient présentes dans la zone</p>
+              <p
+                v-else
+                class="percent-p text-dash-color"
+              >{{formatCash(fluxVolumObservationPresence(item)*-1)}} personnes de moins étaient présentes dans la zone</p>
             </b-card>
             <b-card no-body class="mb-3 p-2" :ref="`mobile_presence_${index}_card`">
               <div class="chart-container">
@@ -775,7 +769,7 @@ export default {
   font-weight: bold;
 }
 .percent-p {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 .chart-container {
   div {
