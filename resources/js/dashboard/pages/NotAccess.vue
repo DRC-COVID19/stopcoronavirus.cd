@@ -11,31 +11,12 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { AGENT_HOSPITAL, ADMIN_DASHBOARD } from "../config/env";
 export default {
-  computed: {
-    ...mapState({
-      userRole: state => state.auth.userRole
-    })
-  },
   methods: {
     goHome() {
-      switch (this.userRole) {
-        case ADMIN_DASHBOARD:
-          this.$router.push({
-            name: "home"
-          });
-          break;
-        case AGENT_HOSPITAL:
-          this.$router.push({
-            name: "hospital.home"
-          });
-          break;
-
-        default:
-          break;
-      }
+      this.$router.push({
+        name: "landing"
+      });
     }
   }
 };
