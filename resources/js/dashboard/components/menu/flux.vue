@@ -4,7 +4,7 @@
       <b-form-row>
         <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
           <b-form-group>
-            <label for class="text-dash-color">Rapport prédefinis</label>
+            <label for class="text-dash-color">Rapports prédefinis</label>
             <v-select
               @input="fluxPredefinedInputChanged"
               :options="fluxPredefinedInput"
@@ -48,7 +48,7 @@
           </b-row>
         </b-col>
         <b-col cols="12" md="4" class="nav-zone pl-3 pr-3">
-          <label for class="text-dash-color">Paramètre Temporel</label>
+          <label for class="text-dash-color">Paramètres Temporels</label>
           <b-row>
             <b-col cols="12" md="4">
               <b-form-group>
@@ -135,10 +135,14 @@ export default {
       fluxForm: {
         preference_start: "2020-02-01",
         preference_end: "2020-03-18",
+        observation_start:"2020-03-19",
+        observation_end:"2020-04-26",
+        fluxGeoGranularity: 2,
+        fluxTimeGranularity: 1,
       },
       dateRangeObservation: {
-        startDate: null,
-        endDate: null,
+        startDate: new Date("02/19/2020"),
+        endDate: new Date("04/26/2020"),
       },
       fluxPredefinedInput: [
         {
@@ -230,8 +234,13 @@ export default {
         this.submitFluxForm();
       }
     );
+    this.fluxGeoGranularityChange(2);
   },
-  computed: {},
+  watch: {
+    fluxZones() {
+      this.fluxGeoGranularityChange(2);
+    },
+  },
   methods: {
     ...mapMutations([
       "setFluxGeoGranularity",

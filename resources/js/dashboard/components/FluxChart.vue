@@ -482,7 +482,7 @@ export default {
                 },
                 scaleLabel: {
                   display: true,
-                  labelString: "Mois",
+                  labelString: "Période",
                   fontSize: 9,
                 },
                 type: "time",
