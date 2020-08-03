@@ -107,10 +107,13 @@ export default {
       etatGlobal: true,
       dataGlobal: null,
       chartLabels : [
-        {label1 : "Total des Lits en réanimation" , label2 : "Lits en réanimation occupés" ,
-          title : "Evolution du taux d'occupation des lits de réanimation" , lableY : "Lits" } ,
-        {label1 : "Total des respirateurs" , label2 : "Respirateurs occupés" ,
-          title : "Evolution du taux d'occupation des respirateurs",lableY : "Respirateurs" } ,
+        {label1 : "Total des Lits en réanimation" , label2 : "Total des respirateurs" ,
+          title : "Evolution du total des lits de réanimation et respirateurs" ,
+          lableY : "Nombre total" } ,
+
+        {label1 : "Lits en réanimation occupés" , label2 : "Respirateurs occupés" ,
+          title : "Evolution du taux d'occupation des lits de réanimation et respirateurs",
+          lableY : "Nombre d'occupation" } ,
       ]
     };
   },
@@ -153,9 +156,9 @@ export default {
         let dataset1 , dataset2
         if(i == 0){
           dataset1 = data.resuscitation_beds
-          dataset2 = data.occupied_resuscitation_beds
+          dataset2 = data.respirators
         }else{
-          dataset1 = data.respirators
+          dataset1 = data.occupied_resuscitation_beds
           dataset2 = data.occupied_respirators
         }
 
