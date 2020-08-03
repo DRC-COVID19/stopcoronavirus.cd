@@ -243,37 +243,20 @@ export default {
       this.setFluxType(value);
     },
     fluxInPercent(items) {
-      let totalReference = 0;
-      items
-        .filter((x) => x.isReference)
-        .map((item) => {
-          totalReference += item.volume;
-        });
       let totalObservation = 0;
-      items
-        .filter((x) => !x.isReference)
-        .map((item) => {
-          totalObservation += item.volume;
-        });
-      let difference = totalObservation - totalReference;
-
-      return Math.round((difference * 100) / totalReference);
+      items.map((item) => {
+        totalObservation += item.percent;
+      });
+      return Math.round(totalObservation / items.length);
     },
     fluxVolumObservation(items) {
-      let totalReference = 0;
-      items
-        .filter((x) => x.isReference)
-        .map((item) => {
-          totalReference += Number(item.volume);
-        });
       let totalObservation = 0;
-      items
-        .filter((x) => !x.isReference)
-        .map((item) => {
-          totalObservation += Number(item.volume);
+
+      items.map((item) => {
+          totalObservation += Number(item.difference);
         });
-      let difference = totalObservation - totalReference;
-      return Math.round(difference);
+      
+      return Math.round(totalObservation);
     },
     fluxVolumObservationPresencePercent(items) {
       const itemReference = items.filter((x) => x.isReference);
@@ -372,44 +355,28 @@ export default {
       let DataReference = [];
       let totalReference = 0;
       let referenceAverage = 0;
-      dataPram
-        .filter((x) => x.isReference)
-        .forEach((item) => {
-          let element = DataReference.find((x) => x.date == item.date);
-          if (element) {
-            element.volume += item.volume;
-          } else {
-            DataReference.push({
-              date: item.date,
-              volume: item.volume,
-            });
-          }
-        });
 
-      DataReference.forEach((item) => {
-        totalReference += item.volume;
+      dataPram.map((item) => {
+        let element = data.find((x) => x.date == item.date);
+        if (element) {
+          element.volume += item.volume;
+          element.percent += item.percent;
+        } else {
+          data.push({
+            date: item.date,
+            volume: item.volume,
+            percent: item.percent,
+          });
+        }
       });
 
-      referenceAverage = totalReference / DataReference.length;
-
-      dataPram
-        .filter((x) => !x.isReference)
-        .forEach((item) => {
-          let element = data.find((x) => x.date == item.date);
-          if (element) {
-            element.volume += item.volume;
-          } else {
-            data.push({
-              date: item.date,
-              volume: item.volume,
-            });
-          }
-        });
-      data.forEach((item) => {
-        let difference = item.volume - referenceAverage;
-        let percent = (difference * 100) / referenceAverage;
-        item.volume = percent;
+      data.map((item) => {
+        item.volume = item.volume / data.length;
+        item.percent = item.percent / data.length;
       });
+
+      const max = d3.max(data.map((x) => x.percent));
+      const min = d3.min(data.map((x) => x.percent));
 
       const tempData = {
         type: "line",
@@ -421,7 +388,7 @@ export default {
               fill: false,
               borderColor: color,
               backgroundColor: "rgb(166,180,205, 0.2)",
-              data: data.map((x) => ({ x: new Date(x.date), y: x.volume })),
+              data: data.map((x) => ({ x: new Date(x.date), y: x.percent })),
               interpolate: true,
               showLine: true,
               pointRadius: 2,
@@ -465,10 +432,9 @@ export default {
                 return (
                   d.datasets[i.datasetIndex].label +
                   ": " +
-                  Math.round(
-                    (referenceAverage * i.yLabel) / 100,
-                    0
-                  ).toLocaleString(undefined, { minimumFractionDigits: 0 })
+                  Math.round(i.yLabel, 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 0,
+                  })
                 );
               },
             },
@@ -504,8 +470,8 @@ export default {
                 display: true,
                 ticks: {
                   fontSize: 9,
-                  min: -100,
-                  max: 100,
+                  min: min < -100 ? min.toFixed(2) : -100,
+                  max: max >= 100 ? max.toFixed(2) : 100,
                   callback: function (value) {
                     return value + "%";
                   },
