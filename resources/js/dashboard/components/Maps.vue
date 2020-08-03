@@ -172,8 +172,8 @@ export default {
         this.addProvinceSource();
       }
 
-      this.addPolygoneLayer(1);
-      this.addPolygoneHoverLayer(1);
+      this.addPolygoneLayer(2);
+      this.addPolygoneHoverLayer(2);
     });
 
     this.map = map;
@@ -195,7 +195,6 @@ export default {
         // if (this.activeMenu != 1) {
         //   return;
         // }
-        console.log(value);
         this.flux24Func();
       }
     );
@@ -1096,7 +1095,9 @@ export default {
       const mouseMove = (e) => {
         // Change the cursor style as a UI indicator.
         // map.getCanvas().style.cursor = "pointer";
-
+        if (this.activeMenu != 1) {
+          return;
+        }
         const coordinates = e.features[0].geometry.coordinates[0].slice();
 
         const item = e.features[0].properties;
@@ -1118,6 +1119,9 @@ export default {
       };
 
       const mouseOut = () => {
+        if (this.activeMenu != 1) {
+          return;
+        }
         map.getCanvas().style.cursor = "";
         popup.remove();
       };
@@ -1359,9 +1363,15 @@ export default {
       // When the user moves their mouse over the state-fill layer, we'll update the
       // feature state for the feature under the mouse.
       map.on("mouseenter", "fluxCircleDataLayer", () => {
+         if (this.activeMenu != 1) {
+          return;
+        }
         map.getCanvas().style.cursor = "pointer";
       });
       map.on("mousemove", "fluxCircleDataLayer", (e) => {
+         if (this.activeMenu != 1) {
+          return;
+        }
         if (e.features.length > 0) {
           if (hoveredStateId) {
             map.setFeatureState(
@@ -1386,6 +1396,9 @@ export default {
       // When the mouse leaves the state-fill layer, update the feature state of the
       // previously hovered feature.
       map.on("mouseout", "fluxCircleDataLayer", () => {
+         if (this.activeMenu != 1) {
+          return;
+        }
         if (hoveredStateId) {
           map.setFeatureState(
             { source: "fluxCircleDataSource", id: hoveredStateId },
