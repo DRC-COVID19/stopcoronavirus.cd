@@ -46,7 +46,7 @@
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arcs</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
-          <b-row  class="map-container" :class="{'map-container-100':!hasCovidCases}">
+          <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
             <Maps
               :covidCases="covidCases"
               :hospitals="hospitals"
@@ -109,18 +109,14 @@
                   :covidCasesStatDaily="covidCasesStatDaily"
                 />
               </b-tab>
-              <b-tab title="Flux tendance" v-if="hasFlux24Daily" :active="hasFlux24Daily">
-                <FluxTendanceChart :flux24Daily="flux24Daily" />
-              </b-tab>
-              <b-tab
-                title="Flux comparaison"
-                v-if="hasflux24DailyComparison"
-                :active="hasflux24DailyComparison"
-              >
+              <b-tab title="Flux comparaison" v-if="hasflux24DailyComparison">
                 <FluxComparisonChart
                   :fluxGeoOptions="fluxGeoOptions"
                   :flux24DailyComparison="flux24DailyComparison"
                 />
+              </b-tab>
+              <b-tab title="Flux tendance" v-if="hasFlux24Daily" :active="hasFlux24Daily">
+                <FluxTendanceChart :flux24Daily="flux24Daily" />
               </b-tab>
             </b-tabs>
           </b-card>

@@ -224,6 +224,16 @@ export default {
         }
       }
     );
+    this.$store.watch(
+      (state) => state.flux.tendanceChartSelectedValue,
+      (value) => {
+        const date =new Date(value.x);
+        this.fluxForm.preference_end=this.moment(date.setDate(date.getDate() - 1)).format(DATEFORMAT);
+        this.fluxForm.observation_start=this.moment(value.x).format(DATEFORMAT);
+        this.$set(this.dateRangeObservation,'startDate',value.x)
+        this.submitFluxForm();
+      }
+    );
     this.fluxGeoGranularityChange(2);
   },
   watch: {
