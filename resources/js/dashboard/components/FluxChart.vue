@@ -16,11 +16,11 @@
               <p
                 v-if="fluxVolumObservation(item)>0"
                 class="percent-p text-dash-color"
-              >{{formatCash(fluxVolumObservation(item))}} personnes de plus sont entrés dans la zone</p>
+              >{{formatCash(fluxVolumObservation(item))}} personnes de plus sont entrées dans la zone</p>
               <p
                 v-else
                 class="percent-p text-dash-color"
-              >{{formatCash(fluxVolumObservation(item)*-1) }} personnes de moins sont entrés dans la zone</p>
+              >{{formatCash(fluxVolumObservation(item)*-1) }} personnes de moins sont entrées dans la zone</p>
             </b-card>
             <b-card no-body class="mb-3 p-2" :ref="`mobile_entrance_${index}_card`">
               <div class="chart-container">
@@ -769,7 +769,7 @@ export default {
   font-weight: bold;
 }
 .percent-p {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 .chart-container {
   div {
