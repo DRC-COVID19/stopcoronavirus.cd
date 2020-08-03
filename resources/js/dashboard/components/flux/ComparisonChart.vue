@@ -56,10 +56,12 @@ export default {
         let borderWidth = 2;
         let borderColor = "rgb(166,180,205)";
         let borderDash = [5];
+        let order=1;
         if (this.fluxGeoOptions.indexOf(keys) != -1) {
           borderWidth = 2;
           borderColor = "rgb(51, 172, 46)";
           borderDash = [0];
+          order=0;
         }
         datasets.push({
           label: keys,
@@ -73,6 +75,7 @@ export default {
           pointRadius: 0,
           borderWidth: borderWidth,
           lineTension: 0.5,
+          order:order,
           borderDash: borderDash
           //   xAxisID: "x-axis-0"
         });

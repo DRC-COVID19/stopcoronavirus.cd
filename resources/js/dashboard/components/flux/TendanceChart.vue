@@ -53,6 +53,7 @@ export default {
       if (!data) {
         return;
       }
+      const maxDate = moment.max(data.map((x) => moment(x.date)));
       const tempData = {
         type: "line",
         data: {
@@ -77,8 +78,8 @@ export default {
           maintainAspectRatio: false,
           // events: ["click"],
           onClick: (e, argument) => {
-            if (argument.length>0) {
-              const firstPoint=argument[0];
+            if (argument.length > 0) {
+              const firstPoint = argument[0];
               const value =
                 myLineChart2.data.datasets[firstPoint._datasetIndex].data[
                   firstPoint._index
@@ -92,7 +93,7 @@ export default {
           title: {
             display: true,
             text: "Flux de tendance" + this.getZone,
-            fontSize: 9
+            fontSize: 9,
           },
           scales: {
             xAxes: [
@@ -145,10 +146,13 @@ export default {
           annotation: {
             events: ["mouseenter", "mouseleave"],
             drawTime: "afterDraw",
-            annotations: DRC_COVID_EVENT.filter((x) =>
-              x.measures.some((z) =>
-                z.zones.some((y) => [...this.fluxGeoOptions, "ALL"].includes(y))
-              )
+            annotations: DRC_COVID_EVENT.filter(
+              (x) =>
+                x.measures.some((z) =>
+                  z.zones.some((y) =>
+                    [...this.fluxGeoOptions, "ALL"].includes(y)
+                  )
+                ) && new Date(x.date) <= maxDate
             ).map((item, index) => {
               return {
                 id: "line" + index,
@@ -156,7 +160,7 @@ export default {
                 mode: "vertical",
                 scaleID: "x-axis-0",
                 value: new Date(item.date),
-                borderColor: PALETTE.flux_presence,
+                borderColor:item.isImportant?PALETTE.flux_presence:PALETTE.flux_out_color,
                 borderWidth: item.isImportant ? 3 : 2,
                 label: {
                   content: item.measures
@@ -175,7 +179,7 @@ export default {
                   myLineChart2.update();
                 },
                 onMouseleave(e) {
-                  this.options.borderColor = PALETTE.flux_presence;
+                  this.options.borderColor = item.isImportant?PALETTE.flux_presence:PALETTE.flux_out_color;
                   this.options.label.enabled = false;
                   myLineChart2.update();
                 },
@@ -204,7 +208,7 @@ export default {
     },
     drawChart1(data) {
       const timeConv = d3.timeParse("%Y-%m-%d");
-      data.forEach(element => {
+      data.forEach((element) => {
         element.date = timeConv(element.date);
       });
       let elementPosition = 900; // this.$refs.tendanceContainer.clientWidth - 20;
@@ -224,22 +228,19 @@ export default {
       const yScale = d3.scaleLinear().rangeRound([height, 0]);
 
       xScale.domain(
-        d3.extent(data, function(d) {
+        d3.extent(data, function (d) {
           return d.date;
         })
       );
 
       yScale.domain([
         0,
-        d3.max(data, function(d) {
+        d3.max(data, function (d) {
           return d.volume;
-        })
+        }),
       ]);
 
-      const yaxis = d3
-        .axisLeft()
-        .ticks(data[0].volume.length)
-        .scale(yScale);
+      const yaxis = d3.axisLeft().ticks(data[0].volume.length).scale(yScale);
 
       const xaxis = d3
         .axisBottom()
@@ -271,10 +272,10 @@ export default {
 
       const line = d3
         .line()
-        .x(function(d) {
+        .x(function (d) {
           return xScale(d.date);
         })
-        .y(function(d) {
+        .y(function (d) {
           return yScale(d.volume);
         });
 
@@ -284,7 +285,7 @@ export default {
         .attr("fill", "none")
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
-        .attr("stroke-dasharray", d => {
+        .attr("stroke-dasharray", (d) => {
           console.log(strokeDasharray(d.isReference));
           return strokeDasharray(d.isReference);
         })
@@ -292,25 +293,25 @@ export default {
           "d",
           d3
             .line()
-            .x(function(d) {
+            .x(function (d) {
               return xScale(d.date);
             })
-            .y(function(d) {
+            .y(function (d) {
               return yScale(d.volume);
             })
         );
-    }
+    },
   },
   computed: {
     ...mapState({
-      fluxGeoOptions : state => state.flux.fluxGeoOptions
+      fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
     }),
-    getZone(){
-      if(this.fluxGeoOptions && this.fluxGeoOptions.length > 0)
-        return ' à ' + this.fluxGeoOptions[0]
-      else return ''
-    }
-  }
+    getZone() {
+      if (this.fluxGeoOptions && this.fluxGeoOptions.length > 0)
+        return " à " + this.fluxGeoOptions[0];
+      else return "";
+    },
+  },
 };
 </script>
 
