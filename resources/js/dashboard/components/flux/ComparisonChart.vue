@@ -1,5 +1,5 @@
 <template>
-  <b-container class="p-0" ref="tendanceContainer">
+  <b-container fluid class="p-0" ref="tendanceContainer">
     <b-row no-gutters>
       <b-col cols="12" class="pl-0 pr-2 ">
         <canvas  width="100vh" ref="comparisonChart" id="comparisonChart" />
@@ -56,10 +56,12 @@ export default {
         let borderWidth = 2;
         let borderColor = "rgb(166,180,205)";
         let borderDash = [5];
+        let order=1;
         if (this.fluxGeoOptions.indexOf(keys) != -1) {
           borderWidth = 2;
           borderColor = "rgb(51, 172, 46)";
           borderDash = [0];
+          order=0;
         }
         datasets.push({
           label: keys,
@@ -73,6 +75,7 @@ export default {
           pointRadius: 0,
           borderWidth: borderWidth,
           lineTension: 0.5,
+          order:order,
           borderDash: borderDash
           //   xAxisID: "x-axis-0"
         });
@@ -97,8 +100,9 @@ export default {
             display: false
           },
           title: {
-            display: false,
-            text: ""
+            display: true,
+            text: "Flux de comparaison" + this.getZone,
+            fontSize: 9
           },
           scales: {
             xAxes: [
@@ -187,7 +191,7 @@ export default {
                 enabled: false
               },
               zoom: {
-                enabled: false, // enable zooming
+                enabled: true, // enable zooming
                 zoomboxBackgroundColor: "rgba(66,133,244,0.2)", // background color of zoom box
                 zoomboxBorderColor: "#48F", // border color of zoom box
                 zoomButtonText: "Reset Zoom", // reset zoom button text
@@ -199,6 +203,13 @@ export default {
       };
 
       const myLineChart = new Chart(ref.getContext("2d"), tempData);
+    }
+  },
+  computed: {
+    getZone(){
+      if(this.fluxGeoOptions && this.fluxGeoOptions.length > 0)
+        return ' par rapport à ' + this.fluxGeoOptions[0]
+      else return ''
     }
   }
 };

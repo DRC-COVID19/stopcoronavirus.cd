@@ -35,9 +35,13 @@
                     :title="user.username"
                   />
                   <b-card class="user-card text-center" v-if="showUserCard">
-                    <p>{{user.username}}</p>
-                    <p>{{user.name}}</p>
-                    <p v-if="user.email">{{user.email}}</p>
+                    <p>
+                      <span class="d-block">{{user.username}}</span>
+                      <span class="d-block">{{user.name}}</span>
+                      <span class="d-block" v-if="user.email">{{user.email}}</span>
+
+                      <router-link class="small" :to="{name : 'landing'}">Revenir à l'accueil</router-link>
+                    </p>
                     <b-button @click="userLogout" variant="danger" block>Deconnexion</b-button>
                   </b-card>
                 </div>
