@@ -481,7 +481,7 @@ export default {
         this.removeMarkersSondage("antibacterial_gel");
       }
     },
-    flux24() {
+    flux24DailyIn() {
       this.flux24Func();
     },
     isLoading() {
