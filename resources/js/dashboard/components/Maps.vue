@@ -333,11 +333,19 @@ export default {
                 <hr class="col-12 m-0 p-0">
 
                 <div class="col-9 small">Lits de réanimation</div>
-                <div class="col-3 bold">${occupied_resuscitation_beds}/${resuscitation_beds}</div>
+                <div class="col-3 bold">${resuscitation_beds}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Lits de réanimation occupés</div>
+                <div class="col-3 bold">${occupied_resuscitation_beds}</div>
                 <hr class="col-12 m-0 p-0">
 
                 <div class="col-9 small">Respirateurs</div>
-                <div class="col-3 bold">${occupied_respirators}/${respirators}</div>
+                <div class="col-3 bold">${respirators}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Respirateurs occupés</div>
+                <div class="col-3 bold">${occupied_respirators}</div>
             </div>`;
           popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
         };

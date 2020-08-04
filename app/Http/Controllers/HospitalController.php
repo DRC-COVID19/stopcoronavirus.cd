@@ -144,56 +144,84 @@ class HospitalController extends Controller
     public function getHospitalEvolution($hospital = null)
     {
         try {
-            $hospitalSituations = HospitalSituation::where(function ($query) use ($hospital) {
-                if ($hospital){
-                    $query->where('hospital_id', intval($hospital));
-                }
-            })->select([
-                'last_update', 'occupied_respirators', 'occupied_resuscitation_beds',
-                DB::raw(
-                    '(occupied_respirators * 100 /
-                            (SELECT respirators FROM
-                                (SELECT id, updated_at, respirators from hospitals
-                                    UNION
-                                    SELECT hospital_id AS id, updated_at, respirators from hospital_logs
-                                ) AS a
-                                WHERE a.id = hospital_id
-                                ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
-                                LIMIT 1
-                            )
-                        ) AS taux_respirators'
-                ),
-                DB::raw(
-                    '(occupied_resuscitation_beds * 100 /
-                            (SELECT resuscitation_beds FROM
-                                (SELECT id, updated_at, resuscitation_beds from hospitals
-                                    UNION
-                                    SELECT hospital_id AS id, updated_at, resuscitation_beds from hospital_logs
-                                ) AS a
-                                WHERE a.id = hospital_id
-                                ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
-                                LIMIT 1
-                            )
-                        ) AS taux_resuscitation_beds'
-                )
-            ])
-                ->orderBy('last_update')
-                ->get();
+            // On réccupère toutes les dates où une mise à jour a pu etre poster
+            // Surtout utile pour l'evolution globale
+
+            $last_updates = HospitalSituation::where(function ($query) use ($hospital) {
+              if ($hospital) $query->where('hospital_id', intval($hospital));
+            })
+            ->select('last_update')
+            ->pluck('last_update')
+            ->unique()->sort()->values() ;
 
             $results = [
-                'last_update' => [],
-                'occupied_respirators' => [],
-                'occupied_resuscitation_beds' => [],
-                'taux_respirators' => [],
-                'taux_resuscitation_beds' => []
+              'last_update' => [],
+              'occupied_respirators' => [],
+              'occupied_resuscitation_beds' => [],
+              'respirators' => [],
+              'resuscitation_beds' => []
             ];
-            foreach ($hospitalSituations as $data) {
-                $results['last_update'][] = $data->last_update;
-                $results['occupied_respirators'][] = $data->occupied_respirators;
-                $results['occupied_resuscitation_beds'][] = $data->occupied_resuscitation_beds;
-                $results['taux_respirators'][] = $data->taux_respirators;
-                $results['taux_resuscitation_beds'][] = $data->taux_resuscitation_beds;
+
+            // A une date donné, on réccupera pour chaque hopital sa dernière situation
+            // Dans le but d'en faire la somme pour chacune d'elle dans le cas du rapport
+            // pour la situation globale
+            foreach ($last_updates as $last_update) {
+
+              $hospitalSituation = HospitalSituation::where(function ($query) use ($hospital) {
+                  if ($hospital){
+                      $query->where('hospital_id', intval($hospital));
+                  }
+              })->selectRaw(
+                'SUM(occupied_respirators) AS occupied_respirators,
+                 SUM(occupied_resuscitation_beds) AS occupied_resuscitation_beds,
+                 SUM(
+                    (SELECT respirators FROM
+                      (SELECT id, updated_at, respirators from hospitals
+                          UNION
+                          SELECT hospital_id AS id, updated_at, respirators from hospital_logs
+                      ) AS a
+                      WHERE a.id = hospital_id
+                      ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
+                      LIMIT 1
+                    )
+                  ) AS respirators,
+                 SUM(
+                    (SELECT resuscitation_beds FROM
+                      (SELECT id, updated_at, resuscitation_beds from hospitals
+                          UNION
+                          SELECT hospital_id AS id, updated_at, resuscitation_beds from hospital_logs
+                      ) AS a
+                      WHERE a.id = hospital_id
+                      ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
+                      LIMIT 1
+                    )
+                  ) AS resuscitation_beds
+              ')
+              ->where('last_update' , '<=' , $last_update)
+              ->whereNotExists(function($query) use($last_update){
+                  // C'est ici qu'on s'assure que la situation actuellemnent lu est la dernière connu
+                  // pour l'hopital x à la date $last_update sur laquelle on boucle
+                  $query->select(DB::raw(1))
+                  ->from(DB::raw('hospital_situations AS h'))
+                  ->whereRaw('h.hospital_id = hospital_situations.hospital_id
+                      AND h.last_update <= "' . $last_update . '"
+                      AND (
+                        h.last_update > hospital_situations.last_update OR
+                        (h.last_update = hospital_situations.last_update AND
+                         h.id > hospital_situations.id )
+                      )
+                    ') ;
+              })
+              ->first();
+
+              $results['last_update'][] = $last_update ;
+              $results['occupied_respirators'][] = $hospitalSituation->occupied_respirators;
+              $results['occupied_resuscitation_beds'][] = $hospitalSituation->occupied_resuscitation_beds;
+              $results['respirators'][] = $hospitalSituation->respirators;
+              $results['resuscitation_beds'][] = $hospitalSituation->resuscitation_beds;
+
             }
+
             return response()->json($results);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
