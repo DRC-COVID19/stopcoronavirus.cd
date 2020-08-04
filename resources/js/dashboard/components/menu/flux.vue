@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body class="rounded-0 p-2">
+  <b-card no-body class="rounded-0 p-2 pb-3">
     <b-form class="flux-form" @submit.prevent="submitFluxForm">
       <b-form-row>
         <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
@@ -7,10 +7,12 @@
             <label for class="text-dash-color">Rapports prédefinis</label>
             <v-select
               @input="fluxPredefinedInputChanged"
+              v-model="fluxPredefinedControl"
               :options="fluxPredefinedInput"
               label="name"
               placeholder="Option"
               :reduce="item=>item.id"
+              class="style-chooser"
             />
           </b-form-group>
         </b-col>
@@ -26,6 +28,7 @@
                   label="name"
                   placeholder="Granularité"
                   :reduce="item=>item.id"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
@@ -42,6 +45,8 @@
                   placeholder="Localisation"
                   label="origin"
                   :reduce="item=>item.origin"
+                  @input="resetFluxPredefinedControl"
+                  class="style-chooser style-chooser-multiple"
                 />
               </b-form-group>
             </b-col>
@@ -59,6 +64,8 @@
                   label="name"
                   placeholder="Granularité"
                   :reduce="item=>item.id"
+                  @input="resetFluxPredefinedControl"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
@@ -67,12 +74,12 @@
                 :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start?flux24Errors.observation_start[0]:''} ${flux24Errors.observation_end?flux24Errors.observation_end[0]:''}` : null"
                 :state="(flux24Errors.observation_start && flux24Errors.observation_start.lenght>0)|| (flux24Errors.observation_end && flux24Errors.observation_end.lenght>0)"
               >
-                <div>
+                <div class="d-flex">
                   <date-range-picker
                     ref="picker2"
-                    :locale-data="{ 
-                        firstDay: 1, 
-                      format: 'dd-mm-yyyy', 
+                    :locale-data="{
+                        firstDay: 1,
+                      format: 'dd-mm-yyyy',
                       drops: 'up' }"
                     v-model="dateRangeObservation"
                     :appendToBody="true"
@@ -80,13 +87,14 @@
                     :min-date="new Date('03/19/2020')"
                     @update="UpdateObservationDate"
                     :calculate-position="dateRangerPosition"
+                    class="style-picker"
                   >
                     <template
                       v-slot:input="picker"
                     >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
                   </date-range-picker>
 
-                  <b-button @click="clearObservationDate" class="btn-dash-blue">
+                  <b-button @click="clearObservationDate" class="btn-clear-observation btn-dash-blue">
                     <span class="fa fa-times"></span>
                   </b-button>
                 </div>
@@ -94,8 +102,8 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="2" class="pl-3 pr-3">
-          <b-button type="submit" block class="mt-2 btn-dash-blue">Filtrer les données</b-button>
+        <b-col cols="12" md="2" class="row pl-3 pr-3">
+          <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue">Filtrer les données</b-button>
         </b-col>
       </b-form-row>
     </b-form>
@@ -203,6 +211,7 @@ export default {
       allZoneCheckedIndeterminate: false,
       allProvincesCheckedIndeterminate: false,
       IsfluxParameterCollapse: false,
+      fluxPredefinedControl : null
     };
   },
   filters: {
@@ -269,6 +278,7 @@ export default {
     UpdateObservationDate({ startDate, endDate }) {
       this.fluxForm.observation_start = moment(startDate).format("YYYY/MM/DD");
       this.fluxForm.observation_end = moment(endDate).format("YYYY/MM/DD");
+      this.resetFluxPredefinedControl() ;
     },
     submitFluxForm() {
       this.$emit("submitFluxForm", this.fluxForm);
@@ -287,8 +297,10 @@ export default {
       this.dateRangeObservation = { startDate: null, endDate: null };
       this.fluxForm.observation_start = null;
       this.fluxForm.observation_end = null;
+      this.resetFluxPredefinedControl()
     },
     fluxGeoGranularityChange(value) {
+      this.resetFluxPredefinedControl()
       this.setFluxGeoGranularity(value);
       this.fluxForm.fluxGeoOptions = [];
       if (value == 1) {
@@ -365,15 +377,28 @@ export default {
       this.$root.$emit("bv::toggle::collapse", "mobilityDetail");
       this.IsfluxParameterCollapse = !this.IsfluxParameterCollapse;
     },
+    resetFluxPredefinedControl(){
+      this.fluxPredefinedControl = null
+    }
   },
 };
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.flux-form {
-  margin: 0;
-  .nav-zone {
-    border-right: 1px solid $dash-blue-8;
+  .flux-form {
+    margin: 0;
+    .nav-zone {
+      border-right: 1px solid $dash-blue-8;
+    }
   }
-}
+
+  .btn-clear-observation{
+    height: 32px;
+    margin-left: 5px;
+    display: flex;
+    align-items: center;
+  }
+  .btn-submit{
+    font-size: 14px ;
+  }
 </style>
