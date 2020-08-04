@@ -96,7 +96,7 @@ class DashBoardController extends Controller
         }
     }
 
-    
+
 
     function getAllDiagnostics()
     {
@@ -1668,10 +1668,15 @@ class DashBoardController extends Controller
     public function getFlux24PresenceProvince(Request $request)
     {
         $data = $this->fluxValidator($request->all());
+        $fluxGeoOptions = $data['fluxGeoOptions'] ;
+
         try {
             $flux = Flux24PresenceProvince::select(['Zone as zone', DB::raw('avg(Volume) as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                // ->whereIn('zone', $data['fluxGeoOptions'])
+                ->where(function($query) use($fluxGeoOptions){
+                  if($fluxGeoOptions && sizeof($fluxGeoOptions) > 0)
+                    $query->whereIn('zone', $fluxGeoOptions) ;
+                })
                 ->groupBy('zone')
                 ->get();
 
@@ -1816,10 +1821,14 @@ class DashBoardController extends Controller
     public function getFlux24PresenceZone(Request $request)
     {
         $data = $this->fluxValidator($request->all());
+        $fluxGeoOptions = $data['fluxGeoOptions'] ;
         try {
             $flux = Flux24PresenceZone::select(['Zone as zone', DB::raw('AVG(Volume) as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                // ->whereIn('zone', $data['fluxGeoOptions'])
+                ->where(function($query) use($fluxGeoOptions){
+                  if($fluxGeoOptions && sizeof($fluxGeoOptions) > 0)
+                    $query->whereIn('zone', $fluxGeoOptions) ;
+                })
                 ->groupBy('zone')
                 ->get();
 
