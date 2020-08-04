@@ -7,6 +7,7 @@ export default {
         fluxEnabled: true,
         isWatchingfluxGeoOptions: true,
         domaineExtValues:{},
+        tendanceChartSelectedValue:null,
         legendHover : null , // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
     },
     mutations: {
@@ -34,6 +35,9 @@ export default {
         setDomaineExtValues(state,payload){
             state.domaineExtValues=payload;
         },
+        setTendanceChartSelectedValue(state,payload){
+            state.tendanceChartSelectedValue=payload;
+        }
     },
     actions: {
         resetState({ state }) {
