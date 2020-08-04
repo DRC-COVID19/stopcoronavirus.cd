@@ -2,7 +2,7 @@
   <div>
     <b-container fluid class="dash-home-page" ref="dash_home_page" id="dash_home_page">
       <Header />
-      <b-row class="mt-2 top-menu">
+      <b-row class="mt-2 top-menu position-relative" style="z-index:8">
         <b-col>
           <MenuFlux
             v-show="activeMenu==1"

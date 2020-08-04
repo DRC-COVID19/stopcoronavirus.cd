@@ -1,16 +1,18 @@
 <template>
   <b-card no-body class="rounded-0 p-2">
-    <b-form class="flux-form" @submit.prevent="submit">
+    <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row>
         <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
           <b-form-group>
             <label for class="text-dash-color">Filtres prédefinis</label>
             <v-select
               @input="predefinedInputChange"
+              v-model="fluxPredefinedControl"
               :options="predefinedInput"
               :reduce="item=>item.id"
               label="name"
               placeholder="Options"
+              class="style-chooser"
             />
           </b-form-group>
         </b-col>
@@ -26,6 +28,8 @@
                   label="name"
                   placeholder="Options"
                   :reduce="item=>item.id"
+                  @input="resetFluxPredefinedControl"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
@@ -38,6 +42,8 @@
                   label="name"
                   placeholder="Options"
                   :reduce="item=>item.id"
+                  @input="resetFluxPredefinedControl"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
@@ -56,6 +62,7 @@
                   label="name"
                   placeholder="Granularité"
                   :reduce="item=>item.id"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
@@ -72,13 +79,15 @@
                   placeholder="Localisation"
                   label="origin"
                   :reduce="item=>item.origin"
+                  class="style-chooser style-chooser-multiple"
+                  @input="resetFluxPredefinedControl"
                 />
               </b-form-group>
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="2" class="pl-3 pr-3">
-          <b-button type="submit" block class="mt-2 btn-dash-blue">Filtrer les données</b-button>
+        <b-col cols="12" md="2" class="row pl-3 pr-3">
+          <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue">Filtrer les données</b-button>
         </b-col>
       </b-form-row>
     </b-form>
@@ -118,6 +127,7 @@ export default {
         observation_end: "2020-03-19",
         observation_start: "2020-03-28",
       },
+      fluxPredefinedControl : null
     };
   },
   computed: {
@@ -153,6 +163,8 @@ export default {
     },
     geoGranularityChange(value) {
       // this.setFluxGeoGranularity(value);
+      if(value != 2) this.resetFluxPredefinedControl()
+
       this.form.geoOptions = [];
       if (value == 1) {
         this.geoOptions = this.fluxProvinces;
@@ -160,6 +172,15 @@ export default {
         this.geoOptions = this.fluxZones;
       }
     },
+    resetFluxPredefinedControl(){
+      this.fluxPredefinedControl = null
+    }
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .btn-submit{
+    font-size: 14px ;
+  }
+</style>
