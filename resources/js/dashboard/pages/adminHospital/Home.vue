@@ -44,12 +44,7 @@
               <b-button
                 size="sm"
                 class="btn-dash-blue mb-1"
-                :to="{
-                  name:'hospital.admin.data',
-                  params:{
-                    hospital_id:data.item.hospital_id
-                  }
-                }"
+                epide"
               >Details</b-button>
             </template>
           </b-table>
