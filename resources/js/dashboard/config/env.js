@@ -6,9 +6,9 @@ export const
     AGENT_HOSPITAL = "agent-hospital",
     ADMIN_HOSPITAL = "admin-hospital",
     PALETTE = {
-        outflow: ["#7f00d4", "#7400c1", "#6800ad", "#5c009", "#500086", "#450072", "#39005f", "#2d004b"],
+        outflow: ["#7f00d4", "#7400c1", "#6800ad", "#5c0099", "#500086", "#450072", "#39005f", "#2d004b"],
         inflow: ["#2189ac", "#3f8cda", "#2a7fd6", "#2573c1", "#2166ac", "#1d5997", "#194d81", "#15406c"],
-        present: ["#F4A582", "#F8D28C", "#CCEBC5", "#A8DDB5", "#7BCCC4", "#4EB3D3", "#2B8CBE", "#08589E"],
+        present: ["#E31A1C"],
         nodata: "#eeeeee",
         bordure_shape_file: " #BFC5D2",
         flux_out_color: "#88419d",
