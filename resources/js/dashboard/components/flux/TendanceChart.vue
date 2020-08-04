@@ -286,7 +286,7 @@ export default {
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
         .attr("stroke-dasharray", (d) => {
-          console.log(strokeDasharray(d.isReference));
+         
           return strokeDasharray(d.isReference);
         })
         .attr(
