@@ -46,7 +46,7 @@
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arcs</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
-          <b-row  class="map-container" :class="{'map-container-100':!hasCovidCases}">
+          <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
             <Maps
               :covidCases="covidCases"
               :hospitals="hospitals"
@@ -61,8 +61,10 @@
               :flour="flour"
               :antiBacterialGel="antiBacterialGel"
               :flux24="flux24"
+              :flux24DailyIn="flux24DailyIn"
+              :flux24DailyOut="flux24DailyOut"
               :isLoading="isLoading"
-              :flux24Presence="flux24Presence"
+              :flux24Presence="flux24PresenceDailyIn"
             />
             <MapsLegend v-if="hasRightSide && activeMenu == 1"></MapsLegend>
             <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
@@ -109,18 +111,14 @@
                   :covidCasesStatDaily="covidCasesStatDaily"
                 />
               </b-tab>
-              <b-tab title="Flux tendance" v-if="hasFlux24Daily" :active="hasFlux24Daily">
-                <FluxTendanceChart :flux24Daily="flux24Daily" />
-              </b-tab>
-              <b-tab
-                title="Flux comparaison"
-                v-if="hasflux24DailyComparison"
-                :active="hasflux24DailyComparison"
-              >
+              <b-tab title="Flux comparaison" v-if="hasflux24DailyComparison">
                 <FluxComparisonChart
                   :fluxGeoOptions="fluxGeoOptions"
                   :flux24DailyComparison="flux24DailyComparison"
                 />
+              </b-tab>
+              <b-tab title="Flux tendance" v-if="hasFlux24Daily" :active="hasFlux24Daily">
+                <FluxTendanceChart :flux24Daily="flux24Daily" />
               </b-tab>
             </b-tabs>
           </b-card>
@@ -156,6 +154,7 @@ import MenuOrientation from "../components/menu/Orientation";
 import MenuIndicateur from "../components/menu/Indicateur";
 
 import { mapState, mapActions, mapMutations } from "vuex";
+import { difference } from "@turf/turf";
 
 const preference_start = "2020-02-01";
 const preference_end = "2020-03-18";
@@ -542,7 +541,76 @@ export default {
       if (this.isLoading) {
         return;
       }
+      /**
+       * formate les données flux
+       */
+      const computedFluxData = (dataObservations, dataReferences) => {
+        const dataOut = [];
+        return dataObservations.map((item) => {
+          const references = dataReferences.filter(
+            (x) =>
+              x.destination == item.destination &&
+              x.origin == item.origin &&
+              x.day == item.day
+          );
+          const count = references.length;
+          if (count > 0) {
+            let referenceVolume = null;
+            if (count % 2 == 0) {
+              let index = (count + 1) / 2;
+              index = parseInt(index);
+              const volume1 = references[index].volume;
+              const volume2 = references[index - 1].volume;
+              referenceVolume = (volume1 + volume2) / 2;
+            } else {
+              const index = (count + 1) / 2;
+              referenceVolume = references[index - 1].volume;
+            }
+            item.volume_reference = referenceVolume;
+            const difference = item.volume - referenceVolume;
+            item.difference = difference;
+            item.percent = (difference / referenceVolume) * 100;
+          } else {
+            item.volume_reference = 0;
+            item.difference = item.volume;
+            item.percent = 0;
+          }
+          return Object.assign({}, item);
+        });
+      };
 
+      const computedFluxPresenceData = (dataObservations, dataReferences) => {
+        const dataOut = [];
+        return dataObservations.map((item) => {
+          const references = dataReferences.filter(
+            (x) => x.zone == item.zone && x.day == item.day
+          );
+          const count = references.length;
+          if (count > 0) {
+            let referenceVolume = null;
+            if (count % 2 == 0) {
+              let index = (count + 1) / 2;
+              index = parseInt(index);
+              const volume1 = references[index].volume;
+              const volume2 = references[index - 1].volume;
+              referenceVolume = (volume1 + volume2) / 2;
+            } else {
+              const index = (count + 1) / 2;
+              referenceVolume = references[index - 1].volume;
+            }
+            item.volume_reference = referenceVolume;
+            const difference = item.volume - referenceVolume;
+            item.difference = difference;
+            item.percent = (difference / referenceVolume) * 100;
+            
+          } else {
+            item.volume_reference = 0;
+            item.difference = item.volume;
+            item.percent = 0;
+          }
+          return Object.assign({}, item);
+        });
+      };
       this.flux24Errors = {};
 
       let url = `api/dashboard/flux/origin`;
@@ -657,7 +725,10 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          this.flux24DailyIn = data;
+          this.flux24DailyIn = computedFluxData(
+            data.observations,
+            data.references
+          );
           this.$set(this.loadings, "urlDailyIn", false);
         })
         .catch(({ response }) => {
@@ -673,7 +744,10 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          this.flux24DailyOut = data;
+          this.flux24DailyOut = computedFluxData(
+            data.observations,
+            data.references
+          );
           this.$set(this.loadings, "urlDailyOut", false);
         })
         .catch(({ response }) => {
@@ -681,18 +755,18 @@ export default {
         });
 
       this.flux24Presence = [];
-      this.$set(this.loadings, "urlPresence", true);
-      axios
-        .get(urlPresence, {
-          params: values,
-        })
-        .then(({ data }) => {
-          this.flux24Presence = data;
-          this.$set(this.loadings, "urlPresence", false);
-        })
-        .catch(({ response }) => {
-          this.$set(this.loadings, "urlPresence", false);
-        });
+      // this.$set(this.loadings, "urlPresence", true);
+      // axios
+      //   .get(urlPresence, {
+      //     params: values,
+      //   })
+      //   .then(({ data }) => {
+      //     this.flux24Presence = data;
+      //     this.$set(this.loadings, "urlPresence", false);
+      //   })
+      //   .catch(({ response }) => {
+      //     this.$set(this.loadings, "urlPresence", false);
+      //   });
 
       this.$set(this.loadings, "urlPresenceDaily", true);
       this.flux24PrensenceDaily = [];
@@ -715,27 +789,30 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          this.flux24PresenceDailyIn = data;
-          this.$set(this.loadings, "urlPresenceDailyIn", false);
-        })
-        .catch(({ response }) => {
+          this.flux24PresenceDailyIn = computedFluxPresenceData(
+            data.observations,
+            data.references
+          );
           this.$set(this.loadings, "urlPresenceDailyIn", false);
         });
+      // .catch(({ response }) => {
+      //   this.$set(this.loadings, "urlPresenceDailyIn", false);
+      // });
 
       this.flux24 = [];
-      this.$set(this.loadings, "flux24", true);
-      axios
-        .get(url, {
-          params: values,
-        })
-        .then(({ data }) => {
-          this.flux24 = data;
-          this.$set(this.loadings, "flux24", false);
-        })
-        .catch(({ response }) => {
-          this.flux24Errors = response.data.errors;
-          this.$set(this.loadings, "flux24", false);
-        });
+      // this.$set(this.loadings, "flux24", true);
+      // axios
+      //   .get(url, {
+      //     params: values,
+      //   })
+      //   .then(({ data }) => {
+      //     this.flux24 = computedFluxData(data.observations, data.references);
+      //     this.$set(this.loadings, "flux24", false);
+      //   })
+      //   .catch(({ response }) => {
+      //     this.flux24Errors = response.data.errors;
+      //     this.$set(this.loadings, "flux24", false);
+      //   });
     },
     seeSide() {
       this.$bvModal.show("data-modal");

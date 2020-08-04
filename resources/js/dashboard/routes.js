@@ -11,6 +11,7 @@ import HospitalData from './pages/hospital/HospitalData';
 import HospitalAdmin from './pages/adminHospital/Home';
 import HospitalAdminData from './pages/adminHospital/HospitalData';
 import NotAcces from './pages/NotAccess';
+import Landing from './pages/Landing';
 
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
@@ -121,6 +122,14 @@ export default [
         component: NotAcces,
         meta: {
             requiresAuth: true,
+        },
+    },
+    {
+        path: "/dashboard-maps/landing",
+        name: "landing",
+        component: Landing,
+        meta: {
+            requiresAuth: true
         },
     }
 ];
