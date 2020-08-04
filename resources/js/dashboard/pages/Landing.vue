@@ -9,23 +9,27 @@
             <div class="card-body">
               <p class="card-text text-muted small text-center">A quel section voulez-vous accéder ?</p>
               <ul class="list-group-flush list-group">
-                <router-link class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-                  v-for="route in routes" :key="route.name"
+                <router-link
+                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                  v-for="route in routes"
+                  :key="route.name"
                   :to="{ name: route.name }"
                 >
-                  <span>{{route.slug}}</span> <i class="fa fa-chevron-right"></i>
+                  <span>{{route.slug}}</span>
+                  <i class="fa fa-chevron-right"></i>
                 </router-link>
               </ul>
             </div>
           </div>
-          <div class="userAccount">
-              <p>
-                <span>Connecté en tant que {{user.name}}</span>  <br>
-                <span>{{user.email}}</span>  <br>
-                <a href="#!" @click.prevent="userLogout">Se déconnecter</a>
-              </p>
+          <div class="userAccount" v-if="user">
+            <p>
+              <span>Connecté en tant que {{user.name}}</span>
+              <br />
+              <span>{{user.email}}</span>
+              <br />
+              <a href="#!" @click.prevent="userLogout">Se déconnecter</a>
+            </p>
           </div>
-
         </b-col>
       </b-row>
     </b-container>
@@ -33,60 +37,69 @@
 </template>
 
 <script>
-  import Logo from "../components/LogoComponent";
-  import { mapState , mapActions } from "vuex";
-  import { AGENT_HOSPITAL, ADMIN_DASHBOARD , ADMIN_HOSPITAL } from "../config/env";
-  export default {
-    components: {
-      Logo
-    },
-    computed: {
-      ...mapState({
-        user: state => state.auth.user
-      }),
-      routes(){
-        let routesAccess = [] ;
-
-        if(this.user.roles === undefined) return routesAccess
-
-        if(this.user.roles.find(a => a.name == ADMIN_DASHBOARD)){
-          routesAccess.push({slug : 'Administration dashboard', name : 'home'})
-        }
-
-        if(this.user.roles.find(a => a.name == AGENT_HOSPITAL)){
-          routesAccess.push({slug : 'Interface agent d\'hopital', name :'hospital.home'})
-        }
-
-        if(this.user.roles.find(a => a.name == ADMIN_HOSPITAL)){
-          routesAccess.push({slug : 'Admininistration hopital', name :'hospital.admin'})
-        }
-
-        return routesAccess
+import Logo from "../components/LogoComponent";
+import { mapState, mapActions } from "vuex";
+import { AGENT_HOSPITAL, ADMIN_DASHBOARD, ADMIN_HOSPITAL } from "../config/env";
+export default {
+  components: {
+    Logo,
+  },
+  computed: {
+    ...mapState({
+      user: (state) => state.auth.user,
+    }),
+    routes() {
+      if (!this.user) {
+        return [];
       }
-    },
-    methods: {
-      ...mapActions(["logout"]),
-      userLogout() {
-        this.logout().then(() => {
-          this.$router.push({
-            name: "login"
-          });
+      let routesAccess = [];
+
+      if (this.user.roles === undefined) return routesAccess;
+
+      if (this.user.roles.find((a) => a.name == ADMIN_DASHBOARD)) {
+        routesAccess.push({ slug: "Administration dashboard", name: "home" });
+      }
+
+      if (this.user.roles.find((a) => a.name == AGENT_HOSPITAL)) {
+        routesAccess.push({
+          slug: "Interface agent d'hopital",
+          name: "hospital.home",
         });
       }
-    }
-  }
+
+      if (this.user.roles.find((a) => a.name == ADMIN_HOSPITAL)) {
+        routesAccess.push({
+          slug: "Admininistration hopital",
+          name: "hospital.admin",
+        });
+      }
+
+      return routesAccess;
+    },
+  },
+  methods: {
+    ...mapActions(["logout"]),
+    userLogout() {
+      this.logout().then(() => {
+        this.$router.push({
+          name: "login",
+        });
+      });
+    },
+  },
+};
 </script>
 
 
 <style lang="scss" scoped>
-  .list-group-item-action{
-    text-decoration : none ;
-    font-size: 14px;
-  }
-  .userAccount{
-    font-size: 12px;
-    color: aa;
-    text-align: center;
-    margin-top: 50px;
-  }
+.list-group-item-action {
+  text-decoration: none;
+  font-size: 14px;
+}
+.userAccount {
+  font-size: 12px;
+  color: aa;
+  text-align: center;
+  margin-top: 50px;
+}
 </style>
