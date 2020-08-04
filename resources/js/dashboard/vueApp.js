@@ -22,37 +22,22 @@ Vue.mixin(commont);
 Vue.use(GlobalComponents);
 Vue.use(onlyInt);
 
-if (store.state.auth.isAuthenticated ) {
+if (store.state.auth.isAuthenticated) {
     store.dispatch('userMe');
 }
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(route => route.meta.requiresAuth) && (!store.state.auth.isAuthenticated || !store.state.auth.userRole)) {
-
         next({ name: 'login' });
         return
     }
 
     // if logged in redirect to dashboard
     if (to.name === 'login' && store.state.auth.isAuthenticated && store.state.auth.userRole) {
-        switch (store.state.auth.userRole) {
-            case ADMIN_DASHBOARD:
-                next({ name: 'home' });
-                break;
-            case AGENT_HOSPITAL:
-                next({ name: 'hospital.home' });
-                break;
-            case ADMIN_HOSPITAL:
-                next({ name: 'hospital.admin' });
-                break;
-            default:
-                next({ name: 'acces.denied' });
-                break;
-        }
+        next({ name: 'landing' });
         return
     }
-
-    if (to.meta.role  && !to.meta.role.includes(store.state.auth.userRole) && to.name != "acces.denied") {
+    if (to.meta.role && !to.meta.role.some(x => store.state.auth.userRole.includes(x)) && to.name != "acces.denied") {
         next({ name: 'acces.denied' });
         return
     }

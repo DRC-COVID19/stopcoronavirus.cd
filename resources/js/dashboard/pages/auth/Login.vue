@@ -79,28 +79,16 @@ export default {
           let hospitalRole = user.roles.find(x => x.name == "agent-hospital");
           let adminHospitalRole = user.roles.find(x => x.name == "admin-hospital");
 
-          if (dashboardRole) {
-            this.$router.push({
-              name: "home"
-            });
-          } else if (hospitalRole) {
+          if (dashboardRole || hospitalRole || adminHospitalRole) {
             this.$router
               .push({
-                name: "hospital.home"
-              })
-              .catch(e => {
-                console.log(e);
-              });
-          }else if (adminHospitalRole) {
-            this.$router
-              .push({
-                name: "hospital.admin"
+                name: "landing"
               })
               .catch(e => {
                 console.log(e);
               });
           }
-           else {
+          else {
             this.$router.push({
               name: "acces.denied"
             });

@@ -7,7 +7,7 @@ export default {
         user: {},
         isAuthenticating: false,
         isAuthenticated: !!localStorage.getItem('dashboard_access_token'),
-        userRole: localStorage.getItem('dashboard_access_role'),
+        userRole: localStorage.getItem('dashboard_access_role')?.split(',') ?? [],
         authError: false,
         lastAuthCheck: null,
         isLogout: false,
@@ -23,17 +23,15 @@ export default {
             let hospitalRole = payload.user.roles.find(x => x.name == AGENT_HOSPITAL);
             let adminHospitalRole = payload.user.roles.find(x => x.name == ADMIN_HOSPITAL);
             if (dashboardRole) {
-                localStorage.setItem('dashboard_access_role', ADMIN_DASHBOARD);
-                state.userRole = ADMIN_DASHBOARD;
+                state.userRole.push(ADMIN_DASHBOARD);
             }
-            else if (hospitalRole) {
-                localStorage.setItem('dashboard_access_role', AGENT_HOSPITAL);
-                state.userRole = AGENT_HOSPITAL;
+            if (hospitalRole) {
+                state.userRole.push(AGENT_HOSPITAL);
             }
-            else if (adminHospitalRole) {
-                localStorage.setItem('dashboard_access_role', ADMIN_HOSPITAL);
-                state.userRole = ADMIN_HOSPITAL;
+            if (adminHospitalRole) {
+                state.userRole.push(ADMIN_HOSPITAL);
             }
+            localStorage.setItem('dashboard_access_role', state.userRole);
             if (payload.token) {
                 localStorage.setItem('dashboard_access_token', payload.token);
                 window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + payload.token;
@@ -49,7 +47,7 @@ export default {
         },
         logoutSuccess(state) {
             state.isAuthenticated = false;
-            state.userRole = null;
+            state.userRole = [];
             state.user = null;
             localStorage.removeItem('dashboard_access_token');
             localStorage.removeItem('dashboard_access_role');
@@ -80,17 +78,15 @@ export default {
                         let hospitalRole = data.roles.find(x => x.name == AGENT_HOSPITAL);
                         let adminHospitalRole = data.roles.find(x => x.name == ADMIN_HOSPITAL);
                         if (dashboardRole) {
-                            localStorage.setItem('dashboard_access_role', ADMIN_DASHBOARD);
-                            state.userRole = ADMIN_DASHBOARD;
+                            state.userRole.push(ADMIN_DASHBOARD);
                         }
-                        else if (hospitalRole) {
-                            localStorage.setItem('dashboard_access_role', AGENT_HOSPITAL);
-                            state.userRole = AGENT_HOSPITAL;
+                        if (hospitalRole) {
+                            state.userRole.push(AGENT_HOSPITAL);
                         }
-                        else if (adminHospitalRole) {
-                            localStorage.setItem('dashboard_access_role', ADMIN_HOSPITAL);
-                            state.userRole = ADMIN_HOSPITAL;
+                        if (adminHospitalRole) {
+                            state.userRole.push(ADMIN_HOSPITAL);
                         }
+                        localStorage.setItem('dashboard_access_role', state.userRole);
                         resolve(data);
                     });
             });
