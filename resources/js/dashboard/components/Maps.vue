@@ -81,6 +81,14 @@ export default {
       type: Array,
       default: [],
     },
+    flux24DailyIn: {
+      type: Array,
+      default: () => [],
+    },
+    flux24DailyOut: {
+      type: Array,
+      default: () => [],
+    },
     isLoading: {
       type: Boolean,
       default: null,
@@ -890,10 +898,16 @@ export default {
       map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
     },
     flux24Func() {
-      if (this.flux24.length > 0) {
+      if (this.flux24DailyIn.length > 0) {
+        let data = [];
+        if (this.fluxType == 1) {
+          data = this.flux24DailyIn;
+        } else if (this.fluxType == 2) {
+          data = this.flux24DailyOut;
+        }
         switch (this.fluxMapStyle) {
           case 2:
-            this.fluxArcStyle(this.flux24, this.fluxGeoGranularity);
+            this.fluxArcStyle(data, this.fluxGeoGranularity);
             map.flyTo({
               pitch: 40,
               speed: 0.2, // make the flying slow
@@ -911,11 +925,7 @@ export default {
             break;
           case 1:
           default:
-            this.fluxHatchedStyle(
-              this.flux24,
-              this.flux24Presence,
-              this.legendHover
-            );
+            this.fluxHatchedStyle(data, this.flux24Presence, this.legendHover);
             map.flyTo({
               pitch: 10,
               speed: 0.2, // make the flying slow
@@ -940,15 +950,16 @@ export default {
       }
     },
     fluxHatchedStyle(flux24Data, flux24DataPresence, legendHover = null) {
+      
       const localData =
         this.fluxType == 3
           ? flux24DataPresence.map((x) => {
-              const difference = x.volume - x.reference_volume ?? 0;
-              let percent = 0;
-              if (x.reference_volume) {
-                percent = (difference / x.reference_volume) * 100;
-              }
-              return { origin: x.zone, volume: x.volume, percent };
+              return {
+                origin: x.zone,
+                volume: x.volume,
+                difference: x.difference,
+                volume_reference: x.volume_reference,
+              };
             })
           : flux24Data;
 
@@ -957,66 +968,53 @@ export default {
       /**
        * format features data
        */
-      const formatData = (element, item, key) => {
+      const formatData = (item, key) => {
+        const element = features.find((x) => x.properties.origin == item[key]);
         if (element) {
-          if (item.isReference) {
-            element.properties.volumeReference += item.volume;
-          } else {
-            element.properties.volume += item.volume;
-          }
-          const volume = element.properties.volume;
-          const volumeReference = element.properties.volumeReference;
-          const difference = volume - volumeReference;
-          let percent = 0;
-          if (volumeReference > 0) {
-            percent = (difference / volumeReference) * 100;
-          }
-          element.properties.percent = percent;
-        } else {
-          const volume = !item.isReference ? item.volume : 0;
-          const volumeReference = item.isReference ? item.volume : 0;
+          element.properties.volume += item.volume;
 
+          element.properties.volumeReference += item.volume_reference;
+          element.properties.difference += item.difference;
+          element.properties.percent =
+            (element.properties.difference /
+              element.properties.volumeReference) *
+            100;
+        } else {
           features.push({
             type: "Feature",
             geometry: {
               type: "Point",
-              coordinates: item.position_end,
+              coordinates:
+                key == "origin" ? item.position_start : item.position_end,
             },
             properties: {
               origin: item[key],
               color: "#ED5F68",
-              volume,
-              volumeReference,
-              percent: 0,
+              volume: item.volume,
+              volumeReference: item.volume_reference,
+              percent: item.percent,
+              difference: item.difference,
             },
           });
         }
       };
-
       if (this.fluxType == 2) {
         localData.map((item) => {
-          const element = features.find(
-            (x) => x.properties.origin == item.origin
-          );
-          formatData(element, item, "origin");
+          formatData(item, "destination");
+        });
+        localData.map((item) => {
+          formatData(item, "origin");
         });
       } else if (this.fluxType == 3) {
         localData.map((item) => {
-          features.push({
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: item.position_end,
-            },
-            properties: item,
-          });
+          formatData(item, "origin");
         });
       } else {
         localData.map((item) => {
-          const element = features.find(
-            (x) => x.properties.origin == item.destination
-          );
-          formatData(element, item, "destination");
+          formatData(item, "origin");
+        });
+        localData.map((item) => {
+          formatData(item, "destination");
         });
       }
 
@@ -1172,7 +1170,7 @@ export default {
       const features = [];
       let color = "#33ac2e";
       let arcData = [];
-      let FluxFiltered = flux24Data.filter((x) => !x.isReference);
+      let FluxFiltered = flux24Data;
 
       let dataKey = "name";
       if (geoGranularity == 2) {
@@ -1181,40 +1179,36 @@ export default {
       /**
        * format features data
        */
-      const formatData = (element, item, key) => {
+      const formatData = (item, key) => {
+        const element = features.find((x) => x.properties.origin == item[key]);
         if (element) {
-          if (item.isReference) {
-            element.properties.volumeReference += item.volume;
-          } else {
-            element.properties.volume += item.volume;
-          }
-          const volume = element.properties.volume;
-          const volumeReference = element.properties.volumeReference;
-          const difference = volume - volumeReference;
-          let percent = 0;
-          if (volumeReference > 0) {
-            percent = (difference / volumeReference) * 100;
-          }
-          element.properties.percent = percent;
+          element.properties.volume += item.volume;
+
+          element.properties.volumeReference += item.volume_reference;
+          element.properties.difference += item.difference;
+          element.properties.percent =
+            (element.properties.difference /
+              element.properties.volumeReference) *
+            100;
         } else {
-          const volume = !item.isReference ? item.volume : 0;
-          const volumeReference = item.isReference ? item.volume : 0;
-          const coordinates = this.getHealthZoneCoordonate(
-            item[key],
-            geoGranularity
-          );
           features.push({
             type: "Feature",
             geometry: {
               type: "Point",
-              coordinates,
+              coordinates: this.getHealthZoneCoordonate(
+                item[key],
+                geoGranularity
+              ),
             },
             properties: {
               origin: item[key],
-              color: "#ED5F68",
-              volume,
-              volumeReference,
-              percent: 0,
+              color: includes(this.fluxGeoOptions, item.origin)
+                ? PALETTE.flux_in_color
+                : PALETTE.flux_out_color,
+              volume: item.volume,
+              volumeReference: item.volume_reference,
+              percent: item.percent,
+              difference: item.difference,
             },
           });
         }
@@ -1222,94 +1216,35 @@ export default {
 
       if (this.fluxType == 2) {
         FluxFiltered.map((item) => {
-          const element = features.find(
-            (x) => x.properties.origin == item.origin
-          );
-          formatData(element, item, "origin");
-        });
-      } else if (this.fluxType == 3) {
-        FluxFiltered.map((item) => {
-          features.push({
-            type: "Feature",
-            geometry: {
-              type: "Point",
-              coordinates: item.position_end,
-            },
-            properties: item,
-          });
+          formatData(item, "destination");
         });
       } else {
         FluxFiltered.map((item) => {
-          const element = features.find(
-            (x) => x.properties.origin == item.destination
-          );
-          formatData(element, item, "destination");
+          formatData(item, "origin");
         });
       }
 
-      // if (this.fluxType == 1) {
-      //   localData.map((item) => {
-      //     let element = features.find(
-      //       (x) => x.properties.origin == item.origin
-      //     );
-      //     if (element) {
-      //       element.properties.volume += item.volume;
-      //     } else {
-      //       features.push({
-      //         type: "Feature",
-      //         geometry: {
-      //           type: "Point",
-      //           coordinates: item.position_start,
-      //         },
-      //         properties: {
-      //           origin: item.origin,
-      //           color: includes(this.fluxGeoOptions, item.origin)
-      //             ? PALETTE.flux_in_color
-      //             : PALETTE.flux_out_color,
-      //           volume: item.volume,
-      //         },
-      //       });
-      //     }
-      //   });
-      //   arcData = FluxFiltered.filter((item) => {
-      //     return includes(this.fluxGeoOptions, item.destination);
-      //   });
-      // } else {
-      //   color = "#ffa500";
-      //   localData.map((item) => {
-      //     const element2 = features.find(
-      //       (x) => x.properties.origin == item.destination
-      //     );
-      //     if (element2) {
-      //       element2.properties.volume += item.volume;
-      //     } else {
-      //       features.push({
-      //         type: "Feature",
-      //         geometry: {
-      //           type: "Point",
-      //           coordinates: item.position_end,
-      //         },
-      //         properties: {
-      //           origin: item.destination,
-      //           color: includes(this.fluxGeoOptions, item.destination)
-      //             ? PALETTE.flux_out_color
-      //             : PALETTE.flux_in_color,
-      //           volume: item.volume,
-      //         },
-      //       });
-      //     }
-      //   });
-      //   arcData = FluxFiltered.filter((item) => {
-      //     return includes(this.fluxGeoOptions, item.origin);
-      //   });
-      // }
+      const filterArcData = (item, key) => {
+        const element = arcData.find((x) => x[key] == item[key]);
+        if (element) {
+          element.volume += item.volume;
+          element.volumeReference += item.volume_reference;
+        } else {
+          arcData.push(Object.assign({}, item));
+        }
+      };
+      let arcBrutData = [];
       if (this.fluxType == 1) {
-        arcData = FluxFiltered.filter((item) => {
-          return includes(this.fluxGeoOptions, item.origin);
+        arcBrutData = FluxFiltered.filter((item) => {
+          return includes(this.fluxGeoOptions, item.destination);
+        }).map((item) => {
+          filterArcData(item, "origin");
         });
       } else {
-        arcData = FluxFiltered.filter((item) => {
-          return includes(this.fluxGeoOptions, item.destination);
+        arcBrutData = FluxFiltered.filter((item) => {
+          return includes(this.fluxGeoOptions, item.origin);
+        }).map((item) => {
+          filterArcData(item, "destination");
         });
       }
 
@@ -1363,13 +1298,13 @@ export default {
       // When the user moves their mouse over the state-fill layer, we'll update the
       // feature state for the feature under the mouse.
       map.on("mouseenter", "fluxCircleDataLayer", () => {
-         if (this.activeMenu != 1) {
+        if (this.activeMenu != 1) {
           return;
         }
         map.getCanvas().style.cursor = "pointer";
       });
       map.on("mousemove", "fluxCircleDataLayer", (e) => {
-         if (this.activeMenu != 1) {
+        if (this.activeMenu != 1) {
           return;
         }
         if (e.features.length > 0) {
@@ -1396,7 +1331,7 @@ export default {
       // When the mouse leaves the state-fill layer, update the feature state of the
       // previously hovered feature.
       map.on("mouseout", "fluxCircleDataLayer", () => {
-         if (this.activeMenu != 1) {
+        if (this.activeMenu != 1) {
           return;
         }
         if (hoveredStateId) {

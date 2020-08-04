@@ -102,15 +102,15 @@
               @click="selectFluxType(3)"
             >
               <h5 class="percent-title">Présences</h5>
-              <div class="percent flux-presence">{{fluxVolumObservationPresencePercent(item)}}%​</div>
+              <div class="percent flux-presence">{{fluxInPercent(item)}}%​</div>
               <p
-                v-if="fluxVolumObservationPresence(item)>0"
+                v-if="fluxVolumObservation(item)>0"
                 class="percent-p text-dash-color"
-              >{{formatCash(fluxVolumObservationPresence(item))}} personnes de plus étaient présentes dans la zone</p>
+              >{{formatCash(fluxVolumObservation(item))}} personnes de plus étaient présentes dans la zone</p>
               <p
                 v-else
                 class="percent-p text-dash-color"
-              >{{formatCash(fluxVolumObservationPresence(item)*-1)}} personnes de moins étaient présentes dans la zone</p>
+              >{{formatCash(fluxVolumObservation(item)*-1)}} personnes de moins étaient présentes dans la zone</p>
             </b-card>
             <b-card no-body class="mb-3 p-2" :ref="`mobile_presence_${index}_card`">
               <div class="chart-container">
@@ -243,19 +243,20 @@ export default {
       this.setFluxType(value);
     },
     fluxInPercent(items) {
-      let totalObservation = 0;
+      let totalDifference = 0;
+      let totalReference = 0;
       items.map((item) => {
-        totalObservation += item.percent;
+        totalDifference += item.difference;
+        totalReference += item.volume_reference;
       });
-      return Math.round(totalObservation / items.length);
+      return Math.round((totalDifference / totalReference) * 100);
     },
     fluxVolumObservation(items) {
       let totalObservation = 0;
 
       items.map((item) => {
-          totalObservation += Number(item.difference);
-        });
-      
+        totalObservation += Number(item.difference);
+      });
       return Math.round(totalObservation);
     },
     fluxVolumObservationPresencePercent(items) {
@@ -278,22 +279,12 @@ export default {
       return Math.round((difference * 100) / totalReference);
     },
     fluxVolumObservationPresence(items) {
-      let totalReference = 0;
+      let totalObservation = 0;
 
-      let averageReference = items
-        .filter((x) => x.isReference)
-        .reduce((avg, value, _, { length }) => {
-          return avg + value.volume / length;
-        }, 0);
-
-      let averageObservation = items
-        .filter((x) => !x.isReference)
-        .reduce((avg, value, _, { length }) => {
-          return avg + value.volume / length;
-        }, 0);
-
-      let difference = averageObservation - averageReference;
-      return Math.round(difference);
+      items.map((item) => {
+        totalObservation += Number(item.difference);
+      });
+      return Math.round(totalObservation / items.length);
     },
     extractFlux23DailyOut() {
       let flux24DailyOutLocal = [];
@@ -360,19 +351,19 @@ export default {
         let element = data.find((x) => x.date == item.date);
         if (element) {
           element.volume += item.volume;
-          element.percent += item.percent;
+          element.volume_reference += item.volume_reference;
+          element.difference += item.difference;
+          element.percent =
+            (element.difference / element.volume_reference) * 100;
         } else {
           data.push({
             date: item.date,
             volume: item.volume,
+            difference: item.difference,
+            volume_reference: item.volume_reference,
             percent: item.percent,
           });
         }
-      });
-
-      data.map((item) => {
-        item.volume = item.volume / data.length;
-        item.percent = item.percent / data.length;
       });
 
       const max = d3.max(data.map((x) => x.percent));
@@ -497,23 +488,14 @@ export default {
       data.forEach((item) => {
         let element = localData.find((x) => x.destination == item.destination);
         if (element) {
-          if (item.isReference) {
-            element.volume_reference = item.volume;
-          } else {
-            element.volume = item.volume;
-          }
+          element.volume += item.volume;
+          element.volume_reference += item.volume_reference;
         } else {
-          if (item.isReference) {
-            localData.push({
-              destination: item.destination,
-              volume_reference: item.volume,
-            });
-          } else {
-            localData.push({
-              origin: item.destination,
-              volume: item.volume,
-            });
-          }
+          localData.push({
+            destination: item.destination,
+            volume_reference: item.volume_reference,
+            volume: item.volume,
+          });
         }
       });
 
@@ -597,23 +579,14 @@ export default {
       data.forEach((item) => {
         let element = localData.find((x) => x.origin == item.origin);
         if (element) {
-          if (item.isReference) {
-            element.volume_reference = item.volume;
-          } else {
-            element.volume = item.volume;
-          }
+          element.volume += item.volume;
+          element.volume_reference += item.volume_reference;
         } else {
-          if (item.isReference) {
-            localData.push({
-              origin: item.origin,
-              volume_reference: item.volume,
-            });
-          } else {
-            localData.push({
-              origin: item.origin,
-              volume: item.volume,
-            });
-          }
+          localData.push({
+            origin: item.origin,
+            volume_reference: item.volume_reference,
+            volume: item.volume,
+          });
         }
       });
 
