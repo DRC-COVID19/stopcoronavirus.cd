@@ -85,6 +85,7 @@
                     :appendToBody="true"
                     opens="center"
                     :min-date="new Date('03/19/2020')"
+                    :max-date="Observation_max_date"
                     @update="UpdateObservationDate"
                     :calculate-position="dateRangerPosition"
                     class="style-picker"
@@ -112,7 +113,7 @@
 
 <script>
 import DateRangePicker from "vue2-daterange-picker";
-import { PREFERENCE_START, PREFERENCE_END, DATEFORMAT } from "../../config/env";
+import { PREFERENCE_START, PREFERENCE_END, DATEFORMAT,FLUX_LAST_UPDATE } from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
@@ -140,6 +141,7 @@ export default {
         startDate: new Date("02/18/2020"),
         endDate: new Date("03/18/2020"),
       },
+      Observation_max_date:new Date(FLUX_LAST_UPDATE),
       fluxForm: {
         preference_start: "2020-02-01",
         preference_end: "2020-03-18",
