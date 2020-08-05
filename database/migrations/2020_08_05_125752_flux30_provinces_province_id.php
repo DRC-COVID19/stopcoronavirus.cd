@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class HealthZonesProvinceId extends Migration
+class Flux30ProvincesProvinceId extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class HealthZonesProvinceId extends Migration
      */
     public function up()
     {
-        Schema::table('health_zones', function (Blueprint $table) {
+        Schema::table('flux30_provinces', function (Blueprint $table) {
             $table->integer('province_id')->index()->unsigned()->nullable();
         });
     }
@@ -25,7 +25,7 @@ class HealthZonesProvinceId extends Migration
      */
     public function down()
     {
-        Schema::table('health_zones', function (Blueprint $table) {
+        Schema::table('flux30_provinces', function (Blueprint $table) {
             $table->dropColumn('province_id');
         });
     }
