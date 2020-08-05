@@ -19,6 +19,7 @@ export const
     },
     PREFERENCE_START = "2020-02-01",
     PREFERENCE_END = "2020-03-18",
+    FLUX_LAST_UPDATE="2020-04-26",
     DATEFORMAT = "Y-MM-DD",
     FLUX_PREDEFINED_INPUT = [
         {
