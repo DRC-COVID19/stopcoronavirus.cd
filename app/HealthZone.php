@@ -9,6 +9,12 @@ class HealthZone extends Model
     protected $fillable = [
         "name",
         'longitude',
-        'latitude'
+        'latitude',
+        'province_id'
     ];
+
+    public function province()
+    {
+        return $this->belongsTo(Province::class);
+    }
 }
