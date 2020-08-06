@@ -18,5 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PostsTableSeeder::class);
         $this->call(HealthZoneHealthZonesTableSeeder::class);
         $this->call(CustomizedHospitalsTableSeeder::class);
+        $this->call(HealthZonesTableSeeder::class);
+        $this->call(ProvincesTableSeeder::class);
     }
 }
