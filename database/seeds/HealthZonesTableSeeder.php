@@ -13,15 +13,12 @@ class HealthZonesTableSeeder extends Seeder
      */
     public function run()
     {
-
-
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
-
+        
         DB::table('health_zones')->truncate();
-
-        DB::table('health_zones')->insert(array(
-            0 =>
-            array(
+        DB::table('health_zones')->insert(array (
+            0 => 
+            array (
                 'id' => 1,
                 'name' => 'Gombe',
                 'latitude' => '-4.3095347',
@@ -30,8 +27,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 10,
             ),
-            1 =>
-            array(
+            1 => 
+            array (
                 'id' => 2,
                 'name' => 'Binza Ozone',
                 'latitude' => '-4.348020429382444',
@@ -40,8 +37,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            2 =>
-            array(
+            2 => 
+            array (
                 'id' => 3,
                 'name' => 'Limete',
                 'latitude' => '-4.350633999999999',
@@ -50,8 +47,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            3 =>
-            array(
+            3 => 
+            array (
                 'id' => 4,
                 'name' => 'Kokolo',
                 'latitude' => '-4.3199632',
@@ -60,8 +57,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            4 =>
-            array(
+            4 => 
+            array (
                 'id' => 5,
                 'name' => 'Binza Méteo',
                 'latitude' => '-4.36161',
@@ -70,8 +67,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            5 =>
-            array(
+            5 => 
+            array (
                 'id' => 6,
                 'name' => 'Lemba',
                 'latitude' => '-4.396010699999999',
@@ -80,8 +77,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            6 =>
-            array(
+            6 => 
+            array (
                 'id' => 7,
                 'name' => 'Kalamu I',
                 'latitude' => '-4.3488157',
@@ -90,8 +87,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:50:21',
                 'province_id' => 10,
             ),
-            7 =>
-            array(
+            7 => 
+            array (
                 'id' => 8,
                 'name' => 'Lingwala',
                 'latitude' => '-4.319352999999999',
@@ -100,8 +97,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            8 =>
-            array(
+            8 => 
+            array (
                 'id' => 9,
                 'name' => 'Kintambo',
                 'latitude' => '-4.343598',
@@ -110,8 +107,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            9 =>
-            array(
+            9 => 
+            array (
                 'id' => 10,
                 'name' => 'Matete',
                 'latitude' => '-4.3878727',
@@ -120,8 +117,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            10 =>
-            array(
+            10 => 
+            array (
                 'id' => 11,
                 'name' => 'Kingabwa',
                 'latitude' => '-4.331000400000001',
@@ -130,8 +127,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 10,
             ),
-            11 =>
-            array(
+            11 => 
+            array (
                 'id' => 12,
                 'name' => 'Kasa-vubu',
                 'latitude' => '-4.344086000000001',
@@ -140,8 +137,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            12 =>
-            array(
+            12 => 
+            array (
                 'id' => 13,
                 'name' => 'Kinshasa',
                 'latitude' => '-4.323859884239902',
@@ -150,8 +147,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            13 =>
-            array(
+            13 => 
+            array (
                 'id' => 14,
                 'name' => 'Bandalungwa',
                 'latitude' => '-4.3394767',
@@ -160,8 +157,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            14 =>
-            array(
+            14 => 
+            array (
                 'id' => 15,
                 'name' => 'Barumbu',
                 'latitude' => '-4.318751100000001',
@@ -170,8 +167,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            15 =>
-            array(
+            15 => 
+            array (
                 'id' => 16,
                 'name' => 'N\'sele',
                 'latitude' => '-4.942558399999999',
@@ -180,8 +177,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:52:44',
                 'province_id' => 10,
             ),
-            16 =>
-            array(
+            16 => 
+            array (
                 'id' => 17,
                 'name' => 'Selembao',
                 'latitude' => '-4.3842422',
@@ -190,8 +187,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            17 =>
-            array(
+            17 => 
+            array (
                 'id' => 18,
                 'name' => 'Bumbu',
                 'latitude' => '-4.374169300000001',
@@ -200,8 +197,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            18 =>
-            array(
+            18 => 
+            array (
                 'id' => 19,
                 'name' => 'Ngiri-Ngiri',
                 'latitude' => '-4.359125100000001',
@@ -210,8 +207,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            19 =>
-            array(
+            19 => 
+            array (
                 'id' => 20,
                 'name' => 'Mont-Ngafula I',
                 'latitude' => '-4.4263717',
@@ -220,8 +217,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:50:21',
                 'province_id' => 10,
             ),
-            20 =>
-            array(
+            20 => 
+            array (
                 'id' => 21,
                 'name' => 'Mont-Ngafula II',
                 'latitude' => '-4.353996366111101',
@@ -230,8 +227,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:50:21',
                 'province_id' => 10,
             ),
-            21 =>
-            array(
+            21 => 
+            array (
                 'id' => 22,
                 'name' => 'Kalamu II',
                 'latitude' => NULL,
@@ -240,8 +237,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:50:21',
                 'province_id' => 10,
             ),
-            22 =>
-            array(
+            22 => 
+            array (
                 'id' => 23,
                 'name' => 'Masina I',
                 'latitude' => NULL,
@@ -250,8 +247,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:50:21',
                 'province_id' => 10,
             ),
-            23 =>
-            array(
+            23 => 
+            array (
                 'id' => 24,
                 'name' => 'Kikimi',
                 'latitude' => NULL,
@@ -260,8 +257,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            24 =>
-            array(
+            24 => 
+            array (
                 'id' => 25,
                 'name' => 'Maluku I',
                 'latitude' => NULL,
@@ -270,8 +267,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:50:22',
                 'province_id' => 10,
             ),
-            25 =>
-            array(
+            25 => 
+            array (
                 'id' => 26,
                 'name' => 'N\'djili',
                 'latitude' => NULL,
@@ -280,8 +277,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:52:44',
                 'province_id' => 10,
             ),
-            26 =>
-            array(
+            26 => 
+            array (
                 'id' => 27,
                 'name' => 'Makala',
                 'latitude' => NULL,
@@ -290,8 +287,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            27 =>
-            array(
+            27 => 
+            array (
                 'id' => 28,
                 'name' => 'Ngaba',
                 'latitude' => NULL,
@@ -300,8 +297,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            28 =>
-            array(
+            28 => 
+            array (
                 'id' => 29,
                 'name' => 'Masina II',
                 'latitude' => NULL,
@@ -310,8 +307,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:50:23',
                 'province_id' => 10,
             ),
-            29 =>
-            array(
+            29 => 
+            array (
                 'id' => 30,
                 'name' => 'Kisenso',
                 'latitude' => NULL,
@@ -320,8 +317,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            30 =>
-            array(
+            30 => 
+            array (
                 'id' => 31,
                 'name' => 'Kimbanseke',
                 'latitude' => NULL,
@@ -330,8 +327,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            31 =>
-            array(
+            31 => 
+            array (
                 'id' => 32,
                 'name' => 'Zone indeterminée',
                 'latitude' => NULL,
@@ -340,8 +337,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => NULL,
             ),
-            32 =>
-            array(
+            32 => 
+            array (
                 'id' => 33,
                 'name' => 'Goma',
                 'latitude' => NULL,
@@ -350,8 +347,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            33 =>
-            array(
+            33 => 
+            array (
                 'id' => 34,
                 'name' => 'Beni',
                 'latitude' => NULL,
@@ -360,8 +357,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            34 =>
-            array(
+            34 => 
+            array (
                 'id' => 35,
                 'name' => 'Butembo',
                 'latitude' => NULL,
@@ -370,8 +367,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            35 =>
-            array(
+            35 => 
+            array (
                 'id' => 36,
                 'name' => 'Ibanda',
                 'latitude' => NULL,
@@ -380,8 +377,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            36 =>
-            array(
+            36 => 
+            array (
                 'id' => 37,
                 'name' => 'Nyakunde',
                 'latitude' => NULL,
@@ -390,8 +387,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 10:31:32',
                 'province_id' => 6,
             ),
-            37 =>
-            array(
+            37 => 
+            array (
                 'id' => 38,
                 'name' => 'Bunia',
                 'latitude' => NULL,
@@ -400,8 +397,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            38 =>
-            array(
+            38 => 
+            array (
                 'id' => 39,
                 'name' => 'Idiofa',
                 'latitude' => NULL,
@@ -410,8 +407,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            39 =>
-            array(
+            39 => 
+            array (
                 'id' => 40,
                 'name' => 'Kenya',
                 'latitude' => NULL,
@@ -420,8 +417,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            40 =>
-            array(
+            40 => 
+            array (
                 'id' => 41,
                 'name' => 'Tshamilemba',
                 'latitude' => NULL,
@@ -430,8 +427,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            41 =>
-            array(
+            41 => 
+            array (
                 'id' => 42,
                 'name' => 'Kasumbalesa',
                 'latitude' => NULL,
@@ -440,8 +437,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 3,
             ),
-            42 =>
-            array(
+            42 => 
+            array (
                 'id' => 43,
                 'name' => 'Matadi',
                 'latitude' => NULL,
@@ -450,8 +447,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 11,
             ),
-            43 =>
-            array(
+            43 => 
+            array (
                 'id' => 44,
                 'name' => 'Nzanza',
                 'latitude' => NULL,
@@ -460,8 +457,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 11,
             ),
-            44 =>
-            array(
+            44 => 
+            array (
                 'id' => 45,
                 'name' => 'Bukavu',
                 'latitude' => NULL,
@@ -470,8 +467,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 22,
             ),
-            45 =>
-            array(
+            45 => 
+            array (
                 'id' => 46,
                 'name' => 'Police',
                 'latitude' => NULL,
@@ -480,8 +477,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            46 =>
-            array(
+            46 => 
+            array (
                 'id' => 47,
                 'name' => 'Kingasani',
                 'latitude' => NULL,
@@ -490,8 +487,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            47 =>
-            array(
+            47 => 
+            array (
                 'id' => 48,
                 'name' => 'Kadutu',
                 'latitude' => NULL,
@@ -500,8 +497,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            48 =>
-            array(
+            48 => 
+            array (
                 'id' => 49,
                 'name' => 'Mvuzi',
                 'latitude' => NULL,
@@ -510,8 +507,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 3,
             ),
-            49 =>
-            array(
+            49 => 
+            array (
                 'id' => 50,
                 'name' => 'Biyela',
                 'latitude' => NULL,
@@ -520,8 +517,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            50 =>
-            array(
+            50 => 
+            array (
                 'id' => 51,
                 'name' => 'Karisimbi',
                 'latitude' => NULL,
@@ -530,8 +527,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            51 =>
-            array(
+            51 => 
+            array (
                 'id' => 52,
                 'name' => 'Himbi',
                 'latitude' => NULL,
@@ -540,8 +537,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 19,
             ),
-            52 =>
-            array(
+            52 => 
+            array (
                 'id' => 53,
                 'name' => 'Lubumbashi',
                 'latitude' => NULL,
@@ -550,8 +547,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            53 =>
-            array(
+            53 => 
+            array (
                 'id' => 54,
                 'name' => 'Boma',
                 'latitude' => NULL,
@@ -560,8 +557,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            54 =>
-            array(
+            54 => 
+            array (
                 'id' => 55,
                 'name' => 'Lukula',
                 'latitude' => NULL,
@@ -570,8 +567,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            55 =>
-            array(
+            55 => 
+            array (
                 'id' => 56,
                 'name' => 'Mbanza Ngungu',
                 'latitude' => NULL,
@@ -580,8 +577,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 11,
             ),
-            56 =>
-            array(
+            56 => 
+            array (
                 'id' => 57,
                 'name' => 'Nyiragongo',
                 'latitude' => NULL,
@@ -590,8 +587,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 10:31:32',
                 'province_id' => 19,
             ),
-            57 =>
-            array(
+            57 => 
+            array (
                 'id' => 58,
                 'name' => 'Rutshuru',
                 'latitude' => NULL,
@@ -600,8 +597,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            58 =>
-            array(
+            58 => 
+            array (
                 'id' => 60,
                 'name' => 'Kasindi',
                 'latitude' => NULL,
@@ -610,8 +607,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 19,
             ),
-            59 =>
-            array(
+            59 => 
+            array (
                 'id' => 61,
                 'name' => 'Bonga Yasa',
                 'latitude' => NULL,
@@ -620,18 +617,18 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 13,
             ),
-            60 =>
-            array(
+            60 => 
+            array (
                 'id' => 62,
-                'name' => 'Kampamba',
+                'name' => 'Kampemba',
                 'latitude' => NULL,
                 'longitude' => NULL,
                 'created_at' => NULL,
                 'updated_at' => NULL,
-                'province_id' => NULL,
+                'province_id' => 3,
             ),
-            61 =>
-            array(
+            61 => 
+            array (
                 'id' => 63,
                 'name' => 'Katuba',
                 'latitude' => NULL,
@@ -640,8 +637,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            62 =>
-            array(
+            62 => 
+            array (
                 'id' => 64,
                 'name' => 'Rwashi',
                 'latitude' => NULL,
@@ -650,8 +647,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            63 =>
-            array(
+            63 => 
+            array (
                 'id' => 65,
                 'name' => 'Kenge',
                 'latitude' => NULL,
@@ -660,8 +657,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 12,
             ),
-            64 =>
-            array(
+            64 => 
+            array (
                 'id' => 66,
                 'name' => 'Kabare',
                 'latitude' => NULL,
@@ -670,8 +667,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            65 =>
-            array(
+            65 => 
+            array (
                 'id' => 67,
                 'name' => 'Malemba',
                 'latitude' => NULL,
@@ -680,8 +677,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 4,
             ),
-            66 =>
-            array(
+            66 => 
+            array (
                 'id' => 68,
                 'name' => 'Makiso',
                 'latitude' => NULL,
@@ -690,8 +687,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 1,
             ),
-            67 =>
-            array(
+            67 => 
+            array (
                 'id' => 69,
                 'name' => 'Kimpese',
                 'latitude' => NULL,
@@ -700,8 +697,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 11,
             ),
-            68 =>
-            array(
+            68 => 
+            array (
                 'id' => 70,
                 'name' => 'Muanda',
                 'latitude' => NULL,
@@ -710,8 +707,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 11,
             ),
-            69 =>
-            array(
+            69 => 
+            array (
                 'id' => 71,
                 'name' => 'Sekebanza',
                 'latitude' => NULL,
@@ -720,8 +717,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 11,
             ),
-            70 =>
-            array(
+            70 => 
+            array (
                 'id' => 72,
                 'name' => 'Mutuanga',
                 'latitude' => NULL,
@@ -730,8 +727,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 19,
             ),
-            71 =>
-            array(
+            71 => 
+            array (
                 'id' => 73,
                 'name' => 'Nyatende',
                 'latitude' => NULL,
@@ -740,8 +737,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 22,
             ),
-            72 =>
-            array(
+            72 => 
+            array (
                 'id' => 74,
                 'name' => 'Panzi',
                 'latitude' => NULL,
@@ -750,8 +747,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 12,
             ),
-            73 =>
-            array(
+            73 => 
+            array (
                 'id' => 75,
                 'name' => 'Bagira',
                 'latitude' => NULL,
@@ -760,8 +757,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            74 =>
-            array(
+            74 => 
+            array (
                 'id' => 76,
                 'name' => 'Wangata',
                 'latitude' => NULL,
@@ -770,8 +767,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            75 =>
-            array(
+            75 => 
+            array (
                 'id' => 77,
                 'name' => 'Sonabata',
                 'latitude' => NULL,
@@ -780,18 +777,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 11,
             ),
-            76 =>
-            array(
-                'id' => 78,
-                'name' => 'Mumbanda',
-                'latitude' => NULL,
-                'longitude' => NULL,
-                'created_at' => NULL,
-                'updated_at' => NULL,
-                'province_id' => NULL,
-            ),
-            77 =>
-            array(
+            76 => 
+            array (
                 'id' => 79,
                 'name' => 'Lukala',
                 'latitude' => NULL,
@@ -800,8 +787,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 11,
             ),
-            78 =>
-            array(
+            77 => 
+            array (
                 'id' => 80,
                 'name' => 'Masa',
                 'latitude' => NULL,
@@ -810,18 +797,18 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 11,
             ),
-            79 =>
-            array(
+            78 => 
+            array (
                 'id' => 81,
                 'name' => 'Kapemba',
                 'latitude' => NULL,
                 'longitude' => NULL,
                 'created_at' => NULL,
                 'updated_at' => NULL,
-                'province_id' => NULL,
+                'province_id' => 3,
             ),
-            80 =>
-            array(
+            79 => 
+            array (
                 'id' => 82,
                 'name' => 'Nyantende',
                 'latitude' => NULL,
@@ -830,8 +817,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            81 =>
-            array(
+            80 => 
+            array (
                 'id' => 83,
                 'name' => 'Mumbunda',
                 'latitude' => NULL,
@@ -840,8 +827,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            82 =>
-            array(
+            81 => 
+            array (
                 'id' => 84,
                 'name' => 'Kisanga',
                 'latitude' => NULL,
@@ -850,8 +837,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            83 =>
-            array(
+            82 => 
+            array (
                 'id' => 86,
                 'name' => 'Kisantu',
                 'latitude' => NULL,
@@ -860,8 +847,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            84 =>
-            array(
+            83 => 
+            array (
                 'id' => 87,
                 'name' => 'Kangu',
                 'latitude' => NULL,
@@ -870,8 +857,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 11,
             ),
-            85 =>
-            array(
+            84 => 
+            array (
                 'id' => 88,
                 'name' => 'Kwilu Ngongo',
                 'latitude' => NULL,
@@ -880,8 +867,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 11,
             ),
-            86 =>
-            array(
+            85 => 
+            array (
                 'id' => 89,
                 'name' => 'Madula',
                 'latitude' => NULL,
@@ -890,18 +877,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => NULL,
             ),
-            87 =>
-            array(
-                'id' => 90,
-                'name' => 'Mumbonda',
-                'latitude' => NULL,
-                'longitude' => NULL,
-                'created_at' => NULL,
-                'updated_at' => NULL,
-                'province_id' => NULL,
-            ),
-            88 =>
-            array(
+            86 => 
+            array (
                 'id' => 91,
                 'name' => 'Bandundu',
                 'latitude' => NULL,
@@ -910,8 +887,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            89 =>
-            array(
+            87 => 
+            array (
                 'id' => 92,
                 'name' => 'Kampemba',
                 'latitude' => NULL,
@@ -920,8 +897,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            90 =>
-            array(
+            88 => 
+            array (
                 'id' => 93,
                 'name' => 'Kamalondo',
                 'latitude' => NULL,
@@ -930,28 +907,28 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            91 =>
-            array(
+            89 => 
+            array (
                 'id' => 94,
-                'name' => 'Kidishi',
+                'name' => 'Kipushi',
                 'latitude' => NULL,
                 'longitude' => NULL,
                 'created_at' => NULL,
                 'updated_at' => NULL,
-                'province_id' => NULL,
+                'province_id' => 3,
             ),
-            92 =>
-            array(
+            90 => 
+            array (
                 'id' => 95,
-                'name' => 'Mumbunda',
+                'name' => 'Mambunda',
                 'latitude' => NULL,
                 'longitude' => NULL,
                 'created_at' => NULL,
                 'updated_at' => NULL,
-                'province_id' => NULL,
+                'province_id' => 3,
             ),
-            93 =>
-            array(
+            91 => 
+            array (
                 'id' => 96,
                 'name' => 'Watsa',
                 'latitude' => NULL,
@@ -960,8 +937,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            94 =>
-            array(
+            92 => 
+            array (
                 'id' => 97,
                 'name' => 'Likasi',
                 'latitude' => NULL,
@@ -970,8 +947,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            95 =>
-            array(
+            93 => 
+            array (
                 'id' => 98,
                 'name' => 'Panda',
                 'latitude' => NULL,
@@ -980,8 +957,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            96 =>
-            array(
+            94 => 
+            array (
                 'id' => 99,
                 'name' => 'Boko Kivula',
                 'latitude' => NULL,
@@ -990,8 +967,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 11,
             ),
-            97 =>
-            array(
+            95 => 
+            array (
                 'id' => 100,
                 'name' => 'Buta',
                 'latitude' => NULL,
@@ -1000,18 +977,18 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 1,
             ),
-            98 =>
-            array(
+            96 => 
+            array (
                 'id' => 101,
-                'name' => 'Kaditu',
+                'name' => 'Kadutu',
                 'latitude' => NULL,
                 'longitude' => NULL,
                 'created_at' => NULL,
                 'updated_at' => NULL,
-                'province_id' => NULL,
+                'province_id' => 22,
             ),
-            99 =>
-            array(
+            97 => 
+            array (
                 'id' => 102,
                 'name' => 'Miti Murhesa',
                 'latitude' => NULL,
@@ -1020,8 +997,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => NULL,
                 'province_id' => 22,
             ),
-            100 =>
-            array(
+            98 => 
+            array (
                 'id' => 103,
                 'name' => 'Fungurume',
                 'latitude' => NULL,
@@ -1030,8 +1007,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            101 =>
-            array(
+            99 => 
+            array (
                 'id' => 104,
                 'name' => 'Luozi',
                 'latitude' => NULL,
@@ -1040,8 +1017,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            102 =>
-            array(
+            100 => 
+            array (
                 'id' => 105,
                 'name' => 'Lualaba',
                 'latitude' => NULL,
@@ -1050,8 +1027,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            103 =>
-            array(
+            101 => 
+            array (
                 'id' => 106,
                 'name' => 'Uvira',
                 'latitude' => NULL,
@@ -1060,8 +1037,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            104 =>
-            array(
+            102 => 
+            array (
                 'id' => 107,
                 'name' => 'Gemena',
                 'latitude' => NULL,
@@ -1070,8 +1047,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 23,
             ),
-            105 =>
-            array(
+            103 => 
+            array (
                 'id' => 108,
                 'name' => 'Sakania',
                 'latitude' => NULL,
@@ -1080,8 +1057,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            106 =>
-            array(
+            104 => 
+            array (
                 'id' => 109,
                 'name' => 'Walikale',
                 'latitude' => NULL,
@@ -1090,8 +1067,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            107 =>
-            array(
+            105 => 
+            array (
                 'id' => 110,
                 'name' => 'Kabondo',
                 'latitude' => NULL,
@@ -1100,8 +1077,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            108 =>
-            array(
+            106 => 
+            array (
                 'id' => 111,
                 'name' => 'Fizi',
                 'latitude' => NULL,
@@ -1110,8 +1087,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            109 =>
-            array(
+            107 => 
+            array (
                 'id' => 112,
                 'name' => 'Wembo Nyama',
                 'latitude' => NULL,
@@ -1120,8 +1097,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            110 =>
-            array(
+            108 => 
+            array (
                 'id' => 113,
                 'name' => 'Kole',
                 'latitude' => NULL,
@@ -1130,8 +1107,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            111 =>
-            array(
+            109 => 
+            array (
                 'id' => 114,
                 'name' => 'Pania Mutombo',
                 'latitude' => NULL,
@@ -1140,8 +1117,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            112 =>
-            array(
+            110 => 
+            array (
                 'id' => 115,
                 'name' => 'Minga',
                 'latitude' => NULL,
@@ -1150,8 +1127,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            113 =>
-            array(
+            111 => 
+            array (
                 'id' => 116,
                 'name' => 'Lusambo',
                 'latitude' => NULL,
@@ -1160,8 +1137,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            114 =>
-            array(
+            112 => 
+            array (
                 'id' => 117,
                 'name' => 'Dikungu',
                 'latitude' => NULL,
@@ -1170,8 +1147,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            115 =>
-            array(
+            113 => 
+            array (
                 'id' => 118,
                 'name' => 'Vanga Kete',
                 'latitude' => NULL,
@@ -1180,8 +1157,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            116 =>
-            array(
+            114 => 
+            array (
                 'id' => 119,
                 'name' => 'Lodja',
                 'latitude' => NULL,
@@ -1190,8 +1167,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            117 =>
-            array(
+            115 => 
+            array (
                 'id' => 120,
                 'name' => 'Omendjadi',
                 'latitude' => NULL,
@@ -1200,8 +1177,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            118 =>
-            array(
+            116 => 
+            array (
                 'id' => 121,
                 'name' => 'Djalo Djeka',
                 'latitude' => NULL,
@@ -1210,8 +1187,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            119 =>
-            array(
+            117 => 
+            array (
                 'id' => 122,
                 'name' => 'Katako Kombe',
                 'latitude' => NULL,
@@ -1220,8 +1197,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            120 =>
-            array(
+            118 => 
+            array (
                 'id' => 123,
                 'name' => 'Bena Dibele',
                 'latitude' => NULL,
@@ -1230,8 +1207,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 21,
             ),
-            121 =>
-            array(
+            119 => 
+            array (
                 'id' => 124,
                 'name' => 'Kamiji',
                 'latitude' => NULL,
@@ -1240,8 +1217,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            122 =>
-            array(
+            120 => 
+            array (
                 'id' => 125,
                 'name' => 'Tshitenge',
                 'latitude' => NULL,
@@ -1250,8 +1227,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            123 =>
-            array(
+            121 => 
+            array (
                 'id' => 126,
                 'name' => 'Miabi',
                 'latitude' => NULL,
@@ -1260,8 +1237,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            124 =>
-            array(
+            122 => 
+            array (
                 'id' => 127,
                 'name' => 'Ngandajika',
                 'latitude' => NULL,
@@ -1270,8 +1247,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            125 =>
-            array(
+            123 => 
+            array (
                 'id' => 128,
                 'name' => 'Mulumba',
                 'latitude' => NULL,
@@ -1280,8 +1257,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            126 =>
-            array(
+            124 => 
+            array (
                 'id' => 129,
                 'name' => 'Tshilenge',
                 'latitude' => NULL,
@@ -1290,8 +1267,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            127 =>
-            array(
+            125 => 
+            array (
                 'id' => 130,
                 'name' => 'Cilundu',
                 'latitude' => NULL,
@@ -1300,8 +1277,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            128 =>
-            array(
+            126 => 
+            array (
                 'id' => 131,
                 'name' => 'Lubao',
                 'latitude' => NULL,
@@ -1310,8 +1287,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            129 =>
-            array(
+            127 => 
+            array (
                 'id' => 132,
                 'name' => 'Kalonda Est',
                 'latitude' => NULL,
@@ -1320,8 +1297,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            130 =>
-            array(
+            128 => 
+            array (
                 'id' => 133,
                 'name' => 'Kabinda',
                 'latitude' => NULL,
@@ -1330,8 +1307,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            131 =>
-            array(
+            129 => 
+            array (
                 'id' => 134,
                 'name' => 'Ludimbi Lukula',
                 'latitude' => NULL,
@@ -1340,8 +1317,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            132 =>
-            array(
+            130 => 
+            array (
                 'id' => 135,
                 'name' => 'Kalambayi Kabanga',
                 'latitude' => NULL,
@@ -1350,8 +1327,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            133 =>
-            array(
+            131 => 
+            array (
                 'id' => 136,
                 'name' => 'Makota',
                 'latitude' => NULL,
@@ -1360,8 +1337,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            134 =>
-            array(
+            132 => 
+            array (
                 'id' => 137,
                 'name' => 'Mwene Ditu',
                 'latitude' => NULL,
@@ -1370,8 +1347,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            135 =>
-            array(
+            133 => 
+            array (
                 'id' => 138,
                 'name' => 'Wikong',
                 'latitude' => NULL,
@@ -1380,8 +1357,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            136 =>
-            array(
+            134 => 
+            array (
                 'id' => 139,
                 'name' => 'Luputa',
                 'latitude' => NULL,
@@ -1390,8 +1367,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            137 =>
-            array(
+            135 => 
+            array (
                 'id' => 140,
                 'name' => 'Kanda Kanda',
                 'latitude' => NULL,
@@ -1400,8 +1377,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            138 =>
-            array(
+            136 => 
+            array (
                 'id' => 141,
                 'name' => 'Bonzola',
                 'latitude' => NULL,
@@ -1410,8 +1387,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            139 =>
-            array(
+            137 => 
+            array (
                 'id' => 142,
                 'name' => 'Dibindi',
                 'latitude' => NULL,
@@ -1420,8 +1397,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            140 =>
-            array(
+            138 => 
+            array (
                 'id' => 143,
                 'name' => 'Kansele',
                 'latitude' => NULL,
@@ -1430,8 +1407,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            141 =>
-            array(
+            139 => 
+            array (
                 'id' => 144,
                 'name' => 'Muya',
                 'latitude' => NULL,
@@ -1440,8 +1417,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            142 =>
-            array(
+            140 => 
+            array (
                 'id' => 145,
                 'name' => 'Diulu',
                 'latitude' => NULL,
@@ -1450,8 +1427,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            143 =>
-            array(
+            141 => 
+            array (
                 'id' => 146,
                 'name' => 'Bipemba',
                 'latitude' => NULL,
@@ -1460,8 +1437,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            144 =>
-            array(
+            142 => 
+            array (
                 'id' => 147,
                 'name' => 'Mpokolo',
                 'latitude' => NULL,
@@ -1470,8 +1447,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            145 =>
-            array(
+            143 => 
+            array (
                 'id' => 148,
                 'name' => 'Nzaba',
                 'latitude' => NULL,
@@ -1480,8 +1457,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            146 =>
-            array(
+            144 => 
+            array (
                 'id' => 149,
                 'name' => 'Kabeya Kamuanga',
                 'latitude' => NULL,
@@ -1490,8 +1467,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            147 =>
-            array(
+            145 => 
+            array (
                 'id' => 150,
                 'name' => 'Mukumbi',
                 'latitude' => NULL,
@@ -1500,8 +1477,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            148 =>
-            array(
+            146 => 
+            array (
                 'id' => 151,
                 'name' => 'Lukelenge',
                 'latitude' => NULL,
@@ -1510,8 +1487,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            149 =>
-            array(
+            147 => 
+            array (
                 'id' => 152,
                 'name' => 'Tshishimbi',
                 'latitude' => NULL,
@@ -1520,8 +1497,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            150 =>
-            array(
+            148 => 
+            array (
                 'id' => 153,
                 'name' => 'Lubilanji',
                 'latitude' => NULL,
@@ -1530,8 +1507,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            151 =>
-            array(
+            149 => 
+            array (
                 'id' => 154,
                 'name' => 'Kamana',
                 'latitude' => NULL,
@@ -1540,8 +1517,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            152 =>
-            array(
+            150 => 
+            array (
                 'id' => 155,
                 'name' => 'Kasansa',
                 'latitude' => NULL,
@@ -1550,8 +1527,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            153 =>
-            array(
+            151 => 
+            array (
                 'id' => 156,
                 'name' => 'Bibanga',
                 'latitude' => NULL,
@@ -1560,8 +1537,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 9,
             ),
-            154 =>
-            array(
+            152 => 
+            array (
                 'id' => 157,
                 'name' => 'Kalenda',
                 'latitude' => NULL,
@@ -1570,8 +1547,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            155 =>
-            array(
+            153 => 
+            array (
                 'id' => 158,
                 'name' => 'Tshofa',
                 'latitude' => NULL,
@@ -1580,8 +1557,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 14,
             ),
-            156 =>
-            array(
+            154 => 
+            array (
                 'id' => 159,
                 'name' => 'Pimu',
                 'latitude' => NULL,
@@ -1590,8 +1567,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 18,
             ),
-            157 =>
-            array(
+            155 => 
+            array (
                 'id' => 160,
                 'name' => 'Nyanga',
                 'latitude' => NULL,
@@ -1600,8 +1577,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 7,
             ),
-            158 =>
-            array(
+            156 => 
+            array (
                 'id' => 161,
                 'name' => 'Kalonda Ouest',
                 'latitude' => NULL,
@@ -1610,8 +1587,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 7,
             ),
-            159 =>
-            array(
+            157 => 
+            array (
                 'id' => 162,
                 'name' => 'Kamonia',
                 'latitude' => NULL,
@@ -1620,8 +1597,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 7,
             ),
-            160 =>
-            array(
+            158 => 
+            array (
                 'id' => 163,
                 'name' => 'Mutena',
                 'latitude' => NULL,
@@ -1630,8 +1607,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 7,
             ),
-            161 =>
-            array(
+            159 => 
+            array (
                 'id' => 164,
                 'name' => 'Banga Lubaka',
                 'latitude' => NULL,
@@ -1640,8 +1617,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 7,
             ),
-            162 =>
-            array(
+            160 => 
+            array (
                 'id' => 165,
                 'name' => 'Kamwesha',
                 'latitude' => NULL,
@@ -1650,8 +1627,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 7,
             ),
-            163 =>
-            array(
+            161 => 
+            array (
                 'id' => 166,
                 'name' => 'Mweka',
                 'latitude' => NULL,
@@ -1660,8 +1637,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 7,
             ),
-            164 =>
-            array(
+            162 => 
+            array (
                 'id' => 167,
                 'name' => 'Moba',
                 'latitude' => NULL,
@@ -1670,8 +1647,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 24,
             ),
-            165 =>
-            array(
+            163 => 
+            array (
                 'id' => 168,
                 'name' => 'Bogosenubia',
                 'latitude' => NULL,
@@ -1680,8 +1657,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 23,
             ),
-            166 =>
-            array(
+            164 => 
+            array (
                 'id' => 169,
                 'name' => 'Moanda',
                 'latitude' => NULL,
@@ -1690,8 +1667,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            167 =>
-            array(
+            165 => 
+            array (
                 'id' => 170,
                 'name' => 'Kitona',
                 'latitude' => NULL,
@@ -1700,8 +1677,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            168 =>
-            array(
+            166 => 
+            array (
                 'id' => 171,
                 'name' => 'Boma Bungu',
                 'latitude' => NULL,
@@ -1710,8 +1687,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            169 =>
-            array(
+            167 => 
+            array (
                 'id' => 172,
                 'name' => 'Seke-Banza',
                 'latitude' => NULL,
@@ -1720,8 +1697,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            170 =>
-            array(
+            168 => 
+            array (
                 'id' => 173,
                 'name' => 'Inga',
                 'latitude' => NULL,
@@ -1730,8 +1707,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            171 =>
-            array(
+            169 => 
+            array (
                 'id' => 174,
                 'name' => 'Tshela',
                 'latitude' => NULL,
@@ -1740,8 +1717,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            172 =>
-            array(
+            170 => 
+            array (
                 'id' => 175,
                 'name' => 'Vaku',
                 'latitude' => NULL,
@@ -1750,8 +1727,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            173 =>
-            array(
+            171 => 
+            array (
                 'id' => 176,
                 'name' => 'Kizu',
                 'latitude' => NULL,
@@ -1760,8 +1737,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            174 =>
-            array(
+            172 => 
+            array (
                 'id' => 177,
                 'name' => 'Kibunzi',
                 'latitude' => NULL,
@@ -1770,8 +1747,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            175 =>
-            array(
+            173 => 
+            array (
                 'id' => 178,
                 'name' => 'Kimpangu',
                 'latitude' => NULL,
@@ -1780,8 +1757,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            176 =>
-            array(
+            174 => 
+            array (
                 'id' => 179,
                 'name' => 'Ngidinga',
                 'latitude' => NULL,
@@ -1790,8 +1767,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            177 =>
-            array(
+            175 => 
+            array (
                 'id' => 180,
                 'name' => 'Boko-Kivulu',
                 'latitude' => NULL,
@@ -1800,8 +1777,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            178 =>
-            array(
+            176 => 
+            array (
                 'id' => 181,
                 'name' => 'Mbanza-Ngungu',
                 'latitude' => NULL,
@@ -1810,8 +1787,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            179 =>
-            array(
+            177 => 
+            array (
                 'id' => 182,
                 'name' => 'Kwilu-Ngongo',
                 'latitude' => NULL,
@@ -1820,8 +1797,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 11,
             ),
-            180 =>
-            array(
+            178 => 
+            array (
                 'id' => 183,
                 'name' => 'Mikope',
                 'latitude' => NULL,
@@ -1830,8 +1807,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 7,
             ),
-            181 =>
-            array(
+            179 => 
+            array (
                 'id' => 184,
                 'name' => 'Oshwe',
                 'latitude' => NULL,
@@ -1840,8 +1817,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 16,
             ),
-            182 =>
-            array(
+            180 => 
+            array (
                 'id' => 185,
                 'name' => 'Bosobe',
                 'latitude' => NULL,
@@ -1850,8 +1827,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 16,
             ),
-            183 =>
-            array(
+            181 => 
+            array (
                 'id' => 186,
                 'name' => 'Bokoro',
                 'latitude' => NULL,
@@ -1860,8 +1837,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 16,
             ),
-            184 =>
-            array(
+            182 => 
+            array (
                 'id' => 187,
                 'name' => 'Masi-Manimba',
                 'latitude' => NULL,
@@ -1870,8 +1847,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            185 =>
-            array(
+            183 => 
+            array (
                 'id' => 188,
                 'name' => 'Yasa-Bonga',
                 'latitude' => NULL,
@@ -1880,8 +1857,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            186 =>
-            array(
+            184 => 
+            array (
                 'id' => 189,
                 'name' => 'Ipamu',
                 'latitude' => NULL,
@@ -1890,8 +1867,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            187 =>
-            array(
+            185 => 
+            array (
                 'id' => 190,
                 'name' => 'Koshibanda',
                 'latitude' => NULL,
@@ -1900,8 +1877,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            188 =>
-            array(
+            186 => 
+            array (
                 'id' => 191,
                 'name' => 'Kingandu',
                 'latitude' => NULL,
@@ -1910,8 +1887,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            189 =>
-            array(
+            187 => 
+            array (
                 'id' => 192,
                 'name' => 'Bulungu',
                 'latitude' => NULL,
@@ -1920,8 +1897,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            190 =>
-            array(
+            188 => 
+            array (
                 'id' => 193,
                 'name' => 'Bagata',
                 'latitude' => NULL,
@@ -1930,8 +1907,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            191 =>
-            array(
+            189 => 
+            array (
                 'id' => 194,
                 'name' => 'Kajiji',
                 'latitude' => NULL,
@@ -1940,8 +1917,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 12,
             ),
-            192 =>
-            array(
+            190 => 
+            array (
                 'id' => 195,
                 'name' => 'Kikwit-Nord',
                 'latitude' => NULL,
@@ -1950,8 +1927,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            193 =>
-            array(
+            191 => 
+            array (
                 'id' => 196,
                 'name' => 'Lusanga',
                 'latitude' => NULL,
@@ -1960,8 +1937,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 13,
             ),
-            194 =>
-            array(
+            192 => 
+            array (
                 'id' => 197,
                 'name' => 'Feshi',
                 'latitude' => NULL,
@@ -1970,8 +1947,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 12,
             ),
-            195 =>
-            array(
+            193 => 
+            array (
                 'id' => 198,
                 'name' => 'Wamba Lwadi',
                 'latitude' => NULL,
@@ -1980,8 +1957,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 12,
             ),
-            196 =>
-            array(
+            194 => 
+            array (
                 'id' => 199,
                 'name' => 'Tembo',
                 'latitude' => NULL,
@@ -1990,8 +1967,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:07',
                 'province_id' => 12,
             ),
-            197 =>
-            array(
+            195 => 
+            array (
                 'id' => 200,
                 'name' => 'Moanza',
                 'latitude' => NULL,
@@ -2000,8 +1977,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 13,
             ),
-            198 =>
-            array(
+            196 => 
+            array (
                 'id' => 201,
                 'name' => 'Kimbau',
                 'latitude' => NULL,
@@ -2010,8 +1987,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 12,
             ),
-            199 =>
-            array(
+            197 => 
+            array (
                 'id' => 202,
                 'name' => 'Boko',
                 'latitude' => NULL,
@@ -2020,8 +1997,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 12,
             ),
-            200 =>
-            array(
+            198 => 
+            array (
                 'id' => 203,
                 'name' => 'Viadana',
                 'latitude' => NULL,
@@ -2030,8 +2007,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 1,
             ),
-            201 =>
-            array(
+            199 => 
+            array (
                 'id' => 204,
                 'name' => 'Poko',
                 'latitude' => NULL,
@@ -2040,8 +2017,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 1,
             ),
-            202 =>
-            array(
+            200 => 
+            array (
                 'id' => 205,
                 'name' => 'Basali',
                 'latitude' => NULL,
@@ -2050,8 +2027,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            203 =>
-            array(
+            201 => 
+            array (
                 'id' => 206,
                 'name' => 'Basoko',
                 'latitude' => NULL,
@@ -2060,8 +2037,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            204 =>
-            array(
+            202 => 
+            array (
                 'id' => 207,
                 'name' => 'Bengamisa',
                 'latitude' => NULL,
@@ -2070,8 +2047,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            205 =>
-            array(
+            203 => 
+            array (
                 'id' => 208,
                 'name' => 'Yakusu',
                 'latitude' => NULL,
@@ -2080,8 +2057,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            206 =>
-            array(
+            204 => 
+            array (
                 'id' => 209,
                 'name' => 'Yahisuli',
                 'latitude' => NULL,
@@ -2090,8 +2067,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            207 =>
-            array(
+            205 => 
+            array (
                 'id' => 210,
                 'name' => 'Yabaondo',
                 'latitude' => NULL,
@@ -2100,8 +2077,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            208 =>
-            array(
+            206 => 
+            array (
                 'id' => 211,
                 'name' => 'Isangi',
                 'latitude' => NULL,
@@ -2110,8 +2087,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            209 =>
-            array(
+            207 => 
+            array (
                 'id' => 212,
                 'name' => 'Yaleko',
                 'latitude' => NULL,
@@ -2120,8 +2097,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            210 =>
-            array(
+            208 => 
+            array (
                 'id' => 213,
                 'name' => 'Banalia',
                 'latitude' => NULL,
@@ -2130,8 +2107,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            211 =>
-            array(
+            209 => 
+            array (
                 'id' => 214,
                 'name' => 'Bafwasende',
                 'latitude' => NULL,
@@ -2140,8 +2117,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            212 =>
-            array(
+            210 => 
+            array (
                 'id' => 215,
                 'name' => 'Bafwagbogbo',
                 'latitude' => NULL,
@@ -2150,8 +2127,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            213 =>
-            array(
+            211 => 
+            array (
                 'id' => 216,
                 'name' => 'Titule',
                 'latitude' => NULL,
@@ -2160,8 +2137,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 1,
             ),
-            214 =>
-            array(
+            212 => 
+            array (
                 'id' => 217,
                 'name' => 'Ganga',
                 'latitude' => NULL,
@@ -2170,8 +2147,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 1,
             ),
-            215 =>
-            array(
+            213 => 
+            array (
                 'id' => 218,
                 'name' => 'Vanga',
                 'latitude' => NULL,
@@ -2180,8 +2157,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 13,
             ),
-            216 =>
-            array(
+            214 => 
+            array (
                 'id' => 219,
                 'name' => 'Djuma',
                 'latitude' => NULL,
@@ -2190,8 +2167,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 13,
             ),
-            217 =>
-            array(
+            215 => 
+            array (
                 'id' => 220,
                 'name' => 'Sia',
                 'latitude' => NULL,
@@ -2200,8 +2177,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 13,
             ),
-            218 =>
-            array(
+            216 => 
+            array (
                 'id' => 221,
                 'name' => 'Mungindu',
                 'latitude' => NULL,
@@ -2210,8 +2187,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 13,
             ),
-            219 =>
-            array(
+            217 => 
+            array (
                 'id' => 222,
                 'name' => 'Kimputu',
                 'latitude' => NULL,
@@ -2220,8 +2197,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 13,
             ),
-            220 =>
-            array(
+            218 => 
+            array (
                 'id' => 223,
                 'name' => 'Mosango',
                 'latitude' => NULL,
@@ -2230,8 +2207,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 13,
             ),
-            221 =>
-            array(
+            219 => 
+            array (
                 'id' => 224,
                 'name' => 'Pay Kongila',
                 'latitude' => NULL,
@@ -2240,8 +2217,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 13,
             ),
-            222 =>
-            array(
+            220 => 
+            array (
                 'id' => 225,
                 'name' => 'Ndjili',
                 'latitude' => NULL,
@@ -2250,8 +2227,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            223 =>
-            array(
+            221 => 
+            array (
                 'id' => 226,
                 'name' => 'Mont-Ngafula I',
                 'latitude' => NULL,
@@ -2260,8 +2237,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            224 =>
-            array(
+            222 => 
+            array (
                 'id' => 227,
                 'name' => 'Kalamu II',
                 'latitude' => NULL,
@@ -2270,8 +2247,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            225 =>
-            array(
+            223 => 
+            array (
                 'id' => 228,
                 'name' => 'Kalamu I',
                 'latitude' => NULL,
@@ -2280,8 +2257,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            226 =>
-            array(
+            224 => 
+            array (
                 'id' => 229,
                 'name' => 'Masina I',
                 'latitude' => NULL,
@@ -2290,8 +2267,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            227 =>
-            array(
+            225 => 
+            array (
                 'id' => 230,
                 'name' => 'Kikongo',
                 'latitude' => NULL,
@@ -2300,8 +2277,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 13,
             ),
-            228 =>
-            array(
+            226 => 
+            array (
                 'id' => 231,
                 'name' => 'Mont-Ngafula II',
                 'latitude' => NULL,
@@ -2310,8 +2287,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            229 =>
-            array(
+            227 => 
+            array (
                 'id' => 232,
                 'name' => 'Sona-Bata',
                 'latitude' => NULL,
@@ -2320,8 +2297,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 11,
             ),
-            230 =>
-            array(
+            228 => 
+            array (
                 'id' => 233,
                 'name' => 'Nsele',
                 'latitude' => NULL,
@@ -2330,8 +2307,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            231 =>
-            array(
+            229 => 
+            array (
                 'id' => 234,
                 'name' => 'Kanzala',
                 'latitude' => NULL,
@@ -2340,8 +2317,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 7,
             ),
-            232 =>
-            array(
+            230 => 
+            array (
                 'id' => 235,
                 'name' => 'Tshikapa',
                 'latitude' => NULL,
@@ -2350,8 +2327,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 7,
             ),
-            233 =>
-            array(
+            231 => 
+            array (
                 'id' => 236,
                 'name' => 'Bwamanda',
                 'latitude' => NULL,
@@ -2360,8 +2337,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 23,
             ),
-            234 =>
-            array(
+            232 => 
+            array (
                 'id' => 237,
                 'name' => 'Kungu',
                 'latitude' => NULL,
@@ -2370,8 +2347,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 23,
             ),
-            235 =>
-            array(
+            233 => 
+            array (
                 'id' => 238,
                 'name' => 'Loko',
                 'latitude' => NULL,
@@ -2380,8 +2357,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 20,
             ),
-            236 =>
-            array(
+            234 => 
+            array (
                 'id' => 239,
                 'name' => 'Bangabola',
                 'latitude' => NULL,
@@ -2390,8 +2367,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 23,
             ),
-            237 =>
-            array(
+            235 => 
+            array (
                 'id' => 240,
                 'name' => 'Boso Mondanda',
                 'latitude' => NULL,
@@ -2400,8 +2377,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 18,
             ),
-            238 =>
-            array(
+            236 => 
+            array (
                 'id' => 241,
                 'name' => 'Budjala',
                 'latitude' => NULL,
@@ -2410,8 +2387,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 23,
             ),
-            239 =>
-            array(
+            237 => 
+            array (
                 'id' => 242,
                 'name' => 'Binga',
                 'latitude' => NULL,
@@ -2420,8 +2397,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 18,
             ),
-            240 =>
-            array(
+            238 => 
+            array (
                 'id' => 243,
                 'name' => 'Yamaluka',
                 'latitude' => NULL,
@@ -2430,8 +2407,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 18,
             ),
-            241 =>
-            array(
+            239 => 
+            array (
                 'id' => 244,
                 'name' => 'Boso Manzi',
                 'latitude' => NULL,
@@ -2440,8 +2417,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 18,
             ),
-            242 =>
-            array(
+            240 => 
+            array (
                 'id' => 245,
                 'name' => 'Karawa',
                 'latitude' => NULL,
@@ -2450,8 +2427,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 20,
             ),
-            243 =>
-            array(
+            241 => 
+            array (
                 'id' => 246,
                 'name' => 'Bominenge',
                 'latitude' => NULL,
@@ -2460,8 +2437,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 23,
             ),
-            244 =>
-            array(
+            242 => 
+            array (
                 'id' => 247,
                 'name' => 'Mbaya',
                 'latitude' => NULL,
@@ -2470,8 +2447,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 23,
             ),
-            245 =>
-            array(
+            243 => 
+            array (
                 'id' => 248,
                 'name' => 'Bulu',
                 'latitude' => NULL,
@@ -2480,8 +2457,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 23,
             ),
-            246 =>
-            array(
+            244 => 
+            array (
                 'id' => 249,
                 'name' => 'Tandala',
                 'latitude' => NULL,
@@ -2490,8 +2467,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 23,
             ),
-            247 =>
-            array(
+            245 => 
+            array (
                 'id' => 250,
                 'name' => 'Kibombo',
                 'latitude' => NULL,
@@ -2500,8 +2477,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            248 =>
-            array(
+            246 => 
+            array (
                 'id' => 251,
                 'name' => 'Kindu',
                 'latitude' => NULL,
@@ -2510,8 +2487,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            249 =>
-            array(
+            247 => 
+            array (
                 'id' => 252,
                 'name' => 'Alunguli',
                 'latitude' => NULL,
@@ -2520,8 +2497,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            250 =>
-            array(
+            248 => 
+            array (
                 'id' => 253,
                 'name' => 'Makiso-Kisangani',
                 'latitude' => NULL,
@@ -2530,8 +2507,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            251 =>
-            array(
+            249 => 
+            array (
                 'id' => 254,
                 'name' => 'Mangobo',
                 'latitude' => NULL,
@@ -2540,8 +2517,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            252 =>
-            array(
+            250 => 
+            array (
                 'id' => 255,
                 'name' => 'Tshopo',
                 'latitude' => NULL,
@@ -2550,8 +2527,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            253 =>
-            array(
+            251 => 
+            array (
                 'id' => 256,
                 'name' => 'Kaniama',
                 'latitude' => NULL,
@@ -2560,8 +2537,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 4,
             ),
-            254 =>
-            array(
+            252 => 
+            array (
                 'id' => 257,
                 'name' => 'Kalemie',
                 'latitude' => NULL,
@@ -2570,8 +2547,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 24,
             ),
-            255 =>
-            array(
+            253 => 
+            array (
                 'id' => 258,
                 'name' => 'Kansimba',
                 'latitude' => NULL,
@@ -2580,8 +2557,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 24,
             ),
-            256 =>
-            array(
+            254 => 
+            array (
                 'id' => 259,
                 'name' => 'Butumba',
                 'latitude' => NULL,
@@ -2590,8 +2567,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 4,
             ),
-            257 =>
-            array(
+            255 => 
+            array (
                 'id' => 260,
                 'name' => 'Kinkondja',
                 'latitude' => NULL,
@@ -2600,8 +2577,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 4,
             ),
-            258 =>
-            array(
+            256 => 
+            array (
                 'id' => 261,
                 'name' => 'Baka',
                 'latitude' => NULL,
@@ -2610,8 +2587,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 4,
             ),
-            259 =>
-            array(
+            257 => 
+            array (
                 'id' => 262,
                 'name' => 'Kiyambi',
                 'latitude' => NULL,
@@ -2620,8 +2597,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 24,
             ),
-            260 =>
-            array(
+            258 => 
+            array (
                 'id' => 263,
                 'name' => 'Manono',
                 'latitude' => NULL,
@@ -2630,8 +2607,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 24,
             ),
-            261 =>
-            array(
+            259 => 
+            array (
                 'id' => 264,
                 'name' => 'Samba',
                 'latitude' => NULL,
@@ -2640,8 +2617,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            262 =>
-            array(
+            260 => 
+            array (
                 'id' => 265,
                 'name' => 'Kasongo',
                 'latitude' => NULL,
@@ -2650,8 +2627,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            263 =>
-            array(
+            261 => 
+            array (
                 'id' => 266,
                 'name' => 'Kunda',
                 'latitude' => NULL,
@@ -2660,8 +2637,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            264 =>
-            array(
+            262 => 
+            array (
                 'id' => 267,
                 'name' => 'Saramabila',
                 'latitude' => NULL,
@@ -2670,8 +2647,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            265 =>
-            array(
+            263 => 
+            array (
                 'id' => 268,
                 'name' => 'Kampene',
                 'latitude' => NULL,
@@ -2680,8 +2657,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            266 =>
-            array(
+            264 => 
+            array (
                 'id' => 269,
                 'name' => 'Nyemba',
                 'latitude' => NULL,
@@ -2690,8 +2667,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 24,
             ),
-            267 =>
-            array(
+            265 => 
+            array (
                 'id' => 270,
                 'name' => 'Nyunzu',
                 'latitude' => NULL,
@@ -2700,8 +2677,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 24,
             ),
-            268 =>
-            array(
+            266 => 
+            array (
                 'id' => 271,
                 'name' => 'Kabambare',
                 'latitude' => NULL,
@@ -2710,8 +2687,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            269 =>
-            array(
+            267 => 
+            array (
                 'id' => 272,
                 'name' => 'Pangi',
                 'latitude' => NULL,
@@ -2720,8 +2697,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            270 =>
-            array(
+            268 => 
+            array (
                 'id' => 273,
                 'name' => 'Kalima',
                 'latitude' => NULL,
@@ -2730,8 +2707,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            271 =>
-            array(
+            269 => 
+            array (
                 'id' => 274,
                 'name' => 'Yalimbongo',
                 'latitude' => NULL,
@@ -2740,8 +2717,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            272 =>
-            array(
+            270 => 
+            array (
                 'id' => 275,
                 'name' => 'Aketi',
                 'latitude' => NULL,
@@ -2750,8 +2727,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 1,
             ),
-            273 =>
-            array(
+            271 => 
+            array (
                 'id' => 276,
                 'name' => 'Lolo',
                 'latitude' => NULL,
@@ -2760,8 +2737,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 18,
             ),
-            274 =>
-            array(
+            272 => 
+            array (
                 'id' => 277,
                 'name' => 'Yamongili',
                 'latitude' => NULL,
@@ -2770,8 +2747,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 18,
             ),
-            275 =>
-            array(
+            273 => 
+            array (
                 'id' => 278,
                 'name' => 'Abuzi',
                 'latitude' => NULL,
@@ -2780,8 +2757,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 20,
             ),
-            276 =>
-            array(
+            274 => 
+            array (
                 'id' => 279,
                 'name' => 'Yambuku',
                 'latitude' => NULL,
@@ -2790,8 +2767,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 18,
             ),
-            277 =>
-            array(
+            275 => 
+            array (
                 'id' => 280,
                 'name' => 'Wasolo',
                 'latitude' => NULL,
@@ -2800,8 +2777,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 20,
             ),
-            278 =>
-            array(
+            276 => 
+            array (
                 'id' => 281,
                 'name' => 'Bosondjo',
                 'latitude' => NULL,
@@ -2810,8 +2787,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 18,
             ),
-            279 =>
-            array(
+            277 => 
+            array (
                 'id' => 282,
                 'name' => 'Bumba',
                 'latitude' => NULL,
@@ -2820,8 +2797,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 18,
             ),
-            280 =>
-            array(
+            278 => 
+            array (
                 'id' => 283,
                 'name' => 'Mondombe',
                 'latitude' => NULL,
@@ -2830,8 +2807,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 26,
             ),
-            281 =>
-            array(
+            279 => 
+            array (
                 'id' => 284,
                 'name' => 'Djolu',
                 'latitude' => NULL,
@@ -2840,8 +2817,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 26,
             ),
-            282 =>
-            array(
+            280 => 
+            array (
                 'id' => 285,
                 'name' => 'Opienge',
                 'latitude' => NULL,
@@ -2850,8 +2827,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            283 =>
-            array(
+            281 => 
+            array (
                 'id' => 286,
                 'name' => 'Obokote',
                 'latitude' => NULL,
@@ -2860,8 +2837,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            284 =>
-            array(
+            282 => 
+            array (
                 'id' => 287,
                 'name' => 'Lowa',
                 'latitude' => NULL,
@@ -2870,8 +2847,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            285 =>
-            array(
+            283 => 
+            array (
                 'id' => 288,
                 'name' => 'Wanierukula',
                 'latitude' => NULL,
@@ -2880,8 +2857,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 25,
             ),
-            286 =>
-            array(
+            284 => 
+            array (
                 'id' => 289,
                 'name' => 'Lubutu',
                 'latitude' => NULL,
@@ -2890,8 +2867,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 17,
             ),
-            287 =>
-            array(
+            285 => 
+            array (
                 'id' => 290,
                 'name' => 'Kitenda',
                 'latitude' => NULL,
@@ -2900,8 +2877,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 12,
             ),
-            288 =>
-            array(
+            286 => 
+            array (
                 'id' => 291,
                 'name' => 'Kasongo Lunda',
                 'latitude' => NULL,
@@ -2910,8 +2887,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 12,
             ),
-            289 =>
-            array(
+            287 => 
+            array (
                 'id' => 292,
                 'name' => 'Popokabaka',
                 'latitude' => NULL,
@@ -2920,8 +2897,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 12,
             ),
-            290 =>
-            array(
+            288 => 
+            array (
                 'id' => 293,
                 'name' => 'Kimvula',
                 'latitude' => NULL,
@@ -2930,8 +2907,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 11,
             ),
-            291 =>
-            array(
+            289 => 
+            array (
                 'id' => 294,
                 'name' => 'Maluku I',
                 'latitude' => NULL,
@@ -2940,8 +2917,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 10,
             ),
-            292 =>
-            array(
+            290 => 
+            array (
                 'id' => 295,
                 'name' => 'Nsona-Mpangu',
                 'latitude' => NULL,
@@ -2950,8 +2927,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 11,
             ),
-            293 =>
-            array(
+            291 => 
+            array (
                 'id' => 296,
                 'name' => 'Kuimba',
                 'latitude' => NULL,
@@ -2960,8 +2937,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 11,
             ),
-            294 =>
-            array(
+            292 => 
+            array (
                 'id' => 297,
                 'name' => 'Kinkonzi',
                 'latitude' => NULL,
@@ -2970,8 +2947,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:08',
                 'province_id' => 11,
             ),
-            295 =>
-            array(
+            293 => 
+            array (
                 'id' => 298,
                 'name' => 'Mangembo',
                 'latitude' => NULL,
@@ -2980,8 +2957,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 11,
             ),
-            296 =>
-            array(
+            294 => 
+            array (
                 'id' => 299,
                 'name' => 'Gombe-Matadi',
                 'latitude' => NULL,
@@ -2990,8 +2967,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 11,
             ),
-            297 =>
-            array(
+            295 => 
+            array (
                 'id' => 300,
                 'name' => 'Bokonzi',
                 'latitude' => NULL,
@@ -3000,8 +2977,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 23,
             ),
-            298 =>
-            array(
+            296 => 
+            array (
                 'id' => 301,
                 'name' => 'Mawuya',
                 'latitude' => NULL,
@@ -3010,8 +2987,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 23,
             ),
-            299 =>
-            array(
+            297 => 
+            array (
                 'id' => 302,
                 'name' => 'Zongo',
                 'latitude' => NULL,
@@ -3020,8 +2997,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 23,
             ),
-            300 =>
-            array(
+            298 => 
+            array (
                 'id' => 303,
                 'name' => 'Libenge',
                 'latitude' => NULL,
@@ -3030,8 +3007,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 23,
             ),
-            301 =>
-            array(
+            299 => 
+            array (
                 'id' => 304,
                 'name' => 'Bili',
                 'latitude' => NULL,
@@ -3040,8 +3017,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 10:31:32',
                 'province_id' => 1,
             ),
-            302 =>
-            array(
+            300 => 
+            array (
                 'id' => 305,
                 'name' => 'Gbadolite',
                 'latitude' => NULL,
@@ -3050,8 +3027,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 20,
             ),
-            303 =>
-            array(
+            301 => 
+            array (
                 'id' => 306,
                 'name' => 'Mobayi Mbongo',
                 'latitude' => NULL,
@@ -3060,8 +3037,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 20,
             ),
-            304 =>
-            array(
+            302 => 
+            array (
                 'id' => 307,
                 'name' => 'Yakoma',
                 'latitude' => NULL,
@@ -3070,8 +3047,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 20,
             ),
-            305 =>
-            array(
+            303 => 
+            array (
                 'id' => 308,
                 'name' => 'Monga',
                 'latitude' => NULL,
@@ -3080,8 +3057,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 1,
             ),
-            306 =>
-            array(
+            304 => 
+            array (
                 'id' => 309,
                 'name' => 'Bondo',
                 'latitude' => NULL,
@@ -3090,8 +3067,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 1,
             ),
-            307 =>
-            array(
+            305 => 
+            array (
                 'id' => 310,
                 'name' => 'Ango',
                 'latitude' => NULL,
@@ -3100,8 +3077,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 1,
             ),
-            308 =>
-            array(
+            306 => 
+            array (
                 'id' => 311,
                 'name' => 'Opala',
                 'latitude' => NULL,
@@ -3110,8 +3087,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 25,
             ),
-            309 =>
-            array(
+            307 => 
+            array (
                 'id' => 312,
                 'name' => 'Kahemba',
                 'latitude' => NULL,
@@ -3120,8 +3097,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 12,
             ),
-            310 =>
-            array(
+            308 => 
+            array (
                 'id' => 313,
                 'name' => 'Gungu',
                 'latitude' => NULL,
@@ -3130,8 +3107,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 13,
             ),
-            311 =>
-            array(
+            309 => 
+            array (
                 'id' => 314,
                 'name' => 'Kitangwa',
                 'latitude' => NULL,
@@ -3140,8 +3117,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 7,
             ),
-            312 =>
-            array(
+            310 => 
+            array (
                 'id' => 315,
                 'name' => 'Mukedi',
                 'latitude' => NULL,
@@ -3150,8 +3127,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 13,
             ),
-            313 =>
-            array(
+            311 => 
+            array (
                 'id' => 316,
                 'name' => 'Kongolo',
                 'latitude' => NULL,
@@ -3160,8 +3137,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 24,
             ),
-            314 =>
-            array(
+            312 => 
+            array (
                 'id' => 317,
                 'name' => 'Mbulula',
                 'latitude' => NULL,
@@ -3170,8 +3147,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 24,
             ),
-            315 =>
-            array(
+            313 => 
+            array (
                 'id' => 318,
                 'name' => 'Kabalo',
                 'latitude' => NULL,
@@ -3180,8 +3157,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 24,
             ),
-            316 =>
-            array(
+            314 => 
+            array (
                 'id' => 319,
                 'name' => 'Bukama',
                 'latitude' => NULL,
@@ -3190,8 +3167,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            317 =>
-            array(
+            315 => 
+            array (
                 'id' => 320,
                 'name' => 'Kabondo Dianda',
                 'latitude' => NULL,
@@ -3200,8 +3177,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            318 =>
-            array(
+            316 => 
+            array (
                 'id' => 321,
                 'name' => 'Kabongo',
                 'latitude' => NULL,
@@ -3210,8 +3187,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            319 =>
-            array(
+            317 => 
+            array (
                 'id' => 322,
                 'name' => 'Songa',
                 'latitude' => NULL,
@@ -3220,8 +3197,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            320 =>
-            array(
+            318 => 
+            array (
                 'id' => 323,
                 'name' => 'Kayamba',
                 'latitude' => NULL,
@@ -3230,8 +3207,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            321 =>
-            array(
+            319 => 
+            array (
                 'id' => 324,
                 'name' => 'Kitenge',
                 'latitude' => NULL,
@@ -3240,8 +3217,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            322 =>
-            array(
+            320 => 
+            array (
                 'id' => 325,
                 'name' => 'Ankoro',
                 'latitude' => NULL,
@@ -3250,8 +3227,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 24,
             ),
-            323 =>
-            array(
+            321 => 
+            array (
                 'id' => 326,
                 'name' => 'Mulongo',
                 'latitude' => NULL,
@@ -3260,8 +3237,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            324 =>
-            array(
+            322 => 
+            array (
                 'id' => 327,
                 'name' => 'Lwamba',
                 'latitude' => NULL,
@@ -3270,8 +3247,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            325 =>
-            array(
+            323 => 
+            array (
                 'id' => 328,
                 'name' => 'Mukanga',
                 'latitude' => NULL,
@@ -3280,8 +3257,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            326 =>
-            array(
+            324 => 
+            array (
                 'id' => 329,
                 'name' => 'Malemba Nkulu',
                 'latitude' => NULL,
@@ -3290,8 +3267,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            327 =>
-            array(
+            325 => 
+            array (
                 'id' => 330,
                 'name' => 'Kinda',
                 'latitude' => NULL,
@@ -3300,8 +3277,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            328 =>
-            array(
+            326 => 
+            array (
                 'id' => 331,
                 'name' => 'Kamina',
                 'latitude' => NULL,
@@ -3310,8 +3287,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 4,
             ),
-            329 =>
-            array(
+            327 => 
+            array (
                 'id' => 332,
                 'name' => 'Kikwit-Sud',
                 'latitude' => NULL,
@@ -3320,8 +3297,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 13,
             ),
-            330 =>
-            array(
+            328 => 
+            array (
                 'id' => 333,
                 'name' => 'Pweto',
                 'latitude' => NULL,
@@ -3330,8 +3307,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            331 =>
-            array(
+            329 => 
+            array (
                 'id' => 334,
                 'name' => 'Lukafu',
                 'latitude' => NULL,
@@ -3340,8 +3317,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            332 =>
-            array(
+            330 => 
+            array (
                 'id' => 335,
                 'name' => 'Mufunga Sampwe',
                 'latitude' => NULL,
@@ -3350,8 +3327,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            333 =>
-            array(
+            331 => 
+            array (
                 'id' => 336,
                 'name' => 'Kilwa',
                 'latitude' => NULL,
@@ -3360,8 +3337,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            334 =>
-            array(
+            332 => 
+            array (
                 'id' => 337,
                 'name' => 'Kapolowe',
                 'latitude' => NULL,
@@ -3370,8 +3347,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            335 =>
-            array(
+            333 => 
+            array (
                 'id' => 338,
                 'name' => 'Kashobwe',
                 'latitude' => NULL,
@@ -3380,8 +3357,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 3,
             ),
-            336 =>
-            array(
+            334 => 
+            array (
                 'id' => 339,
                 'name' => 'Bena Tshiadi',
                 'latitude' => NULL,
@@ -3390,8 +3367,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            337 =>
-            array(
+            335 => 
+            array (
                 'id' => 340,
                 'name' => 'Yangala',
                 'latitude' => NULL,
@@ -3400,8 +3377,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            338 =>
-            array(
+            336 => 
+            array (
                 'id' => 341,
                 'name' => 'Ilebo',
                 'latitude' => NULL,
@@ -3410,8 +3387,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 7,
             ),
-            339 =>
-            array(
+            337 => 
+            array (
                 'id' => 342,
                 'name' => 'Luebo',
                 'latitude' => NULL,
@@ -3420,8 +3397,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 7,
             ),
-            340 =>
-            array(
+            338 => 
+            array (
                 'id' => 343,
                 'name' => 'Bena Leka',
                 'latitude' => NULL,
@@ -3430,8 +3407,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            341 =>
-            array(
+            339 => 
+            array (
                 'id' => 344,
                 'name' => 'Muetshi',
                 'latitude' => NULL,
@@ -3440,8 +3417,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            342 =>
-            array(
+            340 => 
+            array (
                 'id' => 345,
                 'name' => 'Tshikula',
                 'latitude' => NULL,
@@ -3450,8 +3427,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            343 =>
-            array(
+            341 => 
+            array (
                 'id' => 346,
                 'name' => 'Dibaya',
                 'latitude' => NULL,
@@ -3460,8 +3437,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            344 =>
-            array(
+            342 => 
+            array (
                 'id' => 347,
                 'name' => 'Kalomba',
                 'latitude' => NULL,
@@ -3470,8 +3447,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            345 =>
-            array(
+            343 => 
+            array (
                 'id' => 348,
                 'name' => 'Tshibala',
                 'latitude' => NULL,
@@ -3480,8 +3457,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            346 =>
-            array(
+            344 => 
+            array (
                 'id' => 349,
                 'name' => 'Mushenge',
                 'latitude' => NULL,
@@ -3490,8 +3467,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 7,
             ),
-            347 =>
-            array(
+            345 => 
+            array (
                 'id' => 350,
                 'name' => 'Bulape',
                 'latitude' => NULL,
@@ -3500,8 +3477,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 7,
             ),
-            348 =>
-            array(
+            346 => 
+            array (
                 'id' => 351,
                 'name' => 'Masuika',
                 'latitude' => NULL,
@@ -3510,8 +3487,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            349 =>
-            array(
+            347 => 
+            array (
                 'id' => 352,
                 'name' => 'Luiza',
                 'latitude' => NULL,
@@ -3520,8 +3497,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            350 =>
-            array(
+            348 => 
+            array (
                 'id' => 353,
                 'name' => 'Katoka',
                 'latitude' => NULL,
@@ -3530,8 +3507,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            351 =>
-            array(
+            349 => 
+            array (
                 'id' => 354,
                 'name' => 'Ndesha',
                 'latitude' => NULL,
@@ -3540,8 +3517,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            352 =>
-            array(
+            350 => 
+            array (
                 'id' => 355,
                 'name' => 'Tshikaji',
                 'latitude' => NULL,
@@ -3550,8 +3527,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            353 =>
-            array(
+            351 => 
+            array (
                 'id' => 356,
                 'name' => 'Bilomba',
                 'latitude' => NULL,
@@ -3560,8 +3537,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            354 =>
-            array(
+            352 => 
+            array (
                 'id' => 357,
                 'name' => 'Ndekesha',
                 'latitude' => NULL,
@@ -3570,8 +3547,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            355 =>
-            array(
+            353 => 
+            array (
                 'id' => 358,
                 'name' => 'Bunkonde',
                 'latitude' => NULL,
@@ -3580,8 +3557,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            356 =>
-            array(
+            354 => 
+            array (
                 'id' => 359,
                 'name' => 'Mikalayi',
                 'latitude' => NULL,
@@ -3590,8 +3567,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            357 =>
-            array(
+            355 => 
+            array (
                 'id' => 360,
                 'name' => 'Luambo',
                 'latitude' => NULL,
@@ -3600,8 +3577,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            358 =>
-            array(
+            356 => 
+            array (
                 'id' => 361,
                 'name' => 'Katende',
                 'latitude' => NULL,
@@ -3610,8 +3587,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            359 =>
-            array(
+            357 => 
+            array (
                 'id' => 362,
                 'name' => 'Ndjoko-Mpunda',
                 'latitude' => NULL,
@@ -3620,8 +3597,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 7,
             ),
-            360 =>
-            array(
+            358 => 
+            array (
                 'id' => 363,
                 'name' => 'Lubondaie',
                 'latitude' => NULL,
@@ -3630,8 +3607,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            361 =>
-            array(
+            359 => 
+            array (
                 'id' => 364,
                 'name' => 'Kakenge',
                 'latitude' => NULL,
@@ -3640,8 +3617,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 7,
             ),
-            362 =>
-            array(
+            360 => 
+            array (
                 'id' => 365,
                 'name' => 'Rwampara',
                 'latitude' => NULL,
@@ -3650,8 +3627,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            363 =>
-            array(
+            361 => 
+            array (
                 'id' => 366,
                 'name' => 'Jiba',
                 'latitude' => NULL,
@@ -3660,8 +3637,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            364 =>
-            array(
+            362 => 
+            array (
                 'id' => 367,
                 'name' => 'Linga',
                 'latitude' => NULL,
@@ -3670,8 +3647,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            365 =>
-            array(
+            363 => 
+            array (
                 'id' => 368,
                 'name' => 'Mangala',
                 'latitude' => NULL,
@@ -3680,8 +3657,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            366 =>
-            array(
+            364 => 
+            array (
                 'id' => 369,
                 'name' => 'Damas',
                 'latitude' => NULL,
@@ -3690,8 +3667,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            367 =>
-            array(
+            365 => 
+            array (
                 'id' => 370,
                 'name' => 'Fataki',
                 'latitude' => NULL,
@@ -3700,8 +3677,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            368 =>
-            array(
+            366 => 
+            array (
                 'id' => 371,
                 'name' => 'Drodro',
                 'latitude' => NULL,
@@ -3710,8 +3687,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            369 =>
-            array(
+            367 => 
+            array (
                 'id' => 372,
                 'name' => 'Tchomia',
                 'latitude' => NULL,
@@ -3720,8 +3697,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            370 =>
-            array(
+            368 => 
+            array (
                 'id' => 373,
                 'name' => 'Rethy',
                 'latitude' => NULL,
@@ -3730,8 +3707,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            371 =>
-            array(
+            369 => 
+            array (
                 'id' => 374,
                 'name' => 'Nyakunde',
                 'latitude' => NULL,
@@ -3740,8 +3717,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            372 =>
-            array(
+            370 => 
+            array (
                 'id' => 375,
                 'name' => 'Nizi',
                 'latitude' => NULL,
@@ -3750,8 +3727,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            373 =>
-            array(
+            371 => 
+            array (
                 'id' => 376,
                 'name' => 'Bambu',
                 'latitude' => NULL,
@@ -3760,8 +3737,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            374 =>
-            array(
+            372 => 
+            array (
                 'id' => 377,
                 'name' => 'Kilo',
                 'latitude' => NULL,
@@ -3770,8 +3747,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            375 =>
-            array(
+            373 => 
+            array (
                 'id' => 378,
                 'name' => 'Mongbalu',
                 'latitude' => NULL,
@@ -3780,8 +3757,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            376 =>
-            array(
+            374 => 
+            array (
                 'id' => 379,
                 'name' => 'Komanda',
                 'latitude' => NULL,
@@ -3790,8 +3767,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            377 =>
-            array(
+            375 => 
+            array (
                 'id' => 380,
                 'name' => 'Gethy',
                 'latitude' => NULL,
@@ -3800,8 +3777,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            378 =>
-            array(
+            376 => 
+            array (
                 'id' => 381,
                 'name' => 'Boga',
                 'latitude' => NULL,
@@ -3810,8 +3787,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            379 =>
-            array(
+            377 => 
+            array (
                 'id' => 382,
                 'name' => 'Nia-Nia',
                 'latitude' => NULL,
@@ -3820,8 +3797,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            380 =>
-            array(
+            378 => 
+            array (
                 'id' => 383,
                 'name' => 'Mandima',
                 'latitude' => NULL,
@@ -3830,8 +3807,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            381 =>
-            array(
+            379 => 
+            array (
                 'id' => 384,
                 'name' => 'Lolwa',
                 'latitude' => NULL,
@@ -3840,8 +3817,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            382 =>
-            array(
+            380 => 
+            array (
                 'id' => 385,
                 'name' => 'Lita',
                 'latitude' => NULL,
@@ -3850,8 +3827,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            383 =>
-            array(
+            381 => 
+            array (
                 'id' => 386,
                 'name' => 'Boma-Mangbetu',
                 'latitude' => NULL,
@@ -3860,8 +3837,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            384 =>
-            array(
+            382 => 
+            array (
                 'id' => 387,
                 'name' => 'Isiro',
                 'latitude' => NULL,
@@ -3870,8 +3847,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            385 =>
-            array(
+            383 => 
+            array (
                 'id' => 388,
                 'name' => 'Wamba',
                 'latitude' => NULL,
@@ -3880,8 +3857,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            386 =>
-            array(
+            384 => 
+            array (
                 'id' => 389,
                 'name' => 'Doruma',
                 'latitude' => NULL,
@@ -3890,8 +3867,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            387 =>
-            array(
+            385 => 
+            array (
                 'id' => 390,
                 'name' => 'Pawa',
                 'latitude' => NULL,
@@ -3900,8 +3877,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            388 =>
-            array(
+            386 => 
+            array (
                 'id' => 391,
                 'name' => 'Niangara',
                 'latitude' => NULL,
@@ -3910,8 +3887,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            389 =>
-            array(
+            387 => 
+            array (
                 'id' => 392,
                 'name' => 'Rungu',
                 'latitude' => NULL,
@@ -3920,8 +3897,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            390 =>
-            array(
+            388 => 
+            array (
                 'id' => 393,
                 'name' => 'Mambasa',
                 'latitude' => NULL,
@@ -3930,8 +3907,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            391 =>
-            array(
+            389 => 
+            array (
                 'id' => 394,
                 'name' => 'Rimba',
                 'latitude' => NULL,
@@ -3940,8 +3917,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            392 =>
-            array(
+            390 => 
+            array (
                 'id' => 395,
                 'name' => 'Logo',
                 'latitude' => NULL,
@@ -3950,8 +3927,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            393 =>
-            array(
+            391 => 
+            array (
                 'id' => 396,
                 'name' => 'Angumu',
                 'latitude' => NULL,
@@ -3960,8 +3937,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            394 =>
-            array(
+            392 => 
+            array (
                 'id' => 397,
                 'name' => 'Nyarambe',
                 'latitude' => NULL,
@@ -3970,8 +3947,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            395 =>
-            array(
+            393 => 
+            array (
                 'id' => 398,
                 'name' => 'Mahagi',
                 'latitude' => NULL,
@@ -3980,8 +3957,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            396 =>
-            array(
+            394 => 
+            array (
                 'id' => 399,
                 'name' => 'Makoro',
                 'latitude' => NULL,
@@ -3990,8 +3967,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            397 =>
-            array(
+            395 => 
+            array (
                 'id' => 400,
                 'name' => 'Kambala',
                 'latitude' => NULL,
@@ -4000,8 +3977,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            398 =>
-            array(
+            396 => 
+            array (
                 'id' => 401,
                 'name' => 'Biringi',
                 'latitude' => NULL,
@@ -4010,8 +3987,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            399 =>
-            array(
+            397 => 
+            array (
                 'id' => 402,
                 'name' => 'Laybo',
                 'latitude' => NULL,
@@ -4020,8 +3997,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            400 =>
-            array(
+            398 => 
+            array (
                 'id' => 403,
                 'name' => 'Ariwara',
                 'latitude' => NULL,
@@ -4030,8 +4007,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            401 =>
-            array(
+            399 => 
+            array (
                 'id' => 404,
                 'name' => 'Adi',
                 'latitude' => NULL,
@@ -4040,8 +4017,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            402 =>
-            array(
+            400 => 
+            array (
                 'id' => 405,
                 'name' => 'Aru',
                 'latitude' => NULL,
@@ -4050,8 +4027,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            403 =>
-            array(
+            401 => 
+            array (
                 'id' => 406,
                 'name' => 'Adja',
                 'latitude' => NULL,
@@ -4060,8 +4037,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            404 =>
-            array(
+            402 => 
+            array (
                 'id' => 407,
                 'name' => 'Aungba',
                 'latitude' => NULL,
@@ -4070,8 +4047,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 6,
             ),
-            405 =>
-            array(
+            403 => 
+            array (
                 'id' => 408,
                 'name' => 'Faradje',
                 'latitude' => NULL,
@@ -4080,8 +4057,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            406 =>
-            array(
+            404 => 
+            array (
                 'id' => 409,
                 'name' => 'Gombari',
                 'latitude' => NULL,
@@ -4090,8 +4067,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            407 =>
-            array(
+            405 => 
+            array (
                 'id' => 410,
                 'name' => 'Dungu',
                 'latitude' => NULL,
@@ -4100,8 +4077,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 5,
             ),
-            408 =>
-            array(
+            406 => 
+            array (
                 'id' => 411,
                 'name' => 'Demba',
                 'latitude' => NULL,
@@ -4110,8 +4087,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            409 =>
-            array(
+            407 => 
+            array (
                 'id' => 412,
                 'name' => 'Mutoto',
                 'latitude' => NULL,
@@ -4120,8 +4097,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            410 =>
-            array(
+            408 => 
+            array (
                 'id' => 413,
                 'name' => 'Lubunga',
                 'latitude' => NULL,
@@ -4130,8 +4107,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 10:31:32',
                 'province_id' => 25,
             ),
-            411 =>
-            array(
+            409 => 
+            array (
                 'id' => 414,
                 'name' => 'Kananga',
                 'latitude' => NULL,
@@ -4140,8 +4117,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 8,
             ),
-            412 =>
-            array(
+            410 => 
+            array (
                 'id' => 415,
                 'name' => 'Maluku II',
                 'latitude' => NULL,
@@ -4150,8 +4127,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 10,
             ),
-            413 =>
-            array(
+            411 => 
+            array (
                 'id' => 416,
                 'name' => 'Nselo',
                 'latitude' => NULL,
@@ -4160,8 +4137,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 11,
             ),
-            414 =>
-            array(
+            412 => 
+            array (
                 'id' => 417,
                 'name' => 'Lomela',
                 'latitude' => NULL,
@@ -4170,8 +4147,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 21,
             ),
-            415 =>
-            array(
+            413 => 
+            array (
                 'id' => 418,
                 'name' => 'Nioki',
                 'latitude' => NULL,
@@ -4180,8 +4157,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 16,
             ),
-            416 =>
-            array(
+            414 => 
+            array (
                 'id' => 419,
                 'name' => 'Bolobo',
                 'latitude' => NULL,
@@ -4190,8 +4167,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 16,
             ),
-            417 =>
-            array(
+            415 => 
+            array (
                 'id' => 420,
                 'name' => 'Mushie',
                 'latitude' => NULL,
@@ -4200,8 +4177,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 16,
             ),
-            418 =>
-            array(
+            416 => 
+            array (
                 'id' => 421,
                 'name' => 'Kwamouth',
                 'latitude' => NULL,
@@ -4210,8 +4187,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 16,
             ),
-            419 =>
-            array(
+            417 => 
+            array (
                 'id' => 422,
                 'name' => 'Mokala',
                 'latitude' => NULL,
@@ -4220,8 +4197,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 13,
             ),
-            420 =>
-            array(
+            418 => 
+            array (
                 'id' => 423,
                 'name' => 'Kisanji',
                 'latitude' => NULL,
@@ -4230,8 +4207,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:09',
                 'province_id' => 12,
             ),
-            421 =>
-            array(
+            419 => 
+            array (
                 'id' => 424,
                 'name' => 'Lukonga',
                 'latitude' => NULL,
@@ -4240,8 +4217,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 8,
             ),
-            422 =>
-            array(
+            420 => 
+            array (
                 'id' => 425,
                 'name' => 'Tunda',
                 'latitude' => NULL,
@@ -4250,8 +4227,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 17,
             ),
-            423 =>
-            array(
+            421 => 
+            array (
                 'id' => 426,
                 'name' => 'Bosobolo',
                 'latitude' => NULL,
@@ -4260,8 +4237,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 20,
             ),
-            424 =>
-            array(
+            422 => 
+            array (
                 'id' => 427,
                 'name' => 'Businga',
                 'latitude' => NULL,
@@ -4270,8 +4247,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 20,
             ),
-            425 =>
-            array(
+            423 => 
+            array (
                 'id' => 428,
                 'name' => 'Boto',
                 'latitude' => NULL,
@@ -4280,8 +4257,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 23,
             ),
-            426 =>
-            array(
+            424 => 
+            array (
                 'id' => 429,
                 'name' => 'Lisala',
                 'latitude' => NULL,
@@ -4290,8 +4267,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 18,
             ),
-            427 =>
-            array(
+            425 => 
+            array (
                 'id' => 430,
                 'name' => 'Ndage',
                 'latitude' => NULL,
@@ -4300,8 +4277,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 23,
             ),
-            428 =>
-            array(
+            426 => 
+            array (
                 'id' => 431,
                 'name' => 'Mwela Lembwa',
                 'latitude' => NULL,
@@ -4310,8 +4287,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 12,
             ),
-            429 =>
-            array(
+            427 => 
+            array (
                 'id' => 432,
                 'name' => 'Likati',
                 'latitude' => NULL,
@@ -4320,8 +4297,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 1,
             ),
-            430 =>
-            array(
+            428 => 
+            array (
                 'id' => 433,
                 'name' => 'Yahuma',
                 'latitude' => NULL,
@@ -4330,8 +4307,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 25,
             ),
-            431 =>
-            array(
+            429 => 
+            array (
                 'id' => 434,
                 'name' => 'Ikela',
                 'latitude' => NULL,
@@ -4340,8 +4317,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 26,
             ),
-            432 =>
-            array(
+            430 => 
+            array (
                 'id' => 435,
                 'name' => 'Ubundu',
                 'latitude' => NULL,
@@ -4350,8 +4327,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 25,
             ),
-            433 =>
-            array(
+            431 => 
+            array (
                 'id' => 436,
                 'name' => 'Kailo',
                 'latitude' => NULL,
@@ -4360,8 +4337,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 17,
             ),
-            434 =>
-            array(
+            432 => 
+            array (
                 'id' => 437,
                 'name' => 'Ototo',
                 'latitude' => NULL,
@@ -4370,8 +4347,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 21,
             ),
-            435 =>
-            array(
+            433 => 
+            array (
                 'id' => 438,
                 'name' => 'Tshumbe',
                 'latitude' => NULL,
@@ -4380,8 +4357,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 21,
             ),
-            436 =>
-            array(
+            434 => 
+            array (
                 'id' => 439,
                 'name' => 'Lusangi',
                 'latitude' => NULL,
@@ -4390,8 +4367,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 17,
             ),
-            437 =>
-            array(
+            435 => 
+            array (
                 'id' => 440,
                 'name' => 'Bobozo',
                 'latitude' => NULL,
@@ -4400,8 +4377,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 8,
             ),
-            438 =>
-            array(
+            436 => 
+            array (
                 'id' => 441,
                 'name' => 'Punia',
                 'latitude' => NULL,
@@ -4410,8 +4387,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 17,
             ),
-            439 =>
-            array(
+            437 => 
+            array (
                 'id' => 442,
                 'name' => 'Kyondo',
                 'latitude' => NULL,
@@ -4420,8 +4397,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            440 =>
-            array(
+            438 => 
+            array (
                 'id' => 443,
                 'name' => 'Mabalako',
                 'latitude' => NULL,
@@ -4430,8 +4407,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            441 =>
-            array(
+            439 => 
+            array (
                 'id' => 444,
                 'name' => 'Biena',
                 'latitude' => NULL,
@@ -4440,8 +4417,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            442 =>
-            array(
+            440 => 
+            array (
                 'id' => 445,
                 'name' => 'Masereka',
                 'latitude' => NULL,
@@ -4450,8 +4427,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            443 =>
-            array(
+            441 => 
+            array (
                 'id' => 446,
                 'name' => 'Lubero',
                 'latitude' => NULL,
@@ -4460,8 +4437,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            444 =>
-            array(
+            442 => 
+            array (
                 'id' => 447,
                 'name' => 'Manguredjipa',
                 'latitude' => NULL,
@@ -4470,8 +4447,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            445 =>
-            array(
+            443 => 
+            array (
                 'id' => 448,
                 'name' => 'Mutwanga',
                 'latitude' => NULL,
@@ -4480,8 +4457,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            446 =>
-            array(
+            444 => 
+            array (
                 'id' => 449,
                 'name' => 'Kamango',
                 'latitude' => NULL,
@@ -4490,8 +4467,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            447 =>
-            array(
+            445 => 
+            array (
                 'id' => 450,
                 'name' => 'Oicha',
                 'latitude' => NULL,
@@ -4500,8 +4477,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            448 =>
-            array(
+            446 => 
+            array (
                 'id' => 451,
                 'name' => 'Binza',
                 'latitude' => NULL,
@@ -4510,8 +4487,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            449 =>
-            array(
+            447 => 
+            array (
                 'id' => 452,
                 'name' => 'Rwanguba',
                 'latitude' => NULL,
@@ -4520,8 +4497,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            450 =>
-            array(
+            448 => 
+            array (
                 'id' => 453,
                 'name' => 'Birambizo',
                 'latitude' => NULL,
@@ -4530,8 +4507,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            451 =>
-            array(
+            449 => 
+            array (
                 'id' => 454,
                 'name' => 'Vuhovi',
                 'latitude' => NULL,
@@ -4540,8 +4517,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            452 =>
-            array(
+            450 => 
+            array (
                 'id' => 455,
                 'name' => 'Musienene',
                 'latitude' => NULL,
@@ -4550,8 +4527,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            453 =>
-            array(
+            451 => 
+            array (
                 'id' => 456,
                 'name' => 'Katwa',
                 'latitude' => NULL,
@@ -4560,8 +4537,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            454 =>
-            array(
+            452 => 
+            array (
                 'id' => 457,
                 'name' => 'Kayna',
                 'latitude' => NULL,
@@ -4570,8 +4547,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            455 =>
-            array(
+            453 => 
+            array (
                 'id' => 458,
                 'name' => 'Kibua',
                 'latitude' => NULL,
@@ -4580,8 +4557,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            456 =>
-            array(
+            454 => 
+            array (
                 'id' => 459,
                 'name' => 'Masisi',
                 'latitude' => NULL,
@@ -4590,8 +4567,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            457 =>
-            array(
+            455 => 
+            array (
                 'id' => 460,
                 'name' => 'Mweso',
                 'latitude' => NULL,
@@ -4600,8 +4577,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            458 =>
-            array(
+            456 => 
+            array (
                 'id' => 461,
                 'name' => 'Kirotshe',
                 'latitude' => NULL,
@@ -4610,8 +4587,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            459 =>
-            array(
+            457 => 
+            array (
                 'id' => 462,
                 'name' => 'Pinga',
                 'latitude' => NULL,
@@ -4620,8 +4597,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            460 =>
-            array(
+            458 => 
+            array (
                 'id' => 463,
                 'name' => 'Kibirizi',
                 'latitude' => NULL,
@@ -4630,8 +4607,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            461 =>
-            array(
+            459 => 
+            array (
                 'id' => 464,
                 'name' => 'Kalunguta',
                 'latitude' => NULL,
@@ -4640,8 +4617,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            462 =>
-            array(
+            460 => 
+            array (
                 'id' => 465,
                 'name' => 'Alimbongo',
                 'latitude' => NULL,
@@ -4650,8 +4627,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            463 =>
-            array(
+            461 => 
+            array (
                 'id' => 466,
                 'name' => 'Nyiragongo',
                 'latitude' => NULL,
@@ -4660,8 +4637,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            464 =>
-            array(
+            462 => 
+            array (
                 'id' => 467,
                 'name' => 'Katoyi',
                 'latitude' => NULL,
@@ -4670,8 +4647,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            465 =>
-            array(
+            463 => 
+            array (
                 'id' => 468,
                 'name' => 'Bambo',
                 'latitude' => NULL,
@@ -4680,8 +4657,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            466 =>
-            array(
+            464 => 
+            array (
                 'id' => 469,
                 'name' => 'Itebero',
                 'latitude' => NULL,
@@ -4690,8 +4667,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 19,
             ),
-            467 =>
-            array(
+            465 => 
+            array (
                 'id' => 470,
                 'name' => 'Mwana',
                 'latitude' => NULL,
@@ -4700,8 +4677,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            468 =>
-            array(
+            466 => 
+            array (
                 'id' => 471,
                 'name' => 'Kaziba',
                 'latitude' => NULL,
@@ -4710,8 +4687,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            469 =>
-            array(
+            467 => 
+            array (
                 'id' => 472,
                 'name' => 'Nyangezi',
                 'latitude' => NULL,
@@ -4720,8 +4697,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            470 =>
-            array(
+            468 => 
+            array (
                 'id' => 473,
                 'name' => 'Mubumbano',
                 'latitude' => NULL,
@@ -4730,8 +4707,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            471 =>
-            array(
+            469 => 
+            array (
                 'id' => 474,
                 'name' => 'Walungu',
                 'latitude' => NULL,
@@ -4740,8 +4717,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            472 =>
-            array(
+            470 => 
+            array (
                 'id' => 475,
                 'name' => 'Hauts-Plateaux',
                 'latitude' => NULL,
@@ -4750,8 +4727,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            473 =>
-            array(
+            471 => 
+            array (
                 'id' => 476,
                 'name' => 'Kaniola',
                 'latitude' => NULL,
@@ -4760,8 +4737,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            474 =>
-            array(
+            472 => 
+            array (
                 'id' => 477,
                 'name' => 'Kalonge',
                 'latitude' => NULL,
@@ -4770,8 +4747,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            475 =>
-            array(
+            473 => 
+            array (
                 'id' => 478,
                 'name' => 'Bunyakiri',
                 'latitude' => NULL,
@@ -4780,8 +4757,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            476 =>
-            array(
+            474 => 
+            array (
                 'id' => 479,
                 'name' => 'Kitutu',
                 'latitude' => NULL,
@@ -4790,8 +4767,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            477 =>
-            array(
+            475 => 
+            array (
                 'id' => 480,
                 'name' => 'Kamituga',
                 'latitude' => NULL,
@@ -4800,8 +4777,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            478 =>
-            array(
+            476 => 
+            array (
                 'id' => 481,
                 'name' => 'Itombwe',
                 'latitude' => NULL,
@@ -4810,8 +4787,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            479 =>
-            array(
+            477 => 
+            array (
                 'id' => 482,
                 'name' => 'Minembwe',
                 'latitude' => NULL,
@@ -4820,8 +4797,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            480 =>
-            array(
+            478 => 
+            array (
                 'id' => 483,
                 'name' => 'Nundu',
                 'latitude' => NULL,
@@ -4830,8 +4807,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            481 =>
-            array(
+            479 => 
+            array (
                 'id' => 484,
                 'name' => 'Ruzizi',
                 'latitude' => NULL,
@@ -4840,8 +4817,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            482 =>
-            array(
+            480 => 
+            array (
                 'id' => 485,
                 'name' => 'Lemera',
                 'latitude' => NULL,
@@ -4850,8 +4827,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            483 =>
-            array(
+            481 => 
+            array (
                 'id' => 486,
                 'name' => 'Shabunda',
                 'latitude' => NULL,
@@ -4860,8 +4837,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            484 =>
-            array(
+            482 => 
+            array (
                 'id' => 487,
                 'name' => 'Lulingu',
                 'latitude' => NULL,
@@ -4870,8 +4847,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            485 =>
-            array(
+            483 => 
+            array (
                 'id' => 488,
                 'name' => 'Kalole',
                 'latitude' => NULL,
@@ -4880,8 +4857,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            486 =>
-            array(
+            484 => 
+            array (
                 'id' => 489,
                 'name' => 'Mwenga',
                 'latitude' => NULL,
@@ -4890,8 +4867,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            487 =>
-            array(
+            485 => 
+            array (
                 'id' => 490,
                 'name' => 'Mulungu',
                 'latitude' => NULL,
@@ -4900,8 +4877,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            488 =>
-            array(
+            486 => 
+            array (
                 'id' => 491,
                 'name' => 'Katana',
                 'latitude' => NULL,
@@ -4910,8 +4887,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            489 =>
-            array(
+            487 => 
+            array (
                 'id' => 492,
                 'name' => 'Kafakumba',
                 'latitude' => NULL,
@@ -4920,8 +4897,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            490 =>
-            array(
+            488 => 
+            array (
                 'id' => 493,
                 'name' => 'Kanzenze',
                 'latitude' => NULL,
@@ -4930,8 +4907,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            491 =>
-            array(
+            489 => 
+            array (
                 'id' => 494,
                 'name' => 'Kasaji',
                 'latitude' => NULL,
@@ -4940,8 +4917,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            492 =>
-            array(
+            490 => 
+            array (
                 'id' => 495,
                 'name' => 'Dilolo',
                 'latitude' => NULL,
@@ -4950,8 +4927,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            493 =>
-            array(
+            491 => 
+            array (
                 'id' => 496,
                 'name' => 'Sandoa',
                 'latitude' => NULL,
@@ -4960,8 +4937,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            494 =>
-            array(
+            492 => 
+            array (
                 'id' => 497,
                 'name' => 'Kalamba',
                 'latitude' => NULL,
@@ -4970,8 +4947,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            495 =>
-            array(
+            493 => 
+            array (
                 'id' => 498,
                 'name' => 'Lubudi',
                 'latitude' => NULL,
@@ -4980,8 +4957,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            496 =>
-            array(
+            494 => 
+            array (
                 'id' => 499,
                 'name' => 'Bunkeya',
                 'latitude' => NULL,
@@ -4990,8 +4967,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            497 =>
-            array(
+            495 => 
+            array (
                 'id' => 500,
                 'name' => 'Kambove',
                 'latitude' => NULL,
@@ -5000,8 +4977,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            498 =>
-            array(
+            496 => 
+            array (
                 'id' => 501,
                 'name' => 'Kipushi',
                 'latitude' => NULL,
@@ -5010,8 +4987,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            499 =>
-            array(
+            497 => 
+            array (
                 'id' => 502,
                 'name' => 'Kafubu',
                 'latitude' => NULL,
@@ -5020,10 +4997,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-        ));
-        DB::table('health_zones')->insert(array(
-            0 =>
-            array(
+            498 => 
+            array (
                 'id' => 503,
                 'name' => 'Kilela Balanda',
                 'latitude' => NULL,
@@ -5032,8 +5007,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            1 =>
-            array(
+            499 => 
+            array (
                 'id' => 504,
                 'name' => 'Manika',
                 'latitude' => NULL,
@@ -5042,8 +5017,10 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            2 =>
-            array(
+        ));
+        DB::table('health_zones')->insert(array (
+            0 => 
+            array (
                 'id' => 505,
                 'name' => 'Vangu',
                 'latitude' => NULL,
@@ -5052,8 +5029,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            3 =>
-            array(
+            1 => 
+            array (
                 'id' => 506,
                 'name' => 'Kowe',
                 'latitude' => NULL,
@@ -5062,8 +5039,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            4 =>
-            array(
+            2 => 
+            array (
                 'id' => 507,
                 'name' => 'Mitwaba',
                 'latitude' => NULL,
@@ -5072,8 +5049,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            5 =>
-            array(
+            3 => 
+            array (
                 'id' => 508,
                 'name' => 'Minova',
                 'latitude' => NULL,
@@ -5082,8 +5059,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            6 =>
-            array(
+            4 => 
+            array (
                 'id' => 509,
                 'name' => 'Kalehe',
                 'latitude' => NULL,
@@ -5092,8 +5069,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            7 =>
-            array(
+            5 => 
+            array (
                 'id' => 510,
                 'name' => 'Miti-Murhesa',
                 'latitude' => NULL,
@@ -5102,8 +5079,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            8 =>
-            array(
+            6 => 
+            array (
                 'id' => 511,
                 'name' => 'Idjwi',
                 'latitude' => NULL,
@@ -5112,8 +5089,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            9 =>
-            array(
+            7 => 
+            array (
                 'id' => 512,
                 'name' => 'Aba',
                 'latitude' => NULL,
@@ -5122,8 +5099,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 5,
             ),
-            10 =>
-            array(
+            8 => 
+            array (
                 'id' => 513,
                 'name' => 'Masina II',
                 'latitude' => NULL,
@@ -5132,8 +5109,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 10,
             ),
-            11 =>
-            array(
+            9 => 
+            array (
                 'id' => 514,
                 'name' => 'Kapanga',
                 'latitude' => NULL,
@@ -5142,8 +5119,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            12 =>
-            array(
+            10 => 
+            array (
                 'id' => 515,
                 'name' => 'Dilala',
                 'latitude' => NULL,
@@ -5152,8 +5129,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            13 =>
-            array(
+            11 => 
+            array (
                 'id' => 516,
                 'name' => 'Mutshatsha',
                 'latitude' => NULL,
@@ -5162,8 +5139,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 15,
             ),
-            14 =>
-            array(
+            12 => 
+            array (
                 'id' => 517,
                 'name' => 'Kikula',
                 'latitude' => NULL,
@@ -5172,8 +5149,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            15 =>
-            array(
+            13 => 
+            array (
                 'id' => 518,
                 'name' => 'Kimbi Lulenge',
                 'latitude' => NULL,
@@ -5182,8 +5159,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 22,
             ),
-            16 =>
-            array(
+            14 => 
+            array (
                 'id' => 519,
                 'name' => 'Ferekeni',
                 'latitude' => NULL,
@@ -5192,8 +5169,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 17,
             ),
-            17 =>
-            array(
+            15 => 
+            array (
                 'id' => 520,
                 'name' => 'Wapinda',
                 'latitude' => NULL,
@@ -5202,8 +5179,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 20,
             ),
-            18 =>
-            array(
+            16 => 
+            array (
                 'id' => 521,
                 'name' => 'Kasenga',
                 'latitude' => NULL,
@@ -5212,8 +5189,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 3,
             ),
-            19 =>
-            array(
+            17 => 
+            array (
                 'id' => 522,
                 'name' => 'Ntandembelo',
                 'latitude' => NULL,
@@ -5222,8 +5199,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 16,
             ),
-            20 =>
-            array(
+            18 => 
+            array (
                 'id' => 523,
                 'name' => 'Yumbi',
                 'latitude' => NULL,
@@ -5232,8 +5209,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 16,
             ),
-            21 =>
-            array(
+            19 => 
+            array (
                 'id' => 524,
                 'name' => 'Tshudi Loto',
                 'latitude' => NULL,
@@ -5242,8 +5219,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 21,
             ),
-            22 =>
-            array(
+            20 => 
+            array (
                 'id' => 525,
                 'name' => 'Kiri',
                 'latitude' => NULL,
@@ -5252,8 +5229,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 16,
             ),
-            23 =>
-            array(
+            21 => 
+            array (
                 'id' => 526,
                 'name' => 'Bosanga',
                 'latitude' => NULL,
@@ -5262,8 +5239,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 26,
             ),
-            24 =>
-            array(
+            22 => 
+            array (
                 'id' => 527,
                 'name' => 'Yalifafo',
                 'latitude' => NULL,
@@ -5272,8 +5249,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 26,
             ),
-            25 =>
-            array(
+            23 => 
+            array (
                 'id' => 528,
                 'name' => 'Dekese',
                 'latitude' => NULL,
@@ -5282,8 +5259,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:10',
                 'province_id' => 7,
             ),
-            26 =>
-            array(
+            24 => 
+            array (
                 'id' => 529,
                 'name' => 'Mimia',
                 'latitude' => NULL,
@@ -5292,8 +5269,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 16,
             ),
-            27 =>
-            array(
+            25 => 
+            array (
                 'id' => 530,
                 'name' => 'Makanza',
                 'latitude' => NULL,
@@ -5302,8 +5279,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            28 =>
-            array(
+            26 => 
+            array (
                 'id' => 531,
                 'name' => 'Bomongo',
                 'latitude' => NULL,
@@ -5312,8 +5289,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            29 =>
-            array(
+            27 => 
+            array (
                 'id' => 532,
                 'name' => 'Lolanga Mampoko',
                 'latitude' => NULL,
@@ -5322,8 +5299,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            30 =>
-            array(
+            28 => 
+            array (
                 'id' => 533,
                 'name' => 'Penjwa',
                 'latitude' => NULL,
@@ -5332,8 +5309,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 16,
             ),
-            31 =>
-            array(
+            29 => 
+            array (
                 'id' => 534,
                 'name' => 'Bokungu',
                 'latitude' => NULL,
@@ -5342,8 +5319,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 26,
             ),
-            32 =>
-            array(
+            30 => 
+            array (
                 'id' => 535,
                 'name' => 'Wema',
                 'latitude' => NULL,
@@ -5352,8 +5329,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 26,
             ),
-            33 =>
-            array(
+            31 => 
+            array (
                 'id' => 536,
                 'name' => 'Befale',
                 'latitude' => NULL,
@@ -5362,8 +5339,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 26,
             ),
-            34 =>
-            array(
+            32 => 
+            array (
                 'id' => 537,
                 'name' => 'Lotumbe',
                 'latitude' => NULL,
@@ -5372,8 +5349,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            35 =>
-            array(
+            33 => 
+            array (
                 'id' => 538,
                 'name' => 'Monkoto',
                 'latitude' => NULL,
@@ -5382,8 +5359,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 26,
             ),
-            36 =>
-            array(
+            34 => 
+            array (
                 'id' => 539,
                 'name' => 'Djombo',
                 'latitude' => NULL,
@@ -5392,8 +5369,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            37 =>
-            array(
+            35 => 
+            array (
                 'id' => 540,
                 'name' => 'Bongandanga',
                 'latitude' => NULL,
@@ -5402,8 +5379,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 18,
             ),
-            38 =>
-            array(
+            36 => 
+            array (
                 'id' => 541,
                 'name' => 'Lingomo',
                 'latitude' => NULL,
@@ -5412,8 +5389,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 26,
             ),
-            39 =>
-            array(
+            37 => 
+            array (
                 'id' => 542,
                 'name' => 'Basankusu',
                 'latitude' => NULL,
@@ -5422,8 +5399,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            40 =>
-            array(
+            38 => 
+            array (
                 'id' => 543,
                 'name' => 'Boende',
                 'latitude' => NULL,
@@ -5432,8 +5409,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 26,
             ),
-            41 =>
-            array(
+            39 => 
+            array (
                 'id' => 544,
                 'name' => 'Mompono',
                 'latitude' => NULL,
@@ -5442,8 +5419,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 26,
             ),
-            42 =>
-            array(
+            40 => 
+            array (
                 'id' => 545,
                 'name' => 'Monieka',
                 'latitude' => NULL,
@@ -5452,8 +5429,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            43 =>
-            array(
+            41 => 
+            array (
                 'id' => 546,
                 'name' => 'Banjow Moke',
                 'latitude' => NULL,
@@ -5462,8 +5439,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 16,
             ),
-            44 =>
-            array(
+            42 => 
+            array (
                 'id' => 547,
                 'name' => 'Inongo',
                 'latitude' => NULL,
@@ -5472,8 +5449,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 16,
             ),
-            45 =>
-            array(
+            43 => 
+            array (
                 'id' => 548,
                 'name' => 'Bolenge',
                 'latitude' => NULL,
@@ -5482,8 +5459,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            46 =>
-            array(
+            44 => 
+            array (
                 'id' => 549,
                 'name' => 'Bolomba',
                 'latitude' => NULL,
@@ -5492,8 +5469,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            47 =>
-            array(
+            45 => 
+            array (
                 'id' => 550,
                 'name' => 'Ingende',
                 'latitude' => NULL,
@@ -5502,8 +5479,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            48 =>
-            array(
+            46 => 
+            array (
                 'id' => 551,
                 'name' => 'Iboko',
                 'latitude' => NULL,
@@ -5512,8 +5489,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            49 =>
-            array(
+            47 => 
+            array (
                 'id' => 552,
                 'name' => 'Irebu',
                 'latitude' => NULL,
@@ -5522,8 +5499,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            50 =>
-            array(
+            48 => 
+            array (
                 'id' => 553,
                 'name' => 'Mbandaka',
                 'latitude' => NULL,
@@ -5532,8 +5509,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            51 =>
-            array(
+            49 => 
+            array (
                 'id' => 554,
                 'name' => 'Lukolela',
                 'latitude' => NULL,
@@ -5542,8 +5519,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            52 =>
-            array(
+            50 => 
+            array (
                 'id' => 555,
                 'name' => 'Bikoro',
                 'latitude' => NULL,
@@ -5552,8 +5529,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            53 =>
-            array(
+            51 => 
+            array (
                 'id' => 556,
                 'name' => 'Ntondo',
                 'latitude' => NULL,
@@ -5562,8 +5539,8 @@ class HealthZonesTableSeeder extends Seeder
                 'updated_at' => '2020-08-06 09:45:11',
                 'province_id' => 2,
             ),
-            54 =>
-            array(
+            52 => 
+            array (
                 'id' => 557,
                 'name' => 'Lilanga Bobangi',
                 'latitude' => NULL,
