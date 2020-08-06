@@ -22,6 +22,7 @@
             v-if="activeMenu==3"
             :fluxZones="fluxZones"
             :fluxProvinces="fluxProvinces"
+            :flux24Errors="flux24Errors"
           />
           <MenuInfrastructure
             v-if="activeMenu==5"
@@ -602,7 +603,7 @@ export default {
             const difference = item.volume - referenceVolume;
             item.difference = difference;
             item.percent = (difference / referenceVolume) * 100;
-            
+
           } else {
             item.volume_reference = 0;
             item.difference = item.volume;
