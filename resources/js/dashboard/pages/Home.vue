@@ -82,6 +82,9 @@
               <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
+              <b-tab title="Province">
+                <GlobalProvince :fluxGlobalIn="fluxGlobalIn" :fluxGlobalOut="fluxGlobalOut" />
+              </b-tab>
               <b-tab title="FLux chart" v-if="hasFlux24DailyIn" :active="hasFlux24DailyIn">
                 <FluxChart
                   :flux24Daily="flux24Daily"
@@ -152,12 +155,14 @@ import MenuEpidemology from "../components/menu/Epidemiology";
 import MenuInfrastructure from "../components/menu/Infrastructure";
 import MenuOrientation from "../components/menu/Orientation";
 import MenuIndicateur from "../components/menu/Indicateur";
+import GlobalProvince from "../components/flux/GLobalProvince";
 
 import { mapState, mapActions, mapMutations } from "vuex";
 import { difference } from "@turf/turf";
 
 const preference_start = "2020-02-01";
 const preference_end = "2020-03-18";
+
 export default {
   components: {
     Maps,
@@ -218,6 +223,8 @@ export default {
       menuColunmStyle: {},
       flux24PrensenceDaily: [],
       flux24PresenceDailyIn: [],
+      fluxGlobalIn: [],
+      fluxGlobalOut: [],
     };
   },
   computed: {
@@ -293,6 +300,7 @@ export default {
         this.$set(this.loadings, "indicator", value);
       }
     );
+    this.loadFluxGLobalData();
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),
@@ -602,7 +610,6 @@ export default {
             const difference = item.volume - referenceVolume;
             item.difference = difference;
             item.percent = (difference / referenceVolume) * 100;
-            
           } else {
             item.volume_reference = 0;
             item.difference = item.volume;
@@ -903,6 +910,24 @@ export default {
         .catch(({ response }) => {
           this.flux24Errors = response.data.errors;
           this.$set(this.loadings, "fluxPC_flux24", false);
+        });
+    },
+    loadFluxGLobalData() {
+      axios
+        .get("/api/dashboard/flux/origin/provinces/h-24/global-in",{
+          params:{
+            observation_start:'',
+            observation_end:''
+          }
+        })
+        .then(({ data }) => {
+          this.fluxGlobalIn = data;
+        });
+
+      axios
+        .get("/api/dashboard/flux/origin/provinces/h-24/global-out")
+        .then(({ data }) => {
+          this.fluxGlobalOut = data;
         });
     },
   },

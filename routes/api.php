@@ -94,6 +94,8 @@ Route::group([
                     Route::get('/daily-compare', 'DashBoardController@getFluxDataFromOriginDailyProvinceCompare');
                     Route::get('/daily-in', 'DashBoardController@getFluxDataFromOriginDailyInProvince');
                     Route::get('/daily-out', 'DashBoardController@getFluxDataFromOriginDailyOutProvince');
+                    Route::get('/global-in', 'Flux24ProvinceController@getGlobalDataIn');
+                    Route::get('/global-out', 'Flux24ProvinceController@getGlobalDataOut');
                 });
                 Route::group(['prefix' => 'm-30'], function () {
                     Route::get('/', 'DashBoardController@getFlux30DataFromOriginProvince');
@@ -115,7 +117,7 @@ Route::group([
     });
     Route::group(['prefix' => 'hospital-situations'], function () {
         Route::get('/by-hospital/{hospital_id}', 'HospitalSituationController@indexByHospital');
-        
+
         Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate');
     });
 
