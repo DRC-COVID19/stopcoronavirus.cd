@@ -14,4 +14,9 @@ class Province extends Model
     {
         return $this->belongsToMany(SmsDiffusion::class);
     }
+
+    public function healthZones()
+    {
+        return $this->hasMany(HealthZone::class);
+    }
 }
