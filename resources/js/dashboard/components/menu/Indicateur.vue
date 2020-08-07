@@ -145,7 +145,8 @@ import {
   INDICATEUR_Y,
   INDICATEUR_X,
   INDICATEUR_PREDEFINED_INPUT,
-  FLUX_LAST_UPDATE
+  FLUX_LAST_UPDATE,
+  DATEFORMAT
 } from "../../config/env";
 import { mapActions, mapState } from "vuex";
 export default {
@@ -202,28 +203,39 @@ export default {
       this.submitFilters(this.form);
     },
     predefinedInputChange(value) {
-      if (value) {
-        switch (value) {
-          case 1:
-            this.$set(this.form, 'observation_end' , "2020-03-28")
-            this.$set(this.form, 'observation_start' , "2020-03-19")
-            this.$set(this.form,'x',1);
-            this.$set(this.form,'y',1);
-            this.$set(this.form,'geoGranularity',2);
-            this.geoGranularityChange(2);
-            this.$set(this.form,'geoOptions',['Gombe']);
+      if (!value) return
 
-            this.dateRangeObservation = {
-              startDate: new Date(this.form.observation_start),
-              endDate: new Date(this.form.observation_end),
-            }
-            this.submitFilters(this.form);
-            break;
+      let observation_end = null , observation_start = null,
+      x = null , y = null , geoGranularity = null ;
+      let geoOptions = ["Gombe"];
 
-          default:
-            break;
-        }
+      switch (value) {
+        case 1:
+          observation_end = "2020-03-28" ;
+          observation_start = "2020-03-19" ;
+          x = 1 ;
+          y = 1 ;
+          geoGranularity = 2 ;
+          break;
+        case 2:
+          observation_end = this.moment().format(DATEFORMAT) ;
+          observation_start = "2020-03-28" ;
+          x = 1 ;
+          y = 1 ;
+          geoGranularity = 2 ;
+          break;
+        default:
+          break;
       }
+      this.geoGranularityChange(geoGranularity) ;
+      this.form = {
+        geoOptions , observation_end , observation_start , x , y , geoGranularity
+      } ;
+      this.dateRangeObservation = {
+        startDate: new Date(this.form.observation_start),
+        endDate: new Date(this.form.observation_end),
+      }
+      this.submitFilters(this.form);
     },
     geoGranularityChange(value) {
       // this.setFluxGeoGranularity(value);
