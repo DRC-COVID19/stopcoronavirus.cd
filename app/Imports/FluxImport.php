@@ -17,7 +17,13 @@ class FluxImport implements ToModel, WithProgressBar
      */
     public function model(array $row)
     {
-        if ($row[0]=='Date' || $row[0]=="﻿Date") {
+        if ($row[0] == 'Date' || $row[0] == "﻿Date") {
+            return;
+        }
+        $flux = Flux::where('Date', $row[0])->where('origin', $row[1])->where('Destination', $row[2])
+            ->where('Immobility', $row[3])->where('Home_Category', $row[4])->where('Activity_Category', $row[5])
+            ->where('Observation_Zone', $row[6])->where('Mode', $row[7])->where('Volume', $row[8])->exists();
+        if ($flux) {
             return;
         }
         return new Flux([
@@ -32,5 +38,4 @@ class FluxImport implements ToModel, WithProgressBar
             'Volume' => $row[8]
         ]);
     }
-    
 }
