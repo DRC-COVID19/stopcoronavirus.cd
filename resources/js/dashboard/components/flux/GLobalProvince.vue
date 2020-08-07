@@ -1,10 +1,10 @@
 <template>
-  <b-container>
+  <b-container class="global_province_container p-0">
     <b-row>
-      <b-col>
-        <div class="chart-container">
-          <canvas width="100vh" ref="global_province"></canvas>
-        </div>
+      <b-col cols="12">
+        <b-card no-body class="p-2 rounded-0">
+          <canvas height="600" :ref="reference" class="global_province"></canvas>
+        </b-card>
       </b-col>
     </b-row>
   </b-container>
@@ -17,6 +17,19 @@ export default {
       type: Array,
       default: () => [],
     },
+    reference: {
+      type: String,
+      default: null,
+      required: true,
+    },
+    color: {
+      type: String,
+      default: "33ac2e",
+    },
+    title: {
+      type: String,
+      default: null,
+    },
   },
   mounted() {
     this.mobility(this.globalData);
@@ -28,58 +41,40 @@ export default {
   },
   methods: {
     mobility(data) {
-      
-      const localData = localData.sort((a, b) => {
-        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
-      });
-
       const dataChart = {
-        labels: localData.map((d) => d.destination),
+        labels: data.map((d) => d.zone),
         datasets: [
           {
-            label: "Référence",
-            backgroundColor: "#33ac2e",
-            borderColor: "#33ac2e",
+            backgroundColor: this.color,
+            borderColor: this.color,
             borderWidth: 1,
-            data: localData.map((d) => d.volume_reference),
-          },
-          {
-            label: "Observation",
-            backgroundColor: PALETTE.flux_out_color,
-            borderColor: PALETTE.flux_out_color,
-            data: localData.map((d) => d.volume),
+            data: data.map((d) => d.volume),
           },
         ],
       };
 
       const myBarChart = new Chart(
-        this.$refs.global_province.getContext("2d"),
+        this.$refs[this.reference].getContext("2d"),
         {
           type: "horizontalBar",
           data: dataChart,
           options: {
-            elements: {
-              rectangle: {
-                borderWidth: 2,
-              },
-            },
             responsive: true,
             legend: {
+              display: false,
               position: "bottom",
-              labels: {
-                fontSize: 9,
-              },
+              labels: {},
             },
             title: {
-              display: false,
-              text: "Rapport des sorties avant et après confinement",
+              display: !!this.title,
+              text: this.title,
               color: "#6c757d",
             },
             scales: {
               xAxes: [
                 {
                   ticks: {
-                    beginAtZero: true,
+                    beginAtZero: false,
                     fontSize: 9,
                   },
                 },
@@ -87,6 +82,7 @@ export default {
               yAxes: [
                 {
                   ticks: {
+                    beginAtZero: false,
                     fontSize: 9,
                   },
                 },
@@ -97,6 +93,9 @@ export default {
                 sync: {
                   enabled: false, // enable trace line syncing with other charts
                 },
+                zoom: {
+                  enabled: false,
+                },
               },
             },
           },
@@ -106,6 +105,5 @@ export default {
   },
 };
 </script>
-
-<style>
+<style lang="scss" scoped>
 </style>
