@@ -172,26 +172,27 @@ class HospitalController extends Controller
                       $query->where('hospital_id', intval($hospital));
                   }
               })->selectRaw(
-                'SUM(occupied_respirators) AS occupied_respirators,
-                 SUM(occupied_resuscitation_beds) AS occupied_resuscitation_beds,
-                 SUM(
+                ' SUM(occupied_respirators) AS occupied_respirators,
+                  SUM(occupied_resuscitation_beds) AS occupied_resuscitation_beds,
+                  SUM(
                     (SELECT respirators FROM
                       (SELECT id, updated_at, respirators from hospitals
-                          UNION
-                          SELECT hospital_id AS id, updated_at, respirators from hospital_logs
+                        UNION
+                        SELECT hospital_id AS id, updated_at, respirators from hospital_logs
                       ) AS a
-                      WHERE a.id = hospital_id
+                      WHERE a.id = hospital_id AND a.respirators IS NOT NULL
                       ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
                       LIMIT 1
                     )
                   ) AS respirators,
-                 SUM(
+                  SUM(
                     (SELECT resuscitation_beds FROM
                       (SELECT id, updated_at, resuscitation_beds from hospitals
-                          UNION
-                          SELECT hospital_id AS id, updated_at, resuscitation_beds from hospital_logs
+                        UNION
+                        SELECT hospital_id AS id, updated_at, resuscitation_beds from hospital_logs
+                        WHERE respirators IS NOT NULL
                       ) AS a
-                      WHERE a.id = hospital_id
+                      WHERE a.id = hospital_id AND a.resuscitation_beds IS NOT NULL
                       ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
                       LIMIT 1
                     )
@@ -207,8 +208,7 @@ class HospitalController extends Controller
                       AND h.last_update <= "' . $last_update . '"
                       AND (
                         h.last_update > hospital_situations.last_update OR
-                        (h.last_update = hospital_situations.last_update AND
-                         h.id > hospital_situations.id )
+                        (h.last_update = hospital_situations.last_update AND h.id > hospital_situations.id )
                       )
                     ') ;
               })

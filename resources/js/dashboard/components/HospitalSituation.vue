@@ -107,13 +107,10 @@ export default {
       etatGlobal: true,
       dataGlobal: null,
       chartLabels : [
-        {label1 : "Total des Lits de réanimation" , label2 : "Total des respirateurs" ,
-          title : "Evolution du total des lits de réanimation et respirateurs" ,
+        { title : "Evolution du total des lits de réanimation et respirateurs" ,
           lableY : "Nombre total" } ,
 
-        {label1 : "Taux d'occupation des Lits de réanimation" ,
-          label2 : "Taux d'occupation des Respirateurs" ,
-          title : "Evolution du taux d'occupation des lits de réanimation et respirateurs",
+        { title : "Evolution du taux d'occupation des lits de réanimation et respirateurs",
           lableY : "Taux d'occupation" } ,
       ]
     };
@@ -155,16 +152,90 @@ export default {
       for (let i = 0; i < 2; i++) {
 
         let callbacks = {} , ticks = {}
-        let dataset1 , dataset2
+        let datasets = []
         if(i == 0){
-          dataset1 = data.resuscitation_beds
-          dataset2 = data.respirators
+          datasets = [
+            {
+              label: "Lits de réanimation" ,
+              backgroundColor: "#F44336",
+              borderColor: "#F44336",
+              data: data.resuscitation_beds,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4
+            },
+            {
+              label: "Respirateurs" ,
+              fill: false,
+              backgroundColor: "#673AB7",
+              borderColor: "#673AB7",
+              data: data.respirators,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4
+            },
+            {
+              label: "Lits de réanimation occupés" ,
+              backgroundColor: "#9E9E9E",
+              borderColor: "#9E9E9E",
+              data: data.occupied_resuscitation_beds,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4,
+              borderDash: [5, 5]
+            },
+            {
+              label: "Respirateurs occupés" ,
+              fill: false,
+              backgroundColor: "#03A9F4",
+              borderColor: "#03A9F4",
+              data: data.occupied_respirators,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4,
+              borderDash: [5, 5]
+            },
+          ]
         }else{
-          dataset1 = data.occupied_resuscitation_beds.map(
+          const dataset1 = data.occupied_resuscitation_beds.map(
             (a, i) => Math.round(a * 100 / data.resuscitation_beds[i] ))
 
-          dataset2 = data.occupied_respirators.map(
+          const dataset2 = data.occupied_respirators.map(
             (a,i) => Math.round(a * 100 / data.respirators[i] ))
+
+          datasets = [
+            {
+              label: "Taux d'occupation des Lits de réanimation" ,
+              backgroundColor: "#ff6384",
+              borderColor: "#ff6384",
+              data: dataset1 ,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4
+            },
+            {
+              label: "Taux d'occupation des Respirateurs" ,
+              fill: false,
+              backgroundColor: "#36a2eb",
+              borderColor: "#36a2eb",
+              data: dataset2,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4
+            }
+          ]
 
           callbacks = {
             label: function (tooltipItem, data) {
@@ -186,31 +257,7 @@ export default {
           type: "line",
           data: {
             labels: data.last_update.map((d) => new Date(d)),
-            datasets: [
-              {
-                label: this.chartLabels[i].label1 ,
-                backgroundColor: "#ff6384",
-                borderColor: "#ff6384",
-                data: dataset1,
-                fill: false,
-                interpolate: true,
-                showLine: true,
-                pointRadius: 2,
-                lineTension: 0.4
-              },
-              {
-                label: this.chartLabels[i].label2 ,
-                fill: false,
-                backgroundColor: "#36a2eb",
-                borderColor: "#36a2eb",
-                data: dataset2,
-                fill: false,
-                interpolate: true,
-                showLine: true,
-                pointRadius: 2,
-                lineTension: 0.4
-              },
-            ],
+            datasets: datasets
           },
           options: {
             responsive: true,
