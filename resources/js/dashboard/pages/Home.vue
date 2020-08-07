@@ -66,7 +66,7 @@
               :isLoading="isLoading"
               :flux24Presence="flux24PresenceDailyIn"
             />
-            <MapsLegend v-if="hasRightSide && activeMenu == 1"></MapsLegend>
+            <MapsLegend v-if="this.flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
             <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
           </b-row>
         </b-col>
@@ -81,6 +81,18 @@
             <b-tabs pills card>
               <b-tab title="Covid-19 data" v-if="!!covidCases" :active="!!covidCases">
                 <SideCaseCovid :covidCases="covidCases" />
+              </b-tab>
+              <b-tab title="Province">
+                <b-row>
+                  <b-col cols="6" class="pr-2">
+                    <GlobalProvince title="Mobilité entrante" :color="palette.flux_in_color" :globalData="fluxGlobalIn" reference="fluxglobalIn" />
+                  </b-col>
+                  <b-col cols="6" class="pl-2">
+                    <GlobalProvince title="Mobilité sortante"  :color="palette.flux_out_color" :globalData="fluxGlobalOut" reference="fluxglobalOut"  />
+                  </b-col>
+                </b-row>
+                
+                 
               </b-tab>
               <b-tab title="FLux chart" v-if="hasFlux24DailyIn" :active="hasFlux24DailyIn">
                 <FluxChart
@@ -152,12 +164,15 @@ import MenuEpidemology from "../components/menu/Epidemiology";
 import MenuInfrastructure from "../components/menu/Infrastructure";
 import MenuOrientation from "../components/menu/Orientation";
 import MenuIndicateur from "../components/menu/Indicateur";
+import GlobalProvince from "../components/flux/GLobalProvince";
+import { OBSERVATION_START, OBSERVATION_END,PALETTE } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
 import { difference } from "@turf/turf";
 
 const preference_start = "2020-02-01";
 const preference_end = "2020-03-18";
+
 export default {
   components: {
     Maps,
@@ -182,6 +197,7 @@ export default {
     MenuInfrastructure,
     MenuOrientation,
     MenuIndicateur,
+    GlobalProvince
   },
   data() {
     return {
@@ -218,6 +234,9 @@ export default {
       menuColunmStyle: {},
       flux24PrensenceDaily: [],
       flux24PresenceDailyIn: [],
+      fluxGlobalIn: [],
+      fluxGlobalOut: [],
+      palette:PALETTE
     };
   },
   computed: {
@@ -233,7 +252,8 @@ export default {
       return (
         this.getHasCoviCases() ||
         this.flux24DailyIn.length > 0 ||
-        this.hospitalCount != null
+        this.hospitalCount != null ||
+        this.fluxGlobalIn.length > 0
       );
     },
     hasCovidCases() {
@@ -293,6 +313,7 @@ export default {
         this.$set(this.loadings, "indicator", value);
       }
     );
+    this.loadFluxGLobalData();
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData"]),
@@ -602,7 +623,6 @@ export default {
             const difference = item.volume - referenceVolume;
             item.difference = difference;
             item.percent = (difference / referenceVolume) * 100;
-            
           } else {
             item.volume_reference = 0;
             item.difference = item.volume;
@@ -903,6 +923,29 @@ export default {
         .catch(({ response }) => {
           this.flux24Errors = response.data.errors;
           this.$set(this.loadings, "fluxPC_flux24", false);
+        });
+    },
+    loadFluxGLobalData() {
+      axios
+        .get("/api/dashboard/flux/origin/provinces/h-24/global-in", {
+          params: {
+            observation_start: OBSERVATION_START,
+            observation_end: OBSERVATION_END,
+          },
+        })
+        .then(({ data }) => {
+          this.fluxGlobalIn = data;
+        });
+
+      axios
+        .get("/api/dashboard/flux/origin/provinces/h-24/global-out", {
+          params: {
+            observation_start: OBSERVATION_START,
+            observation_end: OBSERVATION_END,
+          },
+        })
+        .then(({ data }) => {
+          this.fluxGlobalOut = data;
         });
     },
   },
