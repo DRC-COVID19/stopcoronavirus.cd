@@ -142,7 +142,7 @@ Route::group([
     Route::get('cavid-cases/statistics/daily', 'DashBoardController@getLastPandemicsStatisticsDaily');
     Route::post('flux-24', 'DashBoardController@getFluxData');
     Route::post('flux-24-daily', 'DashBoardController@getFluxDataDaily');
-    Route::get('flux-zone', 'DashBoardController@getFluxZone');
+    Route::get('flux-zone', 'FluxZoneController@index');
     Route::get('flux-provinces', 'DashBoardController@getFluxProvinces');
 });
 
