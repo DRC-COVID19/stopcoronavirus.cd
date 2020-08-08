@@ -47,27 +47,34 @@
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
-            <Maps
-              :covidCases="covidCases"
-              :hospitals="hospitals"
-              :medicalOrientations="medicalOrientations"
-              :medicalOrientationSelected="medicalOrientationSelected"
-              :sondages="sondages"
-              :worried="worried"
-              :catchVirus="catchVirus"
-              :priceIncrease="priceIncrease"
-              :mask="mask"
-              :makala="makala"
-              :flour="flour"
-              :antiBacterialGel="antiBacterialGel"
-              :flux24="flux24"
-              :flux24DailyIn="flux24DailyIn"
-              :flux24DailyOut="flux24DailyOut"
-              :isLoading="isLoading"
-              :flux24Presence="flux24PresenceDailyIn"
-            />
-            <MapsLegend v-if="hasRightSide && activeMenu == 1"></MapsLegend>
-            <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
+            <div class="fullscreen-container">
+              <fullscreen ref="fullscreenMap" @change="fullscreenMapChange">
+                <Maps
+                  :covidCases="covidCases"
+                  :hospitals="hospitals"
+                  :medicalOrientations="medicalOrientations"
+                  :medicalOrientationSelected="medicalOrientationSelected"
+                  :sondages="sondages"
+                  :worried="worried"
+                  :catchVirus="catchVirus"
+                  :priceIncrease="priceIncrease"
+                  :mask="mask"
+                  :makala="makala"
+                  :flour="flour"
+                  :antiBacterialGel="antiBacterialGel"
+                  :flux24="flux24"
+                  :flux24DailyIn="flux24DailyIn"
+                  :flux24DailyOut="flux24DailyOut"
+                  :isLoading="isLoading"
+                  :flux24Presence="flux24PresenceDailyIn"
+                />
+                <MapsLegend v-if="hasRightSide && activeMenu == 1"></MapsLegend>
+                <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
+              </fullscreen>
+              <button type="button" @click="toggleFullscreenMap" class="fullscreen-btn">
+                <i class="fa fa-expand"></i>
+              </button>
+            </div>
           </b-row>
         </b-col>
         <b-col
@@ -602,7 +609,7 @@ export default {
             const difference = item.volume - referenceVolume;
             item.difference = difference;
             item.percent = (difference / referenceVolume) * 100;
-            
+
           } else {
             item.volume_reference = 0;
             item.difference = item.volume;
@@ -905,6 +912,12 @@ export default {
           this.$set(this.loadings, "fluxPC_flux24", false);
         });
     },
+    toggleFullscreenMap() {
+      this.$refs['fullscreenMap'].toggle()
+    },
+    fullscreenMapChange (fullscreen) {
+      this.fullscreen = fullscreen
+    }
   },
 };
 </script>

@@ -1,11 +1,18 @@
 <template>
-  <b-container fluid class="p-0" ref="tendanceContainer">
-    <b-row no-gutters>
-      <b-col cols="12" class="pl-0 pr-2 ">
-        <canvas  width="100vh" ref="comparisonChart" id="comparisonChart" />
-      </b-col>
-    </b-row>
-  </b-container>
+  <div class="fullscreen-container">
+    <fullscreen ref="fullscreen" @change="fullscreenChange">
+      <b-container fluid class="p-0 container-comparisonChart" ref="tendanceContainer">
+        <b-row no-gutters>
+          <b-col cols="12" class="pl-0 pr-2 ">
+            <canvas  width="100vh" ref="comparisonChart" id="comparisonChart" />
+          </b-col>
+        </b-row>
+      </b-container>
+    </fullscreen>
+    <button type="button" @click="toggleFullscreen" class="fullscreen-btn mini">
+      <i class="fa fa-expand"></i>
+    </button>
+  </div>
 </template>
 
 <script>
@@ -203,6 +210,16 @@ export default {
       };
 
       const myLineChart = new Chart(ref.getContext("2d"), tempData);
+    },
+    toggleFullscreen() {
+      this.$refs['fullscreen'].toggle()
+    },
+    fullscreenChange (fullscreen) {
+      this.fullscreen = fullscreen
+      if(!fullscreen){
+        this.$refs.comparisonChart.style.height = "100%"
+        this.$refs.comparisonChart.height = "100%"
+      }
     }
   },
   computed: {
@@ -216,6 +233,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.container-comparisonChart{
+  background-color: white;
+  height: 100%;
+  background-color: white;
+  .row{
+    height: 100%;
+  }
+}
+.fullscreen{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .container-comparisonChart{
+    width: 100%;
+    height: 80% ;
+    .row{
+      padding: 20px;
+    }
+  }
+}
 #comparisonChart{
+  height : 100% !important
 }
 </style>
