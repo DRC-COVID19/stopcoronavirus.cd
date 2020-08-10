@@ -31,6 +31,11 @@ export default {
       default: null,
     },
   },
+  data() {
+    return {
+      chart: null,
+    };
+  },
   mounted() {
     this.mobility(this.globalData);
   },
@@ -52,55 +57,52 @@ export default {
           },
         ],
       };
-
-      const myBarChart = new Chart(
-        this.$refs[this.reference].getContext("2d"),
-        {
-          type: "horizontalBar",
-          data: dataChart,
-          options: {
-            responsive: true,
-            legend: {
-              display: false,
-              position: "bottom",
-              labels: {},
-            },
-            title: {
-              display: !!this.title,
-              text: this.title,
-              color: "#6c757d",
-            },
-            scales: {
-              xAxes: [
-                {
-                  ticks: {
-                    beginAtZero: false,
-                    fontSize: 9,
-                  },
+      if (this.myLineChart) this.myLineChart.destroy();
+      this.chart = new Chart(this.$refs[this.reference].getContext("2d"), {
+        type: "horizontalBar",
+        data: dataChart,
+        options: {
+          responsive: true,
+          legend: {
+            display: false,
+            position: "bottom",
+            labels: {},
+          },
+          title: {
+            display: !!this.title,
+            text: this.title,
+            color: "#6c757d",
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  beginAtZero: false,
+                  fontSize: 9,
                 },
-              ],
-              yAxes: [
-                {
-                  ticks: {
-                    beginAtZero: false,
-                    fontSize: 9,
-                  },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: false,
+                  fontSize: 9,
                 },
-              ],
-            },
-            plugins: {
-              crosshair: {
-                sync: {
-                  enabled: false, // enable trace line syncing with other charts
-                },
-                zoom: {
-                  enabled: false,
-                },
+              },
+            ],
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: false, // enable trace line syncing with other charts
+              },
+              zoom: {
+                enabled: false,
               },
             },
           },
-        }
-      );
+        },
+      });
     },
   },
 };
