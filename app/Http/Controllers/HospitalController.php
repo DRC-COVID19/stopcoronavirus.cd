@@ -99,29 +99,29 @@ class HospitalController extends Controller
         try {
             $hospitals = Hospital::selectRaw(
                 'SUM(beds) AS beds , SUM(respirators) AS respirators, SUM(foam_beds) AS foam_beds ,
-                 SUM(resuscitation_beds) AS resuscitation_beds, SUM(doctors) AS doctors, SUM(nurses) AS nurses ,
-                 SUM(para_medicals) AS para_medicals,
+                SUM(resuscitation_beds) AS resuscitation_beds, SUM(doctors) AS doctors, SUM(nurses) AS nurses ,
+                SUM(para_medicals) AS para_medicals,
 
-                 SUM(
-                     (SELECT occupied_foam_beds FROM hospital_situations
-                      WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
-                 ) AS occupied_foam_beds ,
-                 SUM(
+                SUM(
+                    (SELECT occupied_foam_beds FROM hospital_situations
+                      WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                ) AS occupied_foam_beds ,
+                SUM(
                     (SELECT occupied_resuscitation_beds FROM hospital_situations
-                     WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
-                 ) AS occupied_resuscitation_beds ,
-                 SUM(
+                    WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                ) AS occupied_resuscitation_beds ,
+                SUM(
                     (SELECT occupied_respirators FROM hospital_situations
-                     WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
-                 ) AS occupied_respirators ,
-                 SUM(
+                    WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                ) AS occupied_respirators ,
+                SUM(
                     (SELECT resuscitation_ventilator FROM hospital_situations
-                     WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
-                 ) AS resuscitation_ventilator ,
-                 SUM(
+                    WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                ) AS resuscitation_ventilator ,
+                SUM(
                     (SELECT oxygenator FROM hospital_situations
-                     WHERE hospital_id = hospitals.id ORDER BY last_update LIMIT 1)
-                 ) AS oxygenator
+                    WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                ) AS oxygenator
                 '
             )->first();
 

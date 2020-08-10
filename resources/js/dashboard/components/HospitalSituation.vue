@@ -107,11 +107,11 @@ export default {
       etatGlobal: true,
       dataGlobal: null,
       chartLabels : [
-        { title : "Evolution du total des lits de réanimation et respirateurs" ,
-          lableY : "Nombre total" } ,
+        { title : "Evolution du taux d'occupation des respirateurs" ,
+          lableY : "Nombre de respirateurs" } ,
 
-        { title : "Evolution du taux d'occupation des lits de réanimation et respirateurs",
-          lableY : "Taux d'occupation" } ,
+        { title : "Evolution du taux d'occupation des lits de réanimation",
+          lableY : "Nombre de lits" } ,
       ]
     };
   },
@@ -156,10 +156,11 @@ export default {
         if(i == 0){
           datasets = [
             {
-              label: "Lits de réanimation" ,
-              backgroundColor: "#F44336",
-              borderColor: "#F44336",
-              data: data.resuscitation_beds,
+              label: "Respirateurs" ,
+              fill: false,
+              backgroundColor: "#673AB7",
+              borderColor: "#673AB7",
+              data: data.respirators,
               fill: false,
               interpolate: true,
               showLine: true,
@@ -167,11 +168,32 @@ export default {
               lineTension: 0.4
             },
             {
-              label: "Respirateurs" ,
+              label: "Respirateurs occupés" ,
               fill: false,
-              backgroundColor: "#673AB7",
-              borderColor: "#673AB7",
-              data: data.respirators,
+              backgroundColor: "#03A9F4",
+              borderColor: "#03A9F4",
+              data: data.occupied_respirators,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4,
+              borderDash: [5, 5]
+            }
+          ]
+        }else{
+          // const dataset1 = data.occupied_resuscitation_beds.map(
+          //   (a, i) => Math.round(a * 100 / data.resuscitation_beds[i] ))
+
+          // const dataset2 = data.occupied_respirators.map(
+          //   (a,i) => Math.round(a * 100 / data.respirators[i] ))
+
+          datasets = [
+            {
+              label: "Lits de réanimation" ,
+              backgroundColor: "#F44336",
+              borderColor: "#F44336",
+              data: data.resuscitation_beds,
               fill: false,
               interpolate: true,
               showLine: true,
@@ -189,68 +211,23 @@ export default {
               pointRadius: 2,
               lineTension: 0.4,
               borderDash: [5, 5]
-            },
-            {
-              label: "Respirateurs occupés" ,
-              fill: false,
-              backgroundColor: "#03A9F4",
-              borderColor: "#03A9F4",
-              data: data.occupied_respirators,
-              fill: false,
-              interpolate: true,
-              showLine: true,
-              pointRadius: 2,
-              lineTension: 0.4,
-              borderDash: [5, 5]
-            },
-          ]
-        }else{
-          const dataset1 = data.occupied_resuscitation_beds.map(
-            (a, i) => Math.round(a * 100 / data.resuscitation_beds[i] ))
-
-          const dataset2 = data.occupied_respirators.map(
-            (a,i) => Math.round(a * 100 / data.respirators[i] ))
-
-          datasets = [
-            {
-              label: "Taux d'occupation des Lits de réanimation" ,
-              backgroundColor: "#ff6384",
-              borderColor: "#ff6384",
-              data: dataset1 ,
-              fill: false,
-              interpolate: true,
-              showLine: true,
-              pointRadius: 2,
-              lineTension: 0.4
-            },
-            {
-              label: "Taux d'occupation des Respirateurs" ,
-              fill: false,
-              backgroundColor: "#36a2eb",
-              borderColor: "#36a2eb",
-              data: dataset2,
-              fill: false,
-              interpolate: true,
-              showLine: true,
-              pointRadius: 2,
-              lineTension: 0.4
             }
-          ]
+          ] ;
 
-          callbacks = {
-            label: function (tooltipItem, data) {
-                var label = data.datasets[tooltipItem.datasetIndex].label || "";
-                if (label) label += ": ";
-                label += tooltipItem.yLabel + "%";
-                return label;
-            }
-          }
+          // callbacks = {
+          //   label: function (tooltipItem, data) {
+          //       var label = data.datasets[tooltipItem.datasetIndex].label || "";
+          //       if (label) label += ": ";
+          //       label += tooltipItem.yLabel + "%";
+          //       return label;
+          //   }
+          // }
 
-          ticks = {
-            callback: function (value, index, values) {
-                return value + "%";
-            }
-          }
+          // ticks = {
+          //   callback: function (value, index, values) {
+          //       return value + "%";
+          //   }
+          // }
         }
 
         const config = {
