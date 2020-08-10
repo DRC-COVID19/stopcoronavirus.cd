@@ -22,14 +22,14 @@ class HospitalSituationController extends Controller
      */
     public function index()
     {
-        $hospitalSituation = HospitalSituation::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('created_at', 'desc')->paginate(15);
+        $hospitalSituation = HospitalSituation::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
         return HospitalSituationSingleResource::collection($hospitalSituation);
     }
 
     public function indexByHospital($hospital_id)
     {
         $hospitalSituation = HospitalSituation::where('hospital_id', $hospital_id)
-            ->orderBy('created_at', 'desc')->paginate(15);
+            ->orderBy('last_update', 'desc')->paginate(15);
         return HospitalSituationSingleResource::collection($hospitalSituation);
     }
     /**
