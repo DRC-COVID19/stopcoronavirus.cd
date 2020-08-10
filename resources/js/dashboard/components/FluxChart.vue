@@ -22,25 +22,38 @@
                 class="percent-p text-dash-color"
               >{{formatCash(fluxVolumObservation(item)*-1) }} personnes de moins sont entrées dans la zone</p>
             </b-card>
-            <b-card no-body class="mb-3 p-2" :ref="`mobile_entrance_${index}_card`">
-              <div class="chart-container">
-                <canvas
-                  height="200"
-                  width="100vh"
-                  :ref="`mobile_entrance_${index}`"
-                  :id="`mobile_entrance_${index}`"
-                ></canvas>
-              </div>
-            </b-card>
-
-            <b-card no-body class="p-2">
-              <canvas
-                height="200"
-                width="100vh"
-                :ref="`mobile_entrance_${index}_2_card`"
-                :id="`mobile_entrance_${index}_2_card`"
-              ></canvas>
-            </b-card>
+            <div class="fullscreen-container">
+              <fullscreen ref="fullscreenEntrance" @change="fullscreenEntranceChange">
+                <b-card no-body class="cardtype1 mb-3 p-2" :ref="`mobile_entrance_${index}_card`">
+                  <div class="chart-container">
+                    <canvas
+                      height="200"
+                      width="100vh"
+                      :ref="`mobile_entrance_${index}`"
+                      :id="`mobile_entrance_${index}`"
+                    ></canvas>
+                  </div>
+                </b-card>
+              </fullscreen>
+              <button type="button" @click="toggleFullscreenEntrance" class="fullscreen-btn mini">
+                <i class="fa fa-expand"></i>
+              </button>
+            </div>
+            <div class="fullscreen-container fullscreen-container2">
+              <fullscreen ref="fullscreenEntrance2" @change="fullscreenEntrance2Change">
+                <b-card no-body class="cardtype2 p-2">
+                  <canvas
+                    height="200"
+                    width="100vh"
+                    :ref="`mobile_entrance_${index}_2_card`"
+                    :id="`mobile_entrance_${index}_2_card`"
+                  ></canvas>
+                </b-card>
+              </fullscreen>
+              <button type="button" @click="toggleFullscreenEntrance2" class="fullscreen-btn mini">
+                <i class="fa fa-expand"></i>
+              </button>
+            </div>
           </b-col>
         </b-row>
       </b-col>
@@ -64,29 +77,45 @@
                 class="percent-p text-dash-color"
               >{{formatCash(fluxVolumObservation(item)*-1)}} personnes de moins sont sorties de la zone</p>
             </b-card>
-            <b-card no-body class="mb-3 p-2" :ref="`mobile_out_${index}_card`">
-              <div class="chart-container">
-                <canvas
-                  height="200"
-                  width="100vh"
-                  :ref="`mobile_out_${index}`"
-                  :id="`mobile_out_${index}`"
-                ></canvas>
-              </div>
-            </b-card>
-            <b-card no-body class="p-2">
-              <canvas
-                height="200"
-                width="100vh"
-                :ref="`mobile_out_${index}_2_card`"
-                :id="`mobile_out_${index}_2_card`"
-              ></canvas>
-              <!--
-                <div class="chart-container">
-                    <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
-                </div>
-              -->
-            </b-card>
+
+            <div class="fullscreen-container">
+              <fullscreen ref="fullscreenOut" @change="fullscreenOutChange">
+                <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_${index}_card`">
+                  <div class="chart-container">
+                    <canvas
+                      height="200"
+                      width="100vh"
+                      :ref="`mobile_out_${index}`"
+                      :id="`mobile_out_${index}`"
+                    ></canvas>
+                  </div>
+                </b-card>
+              </fullscreen>
+              <button type="button" @click="toggleFullscreenOut" class="fullscreen-btn mini">
+                <i class="fa fa-expand"></i>
+              </button>
+            </div>
+
+            <div class="fullscreen-container fullscreen-container2">
+              <fullscreen ref="fullscreenOut2" @change="fullscreenOut2Change">
+                <b-card no-body class="p-2 cardtype2">
+                  <canvas
+                    height="200"
+                    width="100vh"
+                    :ref="`mobile_out_${index}_2_card`"
+                    :id="`mobile_out_${index}_2_card`"
+                  ></canvas>
+                  <!--
+                    <div class="chart-container">
+                        <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
+                    </div>
+                  -->
+                </b-card>
+              </fullscreen>
+              <button type="button" @click="toggleFullscreenOut2" class="fullscreen-btn mini">
+                <i class="fa fa-expand"></i>
+              </button>
+            </div>
           </b-col>
         </b-row>
       </b-col>
@@ -161,6 +190,10 @@ export default {
       flux24DailyInLocal: [],
       flux24DailyOutLocal: [],
       flux24DailyPresenceInLocal: [],
+      configBarChart : {} ,
+      configBarChart2 : {} ,
+      barChart : null,
+      barChart2 : null
     };
   },
   computed: {
@@ -525,7 +558,8 @@ export default {
       };
 
       const refInput = `mobile_out_${index}_2_card`;
-      const myBarChart = new Chart(this.$refs[refInput][0].getContext("2d"), {
+      this.configBarChart2 =
+      {
         type: "horizontalBar",
         data: dataChart,
         options: {
@@ -571,7 +605,8 @@ export default {
             },
           },
         },
-      });
+      }
+      this.barChart2 = new Chart(this.$refs[refInput][0].getContext("2d"), this.configBarChart2 );
     },
     mobileEntranceOrigin(data, index) {
       // data=array[{origin,volume,isReference}]
@@ -616,8 +651,7 @@ export default {
       };
 
       const refInput = `mobile_entrance_${index}_2_card`;
-
-      const myBarChart2 = new Chart(this.$refs[refInput][0].getContext("2d"), {
+      this.configBarChart = {
         type: "horizontalBar",
         data: dataChart2,
         options: {
@@ -663,8 +697,71 @@ export default {
             },
           },
         },
-      });
+      } ;
+      this.barChart = new Chart(this.$refs[refInput][0].getContext("2d"),
+        this.configBarChart
+      );
     },
+    toggleFullscreenEntrance() {
+      this.$refs.fullscreenEntrance[0].toggle()
+    },
+    fullscreenEntranceChange (fullscreen) {
+      //this.fullscreen = fullscreen
+      if(!fullscreen){
+        this.$refs.mobile_entrance_0[0].style.height = "200px"
+        this.$refs.mobile_entrance_0[0].height = "200px"
+      }
+    },
+    toggleFullscreenEntrance2() {
+      this.$refs.fullscreenEntrance2[0].toggle()
+    },
+    fullscreenEntrance2Change(fullscreen) {
+      //this.fullscreen = fullscreen
+      if(!fullscreen){
+        this.$refs.mobile_entrance_0_2_card[0].style.height = "200px"
+        this.$refs.mobile_entrance_0_2_card[0].height = "200px"
+
+        this.configBarChart.options.legend.labels.fontSize = 9
+        this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 9
+        this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 9
+        this.barChart.update()
+      }else{
+        this.configBarChart.options.legend.labels.fontSize = 12
+        this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 12
+        this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 12
+        this.barChart.update()
+      }
+    },
+    toggleFullscreenOut() {
+      this.$refs.fullscreenOut[0].toggle()
+    },
+    fullscreenOutChange(fullscreen) {
+      //this.fullscreen = fullscreen
+      if(!fullscreen){
+        this.$refs.mobile_out_0[0].style.height = "200px"
+        this.$refs.mobile_out_0[0].height = "200px"
+      }
+    },
+    toggleFullscreenOut2() {
+      this.$refs.fullscreenOut2[0].toggle()
+    },
+    fullscreenOut2Change(fullscreen) {
+      //this.fullscreen = fullscreen
+      if(!fullscreen){
+        this.$refs.mobile_out_0_2_card[0].style.height = "200px"
+        this.$refs.mobile_out_0_2_card[0].height = "200px"
+
+        this.configBarChart2.options.legend.labels.fontSize = 9
+        this.configBarChart2.options.scales.xAxes[0].ticks.fontSize = 9
+        this.configBarChart2.options.scales.yAxes[0].ticks.fontSize = 9
+        this.barChart2.update()
+      }else{
+        this.configBarChart2.options.legend.labels.fontSize = 12
+        this.configBarChart2.options.scales.xAxes[0].ticks.fontSize = 12
+        this.configBarChart2.options.scales.yAxes[0].ticks.fontSize = 12
+        this.barChart2.update()
+      }
+    }
   },
 };
 </script>
@@ -713,6 +810,33 @@ export default {
 .chart-container {
   div {
     position: relative;
+  }
+}
+.fullscreen-container{
+  height: auto;
+  display: flex;
+}
+.fullscreen-container2 .fullscreen{
+  align-items: flex-start;
+}
+
+.fullscreen{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .cardtype1{
+    width: 100%;
+    height: 50% ;
+    .chart-container{
+      height: 100% ;
+    }
+  }
+  .cardtype2{
+    width: 40%;
+    height: auto ;
+    canvas{
+      height: 100% ;
+    }
   }
 }
 </style>

@@ -958,7 +958,7 @@ export default {
       }
     },
     fluxHatchedStyle(flux24Data, flux24DataPresence, legendHover = null) {
-      
+
       const localData =
         this.fluxType == 3
           ? flux24DataPresence.map((x) => {
