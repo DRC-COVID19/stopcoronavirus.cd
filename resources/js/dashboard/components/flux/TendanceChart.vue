@@ -1,11 +1,18 @@
 <template>
-  <b-container fluid class="p-0" ref="tendanceContainer">
-    <b-row no-gutters>
-      <b-col cols="12" class="pl-0 pr-2">
-        <canvas width="100vh" ref="tendanceChart" id="tendanceChart" />
-      </b-col>
-    </b-row>
-  </b-container>
+  <div class="fullscreen-container">
+    <fullscreen ref="fullscreen" @change="fullscreenChange">
+      <b-container fluid class="p-0 container-tendanceChart" ref="tendanceContainer">
+        <b-row no-gutters>
+          <b-col cols="12" class="pl-0 pr-2">
+            <canvas width="100vh" ref="tendanceChart" id="tendanceChart" />
+          </b-col>
+        </b-row>
+      </b-container>
+    </fullscreen>
+    <button type="button" @click="toggleFullscreen" class="fullscreen-btn mini">
+      <i class="fa fa-expand"></i>
+    </button>
+  </div>
 </template>
 
 <script>
@@ -286,7 +293,7 @@ export default {
         .attr("stroke", "steelblue")
         .attr("stroke-width", 1.5)
         .attr("stroke-dasharray", (d) => {
-         
+
           return strokeDasharray(d.isReference);
         })
         .attr(
@@ -301,6 +308,16 @@ export default {
             })
         );
     },
+    toggleFullscreen() {
+      this.$refs['fullscreen'].toggle()
+    },
+    fullscreenChange (fullscreen) {
+      this.fullscreen = fullscreen
+      if(!fullscreen){
+        this.$refs.tendanceChart.style.height = "100%"
+        this.$refs.tendanceChart.height = "100%"
+      }
+    }
   },
   computed: {
     ...mapState({
@@ -316,7 +333,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#tendanceChart {
+.container-tendanceChart{
   height: 100%;
+  background-color: white;
+  .row{
+    height: 100%;
+  }
+}
+.fullscreen{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .container-tendanceChart{
+    width: 100%;
+    height: 65% ;
+    .row{
+      padding: 20px;
+    }
+  }
+  #tendanceChart {
+    width: 100% !important;
+    height: min-content !important ;
+  }
+}
+#tendanceChart {
+  height : 100% !important
 }
 </style>
