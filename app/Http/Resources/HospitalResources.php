@@ -28,7 +28,7 @@ class HospitalResources extends JsonResource
             'para_medicals' => $this->para_medicals,
             'respirators' => $this->respirators,
             'situation' => $this->hospitalSituations,
-            'last_situation' => HospitalSituationResource::make($this->hospitalSituations()->orderBy('created_at', 'desc')->first()),
+            'last_situation' => HospitalSituationResource::make($this->hospitalSituations()->orderBy('last_update', 'desc')->first()),
             'longitude' => $this->longitude,
             'latitude' => $this->latitude
         ];
