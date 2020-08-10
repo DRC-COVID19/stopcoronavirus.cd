@@ -321,7 +321,7 @@ export default {
 <style lang="scss" scoped>
 .card-chart {
   position: relative;
-  #canvasStat {
+  #canvasStat1, #canvasStat2 {
     height: 400px !important ;
   }
   .spinner-border {

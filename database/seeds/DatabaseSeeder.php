@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CustomizedHospitalsTableSeeder::class);
         $this->call(HealthZonesTableSeeder::class);
         $this->call(ProvincesTableSeeder::class);
+        $this->call(FluxZonesTableSeeder::class);
     }
 }

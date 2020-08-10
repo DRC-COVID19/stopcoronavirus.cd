@@ -422,7 +422,9 @@
         background: transparent;
         border-radius: unset;
         border: unset;
+        height: 100%;
         > .tabs {
+            height: 100%;
             > .card-header {
                 background: transparent;
                 border: unset;
@@ -446,8 +448,26 @@
                 }
             }
             > .tab-content {
+                height: auto;
                 > .card-body {
+                    height: auto;
                     padding: 10px 0;
+                    > div {
+                        height: inherit;
+                        > div {
+                            height: inherit;
+                            .global_province_container {
+                                height: calc(100vh - 220px);
+                                @include card-style;
+                                div {
+                                    height: inherit;
+                                    .global_province {
+                                        height: 100% !important;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -790,6 +810,6 @@
         border-top-color: white;
     }
 }
-.indicateurChart{
+.indicateurChart {
     @include card-style;
 }
