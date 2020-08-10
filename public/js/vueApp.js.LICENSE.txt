@@ -1,5 +1,5 @@
 /*!
-  * vue-router v3.3.4
+  * vue-router v3.2.0
   * (c) 2020 Evan You
   * @license MIT
   */
@@ -58,7 +58,7 @@
  */
 
 /*!
- * vuex v3.5.1
+ * vuex v3.4.0
  * (c) 2020 Evan You
  * @license MIT
  */
