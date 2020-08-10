@@ -70,6 +70,8 @@ Route::group([
                     Route::get('/daily-compare', 'DashBoardController@getFluxDataFromOriginDailyCompare');
                     Route::get('daily-in', 'DashBoardController@getFluxDataFromOriginDailyIn');
                     Route::get('daily-out', 'DashBoardController@getFluxDataFromOriginDailyOut');
+                    Route::get('/global-in/province', 'Flux24ZoneController@getGlobalDataInByProvince');
+                    Route::get('/global-out/province', 'Flux24ZoneController@getGlobalDataOutByProvince');
                 });
                 Route::group(['prefix' => 'm-30'], function () {
                     Route::get('/', 'DashBoardController@getFlux30DataFromOrigin');

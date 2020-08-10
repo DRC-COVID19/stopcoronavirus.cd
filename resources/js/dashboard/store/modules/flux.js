@@ -8,6 +8,7 @@ export default {
         isWatchingfluxGeoOptions: true,
         domaineExtValues:{},
         tendanceChartSelectedValue:null,
+        isProvinceStatSeeing:false,
         legendHover : null , // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
     },
     mutations: {
@@ -37,6 +38,9 @@ export default {
         },
         setTendanceChartSelectedValue(state,payload){
             state.tendanceChartSelectedValue=payload;
+        },
+        setIsProvinceStatSeeing(state,payload){
+            state.isProvinceStatSeeing=payload;
         }
     },
     actions: {
