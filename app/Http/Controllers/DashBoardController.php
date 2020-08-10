@@ -688,16 +688,14 @@ class DashBoardController extends Controller
         try {
             $flux = Flux::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->where(function ($q) use ($data) {
-                    $q->orWhereIn('Destination', $data['fluxGeoOptions']);
-                })->groupBy('Date', 'day', 'destination', 'Origin')->get();
+                ->whereIn('Destination', $data['fluxGeoOptions'])
+                ->groupBy('Date', 'day', 'destination', 'Origin')->get();
 
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux::select(['Destination as destination', 'Origin as origin', 'Date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->where(function ($q) use ($data) {
-                        $q->orWhereIn('Destination', $data['fluxGeoOptions']);
-                    })->groupBy('day', 'Destination', 'Origin', 'Date')
+                    ->whereIn('Destination', $data['fluxGeoOptions'])
+                    ->groupBy('day', 'Destination', 'Origin', 'Date')
                     ->orderBy('volume')
                     ->get();
             }
@@ -738,17 +736,14 @@ class DashBoardController extends Controller
         try {
             $flux = Flux::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->where(function ($q) use ($data) {
-                    $q->orWhereIn('Origin', $data['fluxGeoOptions']);
-                })->groupBy('Date', 'day', 'origin', 'Destination')->get();
+                ->whereIn('Origin', $data['fluxGeoOptions'])
+                ->groupBy('Date', 'day', 'origin', 'Destination')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux::select(['Origin as origin', 'Destination as destination', 'Date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->where(function ($q) use ($data) {
-                        $q->whereIn('Origin', $data['fluxGeoOptions']);
-                    })->groupBy('day', 'Destination', 'Origin', 'Date')
+                    ->whereIn('Origin', $data['fluxGeoOptions'])->groupBy('day', 'Destination', 'Origin', 'Date')
                     ->orderBy('volume')->get();
             }
 
@@ -938,16 +933,14 @@ class DashBoardController extends Controller
         try {
             $flux = Flux24Province::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->where(function ($q) use ($data) {
-                    $q->orWhereIn('Destination', $data['fluxGeoOptions']);
-                })->groupBy('Date', 'day', 'destination', 'Origin')->get();
+                ->whereIn('Destination', $data['fluxGeoOptions'])
+                ->groupBy('Date', 'day', 'destination', 'Origin')->get();
 
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux24Province::select(['Destination as destination', 'Origin as origin', 'Date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->where(function ($q) use ($data) {
-                        $q->orWhereIn('Destination', $data['fluxGeoOptions']);
-                    })->groupBy('day', 'Destination', 'Origin', 'Date')
+                    ->whereIn('Destination', $data['fluxGeoOptions'])
+                    ->groupBy('day', 'Destination', 'Origin', 'Date')
                     ->orderBy('volume')
                     ->get();
             }
@@ -989,9 +982,8 @@ class DashBoardController extends Controller
         try {
             $flux = Flux24Province::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->where(function ($q) use ($data) {
-                    $q->orWhereIn('Origin', $data['fluxGeoOptions']);
-                })->groupBy('Date', 'day', 'origin', 'Destination')->get();
+                ->whereIn('Destination', $data['fluxGeoOptions'])
+                ->groupBy('Date', 'day', 'origin', 'Destination')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
@@ -2049,17 +2041,17 @@ class DashBoardController extends Controller
             $flux = Flux24PresenceZone::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->WhereIn('Zone', $data['fluxGeoOptions'])
-                ->groupBy('Date', 'Zone','day')->get();
+                ->groupBy('Date', 'Zone', 'day')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24PresenceZone::select(['Zone as zone','Date as date', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+                $fluxRefences = Flux24PresenceZone::select(['Zone as zone', 'Date as date', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->WhereIn('Zone', $data['fluxGeoOptions'])
-                    ->groupBy('day', 'Zone','Date')
+                    ->groupBy('day', 'Zone', 'Date')
                     ->orderBy('volume')
                     ->get();
-                    
+
                 if (count($fluxRefences) > 0) {
                     foreach ($fluxRefences as $value) {
                         $value->{'isReference'} = true;

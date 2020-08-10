@@ -1,16 +1,56 @@
 <template>
-  <b-container class="p-0 flux-chart">
-    <b-row no-gutters>
-      <b-col cols="12" md="4" class="pl-0 pr-2" ref="mobility">
-        <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
-          <b-col cols="12">
-            <h3>{{item[0].destination}}</h3>
-            <b-card
-              class="mb-3 flux-mobility"
-              :class="{'active':fluxType==1}"
-              @click="selectFluxType(1)"
-            >
-              <h5 class="percent-title">Mobilité entrante</h5>
+  <div>
+    <b-container v-if="isProvinceStatSeeing">
+      <b-row>
+        <b-col cols="12" md="6">
+          <h5 @click="seeProvinceStat" class="return-global">
+            <span class="fa fa-chevron-left"></span>
+            {{fluxGeoOptions[0]}}
+          </h5>
+        </b-col>
+        <b-col cols="12" md="6" class="text-right">
+          <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
+          <span class="small text-muted">Dernière mise à jour</span>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col cols="12" md="6">
+          <GlobalProvice
+            title="Mobilité entrante par zone"
+            :color="palette.flux_in_color"
+            :globalData="fluxZoneGlobalIn"
+            reference="fluxZoneglobalIn"
+          />
+        </b-col>
+        <b-col cols="12" md="6">
+          <GlobalProvice
+            title="Mobilité sortante par zone"
+            :color="palette.flux_out_color"
+            :globalData="fluxZoneGlobalOut"
+            reference="fluxZoneglobalOut"
+          />
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-container v-show="!isProvinceStatSeeing" class="p-0 flux-chart">
+      <b-row no-gutters>
+        <b-col cols="12" md="4" class="pl-0 pr-2" ref="mobility">
+          <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
+            <b-col cols="12">
+              <h3>
+                {{item[0].destination}}
+                <span
+                  v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0"
+                  class="fa fa-eye see-province-stat"
+                  @click="seeProvinceStat"
+                ></span>
+              </h3>
+              <b-card
+                class="mb-3 flux-mobility"
+                :class="{'active':fluxType==1}"
+                @click="selectFluxType(1)"
+              >
+                <h5 class="percent-title">Mobilité entrante</h5>
 
               <div class="percent flux-in-color">{{fluxInPercent(item)}}%​</div>
               <p
@@ -145,23 +185,66 @@
                 <canvas
                   height="200"
                   width="100vh"
-                  :ref="`mobile_presence_${index}`"
-                  :id="`mobile_presence_${index}`"
+                  :ref="`mobile_out_${index}_2_card`"
+                  :id="`mobile_out_${index}_2_card`"
                 ></canvas>
-              </div>
-            </b-card>
-          </b-col>
-        </b-row>
-      </b-col>
-    </b-row>
-  </b-container>
+                <!--
+                <div class="chart-container">
+                    <div :ref="`mobile_out_${index}_2`" :id="`mobile_out_${index}_2`"></div>
+                </div>
+                -->
+              </b-card>
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col cols="12" md="4" class="pr-0 pl-2">
+          <b-row v-for="(item,index) in flux24DailyPresenceInLocal" :key="index" class="mb-3">
+            <b-col cols="12">
+              <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
+              <span class="small text-muted">Dernière mise à jour</span>
+              <b-card
+                class="mb-3 flux-mobility"
+                :class="{'active':fluxType==3}"
+                @click="selectFluxType(3)"
+              >
+                <h5 class="percent-title">Présences</h5>
+                <div class="percent flux-presence">{{fluxInPercent(item)}}%​</div>
+                <p
+                  v-if="fluxVolumObservation(item)>0"
+                  class="percent-p text-dash-color"
+                >{{formatCash(fluxVolumObservation(item))}} personnes de plus étaient présentes dans la zone</p>
+                <p
+                  v-else
+                  class="percent-p text-dash-color"
+                >{{formatCash(fluxVolumObservation(item)*-1)}} personnes de moins étaient présentes dans la zone</p>
+              </b-card>
+              <b-card no-body class="mb-3 p-2" :ref="`mobile_presence_${index}_card`">
+                <div class="chart-container">
+                  <canvas
+                    height="200"
+                    width="100vh"
+                    :ref="`mobile_presence_${index}`"
+                    :id="`mobile_presence_${index}`"
+                  ></canvas>
+                </div>
+              </b-card>
+            </b-col>
+          </b-row>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script>
 import * as d3 from "d3";
 import { mapState, mapMutations } from "vuex";
-import { PALETTE,FLUX_LAST_UPDATE } from "../config/env";
+import { PALETTE, FLUX_LAST_UPDATE } from "../config/env";
+import GlobalProvice from "./flux/GLobalProvince";
 export default {
+  components: {
+    GlobalProvice,
+  },
   props: {
     flux24Daily: {
       type: Array,
@@ -183,6 +266,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    fluxZoneGlobalIn: {
+      type: Array,
+      default: () => [],
+    },
+    fluxZoneGlobalOut: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -193,12 +284,15 @@ export default {
       configBarChart : {} ,
       configBarChart2 : {} ,
       barChart : null,
-      barChart2 : null
+      barChart2 : null,
+      palette: PALETTE,
     };
   },
   computed: {
     ...mapState({
       fluxType: (state) => state.flux.fluxType,
+      isProvinceStatSeeing: (state) => state.flux.isProvinceStatSeeing,
+      fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
     }),
   },
   watch: {
@@ -271,9 +365,12 @@ export default {
     });
   },
   methods: {
-    ...mapMutations(["setFluxType"]),
+    ...mapMutations(["setFluxType", "setIsProvinceStatSeeing"]),
     selectFluxType(value) {
       this.setFluxType(value);
+    },
+    seeProvinceStat() {
+      this.setIsProvinceStatSeeing(!this.isProvinceStatSeeing);
     },
     fluxInPercent(items) {
       let totalDifference = 0;
@@ -772,6 +869,13 @@ export default {
 
 .flux-chart {
   @include card-style;
+  .see-province-stat {
+    font-size: 1rem;
+    cursor: pointer;
+  }
+}
+.return-global {
+  cursor: pointer;
 }
 .flux-mobility {
   cursor: pointer;
