@@ -85,6 +85,14 @@ export const
             id: 1,
             name: 'Cas Confirmés'
         },
+        {
+            id: 2,
+            name: 'Cas Guéris'
+        },
+        {
+            id: 3,
+            name: 'Décès'
+        },
     ],
     INDICATEUR_PREDEFINED_INPUT = [
         {
