@@ -18518,6 +18518,10 @@ h3 {
   height: inherit;
 }
 
+.side-right > .card > .tabs > .tab-content > .card-body > div > div .global_province_container div .global_province {
+  height: 100% !important;
+}
+
 .default-makers {
   width: 20px;
   height: 20px;

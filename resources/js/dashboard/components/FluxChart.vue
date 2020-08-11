@@ -189,8 +189,8 @@
                   <canvas
                     height="200"
                     width="100vh"
-                    :ref="`mobile_out_${index}_2_card`"
-                    :id="`mobile_out_${index}_2_card`"
+                    :ref="`mobile_out_${index}`"
+                    :id="`mobile_out_${index}`"
                   ></canvas>
                 </div>
               </b-card>
@@ -417,18 +417,18 @@ export default {
       return Math.round(totalObservation / items.length);
     },
     extractFlux23DailyOut() {
-      let flux24DailyOutLocal = [];
+      const flux24DailyOutLocal = [];
       if (this.flux24DailyOut.length > 0) {
         this.flux24DailyOut.forEach((item) => {
           let index = flux24DailyOutLocal.findIndex((x) =>
-            x.find((y) => y.origin == item.origin)
+            x.some((y) => y.origin == item.origin)
           );
           if (index == -1) {
             let element = [];
-            element.push(item);
+            element.push(Object.assign({},item));
             flux24DailyOutLocal.push(element);
           } else {
-            flux24DailyOutLocal[index].push(item);
+            flux24DailyOutLocal[index].push(Object.assign({},item));
           }
         });
       }

@@ -631,8 +631,7 @@ class DashBoardController extends Controller
                 UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY destination, DATE)
                 AS t
-                WHERE DATE BETWEEN ? and ?
-                GROUP BY origin,DATE ", [$data['preference_start'], $data['observation_end']]);
+                GROUP BY origin,DATE ");
 
             return response()->json($flux);
         } catch (\Throwable $th) {
@@ -982,16 +981,15 @@ class DashBoardController extends Controller
         try {
             $flux = Flux24Province::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->whereIn('Destination', $data['fluxGeoOptions'])
+                ->whereIn('Origin', $data['fluxGeoOptions'])
                 ->groupBy('Date', 'day', 'origin', 'Destination')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux24Province::select(['Origin as origin', 'Destination as destination', 'Date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->where(function ($q) use ($data) {
-                        $q->whereIn('Origin', $data['fluxGeoOptions']);
-                    })->groupBy('day', 'Destination', 'Origin', 'Date')
+                    ->whereIn('Origin', $data['fluxGeoOptions'])
+                    ->groupBy('day', 'Destination', 'Origin', 'Date')
                     ->orderBy('volume')->get();
             }
 
