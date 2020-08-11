@@ -351,10 +351,6 @@ export default {
       padding: 20px;
     }
   }
-  #tendanceChart {
-    width: 100% !important;
-    height: min-content !important ;
-  }
 }
 #tendanceChart {
   height : 100% !important
