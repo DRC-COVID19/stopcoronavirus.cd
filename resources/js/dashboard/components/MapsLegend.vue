@@ -13,8 +13,10 @@
       </div>
       <div class="datas">
         <div class="inner" v-for="(data, i) in colors[color]" :key="i">
-          <span class="lbl">{{valDe(i)}}</span>
+          <span class="lbl">{{valDe(i)}}
           <span v-if="domaineExtValues.isPercent">%</span>
+          </span>
+          
           <div
             class="range"
             :style="'background-color :' + data "
@@ -24,8 +26,10 @@
           ></div>
         </div>
         <div class="inner inner-last">
-          <span class="lbl">{{Math.ceil(domaineExtValues.max)}}</span>
+          <span class="lbl">{{Math.ceil(domaineExtValues.max)}}
           <span v-if="domaineExtValues.isPercent">%</span>
+          </span>
+          
         </div>
       </div>
     </div>
