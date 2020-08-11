@@ -46,8 +46,6 @@ export default {
   },
   mounted() {
     this.mobility(this.globalData);
-    console.log(this.$refs[this.reference].height);
-    console.log(this.$refs[this.reference].width);
   },
   watch: {
     globalData() {
