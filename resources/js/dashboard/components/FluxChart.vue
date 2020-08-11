@@ -62,7 +62,7 @@
                 class="percent-p text-dash-color"
               >{{formatCash(fluxVolumObservation(item)*-1) }} personnes de moins sont entrées dans la zone</p>
             </b-card>
-            <div class="fullscreen-container">
+            <div class="fullscreen-container fullscreen-container1">
               <fullscreen ref="fullscreenEntrance" @change="fullscreenEntranceChange">
                 <b-card no-body class="cardtype1 mb-3 p-2" :ref="`mobile_entrance_${index}_card`">
                   <div class="chart-container">
@@ -118,7 +118,7 @@
               >{{formatCash(fluxVolumObservation(item)*-1)}} personnes de moins sont sorties de la zone</p>
             </b-card>
 
-            <div class="fullscreen-container">
+            <div class="fullscreen-container fullscreen-container1">
               <fullscreen ref="fullscreenOut" @change="fullscreenOutChange">
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_${index}_card`">
                   <div class="chart-container">
@@ -924,6 +924,9 @@ export default {
   align-items: flex-start;
 }
 
+.fullscreen-container1 .fullscreen-btn{
+  bottom: 25px;
+}
 .fullscreen{
   display: flex;
   align-items: center;
