@@ -50,23 +50,9 @@
           </b-row>
         </b-col>
 
-        <b-col cols="12" md="3" class="nav-zone pl-3 pr-3">
-          <label for class="text-dash-color">Paramètres Géographiques</label>
-          <b-row>
-            <b-col cols="12" md="6" class="pr-md-1">
-              <b-form-group>
-                <v-select
-                  @input="geoGranularityChange"
-                  v-model="form.geoGranularity"
-                  :options="geoGranularities"
-                  label="name"
-                  placeholder="Granularité"
-                  :reduce="item=>item.id"
-                  class="style-chooser"
-                />
-              </b-form-group>
-            </b-col>
-            <b-col cols="12" md="6" class="pl-md-1">
+        <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
+          <label for class="text-dash-color">Param. Géographiques</label>
+          
               <b-form-group
                 :invalid-feedback="formErrors.geoOptions ? formErrors.geoOptions[0] : null"
                 :state="formErrors.geoOptions && formErrors.geoOptions.lenght>0"
@@ -74,7 +60,7 @@
                 <v-select
                   v-model="form.geoOptions"
                   multiple
-                  :disabled="!form.geoGranularity"
+                  
                   :options="geoOptions"
                   placeholder="Localisation"
                   label="origin"
@@ -83,11 +69,9 @@
                   @input="resetFluxPredefinedControl"
                 />
               </b-form-group>
-            </b-col>
-          </b-row>
         </b-col>
 
-        <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" md="3" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
           <b-row>
             <b-col cols="12">
@@ -196,6 +180,16 @@ export default {
     ...mapState({
       formErrors: (state) => state.indicator.formErrors,
     }),
+  },
+  watch:{
+    fluxZones(){
+      this.form.geoGranularity=2;
+      this.geoGranularityChange(2);
+    }
+  },
+  mounted(){
+    this.form.geoGranularity=2;
+      this.geoGranularityChange(2);
   },
   methods: {
     ...mapActions(["submitFilters"]),
