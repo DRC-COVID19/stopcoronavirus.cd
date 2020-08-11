@@ -7,8 +7,11 @@
     z-index: 2;
 
     .legend{
-        display : flex ;
-        align-items: flex-end;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      position: relative;
+      bottom: 10px;
     }
     .no-data{
         margin-right: 25px;

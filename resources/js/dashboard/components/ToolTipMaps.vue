@@ -1,6 +1,6 @@
 <template>
   <div class="tooltip-map" :style="{left: position.left, top: position.top}">
-    <div>{{`${item.origin} => ${item.destination}: ${item.volume }`}} </div>
+    <div>{{`${item.origin} => ${item.destination}: ${item.percent }%`}} </div>
     <div v-if="item.inversed_volume">{{`${item.destination} => ${item.origin} : ${item.inversed_volume }`}} </div>
   </div>
 </template>
