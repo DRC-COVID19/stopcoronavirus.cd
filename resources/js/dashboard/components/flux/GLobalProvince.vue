@@ -152,4 +152,7 @@ export default {
   width: 100% !important;
   height: 100% !important;
 }
+.side-right>.card>.tabs>.tab-content>.card-body>div>div .fullscreen .global_province_container {
+    height: 100vh;
+}
 </style>
