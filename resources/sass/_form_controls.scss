@@ -39,6 +39,10 @@
   height: 32px ;
   position: relative;
 }
+.style-chooser > ul li {
+  width : 100% ;
+  min-width : max-content ;
+}
 .style-picker .reportrange-text{
   white-space: nowrap;
   width: 100%;
