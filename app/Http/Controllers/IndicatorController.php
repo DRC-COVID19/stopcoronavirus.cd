@@ -54,6 +54,20 @@ class IndicatorController extends Controller
                         ->WhereIn('health_zones.name', $data['geoOptions'])
                         ->groupBy('health_zones.name', 'last_update')->get();
                     break;
+                case 2:
+                    $axeY = Pandemic::select(['health_zones.name', DB::raw('CAST(last_update AS DATE) as date,SUM(healed) as y')])
+                        ->join('health_zones', 'health_zones.id', '=', 'pandemics.health_zone_id')
+                        ->whereBetween('last_update', [$data['observation_start'], $data['observation_end']])
+                        ->WhereIn('health_zones.name', $data['geoOptions'])
+                        ->groupBy('health_zones.name', 'last_update')->get();
+                    break;
+                case 3:
+                    $axeY = Pandemic::select(['health_zones.name', DB::raw('CAST(last_update AS DATE) as date,SUM(dead) as y')])
+                        ->join('health_zones', 'health_zones.id', '=', 'pandemics.health_zone_id')
+                        ->whereBetween('last_update', [$data['observation_start'], $data['observation_end']])
+                        ->WhereIn('health_zones.name', $data['geoOptions'])
+                        ->groupBy('health_zones.name', 'last_update')->get();
+                    break;
                 default:
                     # code...
                     break;
