@@ -93,10 +93,20 @@
               <b-tab title="Province">
                 <b-row>
                   <b-col cols="6" class="pr-2">
-                    <GlobalProvince title="Mobilité entrante" :color="palette.flux_in_color" :globalData="fluxGlobalIn" reference="fluxglobalIn" />
+                    <GlobalProvince
+                      title="Mobilité entrante"
+                      :color="palette.flux_in_color"
+                      :globalData="fluxGlobalIn"
+                      reference="fluxglobalIn"
+                    />
                   </b-col>
                   <b-col cols="6" class="pl-2">
-                    <GlobalProvince title="Mobilité sortante"  :color="palette.flux_out_color" :globalData="fluxGlobalOut" reference="fluxglobalOut"  />
+                    <GlobalProvince
+                      title="Mobilité sortante"
+                      :color="palette.flux_out_color"
+                      :globalData="fluxGlobalOut"
+                      reference="fluxglobalOut"
+                    />
                   </b-col>
                 </b-row>
               </b-tab>
@@ -107,6 +117,8 @@
                   :flux24DailyOut="flux24DailyOut"
                   :flux24Presence="flux24Presence"
                   :flux24PresenceDailyIn="flux24PresenceDailyIn"
+                  :fluxZoneGlobalIn="fluxZoneGlobalIn"
+                  :fluxZoneGlobalOut="fluxZoneGlobalOut"
                 />
               </b-tab>
               <b-tab title="Hôpital" v-if="hospitalCount != null" :active="!!selectedHospital || activeMenu==5">
@@ -171,7 +183,7 @@ import MenuInfrastructure from "../components/menu/Infrastructure";
 import MenuOrientation from "../components/menu/Orientation";
 import MenuIndicateur from "../components/menu/Indicateur";
 import GlobalProvince from "../components/flux/GLobalProvince";
-import { OBSERVATION_START, OBSERVATION_END,PALETTE } from "../config/env";
+import { OBSERVATION_START, OBSERVATION_END, PALETTE } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
 import { difference } from "@turf/turf";
@@ -203,7 +215,7 @@ export default {
     MenuInfrastructure,
     MenuOrientation,
     MenuIndicateur,
-    GlobalProvince
+    GlobalProvince,
   },
   data() {
     return {
@@ -242,7 +254,9 @@ export default {
       flux24PresenceDailyIn: [],
       fluxGlobalIn: [],
       fluxGlobalOut: [],
-      palette:PALETTE
+      palette: PALETTE,
+      fluxZoneGlobalIn: [],
+      fluxZoneGlobalOut: [],
     };
   },
   computed: {
@@ -840,6 +854,31 @@ export default {
       //     this.flux24Errors = response.data.errors;
       //     this.$set(this.loadings, "flux24", false);
       //   });
+
+      //if geo granularity is health zone
+      if (values.fluxGeoGranularity == 2) {
+        return;
+      }
+
+      //Get  zone in by province
+      this.fluxZoneGlobalIn = [];
+      axios
+        .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
+          params: values,
+        })
+        .then(({ data }) => {
+          this.fluxZoneGlobalIn = data;
+        });
+
+      //Get  zone out by province
+      this.fluxZoneGlobalOut = [];
+      axios
+        .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
+          params: values,
+        })
+        .then(({ data }) => {
+          this.fluxZoneGlobalOut = data;
+        });
     },
     seeSide() {
       this.$bvModal.show("data-modal");
