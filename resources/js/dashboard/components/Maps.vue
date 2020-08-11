@@ -1037,7 +1037,7 @@ export default {
 
       const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
 
-      this.setDomaineExtValues({ min: domaineMin, max: domaineMax });
+      this.setDomaineExtValues({ min: domaineMin, max: domaineMax, isPercent:true });
 
       if (this.fluxType == 1) {
         colorScale.range(PALETTE.inflow);
