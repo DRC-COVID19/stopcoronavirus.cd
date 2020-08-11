@@ -915,7 +915,7 @@ export default {
         }
         switch (this.fluxMapStyle) {
           case 2:
-            this.fluxArcStyle(data, this.fluxGeoGranularity);
+            this.fluxArcStyle(data, this.fluxGeoGranularity, this.legendHover);
             map.flyTo({
               pitch: 40,
               speed: 0.2, // make the flying slow
@@ -958,7 +958,6 @@ export default {
       }
     },
     fluxHatchedStyle(flux24Data, flux24DataPresence, legendHover = null) {
-
       const localData =
         this.fluxType == 3
           ? flux24DataPresence.map((x) => {
@@ -983,10 +982,14 @@ export default {
 
           element.properties.volumeReference += item.volume_reference;
           element.properties.difference += item.difference;
-          element.properties.percent =
-            (element.properties.difference /
-              element.properties.volumeReference) *
-            100;
+          if (element.properties.volumeReference == 0) {
+            element.properties.percent = 100;
+          } else {
+            element.properties.percent =
+              (element.properties.difference /
+                element.properties.volumeReference) *
+              100;
+          }
         } else {
           features.push({
             type: "Feature",
@@ -1038,7 +1041,11 @@ export default {
 
       const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
 
-      this.setDomaineExtValues({ min: domaineMin, max: domaineMax });
+      this.setDomaineExtValues({
+        min: domaineMin,
+        max: domaineMax,
+        isPercent: true,
+      });
 
       if (this.fluxType == 1) {
         colorScale.range(PALETTE.inflow);
@@ -1146,8 +1153,24 @@ export default {
         dataKey = "Zone+Peupl";
       }
       if (geoGranularity == 1) {
+        let newValue = value;
+
+        switch (value) {
+          case "Kasai":
+            newValue = "Kasaï";
+            break;
+          case "Kasai-Oriental":
+            newValue = "Kasaï-Oriental";
+            break;
+          case "Kasai-Central":
+            newValue = "Kasaï-Central";
+            break;
+          case "Equateur":
+            newValue = "Équateur";
+            break;
+        }
         const feature = this.healthProvinceGeojsonCentered.features.find(
-          (x) => x.properties[dataKey] == value
+          (x) => x.properties[dataKey] == newValue
         );
         if (feature) {
           coordinates = feature.geometry.coordinates;
@@ -1163,7 +1186,7 @@ export default {
       }
       return coordinates;
     },
-    fluxArcStyle(flux24Data, geoGranularity) {
+    fluxArcStyle(flux24Data, geoGranularity, legendHover = null) {
       map.U.removeSource(["fluxCircleDataSource"]);
       map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
       map.off("mouseleave", "fluxCircleDataLayer");
@@ -1175,7 +1198,7 @@ export default {
 
       const localData = flux24Data;
 
-      const features = [];
+      let features = [];
       let color = "#33ac2e";
       let arcData = [];
       let FluxFiltered = flux24Data;
@@ -1194,10 +1217,14 @@ export default {
 
           element.properties.volumeReference += item.volume_reference;
           element.properties.difference += item.difference;
-          element.properties.percent =
-            (element.properties.difference /
-              element.properties.volumeReference) *
-            100;
+          if (element.properties.volumeReference == 0) {
+            element.properties.percent = 100;
+          } else {
+            element.properties.percent =
+              (element.properties.difference /
+                element.properties.volumeReference) *
+              100;
+          }
         } else {
           features.push({
             type: "Feature",
@@ -1233,14 +1260,26 @@ export default {
       }
 
       const filterArcData = (item, key) => {
+        if (item[key] == "Hors_Zone") {
+          return;
+        }
         const element = arcData.find((x) => x[key] == item[key]);
+
         if (element) {
           element.volume += item.volume;
-          element.volumeReference += item.volume_reference;
+          element.volume_reference += item.volume_reference;
+          element.difference += item.difference;
+          if (element.volume_reference == 0) {
+            element.percent = 100;
+          } else {
+            element.percent =
+              (element.difference / element.volume_reference) * 100;
+          }
         } else {
           arcData.push(Object.assign({}, item));
         }
       };
+
       let arcBrutData = [];
       if (this.fluxType == 1) {
         arcBrutData = FluxFiltered.filter((item) => {
@@ -1256,6 +1295,29 @@ export default {
         });
       }
 
+      const max = Math.max(...features.map((x) => x.properties.volume));
+      const minArc = Math.min(...arcData.map((x) => x.percent));
+      const maxArc = Math.max(...arcData.map((x) => x.percent));
+
+      this.setDomaineExtValues({ min: minArc, max: maxArc,isPercent:true });
+
+      if (legendHover) {
+        if (features.length > 0) {
+          features = features.filter(
+            (x) =>
+              x.properties.percent >= legendHover.de &&
+              x.properties.percent <= legendHover.a
+          );
+        }
+        if (arcData.length > 0) {
+          arcData = arcData.filter(
+            (x) =>
+              x.percent >= legendHover.de &&
+              x.percent <= legendHover.a
+          );
+        }
+      }
+
       const circleData = {
         type: "geojson",
         generateId: true,
@@ -1265,8 +1327,17 @@ export default {
         },
       };
 
-      const max = Math.max(...features.map((x) => x.properties.volume));
-      const maxArc = Math.max(...arcData.map((x) => x.volume));
+      
+
+      const colorScale = d3.scaleQuantile().domain([minArc, maxArc]);
+
+      if (this.fluxType == 1) {
+        colorScale.range(PALETTE.inflow);
+      } else if (this.fluxType == 3) {
+        colorScale.range(PALETTE.present);
+      } else {
+        colorScale.range(PALETTE.outflow);
+      }
 
       map.addSource("fluxCircleDataSource", circleData);
       map.addLayer({
@@ -1374,15 +1445,22 @@ export default {
           );
           return coordinates ?? d.position_end;
         },
-        getSourceColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
-        getTargetColor: this.fluxType == 1 ? [34, 94, 168] : [138, 69, 159],
+        getSourceColor: (d) => {
+          const color = d3.rgb(colorScale(d.percent));
+          return [color.r, color.g, color.b];
+        },
+        getTargetColor: (d) => {
+          const color = d3.rgb(colorScale(d.percent));
+          return [color.r, color.g, color.b];
+        },
         getHeight: 1,
         getTilt: 1,
         opacity: 0.7,
         highlightColor: [51, 172, 46],
         autoHighlight: true,
         getWidth: (d) => {
-          return (d.volume / maxArc) * 9 + 3;
+          // return (d.volume / maxArc) * 9 + 3;
+          return 3;
         },
         pickable: true,
         onHover: (info, event) => {
