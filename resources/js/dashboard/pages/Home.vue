@@ -22,6 +22,7 @@
             v-if="activeMenu==3"
             :fluxZones="fluxZones"
             :fluxProvinces="fluxProvinces"
+            :flux24Errors="flux24Errors"
           />
           <MenuInfrastructure
             v-if="activeMenu==5"
@@ -120,7 +121,7 @@
                   :fluxZoneGlobalOut="fluxZoneGlobalOut"
                 />
               </b-tab>
-              <b-tab title="Hôpital" v-if="hospitalCount != null" :active="!!selectedHospital">
+              <b-tab title="Hôpital" v-if="hospitalCount != null" :active="!!selectedHospital || activeMenu==5">
                 <HospitalSituation :hospitalTotalData="hospitalTotalData" />
               </b-tab>
             </b-tabs>
