@@ -982,10 +982,14 @@ export default {
 
           element.properties.volumeReference += item.volume_reference;
           element.properties.difference += item.difference;
-          element.properties.percent =
-            (element.properties.difference /
-              element.properties.volumeReference) *
-            100;
+          if (element.properties.volumeReference == 0) {
+            element.properties.percent =100;
+          } else {
+            element.properties.percent =
+              (element.properties.difference /
+                element.properties.volumeReference) *
+              100;
+          }
         } else {
           features.push({
             type: "Feature",
@@ -1037,7 +1041,12 @@ export default {
 
       const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
 
-      this.setDomaineExtValues({ min: domaineMin, max: domaineMax, isPercent:true });
+      console.log({ min: domaineMin, max: domaineMax, isPercent: true });
+      this.setDomaineExtValues({
+        min: domaineMin,
+        max: domaineMax,
+        isPercent: true,
+      });
 
       if (this.fluxType == 1) {
         colorScale.range(PALETTE.inflow);
