@@ -631,8 +631,7 @@ class DashBoardController extends Controller
                 UNION ALL
                 SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux_24 GROUP BY destination, DATE)
                 AS t
-                WHERE DATE BETWEEN ? and ?
-                GROUP BY origin,DATE ", [$data['preference_start'], $data['observation_end']]);
+                GROUP BY origin,DATE ");
 
             return response()->json($flux);
         } catch (\Throwable $th) {
