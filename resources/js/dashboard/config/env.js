@@ -85,6 +85,14 @@ export const
             id: 1,
             name: 'Cas Confirmés'
         },
+        {
+            id: 2,
+            name: 'Cas Guéris'
+        },
+        {
+            id: 3,
+            name: 'Décès'
+        },
     ],
     INDICATEUR_PREDEFINED_INPUT = [
         {
@@ -399,7 +407,7 @@ export const
             name: 'Communication from the governor of Ituri',
             measures: [
                 {
-                    item: `"Communication from the governor of Ituri: 
+                    item: `"Communication from the governor of Ituri:
                     - Commercial flights between Ituri - Isiro - Goma - Kisangani via CAA and Congo Airways resumed
                     - Passengers coming from Kinshasa also allowed, as long as they respect IPC measures on board and on arrival in Ituri"`,
                     zones: ["Ituri"]
@@ -466,12 +474,12 @@ export const
         },
         {
             id: 29,
-            name: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa; 
+            name: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa;
             - Resulted in pausing of surveillence and contact tracing activities
             - Most recent recorded in Kimbanseke health zone (concerning violence against three agents de la riposte who were held in a household in the Maviokele district)"`,
             measures: [
                 {
-                    item: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa; 
+                    item: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa;
                     - Resulted in pausing of surveillence and contact tracing activities
                     - Most recent recorded in Kimbanseke health zone (concerning violence against three agents de la riposte who were held in a household in the Maviokele district)"`,
                     zones: ["Kinshasa"]
