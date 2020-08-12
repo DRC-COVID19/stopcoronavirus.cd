@@ -43,7 +43,7 @@
       <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
       <b-row class="position-relative map-wrap" v-if="activeMenu != 3">
         <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
-          <div class="layer-set-contenair" v-if="hasFlux24Daily">
+          <div class="layer-set-contenair" v-if="hasFlux24DailyIn">
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arcs</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
