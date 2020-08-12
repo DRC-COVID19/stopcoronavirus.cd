@@ -11,6 +11,7 @@ import App from "./App.vue";
 import GlobalComponents from './globalComponents'
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env';
 import "chartjs-plugin-crosshair";
+import fullscreen from 'vue-fullscreen'
 
 require('./helper');
 
@@ -21,6 +22,7 @@ Vue.component('v-select', vSelect);
 Vue.mixin(commont);
 Vue.use(GlobalComponents);
 Vue.use(onlyInt);
+Vue.use(fullscreen);
 
 if (store.state.auth.isAuthenticated) {
     store.dispatch('userMe');

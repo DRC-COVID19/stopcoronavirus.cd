@@ -1,11 +1,18 @@
 <template>
-  <b-container fluid class="p-0" ref="tendanceContainer">
-    <b-row no-gutters>
-      <b-col cols="12" class="pl-0 pr-2">
-        <canvas width="100vh" ref="tendanceChart" id="tendanceChart" />
-      </b-col>
-    </b-row>
-  </b-container>
+  <div class="fullscreen-container">
+    <fullscreen ref="fullscreen" @change="fullscreenChange">
+      <b-container fluid class="p-0 container-tendanceChart" ref="tendanceContainer">
+        <b-row no-gutters>
+          <b-col cols="12" class="pl-0 pr-2">
+            <canvas width="100vh" ref="tendanceChart" id="tendanceChart" />
+          </b-col>
+        </b-row>
+      </b-container>
+    </fullscreen>
+    <button type="button" @click="toggleFullscreen" class="fullscreen-btn mini">
+      <i class="fa fa-expand"></i>
+    </button>
+  </div>
 </template>
 
 <script>
@@ -204,103 +211,19 @@ export default {
       };
       if (this.myLineChart) this.myLineChart.destroy();
       this.myLineChart = new Chart(ref.getContext("2d"), tempData);
-      var myLineChart2 = this.myLineChart;
+      const myLineChart2 = this.myLineChart;
     },
-    drawChart1(data) {
-      const timeConv = d3.timeParse("%Y-%m-%d");
-      data.forEach((element) => {
-        element.date = timeConv(element.date);
-      });
-      let elementPosition = 900; // this.$refs.tendanceContainer.clientWidth - 20;
-      const margin = { top: 10, right: 30, bottom: 60, left: 60 },
-        width = elementPosition - margin.left - margin.right,
-        height = 250 - margin.top - margin.bottom;
-
-      const svg = d3
-        .select(this.$refs.tendanceChart)
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-      const xScale = d3.scaleTime().range([0, width]);
-      const yScale = d3.scaleLinear().rangeRound([height, 0]);
-
-      xScale.domain(
-        d3.extent(data, function (d) {
-          return d.date;
-        })
-      );
-
-      yScale.domain([
-        0,
-        d3.max(data, function (d) {
-          return d.volume;
-        }),
-      ]);
-
-      const yaxis = d3.axisLeft().ticks(data[0].volume.length).scale(yScale);
-
-      const xaxis = d3
-        .axisBottom()
-        // .ticks(d3.timeDay.every(1))
-        .tickFormat(d3.timeFormat("%d-%m"))
-        .scale(xScale);
-
-      svg
-        .append("g")
-        .attr("class", "axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xaxis);
-
-      svg
-        .append("g")
-        .attr("class", "axis")
-        .call(yaxis)
-        .append("text")
-        .attr("transform", "rotate(-90)")
-        .attr("dy", ".75em")
-        .attr("y", 6)
-        .style("text-anchor", "end")
-        .text("Frequency");
-
-      var strokeDasharray = d3
-        .scaleOrdinal()
-        .domain([true, false])
-        .range(["none", "5,5"]);
-
-      const line = d3
-        .line()
-        .x(function (d) {
-          return xScale(d.date);
-        })
-        .y(function (d) {
-          return yScale(d.volume);
-        });
-
-      svg
-        .append("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr("stroke-dasharray", (d) => {
-         
-          return strokeDasharray(d.isReference);
-        })
-        .attr(
-          "d",
-          d3
-            .line()
-            .x(function (d) {
-              return xScale(d.date);
-            })
-            .y(function (d) {
-              return yScale(d.volume);
-            })
-        );
+  
+    toggleFullscreen() {
+      this.$refs['fullscreen'].toggle()
     },
+    fullscreenChange (fullscreen) {
+      this.fullscreen = fullscreen
+      if(!fullscreen){
+        this.$refs.tendanceChart.style.height = "100%"
+        this.$refs.tendanceChart.height = "100%"
+      }
+    }
   },
   computed: {
     ...mapState({
@@ -316,7 +239,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#tendanceChart {
+.container-tendanceChart{
   height: 100%;
+  background-color: white;
+  .row{
+    height: 100%;
+  }
+}
+.fullscreen{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .container-tendanceChart{
+    width: 100%;
+    height: 65% ;
+    .row{
+      padding: 20px;
+    }
+  }
+}
+#tendanceChart {
+  height : 100% !important
 }
 </style>
