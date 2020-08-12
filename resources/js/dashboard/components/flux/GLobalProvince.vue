@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { PALETTE } from "../../config/env";
 export default {
   props: {
     globalData: {
@@ -45,23 +46,34 @@ export default {
     };
   },
   mounted() {
-    this.mobility(this.globalData);
+    this.mobility([...this.globalData]);
   },
   watch: {
     globalData() {
-      this.mobility(this.globalData);
+      this.mobility([...this.globalData]);
     },
   },
   methods: {
     mobility(data) {
+      let localData = data.sort((a, b) => {
+        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
+      });
       const dataChart = {
-        labels: data.map((d) => d.zone),
+        labels: localData.map((d) => d.zone),
         datasets: [
           {
+            label: "Référence",
+            backgroundColor: PALETTE.dash_green,
+            borderColor: PALETTE.dash_green,
+            borderWidth: 1,
+            data: localData.map((d) => d.volume_reference),
+          },
+          {
+            label: "Observation",
             backgroundColor: this.color,
             borderColor: this.color,
             borderWidth: 1,
-            data: data.map((d) => d.volume),
+            data: localData.map((d) => d.volume),
           },
         ],
       };
@@ -73,7 +85,7 @@ export default {
           responsive: true,
           maintainAspectRatio: false,
           legend: {
-            display: false,
+            display: true,
             position: "bottom",
             labels: {
               fontSize: 9,

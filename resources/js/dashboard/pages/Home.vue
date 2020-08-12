@@ -121,7 +121,11 @@
                   :fluxZoneGlobalOut="fluxZoneGlobalOut"
                 />
               </b-tab>
-              <b-tab title="Hôpital" v-if="hospitalCount != null" :active="!!selectedHospital || activeMenu==5">
+              <b-tab
+                title="Hôpital"
+                v-if="hospitalCount != null"
+                :active="!!selectedHospital || activeMenu==5"
+              >
                 <HospitalSituation :hospitalTotalData="hospitalTotalData" />
               </b-tab>
             </b-tabs>
@@ -183,7 +187,13 @@ import MenuInfrastructure from "../components/menu/Infrastructure";
 import MenuOrientation from "../components/menu/Orientation";
 import MenuIndicateur from "../components/menu/Indicateur";
 import GlobalProvince from "../components/flux/GLobalProvince";
-import { OBSERVATION_START, OBSERVATION_END, PALETTE } from "../config/env";
+import {
+  OBSERVATION_START,
+  OBSERVATION_END,
+  PALETTE,
+  PREFERENCE_START,
+  PREFERENCE_END,
+} from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
 import { difference } from "@turf/turf";
@@ -643,7 +653,6 @@ export default {
             const difference = item.volume - referenceVolume;
             item.difference = difference;
             item.percent = (difference / referenceVolume) * 100;
-
           } else {
             item.volume_reference = 0;
             item.difference = item.volume;
@@ -836,9 +845,9 @@ export default {
           );
           this.$set(this.loadings, "urlPresenceDailyIn", false);
         })
-      .catch(({ response }) => {
-        this.$set(this.loadings, "urlPresenceDailyIn", false);
-      });
+        .catch(({ response }) => {
+          this.$set(this.loadings, "urlPresenceDailyIn", false);
+        });
 
       this.flux24 = [];
       // this.$set(this.loadings, "flux24", true);
@@ -867,7 +876,10 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          this.fluxZoneGlobalIn = data;
+          this.fluxZoneGlobalIn = this.computedFluxData(
+            data.observations,
+            data.references
+          );;
         });
 
       //Get  zone out by province
@@ -877,7 +889,10 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          this.fluxZoneGlobalOut = data;
+          this.fluxZoneGlobalOut = this.computedFluxData(
+            data.observations,
+            data.references
+          );;
         });
     },
     seeSide() {
@@ -972,21 +987,45 @@ export default {
         });
     },
     toggleFullscreenMap() {
-      this.$refs['fullscreenMap'].toggle()
+      this.$refs["fullscreenMap"].toggle();
     },
-    fullscreenMapChange (fullscreen) {
-      this.fullscreen = fullscreen
+    fullscreenMapChange(fullscreen) {
+      this.fullscreen = fullscreen;
+    },
+    computedFluxData(dataObservations, dataReferences) {
+      
+      return dataObservations.map((item) => {
+        const reference = dataReferences.find((x) => x.zone == item.zone);
+        if (reference) {
+          item.volume_reference = reference.volume;
+          const difference = item.volume - reference.volume;
+          item.difference = difference;
+          item.percent = (difference / reference.volume) * 100;
+        } else {
+          item.volume_reference = 0;
+          item.difference = item.volume;
+          item.percent = 0;
+        }
+        return Object.assign({}, item);
+      });
     },
     loadFluxGLobalData() {
+      
+
       axios
         .get("/api/dashboard/flux/origin/provinces/h-24/global-in", {
           params: {
             observation_start: OBSERVATION_START,
             observation_end: OBSERVATION_END,
+            preference_start: PREFERENCE_START,
+            preference_end: PREFERENCE_END,
           },
         })
         .then(({ data }) => {
-          this.fluxGlobalIn = data;
+          this.fluxGlobalIn = this.computedFluxData(
+            data.observations,
+            data.references
+          );
         });
 
       axios
@@ -994,10 +1033,15 @@ export default {
           params: {
             observation_start: OBSERVATION_START,
             observation_end: OBSERVATION_END,
+            preference_start: PREFERENCE_START,
+            preference_end: PREFERENCE_END,
           },
         })
         .then(({ data }) => {
-          this.fluxGlobalOut = data;
+          this.fluxGlobalOut = this.computedFluxData(
+            data.observations,
+            data.references
+          );
         });
     },
   },
