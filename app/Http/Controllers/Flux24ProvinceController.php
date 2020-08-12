@@ -21,17 +21,23 @@ class Flux24ProvinceController extends Controller
 
     public function getGlobalDataIn(Request $request)
     {
-        $data = Validator::make($request->all(), [
-            'observation_start' => 'date|required|before_or_equal:observation_end',
-            'observation_end' => 'date|required|after_or_equal:observation_start',
-        ])->validate();
+        $data = $this->fluxValidator($request->all());;
 
         try {
             $flux = Flux24Province::select(['destination as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->orderBy('volume','desc')
+                ->orderBy('volume', 'desc')
                 ->groupBy('destination')->get();
-            return response()->json($flux);
+
+            $flux_reference = Flux24Province::select(['destination as zone', DB::raw('sum(volume)as volume')])
+                ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                ->orderBy('volume', 'desc')
+                ->groupBy('destination')->get();
+
+            return response()->json([
+                'observations'=>$flux,
+                'references'=>$flux_reference,
+            ]);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -41,18 +47,23 @@ class Flux24ProvinceController extends Controller
     }
     public function getGlobalDataOut(Request $request)
     {
-        $data = Validator::make($request->all(), [
-            'observation_start' => 'date|required|before_or_equal:observation_end',
-            'observation_end' => 'date|required|after_or_equal:observation_start',
-        ])->validate();
+        $data = $this->fluxValidator($request->all());
 
         try {
             $flux = Flux24Province::select(['origin as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->orderBy('volume','desc')
+                ->orderBy('volume', 'desc')
                 ->groupBy('origin')->get();
 
-            return response()->json($flux);
+                $flux_reference = Flux24Province::select(['origin as zone', DB::raw('sum(volume)as volume')])
+                ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                ->orderBy('volume', 'desc')
+                ->groupBy('origin')->get();
+
+                return response()->json([
+                    'observations'=>$flux,
+                    'references'=>$flux_reference,
+                ]);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -104,5 +115,15 @@ class Flux24ProvinceController extends Controller
     public function destroy(FLux24Province $fLux24Province)
     {
         //
+    }
+
+    public function fluxValidator($inputData)
+    {
+        return  Validator::make($inputData, [
+            'preference_start' => 'nullable|date|before_or_equal:preference_end',
+            'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
+            'observation_start' => 'date|required|before_or_equal:observation_end',
+            'observation_end' => 'date|required|after_or_equal:observation_start',
+        ])->validate();
     }
 }
