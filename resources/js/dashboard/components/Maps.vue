@@ -1473,8 +1473,10 @@ export default {
         } else {
           color = colorScaleNegative(percent);
         }
+       
         const colorRgb = d3.rgb(color);
-        return [color.r, color.g, color.b];
+         
+        return [colorRgb.r, colorRgb.g, colorRgb.b];
       };
 
       // arcData=this.flux24.filter(x=>!x.isReference);
@@ -1499,7 +1501,6 @@ export default {
           return coordinates ?? d.position_end;
         },
         getSourceColor: (d) => {
-          
           return rgbColor(d.percent);
         },
         getTargetColor: (d) => {
