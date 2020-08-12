@@ -44,11 +44,7 @@ class Flux24ZoneController extends Controller
 
     public function getGlobalDataInByProvince(Request $request)
     {
-        $data = Validator::make($request->all(), [
-            'observation_start' => 'date|required|before_or_equal:observation_end',
-            'observation_end' => 'date|required|after_or_equal:observation_start',
-            'fluxGeoOptions'=>'required|array'
-        ])->validate();
+        $data = $this->fluxValidator($request->all());
 
         try {
             $health_zones = HealthZone::select('health_zones.name')
@@ -62,7 +58,16 @@ class Flux24ZoneController extends Controller
                 ->whereIn('destination', $health_zones)
                 ->groupBy('destination')->get();
 
-            return response()->json($flux);
+            $flux_reference = Flux::select(['destination as zone', DB::raw('sum(volume)as volume')])
+                ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                ->orderBy('volume', 'desc')
+                ->whereIn('destination', $health_zones)
+                ->groupBy('destination')->get();
+
+            return response()->json([
+                'observations' => $flux,
+                'references' => $flux_reference,
+            ]);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -72,25 +77,30 @@ class Flux24ZoneController extends Controller
     }
     public function getGlobalDataOutByProvince(Request $request)
     {
-        $data = Validator::make($request->all(), [
-            'observation_start' => 'date|required|before_or_equal:observation_end',
-            'observation_end' => 'date|required|after_or_equal:observation_start',
-            'fluxGeoOptions'=>'required|array'
-        ])->validate();
+        $data = $this->fluxValidator($request->all());
 
         try {
             $health_zones = HealthZone::select('health_zones.name')
                 ->join('provinces', 'provinces.id', "=", 'health_zones.province_id')
                 ->whereIn('provinces.name', $data['fluxGeoOptions'])
                 ->get()->pluck('name');
-                
+
             $flux = Flux::select(['origin as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->whereIn('origin', $health_zones)
                 ->orderBy('volume', 'desc')
                 ->groupBy('origin')->get();
 
-            return response()->json($flux);
+            $flux_reference = Flux::select(['origin as zone', DB::raw('sum(volume)as volume')])
+                ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                ->whereIn('origin', $health_zones)
+                ->orderBy('volume', 'desc')
+                ->groupBy('origin')->get();
+
+            return response()->json([
+                'observations' => $flux,
+                'references' => $flux_reference,
+            ]);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -120,5 +130,16 @@ class Flux24ZoneController extends Controller
     public function destroy(Flux $flux)
     {
         //
+    }
+
+    public function fluxValidator($inputData)
+    {
+        return  Validator::make($inputData, [
+            'fluxGeoOptions' => 'required|array',
+            'preference_start' => 'nullable|date|before_or_equal:preference_end',
+            'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
+            'observation_start' => 'date|required|before_or_equal:observation_end',
+            'observation_end' => 'date|required|after_or_equal:observation_start',
+        ])->validate();
     }
 }
