@@ -163,7 +163,6 @@
             </b-col>
           </b-row>
         </b-col>
-       
         <b-col cols="12" md="4" class="pr-0 pl-2">
           <b-row v-for="(item,index) in flux24DailyPresenceInLocal" :key="index" class="mb-3">
             <b-col cols="12">
@@ -208,6 +207,7 @@ import * as d3 from "d3";
 import { mapState, mapMutations } from "vuex";
 import { PALETTE, FLUX_LAST_UPDATE } from "../config/env";
 import GlobalProvice from "./flux/GLobalProvince";
+import { difference } from "@turf/turf";
 export default {
   components: {
     GlobalProvice,
@@ -392,10 +392,10 @@ export default {
           );
           if (index == -1) {
             let element = [];
-            element.push(Object.assign({},item));
+            element.push(Object.assign({}, item));
             flux24DailyOutLocal.push(element);
           } else {
-            flux24DailyOutLocal[index].push(Object.assign({},item));
+            flux24DailyOutLocal[index].push(Object.assign({}, item));
           }
         });
       }
@@ -587,17 +587,26 @@ export default {
         if (element) {
           element.volume += item.volume;
           element.volume_reference += item.volume_reference;
+          element.difference += item.difference;
+          if (element.difference == 0) {
+            element.percent = 0;
+          } else {
+            element.percent =
+              (element.difference / element.volume_reference) * 100;
+          }
         } else {
           localData.push({
             destination: item.destination,
             volume_reference: item.volume_reference,
             volume: item.volume,
+            percent: item.percent,
+            difference: item.difference,
           });
         }
       });
 
-      localData = localData.sort((a, b) => {
-        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
+      localData.sort((a, b) => {
+        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
       });
 
       localData = localData.slice(0, 10);
@@ -682,17 +691,26 @@ export default {
         if (element) {
           element.volume += item.volume;
           element.volume_reference += item.volume_reference;
+          element.difference+=item.difference;
+          if (element.difference == 0) {
+            element.percent = 0;
+          } else {
+            element.percent =
+              (element.difference / element.volume_reference) * 100;
+          }
         } else {
           localData.push({
             origin: item.origin,
             volume_reference: item.volume_reference,
             volume: item.volume,
+            difference:item.difference,
+            percent:item.percent
           });
         }
       });
 
       localData = localData.sort((a, b) => {
-        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
+        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
       });
 
       localData = localData.slice(0, 10);

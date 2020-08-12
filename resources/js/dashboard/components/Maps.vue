@@ -1039,6 +1039,23 @@ export default {
       const domaineMax = d3.max(features, (d) => d.properties.percent);
       const domaineMin = d3.min(features, (d) => d.properties.percent);
 
+      const colorScalePositive = d3.scaleQuantile();
+      const colorScaleNegative = d3.scaleQuantile();
+
+      colorScalePositive.domain([0, domaineMax]);
+      colorScaleNegative.domain([domaineMin, 0]);
+
+      // if (domaineMax >= 0 && domaineMin <= 0) {
+      //   colorScalePositive.domain([0, domaineMax]);
+      //   colorScaleNegative.domain([domaineMin, 0]);
+      // } else if (domaineMax <= 0) {
+      //   colorScaleNegative.domain([domaineMin, 0]);
+      // } else if (domaineMin >= 0) {
+      //   colorScalePositive.domain([[0, domaineMax]]);
+      // } else if (domaineMax <= 0) {
+      //   colorScaleNegative.domain([[domaineMin, 0]]);
+      // }
+
       const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
 
       this.setDomaineExtValues({
@@ -1048,11 +1065,17 @@ export default {
       });
 
       if (this.fluxType == 1) {
+        colorScaleNegative.range(PALETTE.inflow_negatif);
+        colorScalePositive.range(PALETTE.inflow_positif);
+
         colorScale.range(PALETTE.inflow);
       } else if (this.fluxType == 3) {
         colorScale.range(PALETTE.present);
       } else {
         colorScale.range(PALETTE.outflow);
+
+        colorScaleNegative.range(PALETTE.outflow_negatif);
+        colorScalePositive.range(PALETTE.outflow_positif);
       }
 
       let dataKey = "name";
@@ -1063,11 +1086,20 @@ export default {
       const colorExpression = [];
       colorExpression.push("case");
       features.forEach((x) => {
-        const color =
+        let color = PALETTE.dash_green;
+        if (
           this.fluxGeoOptions.includes(x.properties.origin) &&
           this.fluxType != 3
-            ? PALETTE.dash_green
-            : colorScale(x.properties.percent);
+        ) {
+          color = PALETTE.dash_green;
+        } else {
+          if (x.properties.percent >= 0) {
+            color = colorScalePositive(x.properties.percent);
+          } else {
+            color = colorScaleNegative(x.properties.percent);
+          }
+        }
+
         colorExpression.push(["==", ["get", dataKey], x.properties.origin]);
         colorExpression.push(color);
       });
@@ -1299,7 +1331,7 @@ export default {
       const minArc = Math.min(...arcData.map((x) => x.percent));
       const maxArc = Math.max(...arcData.map((x) => x.percent));
 
-      this.setDomaineExtValues({ min: minArc, max: maxArc,isPercent:true });
+      this.setDomaineExtValues({ min: minArc, max: maxArc, isPercent: true });
 
       if (legendHover) {
         if (features.length > 0) {
@@ -1311,9 +1343,7 @@ export default {
         }
         if (arcData.length > 0) {
           arcData = arcData.filter(
-            (x) =>
-              x.percent >= legendHover.de &&
-              x.percent <= legendHover.a
+            (x) => x.percent >= legendHover.de && x.percent <= legendHover.a
           );
         }
       }
@@ -1327,16 +1357,24 @@ export default {
         },
       };
 
-      
+      const colorScalePositive = d3.scaleQuantile();
+      const colorScaleNegative = d3.scaleQuantile();
+
+      colorScalePositive.domain([0, maxArc]);
+      colorScaleNegative.domain([minArc, 0]);
 
       const colorScale = d3.scaleQuantile().domain([minArc, maxArc]);
 
       if (this.fluxType == 1) {
         colorScale.range(PALETTE.inflow);
+        colorScaleNegative.range(PALETTE.inflow_negatif);
+        colorScalePositive.range(PALETTE.inflow_positif);
       } else if (this.fluxType == 3) {
         colorScale.range(PALETTE.present);
       } else {
         colorScale.range(PALETTE.outflow);
+        colorScaleNegative.range(PALETTE.outflow_negatif);
+        colorScalePositive.range(PALETTE.outflow_positif);
       }
 
       map.addSource("fluxCircleDataSource", circleData);
@@ -1424,6 +1462,23 @@ export default {
         popup.remove();
       });
 
+      /**
+       * get Rgb color from percent
+       */
+      const rgbColor = (percent) => {
+        let color = null;
+
+        if (percent >= 0) {
+          color = colorScalePositive(percent);
+        } else {
+          color = colorScaleNegative(percent);
+        }
+       
+        const colorRgb = d3.rgb(color);
+         
+        return [colorRgb.r, colorRgb.g, colorRgb.b];
+      };
+
       // arcData=this.flux24.filter(x=>!x.isReference);
       const myDeckLayer = new MapboxLayer({
         id: "arc",
@@ -1446,12 +1501,10 @@ export default {
           return coordinates ?? d.position_end;
         },
         getSourceColor: (d) => {
-          const color = d3.rgb(colorScale(d.percent));
-          return [color.r, color.g, color.b];
+          return rgbColor(d.percent);
         },
         getTargetColor: (d) => {
-          const color = d3.rgb(colorScale(d.percent));
-          return [color.r, color.g, color.b];
+          return rgbColor(d.percent);
         },
         getHeight: 1,
         getTilt: 1,
