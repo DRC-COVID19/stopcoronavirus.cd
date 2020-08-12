@@ -606,6 +606,10 @@ export default {
       });
 
       localData.sort((a, b) => {
+        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
+      });
+
+      localData.sort((a, b) => {
         return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
       });
 
@@ -707,6 +711,10 @@ export default {
             percent:item.percent
           });
         }
+      });
+
+      localData = localData.sort((a, b) => {
+        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
       });
 
       localData = localData.sort((a, b) => {
