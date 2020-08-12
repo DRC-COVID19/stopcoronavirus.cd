@@ -163,7 +163,6 @@
             </b-col>
           </b-row>
         </b-col>
-
         <b-col cols="12" md="4" class="pr-0 pl-2">
           <b-row v-for="(item,index) in flux24DailyPresenceInLocal" :key="index" class="mb-3">
             <b-col cols="12">

@@ -653,6 +653,7 @@ export default {
             const difference = item.volume - referenceVolume;
             item.difference = difference;
             item.percent = (difference / referenceVolume) * 100;
+
           } else {
             item.volume_reference = 0;
             item.difference = item.volume;
