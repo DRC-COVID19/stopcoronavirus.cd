@@ -16,7 +16,6 @@
           <span class="lbl">{{valDe(i)}}
           <span v-if="domaineExtValues.isPercent">%</span>
           </span>
-
           <div
             class="range"
             :style="'background-color :' + data "
