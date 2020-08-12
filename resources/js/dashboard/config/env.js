@@ -6,8 +6,12 @@ export const
     AGENT_HOSPITAL = "agent-hospital",
     ADMIN_HOSPITAL = "admin-hospital",
     PALETTE = {
-        outflow: ["#7f00d4", "#7400c1", "#6800ad", "#5c0099", "#500086", "#450072", "#39005f", "#2d004b"],
-        inflow: ["#2189ac", "#3f8cda", "#2a7fd6", "#2573c1", "#2166ac", "#1d5997", "#194d81", "#15406c"],
+        inflow: ["#2166ac", "#4393c3", "#92c5de", "#d1e5f0", "#fddbc7", "#f4a582", "#d6604d", "#b2182b"],
+        inflow_positif: ["rgb(253, 219, 199)", "rgb(244, 165, 130)" , "rgb(214, 96, 77)" , "rgb(178, 24, 43)" , "rgb(103, 0, 31)" ],
+        inflow_negatif: ["rgb(5, 48, 97)", "rgb(33, 102, 172)", "rgb(67, 147, 195)", "rgb(146, 197, 222)", "rgb(209, 229, 240)"],
+        outflow: ["#2d004b", "#542788", "#8073ac", "#b2abd2", "#fdb863", "#e08214", "#b35806", "#7f3b08"],
+        outflow_positif: ["rgb(254, 224, 182)", "rgb(253, 184, 99)", "rgb(224, 130, 20)" , "rgb(179, 88, 6)" , "rgb(127, 59, 8)"],
+        outflow_negatif: ["rgb(45, 0, 75)", "rgb(84, 39, 136)", "rgb(128, 115, 172)", "rgb(178, 171, 210)", "rgb(216, 218, 235)"],
         present: ["#E31A1C"],
         nodata: "#eeeeee",
         bordure_shape_file: " #BFC5D2",
@@ -85,11 +89,23 @@ export const
             id: 1,
             name: 'Cas Confirmés'
         },
+        {
+            id: 2,
+            name: 'Cas Guéris'
+        },
+        {
+            id: 3,
+            name: 'Décès'
+        },
     ],
     INDICATEUR_PREDEFINED_INPUT = [
         {
             id: 1,
             name: 'Mobilité vs Epidémiologie à la Gombe, une semaine après le debut du confinement'
+        },
+        {
+          id: 2,
+          name: 'Mobilité vs Nombre de cas, depuis le debut du confinement'
         }
     ],
     DRC_COVID_EVENT = [
@@ -399,7 +415,7 @@ export const
             name: 'Communication from the governor of Ituri',
             measures: [
                 {
-                    item: `"Communication from the governor of Ituri: 
+                    item: `"Communication from the governor of Ituri:
                     - Commercial flights between Ituri - Isiro - Goma - Kisangani via CAA and Congo Airways resumed
                     - Passengers coming from Kinshasa also allowed, as long as they respect IPC measures on board and on arrival in Ituri"`,
                     zones: ["Ituri"]
@@ -466,12 +482,12 @@ export const
         },
         {
             id: 29,
-            name: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa; 
+            name: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa;
             - Resulted in pausing of surveillence and contact tracing activities
             - Most recent recorded in Kimbanseke health zone (concerning violence against three agents de la riposte who were held in a household in the Maviokele district)"`,
             measures: [
                 {
-                    item: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa; 
+                    item: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa;
                     - Resulted in pausing of surveillence and contact tracing activities
                     - Most recent recorded in Kimbanseke health zone (concerning violence against three agents de la riposte who were held in a household in the Maviokele district)"`,
                     zones: ["Kinshasa"]
