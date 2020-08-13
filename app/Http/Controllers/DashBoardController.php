@@ -1887,17 +1887,17 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('avg(volume)as volume,WEEKDAY(DATE) AS day')])
+            $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->WhereIn('Zone', $data['fluxGeoOptions'])
                 ->groupBy('Date', 'Zone', 'day')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24PresenceProvince::select(['Zone as zone', DB::raw('avg(volume)as volume,WEEKDAY(DATE) AS day')])
+                $fluxRefences = Flux24PresenceProvince::select(['Zone as zone','Date as date', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->WhereIn('Zone', $data['fluxGeoOptions'])
-                    ->groupBy('day', 'Zone')->get();
+                    ->groupBy('day', 'Zone','date')->get();
             }
 
             $geoCodingFilePath = storage_path('app/fluxZones.json');

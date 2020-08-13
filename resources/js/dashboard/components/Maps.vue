@@ -94,8 +94,8 @@ export default {
       default: null,
     },
     flux24Presence: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => ({}),
     },
   },
   data() {
@@ -960,14 +960,7 @@ export default {
     fluxHatchedStyle(flux24Data, flux24DataPresence, legendHover = null) {
       const localData =
         this.fluxType == 3
-          ? flux24DataPresence.map((x) => {
-              return {
-                origin: x.zone,
-                volume: x.volume,
-                difference: x.difference,
-                volume_reference: x.volume_reference,
-              };
-            })
+          ? flux24DataPresence
           : flux24Data;
 
       let features = [];
@@ -1017,8 +1010,57 @@ export default {
           formatData(item, "origin");
         });
       } else if (this.fluxType == 3) {
-        localData.map((item) => {
-          formatData(item, "origin");
+        // localData.map((item) => {
+        //   formatData(item, "origin");
+        // });
+
+        const { referencesByDate, observationsByDate } = localData;
+        let referenceVolume = null;
+        let observationVolume = null;
+        const countReference = referencesByDate.length;
+        if (countReference > 0) {
+          if (countReference % 2 == 0) {
+            let index = (countReference + 1) / 2;
+            index = parseInt(index);
+            const volume1 = referencesByDate[index].volume;
+            const volume2 = referencesByDate[index - 1].volume;
+            referenceVolume = (volume1 + volume2) / 2;
+          } else {
+            const index = (countReference + 1) / 2;
+            referenceVolume = referencesByDate[index - 1].volume;
+          }
+        }
+
+        const countObservation = observationsByDate.length;
+        if (countObservation > 0) {
+          if (countObservation % 2 == 0) {
+            let index = (countObservation + 1) / 2;
+            index = parseInt(index);
+            const volume1 = observationsByDate[index].volume;
+            const volume2 = observationsByDate[index - 1].volume;
+            observationVolume = (volume1 + volume2) / 2;
+          } else {
+            const index = (countObservation + 1) / 2;
+            observationVolume = observationsByDate[index - 1].volume;
+          }
+        }
+        const difference = observationVolume - referenceVolume;
+        const percent = Math.round((difference / referenceVolume) * 100);
+
+        features.push({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [],
+          },
+          properties: {
+            origin: observationsByDate[0].zone,
+            color: "#ED5F68",
+            volume: observationVolume,
+            volumeReference: referenceVolume,
+            percent: percent,
+            difference: difference,
+          },
         });
       } else {
         localData.map((item) => {
@@ -1029,7 +1071,9 @@ export default {
         });
       }
 
-      features = features.filter((x) => x.properties.volume != 0);
+      
+
+      // features = features.filter((x) => x.properties.volume != 0);
 
       const max = d3.max(features, (d) => d.properties.volume);
 
@@ -1088,8 +1132,8 @@ export default {
       features.forEach((x) => {
         let color = PALETTE.dash_green;
         if (
-          this.fluxGeoOptions.includes(x.properties.origin) &&
-          this.fluxType != 3
+          this.fluxGeoOptions.includes(x.properties.origin) ||
+          this.fluxType == 3
         ) {
           color = PALETTE.dash_green;
         } else {
@@ -1104,6 +1148,7 @@ export default {
         colorExpression.push(color);
       });
       colorExpression.push("white");
+
 
       if (legendHover) {
         features = features.filter(
@@ -1473,9 +1518,9 @@ export default {
         } else {
           color = colorScaleNegative(percent);
         }
-       
+
         const colorRgb = d3.rgb(color);
-         
+
         return [colorRgb.r, colorRgb.g, colorRgb.b];
       };
 
