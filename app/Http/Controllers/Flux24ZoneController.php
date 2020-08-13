@@ -56,13 +56,13 @@ class Flux24ZoneController extends Controller
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->orderBy('volume', 'desc')
                 ->whereIn('destination', $health_zones)
-                ->groupBy('destination')->get();
+                ->groupBy('destination','date')->get();
 
             $flux_reference = Flux::select(['destination as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                 ->orderBy('volume', 'desc')
                 ->whereIn('destination', $health_zones)
-                ->groupBy('destination')->get();
+                ->groupBy('destination'.'date')->get();
 
             return response()->json([
                 'observations' => $flux,
