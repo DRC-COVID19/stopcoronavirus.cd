@@ -354,7 +354,7 @@ export default {
       fluxType: (state) => state.flux.fluxType,
       isProvinceStatSeeing: (state) => state.flux.isProvinceStatSeeing,
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
-    })
+    }),
   },
   watch: {
     flux24DailyIn() {
@@ -403,8 +403,9 @@ export default {
         });
       });
     },
-    mobiliteGenerale(val){
-      this.showMobiliteGenerale = val
+    mobiliteGenerale(){
+      this.showMobiliteGenerale = this.mobiliteGenerale
+      if(this.mobiliteGenerale) this.selectFluxType(4)
     }
   },
   mounted() {
@@ -412,6 +413,13 @@ export default {
     this.flux24DailyOutLocal = this.extractFlux23DailyOut();
     this.flux24DailyGeneraleLocal = this.extractFlux23DailyGenerale();
     this.flux24DailyPresenceInLocal = this.extractFlux24PresenceDailyIn();
+
+    this.showMobiliteGenerale = this.mobiliteGenerale
+    if(this.mobiliteGenerale){
+      this.selectFluxType(4)
+    }else{
+      this.selectFluxType(1)
+    }
 
     this.$nextTick(() => {
       this.flux24DailyInLocal.forEach((item, index) => {

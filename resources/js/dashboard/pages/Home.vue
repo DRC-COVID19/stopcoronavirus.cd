@@ -9,6 +9,7 @@
             @submitFluxForm="submitFluxForm"
             @populationFluxChecked="populationFluxChecked"
             @flux::predefined::changed="fluxPredefinedChanged"
+            @toggleShowMobiliteGenerale="toggleShowMobiliteGenerale"
             :fluxZones="fluxZones"
             :fluxProvinces="fluxProvinces"
             :flux24Errors="flux24Errors"
@@ -990,6 +991,9 @@ export default {
           this.flux24Errors = response.data.errors;
           this.$set(this.loadings, "fluxPC_flux24", false);
         });
+    },
+    toggleShowMobiliteGenerale(checked){
+      this.showMobiliteGenerale = checked
     },
     toggleFullscreenMap() {
       this.$refs["fullscreenMap"].toggle();
