@@ -281,6 +281,7 @@ export default {
       hospitalTotalData: (state) => state.hospital.hospitalTotalData,
       fluxMapStyle: (state) => state.flux.mapStyle,
       activeMenu: (state) => state.nav.activeMenu,
+      healthZones: (state) => state.app.healthZones,
     }),
     hasRightSide() {
       return (
@@ -327,6 +328,9 @@ export default {
   },
   mounted() {
     this.getFluxZone();
+    if (this.healthZones.length == 0) {
+      this.getHealthZone();
+    }
     this.getFluxProvinces();
     this.$store.watch(
       (state) => state.nav.activeMenu,
@@ -350,7 +354,7 @@ export default {
     this.loadFluxGLobalData();
   },
   methods: {
-    ...mapActions(["userMe", "getHospitalsData"]),
+    ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
     ...mapMutations(["setMapStyle"]),
     layerSetSyle(value) {
       this.setMapStyle(value);
@@ -969,10 +973,10 @@ export default {
             data.references
           );
           this.$set(this.loadings, "urlPresenceDailyIn", false);
-        })
-        // .catch(({ response }) => {
-        //   this.$set(this.loadings, "urlPresenceDailyIn", false);
-        // });
+        });
+      // .catch(({ response }) => {
+      //   this.$set(this.loadings, "urlPresenceDailyIn", false);
+      // });
 
       this.flux24 = [];
       // this.$set(this.loadings, "flux24", true);
@@ -994,30 +998,34 @@ export default {
         return;
       }
 
-      //Get  zone in by province
       this.fluxZoneGlobalIn = [];
-      axios
-        .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
-          params: values,
-        })
-        .then(({ data }) => {
-          this.fluxZoneGlobalIn = this.computedFluxData(
-            data.observations,
-            data.references
-          );
-        });
-
-      //Get  zone out by province
       this.fluxZoneGlobalOut = [];
-      axios
-        .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
-          params: values,
-        })
-        .then(({ data }) => {
-          this.fluxZoneGlobalOut = this.computedFluxData(
-            data.observations,
-            data.references
-          );
+
+      this.healthZones
+        .filter((x) => x.province == values.fluxGeoOptions[0])
+        .map((item) => {
+          const healthZoneValues = Object.assign({}, values);
+          healthZoneValues.fluxGeoOptions = item.zone;
+          //Get  zone in by province
+          axios
+            .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
+              params: healthZoneValues,
+            })
+            .then(({ data }) => {
+              this.fluxZoneGlobalIn =data;
+            });
+
+          //Get  zone out by province
+          axios
+            .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
+              params: healthZoneValues,
+            })
+            .then(({ data }) => {
+              // this.fluxZoneGlobalOut = this.computedFluxData(
+              //   data.observations,
+              //   data.references
+              // );
+            });
         });
     },
     seeSide() {
