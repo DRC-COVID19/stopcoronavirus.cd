@@ -98,8 +98,14 @@ export default {
           }
         }
         const difference = observationVolume - referenceVolume;
+        let zone=null;
+        if (observationsByDate[0]) {
+          zone=observationsByDate[0].zone;
+        }else if (referencesByDate[0]) {
+          zone=referencesByDate[0].zone;
+        }
         localData.push({
-          zone: observationsByDate[0].zone,
+          zone: zone,
           volume: observationVolume,
           volume_reference: referenceVolume,
           percent: Math.round((difference / referenceVolume) * 100),
