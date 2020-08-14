@@ -489,7 +489,7 @@ export default {
       this.flux24Func();
     },
     flux24DailyGenerale() {
-      this.flux24Func();
+      if(this.fluxType == 4) this.flux24Func();
     },
     isLoading() {
       if (this.centerCoordinates.length > 0) {
