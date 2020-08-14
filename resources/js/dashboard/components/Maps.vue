@@ -89,6 +89,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    flux24DailyGenerale: {
+      type: Array,
+      default: () => [],
+    },
     isLoading: {
       type: Boolean,
       default: null,
@@ -482,6 +486,9 @@ export default {
       }
     },
     flux24DailyIn() {
+      this.flux24Func();
+    },
+    flux24DailyGenerale() {
       this.flux24Func();
     },
     isLoading() {
@@ -912,6 +919,8 @@ export default {
           data = this.flux24DailyIn;
         } else if (this.fluxType == 2) {
           data = this.flux24DailyOut;
+        } else if (this.fluxType == 4) {
+          data = this.flux24DailyGenerale;
         }
         switch (this.fluxMapStyle) {
           case 2:
@@ -1062,7 +1071,15 @@ export default {
             difference: difference,
           },
         });
-      } else {
+      } else if(this.fluxTYpe == 4) {
+        localData.map((item) => {
+          formatData(item, "zone");
+        });
+        localData.map((item) => {
+          formatData(item, "targetZone");
+        });  
+      }
+      else {
         localData.map((item) => {
           formatData(item, "origin");
         });
@@ -1108,7 +1125,7 @@ export default {
         isPercent: true,
       });
 
-      if (this.fluxType == 1) {
+      if (this.fluxType == 1 || this.fluxType == 4) {
         colorScaleNegative.range(PALETTE.inflow_negatif);
         colorScalePositive.range(PALETTE.inflow_positif);
 
@@ -1330,6 +1347,10 @@ export default {
         FluxFiltered.map((item) => {
           formatData(item, "destination");
         });
+      } else if (this.fluxType == 4) {
+        FluxFiltered.map((item) => {
+          formatData(item, "zone");
+        });
       } else {
         FluxFiltered.map((item) => {
           formatData(item, "origin");
@@ -1364,6 +1385,12 @@ export default {
         }).map((item) => {
           filterArcData(item, "origin");
         });
+      } else if(this.fluxType == 4) {
+        arcBrutData = FluxFiltered.filter((item) => {
+          return includes(this.fluxGeoOptions, item.targetZone);
+        }).map((item) => {
+          filterArcData(item, "zone");
+        });
       } else {
         arcBrutData = FluxFiltered.filter((item) => {
           return includes(this.fluxGeoOptions, item.origin);
@@ -1371,6 +1398,7 @@ export default {
           filterArcData(item, "destination");
         });
       }
+
 
       const max = Math.max(...features.map((x) => x.properties.volume));
       const minArc = Math.min(...arcData.map((x) => x.percent));
@@ -1410,7 +1438,7 @@ export default {
 
       const colorScale = d3.scaleQuantile().domain([minArc, maxArc]);
 
-      if (this.fluxType == 1) {
+      if (this.fluxType == 1 || this.fluxType == 4) {
         colorScale.range(PALETTE.inflow);
         colorScaleNegative.range(PALETTE.inflow_negatif);
         colorScalePositive.range(PALETTE.inflow_positif);
