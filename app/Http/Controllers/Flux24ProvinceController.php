@@ -50,15 +50,15 @@ class Flux24ProvinceController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux24Province::select(['origin as zone', DB::raw('sum(volume)as volume')])
+            $flux = Flux24Province::select(['origin as zone','Date as date', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->orderBy('volume', 'desc')
-                ->groupBy('origin')->get();
+                ->groupBy('origin','Date')->get();
 
-                $flux_reference = Flux24Province::select(['origin as zone', DB::raw('sum(volume)as volume')])
+                $flux_reference = Flux24Province::select(['origin as zone','Date as date', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                 ->orderBy('volume', 'desc')
-                ->groupBy('origin')->get();
+                ->groupBy('origin','Date')->get();
 
                 return response()->json([
                     'observations'=>$flux,

@@ -189,6 +189,7 @@ import MenuInfrastructure from "../components/menu/Infrastructure";
 import MenuOrientation from "../components/menu/Orientation";
 import MenuIndicateur from "../components/menu/Indicateur";
 import GlobalProvince from "../components/flux/GLobalProvince";
+import { groupBy } from "lodash";
 import {
   OBSERVATION_START,
   OBSERVATION_END,
@@ -281,6 +282,7 @@ export default {
       hospitalTotalData: (state) => state.hospital.hospitalTotalData,
       fluxMapStyle: (state) => state.flux.mapStyle,
       activeMenu: (state) => state.nav.activeMenu,
+      healthZones: (state) => state.app.healthZones,
     }),
     hasRightSide() {
       return (
@@ -327,6 +329,9 @@ export default {
   },
   mounted() {
     this.getFluxZone();
+    if (this.healthZones.length == 0) {
+      this.getHealthZone();
+    }
     this.getFluxProvinces();
     this.$store.watch(
       (state) => state.nav.activeMenu,
@@ -350,7 +355,7 @@ export default {
     this.loadFluxGLobalData();
   },
   methods: {
-    ...mapActions(["userMe", "getHospitalsData"]),
+    ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
     ...mapMutations(["setMapStyle"]),
     layerSetSyle(value) {
       this.setMapStyle(value);
@@ -969,10 +974,10 @@ export default {
             data.references
           );
           this.$set(this.loadings, "urlPresenceDailyIn", false);
-        })
-        // .catch(({ response }) => {
-        //   this.$set(this.loadings, "urlPresenceDailyIn", false);
-        // });
+        });
+      // .catch(({ response }) => {
+      //   this.$set(this.loadings, "urlPresenceDailyIn", false);
+      // });
 
       this.flux24 = [];
       // this.$set(this.loadings, "flux24", true);
@@ -994,30 +999,31 @@ export default {
         return;
       }
 
-      //Get  zone in by province
       this.fluxZoneGlobalIn = [];
-      axios
-        .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
-          params: values,
-        })
-        .then(({ data }) => {
-          this.fluxZoneGlobalIn = this.computedFluxData(
-            data.observations,
-            data.references
-          );
-        });
-
-      //Get  zone out by province
       this.fluxZoneGlobalOut = [];
-      axios
-        .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
-          params: values,
-        })
-        .then(({ data }) => {
-          this.fluxZoneGlobalOut = this.computedFluxData(
-            data.observations,
-            data.references
-          );
+
+      this.healthZones
+        .filter((x) => x.province == values.fluxGeoOptions[0])
+        .map((item) => {
+          const healthZoneValues = Object.assign({}, values);
+          healthZoneValues.fluxGeoOptions = item.zone;
+          //Get  zone in by province
+          axios
+            .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
+              params: healthZoneValues,
+            })
+            .then(({ data }) => {
+              this.fluxZoneGlobalIn.push(data);
+            });
+
+          //Get  zone out by province
+          axios
+            .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
+              params: healthZoneValues,
+            })
+            .then(({ data }) => {
+              this.fluxZoneGlobalOut.push(data);
+            });
         });
     },
     seeSide() {
@@ -1144,10 +1150,14 @@ export default {
           },
         })
         .then(({ data }) => {
-          this.fluxGlobalIn = this.computedFluxData(
-            data.observations,
-            data.references
-          );
+          const groupObservations = groupBy(data.observations, (d) => d.zone);
+          const groupReferences = groupBy(data.references, (d) => d.zone);
+          Object.entries(groupObservations).forEach(([key, value]) => {
+            this.fluxGlobalIn.push({
+              references: groupReferences[key],
+              observations: groupObservations[key],
+            });
+          });
         });
 
       axios
@@ -1160,10 +1170,14 @@ export default {
           },
         })
         .then(({ data }) => {
-          this.fluxGlobalOut = this.computedFluxData(
-            data.observations,
-            data.references
-          );
+          const groupObservations = groupBy(data.observations, (d) => d.zone);
+          const groupReferences = groupBy(data.references, (d) => d.zone);
+          Object.entries(groupObservations).forEach(([key, value]) => {
+            this.fluxGlobalOut.push({
+              references: groupReferences[key],
+              observations: groupObservations[key],
+            });
+          });
         });
     },
   },
