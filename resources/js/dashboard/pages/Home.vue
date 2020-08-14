@@ -189,6 +189,7 @@ import MenuInfrastructure from "../components/menu/Infrastructure";
 import MenuOrientation from "../components/menu/Orientation";
 import MenuIndicateur from "../components/menu/Indicateur";
 import GlobalProvince from "../components/flux/GLobalProvince";
+import { groupBy } from "lodash";
 import {
   OBSERVATION_START,
   OBSERVATION_END,
@@ -1012,7 +1013,7 @@ export default {
               params: healthZoneValues,
             })
             .then(({ data }) => {
-              this.fluxZoneGlobalIn =data;
+              this.fluxZoneGlobalIn.push(data);
             });
 
           //Get  zone out by province
@@ -1021,10 +1022,7 @@ export default {
               params: healthZoneValues,
             })
             .then(({ data }) => {
-              // this.fluxZoneGlobalOut = this.computedFluxData(
-              //   data.observations,
-              //   data.references
-              // );
+              this.fluxZoneGlobalOut.push(data);
             });
         });
     },
@@ -1152,10 +1150,14 @@ export default {
           },
         })
         .then(({ data }) => {
-          this.fluxGlobalIn = this.computedFluxData(
-            data.observations,
-            data.references
-          );
+          const groupObservations = groupBy(data.observations, (d) => d.zone);
+          const groupReferences = groupBy(data.references, (d) => d.zone);
+          Object.entries(groupObservations).forEach(([key, value]) => {
+            this.fluxGlobalIn.push({
+              references: groupReferences[key],
+              observations: groupObservations[key],
+            });
+          });
         });
 
       axios
@@ -1168,10 +1170,14 @@ export default {
           },
         })
         .then(({ data }) => {
-          this.fluxGlobalOut = this.computedFluxData(
-            data.observations,
-            data.references
-          );
+          const groupObservations = groupBy(data.observations, (d) => d.zone);
+          const groupReferences = groupBy(data.references, (d) => d.zone);
+          Object.entries(groupObservations).forEach(([key, value]) => {
+            this.fluxGlobalOut.push({
+              references: groupReferences[key],
+              observations: groupObservations[key],
+            });
+          });
         });
     },
   },
