@@ -104,6 +104,10 @@ export default {
         }else if (referencesByDate[0]) {
           zone=referencesByDate[0].zone;
         }
+        if (!zone) {
+          return;
+        }
+        
         localData.push({
           zone: zone,
           volume: observationVolume,
