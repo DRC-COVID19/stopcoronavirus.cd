@@ -94,8 +94,8 @@ export default {
       default: null,
     },
     flux24Presence: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => ({}),
     },
   },
   data() {
@@ -960,14 +960,7 @@ export default {
     fluxHatchedStyle(flux24Data, flux24DataPresence, legendHover = null) {
       const localData =
         this.fluxType == 3
-          ? flux24DataPresence.map((x) => {
-              return {
-                origin: x.zone,
-                volume: x.volume,
-                difference: x.difference,
-                volume_reference: x.volume_reference,
-              };
-            })
+          ? flux24DataPresence
           : flux24Data;
 
       let features = [];
@@ -1017,8 +1010,57 @@ export default {
           formatData(item, "origin");
         });
       } else if (this.fluxType == 3) {
-        localData.map((item) => {
-          formatData(item, "origin");
+        // localData.map((item) => {
+        //   formatData(item, "origin");
+        // });
+
+        const { referencesByDate, observationsByDate } = localData;
+        let referenceVolume = null;
+        let observationVolume = null;
+        const countReference = referencesByDate.length;
+        if (countReference > 0) {
+          if (countReference % 2 == 0) {
+            let index = (countReference + 1) / 2;
+            index = parseInt(index);
+            const volume1 = referencesByDate[index].volume;
+            const volume2 = referencesByDate[index - 1].volume;
+            referenceVolume = (volume1 + volume2) / 2;
+          } else {
+            const index = (countReference + 1) / 2;
+            referenceVolume = referencesByDate[index - 1].volume;
+          }
+        }
+
+        const countObservation = observationsByDate.length;
+        if (countObservation > 0) {
+          if (countObservation % 2 == 0) {
+            let index = (countObservation + 1) / 2;
+            index = parseInt(index);
+            const volume1 = observationsByDate[index].volume;
+            const volume2 = observationsByDate[index - 1].volume;
+            observationVolume = (volume1 + volume2) / 2;
+          } else {
+            const index = (countObservation + 1) / 2;
+            observationVolume = observationsByDate[index - 1].volume;
+          }
+        }
+        const difference = observationVolume - referenceVolume;
+        const percent = Math.round((difference / referenceVolume) * 100);
+
+        features.push({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [],
+          },
+          properties: {
+            origin: observationsByDate[0].zone,
+            color: "#ED5F68",
+            volume: observationVolume,
+            volumeReference: referenceVolume,
+            percent: percent,
+            difference: difference,
+          },
         });
       } else {
         localData.map((item) => {
@@ -1029,7 +1071,9 @@ export default {
         });
       }
 
-      features = features.filter((x) => x.properties.volume != 0);
+      
+
+      // features = features.filter((x) => x.properties.volume != 0);
 
       const max = d3.max(features, (d) => d.properties.volume);
 
@@ -1038,6 +1082,23 @@ export default {
 
       const domaineMax = d3.max(features, (d) => d.properties.percent);
       const domaineMin = d3.min(features, (d) => d.properties.percent);
+
+      const colorScalePositive = d3.scaleQuantile();
+      const colorScaleNegative = d3.scaleQuantile();
+
+      colorScalePositive.domain([0, domaineMax]);
+      colorScaleNegative.domain([domaineMin, 0]);
+
+      // if (domaineMax >= 0 && domaineMin <= 0) {
+      //   colorScalePositive.domain([0, domaineMax]);
+      //   colorScaleNegative.domain([domaineMin, 0]);
+      // } else if (domaineMax <= 0) {
+      //   colorScaleNegative.domain([domaineMin, 0]);
+      // } else if (domaineMin >= 0) {
+      //   colorScalePositive.domain([[0, domaineMax]]);
+      // } else if (domaineMax <= 0) {
+      //   colorScaleNegative.domain([[domaineMin, 0]]);
+      // }
 
       const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
 
@@ -1048,11 +1109,17 @@ export default {
       });
 
       if (this.fluxType == 1) {
+        colorScaleNegative.range(PALETTE.inflow_negatif);
+        colorScalePositive.range(PALETTE.inflow_positif);
+
         colorScale.range(PALETTE.inflow);
       } else if (this.fluxType == 3) {
         colorScale.range(PALETTE.present);
       } else {
         colorScale.range(PALETTE.outflow);
+
+        colorScaleNegative.range(PALETTE.outflow_negatif);
+        colorScalePositive.range(PALETTE.outflow_positif);
       }
 
       let dataKey = "name";
@@ -1063,15 +1130,25 @@ export default {
       const colorExpression = [];
       colorExpression.push("case");
       features.forEach((x) => {
-        const color =
-          this.fluxGeoOptions.includes(x.properties.origin) &&
-          this.fluxType != 3
-            ? PALETTE.dash_green
-            : colorScale(x.properties.percent);
+        let color = PALETTE.dash_green;
+        if (
+          this.fluxGeoOptions.includes(x.properties.origin) ||
+          this.fluxType == 3
+        ) {
+          color = PALETTE.dash_green;
+        } else {
+          if (x.properties.percent >= 0) {
+            color = colorScalePositive(x.properties.percent);
+          } else {
+            color = colorScaleNegative(x.properties.percent);
+          }
+        }
+
         colorExpression.push(["==", ["get", dataKey], x.properties.origin]);
         colorExpression.push(color);
       });
       colorExpression.push("white");
+
 
       if (legendHover) {
         features = features.filter(
@@ -1299,7 +1376,7 @@ export default {
       const minArc = Math.min(...arcData.map((x) => x.percent));
       const maxArc = Math.max(...arcData.map((x) => x.percent));
 
-      this.setDomaineExtValues({ min: minArc, max: maxArc,isPercent:true });
+      this.setDomaineExtValues({ min: minArc, max: maxArc, isPercent: true });
 
       if (legendHover) {
         if (features.length > 0) {
@@ -1311,9 +1388,7 @@ export default {
         }
         if (arcData.length > 0) {
           arcData = arcData.filter(
-            (x) =>
-              x.percent >= legendHover.de &&
-              x.percent <= legendHover.a
+            (x) => x.percent >= legendHover.de && x.percent <= legendHover.a
           );
         }
       }
@@ -1327,16 +1402,24 @@ export default {
         },
       };
 
-      
+      const colorScalePositive = d3.scaleQuantile();
+      const colorScaleNegative = d3.scaleQuantile();
+
+      colorScalePositive.domain([0, maxArc]);
+      colorScaleNegative.domain([minArc, 0]);
 
       const colorScale = d3.scaleQuantile().domain([minArc, maxArc]);
 
       if (this.fluxType == 1) {
         colorScale.range(PALETTE.inflow);
+        colorScaleNegative.range(PALETTE.inflow_negatif);
+        colorScalePositive.range(PALETTE.inflow_positif);
       } else if (this.fluxType == 3) {
         colorScale.range(PALETTE.present);
       } else {
         colorScale.range(PALETTE.outflow);
+        colorScaleNegative.range(PALETTE.outflow_negatif);
+        colorScalePositive.range(PALETTE.outflow_positif);
       }
 
       map.addSource("fluxCircleDataSource", circleData);
@@ -1424,6 +1507,23 @@ export default {
         popup.remove();
       });
 
+      /**
+       * get Rgb color from percent
+       */
+      const rgbColor = (percent) => {
+        let color = null;
+
+        if (percent >= 0) {
+          color = colorScalePositive(percent);
+        } else {
+          color = colorScaleNegative(percent);
+        }
+
+        const colorRgb = d3.rgb(color);
+
+        return [colorRgb.r, colorRgb.g, colorRgb.b];
+      };
+
       // arcData=this.flux24.filter(x=>!x.isReference);
       const myDeckLayer = new MapboxLayer({
         id: "arc",
@@ -1446,12 +1546,10 @@ export default {
           return coordinates ?? d.position_end;
         },
         getSourceColor: (d) => {
-          const color = d3.rgb(colorScale(d.percent));
-          return [color.r, color.g, color.b];
+          return rgbColor(d.percent);
         },
         getTargetColor: (d) => {
-          const color = d3.rgb(colorScale(d.percent));
-          return [color.r, color.g, color.b];
+          return rgbColor(d.percent);
         },
         getHeight: 1,
         getTilt: 1,
