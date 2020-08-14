@@ -53,16 +53,20 @@ class Flux24ZoneController extends Controller
                 ->get()->pluck('name');
 
             $flux = Flux::select(['destination as zone', DB::raw('sum(volume)as volume')])
+                ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->orderBy('volume', 'desc')
                 ->whereIn('destination', $health_zones)
-                ->groupBy('destination')->get();
+                ->limit(1)
+                ->groupBy('destination', 'date')->get();
 
             $flux_reference = Flux::select(['destination as zone', DB::raw('sum(volume)as volume')])
+                ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                 ->orderBy('volume', 'desc')
                 ->whereIn('destination', $health_zones)
-                ->groupBy('destination')->get();
+                ->limit(1)
+                ->groupBy('destination' , 'date')->get();
 
             return response()->json([
                 'observations' => $flux,
@@ -86,15 +90,19 @@ class Flux24ZoneController extends Controller
                 ->get()->pluck('name');
 
             $flux = Flux::select(['origin as zone', DB::raw('sum(volume)as volume')])
+                ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->whereIn('origin', $health_zones)
                 ->orderBy('volume', 'desc')
+                ->limit(1)
                 ->groupBy('origin')->get();
 
             $flux_reference = Flux::select(['origin as zone', DB::raw('sum(volume)as volume')])
+                ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                 ->whereIn('origin', $health_zones)
                 ->orderBy('volume', 'desc')
+                ->limit(1)
                 ->groupBy('origin')->get();
 
             return response()->json([
