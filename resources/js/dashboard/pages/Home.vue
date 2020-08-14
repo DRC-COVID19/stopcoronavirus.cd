@@ -974,10 +974,10 @@ export default {
             data.references
           );
           this.$set(this.loadings, "urlPresenceDailyIn", false);
-        });
-      // .catch(({ response }) => {
-      //   this.$set(this.loadings, "urlPresenceDailyIn", false);
-      // });
+        })
+      .catch(({ response }) => {
+        this.$set(this.loadings, "urlPresenceDailyIn", false);
+      });
 
       this.flux24 = [];
       // this.$set(this.loadings, "flux24", true);
