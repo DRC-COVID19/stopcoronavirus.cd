@@ -67,6 +67,7 @@
                   :flux24="flux24"
                   :flux24DailyIn="flux24DailyIn"
                   :flux24DailyOut="flux24DailyOut"
+                  :flux24DailyGenerale="flux24DailyGenerale"
                   :isLoading="isLoading"
                   :flux24Presence="flux24PresenceDailyIn"
                 />
@@ -1126,9 +1127,6 @@ export default {
       this.flux24DailyGenerale = temp
     },
     updateFluxDataGroupedByDateGen(){
-      console.log("fluxDataGroupedByDateIn", this.fluxDataGroupedByDateIn)
-      console.log("fluxDataGroupedByDateOut", this.fluxDataGroupedByDateOut)
-
       const temp = { referencesByDate : []  , observationsByDate : []} 
       
       if(this.fluxDataGroupedByDateIn.referencesByDate)
@@ -1143,13 +1141,11 @@ export default {
       if(this.fluxDataGroupedByDateOut.observationsByDate)
         temp.observationsByDate = [...temp.observationsByDate , ...this.fluxDataGroupedByDateOut.observationsByDate]
 
-      console.log('temp', temp)
       this.fluxDataGroupedByDateGen = this.computedFluxDataByDate(
         temp.observationsByDate,
         temp.referencesByDate,
         "zone"
       );
-      console.log('fluxDataGroupedByDateGen' , this.fluxDataGroupedByDateGen)
     },
     computedFluxDataByDate(dataObservations, dataReferences, key){
         const referencesByDate = [];

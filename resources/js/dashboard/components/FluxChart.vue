@@ -64,11 +64,11 @@
                 <p
                   v-if="differenceGenerale>0"
                   class="percent-p text-dash-color"
-                >{{differenceGenerale}} personnes de plus sont entrées et sorties de la zone</p>
+                >{{differenceGenerale}} personnes de plus sont <br> entrées et sorties de la zone</p>
                 <p
                   v-else
                   class="percent-p text-dash-color"
-                >{{ `-${differenceGenerale}`}} personnes de moins sont entrées et sorties de la zone</p>
+                >{{ `-${differenceGenerale}`}} personnes de moins sont <br> entrées et sorties de la zone</p>
               </b-card>
 
               <div class="fullscreen-container fullscreen-container1">
@@ -487,7 +487,6 @@ export default {
       const result = this.fluxInPercent(this.flux24PresenceDailyIn);
       this.percentPresence = result.percent;
       this.differencePresence =this.formatCash(result.difference);
-      console.log(this.formatCash(result.difference));
       this.mobileCalc(
         this.flux24PresenceDailyIn,
         `mobile_presence`,
