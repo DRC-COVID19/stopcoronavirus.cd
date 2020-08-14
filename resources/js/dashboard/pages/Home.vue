@@ -115,10 +115,12 @@
                   :flux24Daily="flux24Daily"
                   :flux24DailyIn="flux24DailyIn"
                   :flux24DailyOut="flux24DailyOut"
+                  :flux24DailyGenerale="flux24DailyGenerale"
                   :flux24Presence="flux24Presence"
                   :flux24PresenceDailyIn="flux24PresenceDailyIn"
                   :fluxZoneGlobalIn="fluxZoneGlobalIn"
                   :fluxZoneGlobalOut="fluxZoneGlobalOut"
+                  :mobiliteGenerale="showMobiliteGenerale"
                 />
               </b-tab>
               <b-tab
@@ -258,6 +260,7 @@ export default {
       flux24DailyComparison: [],
       flux24DailyIn: [],
       flux24DailyOut: [],
+      flux24DailyGenerale: [],
       fluxGeoOptions: [],
       menuColunmStyle: {},
       flux24PrensenceDaily: [],
@@ -267,6 +270,7 @@ export default {
       palette: PALETTE,
       fluxZoneGlobalIn: [],
       fluxZoneGlobalOut: [],
+      showMobiliteGenerale : false
     };
   },
   computed: {
@@ -576,6 +580,7 @@ export default {
         this.flux24DailyComparison = [];
         this.flux24DailyIn = [];
         this.flux24DailyOut = [];
+        this.flux24DailyGenerale = [];
       }
     },
     getFluxZone() {
@@ -993,7 +998,7 @@ export default {
       this.fullscreen = fullscreen;
     },
     computedFluxData(dataObservations, dataReferences) {
-      
+
       return dataObservations.map((item) => {
         const reference = dataReferences.find((x) => x.zone == item.zone);
         if (reference) {
@@ -1010,7 +1015,7 @@ export default {
       });
     },
     loadFluxGLobalData() {
-      
+
 
       axios
         .get("/api/dashboard/flux/origin/provinces/h-24/global-in", {
@@ -1044,7 +1049,30 @@ export default {
           );
         });
     },
+    updateflux24DailyGenerale(){
+      const temp = [
+        ...this.flux24DailyIn.map(x => {
+            x.zone = x.origin
+            x.targetZone = x.destination
+            return x
+        }) ,
+        ...this.flux24DailyOut.map(x => {
+            x.targetZone = x.origin
+            x.zone = x.destination
+            return x
+        })
+      ]
+      this.flux24DailyGenerale = temp
+    },
   },
+  watch: {
+    flux24DailyIn(){
+      this.updateflux24DailyGenerale()
+    },
+    flux24DailyOut(){
+      this.updateflux24DailyGenerale()
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
