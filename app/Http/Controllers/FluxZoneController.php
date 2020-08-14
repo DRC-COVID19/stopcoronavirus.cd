@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\FluxZone;
+use App\HealthZone;
 use Illuminate\Http\Request;
 
 class FluxZoneController extends Controller
@@ -16,6 +17,21 @@ class FluxZoneController extends Controller
     {
         try {
             $zones = FluxZone::select('name as origin')->get();
+            return response()->json($zones);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getHealthZoneWithProvince()
+    {
+        try {
+            $zones = HealthZone::select(['health_zones.name as zone','provinces.name as province'])
+                ->join('provinces', 'provinces.id', '=', 'health_zones.province_id')
+                ->get();
             return response()->json($zones);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
