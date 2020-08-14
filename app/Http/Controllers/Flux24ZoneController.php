@@ -47,26 +47,24 @@ class Flux24ZoneController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $health_zones = HealthZone::select('health_zones.name')
-                ->join('provinces', 'provinces.id', "=", 'health_zones.province_id')
-                ->whereIn('provinces.name', $data['fluxGeoOptions'])
-                ->get()->pluck('name');
+            // $health_zones = HealthZone::select('health_zones.name')
+            //     ->join('provinces', 'provinces.id', "=", 'health_zones.province_id')
+            //     ->whereIn('provinces.name', $data['fluxGeoOptions'])
+            //     ->get()->pluck('name');
 
-            $flux = Flux::select(['destination as zone', DB::raw('sum(volume)as volume')])
+            $flux = Flux::select(['destination as zone', 'Date as date', DB::raw('sum(volume)as volume')])
                 ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->orderBy('volume', 'desc')
-                ->whereIn('destination', $health_zones)
-                ->limit(1)
+                ->where('destination', $data['fluxGeoOptions'])
                 ->groupBy('destination', 'date')->get();
 
-            $flux_reference = Flux::select(['destination as zone', DB::raw('sum(volume)as volume')])
+            $flux_reference = Flux::select(['destination as zone', 'Date as date', DB::raw('sum(volume)as volume')])
                 ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                 ->orderBy('volume', 'desc')
-                ->whereIn('destination', $health_zones)
-                ->limit(1)
-                ->groupBy('destination' , 'date')->get();
+                ->where('destination', $data['fluxGeoOptions'])
+                ->groupBy('destination', 'date')->get();
 
             return response()->json([
                 'observations' => $flux,
@@ -84,26 +82,23 @@ class Flux24ZoneController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $health_zones = HealthZone::select('health_zones.name')
-                ->join('provinces', 'provinces.id', "=", 'health_zones.province_id')
-                ->whereIn('provinces.name', $data['fluxGeoOptions'])
-                ->get()->pluck('name');
+            // $health_zones = HealthZone::select('health_zones.name')
+            //     ->join('provinces', 'provinces.id', "=", 'health_zones.province_id')
+            //     ->whereIn('provinces.name', $data['fluxGeoOptions'])
+            //     ->get()->pluck('name');
 
-            $flux = Flux::select(['origin as zone', DB::raw('sum(volume)as volume')])
+            $flux = Flux::select(['origin as zone', 'Date as date', DB::raw('sum(volume)as volume')])
                 ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->whereIn('origin', $health_zones)
+                ->where('origin', $data['fluxGeoOptions'])
                 ->orderBy('volume', 'desc')
-                ->limit(1)
-                ->groupBy('origin')->get();
-
-            $flux_reference = Flux::select(['origin as zone', DB::raw('sum(volume)as volume')])
+                ->groupBy('origin', 'Date')->get();
+            $flux_reference = Flux::select(['origin as zone', 'Date as date', DB::raw('sum(volume)as volume')])
                 ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                ->whereIn('origin', $health_zones)
+                ->where('origin', $data['fluxGeoOptions'])
                 ->orderBy('volume', 'desc')
-                ->limit(1)
-                ->groupBy('origin')->get();
+                ->groupBy('origin', 'date')->get();
 
             return response()->json([
                 'observations' => $flux,
@@ -143,7 +138,7 @@ class Flux24ZoneController extends Controller
     public function fluxValidator($inputData)
     {
         return  Validator::make($inputData, [
-            'fluxGeoOptions' => 'required|array',
+            'fluxGeoOptions' => 'required|string',
             'preference_start' => 'nullable|date|before_or_equal:preference_end',
             'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
             'observation_start' => 'date|required|before_or_equal:observation_end',
