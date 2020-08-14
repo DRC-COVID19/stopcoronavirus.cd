@@ -9,6 +9,10 @@ export default {
             return new Promise(resolve => setTimeout(resolve, ms));
         },
         formatCash(n){
+            if (!n) {
+                return null;
+            }
+            n=Math.abs(n);
             if (n < 1e3) return n;
             if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
             if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
