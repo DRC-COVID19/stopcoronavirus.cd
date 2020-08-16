@@ -192,9 +192,9 @@ export default {
               lineTension: 0.4
             }
           ] ;
-          
+
           ticksY = {
-            min : 0 , 
+            min : 0 ,
             precision : 0
           }
         }
@@ -225,7 +225,7 @@ export default {
           ] ;
 
           ticksY = {
-            min : 0 , 
+            min : 0 ,
             precision : 0
           }
         }else{
@@ -270,6 +270,7 @@ export default {
           }
 
           ticksY = {
+            min : 0 ,
             callback: function (value, index, values) {
                 return value + "%";
             }
