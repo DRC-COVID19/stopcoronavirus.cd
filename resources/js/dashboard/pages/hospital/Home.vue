@@ -48,9 +48,9 @@
                 class="btn-dash-blue mb-1"
                 :to="{
                   name:'hospital.detail',
-                 params:{
+                  params:{
                       update_id:data.item.id,
-                    hospital_id: $route.params.hospital_id
+                    hospital_id: $route.params.hospital_id || 0
                     }
                     }"
               >Details</b-button>
@@ -130,14 +130,18 @@ export default {
   },
   methods: {
     ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
-    getHospitalSituations() {
+    getHospitalSituations(page) {
+      if(typeof page == "undefined") page = 1
       this.ishospitalSituationLoading = true;
-      axios.get("/api/dashboard/hospital-situations").then(({ data }) => {
+      axios.get("/api/dashboard/hospital-situations",
+      {params : {page} }).then(({ data }) => {
         this.hospitalSituations = data;
         this.ishospitalSituationLoading = false;
       });
     },
-    onPageChange(page) {},
+    onPageChange(page) {
+      this.getHospitalSituations(page)
+    },
   },
 };
 </script>
