@@ -1362,12 +1362,12 @@ export default {
   .fullscreen canvas{height: auto !important;}
 }
 .col-mobilite-generale{
-  .cardtype2[data-v-c9579296] {
+  .cardtype2{
     height: 100%;
   }
   .fullscreen-container2{
     canvas{height: 400px !important;}
-    .fullscreen canvas{height: auto !important;}
+    .fullscreen canvas{height: 100% !important;}
   }
 }
 .btn-alt-screen{
