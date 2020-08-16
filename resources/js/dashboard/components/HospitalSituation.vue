@@ -172,7 +172,7 @@ export default {
               fill: false,
               backgroundColor: "#673AB7",
               borderColor: "#673AB7",
-              data: data.respirators,
+              data: data.respirators.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
               showLine: true,
@@ -184,7 +184,7 @@ export default {
               fill: false,
               backgroundColor: "#03A9F4",
               borderColor: "#03A9F4",
-              data: data.occupied_respirators,
+              data: data.occupied_respirators.map(x => (x == 0) ? null : x) ,
               fill: false,
               interpolate: true,
               showLine: true,
@@ -204,7 +204,7 @@ export default {
               label: "Lits de réanimation" ,
               backgroundColor: "#F44336",
               borderColor: "#F44336",
-              data: data.resuscitation_beds,
+              data: data.resuscitation_beds.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
               showLine: true,
@@ -215,7 +215,7 @@ export default {
               label: "Lits de réanimation occupés" ,
               backgroundColor: "#9E9E9E",
               borderColor: "#9E9E9E",
-              data: data.occupied_resuscitation_beds,
+              data: data.occupied_resuscitation_beds.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
               showLine: true,
@@ -230,10 +230,16 @@ export default {
           }
         }else{
           const dataset1 = data.occupied_resuscitation_beds.map(
-            (a, i) => Math.round(a * 100 / data.resuscitation_beds[i] ))
+            (a, i) => {
+              if(a == 0 || data.resuscitation_beds[i] == 0) return null
+              return Math.round(a * 100 / data.resuscitation_beds[i] )
+            })
 
           const dataset2 = data.occupied_respirators.map(
-            (a,i) => Math.round(a * 100 / data.respirators[i] ))
+            (a,i) => {
+              if(a == 0 || data.respirators[i] == 0) return null
+              return Math.round(a * 100 / data.respirators[i] )
+            })
 
           datasets = [
             {
