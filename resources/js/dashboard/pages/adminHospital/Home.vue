@@ -31,7 +31,7 @@
                 <strong>Loading...</strong>
               </div>
             </template>
-             <template v-slot:cell(statut)="data">
+            <template v-slot:cell(statut)="data">
               <span class="badge badge-pill badge-statut"
                 :style="'background-color : ' + getColor(data.item.last_update)">
 
@@ -98,8 +98,8 @@ export default {
 
       const diffDay = curDate.diff(dateFormat, 'days')
 
-      if(diffDay < 2) return '#8BC34A' //green
-      else if(diffDay < 3) return '#FFEB3B' //yellow
+      if(diffDay < 8) return '#8BC34A' //green
+      else if(diffDay < 10) return '#FFEB3B' //yellow
       else return '#F44336' //red
     }
   },
