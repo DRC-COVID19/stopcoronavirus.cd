@@ -123,6 +123,8 @@ Route::group([
         Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate');
     });
 
+    Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
+
     Route::resource('hospital-situations', "HospitalSituationController");
 
     Route::resource('hospitals-data', 'HospitalController');

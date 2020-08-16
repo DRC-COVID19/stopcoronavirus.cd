@@ -52,26 +52,21 @@
               >
                 <h5 class="percent-title">Mobilité entrante</h5>
 
-                <div class="percent flux-in-color">{{fluxInPercent(item)}}%​</div>
+                <div class="percent flux-in-color">{{percentIn}}%​</div>
                 <p
-                  v-if="fluxVolumObservation(item)>0"
+                  v-if="differenceIn>0"
                   class="percent-p text-dash-color"
-                >{{formatCash(fluxVolumObservation(item))}} personnes de plus sont entrées dans la zone</p>
+                >{{differenceIn}} personnes de plus sont entrées dans la zone</p>
                 <p
                   v-else
                   class="percent-p text-dash-color"
-                >{{formatCash(fluxVolumObservation(item)*-1) }} personnes de moins sont entrées dans la zone</p>
+                >{{ `-${differenceIn}`}} personnes de moins sont entrées dans la zone</p>
               </b-card>
               <div class="fullscreen-container fullscreen-container1">
                 <fullscreen ref="fullscreenEntrance" @change="fullscreenEntranceChange">
                   <b-card no-body class="cardtype1 mb-3 p-2" :ref="`mobile_entrance_${index}_card`">
                     <div class="chart-container">
-                      <canvas
-                        height="200"
-                        width="100vh"
-                        :ref="`mobile_entrance_${index}`"
-                        :id="`mobile_entrance_${index}`"
-                      ></canvas>
+                      <canvas height="200" width="100vh" :ref="`mobile_in`" :id="`mobile_in`"></canvas>
                     </div>
                   </b-card>
                 </fullscreen>
@@ -111,27 +106,22 @@
                 @click="selectFluxType(2)"
               >
                 <h5 class="percent-title">Mobilité sortante</h5>
-                <div class="percent flux-out-color">{{fluxInPercent(item)}}%​</div>
+                <div class="percent flux-out-color">{{percentOut}}%​</div>
                 <p
-                  v-if="fluxVolumObservation(item)>0"
+                  v-if="differenceOut>0"
                   class="percent-p text-dash-color"
-                >{{formatCash(fluxVolumObservation(item))}} personnes de plus sont sorties de la zone</p>
+                >{{differenceOut}} personnes de plus sont sorties de la zone</p>
                 <p
                   v-else
                   class="percent-p text-dash-color"
-                >{{formatCash(fluxVolumObservation(item)*-1)}} personnes de moins sont sorties de la zone</p>
+                >{{`-${differenceOut}`}} personnes de moins sont sorties de la zone</p>
               </b-card>
 
               <div class="fullscreen-container fullscreen-container1">
                 <fullscreen ref="fullscreenOut" @change="fullscreenOutChange">
                   <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_${index}_card`">
                     <div class="chart-container">
-                      <canvas
-                        height="200"
-                        width="100vh"
-                        :ref="`mobile_out_${index}`"
-                        :id="`mobile_out_${index}`"
-                      ></canvas>
+                      <canvas height="200" width="100vh" :ref="`mobile_out`" :id="`mobile_out`"></canvas>
                     </div>
                   </b-card>
                 </fullscreen>
@@ -163,9 +153,8 @@
             </b-col>
           </b-row>
         </b-col>
-
         <b-col cols="12" md="4" class="pr-0 pl-2">
-          <b-row v-for="(item,index) in flux24DailyPresenceInLocal" :key="index" class="mb-3">
+          <b-row class="mb-3">
             <b-col cols="12">
               <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
               <span class="small text-muted">Dernière mise à jour</span>
@@ -175,24 +164,19 @@
                 @click="selectFluxType(3)"
               >
                 <h5 class="percent-title">Présences</h5>
-                <div class="percent flux-presence">{{fluxInPercent(item)}}%​</div>
+                <div class="percent flux-presence">{{percentPresence}}%​</div>
                 <p
-                  v-if="fluxVolumObservation(item)>0"
+                  v-if="differencePresence>0"
                   class="percent-p text-dash-color"
-                >{{formatCash(fluxVolumObservation(item))}} personnes de plus étaient présentes dans la zone</p>
+                >{{differencePresence}} personnes de plus étaient présentes dans la zone</p>
                 <p
                   v-else
                   class="percent-p text-dash-color"
-                >{{formatCash(fluxVolumObservation(item)*-1)}} personnes de moins étaient présentes dans la zone</p>
+                >{{`-${differencePresence}`}} personnes de moins étaient présentes dans la zone</p>
               </b-card>
-              <b-card no-body class="mb-3 p-2" :ref="`mobile_presence_${index}_card`">
+              <b-card no-body class="mb-3 p-2" :ref="`mobile_presence_card`">
                 <div class="chart-container">
-                  <canvas
-                    height="200"
-                    width="100vh"
-                    :ref="`mobile_presence_${index}`"
-                    :id="`mobile_presence_${index}`"
-                  ></canvas>
+                  <canvas height="200" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
                 </div>
               </b-card>
             </b-col>
@@ -223,8 +207,8 @@ export default {
       default: () => [],
     },
     flux24PresenceDailyIn: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: () => ({}),
     },
     flux24DailyIn: {
       type: Array,
@@ -242,6 +226,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    fluxDataGroupedByDateIn: {
+      type: Object,
+      default: () => ({}),
+    },
+    fluxDataGroupedByDateOut: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data() {
     return {
@@ -254,6 +246,12 @@ export default {
       barChart: null,
       barChart2: null,
       palette: PALETTE,
+      percentOut: null,
+      percentIn: null,
+      percentPresence: null,
+      differenceIn: null,
+      differenceOut: null,
+      differencePresence: null,
     };
   },
   computed: {
@@ -269,11 +267,7 @@ export default {
 
       this.$nextTick(() => {
         this.flux24DailyInLocal.forEach((item, index) => {
-          this.mobileCalc(
-            item,
-            `mobile_entrance_${index}`,
-            PALETTE.flux_in_color
-          );
+          
           this.mobileEntranceOrigin(item, index);
         });
       });
@@ -283,21 +277,44 @@ export default {
 
       this.$nextTick(() => {
         this.flux24DailyOutLocal.forEach((item, index) => {
-          this.mobileCalc(item, `mobile_out_${index}`, PALETTE.flux_out_color);
           this.mobileOutDestination(item, index);
         });
       });
     },
     flux24PresenceDailyIn() {
-      this.flux24DailyPresenceInLocal = this.extractFlux24PresenceDailyIn();
       this.$nextTick(() => {
-        this.flux24DailyPresenceInLocal.forEach((item, index) => {
-          this.mobileCalc(
-            item,
-            `mobile_presence_${index}`,
-            PALETTE.flux_presence
-          );
-        });
+        const result = this.fluxInPercent(this.flux24PresenceDailyIn);
+        this.percentPresence = result.percent;
+        this.differencePresence =this.formatCash(result.difference);
+        this.mobileCalc(
+          this.flux24PresenceDailyIn,
+          `mobile_presence`,
+          PALETTE.flux_presence
+        );
+      });
+    },
+    fluxDataGroupedByDateIn() {
+      const result = this.fluxInPercent(this.fluxDataGroupedByDateIn);
+      this.percentIn = result.percent;
+      this.differenceIn = this.formatCash(result.difference);
+      this.$nextTick(() => {
+        this.mobileCalc(
+          this.fluxDataGroupedByDateIn,
+          `mobile_in`,
+          PALETTE.flux_in_color
+        );
+      });
+    },
+    fluxDataGroupedByDateOut() {
+      const result = this.fluxInPercent(this.fluxDataGroupedByDateOut);
+      this.percentOut = result.percent;
+      this.differenceOut = this.formatCash(result.difference);
+      this.$nextTick(() => {
+        this.mobileCalc(
+          this.fluxDataGroupedByDateOut,
+          `mobile_out`,
+          PALETTE.flux_out_color
+        );
       });
     },
   },
@@ -308,28 +325,46 @@ export default {
 
     this.$nextTick(() => {
       this.flux24DailyInLocal.forEach((item, index) => {
-        this.mobileCalc(
-          item,
-          `mobile_entrance_${index}`,
-          PALETTE.flux_in_color
-        );
         this.mobileEntranceOrigin(item, index);
       });
     });
     this.$nextTick(() => {
       this.flux24DailyOutLocal.forEach((item, index) => {
-        this.mobileCalc(item, `mobile_out_${index}`, PALETTE.flux_out_color);
+        // this.mobileCalc(item, `mobile_out_${index}`, PALETTE.flux_out_color);
         this.mobileOutDestination(item, index);
       });
     });
     this.$nextTick(() => {
-      this.flux24DailyPresenceInLocal.forEach((item, index) => {
-        this.mobileCalc(
-          item,
-          `mobile_presence_${index}`,
-          PALETTE.flux_presence
-        );
-      });
+      const result = this.fluxInPercent(this.flux24PresenceDailyIn);
+      this.percentPresence = result.percent;
+      this.differencePresence =this.formatCash(result.difference);
+      console.log(this.formatCash(result.difference));
+      this.mobileCalc(
+        this.flux24PresenceDailyIn,
+        `mobile_presence`,
+        PALETTE.flux_presence
+      );
+    });
+    this.$nextTick(() => {
+      const result = this.fluxInPercent(this.fluxDataGroupedByDateOut);
+      this.percentOut = result.percent;
+      this.differenceOut =this.formatCash(result.difference);
+      this.mobileCalc(
+        this.fluxDataGroupedByDateOut,
+        `mobile_out`,
+        PALETTE.flux_out_color
+      );
+    });
+
+    this.$nextTick(() => {
+      const result = this.fluxInPercent(this.fluxDataGroupedByDateIn);
+      this.percentIn = result.percent;
+      this.differenceIn = this.formatCash(result.difference);
+      this.mobileCalc(
+        this.fluxDataGroupedByDateIn,
+        `mobile_in`,
+        PALETTE.flux_in_color
+      );
     });
   },
   methods: {
@@ -340,14 +375,47 @@ export default {
     seeProvinceStat() {
       this.setIsProvinceStatSeeing(!this.isProvinceStatSeeing);
     },
-    fluxInPercent(items) {
-      let totalDifference = 0;
-      let totalReference = 0;
-      items.map((item) => {
-        totalDifference += item.difference;
-        totalReference += item.volume_reference;
-      });
-      return Math.round((totalDifference / totalReference) * 100);
+    fluxInPercent({ referencesByDate, observationsByDate }) {
+      if (!referencesByDate || !observationsByDate) {
+        return {
+          percent: null,
+          difference: null,
+        };
+      }
+      let referenceVolume = null;
+      let observationVolume = null;
+      const countReference = referencesByDate.length;
+      if (countReference > 0) {
+        if (countReference % 2 == 0) {
+          let index = (countReference + 1) / 2;
+          index = parseInt(index);
+          const volume1 = referencesByDate[index].volume;
+          const volume2 = referencesByDate[index - 1].volume;
+          referenceVolume = (volume1 + volume2) / 2;
+        } else {
+          const index = (countReference + 1) / 2;
+          referenceVolume = referencesByDate[index - 1].volume;
+        }
+      }
+
+      const countObservation = observationsByDate.length;
+      if (countObservation > 0) {
+        if (countObservation % 2 == 0) {
+          let index = (countObservation + 1) / 2;
+          index = parseInt(index);
+          const volume1 = observationsByDate[index].volume;
+          const volume2 = observationsByDate[index - 1].volume;
+          observationVolume = (volume1 + volume2) / 2;
+        } else {
+          const index = (countObservation + 1) / 2;
+          observationVolume = observationsByDate[index - 1].volume;
+        }
+      }
+      const difference = observationVolume - referenceVolume;
+      return {
+        percent: Math.round((difference / referenceVolume) * 100),
+        difference: difference,
+      };
     },
     fluxVolumObservation(items) {
       let totalObservation = 0;
@@ -438,30 +506,44 @@ export default {
       }
       return flux24PresenceDailyInLocal;
     },
-    mobileCalc(dataPram, ref, color) {
+    mobileCalc({ referencesByDate, observationsByDate }, ref, color) {
       // set the dimensions and margins of the graph
+
+      if (!referencesByDate || !observationsByDate) {
+        return;
+      }
+
       let data = [];
       let DataReference = [];
       let totalReference = 0;
       let referenceAverage = 0;
 
-      dataPram.map((item) => {
-        let element = data.find((x) => x.date == item.date);
-        if (element) {
-          element.volume += item.volume;
-          element.volume_reference += item.volume_reference;
-          element.difference += item.difference;
-          element.percent =
-            (element.difference / element.volume_reference) * 100;
+      data = observationsByDate.map((item) => {
+        const references = referencesByDate.filter((x) => x.day == item.day);
+
+        const count = references.length;
+        if (count > 0) {
+          let referenceVolume = null;
+          if (count % 2 == 0) {
+            let index = (count + 1) / 2;
+            index = parseInt(index);
+            const volume1 = references[index].volume;
+            const volume2 = references[index - 1].volume;
+            referenceVolume = (volume1 + volume2) / 2;
+          } else {
+            const index = (count + 1) / 2;
+            referenceVolume = references[index - 1].volume;
+          }
+          item.volume_reference = referenceVolume;
+          const difference = item.volume - referenceVolume;
+          item.difference = difference;
+          item.percent = (difference / referenceVolume) * 100;
         } else {
-          data.push({
-            date: item.date,
-            volume: item.volume,
-            difference: item.difference,
-            volume_reference: item.volume_reference,
-            percent: item.percent,
-          });
+          item.volume_reference = 0;
+          item.difference = item.volume;
+          item.percent = 0;
         }
+        return Object.assign({}, item);
       });
 
       const max = d3.max(data.map((x) => x.percent));
@@ -575,8 +657,14 @@ export default {
           },
         },
       };
+      let reference=null;
+      if (this.$refs[ref] && this.$refs[ref][0]) {
+        reference=this.$refs[ref][0];
+      }else{
+        reference=this.$refs[ref];
+      }
       const myLineChart = new Chart(
-        this.$refs[ref][0].getContext("2d"),
+        reference.getContext("2d"),
         tempData
       );
     },
@@ -604,6 +692,10 @@ export default {
             difference: item.difference,
           });
         }
+      });
+
+      localData.sort((a, b) => {
+        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
       });
 
       localData.sort((a, b) => {
@@ -692,7 +784,7 @@ export default {
         if (element) {
           element.volume += item.volume;
           element.volume_reference += item.volume_reference;
-          element.difference+=item.difference;
+          element.difference += item.difference;
           if (element.difference == 0) {
             element.percent = 0;
           } else {
@@ -704,10 +796,14 @@ export default {
             origin: item.origin,
             volume_reference: item.volume_reference,
             volume: item.volume,
-            difference:item.difference,
-            percent:item.percent
+            difference: item.difference,
+            percent: item.percent,
           });
         }
+      });
+
+      localData = localData.sort((a, b) => {
+        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
       });
 
       localData = localData.sort((a, b) => {
