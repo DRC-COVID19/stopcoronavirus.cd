@@ -38,6 +38,10 @@ export default {
       type: String,
       default: null,
     },
+    isProvince:{
+      type:Boolean,
+      default:false,
+    }
   },
   data() {
     return {
@@ -46,18 +50,77 @@ export default {
     };
   },
   mounted() {
-    this.mobility([...this.globalData]);
+    this.mobility(this.globalData);
   },
   watch: {
     globalData() {
-      this.mobility([...this.globalData]);
+      this.mobility(this.globalData);
     },
   },
   methods: {
     mobility(data) {
-      let localData = data.sort((a, b) => {
+      let localData = [];
+     
+      data.map((item) => {
+        const referencesByDate = item.references;
+        const observationsByDate = item.observations;
+
+        if (!referencesByDate || !observationsByDate) {
+          return;
+        }
+        let referenceVolume = null;
+        let observationVolume = null;
+        const countReference = referencesByDate.length;
+        if (countReference > 0) {
+          if (countReference % 2 == 0) {
+            let index = (countReference + 1) / 2;
+            index = parseInt(index);
+            const volume1 = referencesByDate[index].volume;
+            const volume2 = referencesByDate[index - 1].volume;
+            referenceVolume = (volume1 + volume2) / 2;
+          } else {
+            const index = (countReference + 1) / 2;
+            referenceVolume = referencesByDate[index - 1].volume;
+          }
+        }
+
+        const countObservation = observationsByDate.length;
+        if (countObservation > 0) {
+          if (countObservation % 2 == 0) {
+            let index = (countObservation + 1) / 2;
+            index = parseInt(index);
+            const volume1 = observationsByDate[index].volume;
+            const volume2 = observationsByDate[index - 1].volume;
+            observationVolume = (volume1 + volume2) / 2;
+          } else {
+            const index = (countObservation + 1) / 2;
+            observationVolume = observationsByDate[index - 1].volume;
+          }
+        }
+        const difference = observationVolume - referenceVolume;
+        let zone=null;
+        if (observationsByDate[0]) {
+          zone=observationsByDate[0].zone;
+        }else if (referencesByDate[0]) {
+          zone=referencesByDate[0].zone;
+        }
+        if (!zone) {
+          return;
+        }
+        
+        localData.push({
+          zone: zone,
+          volume: observationVolume,
+          volume_reference: referenceVolume,
+          percent: Math.round((difference / referenceVolume) * 100),
+          difference: difference,
+        });
+      });
+
+      localData.sort((a, b) => {
         return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
       });
+      
       const dataChart = {
         labels: localData.map((d) => d.zone),
         datasets: [
