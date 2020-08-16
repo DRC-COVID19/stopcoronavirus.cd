@@ -1185,8 +1185,8 @@ export default {
     fullscreenEntranceChange(fullscreen) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
-        this.$refs.mobile_entrance_0[0].style.height = "200px";
-        this.$refs.mobile_entrance_0[0].height = "200px";
+        this.$refs.mobile_in[0].style.height = "200px";
+        this.$refs.mobile_in[0].height = "200px";
       }
     },
     toggleFullscreenEntrance2() {
@@ -1215,8 +1215,8 @@ export default {
     fullscreenOutChange(fullscreen) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
-        this.$refs.mobile_out_0[0].style.height = "200px";
-        this.$refs.mobile_out_0[0].height = "200px";
+        this.$refs.mobile_out[0].style.height = "200px";
+        this.$refs.mobile_out[0].height = "200px";
       }
     },
     toggleFullscreenOut2() {
@@ -1244,8 +1244,8 @@ export default {
     },
     fullscreenGeneraleChange(fullscreen) {
       if (!fullscreen) {
-        this.$refs.mobile_generale_0[0].style.height = "200px";
-        this.$refs.mobile_generale_0[0].height = "200px";
+        this.$refs.mobile_generale[0].style.height = "200px";
+        this.$refs.mobile_generale[0].height = "200px";
       }
     },
     toggleFullscreenGenerale2() {
