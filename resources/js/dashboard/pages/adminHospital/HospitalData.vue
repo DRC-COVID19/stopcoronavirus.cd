@@ -116,11 +116,15 @@ export default {
   },
   methods: {
     ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
-    getHospitalSituations() {
+    getHospitalSituations(page) {
+      if(typeof page == "undefined") page = 1
       this.ishospitalSituationLoading = true;
       axios
         .get(
-          `/api/dashboard/hospital-situations/by-hospital/${this.$route.params.hospital_id}`
+          `/api/dashboard/hospital-situations/by-hospital/${this.$route.params.hospital_id}`,
+          {
+            params : {page}
+          }
         )
         .then(({ data }) => {
           this.hospitalSituations = data;
@@ -136,7 +140,9 @@ export default {
           this.hospital = data;
         });
     },
-    onPageChange(page) {},
+    onPageChange(page) {
+      this.getHospitalSituations(page)
+    },
   },
 };
 </script>
