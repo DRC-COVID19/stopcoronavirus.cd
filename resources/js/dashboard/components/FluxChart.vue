@@ -34,20 +34,30 @@
     </b-container>
 
     <b-container v-show="!isProvinceStatSeeing" class="p-0 flux-chart">
-
       <b-row no-gutters>
-
-        <b-col cols="12" v-show="showMobiliteGenerale" md="8" class="pl-0 pr-2 col-mobilite-generale">
+        <b-col
+          cols="12"
+          v-show="showMobiliteGenerale"
+          md="8"
+          class="pl-0 pr-2 col-mobilite-generale"
+        >
           <b-row v-for="(item,index) in flux24DailyGeneraleLocal" :key="index" class="mb-3">
             <b-col cols="12">
-
               <h3 class="d-flex">
-                <span class="ml-2"> {{item[0].targetZone}}</span>
-                <button class="btn-alt-screen" @click="seeProvinceStat" title="Statistique des zones"
-                  v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0">
+                <span class="ml-2">{{item[0].targetZone}}</span>
+                <button
+                  class="btn-alt-screen"
+                  @click="seeProvinceStat"
+                  title="Statistique des zones"
+                  v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0"
+                >
                   <i class="fa fa-eye see-province-stat"></i>
                 </button>
-                <button class="btn-alt-screen" @click="toggleGlobalMobility(false)" title="Mobilité entrante et sortante">
+                <button
+                  class="btn-alt-screen"
+                  @click="toggleGlobalMobility(false)"
+                  title="Mobilité entrante et sortante"
+                >
                   <i class="fa fa-exchange-alt"></i>
                 </button>
               </h3>
@@ -57,18 +67,17 @@
                 :class="{'active':fluxType==4}"
                 @click="selectFluxType(4)"
               >
-
                 <h5 class="percent-title">Mobilité générale</h5>
                 <div class="percent flux-in-color">{{percentGenerale}}%​</div>
 
-                <p
-                  v-if="differenceGenerale>0"
-                  class="percent-p text-dash-color"
-                >{{differenceGenerale}} personnes de plus sont <br> entrées et sorties de la zone</p>
-                <p
-                  v-else
-                  class="percent-p text-dash-color"
-                >{{ `-${differenceGenerale}`}} personnes de moins sont <br> entrées et sorties de la zone</p>
+                <p v-if="differenceGenerale>0" class="percent-p text-dash-color">
+                  {{differenceGenerale}} personnes de plus sont
+                  <br />entrées et sorties de la zone
+                </p>
+                <p v-else class="percent-p text-dash-color">
+                  {{ `-${differenceGenerale}`}} personnes de moins sont
+                  <br />entrées et sorties de la zone
+                </p>
               </b-card>
 
               <div class="fullscreen-container fullscreen-container1">
@@ -117,11 +126,19 @@
             <b-col cols="12">
               <h3 class="d-flex">
                 <span class="ml-2">{{item[0].destination}}</span>
-                <button class="btn-alt-screen" @click="seeProvinceStat" title="Statistique des zones"
-                  v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0" >
+                <button
+                  class="btn-alt-screen"
+                  @click="seeProvinceStat"
+                  title="Statistique des zones"
+                  v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0"
+                >
                   <i class="fa fa-eye see-province-stat"></i>
                 </button>
-                <button class="btn-alt-screen" @click="toggleGlobalMobility(true)" title="Mobilité génerale">
+                <button
+                  class="btn-alt-screen"
+                  @click="toggleGlobalMobility(true)"
+                  title="Mobilité génerale"
+                >
                   <i class="fa fa-globe"></i>
                 </button>
               </h3>
@@ -311,9 +328,9 @@ export default {
       type: Array,
       default: () => [],
     },
-    mobiliteGenerale : {
-      type : Boolean,
-      default : false
+    mobiliteGenerale: {
+      type: Boolean,
+      default: false,
     },
     fluxDataGroupedByDateIn: {
       type: Object,
@@ -334,7 +351,7 @@ export default {
       flux24DailyInLocal: [],
       flux24DailyOutLocal: [],
       flux24DailyPresenceInLocal: [],
-      flux24DailyGeneraleLocal : [] ,
+      flux24DailyGeneraleLocal: [],
       configBarChart: {},
       configBarChart2: {},
       configBarChartGen: {},
@@ -342,8 +359,8 @@ export default {
       barChart2: null,
       barChartGen: null,
       palette: PALETTE,
-      showMobiliteGenerale : false,
-      lineCharts : {},
+      showMobiliteGenerale: false,
+      lineCharts: {},
       percentOut: null,
       percentIn: null,
       percentGenerale: null,
@@ -367,10 +384,10 @@ export default {
 
       this.$nextTick(() => {
         this.flux24DailyInLocal.forEach((item, index) => {
-          
           this.mobileEntranceOrigin(item, index);
         });
       });
+      this.updateGeneralMobilityDaily();
     },
     flux24DailyOut() {
       this.flux24DailyOutLocal = this.extractFlux23DailyOut();
@@ -380,22 +397,22 @@ export default {
           this.mobileOutDestination(item, index);
         });
       });
+      this.updateGeneralMobilityDaily();
     },
     flux24DailyGenerale() {
-      this.flux24DailyGeneraleLocal = this.extractFlux23DailyGenerale();
-
-      this.$nextTick(() => {
-        this.flux24DailyGeneraleLocal.forEach((item, index) => {
-          //this.mobileCalc(item, `mobile_generale_${index}`, PALETTE.flux_in_color);
-          this.mobileGenerale(item, index);
-        });
-      });
+      // this.flux24DailyGeneraleLocal = this.extractFlux23DailyGenerale();
+      // this.$nextTick(() => {
+      //   this.flux24DailyGeneraleLocal.forEach((item, index) => {
+      //     //this.mobileCalc(item, `mobile_generale_${index}`, PALETTE.flux_in_color);
+      //     this.mobileGenerale(item, index);
+      //   });
+      // });
     },
     flux24PresenceDailyIn() {
       this.$nextTick(() => {
         const result = this.fluxInPercent(this.flux24PresenceDailyIn);
         this.percentPresence = result.percent;
-        this.differencePresence =this.formatCash(result.difference);
+        this.differencePresence = this.formatCash(result.difference);
         this.mobileCalc(
           this.flux24PresenceDailyIn,
           `mobile_presence`,
@@ -439,10 +456,10 @@ export default {
         );
       });
     },
-    mobiliteGenerale(){
-      this.showMobiliteGenerale = this.mobiliteGenerale
-      if(this.mobiliteGenerale) this.selectFluxType(4)
-    }
+    mobiliteGenerale() {
+      this.showMobiliteGenerale = this.mobiliteGenerale;
+      if (this.mobiliteGenerale) this.selectFluxType(4);
+    },
   },
   mounted() {
     this.flux24DailyInLocal = this.extractFlux23DailyIn();
@@ -450,11 +467,11 @@ export default {
     this.flux24DailyGeneraleLocal = this.extractFlux23DailyGenerale();
     this.flux24DailyPresenceInLocal = this.extractFlux24PresenceDailyIn();
 
-    this.showMobiliteGenerale = this.mobiliteGenerale
-    if(this.mobiliteGenerale){
-      this.selectFluxType(4)
-    }else{
-      this.selectFluxType(1)
+    this.showMobiliteGenerale = this.mobiliteGenerale;
+    if (this.mobiliteGenerale) {
+      this.selectFluxType(4);
+    } else {
+      this.selectFluxType(1);
     }
 
     this.$nextTick(() => {
@@ -465,16 +482,17 @@ export default {
     this.$nextTick(() => {
       this.flux24DailyOutLocal.forEach((item, index) => {
         // this.mobileCalc(item, `mobile_out_${index}`, PALETTE.flux_out_color);
+
         this.mobileOutDestination(item, index);
       });
     });
     this.$nextTick(() => {
       this.flux24DailyGeneraleLocal.forEach((item, index) => {
-          // this.mobileCalc(item, `mobile_generale_${index}`, PALETTE.flux_in_color);
-          this.mobileGenerale(item, index);
+        // this.mobileCalc(item, `mobile_generale_${index}`, PALETTE.flux_in_color);
+        this.mobileGenerale(item, index);
       });
     });
-        
+
     this.$nextTick(() => {
       // this.flux24DailyPresenceInLocal.forEach((item, index) => {
       //   this.mobileCalc(
@@ -486,20 +504,18 @@ export default {
 
       const result = this.fluxInPercent(this.flux24PresenceDailyIn);
       this.percentPresence = result.percent;
-      this.differencePresence =this.formatCash(result.difference);
+      this.differencePresence = this.formatCash(result.difference);
       this.mobileCalc(
         this.flux24PresenceDailyIn,
         `mobile_presence`,
         PALETTE.flux_presence
       );
     });
-    
 
-    
     this.$nextTick(() => {
       const result = this.fluxInPercent(this.fluxDataGroupedByDateOut);
       this.percentOut = result.percent;
-      this.differenceOut =this.formatCash(result.difference);
+      this.differenceOut = this.formatCash(result.difference);
       this.mobileCalc(
         this.fluxDataGroupedByDateOut,
         `mobile_out`,
@@ -518,16 +534,17 @@ export default {
       );
     });
 
-    this.$nextTick(() => {
-      const result = this.fluxInPercent(this.fluxDataGroupedByDateGen);
-      this.percentGenerale = result.percent;
-      this.differenceGenerale = this.formatCash(result.difference);
-      this.mobileCalc(
-        this.fluxDataGroupedByDateGen,
-        `mobile_generale`,
-        PALETTE.flux_in_color
-      );
-    });
+    // this.$nextTick(() => {
+    //   const result = this.fluxInPercent(this.fluxDataGroupedByDateGen);
+    //   this.percentGenerale = result.percent;
+    //   this.differenceGenerale = this.formatCash(result.difference);
+    //   this.mobileCalc(
+    //     this.fluxDataGroupedByDateGen,
+    //     `mobile_generale`,
+    //     PALETTE.flux_in_color
+    //   );
+    // });
+    this.updateGeneralMobilityDaily();
   },
   methods: {
     ...mapMutations(["setFluxType", "setIsProvinceStatSeeing"]),
@@ -634,6 +651,7 @@ export default {
     },
     extractFlux23DailyIn() {
       let flux24DailyInLocal = [];
+      console.log('flux24DailyIn',this.flux24DailyIn);
       if (this.flux24DailyIn.length > 0) {
         this.flux24DailyIn.forEach((item) => {
           let index = flux24DailyInLocal.findIndex((x) =>
@@ -685,6 +703,53 @@ export default {
         });
       }
       return flux24PresenceDailyInLocal;
+    },
+    updateGeneralMobilityDaily() {
+      this.$nextTick(() => {
+        const referencesByDateIn = this.fluxDataGroupedByDateIn
+          .referencesByDate;
+        const observationsByDateIn = this.fluxDataGroupedByDateIn
+          .observationsByDate;
+
+        const referencesByDateOut = this.fluxDataGroupedByDateOut
+          .referencesByDate;
+        const observationsByDateOut = this.fluxDataGroupedByDateOut
+          .observationsByDate;
+
+        const referencesByDate = [];
+        const observationsByDate = [];
+        [...referencesByDateIn, ...referencesByDateOut].map((item) => {
+          const element = referencesByDate.find((x) => x.date == item.date);
+          if (element) {
+            element.volume += item.volume;
+          } else {
+            referencesByDate.push({
+              volume: item.volume,
+              date: item.date,
+            });
+          }
+        });
+
+        [...observationsByDateIn, ...observationsByDateOut].map((item) => {
+          const element = observationsByDate.find((x) => x.date == item.date);
+          if (element) {
+            element.volume += item.volume;
+          } else {
+            observationsByDate.push({
+              volume: item.volume,
+              date: item.date,
+            });
+          }
+        });
+        const general = {
+          referencesByDate,
+          observationsByDate,
+        };
+        const result = this.fluxInPercent(general);
+        this.percentGenerale = result.percent;
+        this.differenceGenerale = this.formatCash(result.difference);
+        this.mobileCalc(general, `mobile_generale`, PALETTE.flux_in_color);
+      });
     },
     mobileCalc({ referencesByDate, observationsByDate }, ref, color) {
       // set the dimensions and margins of the graph
@@ -838,20 +903,17 @@ export default {
         },
       };
 
-      
-      let reference=null;
+      let reference = null;
       if (this.$refs[ref] && this.$refs[ref][0]) {
-        reference=this.$refs[ref][0];
-      }else{
-        reference=this.$refs[ref];
+        reference = this.$refs[ref][0];
+      } else {
+        reference = this.$refs[ref];
       }
-      if(this.lineCharts[ref]) this.lineCharts[ref].destroy()
-      this.lineCharts[ref] = new Chart(
-        reference.getContext("2d"),  
-        tempData
-      );
+      if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
+      this.lineCharts[ref] = new Chart(reference.getContext("2d"), tempData);
     },
     mobileOutDestination(data, index) {
+      console.log(data);
       // data=array[{origin, destination,volume,isReference}]
       let localData = [];
       data.forEach((item) => {
@@ -865,7 +927,7 @@ export default {
           } else {
             element.percent =
               (element.difference / element.volume_reference) * 100;
-          }
+          } 
         } else {
           localData.push({
             destination: item.destination,
@@ -1071,11 +1133,11 @@ export default {
       let localData = [];
 
       data.forEach((item) => {
-        let element = localData.find((x) => x.zone == item.zone );
+        let element = localData.find((x) => x.zone == item.zone);
         if (element) {
           element.volume += item.volume;
           element.volume_reference += item.volume_reference;
-          element.difference+=item.difference;
+          element.difference += item.difference;
           if (element.difference == 0) {
             element.percent = 0;
           } else {
@@ -1086,12 +1148,12 @@ export default {
           localData.push({
             origin: item.origin,
             destination: item.destination,
-            zone :  item.zone,
-            targetZone :  item.targetZone ,
+            zone: item.zone,
+            targetZone: item.targetZone,
             volume_reference: item.volume_reference,
             volume: item.volume,
-            difference:item.difference,
-            percent:item.percent
+            difference: item.difference,
+            percent: item.percent,
           });
         }
       });
@@ -1171,8 +1233,8 @@ export default {
         },
       };
 
-      if(this.barChartGen){
-        this.barChartGen.destroy() ;
+      if (this.barChartGen) {
+        this.barChartGen.destroy();
       }
       this.barChartGen = new Chart(
         this.$refs[refInput][0].getContext("2d"),
@@ -1267,9 +1329,9 @@ export default {
         this.barChartGen.update();
       }
     },
-    toggleGlobalMobility(show){
-      this.showMobiliteGenerale = show
-    }
+    toggleGlobalMobility(show) {
+      this.showMobiliteGenerale = show;
+    },
   },
 };
 </script>
@@ -1357,32 +1419,40 @@ export default {
     }
   }
 }
-.fullscreen-container1{
-  canvas{height: 200px !important;}
-  .fullscreen canvas{height: auto !important;}
+.fullscreen-container1 {
+  canvas {
+    height: 200px !important;
+  }
+  .fullscreen canvas {
+    height: auto !important;
+  }
 }
-.col-mobilite-generale{
-  .cardtype2{
+.col-mobilite-generale {
+  .cardtype2 {
     height: 100%;
   }
-  .fullscreen-container2{
-    canvas{height: 400px !important;}
-    .fullscreen canvas{height: 100% !important;}
+  .fullscreen-container2 {
+    canvas {
+      height: 400px !important;
+    }
+    .fullscreen canvas {
+      height: 100% !important;
+    }
   }
 }
-.btn-alt-screen{
+.btn-alt-screen {
   width: 30px;
   height: 30px;
   border-radius: 50%;
   margin-left: 5px;
-  i{
+  i {
     font-size: 13px !important;
   }
-  &:focus{
-    outline : none ;
+  &:focus {
+    outline: none;
   }
-  &:active{
-    opacity : 0.4 ;
+  &:active {
+    opacity: 0.4;
   }
 }
 </style>
