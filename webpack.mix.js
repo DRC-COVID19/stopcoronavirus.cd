@@ -11,5 +11,39 @@ const mix = require('laravel-mix');
  |
  */
 
+mix.options({
+    hmrOptions: {
+        host: 'localhost',  // site's host name
+        port: 8080,
+    }
+});
+
+let LiveReloadPlugin = require('webpack-livereload-plugin');
+
 mix.js('resources/js/app.js', 'public/js')
-    .sass('resources/sass/app.scss', 'public/css');
+    .js('resources/js/dashboard/vueApp.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css')
+    .sass('resources/sass/vueApp.scss', 'public/css/vueApp.css');
+
+mix.webpackConfig({
+    plugins: [
+        new LiveReloadPlugin()
+    ],
+    resolve: {
+        alias: {
+            '@': path.resolve('resources/js/dashboard'),
+            '@~': path.resolve('resources')
+        }
+    },
+    devServer: { 
+        proxy: {
+            host: '0.0.0.0',  // host machine ip 
+            port: 8080,
+        },
+        watchOptions:{
+            aggregateTimeout:200,
+            poll:5000
+        },
+
+    }
+});

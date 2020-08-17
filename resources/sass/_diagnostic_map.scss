@@ -1,5 +1,58 @@
 #map {
+    height: 100%;
+    width: 100%;
+}
+.map-wrapper {
+    height: 100%;
+    width: 100%;
+}
+.dash-home-page {
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    .header {
+        flex: 1;
+    }
+    .map-wrap {
+        flex: 13;
+        overflow: hidden;
+    }
+    .top-menu {
+        flex: 1;
+    }
+    .row-side-bottom {
+        flex: 6;
+        overflow: hidden;
+    }
+}
+.btn-dash-blue {
+    background: $dash-blue;
+    border: 3px solid $dash-blue !important;
+    border-radius: 5px;
+    &:hover,
+    &:focus,
+    &:active,
+    &:disabled {
+        background: $dash-blue !important;
+    }
+    &:focus{
+      box-shadow: none;
+    }
+    &:active{
+      opacity: 0.6;
+    }
+}
+.text-dash-color {
+    color: $dash-text-100 !important;
+}
+.input-dash {
+    border: 1px solid #d2d5dc;
+    background: $dash-background;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+}
+.dash-login-title {
+    font-size: 1.8rem;
 }
 /*
 .custom-clustericon-2 {
@@ -55,6 +108,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    z-index: 9999;
     p {
         color: white;
         font-size: 1.7rem;
@@ -185,10 +239,9 @@
         }
     }
 }
-.column-left {
-    background: #14244f;
-    height: 100vh;
-    overflow: auto;
+.column-left,
+.top-menu {
+    background: $dash-background;
     &::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
         background-color: #f5f5f5;
@@ -211,11 +264,17 @@
             to(transparent)
         );
     }
+
+    @include card-style;
+    .vs__dropdown-toggle {
+        background: $dash-input-backColor !important;
+        border-color: $dash-input-border-color;
+    }
+
     h1 {
         font-size: 1.3rem;
-        color: white;
     }
-    .map-form-logo{
+    .map-form-logo {
         background: white;
     }
     .map-form-header {
@@ -225,73 +284,198 @@
     }
 
     .styled-checkbox {
-        position: absolute; // take it out of document flow
-        opacity: 0; // hide it
+        padding-left: unset;
+        input[type="checkbox"] {
+            position: absolute; // take it out of document flow
+            opacity: 0; // hide it
 
-        & + label {
-            position: relative;
-            cursor: pointer;
-            padding: 0;
-            padding-left: 30px;
-            width: 100%;
-        }
+            & + label {
+                position: relative;
+                cursor: pointer;
+                padding: 0;
+                padding-left: 30px;
+                width: 100%;
+            }
 
-        // Box.
-        & + label:before {
-            left: 0;
-            content: "";
-            position: absolute;
-            margin-right: 10px;
-            display: inline-block;
-            vertical-align: text-top;
-            width: 20px;
-            height: 20px;
-            background: #d2d2d2;
-        }
+            // Box.
+            & + label:before {
+                left: 0;
+                content: "";
+                position: absolute;
+                margin-right: 10px;
+                display: inline-block;
+                vertical-align: text-top;
+                width: 20px;
+                height: 20px;
+                background: #d2d2d2;
+                border-radius: unset;
+            }
 
-        // Box hover
-        &:hover + label:before {
-            background: #00b065;
-        }
+            // Box hover
+            &:hover + label:before {
+                background: #00b065;
+            }
 
-        // Box focus
-        &:focus + label:before {
-            box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
-        }
+            // Box focus
+            &:focus + label:before {
+                box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.12);
+            }
 
-        // Box checked
-        &:checked + label:before {
-            background: #00b065;
-        }
+            // Box checked
+            &:checked + label:before {
+                background: #00b065;
+            }
 
-        // Disabled state label.
-        &:disabled + label {
-            color: #b8b8b8;
-            cursor: auto;
-        }
+            // Disabled state label.
+            &:disabled + label {
+                color: #b8b8b8;
+                cursor: auto;
+            }
 
-        // Disabled box.
-        &:disabled + label:before {
-            box-shadow: none;
-            background: #ddd;
-        }
+            // Disabled box.
+            &:disabled + label:before {
+                box-shadow: none;
+                background: #ddd;
+            }
 
-        // Checkmark. Could be replaced with an image
-        &:checked + label:after {
-            content: "";
-            position: absolute;
-            left: 5px;
-            top: 9px;
-            background: white;
-            width: 3px;
-            height: 3px;
-            box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white,
-                4px -8px 0 white;
-            transform: rotate(45deg);
+            // Checkmark. Could be replaced with an image
+            &:checked + label:after {
+                content: "";
+                position: absolute;
+                left: 5px;
+                top: 12px;
+                background: white;
+                width: 3px;
+                height: 3px;
+                box-shadow: 2px 0 0 white, 4px 0 0 white, 4px -2px 0 white, 4px -4px 0 white, 4px -6px 0 white,
+                    4px -8px 0 white;
+                transform: rotate(45deg);
+            }
         }
     }
-    .pandemics-stat-row{
+    .form-group {
+        margin-bottom: 0;
+        border-color: $dash-input-border-color;
+    }
+    .form-control {
+        border-radius: 4px;
+    }
+    .pandemics-stat-row {
         font-size: 0.8rem;
+    }
+    .vue-daterange-picker {
+        width: 80%;
+        div {
+            background: $dash-input-backColor;
+            height: 32px;
+        }
+    }
+}
+.side-bottom {
+    .canva-chart {
+        height: 100% !important;
+    }
+    .card {
+        background: white;
+        border-radius: unset;
+        border-color: $dash-shadow-color;
+        height: 100%;
+        .card-header {
+            background: transparent;
+            border: unset;
+            padding: 0.5rem 1.25rem;
+            .nav-item {
+                margin-right: 20px;
+                .nav-link {
+                    background: $dash-shadow-color;
+                    color: $dash-blue;
+                    text-decoration: unset;
+                    border-radius: 5px;
+                    font-size: 0.8rem;
+                    padding-top: 0px;
+                    padding-bottom: 0px;
+                    &.active {
+                        color: white !important;
+                        background: $dash-green !important;
+                    }
+                }
+            }
+        }
+        .tabs {
+            height: 100%;
+            .tab-content {
+                height: calc(100% - 35px);
+                .card-body {
+                    height: 100%;
+                    padding: 5px;
+                    > div {
+                        height: inherit;
+                        > div {
+                            height: inherit;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.side-right {
+    height: 100%;
+    overflow: auto;
+    @include scroolsmallWhite;
+    > .card {
+        background: transparent;
+        border-radius: unset;
+        border: unset;
+        height: 100%;
+        > .tabs {
+            height: 100%;
+            > .card-header {
+                background: transparent;
+                border: unset;
+                padding: 0.5rem 1.25rem;
+                border-radius: unset;
+                .nav-item {
+                    margin-right: 20px;
+                    .nav-link {
+                        background: $dash-shadow-color;
+                        color: $dash-blue;
+                        text-decoration: unset;
+                        border-radius: 5px;
+                        font-size: 0.8rem;
+                        padding-top: 0px;
+                        padding-bottom: 0px;
+                        &.active {
+                            color: white !important;
+                            background: $dash-green !important;
+                        }
+                    }
+                }
+            }
+            > .tab-content {
+                height: auto;
+                > .card-body {
+                    height: auto;
+                    padding: 10px 0;
+                    > div {
+                        height: inherit;
+                        > div {
+                            height: inherit;
+                            .global_province_container {
+                                height: calc(100vh - 220px);
+                                @include card-style;
+                                div {
+                                    height: inherit;
+                                    .global_province {
+                                         height: 100% !important;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 .default-makers {
@@ -342,31 +526,31 @@
     }
 
     &.worried {
-        border: 2px solid $worried;
+        border: 5px solid $worried;
         background: $worried;
     }
     &.mask {
-        border: 2px solid $mask;
+        border: 5px solid $mask;
         background: $mask;
     }
     &.makala {
-        border: 2px solid $makala;
+        border: 5px solid $makala;
         background: $makala;
     }
     &.price_increase {
-        border: 2px solid $price_increase;
+        border: 5px solid $price_increase;
         background: $price_increase;
     }
     &.flour {
-        border: 2px solid $flour;
+        border: 5px solid $flour;
         background: $flour;
     }
-    &.catch_virus{
-        border: 2px solid $catch_virus;
+    &.catch_virus {
+        border: 5px solid $catch_virus;
         background: $catch_virus;
     }
-    &.antibacterial_gel{
-        border: 2px solid $antibacterial_gel;
+    &.antibacterial_gel {
+        border: 5px solid $antibacterial_gel;
         background: $antibacterial_gel;
     }
 }
@@ -382,6 +566,21 @@
     }
 }
 #sondage-item {
+    .sondage-ul {
+        list-style: none;
+    }
+    .sondage-yes {
+        width: 20px;
+        height: 20px;
+        background: $success;
+        display: inline-block;
+    }
+    .sondage-no {
+        width: 20px;
+        height: 20px;
+        background: $primary;
+        display: inline-block;
+    }
     #worried {
         + label {
             border-right: 15px solid $worried;
@@ -424,4 +623,198 @@
             padding-right: 5px;
         }
     }
+}
+
+.covidCases-marker {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    &.confirmed {
+        background: $secondary;
+    }
+    &.sick {
+        background: $flag-yellow;
+    }
+    &.healed {
+        background: $success;
+    }
+    &.dead {
+        background: $dark;
+    }
+}
+.mapboxgl-popup-content {
+    box-sizing: border-box;
+    border: 2px solid #dddddd;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+.topToolTip {
+    padding: 10px 10px;
+    color: #000000;
+    background-color: rgba(255, 255, 255, 1);
+    font-weight: normal;
+    font-size: 13px;
+    z-index: 99999999;
+    display: block;
+    .titleInfoBox {
+        font-weight: bold;
+        font-size: 13px;
+        line-height: 18px;
+        text-align: center;
+        color: #000000;
+        margin-bottom: 7px;
+    }
+    .statLine {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        height: 20px;
+        min-width: 160px;
+        &.divider {
+            height: 1px;
+            background: rgba(0, 0, 0, 0.2);
+            margin: 5px 0 4px 0;
+        }
+    }
+    .statCount {
+        height: 20px;
+        font-size: 13px;
+        line-height: 20px;
+        text-align: right;
+        color: #767676;
+    }
+    .stat {
+        flex: 1;
+        margin-right: 24px;
+        height: 20px;
+        font-size: 13px;
+        line-height: 20px;
+        color: #333333;
+    }
+    .total {
+        color: #de3700;
+    }
+    .legendColor {
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+        margin-right: 10px;
+    }
+    .ongoing {
+        background-color: $secondary;
+    }
+    .recovered {
+        background-color: $success;
+    }
+    .fatal {
+        background-color: $dark;
+    }
+}
+.side-case-covid-container {
+    .stat-color {
+        height: 5px;
+        width: 5px;
+        border-radius: 6px;
+    }
+    .confirmed {
+        flex: 1;
+        .stat-color {
+            background: $secondary;
+        }
+    }
+    .sick {
+        flex: 1;
+        .stat-color {
+            background: $flag-yellow;
+        }
+    }
+    .healed {
+        flex: 1;
+        .stat-color {
+            background: $success;
+        }
+    }
+    .dead {
+        flex: 1;
+        .stat-color {
+            background: $dark;
+        }
+    }
+    .group-item {
+        height: 40vh;
+        overflow: auto;
+        &::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        &::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: #bcbab7;
+            border-radius: 8px;
+            border: solid 2px #fff;
+        }
+    }
+}
+.flux-form {
+    .legend-origin {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: rgb(12, 44, 132);
+    }
+    .legend-destination {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        background: rgb(177, 0, 38);
+    }
+}
+.checkbox-zone-group {
+    height: 250px;
+    overflow: auto;
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #bcbab7;
+        border-radius: 8px;
+        border: solid 2px #fff;
+    }
+}
+
+.custom-checkbox .custom-control-label::before {
+    border-radius: 0.25rem !important;
+}
+
+#data-modal___BV_modal_content_ {
+    min-height: 550px;
+}
+
+.mapboxgl-popup {
+    .mapboxgl-popup-content {
+        border: 2px solid $dash-shadow-color;
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+        border-radius: unset;
+        background: white;
+    }
+    .mapboxgl-popup-tip {
+        border-top-color: white;
+    }
+}
+.indicateurChart {
+    @include card-style;
 }

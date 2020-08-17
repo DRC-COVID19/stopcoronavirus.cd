@@ -15,15 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', "PageController@index")->name('home');
 Route::post('/change-lang','PageController@changeLang')->name('changeLang');
-Route::get('/official-measures', "PageController@officialMeasure")->name('officialMeasure');
-Route::get('/preventative-measures', "PageController@preventativeMeasures")->name('preventativeMeasures');
 Route::get('/stereotypes', "PageController@stereotypes")->name('stereotypes');
-Route::get('/mesures-de-protection-contre-le-coronavirus', "PageController@officialMeasure")->name('officialMeasure');
-Route::get('/directives-prises-par-le-gouvernement', "PageController@preventativeMeasures")->name('preventativeMeasures');
+Route::get('/directives-prises-par-le-gouvernement', "PageController@officialMeasure")->name('officialMeasure');
+Route::get('/mesures-de-protection-contre-le-coronavirus', "PageController@preventativeMeasures")->name('preventativeMeasures');
 Route::get('/idees-recues-fake-news', "PageController@stereotypes")->name('stereotypes');
 Route::get('/sondages', 'PageController@sondage')->name('sondages');
+Route::get('/commité-multisectoriel-de-la-riposte', 'PageController@aboutCmr')->name('aboutCmr');
 
-Route::get('/dashboard-maps','DashBoardController@index');
+Route::get('/dashboard-maps/password-reset/{any}','DashBoardController@index')->name('dashboad.password.reset');
+Route::get('/dashboard-maps/{any?}','DashBoardController@index')->where('any', '^(?!api.*$).*');;
+
 Route::get('/orientation-medicale','SelfTestController@diagnostic')->name('diagnostic');
 Route::group(['prefix' => 'orientation-medicale-test'], function () {
     Route::get('/{step}','SelfTestController@back')->name('selfTest.back');

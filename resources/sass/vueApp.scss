@@ -1,0 +1,60 @@
+@import "variables";
+@import "mixins";
+@import url('https://fonts.googleapis.com/css2?family=Rubik');
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+@import "vue-select/src/scss/vue-select.scss";
+@import "~@fortawesome/fontawesome-free";
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "~@fortawesome/fontawesome-free/scss/brands.scss";
+@import "layout";
+@import "typography";
+@import "btn";
+@import "home";
+@import "statistiques";
+@import "officialMeasures";
+@import "hambourger_menu";
+@import "sondage";
+@import "diagnostic_map";
+@import "mapsLegend";
+@import "form_controls";
+@import "fullscreen";
+@import "https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css";
+body{
+    font-family: $font-family-base;
+}
+
+body,.modal,.table-responsive{
+    &::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: #f5f5f5;
+    }
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        background-color: #f5f5f5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: #0ae;
+
+        background-image: -webkit-gradient(
+            linear,
+            0 0,
+            0 100%,
+            color-stop(0.5, rgba(255, 255, 255, 0.2)),
+            color-stop(0.5, transparent),
+            to(transparent)
+        );
+    }
+}
+.disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}
+.card.default-card{
+    border-radius: unset;
+    border-color: #2e5bff14;
+}
+

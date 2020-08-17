@@ -1,0 +1,51 @@
+.style-chooser  .vs__selected {
+  white-space: nowrap;
+  width : 100% ;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+  display: block;
+}
+.style-chooser.style-chooser-multiple  .vs__selected {
+  width : auto ;
+}
+ .style-chooser  .vs__selected-options {
+  width: calc(100% - 40px);
+  position: relative;
+  height: 100% ;
+}
+.style-chooser.style-chooser-multiple  .vs__selected-options {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: #f9faff;
+  padding-bottom: 5px;
+  border-radius: 4px;
+  overflow: hidden;
+  max-height: 32px;
+  height: auto;
+  transition: max-height 0.6s ease-in-out;
+}
+.style-chooser.style-chooser-multiple .vs__selected-options:hover{
+  max-height: 1000px;
+  border: 1px solid #e0e7ff;
+}
+.style-chooser.style-chooser-multiple  .vs__actions {
+  position: absolute;
+  right: 0px;
+  top: 7px;
+}
+
+.style-chooser .vs__dropdown-toggle {
+  height: 32px ;
+  position: relative;
+}
+.style-chooser > ul li {
+  width : 100% ;
+  min-width : max-content ;
+}
+.style-picker .reportrange-text{
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

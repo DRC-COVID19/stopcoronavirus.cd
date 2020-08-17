@@ -14,17 +14,15 @@ class CreatePandemicsTable extends Migration
     public function up()
     {
         Schema::create('pandemics', function (Blueprint $table) {
-            $ $table->id();
+            $table->id();
             $table->integer('confirmed')->default(0);
             $table->integer('sick')->nullable();
             $table->integer('seriously')->nullable();
             $table->integer('healed')->nullable();
             $table->integer('dead')->nullable();
-            $table->integer('imported')->nullable();
-            $table->integer('local')->nullable();
             $table->datetime('last_update');
-            $table->integer('province_id')->index()->unsigned();
-            $table->integer('township_id')->index()->unsigned()->nullable();
+            $table->bigInteger('province_id')->index()->unsigned();
+            $table->bigInteger('township_id')->index()->unsigned()->nullable();
             $table->timestamps();
             $table->foreign('province_id')->references('id')->on('provinces');
         });

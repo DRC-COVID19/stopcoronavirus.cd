@@ -13,13 +13,11 @@ class CategoriesTableSeeder extends Seeder
      */
     public function run()
     {
+        \DB::table('categories')->delete();
 
-
-        DB::table('categories')->delete();
-
-        DB::table('categories')->insert(array(
+        \DB::table('categories')->insert(array (
             0 =>
-            array(
+            array (
                 'id' => 1,
                 'icon' => NULL,
                 'created_at' => '2020-03-20 15:55:33',

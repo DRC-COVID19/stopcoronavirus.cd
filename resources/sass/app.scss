@@ -41,7 +41,7 @@
 .App-Header {
     .App-Header--navbar {
         margin: 0;
-        &>li {
+        & > li {
             list-style: none;
             position: relative;
             color: $gray-900;
@@ -60,7 +60,7 @@
                 color: inherit;
                 background: inherit;
                 text-decoration: none;
-                .chevron{
+                .chevron {
                     transition: all ease 500ms;
                 }
                 &:hover {
@@ -82,17 +82,16 @@
                 & > ul {
                     display: inherit;
                 }
-                & > .nav-item > .chevron{
+                & > .nav-item > .chevron {
                     transform: rotate(180deg);
                 }
-                
             }
             ul {
                 display: none;
                 position: absolute;
                 left: 0;
                 top: 64px;
-                width: 200px;
+                width: 250px;
                 z-index: 1;
                 background: white;
                 padding: 0 0 2px 0;
@@ -171,3 +170,4 @@
         color: white;
     }
 }
+

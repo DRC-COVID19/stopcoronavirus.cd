@@ -6,7 +6,7 @@
     <title>Dashboard COVID-19 RDC</title>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
-    <link href="{{ asset('css/app.css?v=2.6') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css?v=2.8') }}" rel="stylesheet">
 </head>
 <body>
     <div class="container-fluid">
@@ -54,6 +54,36 @@
 
                 </div>
                 <div class="card mb-3">
+                    <div class="group-control card-header">
+                        <input type="checkbox" class="styled-checkbox" name="covid_case" id="covid_case">
+                        <label for="covid_case">
+                            {{__('Cas covid-19')}}
+                            <span id="covid_case_count"></span>
+                        </label>
+                    </div>
+                    <div class="card-body " id="covid_case_group_item">
+
+                        <label for="confirmed">{{__('confirmés')}}
+                            <input type="radio" name="covid_case_item" id="confirmed" disabled>
+                            <span class="checkmark"></span>
+                        </label>
+                        <label for="healed">{{__('Gueris')}}
+                            <input type="radio" name="covid_case_item" id="healed" disabled>
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label for="dead">{{__('Décès')}}
+                            <input type="radio" name="covid_case_item" id="dead" disabled>
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label for="sick">{{__('malade')}}
+                            <input type="radio" name="covid_case_item" id="sick" disabled>
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="card mb-3">
                     <div class="group-control card-body">
                         <input type="checkbox" class="styled-checkbox" name="list_hospital" id="list_hospital">
                         <label for="list_hospital">
@@ -80,7 +110,7 @@
                         <h4>Legende</h4>
                         <div class="legende">
                             <div>
-                                <span class="fin-8 legende-color"></span> 
+                                <span class="fin-8 legende-color"></span>
                                 <span>Peu probale</span>
                                 <span id="medical_orientation_fin8_count"></span>
                             </div>
@@ -211,6 +241,6 @@
         </div>
         <p>{{__("Fetching Data")}}</p>
     </div>
-    <script src="{{ asset('js/app.js?v=2.7') }}" defer></script>
+    <script src="{{ asset('js/app.js?v=2.9') }}" defer></script>
 </body>
 </html>

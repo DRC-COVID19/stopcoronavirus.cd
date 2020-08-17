@@ -35,8 +35,8 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,700,900&display=swap" rel="stylesheet">
-    <link href="{{ asset('css/app.css?v=4.9') }}" rel="stylesheet">
-    <script src="{{ asset('js/app.js?v=1.9') }}" defer></script>
+    <link href="{{ asset('css/app.css?v=4.91') }}" rel="stylesheet">
+    <script src="{{ asset('js/app.js?v=1.91') }}" defer></script>
 
     <!-- Google Tag Manager -->
     <script>
@@ -80,6 +80,18 @@
                                         <a href="{{route('home')}}" class="px-md-2 {{ Route::currentRouteName()== 'home' ? 'active' : '' }}">
                                             <li> Situation actuelle</li>
                                         </a>
+                                        <a href="#" class="px-md-2">
+                                            <li>{{__('Tout savoir sur le covid-19')}}</li>
+                                        </a>
+                                        <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">
+                                            <li>{{__('Comment se protéger')}}</li>
+                                        </a>
+                                        <a href="{{route('officialMeasure')}}" class="px-md-2 {{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}">
+                                            <li>{{__('Directives du Gouvernement')}}</li>
+                                        </a>
+                                        <a href="{{route('diagnostic')}}" class="px-md-2 {{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">
+                                            <li>Orientation Médicale</li>
+                                        </a>
                                         <a href="{{route('preventativeMeasures')}}" class="px-md-2 {{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}">
                                             <li> Mesures de protection</li>
                                         </a>
@@ -87,7 +99,7 @@
                                             <li> Directives du Gouvernement </li>
                                         </a>
                                         <a href="{{route('stereotypes')}}" class="px-md-2 {{ Route::currentRouteName()=='stereotypes' ? 'active' : '' }}">
-                                            <li> Idées reçues</li>
+                                            <li>Vrai ou Faux</li>
                                         </a>
                                         <a class="px-md-2" target="_blank" href="https://factcheck.stopcoronavirusrdc.info/">
                                             <li>{{__('Fact-checking')}} <span class="fas fa-external-link-alt"></span></li>
@@ -95,9 +107,11 @@
                                         <a href="{{route('sondages')}}" class="px-md-2 {{ Route::currentRouteName()=='sondages' ? 'active' : '' }}">
                                             <li> Sondage</li>
                                         </a>
-                                        <a href="{{route('diagnostic')}}" class="px-md-2 {{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}">
-                                            <li>Orientation Médicale</li>
+
+                                        <a href="{{route('aboutCmr')}}" class="px-md-2 {{ Route::currentRouteName()=='aboutCmr' ? 'active' : '' }}">
+                                            <li> A propos du CMR</li>
                                         </a>
+
                                     </ul>
                                 </div>
                             </nav>
@@ -132,16 +146,26 @@
                         </div>
                         <ul class="d-flex flex-md-row flex-column justify-content-end App-Header--navbar">
                             <li class="{{ Route::currentRouteName()== 'home' ? 'active' : '' }}"> <a href="{{route('home')}}" class="px-md-2 nav-item ">Situation actuelle</a></li>
-                            <li class="{{ Route::currentRouteName()== 'preventativeMeasures' ? 'active' : '' }}"> <a href="{{route('preventativeMeasures')}}" class="px-md-2 nav-item ">Mesures de protection</a></li>
-                            <li class="{{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}"> <a href="{{route('officialMeasure')}}" class="px-md-2 nav-item ">Directives du Gouvernement</a></li>
-                            <li class="{{ Route::currentRouteName()=='stereotypes'||Route::currentRouteName()=='sondages' ? 'active' : '' }}"> <a href="#" class="px-md-2 nav-item">{{__("Idées reçues & sondage")}} <span class="chevron fas fa-chevron-down"></span></a>
+                            <li class="{{ Route::currentRouteName()== 'preventativeMeasures'||Route::currentRouteName()== 'officialMeasure'  ? 'active' : '' }}"> <a href="#" class="px-md-2 nav-item"> <span> {{__("Covid-19")}}</span> <span class="chevron fas fa-chevron-down"></span></a>
                                 <ul>
-                                    <li><a class="sub-nav-item" href="{{route('stereotypes')}}">{{__('Idées reçues')}}</a></li>
+                                    <li><a class="sub-nav-item" href="{{route('preventativeMeasures')}}">{{__('Tout savoir sur le covid-19')}}</a></li>
+                                    {{-- <li><a class="sub-nav-item" >{{__('Comment se protéger')}}</a></li> --}}
+                                    <li><a class="sub-nav-item" href="{{route('officialMeasure')}}">{{__('Directives du Gouvernement')}}</a></li>
+                                </ul>
+                            </li>
+                            <li class="{{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}"> <a href="{{route('diagnostic')}}" class="px-md-2 nav-item ">Orientation Médicale</a></li>
+
+                            <li class="{{ Route::currentRouteName()=='stereotypes'||Route::currentRouteName()=='sondages' ? 'active' : '' }}"> <a href="#" class="px-md-2 nav-item">{{__("Vrai ou Faux & sondage")}} <span class="chevron fas fa-chevron-down"></span></a>
+                                <ul>
+                                    <li><a class="sub-nav-item" href="{{route('stereotypes')}}">{{__('Vrai ou Faux ?')}}</a></li>
                                     <li><a title="{{__('Plateforme de signallement des fakenews et de fact checking concernant le COVID-19.')}}" class="sub-nav-item" target="_blank" href="https://factcheck.stopcoronavirusrdc.info/">{{__('Fact-checking')}} <span class="fas fa-external-link-alt"></span> </a></li>
                                     <li><a class="sub-nav-item" href="{{route('sondages')}}">{{__('Sondage')}}</a></li>
                                 </ul>
                             </li>
-                            <li class="{{ Route::currentRouteName()=='diagnostic'|| Route::currentRouteName()=='selfTest.get'|| Route::currentRouteName()=='seltTest.post' ? 'active' : '' }}"> <a href="{{route('diagnostic')}}" class="px-md-2 nav-item ">Orientation Médicale</a></li>
+                            <li class="{{ Route::currentRouteName()== 'aboutCmr'  ? 'active' : '' }}"> <a href="{{route('aboutCmr')}}" class="px-md-2 nav-item ">A propos du CMR</a></li>
+                            {{-- <li class="{{ Route::currentRouteName()== 'officialMeasure' ? 'active' : '' }}"> <a href="{{route('officialMeasure')}}" class="px-md-2 nav-item ">Directives du Gouvernement</a></li> --}}
+
+
                         </ul>
                     </div>
                 </div>

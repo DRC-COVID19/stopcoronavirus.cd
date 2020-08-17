@@ -15,12 +15,16 @@
         "fruitcake/laravel-cors": "^1.0",
         "google/apiclient": "^2.4",
         "guzzlehttp/guzzle": "^6.3",
+        "hashids/hashids": "^4.0",
         "laravel-admin-ext/latlong": "^1.2",
         "laravel-admin-ext/summernote": "^1.0",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
+        "laravel/ui": "^2.0",
+        "maatwebsite/excel": "^3.1",
         "orangehill/iseed": "^2.6",
-        "rcrowe/twigbridge": "^0.11.3"
+        "rcrowe/twigbridge": "^0.11.3",
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
