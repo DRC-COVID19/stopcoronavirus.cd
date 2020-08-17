@@ -130,8 +130,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
-    getHospitalSituations(page) {
-      if(typeof page == "undefined") page = 1
+    getHospitalSituations(page=1) {
       this.ishospitalSituationLoading = true;
       axios.get("/api/dashboard/hospital-situations",
       {params : {page} }).then(({ data }) => {
