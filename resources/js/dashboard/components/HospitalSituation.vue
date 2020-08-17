@@ -93,6 +93,15 @@
           </div>
         </b-card>
       </b-col>
+
+      <b-col cols="12" class="p-1">
+        <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
+          <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+          <div class="chart-container">
+            <canvas height="400" width="100vh" ref="canvasStat3" id="canvasStat3"></canvas>
+          </div>
+        </b-card>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -112,6 +121,9 @@ export default {
 
         { title : "Evolution du taux d'occupation des lits de réanimation",
           lableY : "Nombre de lits" } ,
+
+        { title : "Evolution global du taux d'occupation",
+          lableY : "Taux d'occupation" } ,
       ]
     };
   },
@@ -149,9 +161,9 @@ export default {
     ...mapActions(["getSituationHospital"]),
     ...mapMutations(["selectHospital"]),
     paintStats(data) {
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 3; i++) {
 
-        let callbacks = {} , ticks = {}
+        let callbacks = {} , ticksY = {}
         let datasets = []
         if(i == 0){
           datasets = [
@@ -160,7 +172,7 @@ export default {
               fill: false,
               backgroundColor: "#673AB7",
               borderColor: "#673AB7",
-              data: data.respirators,
+              data: data.respirators.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
               showLine: true,
@@ -172,28 +184,27 @@ export default {
               fill: false,
               backgroundColor: "#03A9F4",
               borderColor: "#03A9F4",
-              data: data.occupied_respirators,
+              data: data.occupied_respirators.map(x => (x == 0) ? null : x) ,
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4,
-              borderDash: [5, 5]
+              lineTension: 0.4
             }
-          ]
-        }else{
-          // const dataset1 = data.occupied_resuscitation_beds.map(
-          //   (a, i) => Math.round(a * 100 / data.resuscitation_beds[i] ))
+          ] ;
 
-          // const dataset2 = data.occupied_respirators.map(
-          //   (a,i) => Math.round(a * 100 / data.respirators[i] ))
-
+          ticksY = {
+            min : 0 ,
+            precision : 0
+          }
+        }
+        else if(i == 1){
           datasets = [
             {
               label: "Lits de réanimation" ,
               backgroundColor: "#F44336",
               borderColor: "#F44336",
-              data: data.resuscitation_beds,
+              data: data.resuscitation_beds.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
               showLine: true,
@@ -204,30 +215,72 @@ export default {
               label: "Lits de réanimation occupés" ,
               backgroundColor: "#9E9E9E",
               borderColor: "#9E9E9E",
-              data: data.occupied_resuscitation_beds,
+              data: data.occupied_resuscitation_beds.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4,
-              borderDash: [5, 5]
+              lineTension: 0.4
             }
           ] ;
 
-          // callbacks = {
-          //   label: function (tooltipItem, data) {
-          //       var label = data.datasets[tooltipItem.datasetIndex].label || "";
-          //       if (label) label += ": ";
-          //       label += tooltipItem.yLabel + "%";
-          //       return label;
-          //   }
-          // }
+          ticksY = {
+            min : 0 ,
+            precision : 0
+          }
+        }else{
+          const dataset1 = data.occupied_resuscitation_beds.map(
+            (a, i) => {
+              if(a == 0 || data.resuscitation_beds[i] == 0) return null
+              return Math.round(a * 100 / data.resuscitation_beds[i] )
+            })
 
-          // ticks = {
-          //   callback: function (value, index, values) {
-          //       return value + "%";
-          //   }
-          // }
+          const dataset2 = data.occupied_respirators.map(
+            (a,i) => {
+              if(a == 0 || data.respirators[i] == 0) return null
+              return Math.round(a * 100 / data.respirators[i] )
+            })
+
+          datasets = [
+            {
+              label: "Taux occupation des lits de réanimation" ,
+              backgroundColor: "#F44336",
+              borderColor: "#F44336",
+              data: dataset1,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4
+            },
+            {
+              label: "Taux occupation des Réspirateurs" ,
+              backgroundColor: "#673AB7",
+              borderColor: "#673AB7",
+              data: dataset2,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4
+            }
+          ] ;
+
+          callbacks = {
+            label: function (tooltipItem, data) {
+                var label = data.datasets[tooltipItem.datasetIndex].label || "";
+                if (label) label += ": ";
+                label += tooltipItem.yLabel + "%";
+                return label;
+            }
+          }
+
+          ticksY = {
+            min : 0 ,
+            callback: function (value, index, values) {
+                return value + "%";
+            }
+          }
         }
 
         const config = {
@@ -291,7 +344,7 @@ export default {
                     display: true,
                     labelString: this.chartLabels[i].lableY,
                   }
-                  ,ticks: ticks
+                  ,ticks: ticksY
                 },
               ],
             },
