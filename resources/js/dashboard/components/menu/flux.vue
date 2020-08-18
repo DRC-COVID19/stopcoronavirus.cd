@@ -180,6 +180,10 @@ export default {
           id: 5,
           name: "Mobilité à la Gombe depuis le début du confinement",
         },
+        {
+            id: 7,
+            name: "Mobilité générale à la Gombe depuis le début du confinement"
+        }
       ],
       fluxFilterInput: "",
       fluxFilterInputProvince: "",
@@ -320,6 +324,9 @@ export default {
       let observation_start = null;
       let observation_end = null;
       let fluxGeoOptions = ["Gombe"];
+
+      if(value != 7) this.$emit("toggleShowMobiliteGenerale", false);
+
       switch (value) {
         case 1:
           observation_start = this.moment().format(DATEFORMAT);
@@ -354,6 +361,11 @@ export default {
         case 6:
           observation_start = "2020-03-19";
           observation_end = "2020-03-28";
+          break;
+        case 7:
+          observation_start = "2020-03-19";
+          observation_end = this.moment().format(DATEFORMAT);
+          this.$emit("toggleShowMobiliteGenerale", true); 
           break;
       }
 
