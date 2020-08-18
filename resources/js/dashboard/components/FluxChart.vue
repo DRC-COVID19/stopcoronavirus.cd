@@ -34,114 +34,91 @@
     </b-container>
 
     <b-container v-show="!isProvinceStatSeeing" class="p-0 flux-chart">
+      <b-row>
+        <b-col cols="12" md="6">
+          <h3 class="d-flex">
+            <span class="ml-2">{{targetZone}}</span>
+            <button
+              class="btn-alt-screen"
+              @click="seeProvinceStat"
+              title="Statistique des zones"
+              v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0"
+            >
+              <i class="fa fa-eye see-province-stat"></i>
+            </button>
+            <button
+              class="btn-alt-screen"
+              @click="toggleGlobalMobility()"
+              title="Mobilité génerale"
+            >
+              <i v-if="!showMobiliteGenerale" class="fa fa-exchange-alt"></i>
+              <i v-else class="fa fa-globe"></i>
+            </button>
+          </h3>
+        </b-col>
+        <b-col cols="12" md="6" class="text-right">
+          <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
+          <span class="small text-muted">Dernière mise à jour</span>
+        </b-col>
+      </b-row>
       <b-row no-gutters>
         <b-col
           cols="12"
           v-show="showMobiliteGenerale"
-          md="8"
+          md="12"
           class="pl-0 pr-2 col-mobilite-generale"
         >
-          <b-row v-for="(item,index) in flux24DailyGeneraleLocal" :key="index" class="mb-3">
-            <b-col cols="12">
-              <h3 class="d-flex">
-                <span class="ml-2">{{item[0].targetZone}}</span>
-                <button
-                  class="btn-alt-screen"
-                  @click="seeProvinceStat"
-                  title="Statistique des zones"
-                  v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0"
-                >
-                  <i class="fa fa-eye see-province-stat"></i>
-                </button>
-                <button
-                  class="btn-alt-screen"
-                  @click="toggleGlobalMobility(false)"
-                  title="Mobilité entrante et sortante"
-                >
-                  <i class="fa fa-exchange-alt"></i>
-                </button>
-              </h3>
+          <b-card
+            class="mb-3 flux-mobility"
+            :class="{'active':fluxType==4}"
+            @click="selectFluxType(4)"
+          >
+            <h5 class="percent-title">Mobilité générale</h5>
+            <div class="percent flux-in-color">{{percentGenerale}}%​</div>
 
-              <b-card
-                class="mb-3 flux-mobility"
-                :class="{'active':fluxType==4}"
-                @click="selectFluxType(4)"
-              >
-                <h5 class="percent-title">Mobilité générale</h5>
-                <div class="percent flux-in-color">{{percentGenerale}}%​</div>
+            <p v-if="differenceGenerale>0" class="percent-p text-dash-color">
+              {{differenceGenerale}} personnes de plus sont
+              <br />entrées et sorties de la zone
+            </p>
+            <p v-else class="percent-p text-dash-color">
+              {{ `${differenceGenerale}`}} personnes de moins sont
+              <br />entrées et sorties de la zone
+            </p>
+          </b-card>
 
-                <p v-if="differenceGenerale>0" class="percent-p text-dash-color">
-                  {{differenceGenerale}} personnes de plus sont
-                  <br />entrées et sorties de la zone
-                </p>
-                <p v-else class="percent-p text-dash-color">
-                  {{ `-${differenceGenerale}`}} personnes de moins sont
-                  <br />entrées et sorties de la zone
-                </p>
+          <div class="fullscreen-container fullscreen-container1">
+            <fullscreen ref="fullscreenGenerale" @change="fullscreenGeneraleChange">
+              <b-card no-body class="cardtype1 mb-3 p-2" :ref="`mobile_generale_card`">
+                <div class="chart-container">
+                  <canvas height="200" width="100vh" ref="mobile_generale" id="mobile_generale"></canvas>
+                </div>
               </b-card>
+            </fullscreen>
+            <button type="button" @click="toggleFullscreenGenerale" class="fullscreen-btn mini">
+              <i class="fa fa-expand"></i>
+            </button>
+          </div>
 
-              <div class="fullscreen-container fullscreen-container1">
-                <fullscreen ref="fullscreenGenerale" @change="fullscreenGeneraleChange">
-                  <b-card no-body class="cardtype1 mb-3 p-2" :ref="`mobile_generale_${index}_card`">
-                    <div class="chart-container">
-                      <canvas
-                        height="200"
-                        width="100vh"
-                        :ref="`mobile_generale`"
-                        :id="`mobile_generale`"
-                      ></canvas>
-                    </div>
-                  </b-card>
-                </fullscreen>
-                <button type="button" @click="toggleFullscreenGenerale" class="fullscreen-btn mini">
-                  <i class="fa fa-expand"></i>
-                </button>
-              </div>
-
-              <div class="fullscreen-container fullscreen-container2">
-                <fullscreen ref="fullscreenGenerale2" @change="fullscreenGenerale2Change">
-                  <b-card no-body class="cardtype2 p-2">
-                    <canvas
-                      height="200"
-                      width="100vh"
-                      :ref="`mobile_generale_${index}_2_card`"
-                      :id="`mobile_generale_${index}_2_card`"
-                    ></canvas>
-                  </b-card>
-                </fullscreen>
-                <button
-                  type="button"
-                  @click="toggleFullscreenGenerale2"
-                  class="fullscreen-btn mini"
-                >
-                  <i class="fa fa-expand"></i>
-                </button>
-              </div>
-            </b-col>
-          </b-row>
+          <!-- <div class="fullscreen-container fullscreen-container2">
+            <fullscreen ref="fullscreenGenerale2" @change="fullscreenGenerale2Change">
+              <b-card no-body class="cardtype2 p-2">
+                <canvas
+                  height="200"
+                  width="100vh"
+                  ref="mobile_generale_2_card"
+                  id="mobile_generale_2_card"
+                ></canvas>
+              </b-card>
+            </fullscreen>
+            <button type="button" @click="toggleFullscreenGenerale2" class="fullscreen-btn mini">
+              <i class="fa fa-expand"></i>
+            </button>
+          </div> -->
         </b-col>
 
         <b-col cols="12" v-show="!showMobiliteGenerale" md="4" class="pl-0 pr-2" ref="mobility">
-          <b-row v-for="(item,index) in flux24DailyInLocal" :key="index" class="mb-3">
+          <b-row class="mb-3">
             <b-col cols="12">
-              <h3 class="d-flex">
-                <span class="ml-2">{{item[0].destination}}</span>
-                <button
-                  class="btn-alt-screen"
-                  @click="seeProvinceStat"
-                  title="Statistique des zones"
-                  v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0"
-                >
-                  <i class="fa fa-eye see-province-stat"></i>
-                </button>
-                <button
-                  class="btn-alt-screen"
-                  @click="toggleGlobalMobility(true)"
-                  title="Mobilité génerale"
-                >
-                  <i class="fa fa-globe"></i>
-                </button>
-              </h3>
               <b-card
                 class="mb-3 flux-mobility"
                 :class="{'active':fluxType==1}"
@@ -157,13 +134,13 @@
                 <p
                   v-else
                   class="percent-p text-dash-color"
-                >{{ `-${differenceIn}`}} personnes de moins sont entrées dans la zone</p>
+                >{{ `${differenceIn}`}} personnes de moins sont entrées dans la zone</p>
               </b-card>
               <div class="fullscreen-container fullscreen-container1">
                 <fullscreen ref="fullscreenEntrance" @change="fullscreenEntranceChange">
-                  <b-card no-body class="cardtype1 mb-3 p-2" :ref="`mobile_entrance_${index}_card`">
+                  <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
                     <div class="chart-container">
-                      <canvas height="200" width="100vh" :ref="`mobile_in`" :id="`mobile_in`"></canvas>
+                      <canvas height="200" width="100vh" ref="mobile_in" id="mobile_in"></canvas>
                     </div>
                   </b-card>
                 </fullscreen>
@@ -177,8 +154,8 @@
                     <canvas
                       height="200"
                       width="100vh"
-                      :ref="`mobile_entrance_${index}_2_card`"
-                      :id="`mobile_entrance_${index}_2_card`"
+                      ref="mobile_entrance_2_card"
+                      id="mobile_entrance_2_card"
                     ></canvas>
                   </b-card>
                 </fullscreen>
@@ -195,9 +172,8 @@
         </b-col>
 
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="!showMobiliteGenerale">
-          <b-row v-for="(item,index) in flux24DailyOutLocal" :key="index" class="mb-3">
+          <b-row class="mb-3">
             <b-col cols="12">
-              <h3>&nbsp;</h3>
               <b-card
                 class="mb-3 flux-mobility"
                 :class="{'active':fluxType==2}"
@@ -212,14 +188,14 @@
                 <p
                   v-else
                   class="percent-p text-dash-color"
-                >{{`-${differenceOut}`}} personnes de moins sont sorties de la zone</p>
+                >{{`${differenceOut}`}} personnes de moins sont sorties de la zone</p>
               </b-card>
 
               <div class="fullscreen-container fullscreen-container1">
                 <fullscreen ref="fullscreenOut" @change="fullscreenOutChange">
-                  <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_${index}_card`">
+                  <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
                     <div class="chart-container">
-                      <canvas height="200" width="100vh" :ref="`mobile_out`" :id="`mobile_out`"></canvas>
+                      <canvas height="200" width="100vh" ref="mobile_out" id="mobile_out"></canvas>
                     </div>
                   </b-card>
                 </fullscreen>
@@ -234,8 +210,8 @@
                     <canvas
                       height="200"
                       width="100vh"
-                      :ref="`mobile_out_${index}_2_card`"
-                      :id="`mobile_out_${index}_2_card`"
+                      ref="mobile_out_2_card"
+                      id="mobile_out_2_card"
                     ></canvas>
                     <!--
                     <div class="chart-container">
@@ -251,34 +227,28 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="4" class="pr-0 pl-2">
-          <b-row class="mb-3">
-            <b-col cols="12">
-              <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
-              <span class="small text-muted">Dernière mise à jour</span>
-              <b-card
-                class="mb-3 flux-mobility"
-                :class="{'active':fluxType==3}"
-                @click="selectFluxType(3)"
-              >
-                <h5 class="percent-title">Présences</h5>
-                <div class="percent flux-presence">{{percentPresence}}%​</div>
-                <p
-                  v-if="differencePresence>0"
-                  class="percent-p text-dash-color"
-                >{{differencePresence}} personnes de plus étaient présentes dans la zone</p>
-                <p
-                  v-else
-                  class="percent-p text-dash-color"
-                >{{`-${differencePresence}`}} personnes de moins étaient présentes dans la zone</p>
-              </b-card>
-              <b-card no-body class="mb-3 p-2" :ref="`mobile_presence_card`">
-                <div class="chart-container">
-                  <canvas height="200" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
-                </div>
-              </b-card>
-            </b-col>
-          </b-row>
+        <b-col cols="12" md="4" class="pr-0 pl-2" v-show="!showMobiliteGenerale">
+          <b-card
+            class="mb-3 flux-mobility"
+            :class="{'active':fluxType==3}"
+            @click="selectFluxType(3)"
+          >
+            <h5 class="percent-title">Présences</h5>
+            <div class="percent flux-presence">{{percentPresence}}%​</div>
+            <p
+              v-if="differencePresence>0"
+              class="percent-p text-dash-color"
+            >{{differencePresence}} personnes de plus étaient présentes dans la zone</p>
+            <p
+              v-else
+              class="percent-p text-dash-color"
+            >{{`${differencePresence}`}} personnes de moins étaient présentes dans la zone</p>
+          </b-card>
+          <b-card no-body class="mb-3 p-2" ref="mobile_presence_card">
+            <div class="chart-container">
+              <canvas height="200" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
+            </div>
+          </b-card>
         </b-col>
       </b-row>
     </b-container>
@@ -356,7 +326,7 @@ export default {
       configBarChart2: {},
       configBarChartGen: {},
       barChart: null,
-      barChart2: null,
+      barChart2: {},
       barChartGen: null,
       palette: PALETTE,
       showMobiliteGenerale: false,
@@ -369,6 +339,7 @@ export default {
       differenceOut: null,
       differenceGenerale: null,
       differencePresence: null,
+      targetZone: null,
     };
   },
   computed: {
@@ -380,33 +351,12 @@ export default {
   },
   watch: {
     flux24DailyIn() {
-      this.flux24DailyInLocal = this.extractFlux23DailyIn();
-
-      this.$nextTick(() => {
-        this.flux24DailyInLocal.forEach((item, index) => {
-          this.mobileEntranceOrigin(item, index);
-        });
-      });
+      this.updateFluxInMobility();
       this.updateGeneralMobilityDaily();
     },
     flux24DailyOut() {
-      this.flux24DailyOutLocal = this.extractFlux23DailyOut();
-
-      this.$nextTick(() => {
-        this.flux24DailyOutLocal.forEach((item, index) => {
-          this.mobileOutDestination(item, index);
-        });
-      });
+      this.updateFluxOutMobility();
       this.updateGeneralMobilityDaily();
-    },
-    flux24DailyGenerale() {
-      // this.flux24DailyGeneraleLocal = this.extractFlux23DailyGenerale();
-      // this.$nextTick(() => {
-      //   this.flux24DailyGeneraleLocal.forEach((item, index) => {
-      //     //this.mobileCalc(item, `mobile_generale_${index}`, PALETTE.flux_in_color);
-      //     this.mobileGenerale(item, index);
-      //   });
-      // });
     },
     flux24PresenceDailyIn() {
       this.$nextTick(() => {
@@ -462,11 +412,6 @@ export default {
     },
   },
   mounted() {
-    this.flux24DailyInLocal = this.extractFlux23DailyIn();
-    this.flux24DailyOutLocal = this.extractFlux23DailyOut();
-    this.flux24DailyGeneraleLocal = this.extractFlux23DailyGenerale();
-    this.flux24DailyPresenceInLocal = this.extractFlux24PresenceDailyIn();
-
     this.showMobiliteGenerale = this.mobiliteGenerale;
     if (this.mobiliteGenerale) {
       this.selectFluxType(4);
@@ -474,34 +419,10 @@ export default {
       this.selectFluxType(1);
     }
 
-    this.$nextTick(() => {
-      this.flux24DailyInLocal.forEach((item, index) => {
-        this.mobileEntranceOrigin(item, index);
-      });
-    });
-    this.$nextTick(() => {
-      this.flux24DailyOutLocal.forEach((item, index) => {
-        // this.mobileCalc(item, `mobile_out_${index}`, PALETTE.flux_out_color);
-
-        this.mobileOutDestination(item, index);
-      });
-    });
-    this.$nextTick(() => {
-      this.flux24DailyGeneraleLocal.forEach((item, index) => {
-        // this.mobileCalc(item, `mobile_generale_${index}`, PALETTE.flux_in_color);
-        this.mobileGenerale(item, index);
-      });
-    });
+    this.updateFluxInMobility();
+    this.updateFluxOutMobility();
 
     this.$nextTick(() => {
-      // this.flux24DailyPresenceInLocal.forEach((item, index) => {
-      //   this.mobileCalc(
-      //     item,
-      //     `mobile_presence_${index}`,
-      //     PALETTE.flux_presence
-      //   );
-      // });
-
       const result = this.fluxInPercent(this.flux24PresenceDailyIn);
       this.percentPresence = result.percent;
       this.differencePresence = this.formatCash(result.difference);
@@ -545,6 +466,14 @@ export default {
     //   );
     // });
     this.updateGeneralMobilityDaily();
+    this.targetZone = this.fluxGeoOptions[0];
+
+    this.$store.watch(
+      (state) => state.flux.fluxGeoOptions,
+      (value) => {
+        this.targetZone = value[0];
+      }
+    );
   },
   methods: {
     ...mapMutations(["setFluxType", "setIsProvinceStatSeeing"]),
@@ -651,7 +580,7 @@ export default {
     },
     extractFlux23DailyIn() {
       let flux24DailyInLocal = [];
-      console.log('flux24DailyIn',this.flux24DailyIn);
+      console.log("flux24DailyIn", this.flux24DailyIn);
       if (this.flux24DailyIn.length > 0) {
         this.flux24DailyIn.forEach((item) => {
           let index = flux24DailyInLocal.findIndex((x) =>
@@ -704,17 +633,15 @@ export default {
       }
       return flux24PresenceDailyInLocal;
     },
-    updateGeneralMobilityDaily() {
+    updateGeneralMobilityZone() {
       this.$nextTick(() => {
-        const referencesByDateIn = this.fluxDataGroupedByDateIn
-          .referencesByDate;
-        const observationsByDateIn = this.fluxDataGroupedByDateIn
-          .observationsByDate;
+        const referencesByDateIn = this.flux24DailyIn.referencesByDate ?? [];
+        const observationsByDateIn =
+          this.flux24DailyIn.observationsByDate ?? [];
 
-        const referencesByDateOut = this.fluxDataGroupedByDateOut
-          .referencesByDate;
-        const observationsByDateOut = this.fluxDataGroupedByDateOut
-          .observationsByDate;
+        const referencesByDateOut = this.flux24DailyOut.referencesByDate ?? [];
+        const observationsByDateOut =
+          this.flux24DailyOut.observationsByDate ?? [];
 
         const referencesByDate = [];
         const observationsByDate = [];
@@ -749,6 +676,71 @@ export default {
         this.percentGenerale = result.percent;
         this.differenceGenerale = this.formatCash(result.difference);
         this.mobileCalc(general, `mobile_generale`, PALETTE.flux_in_color);
+      });
+    },
+    updateGeneralMobilityDaily() {
+      this.$nextTick(() => {
+        const referencesByDateIn =
+          this.fluxDataGroupedByDateIn.referencesByDate ?? [];
+        const observationsByDateIn =
+          this.fluxDataGroupedByDateIn.observationsByDate ?? [];
+
+        const referencesByDateOut =
+          this.fluxDataGroupedByDateOut.referencesByDate ?? [];
+        const observationsByDateOut =
+          this.fluxDataGroupedByDateOut.observationsByDate ?? [];
+
+        const referencesByDate = [];
+        const observationsByDate = [];
+        [...referencesByDateIn, ...referencesByDateOut].map((item) => {
+          const element = referencesByDate.find((x) => x.date == item.date);
+          if (element) {
+            element.volume += item.volume;
+          } else {
+            referencesByDate.push({
+              volume: item.volume,
+              date: item.date,
+            });
+          }
+        });
+
+        [...observationsByDateIn, ...observationsByDateOut].map((item) => {
+          const element = observationsByDate.find((x) => x.date == item.date);
+          if (element) {
+            element.volume += item.volume;
+          } else {
+            observationsByDate.push({
+              volume: item.volume,
+              date: item.date,
+            });
+          }
+        });
+        const general = {
+          referencesByDate,
+          observationsByDate,
+        };
+        const result = this.fluxInPercent(general);
+        this.percentGenerale = result.percent;
+        this.differenceGenerale = this.formatCash(result.difference);
+        this.mobileCalc(general, `mobile_generale`, PALETTE.flux_in_color);
+      });
+    },
+    updateFluxInMobility() {
+      this.$nextTick(() => {
+        this.fluxMobilityFluxZone(
+          this.flux24DailyIn,
+          "mobile_entrance_2_card",
+          "origin"
+        );
+      });
+    },
+    updateFluxOutMobility() {
+      this.$nextTick(() => {
+        this.fluxMobilityFluxZone(
+          this.flux24DailyOut,
+          "mobile_out_2_card",
+          "destination"
+        );
       });
     },
     mobileCalc({ referencesByDate, observationsByDate }, ref, color) {
@@ -902,41 +894,64 @@ export default {
           },
         },
       };
-
-      let reference = null;
-      if (this.$refs[ref] && this.$refs[ref][0]) {
-        reference = this.$refs[ref][0];
-      } else {
-        reference = this.$refs[ref];
-      }
+      let reference = this.$refs[ref];
       if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
       this.lineCharts[ref] = new Chart(reference.getContext("2d"), tempData);
     },
-    mobileOutDestination(data, index) {
-      console.log(data);
-      // data=array[{origin, destination,volume,isReference}]
+    fluxMobilityFluxZone(InputData, ref, key) {
+      if (!InputData) {
+        return;
+      }
+      let DataReference = [];
+      let totalReference = 0;
+      let referenceAverage = 0;
       let localData = [];
-      data.forEach((item) => {
-        let element = localData.find((x) => x.destination == item.destination);
-        if (element) {
-          element.volume += item.volume;
-          element.volume_reference += item.volume_reference;
-          element.difference += item.difference;
-          if (element.difference == 0) {
-            element.percent = 0;
-          } else {
-            element.percent =
-              (element.difference / element.volume_reference) * 100;
-          } 
-        } else {
-          localData.push({
-            destination: item.destination,
-            volume_reference: item.volume_reference,
-            volume: item.volume,
-            percent: item.percent,
-            difference: item.difference,
-          });
+
+      InputData.map(({ references, observations }) => {
+        if (!observations || !references) {
+          return {
+            percent: null,
+            difference: null,
+          };
         }
+        let referenceVolume = null;
+        let observationVolume = null;
+        const countReference = references.length;
+        if (countReference > 0) {
+          if (countReference % 2 == 0) {
+            let index = (countReference + 1) / 2;
+            index = parseInt(index);
+            const volume1 = references[index].volume;
+            const volume2 = references[index - 1].volume;
+            referenceVolume = (volume1 + volume2) / 2;
+          } else {
+            const index = (countReference + 1) / 2;
+            referenceVolume = references[index - 1].volume;
+          }
+        }
+
+        const countObservation = observations.length;
+        if (countObservation > 0) {
+          if (countObservation % 2 == 0) {
+            let index = (countObservation + 1) / 2;
+            index = parseInt(index);
+            const volume1 = observations[index].volume;
+            const volume2 = observations[index - 1].volume;
+            observationVolume = (volume1 + volume2) / 2;
+          } else {
+            const index = (countObservation + 1) / 2;
+            observationVolume = observations[index - 1].volume;
+          }
+        }
+        const difference = observationVolume - referenceVolume;
+
+        localData.push({
+          zone: observations[0][key],
+          percent: Math.round((difference / referenceVolume) * 100),
+          difference: difference,
+          volume: observationVolume,
+          volume_reference: referenceVolume,
+        });
       });
 
       localData.sort((a, b) => {
@@ -950,7 +965,7 @@ export default {
       localData = localData.slice(0, 10);
 
       const dataChart = {
-        labels: localData.map((d) => d.destination),
+        labels: localData.map((d) => d.zone),
         datasets: [
           {
             label: "Référence",
@@ -968,7 +983,6 @@ export default {
         ],
       };
 
-      const refInput = `mobile_out_${index}_2_card`;
       this.configBarChart2 = {
         type: "horizontalBar",
         data: dataChart,
@@ -1016,8 +1030,11 @@ export default {
           },
         },
       };
-      this.barChart2 = new Chart(
-        this.$refs[refInput][0].getContext("2d"),
+
+      console.log(this.$refs[ref]);
+      if (this.barChart2[ref]) this.barChart2[ref].destroy();
+      this.barChart2[ref] = new Chart(
+        this.$refs[ref].getContext("2d"),
         this.configBarChart2
       );
     },
@@ -1329,8 +1346,8 @@ export default {
         this.barChartGen.update();
       }
     },
-    toggleGlobalMobility(show) {
-      this.showMobiliteGenerale = show;
+    toggleGlobalMobility() {
+      this.showMobiliteGenerale = !this.showMobiliteGenerale;
     },
   },
 };

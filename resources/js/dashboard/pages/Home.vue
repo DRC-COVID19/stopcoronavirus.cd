@@ -67,6 +67,8 @@
                   :flux24="flux24"
                   :flux24DailyIn="flux24DailyIn"
                   :flux24DailyOut="flux24DailyOut"
+                  :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
+                  :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
                   :flux24DailyGenerale="flux24DailyGenerale"
                   :isLoading="isLoading"
                   :flux24Presence="flux24PresenceDailyIn"
@@ -276,7 +278,7 @@ export default {
       palette: PALETTE,
       fluxZoneGlobalIn: [],
       fluxZoneGlobalOut: [],
-      showMobiliteGenerale : false,
+      showMobiliteGenerale: false,
       fluxDataGroupedByDateIn: {},
       fluxDataGroupedByDateOut: {},
       fluxDataGroupedByDateGen: {},
@@ -648,7 +650,7 @@ export default {
         });
       };
 
-      const computedFluxDataByDate = this.computedFluxDataByDate
+      const computedFluxDataByDate = this.computedFluxDataByDate;
 
       const computedFluxPresenceData = (dataObservations, dataReferences) => {
         const dataOut = [];
@@ -837,10 +839,19 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          this.flux24DailyIn = computedFluxData(
-            data.observations,
-            data.references
-          );
+          // this.flux24DailyIn = computedFluxData(
+          //   data.observations,
+          //   data.references
+          // );
+          const groupObservations = groupBy(data.observations, (d) => d.origin);
+          const groupReferences = groupBy(data.references, (d) => d.origin);
+          Object.entries(groupObservations).forEach(([key, value]) => {
+            this.flux24DailyIn.push({
+              references: groupReferences[key],
+              observations: groupObservations[key],
+            });
+          });
+
           this.fluxDataGroupedByDateIn = computedFluxDataByDate(
             data.observations,
             data.references,
@@ -861,15 +872,25 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          this.flux24DailyOut = computedFluxData(
-            data.observations,
-            data.references
-          );
+          // this.flux24DailyOut = computedFluxData(
+          //   data.observations,
+          //   data.references
+          // );
+          const groupObservations = groupBy(data.observations, (d) => d.destination);
+          const groupReferences = groupBy(data.references, (d) => d.destination);
+          Object.entries(groupObservations).forEach(([key, value]) => {
+            this.flux24DailyOut.push({
+              references: groupReferences[key],
+              observations: groupObservations[key],
+            });
+          });
+
           this.fluxDataGroupedByDateOut = computedFluxDataByDate(
             data.observations,
             data.references,
             "origin"
           );
+
           this.$set(this.loadings, "urlDailyOut", false);
         })
         .catch(({ response }) => {
@@ -917,9 +938,9 @@ export default {
           );
           this.$set(this.loadings, "urlPresenceDailyIn", false);
         })
-      .catch(({ response }) => {
-        this.$set(this.loadings, "urlPresenceDailyIn", false);
-      });
+        .catch(({ response }) => {
+          this.$set(this.loadings, "urlPresenceDailyIn", false);
+        });
 
       this.flux24 = [];
       // this.$set(this.loadings, "flux24", true);
@@ -1059,8 +1080,8 @@ export default {
           this.$set(this.loadings, "fluxPC_flux24", false);
         });
     },
-    toggleShowMobiliteGenerale(checked){
-      this.showMobiliteGenerale = checked
+    toggleShowMobiliteGenerale(checked) {
+      this.showMobiliteGenerale = checked;
     },
     toggleFullscreenMap() {
       this.$refs["fullscreenMap"].toggle();
@@ -1125,35 +1146,47 @@ export default {
           });
         });
     },
-    updateflux24DailyGenerale(){
+    updateflux24DailyGenerale() {
       const temp = [
-        ...this.flux24DailyIn.map(x => {
-            x.zone = x.origin
-            x.targetZone = x.destination
-            return x
-        }) ,
-        ...this.flux24DailyOut.map(x => {
-            x.targetZone = x.origin
-            x.zone = x.destination
-            return x
-        })
-      ]
-      this.flux24DailyGenerale = temp
+        ...this.flux24DailyIn.map((x) => {
+          x.zone = x.origin;
+          x.targetZone = x.destination;
+          return x;
+        }),
+        ...this.flux24DailyOut.map((x) => {
+          x.targetZone = x.origin;
+          x.zone = x.destination;
+          return x;
+        }),
+      ];
+      this.flux24DailyGenerale = temp;
     },
-    updateFluxDataGroupedByDateGen(){
-      const temp = { referencesByDate : []  , observationsByDate : []} 
-      
-      if(this.fluxDataGroupedByDateIn.referencesByDate)
-        temp.referencesByDate = [...temp.referencesByDate , ...this.fluxDataGroupedByDateIn.referencesByDate]
+    updateFluxDataGroupedByDateGen() {
+      const temp = { referencesByDate: [], observationsByDate: [] };
 
-      if(this.fluxDataGroupedByDateOut.referencesByDate)
-        temp.referencesByDate = [...temp.referencesByDate , ...this.fluxDataGroupedByDateOut.referencesByDate]
+      if (this.fluxDataGroupedByDateIn.referencesByDate)
+        temp.referencesByDate = [
+          ...temp.referencesByDate,
+          ...this.fluxDataGroupedByDateIn.referencesByDate,
+        ];
 
-      if(this.fluxDataGroupedByDateIn.observationsByDate)
-        temp.observationsByDate = [...temp.observationsByDate , ...this.fluxDataGroupedByDateIn.observationsByDate]
-      
-      if(this.fluxDataGroupedByDateOut.observationsByDate)
-        temp.observationsByDate = [...temp.observationsByDate , ...this.fluxDataGroupedByDateOut.observationsByDate]
+      if (this.fluxDataGroupedByDateOut.referencesByDate)
+        temp.referencesByDate = [
+          ...temp.referencesByDate,
+          ...this.fluxDataGroupedByDateOut.referencesByDate,
+        ];
+
+      if (this.fluxDataGroupedByDateIn.observationsByDate)
+        temp.observationsByDate = [
+          ...temp.observationsByDate,
+          ...this.fluxDataGroupedByDateIn.observationsByDate,
+        ];
+
+      if (this.fluxDataGroupedByDateOut.observationsByDate)
+        temp.observationsByDate = [
+          ...temp.observationsByDate,
+          ...this.fluxDataGroupedByDateOut.observationsByDate,
+        ];
 
       this.fluxDataGroupedByDateGen = this.computedFluxDataByDate(
         temp.observationsByDate,
@@ -1161,85 +1194,81 @@ export default {
         "zone"
       );
     },
-    computedFluxDataByDate(dataObservations, dataReferences, key){
-        const referencesByDate = [];
-        const observationsByDate = [];
+    computedFluxDataByDate(dataObservations, dataReferences, key) {
+      const referencesByDate = [];
+      const observationsByDate = [];
 
-        dataReferences.map((item) => {
-          const element = referencesByDate.find((x) => x.date == item.Date || x.date == item.date);
-          if (element) {
-            element.volume += item.volume;
-          } else {
-            referencesByDate.push({
-              date: item.Date || item.date ,
-              day: item.day,
-              volume: item.volume,
-              zone: item[key],
-            });
-          }
-        });
+      dataReferences.map((item) => {
+        const element = referencesByDate.find(
+          (x) => x.date == item.Date || x.date == item.date
+        );
+        if (element) {
+          element.volume += item.volume;
+        } else {
+          referencesByDate.push({
+            date: item.Date || item.date,
+            day: item.day,
+            volume: item.volume,
+            zone: item[key],
+          });
+        }
+      });
 
-        dataObservations.map((item) => {
-          const element = observationsByDate.find((x) => x.date == item.date);
-          if (element) {
-            element.volume += item.volume;
-          } else {
-            observationsByDate.push({
-              date: item.date,
-              day: item.day,
-              volume: item.volume,
-              zone: item[key],
-            });
-          }
-        });
+      dataObservations.map((item) => {
+        const element = observationsByDate.find((x) => x.date == item.date);
+        if (element) {
+          element.volume += item.volume;
+        } else {
+          observationsByDate.push({
+            date: item.date,
+            day: item.day,
+            volume: item.volume,
+            zone: item[key],
+          });
+        }
+      });
 
-        return {
-          referencesByDate,
-          observationsByDate,
-        };
+      return {
+        referencesByDate,
+        observationsByDate,
+      };
 
-        // return dataObservations.map((item) => {
-        //   const references = dataReferences.filter((x) => x.day == item.day);
-        //   const count = references.length;
-        //   if (count > 0) {
-        //     let referenceVolume = null;
-        //     if (count % 2 == 0) {
-        //       let index = (count + 1) / 2;
-        //       index = parseInt(index);
-        //       const volume1 = references[index].volume;
-        //       const volume2 = references[index - 1].volume;
-        //       referenceVolume = (volume1 + volume2) / 2;
-        //     } else {
-        //       const index = (count + 1) / 2;
-        //       referenceVolume = references[index - 1].volume;
-        //     }
-        //     item.volume_reference = referenceVolume;
-        //     const difference = item.volume - referenceVolume;
-        //     item.difference = difference;
-        //     item.percent = (difference / referenceVolume) * 100;
-        //   } else {
-        //     item.volume_reference = 0;
-        //     item.difference = item.volume;
-        //     item.percent = 0;
-        //   }
-        //   return Object.assign({}, item);
-        // });
-      }
+      // return dataObservations.map((item) => {
+      //   const references = dataReferences.filter((x) => x.day == item.day);
+      //   const count = references.length;
+      //   if (count > 0) {
+      //     let referenceVolume = null;
+      //     if (count % 2 == 0) {
+      //       let index = (count + 1) / 2;
+      //       index = parseInt(index);
+      //       const volume1 = references[index].volume;
+      //       const volume2 = references[index - 1].volume;
+      //       referenceVolume = (volume1 + volume2) / 2;
+      //     } else {
+      //       const index = (count + 1) / 2;
+      //       referenceVolume = references[index - 1].volume;
+      //     }
+      //     item.volume_reference = referenceVolume;
+      //     const difference = item.volume - referenceVolume;
+      //     item.difference = difference;
+      //     item.percent = (difference / referenceVolume) * 100;
+      //   } else {
+      //     item.volume_reference = 0;
+      //     item.difference = item.volume;
+      //     item.percent = 0;
+      //   }
+      //   return Object.assign({}, item);
+      // });
+    },
   },
   watch: {
-    flux24DailyIn(){
-      this.updateflux24DailyGenerale()
+    fluxDataGroupedByDateIn() {
+      this.updateFluxDataGroupedByDateGen();
     },
-    flux24DailyOut(){
-      this.updateflux24DailyGenerale()
+    fluxDataGroupedByDateOut() {
+      this.updateFluxDataGroupedByDateGen();
     },
-    fluxDataGroupedByDateIn(){
-      this.updateFluxDataGroupedByDateGen()
-    },
-    fluxDataGroupedByDateOut(){
-      this.updateFluxDataGroupedByDateGen()
-    }
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
