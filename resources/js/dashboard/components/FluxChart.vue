@@ -51,7 +51,7 @@
               @click="toggleGlobalMobility()"
               title="Mobilité génerale"
             >
-              <i v-if="!showMobiliteGenerale" class="fa fa-exchange-alt"></i>
+              <i v-if="showMobiliteGenerale" class="fa fa-exchange-alt"></i>
               <i v-else class="fa fa-globe"></i>
             </button>
           </h3>
@@ -71,7 +71,6 @@
           <b-card
             class="mb-3 flux-mobility"
             :class="{'active':fluxType==4}"
-            @click="selectFluxType(4)"
           >
             <h5 class="percent-title">Mobilité générale</h5>
             <div class="percent flux-in-color">{{percentGenerale}}%​</div>
@@ -455,16 +454,7 @@ export default {
       );
     });
 
-    // this.$nextTick(() => {
-    //   const result = this.fluxInPercent(this.fluxDataGroupedByDateGen);
-    //   this.percentGenerale = result.percent;
-    //   this.differenceGenerale = this.formatCash(result.difference);
-    //   this.mobileCalc(
-    //     this.fluxDataGroupedByDateGen,
-    //     `mobile_generale`,
-    //     PALETTE.flux_in_color
-    //   );
-    // });
+
     this.updateGeneralMobilityDaily();
     this.targetZone = this.fluxGeoOptions[0];
 
@@ -580,7 +570,7 @@ export default {
     },
     extractFlux23DailyIn() {
       let flux24DailyInLocal = [];
-      console.log("flux24DailyIn", this.flux24DailyIn);
+     
       if (this.flux24DailyIn.length > 0) {
         this.flux24DailyIn.forEach((item) => {
           let index = flux24DailyInLocal.findIndex((x) =>
@@ -1031,7 +1021,6 @@ export default {
         },
       };
 
-      console.log(this.$refs[ref]);
       if (this.barChart2[ref]) this.barChart2[ref].destroy();
       this.barChart2[ref] = new Chart(
         this.$refs[ref].getContext("2d"),
