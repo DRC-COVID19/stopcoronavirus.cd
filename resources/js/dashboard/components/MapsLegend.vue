@@ -70,13 +70,13 @@ export default {
       );
     },
     pourcentPositif: function () {
-      if(this.domaineExtValues.max < 0) return 0
+      if(this.domaineExtValues.max <= 0) return 0
       return (
         Math.abs(this.domaineExtValues.max) / 5
       );
     },
     lastValue(){
-      if(this.domaineExtValues.max < 0) return 100
+      if(this.domaineExtValues.max <= 0) return 100
       else return Math.ceil(this.domaineExtValues.max)
     }
   },
@@ -91,7 +91,7 @@ export default {
           case 3: return '-40%'
           case 4: return '-20%'
         }
-      }else if(this.domaineExtValues.max < 0){
+      }else if(this.domaineExtValues.max <= 0){
         switch (i) {
           case 5: return '0%'
           case 6: return '20%'
