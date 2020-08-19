@@ -52,6 +52,10 @@ export const
         {
             id: 5,
             name: "Mobilité à la Gombe depuis le début du confinement"
+        },
+        {
+            id: 7,
+            name: "Mobilité générale à la Gombe depuis le début du confinement"
         }
     ],
     GEO_GRANULARITIES = [
