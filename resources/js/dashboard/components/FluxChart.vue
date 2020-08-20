@@ -889,30 +889,72 @@ export default {
         this.configBarChart2
       );
     },
-    fluxMobilityFluxGeneralZone(fluxDataIn, fluxDataOut) {
-      
+    fluxMobilityFluxGeneralZone(fluxDataIn, fluxDataOut,order='asc') {
       const generalData = [...fluxDataIn];
+      const localData = [];
       generalData.map(({ references, observations }) => {
-        references.map((item) => {
-          const elementOut = fluxDataOut.find((x) =>
-            x.references.some(
-              (y) => y.date == item.date && y.destination == item.zone
-            )
-          );
-          console.log('elementOut',elementOut);
-          if (elementOut) {
-            console.log('elementOut',elementOut);
-            itemOut = elementOut.references.find(
-              (y) => y.date == item.date && y.destination == item.zone
+        if (references) {
+          references.map((item) => {
+            const elementOut = fluxDataOut.find(
+              (x) =>
+                x.references &&
+                x.references.some(
+                  (y) => y.destination == item.origin && y.Date == item.date
+                )
             );
-            item.volume += itemOut.volume;
-          }
+            if (elementOut) {
+              const itemOut = elementOut.references.find(
+                (y) => y.destination == item.origin && y.Date == item.date
+              );
+              item.volume += itemOut.volume;
+            }
+          });
+        }
+
+        if (observations) {
+          observations.map((item) => {
+            const elementOut = fluxDataOut.find(
+              (x) =>
+                x.observations &&
+                x.observations.some(
+                  (y) => y.destination == item.origin && y.Date == item.date
+                )
+            );
+            if (elementOut) {
+              const itemOut = elementOut.observations.find(
+                (y) => y.destination == item.origin && y.Date == item.date
+              );
+              item.volume += itemOut.volume;
+            }
+          });
+        }
+
+        const result = this.formatFluxDataByMedian({
+          references,
+          observations,
+        });
+        localData.push({
+          zone: observations[0].origin,
+          volume: result.observationVolume,
+          percent: result.percent,
+          volume_reference: result.referenceVolume,
         });
       });
 
-      console.log("fluxDataOut", fluxDataOut);
-      console.log("fluxDataIn", fluxDataIn);
-      console.log("generalData", generalData);
+
+
+      localData.sort((a, b) => {
+        if (order=='asc') {
+          return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
+        }
+        else{
+          return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
+        }
+      });
+
+      console.log("localData", localData);
+      // console.log("fluxDataIn", fluxDataIn);
+      // console.log("generalData", generalData);
     },
     toggleFullscreenEntrance() {
       this.$refs.fullscreenEntrance[0].toggle();
