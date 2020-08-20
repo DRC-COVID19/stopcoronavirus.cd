@@ -349,16 +349,18 @@ export default {
     flux24DailyIn() {
       this.updateFluxInMobility();
       this.updateGeneralMobilityDaily();
+      this.fluxMobilityFluxGeneralZone(this.flux24DailyIn, this.flux24DailyOut);
     },
     flux24DailyOut() {
       this.updateFluxOutMobility();
       this.updateGeneralMobilityDaily();
+      this.fluxMobilityFluxGeneralZone(this.flux24DailyIn, this.flux24DailyOut);
     },
     flux24PresenceDailyIn() {
       this.mobilePresence();
     },
     fluxDataGroupedByDateIn() {
-     this.mobileIn();
+      this.mobileIn();
     },
     fluxDataGroupedByDateOut() {
       this.mobileOut();
@@ -384,6 +386,8 @@ export default {
     this.mobileOut();
 
     this.mobileIn();
+
+    this.fluxMobilityFluxGeneralZone(this.flux24DailyIn, this.flux24DailyOut);
 
     this.updateGeneralMobilityDaily();
     this.targetZone = this.fluxGeoOptions[0];
@@ -884,6 +888,31 @@ export default {
         this.$refs[ref].getContext("2d"),
         this.configBarChart2
       );
+    },
+    fluxMobilityFluxGeneralZone(fluxDataIn, fluxDataOut) {
+      
+      const generalData = [...fluxDataIn];
+      generalData.map(({ references, observations }) => {
+        references.map((item) => {
+          const elementOut = fluxDataOut.find((x) =>
+            x.references.some(
+              (y) => y.date == item.date && y.destination == item.zone
+            )
+          );
+          console.log('elementOut',elementOut);
+          if (elementOut) {
+            console.log('elementOut',elementOut);
+            itemOut = elementOut.references.find(
+              (y) => y.date == item.date && y.destination == item.zone
+            );
+            item.volume += itemOut.volume;
+          }
+        });
+      });
+
+      console.log("fluxDataOut", fluxDataOut);
+      console.log("fluxDataIn", fluxDataIn);
+      console.log("generalData", generalData);
     },
     toggleFullscreenEntrance() {
       this.$refs.fullscreenEntrance[0].toggle();
