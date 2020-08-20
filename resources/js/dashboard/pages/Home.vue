@@ -808,7 +808,21 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          this.flux24DailyComparison = data;
+          if (values.fluxGeoGranularity == 2) {
+            const origin = data.origin;
+            origin.map((item) => {
+              const element = data.destination.find(
+                (x) => x.origin == item.origin && x.date == item.date
+              );
+              if (element) {
+                item.volume += element.volume;
+              }
+            });
+            this.flux24DailyComparison = origin;
+          } else {
+            this.flux24DailyComparison = data;
+          }
+
           this.fluxGeoOptions = values.fluxGeoOptions;
           this.$set(this.loadings, "urlDailyCompare", false);
         })
@@ -876,8 +890,14 @@ export default {
           //   data.observations,
           //   data.references
           // );
-          const groupObservations = groupBy(data.observations, (d) => d.destination);
-          const groupReferences = groupBy(data.references, (d) => d.destination);
+          const groupObservations = groupBy(
+            data.observations,
+            (d) => d.destination
+          );
+          const groupReferences = groupBy(
+            data.references,
+            (d) => d.destination
+          );
           Object.entries(groupObservations).forEach(([key, value]) => {
             this.flux24DailyOut.push({
               references: groupReferences[key],
