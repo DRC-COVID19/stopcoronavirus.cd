@@ -62,7 +62,7 @@ class Flux24ZoneController extends Controller
                 ->get();
 
             $flux_reference = Flux24Sum::select(['destination as zone', 'Date as date','volume'])
-                ->where('Observation_Zone', 'ZoneGlobale')
+                // ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                 ->orderBy('volume', 'desc')
                 ->where('destination', $data['fluxGeoOptions'])
