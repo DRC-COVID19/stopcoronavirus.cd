@@ -49,8 +49,8 @@
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
-            <div class="fullscreen-container">
-              <fullscreen ref="fullscreenMap" @change="fullscreenMapChange">
+            
+              <FullScreen id="fullscreenMap" link="" @change="fullscreenMapChange">
                 <Maps
                   :covidCases="covidCases"
                   :hospitals="hospitals"
@@ -73,13 +73,9 @@
                   :isLoading="isLoading"
                   :flux24Presence="flux24PresenceDailyIn"
                 />
-                <MapsLegend v-if="this.flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
+                <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
                 <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
-              </fullscreen>
-              <button type="button" @click="toggleFullscreenMap" class="fullscreen-btn">
-                <i class="fa fa-expand"></i>
-              </button>
-            </div>
+              </FullScreen>
           </b-row>
         </b-col>
         <b-col
