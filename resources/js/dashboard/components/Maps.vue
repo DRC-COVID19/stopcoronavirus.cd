@@ -1477,7 +1477,7 @@ export default {
           return;
         }
         
-        const result = this.formatFluxData(item);
+        const result = this.formatFluxDataByMedian(item);
         arcData.push({
           percent: result.percent,
           volume: result.observationVolume,

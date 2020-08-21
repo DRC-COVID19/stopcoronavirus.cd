@@ -25,10 +25,7 @@
           md="12"
           class="pl-0 pr-2 col-mobilite-generale"
         >
-          <b-card
-            class="mb-3 flux-mobility"
-            :class="{'active':fluxType==4}"
-          >
+          <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==4}">
             <h5 class="percent-title">Mobilité générale</h5>
             <div class="percent flux-in-color">{{percentGenerale}}%​</div>
 
@@ -69,7 +66,7 @@
             <button type="button" @click="toggleFullscreenGenerale2" class="fullscreen-btn mini">
               <i class="fa fa-expand"></i>
             </button>
-          </div> -->
+          </div>-->
         </b-col>
 
         <b-col cols="12" v-show="this.typeMobilite == 1" md="4" class="pl-0 pr-2" ref="mobility">
@@ -364,52 +361,13 @@ export default {
       this.updateGeneralMobilityDaily();
     },
     flux24PresenceDailyIn() {
-      this.$nextTick(() => {
-        const result = this.fluxInPercent(this.flux24PresenceDailyIn);
-        this.percentPresence = result.percent;
-        this.differencePresence = this.formatCash(result.difference);
-        this.mobileCalc(
-          this.flux24PresenceDailyIn,
-          `mobile_presence`,
-          PALETTE.flux_presence
-        );
-      });
+      this.mobilePresence();
     },
     fluxDataGroupedByDateIn() {
-      const result = this.fluxInPercent(this.fluxDataGroupedByDateIn);
-      this.percentIn = result.percent;
-      this.differenceIn = this.formatCash(result.difference);
-      this.$nextTick(() => {
-        this.mobileCalc(
-          this.fluxDataGroupedByDateIn,
-          `mobile_in`,
-          PALETTE.flux_in_color
-        );
-      });
-    },
-    fluxDataGroupedByDateGen() {
-      const result = this.fluxInPercent(this.fluxDataGroupedByDateGen);
-      this.percentGenerale = result.percent;
-      this.differenceGenerale = this.formatCash(result.difference);
-      this.$nextTick(() => {
-        this.mobileCalc(
-          this.fluxDataGroupedByDateGen,
-          `mobile_generale`,
-          PALETTE.flux_in_color
-        );
-      });
+      this.mobileIn();
     },
     fluxDataGroupedByDateOut() {
-      const result = this.fluxInPercent(this.fluxDataGroupedByDateOut);
-      this.percentOut = result.percent;
-      this.differenceOut = this.formatCash(result.difference);
-      this.$nextTick(() => {
-        this.mobileCalc(
-          this.fluxDataGroupedByDateOut,
-          `mobile_out`,
-          PALETTE.flux_out_color
-        );
-      });
+      this.mobileOut();
     },
     mobiliteGenerale() {
       if (this.mobiliteGenerale){
@@ -441,39 +399,11 @@ export default {
     this.updateFluxInMobility();
     this.updateFluxOutMobility();
 
-    this.$nextTick(() => {
-      const result = this.fluxInPercent(this.flux24PresenceDailyIn);
-      this.percentPresence = result.percent;
-      this.differencePresence = this.formatCash(result.difference);
-      this.mobileCalc(
-        this.flux24PresenceDailyIn,
-        `mobile_presence`,
-        PALETTE.flux_presence
-      );
-    });
+    this.mobilePresence();
 
-    this.$nextTick(() => {
-      const result = this.fluxInPercent(this.fluxDataGroupedByDateOut);
-      this.percentOut = result.percent;
-      this.differenceOut = this.formatCash(result.difference);
-      this.mobileCalc(
-        this.fluxDataGroupedByDateOut,
-        `mobile_out`,
-        PALETTE.flux_out_color
-      );
-    });
+    this.mobileOut();
 
-    this.$nextTick(() => {
-      const result = this.fluxInPercent(this.fluxDataGroupedByDateIn);
-      this.percentIn = result.percent;
-      this.differenceIn = this.formatCash(result.difference);
-      this.mobileCalc(
-        this.fluxDataGroupedByDateIn,
-        `mobile_in`,
-        PALETTE.flux_in_color
-      );
-    });
-
+    this.mobileIn();
 
     this.updateGeneralMobilityDaily();
     this.targetZone = this.fluxGeoOptions[0];
@@ -532,113 +462,41 @@ export default {
         difference: difference,
       };
     },
-    fluxVolumObservation(items) {
-      let totalObservation = 0;
-
-      items.map((item) => {
-        totalObservation += Number(item.difference);
+    mobilePresence() {
+      this.$nextTick(() => {
+        const result = this.fluxInPercent(this.flux24PresenceDailyIn);
+        this.percentPresence = result.percent;
+        this.differencePresence = this.formatCash(result.difference);
+        this.mobileCalc(
+          this.flux24PresenceDailyIn,
+          `mobile_presence`,
+          PALETTE.flux_presence
+        );
       });
-      return Math.round(totalObservation);
     },
-    fluxVolumObservationPresencePercent(items) {
-      const itemReference = items.filter((x) => x.isReference);
-
-      const itemOnbservation = items.filter((x) => !x.isReference);
-
-      let totalReference = 0;
-      itemReference.map((value) => {
-        totalReference += value.volume;
+    mobileOut() {
+      this.$nextTick(() => {
+        const result = this.fluxInPercent(this.fluxDataGroupedByDateOut);
+        this.percentOut = result.percent;
+        this.differenceOut = this.formatCash(result.difference);
+        this.mobileCalc(
+          this.fluxDataGroupedByDateOut,
+          `mobile_out`,
+          PALETTE.flux_out_color
+        );
       });
-
-      let totalObservation = 0;
-      itemOnbservation.map((value) => {
-        totalObservation += value.volume;
+    },
+    mobileIn() {
+      this.$nextTick(() => {
+        const result = this.fluxInPercent(this.fluxDataGroupedByDateIn);
+        this.percentIn = result.percent;
+        this.differenceIn = this.formatCash(result.difference);
+        this.mobileCalc(
+          this.fluxDataGroupedByDateIn,
+          `mobile_in`,
+          PALETTE.flux_in_color
+        );
       });
-      const averageObservation = totalObservation / itemOnbservation.length;
-      const averageReference = totalReference / itemReference.length;
-      let difference = totalObservation - totalReference;
-      return Math.round((difference * 100) / totalReference);
-    },
-    fluxVolumObservationPresence(items) {
-      let totalObservation = 0;
-
-      items.map((item) => {
-        totalObservation += Number(item.difference);
-      });
-      return Math.round(totalObservation / items.length);
-    },
-    extractFlux23DailyOut() {
-      const flux24DailyOutLocal = [];
-      if (this.flux24DailyOut.length > 0) {
-        this.flux24DailyOut.forEach((item) => {
-          let index = flux24DailyOutLocal.findIndex((x) =>
-            x.some((y) => y.origin == item.origin)
-          );
-          if (index == -1) {
-            let element = [];
-            element.push(Object.assign({}, item));
-            flux24DailyOutLocal.push(element);
-          } else {
-            flux24DailyOutLocal[index].push(Object.assign({}, item));
-          }
-        });
-      }
-      return flux24DailyOutLocal;
-    },
-    extractFlux23DailyIn() {
-      let flux24DailyInLocal = [];
-
-      if (this.flux24DailyIn.length > 0) {
-        this.flux24DailyIn.forEach((item) => {
-          let index = flux24DailyInLocal.findIndex((x) =>
-            x.find((y) => y.destination == item.destination)
-          );
-          if (index == -1) {
-            let element = [];
-            element.push(item);
-            flux24DailyInLocal.push(element);
-          } else {
-            flux24DailyInLocal[index].push(item);
-          }
-        });
-      }
-      return flux24DailyInLocal;
-    },
-    extractFlux23DailyGenerale() {
-      let flux24DailyGeneraleLocal = [];
-      if (this.flux24DailyGenerale.length > 0) {
-        this.flux24DailyGenerale.forEach((item) => {
-          let index = flux24DailyGeneraleLocal.findIndex((x) =>
-            x.find((y) => y.targetZone == item.targetZone)
-          );
-          if (index == -1) {
-            let element = [];
-            element.push(item);
-            flux24DailyGeneraleLocal.push(element);
-          } else {
-            flux24DailyGeneraleLocal[index].push(item);
-          }
-        });
-      }
-      return flux24DailyGeneraleLocal;
-    },
-    extractFlux24PresenceDailyIn() {
-      let flux24PresenceDailyInLocal = [];
-      if (this.flux24PresenceDailyIn.length > 0) {
-        this.flux24PresenceDailyIn.forEach((item) => {
-          let index = flux24PresenceDailyInLocal.findIndex((x) =>
-            x.find((y) => y.zone == item.zone)
-          );
-          if (index == -1) {
-            let element = [];
-            element.push(Object.assign({}, item));
-            flux24PresenceDailyInLocal.push(element);
-          } else {
-            flux24PresenceDailyInLocal[index].push(Object.assign({}, item));
-          }
-        });
-      }
-      return flux24PresenceDailyInLocal;
     },
     updateGeneralMobilityZone() {
       this.$nextTick(() => {
@@ -1042,226 +900,6 @@ export default {
       this.barChart2[ref] = new Chart(
         this.$refs[ref].getContext("2d"),
         this.configBarChart2[ref]
-      );
-    },
-    mobileEntranceOrigin(data, index) {
-      // data=array[{origin,volume,isReference}]
-      let localData = [];
-      data.forEach((item) => {
-        let element = localData.find((x) => x.origin == item.origin);
-        if (element) {
-          element.volume += item.volume;
-          element.volume_reference += item.volume_reference;
-          element.difference += item.difference;
-          if (element.difference == 0) {
-            element.percent = 0;
-          } else {
-            element.percent =
-              (element.difference / element.volume_reference) * 100;
-          }
-        } else {
-          localData.push({
-            origin: item.origin,
-            volume_reference: item.volume_reference,
-            volume: item.volume,
-            difference: item.difference,
-            percent: item.percent,
-          });
-        }
-      });
-
-      localData = localData.sort((a, b) => {
-        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
-      });
-
-      localData = localData.sort((a, b) => {
-        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
-      });
-
-      localData = localData.slice(0, 10);
-
-      const dataChart2 = {
-        labels: localData.map((d) => d.origin),
-        datasets: [
-          {
-            label: "Référence",
-            backgroundColor: "#33ac2e",
-            borderColor: "#33ac2e",
-            borderWidth: 1,
-            data: localData.map((d) => d.volume_reference),
-          },
-          {
-            label: "Observation",
-            backgroundColor: PALETTE.flux_in_color,
-            borderColor: PALETTE.flux_in_color,
-            data: localData.map((d) => d.volume),
-          },
-        ],
-      };
-
-      const refInput = `mobile_entrance_${index}_2_card`;
-      this.configBarChart = {
-        type: "horizontalBar",
-        data: dataChart2,
-        options: {
-          elements: {
-            rectangle: {
-              borderWidth: 2,
-            },
-          },
-          responsive: true,
-          legend: {
-            position: "bottom",
-            labels: {
-              fontSize: 9,
-            },
-          },
-          title: {
-            display: false,
-            text: "Rapport des entrées avant et après confinement",
-            color: "#6c757d",
-          },
-          scales: {
-            xAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                  fontSize: 9,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                ticks: {
-                  fontSize: 9,
-                },
-              },
-            ],
-          },
-          plugins: {
-            crosshair: {
-              sync: {
-                enabled: false, // enable trace line syncing with other charts
-              },
-            },
-          },
-        },
-      };
-      this.barChart = new Chart(
-        this.$refs[refInput][0].getContext("2d"),
-        this.configBarChart
-      );
-    },
-    mobileGenerale(data, index) {
-      let localData = [];
-
-      data.forEach((item) => {
-        let element = localData.find((x) => x.zone == item.zone);
-        if (element) {
-          element.volume += item.volume;
-          element.volume_reference += item.volume_reference;
-          element.difference += item.difference;
-          if (element.difference == 0) {
-            element.percent = 0;
-          } else {
-            element.percent =
-              (element.difference / element.volume_reference) * 100;
-          }
-        } else {
-          localData.push({
-            origin: item.origin,
-            destination: item.destination,
-            zone: item.zone,
-            targetZone: item.targetZone,
-            volume_reference: item.volume_reference,
-            volume: item.volume,
-            difference: item.difference,
-            percent: item.percent,
-          });
-        }
-      });
-
-      localData = localData.sort((a, b) => {
-        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
-      });
-
-      localData = localData.slice(0, 10);
-
-      const dataChart2 = {
-        labels: localData.map((d) => d.zone),
-        datasets: [
-          {
-            label: "Référence",
-            backgroundColor: "#33ac2e",
-            borderColor: "#33ac2e",
-            borderWidth: 1,
-            data: localData.map((d) => d.volume_reference),
-          },
-          {
-            label: "Observation",
-            backgroundColor: PALETTE.flux_in_color,
-            borderColor: PALETTE.flux_in_color,
-            data: localData.map((d) => d.volume),
-          },
-        ],
-      };
-
-      const refInput = `mobile_generale_${index}_2_card`;
-      this.configBarChartGen = {
-        type: "horizontalBar",
-        data: dataChart2,
-        options: {
-          elements: {
-            rectangle: {
-              borderWidth: 2,
-            },
-          },
-          responsive: true,
-          maintainAspectRatio: false,
-          legend: {
-            position: "bottom",
-            labels: {
-              fontSize: 9,
-            },
-          },
-          title: {
-            display: false,
-            text: "Rapport des entrées-sorties avant et après confinement",
-            color: "#6c757d",
-          },
-          scales: {
-            xAxes: [
-              {
-                ticks: {
-                  beginAtZero: true,
-                  fontSize: 9,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                ticks: {
-                  fontSize: 9,
-                },
-              },
-            ],
-          },
-          plugins: {
-            crosshair: {
-              sync: {
-                enabled: false, // enable trace line syncing with other charts
-              },
-            },
-          },
-        },
-      };
-
-      if (this.barChartGen) {
-        this.barChartGen.destroy();
-      }
-      this.barChartGen = new Chart(
-        this.$refs[refInput][0].getContext("2d"),
-        this.configBarChartGen
       );
     },
     toggleFullscreenEntrance() {
