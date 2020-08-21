@@ -102,7 +102,81 @@ export default {
                     });
                 }
             });
-        }
+        },
+        drawHorizontalChart(localData, key, ref, color, title = null) {
+            const dataChart = {
+              labels: localData.map((d) => d[key]),
+              datasets: [
+                {
+                  label: "Référence",
+                  backgroundColor: "#33ac2e",
+                  borderColor: "#33ac2e",
+                  borderWidth: 1,
+                  data: localData.map((d) => d.volume_reference),
+                },
+                {
+                  label: "Observation",
+                  backgroundColor: color,
+                  borderColor: color,
+                  data: localData.map((d) => d.volume),
+                },
+              ],
+            };
+      
+            this.configBarChart2 = {
+              type: "horizontalBar",
+              data: dataChart,
+              options: {
+                elements: {
+                  rectangle: {
+                    borderWidth: 2,
+                  },
+                },
+                responsive: true,
+                legend: {
+                  position: "bottom",
+                  labels: {
+                    fontSize: 9,
+                  },
+                },
+                title: {
+                  display: !!title,
+                  text: title,
+                  color: "#6c757d",
+                },
+                scales: {
+                  xAxes: [
+                    {
+                      ticks: {
+                        beginAtZero: true,
+                        fontSize: 9,
+                      },
+                    },
+                  ],
+                  yAxes: [
+                    {
+                      ticks: {
+                        fontSize: 9,
+                      },
+                    },
+                  ],
+                },
+                plugins: {
+                  crosshair: {
+                    sync: {
+                      enabled: false, // enable trace line syncing with other charts
+                    },
+                  },
+                },
+              },
+            };
+      
+            if (this.barChart2[ref]) this.barChart2[ref].destroy();
+            this.barChart2[ref] = new Chart(
+              this.$refs[ref].getContext("2d"),
+              this.configBarChart2
+            );
+          },
     }
 
 }
