@@ -1,70 +1,27 @@
 <template>
   <div>
-    <b-container v-if="isProvinceStatSeeing">
+    <b-container class="p-0 flux-chart">
       <b-row>
-        <b-col cols="12" md="6">
-          <h5 @click="seeProvinceStat" class="return-global">
-            <span class="fa fa-chevron-left"></span>
-            {{fluxGeoOptions[0]}}
-          </h5>
-        </b-col>
-        <b-col cols="12" md="6" class="text-right">
-          <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
-          <span class="small text-muted">Dernière mise à jour</span>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="12" md="6">
-          <GlobalProvice
-            title="Mobilité entrante par zone"
-            :color="palette.flux_in_color"
-            :globalData="fluxZoneGlobalIn"
-            reference="fluxZoneglobalIn"
-          />
-        </b-col>
-        <b-col cols="12" md="6">
-          <GlobalProvice
-            title="Mobilité sortante par zone"
-            :color="palette.flux_out_color"
-            :globalData="fluxZoneGlobalOut"
-            reference="fluxZoneglobalOut"
-          />
-        </b-col>
-      </b-row>
-    </b-container>
-
-    <b-container v-show="!isProvinceStatSeeing" class="p-0 flux-chart">
-      <b-row>
-        <b-col cols="12" md="6">
+        <div class="col-md col-12">
           <h3 class="d-flex">
-            <span class="ml-2">{{targetZone}}</span>
-            <button
-              class="btn-alt-screen"
-              @click="seeProvinceStat"
-              title="Statistique des zones"
-              v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0"
-            >
-              <i class="fa fa-eye see-province-stat"></i>
-            </button>
-            <button
-              class="btn-alt-screen"
-              @click="toggleGlobalMobility()"
-              title="Mobilité génerale"
-            >
-              <i v-if="showMobiliteGenerale" class="fa fa-exchange-alt"></i>
-              <i v-else class="fa fa-globe"></i>
-            </button>
+            <span class="ml-2 mr-2">{{targetZone}}</span>
+
+            <toggle-button
+              :labels="typesMobilite"
+              v-model="typeMobilite"
+            ></toggle-button>
           </h3>
-        </b-col>
-        <b-col cols="12" md="6" class="text-right">
+        </div>
+        <div class="col-md-auto col-12 text-right">
           <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
           <span class="small text-muted">Dernière mise à jour</span>
-        </b-col>
+        </div>
       </b-row>
-      <b-row no-gutters>
+
+      <b-row no-gutters v-show="this.typeMobilite != 3">
         <b-col
           cols="12"
-          v-show="showMobiliteGenerale"
+          v-show="this.typeMobilite == 2"
           md="12"
           class="pl-0 pr-2 col-mobilite-generale"
         >
@@ -115,7 +72,7 @@
           </div> -->
         </b-col>
 
-        <b-col cols="12" v-show="!showMobiliteGenerale" md="4" class="pl-0 pr-2" ref="mobility">
+        <b-col cols="12" v-show="this.typeMobilite == 1" md="4" class="pl-0 pr-2" ref="mobility">
           <b-row class="mb-3">
             <b-col cols="12">
               <b-card
@@ -170,7 +127,7 @@
           </b-row>
         </b-col>
 
-        <b-col cols="12" md="4" class="pr-0 pl-2" v-show="!showMobiliteGenerale">
+        <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
           <b-row class="mb-3">
             <b-col cols="12">
               <b-card
@@ -226,7 +183,8 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="4" class="pr-0 pl-2" v-show="!showMobiliteGenerale">
+
+        <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
           <b-card
             class="mb-3 flux-mobility"
             :class="{'active':fluxType==3}"
@@ -250,6 +208,42 @@
           </b-card>
         </b-col>
       </b-row>
+
+      <b-row class="no-gutters" v-show="this.typeMobilite == 3">
+        <!--
+        <b-row>
+          <b-col cols="12" md="6">
+            <h5 @click="seeProvinceStat" class="return-global">
+              <span class="fa fa-chevron-left"></span>
+              {{fluxGeoOptions[0]}}
+            </h5>
+          </b-col>
+          <b-col cols="12" md="6" class="text-right">
+            <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
+            <span class="small text-muted">Dernière mise à jour</span>
+          </b-col>
+        </b-row>
+        -->
+
+        <b-row class="col-12">
+          <b-col cols="12" md="6" class="pr-md-0">
+            <GlobalProvice
+              title="Mobilité entrante par zone"
+              :color="palette.flux_in_color"
+              :globalData="fluxZoneGlobalIn"
+              reference="fluxZoneglobalIn"
+            />
+          </b-col>
+          <b-col cols="12" md="6" class="pr-md-0">
+            <GlobalProvice
+              title="Mobilité sortante par zone"
+              :color="palette.flux_out_color"
+              :globalData="fluxZoneGlobalOut"
+              reference="fluxZoneglobalOut"
+            />
+          </b-col>
+        </b-row>
+      </b-row>
     </b-container>
   </div>
 </template>
@@ -259,10 +253,12 @@ import * as d3 from "d3";
 import { mapState, mapMutations } from "vuex";
 import { PALETTE, FLUX_LAST_UPDATE } from "../config/env";
 import GlobalProvice from "./flux/GLobalProvince";
+import ToggleButton from "../components/ToggleButton";
 import { difference } from "@turf/turf";
 export default {
   components: {
     GlobalProvice,
+    ToggleButton
   },
   props: {
     flux24Daily: {
@@ -328,7 +324,6 @@ export default {
       barChart2: {},
       barChartGen: null,
       palette: PALETTE,
-      showMobiliteGenerale: false,
       lineCharts: {},
       percentOut: null,
       percentIn: null,
@@ -339,6 +334,7 @@ export default {
       differenceGenerale: null,
       differencePresence: null,
       targetZone: null,
+      typeMobilite : 1
     };
   },
   computed: {
@@ -347,6 +343,16 @@ export default {
       isProvinceStatSeeing: (state) => state.flux.isProvinceStatSeeing,
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
     }),
+    typesMobilite(){
+      let types = [
+        {val: 1 , lbl : 'default' } ,
+        {val:2, lbl : 'générale'}
+      ]
+      if(this.fluxZoneGlobalIn.length>0 || this.fluxZoneGlobalOut.length>0 ){
+        types.push({val:3, lbl : 'provinces'})
+      }
+      return types
+    }
   },
   watch: {
     flux24DailyIn() {
@@ -406,15 +412,30 @@ export default {
       });
     },
     mobiliteGenerale() {
-      this.showMobiliteGenerale = this.mobiliteGenerale;
-      if (this.mobiliteGenerale) this.selectFluxType(4);
+      if (this.mobiliteGenerale){
+        this.selectFluxType(4);
+        this.typeMobilite = 2;
+      }
     },
+    typeMobilite(){
+      console.log('typeMobilite', this.typeMobilite)
+      if(this.typeMobilite == 3){
+        this.setIsProvinceStatSeeing(true)
+      }else if(this.isProvinceStatSeeing){
+        this.setIsProvinceStatSeeing(false)
+      }
+    }
   },
   mounted() {
-    this.showMobiliteGenerale = this.mobiliteGenerale;
     if (this.mobiliteGenerale) {
       this.selectFluxType(4);
-    } else {
+      this.typeMobilite = 2;
+    }
+    else if(this.isProvinceStatSeeing){
+      this.typeMobilite = 3;
+      this.selectFluxType(1);
+    }
+    else{
       this.selectFluxType(1);
     }
 
@@ -469,9 +490,6 @@ export default {
     ...mapMutations(["setFluxType", "setIsProvinceStatSeeing"]),
     selectFluxType(value) {
       this.setFluxType(value);
-    },
-    seeProvinceStat() {
-      this.setIsProvinceStatSeeing(!this.isProvinceStatSeeing);
     },
     fluxInPercent({ referencesByDate, observationsByDate }) {
       if (!referencesByDate || !observationsByDate) {
@@ -570,7 +588,7 @@ export default {
     },
     extractFlux23DailyIn() {
       let flux24DailyInLocal = [];
-     
+
       if (this.flux24DailyIn.length > 0) {
         this.flux24DailyIn.forEach((item) => {
           let index = flux24DailyInLocal.findIndex((x) =>
@@ -1334,10 +1352,7 @@ export default {
         this.configBarChartGen.options.scales.yAxes[0].ticks.fontSize = 12;
         this.barChartGen.update();
       }
-    },
-    toggleGlobalMobility() {
-      this.showMobiliteGenerale = !this.showMobiliteGenerale;
-    },
+    }
   },
 };
 </script>
