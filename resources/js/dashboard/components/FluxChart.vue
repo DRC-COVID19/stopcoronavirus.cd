@@ -418,7 +418,6 @@ export default {
       }
     },
     typeMobilite(){
-      console.log('typeMobilite', this.typeMobilite)
       if(this.typeMobilite == 3){
         this.setIsProvinceStatSeeing(true)
       }else if(this.isProvinceStatSeeing){
@@ -991,7 +990,7 @@ export default {
         ],
       };
 
-      this.configBarChart2 = {
+      this.configBarChart2[ref] = {
         type: "horizontalBar",
         data: dataChart,
         options: {
@@ -1042,7 +1041,7 @@ export default {
       if (this.barChart2[ref]) this.barChart2[ref].destroy();
       this.barChart2[ref] = new Chart(
         this.$refs[ref].getContext("2d"),
-        this.configBarChart2
+        this.configBarChart2[ref]
       );
     },
     mobileEntranceOrigin(data, index) {
@@ -1266,81 +1265,85 @@ export default {
       );
     },
     toggleFullscreenEntrance() {
-      this.$refs.fullscreenEntrance[0].toggle();
+      this.$refs.fullscreenEntrance.toggle();
     },
     fullscreenEntranceChange(fullscreen) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
-        this.$refs.mobile_in[0].style.height = "200px";
-        this.$refs.mobile_in[0].height = "200px";
+        this.$refs.mobile_in.style.height = "200px";
+        this.$refs.mobile_in.height = "200px";
       }
     },
     toggleFullscreenEntrance2() {
-      this.$refs.fullscreenEntrance2[0].toggle();
+      this.$refs.fullscreenEntrance2.toggle();
     },
     fullscreenEntrance2Change(fullscreen) {
       //this.fullscreen = fullscreen
+      const barChart = this.barChart2['mobile_entrance_2_card']
+      const configBarChart = this.configBarChart2['mobile_entrance_2_card']
       if (!fullscreen) {
-        this.$refs.mobile_entrance_0_2_card[0].style.height = "400px";
-        this.$refs.mobile_entrance_0_2_card[0].height = "400px";
+        this.$refs.mobile_entrance_2_card.style.height = "400px";
+        this.$refs.mobile_entrance_2_card.height = "400px";
 
-        this.configBarChart.options.legend.labels.fontSize = 9;
-        this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 9;
-        this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 9;
-        this.barChart.update();
+        configBarChart.options.legend.labels.fontSize = 9;
+        configBarChart.options.scales.xAxes[0].ticks.fontSize = 9;
+        configBarChart.options.scales.yAxes[0].ticks.fontSize = 9;
+        barChart.update();
       } else {
-        this.configBarChart.options.legend.labels.fontSize = 12;
-        this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 12;
-        this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 12;
-        this.barChart.update();
+        configBarChart.options.legend.labels.fontSize = 12;
+        configBarChart.options.scales.xAxes[0].ticks.fontSize = 12;
+        configBarChart.options.scales.yAxes[0].ticks.fontSize = 12;
+        barChart.update();
       }
     },
     toggleFullscreenOut() {
-      this.$refs.fullscreenOut[0].toggle();
+      this.$refs.fullscreenOut.toggle();
     },
     fullscreenOutChange(fullscreen) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
-        this.$refs.mobile_out[0].style.height = "200px";
-        this.$refs.mobile_out[0].height = "200px";
+        this.$refs.mobile_out.style.height = "200px";
+        this.$refs.mobile_out.height = "200px";
       }
     },
     toggleFullscreenOut2() {
-      this.$refs.fullscreenOut2[0].toggle();
+      this.$refs.fullscreenOut2.toggle();
     },
     fullscreenOut2Change(fullscreen) {
       //this.fullscreen = fullscreen
+      const barChart2 = this.barChart2['mobile_out_2_card']
+      const configBarChart2 = this.configBarChart2['mobile_out_2_card']
       if (!fullscreen) {
-        this.$refs.mobile_out_0_2_card[0].style.height = "400px";
-        this.$refs.mobile_out_0_2_card[0].height = "400px";
+        this.$refs.mobile_out_2_card.style.height = "400px";
+        this.$refs.mobile_out_2_card.height = "400px";
 
-        this.configBarChart2.options.legend.labels.fontSize = 9;
-        this.configBarChart2.options.scales.xAxes[0].ticks.fontSize = 9;
-        this.configBarChart2.options.scales.yAxes[0].ticks.fontSize = 9;
-        this.barChart2.update();
+        configBarChart2.options.legend.labels.fontSize = 9;
+        configBarChart2.options.scales.xAxes[0].ticks.fontSize = 9;
+        configBarChart2.options.scales.yAxes[0].ticks.fontSize = 9;
+        barChart2.update();
       } else {
-        this.configBarChart2.options.legend.labels.fontSize = 12;
-        this.configBarChart2.options.scales.xAxes[0].ticks.fontSize = 12;
-        this.configBarChart2.options.scales.yAxes[0].ticks.fontSize = 12;
-        this.barChart2.update();
+        configBarChart2.options.legend.labels.fontSize = 12;
+        configBarChart2.options.scales.xAxes[0].ticks.fontSize = 12;
+        configBarChart2.options.scales.yAxes[0].ticks.fontSize = 12;
+        barChart2.update();
       }
     },
     toggleFullscreenGenerale() {
-      this.$refs.fullscreenGenerale[0].toggle();
+      this.$refs.fullscreenGenerale.toggle();
     },
     fullscreenGeneraleChange(fullscreen) {
       if (!fullscreen) {
-        this.$refs.mobile_generale[0].style.height = "200px";
-        this.$refs.mobile_generale[0].height = "200px";
+        this.$refs.mobile_generale.style.height = "200px";
+        this.$refs.mobile_generale.height = "200px";
       }
     },
     toggleFullscreenGenerale2() {
-      this.$refs.fullscreenGenerale2[0].toggle();
+      this.$refs.fullscreenGenerale2.toggle();
     },
     fullscreenGenerale2Change(fullscreen) {
       if (!fullscreen) {
-        this.$refs.mobile_generale_0_2_card[0].style.height = "400px";
-        this.$refs.mobile_generale_0_2_card[0].height = "400px";
+        this.$refs.mobile_generale_card.style.height = "400px";
+        this.$refs.mobile_generale_card.height = "400px";
 
         this.configBarChartGen.options.legend.labels.fontSize = 9;
         this.configBarChartGen.options.scales.xAxes[0].ticks.fontSize = 9;

@@ -67,10 +67,10 @@ export default {
     font-size: 11px;
     .slide{
       position: absolute;
-      height: 26;
+      height: 24px;
       background-color: #2e5bff;
       width: 57px;
-      top: 1px;
+      top: 2px;
       left: 0px;
       transform: translateX(2px);
       border-radius: 5px;
