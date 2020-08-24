@@ -3,12 +3,22 @@
     <b-row class="pt-2 pb-2">
       <b-col class="pr-1" cols="12" md="6">
         <b-card class="no-body card-chart rounded-0">
+          <legend-popover>
+            <template v-slot:title>Comment est-ce calculé ? </template>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Sapiente tempore libero fugit perferendis repellendus?
+          </legend-popover>
           <canvas ref="leftChart" width="100vh" id="leftChart"></canvas>
         </b-card>
       </b-col>
 
       <b-col class="pl-1" cols="12" md="6">
         <b-card class="no-body card-chart rounded-0">
+          <legend-popover>
+            <template v-slot:title>Comment est-ce calculé ? </template>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Sapiente tempore libero fugit perferendis repellendus?
+          </legend-popover>
           <canvas ref="rightChart" width="100vh" id="rightChart"></canvas>
         </b-card>
       </b-col>
@@ -19,6 +29,7 @@
 <script>
 import { mapState } from "vuex";
 import { INDICATEUR_Y, INDICATEUR_X,PALETTE } from "../config/env";
+
 export default {
   data() {
     return {
