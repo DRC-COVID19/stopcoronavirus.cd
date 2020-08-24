@@ -875,13 +875,16 @@ export default {
                 ticks: {
                   beginAtZero: true,
                   fontSize: 9,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value)  ;
+                  }
                 },
               },
             ],
             yAxes: [
               {
                 ticks: {
-                  fontSize: 9,
+                  fontSize: 9
                 },
               },
             ],
