@@ -1913,20 +1913,7 @@ class DashBoardController extends Controller
                     ->WhereIn('Zone', $data['fluxGeoOptions'])
                     ->groupBy('day', 'Zone', 'date')->get();
             }
-
-            $geoCodingFilePath = storage_path('app/fluxZones.json');
-            $geoData = [];
-            if (file_exists($geoCodingFilePath)) {
-                $jsonString = file_get_contents($geoCodingFilePath);
-                $geoData = json_decode($jsonString, true);
-            }
-            foreach ($flux as $value) {
-                if (isset($geoData[strtoupper($value->zone)][0])) {
-                    $value->{'position_start'} = $geoData[strtoupper($value->zone)][0]['coordinates'];
-                } else {
-                    continue;
-                }
-            }
+            
             return response()->json([
                 'references' => $fluxRefences,
                 'observations' => $flux,
