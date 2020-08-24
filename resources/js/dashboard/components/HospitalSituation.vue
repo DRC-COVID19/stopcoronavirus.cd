@@ -79,6 +79,11 @@
       <b-col cols="12" md="6" class="p-1">
         <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+          <legend-popover>
+            <template v-slot:title>Comment est-ce calculé ? </template>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Sapiente tempore libero fugit perferendis repellendus?
+          </legend-popover>
           <div class="chart-container">
             <canvas height="400" width="100vh" ref="canvasStat1" id="canvasStat1"></canvas>
           </div>
@@ -88,6 +93,11 @@
       <b-col cols="12" md="6" class="p-1">
         <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+          <legend-popover>
+            <template v-slot:title>Comment est-ce calculé ? </template>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Sapiente tempore libero fugit perferendis repellendus?
+          </legend-popover>
           <div class="chart-container">
             <canvas height="400" width="100vh" ref="canvasStat2" id="canvasStat2"></canvas>
           </div>
@@ -108,6 +118,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
+
 export default {
   props: ["hospitalTotalData"],
   data() {

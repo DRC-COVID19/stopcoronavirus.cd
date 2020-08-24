@@ -42,6 +42,11 @@
           <div class="fullscreen-container fullscreen-container1">
             <fullscreen ref="fullscreenGenerale" @change="fullscreenGeneraleChange">
               <b-card no-body class="cardtype1 mb-3 p-2" :ref="`mobile_generale_card`">
+                <legend-popover>
+                  <template v-slot:title>Comment est-ce calculé ? </template>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Sapiente tempore libero fugit perferendis repellendus?
+                </legend-popover>
                 <div class="chart-container">
                   <canvas height="200" width="100vh" ref="mobile_generale" id="mobile_generale"></canvas>
                 </div>
@@ -92,6 +97,11 @@
               <div class="fullscreen-container fullscreen-container1">
                 <fullscreen ref="fullscreenEntrance" @change="fullscreenEntranceChange">
                   <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
+                    <legend-popover>
+                      <template v-slot:title>Comment est-ce calculé ? </template>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Sapiente tempore libero fugit perferendis repellendus?
+                    </legend-popover>
                     <div class="chart-container">
                       <canvas height="200" width="100vh" ref="mobile_in" id="mobile_in"></canvas>
                     </div>
@@ -104,6 +114,11 @@
               <div class="fullscreen-container fullscreen-container2">
                 <fullscreen ref="fullscreenEntrance2" @change="fullscreenEntrance2Change">
                   <b-card no-body class="cardtype2 p-2">
+                    <legend-popover>
+                      <template v-slot:title>Comment est-ce calculé ? </template>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Sapiente tempore libero fugit perferendis repellendus?
+                    </legend-popover>
                     <canvas
                       height="200"
                       width="100vh"
@@ -147,6 +162,11 @@
               <div class="fullscreen-container fullscreen-container1">
                 <fullscreen ref="fullscreenOut" @change="fullscreenOutChange">
                   <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
+                    <legend-popover>
+                      <template v-slot:title>Comment est-ce calculé ? </template>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Sapiente tempore libero fugit perferendis repellendus?
+                    </legend-popover>
                     <div class="chart-container">
                       <canvas height="200" width="100vh" ref="mobile_out" id="mobile_out"></canvas>
                     </div>
@@ -160,6 +180,11 @@
               <div class="fullscreen-container fullscreen-container2">
                 <fullscreen ref="fullscreenOut2" @change="fullscreenOut2Change">
                   <b-card no-body class="p-2 cardtype2">
+                    <legend-popover>
+                      <template v-slot:title>Comment est-ce calculé ? </template>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Sapiente tempore libero fugit perferendis repellendus?
+                    </legend-popover>
                     <canvas
                       height="200"
                       width="100vh"
@@ -199,6 +224,11 @@
             >{{`${differencePresence}`}} personnes de moins étaient présentes dans la zone</p>
           </b-card>
           <b-card no-body class="mb-3 p-2" ref="mobile_presence_card">
+            <legend-popover>
+              <template v-slot:title>Comment est-ce calculé ? </template>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Sapiente tempore libero fugit perferendis repellendus?
+            </legend-popover>
             <div class="chart-container">
               <canvas height="200" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
             </div>
