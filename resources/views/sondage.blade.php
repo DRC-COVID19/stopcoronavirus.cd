@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="col-12 mt-4 mb-4">
-            <h3 class="mb-4">{{__("Méthodologies")}}</h3>
+            <h3 class="mb-4">{{__("Méthodologie")}}</h3>
             <p>Les répondants sont atteints par le contact d'au moins un de leurs membres adultes dans les
               régions suivantes: Kinshasa et autres. Le contact est établi à partir d'une grande base de
               données de numéros de téléphone répertoriés dans la base de données du centre d'appels
