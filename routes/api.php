@@ -148,6 +148,10 @@ Route::group([
     Route::post('flux-24-daily', 'DashBoardController@getFluxDataDaily');
     Route::get('flux-zone', 'FluxZoneController@index');
     Route::get('flux-provinces', 'DashBoardController@getFluxProvinces');
+
+    Route::group(['prefix' => 'pandemics'], function () {
+        Route::get('top-confirmed', 'PandemicController@getHealthZoneTopConfirmed');
+    });
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');
