@@ -28,6 +28,14 @@ export default {
             }
             let referenceVolume = null;
             let observationVolume = null;
+
+            references.sort((a, b) => {
+              return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+            });
+            observations.sort((a, b) => {
+              return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+            });
+            
             const countReference = references.length;
             if (countReference > 0) {
                 if (countReference % 2 == 0) {

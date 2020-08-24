@@ -82,11 +82,7 @@
             </p>
           </b-card>
 
-          <FullScreen
-            id="mobile_generale_full"
-            link="general_flux"
-            @change="fullscreenGeneraleChange"
-          >
+          <FullScreen id="mobile_generale_full" link="general_flux" @change="fullscreenMobileDaily">
             <b-card no-body class="cardtype1 mb-3 p-2">
               <div class="chart-container">
                 <canvas height="200" width="100vh" ref="general_flux" id="general_flux"></canvas>
@@ -96,11 +92,7 @@
 
           <b-row>
             <b-col cols="12" md="4">
-              <FullScreen
-                id="general_top_asc"
-                link="general_top_asc"
-                @change="fullscreenGenerale2Change"
-              >
+              <FullScreen id="general_top_asc" link="general_top_asc" @change="fullscreenFluxInOut">
                 <b-card no-body class="cardtype2 p-2">
                   <canvas height="200" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
                 </b-card>
@@ -110,14 +102,24 @@
               <FullScreen
                 id="general_top_desc"
                 link="general_top_desc"
-                @change="fullscreenGenerale2Change"
+                @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
                   <canvas height="200" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
                 </b-card>
               </FullScreen>
             </b-col>
-            <b-col cols="12" md="4"></b-col>
+            <b-col cols="12" md="4">
+              <FullScreen
+                id="pandemic_top_desc"
+                link="pandemic_top_desc"
+                @change="fullscreenFluxInOut"
+              >
+                <b-card no-body class="cardtype2 p-2">
+                  <canvas height="200" width="100vh" ref="pandemic_top_desc" id="pandemic_top_desc"></canvas>
+                </b-card>
+              </FullScreen>
+            </b-col>
           </b-row>
         </b-col>
 
@@ -141,11 +143,7 @@
                   class="percent-p text-dash-color"
                 >{{ `${differenceIn}`}} personnes de moins sont entrées dans la zone</p>
               </b-card>
-              <FullScreen
-                id="fullscreenEntrance"
-                link="mobile_in"
-                @change="fullscreenEntranceChange"
-              >
+              <FullScreen id="fullscreenEntrance" link="mobile_in" @change="fullscreenMobileDaily">
                 <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_in" id="mobile_in"></canvas>
@@ -156,7 +154,7 @@
               <FullScreen
                 id="fullscreenEntrance2"
                 link="mobile_entrance_2_card"
-                @change="fullscreenEntrance2Change"
+                @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
                   <canvas
@@ -190,7 +188,7 @@
                   class="percent-p text-dash-color"
                 >{{`${differenceOut}`}} personnes de moins sont sorties de la zone</p>
               </b-card>
-              <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenOutChange">
+              <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily">
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_out" id="mobile_out"></canvas>
@@ -200,7 +198,7 @@
               <FullScreen
                 id="fullscreenOut2"
                 link="mobile_out_2_card"
-                @change="fullscreenOut2Change"
+                @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="p-2 cardtype2">
                   <canvas height="200" width="100vh" ref="mobile_out_2_card" id="mobile_out_2_card"></canvas>
@@ -226,7 +224,11 @@
               class="percent-p text-dash-color"
             >{{`${differencePresence}`}} personnes de moins étaient présentes dans la zone</p>
           </b-card>
-          <FullScreen id="mobile_presence_full" link="mobile_presence">
+          <FullScreen
+            id="mobile_presence_full"
+            link="mobile_presence"
+            @change="fullscreenMobileDaily"
+          >
             <b-card no-body class="mb-3 p-2" ref="mobile_presence_card">
               <div class="chart-container">
                 <canvas height="200" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
@@ -299,6 +301,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    topHealthZoneConfirmed: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -310,7 +316,7 @@ export default {
       configBarChart: {},
       configBarChart2: {},
       configBarChartGen: {},
-      barChart: null,
+      barChart: {},
       barChart2: {},
       barChartGen: null,
       palette: PALETTE,
@@ -337,11 +343,9 @@ export default {
   watch: {
     flux24DailyIn() {
       this.updateFluxInMobility();
-      this.updateGeneralMobilityDaily();
     },
     flux24DailyOut() {
       this.updateFluxOutMobility();
-      this.updateGeneralMobilityDaily();
     },
     flux24PresenceDailyIn() {
       this.mobilePresence();
@@ -353,18 +357,32 @@ export default {
       this.mobileOut();
     },
     fluxZoneGlobalIn() {
-      console.log("in");
-      debounce(function (e) {
-        this.fluxMobilityFluxGeneralZone(
-          this.fluxZoneGlobalIn,
-          "general_top_asc",
-          "general_top_desc",
-          `Top 5 des zones avec une mobilité croissante`,
-          "Top 5 des zones avec une mobilité decroissante"
-        );
-      }, 1000);
-    },
+      // debounce(function (e) {
+      //   this.fluxMobilityFluxGeneralZone(
+      //     this.fluxZoneGlobalIn,
+      //     "general_top_asc",
+      //     "general_top_desc",
+      //     `Top 5 des zones avec une mobilité croissante`,
+      //     "Top 5 des zones avec une mobilité decroissante"
+      //   );
+      // }, 500);
 
+      this.fluxMobilityFluxGeneralZone(
+        this.fluxZoneGlobalIn,
+        "general_top_asc",
+        "general_top_desc",
+        `Top 5 des zones avec une mobilité croissante`,
+        "Top 5 des zones avec une mobilité decroissante"
+      );
+      this.updateGeneralMobilityDaily();
+    },
+    topHealthZoneConfirmed() {
+      this.topHealthZonePandemics(
+        this.topHealthZoneConfirmed,
+        "pandemic_top_desc",
+        "Top 5 des zones les plus affectés au covid-19"
+      );
+    },
     mobiliteGenerale() {
       this.showMobiliteGenerale = this.mobiliteGenerale;
       if (this.mobiliteGenerale) this.selectFluxType(4);
@@ -395,6 +413,12 @@ export default {
       "Top 5 des zones avec une mobilité decroissante"
     );
 
+    this.topHealthZonePandemics(
+      this.topHealthZoneConfirmed,
+      "pandemic_top_desc",
+      "Top 5 des zones les plus affectés au covid-19"
+    );
+
     this.updateGeneralMobilityDaily();
     this.targetZone = this.fluxGeoOptions[0];
 
@@ -422,6 +446,14 @@ export default {
       }
       let referenceVolume = null;
       let observationVolume = null;
+
+      referencesByDate.sort((a, b) => {
+        return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+      });
+      observationsByDate.sort((a, b) => {
+        return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+      });
+
       const countReference = referencesByDate.length;
       if (countReference > 0) {
         if (countReference % 2 == 0) {
@@ -457,7 +489,9 @@ export default {
     },
     mobilePresence() {
       this.$nextTick(() => {
-        const result = this.fluxInPercent(this.flux24PresenceDailyIn);
+        const result = this.fluxInPercent(
+          Object.assign({}, this.flux24PresenceDailyIn)
+        );
         this.percentPresence = result.percent;
         this.differencePresence = this.formatCash(result.difference);
         this.mobileCalc(
@@ -469,7 +503,9 @@ export default {
     },
     mobileOut() {
       this.$nextTick(() => {
-        const result = this.fluxInPercent(this.fluxDataGroupedByDateOut);
+        const result = this.fluxInPercent(
+          Object.assign({}, this.fluxDataGroupedByDateOut)
+        );
         this.percentOut = result.percent;
         this.differenceOut = this.formatCash(result.difference);
         this.mobileCalc(
@@ -481,7 +517,9 @@ export default {
     },
     mobileIn() {
       this.$nextTick(() => {
-        const result = this.fluxInPercent(this.fluxDataGroupedByDateIn);
+        const result = this.fluxInPercent(
+          Object.assign({}, this.fluxDataGroupedByDateIn)
+        );
         this.percentIn = result.percent;
         this.differenceIn = this.formatCash(result.difference);
         this.mobileCalc(
@@ -530,7 +568,7 @@ export default {
           referencesByDate,
           observationsByDate,
         };
-        const result = this.fluxInPercent(general);
+        const result = this.fluxInPercent(Object.assign({}, general));
         this.percentGenerale = result.percent;
         this.differenceGenerale = this.formatCash(result.difference);
 
@@ -539,49 +577,54 @@ export default {
     },
     updateGeneralMobilityDaily() {
       this.$nextTick(() => {
-        const referencesByDateIn =
-          this.fluxDataGroupedByDateIn.referencesByDate ?? [];
-        const observationsByDateIn =
-          this.fluxDataGroupedByDateIn.observationsByDate ?? [];
-
-        const referencesByDateOut =
-          this.fluxDataGroupedByDateOut.referencesByDate ?? [];
-        const observationsByDateOut =
-          this.fluxDataGroupedByDateOut.observationsByDate ?? [];
-
         const referencesByDate = [];
         const observationsByDate = [];
-        [...referencesByDateIn, ...referencesByDateOut].map((item) => {
-          const element = referencesByDate.find((x) => x.date == item.date);
-          if (element) {
-            element.volume += item.volume;
-          } else {
-            referencesByDate.push({
-              volume: item.volume,
-              date: item.date,
+        this.fluxZoneGlobalIn.map(
+          ({ general_observation, general_reference }) => {
+            general_reference.map((item) => {
+              const reference = referencesByDate.find(
+                (x) => x.date == item.date
+              );
+              if (reference) {
+                reference.volume += item.volume;
+              } else {
+                referencesByDate.push({
+                  volume: item.volume,
+                  date: item.date,
+                  day: item.day,
+                });
+              }
             });
-          }
-        });
 
-        [...observationsByDateIn, ...observationsByDateOut].map((item) => {
-          const element = observationsByDate.find((x) => x.date == item.date);
-          if (element) {
-            element.volume += item.volume;
-          } else {
-            observationsByDate.push({
-              volume: item.volume,
-              date: item.date,
+            general_observation.map((item) => {
+              const element = observationsByDate.find(
+                (x) => x.date == item.date
+              );
+              if (element) {
+                element.volume += item.volume;
+              } else {
+                observationsByDate.push({
+                  volume: item.volume,
+                  date: item.date,
+                  day: item.day,
+                });
+              }
             });
           }
-        });
+        );
         const general = {
           referencesByDate,
           observationsByDate,
         };
-        const result = this.fluxInPercent(general);
+        const result = this.fluxInPercent(Object.assign({}, general));
         this.percentGenerale = result.percent;
         this.differenceGenerale = this.formatCash(result.difference);
-        this.mobileCalc(general, `general_flux`, PALETTE.flux_in_color);
+        this.mobileCalc(
+          Object.assign({}, general),
+          `general_flux`,
+          PALETTE.flux_in_color,
+          "Mobilité générale intérieure de la zone"
+        );
       });
     },
     updateFluxInMobility() {
@@ -602,7 +645,12 @@ export default {
         );
       });
     },
-    mobileCalc({ referencesByDate, observationsByDate }, ref, color) {
+    mobileCalc(
+      { referencesByDate, observationsByDate },
+      ref,
+      color,
+      title = null
+    ) {
       // set the dimensions and margins of the graph
 
       if (!referencesByDate || !observationsByDate) {
@@ -614,9 +662,18 @@ export default {
       let totalReference = 0;
       let referenceAverage = 0;
 
+      referencesByDate.sort((a, b) => {
+        return new Date(a.date ?? 0) > new Date(b.date ?? 0) ? 1 : -1;
+      });
+      observationsByDate.sort((a, b) => {
+        return new Date(a.date ?? 0) > new Date(b.date ?? 0) ? 1 : -1;
+      });
+
       data = observationsByDate.map((item) => {
         const references = referencesByDate.filter((x) => x.day == item.day);
-
+        references.sort((a, b) => {
+          return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
+        });
         const count = references.length;
         if (count > 0) {
           let referenceVolume = null;
@@ -671,8 +728,8 @@ export default {
             display: false,
           },
           title: {
-            display: false,
-            text: "",
+            display: !!title,
+            text: title,
           },
           plugins: {
             crosshair: {
@@ -815,7 +872,7 @@ export default {
           volume_reference: referenceVolume,
         });
       });
-      localData=localData.filter(x=>x.percent);
+      localData = localData.filter((x) => x.percent);
       localData.sort((a, b) => {
         return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
       });
@@ -832,6 +889,13 @@ export default {
         ref,
         key == "origin" ? PALETTE.flux_in_color : PALETTE.flux_out_color
       );
+    },
+    topHealthZonePandemics(inPutData, ref, title = null) {
+      const data = inPutData.map((item) => ({
+        zone: item.name,
+        volume: item.confirmed,
+      }));
+      this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color, title);
     },
     async fluxMobilityFluxGeneralZone(
       fluxDataIn,
@@ -861,7 +925,7 @@ export default {
       });
 
       processing.then((data) => {
-        let localData = data.filter(x=>x.percent);
+        let localData = data.filter((x) => x.percent);
         localData.sort((a, b) => {
           return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
         });
@@ -891,26 +955,29 @@ export default {
       });
     },
     drawHorizontalChart(localData, key, ref, color, title = null) {
+      const datasets = [];
+      const volumeReferences = localData.map((d) => d.volume_reference);
+      if (volumeReferences.some((x) => x)) {
+        datasets.push({
+          label: "Référence",
+          backgroundColor: "#33ac2e",
+          borderColor: "#33ac2e",
+          borderWidth: 1,
+          data: volumeReferences,
+        });
+      }
+      datasets.push({
+        label: "Observation",
+        backgroundColor: color,
+        borderColor: color,
+        data: localData.map((d) => d.volume),
+      });
       const dataChart = {
         labels: localData.map((d) => d[key]),
-        datasets: [
-          {
-            label: "Référence",
-            backgroundColor: "#33ac2e",
-            borderColor: "#33ac2e",
-            borderWidth: 1,
-            data: localData.map((d) => d.volume_reference),
-          },
-          {
-            label: "Observation",
-            backgroundColor: color,
-            borderColor: color,
-            data: localData.map((d) => d.volume),
-          },
-        ],
+        datasets: datasets,
       };
 
-      this.configBarChart2 = {
+      this.configBarChart[ref] = {
         type: "horizontalBar",
         data: dataChart,
         options: {
@@ -945,9 +1012,12 @@ export default {
                 ticks: {
                   fontSize: 9,
                   callback: function (label, index, labels) {
-                    return `${label} (${
-                      localData.find((x) => x.zone == label).percent
-                    }%)`;
+                    const value = localData.find((x) => x.zone == label);
+                    if (value && value.percent) {
+                      return `${label} (${value.percent}%)`;
+                    } else {
+                      return label;
+                    }
                   },
                 },
               },
@@ -963,45 +1033,49 @@ export default {
         },
       };
 
-      if (this.barChart2[ref]) this.barChart2[ref].destroy();
-      this.barChart2[ref] = new Chart(
+      if (this.barChart[ref]) this.barChart[ref].destroy();
+      this.barChart[ref] = new Chart(
         this.$refs[ref].getContext("2d"),
-        this.configBarChart2
+        this.configBarChart[ref]
       );
-      
     },
-    toggleFullscreenEntrance() {
-      this.$refs.fullscreenEntrance[0].toggle();
-    },
-    fullscreenEntranceChange(fullscreen) {
+    fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
-        this.$refs.mobile_in[0].style.height = "200px";
-        this.$refs.mobile_in[0].height = "200px";
-      }
-    },
-    toggleFullscreenEntrance2() {
-      this.$refs.fullscreenEntrance2[0].toggle();
-    },
-    fullscreenEntrance2Change(fullscreen) {
-      //this.fullscreen = fullscreen
-      if (!fullscreen) {
-        this.$refs.mobile_entrance_0_2_card[0].style.height = "400px";
-        this.$refs.mobile_entrance_0_2_card[0].height = "400px";
-
-        this.configBarChart.options.legend.labels.fontSize = 9;
-        this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 9;
-        this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 9;
-        this.barChart.update();
+        this.$refs[ref].style.height = "200px";
+        this.$refs[ref].height = "200px";
       } else {
-        this.configBarChart.options.legend.labels.fontSize = 12;
-        this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 12;
-        this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 12;
-        this.barChart.update();
+        this.$refs[ref].style.height = "400px";
+        this.$refs[ref].height = "400px";
       }
     },
-    toggleFullscreenOut() {
-      this.$refs.fullscreenOut[0].toggle();
+    fullscreenFluxInOut(fullscreen, ref) {
+      //this.fullscreen = fullscreen
+      const element = this.$refs[ref];
+      const parent_2 = element.parentElement.parentElement;
+      console.log(this.$refs);
+      if (!fullscreen) {
+        this.$refs[ref].style.height = "400px";
+        this.$refs[ref].height = "400px";
+        element.parentElement.style.width = "auto";
+        parent_2.style.display = "";
+        parent_2.style.alignItem = "";
+        parent_2.style.justifyContent = "";
+        this.configBarChart[ref].options.legend.labels.fontSize = 9;
+        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 9;
+        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9;
+        this.barChart[ref].update();
+      } else {
+        element.parentElement.style.width = "30%";
+        parent_2.style.display = "flex";
+        parent_2.style.alignItems = "center";
+        parent_2.style.justifyContent = "center";
+
+        this.configBarChart[ref].options.legend.labels.fontSize = 12;
+        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 12;
+        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 12;
+        this.barChart[ref].update();
+      }
     },
     fullscreenOutChange(fullscreen) {
       //this.fullscreen = fullscreen
@@ -1009,9 +1083,6 @@ export default {
         this.$refs.mobile_out[0].style.height = "200px";
         this.$refs.mobile_out[0].height = "200px";
       }
-    },
-    toggleFullscreenOut2() {
-      this.$refs.fullscreenOut2[0].toggle();
     },
     fullscreenOut2Change(fullscreen) {
       //this.fullscreen = fullscreen
@@ -1030,11 +1101,7 @@ export default {
         this.barChart2.update();
       }
     },
-    toggleFullscreenGenerale() {
-      this.$refs.fullscreenGenerale[0].toggle();
-    },
     fullscreenGeneraleChange(fullscreen, ref) {
-      console.log(this.$refs[ref]);
       if (!fullscreen) {
         this.$refs[ref].style.height = "200px";
       }

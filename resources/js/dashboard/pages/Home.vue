@@ -49,33 +49,32 @@
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
-            
-              <FullScreen id="fullscreenMap" link="" @change="fullscreenMapChange">
-                <Maps
-                  :covidCases="covidCases"
-                  :hospitals="hospitals"
-                  :medicalOrientations="medicalOrientations"
-                  :medicalOrientationSelected="medicalOrientationSelected"
-                  :sondages="sondages"
-                  :worried="worried"
-                  :catchVirus="catchVirus"
-                  :priceIncrease="priceIncrease"
-                  :mask="mask"
-                  :makala="makala"
-                  :flour="flour"
-                  :antiBacterialGel="antiBacterialGel"
-                  :flux24="flux24"
-                  :flux24DailyIn="flux24DailyIn"
-                  :flux24DailyOut="flux24DailyOut"
-                  :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
-                  :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
-                  :flux24DailyGenerale="flux24DailyGenerale"
-                  :isLoading="isLoading"
-                  :flux24Presence="flux24PresenceDailyIn"
-                />
-                <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
-                <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
-              </FullScreen>
+            <FullScreen id="fullscreenMap" link @change="fullscreenMapChange">
+              <Maps
+                :covidCases="covidCases"
+                :hospitals="hospitals"
+                :medicalOrientations="medicalOrientations"
+                :medicalOrientationSelected="medicalOrientationSelected"
+                :sondages="sondages"
+                :worried="worried"
+                :catchVirus="catchVirus"
+                :priceIncrease="priceIncrease"
+                :mask="mask"
+                :makala="makala"
+                :flour="flour"
+                :antiBacterialGel="antiBacterialGel"
+                :flux24="flux24"
+                :flux24DailyIn="flux24DailyIn"
+                :flux24DailyOut="flux24DailyOut"
+                :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
+                :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
+                :flux24DailyGenerale="flux24DailyGenerale"
+                :isLoading="isLoading"
+                :flux24Presence="flux24PresenceDailyIn"
+              />
+              <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
+              <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
+            </FullScreen>
           </b-row>
         </b-col>
         <b-col
@@ -124,6 +123,7 @@
                   :fluxZoneGlobalIn="fluxZoneGlobalIn"
                   :fluxZoneGlobalOut="fluxZoneGlobalOut"
                   :mobiliteGenerale="showMobiliteGenerale"
+                  :topHealthZoneConfirmed="topHealthZoneConfirmed"
                 />
               </b-tab>
               <b-tab
@@ -980,6 +980,17 @@ export default {
 
       this.fluxZoneGlobalIn = [];
       this.fluxZoneGlobalOut = [];
+      this.topHealthZoneConfirmed = [];
+
+      const pandemicParams=Object.assign({}, values);
+      pandemicParams.fluxGeoOptions=pandemicParams.fluxGeoOptions[0];
+      axios
+        .get("/api/dashboard/pandemics/top-confirmed", {
+          params: pandemicParams,
+        })
+        .then(({ data }) => {
+          this.topHealthZoneConfirmed = data;
+        });
 
       this.healthZones
         .filter((x) => x.province == values.fluxGeoOptions[0])
