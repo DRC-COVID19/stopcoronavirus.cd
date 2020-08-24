@@ -60,7 +60,7 @@ export default {
   methods: {
     mobility(data) {
       let localData = [];
-     
+
       data.map((item) => {
         const referencesByDate = item.references;
         const observationsByDate = item.observations;
@@ -107,7 +107,7 @@ export default {
         if (!zone) {
           return;
         }
-        
+
         localData.push({
           zone: zone,
           volume: observationVolume,
@@ -120,7 +120,7 @@ export default {
       localData.sort((a, b) => {
         return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
       });
-      
+
       const dataChart = {
         labels: localData.map((d) => d.zone),
         datasets: [
@@ -166,14 +166,9 @@ export default {
                 ticks: {
                   beginAtZero: false,
                   fontSize: 9,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: false,
-                  fontSize: 9,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value)
+                  }
                 },
               },
             ],

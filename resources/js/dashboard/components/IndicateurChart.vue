@@ -108,6 +108,11 @@ export default {
                   labelString: INDICATEUR_X.find((x) => x.id == this.labelAxeX)
                     .name,
                 },
+                ticks: {
+                  callback: (value, index, values) => {
+                    return this.formatCash(value)  ;
+                  }
+                },
               },
             ],
             yAxes: [
@@ -115,6 +120,9 @@ export default {
                 display: true,
                 ticks: {
                   beginAtZero: true,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value)  ;
+                  }
                 },
                 scaleLabel: {
                   display: true,
@@ -193,6 +201,9 @@ export default {
                 display: true,
                 ticks: {
                   beginAtZero: false,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value)  ;
+                  }
                 },
                 scaleLabel: {
                   display: true,
