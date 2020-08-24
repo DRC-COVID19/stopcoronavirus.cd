@@ -169,7 +169,6 @@ export default {
                 ticks: {
                   beginAtZero: false,
                   fontSize: 9,
-                  fontColor:['red','blue'],
                   callback: function (label, index, labels) {
                     const value = localData.find((x) => x.zone == label);
                     if (value && value.percent) {
