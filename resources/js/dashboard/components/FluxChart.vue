@@ -373,8 +373,7 @@ export default {
     typesMobilite(){
       let types = [
         {val: 1 , lbl : 'Par défaut' } ,
-        {val:2, lbl : 'Général'},
-        {val:3, lbl : 'Stat. zones'},
+        {val: 2, lbl : 'Général'}
       ]
       if(this.fluxZoneGlobalIn.length>0 || this.fluxZoneGlobalOut.length>0 ){
         types.push({val:3, lbl : 'Stat. zones'})
