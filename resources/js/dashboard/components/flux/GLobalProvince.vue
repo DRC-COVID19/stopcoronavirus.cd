@@ -113,7 +113,7 @@ export default {
       });
 
       localData.sort((a, b) => {
-        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
+        return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
       });
 
       const dataChart = {
@@ -169,14 +169,15 @@ export default {
                 ticks: {
                   beginAtZero: false,
                   fontSize: 9,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                ticks: {
-                  beginAtZero: false,
-                  fontSize: 9,
+                  fontColor:['red','blue'],
+                  callback: function (label, index, labels) {
+                    const value = localData.find((x) => x.zone == label);
+                    if (value && value.percent) {
+                      return `${label} (${value.percent}%)`;
+                    } else {
+                      return label;
+                    }
+                  },
                 },
               },
             ],

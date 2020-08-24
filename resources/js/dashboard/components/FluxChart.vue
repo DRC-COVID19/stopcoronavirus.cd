@@ -1,70 +1,24 @@
 <template>
   <div>
-    <b-container v-if="isProvinceStatSeeing">
+    <b-container class="p-0 flux-chart">
       <b-row>
-        <b-col cols="12" md="6">
-          <h5 @click="seeProvinceStat" class="return-global">
-            <span class="fa fa-chevron-left"></span>
-            {{fluxGeoOptions[0]}}
-          </h5>
-        </b-col>
-        <b-col cols="12" md="6" class="text-right">
-          <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
-          <span class="small text-muted">Dernière mise à jour</span>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col cols="12" md="6">
-          <GlobalProvice
-            title="Mobilité entrante par zone"
-            :color="palette.flux_in_color"
-            :globalData="fluxZoneGlobalIn"
-            reference="fluxZoneglobalIn"
-          />
-        </b-col>
-        <b-col cols="12" md="6">
-          <GlobalProvice
-            title="Mobilité sortante par zone"
-            :color="palette.flux_out_color"
-            :globalData="fluxZoneGlobalOut"
-            reference="fluxZoneglobalOut"
-          />
-        </b-col>
-      </b-row>
-    </b-container>
-
-    <b-container v-show="!isProvinceStatSeeing" class="p-0 flux-chart">
-      <b-row>
-        <b-col cols="12" md="6">
+        <div class="col-md col-12">
           <h3 class="d-flex">
-            <span class="ml-2">{{targetZone}}</span>
-            <button
-              class="btn-alt-screen"
-              @click="seeProvinceStat"
-              title="Statistique des zones"
-              v-if="fluxZoneGlobalIn.length>0|| fluxZoneGlobalOut.length>0"
-            >
-              <i class="fa fa-eye see-province-stat"></i>
-            </button>
-            <button
-              class="btn-alt-screen"
-              @click="toggleGlobalMobility()"
-              title="Mobilité génerale"
-            >
-              <i v-if="showMobiliteGenerale" class="fa fa-exchange-alt"></i>
-              <i v-else class="fa fa-globe"></i>
-            </button>
+            <span class="ml-2 mr-2">{{targetZone}}</span>
+
+            <toggle-button :labels="typesMobilite" v-model="typeMobilite"></toggle-button>
           </h3>
-        </b-col>
-        <b-col cols="12" md="6" class="text-right">
+        </div>
+        <div class="col-md-auto col-12 text-right">
           <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
           <span class="small text-muted">Dernière mise à jour</span>
-        </b-col>
+        </div>
       </b-row>
-      <b-row no-gutters>
+
+      <b-row no-gutters v-show="this.typeMobilite != 3">
         <b-col
           cols="12"
-          v-show="showMobiliteGenerale"
+          v-show="this.typeMobilite == 2"
           md="12"
           class="pl-0 pr-2 col-mobilite-generale"
         >
@@ -123,7 +77,7 @@
           </b-row>
         </b-col>
 
-        <b-col cols="12" v-show="!showMobiliteGenerale" md="4" class="pl-0 pr-2" ref="mobility">
+        <b-col cols="12" v-show="this.typeMobilite == 1" md="4" class="pl-0 pr-2" ref="mobility">
           <b-row class="mb-3">
             <b-col cols="12">
               <b-card
@@ -169,7 +123,7 @@
           </b-row>
         </b-col>
 
-        <b-col cols="12" md="4" class="pr-0 pl-2" v-show="!showMobiliteGenerale">
+        <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
           <b-row class="mb-3">
             <b-col cols="12">
               <b-card
@@ -207,7 +161,8 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="4" class="pr-0 pl-2" v-show="!showMobiliteGenerale">
+
+        <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
           <b-card
             class="mb-3 flux-mobility"
             :class="{'active':fluxType==3}"
@@ -237,6 +192,42 @@
           </FullScreen>
         </b-col>
       </b-row>
+
+      <b-row class="no-gutters" v-show="this.typeMobilite == 3">
+        <!--
+        <b-row>
+          <b-col cols="12" md="6">
+            <h5 @click="seeProvinceStat" class="return-global">
+              <span class="fa fa-chevron-left"></span>
+              {{fluxGeoOptions[0]}}
+            </h5>
+          </b-col>
+          <b-col cols="12" md="6" class="text-right">
+            <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
+            <span class="small text-muted">Dernière mise à jour</span>
+          </b-col>
+        </b-row>
+        -->
+
+        <b-row class="col-12">
+          <b-col cols="12" md="6" class="pr-md-0">
+            <GlobalProvice
+              title="Mobilité entrante par zone"
+              :color="palette.flux_in_color"
+              :globalData="fluxZoneGlobalIn"
+              reference="fluxZoneglobalIn"
+            />
+          </b-col>
+          <b-col cols="12" md="6" class="pr-md-0">
+            <GlobalProvice
+              title="Mobilité sortante par zone"
+              :color="palette.flux_out_color"
+              :globalData="fluxZoneGlobalOut"
+              reference="fluxZoneglobalOut"
+            />
+          </b-col>
+        </b-row>
+      </b-row>
     </b-container>
   </div>
 </template>
@@ -246,11 +237,13 @@ import * as d3 from "d3";
 import { mapState, mapMutations } from "vuex";
 import { PALETTE, FLUX_LAST_UPDATE } from "../config/env";
 import GlobalProvice from "./flux/GLobalProvince";
+import ToggleButton from "../components/ToggleButton";
 import { difference } from "@turf/turf";
 import { debounce } from "lodash";
 export default {
   components: {
     GlobalProvice,
+    ToggleButton,
   },
   props: {
     flux24Daily: {
@@ -320,7 +313,6 @@ export default {
       barChart2: {},
       barChartGen: null,
       palette: PALETTE,
-      showMobiliteGenerale: false,
       lineCharts: {},
       percentOut: null,
       percentIn: null,
@@ -331,6 +323,8 @@ export default {
       differenceGenerale: null,
       differencePresence: null,
       targetZone: null,
+      typeMobilite: 1,
+      fluxGeoGranularity: 2,
     };
   },
   computed: {
@@ -339,6 +333,19 @@ export default {
       isProvinceStatSeeing: (state) => state.flux.isProvinceStatSeeing,
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
     }),
+    typesMobilite() {
+      let types = [{ val: 1, lbl: "default" }];
+      if (this.fluxGeoGranularity == 1) {
+        types.push({ val: 2, lbl: "générale" });
+      }
+      if (
+        this.fluxZoneGlobalIn.length > 0 ||
+        this.fluxZoneGlobalOut.length > 0
+      ) {
+        types.push({ val: 3, lbl: "provinces" });
+      }
+      return types;
+    },
   },
   watch: {
     flux24DailyIn() {
@@ -384,14 +391,26 @@ export default {
       );
     },
     mobiliteGenerale() {
-      this.showMobiliteGenerale = this.mobiliteGenerale;
-      if (this.mobiliteGenerale) this.selectFluxType(4);
+      if (this.mobiliteGenerale) {
+        this.selectFluxType(4);
+        this.typeMobilite = 2;
+      }
+    },
+    typeMobilite() {
+      if (this.typeMobilite == 3) {
+        this.setIsProvinceStatSeeing(true);
+      } else if (this.isProvinceStatSeeing) {
+        this.setIsProvinceStatSeeing(false);
+      }
     },
   },
   mounted() {
-    this.showMobiliteGenerale = this.mobiliteGenerale;
     if (this.mobiliteGenerale) {
       this.selectFluxType(4);
+      this.typeMobilite = 2;
+    } else if (this.isProvinceStatSeeing) {
+      this.typeMobilite = 3;
+      this.selectFluxType(1);
     } else {
       this.selectFluxType(1);
     }
@@ -428,14 +447,21 @@ export default {
         this.targetZone = value[0];
       }
     );
+
+    this.$store.watch(
+      (state) => state.flux.fluxGeoGranularity,
+      (value) => {
+        this.fluxGeoGranularity = value;
+        if (this.fluxGeoGranularity == 2) {
+          this.typeMobilite = 1;
+        }
+      }
+    );
   },
   methods: {
     ...mapMutations(["setFluxType", "setIsProvinceStatSeeing"]),
     selectFluxType(value) {
       this.setFluxType(value);
-    },
-    seeProvinceStat() {
-      this.setIsProvinceStatSeeing(!this.isProvinceStatSeeing);
     },
     fluxInPercent({ referencesByDate, observationsByDate }) {
       if (!referencesByDate || !observationsByDate) {
@@ -1080,25 +1106,27 @@ export default {
     fullscreenOutChange(fullscreen) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
-        this.$refs.mobile_out[0].style.height = "200px";
-        this.$refs.mobile_out[0].height = "200px";
+        this.$refs.mobile_out.style.height = "200px";
+        this.$refs.mobile_out.height = "200px";
       }
     },
     fullscreenOut2Change(fullscreen) {
       //this.fullscreen = fullscreen
+      const barChart2 = this.barChart2["mobile_out_2_card"];
+      const configBarChart2 = this.configBarChart2["mobile_out_2_card"];
       if (!fullscreen) {
-        this.$refs.mobile_out_0_2_card[0].style.height = "400px";
-        this.$refs.mobile_out_0_2_card[0].height = "400px";
+        this.$refs.mobile_out_2_card.style.height = "400px";
+        this.$refs.mobile_out_2_card.height = "400px";
 
-        this.configBarChart2.options.legend.labels.fontSize = 9;
-        this.configBarChart2.options.scales.xAxes[0].ticks.fontSize = 9;
-        this.configBarChart2.options.scales.yAxes[0].ticks.fontSize = 9;
-        this.barChart2.update();
+        configBarChart2.options.legend.labels.fontSize = 9;
+        configBarChart2.options.scales.xAxes[0].ticks.fontSize = 9;
+        configBarChart2.options.scales.yAxes[0].ticks.fontSize = 9;
+        barChart2.update();
       } else {
-        this.configBarChart2.options.legend.labels.fontSize = 12;
-        this.configBarChart2.options.scales.xAxes[0].ticks.fontSize = 12;
-        this.configBarChart2.options.scales.yAxes[0].ticks.fontSize = 12;
-        this.barChart2.update();
+        configBarChart2.options.legend.labels.fontSize = 12;
+        configBarChart2.options.scales.xAxes[0].ticks.fontSize = 12;
+        configBarChart2.options.scales.yAxes[0].ticks.fontSize = 12;
+        barChart2.update();
       }
     },
     fullscreenGeneraleChange(fullscreen, ref) {
