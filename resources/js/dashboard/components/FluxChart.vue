@@ -1330,4 +1330,16 @@ export default {
     }
   }
 }
+.btns-toggle-presence{
+  i{
+    color : #7b7f88 ;
+    font-size: 15px;
+    margin-right: 2px;
+    cursor : pointer ;
+    transition : color 0.2s ease-in-out ;
+    &.active{
+      color : #8BC34A ;
+    }
+  }
+}
 </style>
