@@ -800,32 +800,32 @@ export default {
       this.fluxGeoOptions = [];
 
       // this.$set(this.loadings, "urlDailyCompare", true);
-      axios
-        .get(urlDailyCompare, {
-          params: values,
-        })
-        .then(({ data }) => {
-          if (values.fluxGeoGranularity == 2) {
-            const origin = data.origin;
-            origin.map((item) => {
-              const element = data.destination.find(
-                (x) => x.origin == item.origin && x.date == item.date
-              );
-              if (element) {
-                item.volume += element.volume;
-              }
-            });
-            this.flux24DailyComparison = origin;
-          } else {
-            this.flux24DailyComparison = data;
-          }
+      // axios
+      //   .get(urlDailyCompare, {
+      //     params: values,
+      //   })
+      //   .then(({ data }) => {
+      //     if (values.fluxGeoGranularity == 2) {
+      //       const origin = data.origin;
+      //       origin.map((item) => {
+      //         const element = data.destination.find(
+      //           (x) => x.origin == item.origin && x.date == item.date
+      //         );
+      //         if (element) {
+      //           item.volume += element.volume;
+      //         }
+      //       });
+      //       this.flux24DailyComparison = origin;
+      //     } else {
+      //       this.flux24DailyComparison = data;
+      //     }
 
-          this.fluxGeoOptions = values.fluxGeoOptions;
-          this.$set(this.loadings, "urlDailyCompare", false);
-        })
-        .catch(({ response }) => {
-          this.$set(this.loadings, "urlDailyCompare", false);
-        });
+      //     this.fluxGeoOptions = values.fluxGeoOptions;
+      //     this.$set(this.loadings, "urlDailyCompare", false);
+      //   })
+      //   .catch(({ response }) => {
+      //     this.$set(this.loadings, "urlDailyCompare", false);
+      //   });
 
       this.flux24Daily = [];
       this.$set(this.loadings, "urlDaily", true);
