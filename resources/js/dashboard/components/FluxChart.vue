@@ -1127,10 +1127,9 @@ export default {
       //this.fullscreen = fullscreen
       const element = this.$refs[ref];
       const parent_2 = element.parentElement.parentElement;
-      console.log(this.$refs);
       if (!fullscreen) {
-        this.$refs[ref].style.height = "400px";
-        this.$refs[ref].height = "400px";
+        element.style.height = "400px";
+        element.height = "400px";
         element.parentElement.style.width = "auto";
         parent_2.style.display = "";
         parent_2.style.alignItem = "";
@@ -1140,7 +1139,7 @@ export default {
         this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9;
         this.barChart[ref].update();
       } else {
-        element.parentElement.style.width = "30%";
+        element.parentElement.style.width = "80%";
         parent_2.style.display = "flex";
         parent_2.style.alignItems = "center";
         parent_2.style.justifyContent = "center";
