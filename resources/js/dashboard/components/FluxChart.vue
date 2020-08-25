@@ -1161,12 +1161,13 @@ export default {
           },
         },
       };
-
+      const reference=this.$refs[ref];
       if (this.barChart[ref]) this.barChart[ref].destroy();
       this.barChart[ref] = new Chart(
-        this.$refs[ref].getContext("2d"),
+        reference.getContext("2d"),
         this.configBarChart[ref]
       );
+      reference.style.height = 400;
     },
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
