@@ -26,11 +26,13 @@ class Flux24ProvinceController extends Controller
         try {
             $flux = Flux24Province::select(['destination as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->where('immobility','3h')
                 ->orderBy('volume', 'desc')
                 ->groupBy('destination')->get();
 
             $flux_reference = Flux24Province::select(['destination as zone', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                ->where('immobility','3h')
                 ->orderBy('volume', 'desc')
                 ->groupBy('destination')->get();
 
@@ -52,11 +54,13 @@ class Flux24ProvinceController extends Controller
         try {
             $flux = Flux24Province::select(['origin as zone','Date as date', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->where('immobility','3h')
                 ->orderBy('volume', 'desc')
                 ->groupBy('origin','Date')->get();
 
                 $flux_reference = Flux24Province::select(['origin as zone','Date as date', DB::raw('sum(volume)as volume')])
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                ->where('immobility','3h')
                 ->orderBy('volume', 'desc')
                 ->groupBy('origin','Date')->get();
 
