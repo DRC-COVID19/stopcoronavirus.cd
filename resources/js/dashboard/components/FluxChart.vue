@@ -20,7 +20,7 @@
           cols="12"
           v-show="this.typeMobilite == 2"
           md="12"
-          class="pl-0 pr-2 col-mobilite-generale"
+          class="pl-0  col-mobilite-generale"
         >
           <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==4}">
             <h5 class="percent-title">Mobilité générale</h5>
