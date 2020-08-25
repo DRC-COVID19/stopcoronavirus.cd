@@ -271,7 +271,7 @@
         </b-row>
         -->
 
-        <b-row class="col-12">
+        <b-row align-h="center" class="col-12">
           <b-col cols="12" md="6" class="pr-md-0">
             <GlobalProvice
               title="Mobilité entrante par zone"
