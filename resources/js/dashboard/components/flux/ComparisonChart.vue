@@ -106,7 +106,9 @@ export default {
         resolver({ datasets, labels, maxDate });
       });
 
+      console.log(new Date().toTimeString());
       process.then(({ datasets, labels, maxDate }) => {
+        console.log(new Date().toTimeString());
         const tempData = {
           type: "line",
           data: {
@@ -258,6 +260,7 @@ export default {
         if (this.myLineChart) this.myLineChart.destroy();
         this.myLineChart = new Chart(ref.getContext("2d"), tempData);
         const myLineChart2 = this.myLineChart;
+        console.log(new Date().toTimeString());
       });
     },
     toggleFullscreen() {
