@@ -60,18 +60,24 @@ export default {
       if (!data) {
         return;
       }
+      const labels=[];
+      const localData=[];
+      data.map(x=>{
+          labels.push(new Date(x.date));
+          localData.push({ x: new Date(x.date), y: x.volume })
+      });
       const maxDate = moment.max(data.map((x) => moment(x.date)));
       const tempData = {
         type: "line",
         data: {
-          labels: data.map((x) => new Date(x.date)),
+          labels:labels,
           datasets: [
             {
               label: "Volume",
               fill: false,
               borderColor: "rgb(51, 172, 46)",
               backgroundColor: "rgb(166,180,205, 0.2)",
-              data: data.map((x) => ({ x: new Date(x.date), y: x.volume })),
+              data: localData,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
