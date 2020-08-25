@@ -229,7 +229,19 @@
             :class="{'active':fluxType==3}"
             @click="selectFluxType(3)"
           >
-            <h5 class="percent-title">Présences</h5>
+            <div class="row justify-content-between">
+              <h5 class="percent-title">Présences</h5>
+              <div class="btns-toggle-presence">
+                <i class="fa fa-sun"
+                  title="N'afficher que les présences jour"
+                  :class="{'active' : typePresence == 2}"
+                  @click="toggleTypePresence(2)"></i>
+                <i class="fa fa-moon"
+                  title="N'afficher que les présences nuit"
+                  :class="{'active' : typePresence == 3}"
+                  @click="toggleTypePresence(3)"></i>
+              </div>
+            </div>
             <div class="percent flux-presence">{{percentPresence}}%​</div>
             <p
               v-if="differencePresence>0"
@@ -343,6 +355,7 @@ export default {
       fluxType: (state) => state.flux.fluxType,
       isProvinceStatSeeing: (state) => state.flux.isProvinceStatSeeing,
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
+      typePresence: (state) => state.flux.typePresence,
     }),
   },
   watch: {
@@ -396,7 +409,7 @@ export default {
     );
   },
   methods: {
-    ...mapMutations(["setFluxType", "setIsProvinceStatSeeing"]),
+    ...mapMutations(["setFluxType", "setIsProvinceStatSeeing", "setTypePresence"]),
     selectFluxType(value) {
       this.setFluxType(value);
     },
@@ -976,6 +989,10 @@ export default {
     toggleGlobalMobility() {
       this.showMobiliteGenerale = !this.showMobiliteGenerale;
     },
+    toggleTypePresence(type){
+      if(this.typePresence == type) type = 1
+      this.setTypePresence(type)
+    }
   },
 };
 </script>
@@ -1097,6 +1114,18 @@ export default {
   }
   &:active {
     opacity: 0.4;
+  }
+}
+.btns-toggle-presence{
+  i{
+    color : #7b7f88 ;
+    font-size: 15px;
+    margin-right: 2px;
+    cursor : pointer ;
+    transition : color 0.2s ease-in-out ;
+    &.active{
+      color : #8BC34A ;
+    }
   }
 }
 </style>

@@ -10,6 +10,7 @@ export default {
         tendanceChartSelectedValue:null,
         isProvinceStatSeeing:false,
         legendHover : null , // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
+        typePresence : 1
     },
     mutations: {
         setIsWatchingfluxGeoOptions(state, payload) {
@@ -41,7 +42,10 @@ export default {
         },
         setIsProvinceStatSeeing(state,payload){
             state.isProvinceStatSeeing=payload;
-        }
+        },
+        setTypePresence(state,payload){
+            state.typePresence=payload;
+        },
     },
     actions: {
         resetState({ state }) {
