@@ -126,7 +126,10 @@ export default {
               {
                 display: true,
                 ticks: {
-                  beginAtZero: true
+                  beginAtZero: true,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value)  ;
+                  }
                 },
                 scaleLabel: {
                   display: false,
