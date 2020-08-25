@@ -38,6 +38,11 @@
 
           <FullScreen id="mobile_generale_full" link="general_flux" @change="fullscreenMobileDaily">
             <b-card no-body class="cardtype1 mb-3 p-2">
+              <legend-popover>
+                <template v-slot:title>Comment est-ce calculé ?</template>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Sapiente tempore libero fugit perferendis repellendus?
+              </legend-popover>
               <div class="chart-container">
                 <canvas height="200" width="100vh" ref="general_flux" id="general_flux"></canvas>
               </div>
@@ -48,6 +53,11 @@
             <b-col cols="12" md="4">
               <FullScreen id="general_top_asc" link="general_top_asc" @change="fullscreenFluxInOut">
                 <b-card no-body class="cardtype2 p-2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas height="200" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
                 </b-card>
               </FullScreen>
@@ -59,6 +69,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas height="200" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
                 </b-card>
               </FullScreen>
@@ -70,6 +85,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas height="200" width="100vh" ref="pandemic_top_desc" id="pandemic_top_desc"></canvas>
                 </b-card>
               </FullScreen>
@@ -99,6 +119,11 @@
               </b-card>
               <FullScreen id="fullscreenEntrance" link="mobile_in" @change="fullscreenMobileDaily">
                 <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_in" id="mobile_in"></canvas>
                   </div>
@@ -111,6 +136,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas
                     height="200"
                     width="100vh"
@@ -144,6 +174,11 @@
               </b-card>
               <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily">
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_out" id="mobile_out"></canvas>
                   </div>
@@ -155,6 +190,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="p-2 cardtype2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas height="200" width="100vh" ref="mobile_out_2_card" id="mobile_out_2_card"></canvas>
                 </b-card>
               </FullScreen>
@@ -185,6 +225,11 @@
             @change="fullscreenMobileDaily"
           >
             <b-card no-body class="mb-3 p-2" ref="mobile_presence_card">
+              <legend-popover>
+                <template v-slot:title>Comment est-ce calculé ?</template>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Sapiente tempore libero fugit perferendis repellendus?
+              </legend-popover>
               <div class="chart-container">
                 <canvas height="200" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
               </div>
@@ -334,9 +379,15 @@ export default {
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
     }),
     typesMobilite() {
-      let types = [{ val: 1, lbl: "default" }];
+      let types = [{ val: 1, lbl: "Par défaut" }];
       if (this.fluxGeoGranularity == 1) {
-        types.push({ val: 2, lbl: "générale" });
+        types.push({ val: 2, lbl: "Général" });
+      }
+      if (
+        this.fluxZoneGlobalIn.length > 0 ||
+        this.fluxZoneGlobalOut.length > 0
+      ) {
+        types.push({ val: 3, lbl: "Stat. zones" });
       }
       if (
         this.fluxZoneGlobalIn.length > 0 ||
@@ -1030,6 +1081,9 @@ export default {
                 ticks: {
                   beginAtZero: true,
                   fontSize: 9,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value);
+                  },
                 },
               },
             ],
