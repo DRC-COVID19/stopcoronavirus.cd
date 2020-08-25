@@ -91,11 +91,11 @@ Route::group([
             });
             Route::group(['prefix' => 'provinces'], function () {
                 Route::group(['prefix' => 'h-24'], function () {
-                    Route::get('/', 'DashBoardController@getFluxDataFromOriginProvince');
-                    Route::get('/daily', 'DashBoardController@getFluxDataFromOriginDailyProvince');
-                    Route::get('/daily-compare', 'DashBoardController@getFluxDataFromOriginDailyProvinceCompare');
-                    Route::get('/daily-in', 'DashBoardController@getFluxDataFromOriginDailyInProvince');
-                    Route::get('/daily-out', 'DashBoardController@getFluxDataFromOriginDailyOutProvince');
+                    Route::get('/', 'Flux24ProvinceController@getFluxDataFromOriginProvince');
+                    Route::get('/daily', 'Flux24ProvinceController@getFluxDataFromOriginDailyProvince');
+                    Route::get('/daily-compare', 'Flux24ProvinceController@getFluxDataFromOriginDailyProvinceCompare');
+                    Route::get('/daily-in', 'Flux24ProvinceController@getFluxDataFromOriginDailyInProvince');
+                    Route::get('/daily-out', 'Flux24ProvinceController@getFluxDataFromOriginDailyOutProvince');
                     Route::get('/global-in', 'Flux24ProvinceController@getGlobalDataIn');
                     Route::get('/global-out', 'Flux24ProvinceController@getGlobalDataOut');
                 });

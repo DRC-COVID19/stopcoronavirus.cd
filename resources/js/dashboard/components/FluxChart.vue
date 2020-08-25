@@ -55,7 +55,9 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -71,7 +73,9 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -87,7 +91,14 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="pandemic_top_desc" id="pandemic_top_desc"></canvas>
+                  <div class="chart-container">
+                    <canvas
+                      height="400"
+                      width="100vh"
+                      ref="pandemic_top_desc"
+                      id="pandemic_top_desc"
+                    ></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -136,12 +147,14 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas
-                    height="200"
-                    width="100vh"
-                    ref="mobile_entrance_2_card"
-                    id="mobile_entrance_2_card"
-                  ></canvas>
+                  <div class="chart-container">
+                    <canvas
+                      height="200"
+                      width="100vh"
+                      ref="mobile_entrance_2_card"
+                      id="mobile_entrance_2_card"
+                    ></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -188,7 +201,14 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="mobile_out_2_card" id="mobile_out_2_card"></canvas>
+                  <div class="chart-container">
+                    <canvas
+                      height="400"
+                      width="100vh"
+                      ref="mobile_out_2_card"
+                      id="mobile_out_2_card"
+                    ></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -236,7 +256,7 @@
                 Sapiente tempore libero fugit perferendis repellendus?
               </legend-popover>
               <div class="chart-container">
-                <canvas height="200" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
+                <canvas height="400" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
               </div>
             </b-card>
           </FullScreen>
@@ -289,7 +309,12 @@ import { PALETTE, FLUX_LAST_UPDATE } from "../config/env";
 import GlobalProvice from "./flux/GLobalProvince";
 import ToggleButton from "../components/ToggleButton";
 import { difference } from "@turf/turf";
-import { debounce } from "lodash";
+import { debounce, includes } from "lodash";
+import Chart from "chart.js";
+import "chartjs-plugin-annotation";
+Chart.defaults.global.defaultFontFamily = "'Rubik',sans-serif";
+Chart.defaults.global.defaultFontColor = "#7b7f88";
+
 export default {
   components: {
     GlobalProvice,
@@ -429,16 +454,29 @@ export default {
         this.fluxZoneGlobalIn,
         "general_top_asc",
         "general_top_desc",
-        `Top 5 des zones avec une mobilité croissante`,
-        "Top 5 des zones avec une mobilité decroissante"
+        `Les 5 zones de santé avec la plus forte décroissance de mobilité`,
+        "Les 5 zones de santé avec la plus faible décroissance de mobilité",
+        this.topHealthZoneConfirmed,
+        "Impacte sur la mobilité pour les 5 zones de santé les plus affectées",
+        "pandemic_top_desc"
       );
       this.updateGeneralMobilityDaily();
     },
     topHealthZoneConfirmed() {
-      this.topHealthZonePandemics(
+      // this.topHealthZonePandemics(
+      //   this.topHealthZoneConfirmed,
+      //   "pandemic_top_desc",
+      //   "Impacte sur la mobilité pour les 5 zones de santé les plus affectées"
+      // );
+      this.fluxMobilityFluxGeneralZone(
+        this.fluxZoneGlobalIn,
+        "general_top_asc",
+        "general_top_desc",
+        `Les 5 zones de santé avec la plus forte décroissance de mobilité`,
+        "Les 5 zones de santé avec la plus faible décroissance de mobilité",
         this.topHealthZoneConfirmed,
-        "pandemic_top_desc",
-        "Top 5 des zones les plus affectés au covid-19"
+        "Impacte sur la mobilité pour les 5 zones de santé les plus affectées",
+        "pandemic_top_desc"
       );
     },
     mobiliteGenerale() {
@@ -479,15 +517,18 @@ export default {
       this.fluxZoneGlobalIn,
       "general_top_asc",
       "general_top_desc",
-      `Top 5 des zones avec une mobilité croissante`,
-      "Top 5 des zones avec une mobilité decroissante"
+      `Les 5 zones de santé avec la plus forte décroissance de mobilité`,
+      "Les 5 zones de santé avec la plus faible décroissance de mobilité",
+      this.topHealthZoneConfirmed,
+      "Impacte sur la mobilité pour les 5 zones de santé les plus affectées",
+      "pandemic_top_desc"
     );
 
-    this.topHealthZonePandemics(
-      this.topHealthZoneConfirmed,
-      "pandemic_top_desc",
-      "Top 5 des zones les plus affectés au covid-19"
-    );
+    // this.topHealthZonePandemics(
+    //   this.topHealthZoneConfirmed,
+    //   "pandemic_top_desc",
+    //   "Impacte sur la mobilité pour les 5 zones de santé les plus affectées"
+    // );
 
     this.updateGeneralMobilityDaily();
     this.targetZone = this.fluxGeoOptions[0];
@@ -498,7 +539,7 @@ export default {
         this.targetZone = value[0];
       }
     );
-    this.fluxGeoGranularity=this.$store.state.flux.fluxGeoGranularity;
+    this.fluxGeoGranularity = this.$store.state.flux.fluxGeoGranularity;
     this.$store.watch(
       (state) => state.flux.fluxGeoGranularity,
       (value) => {
@@ -979,7 +1020,10 @@ export default {
       refAsc,
       refDesc,
       titleAsc,
-      titleDesc
+      titleDesc,
+      topHealthZoneConfirmed,
+      titleHelth,
+      refHealth
     ) {
       const generalData = [...fluxDataIn];
 
@@ -993,9 +1037,8 @@ export default {
 
           data.push({
             zone: zone,
-            volume: result.observationVolume,
+            volume: result.percent,
             percent: result.percent,
-            volume_reference: result.referenceVolume,
           });
         });
         resolver(data);
@@ -1015,6 +1058,12 @@ export default {
 
         const descData = localData.slice(0, 5);
 
+        const healthZones = topHealthZoneConfirmed.map((x) => x.name);
+
+        const mobilityHealth = data.filter((x) =>
+          includes(healthZones, x.zone)
+        );
+
         this.drawHorizontalChart(
           ascData,
           "zone",
@@ -1028,6 +1077,13 @@ export default {
           refDesc,
           PALETTE.flux_in_color,
           titleDesc
+        );
+        this.drawHorizontalChart(
+          mobilityHealth,
+          "zone",
+          refHealth,
+          PALETTE.flux_in_color,
+          titleHelth
         );
       });
     },
@@ -1064,6 +1120,7 @@ export default {
             },
           },
           responsive: true,
+          maintainAspectRatio: false,
           legend: {
             position: "bottom",
             labels: {
@@ -1073,7 +1130,7 @@ export default {
           title: {
             display: !!title,
             text: title,
-            color: "#6c757d",
+            fontSize: 15,
           },
           scales: {
             xAxes: [
@@ -1136,7 +1193,7 @@ export default {
       if (!fullscreen) {
         element.style.height = "400px";
         element.height = "400px";
-        element.parentElement.style.width = "auto";
+        element.parentElement.style.width = "";
         parent_2.style.display = "";
         parent_2.style.alignItem = "";
         parent_2.style.justifyContent = "";
