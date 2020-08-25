@@ -1280,7 +1280,7 @@ export default {
   .cardtype2{
     canvas{
       width: 700px !important;
-      height: 100vh !important;
+      height: calc(100vh - 32px) !important;
     }
   }
 }
