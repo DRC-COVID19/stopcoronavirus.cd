@@ -278,6 +278,7 @@ export default {
       fluxDataGroupedByDateIn: {},
       fluxDataGroupedByDateOut: {},
       fluxDataGroupedByDateGen: {},
+      topHealthZoneConfirmed:[]
     };
   },
   computed: {

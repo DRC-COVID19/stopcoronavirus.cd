@@ -161,6 +161,9 @@ export default {
                 ticks: {
                   beginAtZero: false,
                   fontSize: 9,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value)
+                  }
                 },
               },
             ],
@@ -169,14 +172,6 @@ export default {
                 ticks: {
                   beginAtZero: false,
                   fontSize: 9,
-                  callback: function (label, index, labels) {
-                    const value = localData.find((x) => x.zone == label);
-                    if (value && value.percent) {
-                      return `${label} (${value.percent}%)`;
-                    } else {
-                      return label;
-                    }
-                  },
                 },
               },
             ],

@@ -10,7 +10,7 @@
                         @mouseleave="setLegendEpidHover(null)"></div>
                 </div>
                 <div class="inner inner-last">
-                    <span class="lbl">{{Math.ceil(extValues.max)}}</span>
+                    <span class="lbl">{{lastValue}}</span>
                 </div>
             </div>
         </div>
@@ -37,13 +37,17 @@
             pourcent : function(){
                 //Calcul de la différence de marge entre chaque plage de la légende
                 return Math.abs(this.extValues.max - this.extValues.min) / 4
+            },
+            lastValue(){
+              return this.formatCash(Math.ceil(this.extValues.max))
             }
         } ,
         methods : {
             ...mapMutations(['setLegendEpidHover']),
             valAt : function(i){
                 //Calcul de la valeur en pourcentage de l'extrimté d'une plage à l'index i
-                return Math.floor(this.extValues.min + i * this.pourcent)
+                const val = Math.floor(this.extValues.min + i * this.pourcent)
+                return this.formatCash(val)
             }
         }
     }
