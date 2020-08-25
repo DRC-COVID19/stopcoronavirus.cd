@@ -13,6 +13,9 @@
 </template>
 
 <script>
+import Chart from "chart.js";
+import "chartjs-plugin-annotation";
+Chart.defaults.global.defaultFontFamily = 'Rubik,sans-serif';
 import { PALETTE } from "../../config/env";
 export default {
   props: {
