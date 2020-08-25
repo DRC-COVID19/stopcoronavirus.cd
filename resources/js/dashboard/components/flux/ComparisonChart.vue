@@ -148,6 +148,9 @@ export default {
                 },
                 ticks: {
                   beginAtZero: false,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value)  ;
+                  }
                 },
               },
             ],

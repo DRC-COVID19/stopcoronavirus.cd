@@ -79,6 +79,11 @@
       <b-col cols="12" md="6" class="p-1">
         <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+          <legend-popover>
+            <template v-slot:title>Comment est-ce calculé ? </template>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Sapiente tempore libero fugit perferendis repellendus?
+          </legend-popover>
           <div class="chart-container">
             <canvas height="400" width="100vh" ref="canvasStat1" id="canvasStat1"></canvas>
           </div>
@@ -88,6 +93,11 @@
       <b-col cols="12" md="6" class="p-1">
         <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+          <legend-popover>
+            <template v-slot:title>Comment est-ce calculé ? </template>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            Sapiente tempore libero fugit perferendis repellendus?
+          </legend-popover>
           <div class="chart-container">
             <canvas height="400" width="100vh" ref="canvasStat2" id="canvasStat2"></canvas>
           </div>
@@ -108,6 +118,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
+
 export default {
   props: ["hospitalTotalData"],
   data() {
@@ -170,8 +181,8 @@ export default {
             {
               label: "Respirateurs" ,
               fill: false,
-              backgroundColor: "#673AB7",
-              borderColor: "#673AB7",
+              backgroundColor: "#F44336",
+              borderColor: "#F44336",
               data: data.respirators.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
@@ -182,8 +193,8 @@ export default {
             {
               label: "Respirateurs occupés" ,
               fill: false,
-              backgroundColor: "#03A9F4",
-              borderColor: "#03A9F4",
+              backgroundColor: "#2e5bff",
+              borderColor: "#2e5bff",
               data: data.occupied_respirators.map(x => (x == 0) ? null : x) ,
               fill: false,
               interpolate: true,
@@ -213,8 +224,8 @@ export default {
             },
             {
               label: "Lits de réanimation occupés" ,
-              backgroundColor: "#9E9E9E",
-              borderColor: "#9E9E9E",
+              backgroundColor: "#2e5bff",
+              borderColor: "#2e5bff",
               data: data.occupied_resuscitation_beds.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
@@ -255,8 +266,8 @@ export default {
             },
             {
               label: "Taux occupation des Réspirateurs" ,
-              backgroundColor: "#673AB7",
-              borderColor: "#673AB7",
+              backgroundColor: "#2e5bff",
+              borderColor: "#2e5bff",
               data: dataset2,
               fill: false,
               interpolate: true,

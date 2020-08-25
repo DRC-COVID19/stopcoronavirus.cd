@@ -1004,6 +1004,12 @@ export default {
         }
         let referenceVolume = null;
         let observationVolume = null;
+        references.sort((a, b) => {
+          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        });
+        observations.sort((a, b) => {
+          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        });
         const countReference = references.length;
         if (countReference > 0) {
           if (countReference % 2 == 0) {
@@ -1062,6 +1068,12 @@ export default {
         }
         let referenceVolume = null;
         let observationVolume = null;
+        referencesByDate.sort((a, b) => {
+          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        });
+        observationsByDate.sort((a, b) => {
+          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        });
         const countReference = referencesByDate.length;
         if (countReference > 0) {
           if (countReference % 2 == 0) {
@@ -1124,6 +1136,12 @@ export default {
         const { referencesByDate, observationsByDate } = localData;
         let referenceVolume = null;
         let observationVolume = null;
+        referencesByDate.sort((a, b) => {
+          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        });
+        observationsByDate.sort((a, b) => {
+          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        });
         const countReference = referencesByDate.length;
         if (countReference > 0) {
           if (countReference % 2 == 0) {
@@ -1182,8 +1200,6 @@ export default {
         });
         formatCurrentZone(DataGroupByDate);
       }
-
-      console.log(features.map((x) => x.properties.origin));
 
       // features = features.filter((x) => x.properties.volume != 0);
 
@@ -1407,6 +1423,14 @@ export default {
         }
         let referenceVolume = null;
         let observationVolume = null;
+
+        references.sort((a, b) => {
+          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        });
+        observations.sort((a, b) => {
+          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        });
+
         const countReference = references.length;
         if (countReference > 0) {
           if (countReference % 2 == 0) {
@@ -1476,7 +1500,7 @@ export default {
         if (item.observations[0][key] == "Hors_Zone") {
           return;
         }
-        
+
         const result = this.formatFluxDataByMedian(item);
         arcData.push({
           percent: result.percent,
@@ -1504,8 +1528,6 @@ export default {
           filterArcData(item, "destination");
         });
       }
-
-
 
       const max = Math.max(...features.map((x) => x.properties.volume));
       const minArc = Math.min(...arcData.map((x) => x.percent));
