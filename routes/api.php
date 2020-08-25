@@ -85,7 +85,7 @@ Route::group([
                     Route::group(['prefix' => 'h-24'], function () {
                         Route::get('/', 'DashBoardController@getFlux24PresenceZone');
                         Route::get('/daily', 'DashBoardController@getFlux24PresenceZoneDaily');
-                        Route::get('/daily-in', 'DashBoardController@getFlux24PresenceDailyInZone');
+                        Route::get('/daily-in', 'Flux24PresenceZoneController@getFlux24PresenceDailyInZone');
                     });
                 });
             });
@@ -111,7 +111,7 @@ Route::group([
                     Route::group(['prefix' => 'h-24'], function () {
                         Route::get('/', 'DashBoardController@getFlux24PresenceProvince');
                         Route::get('/daily', 'DashBoardController@getFlux24PresenceProvinceDaily');
-                        Route::get('/daily-in', 'DashBoardController@getFlux24PresenceDailyInProvince');
+                        Route::get('/daily-in', 'Flux24PresenceProvinceController@getFlux24PresenceDailyInProvince');
                     });
                 });
             });
