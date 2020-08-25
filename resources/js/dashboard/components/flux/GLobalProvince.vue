@@ -2,7 +2,7 @@
   <FullScreen id="fullscreen" :link="reference" @change="fullscreenChange">
     <b-container class="global_province_container p-0">
       <b-row>
-        <b-col cols="12">
+        <b-col cols="12" class="pr-0">
           <b-card no-body class="p-2 rounded-0">
             <canvas height="600" :ref="reference" class="global_province"></canvas>
           </b-card>
