@@ -49,7 +49,7 @@ export default {
     positionSlide(){
       const selectedIndex = this.labels.findIndex(data => data.val == this.dataValue)
       if(selectedIndex == -1) return {opacity : 0}
-      else return {left : (selectedIndex * 57) + 'px', opacity : 1}
+      else return {left : (selectedIndex * 62) + 'px', opacity : 1}
     }
   },
 }
@@ -69,7 +69,7 @@ export default {
       position: absolute;
       height: 24px;
       background-color: #2e5bff;
-      width: 57px;
+      width: 62px;
       top: 2px;
       left: 0px;
       transform: translateX(2px);
@@ -83,7 +83,7 @@ export default {
       .label{
         margin: 0px;
         cursor : pointer ;
-        width: 57px;
+        width: 62px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;

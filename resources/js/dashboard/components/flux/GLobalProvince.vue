@@ -161,6 +161,9 @@ export default {
                 ticks: {
                   beginAtZero: false,
                   fontSize: 9,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value)
+                  }
                 },
               },
             ],
@@ -176,7 +179,7 @@ export default {
                     } else {
                       return label;
                     }
-                  },
+                  }
                 },
               },
             ],
@@ -200,14 +203,30 @@ export default {
         this.configBarChart
       );
     },
-    fullscreenChange(fullscreen) {
+    fullscreenChange(fullscreen,ref) {
+      const element = this.$refs[ref];
+      const parent_2 = element.parentElement.parentElement;
       if (!fullscreen) {
+
+        element.style.height = "400px";
+        element.height = "400px";
+        element.parentElement.style.width = "auto";
+        parent_2.style.display = "";
+        parent_2.style.alignItem = "";
+        parent_2.style.justifyContent = "";
+
         this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 9;
         this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 9;
         this.configBarChart.options.title.fontSize = 9;
 
         this.barChart.update();
       } else {
+
+        element.parentElement.style.width = "100%";
+        parent_2.style.display = "flex";
+        parent_2.style.alignItems = "center";
+        parent_2.style.justifyContent = "center";
+
         this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 12;
         this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 12;
         this.configBarChart.options.title.fontSize = 12;

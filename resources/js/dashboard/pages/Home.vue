@@ -281,6 +281,7 @@ export default {
       fluxDataGroupedByDateIn: {},
       fluxDataGroupedByDateOut: {},
       fluxDataGroupedByDateGen: {},
+      topHealthZoneConfirmed:[]
     };
   },
   computed: {
@@ -337,7 +338,6 @@ export default {
         : false;
     },
     flux24PresenceDailyInFormat(){
-      console.log(this.typePresence)
       if(this.typePresence == 3) return this.flux24PresenceDailyInNight
       else if(this.typePresence == 2) return this.flux24PresenceDailyInDay
       else return this.flux24PresenceDailyIn
