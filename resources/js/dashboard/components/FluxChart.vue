@@ -389,12 +389,6 @@ export default {
       ) {
         types.push({ val: 3, lbl: "Stat. zones" });
       }
-      if (
-        this.fluxZoneGlobalIn.length > 0 ||
-        this.fluxZoneGlobalOut.length > 0
-      ) {
-        types.push({ val: 3, lbl: "provinces" });
-      }
       return types;
     },
   },
@@ -498,7 +492,7 @@ export default {
         this.targetZone = value[0];
       }
     );
-
+    this.fluxGeoGranularity=this.$store.state.flux.fluxGeoGranularity;
     this.$store.watch(
       (state) => state.flux.fluxGeoGranularity,
       (value) => {
