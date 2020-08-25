@@ -70,7 +70,7 @@
                 :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
                 :flux24DailyGenerale="flux24DailyGenerale"
                 :isLoading="isLoading"
-                :flux24Presence="flux24PresenceDailyIn"
+                :flux24Presence="flux24PresenceDailyInFormat"
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
@@ -119,7 +119,7 @@
                   :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
                   :fluxDataGroupedByDateGen="fluxDataGroupedByDateGen"
                   :flux24Presence="flux24Presence"
-                  :flux24PresenceDailyIn="flux24PresenceDailyIn"
+                  :flux24PresenceDailyIn="flux24PresenceDailyInFormat"
                   :fluxZoneGlobalIn="fluxZoneGlobalIn"
                   :fluxZoneGlobalOut="fluxZoneGlobalOut"
                   :mobiliteGenerale="showMobiliteGenerale"
@@ -269,6 +269,9 @@ export default {
       menuColunmStyle: {},
       flux24PrensenceDaily: [],
       flux24PresenceDailyIn: {},
+      flux24PresenceDailyInData: {},
+      flux24PresenceDailyInDay: {},
+      flux24PresenceDailyInNight: {},
       fluxGlobalIn: [],
       fluxGlobalOut: [],
       palette: PALETTE,
@@ -289,6 +292,7 @@ export default {
       fluxMapStyle: (state) => state.flux.mapStyle,
       activeMenu: (state) => state.nav.activeMenu,
       healthZones: (state) => state.app.healthZones,
+      typePresence: (state) => state.flux.typePresence
     }),
     hasRightSide() {
       return (
@@ -332,6 +336,12 @@ export default {
         ? true
         : false;
     },
+    flux24PresenceDailyInFormat(){
+      console.log(this.typePresence)
+      if(this.typePresence == 3) return this.flux24PresenceDailyInNight
+      else if(this.typePresence == 2) return this.flux24PresenceDailyInDay
+      else return this.flux24PresenceDailyIn
+    }
   },
   mounted() {
     this.getFluxZone();
@@ -680,46 +690,7 @@ export default {
         });
       };
 
-      const computedFluxPresenceDataByDate = (
-        dataObservations,
-        dataReferences
-      ) => {
-        const referencesByDate = [];
-        const observationsByDate = [];
-
-        dataReferences.map((item) => {
-          const element = referencesByDate.find((x) => x.date == item.date);
-          if (element) {
-            element.volume += item.volume;
-          } else {
-            referencesByDate.push({
-              date: item.date,
-              day: item.day,
-              volume: item.volume,
-              zone: item.zone,
-            });
-          }
-        });
-
-        dataObservations.map((item) => {
-          const element = observationsByDate.find((x) => x.date == item.date);
-          if (element) {
-            element.volume += item.volume;
-          } else {
-            observationsByDate.push({
-              date: item.date,
-              day: item.day,
-              volume: item.volume,
-              zone: item.zone,
-            });
-          }
-        });
-
-        return {
-          referencesByDate,
-          observationsByDate,
-        };
-      };
+      const computedFluxPresenceDataByDate = this.computedFluxPresenceDataByDate ;
 
       this.flux24Errors = {};
 
@@ -941,17 +912,15 @@ export default {
       //     this.$set(this.loadings, "urlPresenceDaily", false);
       //   });
 
-      this.flux24PresenceDailyIn = {};
+      this.flux24PresenceDailyInData = {};
       this.$set(this.loadings, "urlPresenceDailyIn", true);
       axios
         .get(urlPresenceDailyIn, {
           params: values,
         })
         .then(({ data }) => {
-          this.flux24PresenceDailyIn = computedFluxPresenceDataByDate(
-            data.observations,
-            data.references
-          );
+          this.flux24PresenceDailyInData = data
+
           this.$set(this.loadings, "urlPresenceDailyIn", false);
         })
         .catch(({ response }) => {
@@ -1221,7 +1190,7 @@ export default {
         "zone"
       );
     },
-    computedFluxDataByDate(dataObservations, dataReferences, key) {
+    computedFluxDataByDate(dataObservations, dataReferences, key){
       const referencesByDate = [];
       const observationsByDate = [];
 
@@ -1287,6 +1256,43 @@ export default {
       //   return Object.assign({}, item);
       // });
     },
+    computedFluxPresenceDataByDate(dataObservations, dataReferences){
+      const referencesByDate = [];
+      const observationsByDate = [];
+
+      dataReferences.map((item) => {
+        const element = referencesByDate.find((x) => x.date == item.date);
+        if (element) {
+          element.volume += item.volume;
+        } else {
+          referencesByDate.push({
+            date: item.date,
+            day: item.day,
+            volume: item.volume,
+            zone: item.zone,
+          });
+        }
+      });
+
+      dataObservations.map((item) => {
+        const element = observationsByDate.find((x) => x.date == item.date);
+        if (element) {
+          element.volume += item.volume;
+        } else {
+          observationsByDate.push({
+            date: item.date,
+            day: item.day,
+            volume: item.volume,
+            zone: item.zone,
+          });
+        }
+      });
+
+      return {
+        referencesByDate,
+        observationsByDate,
+      };
+    }
   },
   watch: {
     fluxDataGroupedByDateIn() {
@@ -1295,6 +1301,28 @@ export default {
     fluxDataGroupedByDateOut() {
       this.updateFluxDataGroupedByDateGen();
     },
+    flux24PresenceDailyInData(){
+      let data = {observations : [], references : []}
+      if(this.flux24PresenceDailyInData.observations){
+        data.observations = this.flux24PresenceDailyInData.observations
+      }
+      if(this.flux24PresenceDailyInData.references){
+        data.references = this.flux24PresenceDailyInData.references
+      }
+
+      this.flux24PresenceDailyInDay = this.computedFluxPresenceDataByDate(
+        data.observations.filter(x => x.PresenceType == "Jour"),
+        data.references.filter(x => x.PresenceType == "Jour")
+      );
+      this.flux24PresenceDailyInNight = this.computedFluxPresenceDataByDate(
+        data.observations.filter(x => x.PresenceType == "Nuit"),
+        data.references.filter(x => x.PresenceType == "Nuit")
+      );
+      this.flux24PresenceDailyIn = this.computedFluxPresenceDataByDate(
+        data.observations,
+        data.references
+      );
+    }
   },
 };
 </script>

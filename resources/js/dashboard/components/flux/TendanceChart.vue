@@ -213,7 +213,7 @@ export default {
       this.myLineChart = new Chart(ref.getContext("2d"), tempData);
       const myLineChart2 = this.myLineChart;
     },
-  
+
     toggleFullscreen() {
       this.$refs['fullscreen'].toggle()
     },
