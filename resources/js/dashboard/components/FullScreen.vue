@@ -1,6 +1,6 @@
 <template>
   <div class="fullscreen-container">
-    <Fullscreen :ref="id" @change="fullscreenChange">
+    <Fullscreen :ref="id" @change="fullscreenChange" class="col-12 p-0">
       <slot></slot>
     </Fullscreen>
     <button type="button" @click="toggleFullscreen" class="fullscreen-btn mini">
@@ -79,5 +79,10 @@ export default {
     transform: scale(1);
     opacity: 1;
   }
+}
+.fullscreen{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

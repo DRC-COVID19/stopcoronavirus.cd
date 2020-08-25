@@ -20,19 +20,16 @@
           cols="12"
           v-show="this.typeMobilite == 2"
           md="12"
-          class="pl-0 pr-2 col-mobilite-generale"
+          class="pl-0  col-mobilite-generale"
         >
           <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==4}">
             <h5 class="percent-title">Mobilité générale</h5>
             <div class="percent flux-in-color">{{percentGenerale}}%​</div>
 
-            <p v-if="differenceGenerale>0" class="percent-p text-dash-color">
-              {{differenceGenerale}} personnes de plus sont
-              <br />entrées et sorties de la zone
-            </p>
-            <p v-else class="percent-p text-dash-color">
-              {{ `${differenceGenerale}`}} personnes de moins sont
-              <br />entrées et sorties de la zone
+            <p class="percent-p text-dash-color mb-0">
+              {{differenceGenerale}} personnes de
+              <span v-if="differenceGenerale>0">plus</span> <span v-else>moins</span>
+              sont entrées et sorties de la zone
             </p>
           </b-card>
 
@@ -58,10 +55,13 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
+                  </div>  
                 </b-card>
               </FullScreen>
             </b-col>
+
             <b-col cols="12" md="4">
               <FullScreen
                 id="general_top_desc"
@@ -74,10 +74,13 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
+
             <b-col cols="12" md="4">
               <FullScreen
                 id="pandemic_top_desc"
@@ -90,7 +93,9 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="pandemic_top_desc" id="pandemic_top_desc"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="pandemic_top_desc" id="pandemic_top_desc"></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -108,15 +113,14 @@
                 <h5 class="percent-title">Mobilité entrante</h5>
 
                 <div class="percent flux-in-color">{{percentIn}}%​</div>
-                <p
-                  v-if="differenceIn>0"
-                  class="percent-p text-dash-color"
-                >{{differenceIn}} personnes de plus sont entrées dans la zone</p>
-                <p
-                  v-else
-                  class="percent-p text-dash-color"
-                >{{ `${differenceIn}`}} personnes de moins sont entrées dans la zone</p>
+                <p class="percent-p text-dash-color mb-0">
+                  {{differenceIn}} personnes de
+                  <span v-if="differenceIn>0">plus</span> <span v-else>moins</span>
+                  sont entrées dans la zone <br>
+                  <span style="opacity:0">-</span>
+                </p>
               </b-card>
+
               <FullScreen id="fullscreenEntrance" link="mobile_in" @change="fullscreenMobileDaily">
                 <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
                   <legend-popover>
@@ -141,12 +145,10 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas
-                    height="200"
-                    width="100vh"
-                    ref="mobile_entrance_2_card"
-                    id="mobile_entrance_2_card"
-                  ></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="mobile_entrance_2_card" id="mobile_entrance_2_card">
+                    </canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -163,15 +165,14 @@
               >
                 <h5 class="percent-title">Mobilité sortante</h5>
                 <div class="percent flux-out-color">{{percentOut}}%​</div>
-                <p
-                  v-if="differenceOut>0"
-                  class="percent-p text-dash-color"
-                >{{differenceOut}} personnes de plus sont sorties de la zone</p>
-                <p
-                  v-else
-                  class="percent-p text-dash-color"
-                >{{`${differenceOut}`}} personnes de moins sont sorties de la zone</p>
+                <p class="percent-p text-dash-color mb-0">
+                  {{differenceOut}} personnes de
+                  <span v-if="differenceOut>0">plus</span> <span v-else>moins</span>
+                  sont sorties de la zone <br>
+                  <span style="opacity:0">-</span>
+                </p>
               </b-card>
+
               <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily">
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
                   <legend-popover>
@@ -184,6 +185,7 @@
                   </div>
                 </b-card>
               </FullScreen>
+
               <FullScreen
                 id="fullscreenOut2"
                 link="mobile_out_2_card"
@@ -195,7 +197,9 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="mobile_out_2_card" id="mobile_out_2_card"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="mobile_out_2_card" id="mobile_out_2_card"></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -208,30 +212,43 @@
             :class="{'active':fluxType==3}"
             @click="selectFluxType(3)"
           >
-            <h5 class="percent-title">Présences</h5>
+            <div class="row justify-content-between">
+              <h5 class="percent-title">Présences</h5>
+              <div class="btns-toggle-presence">
+                <i class="fa fa-sun"
+                  title="N'afficher que les présences jour"
+                  :class="{'active' : typePresence == 2}"
+                  @click="toggleTypePresence(2)"></i>
+                <i class="fa fa-moon"
+                  title="N'afficher que les présences nuit"
+                  :class="{'active' : typePresence == 3}"
+                  @click="toggleTypePresence(3)"></i>
+              </div>
+            </div>
             <div class="percent flux-presence">{{percentPresence}}%​</div>
-            <p
-              v-if="differencePresence>0"
-              class="percent-p text-dash-color"
-            >{{differencePresence}} personnes de plus étaient présentes dans la zone</p>
-            <p
-              v-else
-              class="percent-p text-dash-color"
-            >{{`${differencePresence}`}} personnes de moins étaient présentes dans la zone</p>
+            <p class="percent-p text-dash-color mb-0">
+              {{differencePresence}} personnes de
+              <span v-if="differencePresence>0">plus</span> <span v-else>moins</span>
+              étaient présentes dans la zone <br>
+              <span v-if="typePresence == 2">durant la journée</span>
+              <span v-else-if="typePresence == 3">durant la nuit</span>
+              <span v-else style="opacity:0">-</span>
+            </p>
           </b-card>
+
           <FullScreen
             id="mobile_presence_full"
             link="mobile_presence"
             @change="fullscreenMobileDaily"
           >
-            <b-card no-body class="mb-3 p-2" ref="mobile_presence_card">
+            <b-card no-body class="mb-3 p-2 cardtype1" ref="mobile_presence_card">
               <legend-popover>
                 <template v-slot:title>Comment est-ce calculé ?</template>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Sapiente tempore libero fugit perferendis repellendus?
               </legend-popover>
               <div class="chart-container">
-                <canvas height="200" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
+                <canvas height="400" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
               </div>
             </b-card>
           </FullScreen>
@@ -254,7 +271,7 @@
         </b-row>
         -->
 
-        <b-row class="col-12">
+        <b-row align-h="center" class="col-12">
           <b-col cols="12" md="6" class="pr-md-0">
             <GlobalProvice
               title="Mobilité entrante par zone"
@@ -284,7 +301,12 @@ import { PALETTE, FLUX_LAST_UPDATE } from "../config/env";
 import GlobalProvice from "./flux/GLobalProvince";
 import ToggleButton from "../components/ToggleButton";
 import { difference } from "@turf/turf";
-import { debounce } from "lodash";
+import { debounce, includes } from "lodash";
+import Chart from "chart.js";
+import "chartjs-plugin-annotation";
+Chart.defaults.global.defaultFontFamily = "'Rubik',sans-serif";
+Chart.defaults.global.defaultFontColor = "#7b7f88";
+
 export default {
   components: {
     GlobalProvice,
@@ -377,6 +399,7 @@ export default {
       fluxType: (state) => state.flux.fluxType,
       isProvinceStatSeeing: (state) => state.flux.isProvinceStatSeeing,
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
+      typePresence: (state) => state.flux.typePresence,
     }),
     typesMobilite() {
       let types = [{ val: 1, lbl: "Par défaut" }];
@@ -423,16 +446,29 @@ export default {
         this.fluxZoneGlobalIn,
         "general_top_asc",
         "general_top_desc",
-        `Top 5 des zones avec une mobilité croissante`,
-        "Top 5 des zones avec une mobilité decroissante"
+        `Les 5 zones de santé avec la plus forte décroissance de mobilité`,
+        "Les 5 zones de santé avec la plus faible décroissance de mobilité",
+        this.topHealthZoneConfirmed,
+        "Impacte sur la mobilité pour les 5 zones de santé les plus affectées",
+        "pandemic_top_desc"
       );
       this.updateGeneralMobilityDaily();
     },
     topHealthZoneConfirmed() {
-      this.topHealthZonePandemics(
+      // this.topHealthZonePandemics(
+      //   this.topHealthZoneConfirmed,
+      //   "pandemic_top_desc",
+      //   "Impacte sur la mobilité pour les 5 zones de santé les plus affectées"
+      // );
+      this.fluxMobilityFluxGeneralZone(
+        this.fluxZoneGlobalIn,
+        "general_top_asc",
+        "general_top_desc",
+        `Les 5 zones de santé avec la plus forte décroissance de mobilité`,
+        "Les 5 zones de santé avec la plus faible décroissance de mobilité",
         this.topHealthZoneConfirmed,
-        "pandemic_top_desc",
-        "Top 5 des zones les plus affectés au covid-19"
+        "Impacte sur la mobilité pour les 5 zones de santé les plus affectées",
+        "pandemic_top_desc"
       );
     },
     mobiliteGenerale() {
@@ -473,15 +509,18 @@ export default {
       this.fluxZoneGlobalIn,
       "general_top_asc",
       "general_top_desc",
-      `Top 5 des zones avec une mobilité croissante`,
-      "Top 5 des zones avec une mobilité decroissante"
+      `Les 5 zones de santé avec la plus forte décroissance de mobilité`,
+      "Les 5 zones de santé avec la plus faible décroissance de mobilité",
+      this.topHealthZoneConfirmed,
+      "Impacte sur la mobilité pour les 5 zones de santé les plus affectées",
+      "pandemic_top_desc"
     );
 
-    this.topHealthZonePandemics(
-      this.topHealthZoneConfirmed,
-      "pandemic_top_desc",
-      "Top 5 des zones les plus affectés au covid-19"
-    );
+    // this.topHealthZonePandemics(
+    //   this.topHealthZoneConfirmed,
+    //   "pandemic_top_desc",
+    //   "Impacte sur la mobilité pour les 5 zones de santé les plus affectées"
+    // );
 
     this.updateGeneralMobilityDaily();
     this.targetZone = this.fluxGeoOptions[0];
@@ -492,7 +531,7 @@ export default {
         this.targetZone = value[0];
       }
     );
-    this.fluxGeoGranularity=this.$store.state.flux.fluxGeoGranularity;
+    this.fluxGeoGranularity = this.$store.state.flux.fluxGeoGranularity;
     this.$store.watch(
       (state) => state.flux.fluxGeoGranularity,
       (value) => {
@@ -504,7 +543,7 @@ export default {
     );
   },
   methods: {
-    ...mapMutations(["setFluxType", "setIsProvinceStatSeeing"]),
+    ...mapMutations(["setFluxType", "setIsProvinceStatSeeing", "setTypePresence"]),
     selectFluxType(value) {
       this.setFluxType(value);
     },
@@ -973,7 +1012,10 @@ export default {
       refAsc,
       refDesc,
       titleAsc,
-      titleDesc
+      titleDesc,
+      topHealthZoneConfirmed,
+      titleHelth,
+      refHealth
     ) {
       const generalData = [...fluxDataIn];
 
@@ -987,9 +1029,8 @@ export default {
 
           data.push({
             zone: zone,
-            volume: result.observationVolume,
+            volume: result.percent,
             percent: result.percent,
-            volume_reference: result.referenceVolume,
           });
         });
         resolver(data);
@@ -1009,6 +1050,12 @@ export default {
 
         const descData = localData.slice(0, 5);
 
+        const healthZones = topHealthZoneConfirmed.map((x) => x.name);
+
+        const mobilityHealth = data.filter((x) =>
+          includes(healthZones, x.zone)
+        );
+
         this.drawHorizontalChart(
           ascData,
           "zone",
@@ -1022,6 +1069,13 @@ export default {
           refDesc,
           PALETTE.flux_in_color,
           titleDesc
+        );
+        this.drawHorizontalChart(
+          mobilityHealth,
+          "zone",
+          refHealth,
+          PALETTE.flux_in_color,
+          titleHelth
         );
       });
     },
@@ -1058,6 +1112,7 @@ export default {
             },
           },
           responsive: true,
+          maintainAspectRatio: false,
           legend: {
             position: "bottom",
             labels: {
@@ -1067,7 +1122,7 @@ export default {
           title: {
             display: !!title,
             text: title,
-            color: "#6c757d",
+            fontSize: 15,
           },
           scales: {
             xAxes: [
@@ -1130,7 +1185,7 @@ export default {
       if (!fullscreen) {
         element.style.height = "400px";
         element.height = "400px";
-        element.parentElement.style.width = "auto";
+        element.parentElement.style.width = "";
         parent_2.style.display = "";
         parent_2.style.alignItem = "";
         parent_2.style.justifyContent = "";
@@ -1139,10 +1194,10 @@ export default {
         this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9;
         this.barChart[ref].update();
       } else {
-        element.parentElement.style.width = "80%";
-        parent_2.style.display = "flex";
-        parent_2.style.alignItems = "center";
-        parent_2.style.justifyContent = "center";
+        // element.parentElement.style.width = "80%";
+        // parent_2.style.display = "flex";
+        // parent_2.style.alignItems = "center";
+        // parent_2.style.justifyContent = "center";
 
         this.configBarChart[ref].options.legend.labels.fontSize = 12;
         this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 12;
@@ -1200,6 +1255,10 @@ export default {
     toggleGlobalMobility() {
       this.showMobiliteGenerale = !this.showMobiliteGenerale;
     },
+    toggleTypePresence(type){
+      if(this.typePresence == type) type = 1
+      this.setTypePresence(type)
+    }
   },
 };
 </script>
@@ -1255,6 +1314,32 @@ export default {
 .chart-container {
   div {
     position: relative;
+  }
+}
+.fullscreen{
+  .cardtype1{
+    canvas{
+      width: calc(100vw - 19px) !important;
+      height: 500px !important;
+    }
+  }
+  .cardtype2{
+    canvas{
+      width: 700px !important;
+      height: calc(100vh - 32px) !important;
+    }
+  }
+}
+.btns-toggle-presence{
+  i{
+    color : #7b7f88 ;
+    font-size: 15px;
+    margin-right: 2px;
+    cursor : pointer ;
+    transition : color 0.2s ease-in-out ;
+    &.active{
+      color : #8BC34A ;
+    }
   }
 }
 </style>
