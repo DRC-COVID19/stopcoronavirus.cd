@@ -26,18 +26,20 @@
             <h5 class="percent-title">Mobilité générale</h5>
             <div class="percent flux-in-color">{{percentGenerale}}%​</div>
 
-            <p v-if="differenceGenerale>0" class="percent-p text-dash-color">
-              {{differenceGenerale}} personnes de plus sont
-              <br />entrées et sorties de la zone
-            </p>
-            <p v-else class="percent-p text-dash-color">
-              {{ `${differenceGenerale}`}} personnes de moins sont
-              <br />entrées et sorties de la zone
+            <p class="percent-p text-dash-color mb-0">
+              {{differenceGenerale}} personnes de
+              <span v-if="differenceGenerale>0">plus</span> <span v-else>moins</span>
+              sont entrées et sorties de la zone
             </p>
           </b-card>
 
           <FullScreen id="mobile_generale_full" link="general_flux" @change="fullscreenMobileDaily">
             <b-card no-body class="cardtype1 mb-3 p-2">
+              <legend-popover>
+                <template v-slot:title>Comment est-ce calculé ?</template>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Sapiente tempore libero fugit perferendis repellendus?
+              </legend-popover>
               <div class="chart-container">
                 <canvas height="200" width="100vh" ref="general_flux" id="general_flux"></canvas>
               </div>
@@ -48,6 +50,11 @@
             <b-col cols="12" md="4">
               <FullScreen id="general_top_asc" link="general_top_asc" @change="fullscreenFluxInOut">
                 <b-card no-body class="cardtype2 p-2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas height="200" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
                 </b-card>
               </FullScreen>
@@ -59,6 +66,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas height="200" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
                 </b-card>
               </FullScreen>
@@ -70,6 +82,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas height="200" width="100vh" ref="pandemic_top_desc" id="pandemic_top_desc"></canvas>
                 </b-card>
               </FullScreen>
@@ -88,17 +105,20 @@
                 <h5 class="percent-title">Mobilité entrante</h5>
 
                 <div class="percent flux-in-color">{{percentIn}}%​</div>
-                <p
-                  v-if="differenceIn>0"
-                  class="percent-p text-dash-color"
-                >{{differenceIn}} personnes de plus sont entrées dans la zone</p>
-                <p
-                  v-else
-                  class="percent-p text-dash-color"
-                >{{ `${differenceIn}`}} personnes de moins sont entrées dans la zone</p>
+                <p class="percent-p text-dash-color mb-0">
+                  {{differenceIn}} personnes de
+                  <span v-if="differenceIn>0">plus</span> <span v-else>moins</span>
+                  sont entrées dans la zone <br>
+                  <span style="opacity:0">-</span>
+                </p>
               </b-card>
               <FullScreen id="fullscreenEntrance" link="mobile_in" @change="fullscreenMobileDaily">
                 <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_in" id="mobile_in"></canvas>
                   </div>
@@ -111,6 +131,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas
                     height="200"
                     width="100vh"
@@ -133,17 +158,20 @@
               >
                 <h5 class="percent-title">Mobilité sortante</h5>
                 <div class="percent flux-out-color">{{percentOut}}%​</div>
-                <p
-                  v-if="differenceOut>0"
-                  class="percent-p text-dash-color"
-                >{{differenceOut}} personnes de plus sont sorties de la zone</p>
-                <p
-                  v-else
-                  class="percent-p text-dash-color"
-                >{{`${differenceOut}`}} personnes de moins sont sorties de la zone</p>
+                <p class="percent-p text-dash-color mb-0">
+                  {{differenceOut}} personnes de
+                  <span v-if="differenceOut>0">plus</span> <span v-else>moins</span>
+                  sont sorties de la zone <br>
+                  <span style="opacity:0">-</span>
+                </p>
               </b-card>
               <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily">
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_out" id="mobile_out"></canvas>
                   </div>
@@ -155,6 +183,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="p-2 cardtype2">
+                  <legend-popover>
+                    <template v-slot:title>Comment est-ce calculé ?</template>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Sapiente tempore libero fugit perferendis repellendus?
+                  </legend-popover>
                   <canvas height="200" width="100vh" ref="mobile_out_2_card" id="mobile_out_2_card"></canvas>
                 </b-card>
               </FullScreen>
@@ -182,14 +215,14 @@
               </div>
             </div>
             <div class="percent flux-presence">{{percentPresence}}%​</div>
-            <p
-              v-if="differencePresence>0"
-              class="percent-p text-dash-color"
-            >{{differencePresence}} personnes de plus étaient présentes dans la zone</p>
-            <p
-              v-else
-              class="percent-p text-dash-color"
-            >{{`${differencePresence}`}} personnes de moins étaient présentes dans la zone</p>
+            <p class="percent-p text-dash-color mb-0">
+              {{differencePresence}} personnes de
+              <span v-if="differencePresence>0">plus</span> <span v-else>moins</span>
+              étaient présentes dans la zone <br>
+              <span v-if="typePresence == 2">durant la journée</span>
+              <span v-else-if="typePresence == 3">durant la nuit</span>
+              <span v-else style="opacity:0">-</span>
+            </p>
           </b-card>
           <FullScreen
             id="mobile_presence_full"
@@ -197,6 +230,11 @@
             @change="fullscreenMobileDaily"
           >
             <b-card no-body class="mb-3 p-2" ref="mobile_presence_card">
+              <legend-popover>
+                <template v-slot:title>Comment est-ce calculé ?</template>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Sapiente tempore libero fugit perferendis repellendus?
+              </legend-popover>
               <div class="chart-container">
                 <canvas height="200" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
               </div>
@@ -347,15 +385,15 @@ export default {
       typePresence: (state) => state.flux.typePresence,
     }),
     typesMobilite() {
-      let types = [{ val: 1, lbl: "default" }];
+      let types = [{ val: 1, lbl: "Par défaut" }];
       if (this.fluxGeoGranularity == 1) {
-        types.push({ val: 2, lbl: "générale" });
+        types.push({ val: 2, lbl: "Général" });
       }
       if (
         this.fluxZoneGlobalIn.length > 0 ||
         this.fluxZoneGlobalOut.length > 0
       ) {
-        types.push({ val: 3, lbl: "provinces" });
+        types.push({ val: 3, lbl: "Stat. zones" });
       }
       return types;
     },
@@ -460,7 +498,7 @@ export default {
         this.targetZone = value[0];
       }
     );
-
+    this.fluxGeoGranularity=this.$store.state.flux.fluxGeoGranularity;
     this.$store.watch(
       (state) => state.flux.fluxGeoGranularity,
       (value) => {
@@ -1043,6 +1081,9 @@ export default {
                 ticks: {
                   beginAtZero: true,
                   fontSize: 9,
+                  callback: (value, index, values) => {
+                    return this.formatCash(value);
+                  },
                 },
               },
             ],
@@ -1092,10 +1133,9 @@ export default {
       //this.fullscreen = fullscreen
       const element = this.$refs[ref];
       const parent_2 = element.parentElement.parentElement;
-      console.log(this.$refs);
       if (!fullscreen) {
-        this.$refs[ref].style.height = "400px";
-        this.$refs[ref].height = "400px";
+        element.style.height = "400px";
+        element.height = "400px";
         element.parentElement.style.width = "auto";
         parent_2.style.display = "";
         parent_2.style.alignItem = "";
@@ -1105,7 +1145,7 @@ export default {
         this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9;
         this.barChart[ref].update();
       } else {
-        element.parentElement.style.width = "30%";
+        element.parentElement.style.width = "80%";
         parent_2.style.display = "flex";
         parent_2.style.alignItems = "center";
         parent_2.style.justifyContent = "center";

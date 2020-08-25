@@ -9,7 +9,8 @@ export default {
             return new Promise(resolve => setTimeout(resolve, ms));
         },
         formatCash(n) {
-            if (!n) {
+            if(n == 0) return 0
+            else if (!n) {
                 return null;
             }
             n = Math.abs(n);
