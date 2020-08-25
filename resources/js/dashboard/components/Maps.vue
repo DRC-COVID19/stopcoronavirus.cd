@@ -611,7 +611,12 @@ export default {
     loadSource() {
       axios
         .get(
-          `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`
+          `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`,
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
         )
         .then(({ data }) => {
           // console.log("data", data);
@@ -643,7 +648,12 @@ export default {
 
       axios
         .get(
-          `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`
+          `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`,
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
         )
         .then(({ data }) => {
           // console.log("data", data);
