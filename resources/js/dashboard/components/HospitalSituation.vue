@@ -181,8 +181,8 @@ export default {
             {
               label: "Respirateurs" ,
               fill: false,
-              backgroundColor: "#673AB7",
-              borderColor: "#673AB7",
+              backgroundColor: "#F44336",
+              borderColor: "#F44336",
               data: data.respirators.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
@@ -193,8 +193,8 @@ export default {
             {
               label: "Respirateurs occupés" ,
               fill: false,
-              backgroundColor: "#03A9F4",
-              borderColor: "#03A9F4",
+              backgroundColor: "#2e5bff",
+              borderColor: "#2e5bff",
               data: data.occupied_respirators.map(x => (x == 0) ? null : x) ,
               fill: false,
               interpolate: true,
@@ -224,8 +224,8 @@ export default {
             },
             {
               label: "Lits de réanimation occupés" ,
-              backgroundColor: "#9E9E9E",
-              borderColor: "#9E9E9E",
+              backgroundColor: "#2e5bff",
+              borderColor: "#2e5bff",
               data: data.occupied_resuscitation_beds.map(x => (x == 0) ? null : x),
               fill: false,
               interpolate: true,
@@ -266,8 +266,8 @@ export default {
             },
             {
               label: "Taux occupation des Réspirateurs" ,
-              backgroundColor: "#673AB7",
-              borderColor: "#673AB7",
+              backgroundColor: "#2e5bff",
+              borderColor: "#2e5bff",
               data: dataset2,
               fill: false,
               interpolate: true,

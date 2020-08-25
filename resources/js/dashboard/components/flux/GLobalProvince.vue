@@ -1,20 +1,15 @@
 <template>
-  <div class="fullscreen-container">
-    <fullscreen ref="fullscreen" @change="fullscreenChange">
-      <b-container class="global_province_container p-0">
-        <b-row>
-          <b-col cols="12">
-            <b-card no-body class="p-2 rounded-0">
-              <canvas height="600" :ref="reference" class="global_province"></canvas>
-            </b-card>
-          </b-col>
-        </b-row>
-      </b-container>
-    </fullscreen>
-    <button type="button" @click="toggleFullscreen" class="fullscreen-btn mini">
-      <i class="fa fa-expand"></i>
-    </button>
-  </div>
+  <FullScreen id="fullscreen" :link="reference" @change="fullscreenChange">
+    <b-container class="global_province_container p-0">
+      <b-row>
+        <b-col cols="12">
+          <b-card no-body class="p-2 rounded-0">
+            <canvas height="600" :ref="reference" class="global_province"></canvas>
+          </b-card>
+        </b-col>
+      </b-row>
+    </b-container>
+  </FullScreen>
 </template>
 
 <script>
@@ -38,10 +33,10 @@ export default {
       type: String,
       default: null,
     },
-    isProvince:{
-      type:Boolean,
-      default:false,
-    }
+    isProvince: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -98,11 +93,11 @@ export default {
           }
         }
         const difference = observationVolume - referenceVolume;
-        let zone=null;
+        let zone = null;
         if (observationsByDate[0]) {
-          zone=observationsByDate[0].zone;
-        }else if (referencesByDate[0]) {
-          zone=referencesByDate[0].zone;
+          zone = observationsByDate[0].zone;
+        } else if (referencesByDate[0]) {
+          zone = referencesByDate[0].zone;
         }
         if (!zone) {
           return;
@@ -118,7 +113,7 @@ export default {
       });
 
       localData.sort((a, b) => {
-        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
+        return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
       });
 
       const dataChart = {
@@ -199,9 +194,6 @@ export default {
         this.$refs[this.reference].getContext("2d"),
         this.configBarChart
       );
-    },
-    toggleFullscreen() {
-      this.$refs["fullscreen"].toggle();
     },
     fullscreenChange(fullscreen) {
       if (!fullscreen) {
