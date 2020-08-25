@@ -80,4 +80,9 @@ export default {
     opacity: 1;
   }
 }
+.fullscreen{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 </style>
