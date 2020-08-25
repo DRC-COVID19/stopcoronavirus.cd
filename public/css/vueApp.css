@@ -28261,17 +28261,6 @@ h3 {
   text-overflow: ellipsis;
 }
 
-.fullscreen-container {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-.fullscreen-container > div:nth-child(1) {
-  width: 100%;
-  height: 100%;
-}
-
 .fullscreen-container .fullscreen-btn {
   transform-origin: center;
   transform: scale(0);
