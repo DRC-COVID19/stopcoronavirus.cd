@@ -58,10 +58,13 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
+                  </div>  
                 </b-card>
               </FullScreen>
             </b-col>
+
             <b-col cols="12" md="4">
               <FullScreen
                 id="general_top_desc"
@@ -74,10 +77,13 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
+
             <b-col cols="12" md="4">
               <FullScreen
                 id="pandemic_top_desc"
@@ -90,7 +96,9 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="pandemic_top_desc" id="pandemic_top_desc"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="pandemic_top_desc" id="pandemic_top_desc"></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -117,6 +125,7 @@
                   class="percent-p text-dash-color"
                 >{{ `${differenceIn}`}} personnes de moins sont entrées dans la zone</p>
               </b-card>
+
               <FullScreen id="fullscreenEntrance" link="mobile_in" @change="fullscreenMobileDaily">
                 <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
                   <legend-popover>
@@ -141,12 +150,10 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas
-                    height="200"
-                    width="100vh"
-                    ref="mobile_entrance_2_card"
-                    id="mobile_entrance_2_card"
-                  ></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="mobile_entrance_2_card" id="mobile_entrance_2_card">
+                    </canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -172,6 +179,7 @@
                   class="percent-p text-dash-color"
                 >{{`${differenceOut}`}} personnes de moins sont sorties de la zone</p>
               </b-card>
+
               <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily">
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
                   <legend-popover>
@@ -184,6 +192,7 @@
                   </div>
                 </b-card>
               </FullScreen>
+
               <FullScreen
                 id="fullscreenOut2"
                 link="mobile_out_2_card"
@@ -195,7 +204,9 @@
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
-                  <canvas height="200" width="100vh" ref="mobile_out_2_card" id="mobile_out_2_card"></canvas>
+                  <div class="chart-container">
+                    <canvas height="400" width="100vh" ref="mobile_out_2_card" id="mobile_out_2_card"></canvas>
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -219,12 +230,13 @@
               class="percent-p text-dash-color"
             >{{`${differencePresence}`}} personnes de moins étaient présentes dans la zone</p>
           </b-card>
+
           <FullScreen
             id="mobile_presence_full"
             link="mobile_presence"
             @change="fullscreenMobileDaily"
           >
-            <b-card no-body class="mb-3 p-2" ref="mobile_presence_card">
+            <b-card no-body class="mb-3 p-2 cardtype1" ref="mobile_presence_card">
               <legend-popover>
                 <template v-slot:title>Comment est-ce calculé ?</template>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
@@ -1058,6 +1070,7 @@ export default {
             },
           },
           responsive: true,
+          maintainAspectRatio: false,
           legend: {
             position: "bottom",
             labels: {
@@ -1139,10 +1152,10 @@ export default {
         this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9;
         this.barChart[ref].update();
       } else {
-        element.parentElement.style.width = "80%";
-        parent_2.style.display = "flex";
-        parent_2.style.alignItems = "center";
-        parent_2.style.justifyContent = "center";
+        // element.parentElement.style.width = "80%";
+        // parent_2.style.display = "flex";
+        // parent_2.style.alignItems = "center";
+        // parent_2.style.justifyContent = "center";
 
         this.configBarChart[ref].options.legend.labels.fontSize = 12;
         this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 12;
@@ -1255,6 +1268,20 @@ export default {
 .chart-container {
   div {
     position: relative;
+  }
+}
+.fullscreen{
+  .cardtype1{
+    canvas{
+      width: calc(100vw - 19px) !important;
+      height: 500px !important;
+    }
+  }
+  .cardtype2{
+    canvas{
+      width: 700px !important;
+      height: 100vh !important;
+    }
   }
 }
 </style>
