@@ -281,7 +281,7 @@ export default {
       fluxDataGroupedByDateIn: {},
       fluxDataGroupedByDateOut: {},
       fluxDataGroupedByDateGen: {},
-      topHealthZoneConfirmed:[]
+      topHealthZoneConfirmed: [],
     };
   },
   computed: {
@@ -293,7 +293,7 @@ export default {
       fluxMapStyle: (state) => state.flux.mapStyle,
       activeMenu: (state) => state.nav.activeMenu,
       healthZones: (state) => state.app.healthZones,
-      typePresence: (state) => state.flux.typePresence
+      typePresence: (state) => state.flux.typePresence,
     }),
     hasRightSide() {
       return (
@@ -337,11 +337,11 @@ export default {
         ? true
         : false;
     },
-    flux24PresenceDailyInFormat(){
-      if(this.typePresence == 3) return this.flux24PresenceDailyInNight
-      else if(this.typePresence == 2) return this.flux24PresenceDailyInDay
-      else return this.flux24PresenceDailyIn
-    }
+    flux24PresenceDailyInFormat() {
+      if (this.typePresence == 3) return this.flux24PresenceDailyInNight;
+      else if (this.typePresence == 2) return this.flux24PresenceDailyInDay;
+      else return this.flux24PresenceDailyIn;
+    },
   },
   mounted() {
     this.getFluxZone();
@@ -690,7 +690,8 @@ export default {
         });
       };
 
-      const computedFluxPresenceDataByDate = this.computedFluxPresenceDataByDate ;
+      const computedFluxPresenceDataByDate = this
+        .computedFluxPresenceDataByDate;
 
       this.flux24Errors = {};
 
@@ -919,7 +920,7 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          this.flux24PresenceDailyInData = data
+          this.flux24PresenceDailyInData = data;
 
           this.$set(this.loadings, "urlPresenceDailyIn", false);
         })
@@ -951,8 +952,8 @@ export default {
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
 
-      const pandemicParams=Object.assign({}, values);
-      pandemicParams.fluxGeoOptions=pandemicParams.fluxGeoOptions[0];
+      const pandemicParams = Object.assign({}, values);
+      pandemicParams.fluxGeoOptions = pandemicParams.fluxGeoOptions[0];
       axios
         .get("/api/dashboard/pandemics/top-confirmed", {
           params: pandemicParams,
@@ -961,11 +962,26 @@ export default {
           this.topHealthZoneConfirmed = data;
         });
 
-      this.healthZones
-        .filter((x) => x.province == values.fluxGeoOptions[0])
-        .map((item) => {
+      const healthZones = this.healthZones.filter(
+        (x) => x.province == values.fluxGeoOptions[0]
+      );
+
+      let healthZonesWorkingIn = healthZones.slice(0, 10);
+      let healthZonesWorkingOut = healthZones.slice(0, 10);
+
+      let healthIndexIn = healthZonesWorkingIn.length;
+      let healthIndexOut = healthZonesWorkingOut.length;
+
+      let loopLenghtIn = healthIndexIn;
+
+      let loopLenghtOut = healthIndexOut;
+
+      const globalInFunc = () => {
+        for (let index = 0; index < loopLenghtIn; index++) {
+          const item = healthZonesWorkingIn[index];
           const healthZoneValues = Object.assign({}, values);
           healthZoneValues.fluxGeoOptions = item.zone;
+
           //Get  zone in by province
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
@@ -973,17 +989,68 @@ export default {
             })
             .then(({ data }) => {
               this.fluxZoneGlobalIn.push(data);
+
+              healthZonesWorkingIn = healthZones.slice(
+                healthIndexIn,
+                healthIndexIn + 1
+              );
+              healthIndexIn++;
+              loopLenghtIn = 1;
+              if (healthIndexIn <= healthZones.length) {
+                globalInFunc();
+              }
             });
 
           //Get  zone out by province
+          // axios
+          //   .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
+          //     params: healthZoneValues,
+          //   })
+          //   .then(({ data }) => {
+          //     this.fluxZoneGlobalOut.push(data);
+          //   });
+        }
+        healthZonesWorkingIn = [];
+      };
+      const globalOutFunc = () => {
+        for (let index = 0; index < loopLenghtOut; index++) {
+          const item = healthZonesWorkingOut[index];
+          const healthZoneValues = Object.assign({}, values);
+          healthZoneValues.fluxGeoOptions = item.zone;
+
+          //Get  zone in by province
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
               params: healthZoneValues,
             })
             .then(({ data }) => {
               this.fluxZoneGlobalOut.push(data);
+
+              healthZonesWorkingOut = healthZones.slice(
+                healthIndexOut,
+                healthIndexOut + 1
+              );
+              healthIndexOut++;
+              loopLenghtOut = 1;
+              if (healthIndexOut <= healthZones.length) {
+                globalOutFunc();
+              }
             });
-        });
+
+          //Get  zone out by province
+          // axios
+          //   .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
+          //     params: healthZoneValues,
+          //   })
+          //   .then(({ data }) => {
+          //     this.fluxZoneGlobalOut.push(data);
+          //   });
+        }
+        healthZonesWorkingOut = [];
+      };
+
+      globalInFunc();
+      globalOutFunc();
     },
     seeSide() {
       this.$bvModal.show("data-modal");
@@ -1190,7 +1257,7 @@ export default {
         "zone"
       );
     },
-    computedFluxDataByDate(dataObservations, dataReferences, key){
+    computedFluxDataByDate(dataObservations, dataReferences, key) {
       const referencesByDate = [];
       const observationsByDate = [];
 
@@ -1256,7 +1323,7 @@ export default {
       //   return Object.assign({}, item);
       // });
     },
-    computedFluxPresenceDataByDate(dataObservations, dataReferences){
+    computedFluxPresenceDataByDate(dataObservations, dataReferences) {
       const referencesByDate = [];
       const observationsByDate = [];
 
@@ -1292,7 +1359,7 @@ export default {
         referencesByDate,
         observationsByDate,
       };
-    }
+    },
   },
   watch: {
     fluxDataGroupedByDateIn() {
@@ -1301,28 +1368,28 @@ export default {
     fluxDataGroupedByDateOut() {
       this.updateFluxDataGroupedByDateGen();
     },
-    flux24PresenceDailyInData(){
-      let data = {observations : [], references : []}
-      if(this.flux24PresenceDailyInData.observations){
-        data.observations = this.flux24PresenceDailyInData.observations
+    flux24PresenceDailyInData() {
+      let data = { observations: [], references: [] };
+      if (this.flux24PresenceDailyInData.observations) {
+        data.observations = this.flux24PresenceDailyInData.observations;
       }
-      if(this.flux24PresenceDailyInData.references){
-        data.references = this.flux24PresenceDailyInData.references
+      if (this.flux24PresenceDailyInData.references) {
+        data.references = this.flux24PresenceDailyInData.references;
       }
 
       this.flux24PresenceDailyInDay = this.computedFluxPresenceDataByDate(
-        data.observations.filter(x => x.PresenceType == "Jour"),
-        data.references.filter(x => x.PresenceType == "Jour")
+        data.observations.filter((x) => x.PresenceType == "Jour"),
+        data.references.filter((x) => x.PresenceType == "Jour")
       );
       this.flux24PresenceDailyInNight = this.computedFluxPresenceDataByDate(
-        data.observations.filter(x => x.PresenceType == "Nuit"),
-        data.references.filter(x => x.PresenceType == "Nuit")
+        data.observations.filter((x) => x.PresenceType == "Nuit"),
+        data.references.filter((x) => x.PresenceType == "Nuit")
       );
       this.flux24PresenceDailyIn = this.computedFluxPresenceDataByDate(
         data.observations,
         data.references
       );
-    }
+    },
   },
 };
 </script>

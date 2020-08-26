@@ -122,19 +122,19 @@ export default {
       const dataChart = {
         labels: localData.map((d) => d.zone),
         datasets: [
-          {
-            label: "Référence",
-            backgroundColor: PALETTE.dash_green,
-            borderColor: PALETTE.dash_green,
-            borderWidth: 1,
-            data: localData.map((d) => d.volume_reference),
-          },
+          // {
+          //   label: "Référence",
+          //   backgroundColor: PALETTE.dash_green,
+          //   borderColor: PALETTE.dash_green,
+          //   borderWidth: 1,
+          //   data: localData.map((d) => d.volume_reference),
+          // },
           {
             label: "Observation",
             backgroundColor: this.color,
             borderColor: this.color,
             borderWidth: 1,
-            data: localData.map((d) => d.volume),
+            data: localData.map((d) => d.percent),
           },
         ],
       };
