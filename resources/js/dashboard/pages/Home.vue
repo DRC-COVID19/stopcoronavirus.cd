@@ -966,8 +966,8 @@ export default {
         (x) => x.province == values.fluxGeoOptions[0]
       );
 
-      let healthZonesWorkingIn = healthZones.slice(0, 10);
-      let healthZonesWorkingOut = healthZones.slice(0, 10);
+      let healthZonesWorkingIn = healthZones.slice(0, 3);
+      let healthZonesWorkingOut = healthZones.slice(0, 3);
 
       let healthIndexIn = healthZonesWorkingIn.length;
       let healthIndexOut = healthZonesWorkingOut.length;
