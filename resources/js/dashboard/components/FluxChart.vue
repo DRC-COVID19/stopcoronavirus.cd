@@ -103,7 +103,7 @@
           </b-row>
         </b-col>
 
-        <b-col cols="12" v-show="this.typeMobilite == 1" md="4" class="pl-0 pr-2" ref="mobility">
+        <b-col cols="12" v-show="this.typeMobilite == 1" md="4" class="pl-0" ref="mobility">
           <b-row class="mb-3">
             <b-col cols="12">
               <b-card
