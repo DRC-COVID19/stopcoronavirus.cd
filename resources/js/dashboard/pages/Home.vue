@@ -987,9 +987,12 @@ export default {
             .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
               params: healthZoneValues,
             })
-            .then(({ data }) => {
-              this.fluxZoneGlobalIn.push(data);
-
+            .then(async (response) => {
+              this.fluxZoneGlobalIn.push(response.data);
+              
+              if (response.headers["x-ratelimit-remaining"] == 0) {
+                await this.sleep(25000);
+              }
               healthZonesWorkingIn = healthZones.slice(
                 healthIndexIn,
                 healthIndexIn + 1
@@ -1023,9 +1026,12 @@ export default {
             .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
               params: healthZoneValues,
             })
-            .then(({ data }) => {
-              this.fluxZoneGlobalOut.push(data);
+            .then(async (response) => {
+              this.fluxZoneGlobalOut.push(response.data);
 
+              if (response.headers["x-ratelimit-remaining"] == 0) {
+                await this.sleep(25000);
+              }
               healthZonesWorkingOut = healthZones.slice(
                 healthIndexOut,
                 healthIndexOut + 1
