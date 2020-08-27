@@ -944,14 +944,15 @@ export default {
       //   });
 
       //if geo granularity is health zone
-      if (values.fluxGeoGranularity == 2) {
-        return;
-      }
 
       this.fluxZoneGlobalIn = [];
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
 
+      if (values.fluxGeoGranularity == 2) {
+        return;
+      }
+      
       const pandemicParams = Object.assign({}, values);
       pandemicParams.fluxGeoOptions = pandemicParams.fluxGeoOptions[0];
       axios
