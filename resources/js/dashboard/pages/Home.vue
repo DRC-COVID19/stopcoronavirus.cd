@@ -989,8 +989,8 @@ export default {
             })
             .then(async (response) => {
               this.fluxZoneGlobalIn.push(response.data);
-              
-              if (response.headers["x-ratelimit-remaining"] == 0) {
+              console.log('in',response.headers["x-ratelimit-remaining"]);
+              if (Number(response.headers["x-ratelimit-remaining"]) < 7) {
                 await this.sleep(25000);
               }
               healthZonesWorkingIn = healthZones.slice(
@@ -1028,8 +1028,8 @@ export default {
             })
             .then(async (response) => {
               this.fluxZoneGlobalOut.push(response.data);
-
-              if (response.headers["x-ratelimit-remaining"] == 0) {
+              console.log( 'out',response.headers["x-ratelimit-remaining"] );
+              if (Number(response.headers["x-ratelimit-remaining"])<7) {
                 await this.sleep(25000);
               }
               healthZonesWorkingOut = healthZones.slice(
