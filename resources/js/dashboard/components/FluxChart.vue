@@ -16,19 +16,15 @@
       </b-row>
 
       <b-row no-gutters v-show="this.typeMobilite != 3">
-        <b-col
-          cols="12"
-          v-show="this.typeMobilite == 2"
-          md="12"
-          class="pl-0  col-mobilite-generale"
-        >
+        <b-col cols="12" v-show="this.typeMobilite == 2" md="12" class="pl-0 col-mobilite-generale">
           <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==4}">
             <h5 class="percent-title">Mobilité générale</h5>
             <div class="percent flux-in-color">{{percentGenerale}}%​</div>
 
             <p class="percent-p text-dash-color mb-0">
               {{differenceGenerale}} personnes de
-              <span v-if="differenceGenerale>0">plus</span> <span v-else>moins</span>
+              <span v-if="differenceGenerale>0">plus</span>
+              <span v-else>moins</span>
               sont entrées et sorties de la zone
             </p>
           </b-card>
@@ -57,7 +53,7 @@
                   </legend-popover>
                   <div class="chart-container">
                     <canvas height="400" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
-                  </div>  
+                  </div>
                 </b-card>
               </FullScreen>
             </b-col>
@@ -94,7 +90,12 @@
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
                   <div class="chart-container">
-                    <canvas height="400" width="100vh" ref="pandemic_top_desc" id="pandemic_top_desc"></canvas>
+                    <canvas
+                      height="400"
+                      width="100vh"
+                      ref="pandemic_top_desc"
+                      id="pandemic_top_desc"
+                    ></canvas>
                   </div>
                 </b-card>
               </FullScreen>
@@ -115,8 +116,10 @@
                 <div class="percent flux-in-color">{{percentIn}}%​</div>
                 <p class="percent-p text-dash-color mb-0">
                   {{differenceIn}} personnes de
-                  <span v-if="differenceIn>0">plus</span> <span v-else>moins</span>
-                  sont entrées dans la zone <br>
+                  <span v-if="differenceIn>0">plus</span>
+                  <span v-else>moins</span>
+                  sont entrées dans la zone
+                  <br />
                   <span style="opacity:0">-</span>
                 </p>
               </b-card>
@@ -146,8 +149,12 @@
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
                   <div class="chart-container">
-                    <canvas height="400" width="100vh" ref="mobile_entrance_2_card" id="mobile_entrance_2_card">
-                    </canvas>
+                    <canvas
+                      height="400"
+                      width="100vh"
+                      ref="mobile_entrance_2_card"
+                      id="mobile_entrance_2_card"
+                    ></canvas>
                   </div>
                 </b-card>
               </FullScreen>
@@ -167,8 +174,10 @@
                 <div class="percent flux-out-color">{{percentOut}}%​</div>
                 <p class="percent-p text-dash-color mb-0">
                   {{differenceOut}} personnes de
-                  <span v-if="differenceOut>0">plus</span> <span v-else>moins</span>
-                  sont sorties de la zone <br>
+                  <span v-if="differenceOut>0">plus</span>
+                  <span v-else>moins</span>
+                  sont sorties de la zone
+                  <br />
                   <span style="opacity:0">-</span>
                 </p>
               </b-card>
@@ -198,7 +207,12 @@
                     Sapiente tempore libero fugit perferendis repellendus?
                   </legend-popover>
                   <div class="chart-container">
-                    <canvas height="400" width="100vh" ref="mobile_out_2_card" id="mobile_out_2_card"></canvas>
+                    <canvas
+                      height="400"
+                      width="100vh"
+                      ref="mobile_out_2_card"
+                      id="mobile_out_2_card"
+                    ></canvas>
                   </div>
                 </b-card>
               </FullScreen>
@@ -215,21 +229,27 @@
             <div class="row justify-content-between">
               <h5 class="percent-title">Présences</h5>
               <div class="btns-toggle-presence">
-                <i class="fa fa-sun"
+                <i
+                  class="fa fa-sun"
                   title="N'afficher que les présences jour"
                   :class="{'active' : typePresence == 2}"
-                  @click="toggleTypePresence(2)"></i>
-                <i class="fa fa-moon"
+                  @click="toggleTypePresence(2)"
+                ></i>
+                <i
+                  class="fa fa-moon"
                   title="N'afficher que les présences nuit"
                   :class="{'active' : typePresence == 3}"
-                  @click="toggleTypePresence(3)"></i>
+                  @click="toggleTypePresence(3)"
+                ></i>
               </div>
             </div>
             <div class="percent flux-presence">{{percentPresence}}%​</div>
             <p class="percent-p text-dash-color mb-0">
               {{differencePresence}} personnes de
-              <span v-if="differencePresence>0">plus</span> <span v-else>moins</span>
-              étaient présentes dans la zone <br>
+              <span v-if="differencePresence>0">plus</span>
+              <span v-else>moins</span>
+              étaient présentes dans la zone
+              <br />
               <span v-if="typePresence == 2">durant la journée</span>
               <span v-else-if="typePresence == 3">durant la nuit</span>
               <span v-else style="opacity:0">-</span>
@@ -407,8 +427,9 @@ export default {
         types.push({ val: 2, lbl: "Général" });
       }
       if (
-        this.fluxZoneGlobalIn.length > 0 ||
-        this.fluxZoneGlobalOut.length > 0
+        (this.fluxZoneGlobalIn.length > 0 ||
+          this.fluxZoneGlobalOut.length > 0) &&
+        this.fluxGeoGranularity == 1
       ) {
         types.push({ val: 3, lbl: "Stat. zones" });
       }
@@ -543,7 +564,11 @@ export default {
     );
   },
   methods: {
-    ...mapMutations(["setFluxType", "setIsProvinceStatSeeing", "setTypePresence"]),
+    ...mapMutations([
+      "setFluxType",
+      "setIsProvinceStatSeeing",
+      "setTypePresence",
+    ]),
     selectFluxType(value) {
       this.setFluxType(value);
     },
@@ -1161,7 +1186,7 @@ export default {
           },
         },
       };
-      const reference=this.$refs[ref];
+      const reference = this.$refs[ref];
       if (this.barChart[ref]) this.barChart[ref].destroy();
       this.barChart[ref] = new Chart(
         reference.getContext("2d"),
@@ -1256,10 +1281,10 @@ export default {
     toggleGlobalMobility() {
       this.showMobiliteGenerale = !this.showMobiliteGenerale;
     },
-    toggleTypePresence(type){
-      if(this.typePresence == type) type = 1
-      this.setTypePresence(type)
-    }
+    toggleTypePresence(type) {
+      if (this.typePresence == type) type = 1;
+      this.setTypePresence(type);
+    },
   },
 };
 </script>
@@ -1317,29 +1342,29 @@ export default {
     position: relative;
   }
 }
-.fullscreen{
-  .cardtype1{
-    canvas{
+.fullscreen {
+  .cardtype1 {
+    canvas {
       width: calc(100vw - 19px) !important;
       height: 500px !important;
     }
   }
-  .cardtype2{
-    canvas{
+  .cardtype2 {
+    canvas {
       width: 700px !important;
       height: calc(100vh - 32px) !important;
     }
   }
 }
-.btns-toggle-presence{
-  i{
-    color : #7b7f88 ;
+.btns-toggle-presence {
+  i {
+    color: #7b7f88;
     font-size: 15px;
     margin-right: 2px;
-    cursor : pointer ;
-    transition : color 0.2s ease-in-out ;
-    &.active{
-      color : #8BC34A ;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+    &.active {
+      color: #8bc34a;
     }
   }
 }
