@@ -103,7 +103,7 @@
           </b-row>
         </b-col>
 
-        <b-col cols="12" v-show="this.typeMobilite == 1" md="4" class="pl-0 pr-2" ref="mobility">
+        <b-col cols="12" v-show="this.typeMobilite == 1" md="4" class="pl-0" ref="mobility">
           <b-row class="mb-3">
             <b-col cols="12">
               <b-card
@@ -291,8 +291,7 @@
         </b-row>
         -->
 
-        <b-row align-h="center" class="col-12">
-          <b-col cols="12" md="6" class="pr-md-0">
+          <b-col cols="12" md="6" class="pr-2">
             <GlobalProvice
               title="Mobilité entrante par zone"
               :color="palette.flux_in_color"
@@ -300,7 +299,7 @@
               reference="fluxZoneglobalIn"
             />
           </b-col>
-          <b-col cols="12" md="6" class="pr-md-0">
+          <b-col cols="12" md="6" class="pl-2">
             <GlobalProvice
               title="Mobilité sortante par zone"
               :color="palette.flux_out_color"
@@ -308,7 +307,6 @@
               reference="fluxZoneglobalOut"
             />
           </b-col>
-        </b-row>
       </b-row>
     </b-container>
   </div>
