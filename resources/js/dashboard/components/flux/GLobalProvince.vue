@@ -1,14 +1,13 @@
 <template>
   <FullScreen id="fullscreen" :link="reference" @change="fullscreenChange">
-    <b-container class="global_province_container p-0">
-      <b-row>
+  
+      <b-row no-gutters class="global_province_container">
         <b-col cols="12" class="pr-0">
-          <b-card no-body class="p-2 rounded-0">
+          <b-card no-body class="p-2 rounded-0 cardtype2">
             <canvas height="600" :ref="reference" class="global_province"></canvas>
           </b-card>
         </b-col>
       </b-row>
-    </b-container>
   </FullScreen>
 </template>
 
@@ -213,6 +212,7 @@ export default {
 
         element.style.height = "400px";
         element.height = "400px";
+        element.style.width = "700px";
         element.parentElement.style.width = "auto";
         parent_2.style.display = "";
         parent_2.style.alignItem = "";
@@ -224,7 +224,7 @@ export default {
 
         this.barChart.update();
       } else {
-
+        element.style.width = "700px";
         element.parentElement.style.width = "100%";
         parent_2.style.display = "flex";
         parent_2.style.alignItems = "center";
@@ -251,7 +251,6 @@ export default {
   .global_province_container
   div
   .global_province {
-  width: 100% !important;
   height: 100% !important;
 }
 .side-right
