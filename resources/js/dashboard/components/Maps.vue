@@ -148,10 +148,12 @@ export default {
       isMapLoaded: false,
       isZoneSourceLoaded: false,
       isProvinceSourceLoaded: false,
+      defaultCenterCoordinates : [ 23.485632, -3.983283]
     };
   },
   created() {
     this.loadSource();
+    // -3.983283, 23.485632 center from google maps
   },
   mounted() {
     Mapbox.accessToken = this.MAPBOX_TOKEN;
@@ -265,6 +267,7 @@ export default {
       fluxGeoGranularity: (state) => state.flux.fluxGeoGranularity,
       fluxType: (state) => state.flux.fluxType,
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
+      fluxGeoOptionsTmp: (state) => state.flux.fluxGeoOptionsTmp,
       fluxEnabled: (state) => state.flux.fluxEnabled,
       activeMenu: (state) => state.nav.activeMenu,
       legendHover: (state) => state.flux.legendHover,
@@ -501,9 +504,36 @@ export default {
     },
     isLoading() {
       if (this.centerCoordinates.length > 0) {
+        map.resize();
         map.flyTo({ center: this.centerCoordinates });
       }
     },
+    fluxGeoGranularity(){
+      if(this.fluxGeoGranularity == 1){
+        map.resize();
+        map.flyTo({
+          center: this.defaultCenterCoordinates,
+          easing: function(t) {
+            return t;
+          },
+          zoom: 3.5
+        })
+      }
+    },
+    fluxGeoOptionsTmp(){
+      const lenGeoOptions = this.fluxGeoOptionsTmp.length
+      if(this.fluxGeoGranularity == 2 && lenGeoOptions > 0){
+        const zone = this.fluxGeoOptionsTmp[lenGeoOptions - 1]
+        map.resize();
+        map.flyTo({
+          center: this.getHealthZoneCoordonate(zone, this.fluxGeoGranularity) ,
+          easing: function(t) {
+            return t;
+          },
+          zoom: 10
+        })
+      }
+    }
   },
   methods: {
     ...mapMutations([
@@ -1545,7 +1575,6 @@ export default {
 
       this.setDomaineExtValues({ min: minArc, max: maxArc, isPercent: true });
 
-      console.log({ min: minArc, max: maxArc });
       if (legendHover) {
         if (features.length > 0) {
           features = features.filter(

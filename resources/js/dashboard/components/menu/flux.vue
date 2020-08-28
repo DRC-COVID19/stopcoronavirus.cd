@@ -45,7 +45,7 @@
                   placeholder="Localisation"
                   label="origin"
                   :reduce="item=>item.origin"
-                  @input="resetFluxPredefinedControl"
+                  @input="fluxGeoOptionsChange"
                   class="style-chooser style-chooser-multiple"
                 />
               </b-form-group>
@@ -261,6 +261,7 @@ export default {
       "setFluxGeoGranularity",
       "setFluxGeoOptions",
       "setFluxEnabled",
+      "setFluxGeoOptionsTmp",
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -315,6 +316,10 @@ export default {
         this.fluxGeoOptions = this.fluxZones;
       }
     },
+    fluxGeoOptionsChange(value){
+      this.resetFluxPredefinedControl()
+      this.setFluxGeoOptionsTmp(value)
+    },
     fluxPredefinedInputChanged(value) {
       if (!value) {
         return;
@@ -365,7 +370,7 @@ export default {
         case 7:
           observation_start = "2020-03-19";
           observation_end = this.moment().format(DATEFORMAT);
-          this.$emit("toggleShowMobiliteGenerale", true); 
+          this.$emit("toggleShowMobiliteGenerale", true);
           break;
       }
 
