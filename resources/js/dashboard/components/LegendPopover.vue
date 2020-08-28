@@ -4,11 +4,11 @@
         ref="popoverTarget"
         id="popover-target"
         :class="{'fa-info-circle' : !show , 'target fa-times-circle' : show }"
-        @click="show = !show"></i>
+        ></i>
       <b-popover
         :target="() => $refs.popoverTarget"
         ref="popover"
-        triggers="click"
+        triggers="hover"
         placement="top"
         :show.sync="show"
       >

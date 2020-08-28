@@ -4,6 +4,7 @@ export default {
         mapStyle: 1,
         fluxType: 1,
         fluxGeoOptions: [],
+        fluxGeoOptionsTmp: [],
         fluxEnabled: true,
         isWatchingfluxGeoOptions: true,
         domaineExtValues:{},
@@ -27,6 +28,9 @@ export default {
         },
         setFluxGeoOptions(state, payload) {
             state.fluxGeoOptions = payload;
+        },
+        setFluxGeoOptionsTmp(state, payload) {
+            state.fluxGeoOptionsTmp = payload;
         },
         setFluxEnabled(state, payload) {
             state.fluxEnabled = payload;
