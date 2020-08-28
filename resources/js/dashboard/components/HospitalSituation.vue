@@ -19,7 +19,7 @@
       </b-col>
     </b-row>
     <b-row no-gutters>
-      <b-col cols="12" md="6" class="row no-gutters pr-1"  >
+      <b-col cols="12" md="6" class="row no-gutters pr-1">
         <b-card class="col-12 default-card mb-2">
           <h5 class="bold">Capacité de prise en charge</h5>
           <div>
@@ -75,12 +75,12 @@
       </b-col>
     </b-row>
 
-    <b-row class="pl-3 pr-3 mb-2">
-      <b-col cols="12" md="6" class="p-1">
-        <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
+    <b-row no-gutters class="mb-2">
+      <b-col cols="12" md="6" class="pr-1" >
+        <b-card no-body class="default-card   card-chart p-2">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
           <legend-popover>
-            <template v-slot:title>Comment est-ce calculé ? </template>
+            <template v-slot:title>Comment est-ce calculé ?</template>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             Sapiente tempore libero fugit perferendis repellendus?
           </legend-popover>
@@ -90,11 +90,11 @@
         </b-card>
       </b-col>
 
-      <b-col cols="12" md="6" class="p-1">
-        <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
+      <b-col cols="12" md="6" class="pl-1">
+        <b-card no-body class="default-card   card-chart p-2">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
           <legend-popover>
-            <template v-slot:title>Comment est-ce calculé ? </template>
+            <template v-slot:title>Comment est-ce calculé ?</template>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit.
             Sapiente tempore libero fugit perferendis repellendus?
           </legend-popover>
@@ -104,8 +104,8 @@
         </b-card>
       </b-col>
 
-      <b-col cols="12" class="p-1">
-        <b-card no-body class="default-card col-12 p-0 pt-3 pb-3 card-chart">
+      <b-col cols="12" class="mt-2" >
+        <b-card no-body class="default-card  card-chart p-2">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
           <div class="chart-container">
             <canvas height="400" width="100vh" ref="canvasStat3" id="canvasStat3"></canvas>
@@ -118,6 +118,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
+import { PALETTE } from "../config/env";
 
 export default {
   props: ["hospitalTotalData"],
@@ -126,16 +127,22 @@ export default {
       lineCharts: [],
       etatGlobal: true,
       dataGlobal: null,
-      chartLabels : [
-        { title : "Evolution du taux d'occupation des respirateurs" ,
-          lableY : "Nombre de respirateurs" } ,
+      chartLabels: [
+        {
+          title: "Evolution du taux d'occupation des respirateurs",
+          lableY: "Nombre de respirateurs",
+        },
 
-        { title : "Evolution du taux d'occupation des lits de réanimation",
-          lableY : "Nombre de lits" } ,
+        {
+          title: "Evolution du taux d'occupation des lits de réanimation",
+          lableY: "Nombre de lits",
+        },
 
-        { title : "Evolution global du taux d'occupation",
-          lableY : "Taux d'occupation" } ,
-      ]
+        {
+          title: "Evolution global du taux d'occupation",
+          lableY: "Taux d'occupation",
+        },
+      ],
     };
   },
   mounted() {
@@ -164,7 +171,7 @@ export default {
       this.getSituationHospital(id);
     },
     situationHospital(val) {
-      this.dataGlobal = val
+      this.dataGlobal = val;
       this.paintStats(val);
     },
   },
@@ -172,133 +179,288 @@ export default {
     ...mapActions(["getSituationHospital"]),
     ...mapMutations(["selectHospital"]),
     paintStats(data) {
-      for (let i = 0; i < 3; i++) {
+      const lastUpdates = data.last_update;
+      const occupiedRespirators = data.occupied_respirators;
+      const occupiedResuscitation_beds = data.occupied_resuscitation_beds;
+      const unknow = [];
 
-        let callbacks = {} , ticksY = {}
-        let datasets = []
-        if(i == 0){
-          datasets = [
-            {
-              label: "Respirateurs" ,
-              fill: false,
-              backgroundColor: "#F44336",
-              borderColor: "#F44336",
-              data: data.respirators.map(x => (x == 0) ? null : x),
-              fill: false,
-              interpolate: true,
-              showLine: true,
-              pointRadius: 2,
-              lineTension: 0.4
-            },
-            {
-              label: "Respirateurs occupés" ,
-              fill: false,
-              backgroundColor: "#2e5bff",
-              borderColor: "#2e5bff",
-              data: data.occupied_respirators.map(x => (x == 0) ? null : x) ,
-              fill: false,
-              interpolate: true,
-              showLine: true,
-              pointRadius: 2,
-              lineTension: 0.4
+      const valideIndex = [];
+      data.occupied_respirators = occupiedRespirators.map((item, index) => {
+        if (!item || Number(item) == 0) {
+          const y1Array = [];
+          const y2Array = [];
+
+          occupiedRespirators.map((x, i) => {
+            if (i < index && x && Number(x) > 0) {
+              y1Array.push({
+                value: x,
+                i,
+              });
             }
-          ] ;
+            if (i > index && x && Number(x) > 0) {
+              y2Array.push({
+                value: x,
+                i,
+              });
+            }
+          });
+          let y1 = null;
+          let y2 = null;
+          let x1 = null;
+          let x2 = null;
+          if (y1Array && y1Array.length > 0) {
+            y1 = y1Array[y1Array.length - 1];
+            x1 = lastUpdates[y1.i];
+          }
+          if (y2Array && y2Array.length > 0) {
+            y2 = y2Array[0];
+            x2 = lastUpdates[y2.i];
+          }
+          const x = lastUpdates[index];
 
-          ticksY = {
-            min : 0 ,
-            precision : 0
+          if (y1 && y2 && x1 && x2) {
+            const x_x1 = Math.abs(new Date(x) - new Date(x1));
+            const x2_x1 = Math.abs(new Date(x2) - new Date(x1));
+            const y2_y1 = Number(y2.value) - Number(y1.value);
+            const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
+
+            return y;
+
+            console.log([
+              {
+                y1,
+                x1,
+              },
+              {
+                x,
+                y,
+                index,
+              },
+              {
+                y2,
+                x2,
+              },
+            ]);
           }
         }
-        else if(i == 1){
+        return item;
+      });
+
+      data.occupied_resuscitation_beds = occupiedResuscitation_beds.map(
+        (item, index) => {
+          if (!item || Number(item) == 0) {
+            const y1Array = [];
+            const y2Array = [];
+
+            occupiedResuscitation_beds.map((x, i) => {
+              if (i < index && x && Number(x) > 0) {
+                y1Array.push({
+                  value: x,
+                  i,
+                });
+              }
+              if (i > index && x && Number(x) > 0) {
+                y2Array.push({
+                  value: x,
+                  i,
+                });
+              }
+            });
+            let y1 = null;
+            let y2 = null;
+            let x1 = null;
+            let x2 = null;
+            if (y1Array && y1Array.length > 0) {
+              y1 = y1Array[y1Array.length - 1];
+              x1 = lastUpdates[y1.i];
+            }
+            if (y2Array && y2Array.length > 0) {
+              y2 = y2Array[0];
+              x2 = lastUpdates[y2.i];
+            }
+            const x = lastUpdates[index];
+
+            if (y1 && y2 && x1 && x2) {
+              const x_x1 = Math.abs(new Date(x) - new Date(x1));
+              const x2_x1 = Math.abs(new Date(x2) - new Date(x1));
+              const y2_y1 = Number(y2.value) - Number(y1.value);
+              const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
+
+              return y;
+
+              console.log([
+                {
+                  y1,
+                  x1,
+                },
+                {
+                  x,
+                  y,
+                  index,
+                },
+                {
+                  y2,
+                  x2,
+                },
+              ]);
+            }
+          }
+          return item;
+        }
+      );
+
+      for (let i = 0; i < 3; i++) {
+        let callbacks = {
+            title: (a, d) => {
+              return this.moment(a[0].xLabel).format("DD.MM.Y");
+            },
+          },
+          ticksY = {};
+        let datasets = [];
+        let annotation = {};
+        if (i == 0) {
+          annotation = {
+            drawTime: "afterDraw",
+            annotations: [
+              {
+                id: "line" + i,
+                type: "line",
+                mode: "horizontal",
+                scaleID: "y-axis-0",
+                value: data.respirators[data.respirators.length - 1],
+                borderColor: PALETTE.dash_green,
+                label: { content: "label" },
+                borderWidth: 3,
+              },
+            ],
+          };
           datasets = [
             {
-              label: "Lits de réanimation" ,
+              label: "Respirateurs occupés",
+              fill: false,
               backgroundColor: "#F44336",
               borderColor: "#F44336",
-              data: data.resuscitation_beds.map(x => (x == 0) ? null : x),
+              data: data.occupied_respirators.map((x) => (x == 0 ? null : x)),
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
+              lineTension: 0.4,
             },
-            {
-              label: "Lits de réanimation occupés" ,
-              backgroundColor: "#2e5bff",
-              borderColor: "#2e5bff",
-              data: data.occupied_resuscitation_beds.map(x => (x == 0) ? null : x),
-              fill: false,
-              interpolate: true,
-              showLine: true,
-              pointRadius: 2,
-              lineTension: 0.4
-            }
-          ] ;
+          ];
 
           ticksY = {
-            min : 0 ,
-            precision : 0
-          }
-        }else{
-          const dataset1 = data.occupied_resuscitation_beds.map(
-            (a, i) => {
-              if(a == 0 || data.resuscitation_beds[i] == 0) return null
-              return Math.round(a * 100 / data.resuscitation_beds[i] )
-            })
-
-          const dataset2 = data.occupied_respirators.map(
-            (a,i) => {
-              if(a == 0 || data.respirators[i] == 0) return null
-              return Math.round(a * 100 / data.respirators[i] )
-            })
-
+            min: 0,
+            precision: 0,
+          };
+        } else if (i == 1) {
+          annotation = {
+            drawTime: "afterDraw",
+            annotations: [
+              {
+                id: "line" + i,
+                type: "line",
+                mode: "horizontal",
+                scaleID: "y-axis-0",
+                value:
+                  data.resuscitation_beds[data.resuscitation_beds.length - 1],
+                borderColor: PALETTE.dash_green,
+                borderWidth: 3,
+                label: "label",
+              },
+            ],
+          };
           datasets = [
+            // {
+            //   label: "Lits de réanimation",
+            //   backgroundColor: "#F44336",
+            //   borderColor: "#F44336",
+            //   data: data.resuscitation_beds.map((x) => (x == 0 ? null : x)),
+            //   fill: false,
+            //   interpolate: true,
+            //   showLine: true,
+            //   pointRadius: 2,
+            //   lineTension: 0.4,
+            // },
             {
-              label: "Taux occupation des lits de réanimation" ,
-              backgroundColor: "#F44336",
-              borderColor: "#F44336",
-              data: dataset1,
+              label: "Lits de réanimation occupés",
+              backgroundColor: "#2e5bff",
+              borderColor: "#2e5bff",
+              data: data.occupied_resuscitation_beds.map((x) =>
+                x == 0 ? null : x
+              ),
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
+              lineTension: 0.4,
             },
+          ];
+
+          ticksY = {
+            min: 0,
+            precision: 0,
+          };
+        } else {
+          const dataset1 = data.occupied_resuscitation_beds.map((a, i) => {
+            // if (a == 0 || data.resuscitation_beds[i] == 0) return null;
+            return Math.round(
+              (a * 100) /
+                data.resuscitation_beds[data.resuscitation_beds.length - 1]
+            );
+          });
+
+          const dataset2 = data.occupied_respirators.map((a, i) => {
+            // if (a == 0 || data.respirators[i] == 0) return null;
+            return Math.round(
+              (a * 100) / data.respirators[data.respirators.length - 1]
+            );
+          });
+
+          datasets = [
             {
-              label: "Taux occupation des Réspirateurs" ,
-              backgroundColor: "#2e5bff",
-              borderColor: "#2e5bff",
+              label: "Taux occupation des Réspirateurs",
+              backgroundColor: "#F44336",
+              borderColor: "#F44336",
               data: dataset2,
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
-            }
-          ] ;
+              lineTension: 0.4,
+            },
+            {
+              label: "Taux occupation des lits de réanimation",
+              backgroundColor: "#2e5bff",
+              borderColor: "#2e5bff",
+              data: dataset1,
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4,
+            },
+          ];
 
-          callbacks = {
-            label: function (tooltipItem, data) {
-                var label = data.datasets[tooltipItem.datasetIndex].label || "";
-                if (label) label += ": ";
-                label += tooltipItem.yLabel + "%";
-                return label;
-            }
-          }
+          callbacks.label = function (tooltipItem, data) {
+            var label = data.datasets[tooltipItem.datasetIndex].label || "";
+            if (label) label += ": ";
+            label += tooltipItem.yLabel + "%";
+            return label;
+          };
 
           ticksY = {
-            min : 0 ,
+            min: 0,
             callback: function (value, index, values) {
-                return value + "%";
-            }
-          }
+              return value + "%";
+            },
+          };
         }
-
         const config = {
           type: "line",
           data: {
             labels: data.last_update.map((d) => new Date(d)),
-            datasets: datasets
+            datasets: datasets,
           },
           options: {
             responsive: true,
@@ -306,13 +468,14 @@ export default {
             title: {
               display: true,
               text: this.chartLabels[i].title,
-              fontSize : 11
+              fontSize: 11,
             },
             tooltips: {
               mode: "index",
               intersect: false,
-              callbacks: callbacks
+              callbacks: callbacks,
             },
+            annotation,
             plugins: {
               crosshair: {
                 sync: {
@@ -335,6 +498,10 @@ export default {
                   distribution: "series",
                   time: {
                     unit: "day",
+                    unitStepSize: 1,
+                    displayFormats: {
+                      day: "DD.MM",
+                    },
                   },
                   scaleLabel: {
                     display: true,
@@ -354,8 +521,8 @@ export default {
                   scaleLabel: {
                     display: true,
                     labelString: this.chartLabels[i].lableY,
-                  }
-                  ,ticks: ticksY
+                  },
+                  ticks: ticksY,
                 },
               ],
             },
@@ -364,7 +531,7 @@ export default {
 
         if (this.lineCharts[i]) this.lineCharts[i].destroy();
         this.lineCharts[i] = new Chart(
-          this.$refs[`canvasStat${i+1}`].getContext("2d"),
+          this.$refs[`canvasStat${i + 1}`].getContext("2d"),
           config
         );
       }
@@ -372,12 +539,15 @@ export default {
     backToTotalData() {
       this.selectHospital(null);
     },
-    lastUpdate(){
-      if (this.selectedHospital != null) return this.selectedHospital.last_update
-      else if(this.dataGlobal)
-        return this.dataGlobal.last_update[this.dataGlobal.last_update.length - 1]
-      else return null
-    }
+    lastUpdate() {
+      if (this.selectedHospital != null)
+        return this.selectedHospital.last_update;
+      else if (this.dataGlobal)
+        return this.dataGlobal.last_update[
+          this.dataGlobal.last_update.length - 1
+        ];
+      else return null;
+    },
   },
 };
 </script>
@@ -385,7 +555,8 @@ export default {
 <style lang="scss" scoped>
 .card-chart {
   position: relative;
-  #canvasStat1, #canvasStat2 {
+  #canvasStat1,
+  #canvasStat2 {
     height: 400px !important ;
   }
   .spinner-border {
