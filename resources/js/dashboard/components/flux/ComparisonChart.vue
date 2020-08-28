@@ -106,9 +106,7 @@ export default {
         resolver({ datasets, labels, maxDate });
       });
 
-      console.log(new Date().toTimeString());
       process.then(({ datasets, labels, maxDate }) => {
-        console.log(new Date().toTimeString());
         const tempData = {
           type: "line",
           data: {
@@ -181,8 +179,8 @@ export default {
             //   },
             tooltips: {
               enabled: true,
-              mode: "nearest",
-              intersect: true,
+              mode: "interpolate",
+              intersect: false,
               callbacks: {
                 title: function (tooltipItem, data) {
                   let d = new Date(tooltipItem[0].label);
