@@ -49,7 +49,7 @@
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
-            <FullScreen id="fullscreenMap" link @change="fullscreenMapChange">
+            <FullScreen id="fullscreenMap" no-flex link @change="fullscreenMapChange">
               <Maps
                 :covidCases="covidCases"
                 :hospitals="hospitals"
@@ -952,7 +952,7 @@ export default {
       if (values.fluxGeoGranularity == 2) {
         return;
       }
-      
+
       const pandemicParams = Object.assign({}, values);
       pandemicParams.fluxGeoOptions = pandemicParams.fluxGeoOptions[0];
       axios

@@ -1,5 +1,5 @@
 <template>
-  <div class="fullscreen-container">
+  <div class="fullscreen-container" :class="{'noFlex' : noFlex}">
     <Fullscreen :ref="id" @change="fullscreenChange" class="col-12 p-0">
       <slot></slot>
     </Fullscreen>
@@ -22,8 +22,12 @@ export default {
     },
     link: {
       type: String,
-      required: true,
+      required: true
     },
+    noFlex : {
+      type : Boolean ,
+      default : false
+    }
   },
   methods: {
     toggleFullscreen() {
@@ -36,7 +40,7 @@ export default {
         this.$emit("change", fullscreen, this.link);
       });
     },
-  },
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -78,6 +82,11 @@ export default {
   &:hover .fullscreen-btn {
     transform: scale(1);
     opacity: 1;
+  }
+}
+.fullscreen-container.noFlex{
+  .fullscreen{
+    display: block;
   }
 }
 .fullscreen{
