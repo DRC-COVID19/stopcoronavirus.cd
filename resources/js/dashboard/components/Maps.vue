@@ -284,6 +284,7 @@ export default {
     },
     hospitals() {
       if (this.hospitals) {
+        map.U.removeSource("covid9HospitalsSource");
         this.map.addSource("covid9HospitalsSource", this.hospitals);
 
         this.map.addLayer({

@@ -29,6 +29,7 @@
             v-if="activeMenu==5"
             :hospitalCount="hospitalCount"
             @hopitalChecked="gethopitals"
+            @submitInfrastructureForm="submitInfrastructureForm"
           />
           <MenuOrientation
             v-if="activeMenu==6"
@@ -952,7 +953,7 @@ export default {
       if (values.fluxGeoGranularity == 2) {
         return;
       }
-      
+
       const pandemicParams = Object.assign({}, values);
       pandemicParams.fluxGeoOptions = pandemicParams.fluxGeoOptions[0];
       axios
@@ -1058,6 +1059,9 @@ export default {
 
       globalInFunc();
       globalOutFunc();
+    },
+    submitInfrastructureForm(values){
+      this.getHospitalsData(values);
     },
     seeSide() {
       this.$bvModal.show("data-modal");

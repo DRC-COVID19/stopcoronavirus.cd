@@ -19,4 +19,8 @@ class HospitalLog extends Model
     {
         return $this->belongsTo(Hospital::class);
     }
+    public function hospitalSituations()
+    {
+        return $this->hasMany(HospitalSituation::class, 'hospital_id');
+    }
 }

@@ -9,6 +9,8 @@ export default {
         situationHospitalLoading: false,
         hospitalTotalData: null,
         hospitalManagerName: null,
+        observation_end: null,
+        observation_start: null,
     },
     mutations: {
         selectHospital(state, payload) {
@@ -25,8 +27,16 @@ export default {
         getHospitalsData({ state }, payload) {
             state.isLoading = true;
             if (payload) {
+                if(payload.observation_end) state.observation_end = payload.observation_end
+                if(payload.observation_start) state.observation_start = payload.observation_start
+
                 axios
-                    .get(`/api/dashboard/hospitals`)
+                    .get(`/api/dashboard/hospitals`, {
+                      params : {
+                        observation_end : payload.observation_end || null ,
+                        observation_start : payload.observation_start || null
+                      }
+                    })
                     .then(({ data }) => {
                         let Features = data.map((value) => {
                             return {
@@ -88,7 +98,12 @@ export default {
                     });
 
                 axios
-                    .get(`/api/dashboard/hospitals/totaux`)
+                    .get(`/api/dashboard/hospitals/totaux`, {
+                      params : {
+                        observation_end : payload.observation_end || null ,
+                        observation_start : payload.observation_start || null
+                      }
+                    })
                     .then(({ data }) => {
                         state.hospitalTotalData = data
                     })
@@ -104,7 +119,13 @@ export default {
             const selectedHospital = payload ? payload : ''
             state.situationHospitalLoading = true
             axios
-                .get(`/api/dashboard/hospitals/evolution/${selectedHospital}`)
+                .get(`/api/dashboard/hospitals/evolution/${selectedHospital}`,
+                {
+                  params : {
+                    observation_end : state.observation_end ,
+                    observation_start : state.observation_start
+                  }
+                })
                 .then(({ data }) => {
                     state.situationHospital = data
                     state.situationHospitalLoading = false
