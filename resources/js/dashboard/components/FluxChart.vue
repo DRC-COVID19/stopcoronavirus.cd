@@ -1154,7 +1154,8 @@ export default {
                   beginAtZero: true,
                   fontSize: 9,
                   callback: (value, index, values) => {
-                    return this.formatCash(value);
+                    const sign=value<0?'-':'';
+                    return `${sign}${this.formatCash(value)}`;
                   },
                 },
               },
