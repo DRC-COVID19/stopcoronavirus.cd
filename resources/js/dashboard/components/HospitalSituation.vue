@@ -144,8 +144,8 @@ export default {
   computed: {
     ...mapState({
       selectedHospital: (state) => state.hospital.selectedHospital,
-      situationHospitalLoading: (state) =>
-        state.hospital.situationHospitalLoading,
+      situationHospitalLoading: (state) => state.hospital.situationHospitalLoading,
+      hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
     }),
     hospital() {
@@ -159,6 +159,9 @@ export default {
     },
   },
   watch: {
+    hospitalData() {
+      this.selectHospital(null)
+    },
     selectedHospital(val) {
       const id = val ? val.id : null;
       this.getSituationHospital(id);
@@ -172,6 +175,7 @@ export default {
     ...mapActions(["getSituationHospital"]),
     ...mapMutations(["selectHospital"]),
     paintStats(data) {
+
       for (let i = 0; i < 3; i++) {
 
         let callbacks = {} , ticksY = {}
