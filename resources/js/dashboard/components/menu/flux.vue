@@ -262,6 +262,7 @@ export default {
       "setFluxGeoOptions",
       "setFluxEnabled",
       "setFluxGeoOptionsTmp",
+      "setFluxGeoGranularityTemp"
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -290,6 +291,7 @@ export default {
     submitFluxForm() {
       this.$emit("submitFluxForm", this.fluxForm);
       this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
+      this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;

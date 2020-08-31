@@ -17,7 +17,8 @@
 
       <b-row no-gutters v-show="this.typeMobilite != 3">
         <b-col cols="12" v-show="this.typeMobilite == 2" md="12" class="pl-0 col-mobilite-generale">
-          <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==4}">
+          <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==4}" 
+            @click="selectFluxType(4)">
             <h5 class="percent-title">Mobilité générale</h5>
             <div class="percent flux-in-color">{{percentGenerale}}%​</div>
 
@@ -552,7 +553,7 @@ export default {
     );
     this.fluxGeoGranularity = this.$store.state.flux.fluxGeoGranularity;
     this.$store.watch(
-      (state) => state.flux.fluxGeoGranularity,
+      (state) => state.flux.fluxGeoGranularityTemp,
       (value) => {
         this.fluxGeoGranularity = value;
         if (this.fluxGeoGranularity == 2) {

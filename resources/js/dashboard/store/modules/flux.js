@@ -1,6 +1,7 @@
 export default {
     state: {
         fluxGeoGranularity: null,
+        fluxGeoGranularityTemp:null,
         mapStyle: 1,
         fluxType: 1,
         fluxGeoOptions: [],
@@ -19,6 +20,9 @@ export default {
         },
         setFluxGeoGranularity(state, payload) {
             state.fluxGeoGranularity = payload
+        },
+        setFluxGeoGranularityTemp(state, payload) {
+            state.fluxGeoGranularityTemp = payload
         },
         setMapStyle(state, payload) {
             state.mapStyle = payload;

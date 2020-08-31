@@ -76,8 +76,8 @@
     </b-row>
 
     <b-row no-gutters class="mb-2">
-      <b-col cols="12" md="6" class="pr-1" >
-        <b-card no-body class="default-card   card-chart p-2">
+      <b-col cols="12" md="6" class="pr-1">
+        <b-card no-body class="default-card card-chart p-2">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
           <legend-popover>
             <template v-slot:title>Comment est-ce calculé ?</template>
@@ -91,7 +91,7 @@
       </b-col>
 
       <b-col cols="12" md="6" class="pl-1">
-        <b-card no-body class="default-card   card-chart p-2">
+        <b-card no-body class="default-card card-chart p-2">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
           <legend-popover>
             <template v-slot:title>Comment est-ce calculé ?</template>
@@ -104,8 +104,8 @@
         </b-card>
       </b-col>
 
-      <b-col cols="12" class="mt-2" >
-        <b-card no-body class="default-card  card-chart p-2">
+      <b-col cols="12" class="mt-2">
+        <b-card no-body class="default-card card-chart p-2">
           <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
           <div class="chart-container">
             <canvas height="400" width="100vh" ref="canvasStat3" id="canvasStat3"></canvas>
@@ -183,6 +183,8 @@ export default {
       const occupiedRespirators = data.occupied_respirators;
       const occupiedResuscitation_beds = data.occupied_resuscitation_beds;
       const unknow = [];
+      const Respirators = [...occupiedRespirators];
+      const Resuscitation_beds = [...occupiedResuscitation_beds];
 
       const valideIndex = [];
       data.occupied_respirators = occupiedRespirators.map((item, index) => {
@@ -340,6 +342,18 @@ export default {
               fill: false,
               backgroundColor: "#F44336",
               borderColor: "#F44336",
+              data: Respirators.map((x) => (x == 0 ? null : x)),
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4,
+            },
+            {
+              label: "Interpolation",
+              fill: false,
+              backgroundColor: "green",
+              borderColor: "green",
               data: data.occupied_respirators.map((x) => (x == 0 ? null : x)),
               fill: false,
               interpolate: true,
@@ -371,21 +385,21 @@ export default {
             ],
           };
           datasets = [
-            // {
-            //   label: "Lits de réanimation",
-            //   backgroundColor: "#F44336",
-            //   borderColor: "#F44336",
-            //   data: data.resuscitation_beds.map((x) => (x == 0 ? null : x)),
-            //   fill: false,
-            //   interpolate: true,
-            //   showLine: true,
-            //   pointRadius: 2,
-            //   lineTension: 0.4,
-            // },
             {
               label: "Lits de réanimation occupés",
               backgroundColor: "#2e5bff",
               borderColor: "#2e5bff",
+              data: Resuscitation_beds.map((x) => (x == 0 ? null : x)),
+              fill: false,
+              interpolate: true,
+              showLine: true,
+              pointRadius: 2,
+              lineTension: 0.4,
+            },
+            {
+              label: "interpolation",
+              backgroundColor: "green",
+              borderColor: "green",
               data: data.occupied_resuscitation_beds.map((x) =>
                 x == 0 ? null : x
               ),
