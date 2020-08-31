@@ -24,7 +24,7 @@ class Flux24ZoneController extends Controller
     //Zones 24h
     public function getFluxDataFromOrigin(Request $request)
     {
-        $data = $this->fluxValidator($request->all());
+        $data = $this->fluxValidatorOld($request->all());
         try {
             $flux = Flux24Sum::select(['origin', 'destination', 'volume', 'day'])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
@@ -103,7 +103,7 @@ class Flux24ZoneController extends Controller
     }
     public function getFluxDataFromOriginDailyCompare(Request $request)
     {
-        $data = $this->fluxValidator($request->all());
+        $data = $this->fluxValidatorOld($request->all());
         try {
             // $flux = DB::select("SELECT origin,  date , volume FROM (
             //     SELECT origin,date, volume AS volume FROM flux24_sums 
@@ -129,7 +129,7 @@ class Flux24ZoneController extends Controller
 
     public function getFluxDataFromOriginDaily(Request $request)
     {
-        $data = $this->fluxValidator($request->all());
+        $data = $this->fluxValidatorOld($request->all());
 
         try {
             $flux = Flux24Sum::select(['Date as date', DB::raw('sum(volume) as volume')])
@@ -177,7 +177,7 @@ class Flux24ZoneController extends Controller
     }
     public function getFluxDataFromOriginDailyIn(Request $request)
     {
-        $data = $this->fluxValidator($request->all());
+        $data = $this->fluxValidatorOld($request->all());
 
         try {
             $flux = Flux24Sum::select(['Date as date', 'Destination as destination', 'Origin as origin', 'volume', 'day'])
@@ -232,7 +232,7 @@ class Flux24ZoneController extends Controller
     }
     public function getFluxDataFromOriginDailyOut(Request $request)
     {
-        $data = $this->fluxValidator($request->all());
+        $data = $this->fluxValidatorOld($request->all());
 
         try {
             $flux = Flux24Sum::select(['Date as date', 'Origin as origin', 'Destination as destination', 'volume', 'day'])
@@ -451,4 +451,17 @@ class Flux24ZoneController extends Controller
             'observation_end' => 'date|required|after_or_equal:observation_start',
         ])->validate();
     }
+
+    public function fluxValidatorOld($inputData)
+    {
+        return  Validator::make($inputData, [
+            'fluxGeoOptions' => 'required|array',
+            'preference_start' => 'nullable|date|before_or_equal:preference_end',
+            'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
+            'observation_start' => 'date|required|before_or_equal:observation_end',
+            'observation_end' => 'date|required|after_or_equal:observation_start',
+        ])->validate();
+    }
+
+
 }

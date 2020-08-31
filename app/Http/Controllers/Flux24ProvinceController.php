@@ -417,4 +417,6 @@ class Flux24ProvinceController extends Controller
             'observation_end' => 'date|required|after_or_equal:observation_start',
         ])->validate();
     }
+
+    
 }
