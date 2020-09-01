@@ -149,6 +149,8 @@ Route::group([
     Route::get('flux-zone', 'FluxZoneController@index');
     Route::get('flux-provinces', 'DashBoardController@getFluxProvinces');
 
+    Route::get('/townships', 'DashBoardController@getTownships');
+
     Route::group(['prefix' => 'pandemics'], function () {
         Route::get('top-confirmed', 'PandemicController@getHealthZoneTopConfirmed');
     });

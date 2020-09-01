@@ -11,6 +11,7 @@ use App\Flux30Province;
 use App\Flux30Zone;
 use App\Hospital;
 use App\HospitalSituation;
+use App\Township;
 use App\Http\Resources\HospitalResources;
 use App\Http\Resources\HospitalTotauxResource;
 use Illuminate\Http\Request;
@@ -629,7 +630,7 @@ class DashBoardController extends Controller
         $data = $this->fluxValidator($request->all());
         try {
             // $flux = DB::select("SELECT origin,  date , volume FROM (
-            //     SELECT origin,date, volume AS volume FROM flux24_sums 
+            //     SELECT origin,date, volume AS volume FROM flux24_sums
 
             //     UNION ALL
             //     SELECT destination AS origin,date, volume FROM flux24_sums )
@@ -1913,7 +1914,7 @@ class DashBoardController extends Controller
                     ->WhereIn('Zone', $data['fluxGeoOptions'])
                     ->groupBy('day', 'Zone', 'date')->get();
             }
-            
+
             return response()->json([
                 'references' => $fluxRefences,
                 'observations' => $flux,
@@ -2081,6 +2082,19 @@ class DashBoardController extends Controller
                 'references' => $fluxRefences,
                 'observations' => $flux,
             ]);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function getTownships()
+    {
+        try {
+            $townships = Township::orderBy('name')->get() ;
+            return response()->json($townships);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

@@ -28,6 +28,7 @@
           <MenuInfrastructure
             v-if="activeMenu==5"
             :hospitalCount="hospitalCount"
+            :townships="townships"
             @hopitalChecked="gethopitals"
             @submitInfrastructureForm="submitInfrastructureForm"
           />
@@ -283,6 +284,7 @@ export default {
       fluxDataGroupedByDateOut: {},
       fluxDataGroupedByDateGen: {},
       topHealthZoneConfirmed: [],
+      townships : []
     };
   },
   computed: {
@@ -370,6 +372,7 @@ export default {
       }
     );
     this.loadFluxGLobalData();
+    this.loadTownships() ;
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
@@ -1371,6 +1374,14 @@ export default {
         observationsByDate,
       };
     },
+
+    loadTownships(){
+      axios
+      .get("/api/dashboard/townships")
+      .then( ({ data }) => {
+        this.townships = data
+      }) ;
+    }
   },
   watch: {
     fluxDataGroupedByDateIn() {
