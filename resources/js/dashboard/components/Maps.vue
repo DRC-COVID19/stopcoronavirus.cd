@@ -109,6 +109,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    fluxZoneGlobalIn: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -148,17 +152,19 @@ export default {
       isMapLoaded: false,
       isZoneSourceLoaded: false,
       isProvinceSourceLoaded: false,
+      defaultCenterCoordinates: [23.485632, -3.983283],
     };
   },
   created() {
     this.loadSource();
+    // -3.983283, 23.485632 center from google maps
   },
   mounted() {
     Mapbox.accessToken = this.MAPBOX_TOKEN;
     window.map = new Mapbox.Map({
       container: "map",
-      center: [15.31389, -4.33167],
-      zoom: 10,
+      center: this.defaultCenterCoordinates,
+      zoom: 3.5,
       pitch: 10,
       style: this.MAPBOX_DEFAULT_STYLE,
     });
@@ -200,7 +206,7 @@ export default {
 
     //watch store
     this.$store.watch(
-      (state) => state.flux.fluxGeoGranularity,
+      (state) => state.flux.fluxGeoGranularityTemp,
       (value) => {
         // if (this.activeMenu != 1) {
         //   return;
@@ -262,13 +268,15 @@ export default {
   computed: {
     ...mapState({
       fluxMapStyle: (state) => state.flux.mapStyle,
-      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularity,
+      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
       fluxType: (state) => state.flux.fluxType,
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
+      fluxGeoOptionsTmp: (state) => state.flux.fluxGeoOptionsTmp,
       fluxEnabled: (state) => state.flux.fluxEnabled,
       activeMenu: (state) => state.nav.activeMenu,
       legendHover: (state) => state.flux.legendHover,
       epidemicLengendHover: (state) => state.epidemic.legendEpidHover,
+      fluxGeoGranularityMenu: (state) => state.flux.fluxGeoGranularity,
     }),
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
@@ -502,7 +510,34 @@ export default {
     },
     isLoading() {
       if (this.centerCoordinates.length > 0) {
+        map.resize();
         map.flyTo({ center: this.centerCoordinates });
+      }
+    },
+    fluxGeoGranularityMenu() {
+      // if (this.fluxGeoGranularity == 1) {
+      map.resize();
+      map.flyTo({
+        center: this.defaultCenterCoordinates,
+        easing: function (t) {
+          return t;
+        },
+        zoom: 3.5,
+      });
+      // }
+    },
+    fluxGeoOptionsTmp() {
+      const lenGeoOptions = this.fluxGeoOptionsTmp.length;
+      if (this.fluxGeoGranularityMenu == 2 && lenGeoOptions > 0) {
+        const zone = this.fluxGeoOptionsTmp[lenGeoOptions - 1];
+        map.resize();
+        map.flyTo({
+          center: this.getHealthZoneCoordonate(zone, this.fluxGeoGranularity),
+          easing: function (t) {
+            return t;
+          },
+          zoom: 10,
+        });
       }
     },
   },
@@ -514,6 +549,19 @@ export default {
       "setEpidemicExtValues",
     ]),
     ...mapActions(["resetState"]),
+    mapFly(center, zoom = 3.4) {
+      console.log({
+        center,
+        zoom,
+      });
+      map.flyTo({
+        center: center,
+        easing: function (t) {
+          return t;
+        },
+        zoom: zoom,
+      });
+    },
     addPolygoneLayer(geoGranularity) {
       map.U.removeLayer([this.drcSourceId]);
       map.addLayer(
@@ -935,19 +983,57 @@ export default {
       if (this.flux24DailyIn.length > 0) {
         let data = [];
         let DataGroupByDate = [];
-        if (this.fluxType == 1) {
-          data = this.flux24DailyIn;
-          DataGroupByDate = this.fluxDataGroupedByDateIn;
-        } else if (this.fluxType == 2) {
-          data = this.flux24DailyOut;
-          DataGroupByDate = this.fluxDataGroupedByDateOut;
-        } else if (this.fluxType == 4) {
-          data = this.flux24DailyGenerale;
+        let mapFlyOptions = {};
+        // if (this.fluxType == 1) {
+        //   data = this.flux24DailyIn;
+        //   DataGroupByDate = this.fluxDataGroupedByDateIn;
+        // } else if (this.fluxType == 2) {
+        //   data = this.flux24DailyOut;
+        //   DataGroupByDate = this.fluxDataGroupedByDateOut;
+        // } else if (this.fluxType == 4) {
+        //   data = this.flux24DailyGenerale;
+        // }
+        switch (this.fluxType) {
+          case 1:
+            if (this.fluxGeoGranularity == 1) {
+              mapFlyOptions = {
+                center: this.defaultCenterCoordinates,
+                zoom: 3.5,
+              };
+            }
+
+            data = this.flux24DailyIn;
+            DataGroupByDate = this.fluxDataGroupedByDateIn;
+            break;
+          case 2:
+            if (this.fluxGeoGranularity == 1) {
+              mapFlyOptions = {
+                center: this.defaultCenterCoordinates,
+                zoom: 3.5,
+              };
+            }
+            data = this.flux24DailyOut;
+            DataGroupByDate = this.fluxDataGroupedByDateOut;
+          case 3:
+            break;
+          case 4:
+            // this.addPolygoneLayer(2);
+
+            const zone = this.fluxGeoOptionsTmp[0];
+            const center = this.getHealthZoneCoordonate(zone, 1);
+            mapFlyOptions = {
+              center: this.getHealthZoneCoordonate(zone, 1),
+              zoom: 8,
+            };
+            data = this.fluxZoneGlobalIn;
+            break;
+          default:
+            break;
         }
         switch (this.fluxMapStyle) {
           case 2:
             this.fluxArcStyle(data, this.fluxGeoGranularity, this.legendHover);
-            map.flyTo({
+            const options = {
               pitch: 40,
               speed: 0.2, // make the flying slow
               curve: 1, // change the speed at which it zooms out
@@ -960,7 +1046,14 @@ export default {
 
               // this animation is considered essential with respect to prefers-reduced-motion
               essential: true,
-            });
+            };
+            if (mapFlyOptions.center) {
+              options.center = mapFlyOptions.center;
+            }
+            if (mapFlyOptions.zoom) {
+              options.zoom = mapFlyOptions.zoom;
+            }
+            map.flyTo(options);
             break;
           case 1:
           default:
@@ -970,9 +1063,9 @@ export default {
               this.flux24Presence,
               this.legendHover
             );
-            map.flyTo({
+            const optionsHatched = {
               pitch: 10,
-              speed: 0.2, // make the flying slow
+              // speed: 0.2, // make the flying slow
               curve: 1, // change the speed at which it zooms out
 
               // This can be any easing function: it takes a number between
@@ -983,12 +1076,24 @@ export default {
 
               // this animation is considered essential with respect to prefers-reduced-motion
               essential: true,
-            });
+            };
+            if (mapFlyOptions.center) {
+              optionsHatched.center = mapFlyOptions.center;
+            }
+            if (mapFlyOptions.zoom) {
+              optionsHatched.zoom = mapFlyOptions.zoom;
+            }
+            map.resize();
+            map.flyTo(optionsHatched);
             break;
         }
       } else {
         map.U.removeSource(["fluxCircleDataSource"]);
-        map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
+        map.U.removeLayer([
+          HATCHED_MOBILITY_LAYER,
+          "arc",
+          "fluxCircleDataLayer",
+        ]);
         map.off("mouseleave", "fluxCircleDataLayer");
         map.off("mouseleave", "fluxCircleDataLayer");
       }
@@ -1006,49 +1111,27 @@ export default {
       /**
        * format features data
        */
-      const formatData = ({ references, observations }, key) => {
-        if (!observations || !references) {
+      const formatData = (item, key) => {
+        const references = item.zone ? item.general_reference : item.references;
+        const observations = item.zone
+          ? item.general_observation
+          : item.observations;
+
+        if (
+          !observations ||
+          !references ||
+          observations.length == 0 ||
+          references.length == 0
+        ) {
           return {
             percent: null,
             difference: null,
           };
         }
-        let referenceVolume = null;
-        let observationVolume = null;
-        references.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        const result = this.formatFluxDataByMedian({
+          references,
+          observations,
         });
-        observations.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
-        });
-        const countReference = references.length;
-        if (countReference > 0) {
-          if (countReference % 2 == 0) {
-            let index = (countReference + 1) / 2;
-            index = parseInt(index);
-            const volume1 = references[index].volume;
-            const volume2 = references[index - 1].volume;
-            referenceVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countReference + 1) / 2;
-            referenceVolume = references[index - 1].volume;
-          }
-        }
-
-        const countObservation = observations.length;
-        if (countObservation > 0) {
-          if (countObservation % 2 == 0) {
-            let index = (countObservation + 1) / 2;
-            index = parseInt(index);
-            const volume1 = observations[index].volume;
-            const volume2 = observations[index - 1].volume;
-            observationVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countObservation + 1) / 2;
-            observationVolume = observations[index - 1].volume;
-          }
-        }
-        const difference = observationVolume - referenceVolume;
 
         features.push({
           type: "Feature",
@@ -1060,12 +1143,12 @@ export default {
                 : observations[0].position_end,
           },
           properties: {
-            origin: observations[0][key],
+            origin: item.zone ?? observations[0][key],
             color: "#ED5F68",
-            volume: observationVolume,
-            volumeReference: referenceVolume,
-            percent: Math.round((difference / referenceVolume) * 100),
-            difference: difference,
+            volume: result.referenceVolume,
+            volumeReference: result.referenceVolume,
+            percent: result.percent,
+            difference: result.difference,
           },
         });
       };
@@ -1202,9 +1285,9 @@ export default {
         localData.map((item) => {
           formatData(item, "zone");
         });
-        localData.map((item) => {
-          formatData(item, "targetZone");
-        });
+        // localData.map((item) => {
+        //   formatData(item, "targetZone");
+        // });
       } else {
         localData.map((item) => {
           formatData(item, "origin");
@@ -1262,7 +1345,7 @@ export default {
       }
 
       let dataKey = "name";
-      if (this.fluxGeoGranularity == 2) {
+      if (this.fluxGeoGranularity == 2 || this.fluxType == 4) {
         dataKey = "Zone+Peupl";
       }
 
@@ -1298,10 +1381,14 @@ export default {
           return;
         }
       }
-
+      console.log(features.map((x) => x.properties.origin));
+      let hatchedSource = this.drcSourceId;
+      if (this.fluxGeoGranularity == 2 || this.fluxType == 4) {
+        hatchedSource = this.drcHealthZone;
+      }
       map.U.addFill(
         HATCHED_MOBILITY_LAYER,
-        this.fluxGeoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
+        hatchedSource,
         map.U.properties({
           fillColor: colorExpression,
           fillOpacity: [
@@ -1407,7 +1494,7 @@ export default {
       map.off("mouseleave", "fluxCircleDataLayer");
       map.off("mouseleave", "fluxCircleDataLayer");
 
-      if (this.fluxType == 3) {
+      if (this.fluxType == 3 || this.fluxType == 4) {
         return;
       }
 
@@ -1546,7 +1633,6 @@ export default {
 
       this.setDomaineExtValues({ min: minArc, max: maxArc, isPercent: true });
 
-      console.log({ min: minArc, max: maxArc });
       if (legendHover) {
         if (features.length > 0) {
           features = features.filter(

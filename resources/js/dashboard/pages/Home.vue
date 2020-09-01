@@ -51,7 +51,7 @@
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
-            <FullScreen id="fullscreenMap" link @change="fullscreenMapChange">
+            <FullScreen id="fullscreenMap" no-flex link @change="fullscreenMapChange">
               <Maps
                 :covidCases="covidCases"
                 :hospitals="hospitals"
@@ -73,6 +73,7 @@
                 :flux24DailyGenerale="flux24DailyGenerale"
                 :isLoading="isLoading"
                 :flux24Presence="flux24PresenceDailyInFormat"
+                :fluxZoneGlobalIn="fluxZoneGlobalIn"
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
@@ -971,6 +972,8 @@ export default {
         (x) => x.province == values.fluxGeoOptions[0]
       );
 
+      console.log('healthZones',healthZones);
+
       let healthZonesWorkingIn = healthZones.slice(0, 3);
       let healthZonesWorkingOut = healthZones.slice(0, 3);
 
@@ -994,7 +997,7 @@ export default {
             })
             .then(async (response) => {
               this.fluxZoneGlobalIn.push(response.data);
-              console.log('in',response.headers["x-ratelimit-remaining"]);
+
               if (Number(response.headers["x-ratelimit-remaining"]) < 7) {
                 await this.sleep(25000);
               }
@@ -1033,7 +1036,6 @@ export default {
             })
             .then(async (response) => {
               this.fluxZoneGlobalOut.push(response.data);
-              console.log( 'out',response.headers["x-ratelimit-remaining"] );
               if (Number(response.headers["x-ratelimit-remaining"])<7) {
                 await this.sleep(25000);
               }

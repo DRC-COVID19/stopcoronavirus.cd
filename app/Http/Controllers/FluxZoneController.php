@@ -31,6 +31,7 @@ class FluxZoneController extends Controller
         try {
             $zones = HealthZone::select(['health_zones.name as zone','provinces.name as province'])
                 ->join('provinces', 'provinces.id', '=', 'health_zones.province_id')
+                ->distinct()
                 ->get();
             return response()->json($zones);
         } catch (\Throwable $th) {
