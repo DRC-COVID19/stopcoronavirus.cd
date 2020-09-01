@@ -74,6 +74,7 @@
                 :isLoading="isLoading"
                 :flux24Presence="flux24PresenceDailyInFormat"
                 :fluxZoneGlobalIn="fluxZoneGlobalIn"
+                :showInfrastructure="showInfrastructure"
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
@@ -285,7 +286,8 @@ export default {
       fluxDataGroupedByDateOut: {},
       fluxDataGroupedByDateGen: {},
       topHealthZoneConfirmed: [],
-      townships : []
+      townships : [],
+      showInfrastructure : false
     };
   },
   computed: {
@@ -357,10 +359,14 @@ export default {
       (state) => state.nav.activeMenu,
       (value) => {
         this.gethopitals(false);
+        if(value != 5 && this.showInfrastructure){
+          this.showInfrastructure = false
+        }
         switch (value) {
           case 1:
             break;
           case 2:
+            break ;
           default:
             break;
         }
@@ -397,6 +403,7 @@ export default {
       return this.medicalOrientations && this.medicalOrientations.length > 0;
     },
     gethopitals(checked) {
+      this.showInfrastructure = true
       this.getHospitalsData(checked);
     },
     getCovidCases(checked) {
@@ -1066,6 +1073,7 @@ export default {
       globalOutFunc();
     },
     submitInfrastructureForm(values){
+      this.showInfrastructure = true
       this.getHospitalsData(values);
     },
     seeSide() {

@@ -113,6 +113,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    showInfrastructure: {
+      type: Boolean,
+      default: null,
+    },
   },
   data() {
     return {
@@ -540,6 +544,11 @@ export default {
         });
       }
     },
+    showInfrastructure(){
+      if(!this.showInfrastructure){
+        map.U.removeSource("covid9HospitalsSource")
+      }
+    }
   },
   methods: {
     ...mapMutations([
