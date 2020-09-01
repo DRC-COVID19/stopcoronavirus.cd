@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\HospitalSituation;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 class HospitalResources extends JsonResource
 {
@@ -16,7 +17,10 @@ class HospitalResources extends JsonResource
     public function toArray($request)
     {
 
-        return [
+        $observation_end = $request->query('observation_end') ;
+        $observation_start = $request->query('observation_start') ;
+
+        $result = [
             'id' => $this->id,
             'name' => $this->name,
             'address' => $this->address,
@@ -27,10 +31,22 @@ class HospitalResources extends JsonResource
             'nurses' => $this->nurses,
             'para_medicals' => $this->para_medicals,
             'respirators' => $this->respirators,
-            'situation' => $this->hospitalSituations,
-            'last_situation' => HospitalSituationResource::make($this->hospitalSituations()->orderBy('last_update', 'desc')->first()),
+
+            'situation' =>
+              $this->hospitalSituations()
+              ->where(function($query) use($observation_start, $observation_end){
+                $query
+                ->whereBetween('last_update', [$observation_start, $observation_end]) ;
+              })
+              ->orderBy('last_update', 'desc')
+              ->get(),
+
             'longitude' => $this->longitude,
             'latitude' => $this->latitude
         ];
+
+        $result['last_situation'] =
+          sizeof($result['situation']) > 0 ? $result['situation'][0] : null ;
+        return $result ;
     }
 }

@@ -28,7 +28,9 @@
           <MenuInfrastructure
             v-if="activeMenu==5"
             :hospitalCount="hospitalCount"
+            :townships="townships"
             @hopitalChecked="gethopitals"
+            @submitInfrastructureForm="submitInfrastructureForm"
           />
           <MenuOrientation
             v-if="activeMenu==6"
@@ -72,6 +74,7 @@
                 :isLoading="isLoading"
                 :flux24Presence="flux24PresenceDailyInFormat"
                 :fluxZoneGlobalIn="fluxZoneGlobalIn"
+                :showInfrastructure="showInfrastructure"
                 :isFluxGlobalProvinceloading="isFluxGlobalProvinceloading"
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
@@ -285,6 +288,8 @@ export default {
       fluxDataGroupedByDateOut: {},
       fluxDataGroupedByDateGen: {},
       topHealthZoneConfirmed: [],
+      townships : [],
+      showInfrastructure : false,
       isFluxGlobalProvinceloading: {},
       globalProgress: null,
     };
@@ -358,10 +363,14 @@ export default {
       (state) => state.nav.activeMenu,
       (value) => {
         this.gethopitals(false);
+        if(value != 5 && this.showInfrastructure){
+          this.showInfrastructure = false
+        }
         switch (value) {
           case 1:
             break;
           case 2:
+            break ;
           default:
             break;
         }
@@ -374,6 +383,7 @@ export default {
       }
     );
     this.loadFluxGLobalData();
+    this.loadTownships() ;
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
@@ -397,6 +407,7 @@ export default {
       return this.medicalOrientations && this.medicalOrientations.length > 0;
     },
     gethopitals(checked) {
+      this.showInfrastructure = true
       this.getHospitalsData(checked);
     },
     getCovidCases(checked) {
@@ -1084,6 +1095,10 @@ export default {
       globalInFunc();
       globalOutFunc();
     },
+    submitInfrastructureForm(values){
+      this.showInfrastructure = true
+      this.getHospitalsData(values);
+    },
     seeSide() {
       this.$bvModal.show("data-modal");
     },
@@ -1397,6 +1412,14 @@ export default {
         observationsByDate,
       };
     },
+
+    loadTownships(){
+      axios
+      .get("/api/dashboard/townships")
+      .then( ({ data }) => {
+        this.townships = data
+      }) ;
+    }
   },
   watch: {
     fluxDataGroupedByDateIn() {

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Hospital;
+use App\HospitalLog;
 use App\HospitalSituation;
 use App\Http\Resources\HospitalResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Collection ;
 
 class HospitalController extends Controller
 {
@@ -81,11 +83,18 @@ class HospitalController extends Controller
         //
     }
 
-    public function getHospials()
+    public function getHospials(Request $request)
     {
         try {
-            $hospitals = HospitalResources::collection(Hospital::get());
-            return response()->json($hospitals);
+            $observation_end = $request->query('observation_end') ;
+            $observation_start = $request->query('observation_start') ;
+            $township = $request->query('township') ;
+
+
+            $hospitalsFiltred = $this->getHospitalsFromFiltre($observation_start, $observation_end, $township) ;
+            $dataHospitals = HospitalResources::collection($hospitalsFiltred);
+            return response()->json($dataHospitals);
+
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -94,43 +103,121 @@ class HospitalController extends Controller
         }
     }
 
-    public function getHospitalsTotaux()
+    private function getHospitalsFromFiltre($date_start, $date_end, $township){
+      $hospitalLogs = HospitalLog::
+      where(function($query) use($date_start, $date_end){
+        $query
+        ->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$date_start, $date_end])
+        ->orWhereNull('updated_at') ;
+      })
+      ->where(function($query) use($township){
+        if($township) $query->where('township_id', $township) ;
+      })
+      ->orderBy('updated_at', 'desc')
+      ->get() ;
+
+      $hospitals = Hospital::where(function($query) use($date_start, $date_end){
+        $query
+        ->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$date_start, $date_end])
+        ->orWhereNull('updated_at') ;
+    	})
+      ->where(function($query) use($township){
+        if($township) $query->where('township_id', $township) ;
+      })
+      ->orderBy('updated_at', 'desc')
+      ->get() ;
+
+      $hospitals =
+      $hospitals->concat($hospitalLogs)->sortByDesc('updated_at')->values() ;
+
+      $hospitals = $hospitals->map(function ($item, $key) {
+          if(!$item->hospital_id){
+            $item->hospital_id = $item->id ;
+          }
+          return $item ;
+      });
+
+      $hospitalsFiltred = $hospitals->unique('hospital_id')->values() ;
+      return $hospitalsFiltred ;
+    }
+
+    public function getHospitalsTotaux(Request $request)
     {
         try {
-            $hospitals = Hospital::selectRaw(
-                'SUM(beds) AS beds , SUM(respirators) AS respirators, SUM(foam_beds) AS foam_beds ,
-                SUM(resuscitation_beds) AS resuscitation_beds, SUM(doctors) AS doctors, SUM(nurses) AS nurses ,
-                SUM(para_medicals) AS para_medicals,
+            $observation_end = $request->query('observation_end') ;
+            $observation_start = $request->query('observation_start') ;
+            $township = $request->query('township') ;
 
+            $hospitalsFiltred = $this->getHospitalsFromFiltre($observation_start, $observation_end, $township) ;
+
+            $hospitals = collect([
+              'beds' => $hospitalsFiltred->sum('beds') ,
+              'respirators' => $hospitalsFiltred->sum('respirators') ,
+              'foam_beds' => $hospitalsFiltred->sum('foam_beds') ,
+              'resuscitation_beds' => $hospitalsFiltred->sum('resuscitation_beds') ,
+              'doctors' => $hospitalsFiltred->sum('doctors') ,
+              'nurses' => $hospitalsFiltred->sum('nurses') ,
+              'para_medicals' => $hospitalsFiltred->sum('para_medicals') ,
+            ]) ;
+
+            $hospitalsSituation1 = Hospital::
+            where(function($query) use($township){
+              if($township) $query->whereRaw('township_id = :township ' , ['township' => $township]) ;
+            })
+            ->selectRaw('
                 SUM(
                     (SELECT occupied_foam_beds FROM hospital_situations
-                      WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                      WHERE hospital_id = hospitals.id AND
+                      DATE(last_update) BETWEEN DATE(:date_start1) AND DATE(:date_end1)
+                      ORDER BY last_update DESC LIMIT 1)
                 ) AS occupied_foam_beds ,
                 SUM(
                     (SELECT occupied_resuscitation_beds FROM hospital_situations
-                    WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                    WHERE hospital_id = hospitals.id AND
+                    DATE(last_update) BETWEEN DATE(:date_start2) AND DATE(:date_end2)
+                    ORDER BY last_update DESC LIMIT 1)
                 ) AS occupied_resuscitation_beds ,
                 SUM(
                     (SELECT occupied_respirators FROM hospital_situations
-                    WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                    WHERE hospital_id = hospitals.id AND
+                    DATE(last_update) BETWEEN DATE(:date_start3) AND DATE(:date_end3)
+                    ORDER BY last_update DESC LIMIT 1)
                 ) AS occupied_respirators ,
                 SUM(
                     (SELECT resuscitation_ventilator FROM hospital_situations
-                    WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                    WHERE hospital_id = hospitals.id AND
+                    DATE(last_update) BETWEEN DATE(:date_start4) AND DATE(:date_end4)
+                    ORDER BY last_update DESC LIMIT 1)
                 ) AS resuscitation_ventilator ,
                 SUM(
                     (SELECT oxygenator FROM hospital_situations
-                    WHERE hospital_id = hospitals.id ORDER BY last_update DESC LIMIT 1)
+                    WHERE hospital_id = hospitals.id AND
+                    DATE(last_update) BETWEEN DATE(:date_start5) AND DATE(:date_end5)
+                    ORDER BY last_update DESC LIMIT 1)
                 ) AS oxygenator
-                '
-            )->first();
+                ' ,
+                ['date_start1' => $observation_start , 'date_end1' => $observation_end ,
+                'date_start2' => $observation_start , 'date_end2' => $observation_end ,
+                'date_start3' => $observation_start , 'date_end3' => $observation_end ,
+                'date_start4' => $observation_start , 'date_end4' => $observation_end ,
+                'date_start5' => $observation_start , 'date_end5' => $observation_end ]
+            )
+            ->first();
 
+            $hospitalsSituation2 = HospitalSituation::
+            whereRaw('DATE(last_update) BETWEEN ? AND ?', [$observation_start, $observation_end])
+            ->where(function($query) use($township){
+              if($township)
+                $query->whereRaw('(SELECT township_id FROM hospitals WHERE id = hospital_id) = ?' ,
+                [$township]) ;
+            })
+            ->selectRaw(
+                'SUM(confirmed) as confirmed, SUM(healed) as healed, SUM(dead) as dead, SUM(sick) as sick'
+            )
+            ->first();
 
-            $hospitalsSituation = HospitalSituation::selectRaw(
-                'SUM(confirmed) as confirmed, SUM(healed) as healed, SUM(dead) as dead'
-            )->first();
-
-            $results = array_merge($hospitals->toArray(), $hospitalsSituation->toArray());
+            $results =
+            $hospitals->merge($hospitalsSituation1)->merge($hospitalsSituation2);
 
             return response()->json($results);
         } catch (\Throwable $th) {
@@ -141,15 +228,27 @@ class HospitalController extends Controller
         }
     }
 
-    public function getHospitalEvolution($hospital = null)
+    public function getHospitalEvolution($hospital = null, Request $request)
     {
         try {
+
+            $observation_end = $request->query('observation_end') ;
+            $observation_start = $request->query('observation_start') ;
+            $township = $request->query('township') ;
+
             // On réccupère toutes les dates où une mise à jour a pu etre poster
             // Surtout utile pour l'evolution globale
 
-            $last_updates = HospitalSituation::where(function ($query) use ($hospital) {
-              if ($hospital) $query->where('hospital_id', intval($hospital));
+            $last_updates = HospitalSituation::where(function ($query) use ($hospital, $township) {
+              if ($hospital){
+                $query->where('hospital_id', intval($hospital));
+              }
+              else if($township){
+                $query->whereRaw('(SELECT township_id FROM hospitals WHERE id = hospital_id) = ?' ,
+                [$township]) ;
+              }
             })
+            ->whereRaw('DATE(last_update) BETWEEN ? AND ? ', [$observation_start, $observation_end])
             ->select('last_update')
             ->pluck('last_update')
             ->unique()->sort()->values() ;
@@ -167,9 +266,12 @@ class HospitalController extends Controller
             // pour la situation globale
             foreach ($last_updates as $last_update) {
 
-              $hospitalSituation = HospitalSituation::where(function ($query) use ($hospital) {
+              $hospitalSituation = HospitalSituation::where(function ($query) use ($hospital, $township) {
                   if ($hospital){
                       $query->where('hospital_id', intval($hospital));
+                  }else if($township){
+                    $query->whereRaw('(SELECT township_id FROM hospitals WHERE id = hospital_id) = ?' ,
+                    [$township]) ;
                   }
               })->selectRaw(
                 ' SUM(occupied_respirators) AS occupied_respirators,
@@ -199,6 +301,7 @@ class HospitalController extends Controller
                   ) AS resuscitation_beds
               ')
               ->where('last_update' , '<=' , $last_update)
+              ->whereRaw('DATE(last_update) BETWEEN ? AND ?', [$observation_start, $observation_end])
               ->whereNotExists(function($query) use($last_update){
                   // C'est ici qu'on s'assure que la situation actuellemnent lu est la dernière connu
                   // pour l'hopital x à la date $last_update sur laquelle on boucle

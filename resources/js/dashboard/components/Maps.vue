@@ -113,6 +113,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    showInfrastructure: {
+      type: Boolean,
+      default: null
+    },
     isFluxGlobalProvinceloading: {
       type: Object,
       default: () => ({}),
@@ -296,6 +300,7 @@ export default {
     },
     hospitals() {
       if (this.hospitals) {
+        map.U.removeSource("covid9HospitalsSource");
         map.flyTo({
           center: this.getHealthZoneCoordonate("Kinshasa", 2),
           easing: function (t) {
@@ -551,6 +556,11 @@ export default {
           },
           zoom: 10,
         });
+      }
+    },
+    showInfrastructure(){
+      if(!this.showInfrastructure){
+        map.U.removeSource("covid9HospitalsSource");
       }
     },
     "isFluxGlobalProvinceloading.in"() {

@@ -29,6 +29,7 @@ export const
     OBSERVATION_START="2020-03-19",
     OBSERVATION_END="2020-04-26",
     DATEFORMAT = "Y-MM-DD",
+    INFRASTRUCTURE_FIRST_UPDATE = "2020-07-01" ,
     FLUX_PREDEFINED_INPUT = [
         {
             id: 1,
