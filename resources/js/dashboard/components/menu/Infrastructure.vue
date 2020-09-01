@@ -35,7 +35,6 @@
                 v-model="dateRangeObservation"
                 :appendToBody="true"
                 opens="center"
-                :min-date="min_date"
                 :max-date="new Date()"
                 :singleDatePicker="false"
                 @update="UpdateObservationDate"

@@ -107,7 +107,7 @@ class HospitalController extends Controller
       $hospitalLogs = HospitalLog::
       where(function($query) use($date_start, $date_end){
         $query
-        ->whereBetween('updated_at', [$date_start, $date_end])
+        ->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$date_start, $date_end])
         ->orWhereNull('updated_at') ;
       })
       ->where(function($query) use($township){
@@ -118,7 +118,7 @@ class HospitalController extends Controller
 
       $hospitals = Hospital::where(function($query) use($date_start, $date_end){
         $query
-        ->whereBetween('updated_at', [$date_start, $date_end])
+        ->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$date_start, $date_end])
         ->orWhereNull('updated_at') ;
     	})
       ->where(function($query) use($township){
@@ -205,7 +205,7 @@ class HospitalController extends Controller
             ->first();
 
             $hospitalsSituation2 = HospitalSituation::
-            whereBetween('last_update', [$observation_start, $observation_end])
+            whereRaw('DATE(last_update) BETWEEN ? AND ?', [$observation_start, $observation_end])
             ->where(function($query) use($township){
               if($township)
                 $query->whereRaw('(SELECT township_id FROM hospitals WHERE id = hospital_id) = ?' ,
@@ -248,7 +248,7 @@ class HospitalController extends Controller
                 [$township]) ;
               }
             })
-            ->whereBetween('last_update', [$observation_start, $observation_end])
+            ->whereRaw('DATE(last_update) BETWEEN ? AND ? ', [$observation_start, $observation_end])
             ->select('last_update')
             ->pluck('last_update')
             ->unique()->sort()->values() ;
@@ -301,7 +301,7 @@ class HospitalController extends Controller
                   ) AS resuscitation_beds
               ')
               ->where('last_update' , '<=' , $last_update)
-              ->whereBetween('last_update', [$observation_start, $observation_end])
+              ->whereRaw('DATE(last_update) BETWEEN ? AND ?', [$observation_start, $observation_end])
               ->whereNotExists(function($query) use($last_update){
                   // C'est ici qu'on s'assure que la situation actuellemnent lu est la dernière connu
                   // pour l'hopital x à la date $last_update sur laquelle on boucle
