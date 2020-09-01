@@ -296,6 +296,13 @@ export default {
     },
     hospitals() {
       if (this.hospitals) {
+        map.flyTo({
+          center: this.getHealthZoneCoordonate("Kinshasa", 2),
+          easing: function (t) {
+            return t;
+          },
+          zoom: 10,
+        });
         this.map.addSource("covid9HospitalsSource", this.hospitals);
 
         this.map.addLayer({
@@ -773,6 +780,13 @@ export default {
       property = "confirmed",
       geoGranularity = 2
     ) {
+      map.flyTo({
+        center: this.getHealthZoneCoordonate("Kinshasa", 2),
+        easing: function (t) {
+          return t;
+        },
+        zoom: 10,
+      });
       let features = covidCasesData.data.features;
 
       features = features.sort((a, b) => {
