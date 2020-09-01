@@ -2,11 +2,27 @@
   <b-card no-body class="rounded-0 p-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row>
+
         <b-col v-if="hospitalCount" md="2" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Nombre d'infrastructures</label>
            <b-badge >{{hospitalCount}}</b-badge>
         </b-col>
-        <b-col cols="12" :md="hospitalCount ? 8 : 10" class="nav-zone pl-3 pr-3">
+
+        <b-col cols="12" md="3" class="nav-zone pl-3 pr-3">
+          <b-form-group>
+            <label for class="text-dash-color">Commune</label>
+            <v-select
+              v-model="form.township"
+              :options="townshipList"
+              label="name"
+              placeholder="Commune"
+              :reduce="item=>item.id"
+              class="style-chooser"
+            />
+          </b-form-group>
+        </b-col>
+
+        <b-col cols="12" :md="hospitalCount ? 5 : 7" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
           <b-form-group>
             <div class="d-flex">
@@ -36,10 +52,12 @@
             </div>
           </b-form-group>
         </b-col>
+
         <b-col cols="12" md="2" class="row pl-3 pr-3">
           <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue">Filtrer les données</b-button>
         </b-col>
-      </b-form-row>
+
+        </b-form-row>
     </b-form>
   </b-card>
 </template>
@@ -55,6 +73,10 @@ export default {
     hospitalCount: {
       type: Number,
       default: null
+    } ,
+    townships : {
+      type : Array ,
+      default : () => []
     }
   },
   components: {
@@ -65,12 +87,14 @@ export default {
       form : {
         observation_end: moment().format("YYYY-MM-DD"),
         observation_start: INFRASTRUCTURE_FIRST_UPDATE,
+        township : 0
       },
       dateRangeObservation: {
         startDate: new Date(INFRASTRUCTURE_FIRST_UPDATE),
         endDate: new Date(),
       },
       min_date: new Date(INFRASTRUCTURE_FIRST_UPDATE),
+      defaultTownship : [{ id : 0 , name : "Tous" }]
     }
   },
   filters: {
@@ -98,7 +122,12 @@ export default {
     submit() {
       this.$emit("submitInfrastructureForm", this.form);
     }
-  }
+  },
+  computed: {
+    townshipList(){
+      return [...this.defaultTownship, ...this.townships]
+    }
+  },
 };
 </script>
 

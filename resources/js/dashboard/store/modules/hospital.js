@@ -11,6 +11,7 @@ export default {
         hospitalManagerName: null,
         observation_end: null,
         observation_start: null,
+        township: null,
     },
     mutations: {
         selectHospital(state, payload) {
@@ -29,12 +30,14 @@ export default {
             if (payload) {
                 if(payload.observation_end) state.observation_end = payload.observation_end
                 if(payload.observation_start) state.observation_start = payload.observation_start
+                state.township = payload.township
 
                 axios
                     .get(`/api/dashboard/hospitals`, {
                       params : {
                         observation_end : payload.observation_end || null ,
-                        observation_start : payload.observation_start || null
+                        observation_start : payload.observation_start || null ,
+                        township : payload.township
                       }
                     })
                     .then(({ data }) => {
@@ -101,7 +104,8 @@ export default {
                     .get(`/api/dashboard/hospitals/totaux`, {
                       params : {
                         observation_end : payload.observation_end || null ,
-                        observation_start : payload.observation_start || null
+                        observation_start : payload.observation_start || null ,
+                        township : payload.township
                       }
                     })
                     .then(({ data }) => {
@@ -123,7 +127,8 @@ export default {
                 {
                   params : {
                     observation_end : state.observation_end ,
-                    observation_start : state.observation_start
+                    observation_start : state.observation_start ,
+                    township : state.township
                   }
                 })
                 .then(({ data }) => {
