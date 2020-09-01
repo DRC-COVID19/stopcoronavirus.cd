@@ -115,7 +115,11 @@ export default {
     },
     showInfrastructure: {
       type: Boolean,
-      default: null,
+      default: null
+    },
+    isFluxGlobalProvinceloading: {
+      type: Object,
+      default: () => ({}),
     },
   },
   data() {
@@ -297,6 +301,13 @@ export default {
     hospitals() {
       if (this.hospitals) {
         map.U.removeSource("covid9HospitalsSource");
+        map.flyTo({
+          center: this.getHealthZoneCoordonate("Kinshasa", 2),
+          easing: function (t) {
+            return t;
+          },
+          zoom: 10,
+        });
         this.map.addSource("covid9HospitalsSource", this.hospitals);
 
         this.map.addLayer({
@@ -536,7 +547,10 @@ export default {
         const zone = this.fluxGeoOptionsTmp[lenGeoOptions - 1];
         map.resize();
         map.flyTo({
-          center: this.getHealthZoneCoordonate(zone, this.fluxGeoGranularity),
+          center: this.getHealthZoneCoordonate(
+            zone,
+            this.fluxGeoGranularityMenu
+          ),
           easing: function (t) {
             return t;
           },
@@ -546,9 +560,17 @@ export default {
     },
     showInfrastructure(){
       if(!this.showInfrastructure){
-        map.U.removeSource("covid9HospitalsSource")
+        map.U.removeSource("covid9HospitalsSource");
       }
-    }
+    },
+    "isFluxGlobalProvinceloading.in"() {
+      map.resize();
+      map.flyTo({ center: this.defaultCenterCoordinates });
+    },
+    "isFluxGlobalProvinceloading.out"() {
+      map.resize();
+      map.flyTo({ center: this.defaultCenterCoordinates });
+    },
   },
   methods: {
     ...mapMutations([
@@ -768,6 +790,13 @@ export default {
       property = "confirmed",
       geoGranularity = 2
     ) {
+      map.flyTo({
+        center: this.getHealthZoneCoordonate("Kinshasa", 2),
+        easing: function (t) {
+          return t;
+        },
+        zoom: 10,
+      });
       let features = covidCasesData.data.features;
 
       features = features.sort((a, b) => {
@@ -1002,6 +1031,10 @@ export default {
         // } else if (this.fluxType == 4) {
         //   data = this.flux24DailyGenerale;
         // }
+        let zone = null;
+        if (this.fluxGeoOptionsTmp && this.fluxGeoOptionsTmp.length > 0) {
+          zone = this.fluxGeoOptionsTmp[0];
+        }
         switch (this.fluxType) {
           case 1:
             if (this.fluxGeoGranularity == 1) {
@@ -1009,8 +1042,12 @@ export default {
                 center: this.defaultCenterCoordinates,
                 zoom: 3.5,
               };
+            } else {
+              mapFlyOptions = {
+                center: this.getHealthZoneCoordonate(zone, 2),
+                zoom: 8,
+              };
             }
-
             data = this.flux24DailyIn;
             DataGroupByDate = this.fluxDataGroupedByDateIn;
             break;
@@ -1020,16 +1057,17 @@ export default {
                 center: this.defaultCenterCoordinates,
                 zoom: 3.5,
               };
+            } else {
+              mapFlyOptions = {
+                center: this.getHealthZoneCoordonate(zone, 2),
+                zoom: 8,
+              };
             }
             data = this.flux24DailyOut;
             DataGroupByDate = this.fluxDataGroupedByDateOut;
           case 3:
             break;
           case 4:
-            // this.addPolygoneLayer(2);
-
-            const zone = this.fluxGeoOptionsTmp[0];
-            const center = this.getHealthZoneCoordonate(zone, 1);
             mapFlyOptions = {
               center: this.getHealthZoneCoordonate(zone, 1),
               zoom: 8,
@@ -1339,18 +1377,26 @@ export default {
         isPercent: true,
       });
 
-      if (this.fluxType == 1 || this.fluxType == 4) {
-        colorScaleNegative.range(PALETTE.inflow_negatif);
-        colorScalePositive.range(PALETTE.inflow_positif);
+      switch (this.fluxType) {
+        case 1:
+          colorScaleNegative.range(PALETTE.inflow_negatif);
+          colorScalePositive.range(PALETTE.inflow_positif);
 
-        colorScale.range(PALETTE.inflow);
-      } else if (this.fluxType == 3) {
-        colorScale.range(PALETTE.present);
-      } else {
-        colorScale.range(PALETTE.outflow);
-
-        colorScaleNegative.range(PALETTE.outflow_negatif);
-        colorScalePositive.range(PALETTE.outflow_positif);
+          colorScale.range(PALETTE.inflow);
+          break;
+        case 3:
+          colorScale.range(PALETTE.present);
+          break;
+        case 4:
+          colorScaleNegative.range(PALETTE.general_negatif);
+          colorScalePositive.range(PALETTE.general_positif);
+          break;
+        case 2:
+          colorScale.range(PALETTE.outflow);
+          colorScaleNegative.range(PALETTE.outflow_negatif);
+          colorScalePositive.range(PALETTE.outflow_positif);
+        default:
+          break;
       }
 
       let dataKey = "name";
@@ -1363,7 +1409,8 @@ export default {
       features.forEach((x) => {
         let color = PALETTE.dash_green;
         if (
-          this.fluxGeoOptions.includes(x.properties.origin) ||
+          (this.fluxGeoOptions.includes(x.properties.origin) &&
+            this.fluxType != 4) ||
           this.fluxType == 3
         ) {
           color = PALETTE.dash_green;

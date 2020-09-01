@@ -22,12 +22,12 @@ export default {
     },
     link: {
       type: String,
-      required: true
+      required: true,
     },
-    noFlex : {
-      type : Boolean ,
-      default : false
-    }
+    noFlex: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     toggleFullscreen() {
@@ -40,14 +40,17 @@ export default {
         this.$emit("change", fullscreen, this.link);
       });
     },
-  }
+  },
 };
 </script>
 <style lang="scss" scoped>
 .fullscreen-container {
   position: relative;
-  height: auto;
-    width: 100%;
+  height: inherit;
+  width: 100%;
+  > div {
+    height: inherit;
+  }
   .fullscreen-btn {
     transform-origin: center;
     transform: scale(0);
@@ -84,12 +87,12 @@ export default {
     opacity: 1;
   }
 }
-.fullscreen-container.noFlex{
-  .fullscreen{
+.fullscreen-container.noFlex {
+  .fullscreen {
     display: block;
   }
 }
-.fullscreen{
+.fullscreen {
   display: flex;
   align-items: center;
   justify-content: center;
