@@ -362,8 +362,8 @@ export default {
             {
               label: "Interpolation",
               fill: false,
-              backgroundColor: "green",
-              borderColor: "green",
+              backgroundColor: PALETTE.dash_green,
+              borderColor: PALETTE.dash_green,
               data: data.occupied_respirators.map((x) => (x == 0 ? null : x)),
               fill: false,
               interpolate: true,
@@ -408,8 +408,8 @@ export default {
             },
             {
               label: "interpolation",
-              backgroundColor: "green",
-              borderColor: "green",
+              backgroundColor: PALETTE.dash_green,
+              borderColor: PALETTE.dash_green,
               data: data.occupied_resuscitation_beds.map((x) =>
                 x == 0 ? null : x
               ),
