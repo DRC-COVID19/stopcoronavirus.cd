@@ -514,6 +514,12 @@ export default {
       }
     },
     typeMobilite() {
+      if (this.typeMobilite==2) {
+        this.selectFluxType(4);
+      }
+      else if (this.typeMobilite==1) {
+        this.selectFluxType(1);
+      }
       if (this.typeMobilite == 3) {
         this.setIsProvinceStatSeeing(true);
       } else if (this.isProvinceStatSeeing) {
