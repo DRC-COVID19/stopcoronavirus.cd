@@ -45391,9 +45391,15 @@ function setMarkersSondage(sondage, map) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 __webpack_require__(/*! E:\workspace-ged\kd\stopcoronavirus\resources\js\app.js */"./resources/js/app.js");
 __webpack_require__(/*! E:\workspace-ged\kd\stopcoronavirus\resources\sass\app.scss */"./resources/sass/app.scss");
 module.exports = __webpack_require__(/*! E:\workspace-ged\kd\stopcoronavirus\resources\sass\vueApp.scss */"./resources/sass/vueApp.scss");
+=======
+__webpack_require__(/*! C:\Source\covid19\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\Source\covid19\resources\sass\app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! C:\Source\covid19\resources\sass\vueApp.scss */"./resources/sass/vueApp.scss");
+>>>>>>> dev
 
 
 /***/ })

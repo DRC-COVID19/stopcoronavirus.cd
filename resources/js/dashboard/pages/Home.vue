@@ -75,6 +75,7 @@
                 :flux24Presence="flux24PresenceDailyInFormat"
                 :fluxZoneGlobalIn="fluxZoneGlobalIn"
                 :showInfrastructure="showInfrastructure"
+                :isFluxGlobalProvinceloading="isFluxGlobalProvinceloading"
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
@@ -128,6 +129,7 @@
                   :fluxZoneGlobalOut="fluxZoneGlobalOut"
                   :mobiliteGenerale="showMobiliteGenerale"
                   :topHealthZoneConfirmed="topHealthZoneConfirmed"
+                  :globalProgress="globalProgress"
                 />
               </b-tab>
               <b-tab
@@ -287,7 +289,9 @@ export default {
       fluxDataGroupedByDateGen: {},
       topHealthZoneConfirmed: [],
       townships : [],
-      showInfrastructure : false
+      showInfrastructure : false,
+      isFluxGlobalProvinceloading: {},
+      globalProgress: null,
     };
   },
   computed: {
@@ -978,8 +982,7 @@ export default {
       const healthZones = this.healthZones.filter(
         (x) => x.province == values.fluxGeoOptions[0]
       );
-
-      console.log('healthZones',healthZones);
+      let countAll = healthZones.length;
 
       let healthZonesWorkingIn = healthZones.slice(0, 3);
       let healthZonesWorkingOut = healthZones.slice(0, 3);
@@ -990,6 +993,11 @@ export default {
       let loopLenghtIn = healthIndexIn;
 
       let loopLenghtOut = healthIndexOut;
+
+      let countIn = 0;
+      let countOut = 0;
+
+      this.globalProgress = ((countIn + countOut) / (countAll * 2)) * 100;
 
       const globalInFunc = () => {
         for (let index = 0; index < loopLenghtIn; index++) {
@@ -1004,7 +1012,9 @@ export default {
             })
             .then(async (response) => {
               this.fluxZoneGlobalIn.push(response.data);
-
+              countIn++;
+              this.globalProgress =
+                ((countIn + countOut) / (countAll * 2)) * 100;
               if (Number(response.headers["x-ratelimit-remaining"]) < 7) {
                 await this.sleep(25000);
               }
@@ -1017,6 +1027,11 @@ export default {
               if (healthIndexIn <= healthZones.length) {
                 globalInFunc();
               }
+            })
+            .catch(() => {
+              countIn++;
+              this.globalProgress =
+                ((countIn + countOut) / (countAll * 2)) * 100;
             });
 
           //Get  zone out by province
@@ -1043,7 +1058,10 @@ export default {
             })
             .then(async (response) => {
               this.fluxZoneGlobalOut.push(response.data);
-              if (Number(response.headers["x-ratelimit-remaining"])<7) {
+              countOut++;
+              this.globalProgress =
+                ((countIn + countOut) / (countAll * 2)) * 100;
+              if (Number(response.headers["x-ratelimit-remaining"]) < 7) {
                 await this.sleep(25000);
               }
               healthZonesWorkingOut = healthZones.slice(
@@ -1055,6 +1073,11 @@ export default {
               if (healthIndexOut <= healthZones.length) {
                 globalOutFunc();
               }
+            })
+            .catch(() => {
+              countOut++;
+              this.globalProgress =
+                ((countIn + countOut) / (countAll * 2)) * 100;
             });
 
           //Get  zone out by province
@@ -1193,6 +1216,8 @@ export default {
       });
     },
     loadFluxGLobalData() {
+      this.$set(this.isFluxGlobalProvinceloading, "in", true);
+
       axios
         .get("/api/dashboard/flux/origin/provinces/h-24/global-in", {
           params: {
@@ -1211,8 +1236,10 @@ export default {
               observations: groupObservations[key],
             });
           });
+          this.$set(this.isFluxGlobalProvinceloading, "in", false);
         });
 
+      this.$set(this.isFluxGlobalProvinceloading, "out", true);
       axios
         .get("/api/dashboard/flux/origin/provinces/h-24/global-out", {
           params: {
@@ -1231,6 +1258,7 @@ export default {
               observations: groupObservations[key],
             });
           });
+          this.$set(this.isFluxGlobalProvinceloading, "out", false);
         });
     },
     updateflux24DailyGenerale() {

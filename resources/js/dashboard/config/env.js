@@ -12,6 +12,8 @@ export const
         outflow: ["#2d004b", "#542788", "#8073ac", "#b2abd2", "#fdb863", "#e08214", "#b35806", "#7f3b08"],
         outflow_positif: ["rgb(254, 224, 182)", "rgb(253, 184, 99)", "rgb(224, 130, 20)" , "rgb(179, 88, 6)" , "rgb(127, 59, 8)"],
         outflow_negatif: ["rgb(45, 0, 75)", "rgb(84, 39, 136)", "rgb(128, 115, 172)", "rgb(178, 171, 210)", "rgb(216, 218, 235)"],
+        general_positif:['#d3f9ce','#93d691','#47c357','#108337','#035d21'],
+        general_negatif:['#2c012f','#7d0088','#a048af','#c790d2','#e9cbea'],
         present: ["#E31A1C"],
         nodata: "#eeeeee",
         bordure_shape_file: " #BFC5D2",
