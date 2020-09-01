@@ -146,13 +146,13 @@ export default {
   data() {
     return {
       dateRangePreference: {
-        startDate: new Date("02/18/2020"),
-        endDate: new Date("03/18/2020"),
+        startDate: new Date(PREFERENCE_START),
+        endDate: new Date(PREFERENCE_END),
       },
       Observation_max_date: new Date(FLUX_LAST_UPDATE),
       fluxForm: {
-        preference_start: "2020-02-01",
-        preference_end: "2020-03-18",
+        preference_start: PREFERENCE_START,
+        preference_end: PREFERENCE_END,
         observation_start: "2020-03-19",
         observation_end: "2020-06-29",
         fluxGeoGranularity: 2,

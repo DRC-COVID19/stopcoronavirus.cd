@@ -604,10 +604,10 @@ export default {
       let observationVolume = null;
 
       referencesByDate.sort((a, b) => {
-        return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        return new Date(a.date) < new Date(b.date) ? 1 : -1;
       });
       observationsByDate.sort((a, b) => {
-        return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        return new Date(a.date) < new Date(b.date) ? 1 : -1;
       });
 
       const countReference = referencesByDate.length;
