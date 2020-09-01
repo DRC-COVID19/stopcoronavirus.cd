@@ -3,7 +3,12 @@
     <b-row>
       <b-col cols="12 mb-2">
         <div class="row align-items-center">
-          <h4 class="col m-0">{{hospital.name || "Rapport global"}}</h4>
+          <h4 class="col m-0 d-flex align-items-baseline">
+            <span>{{hospital.name || "Rapport global"}}</span>
+            <b-badge v-if="hospitalCount" style="font-size:12px" class="ml-2">
+              {{hospitalCount}} <small>infrastructure(s)</small>
+            </b-badge>
+          </h4>
           <div
             class="text-right text-black-50 col"
           >Mise à jour du {{moment(lastUpdate()).format('DD.MM.Y')}}</div>
@@ -154,6 +159,7 @@ export default {
       situationHospitalLoading: (state) => state.hospital.situationHospitalLoading,
       hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
+      hospitalCount: (state) => state.hospital.hospitalCount
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;

@@ -3,12 +3,7 @@
     <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row>
 
-        <b-col v-if="hospitalCount" md="2" class="nav-zone pl-3 pr-3">
-          <label for class="text-dash-color">Nombre d'infrastructures</label>
-           <b-badge >{{hospitalCount}}</b-badge>
-        </b-col>
-
-        <b-col cols="12" md="3" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" md="4" class="nav-zone pl-3 pr-3">
           <b-form-group>
             <label for class="text-dash-color">Commune</label>
             <v-select
@@ -22,7 +17,7 @@
           </b-form-group>
         </b-col>
 
-        <b-col cols="12" :md="hospitalCount ? 5 : 7" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" :md="6" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
           <b-form-group>
             <div class="d-flex">
