@@ -11,7 +11,8 @@ import App from "./App.vue";
 import GlobalComponents from './globalComponents'
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env';
 import "chartjs-plugin-crosshair";
-import fullscreen from 'vue-fullscreen'
+import fullscreen from 'vue-fullscreen';
+import VueEllipseProgress from "vue-ellipse-progress";
 
 require('./helper');
 
@@ -23,6 +24,7 @@ Vue.mixin(commont);
 Vue.use(GlobalComponents);
 Vue.use(onlyInt);
 Vue.use(fullscreen);
+Vue.use(VueEllipseProgress);
 
 if (store.state.auth.isAuthenticated) {
     store.dispatch('userMe');

@@ -3,10 +3,14 @@
     <b-container class="p-0 flux-chart">
       <b-row>
         <div class="col-md col-12">
-          <h3 class="d-flex">
+          <h3 class="d-flex align-items-center">
             <span class="ml-2 mr-2">{{targetZone}}</span>
 
-            <toggle-button :labels="typesMobilite" v-model="typeMobilite"></toggle-button>
+            <toggle-button
+              :labels="typesMobilite"
+              :globalProgress="globalProgress"
+              v-model="typeMobilite"
+            ></toggle-button>
           </h3>
         </div>
         <div class="col-md-auto col-12 text-right">
@@ -17,8 +21,11 @@
 
       <b-row no-gutters v-show="this.typeMobilite != 3">
         <b-col cols="12" v-show="this.typeMobilite == 2" md="12" class="pl-0 col-mobilite-generale">
-          <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==4}" 
-            @click="selectFluxType(4)">
+          <b-card
+            class="mb-3 flux-mobility"
+            :class="{'active':fluxType==4}"
+            @click="selectFluxType(4)"
+          >
             <h5 class="percent-title">Mobilité générale</h5>
             <div class="percent flux-in-color">{{percentGenerale}}%​</div>
 
@@ -292,22 +299,22 @@
         </b-row>
         -->
 
-          <b-col cols="12" md="6" class="pr-2">
-            <GlobalProvice
-              title="Mobilité entrante par zone"
-              :color="palette.flux_in_color"
-              :globalData="fluxZoneGlobalIn"
-              reference="fluxZoneglobalIn"
-            />
-          </b-col>
-          <b-col cols="12" md="6" class="pl-2">
-            <GlobalProvice
-              title="Mobilité sortante par zone"
-              :color="palette.flux_out_color"
-              :globalData="fluxZoneGlobalOut"
-              reference="fluxZoneglobalOut"
-            />
-          </b-col>
+        <b-col cols="12" md="6" class="pr-2">
+          <GlobalProvice
+            title="Mobilité entrante par zone"
+            :color="palette.flux_in_color"
+            :globalData="fluxZoneGlobalIn"
+            reference="fluxZoneglobalIn"
+          />
+        </b-col>
+        <b-col cols="12" md="6" class="pl-2">
+          <GlobalProvice
+            title="Mobilité sortante par zone"
+            :color="palette.flux_out_color"
+            :globalData="fluxZoneGlobalOut"
+            reference="fluxZoneglobalOut"
+          />
+        </b-col>
       </b-row>
     </b-container>
   </div>
@@ -384,6 +391,9 @@ export default {
       type: Array,
       default: () => [],
     },
+    globalProgress: {
+      default: null,
+    },
   },
   data() {
     return {
@@ -422,13 +432,19 @@ export default {
     }),
     typesMobilite() {
       let types = [{ val: 1, lbl: "Par défaut" }];
-      if (this.fluxGeoGranularity == 1) {
+      if (
+        this.fluxGeoGranularity == 1 &&
+        this.globalProgress &&
+        this.globalProgress == 100
+      ) {
         types.push({ val: 2, lbl: "Général" });
       }
       if (
         (this.fluxZoneGlobalIn.length > 0 ||
           this.fluxZoneGlobalOut.length > 0) &&
-        this.fluxGeoGranularity == 1
+        this.fluxGeoGranularity == 1 &&
+        this.globalProgress &&
+        this.globalProgress == 100
       ) {
         types.push({ val: 3, lbl: "Stat. zones" });
       }
@@ -1155,7 +1171,7 @@ export default {
                   beginAtZero: true,
                   fontSize: 9,
                   callback: (value, index, values) => {
-                    const sign=value<0?'-':'';
+                    const sign = value < 0 ? "-" : "";
                     return `${sign}${this.formatCash(value)}`;
                   },
                 },
