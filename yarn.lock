@@ -5673,6 +5673,25 @@ jest-worker@^25.1.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
+jquery-circle-progress@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/jquery-circle-progress/-/jquery-circle-progress-1.2.2.tgz#260e9130ac8e2b5572eaa7a93b9e8a6b27bc8eea"
+  integrity sha1-Jg6RMKyOK1Vy6qepO56Kaye8juo=
+  dependencies:
+    jquery "*"
+
+jquery-easing@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/jquery-easing/-/jquery-easing-0.0.1.tgz#b3c37525b55734dc1ee1ad09b6c3373187687715"
+  integrity sha1-s8N1JbVXNNwe4a0JtsM3MYdodxU=
+  dependencies:
+    jquery "*"
+
+jquery@*:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
+  integrity sha512-XwIBPqcMn57FxfT+Go5pzySnm4KWkT1Tv7gjrpT1srtf8Weynl6R273VJ5GjkRb51IzMp5nbaPjJXMWeju2MKg==
+
 jquery@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
@@ -8757,6 +8776,11 @@ vue-airbnb-style-datepicker@^2.7.1:
   dependencies:
     v-click-outside "^2.0.1"
 
+vue-ellipse-progress@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue-ellipse-progress/-/vue-ellipse-progress-1.2.0.tgz#a8e21211885aba4ef82c5be455a5520915e13a59"
+  integrity sha512-9qWrFey4rkJU1yUVFlfIte5fy0+1bZT6XBfNvqOAllqxP8y744teI76auFoDVrM9HHHjnR1O+QY/kQjwWZH+5g==
+
 vue-form-wizard@^0.8.4:
   version "0.8.4"
   resolved "https://registry.yarnpkg.com/vue-form-wizard/-/vue-form-wizard-0.8.4.tgz#ddf864c9709b7ba2a6323f59e5d6d17536b7800e"
@@ -8857,6 +8881,15 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
+vue2-circle-progress@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/vue2-circle-progress/-/vue2-circle-progress-1.2.3.tgz#7c38af4d84c68299c078188ead09343f74541bbf"
+  integrity sha1-fDivTYTGgpnAeBiOrQk0P3RUG78=
+  dependencies:
+    jquery-circle-progress "^1.2.2"
+    jquery-easing "0.0.1"
+    vue "^2.0.0"
+
 vue2-daterange-picker@^0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/vue2-daterange-picker/-/vue2-daterange-picker-0.5.1.tgz#f41f3cd20b242b7f34ce16eeea9534d9cbe9f4d7"
@@ -8864,10 +8897,20 @@ vue2-daterange-picker@^0.5.1:
   dependencies:
     vue "^2.6.10"
 
+vue@^2.0.0:
+  version "2.6.12"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
+  integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
+
 vue@^2.6.10, vue@^2.6.11:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
+
+vuejs-progress-bar@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/vuejs-progress-bar/-/vuejs-progress-bar-1.2.2.tgz#1fa13beb9d540babc745cb13202c672ae1abe5fc"
+  integrity sha512-RTkbj56Hj4nykkc9BZxTxbaulov2oRAHSRuW7BlyYAkz4a9ZjhF0t7X+imEK1F5eNC94AywXlfLbIohGnGq83w==
 
 vuex@^3.4.0:
   version "3.4.0"
