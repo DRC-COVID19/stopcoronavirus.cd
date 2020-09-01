@@ -58,9 +58,6 @@ export default {
     value(val) {
       this.dataValue = val;
     },
-    globalProgress() {
-      console.log("watch", this.globalProgress);
-    },
   },
   methods: {
     setValue(value) {

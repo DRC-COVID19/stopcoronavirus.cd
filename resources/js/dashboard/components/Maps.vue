@@ -115,7 +115,7 @@ export default {
     },
     showInfrastructure: {
       type: Boolean,
-      default: null
+      default: null,
     },
     isFluxGlobalProvinceloading: {
       type: Object,
@@ -558,8 +558,8 @@ export default {
         });
       }
     },
-    showInfrastructure(){
-      if(!this.showInfrastructure){
+    showInfrastructure() {
+      if (!this.showInfrastructure) {
         map.U.removeSource("covid9HospitalsSource");
       }
     },
@@ -1190,7 +1190,7 @@ export default {
                 : observations[0].position_end,
           },
           properties: {
-            origin: item.zone ?? observations[0][key],
+            origin: this.fixedZone(item.zone ?? observations[0][key]),
             color: "#ED5F68",
             volume: result.referenceVolume,
             volumeReference: result.referenceVolume,
@@ -1251,7 +1251,7 @@ export default {
             coordinates: observationsByDate[0].position_start,
           },
           properties: {
-            origin: observationsByDate[0].zone,
+            origin: this.fixedZone(observationsByDate[0].zone),
             color: "#ED5F68",
             volume: observationVolume,
             volumeReference: referenceVolume,
@@ -1320,7 +1320,7 @@ export default {
             coordinates: [],
           },
           properties: {
-            origin: observationsByDate[0].zone,
+            origin: this.fixedZone(observationsByDate[0].zone),
             color: "#ED5F68",
             volume: observationVolume,
             volumeReference: referenceVolume,
@@ -1409,7 +1409,9 @@ export default {
       features.forEach((x) => {
         let color = PALETTE.dash_green;
         if (
-          (this.fluxGeoOptions.includes(x.properties.origin) &&
+          (this.fluxGeoOptions.some(
+            (y) => this.fixedZone(y) == x.properties.origin
+          ) &&
             this.fluxType != 4) ||
           this.fluxType == 3
         ) {
@@ -1543,6 +1545,24 @@ export default {
         }
       }
       return coordinates;
+    },
+    fixedZone(value) {
+      let newValue = value;
+      switch (value) {
+        case "Kasai":
+          newValue = "Kasaï";
+          break;
+        case "Kasai-Oriental":
+          newValue = "Kasaï-Oriental";
+          break;
+        case "Kasai-Central":
+          newValue = "Kasaï-Central";
+          break;
+        case "Equateur":
+          newValue = "Équateur";
+          break;
+      }
+      return newValue;
     },
     fluxArcStyle(flux24Data, geoGranularity, legendHover = null) {
       map.U.removeSource(["fluxCircleDataSource"]);
