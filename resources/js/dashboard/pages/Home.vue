@@ -72,6 +72,7 @@
                 :isLoading="isLoading"
                 :flux24Presence="flux24PresenceDailyInFormat"
                 :fluxZoneGlobalIn="fluxZoneGlobalIn"
+                :isFluxGlobalProvinceloading="isFluxGlobalProvinceloading"
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
@@ -283,6 +284,7 @@ export default {
       fluxDataGroupedByDateOut: {},
       fluxDataGroupedByDateGen: {},
       topHealthZoneConfirmed: [],
+      isFluxGlobalProvinceloading:{}
     };
   },
   computed: {
@@ -968,8 +970,6 @@ export default {
         (x) => x.province == values.fluxGeoOptions[0]
       );
 
-      console.log('healthZones',healthZones);
-
       let healthZonesWorkingIn = healthZones.slice(0, 3);
       let healthZonesWorkingOut = healthZones.slice(0, 3);
 
@@ -1032,7 +1032,7 @@ export default {
             })
             .then(async (response) => {
               this.fluxZoneGlobalOut.push(response.data);
-              if (Number(response.headers["x-ratelimit-remaining"])<7) {
+              if (Number(response.headers["x-ratelimit-remaining"]) < 7) {
                 await this.sleep(25000);
               }
               healthZonesWorkingOut = healthZones.slice(
@@ -1178,6 +1178,8 @@ export default {
       });
     },
     loadFluxGLobalData() {
+      this.$set(this.isFluxGlobalProvinceloading, "in", true);
+
       axios
         .get("/api/dashboard/flux/origin/provinces/h-24/global-in", {
           params: {
@@ -1196,8 +1198,10 @@ export default {
               observations: groupObservations[key],
             });
           });
+          this.$set(this.isFluxGlobalProvinceloading, "in", false);
         });
 
+      this.$set(this.isFluxGlobalProvinceloading, "out", true);
       axios
         .get("/api/dashboard/flux/origin/provinces/h-24/global-out", {
           params: {
@@ -1216,6 +1220,7 @@ export default {
               observations: groupObservations[key],
             });
           });
+          this.$set(this.isFluxGlobalProvinceloading, "out", false);
         });
     },
     updateflux24DailyGenerale() {
