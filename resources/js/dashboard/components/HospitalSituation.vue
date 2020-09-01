@@ -77,40 +77,46 @@
 
     <b-row no-gutters class="mb-2">
       <b-col cols="12" md="6" class="pr-1">
-        <b-card no-body class="default-card card-chart p-2">
-          <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
-          <legend-popover>
-            <template v-slot:title>Comment est-ce calculé ?</template>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Sapiente tempore libero fugit perferendis repellendus?
-          </legend-popover>
-          <div class="chart-container">
-            <canvas height="400" width="100vh" ref="canvasStat1" id="canvasStat1"></canvas>
-          </div>
-        </b-card>
+        <FullScreen id="canvasStat1_full" link="canvasStat1">
+          <b-card no-body class="default-card card-chart p-2 cardtype1">
+            <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+            <legend-popover>
+              <template v-slot:title>Comment est-ce calculé ?</template>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Sapiente tempore libero fugit perferendis repellendus?
+            </legend-popover>
+            <div class="chart-container">
+              <canvas height="400" width="100vh" ref="canvasStat1" id="canvasStat1"></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
       </b-col>
 
       <b-col cols="12" md="6" class="pl-1">
-        <b-card no-body class="default-card card-chart p-2">
-          <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
-          <legend-popover>
-            <template v-slot:title>Comment est-ce calculé ?</template>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-            Sapiente tempore libero fugit perferendis repellendus?
-          </legend-popover>
-          <div class="chart-container">
-            <canvas height="400" width="100vh" ref="canvasStat2" id="canvasStat2"></canvas>
-          </div>
-        </b-card>
+        <FullScreen id="canvasStat2_full" link="canvasStat2">
+          <b-card no-body class="default-card card-chart p-2 cardtype1">
+            <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+            <legend-popover>
+              <template v-slot:title>Comment est-ce calculé ?</template>
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              Sapiente tempore libero fugit perferendis repellendus?
+            </legend-popover>
+            <div class="chart-container">
+              <canvas height="400" width="100vh" ref="canvasStat2" id="canvasStat2"></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
       </b-col>
 
       <b-col cols="12" class="mt-2">
-        <b-card no-body class="default-card card-chart p-2">
-          <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
-          <div class="chart-container">
-            <canvas height="400" width="100vh" ref="canvasStat3" id="canvasStat3"></canvas>
-          </div>
-        </b-card>
+        <FullScreen id="canvasStat3_full" link="canvasStat3">
+          <b-card no-body class="default-card card-chart p-2 cardtype1">
+            <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+            <div class="chart-container">
+              <canvas height="400" width="100vh" ref="canvasStat3" id="canvasStat3"></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
       </b-col>
     </b-row>
   </b-container>
@@ -567,6 +573,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.fullscreen {
+  .cardtype1 {
+    canvas {
+      width: calc(100vw - 19px) !important;
+      height: 500px !important;
+    }
+  }
+  .cardtype2 {
+    canvas {
+      width: 700px !important;
+      height: calc(100vh - 32px) !important;
+    }
+  }
+}
 .card-chart {
   position: relative;
   #canvasStat1,
