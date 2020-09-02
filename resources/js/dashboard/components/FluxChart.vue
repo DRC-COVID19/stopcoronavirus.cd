@@ -514,10 +514,9 @@ export default {
       }
     },
     typeMobilite() {
-      if (this.typeMobilite==2) {
+      if (this.typeMobilite == 2) {
         this.selectFluxType(4);
-      }
-      else if (this.typeMobilite==1) {
+      } else if (this.typeMobilite == 1) {
         this.selectFluxType(1);
       }
       if (this.typeMobilite == 3) {
@@ -600,47 +599,52 @@ export default {
           difference: null,
         };
       }
-      let referenceVolume = null;
-      let observationVolume = null;
+      // let referenceVolume = null;
+      // let observationVolume = null;
 
-      referencesByDate.sort((a, b) => {
-        return new Date(a.date) < new Date(b.date) ? 1 : -1;
+      // referencesByDate.sort((a, b) => {
+      //   return new Number(a.volume) < new Number(b.volume) ? 1 : -1;
+      // });
+      // observationsByDate.sort((a, b) => {
+      //   return new Number(a.volume) < new Number(b.volume) ? 1 : -1;
+      // });
+
+      // const countReference = referencesByDate.length;
+      // if (countReference > 0) {
+      //   if (countReference % 2 == 0) {
+      //     let index = (countReference + 1) / 2;
+      //     index = parseInt(index);
+      //     const volume1 = referencesByDate[index].volume;
+      //     const volume2 = referencesByDate[index - 1].volume;
+      //     referenceVolume = (volume1 + volume2) / 2;
+      //   } else {
+      //     const index = (countReference + 1) / 2;
+      //     referenceVolume = referencesByDate[index - 1].volume;
+      //   }
+      // }
+
+      // const countObservation = observationsByDate.length;
+      // if (countObservation > 0) {
+      //   if (countObservation % 2 == 0) {
+      //     let index = (countObservation + 1) / 2;
+      //     index = parseInt(index);
+      //     const volume1 = observationsByDate[index].volume;
+      //     const volume2 = observationsByDate[index - 1].volume;
+      //     observationVolume = (volume1 + volume2) / 2;
+      //   } else {
+      //     const index = (countObservation + 1) / 2;
+      //     observationVolume = observationsByDate[index - 1].volume;
+      //   }
+      // }
+      // const difference = observationVolume - referenceVolume;
+
+      const result = this.formatFluxDataByMedian({
+        references: referencesByDate,
+        observations: observationsByDate,
       });
-      observationsByDate.sort((a, b) => {
-        return new Date(a.date) < new Date(b.date) ? 1 : -1;
-      });
-
-      const countReference = referencesByDate.length;
-      if (countReference > 0) {
-        if (countReference % 2 == 0) {
-          let index = (countReference + 1) / 2;
-          index = parseInt(index);
-          const volume1 = referencesByDate[index].volume;
-          const volume2 = referencesByDate[index - 1].volume;
-          referenceVolume = (volume1 + volume2) / 2;
-        } else {
-          const index = (countReference + 1) / 2;
-          referenceVolume = referencesByDate[index - 1].volume;
-        }
-      }
-
-      const countObservation = observationsByDate.length;
-      if (countObservation > 0) {
-        if (countObservation % 2 == 0) {
-          let index = (countObservation + 1) / 2;
-          index = parseInt(index);
-          const volume1 = observationsByDate[index].volume;
-          const volume2 = observationsByDate[index - 1].volume;
-          observationVolume = (volume1 + volume2) / 2;
-        } else {
-          const index = (countObservation + 1) / 2;
-          observationVolume = observationsByDate[index - 1].volume;
-        }
-      }
-      const difference = observationVolume - referenceVolume;
       return {
-        percent: Math.round((difference / referenceVolume) * 100),
-        difference: difference,
+        percent: result.percent,
+        difference: result.difference,
       };
     },
     mobilePresence() {
@@ -989,43 +993,20 @@ export default {
             difference: null,
           };
         }
-        let referenceVolume = null;
-        let observationVolume = null;
-        const countReference = references.length;
-        if (countReference > 0) {
-          if (countReference % 2 == 0) {
-            let index = (countReference + 1) / 2;
-            index = parseInt(index);
-            const volume1 = references[index].volume;
-            const volume2 = references[index - 1].volume;
-            referenceVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countReference + 1) / 2;
-            referenceVolume = references[index - 1].volume;
-          }
-        }
 
-        const countObservation = observations.length;
-        if (countObservation > 0) {
-          if (countObservation % 2 == 0) {
-            let index = (countObservation + 1) / 2;
-            index = parseInt(index);
-            const volume1 = observations[index].volume;
-            const volume2 = observations[index - 1].volume;
-            observationVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countObservation + 1) / 2;
-            observationVolume = observations[index - 1].volume;
-          }
-        }
-        const difference = observationVolume - referenceVolume;
+        const result = this.formatFluxDataByMedian({
+          references,
+          observations,
+        });
 
         localData.push({
           zone: observations[0][key],
-          percent: Math.round((difference / referenceVolume) * 100),
-          difference: difference,
-          volume: observationVolume,
-          volume_reference: referenceVolume,
+          percent: Math.round(
+            (result.difference / result.referenceVolume) * 100
+          ),
+          difference: result.difference,
+          volume: result.observationVolume,
+          volume_reference: result.referenceVolume,
         });
       });
       localData = localData.filter((x) => x.percent);
