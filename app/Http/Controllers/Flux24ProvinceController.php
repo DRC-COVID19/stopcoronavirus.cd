@@ -29,7 +29,7 @@ class Flux24ProvinceController extends Controller
                 ->where('immobility', '3h')
                 ->where('destination', '!=', 'Hors_Zone')
                 ->where('origin', '!=', 'Hors_Zone')
-                ->orderBy('date')
+                ->orderBy('volume')
                 ->groupBy('destination', 'date')->get();
 
             $flux_reference = Flux24Province::select(['destination as zone', 'date', DB::raw('sum(volume)as volume')])
@@ -37,7 +37,7 @@ class Flux24ProvinceController extends Controller
                 ->where('immobility', '3h')
                 ->where('destination', '!=', 'Hors_Zone')
                 ->where('origin', '!=', 'Hors_Zone')
-                ->orderBy('date')
+                ->orderBy('volume')
                 ->groupBy('destination', 'date')->get();
 
             return response()->json([
@@ -61,7 +61,7 @@ class Flux24ProvinceController extends Controller
                 ->where('immobility', '3h')
                 ->where('destination', '!=', 'Hors_Zone')
                 ->where('origin', '!=', 'Hors_Zone')
-                ->orderBy('date')
+                ->orderBy('volume')
                 ->groupBy('origin', 'Date')->get();
 
             $flux_reference = Flux24Province::select(['origin as zone', 'Date as date', DB::raw('sum(volume)as volume')])
@@ -69,7 +69,7 @@ class Flux24ProvinceController extends Controller
                 ->where('immobility', '3h')
                 ->where('destination', '!=', 'Hors_Zone')
                 ->where('origin', '!=', 'Hors_Zone')
-                ->orderBy('date')
+                ->orderBy('volume')
                 ->groupBy('origin', 'Date')->get();
 
             return response()->json([
