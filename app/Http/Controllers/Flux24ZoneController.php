@@ -328,7 +328,7 @@ class Flux24ZoneController extends Controller
                 })
                 ->where('destination', '!=', 'Hors_Zone')
                 ->where('origin', '!=', 'Hors_Zone')
-                ->orderBy('date')
+                ->orderBy('volume')
                 ->groupBy('date', 'day')
                 ->get();
 
@@ -341,7 +341,7 @@ class Flux24ZoneController extends Controller
                 })
                 ->where('destination', '!=', 'Hors_Zone')
                 ->where('origin', '!=', 'Hors_Zone')
-                ->orderBy('date')
+                ->orderBy('volume')
                 ->groupBy('date', 'day')
                 ->get();
 
@@ -352,6 +352,7 @@ class Flux24ZoneController extends Controller
                 ->where('destination', $data['fluxGeoOptions'])
                 ->where('origin', '!=', 'Hors_Zone')
                 // ->groupBy('destination', 'date')
+                ->orderBy('volume')
                 ->get();
 
             $flux_reference = Flux24Sum::select(['destination as zone', 'Date as date', 'volume'])
@@ -361,6 +362,7 @@ class Flux24ZoneController extends Controller
                 ->where('destination', $data['fluxGeoOptions'])
                 // ->where('destination','!=','Hors_Zone')
                 ->where('origin', '!=', 'Hors_Zone')
+                ->orderBy('volume')
                 // ->groupBy('destination', 'date')
                 ->get();
             return response()->json([
@@ -393,6 +395,7 @@ class Flux24ZoneController extends Controller
                 ->where('origin', $data['fluxGeoOptions'])
                 ->orderBy('volume', 'desc')
                 ->where('destination', '!=', 'Hors_Zone')
+                ->orderBy('volume')
                 // ->where('origin','!=','Hors_Zone')
                 // ->groupBy('origin', 'Date')
                 ->get();
@@ -402,6 +405,7 @@ class Flux24ZoneController extends Controller
                 ->where('origin', $data['fluxGeoOptions'])
                 ->orderBy('volume', 'desc')
                 ->where('destination', '!=', 'Hors_Zone')
+                ->orderBy('volume')
                 // ->where('origin','!=','Hors_Zone')
                 // ->groupBy('origin', 'date')
                 ->get();
