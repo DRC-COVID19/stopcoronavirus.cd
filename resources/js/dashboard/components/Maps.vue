@@ -25,7 +25,8 @@ const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
   sourceHealthProvinceGeojsonCentered = "sourHealthProvinceGeojsonCentered",
   sourceHealthProvinceGeojson = "sourceHealthProvinceGeojson",
   EPIDEMIC_LAYER = "EPIDEMIC_LAYER",
-  HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER";
+  HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER",
+  COVID_HOSPITAL_SOURCE = "COVID_HOSPITAL_SOURCE";
 export default {
   components: { ToolTipMaps },
   props: {
@@ -113,13 +114,14 @@ export default {
       type: Array,
       default: () => [],
     },
-    showInfrastructure: {
-      type: Boolean,
-      default: null,
-    },
+
     isFluxGlobalProvinceloading: {
       type: Object,
       default: () => ({}),
+    },
+    hasRightSide: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -246,15 +248,16 @@ export default {
     this.$store.watch(
       (state) => state.nav.activeMenu,
       (value) => {
-        switch (value) {
-          case 1:
-            break;
-          case 5:
-            this.addPolygoneLayer(2);
-            this.addPolygoneHoverLayer(2);
-          default:
-            break;
-        }
+        this.drawDesign();
+        // switch (value) {
+        //   case 1:
+        //     break;
+        //   case 5:
+        //     this.addPolygoneLayer(2);
+        //     this.addPolygoneHoverLayer(2);
+        //   default:
+        //     break;
+        // }
       }
     );
 
@@ -299,109 +302,7 @@ export default {
       }
     },
     hospitals() {
-      if (this.hospitals) {
-        map.U.removeSource("covid9HospitalsSource");
-        map.flyTo({
-          center: this.getHealthZoneCoordonate("Kinshasa", 2),
-          easing: function (t) {
-            return t;
-          },
-          zoom: 10,
-        });
-        this.map.addSource("covid9HospitalsSource", this.hospitals);
-
-        this.map.addLayer({
-          id: "covid9HospitalsLayer",
-          type: "symbol",
-          source: "covid9HospitalsSource",
-          // minzoom: 10,
-          layout: {
-            "text-line-height": 1,
-            "text-padding": 0,
-            "text-anchor": "center",
-            "text-allow-overlap": true,
-            "text-ignore-placement": true,
-            "text-field": String.fromCharCode("0xf47e"),
-            "icon-optional": true,
-            "text-font": ["Font Awesome 5 Free Solid"],
-            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25],
-          },
-          paint: {
-            "text-translate-anchor": "viewport",
-            "text-color": ["get", "color"],
-          },
-        });
-
-        const popup = new Mapbox.Popup({
-          closeButton: false,
-          closeOnClick: false,
-        });
-
-        const mouseMove = (e) => {
-          const coordinates = e.features[0].geometry.coordinates.slice();
-          const {
-            name,
-            address,
-            beds,
-            occupied_beds,
-            masks,
-            respirators,
-            occupied_respirators,
-            confirmed,
-            dead,
-            sick,
-            healed,
-            last_update,
-            resuscitation_beds,
-            occupied_resuscitation_beds,
-          } = e.features[0].properties;
-
-          const HTML = `<div class="row">
-                <div class="col-12 bold text-center hospital-name">${name}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Confirmés</div>
-                <div class="col-3 bold">${confirmed}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Hospitalisés</div>
-                <div class="col-3 bold">${sick}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Lits de réanimation</div>
-                <div class="col-3 bold">${resuscitation_beds}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Lits de réanimation occupés</div>
-                <div class="col-3 bold">${occupied_resuscitation_beds}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Respirateurs</div>
-                <div class="col-3 bold">${respirators}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Respirateurs occupés</div>
-                <div class="col-3 bold">${occupied_respirators}</div>
-            </div>`;
-          popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
-        };
-
-        const mouseOut = (e) => {
-          this.map.getCanvas().style.cursor = "";
-          popup.remove();
-        };
-
-        const mouseClick = (e) => {
-          this.selectHospital(e.features[0].properties);
-        };
-
-        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
-          this.map.getCanvas().style.cursor = "pointer";
-        });
-        this.map.on("mouseleave", "covid9HospitalsLayer", mouseOut);
-        this.map.on("mousemove", "covid9HospitalsLayer", mouseMove);
-        this.map.on("click", "covid9HospitalsLayer", mouseClick);
-      }
+      this.infrastructure();
     },
     medicalOrientations() {
       this.getMedicalOrientations();
@@ -558,11 +459,9 @@ export default {
         });
       }
     },
-    showInfrastructure() {
-      if (!this.showInfrastructure) {
-        map.U.removeSource("covid9HospitalsSource");
-      }
-    },
+    // hasRightSide() {
+    //   this.drawDesign();
+    // },
     "isFluxGlobalProvinceloading.in"() {
       map.resize();
       map.flyTo({ center: this.defaultCenterCoordinates });
@@ -580,19 +479,6 @@ export default {
       "setEpidemicExtValues",
     ]),
     ...mapActions(["resetState"]),
-    mapFly(center, zoom = 3.4) {
-      console.log({
-        center,
-        zoom,
-      });
-      map.flyTo({
-        center: center,
-        easing: function (t) {
-          return t;
-        },
-        zoom: zoom,
-      });
-    },
     addPolygoneLayer(geoGranularity) {
       map.U.removeLayer([this.drcSourceId]);
       map.addLayer(
@@ -699,7 +585,6 @@ export default {
           }
         )
         .then(({ data }) => {
-          // console.log("data", data);
           this.isZoneSourceLoaded = false;
           this.healthZoneGeojson = data;
           const features = data.features.map((item) => {
@@ -722,7 +607,6 @@ export default {
             type: "FeatureCollection",
             features: features,
           };
-          // console.log(this.healthZoneGeojsonCentered);
           this.addZoneSource();
         });
 
@@ -736,7 +620,6 @@ export default {
           }
         )
         .then(({ data }) => {
-          // console.log("data", data);
           this.isProvinceSourceLoaded = false;
           this.healthProvinceGeojson = data;
           const features = data.features.map((item) => {
@@ -790,12 +673,13 @@ export default {
       property = "confirmed",
       geoGranularity = 2
     ) {
+      map.resize();
       map.flyTo({
-        center: this.getHealthZoneCoordonate("Kinshasa", 2),
+        center: this.defaultCenterCoordinates,
         easing: function (t) {
           return t;
         },
-        zoom: 10,
+        zoom: 3.5,
       });
       let features = covidCasesData.data.features;
 
@@ -1019,6 +903,8 @@ export default {
     },
     flux24Func() {
       if (this.flux24DailyIn.length > 0) {
+        this.addPolygoneLayer(this.fluxGeoGranularity);
+        this.addPolygoneHoverLayer(this.fluxGeoGranularity);
         let data = [];
         let DataGroupByDate = [];
         let mapFlyOptions = {};
@@ -1135,15 +1021,14 @@ export default {
             break;
         }
       } else {
-        map.U.removeSource(["fluxCircleDataSource"]);
-        map.U.removeLayer([
-          HATCHED_MOBILITY_LAYER,
-          "arc",
-          "fluxCircleDataLayer",
-        ]);
-        map.off("mouseleave", "fluxCircleDataLayer");
-        map.off("mouseleave", "fluxCircleDataLayer");
+        this.flux24RemoveLayer();
       }
+    },
+    flux24RemoveLayer() {
+      map.U.removeSource(["fluxCircleDataSource"]);
+      map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
+      map.off("mouseleave", "fluxCircleDataLayer");
+      map.off("mouseleave", "fluxCircleDataLayer");
     },
     fluxHatchedStyle(
       flux24Data,
@@ -1439,7 +1324,6 @@ export default {
           return;
         }
       }
-      console.log(features.map((x) => x.properties.origin));
       let hatchedSource = this.drcSourceId;
       if (this.fluxGeoGranularity == 2 || this.fluxType == 4) {
         hatchedSource = this.drcHealthZone;
@@ -1505,6 +1389,36 @@ export default {
       map.on("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
 
       map.on("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
+    },
+    drawDesign() {
+      const mapFlyOptions = {
+        center: this.defaultCenterCoordinates,
+        zoom: 3.5,
+      };
+      this.flux24RemoveLayer();
+      map.U.removeLayer([EPIDEMIC_LAYER]);
+      map.U.removeSource(COVID_HOSPITAL_SOURCE);
+      map.resize();
+      switch (this.activeMenu) {
+        case 1:
+          this.flux24Func();
+          return;
+        case 2:
+          if (this.covidCases) {
+            this.addPolygoneLayer(2);
+            this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
+            return;
+          }
+          break;
+        case 5:
+          this.addPolygoneLayer(2);
+          // this.addPolygoneHoverLayer(2);
+          this.infrastructure();
+          return;
+        default:
+          break;
+      }
+      map.flyTo(mapFlyOptions);
     },
     getHealthZoneCoordonate(value, geoGranularity) {
       let coordinates = [];
@@ -1902,7 +1816,112 @@ export default {
       });
       map.addLayer(myDeckLayer);
     },
-    infrastructure() {},
+    infrastructure() {
+      if (this.hospitals) {
+        map.U.removeSource(COVID_HOSPITAL_SOURCE);
+        map.resize();
+        map.flyTo({
+          center: this.getHealthZoneCoordonate("Kinshasa", 2),
+          easing: function (t) {
+            return t;
+          },
+          zoom: 9,
+        });
+        this.map.addSource(COVID_HOSPITAL_SOURCE, this.hospitals);
+
+        this.map.addLayer({
+          id: "covid9HospitalsLayer",
+          type: "symbol",
+          source: COVID_HOSPITAL_SOURCE,
+          // minzoom: 10,
+          layout: {
+            "text-line-height": 1,
+            "text-padding": 0,
+            "text-anchor": "center",
+            "text-allow-overlap": true,
+            "text-ignore-placement": true,
+            "text-field": String.fromCharCode("0xf47e"),
+            "icon-optional": true,
+            "text-font": ["Font Awesome 5 Free Solid"],
+            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25],
+          },
+          paint: {
+            "text-translate-anchor": "viewport",
+            "text-color": ["get", "color"],
+          },
+        });
+
+        const popup = new Mapbox.Popup({
+          closeButton: false,
+          closeOnClick: false,
+        });
+
+        const mouseMove = (e) => {
+          const coordinates = e.features[0].geometry.coordinates.slice();
+          const {
+            name,
+            address,
+            beds,
+            occupied_beds,
+            masks,
+            respirators,
+            occupied_respirators,
+            confirmed,
+            dead,
+            sick,
+            healed,
+            last_update,
+            resuscitation_beds,
+            occupied_resuscitation_beds,
+          } = e.features[0].properties;
+
+          const HTML = `<div class="row">
+                <div class="col-12 bold text-center hospital-name">${name}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Confirmés</div>
+                <div class="col-3 bold">${confirmed}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Hospitalisés</div>
+                <div class="col-3 bold">${sick}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Lits de réanimation</div>
+                <div class="col-3 bold">${resuscitation_beds}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Lits de réanimation occupés</div>
+                <div class="col-3 bold">${occupied_resuscitation_beds}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Respirateurs</div>
+                <div class="col-3 bold">${respirators}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Respirateurs occupés</div>
+                <div class="col-3 bold">${occupied_respirators}</div>
+            </div>`;
+          popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+        };
+
+        const mouseOut = (e) => {
+          this.map.getCanvas().style.cursor = "";
+          popup.remove();
+        };
+
+        const mouseClick = (e) => {
+          this.selectHospital(e.features[0].properties);
+        };
+
+        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
+          this.map.getCanvas().style.cursor = "pointer";
+        });
+        this.map.on("mouseleave", "covid9HospitalsLayer", mouseOut);
+        this.map.on("mousemove", "covid9HospitalsLayer", mouseMove);
+        this.map.on("click", "covid9HospitalsLayer", mouseClick);
+      }
+    },
     mapGeoJsonSourceFlux(fluxGeoGranularity) {
       map.removeLayer(this.drcSourceId);
       if (fluxGeoGranularity == 1) {
