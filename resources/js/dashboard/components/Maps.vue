@@ -155,10 +155,6 @@ export default {
       AllSondagesMarkers: [],
       ArcLayerSelectedObject: {},
       centerCoordinates: [],
-      healthZoneGeojson: null,
-      healthZoneGeojsonCentered: null,
-      healthProvinceGeojson: null,
-      healthProvinceGeojsonCentered: null,
       isMapLoaded: false,
       isZoneSourceLoaded: false,
       isProvinceSourceLoaded: false,
@@ -166,8 +162,7 @@ export default {
     };
   },
   created() {
-    this.loadSource();
-    // -3.983283, 23.485632 center from google maps
+    // this.loadSource();
   },
   mounted() {
     Mapbox.accessToken = this.MAPBOX_TOKEN;
@@ -183,33 +178,37 @@ export default {
     this.isMapLoaded = false;
     map.on("load", () => {
       this.isMapLoaded = true;
-      map.addSource(this.drcSourceId, {
-        type: "geojson",
-        generateId: true,
-        data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`,
-      });
+      // map.addSource(this.drcSourceId, {
+      //   type: "geojson",
+      //   generateId: true,
+      //   data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`,
+      // });
 
-      map.addSource(this.drcHealthZone, {
-        type: "geojson",
-        generateId: true,
-        data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`,
-      });
+      // map.addSource(this.drcHealthZone, {
+      //   type: "geojson",
+      //   generateId: true,
+      //   data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`,
+      // });
 
       // map.addSource(this.kinSourceId, {
       //   type: "vector",
       //   url: "mapbox://merki230.4airwoxt"
       // });
 
-      if (!this.isZoneSourceLoaded && this.healthZoneGeojson) {
+      if (this.healthZoneGeojson) {
         this.addZoneSource();
+        this.addPolygoneLayer(2);
+        this.addPolygoneHoverLayer(2);
+        this.$emit("geoJsonLoaded", "healthZoneGeo");
       }
-
-      if (!this.isProvinceSourceLoaded && this.healthProvinceGeojson) {
+      if (this.healthProvinceGeojson) {
         this.addProvinceSource();
+        this.$emit("geoJsonLoaded", "provinceGeo");
       }
 
-      this.addPolygoneLayer(2);
-      this.addPolygoneHoverLayer(2);
+      // if (!this.isProvinceSourceLoaded && this.healthProvinceGeojson) {
+      //   this.addProvinceSource();
+      // }
     });
 
     this.map = map;
@@ -288,12 +287,27 @@ export default {
       legendHover: (state) => state.flux.legendHover,
       epidemicLengendHover: (state) => state.epidemic.legendEpidHover,
       fluxGeoGranularityMenu: (state) => state.flux.fluxGeoGranularity,
+      healthZoneGeojsonCentered: (state) => state.app.healthZoneGeojsonCentered,
+      healthZoneGeojson: (state) => state.app.healthZoneGeojson,
+      healthProvinceGeojson: (state) => state.app.healthProvinceGeojson,
+      healthProvinceGeojsonCentered: (state) =>
+        state.app.healthProvinceGeojsonCentered,
     }),
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
     },
   },
   watch: {
+    healthZoneGeojson() {
+      this.addZoneSource();
+      this.addPolygoneLayer(2);
+      this.addPolygoneHoverLayer(2);
+      this.$emit("geoJsonLoaded", "healthZoneGeo");
+    },
+    healthProvinceGeojson() {
+      this.addProvinceSource();
+      this.$emit("geoJsonLoaded", "provinceGeo");
+    },
     covidCases() {
       if (this.covidCases) {
         this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
@@ -608,6 +622,8 @@ export default {
             features: features,
           };
           this.addZoneSource();
+          this.addPolygoneLayer(2);
+          this.addPolygoneHoverLayer(2);
         });
 
       axios
@@ -646,26 +662,50 @@ export default {
         });
     },
     addProvinceSource() {
-      if (!this.isMapLoaded) {
-        return;
-      }
-      map.U.addGeoJSON(
-        sourceHealthProvinceGeojsonCentered,
-        this.healthProvinceGeojsonCentered
-      );
-      map.U.addGeoJSON(sourceHealthProvinceGeojson, this.healthProvinceGeojson);
-      this.isProvinceSourceLoaded = true;
+      // if (!this.isMapLoaded) {
+      //   return;
+      // }
+      // map.U.addGeoJSON(
+      //   sourceHealthProvinceGeojsonCentered,
+      //   this.healthProvinceGeojsonCentered
+      // );
+      // map.U.addGeoJSON(this.drcSourceId, this.healthProvinceGeojson);
+
+      map.addSource(sourceHealthProvinceGeojsonCentered, {
+        type: "geojson",
+        generateId: true,
+        data: this.healthProvinceGeojsonCentered,
+      });
+
+      // map.U.addGeoJSON(this.drcHealthZone, this.healthZoneGeojson);
+
+      map.addSource(this.drcSourceId, {
+        type: "geojson",
+        generateId: true,
+        data: this.healthProvinceGeojson,
+      });
     },
     addZoneSource() {
-      if (!this.isMapLoaded) {
-        return;
-      }
-      map.U.addGeoJSON(
-        sourceHealthZoneGeojsonCentered,
-        this.healthZoneGeojsonCentered
-      );
-      map.U.addGeoJSON(sourceHealthZoneGeojson, this.healthZoneGeojson);
-      this.isZoneSourceLoaded = true;
+      // if (!this.isMapLoaded) {
+      //   return;
+      // }
+      // map.U.addGeoJSON(
+      //   sourceHealthZoneGeojsonCentered,
+      //   this.healthZoneGeojsonCentered
+      // );
+      map.addSource(sourceHealthZoneGeojsonCentered, {
+        type: "geojson",
+        generateId: true,
+        data: this.healthZoneGeojsonCentered,
+      });
+
+      // map.U.addGeoJSON(this.drcHealthZone, this.healthZoneGeojson);
+
+      map.addSource(this.drcHealthZone, {
+        type: "geojson",
+        generateId: true,
+        data: this.healthZoneGeojson,
+      });
     },
     covidHatchedStyle(
       covidCasesData,
