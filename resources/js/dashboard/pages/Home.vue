@@ -76,6 +76,7 @@
                 :fluxZoneGlobalIn="fluxZoneGlobalIn"
                 :isFluxGlobalProvinceloading="isFluxGlobalProvinceloading"
                 :hasRightSide="hasRightSide"
+                @geoJsonLoaded="geoJsonLoaded"
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
@@ -321,13 +322,13 @@ export default {
       return (
         (this.getHasCoviCases() && this.activeMenu == 2) ||
         (this.flux24DailyIn.length > 0 && this.activeMenu == 1) ||
-        (this.hospitalCount != null && this.activeMenu==5) ||
+        (this.hospitalCount != null && this.activeMenu == 5) ||
         (this.fluxGlobalIn.length > 0 && this.activeMenu == 1)
       );
     },
     hasBottom() {
       return (
-        (this.activeMenu == 2 && this.hasCovidCases )||
+        (this.activeMenu == 2 && this.hasCovidCases) ||
         (this.activeMenu == 1 &&
           (this.hasFlux24Daily || this.hasflux24DailyComparison))
       );
@@ -373,6 +374,9 @@ export default {
     },
   },
   mounted() {
+    this.$set(this.loadings, "healthZoneGeo", true);
+    this.$set(this.loadings, "provinceGeo", true);
+
     this.getFluxZone();
     if (this.healthZones.length == 0) {
       this.getHealthZone();
@@ -404,6 +408,10 @@ export default {
   methods: {
     ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
     ...mapMutations(["setMapStyle"]),
+    geoJsonLoaded(item) {
+      this.$set(this.loadings, item, false);
+      this.$set(this.loadings, item, false);
+    },
     layerSetSyle(value) {
       this.setMapStyle(value);
     },
