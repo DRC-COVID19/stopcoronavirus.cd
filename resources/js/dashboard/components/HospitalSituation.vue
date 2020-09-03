@@ -6,7 +6,8 @@
           <h4 class="col m-0 d-flex align-items-baseline">
             <span>{{hospital.name || "Rapport global"}}</span>
             <b-badge v-if="hospitalCount" style="font-size:12px" class="ml-2">
-              {{hospitalCount}} <small>infrastructure(s)</small>
+              {{hospitalCount}}
+              <small>infrastructure(s)</small>
             </b-badge>
           </h4>
           <div
@@ -36,9 +37,9 @@
             <div>Respirateurs occupés: {{parseData(hospital.occupied_respirators)}}</div>
             <div>Ventilateur de réanimation : {{parseData(hospital.resuscitation_ventilator)}}</div>
             <div>Oxygénérateur: {{parseData(hospital.oxygenator)}}</div>
-            <div v-if="!isGlobal">
-              Equipement de protection individuelle: {{parseData(hospital.individual_protection_equipment)}}
-            </div>
+            <div
+              v-if="!isGlobal"
+            >Equipement de protection individuelle: {{parseData(hospital.individual_protection_equipment)}}</div>
             <div v-if="!isGlobal">Masques N95/FFP2: {{parseData(hospital.masks)}}</div>
             <div v-if="!isGlobal">Dépistage rapide: {{parseData(hospital.rapid_screening)}}</div>
             <div v-if="!isGlobal">Radiographie: {{parseData(hospital.x_ray)}}</div>
@@ -156,10 +157,11 @@ export default {
   computed: {
     ...mapState({
       selectedHospital: (state) => state.hospital.selectedHospital,
-      situationHospitalLoading: (state) => state.hospital.situationHospitalLoading,
+      situationHospitalLoading: (state) =>
+        state.hospital.situationHospitalLoading,
       hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
-      hospitalCount: (state) => state.hospital.hospitalCount
+      hospitalCount: (state) => state.hospital.hospitalCount,
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;
@@ -173,8 +175,8 @@ export default {
   },
   watch: {
     hospitalData() {
-      this.selectHospital(null)
-      this.getSituationHospital()
+      this.selectHospital(null);
+      this.getSituationHospital();
     },
     selectedHospital(val) {
       const id = val ? val.id : null;
@@ -572,10 +574,10 @@ export default {
         ];
       else return null;
     },
-    parseData(data){
-      if(!data && data != 0) return "N/A"
-      else return data
-    }
+    parseData(data) {
+      if (data == null) return "N/A";
+      else return data;
+    },
   },
 };
 </script>
