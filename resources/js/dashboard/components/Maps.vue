@@ -123,6 +123,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    showBottom: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
