@@ -6,7 +6,8 @@
           <h4 class="col m-0 d-flex align-items-baseline">
             <span>{{hospital.name || "Rapport global"}}</span>
             <b-badge v-if="hospitalCount" style="font-size:12px" class="ml-2">
-              {{hospitalCount}} <small>infrastructure(s)</small>
+              {{hospitalCount}}
+              <small>infrastructure(s)</small>
             </b-badge>
           </h4>
           <div
@@ -28,23 +29,23 @@
         <b-card class="col-12 default-card mb-2">
           <h5 class="bold">Capacité de prise en charge</h5>
           <div>
-            <div>Lits avec mousse: {{hospital.foam_beds}}</div>
-            <div>Lits avec mousse occupés: {{hospital.occupied_foam_beds}}</div>
-            <div>Lits de réanimation: {{hospital.resuscitation_beds}}</div>
-            <div>Lits de réanimation occupés: {{hospital.occupied_resuscitation_beds}}</div>
-            <div>Respirateurs: {{hospital.respirators}}</div>
-            <div>Respirateurs occupés: {{hospital.occupied_respirators}}</div>
-            <div>Ventilateur de réanimation : {{hospital.resuscitation_ventilator}}</div>
-            <div>Oxygénérateur: {{hospital.oxygenator}}</div>
+            <div>Lits avec mousse: {{parseData(hospital.foam_beds)}}</div>
+            <div>Lits avec mousse occupés: {{parseData(hospital.occupied_foam_beds)}}</div>
+            <div>Lits de réanimation: {{parseData(hospital.resuscitation_beds)}}</div>
+            <div>Lits de réanimation occupés: {{parseData(hospital.occupied_resuscitation_beds)}}</div>
+            <div>Respirateurs: {{parseData(hospital.respirators)}}</div>
+            <div>Respirateurs occupés: {{parseData(hospital.occupied_respirators)}}</div>
+            <div>Ventilateur de réanimation : {{parseData(hospital.resuscitation_ventilator)}}</div>
+            <div>Oxygénérateur: {{parseData(hospital.oxygenator)}}</div>
             <div
               v-if="!isGlobal"
-            >Equipement de protection individuelle: {{hospital.individual_protection_equipment}}</div>
-            <div v-if="!isGlobal">Masques N95/FFP2: {{hospital.masks}}</div>
-            <div v-if="!isGlobal">Dépistage rapide: {{hospital.rapid_screening}}</div>
-            <div v-if="!isGlobal">Radiographie: {{hospital.x_ray}}</div>
-            <div v-if="!isGlobal">Automate Genexpert: {{hospital.automate_genexpert}}</div>
-            <div v-if="!isGlobal">Gel hydro alcoolique: {{hospital.gel_hydro_alcoolique}}</div>
-            <div v-if="!isGlobal">check point: {{hospital.check_point}}</div>
+            >Equipement de protection individuelle: {{parseData(hospital.individual_protection_equipment)}}</div>
+            <div v-if="!isGlobal">Masques N95/FFP2: {{parseData(hospital.masks)}}</div>
+            <div v-if="!isGlobal">Dépistage rapide: {{parseData(hospital.rapid_screening)}}</div>
+            <div v-if="!isGlobal">Radiographie: {{parseData(hospital.x_ray)}}</div>
+            <div v-if="!isGlobal">Automate Genexpert: {{parseData(hospital.automate_genexpert)}}</div>
+            <div v-if="!isGlobal">Gel hydro alcoolique: {{parseData(hospital.gel_hydro_alcoolique)}}</div>
+            <div v-if="!isGlobal">check point: {{parseData(hospital.check_point)}}</div>
           </div>
         </b-card>
       </b-col>
@@ -52,30 +53,24 @@
         <b-card class="col-12 default-card mb-2">
           <h5 class="bold">Situations épidemologiques</h5>
           <div>
-            <div>Confirmés: {{hospital.confirmed}}</div>
-            <div>Hospitalisés: {{hospital.sick}}</div>
-            <div>Guéris: {{hospital.healed}}</div>
-            <div>décès: {{hospital.dead}}</div>
+            <div>Confirmés: {{parseData(hospital.confirmed)}}</div>
+            <div>Hospitalisés: {{parseData(hospital.sick)}}</div>
+            <div>Guéris: {{parseData(hospital.healed)}}</div>
+            <div>décès: {{parseData(hospital.dead)}}</div>
           </div>
         </b-card>
         <b-card class="col-12 default-card mb-2" v-if="!isGlobal">
           <h5 class="bold">Médicaments</h5>
-          <div>Chloroquine: {{hospital.chloroquine}}</div>
-          <div>Hydrochloroquine: {{hospital.hydrochloroquine}}</div>
-          <div>Azytromicine: {{hospital.azytromicine}}</div>
-          <div>Vitamince C: {{hospital.Vitamince_c}}</div>
+          <div>Chloroquine: {{parseData(hospital.chloroquine)}}</div>
+          <div>Hydrochloroquine: {{parseData(hospital.hydrochloroquine)}}</div>
+          <div>Azytromicine: {{parseData(hospital.azytromicine)}}</div>
+          <div>Vitamince C: {{parseData(hospital.Vitamince_c)}}</div>
         </b-card>
         <b-card class="col-12 default-card mb-2">
           <h5 class="bold">Personnels</h5>
-          <div>Médicins: {{hospital.doctors}}</div>
-          <div>
-            Infirmiers
-            : {{hospital.nurses}}
-          </div>
-          <div>
-            Para Médicaux
-            : {{hospital.para_medicals}}
-          </div>
+          <div>Médicins: {{parseData(hospital.doctors)}}</div>
+          <div>Infirmiers: {{parseData(hospital.nurses)}}</div>
+          <div>Para Médicaux: {{parseData(hospital.para_medicals)}}</div>
         </b-card>
       </b-col>
     </b-row>
@@ -163,10 +158,11 @@ export default {
   computed: {
     ...mapState({
       selectedHospital: (state) => state.hospital.selectedHospital,
-      situationHospitalLoading: (state) => state.hospital.situationHospitalLoading,
+      situationHospitalLoading: (state) =>
+        state.hospital.situationHospitalLoading,
       hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
-      hospitalCount: (state) => state.hospital.hospitalCount
+      hospitalCount: (state) => state.hospital.hospitalCount,
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;
@@ -180,8 +176,8 @@ export default {
   },
   watch: {
     hospitalData() {
-      this.selectHospital(null)
-      this.getSituationHospital()
+      this.selectHospital(null);
+      this.getSituationHospital();
     },
     selectedHospital(val) {
       const id = val ? val.id : null;
@@ -578,6 +574,10 @@ export default {
           this.dataGlobal.last_update.length - 1
         ];
       else return null;
+    },
+    parseData(data) {
+      if (data == null) return "N/A";
+      else return data;
     },
   },
 };
