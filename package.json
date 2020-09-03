@@ -28,6 +28,7 @@
         "@turf/buffer": "^5.1.5",
         "@turf/collect": "^6.0.1",
         "@turf/turf": "^5.1.6",
+        "animate.css": "^4.1.0",
         "bootstrap": "^4.4.1",
         "bootstrap-vue": "^2.15.0",
         "chart.js": "^2.9.3",
