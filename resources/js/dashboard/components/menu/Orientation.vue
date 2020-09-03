@@ -1,6 +1,7 @@
 <template>
   <b-card>
     <b-form-checkbox
+      v-if="!orientationChecked"
       v-model="orientationChecked"
       @change="medicalOrientationToggle"
       class="styled-checkbox"
@@ -9,17 +10,22 @@
       Cas probables (issus du formulaire d'orientation médicale)
       <b-badge v-if="orientationCount">{{orientationCount}}</b-badge>
     </b-form-checkbox>
-    <b-collapse id="orientation_result_collapse">
-      <hr />
-      <v-select
-        name="orientation_result"
-        v-model="orientationSelected"
-        :disable="orientationChecked"
-        :options="OrientationLIst"
-        label="name"
-        :reduce="item=>item.id"
-        @input="orientationChange"
-      />
+
+    <b-row v-if="orientationChecked">
+      <b-col cols="12" md="12">
+        <v-select
+          name="orientation_result"
+          v-model="orientationSelected"
+          :disable="orientationChecked"
+          :options="OrientationLIst"
+          label="name"
+          :reduce="item=>item.id"
+          @input="orientationChange"
+        />
+      </b-col>
+    </b-row>
+
+    <!--
       <h4>Legende</h4>
       <div class="legende">
         <div>
@@ -41,6 +47,7 @@
           <a href="#" target="_blank">Voir formulaire</a>
         </div>
       </div>
+      -->
     </b-collapse>
   </b-card>
 </template>
@@ -91,7 +98,6 @@ export default {
   },
   methods: {
     medicalOrientationToggle(checked) {
-      this.$root.$emit("bv::toggle::collapse", "orientation_result_collapse");
       if (checked) {
         this.orientationSelected = "ALL";
       }
