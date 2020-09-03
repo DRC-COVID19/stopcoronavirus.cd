@@ -3,7 +3,7 @@
     <b-col cols="12" class="map-form-header">
       <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
-          <h1 class="title">Dashboard Covid-19</h1>
+          <h1 class="title m-0">Dashboard Covid-19</h1>
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
@@ -17,13 +17,14 @@
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item>
-              <div class="map-form-logo d-flex justify-content-center justify-content-md-end">
+              <div class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center">
                 <img src="/img/partners_top.png" height="30" width="100" class="img-fluid" alt />
                 <img src="/img/commite_riposte.jpg" height="30" width="100" class="img-fluid" alt />
+                <img src="/img/Orange_logo.svg" height="30" width="100" class="img-fluid" alt />
                 <div
                   @mouseleave="userAvatarMouseLeave"
                   @mouseenter="userAvatarMouseEnter"
-                  class="avatar-container"
+                  class="avatar-container ml-3"
                   v-if="user"
                 >
                   <b-img
@@ -120,14 +121,30 @@ export default {
   }
   .avatar-container {
     position: relative;
+
     img {
       cursor: pointer;
+      height: 30px;
     }
     .user-card {
       position: absolute;
       right: 0;
       top: 110%;
       z-index: 99;
+    }
+  }
+  .img-fluid{
+    width: auto;
+    max-width: none;
+    height: 30px;
+  }
+
+  @media screen and (min-width:992px) and (max-width:1200px){
+    .img-fluid{
+      height: 20px;
+    }
+    .title{
+      font-size: 18px;
     }
   }
 }
