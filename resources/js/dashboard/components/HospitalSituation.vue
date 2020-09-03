@@ -3,16 +3,25 @@
     <b-row>
       <b-col cols="12 mb-2">
         <div class="row align-items-center">
-          <h4 class="col m-0 d-flex align-items-baseline">
+          <skeleton-loading v-if="isLoading" class="col-12 col-md-6" >
+            <square-skeleton
+              :boxProperties="{
+                                width: '70%',
+                                height: '40px'
+                            }"
+            ></square-skeleton>
+          </skeleton-loading>
+          <h4 class="col m-0 d-flex align-items-baseline" v-if="!isLoading" >
             <span>{{hospital.name || "Rapport global"}}</span>
             <b-badge v-if="hospitalCount" style="font-size:12px" class="ml-2">
-              {{hospitalCount}} <small>infrastructure(s)</small>
+              {{hospitalCount}}
+              <small>infrastructure(s)</small>
             </b-badge>
           </h4>
           <div
             class="text-right text-black-50 col"
           >Mise à jour du {{moment(lastUpdate()).format('DD.MM.Y')}}</div>
-          <div class="col-12 text-right">
+          <div class="col-12 text-right" v-if="!isLoading">
             <button
               class="btn btn-sm btn-primary"
               style="font-size: 12px;"
@@ -25,64 +34,90 @@
     </b-row>
     <b-row no-gutters>
       <b-col cols="12" md="6" class="row no-gutters pr-1">
-        <b-card class="col-12 default-card mb-2">
+        <skeleton-loading v-if="isLoading" class="mb-2">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '340px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <b-card class="col-12 default-card mb-2" v-else>
           <h5 class="bold">Capacité de prise en charge</h5>
           <div>
-            <div>Lits avec mousse: {{hospital.foam_beds}}</div>
-            <div>Lits avec mousse occupés: {{hospital.occupied_foam_beds}}</div>
-            <div>Lits de réanimation: {{hospital.resuscitation_beds}}</div>
-            <div>Lits de réanimation occupés: {{hospital.occupied_resuscitation_beds}}</div>
-            <div>Respirateurs: {{hospital.respirators}}</div>
-            <div>Respirateurs occupés: {{hospital.occupied_respirators}}</div>
-            <div>Ventilateur de réanimation : {{hospital.resuscitation_ventilator}}</div>
-            <div>Oxygénérateur: {{hospital.oxygenator}}</div>
+            <div>Lits avec mousse: {{parseData(hospital.foam_beds)}}</div>
+            <div>Lits avec mousse occupés: {{parseData(hospital.occupied_foam_beds)}}</div>
+            <div>Lits de réanimation: {{parseData(hospital.resuscitation_beds)}}</div>
+            <div>Lits de réanimation occupés: {{parseData(hospital.occupied_resuscitation_beds)}}</div>
+            <div>Respirateurs: {{parseData(hospital.respirators)}}</div>
+            <div>Respirateurs occupés: {{parseData(hospital.occupied_respirators)}}</div>
+            <div>Ventilateur de réanimation : {{parseData(hospital.resuscitation_ventilator)}}</div>
+            <div>Oxygénérateur: {{parseData(hospital.oxygenator)}}</div>
             <div
               v-if="!isGlobal"
-            >Equipement de protection individuelle: {{hospital.individual_protection_equipment}}</div>
-            <div v-if="!isGlobal">Masques N95/FFP2: {{hospital.masks}}</div>
-            <div v-if="!isGlobal">Dépistage rapide: {{hospital.rapid_screening}}</div>
-            <div v-if="!isGlobal">Radiographie: {{hospital.x_ray}}</div>
-            <div v-if="!isGlobal">Automate Genexpert: {{hospital.automate_genexpert}}</div>
-            <div v-if="!isGlobal">Gel hydro alcoolique: {{hospital.gel_hydro_alcoolique}}</div>
-            <div v-if="!isGlobal">check point: {{hospital.check_point}}</div>
+            >Equipement de protection individuelle: {{parseData(hospital.individual_protection_equipment)}}</div>
+            <div v-if="!isGlobal">Masques N95/FFP2: {{parseData(hospital.masks)}}</div>
+            <div v-if="!isGlobal">Dépistage rapide: {{parseData(hospital.rapid_screening)}}</div>
+            <div v-if="!isGlobal">Radiographie: {{parseData(hospital.x_ray)}}</div>
+            <div v-if="!isGlobal">Automate Genexpert: {{parseData(hospital.automate_genexpert)}}</div>
+            <div v-if="!isGlobal">Gel hydro alcoolique: {{parseData(hospital.gel_hydro_alcoolique)}}</div>
+            <div v-if="!isGlobal">check point: {{parseData(hospital.check_point)}}</div>
           </div>
         </b-card>
       </b-col>
       <b-col cols="12" md="6" class="pl-1">
-        <b-card class="col-12 default-card mb-2">
+        <skeleton-loading v-if="isLoading" class="mb-2">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '170px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <b-card class="col-12 default-card mb-2" v-if="!isLoading">
           <h5 class="bold">Situations épidemologiques</h5>
           <div>
-            <div>Confirmés: {{hospital.confirmed}}</div>
-            <div>Hospitalisés: {{hospital.sick}}</div>
-            <div>Guéris: {{hospital.healed}}</div>
-            <div>décès: {{hospital.dead}}</div>
+            <div>Confirmés: {{parseData(hospital.confirmed)}}</div>
+            <div>Hospitalisés: {{parseData(hospital.sick)}}</div>
+            <div>Guéris: {{parseData(hospital.healed)}}</div>
+            <div>décès: {{parseData(hospital.dead)}}</div>
           </div>
         </b-card>
-        <b-card class="col-12 default-card mb-2" v-if="!isGlobal">
+        <b-card class="col-12 default-card mb-2" v-if="!isGlobal && !isLoading">
           <h5 class="bold">Médicaments</h5>
-          <div>Chloroquine: {{hospital.chloroquine}}</div>
-          <div>Hydrochloroquine: {{hospital.hydrochloroquine}}</div>
-          <div>Azytromicine: {{hospital.azytromicine}}</div>
-          <div>Vitamince C: {{hospital.Vitamince_c}}</div>
+          <div>Chloroquine: {{parseData(hospital.chloroquine)}}</div>
+          <div>Hydrochloroquine: {{parseData(hospital.hydrochloroquine)}}</div>
+          <div>Azytromicine: {{parseData(hospital.azytromicine)}}</div>
+          <div>Vitamince C: {{parseData(hospital.Vitamince_c)}}</div>
         </b-card>
-        <b-card class="col-12 default-card mb-2">
+        <skeleton-loading v-if="isLoading" class="mb-2">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '170px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <b-card class="col-12 default-card mb-2" v-if="!isLoading">
           <h5 class="bold">Personnels</h5>
-          <div>Médicins: {{hospital.doctors}}</div>
-          <div>
-            Infirmiers
-            : {{hospital.nurses}}
-          </div>
-          <div>
-            Para Médicaux
-            : {{hospital.para_medicals}}
-          </div>
+          <div>Médicins: {{parseData(hospital.doctors)}}</div>
+          <div>Infirmiers: {{parseData(hospital.nurses)}}</div>
+          <div>Para Médicaux: {{parseData(hospital.para_medicals)}}</div>
         </b-card>
       </b-col>
     </b-row>
 
     <b-row no-gutters class="mb-2">
       <b-col cols="12" md="6" class="pr-1">
-        <FullScreen id="canvasStat1_full" link="canvasStat1">
+        <skeleton-loading v-if="isLoading">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '430px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <FullScreen id="canvasStat1_full" link="canvasStat1" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
             <legend-popover>
@@ -98,7 +133,15 @@
       </b-col>
 
       <b-col cols="12" md="6" class="pl-1">
-        <FullScreen id="canvasStat2_full" link="canvasStat2">
+        <skeleton-loading v-if="isLoading">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '430px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <FullScreen id="canvasStat2_full" link="canvasStat2" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
             <legend-popover>
@@ -114,7 +157,15 @@
       </b-col>
 
       <b-col cols="12" class="mt-2">
-        <FullScreen id="canvasStat3_full" link="canvasStat3">
+        <skeleton-loading v-if="isLoading">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '430px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <FullScreen id="canvasStat3_full" link="canvasStat3" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
             <div class="chart-container">
@@ -157,15 +208,18 @@ export default {
     };
   },
   mounted() {
-    this.getSituationHospital();
+    const id = this.selectedHospital ? this.selectedHospital.id : null;
+    this.getSituationHospital(id);
   },
   computed: {
     ...mapState({
       selectedHospital: (state) => state.hospital.selectedHospital,
-      situationHospitalLoading: (state) => state.hospital.situationHospitalLoading,
+      situationHospitalLoading: (state) =>
+        state.hospital.situationHospitalLoading,
       hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
-      hospitalCount: (state) => state.hospital.hospitalCount
+      hospitalCount: (state) => state.hospital.hospitalCount,
+      isLoading: (state) => state.hospital.isLoading,
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;
@@ -179,8 +233,8 @@ export default {
   },
   watch: {
     hospitalData() {
-      this.selectHospital(null)
-      this.getSituationHospital()
+      this.selectHospital(null);
+      this.getSituationHospital();
     },
     selectedHospital(val) {
       const id = val ? val.id : null;
@@ -577,6 +631,10 @@ export default {
           this.dataGlobal.last_update.length - 1
         ];
       else return null;
+    },
+    parseData(data) {
+      if (data == null) return "N/A";
+      else return data;
     },
   },
 };

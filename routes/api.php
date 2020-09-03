@@ -49,7 +49,8 @@ Route::group([
         Route::post('reset-password/{user_id}', 'AuthController@resetPassword');
     });
 
-    Route::group(['prefix' => 'flux'], function () {
+
+    Route::group(['prefix' => 'flux','middleware'=>'cache.headers:private;max_age=3600'], function () {
         Route::group(['prefix' => 'predefined'], function () {
             Route::group(['prefix' => 'zones'], function () {
                 Route::group(['prefix' => 'h-24'], function () {
