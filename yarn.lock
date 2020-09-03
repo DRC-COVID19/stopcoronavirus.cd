@@ -8860,6 +8860,13 @@ vue-select@^3.10.3:
   resolved "https://registry.yarnpkg.com/vue-select/-/vue-select-3.10.3.tgz#60659dc07ec4c96ec270fb12558eab7b938f5004"
   integrity sha512-SgLmiSwnJwT2erxjq42AA1iTzu1uqhA5MPuF4UDtGot5YSgJLKy71H0LO0hHaBpIjb7d/nJHiufYKcrSakaupw==
 
+vue-skeleton-loading@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/vue-skeleton-loading/-/vue-skeleton-loading-1.0.2.tgz#f3ba2c2d8626d27b11fe136cda7e1ee1bf03b878"
+  integrity sha1-87osLYYm0nsR/hNs2n4e4b8DuHg=
+  dependencies:
+    vue "^2.5.2"
+
 vue-style-loader@^4.1.0:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/vue-style-loader/-/vue-style-loader-4.1.2.tgz#dedf349806f25ceb4e64f3ad7c0a44fba735fcf8"
@@ -8897,7 +8904,7 @@ vue2-daterange-picker@^0.5.1:
   dependencies:
     vue "^2.6.10"
 
-vue@^2.0.0:
+vue@^2.0.0, vue@^2.5.2:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
