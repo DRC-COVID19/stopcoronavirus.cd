@@ -51,7 +51,7 @@
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
-           
+
             <FullScreen id="fullscreenMap" no-flex link @change="fullscreenMapChange">
               <Maps
                 :covidCases="covidCases"
