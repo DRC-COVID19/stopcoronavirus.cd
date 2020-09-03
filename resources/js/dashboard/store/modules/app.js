@@ -3,10 +3,16 @@ import * as turf from "@turf/turf";
 export default {
   state: {
     healthZones: [],
-    healthZoneGeojsonCentered:null,
-    healthZoneGeojson:null,
-    healthProvinceGeojson:null,
-    healthProvinceGeojsonCentered:null
+    healthZoneGeojsonCentered: null,
+    healthZoneGeojson: null,
+    healthProvinceGeojson: null,
+    healthProvinceGeojsonCentered: null,
+    isLoading: false,
+  },
+  mutations: {
+    setIsLoading(state, payload) {
+      state.isLoading = payload;
+    }
   },
   actions: {
     getHealthZone({ state }) {

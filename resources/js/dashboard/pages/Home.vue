@@ -51,6 +51,7 @@
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
+           
             <FullScreen id="fullscreenMap" no-flex link @change="fullscreenMapChange">
               <Maps
                 :covidCases="covidCases"
@@ -102,7 +103,16 @@
               <b-tab title="Province" v-if="activeMenu==1">
                 <b-row>
                   <b-col cols="6" class="pr-2">
+                    <skeleton-loading v-if="isLoading">
+                      <square-skeleton
+                        :boxProperties="{
+                                width: '100%',
+                                height: '830px'
+                            }"
+                      ></square-skeleton>
+                    </skeleton-loading>
                     <GlobalProvince
+                      v-else
                       title="Mobilité entrante"
                       :color="palette.flux_in_color"
                       :globalData="fluxGlobalIn"
@@ -110,7 +120,16 @@
                     />
                   </b-col>
                   <b-col cols="6" class="pl-2">
+                    <skeleton-loading v-if="isLoading">
+                      <square-skeleton
+                        :boxProperties="{
+                                width: '100%',
+                                height: '830px'
+                            }"
+                      ></square-skeleton>
+                    </skeleton-loading>
                     <GlobalProvince
+                      v-else
                       title="Mobilité sortante"
                       :color="palette.flux_out_color"
                       :globalData="fluxGlobalOut"
