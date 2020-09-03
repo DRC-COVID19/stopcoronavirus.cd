@@ -11,7 +11,7 @@
             <b-nav-item :class="{'active':activeMenu==1}" @click="selectMenu(1)">Mobilité</b-nav-item>
             <b-nav-item :class="{'active':activeMenu==2}" @click="selectMenu(2)">Epidémiologie </b-nav-item>
             <b-nav-item :class="{'active':activeMenu==3}" @click="selectMenu(3)">Indicateurs</b-nav-item>
-            <b-nav-item :class="{'active':activeMenu==4}" @click="selectMenu(4)">Sondages</b-nav-item>
+            <!-- <b-nav-item :class="{'active':activeMenu==4}" @click="selectMenu(4)">Sondages</b-nav-item> -->
             <b-nav-item :class="{'active':activeMenu==5}" @click="selectMenu(5)">Infrastructures</b-nav-item>
             <b-nav-item :class="{'active':activeMenu==6}" @click="selectMenu(6)">Orientation</b-nav-item>
           </b-navbar-nav>

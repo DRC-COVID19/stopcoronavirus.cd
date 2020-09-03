@@ -152,7 +152,8 @@ export default {
     };
   },
   mounted() {
-    this.getSituationHospital();
+    const id = this.selectedHospital ? this.selectedHospital.id : null;
+    this.getSituationHospital(id);
   },
   computed: {
     ...mapState({
