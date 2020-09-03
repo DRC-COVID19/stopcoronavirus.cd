@@ -171,7 +171,7 @@
           </b-card>
         </b-col>
       </b-row>
-      <b-row class="row-side-bottom mt-2 mb-2" v-if="activeMenu != 3 && hasBottom">
+      <b-row class="row-side-bottom mt-2 mb-2" v-if="activeMenu != 3 && hasBottom && showBottom">
         <b-col class="side-bottom" cols="12">
           <b-card no-body>
             <b-tabs pills card>
@@ -324,6 +324,7 @@ export default {
       townships: [],
       isFluxGlobalProvinceloading: {},
       globalProgress: null,
+      showBottom:false,
     };
   },
   computed: {
