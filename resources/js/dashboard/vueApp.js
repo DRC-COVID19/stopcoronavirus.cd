@@ -30,6 +30,8 @@ if (store.state.auth.isAuthenticated) {
     store.dispatch('userMe');
 }
 
+store.dispatch('loadSource');
+
 router.beforeEach((to, from, next) => {
     if (to.matched.some(route => route.meta.requiresAuth) && (!store.state.auth.isAuthenticated || !store.state.auth.userRole)) {
         next({ name: 'login' });
