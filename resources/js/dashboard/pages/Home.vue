@@ -81,6 +81,10 @@
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
+              <Legend showTotal :data="orientationLegend" class="legend-orientation"
+                v-if="orientationCount && orientationCount > 0 && activeMenu == 6"
+              >
+              </Legend>
             </FullScreen>
           </b-row>
         </b-col>
@@ -324,6 +328,7 @@ export default {
       townships: [],
       isFluxGlobalProvinceloading: {},
       globalProgress: null,
+      orientationLegend: [],
     };
   },
   computed: {
@@ -573,6 +578,7 @@ export default {
             this.finCount = total_fin;
             this.fin5Count = total_fin5;
             this.fin8Count = total_fin8;
+            this.setDataOrientationLegend(this.finCount, this.fin5Count, this.fin8Count)
 
             this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = total_fin + total_fin8 + total_fin5;
@@ -611,6 +617,13 @@ export default {
         this.medicalOrientations = null;
         this.orientationCount = null;
       }
+    },
+    setDataOrientationLegend(a, b, c){
+      this.orientationLegend = [
+        {color : "#3b9d3b" , label : "Peu probale" , caption : a},
+        {color : "#ffb93b" , label : "Probale" , caption : b},
+        {color : "#ff3b3b" , label : "Très probale" , caption : c}
+      ]
     },
     medicalOrientationChanged(item) {
       this.medicalOrientationSelected = item;
@@ -1540,5 +1553,10 @@ export default {
       color: white !important;
     }
   }
+}
+.legend-orientation{
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
 }
 </style>

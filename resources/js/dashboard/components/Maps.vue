@@ -2168,7 +2168,7 @@ export default {
       });
     },
     medicalOrientationChanged() {
-      if (this.medicalOrientations.length == 0) {
+      if (!this.medicalOrientations || this.medicalOrientations.length == 0) {
         return;
       }
       if (this.medicalOrientationSelected == "ALL") {
