@@ -13,6 +13,9 @@ import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env';
 import "chartjs-plugin-crosshair";
 import fullscreen from 'vue-fullscreen';
 import VueEllipseProgress from "vue-ellipse-progress";
+import VueSkeletonLoading from 'vue-skeleton-loading';
+ 
+
 
 require('./helper');
 
@@ -25,6 +28,7 @@ Vue.use(GlobalComponents);
 Vue.use(onlyInt);
 Vue.use(fullscreen);
 Vue.use(VueEllipseProgress);
+Vue.use(VueSkeletonLoading);
 
 if (store.state.auth.isAuthenticated) {
     store.dispatch('userMe');

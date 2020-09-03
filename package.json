@@ -51,6 +51,7 @@
         "vue-rangedate-picker": "^1.0.0",
         "vue-router": "^3.2.0",
         "vue-select": "^3.10.3",
+        "vue-skeleton-loading": "^1.0.2",
         "vue2-circle-progress": "^1.2.3",
         "vue2-daterange-picker": "^0.5.1",
         "vuejs-progress-bar": "^1.2.2",

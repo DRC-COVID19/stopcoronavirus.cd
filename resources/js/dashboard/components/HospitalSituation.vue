@@ -3,7 +3,15 @@
     <b-row>
       <b-col cols="12 mb-2">
         <div class="row align-items-center">
-          <h4 class="col m-0 d-flex align-items-baseline">
+          <skeleton-loading v-if="isLoading" class="col-12 col-md-6" >
+            <square-skeleton
+              :boxProperties="{
+                                width: '70%',
+                                height: '40px'
+                            }"
+            ></square-skeleton>
+          </skeleton-loading>
+          <h4 class="col m-0 d-flex align-items-baseline" v-if="!isLoading" >
             <span>{{hospital.name || "Rapport global"}}</span>
             <b-badge v-if="hospitalCount" style="font-size:12px" class="ml-2">
               {{hospitalCount}}
@@ -13,7 +21,7 @@
           <div
             class="text-right text-black-50 col"
           >Mise à jour du {{moment(lastUpdate()).format('DD.MM.Y')}}</div>
-          <div class="col-12 text-right">
+          <div class="col-12 text-right" v-if="!isLoading">
             <button
               class="btn btn-sm btn-primary"
               style="font-size: 12px;"
@@ -26,7 +34,15 @@
     </b-row>
     <b-row no-gutters>
       <b-col cols="12" md="6" class="row no-gutters pr-1">
-        <b-card class="col-12 default-card mb-2">
+        <skeleton-loading v-if="isLoading" class="mb-2">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '340px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <b-card class="col-12 default-card mb-2" v-else>
           <h5 class="bold">Capacité de prise en charge</h5>
           <div>
             <div>Lits avec mousse: {{parseData(hospital.foam_beds)}}</div>
@@ -50,7 +66,15 @@
         </b-card>
       </b-col>
       <b-col cols="12" md="6" class="pl-1">
-        <b-card class="col-12 default-card mb-2">
+        <skeleton-loading v-if="isLoading" class="mb-2">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '170px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <b-card class="col-12 default-card mb-2" v-if="!isLoading">
           <h5 class="bold">Situations épidemologiques</h5>
           <div>
             <div>Confirmés: {{parseData(hospital.confirmed)}}</div>
@@ -59,14 +83,22 @@
             <div>décès: {{parseData(hospital.dead)}}</div>
           </div>
         </b-card>
-        <b-card class="col-12 default-card mb-2" v-if="!isGlobal">
+        <b-card class="col-12 default-card mb-2" v-if="!isGlobal && !isLoading">
           <h5 class="bold">Médicaments</h5>
           <div>Chloroquine: {{parseData(hospital.chloroquine)}}</div>
           <div>Hydrochloroquine: {{parseData(hospital.hydrochloroquine)}}</div>
           <div>Azytromicine: {{parseData(hospital.azytromicine)}}</div>
           <div>Vitamince C: {{parseData(hospital.Vitamince_c)}}</div>
         </b-card>
-        <b-card class="col-12 default-card mb-2">
+        <skeleton-loading v-if="isLoading" class="mb-2">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '170px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <b-card class="col-12 default-card mb-2" v-if="!isLoading">
           <h5 class="bold">Personnels</h5>
           <div>Médicins: {{parseData(hospital.doctors)}}</div>
           <div>Infirmiers: {{parseData(hospital.nurses)}}</div>
@@ -77,7 +109,15 @@
 
     <b-row no-gutters class="mb-2">
       <b-col cols="12" md="6" class="pr-1">
-        <FullScreen id="canvasStat1_full" link="canvasStat1">
+        <skeleton-loading v-if="isLoading">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '430px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <FullScreen id="canvasStat1_full" link="canvasStat1" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
             <legend-popover>
@@ -93,7 +133,15 @@
       </b-col>
 
       <b-col cols="12" md="6" class="pl-1">
-        <FullScreen id="canvasStat2_full" link="canvasStat2">
+        <skeleton-loading v-if="isLoading">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '430px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <FullScreen id="canvasStat2_full" link="canvasStat2" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
             <legend-popover>
@@ -109,7 +157,15 @@
       </b-col>
 
       <b-col cols="12" class="mt-2">
-        <FullScreen id="canvasStat3_full" link="canvasStat3">
+        <skeleton-loading v-if="isLoading">
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '430px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <FullScreen id="canvasStat3_full" link="canvasStat3" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
             <div class="chart-container">
@@ -163,6 +219,7 @@ export default {
       hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
       hospitalCount: (state) => state.hospital.hospitalCount,
+      isLoading: (state) => state.hospital.isLoading,
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;
