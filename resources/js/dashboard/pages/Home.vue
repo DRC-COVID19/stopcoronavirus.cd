@@ -316,6 +316,7 @@ export default {
       palette: PALETTE,
       fluxZoneGlobalIn: [],
       fluxZoneGlobalOut: [],
+      fluxZoneGlobalPresence:[],
       showMobiliteGenerale: false,
       fluxDataGroupedByDateIn: {},
       fluxDataGroupedByDateOut: {},

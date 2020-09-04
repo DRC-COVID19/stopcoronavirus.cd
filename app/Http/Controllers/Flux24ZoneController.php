@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Flux;
+use App\Flux24PresenceZone;
 use App\Flux24Sum;
 use App\HealthZone;
 use Illuminate\Http\Request;
@@ -410,9 +411,26 @@ class Flux24ZoneController extends Controller
                 // ->groupBy('origin', 'date')
                 ->get();
 
+            $presence_observation = Flux24PresenceZone::select(['Date as date', 'Zone as zone', 'PresenceType', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->where('Zone', $data['fluxGeoOptions'])
+                ->groupBy('Date', 'Zone', 'day', 'PresenceType')
+                ->orderBy('volume')
+                ->get();
+
+            $presence_reference = Flux24PresenceZone::select(['Zone as zone', 'Date as date', 'PresenceType', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+                ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                ->where('Zone', $data['fluxGeoOptions'])
+                ->groupBy('day', 'Zone', 'Date', 'PresenceType')
+                ->orderBy('volume')
+                ->get();
+
+
             return response()->json([
                 'observations' => $flux,
                 'references' => $flux_reference,
+                'presence_observation' => $presence_observation,
+                'presence_reference' => $presence_reference
             ]);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
@@ -466,6 +484,4 @@ class Flux24ZoneController extends Controller
             'observation_end' => 'date|required|after_or_equal:observation_start',
         ])->validate();
     }
-
-
 }
