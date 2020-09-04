@@ -51,7 +51,6 @@
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
-           
             <FullScreen id="fullscreenMap" no-flex link @change="fullscreenMapChange">
               <Maps
                 :covidCases="covidCases"
@@ -78,6 +77,7 @@
                 :isFluxGlobalProvinceloading="isFluxGlobalProvinceloading"
                 :hasRightSide="hasRightSide"
                 @geoJsonLoaded="geoJsonLoaded"
+                :showBottom="showBottom"
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
@@ -171,37 +171,54 @@
           </b-card>
         </b-col>
       </b-row>
-      <b-row class="row-side-bottom mt-2 mb-2" v-if="activeMenu != 3 && hasBottom">
-        <b-col class="side-bottom" cols="12">
-          <b-card no-body>
-            <b-tabs pills card>
-              <b-tab
-                title="Covid-19 chart"
-                v-if="hasCovidCases && activeMenu==2"
-                :active="hasCovidCases"
-              >
-                <CovidCaseChart
-                  :covidCasesStat="covidCasesStat"
-                  :covidCasesStatDaily="covidCasesStatDaily"
-                />
-              </b-tab>
-              <b-tab title="Flux comparaison" v-if="hasflux24DailyComparison && activeMenu==1">
-                <FluxComparisonChart
-                  :fluxGeoOptions="fluxGeoOptions"
-                  :flux24DailyComparison="flux24DailyComparison"
-                />
-              </b-tab>
-              <b-tab
-                title="Flux tendance"
-                v-if="hasFlux24Daily && activeMenu==1"
-                :active="hasFlux24Daily"
-              >
-                <FluxTendanceChart :flux24Daily="flux24Daily" />
-              </b-tab>
-            </b-tabs>
-          </b-card>
+      <b-row v-if="hasBottom">
+        <b-col cols="12" class="d-flex justify-content-center">
+          <div
+            @click="toggleBottomBar"
+            class="bottom-bar-button d-flex align-items-center justify-content-center"
+            :class="{'bottom-collapse':!showBottom}"
+          >
+            <span :class="{'rotate':showBottom}" class="fa fa-chevron-up"></span>
+          </div>
         </b-col>
       </b-row>
+      <transition name="bounce">
+        <b-row
+          class="row-side-bottom mb-2"
+          :class="{'mt-2':!showBottom}"
+          v-if="activeMenu != 3 && hasBottom && showBottom"
+        >
+          <b-col class="side-bottom" cols="12">
+            <b-card no-body>
+              <b-tabs pills card>
+                <b-tab
+                  title="Covid-19 chart"
+                  v-if="hasCovidCases && activeMenu==2"
+                  :active="hasCovidCases"
+                >
+                  <CovidCaseChart
+                    :covidCasesStat="covidCasesStat"
+                    :covidCasesStatDaily="covidCasesStatDaily"
+                  />
+                </b-tab>
+                <b-tab title="Flux comparaison" v-if="hasflux24DailyComparison && activeMenu==1">
+                  <FluxComparisonChart
+                    :fluxGeoOptions="fluxGeoOptions"
+                    :flux24DailyComparison="flux24DailyComparison"
+                  />
+                </b-tab>
+                <b-tab
+                  title="Flux tendance"
+                  v-if="hasFlux24Daily && activeMenu==1"
+                  :active="hasFlux24Daily"
+                >
+                  <FluxTendanceChart :flux24Daily="flux24Daily" />
+                </b-tab>
+              </b-tabs>
+            </b-card>
+          </b-col>
+        </b-row>
+      </transition>
       <Waiting v-if="isLoading" />
     </b-container>
   </div>
@@ -325,6 +342,7 @@ export default {
       townships: [],
       isFluxGlobalProvinceloading: {},
       globalProgress: null,
+      showBottom: false,
     };
   },
   computed: {
@@ -428,6 +446,9 @@ export default {
   methods: {
     ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
     ...mapMutations(["setMapStyle"]),
+    toggleBottomBar() {
+      this.showBottom = !this.showBottom;
+    },
     geoJsonLoaded(item) {
       this.$set(this.loadings, item, false);
       this.$set(this.loadings, item, false);
@@ -1500,6 +1521,60 @@ export default {
   background: $dash-background;
   .side-bottom {
     // height: calc(20vh - 72.5px);
+  }
+
+  .bounce-enter-active {
+    animation: slideInUp 0.5s;
+  }
+  .bounce-leave-active {
+    animation: slideOutDown 0.5s;
+  }
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}
+.bottom-collapse {
+  box-shadow: 0px 0px 18px 10px #2e5bffb8;
+  animation-name: shadow-animation;
+  // animation-delay: 800ms;
+  animation-duration: 3s;
+  animation-fill-mode: backwards;
+  animation-iteration-count: infinite;
+}
+@keyframes shadow-animation {
+  0% {
+    box-shadow: 0px 0px 18px 10px #2e5bffb8;
+  }
+  50% {
+    box-shadow: 0px 0px 18px 1px #2e5bffb8;
+  }
+  0% {
+    box-shadow: 0px 0px 18px 10px #2e5bffb8;
+  }
+}
+.bottom-bar-button {
+  width: 30px;
+  height: 25px;
+  background: $dash-blue;
+  border-radius: 120px 120px 0px 0px;
+  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  z-index: 999;
+  span {
+    color: white;
+    transition: all ease 800ms;
+    &.rotate {
+      transform: rotate(180deg);
+    }
   }
 }
 

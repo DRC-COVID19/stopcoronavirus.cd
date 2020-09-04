@@ -431,7 +431,7 @@ export default {
       typePresence: (state) => state.flux.typePresence,
     }),
     typesMobilite() {
-      let types = [{ val: 1, lbl: "Par défaut" }];
+      let types = [{ val: 1, lbl: "Détails" }];
       if (
         this.fluxGeoGranularity == 1 &&
         this.globalProgress &&
@@ -446,7 +446,7 @@ export default {
         this.globalProgress &&
         this.globalProgress == 100
       ) {
-        types.push({ val: 3, lbl: "Stat. zones" });
+        types.push({ val: 3, lbl: "Zones" });
       }
       return types;
     },
