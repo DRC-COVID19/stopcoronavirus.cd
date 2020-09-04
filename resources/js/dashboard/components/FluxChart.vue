@@ -231,7 +231,7 @@
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
           <b-card
             class="mb-3 flux-mobility"
-            :class="{'active':fluxType==3}"
+            :class="{'active':fluxType==3,'disabled':globalProgress && globalProgress<100}"
             @click="selectFluxType(3)"
           >
             <div class="row justify-content-between">
@@ -979,32 +979,40 @@ export default {
         return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
       });
 
-      const localDataPercent = localData.map(x => x.percent)
-      const minVal = d3.min(localDataPercent)
-      const maxVal = d3.max(localDataPercent)
+      const localDataPercent = localData.map((x) => x.percent);
+      const minVal = d3.min(localDataPercent);
+      const maxVal = d3.max(localDataPercent);
       localData = localData.slice(0, 10);
-
 
       this.drawHorizontalChart(
         localData,
         "zone",
         ref,
-        key == "origin" ?
-        this.getRangeColors(localData.map(x => x.percent), PALETTE.inflow_positif, PALETTE.inflow_negatif, minVal, maxVal)  :
-        this.getRangeColors(localData.map(x => x.percent), PALETTE.outflow_positif, PALETTE.outflow_negatif, minVal, maxVal)
+        key == "origin"
+          ? this.getRangeColors(
+              localData.map((x) => x.percent),
+              PALETTE.inflow_positif,
+              PALETTE.inflow_negatif,
+              minVal,
+              maxVal
+            )
+          : this.getRangeColors(
+              localData.map((x) => x.percent),
+              PALETTE.outflow_positif,
+              PALETTE.outflow_negatif,
+              minVal,
+              maxVal
+            )
       );
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
-      console.log('topHealthZonePandemics', inPutData)
+      console.log("topHealthZonePandemics", inPutData);
       const data = inPutData.map((item) => ({
         zone: item.name,
         volume: item.confirmed,
       }));
-      console.log('topHealthZonePandemics', data)
-      this.drawHorizontalChart(
-        data, "zone", ref,
-        "red" ,
-        title);
+      console.log("topHealthZonePandemics", data);
+      this.drawHorizontalChart(data, "zone", ref, "red", title);
     },
     async fluxMobilityFluxGeneralZone(
       fluxDataIn,
@@ -1041,9 +1049,9 @@ export default {
           return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
         });
 
-        const localDataPercent = localData.map(x => x.percent)
-        const minVal = d3.min(localDataPercent)
-        const maxVal = d3.max(localDataPercent)
+        const localDataPercent = localData.map((x) => x.percent);
+        const minVal = d3.min(localDataPercent);
+        const maxVal = d3.max(localDataPercent);
 
         const ascData = localData.slice(0, 5);
 
@@ -1060,32 +1068,41 @@ export default {
         );
 
         this.drawHorizontalChart(
-          ascData, "zone", refAsc,
+          ascData,
+          "zone",
+          refAsc,
           this.getRangeColors(
-            ascData.map(x => x.percent),
+            ascData.map((x) => x.percent),
             PALETTE.general_positif,
             PALETTE.general_negatif,
-            minVal, maxVal
+            minVal,
+            maxVal
           ),
           titleAsc
         );
         this.drawHorizontalChart(
-          descData, "zone", refDesc,
+          descData,
+          "zone",
+          refDesc,
           this.getRangeColors(
-            descData.map(x => x.percent),
+            descData.map((x) => x.percent),
             PALETTE.general_positif,
             PALETTE.general_negatif,
-            minVal, maxVal
+            minVal,
+            maxVal
           ),
           titleDesc
         );
         this.drawHorizontalChart(
-          mobilityHealth, "zone", refHealth,
+          mobilityHealth,
+          "zone",
+          refHealth,
           this.getRangeColors(
-            mobilityHealth.map(x => x.percent),
+            mobilityHealth.map((x) => x.percent),
             PALETTE.general_positif,
             PALETTE.general_negatif,
-            minVal, maxVal
+            minVal,
+            maxVal
           ),
           titleHelth
         );
@@ -1183,41 +1200,46 @@ export default {
       );
       reference.style.height = 400;
     },
-    getRangeColors(data, color, colorNeg = null, domaineMin = null, domaineMax = null){
-      domaineMin = domaineMin == null ? d3.min(data) : domaineMin
-      domaineMax = domaineMax == null ? d3.max(data) : domaineMax
+    getRangeColors(
+      data,
+      color,
+      colorNeg = null,
+      domaineMin = null,
+      domaineMax = null
+    ) {
+      domaineMin = domaineMin == null ? d3.min(data) : domaineMin;
+      domaineMax = domaineMax == null ? d3.max(data) : domaineMax;
 
-      let colorScale = null
-      let colorScaleNeg = null
+      let colorScale = null;
+      let colorScaleNeg = null;
 
-      if(colorNeg){
-        colorScale = d3.scaleQuantile()
-          .domain([0, domaineMax])
-          .range(color);
+      if (colorNeg) {
+        colorScale = d3.scaleQuantile().domain([0, domaineMax]).range(color);
 
-        colorScaleNeg = d3.scaleQuantile()
+        colorScaleNeg = d3
+          .scaleQuantile()
           .domain([domaineMin, 0])
           .range(colorNeg);
-      }else{
-        colorScale = d3.scaleQuantile()
+      } else {
+        colorScale = d3
+          .scaleQuantile()
           .domain([domaineMin, domaineMax])
           .range(color);
       }
 
       const getColorRange = (data) => {
-        if(data < 0 && colorNeg) {
-          return colorScaleNeg(data)
+        if (data < 0 && colorNeg) {
+          return colorScaleNeg(data);
+        } else {
+          return colorScale(data);
         }
-        else {
-          return colorScale(data)
-        }
-      }
+      };
 
       const rangeColors = data.map((d) => {
-        return getColorRange(d)
-      }) ;
+        return getColorRange(d);
+      });
 
-      return rangeColors
+      return rangeColors;
     },
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
