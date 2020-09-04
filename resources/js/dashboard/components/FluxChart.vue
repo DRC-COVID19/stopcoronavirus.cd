@@ -240,13 +240,13 @@
                 <i
                   class="fa fa-sun"
                   title="N'afficher que les présences jour"
-                  :class="{'active' : typePresence == 2}"
+                  :class="{'active' : typePresence == 2 || typePresence == 1 }"
                   @click="toggleTypePresence(2)"
                 ></i>
                 <i
                   class="fa fa-moon"
                   title="N'afficher que les présences nuit"
-                  :class="{'active' : typePresence == 3}"
+                  :class="{'active' : typePresence == 3|| typePresence == 1}"
                   @click="toggleTypePresence(3)"
                 ></i>
               </div>
@@ -599,45 +599,6 @@ export default {
           difference: null,
         };
       }
-      // let referenceVolume = null;
-      // let observationVolume = null;
-
-      // referencesByDate.sort((a, b) => {
-      //   return new Number(a.volume) < new Number(b.volume) ? 1 : -1;
-      // });
-      // observationsByDate.sort((a, b) => {
-      //   return new Number(a.volume) < new Number(b.volume) ? 1 : -1;
-      // });
-
-      // const countReference = referencesByDate.length;
-      // if (countReference > 0) {
-      //   if (countReference % 2 == 0) {
-      //     let index = (countReference + 1) / 2;
-      //     index = parseInt(index);
-      //     const volume1 = referencesByDate[index].volume;
-      //     const volume2 = referencesByDate[index - 1].volume;
-      //     referenceVolume = (volume1 + volume2) / 2;
-      //   } else {
-      //     const index = (countReference + 1) / 2;
-      //     referenceVolume = referencesByDate[index - 1].volume;
-      //   }
-      // }
-
-      // const countObservation = observationsByDate.length;
-      // if (countObservation > 0) {
-      //   if (countObservation % 2 == 0) {
-      //     let index = (countObservation + 1) / 2;
-      //     index = parseInt(index);
-      //     const volume1 = observationsByDate[index].volume;
-      //     const volume2 = observationsByDate[index - 1].volume;
-      //     observationVolume = (volume1 + volume2) / 2;
-      //   } else {
-      //     const index = (countObservation + 1) / 2;
-      //     observationVolume = observationsByDate[index - 1].volume;
-      //   }
-      // }
-      // const difference = observationVolume - referenceVolume;
-
       const result = this.formatFluxDataByMedian({
         references: referencesByDate,
         observations: observationsByDate,
@@ -1285,7 +1246,24 @@ export default {
       this.showMobiliteGenerale = !this.showMobiliteGenerale;
     },
     toggleTypePresence(type) {
-      if (this.typePresence == type) type = 1;
+      if (this.typePresence == 1) {
+        if (type == 2) {
+          this.setTypePresence(1);
+        }
+        switch (type) {
+          case 2:
+            this.setTypePresence(3);
+            break;
+          case 3:
+            this.setTypePresence(2);
+          default:
+            break;
+        }
+        return;
+      }
+      if (this.typePresence != type) {
+        type = 1;
+      }
       this.setTypePresence(type);
     },
   },

@@ -78,6 +78,7 @@
                 :hasRightSide="hasRightSide"
                 @geoJsonLoaded="geoJsonLoaded"
                 :showBottom="showBottom"
+                :fluxZoneGlobalOut="fluxZoneGlobalOut"
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
@@ -333,6 +334,7 @@ export default {
       palette: PALETTE,
       fluxZoneGlobalIn: [],
       fluxZoneGlobalOut: [],
+      fluxZoneGlobalPresence:[],
       showMobiliteGenerale: false,
       fluxDataGroupedByDateIn: {},
       fluxDataGroupedByDateOut: {},
@@ -1450,6 +1452,7 @@ export default {
             date: item.date,
             day: item.day,
             volume: item.volume,
+            PresenceType:item.PresenceType,
             zone: item.zone,
           });
         }
@@ -1464,6 +1467,7 @@ export default {
             date: item.date,
             day: item.day,
             volume: item.volume,
+            PresenceType:item.PresenceType,
             zone: item.zone,
           });
         }
