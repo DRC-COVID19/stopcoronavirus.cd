@@ -406,6 +406,7 @@ export default {
               },
             ],
           };
+
           datasets = [
             {
               label: "Respirateurs occupés",
@@ -424,7 +425,15 @@ export default {
               fill: false,
               backgroundColor: PALETTE.dash_red,
               borderColor: PALETTE.dash_red,
-              data: data.occupied_respirators.map((x) => (x == 0 ? null : x)),
+              data: data.occupied_respirators.map((x, i) => {
+                if(x == 0) return null
+                if(!+Respirators[i] || !+Respirators[i-1] ||
+                  !+Respirators[i+1] ){
+                    return x
+                }
+
+                return null
+              }),
               fill: false,
               interpolate: true,
               showLine: true,
@@ -454,6 +463,8 @@ export default {
               },
             ],
           };
+          console.log('Resuscitation_beds', Resuscitation_beds)
+          console.log('occupied_resuscitation_beds', data.occupied_resuscitation_beds)
           datasets = [
             {
               label: "Lits de réanimation occupés",
@@ -470,9 +481,15 @@ export default {
               label: "interpolation",
               backgroundColor: PALETTE.dash_red ,
               borderColor: PALETTE.dash_red ,
-              data: data.occupied_resuscitation_beds.map((x) =>
-                x == 0 ? null : x
-              ),
+              data: data.occupied_resuscitation_beds.map((x, i) => {
+                if(x == 0) return null
+                if(!+Resuscitation_beds[i] || !+Resuscitation_beds[i-1] ||
+                  !+Resuscitation_beds[i+1] ){
+                    return x
+                }
+
+                return null
+              }),
               fill: false,
               interpolate: true,
               showLine: true,
