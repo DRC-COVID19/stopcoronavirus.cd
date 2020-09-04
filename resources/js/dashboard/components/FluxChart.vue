@@ -979,21 +979,32 @@ export default {
         return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
       });
 
+      const localDataPercent = localData.map(x => x.percent)
+      const minVal = d3.min(localDataPercent)
+      const maxVal = d3.max(localDataPercent)
       localData = localData.slice(0, 10);
+
 
       this.drawHorizontalChart(
         localData,
         "zone",
         ref,
-        key == "origin" ? PALETTE.flux_in_color : PALETTE.flux_out_color
+        key == "origin" ?
+        this.getRangeColors(localData.map(x => x.percent), PALETTE.inflow_positif, PALETTE.inflow_negatif, minVal, maxVal)  :
+        this.getRangeColors(localData.map(x => x.percent), PALETTE.outflow_positif, PALETTE.outflow_negatif, minVal, maxVal)
       );
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
+      console.log('topHealthZonePandemics', inPutData)
       const data = inPutData.map((item) => ({
         zone: item.name,
         volume: item.confirmed,
       }));
-      this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color, title);
+      console.log('topHealthZonePandemics', data)
+      this.drawHorizontalChart(
+        data, "zone", ref,
+        "red" ,
+        title);
     },
     async fluxMobilityFluxGeneralZone(
       fluxDataIn,
@@ -1030,6 +1041,10 @@ export default {
           return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
         });
 
+        const localDataPercent = localData.map(x => x.percent)
+        const minVal = d3.min(localDataPercent)
+        const maxVal = d3.max(localDataPercent)
+
         const ascData = localData.slice(0, 5);
 
         localData.sort((a, b) => {
@@ -1045,24 +1060,33 @@ export default {
         );
 
         this.drawHorizontalChart(
-          ascData,
-          "zone",
-          refAsc,
-          PALETTE.flux_in_color,
+          ascData, "zone", refAsc,
+          this.getRangeColors(
+            ascData.map(x => x.percent),
+            PALETTE.general_positif,
+            PALETTE.general_negatif,
+            minVal, maxVal
+          ),
           titleAsc
         );
         this.drawHorizontalChart(
-          descData,
-          "zone",
-          refDesc,
-          PALETTE.flux_in_color,
+          descData, "zone", refDesc,
+          this.getRangeColors(
+            descData.map(x => x.percent),
+            PALETTE.general_positif,
+            PALETTE.general_negatif,
+            minVal, maxVal
+          ),
           titleDesc
         );
         this.drawHorizontalChart(
-          mobilityHealth,
-          "zone",
-          refHealth,
-          PALETTE.flux_in_color,
+          mobilityHealth, "zone", refHealth,
+          this.getRangeColors(
+            mobilityHealth.map(x => x.percent),
+            PALETTE.general_positif,
+            PALETTE.general_negatif,
+            minVal, maxVal
+          ),
           titleHelth
         );
       });
@@ -1079,6 +1103,7 @@ export default {
           data: volumeReferences,
         });
       }
+
       datasets.push({
         label: "Observation",
         backgroundColor: color,
@@ -1157,6 +1182,42 @@ export default {
         this.configBarChart[ref]
       );
       reference.style.height = 400;
+    },
+    getRangeColors(data, color, colorNeg = null, domaineMin = null, domaineMax = null){
+      domaineMin = domaineMin == null ? d3.min(data) : domaineMin
+      domaineMax = domaineMax == null ? d3.max(data) : domaineMax
+
+      let colorScale = null
+      let colorScaleNeg = null
+
+      if(colorNeg){
+        colorScale = d3.scaleQuantile()
+          .domain([0, domaineMax])
+          .range(color);
+
+        colorScaleNeg = d3.scaleQuantile()
+          .domain([domaineMin, 0])
+          .range(colorNeg);
+      }else{
+        colorScale = d3.scaleQuantile()
+          .domain([domaineMin, domaineMax])
+          .range(color);
+      }
+
+      const getColorRange = (data) => {
+        if(data < 0 && colorNeg) {
+          return colorScaleNeg(data)
+        }
+        else {
+          return colorScale(data)
+        }
+      }
+
+      const rangeColors = data.map((d) => {
+        return getColorRange(d)
+      }) ;
+
+      return rangeColors
     },
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
