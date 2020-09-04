@@ -127,6 +127,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    fluxZoneGlobalOut: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -200,13 +204,13 @@ export default {
       // });
 
       if (this.healthZoneGeojson) {
-        this.addZoneSource();
+        // this.addZoneSource();
         this.addPolygoneLayer(2);
         this.addPolygoneHoverLayer(2);
         this.$emit("geoJsonLoaded", "healthZoneGeo");
       }
       if (this.healthProvinceGeojson) {
-        this.addProvinceSource();
+        // this.addProvinceSource();
         this.$emit("geoJsonLoaded", "provinceGeo");
       }
 
@@ -296,6 +300,7 @@ export default {
       healthProvinceGeojson: (state) => state.app.healthProvinceGeojson,
       healthProvinceGeojsonCentered: (state) =>
         state.app.healthProvinceGeojsonCentered,
+      typePresence: (state) => state.flux.typePresence,
     }),
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
@@ -476,6 +481,9 @@ export default {
           zoom: 10,
         });
       }
+    },
+    typePresence(){
+      this.flux24Func();
     },
     // hasRightSide() {
     //   this.drawDesign();
@@ -995,7 +1003,21 @@ export default {
             }
             data = this.flux24DailyOut;
             DataGroupByDate = this.fluxDataGroupedByDateOut;
+            break;
           case 3:
+            mapFlyOptions = {
+              center: this.getHealthZoneCoordonate(zone, this.fluxGeoGranularity),
+              zoom: 8,
+            };
+            if (this.fluxGeoGranularity == 1){
+              data = this.fluxZoneGlobalOut;
+            }else{
+              data=[{
+                presence_observation:this.flux24Presence.observationsByDate,
+                presence_reference:this.flux24Presence.referencesByDate
+              }];
+            }
+            
             break;
           case 4:
             mapFlyOptions = {
@@ -1080,10 +1102,8 @@ export default {
       flux24DataPresence,
       legendHover = null
     ) {
-      const localData = this.fluxType == 3 ? flux24DataPresence : flux24Data;
-
+      const localData = flux24Data;
       let features = [];
-
       /**
        * format features data
        */
@@ -1199,63 +1219,34 @@ export default {
         //   formatData(item, "origin");
         // });
       } else if (this.fluxType == 3) {
-        // localData.map((item) => {
-        //   formatData(item, "origin");
-        // });
-
-        const { referencesByDate, observationsByDate } = localData;
-        let referenceVolume = null;
-        let observationVolume = null;
-        referencesByDate.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
-        });
-        observationsByDate.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
-        });
-        const countReference = referencesByDate.length;
-        if (countReference > 0) {
-          if (countReference % 2 == 0) {
-            let index = (countReference + 1) / 2;
-            index = parseInt(index);
-            const volume1 = referencesByDate[index].volume;
-            const volume2 = referencesByDate[index - 1].volume;
-            referenceVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countReference + 1) / 2;
-            referenceVolume = referencesByDate[index - 1].volume;
+        localData.map((item) => {
+          let observations = item.presence_observation;
+          let references = item.presence_reference;
+          switch (this.typePresence) {
+            case 2:
+              observations = item.presence_observation.filter(
+                (x) => x.PresenceType == "Jour"
+              );
+              references = item.presence_reference.filter(
+                (x) => x.PresenceType == "Jour"
+              );
+              break;
+            case 3:
+              observations = item.presence_observation.filter(
+                (x) => x.PresenceType == "Nuit"
+              );
+              references = item.presence_reference.filter(
+                (x) => x.PresenceType == "Nuit"
+              );
+              break;
           }
-        }
-
-        const countObservation = observationsByDate.length;
-        if (countObservation > 0) {
-          if (countObservation % 2 == 0) {
-            let index = (countObservation + 1) / 2;
-            index = parseInt(index);
-            const volume1 = observationsByDate[index].volume;
-            const volume2 = observationsByDate[index - 1].volume;
-            observationVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countObservation + 1) / 2;
-            observationVolume = observationsByDate[index - 1].volume;
-          }
-        }
-        const difference = observationVolume - referenceVolume;
-        const percent = Math.round((difference / referenceVolume) * 100);
-
-        features.push({
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [],
-          },
-          properties: {
-            origin: this.fixedZone(observationsByDate[0].zone),
-            color: "#ED5F68",
-            volume: observationVolume,
-            volumeReference: referenceVolume,
-            percent: percent,
-            difference: difference,
-          },
+          formatData(
+            {
+              observations,
+              references,
+            },
+            "zone"
+          );
         });
       } else if (this.fluxTYpe == 4) {
         localData.map((item) => {
@@ -1287,17 +1278,6 @@ export default {
       colorScalePositive.domain([0, domaineMax]);
       colorScaleNegative.domain([domaineMin, 0]);
 
-      // if (domaineMax >= 0 && domaineMin <= 0) {
-      //   colorScalePositive.domain([0, domaineMax]);
-      //   colorScaleNegative.domain([domaineMin, 0]);
-      // } else if (domaineMax <= 0) {
-      //   colorScaleNegative.domain([domaineMin, 0]);
-      // } else if (domaineMin >= 0) {
-      //   colorScalePositive.domain([[0, domaineMax]]);
-      // } else if (domaineMax <= 0) {
-      //   colorScaleNegative.domain([[domaineMin, 0]]);
-      // }
-
       const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
 
       this.setDomaineExtValues({
@@ -1314,7 +1294,8 @@ export default {
           colorScale.range(PALETTE.inflow);
           break;
         case 3:
-          colorScale.range(PALETTE.present);
+          colorScaleNegative.range(PALETTE.presence_negatif);
+          colorScalePositive.range(PALETTE.presence_positif);
           break;
         case 4:
           colorScaleNegative.range(PALETTE.general_negatif);
@@ -1329,7 +1310,11 @@ export default {
       }
 
       let dataKey = "name";
-      if (this.fluxGeoGranularity == 2 || this.fluxType == 4) {
+      if (
+        this.fluxGeoGranularity == 2 ||
+        this.fluxType == 4 ||
+        this.fluxType == 3
+      ) {
         dataKey = "Zone+Peupl";
       }
 
@@ -1338,11 +1323,11 @@ export default {
       features.forEach((x) => {
         let color = PALETTE.dash_green;
         if (
-          (this.fluxGeoOptions.some(
+          this.fluxGeoOptions.some(
             (y) => this.fixedZone(y) == x.properties.origin
           ) &&
-            this.fluxType != 4) ||
-          this.fluxType == 3
+          this.fluxType != 4 &&
+          this.fluxType != 3
         ) {
           color = PALETTE.dash_green;
         } else {
@@ -1369,7 +1354,11 @@ export default {
         }
       }
       let hatchedSource = this.drcSourceId;
-      if (this.fluxGeoGranularity == 2 || this.fluxType == 4) {
+      if (
+        this.fluxGeoGranularity == 2 ||
+        this.fluxType == 4 ||
+        this.fluxType == 3
+      ) {
         hatchedSource = this.drcHealthZone;
       }
       map.U.addFill(
