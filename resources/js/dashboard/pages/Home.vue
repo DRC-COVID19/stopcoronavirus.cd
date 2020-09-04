@@ -100,6 +100,13 @@
               >
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
+              <b-tab
+                title="Orientation data"
+                v-if="orientationCount != null && activeMenu==6"
+                :active="orientationCount != null"
+              >
+                <SideOrientation :medicalOrientations="medicalOrientations" />
+              </b-tab>
               <b-tab title="Province" v-if="activeMenu==1">
                 <b-row>
                   <b-col cols="6" class="pr-2">
@@ -361,7 +368,8 @@ export default {
         (this.getHasCoviCases() && this.activeMenu == 2) ||
         (this.flux24DailyIn.length > 0 && this.activeMenu == 1) ||
         (this.hospitalCount != null && this.activeMenu == 5) ||
-        (this.fluxGlobalIn.length > 0 && this.activeMenu == 1)
+        (this.fluxGlobalIn.length > 0 && this.activeMenu == 1) ||
+        (this.orientationCount != null && this.activeMenu == 6)
       );
     },
     hasBottom() {
