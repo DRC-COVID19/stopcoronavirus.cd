@@ -1554,5 +1554,6 @@ export default {
   position: absolute;
   bottom: 20px;
   left: 20px;
+  z-index: 200;
 }
 </style>
