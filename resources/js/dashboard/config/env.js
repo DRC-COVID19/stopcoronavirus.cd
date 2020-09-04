@@ -23,6 +23,7 @@ export const
         flux_in_color: "#225ea8",
         flux_presence: "#E31A1C",
         dash_green: "#33ac2e",
+        dash_red: "#f44336",
         epidemic: ["#FFFFB2", "#FECC5C", "#FD8D3C", "#E31A1C"]
     },
     PREFERENCE_START = "2020-02-18",
