@@ -36,10 +36,6 @@
             v-show="activeMenu==6"
             @medicalOrientationChecked="getmedicalOrientations"
             @medicalOrientationChanged="medicalOrientationChanged"
-            :orientationCount="orientationCount"
-            :finCount="finCount"
-            :fin5Count="fin5Count"
-            :fin8Count="fin8Count"
           />
         </b-col>
       </b-row>
