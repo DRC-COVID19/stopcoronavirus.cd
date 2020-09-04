@@ -427,8 +427,10 @@ export default {
               borderColor: PALETTE.dash_red,
               data: data.occupied_respirators.map((x, i) => {
                 if(x == 0) return null
-                if(!+Respirators[i] || !+Respirators[i-1] ||
-                  !+Respirators[i+1] ){
+                if(!+Respirators[i] ||
+                  (!+Respirators[i-1] && +data.occupied_respirators[i-1] ) ||
+                  (!+Respirators[i+1] && +data.occupied_respirators[i+1] )
+                ){
                     return x
                 }
 
@@ -463,8 +465,7 @@ export default {
               },
             ],
           };
-          console.log('Resuscitation_beds', Resuscitation_beds)
-          console.log('occupied_resuscitation_beds', data.occupied_resuscitation_beds)
+
           datasets = [
             {
               label: "Lits de réanimation occupés",
@@ -483,8 +484,10 @@ export default {
               borderColor: PALETTE.dash_red ,
               data: data.occupied_resuscitation_beds.map((x, i) => {
                 if(x == 0) return null
-                if(!+Resuscitation_beds[i] || !+Resuscitation_beds[i-1] ||
-                  !+Resuscitation_beds[i+1] ){
+                if(!+Resuscitation_beds[i] ||
+                  (!+Resuscitation_beds[i-1] && +data.occupied_resuscitation_beds[i-1] ) ||
+                  (!+Resuscitation_beds[i+1] && +data.occupied_resuscitation_beds[i+1] )
+                ){
                     return x
                 }
 
