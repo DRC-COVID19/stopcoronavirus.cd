@@ -13,10 +13,11 @@
       </div>
       <div class="datas">
         <div class="inner" v-for="(data, i) in colors[color]" :key="i">
-          <span class="lbl">{{valDe(i)}}
-          <span v-if="domaineExtValues.isPercent">%</span>
+          <span class="lbl">
+            {{valDe(i)}}
+            <span v-if="domaineExtValues.isPercent">%</span>
           </span>
-          
+
           <div
             class="range"
             :style="'background-color :' + data "
@@ -26,8 +27,9 @@
           ></div>
         </div>
         <div class="inner inner-last">
-          <span class="lbl">{{lastValue}}
-          <span v-if="domaineExtValues.isPercent">%</span>
+          <span class="lbl">
+            {{lastValue}}
+            <span v-if="domaineExtValues.isPercent">%</span>
           </span>
         </div>
       </div>
@@ -44,12 +46,13 @@ export default {
   data: function () {
     return {
       colors: [
-        [...PALETTE.inflow_negatif , ...PALETTE.inflow_positif] ,
-        [...PALETTE.outflow_negatif , ...PALETTE.outflow_positif] ,
-        PALETTE.present
+        [...PALETTE.inflow_negatif, ...PALETTE.inflow_positif],
+        [...PALETTE.outflow_negatif, ...PALETTE.outflow_positif],
+        [...PALETTE.presence_negatif, ...PALETTE.presence_positif],
+        [...PALETTE.general_negatif, ...PALETTE.general_positif],
       ],
-      color_nodata: PALETTE.nodata
-    }
+      color_nodata: PALETTE.nodata,
+    };
   },
   computed: {
     ...mapGetters(["fluxType", "legendHover"]),
@@ -64,50 +67,54 @@ export default {
       return 0;
     },
     pourcentNegatif: function () {
-      if(this.domaineExtValues.min >= 0) return 0
-      return (
-        Math.abs(this.domaineExtValues.min) / 5
-      );
+      if (this.domaineExtValues.min >= 0) return 0;
+      return Math.abs(this.domaineExtValues.min) / 5;
     },
     pourcentPositif: function () {
-      if(this.domaineExtValues.max <= 0) return 0
-      return (
-        Math.abs(this.domaineExtValues.max) / 5
-      );
+      if (this.domaineExtValues.max <= 0) return 0;
+      return Math.abs(this.domaineExtValues.max) / 5;
     },
-    lastValue(){
-      if(this.domaineExtValues.max <= 0) return 100
-      else return Math.ceil(this.domaineExtValues.max)
-    }
+    lastValue() {
+      if (this.domaineExtValues.max <= 0) return 100;
+      else return Math.ceil(this.domaineExtValues.max);
+    },
   },
   methods: {
     ...mapMutations(["setLegendHover"]),
     valDe: function (i) {
-      if(this.domaineExtValues.min >= 0){
+      if (this.domaineExtValues.min >= 0) {
         switch (i) {
-          case 0: return '-100%'
-          case 1: return '-80%'
-          case 2: return '-60%'
-          case 3: return '-40%'
-          case 4: return '-20%'
+          case 0:
+            return "-100%";
+          case 1:
+            return "-80%";
+          case 2:
+            return "-60%";
+          case 3:
+            return "-40%";
+          case 4:
+            return "-20%";
         }
-      }else if(this.domaineExtValues.max <= 0){
+      } else if (this.domaineExtValues.max <= 0) {
         switch (i) {
-          case 5: return '0%'
-          case 6: return '20%'
-          case 7: return '40%'
-          case 8: return '60%'
-          case 9: return '80%'
+          case 5:
+            return "0%";
+          case 6:
+            return "20%";
+          case 7:
+            return "40%";
+          case 8:
+            return "60%";
+          case 9:
+            return "80%";
         }
       }
 
-      if(i == 5){
+      if (i == 5) {
         return 0;
-      }
-      else if(i < 5)
+      } else if (i < 5)
         return Math.floor(this.domaineExtValues.min + i * this.pourcentNegatif);
-      else
-        return Math.floor( (i-5) * this.pourcentPositif);
+      else return Math.floor((i - 5) * this.pourcentPositif);
     },
   },
 };

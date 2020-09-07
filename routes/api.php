@@ -49,7 +49,8 @@ Route::group([
         Route::post('reset-password/{user_id}', 'AuthController@resetPassword');
     });
 
-    Route::group(['prefix' => 'flux'], function () {
+
+    Route::group(['prefix' => 'flux','middleware'=>'cache.headers:private;max_age=3600'], function () {
         Route::group(['prefix' => 'predefined'], function () {
             Route::group(['prefix' => 'zones'], function () {
                 Route::group(['prefix' => 'h-24'], function () {
@@ -65,11 +66,11 @@ Route::group([
         Route::group(['prefix' => 'origin'], function () {
             Route::group(['prefix' => 'zones'], function () {
                 Route::group(['prefix' => 'h-24'], function () {
-                    Route::get('/', 'DashBoardController@getFluxDataFromOrigin');
-                    Route::get('/daily', 'DashBoardController@getFluxDataFromOriginDaily');
-                    Route::get('/daily-compare', 'DashBoardController@getFluxDataFromOriginDailyCompare');
-                    Route::get('daily-in', 'DashBoardController@getFluxDataFromOriginDailyIn');
-                    Route::get('daily-out', 'DashBoardController@getFluxDataFromOriginDailyOut');
+                    Route::get('/', 'Flux24ZoneController@getFluxDataFromOrigin');
+                    Route::get('/daily', 'Flux24ZoneController@getFluxDataFromOriginDaily');
+                    Route::get('/daily-compare', 'Flux24ZoneController@getFluxDataFromOriginDailyCompare');
+                    Route::get('daily-in', 'Flux24ZoneController@getFluxDataFromOriginDailyIn');
+                    Route::get('daily-out', 'Flux24ZoneController@getFluxDataFromOriginDailyOut');
                     Route::get('/global-in/province', 'Flux24ZoneController@getGlobalDataInByProvince');
                     Route::get('/global-out/province', 'Flux24ZoneController@getGlobalDataOutByProvince');
                 });
@@ -148,6 +149,8 @@ Route::group([
     Route::post('flux-24-daily', 'DashBoardController@getFluxDataDaily');
     Route::get('flux-zone', 'FluxZoneController@index');
     Route::get('flux-provinces', 'DashBoardController@getFluxProvinces');
+
+    Route::get('/townships', 'DashBoardController@getTownships');
 
     Route::group(['prefix' => 'pandemics'], function () {
         Route::get('top-confirmed', 'PandemicController@getHealthZoneTopConfirmed');

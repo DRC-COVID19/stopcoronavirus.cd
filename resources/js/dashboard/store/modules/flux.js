@@ -1,9 +1,11 @@
 export default {
     state: {
         fluxGeoGranularity: null,
+        fluxGeoGranularityTemp:null,
         mapStyle: 1,
         fluxType: 1,
         fluxGeoOptions: [],
+        fluxGeoOptionsTmp: [],
         fluxEnabled: true,
         isWatchingfluxGeoOptions: true,
         domaineExtValues:{},
@@ -19,6 +21,9 @@ export default {
         setFluxGeoGranularity(state, payload) {
             state.fluxGeoGranularity = payload
         },
+        setFluxGeoGranularityTemp(state, payload) {
+            state.fluxGeoGranularityTemp = payload
+        },
         setMapStyle(state, payload) {
             state.mapStyle = payload;
         },
@@ -27,6 +32,9 @@ export default {
         },
         setFluxGeoOptions(state, payload) {
             state.fluxGeoOptions = payload;
+        },
+        setFluxGeoOptionsTmp(state, payload) {
+            state.fluxGeoOptionsTmp = payload;
         },
         setFluxEnabled(state, payload) {
             state.fluxEnabled = payload;

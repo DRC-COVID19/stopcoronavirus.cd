@@ -38,4 +38,8 @@ class HospitalSituation extends Model
     {
         return $this->belongsTo(Hospital::class);
     }
+    public function hospitalLog()
+    {
+        return $this->belongsTo(HospitalLog::class, 'hospital_id');
+    }
 }
