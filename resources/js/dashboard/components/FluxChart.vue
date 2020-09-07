@@ -991,17 +991,11 @@ export default {
         key == "origin"
           ? this.getRangeColors(
               localData.map((x) => x.percent),
-              PALETTE.inflow_positif,
-              PALETTE.inflow_negatif,
-              minVal,
-              maxVal
+              PALETTE.inflow_negatif.slice().reverse()
             )
           : this.getRangeColors(
               localData.map((x) => x.percent),
-              PALETTE.outflow_positif,
-              PALETTE.outflow_negatif,
-              minVal,
-              maxVal
+              PALETTE.outflow_negatif.slice().reverse()
             )
       );
     },
