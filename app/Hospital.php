@@ -15,7 +15,8 @@ class Hospital extends Model
         'respirators',
         'doctors',
         'nurses',
-        'para_medicals'
+        'para_medicals',
+        'township_id',
     ];
     public function hospitalSituations()
     {
@@ -30,6 +31,10 @@ class Hospital extends Model
     {
         return $this->belongsTo(Administrator::class,'agent_id');
     }
+    public function township()
+    {
+        return $this->belongsTo(Township::class);
+    }
 
     public static function boot()
     {
@@ -37,6 +42,7 @@ class Hospital extends Model
 
         self::updating(function($model){
             $data = $model->getOriginal() ;
+            unset($data['id']) ;
             $data['hospital_id'] = $model->id ;
 
             HospitalLog::create($data) ;

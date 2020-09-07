@@ -3,10 +3,14 @@
     <b-container class="p-0 flux-chart">
       <b-row>
         <div class="col-md col-12">
-          <h3 class="d-flex">
+          <h3 class="d-flex align-items-center">
             <span class="ml-2 mr-2">{{targetZone}}</span>
 
-            <toggle-button :labels="typesMobilite" v-model="typeMobilite"></toggle-button>
+            <toggle-button
+              :labels="typesMobilite"
+              :globalProgress="globalProgress"
+              v-model="typeMobilite"
+            ></toggle-button>
           </h3>
         </div>
         <div class="col-md-auto col-12 text-right">
@@ -17,7 +21,11 @@
 
       <b-row no-gutters v-show="this.typeMobilite != 3">
         <b-col cols="12" v-show="this.typeMobilite == 2" md="12" class="pl-0 col-mobilite-generale">
-          <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==4}">
+          <b-card
+            class="mb-3 flux-mobility"
+            :class="{'active':fluxType==4}"
+            @click="selectFluxType(4)"
+          >
             <h5 class="percent-title">Mobilité générale</h5>
             <div class="percent flux-in-color">{{percentGenerale}}%​</div>
 
@@ -106,10 +114,38 @@
         <b-col cols="12" v-show="this.typeMobilite == 1" md="4" class="pl-0" ref="mobility">
           <b-row class="mb-3">
             <b-col cols="12">
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '175px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '200px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '400px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
               <b-card
                 class="mb-3 flux-mobility"
                 :class="{'active':fluxType==1}"
                 @click="selectFluxType(1)"
+                v-show="!isLoading"
               >
                 <h5 class="percent-title">Mobilité entrante</h5>
 
@@ -124,7 +160,12 @@
                 </p>
               </b-card>
 
-              <FullScreen id="fullscreenEntrance" link="mobile_in" @change="fullscreenMobileDaily">
+              <FullScreen
+                id="fullscreenEntrance"
+                link="mobile_in"
+                @change="fullscreenMobileDaily"
+                v-show="!isLoading"
+              >
                 <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
                   <legend-popover>
                     <template v-slot:title>Comment est-ce calculé ?</template>
@@ -141,6 +182,7 @@
                 id="fullscreenEntrance2"
                 link="mobile_entrance_2_card"
                 @change="fullscreenFluxInOut"
+                v-show="!isLoading"
               >
                 <b-card no-body class="cardtype2 p-2">
                   <legend-popover>
@@ -165,10 +207,38 @@
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
           <b-row class="mb-3">
             <b-col cols="12">
+
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '175px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '200px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '400px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
               <b-card
                 class="mb-3 flux-mobility"
                 :class="{'active':fluxType==2}"
                 @click="selectFluxType(2)"
+                v-show="!isLoading"
               >
                 <h5 class="percent-title">Mobilité sortante</h5>
                 <div class="percent flux-out-color">{{percentOut}}%​</div>
@@ -182,7 +252,7 @@
                 </p>
               </b-card>
 
-              <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily">
+              <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily" v-show="!isLoading">
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
                   <legend-popover>
                     <template v-slot:title>Comment est-ce calculé ?</template>
@@ -199,6 +269,7 @@
                 id="fullscreenOut2"
                 link="mobile_out_2_card"
                 @change="fullscreenFluxInOut"
+                v-show="!isLoading"
               >
                 <b-card no-body class="p-2 cardtype2">
                   <legend-popover>
@@ -221,10 +292,28 @@
         </b-col>
 
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
+        <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '175px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '200px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
           <b-card
             class="mb-3 flux-mobility"
-            :class="{'active':fluxType==3}"
+            :class="{'active':fluxType==3,'disabled':globalProgress && globalProgress<100}"
             @click="selectFluxType(3)"
+            v-show="!isLoading"
           >
             <div class="row justify-content-between">
               <h5 class="percent-title">Présences</h5>
@@ -232,13 +321,13 @@
                 <i
                   class="fa fa-sun"
                   title="N'afficher que les présences jour"
-                  :class="{'active' : typePresence == 2}"
+                  :class="{'active' : typePresence == 2 || typePresence == 1 }"
                   @click="toggleTypePresence(2)"
                 ></i>
                 <i
                   class="fa fa-moon"
                   title="N'afficher que les présences nuit"
-                  :class="{'active' : typePresence == 3}"
+                  :class="{'active' : typePresence == 3|| typePresence == 1}"
                   @click="toggleTypePresence(3)"
                 ></i>
               </div>
@@ -260,6 +349,7 @@
             id="mobile_presence_full"
             link="mobile_presence"
             @change="fullscreenMobileDaily"
+            v-show="!isLoading"
           >
             <b-card no-body class="mb-3 p-2 cardtype1" ref="mobile_presence_card">
               <legend-popover>
@@ -291,22 +381,22 @@
         </b-row>
         -->
 
-          <b-col cols="12" md="6" class="pr-2">
-            <GlobalProvice
-              title="Mobilité entrante par zone"
-              :color="palette.flux_in_color"
-              :globalData="fluxZoneGlobalIn"
-              reference="fluxZoneglobalIn"
-            />
-          </b-col>
-          <b-col cols="12" md="6" class="pl-2">
-            <GlobalProvice
-              title="Mobilité sortante par zone"
-              :color="palette.flux_out_color"
-              :globalData="fluxZoneGlobalOut"
-              reference="fluxZoneglobalOut"
-            />
-          </b-col>
+        <b-col cols="12" md="6" class="pr-2">
+          <GlobalProvice
+            title="Mobilité entrante par zone"
+            :color="palette.flux_in_color"
+            :globalData="fluxZoneGlobalIn"
+            reference="fluxZoneglobalIn"
+          />
+        </b-col>
+        <b-col cols="12" md="6" class="pl-2">
+          <GlobalProvice
+            title="Mobilité sortante par zone"
+            :color="palette.flux_out_color"
+            :globalData="fluxZoneGlobalOut"
+            reference="fluxZoneglobalOut"
+          />
+        </b-col>
       </b-row>
     </b-container>
   </div>
@@ -383,6 +473,13 @@ export default {
       type: Array,
       default: () => [],
     },
+    globalProgress: {
+      default: null,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -420,22 +517,29 @@ export default {
       typePresence: (state) => state.flux.typePresence,
     }),
     typesMobilite() {
-      let types = [{ val: 1, lbl: "Par défaut" }];
-      if (this.fluxGeoGranularity == 1) {
+      let types = [{ val: 1, lbl: "Détails" }];
+      if (
+        this.fluxGeoGranularity == 1 &&
+        this.globalProgress &&
+        this.globalProgress == 100
+      ) {
         types.push({ val: 2, lbl: "Général" });
       }
       if (
         (this.fluxZoneGlobalIn.length > 0 ||
           this.fluxZoneGlobalOut.length > 0) &&
-        this.fluxGeoGranularity == 1
+        this.fluxGeoGranularity == 1 &&
+        this.globalProgress &&
+        this.globalProgress == 100
       ) {
-        types.push({ val: 3, lbl: "Stat. zones" });
+        types.push({ val: 3, lbl: "Zones" });
       }
       return types;
     },
   },
   watch: {
     flux24DailyIn() {
+      this.typeMobilite = 1;
       this.updateFluxInMobility();
     },
     flux24DailyOut() {
@@ -451,16 +555,6 @@ export default {
       this.mobileOut();
     },
     fluxZoneGlobalIn() {
-      // debounce(function (e) {
-      //   this.fluxMobilityFluxGeneralZone(
-      //     this.fluxZoneGlobalIn,
-      //     "general_top_asc",
-      //     "general_top_desc",
-      //     `Top 5 des zones avec une mobilité croissante`,
-      //     "Top 5 des zones avec une mobilité decroissante"
-      //   );
-      // }, 500);
-
       this.fluxMobilityFluxGeneralZone(
         this.fluxZoneGlobalIn,
         "general_top_asc",
@@ -497,6 +591,11 @@ export default {
       }
     },
     typeMobilite() {
+      if (this.typeMobilite == 2) {
+        this.selectFluxType(4);
+      } else if (this.typeMobilite == 1) {
+        this.selectFluxType(1);
+      }
       if (this.typeMobilite == 3) {
         this.setIsProvinceStatSeeing(true);
       } else if (this.isProvinceStatSeeing) {
@@ -552,7 +651,7 @@ export default {
     );
     this.fluxGeoGranularity = this.$store.state.flux.fluxGeoGranularity;
     this.$store.watch(
-      (state) => state.flux.fluxGeoGranularity,
+      (state) => state.flux.fluxGeoGranularityTemp,
       (value) => {
         this.fluxGeoGranularity = value;
         if (this.fluxGeoGranularity == 2) {
@@ -577,47 +676,13 @@ export default {
           difference: null,
         };
       }
-      let referenceVolume = null;
-      let observationVolume = null;
-
-      referencesByDate.sort((a, b) => {
-        return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+      const result = this.formatFluxDataByMedian({
+        references: referencesByDate,
+        observations: observationsByDate,
       });
-      observationsByDate.sort((a, b) => {
-        return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
-      });
-
-      const countReference = referencesByDate.length;
-      if (countReference > 0) {
-        if (countReference % 2 == 0) {
-          let index = (countReference + 1) / 2;
-          index = parseInt(index);
-          const volume1 = referencesByDate[index].volume;
-          const volume2 = referencesByDate[index - 1].volume;
-          referenceVolume = (volume1 + volume2) / 2;
-        } else {
-          const index = (countReference + 1) / 2;
-          referenceVolume = referencesByDate[index - 1].volume;
-        }
-      }
-
-      const countObservation = observationsByDate.length;
-      if (countObservation > 0) {
-        if (countObservation % 2 == 0) {
-          let index = (countObservation + 1) / 2;
-          index = parseInt(index);
-          const volume1 = observationsByDate[index].volume;
-          const volume2 = observationsByDate[index - 1].volume;
-          observationVolume = (volume1 + volume2) / 2;
-        } else {
-          const index = (countObservation + 1) / 2;
-          observationVolume = observationsByDate[index - 1].volume;
-        }
-      }
-      const difference = observationVolume - referenceVolume;
       return {
-        percent: Math.round((difference / referenceVolume) * 100),
-        difference: difference,
+        percent: result.percent,
+        difference: result.difference,
       };
     },
     mobilePresence() {
@@ -966,43 +1031,20 @@ export default {
             difference: null,
           };
         }
-        let referenceVolume = null;
-        let observationVolume = null;
-        const countReference = references.length;
-        if (countReference > 0) {
-          if (countReference % 2 == 0) {
-            let index = (countReference + 1) / 2;
-            index = parseInt(index);
-            const volume1 = references[index].volume;
-            const volume2 = references[index - 1].volume;
-            referenceVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countReference + 1) / 2;
-            referenceVolume = references[index - 1].volume;
-          }
-        }
 
-        const countObservation = observations.length;
-        if (countObservation > 0) {
-          if (countObservation % 2 == 0) {
-            let index = (countObservation + 1) / 2;
-            index = parseInt(index);
-            const volume1 = observations[index].volume;
-            const volume2 = observations[index - 1].volume;
-            observationVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countObservation + 1) / 2;
-            observationVolume = observations[index - 1].volume;
-          }
-        }
-        const difference = observationVolume - referenceVolume;
+        const result = this.formatFluxDataByMedian({
+          references,
+          observations,
+        });
 
         localData.push({
           zone: observations[0][key],
-          percent: Math.round((difference / referenceVolume) * 100),
-          difference: difference,
-          volume: observationVolume,
-          volume_reference: referenceVolume,
+          percent: Math.round(
+            (result.difference / result.referenceVolume) * 100
+          ),
+          difference: result.difference,
+          volume: result.observationVolume,
+          volume_reference: result.referenceVolume,
         });
       });
       localData = localData.filter((x) => x.percent);
@@ -1014,21 +1056,34 @@ export default {
         return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
       });
 
+      const localDataPercent = localData.map((x) => x.percent);
+      const minVal = d3.min(localDataPercent);
+      const maxVal = d3.max(localDataPercent);
       localData = localData.slice(0, 10);
 
       this.drawHorizontalChart(
         localData,
         "zone",
         ref,
-        key == "origin" ? PALETTE.flux_in_color : PALETTE.flux_out_color
+        key == "origin"
+          ? this.getRangeColors(
+              localData.map((x) => x.percent),
+              PALETTE.inflow_negatif.slice().reverse()
+            )
+          : this.getRangeColors(
+              localData.map((x) => x.percent),
+              PALETTE.outflow_negatif.slice().reverse()
+            )
       );
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
+      console.log("topHealthZonePandemics", inPutData);
       const data = inPutData.map((item) => ({
         zone: item.name,
         volume: item.confirmed,
       }));
-      this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color, title);
+      console.log("topHealthZonePandemics", data);
+      this.drawHorizontalChart(data, "zone", ref, "red", title);
     },
     async fluxMobilityFluxGeneralZone(
       fluxDataIn,
@@ -1065,6 +1120,10 @@ export default {
           return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
         });
 
+        const localDataPercent = localData.map((x) => x.percent);
+        const minVal = d3.min(localDataPercent);
+        const maxVal = d3.max(localDataPercent);
+
         const ascData = localData.slice(0, 5);
 
         localData.sort((a, b) => {
@@ -1083,21 +1142,39 @@ export default {
           ascData,
           "zone",
           refAsc,
-          PALETTE.flux_in_color,
+          this.getRangeColors(
+            ascData.map((x) => x.percent),
+            PALETTE.general_positif,
+            PALETTE.general_negatif,
+            minVal,
+            maxVal
+          ),
           titleAsc
         );
         this.drawHorizontalChart(
           descData,
           "zone",
           refDesc,
-          PALETTE.flux_in_color,
+          this.getRangeColors(
+            descData.map((x) => x.percent),
+            PALETTE.general_positif,
+            PALETTE.general_negatif,
+            minVal,
+            maxVal
+          ),
           titleDesc
         );
         this.drawHorizontalChart(
           mobilityHealth,
           "zone",
           refHealth,
-          PALETTE.flux_in_color,
+          this.getRangeColors(
+            mobilityHealth.map((x) => x.percent),
+            PALETTE.general_positif,
+            PALETTE.general_negatif,
+            minVal,
+            maxVal
+          ),
           titleHelth
         );
       });
@@ -1114,6 +1191,7 @@ export default {
           data: volumeReferences,
         });
       }
+
       datasets.push({
         label: "Observation",
         backgroundColor: color,
@@ -1154,7 +1232,8 @@ export default {
                   beginAtZero: true,
                   fontSize: 9,
                   callback: (value, index, values) => {
-                    return this.formatCash(value);
+                    const sign = value < 0 ? "-" : "";
+                    return `${sign}${this.formatCash(value)}`;
                   },
                 },
               },
@@ -1191,6 +1270,47 @@ export default {
         this.configBarChart[ref]
       );
       reference.style.height = 400;
+    },
+    getRangeColors(
+      data,
+      color,
+      colorNeg = null,
+      domaineMin = null,
+      domaineMax = null
+    ) {
+      domaineMin = domaineMin == null ? d3.min(data) : domaineMin;
+      domaineMax = domaineMax == null ? d3.max(data) : domaineMax;
+
+      let colorScale = null;
+      let colorScaleNeg = null;
+
+      if (colorNeg) {
+        colorScale = d3.scaleQuantile().domain([0, domaineMax]).range(color);
+
+        colorScaleNeg = d3
+          .scaleQuantile()
+          .domain([domaineMin, 0])
+          .range(colorNeg);
+      } else {
+        colorScale = d3
+          .scaleQuantile()
+          .domain([domaineMin, domaineMax])
+          .range(color);
+      }
+
+      const getColorRange = (data) => {
+        if (data < 0 && colorNeg) {
+          return colorScaleNeg(data);
+        } else {
+          return colorScale(data);
+        }
+      };
+
+      const rangeColors = data.map((d) => {
+        return getColorRange(d);
+      });
+
+      return rangeColors;
     },
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
@@ -1280,7 +1400,24 @@ export default {
       this.showMobiliteGenerale = !this.showMobiliteGenerale;
     },
     toggleTypePresence(type) {
-      if (this.typePresence == type) type = 1;
+      if (this.typePresence == 1) {
+        if (type == 2) {
+          this.setTypePresence(1);
+        }
+        switch (type) {
+          case 2:
+            this.setTypePresence(3);
+            break;
+          case 3:
+            this.setTypePresence(2);
+          default:
+            break;
+        }
+        return;
+      }
+      if (this.typePresence != type) {
+        type = 1;
+      }
       this.setTypePresence(type);
     },
   },

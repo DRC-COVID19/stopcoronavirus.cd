@@ -1,5 +1,5 @@
 <template>
-  <div class="fullscreen-container">
+  <div class="fullscreen-container" :class="{'noFlex' : noFlex}">
     <Fullscreen :ref="id" @change="fullscreenChange" class="col-12 p-0">
       <slot></slot>
     </Fullscreen>
@@ -24,6 +24,10 @@ export default {
       type: String,
       required: true,
     },
+    noFlex: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     toggleFullscreen() {
@@ -42,8 +46,11 @@ export default {
 <style lang="scss" scoped>
 .fullscreen-container {
   position: relative;
-  height: auto;
-    width: 100%;
+  height: inherit;
+  width: 100%;
+  > div {
+    height: inherit;
+  }
   .fullscreen-btn {
     transform-origin: center;
     transform: scale(0);
@@ -51,7 +58,7 @@ export default {
     bottom: 20px;
     left: 20px;
     position: absolute;
-    z-index: 2;
+    z-index: 200;
     background-color: #2e5bff;
     width: 40px;
     height: 40px;
@@ -80,7 +87,12 @@ export default {
     opacity: 1;
   }
 }
-.fullscreen{
+.fullscreen-container.noFlex {
+  .fullscreen {
+    display: block;
+  }
+}
+.fullscreen {
   display: flex;
   align-items: center;
   justify-content: center;

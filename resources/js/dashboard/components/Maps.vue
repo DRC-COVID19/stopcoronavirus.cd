@@ -25,7 +25,8 @@ const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
   sourceHealthProvinceGeojsonCentered = "sourHealthProvinceGeojsonCentered",
   sourceHealthProvinceGeojson = "sourceHealthProvinceGeojson",
   EPIDEMIC_LAYER = "EPIDEMIC_LAYER",
-  HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER";
+  HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER",
+  COVID_HOSPITAL_SOURCE = "COVID_HOSPITAL_SOURCE";
 export default {
   components: { ToolTipMaps },
   props: {
@@ -109,6 +110,27 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    fluxZoneGlobalIn: {
+      type: Array,
+      default: () => [],
+    },
+
+    isFluxGlobalProvinceloading: {
+      type: Object,
+      default: () => ({}),
+    },
+    hasRightSide: {
+      type: Boolean,
+      default: false,
+    },
+    showBottom: {
+      type: Boolean,
+      default: false,
+    },
+    fluxZoneGlobalOut: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -141,24 +163,21 @@ export default {
       AllSondagesMarkers: [],
       ArcLayerSelectedObject: {},
       centerCoordinates: [],
-      healthZoneGeojson: null,
-      healthZoneGeojsonCentered: null,
-      healthProvinceGeojson: null,
-      healthProvinceGeojsonCentered: null,
       isMapLoaded: false,
       isZoneSourceLoaded: false,
       isProvinceSourceLoaded: false,
+      defaultCenterCoordinates: [23.485632, -3.983283],
     };
   },
   created() {
-    this.loadSource();
+    // this.loadSource();
   },
   mounted() {
     Mapbox.accessToken = this.MAPBOX_TOKEN;
     window.map = new Mapbox.Map({
       container: "map",
-      center: [15.31389, -4.33167],
-      zoom: 10,
+      center: this.defaultCenterCoordinates,
+      zoom: 3.5,
       pitch: 10,
       style: this.MAPBOX_DEFAULT_STYLE,
     });
@@ -167,40 +186,44 @@ export default {
     this.isMapLoaded = false;
     map.on("load", () => {
       this.isMapLoaded = true;
-      map.addSource(this.drcSourceId, {
-        type: "geojson",
-        generateId: true,
-        data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`,
-      });
+      // map.addSource(this.drcSourceId, {
+      //   type: "geojson",
+      //   generateId: true,
+      //   data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`,
+      // });
 
-      map.addSource(this.drcHealthZone, {
-        type: "geojson",
-        generateId: true,
-        data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`,
-      });
+      // map.addSource(this.drcHealthZone, {
+      //   type: "geojson",
+      //   generateId: true,
+      //   data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`,
+      // });
 
       // map.addSource(this.kinSourceId, {
       //   type: "vector",
       //   url: "mapbox://merki230.4airwoxt"
       // });
 
-      if (!this.isZoneSourceLoaded && this.healthZoneGeojson) {
-        this.addZoneSource();
+      if (this.healthZoneGeojson) {
+        // this.addZoneSource();
+        this.addPolygoneLayer(2);
+        this.addPolygoneHoverLayer(2);
+        this.$emit("geoJsonLoaded", "healthZoneGeo");
+      }
+      if (this.healthProvinceGeojson) {
+        // this.addProvinceSource();
+        this.$emit("geoJsonLoaded", "provinceGeo");
       }
 
-      if (!this.isProvinceSourceLoaded && this.healthProvinceGeojson) {
-        this.addProvinceSource();
-      }
-
-      this.addPolygoneLayer(2);
-      this.addPolygoneHoverLayer(2);
+      // if (!this.isProvinceSourceLoaded && this.healthProvinceGeojson) {
+      //   this.addProvinceSource();
+      // }
     });
 
     this.map = map;
 
     //watch store
     this.$store.watch(
-      (state) => state.flux.fluxGeoGranularity,
+      (state) => state.flux.fluxGeoGranularityTemp,
       (value) => {
         // if (this.activeMenu != 1) {
         //   return;
@@ -232,15 +255,16 @@ export default {
     this.$store.watch(
       (state) => state.nav.activeMenu,
       (value) => {
-        switch (value) {
-          case 1:
-            break;
-          case 5:
-            this.addPolygoneLayer(2);
-            this.addPolygoneHoverLayer(2);
-          default:
-            break;
-        }
+        this.drawDesign();
+        // switch (value) {
+        //   case 1:
+        //     break;
+        //   case 5:
+        //     this.addPolygoneLayer(2);
+        //     this.addPolygoneHoverLayer(2);
+        //   default:
+        //     break;
+        // }
       }
     );
 
@@ -262,19 +286,37 @@ export default {
   computed: {
     ...mapState({
       fluxMapStyle: (state) => state.flux.mapStyle,
-      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularity,
+      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
       fluxType: (state) => state.flux.fluxType,
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
+      fluxGeoOptionsTmp: (state) => state.flux.fluxGeoOptionsTmp,
       fluxEnabled: (state) => state.flux.fluxEnabled,
       activeMenu: (state) => state.nav.activeMenu,
       legendHover: (state) => state.flux.legendHover,
       epidemicLengendHover: (state) => state.epidemic.legendEpidHover,
+      fluxGeoGranularityMenu: (state) => state.flux.fluxGeoGranularity,
+      healthZoneGeojsonCentered: (state) => state.app.healthZoneGeojsonCentered,
+      healthZoneGeojson: (state) => state.app.healthZoneGeojson,
+      healthProvinceGeojson: (state) => state.app.healthProvinceGeojson,
+      healthProvinceGeojsonCentered: (state) =>
+        state.app.healthProvinceGeojsonCentered,
+      typePresence: (state) => state.flux.typePresence,
     }),
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
     },
   },
   watch: {
+    healthZoneGeojson() {
+      this.addZoneSource();
+      this.addPolygoneLayer(2);
+      this.addPolygoneHoverLayer(2);
+      this.$emit("geoJsonLoaded", "healthZoneGeo");
+    },
+    healthProvinceGeojson() {
+      this.addProvinceSource();
+      this.$emit("geoJsonLoaded", "provinceGeo");
+    },
     covidCases() {
       if (this.covidCases) {
         this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
@@ -283,159 +325,13 @@ export default {
       }
     },
     hospitals() {
-      if (this.hospitals) {
-        this.map.addSource("covid9HospitalsSource", this.hospitals);
-
-        this.map.addLayer({
-          id: "covid9HospitalsLayer",
-          type: "symbol",
-          source: "covid9HospitalsSource",
-          // minzoom: 10,
-          layout: {
-            "text-line-height": 1,
-            "text-padding": 0,
-            "text-anchor": "center",
-            "text-allow-overlap": true,
-            "text-ignore-placement": true,
-            "text-field": String.fromCharCode("0xf47e"),
-            "icon-optional": true,
-            "text-font": ["Font Awesome 5 Free Solid"],
-            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25],
-          },
-          paint: {
-            "text-translate-anchor": "viewport",
-            "text-color": ["get", "color"],
-          },
-        });
-
-        const popup = new Mapbox.Popup({
-          closeButton: false,
-          closeOnClick: false,
-        });
-
-        const mouseMove = (e) => {
-          const coordinates = e.features[0].geometry.coordinates.slice();
-          const {
-            name,
-            address,
-            beds,
-            occupied_beds,
-            masks,
-            respirators,
-            occupied_respirators,
-            confirmed,
-            dead,
-            sick,
-            healed,
-            last_update,
-            resuscitation_beds,
-            occupied_resuscitation_beds,
-          } = e.features[0].properties;
-
-          const HTML = `<div class="row">
-                <div class="col-12 bold text-center hospital-name">${name}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Confirmés</div>
-                <div class="col-3 bold">${confirmed}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Hospitalisés</div>
-                <div class="col-3 bold">${sick}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Lits de réanimation</div>
-                <div class="col-3 bold">${resuscitation_beds}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Lits de réanimation occupés</div>
-                <div class="col-3 bold">${occupied_resuscitation_beds}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Respirateurs</div>
-                <div class="col-3 bold">${respirators}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Respirateurs occupés</div>
-                <div class="col-3 bold">${occupied_respirators}</div>
-            </div>`;
-          popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
-        };
-
-        const mouseOut = (e) => {
-          this.map.getCanvas().style.cursor = "";
-          popup.remove();
-        };
-
-        const mouseClick = (e) => {
-          this.selectHospital(e.features[0].properties);
-        };
-
-        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
-          this.map.getCanvas().style.cursor = "pointer";
-        });
-        this.map.on("mouseleave", "covid9HospitalsLayer", mouseOut);
-        this.map.on("mousemove", "covid9HospitalsLayer", mouseMove);
-        this.map.on("click", "covid9HospitalsLayer", mouseClick);
-      }
+      this.infrastructure();
     },
     medicalOrientations() {
       this.getMedicalOrientations();
     },
     medicalOrientationSelected() {
-      if (this.medicalOrientations.length == 0) {
-        return;
-      }
-      if (this.medicalOrientationSelected == "ALL") {
-        this.getMedicalOrientations();
-        return;
-      }
-      this.RemoveOrientationMakers();
-      let orientation = this.medicalOrientationSelected;
-      this.medicalOrientations.map((value) => {
-        if (value[orientation] >= 0) {
-          let el = document.createElement("div");
-          el.className = `default-makers ${orientation}`;
-          if (value[orientation] > 3840) {
-            el.style = "width:100px;height:100px;";
-          } else if (value[orientation] > 1920) {
-            el.style = "width:90px;height:90px;";
-          } else if (value[orientation] > 960) {
-            el.style = "width:80px;height:80px;";
-          } else if (value[orientation] > 480) {
-            el.style = "width:70px;height:70px;";
-          } else if (value[orientation] > 240) {
-            el.style = "width:60px;height:60px;";
-          } else if (value[orientation] > 120) {
-            el.style = "width:50px;height:50px;";
-          } else if (value[orientation] > 60) {
-            el.style = "width:40px;height:40px;";
-          } else if (value[orientation] > 30) {
-            el.style = "width:30px;height:30px;";
-          } else if (value[orientation] > 15) {
-            el.style = "width:20px;height:20px;";
-          }
-          el.style.zIndex = value[orientation];
-
-          let longitude = value.longitude;
-          let latitude = value.latitude;
-
-          if (value.province.toUpperCase() != "KINSHASA") {
-            longitude = (Number(longitude) + 500 / 100000).toFixed(5);
-            latitude = (Number(latitude) - 300 / 100000).toFixed(5);
-          }
-          // popup
-          let popup = new Mapbox.Popup({ offset: 25 }).setText(value.township);
-          // add marker to map
-          let offSet = { offset: [-70, 30] };
-          let currentMarker = new Mapbox.Marker(el)
-            .setLngLat([longitude, latitude])
-            .setPopup(popup)
-            .addTo(this.map);
-          currentMarker.defaultOffset = offSet.offset;
-          this.medicalOrientationMakers.push(currentMarker);
-        }
-      });
+      this.medicalOrientationChanged()
     },
     sondages() {
       if (!this.sondages) {
@@ -501,8 +397,53 @@ export default {
     },
     isLoading() {
       if (this.centerCoordinates.length > 0) {
+        map.resize();
         map.flyTo({ center: this.centerCoordinates });
       }
+    },
+    fluxGeoGranularityMenu() {
+      // if (this.fluxGeoGranularity == 1) {
+      map.resize();
+      map.flyTo({
+        center: this.defaultCenterCoordinates,
+        easing: function (t) {
+          return t;
+        },
+        zoom: 3.5,
+      });
+      // }
+    },
+    fluxGeoOptionsTmp() {
+      const lenGeoOptions = this.fluxGeoOptionsTmp.length;
+      if (this.fluxGeoGranularityMenu == 2 && lenGeoOptions > 0) {
+        const zone = this.fluxGeoOptionsTmp[lenGeoOptions - 1];
+        const area = this.getHealthZoneArea(zone, 2);
+        map.resize();
+        map.flyTo({
+          center: this.getHealthZoneCoordonate(
+            zone,
+            this.fluxGeoGranularityMenu
+          ),
+          easing: function (t) {
+            return t;
+          },
+          zoom: this.zoomByArea(area),
+        });
+      }
+    },
+    typePresence() {
+      this.flux24Func();
+    },
+    // hasRightSide() {
+    //   this.drawDesign();
+    // },
+    "isFluxGlobalProvinceloading.in"() {
+      map.resize();
+      map.flyTo({ center: this.defaultCenterCoordinates });
+    },
+    "isFluxGlobalProvinceloading.out"() {
+      map.resize();
+      map.flyTo({ center: this.defaultCenterCoordinates });
     },
   },
   methods: {
@@ -619,7 +560,6 @@ export default {
           }
         )
         .then(({ data }) => {
-          // console.log("data", data);
           this.isZoneSourceLoaded = false;
           this.healthZoneGeojson = data;
           const features = data.features.map((item) => {
@@ -642,8 +582,9 @@ export default {
             type: "FeatureCollection",
             features: features,
           };
-          // console.log(this.healthZoneGeojsonCentered);
           this.addZoneSource();
+          this.addPolygoneLayer(2);
+          this.addPolygoneHoverLayer(2);
         });
 
       axios
@@ -656,7 +597,6 @@ export default {
           }
         )
         .then(({ data }) => {
-          // console.log("data", data);
           this.isProvinceSourceLoaded = false;
           this.healthProvinceGeojson = data;
           const features = data.features.map((item) => {
@@ -683,26 +623,50 @@ export default {
         });
     },
     addProvinceSource() {
-      if (!this.isMapLoaded) {
-        return;
-      }
-      map.U.addGeoJSON(
-        sourceHealthProvinceGeojsonCentered,
-        this.healthProvinceGeojsonCentered
-      );
-      map.U.addGeoJSON(sourceHealthProvinceGeojson, this.healthProvinceGeojson);
-      this.isProvinceSourceLoaded = true;
+      // if (!this.isMapLoaded) {
+      //   return;
+      // }
+      // map.U.addGeoJSON(
+      //   sourceHealthProvinceGeojsonCentered,
+      //   this.healthProvinceGeojsonCentered
+      // );
+      // map.U.addGeoJSON(this.drcSourceId, this.healthProvinceGeojson);
+
+      map.addSource(sourceHealthProvinceGeojsonCentered, {
+        type: "geojson",
+        generateId: true,
+        data: this.healthProvinceGeojsonCentered,
+      });
+
+      // map.U.addGeoJSON(this.drcHealthZone, this.healthZoneGeojson);
+
+      map.addSource(this.drcSourceId, {
+        type: "geojson",
+        generateId: true,
+        data: this.healthProvinceGeojson,
+      });
     },
     addZoneSource() {
-      if (!this.isMapLoaded) {
-        return;
-      }
-      map.U.addGeoJSON(
-        sourceHealthZoneGeojsonCentered,
-        this.healthZoneGeojsonCentered
-      );
-      map.U.addGeoJSON(sourceHealthZoneGeojson, this.healthZoneGeojson);
-      this.isZoneSourceLoaded = true;
+      // if (!this.isMapLoaded) {
+      //   return;
+      // }
+      // map.U.addGeoJSON(
+      //   sourceHealthZoneGeojsonCentered,
+      //   this.healthZoneGeojsonCentered
+      // );
+      map.addSource(sourceHealthZoneGeojsonCentered, {
+        type: "geojson",
+        generateId: true,
+        data: this.healthZoneGeojsonCentered,
+      });
+
+      // map.U.addGeoJSON(this.drcHealthZone, this.healthZoneGeojson);
+
+      map.addSource(this.drcHealthZone, {
+        type: "geojson",
+        generateId: true,
+        data: this.healthZoneGeojson,
+      });
     },
     covidHatchedStyle(
       covidCasesData,
@@ -710,6 +674,14 @@ export default {
       property = "confirmed",
       geoGranularity = 2
     ) {
+      map.resize();
+      map.flyTo({
+        center: this.defaultCenterCoordinates,
+        easing: function (t) {
+          return t;
+        },
+        zoom: 3.5,
+      });
       let features = covidCasesData.data.features;
 
       features = features.sort((a, b) => {
@@ -930,23 +902,115 @@ export default {
 
       map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
     },
+    zoomByArea(area) {
+      let zoom = 8;
+      if (area > 10805419917.999899) {
+        zoom = 6;
+      }
+      if (area <= 129466262.08234933) {
+        zoom = 8;
+      } else if (area <= 10805419917.999899) {
+        zoom = 7;
+      }
+      console.log("area", area);
+      console.log("zoom", zoom);
+      return zoom;
+    },
     flux24Func() {
       if (this.flux24DailyIn.length > 0) {
+        this.addPolygoneLayer(this.fluxGeoGranularity);
+        this.addPolygoneHoverLayer(this.fluxGeoGranularity);
+
         let data = [];
         let DataGroupByDate = [];
-        if (this.fluxType == 1) {
-          data = this.flux24DailyIn;
-          DataGroupByDate = this.fluxDataGroupedByDateIn;
-        } else if (this.fluxType == 2) {
-          data = this.flux24DailyOut;
-          DataGroupByDate = this.fluxDataGroupedByDateOut;
-        } else if (this.fluxType == 4) {
-          data = this.flux24DailyGenerale;
+        let mapFlyOptions = {};
+        let area = null;
+        // if (this.fluxType == 1) {
+        //   data = this.flux24DailyIn;
+        //   DataGroupByDate = this.fluxDataGroupedByDateIn;
+        // } else if (this.fluxType == 2) {
+        //   data = this.flux24DailyOut;
+        //   DataGroupByDate = this.fluxDataGroupedByDateOut;
+        // } else if (this.fluxType == 4) {
+        //   data = this.flux24DailyGenerale;
+        // }
+        let zone = null;
+        if (this.fluxGeoOptionsTmp && this.fluxGeoOptionsTmp.length > 0) {
+          zone = this.fluxGeoOptionsTmp[0];
+        }
+        switch (this.fluxType) {
+          case 1:
+            if (this.fluxGeoGranularity == 1) {
+              mapFlyOptions = {
+                center: this.defaultCenterCoordinates,
+                zoom: 3.5,
+              };
+            } else {
+              mapFlyOptions = {
+                center: this.getHealthZoneCoordonate(zone, 2),
+                zoom: 8,
+              };
+              area = this.getHealthZoneArea(zone, 2);
+              mapFlyOptions.zoom = this.zoomByArea(area);
+            }
+            data = this.flux24DailyIn;
+            DataGroupByDate = this.fluxDataGroupedByDateIn;
+            break;
+          case 2:
+            if (this.fluxGeoGranularity == 1) {
+              mapFlyOptions = {
+                center: this.defaultCenterCoordinates,
+                zoom: 3.5,
+              };
+            } else {
+              mapFlyOptions = {
+                center: this.getHealthZoneCoordonate(zone, 2),
+                zoom: 8,
+              };
+              area = this.getHealthZoneArea(zone, 2);
+              mapFlyOptions.zoom = this.zoomByArea(area);
+            }
+            data = this.flux24DailyOut;
+            DataGroupByDate = this.fluxDataGroupedByDateOut;
+            break;
+          case 3:
+            mapFlyOptions = {
+              center: this.getHealthZoneCoordonate(
+                zone,
+                this.fluxGeoGranularity
+              ),
+              zoom: 8,
+            };
+            area = this.getHealthZoneArea(zone, this.fluxGeoGranularity);
+            mapFlyOptions.zoom = this.zoomByArea(area);
+            if (this.fluxGeoGranularity == 1) {
+              data = this.fluxZoneGlobalOut;
+            } else {
+              data = [
+                {
+                  presence_observation: this.flux24Presence.observationsByDate,
+                  presence_reference: this.flux24Presence.referencesByDate,
+                },
+              ];
+            }
+
+            break;
+          case 4:
+            mapFlyOptions = {
+              center: this.getHealthZoneCoordonate(zone, 1),
+              zoom: 8,
+            };
+            area = this.getHealthZoneArea(zone, 1);
+            mapFlyOptions.zoom = this.zoomByArea(area);
+            data = this.fluxZoneGlobalIn;
+            break;
+          default:
+            break;
         }
         switch (this.fluxMapStyle) {
           case 2:
             this.fluxArcStyle(data, this.fluxGeoGranularity, this.legendHover);
-            map.flyTo({
+            const options = {
               pitch: 40,
               speed: 0.2, // make the flying slow
               curve: 1, // change the speed at which it zooms out
@@ -959,7 +1023,14 @@ export default {
 
               // this animation is considered essential with respect to prefers-reduced-motion
               essential: true,
-            });
+            };
+            if (mapFlyOptions.center) {
+              options.center = mapFlyOptions.center;
+            }
+            if (mapFlyOptions.zoom) {
+              options.zoom = mapFlyOptions.zoom;
+            }
+            map.flyTo(options);
             break;
           case 1:
           default:
@@ -969,9 +1040,9 @@ export default {
               this.flux24Presence,
               this.legendHover
             );
-            map.flyTo({
+            const optionsHatched = {
               pitch: 10,
-              speed: 0.2, // make the flying slow
+              // speed: 0.2, // make the flying slow
               curve: 1, // change the speed at which it zooms out
 
               // This can be any easing function: it takes a number between
@@ -982,15 +1053,26 @@ export default {
 
               // this animation is considered essential with respect to prefers-reduced-motion
               essential: true,
-            });
+            };
+            if (mapFlyOptions.center) {
+              optionsHatched.center = mapFlyOptions.center;
+            }
+            if (mapFlyOptions.zoom) {
+              optionsHatched.zoom = mapFlyOptions.zoom;
+            }
+            map.resize();
+            map.flyTo(optionsHatched);
             break;
         }
       } else {
-        map.U.removeSource(["fluxCircleDataSource"]);
-        map.U.removeLayer([this.hashedLayerId, "arc", "fluxCircleDataLayer"]);
-        map.off("mouseleave", "fluxCircleDataLayer");
-        map.off("mouseleave", "fluxCircleDataLayer");
+        this.flux24RemoveLayer();
       }
+    },
+    flux24RemoveLayer() {
+      map.U.removeSource(["fluxCircleDataSource"]);
+      map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
+      map.off("mouseleave", "fluxCircleDataLayer");
+      map.off("mouseleave", "fluxCircleDataLayer");
     },
     fluxHatchedStyle(
       flux24Data,
@@ -998,56 +1080,32 @@ export default {
       flux24DataPresence,
       legendHover = null
     ) {
-      const localData = this.fluxType == 3 ? flux24DataPresence : flux24Data;
-
+      const localData = flux24Data;
       let features = [];
-
       /**
        * format features data
        */
-      const formatData = ({ references, observations }, key) => {
-        if (!observations || !references) {
+      const formatData = (item, key) => {
+        const references = item.zone ? item.general_reference : item.references;
+        const observations = item.zone
+          ? item.general_observation
+          : item.observations;
+
+        if (
+          !observations ||
+          !references ||
+          observations.length == 0 ||
+          references.length == 0
+        ) {
           return {
             percent: null,
             difference: null,
           };
         }
-        let referenceVolume = null;
-        let observationVolume = null;
-        references.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        const result = this.formatFluxDataByMedian({
+          references,
+          observations,
         });
-        observations.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
-        });
-        const countReference = references.length;
-        if (countReference > 0) {
-          if (countReference % 2 == 0) {
-            let index = (countReference + 1) / 2;
-            index = parseInt(index);
-            const volume1 = references[index].volume;
-            const volume2 = references[index - 1].volume;
-            referenceVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countReference + 1) / 2;
-            referenceVolume = references[index - 1].volume;
-          }
-        }
-
-        const countObservation = observations.length;
-        if (countObservation > 0) {
-          if (countObservation % 2 == 0) {
-            let index = (countObservation + 1) / 2;
-            index = parseInt(index);
-            const volume1 = observations[index].volume;
-            const volume2 = observations[index - 1].volume;
-            observationVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countObservation + 1) / 2;
-            observationVolume = observations[index - 1].volume;
-          }
-        }
-        const difference = observationVolume - referenceVolume;
 
         features.push({
           type: "Feature",
@@ -1059,12 +1117,12 @@ export default {
                 : observations[0].position_end,
           },
           properties: {
-            origin: observations[0][key],
+            origin: this.fixedZone(item.zone ?? observations[0][key]),
             color: "#ED5F68",
-            volume: observationVolume,
-            volumeReference: referenceVolume,
-            percent: Math.round((difference / referenceVolume) * 100),
-            difference: difference,
+            volume: result.referenceVolume,
+            volumeReference: result.referenceVolume,
+            percent: result.percent,
+            difference: result.difference,
           },
         });
       };
@@ -1120,7 +1178,7 @@ export default {
             coordinates: observationsByDate[0].position_start,
           },
           properties: {
-            origin: observationsByDate[0].zone,
+            origin: this.fixedZone(observationsByDate[0].zone),
             color: "#ED5F68",
             volume: observationVolume,
             volumeReference: referenceVolume,
@@ -1139,71 +1197,42 @@ export default {
         //   formatData(item, "origin");
         // });
       } else if (this.fluxType == 3) {
-        // localData.map((item) => {
-        //   formatData(item, "origin");
-        // });
-
-        const { referencesByDate, observationsByDate } = localData;
-        let referenceVolume = null;
-        let observationVolume = null;
-        referencesByDate.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
-        });
-        observationsByDate.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
-        });
-        const countReference = referencesByDate.length;
-        if (countReference > 0) {
-          if (countReference % 2 == 0) {
-            let index = (countReference + 1) / 2;
-            index = parseInt(index);
-            const volume1 = referencesByDate[index].volume;
-            const volume2 = referencesByDate[index - 1].volume;
-            referenceVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countReference + 1) / 2;
-            referenceVolume = referencesByDate[index - 1].volume;
+        localData.map((item) => {
+          let observations = item.presence_observation;
+          let references = item.presence_reference;
+          switch (this.typePresence) {
+            case 2:
+              observations = item.presence_observation.filter(
+                (x) => x.PresenceType == "Jour"
+              );
+              references = item.presence_reference.filter(
+                (x) => x.PresenceType == "Jour"
+              );
+              break;
+            case 3:
+              observations = item.presence_observation.filter(
+                (x) => x.PresenceType == "Nuit"
+              );
+              references = item.presence_reference.filter(
+                (x) => x.PresenceType == "Nuit"
+              );
+              break;
           }
-        }
-
-        const countObservation = observationsByDate.length;
-        if (countObservation > 0) {
-          if (countObservation % 2 == 0) {
-            let index = (countObservation + 1) / 2;
-            index = parseInt(index);
-            const volume1 = observationsByDate[index].volume;
-            const volume2 = observationsByDate[index - 1].volume;
-            observationVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countObservation + 1) / 2;
-            observationVolume = observationsByDate[index - 1].volume;
-          }
-        }
-        const difference = observationVolume - referenceVolume;
-        const percent = Math.round((difference / referenceVolume) * 100);
-
-        features.push({
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [],
-          },
-          properties: {
-            origin: observationsByDate[0].zone,
-            color: "#ED5F68",
-            volume: observationVolume,
-            volumeReference: referenceVolume,
-            percent: percent,
-            difference: difference,
-          },
+          formatData(
+            {
+              observations,
+              references,
+            },
+            "zone"
+          );
         });
       } else if (this.fluxTYpe == 4) {
         localData.map((item) => {
           formatData(item, "zone");
         });
-        localData.map((item) => {
-          formatData(item, "targetZone");
-        });
+        // localData.map((item) => {
+        //   formatData(item, "targetZone");
+        // });
       } else {
         localData.map((item) => {
           formatData(item, "origin");
@@ -1227,17 +1256,6 @@ export default {
       colorScalePositive.domain([0, domaineMax]);
       colorScaleNegative.domain([domaineMin, 0]);
 
-      // if (domaineMax >= 0 && domaineMin <= 0) {
-      //   colorScalePositive.domain([0, domaineMax]);
-      //   colorScaleNegative.domain([domaineMin, 0]);
-      // } else if (domaineMax <= 0) {
-      //   colorScaleNegative.domain([domaineMin, 0]);
-      // } else if (domaineMin >= 0) {
-      //   colorScalePositive.domain([[0, domaineMax]]);
-      // } else if (domaineMax <= 0) {
-      //   colorScaleNegative.domain([[domaineMin, 0]]);
-      // }
-
       const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
 
       this.setDomaineExtValues({
@@ -1246,22 +1264,35 @@ export default {
         isPercent: true,
       });
 
-      if (this.fluxType == 1 || this.fluxType == 4) {
-        colorScaleNegative.range(PALETTE.inflow_negatif);
-        colorScalePositive.range(PALETTE.inflow_positif);
+      switch (this.fluxType) {
+        case 1:
+          colorScaleNegative.range(PALETTE.inflow_negatif);
+          colorScalePositive.range(PALETTE.inflow_positif);
 
-        colorScale.range(PALETTE.inflow);
-      } else if (this.fluxType == 3) {
-        colorScale.range(PALETTE.present);
-      } else {
-        colorScale.range(PALETTE.outflow);
-
-        colorScaleNegative.range(PALETTE.outflow_negatif);
-        colorScalePositive.range(PALETTE.outflow_positif);
+          colorScale.range(PALETTE.inflow);
+          break;
+        case 3:
+          colorScaleNegative.range(PALETTE.presence_negatif);
+          colorScalePositive.range(PALETTE.presence_positif);
+          break;
+        case 4:
+          colorScaleNegative.range(PALETTE.general_negatif);
+          colorScalePositive.range(PALETTE.general_positif);
+          break;
+        case 2:
+          colorScale.range(PALETTE.outflow);
+          colorScaleNegative.range(PALETTE.outflow_negatif);
+          colorScalePositive.range(PALETTE.outflow_positif);
+        default:
+          break;
       }
 
       let dataKey = "name";
-      if (this.fluxGeoGranularity == 2) {
+      if (
+        this.fluxGeoGranularity == 2 ||
+        this.fluxType == 4 ||
+        this.fluxType == 3
+      ) {
         dataKey = "Zone+Peupl";
       }
 
@@ -1270,8 +1301,11 @@ export default {
       features.forEach((x) => {
         let color = PALETTE.dash_green;
         if (
-          this.fluxGeoOptions.includes(x.properties.origin) ||
-          this.fluxType == 3
+          this.fluxGeoOptions.some(
+            (y) => this.fixedZone(y) == x.properties.origin
+          ) &&
+          this.fluxType != 4 &&
+          this.fluxType != 3
         ) {
           color = PALETTE.dash_green;
         } else {
@@ -1297,10 +1331,17 @@ export default {
           return;
         }
       }
-
+      let hatchedSource = this.drcSourceId;
+      if (
+        this.fluxGeoGranularity == 2 ||
+        this.fluxType == 4 ||
+        this.fluxType == 3
+      ) {
+        hatchedSource = this.drcHealthZone;
+      }
       map.U.addFill(
         HATCHED_MOBILITY_LAYER,
-        this.fluxGeoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
+        hatchedSource,
         map.U.properties({
           fillColor: colorExpression,
           fillOpacity: [
@@ -1360,6 +1401,41 @@ export default {
 
       map.on("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
     },
+    drawDesign() {
+      const mapFlyOptions = {
+        center: this.defaultCenterCoordinates,
+        zoom: 3.5,
+      };
+      this.flux24RemoveLayer();
+      map.U.removeLayer([EPIDEMIC_LAYER]);
+      map.U.removeSource(COVID_HOSPITAL_SOURCE);
+      this.RemoveOrientationMakers();
+      map.resize();
+      switch (this.activeMenu) {
+        case 1:
+          this.flux24Func();
+          return;
+        case 2:
+          if (this.covidCases) {
+            this.addPolygoneLayer(2);
+            this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
+            return;
+          }
+          break;
+        case 5:
+          this.addPolygoneLayer(2);
+          // this.addPolygoneHoverLayer(2);
+          this.infrastructure();
+          return;
+          break;
+        case 6:
+          this.medicalOrientationChanged();
+          return;
+        default:
+          break;
+      }
+      map.flyTo(mapFlyOptions);
+    },
     getHealthZoneCoordonate(value, geoGranularity) {
       let coordinates = [];
       let dataKey = "name";
@@ -1367,22 +1443,7 @@ export default {
         dataKey = "Zone+Peupl";
       }
       if (geoGranularity == 1) {
-        let newValue = value;
-
-        switch (value) {
-          case "Kasai":
-            newValue = "Kasaï";
-            break;
-          case "Kasai-Oriental":
-            newValue = "Kasaï-Oriental";
-            break;
-          case "Kasai-Central":
-            newValue = "Kasaï-Central";
-            break;
-          case "Equateur":
-            newValue = "Équateur";
-            break;
-        }
+        let newValue = this.fixedZone(value);
         const feature = this.healthProvinceGeojsonCentered.features.find(
           (x) => x.properties[dataKey] == newValue
         );
@@ -1400,13 +1461,57 @@ export default {
       }
       return coordinates;
     },
+    getHealthZoneArea(value, geoGranularity) {
+      let area = null;
+      let dataKey = "name";
+      if (geoGranularity == 2) {
+        dataKey = "Zone+Peupl";
+      }
+      if (geoGranularity == 1) {
+        let newValue = this.fixedZone(value);
+        const feature = this.healthProvinceGeojsonCentered.features.find(
+          (x) => x.properties[dataKey] == newValue
+        );
+        if (feature) {
+          area = feature.properties.area;
+        }
+      } else {
+        const feature = this.healthZoneGeojsonCentered.features.find(
+          (x) => x.properties[dataKey] == value
+        );
+
+        if (feature) {
+          area = feature.properties.area;
+        }
+        console.log("feature", feature);
+      }
+      return area;
+    },
+    fixedZone(value) {
+      let newValue = value;
+      switch (value) {
+        case "Kasai":
+          newValue = "Kasaï";
+          break;
+        case "Kasai-Oriental":
+          newValue = "Kasaï-Oriental";
+          break;
+        case "Kasai-Central":
+          newValue = "Kasaï-Central";
+          break;
+        case "Equateur":
+          newValue = "Équateur";
+          break;
+      }
+      return newValue;
+    },
     fluxArcStyle(flux24Data, geoGranularity, legendHover = null) {
       map.U.removeSource(["fluxCircleDataSource"]);
       map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
       map.off("mouseleave", "fluxCircleDataLayer");
       map.off("mouseleave", "fluxCircleDataLayer");
 
-      if (this.fluxType == 3) {
+      if (this.fluxType == 3 || this.fluxType == 4) {
         return;
       }
 
@@ -1545,7 +1650,6 @@ export default {
 
       this.setDomaineExtValues({ min: minArc, max: maxArc, isPercent: true });
 
-      console.log({ min: minArc, max: maxArc });
       if (legendHover) {
         if (features.length > 0) {
           features = features.filter(
@@ -1739,7 +1843,112 @@ export default {
       });
       map.addLayer(myDeckLayer);
     },
-    infrastructure() {},
+    infrastructure() {
+      if (this.hospitals) {
+        map.U.removeSource(COVID_HOSPITAL_SOURCE);
+        map.resize();
+        map.flyTo({
+          center: this.getHealthZoneCoordonate("Kinshasa", 2),
+          easing: function (t) {
+            return t;
+          },
+          zoom: 9,
+        });
+        this.map.addSource(COVID_HOSPITAL_SOURCE, this.hospitals);
+
+        this.map.addLayer({
+          id: "covid9HospitalsLayer",
+          type: "symbol",
+          source: COVID_HOSPITAL_SOURCE,
+          // minzoom: 10,
+          layout: {
+            "text-line-height": 1,
+            "text-padding": 0,
+            "text-anchor": "center",
+            "text-allow-overlap": true,
+            "text-ignore-placement": true,
+            "text-field": String.fromCharCode("0xf47e"),
+            "icon-optional": true,
+            "text-font": ["Font Awesome 5 Free Solid"],
+            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25],
+          },
+          paint: {
+            "text-translate-anchor": "viewport",
+            "text-color": ["get", "color"],
+          },
+        });
+
+        const popup = new Mapbox.Popup({
+          closeButton: false,
+          closeOnClick: false,
+        });
+
+        const mouseMove = (e) => {
+          const coordinates = e.features[0].geometry.coordinates.slice();
+          const {
+            name,
+            address,
+            beds,
+            occupied_beds,
+            masks,
+            respirators,
+            occupied_respirators,
+            confirmed,
+            dead,
+            sick,
+            healed,
+            last_update,
+            resuscitation_beds,
+            occupied_resuscitation_beds,
+          } = e.features[0].properties;
+
+          const HTML = `<div class="row">
+                <div class="col-12 bold text-center hospital-name">${name}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Confirmés</div>
+                <div class="col-3 bold">${confirmed}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Hospitalisés</div>
+                <div class="col-3 bold">${sick}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Lits de réanimation</div>
+                <div class="col-3 bold">${resuscitation_beds}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Lits de réanimation occupés</div>
+                <div class="col-3 bold">${occupied_resuscitation_beds}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Respirateurs</div>
+                <div class="col-3 bold">${respirators}</div>
+                <hr class="col-12 m-0 p-0">
+
+                <div class="col-9 small">Respirateurs occupés</div>
+                <div class="col-3 bold">${occupied_respirators}</div>
+            </div>`;
+          popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+        };
+
+        const mouseOut = (e) => {
+          this.map.getCanvas().style.cursor = "";
+          popup.remove();
+        };
+
+        const mouseClick = (e) => {
+          this.selectHospital(e.features[0].properties);
+        };
+
+        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
+          this.map.getCanvas().style.cursor = "pointer";
+        });
+        this.map.on("mouseleave", "covid9HospitalsLayer", mouseOut);
+        this.map.on("mousemove", "covid9HospitalsLayer", mouseMove);
+        this.map.on("click", "covid9HospitalsLayer", mouseClick);
+      }
+    },
     mapGeoJsonSourceFlux(fluxGeoGranularity) {
       map.removeLayer(this.drcSourceId);
       if (fluxGeoGranularity == 1) {
@@ -1989,6 +2198,61 @@ export default {
     removeMarkersSondage(sondage) {
       this.AllSondagesMarkers.filter((x) => x[sondage]).map((item) => {
         item.remove();
+      });
+    },
+    medicalOrientationChanged() {
+      if (!this.medicalOrientations || this.medicalOrientations.length == 0) {
+        return;
+      }
+      if (this.medicalOrientationSelected == "ALL") {
+        this.getMedicalOrientations();
+        return;
+      }
+      this.RemoveOrientationMakers();
+      let orientation = this.medicalOrientationSelected;
+      this.medicalOrientations.map((value) => {
+        if (value[orientation] >= 0) {
+          let el = document.createElement("div");
+          el.className = `default-makers ${orientation}`;
+          if (value[orientation] > 3840) {
+            el.style = "width:100px;height:100px;";
+          } else if (value[orientation] > 1920) {
+            el.style = "width:90px;height:90px;";
+          } else if (value[orientation] > 960) {
+            el.style = "width:80px;height:80px;";
+          } else if (value[orientation] > 480) {
+            el.style = "width:70px;height:70px;";
+          } else if (value[orientation] > 240) {
+            el.style = "width:60px;height:60px;";
+          } else if (value[orientation] > 120) {
+            el.style = "width:50px;height:50px;";
+          } else if (value[orientation] > 60) {
+            el.style = "width:40px;height:40px;";
+          } else if (value[orientation] > 30) {
+            el.style = "width:30px;height:30px;";
+          } else if (value[orientation] > 15) {
+            el.style = "width:20px;height:20px;";
+          }
+          el.style.zIndex = value[orientation];
+
+          let longitude = value.longitude;
+          let latitude = value.latitude;
+
+          if (value.province.toUpperCase() != "KINSHASA") {
+            longitude = (Number(longitude) + 500 / 100000).toFixed(5);
+            latitude = (Number(latitude) - 300 / 100000).toFixed(5);
+          }
+          // popup
+          let popup = new Mapbox.Popup({ offset: 25 }).setText(value.township);
+          // add marker to map
+          let offSet = { offset: [-70, 30] };
+          let currentMarker = new Mapbox.Marker(el)
+            .setLngLat([longitude, latitude])
+            .setPopup(popup)
+            .addTo(this.map);
+          currentMarker.defaultOffset = offSet.offset;
+          this.medicalOrientationMakers.push(currentMarker);
+        }
       });
     },
   },

@@ -45,7 +45,7 @@
 </IfModule>
 
 # 1 week
-<FilesMatch ".(flv|gif|jpg|jpeg|png|ico|swf|pdf)$">
+<FilesMatch ".(flv|gif|jpg|jpeg|png|ico|swf|pdf|json)$">
     Header set Cache-Control "max-age=604800"
     #Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
 </FilesMatch>

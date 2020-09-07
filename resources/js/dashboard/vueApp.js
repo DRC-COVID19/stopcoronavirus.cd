@@ -11,7 +11,11 @@ import App from "./App.vue";
 import GlobalComponents from './globalComponents'
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env';
 import "chartjs-plugin-crosshair";
-import fullscreen from 'vue-fullscreen'
+import fullscreen from 'vue-fullscreen';
+import VueEllipseProgress from "vue-ellipse-progress";
+import VueSkeletonLoading from 'vue-skeleton-loading';
+ 
+
 
 require('./helper');
 
@@ -23,10 +27,14 @@ Vue.mixin(commont);
 Vue.use(GlobalComponents);
 Vue.use(onlyInt);
 Vue.use(fullscreen);
+Vue.use(VueEllipseProgress);
+Vue.use(VueSkeletonLoading);
 
 if (store.state.auth.isAuthenticated) {
     store.dispatch('userMe');
 }
+
+store.dispatch('loadSource');
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(route => route.meta.requiresAuth) && (!store.state.auth.isAuthenticated || !store.state.auth.userRole)) {

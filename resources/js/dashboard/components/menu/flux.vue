@@ -45,7 +45,7 @@
                   placeholder="Localisation"
                   label="origin"
                   :reduce="item=>item.origin"
-                  @input="resetFluxPredefinedControl"
+                  @input="fluxGeoOptionsChange"
                   class="style-chooser style-chooser-multiple"
                 />
               </b-form-group>
@@ -95,7 +95,10 @@
                     >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
                   </date-range-picker>
 
-                  <b-button @click="clearObservationDate" class="btn-clear-observation btn-dash-blue">
+                  <b-button
+                    @click="clearObservationDate"
+                    class="btn-clear-observation btn-dash-blue"
+                  >
                     <span class="fa fa-times"></span>
                   </b-button>
                 </div>
@@ -113,7 +116,12 @@
 
 <script>
 import DateRangePicker from "vue2-daterange-picker";
-import { PREFERENCE_START, PREFERENCE_END, DATEFORMAT,FLUX_LAST_UPDATE } from "../../config/env";
+import {
+  PREFERENCE_START,
+  PREFERENCE_END,
+  DATEFORMAT,
+  FLUX_LAST_UPDATE,
+} from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
@@ -138,15 +146,15 @@ export default {
   data() {
     return {
       dateRangePreference: {
-        startDate: new Date("02/18/2020"),
-        endDate: new Date("03/18/2020"),
+        startDate: new Date(PREFERENCE_START),
+        endDate: new Date(PREFERENCE_END),
       },
-      Observation_max_date:new Date(FLUX_LAST_UPDATE),
+      Observation_max_date: new Date(FLUX_LAST_UPDATE),
       fluxForm: {
-        preference_start: "2020-02-01",
-        preference_end: "2020-03-18",
-        observation_start:"2020-03-19",
-        observation_end:"2020-06-29",
+        preference_start: PREFERENCE_START,
+        preference_end: PREFERENCE_END,
+        observation_start: "2020-03-19",
+        observation_end: "2020-06-29",
         fluxGeoGranularity: 2,
         fluxTimeGranularity: 1,
       },
@@ -181,9 +189,9 @@ export default {
           name: "Mobilité à la Gombe depuis le début du confinement",
         },
         {
-            id: 7,
-            name: "Mobilité générale à la Gombe depuis le début du confinement"
-        }
+          id: 7,
+          name: "Mobilité générale à la Gombe depuis le début du confinement",
+        },
       ],
       fluxFilterInput: "",
       fluxFilterInputProvince: "",
@@ -217,7 +225,7 @@ export default {
       allZoneCheckedIndeterminate: false,
       allProvincesCheckedIndeterminate: false,
       IsfluxParameterCollapse: false,
-      fluxPredefinedControl : null
+      fluxPredefinedControl: null,
     };
   },
   filters: {
@@ -242,10 +250,14 @@ export default {
     this.$store.watch(
       (state) => state.flux.tendanceChartSelectedValue,
       (value) => {
-        const date =new Date(value.x);
-        this.fluxForm.preference_end=this.moment(date.setDate(date.getDate() - 1)).format(DATEFORMAT);
-        this.fluxForm.observation_start=this.moment(value.x).format(DATEFORMAT);
-        this.$set(this.dateRangeObservation,'startDate',value.x)
+        const date = new Date(value.x);
+        this.fluxForm.preference_end = this.moment(
+          date.setDate(date.getDate() - 1)
+        ).format(DATEFORMAT);
+        this.fluxForm.observation_start = this.moment(value.x).format(
+          DATEFORMAT
+        );
+        this.$set(this.dateRangeObservation, "startDate", value.x);
         this.submitFluxForm();
       }
     );
@@ -261,6 +273,8 @@ export default {
       "setFluxGeoGranularity",
       "setFluxGeoOptions",
       "setFluxEnabled",
+      "setFluxGeoOptionsTmp",
+      "setFluxGeoGranularityTemp",
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -284,11 +298,12 @@ export default {
     UpdateObservationDate({ startDate, endDate }) {
       this.fluxForm.observation_start = moment(startDate).format("YYYY/MM/DD");
       this.fluxForm.observation_end = moment(endDate).format("YYYY/MM/DD");
-      this.resetFluxPredefinedControl() ;
+      this.resetFluxPredefinedControl();
     },
     submitFluxForm() {
       this.$emit("submitFluxForm", this.fluxForm);
       this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
+      this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
@@ -303,10 +318,10 @@ export default {
       this.dateRangeObservation = { startDate: null, endDate: null };
       this.fluxForm.observation_start = null;
       this.fluxForm.observation_end = null;
-      this.resetFluxPredefinedControl()
+      this.resetFluxPredefinedControl();
     },
     fluxGeoGranularityChange(value) {
-      this.resetFluxPredefinedControl()
+      this.resetFluxPredefinedControl();
       this.setFluxGeoGranularity(value);
       this.fluxForm.fluxGeoOptions = [];
       if (value == 1) {
@@ -314,6 +329,10 @@ export default {
       } else {
         this.fluxGeoOptions = this.fluxZones;
       }
+    },
+    fluxGeoOptionsChange(value) {
+      this.resetFluxPredefinedControl();
+      this.setFluxGeoOptionsTmp(value);
     },
     fluxPredefinedInputChanged(value) {
       if (!value) {
@@ -325,7 +344,7 @@ export default {
       let observation_end = null;
       let fluxGeoOptions = ["Gombe"];
 
-      if(value != 7) this.$emit("toggleShowMobiliteGenerale", false);
+      if (value != 7) this.$emit("toggleShowMobiliteGenerale", false);
 
       switch (value) {
         case 1:
@@ -365,7 +384,7 @@ export default {
         case 7:
           observation_start = "2020-03-19";
           observation_end = this.moment().format(DATEFORMAT);
-          this.$emit("toggleShowMobiliteGenerale", true); 
+          this.$emit("toggleShowMobiliteGenerale", true);
           break;
       }
 
@@ -379,40 +398,43 @@ export default {
         fluxGeoGranularity: 2,
       };
 
-      (this.dateRangeObservation = {
+      this.dateRangeObservation = {
         startDate: new Date(observation_start),
         endDate: new Date(observation_end),
-      }),
-        this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
+      };
+      this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularity(this.fluxForm.fluxGeoGranularity);
+      this.setFluxGeoOptionsTmp(this.fluxForm.fluxGeoOptions);
+
+      this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);
       this.$emit("submitFluxForm", this.fluxForm);
     },
     mobilityDetailToggle() {
       this.$root.$emit("bv::toggle::collapse", "mobilityDetail");
       this.IsfluxParameterCollapse = !this.IsfluxParameterCollapse;
     },
-    resetFluxPredefinedControl(){
-      this.fluxPredefinedControl = null
-    }
+    resetFluxPredefinedControl() {
+      this.fluxPredefinedControl = null;
+    },
   },
 };
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-  .flux-form {
-    margin: 0;
-    .nav-zone {
-      border-right: 1px solid $dash-blue-8;
-    }
+.flux-form {
+  margin: 0;
+  .nav-zone {
+    border-right: 1px solid $dash-blue-8;
   }
+}
 
-  .btn-clear-observation{
-    height: 32px;
-    margin-left: 5px;
-    display: flex;
-    align-items: center;
-  }
-  .btn-submit{
-    font-size: 14px ;
-  }
+.btn-clear-observation {
+  height: 32px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+}
+.btn-submit {
+  font-size: 14px;
+}
 </style>

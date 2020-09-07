@@ -33,7 +33,7 @@
                 />
               </b-form-group>
             </b-col>
-            <b-col cols="12" md="6"  class="pl-md-1">
+            <b-col cols="12" md="6" class="pl-md-1">
               <b-form-group>
                 <label for class="text-dash-color">Y</label>
                 <v-select
@@ -52,23 +52,22 @@
 
         <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Param. Géographiques</label>
-          
-              <b-form-group
-                :invalid-feedback="formErrors.geoOptions ? formErrors.geoOptions[0] : null"
-                :state="formErrors.geoOptions && formErrors.geoOptions.lenght>0"
-              >
-                <v-select
-                  v-model="form.geoOptions"
-                  multiple
-                  
-                  :options="geoOptions"
-                  placeholder="Localisation"
-                  label="origin"
-                  :reduce="item=>item.origin"
-                  class="style-chooser style-chooser-multiple"
-                  @input="resetFluxPredefinedControl"
-                />
-              </b-form-group>
+
+          <b-form-group
+            :invalid-feedback="formErrors.geoOptions ? formErrors.geoOptions[0] : null"
+            :state="formErrors.geoOptions && formErrors.geoOptions.lenght>0"
+          >
+            <v-select
+              v-model="form.geoOptions"
+              multiple
+              :options="geoOptions"
+              placeholder="Localisation"
+              label="origin"
+              :reduce="item=>item.origin"
+              class="style-chooser style-chooser-multiple"
+              @input="resetFluxPredefinedControl"
+            />
+          </b-form-group>
         </b-col>
 
         <b-col cols="12" md="3" class="nav-zone pl-3 pr-3">
@@ -95,15 +94,17 @@
                     :calculate-position="dateRangerPosition"
                     class="style-picker"
                   >
-                    <template
-                      v-slot:input="picker"
-                    >
-                      <span :title="filtredDate(picker.startDate) + ' - ' + filtredDate(picker.endDate)">
-                      {{ picker.startDate|date }} - {{ picker.endDate|date }}</span>
+                    <template v-slot:input="picker">
+                      <span
+                        :title="filtredDate(picker.startDate) + ' - ' + filtredDate(picker.endDate)"
+                      >{{ picker.startDate|date }} - {{ picker.endDate|date }}</span>
                     </template>
                   </date-range-picker>
 
-                  <b-button @click="clearObservationDate" class="btn-clear-observation btn-dash-blue">
+                  <b-button
+                    @click="clearObservationDate"
+                    class="btn-clear-observation btn-dash-blue"
+                  >
                     <span class="fa fa-times"></span>
                   </b-button>
                 </div>
@@ -130,7 +131,9 @@ import {
   INDICATEUR_X,
   INDICATEUR_PREDEFINED_INPUT,
   FLUX_LAST_UPDATE,
-  DATEFORMAT
+  OBSERVATION_START,
+  OBSERVATION_END,
+  DATEFORMAT,
 } from "../../config/env";
 import { mapActions, mapState } from "vuex";
 export default {
@@ -149,7 +152,7 @@ export default {
     flux24Errors: {
       type: Object,
       default: () => ({}),
-    }
+    },
   },
   data() {
     return {
@@ -160,15 +163,15 @@ export default {
       indicateurX: INDICATEUR_X,
       geoOptions: [],
       form: {
-        observation_end: "2020-03-19",
-        observation_start: "2020-03-28",
+        observation_end: OBSERVATION_END,
+        observation_start: OBSERVATION_START,
       },
-      fluxPredefinedControl : null,
+      fluxPredefinedControl: null,
       dateRangeObservation: {
-        startDate: new Date("02/19/2020"),
-        endDate: new Date("04/26/2020"),
+        startDate: new Date(OBSERVATION_START),
+        endDate: new Date(OBSERVATION_END),
       },
-      Observation_max_date:new Date(FLUX_LAST_UPDATE),
+      Observation_max_date: new Date(FLUX_LAST_UPDATE),
     };
   },
   filters: {
@@ -181,15 +184,15 @@ export default {
       formErrors: (state) => state.indicator.formErrors,
     }),
   },
-  watch:{
-    fluxZones(){
-      this.form.geoGranularity=2;
+  watch: {
+    fluxZones() {
+      this.form.geoGranularity = 2;
       this.geoGranularityChange(2);
-    }
+    },
   },
-  mounted(){
-    this.form.geoGranularity=2;
-      this.geoGranularityChange(2);
+  mounted() {
+    this.form.geoGranularity = 2;
+    this.geoGranularityChange(2);
   },
   methods: {
     ...mapActions(["submitFilters"]),
@@ -197,43 +200,51 @@ export default {
       this.submitFilters(this.form);
     },
     predefinedInputChange(value) {
-      if (!value) return
+      if (!value) return;
 
-      let observation_end = null , observation_start = null,
-      x = null , y = null , geoGranularity = null ;
+      let observation_end = null,
+        observation_start = null,
+        x = null,
+        y = null,
+        geoGranularity = null;
       let geoOptions = ["Gombe"];
 
       switch (value) {
         case 1:
-          observation_end = "2020-03-28" ;
-          observation_start = "2020-03-19" ;
-          x = 1 ;
-          y = 1 ;
-          geoGranularity = 2 ;
+          observation_end = "2020-03-28";
+          observation_start = "2020-03-19";
+          x = 1;
+          y = 1;
+          geoGranularity = 2;
           break;
         case 2:
-          observation_end = this.moment().format(DATEFORMAT) ;
-          observation_start = "2020-03-28" ;
-          x = 1 ;
-          y = 1 ;
-          geoGranularity = 2 ;
+          observation_end = this.moment().format(DATEFORMAT);
+          observation_start = "2020-03-19";
+          x = 1;
+          y = 1;
+          geoGranularity = 2;
           break;
         default:
           break;
       }
-      this.geoGranularityChange(geoGranularity) ;
+      this.geoGranularityChange(geoGranularity);
       this.form = {
-        geoOptions , observation_end , observation_start , x , y , geoGranularity
-      } ;
+        geoOptions,
+        observation_end,
+        observation_start,
+        x,
+        y,
+        geoGranularity,
+      };
       this.dateRangeObservation = {
         startDate: new Date(this.form.observation_start),
         endDate: new Date(this.form.observation_end),
-      }
+      };
       this.submitFilters(this.form);
     },
     geoGranularityChange(value) {
       // this.setFluxGeoGranularity(value);
-      if(value != 2) this.resetFluxPredefinedControl()
+      if (value != 2) this.resetFluxPredefinedControl();
 
       this.form.geoOptions = [];
       if (value == 1) {
@@ -245,36 +256,36 @@ export default {
     UpdateObservationDate({ startDate, endDate }) {
       this.form.observation_start = moment(startDate).format("YYYY/MM/DD");
       this.form.observation_end = moment(endDate).format("YYYY/MM/DD");
-      this.resetFluxPredefinedControl() ;
+      this.resetFluxPredefinedControl();
     },
     clearObservationDate() {
       this.dateRangeObservation = { startDate: null, endDate: null };
       this.form.observation_start = null;
       this.form.observation_end = null;
-      this.resetFluxPredefinedControl()
+      this.resetFluxPredefinedControl();
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
       dropdownList.style.left = `${left}px`;
     },
-    resetFluxPredefinedControl(){
-      this.fluxPredefinedControl = null
+    resetFluxPredefinedControl() {
+      this.fluxPredefinedControl = null;
     },
-    filtredDate(value){
-      return this.$options.filters.date(value)
-    }
+    filtredDate(value) {
+      return this.$options.filters.date(value);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  .btn-submit{
-    font-size: 14px ;
-  }
-  .btn-clear-observation{
-    height: 32px;
-    margin-left: 5px;
-    display: flex;
-    align-items: center;
-  }
+.btn-submit {
+  font-size: 14px;
+}
+.btn-clear-observation {
+  height: 32px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+}
 </style>
