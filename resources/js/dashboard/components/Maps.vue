@@ -331,59 +331,7 @@ export default {
       this.getMedicalOrientations();
     },
     medicalOrientationSelected() {
-      if (this.medicalOrientations.length == 0) {
-        return;
-      }
-      if (this.medicalOrientationSelected == "ALL") {
-        this.getMedicalOrientations();
-        return;
-      }
-      this.RemoveOrientationMakers();
-      let orientation = this.medicalOrientationSelected;
-      this.medicalOrientations.map((value) => {
-        if (value[orientation] >= 0) {
-          let el = document.createElement("div");
-          el.className = `default-makers ${orientation}`;
-          if (value[orientation] > 3840) {
-            el.style = "width:100px;height:100px;";
-          } else if (value[orientation] > 1920) {
-            el.style = "width:90px;height:90px;";
-          } else if (value[orientation] > 960) {
-            el.style = "width:80px;height:80px;";
-          } else if (value[orientation] > 480) {
-            el.style = "width:70px;height:70px;";
-          } else if (value[orientation] > 240) {
-            el.style = "width:60px;height:60px;";
-          } else if (value[orientation] > 120) {
-            el.style = "width:50px;height:50px;";
-          } else if (value[orientation] > 60) {
-            el.style = "width:40px;height:40px;";
-          } else if (value[orientation] > 30) {
-            el.style = "width:30px;height:30px;";
-          } else if (value[orientation] > 15) {
-            el.style = "width:20px;height:20px;";
-          }
-          el.style.zIndex = value[orientation];
-
-          let longitude = value.longitude;
-          let latitude = value.latitude;
-
-          if (value.province.toUpperCase() != "KINSHASA") {
-            longitude = (Number(longitude) + 500 / 100000).toFixed(5);
-            latitude = (Number(latitude) - 300 / 100000).toFixed(5);
-          }
-          // popup
-          let popup = new Mapbox.Popup({ offset: 25 }).setText(value.township);
-          // add marker to map
-          let offSet = { offset: [-70, 30] };
-          let currentMarker = new Mapbox.Marker(el)
-            .setLngLat([longitude, latitude])
-            .setPopup(popup)
-            .addTo(this.map);
-          currentMarker.defaultOffset = offSet.offset;
-          this.medicalOrientationMakers.push(currentMarker);
-        }
-      });
+      this.medicalOrientationChanged()
     },
     sondages() {
       if (!this.sondages) {
@@ -469,6 +417,7 @@ export default {
       const lenGeoOptions = this.fluxGeoOptionsTmp.length;
       if (this.fluxGeoGranularityMenu == 2 && lenGeoOptions > 0) {
         const zone = this.fluxGeoOptionsTmp[lenGeoOptions - 1];
+        const area = this.getHealthZoneArea(zone, 2);
         map.resize();
         map.flyTo({
           center: this.getHealthZoneCoordonate(
@@ -478,11 +427,11 @@ export default {
           easing: function (t) {
             return t;
           },
-          zoom: 10,
+          zoom: this.zoomByArea(area),
         });
       }
     },
-    typePresence(){
+    typePresence() {
       this.flux24Func();
     },
     // hasRightSide() {
@@ -953,13 +902,29 @@ export default {
 
       map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
     },
+    zoomByArea(area) {
+      let zoom = 8;
+      if (area > 10805419917.999899) {
+        zoom = 6;
+      }
+      if (area <= 129466262.08234933) {
+        zoom = 8;
+      } else if (area <= 10805419917.999899) {
+        zoom = 7;
+      }
+      console.log("area", area);
+      console.log("zoom", zoom);
+      return zoom;
+    },
     flux24Func() {
       if (this.flux24DailyIn.length > 0) {
         this.addPolygoneLayer(this.fluxGeoGranularity);
         this.addPolygoneHoverLayer(this.fluxGeoGranularity);
+
         let data = [];
         let DataGroupByDate = [];
         let mapFlyOptions = {};
+        let area = null;
         // if (this.fluxType == 1) {
         //   data = this.flux24DailyIn;
         //   DataGroupByDate = this.fluxDataGroupedByDateIn;
@@ -985,6 +950,8 @@ export default {
                 center: this.getHealthZoneCoordonate(zone, 2),
                 zoom: 8,
               };
+              area = this.getHealthZoneArea(zone, 2);
+              mapFlyOptions.zoom = this.zoomByArea(area);
             }
             data = this.flux24DailyIn;
             DataGroupByDate = this.fluxDataGroupedByDateIn;
@@ -1000,30 +967,41 @@ export default {
                 center: this.getHealthZoneCoordonate(zone, 2),
                 zoom: 8,
               };
+              area = this.getHealthZoneArea(zone, 2);
+              mapFlyOptions.zoom = this.zoomByArea(area);
             }
             data = this.flux24DailyOut;
             DataGroupByDate = this.fluxDataGroupedByDateOut;
             break;
           case 3:
             mapFlyOptions = {
-              center: this.getHealthZoneCoordonate(zone, this.fluxGeoGranularity),
+              center: this.getHealthZoneCoordonate(
+                zone,
+                this.fluxGeoGranularity
+              ),
               zoom: 8,
             };
-            if (this.fluxGeoGranularity == 1){
+            area = this.getHealthZoneArea(zone, this.fluxGeoGranularity);
+            mapFlyOptions.zoom = this.zoomByArea(area);
+            if (this.fluxGeoGranularity == 1) {
               data = this.fluxZoneGlobalOut;
-            }else{
-              data=[{
-                presence_observation:this.flux24Presence.observationsByDate,
-                presence_reference:this.flux24Presence.referencesByDate
-              }];
+            } else {
+              data = [
+                {
+                  presence_observation: this.flux24Presence.observationsByDate,
+                  presence_reference: this.flux24Presence.referencesByDate,
+                },
+              ];
             }
-            
+
             break;
           case 4:
             mapFlyOptions = {
               center: this.getHealthZoneCoordonate(zone, 1),
               zoom: 8,
             };
+            area = this.getHealthZoneArea(zone, 1);
+            mapFlyOptions.zoom = this.zoomByArea(area);
             data = this.fluxZoneGlobalIn;
             break;
           default:
@@ -1431,6 +1409,7 @@ export default {
       this.flux24RemoveLayer();
       map.U.removeLayer([EPIDEMIC_LAYER]);
       map.U.removeSource(COVID_HOSPITAL_SOURCE);
+      this.RemoveOrientationMakers();
       map.resize();
       switch (this.activeMenu) {
         case 1:
@@ -1448,6 +1427,10 @@ export default {
           // this.addPolygoneHoverLayer(2);
           this.infrastructure();
           return;
+          break;
+        case 6:
+          this.medicalOrientationChanged();
+          return;
         default:
           break;
       }
@@ -1460,22 +1443,7 @@ export default {
         dataKey = "Zone+Peupl";
       }
       if (geoGranularity == 1) {
-        let newValue = value;
-
-        switch (value) {
-          case "Kasai":
-            newValue = "Kasaï";
-            break;
-          case "Kasai-Oriental":
-            newValue = "Kasaï-Oriental";
-            break;
-          case "Kasai-Central":
-            newValue = "Kasaï-Central";
-            break;
-          case "Equateur":
-            newValue = "Équateur";
-            break;
-        }
+        let newValue = this.fixedZone(value);
         const feature = this.healthProvinceGeojsonCentered.features.find(
           (x) => x.properties[dataKey] == newValue
         );
@@ -1492,6 +1460,32 @@ export default {
         }
       }
       return coordinates;
+    },
+    getHealthZoneArea(value, geoGranularity) {
+      let area = null;
+      let dataKey = "name";
+      if (geoGranularity == 2) {
+        dataKey = "Zone+Peupl";
+      }
+      if (geoGranularity == 1) {
+        let newValue = this.fixedZone(value);
+        const feature = this.healthProvinceGeojsonCentered.features.find(
+          (x) => x.properties[dataKey] == newValue
+        );
+        if (feature) {
+          area = feature.properties.area;
+        }
+      } else {
+        const feature = this.healthZoneGeojsonCentered.features.find(
+          (x) => x.properties[dataKey] == value
+        );
+
+        if (feature) {
+          area = feature.properties.area;
+        }
+        console.log("feature", feature);
+      }
+      return area;
     },
     fixedZone(value) {
       let newValue = value;
@@ -2204,6 +2198,61 @@ export default {
     removeMarkersSondage(sondage) {
       this.AllSondagesMarkers.filter((x) => x[sondage]).map((item) => {
         item.remove();
+      });
+    },
+    medicalOrientationChanged() {
+      if (!this.medicalOrientations || this.medicalOrientations.length == 0) {
+        return;
+      }
+      if (this.medicalOrientationSelected == "ALL") {
+        this.getMedicalOrientations();
+        return;
+      }
+      this.RemoveOrientationMakers();
+      let orientation = this.medicalOrientationSelected;
+      this.medicalOrientations.map((value) => {
+        if (value[orientation] >= 0) {
+          let el = document.createElement("div");
+          el.className = `default-makers ${orientation}`;
+          if (value[orientation] > 3840) {
+            el.style = "width:100px;height:100px;";
+          } else if (value[orientation] > 1920) {
+            el.style = "width:90px;height:90px;";
+          } else if (value[orientation] > 960) {
+            el.style = "width:80px;height:80px;";
+          } else if (value[orientation] > 480) {
+            el.style = "width:70px;height:70px;";
+          } else if (value[orientation] > 240) {
+            el.style = "width:60px;height:60px;";
+          } else if (value[orientation] > 120) {
+            el.style = "width:50px;height:50px;";
+          } else if (value[orientation] > 60) {
+            el.style = "width:40px;height:40px;";
+          } else if (value[orientation] > 30) {
+            el.style = "width:30px;height:30px;";
+          } else if (value[orientation] > 15) {
+            el.style = "width:20px;height:20px;";
+          }
+          el.style.zIndex = value[orientation];
+
+          let longitude = value.longitude;
+          let latitude = value.latitude;
+
+          if (value.province.toUpperCase() != "KINSHASA") {
+            longitude = (Number(longitude) + 500 / 100000).toFixed(5);
+            latitude = (Number(latitude) - 300 / 100000).toFixed(5);
+          }
+          // popup
+          let popup = new Mapbox.Popup({ offset: 25 }).setText(value.township);
+          // add marker to map
+          let offSet = { offset: [-70, 30] };
+          let currentMarker = new Mapbox.Marker(el)
+            .setLngLat([longitude, latitude])
+            .setPopup(popup)
+            .addTo(this.map);
+          currentMarker.defaultOffset = offSet.offset;
+          this.medicalOrientationMakers.push(currentMarker);
+        }
       });
     },
   },

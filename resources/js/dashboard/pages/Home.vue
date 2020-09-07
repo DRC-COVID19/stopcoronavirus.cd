@@ -36,10 +36,6 @@
             v-show="activeMenu==6"
             @medicalOrientationChecked="getmedicalOrientations"
             @medicalOrientationChanged="medicalOrientationChanged"
-            :orientationCount="orientationCount"
-            :finCount="finCount"
-            :fin5Count="fin5Count"
-            :fin8Count="fin8Count"
           />
         </b-col>
       </b-row>
@@ -82,6 +78,12 @@
               />
               <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
               <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
+              <Legend
+                showTotal
+                :data="orientationLegend"
+                class="legend-orientation"
+                v-if="orientationCount && orientationCount > 0 && activeMenu == 6"
+              ></Legend>
             </FullScreen>
           </b-row>
         </b-col>
@@ -90,7 +92,7 @@
           md="6"
           class="side-right mt-2 pl-2"
           :class="{'side-right-100':!hasCovidCases}"
-          v-if="hasRightSide"
+          v-if="hasRightSide || ( isLoading && activeMenu ==1)"
         >
           <b-card no-body>
             <b-tabs pills card>
@@ -101,7 +103,14 @@
               >
                 <SideCaseCovid :covidCases="covidCases" />
               </b-tab>
-              <b-tab title="Province" v-if="activeMenu==1">
+              <b-tab
+                title="Orientation data"
+                v-if="orientationCount != null && activeMenu==6"
+                :active="orientationCount != null"
+              >
+                <SideOrientation :medicalOrientations="medicalOrientations" />
+              </b-tab>
+              <b-tab title="Province" v-if="activeMenu==1 ">
                 <b-row>
                   <b-col cols="6" class="pr-2">
                     <skeleton-loading v-if="isLoading">
@@ -141,8 +150,8 @@
               </b-tab>
               <b-tab
                 title="FLux chart"
-                v-if="hasFlux24DailyIn  && this.activeMenu==1"
-                :active="hasFlux24DailyIn"
+                v-if="(hasFlux24DailyIn || isLoading) && !isFirstLoad && this.activeMenu==1"
+                :active="hasFlux24DailyIn || isLoading"
               >
                 <FluxChart
                   :flux24Daily="flux24Daily"
@@ -159,6 +168,7 @@
                   :mobiliteGenerale="showMobiliteGenerale"
                   :topHealthZoneConfirmed="topHealthZoneConfirmed"
                   :globalProgress="globalProgress"
+                  :isLoading="isLoading"
                 />
               </b-tab>
               <b-tab
@@ -334,7 +344,7 @@ export default {
       palette: PALETTE,
       fluxZoneGlobalIn: [],
       fluxZoneGlobalOut: [],
-      fluxZoneGlobalPresence:[],
+      fluxZoneGlobalPresence: [],
       showMobiliteGenerale: false,
       fluxDataGroupedByDateIn: {},
       fluxDataGroupedByDateOut: {},
@@ -343,7 +353,9 @@ export default {
       townships: [],
       isFluxGlobalProvinceloading: {},
       globalProgress: null,
+      orientationLegend: [],
       showBottom: false,
+      isFirstLoad:true,
     };
   },
   computed: {
@@ -362,7 +374,8 @@ export default {
         (this.getHasCoviCases() && this.activeMenu == 2) ||
         (this.flux24DailyIn.length > 0 && this.activeMenu == 1) ||
         (this.hospitalCount != null && this.activeMenu == 5) ||
-        (this.fluxGlobalIn.length > 0 && this.activeMenu == 1)
+        (this.fluxGlobalIn.length > 0 && this.activeMenu == 1) ||
+        (this.orientationCount != null && this.activeMenu == 6)
       );
     },
     hasBottom() {
@@ -596,6 +609,11 @@ export default {
             this.finCount = total_fin;
             this.fin5Count = total_fin5;
             this.fin8Count = total_fin8;
+            this.setDataOrientationLegend(
+              this.finCount,
+              this.fin5Count,
+              this.fin8Count
+            );
 
             this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = total_fin + total_fin8 + total_fin5;
@@ -634,6 +652,13 @@ export default {
         this.medicalOrientations = null;
         this.orientationCount = null;
       }
+    },
+    setDataOrientationLegend(a, b, c) {
+      this.orientationLegend = [
+        { color: "#3b9d3b", label: "Peu probale", caption: a },
+        { color: "#ffb93b", label: "Probale", caption: b },
+        { color: "#ff3b3b", label: "Très probale", caption: c },
+      ];
     },
     medicalOrientationChanged(item) {
       this.medicalOrientationSelected = item;
@@ -702,6 +727,7 @@ export default {
       /**
        * formate les données flux
        */
+      this.isFirstLoad=false;
       const computedFluxData = (dataObservations, dataReferences) => {
         const dataOut = [];
         return dataObservations.map((item) => {
@@ -1452,7 +1478,7 @@ export default {
             date: item.date,
             day: item.day,
             volume: item.volume,
-            PresenceType:item.PresenceType,
+            PresenceType: item.PresenceType,
             zone: item.zone,
           });
         }
@@ -1467,7 +1493,7 @@ export default {
             date: item.date,
             day: item.day,
             volume: item.volume,
-            PresenceType:item.PresenceType,
+            PresenceType: item.PresenceType,
             zone: item.zone,
           });
         }
@@ -1619,5 +1645,11 @@ export default {
       color: white !important;
     }
   }
+}
+.legend-orientation {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  z-index: 200;
 }
 </style>
