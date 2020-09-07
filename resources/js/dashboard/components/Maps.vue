@@ -204,13 +204,13 @@ export default {
       // });
 
       if (this.healthZoneGeojson) {
-        // this.addZoneSource();
+        this.addZoneSource();
         this.addPolygoneLayer(2);
         this.addPolygoneHoverLayer(2);
         this.$emit("geoJsonLoaded", "healthZoneGeo");
       }
       if (this.healthProvinceGeojson) {
-        // this.addProvinceSource();
+        this.addProvinceSource();
         this.$emit("geoJsonLoaded", "provinceGeo");
       }
 
@@ -469,6 +469,7 @@ export default {
       const lenGeoOptions = this.fluxGeoOptionsTmp.length;
       if (this.fluxGeoGranularityMenu == 2 && lenGeoOptions > 0) {
         const zone = this.fluxGeoOptionsTmp[lenGeoOptions - 1];
+        const area = this.getHealthZoneArea(zone, 2);
         map.resize();
         map.flyTo({
           center: this.getHealthZoneCoordonate(
@@ -478,11 +479,11 @@ export default {
           easing: function (t) {
             return t;
           },
-          zoom: 10,
+          zoom: this.zoomByArea(area),
         });
       }
     },
-    typePresence(){
+    typePresence() {
       this.flux24Func();
     },
     // hasRightSide() {
@@ -953,13 +954,30 @@ export default {
 
       map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
     },
+    zoomByArea(area) {
+      let zoom = 8;
+      if (area > 10805419917.999899) {
+        zoom = 6;
+      }
+      if (area <= 129466262.08234933) {
+        zoom = 8;
+      }
+      else if (area <= 10805419917.999899) {
+        zoom = 7;
+      } 
+      console.log("area", area);
+      console.log("zoom", zoom);
+      return zoom;
+    },
     flux24Func() {
       if (this.flux24DailyIn.length > 0) {
         this.addPolygoneLayer(this.fluxGeoGranularity);
         this.addPolygoneHoverLayer(this.fluxGeoGranularity);
+
         let data = [];
         let DataGroupByDate = [];
         let mapFlyOptions = {};
+        let area = null;
         // if (this.fluxType == 1) {
         //   data = this.flux24DailyIn;
         //   DataGroupByDate = this.fluxDataGroupedByDateIn;
@@ -985,6 +1003,8 @@ export default {
                 center: this.getHealthZoneCoordonate(zone, 2),
                 zoom: 8,
               };
+              area = this.getHealthZoneArea(zone, 2);
+              mapFlyOptions.zoom = this.zoomByArea(area);
             }
             data = this.flux24DailyIn;
             DataGroupByDate = this.fluxDataGroupedByDateIn;
@@ -1000,30 +1020,41 @@ export default {
                 center: this.getHealthZoneCoordonate(zone, 2),
                 zoom: 8,
               };
+              area = this.getHealthZoneArea(zone, 2);
+              mapFlyOptions.zoom = this.zoomByArea(area);
             }
             data = this.flux24DailyOut;
             DataGroupByDate = this.fluxDataGroupedByDateOut;
             break;
           case 3:
             mapFlyOptions = {
-              center: this.getHealthZoneCoordonate(zone, this.fluxGeoGranularity),
+              center: this.getHealthZoneCoordonate(
+                zone,
+                this.fluxGeoGranularity
+              ),
               zoom: 8,
             };
-            if (this.fluxGeoGranularity == 1){
+            area = this.getHealthZoneArea(zone, this.fluxGeoGranularity);
+            mapFlyOptions.zoom = this.zoomByArea(area);
+            if (this.fluxGeoGranularity == 1) {
               data = this.fluxZoneGlobalOut;
-            }else{
-              data=[{
-                presence_observation:this.flux24Presence.observationsByDate,
-                presence_reference:this.flux24Presence.referencesByDate
-              }];
+            } else {
+              data = [
+                {
+                  presence_observation: this.flux24Presence.observationsByDate,
+                  presence_reference: this.flux24Presence.referencesByDate,
+                },
+              ];
             }
-            
+
             break;
           case 4:
             mapFlyOptions = {
               center: this.getHealthZoneCoordonate(zone, 1),
               zoom: 8,
             };
+            area = this.getHealthZoneArea(zone, 1);
+            mapFlyOptions.zoom = this.zoomByArea(area);
             data = this.fluxZoneGlobalIn;
             break;
           default:
@@ -1460,22 +1491,7 @@ export default {
         dataKey = "Zone+Peupl";
       }
       if (geoGranularity == 1) {
-        let newValue = value;
-
-        switch (value) {
-          case "Kasai":
-            newValue = "Kasaï";
-            break;
-          case "Kasai-Oriental":
-            newValue = "Kasaï-Oriental";
-            break;
-          case "Kasai-Central":
-            newValue = "Kasaï-Central";
-            break;
-          case "Equateur":
-            newValue = "Équateur";
-            break;
-        }
+        let newValue = this.fixedZone(value);
         const feature = this.healthProvinceGeojsonCentered.features.find(
           (x) => x.properties[dataKey] == newValue
         );
@@ -1492,6 +1508,32 @@ export default {
         }
       }
       return coordinates;
+    },
+    getHealthZoneArea(value, geoGranularity) {
+      let area = null;
+      let dataKey = "name";
+      if (geoGranularity == 2) {
+        dataKey = "Zone+Peupl";
+      }
+      if (geoGranularity == 1) {
+        let newValue = this.fixedZone(value);
+        const feature = this.healthProvinceGeojsonCentered.features.find(
+          (x) => x.properties[dataKey] == newValue
+        );
+        if (feature) {
+          area = feature.properties.area;
+        }
+      } else {
+        const feature = this.healthZoneGeojsonCentered.features.find(
+          (x) => x.properties[dataKey] == value
+        );
+
+        if (feature) {
+          area = feature.properties.area;
+        }
+        console.log("feature", feature);
+      }
+      return area;
     },
     fixedZone(value) {
       let newValue = value;
