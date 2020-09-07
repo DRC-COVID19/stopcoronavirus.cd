@@ -46,7 +46,10 @@ export default {
                 break;
             }
             const feature = turf.centerOfMass(polygone);
+            const area = turf.area(polygone);
+           
             feature.properties = item.properties;
+            feature.properties.area=area;
             return feature;
           });
           state.healthZoneGeojsonCentered = {
@@ -79,7 +82,10 @@ export default {
                 break;
             }
             const feature = turf.centerOfMass(polygone);
+            const area = turf.area(polygone);
+          
             feature.properties = item.properties;
+            feature.properties.area = area;
             return feature;
           });
           state.healthProvinceGeojsonCentered = {

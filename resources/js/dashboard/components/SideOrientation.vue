@@ -2,15 +2,16 @@
   <b-container class="side-case-covid-container">
     <b-row>
       <b-col>
-        <b-table striped bordered outlined hover responsive :items="medicalOrientations" :fields="fields">
+        <b-table striped bordered outlined hover responsive
+          :items="medicalOrientationsSort" :fields="fields">
           <template v-slot:cell(FIN8)="data">
-            <div class="text-right">{{ data.item.FIN8 }}</div>
+            <div class="text-right">{{ data.item.FIN8 || "0"}}</div>
           </template>
           <template v-slot:cell(FIN5)="data">
-            <div class="text-right">{{ data.item.FIN5 }}</div>
+            <div class="text-right">{{ data.item.FIN5 || "0"}}</div>
           </template>
           <template v-slot:cell(FIN)="data">
-            <div class="text-right">{{ data.item.FIN }}</div>
+            <div class="text-right">{{ data.item.FIN || "0"}}</div>
           </template>
         </b-table>
       </b-col>
@@ -57,6 +58,26 @@ export default {
   computed: {
     CovidCasesProvince() {
       return this.covidCases?.data.features;
+    },
+    medicalOrientationsSort(){
+      return (
+        this.medicalOrientations.sort(function(a, b) {
+          if (a.province > b.province) {
+            return 1;
+          }
+          if (a.province < b.province) {
+            return -1;
+          }
+
+          if (a.township > b.township) {
+              return 1;
+          }else if(a.township < b.township){
+            return -1;
+          }else{
+            return 0;
+          }
+        })
+      )
     }
   },
   methods: {
