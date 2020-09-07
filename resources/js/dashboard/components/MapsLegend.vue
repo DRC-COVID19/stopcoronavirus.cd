@@ -48,7 +48,7 @@ export default {
       colors: [
         [...PALETTE.inflow_negatif, ...PALETTE.inflow_positif],
         [...PALETTE.outflow_negatif, ...PALETTE.outflow_positif],
-        PALETTE.present,
+        [...PALETTE.presence_negatif, ...PALETTE.presence_positif],
         [...PALETTE.general_negatif, ...PALETTE.general_positif],
       ],
       color_nodata: PALETTE.nodata,
