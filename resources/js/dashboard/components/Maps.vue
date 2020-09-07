@@ -204,13 +204,13 @@ export default {
       // });
 
       if (this.healthZoneGeojson) {
-        this.addZoneSource();
+        // this.addZoneSource();
         this.addPolygoneLayer(2);
         this.addPolygoneHoverLayer(2);
         this.$emit("geoJsonLoaded", "healthZoneGeo");
       }
       if (this.healthProvinceGeojson) {
-        this.addProvinceSource();
+        // this.addProvinceSource();
         this.$emit("geoJsonLoaded", "provinceGeo");
       }
 
@@ -961,10 +961,9 @@ export default {
       }
       if (area <= 129466262.08234933) {
         zoom = 8;
-      }
-      else if (area <= 10805419917.999899) {
+      } else if (area <= 10805419917.999899) {
         zoom = 7;
-      } 
+      }
       console.log("area", area);
       console.log("zoom", zoom);
       return zoom;
@@ -1462,6 +1461,7 @@ export default {
       this.flux24RemoveLayer();
       map.U.removeLayer([EPIDEMIC_LAYER]);
       map.U.removeSource(COVID_HOSPITAL_SOURCE);
+      this.RemoveOrientationMakers();
       map.resize();
       switch (this.activeMenu) {
         case 1:
@@ -1478,6 +1478,9 @@ export default {
           this.addPolygoneLayer(2);
           // this.addPolygoneHoverLayer(2);
           this.infrastructure();
+          return;
+        case 6:
+          this.getMedicalOrientations();
           return;
         default:
           break;
