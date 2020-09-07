@@ -58,7 +58,7 @@ export default {
     bottom: 20px;
     left: 20px;
     position: absolute;
-    z-index: 2;
+    z-index: 200;
     background-color: #2e5bff;
     width: 40px;
     height: 40px;

@@ -331,59 +331,7 @@ export default {
       this.getMedicalOrientations();
     },
     medicalOrientationSelected() {
-      if (this.medicalOrientations.length == 0) {
-        return;
-      }
-      if (this.medicalOrientationSelected == "ALL") {
-        this.getMedicalOrientations();
-        return;
-      }
-      this.RemoveOrientationMakers();
-      let orientation = this.medicalOrientationSelected;
-      this.medicalOrientations.map((value) => {
-        if (value[orientation] >= 0) {
-          let el = document.createElement("div");
-          el.className = `default-makers ${orientation}`;
-          if (value[orientation] > 3840) {
-            el.style = "width:100px;height:100px;";
-          } else if (value[orientation] > 1920) {
-            el.style = "width:90px;height:90px;";
-          } else if (value[orientation] > 960) {
-            el.style = "width:80px;height:80px;";
-          } else if (value[orientation] > 480) {
-            el.style = "width:70px;height:70px;";
-          } else if (value[orientation] > 240) {
-            el.style = "width:60px;height:60px;";
-          } else if (value[orientation] > 120) {
-            el.style = "width:50px;height:50px;";
-          } else if (value[orientation] > 60) {
-            el.style = "width:40px;height:40px;";
-          } else if (value[orientation] > 30) {
-            el.style = "width:30px;height:30px;";
-          } else if (value[orientation] > 15) {
-            el.style = "width:20px;height:20px;";
-          }
-          el.style.zIndex = value[orientation];
-
-          let longitude = value.longitude;
-          let latitude = value.latitude;
-
-          if (value.province.toUpperCase() != "KINSHASA") {
-            longitude = (Number(longitude) + 500 / 100000).toFixed(5);
-            latitude = (Number(latitude) - 300 / 100000).toFixed(5);
-          }
-          // popup
-          let popup = new Mapbox.Popup({ offset: 25 }).setText(value.township);
-          // add marker to map
-          let offSet = { offset: [-70, 30] };
-          let currentMarker = new Mapbox.Marker(el)
-            .setLngLat([longitude, latitude])
-            .setPopup(popup)
-            .addTo(this.map);
-          currentMarker.defaultOffset = offSet.offset;
-          this.medicalOrientationMakers.push(currentMarker);
-        }
-      });
+      this.medicalOrientationChanged()
     },
     sondages() {
       if (!this.sondages) {
@@ -1479,8 +1427,9 @@ export default {
           // this.addPolygoneHoverLayer(2);
           this.infrastructure();
           return;
+          break;
         case 6:
-          this.getMedicalOrientations();
+          this.medicalOrientationChanged();
           return;
         default:
           break;
@@ -2249,6 +2198,61 @@ export default {
     removeMarkersSondage(sondage) {
       this.AllSondagesMarkers.filter((x) => x[sondage]).map((item) => {
         item.remove();
+      });
+    },
+    medicalOrientationChanged() {
+      if (!this.medicalOrientations || this.medicalOrientations.length == 0) {
+        return;
+      }
+      if (this.medicalOrientationSelected == "ALL") {
+        this.getMedicalOrientations();
+        return;
+      }
+      this.RemoveOrientationMakers();
+      let orientation = this.medicalOrientationSelected;
+      this.medicalOrientations.map((value) => {
+        if (value[orientation] >= 0) {
+          let el = document.createElement("div");
+          el.className = `default-makers ${orientation}`;
+          if (value[orientation] > 3840) {
+            el.style = "width:100px;height:100px;";
+          } else if (value[orientation] > 1920) {
+            el.style = "width:90px;height:90px;";
+          } else if (value[orientation] > 960) {
+            el.style = "width:80px;height:80px;";
+          } else if (value[orientation] > 480) {
+            el.style = "width:70px;height:70px;";
+          } else if (value[orientation] > 240) {
+            el.style = "width:60px;height:60px;";
+          } else if (value[orientation] > 120) {
+            el.style = "width:50px;height:50px;";
+          } else if (value[orientation] > 60) {
+            el.style = "width:40px;height:40px;";
+          } else if (value[orientation] > 30) {
+            el.style = "width:30px;height:30px;";
+          } else if (value[orientation] > 15) {
+            el.style = "width:20px;height:20px;";
+          }
+          el.style.zIndex = value[orientation];
+
+          let longitude = value.longitude;
+          let latitude = value.latitude;
+
+          if (value.province.toUpperCase() != "KINSHASA") {
+            longitude = (Number(longitude) + 500 / 100000).toFixed(5);
+            latitude = (Number(latitude) - 300 / 100000).toFixed(5);
+          }
+          // popup
+          let popup = new Mapbox.Popup({ offset: 25 }).setText(value.township);
+          // add marker to map
+          let offSet = { offset: [-70, 30] };
+          let currentMarker = new Mapbox.Marker(el)
+            .setLngLat([longitude, latitude])
+            .setPopup(popup)
+            .addTo(this.map);
+          currentMarker.defaultOffset = offSet.offset;
+          this.medicalOrientationMakers.push(currentMarker);
+        }
       });
     },
   },
