@@ -14,6 +14,8 @@ export const
         outflow_negatif: ["rgb(45, 0, 75)", "rgb(84, 39, 136)", "rgb(128, 115, 172)", "rgb(178, 171, 210)", "rgb(216, 218, 235)"],
         general_positif:['#d3f9ce','#93d691','#47c357','#108337','#035d21'],
         general_negatif:['#2c012f','#7d0088','#a048af','#c790d2','#e9cbea'],
+        presence_positif:['#fdbb84','#fc8d59','#ef6548','#d7301f','#990000'],
+        presence_negatif:['#182f4d','#3b4c61','#5875a6','#7d9cd1','#b4c3dc'],
         present: ["#E31A1C"],
         nodata: "#eeeeee",
         bordure_shape_file: " #BFC5D2",
@@ -21,6 +23,7 @@ export const
         flux_in_color: "#225ea8",
         flux_presence: "#E31A1C",
         dash_green: "#33ac2e",
+        dash_red: "#f44336",
         epidemic: ["#FFFFB2", "#FECC5C", "#FD8D3C", "#E31A1C"]
     },
     PREFERENCE_START = "2020-02-18",
