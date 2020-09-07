@@ -114,10 +114,38 @@
         <b-col cols="12" v-show="this.typeMobilite == 1" md="4" class="pl-0" ref="mobility">
           <b-row class="mb-3">
             <b-col cols="12">
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '175px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '200px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '400px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
               <b-card
                 class="mb-3 flux-mobility"
                 :class="{'active':fluxType==1}"
                 @click="selectFluxType(1)"
+                v-show="!isLoading"
               >
                 <h5 class="percent-title">Mobilité entrante</h5>
 
@@ -132,7 +160,12 @@
                 </p>
               </b-card>
 
-              <FullScreen id="fullscreenEntrance" link="mobile_in" @change="fullscreenMobileDaily">
+              <FullScreen
+                id="fullscreenEntrance"
+                link="mobile_in"
+                @change="fullscreenMobileDaily"
+                v-show="!isLoading"
+              >
                 <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
                   <legend-popover>
                     <template v-slot:title>Comment est-ce calculé ?</template>
@@ -149,6 +182,7 @@
                 id="fullscreenEntrance2"
                 link="mobile_entrance_2_card"
                 @change="fullscreenFluxInOut"
+                v-show="!isLoading"
               >
                 <b-card no-body class="cardtype2 p-2">
                   <legend-popover>
@@ -173,10 +207,38 @@
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
           <b-row class="mb-3">
             <b-col cols="12">
+
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '175px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '200px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '400px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
               <b-card
                 class="mb-3 flux-mobility"
                 :class="{'active':fluxType==2}"
                 @click="selectFluxType(2)"
+                v-show="!isLoading"
               >
                 <h5 class="percent-title">Mobilité sortante</h5>
                 <div class="percent flux-out-color">{{percentOut}}%​</div>
@@ -190,7 +252,7 @@
                 </p>
               </b-card>
 
-              <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily">
+              <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily" v-show="!isLoading">
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
                   <legend-popover>
                     <template v-slot:title>Comment est-ce calculé ?</template>
@@ -207,6 +269,7 @@
                 id="fullscreenOut2"
                 link="mobile_out_2_card"
                 @change="fullscreenFluxInOut"
+                v-show="!isLoading"
               >
                 <b-card no-body class="p-2 cardtype2">
                   <legend-popover>
@@ -229,10 +292,28 @@
         </b-col>
 
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
+        <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '175px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
+
+              <skeleton-loading class="mb-3" v-if="isLoading">
+                <square-skeleton
+                  :boxProperties="{
+                                width: '100%',
+                                height: '200px'
+                            }"
+                ></square-skeleton>
+              </skeleton-loading>
           <b-card
             class="mb-3 flux-mobility"
             :class="{'active':fluxType==3,'disabled':globalProgress && globalProgress<100}"
             @click="selectFluxType(3)"
+            v-show="!isLoading"
           >
             <div class="row justify-content-between">
               <h5 class="percent-title">Présences</h5>
@@ -268,6 +349,7 @@
             id="mobile_presence_full"
             link="mobile_presence"
             @change="fullscreenMobileDaily"
+            v-show="!isLoading"
           >
             <b-card no-body class="mb-3 p-2 cardtype1" ref="mobile_presence_card">
               <legend-popover>
@@ -394,6 +476,10 @@ export default {
     globalProgress: {
       default: null,
     },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -453,6 +539,7 @@ export default {
   },
   watch: {
     flux24DailyIn() {
+      this.typeMobilite = 1;
       this.updateFluxInMobility();
     },
     flux24DailyOut() {
@@ -468,16 +555,6 @@ export default {
       this.mobileOut();
     },
     fluxZoneGlobalIn() {
-      // debounce(function (e) {
-      //   this.fluxMobilityFluxGeneralZone(
-      //     this.fluxZoneGlobalIn,
-      //     "general_top_asc",
-      //     "general_top_desc",
-      //     `Top 5 des zones avec une mobilité croissante`,
-      //     "Top 5 des zones avec une mobilité decroissante"
-      //   );
-      // }, 500);
-
       this.fluxMobilityFluxGeneralZone(
         this.fluxZoneGlobalIn,
         "general_top_asc",
