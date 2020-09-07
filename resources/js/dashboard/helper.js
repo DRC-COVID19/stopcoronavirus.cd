@@ -1,5 +1,6 @@
 
 import { create } from 'axios';
+import axiosInstance from 'axios';
 import moment from 'moment';
 
 let axiosCreate = create({
@@ -9,6 +10,7 @@ let axiosCreate = create({
 window.axios = axiosCreate;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.moment = moment;
+window.axiosInstance = axiosInstance ;
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
