@@ -1626,7 +1626,7 @@ export default {
   top: 10px;
 }
 .layer-set-contenair {
-  background: #f4f6fc;
+  background: transparent;
   position: absolute;
   z-index: 7;
   top: 14px;
@@ -1637,8 +1637,8 @@ export default {
     padding: 5px;
     text-align: center;
     text-decoration: unset;
-    background: #2e5bff3d;
-    color: #2e5bff !important;
+    background: rgba(46,91,255,0.3);
+    color: white !important;
     border-radius: 5px;
     &.active {
       background: $dash-green;
