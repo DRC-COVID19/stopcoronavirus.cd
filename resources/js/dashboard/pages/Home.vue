@@ -1337,8 +1337,10 @@ export default {
           this.flux24 = data;
           this.$set(this.loadings, "fluxPC_flux24", false);
         })
-        .catch(({ response }) => {
-          this.flux24Errors = response.data.errors;
+        .catch((thrown) => {
+          if (!axiosInstance.isCancel(thrown)) {
+            this.flux24Errors = thrown.response.data.errors;
+          }
           this.$set(this.loadings, "fluxPC_flux24", false);
         });
     },
@@ -1573,6 +1575,7 @@ export default {
       };
     },
     cancelAxios(token){
+      console.log('token', token)
       if(this.listAxiosToken[token]){
         this.listAxiosToken[token].forEach(x => {
           x.cancel('Operation canceled.');
