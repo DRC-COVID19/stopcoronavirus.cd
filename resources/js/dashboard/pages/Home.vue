@@ -459,7 +459,7 @@ export default {
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
-    ...mapMutations(["setMapStyle"]),
+    ...mapMutations(["setMapStyle","setFluxType"]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
     },
@@ -728,6 +728,7 @@ export default {
        * formate les données flux
        */
       this.isFirstLoad=false;
+      this.setFluxType(1);
       const computedFluxData = (dataObservations, dataReferences) => {
         const dataOut = [];
         return dataObservations.map((item) => {

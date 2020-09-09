@@ -322,6 +322,7 @@ export default {
         this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
       } else {
         map.U.removeLayer([EPIDEMIC_LAYER]);
+        map.resize();
       }
     },
     hospitals() {
@@ -935,8 +936,8 @@ export default {
         //   data = this.flux24DailyGenerale;
         // }
         let zone = null;
-        if (this.fluxGeoOptionsTmp && this.fluxGeoOptionsTmp.length > 0) {
-          zone = this.fluxGeoOptionsTmp[0];
+        if (this.fluxGeoOptions && this.fluxGeoOptions.length > 0) {
+          zone = this.fluxGeoOptions[0];
         }
         switch (this.fluxType) {
           case 1:
