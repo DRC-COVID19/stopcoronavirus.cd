@@ -14,7 +14,7 @@
           </h3>
         </div>
         <div class="col-md-auto col-12 text-right">
-          <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
+          <h5 class="m-0 small">{{moment(last_update).format('Y-MM-DD')}}</h5>
           <span class="small text-muted">Dernière mise à jour</span>
         </div>
       </b-row>
@@ -1068,17 +1068,11 @@ export default {
         key == "origin"
           ? this.getRangeColors(
               localData.map((x) => x.percent),
-              PALETTE.inflow_positif,
-              PALETTE.inflow_negatif,
-              minVal,
-              maxVal
+              PALETTE.inflow_negatif.slice().reverse()
             )
           : this.getRangeColors(
               localData.map((x) => x.percent),
-              PALETTE.outflow_positif,
-              PALETTE.outflow_negatif,
-              minVal,
-              maxVal
+              PALETTE.outflow_negatif.slice().reverse()
             )
       );
     },
