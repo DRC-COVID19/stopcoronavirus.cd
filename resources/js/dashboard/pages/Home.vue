@@ -43,7 +43,10 @@
       <b-row class="position-relative map-wrap" v-show="activeMenu != 3">
         <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
           <div class="layer-set-contenair" v-if="hasFlux24DailyIn && activeMenu==1">
-            <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arcs</b-link>
+            <b-link
+              :class="{'active':fluxMapStyle==2,'disabled':disabledArc}"
+              @click="layerSetSyle(2)"
+            >Arcs</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
@@ -355,7 +358,8 @@ export default {
       globalProgress: null,
       orientationLegend: [],
       showBottom: false,
-      isFirstLoad:true,
+      isFirstLoad: true,
+      disabledArc: false,
     };
   },
   computed: {
@@ -456,10 +460,21 @@ export default {
     );
     this.loadFluxGLobalData();
     this.loadTownships();
+    this.$store.watch(
+      (state) => state.flux.fluxType,
+      (value) => {
+        if (value == 3 || value == 4) {
+          this.disabledArc = true;
+          this.setMapStyle(1);
+        } else {
+          this.disabledArc = false;
+        }
+      }
+    );
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
-    ...mapMutations(["setMapStyle","setFluxType"]),
+    ...mapMutations(["setMapStyle", "setFluxType"]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
     },
@@ -727,7 +742,7 @@ export default {
       /**
        * formate les données flux
        */
-      this.isFirstLoad=false;
+      this.isFirstLoad = false;
       this.setFluxType(1);
       const computedFluxData = (dataObservations, dataReferences) => {
         const dataOut = [];
@@ -1638,12 +1653,15 @@ export default {
     padding: 5px;
     text-align: center;
     text-decoration: unset;
-    background: rgba(46,91,255,0.3);
+    background: rgba(46, 91, 255, 0.7);
     color: white !important;
     border-radius: 5px;
     &.active {
       background: $dash-green;
       color: white !important;
+    }
+    &:hover{
+      opacity: 0.8;
     }
   }
 }
