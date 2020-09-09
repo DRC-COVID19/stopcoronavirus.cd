@@ -95,7 +95,7 @@
           md="6"
           class="side-right mt-2 pl-2"
           :class="{'side-right-100':!hasCovidCases}"
-          v-if="hasRightSide || ( isLoading && activeMenu ==1)"
+          v-if="hasRightSide"
         >
           <b-card no-body>
             <b-tabs pills card>
@@ -152,7 +152,7 @@
                 </b-row>
               </b-tab>
               <b-tab
-                title="FLux chart"
+                title="Mobilité"
                 v-if="(hasFlux24DailyIn || isLoading) && !isFirstLoad && this.activeMenu==1"
                 :active="hasFlux24DailyIn || isLoading"
               >
@@ -176,7 +176,7 @@
               </b-tab>
               <b-tab
                 title="Hôpital"
-                v-if="hospitalCount != null && activeMenu==5"
+                v-if="(hospitalCount != null || isLoading) && activeMenu==5"
                 :active="!!selectedHospital || activeMenu==5"
               >
                 <HospitalSituation :hospitalTotalData="hospitalTotalData" />
@@ -374,12 +374,14 @@ export default {
       typePresence: (state) => state.flux.typePresence,
     }),
     hasRightSide() {
+      console.log((this.isLoading && (this.activeMenu == 1 || this.activeMenu == 5)));
       return (
         (this.getHasCoviCases() && this.activeMenu == 2) ||
         (this.flux24DailyIn.length > 0 && this.activeMenu == 1) ||
         (this.hospitalCount != null && this.activeMenu == 5) ||
         (this.fluxGlobalIn.length > 0 && this.activeMenu == 1) ||
-        (this.orientationCount != null && this.activeMenu == 6)
+        (this.orientationCount != null && this.activeMenu == 6) ||
+        (this.isLoading && (this.activeMenu == 1 || this.activeMenu == 5))
       );
     },
     hasBottom() {
@@ -439,17 +441,9 @@ export default {
     }
     this.getFluxProvinces();
     this.$store.watch(
-      (state) => state.nav.activeMenu,
-      (value) => {
-        this.gethopitals(false);
-        switch (value) {
-          case 1:
-            break;
-          case 2:
-            break;
-          default:
-            break;
-        }
+      state => state.hospital.isLoading,
+      value => {
+        this.$set(this.loadings, "hospital", value);
       }
     );
     this.$store.watch(
@@ -1660,7 +1654,7 @@ export default {
       background: $dash-green;
       color: white !important;
     }
-    &:hover{
+    &:hover {
       opacity: 0.8;
     }
   }
