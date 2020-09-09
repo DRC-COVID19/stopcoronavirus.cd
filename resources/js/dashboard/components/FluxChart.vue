@@ -14,7 +14,7 @@
           </h3>
         </div>
         <div class="col-md-auto col-12 text-right">
-          <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
+          <h5 class="m-0 small">{{moment(last_update).format('Y-MM-DD')}}</h5>
           <span class="small text-muted">Dernière mise à jour</span>
         </div>
       </b-row>
