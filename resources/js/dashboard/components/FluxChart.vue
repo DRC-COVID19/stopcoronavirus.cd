@@ -1016,19 +1016,12 @@ export default {
       const maxVal = d3.max(localDataPercent);
       localData = localData.slice(0, 10);
 
+      // cond : key == origin
       this.drawHorizontalChart(
         localData,
         "zone",
         ref,
-        key == "origin"
-          ? this.getRangeColors(
-              localData.map((x) => x.percent),
-              PALETTE.inflow_negatif.slice().reverse()
-            )
-          : this.getRangeColors(
-              localData.map((x) => x.percent),
-              PALETTE.outflow_negatif.slice().reverse()
-            )
+        PALETTE.flux_in_color
       );
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
@@ -1038,7 +1031,7 @@ export default {
         volume: item.confirmed,
       }));
       console.log("topHealthZonePandemics", data);
-      this.drawHorizontalChart(data, "zone", ref, "red", title);
+      this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color, title);
     },
     async fluxMobilityFluxGeneralZone(
       fluxDataIn,
@@ -1097,39 +1090,21 @@ export default {
           ascData,
           "zone",
           refAsc,
-          this.getRangeColors(
-            ascData.map((x) => x.percent),
-            PALETTE.general_positif,
-            PALETTE.general_negatif,
-            minVal,
-            maxVal
-          ),
+          PALETTE.flux_in_color,
           titleAsc
         );
         this.drawHorizontalChart(
           descData,
           "zone",
           refDesc,
-          this.getRangeColors(
-            descData.map((x) => x.percent),
-            PALETTE.general_positif,
-            PALETTE.general_negatif,
-            minVal,
-            maxVal
-          ),
+          PALETTE.flux_in_color,
           titleDesc
         );
         this.drawHorizontalChart(
           mobilityHealth,
           "zone",
           refHealth,
-          this.getRangeColors(
-            mobilityHealth.map((x) => x.percent),
-            PALETTE.general_positif,
-            PALETTE.general_negatif,
-            minVal,
-            maxVal
-          ),
+          PALETTE.flux_in_color,
           titleHelth
         );
       });
