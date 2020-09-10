@@ -1,9 +1,9 @@
 <template>
   <div>
     <b-container class="p-0 flux-chart">
-      <b-row>
+      <b-row class="mb-2">
         <div class="col-md col-12">
-          <h3 class="d-flex align-items-center">
+          <h3 class="d-flex align-items-center mb-0">
             <span class="ml-2 mr-2">{{targetZone}}</span>
 
             <toggle-button
@@ -13,9 +13,17 @@
             ></toggle-button>
           </h3>
         </div>
-        <div class="col-md-auto col-12 text-right">
-          <h5 class="m-0 small">{{moment(last_update).format('Y-MM-DD')}}</h5>
-          <span class="small text-muted">Dernière mise à jour</span>
+        <div class="col-md col-12 d-flex justify-content-end">
+          <div>
+            <p class="small m-0">Données fournies par Orange</p>
+            <p class="small m-0">
+              <span class="text-muted">Dernière mise à jour</span> :
+              {{moment(last_update).format('Y-MM-DD')}}
+            </p>
+          </div>
+          <div>
+            <img src="/img/Orange_logo.svg" class="logoPartenaire"alt />
+          </div>
         </div>
       </b-row>
 
@@ -1432,5 +1440,10 @@ export default {
       color: #8bc34a;
     }
   }
+}
+.logoPartenaire{
+  height: 38px;
+  width: auto;
+  margin-left: 5px;
 }
 </style>
