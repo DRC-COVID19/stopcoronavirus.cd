@@ -100,18 +100,18 @@
           <b-card no-body>
             <b-tabs pills card>
               <b-tab
-                title="Covid-19 data"
-                v-if="!!covidCases && activeMenu==2"
+                title="Données Covid-19"
+                v-if="(!!covidCases || isLoading) && activeMenu==2"
                 :active="!!covidCases"
               >
-                <SideCaseCovid :covidCases="covidCases" />
+                <SideCaseCovid :covidCases="covidCases" :isLoading="isLoading" />
               </b-tab>
               <b-tab
-                title="Orientation data"
-                v-if="orientationCount != null && activeMenu==6"
+                title="Données Orientation médicale covid-19"
+                v-if="(orientationCount != null || isLoading) && activeMenu==6"
                 :active="orientationCount != null"
               >
-                <SideOrientation :medicalOrientations="medicalOrientations" />
+                <SideOrientation :medicalOrientations="medicalOrientations" :isLoading="isLoading" />
               </b-tab>
               <b-tab title="Province" v-if="activeMenu==1 ">
                 <b-row>
@@ -175,7 +175,7 @@
                 />
               </b-tab>
               <b-tab
-                title="Hôpital"
+                title="Infrastructures"
                 v-if="(hospitalCount != null || isLoading) && activeMenu==5"
                 :active="!!selectedHospital || activeMenu==5"
               >
@@ -374,14 +374,17 @@ export default {
       typePresence: (state) => state.flux.typePresence,
     }),
     hasRightSide() {
-      console.log((this.isLoading && (this.activeMenu == 1 || this.activeMenu == 5)));
       return (
         (this.getHasCoviCases() && this.activeMenu == 2) ||
         (this.flux24DailyIn.length > 0 && this.activeMenu == 1) ||
         (this.hospitalCount != null && this.activeMenu == 5) ||
         (this.fluxGlobalIn.length > 0 && this.activeMenu == 1) ||
         (this.orientationCount != null && this.activeMenu == 6) ||
-        (this.isLoading && (this.activeMenu == 1 || this.activeMenu == 5))
+        (this.isLoading &&
+          (this.activeMenu == 1 ||
+            this.activeMenu == 5 ||
+            this.activeMenu == 2 ||
+            this.activeMenu == 6))
       );
     },
     hasBottom() {
@@ -441,8 +444,8 @@ export default {
     }
     this.getFluxProvinces();
     this.$store.watch(
-      state => state.hospital.isLoading,
-      value => {
+      (state) => state.hospital.isLoading,
+      (value) => {
         this.$set(this.loadings, "hospital", value);
       }
     );

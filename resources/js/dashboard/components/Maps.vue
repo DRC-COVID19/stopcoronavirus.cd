@@ -183,9 +183,39 @@ export default {
     });
     U.init(map, Mapbox);
     map.addControl(new Mapbox.NavigationControl());
+
     this.isMapLoaded = false;
     map.on("load", () => {
       this.isMapLoaded = true;
+
+      map.U.addGeoJSON(
+        this.drcSourceId,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true,
+        }
+      );
+      map.U.addGeoJSON(
+        this.drcHealthZone,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true,
+        }
+      );
+      map.U.addGeoJSON(
+        sourceHealthZoneGeojsonCentered,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true,
+        }
+      );
+      map.U.addGeoJSON(
+        sourceHealthProvinceGeojsonCentered,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true,
+        }
+      );
       // map.addSource(this.drcSourceId, {
       //   type: "geojson",
       //   generateId: true,
@@ -204,13 +234,13 @@ export default {
       // });
 
       if (this.healthZoneGeojson) {
-        // this.addZoneSource();
+        this.addZoneSource();
         this.addPolygoneLayer(2);
         this.addPolygoneHoverLayer(2);
         this.$emit("geoJsonLoaded", "healthZoneGeo");
       }
       if (this.healthProvinceGeojson) {
-        // this.addProvinceSource();
+        this.addProvinceSource();
         this.$emit("geoJsonLoaded", "provinceGeo");
       }
 
@@ -332,7 +362,7 @@ export default {
       this.getMedicalOrientations();
     },
     medicalOrientationSelected() {
-      this.medicalOrientationChanged()
+      this.medicalOrientationChanged();
     },
     sondages() {
       if (!this.sondages) {
@@ -624,50 +654,25 @@ export default {
         });
     },
     addProvinceSource() {
-      // if (!this.isMapLoaded) {
-      //   return;
-      // }
-      // map.U.addGeoJSON(
-      //   sourceHealthProvinceGeojsonCentered,
-      //   this.healthProvinceGeojsonCentered
-      // );
-      // map.U.addGeoJSON(this.drcSourceId, this.healthProvinceGeojson);
-
-      map.addSource(sourceHealthProvinceGeojsonCentered, {
-        type: "geojson",
-        generateId: true,
-        data: this.healthProvinceGeojsonCentered,
-      });
-
-      // map.U.addGeoJSON(this.drcHealthZone, this.healthZoneGeojson);
-
-      map.addSource(this.drcSourceId, {
-        type: "geojson",
-        generateId: true,
-        data: this.healthProvinceGeojson,
-      });
+       if (!map || !map.U) {
+        return;
+      }
+      map.U.setData(
+        sourceHealthProvinceGeojsonCentered,
+        this.healthProvinceGeojsonCentered
+      );
+      map.U.setData(this.drcSourceId, this.healthProvinceGeojson);
     },
     addZoneSource() {
-      // if (!this.isMapLoaded) {
-      //   return;
-      // }
-      // map.U.addGeoJSON(
-      //   sourceHealthZoneGeojsonCentered,
-      //   this.healthZoneGeojsonCentered
-      // );
-      map.addSource(sourceHealthZoneGeojsonCentered, {
-        type: "geojson",
-        generateId: true,
-        data: this.healthZoneGeojsonCentered,
-      });
+      if (!map || !map.U) {
+        return;
+      }
+      map.U.setData(
+        sourceHealthZoneGeojsonCentered,
+        this.healthZoneGeojsonCentered
+      );
 
-      // map.U.addGeoJSON(this.drcHealthZone, this.healthZoneGeojson);
-
-      map.addSource(this.drcHealthZone, {
-        type: "geojson",
-        generateId: true,
-        data: this.healthZoneGeojson,
-      });
+      map.U.setData(this.drcHealthZone, this.healthZoneGeojson);
     },
     covidHatchedStyle(
       covidCasesData,
