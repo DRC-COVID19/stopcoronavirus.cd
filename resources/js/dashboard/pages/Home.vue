@@ -40,7 +40,8 @@
         </b-col>
       </b-row>
       <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
-      <b-row class="position-relative map-wrap" v-show="activeMenu != 3">
+      <about v-if="activeMenu == 7"></about>
+      <b-row class="position-relative map-wrap" v-show="showMaps">
         <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
           <div class="layer-set-contenair" v-if="hasFlux24DailyIn && activeMenu==1">
             <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arcs</b-link>
@@ -259,6 +260,7 @@ import MenuInfrastructure from "../components/menu/Infrastructure";
 import MenuOrientation from "../components/menu/Orientation";
 import MenuIndicateur from "../components/menu/Indicateur";
 import GlobalProvince from "../components/flux/GLobalProvince";
+import About from "../components/About";
 import { groupBy } from "lodash";
 import {
   OBSERVATION_START,
@@ -299,6 +301,7 @@ export default {
     MenuOrientation,
     MenuIndicateur,
     GlobalProvince,
+    About
   },
   data() {
     return {
@@ -424,6 +427,10 @@ export default {
       else if (this.typePresence == 2) return this.flux24PresenceDailyInDay;
       else return this.flux24PresenceDailyIn;
     },
+    showMaps(){
+      if(this.activeMenu == 3 || this.activeMenu == 7) return false
+      return true
+    }
   },
   mounted() {
     this.$set(this.loadings, "healthZoneGeo", true);
