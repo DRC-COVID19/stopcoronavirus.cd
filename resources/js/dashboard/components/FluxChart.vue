@@ -39,11 +39,6 @@
 
           <FullScreen id="mobile_generale_full" link="general_flux" @change="fullscreenMobileDaily">
             <b-card no-body class="cardtype1 mb-3 p-2">
-              <legend-popover>
-                <template v-slot:title>Comment est-ce calculé ?</template>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Sapiente tempore libero fugit perferendis repellendus?
-              </legend-popover>
               <div class="chart-container">
                 <canvas height="200" width="100vh" ref="general_flux" id="general_flux"></canvas>
               </div>
@@ -54,11 +49,6 @@
             <b-col cols="12" md="4">
               <FullScreen id="general_top_asc" link="general_top_asc" @change="fullscreenFluxInOut">
                 <b-card no-body class="cardtype2 p-2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="400" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
                   </div>
@@ -73,11 +63,6 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="400" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
                   </div>
@@ -92,11 +77,6 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -167,11 +147,6 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_in" id="mobile_in"></canvas>
                   </div>
@@ -185,11 +160,6 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="cardtype2 p-2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -254,11 +224,6 @@
 
               <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily" v-show="!isLoading">
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_out" id="mobile_out"></canvas>
                   </div>
@@ -272,11 +237,6 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="p-2 cardtype2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -352,11 +312,6 @@
             v-show="!isLoading"
           >
             <b-card no-body class="mb-3 p-2 cardtype1" ref="mobile_presence_card">
-              <legend-popover>
-                <template v-slot:title>Comment est-ce calculé ?</template>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Sapiente tempore libero fugit perferendis repellendus?
-              </legend-popover>
               <div class="chart-container">
                 <canvas height="400" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
               </div>
