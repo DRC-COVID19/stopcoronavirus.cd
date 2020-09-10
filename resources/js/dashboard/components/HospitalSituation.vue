@@ -120,11 +120,6 @@
         <FullScreen id="canvasStat1_full" link="canvasStat1" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
-            <legend-popover>
-              <template v-slot:title>Comment est-ce calculé ?</template>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Sapiente tempore libero fugit perferendis repellendus?
-            </legend-popover>
             <div class="chart-container">
               <canvas height="400" width="100vh" ref="canvasStat1" id="canvasStat1"></canvas>
             </div>
@@ -144,11 +139,6 @@
         <FullScreen id="canvasStat2_full" link="canvasStat2" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
-            <legend-popover>
-              <template v-slot:title>Comment est-ce calculé ?</template>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Sapiente tempore libero fugit perferendis repellendus?
-            </legend-popover>
             <div class="chart-container">
               <canvas height="400" width="100vh" ref="canvasStat2" id="canvasStat2"></canvas>
             </div>
