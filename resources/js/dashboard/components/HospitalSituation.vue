@@ -418,6 +418,13 @@ export default {
         }
       );
 
+      const totalRescitationBed = Number(
+        data.resuscitation_beds[data.resuscitation_beds.length - 1]
+      );
+      const totalRespirator = Number(
+        data.respirators[data.respirators.length - 1]
+      );
+
       for (let i = 0; i < 3; i++) {
         let callbacks = {
             title: (a, d) => {
@@ -436,7 +443,7 @@ export default {
                 type: "line",
                 mode: "horizontal",
                 scaleID: "y-axis-0",
-                value: data.respirators[data.respirators.length - 1],
+                value: totalRespirator,
                 borderColor: "magenta",
                 label: { content: "label" },
                 borderWidth: 3,
@@ -481,9 +488,14 @@ export default {
               lineTension: 0.4,
             },
           ];
-
+          const respiratorMax = Math.max(...Respirators.map((x) => Number(x)));
+          let tickMax = respiratorMax;
+          if (totalRespirator > respiratorMax) {
+            tickMax = totalRespirator + 1;
+          }
           ticksY = {
             min: 0,
+            max: tickMax,
             precision: 0,
           };
         } else if (i == 1) {
@@ -495,8 +507,7 @@ export default {
                 type: "line",
                 mode: "horizontal",
                 scaleID: "y-axis-0",
-                value:
-                  data.resuscitation_beds[data.resuscitation_beds.length - 1],
+                value: totalRescitationBed,
                 borderColor: "magenta",
                 borderWidth: 3,
                 label: "label",
@@ -542,9 +553,18 @@ export default {
             },
           ];
 
+          const resuscitationBedsMax = Math.max(
+            ...Resuscitation_beds.map((x) => Number(x))
+          );
+          let tickMax = resuscitationBedsMax;
+          if (totalRescitationBed > resuscitationBedsMax) {
+            tickMax = totalRescitationBed + 1;
+          }
+
           ticksY = {
             min: 0,
             precision: 0,
+            max: tickMax,
           };
         } else {
           const dataset1 = data.occupied_resuscitation_beds.map((a, i) => {
