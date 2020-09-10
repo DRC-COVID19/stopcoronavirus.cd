@@ -3,7 +3,7 @@
     <b-row>
       <b-col cols="12 mb-2">
         <div class="row align-items-center">
-          <skeleton-loading v-if="isLoading" class="col-12 col-md-6" >
+          <skeleton-loading v-if="isLoading" class="col-12 col-md-6">
             <square-skeleton
               :boxProperties="{
                                 width: '70%',
@@ -11,7 +11,7 @@
                             }"
             ></square-skeleton>
           </skeleton-loading>
-          <h4 class="col m-0 d-flex align-items-baseline" v-if="!isLoading" >
+          <h4 class="col m-0 d-flex align-items-baseline" v-if="!isLoading">
             <span>{{hospital.name || "Rapport global"}}</span>
             <b-badge v-if="hospitalCount" style="font-size:12px" class="ml-2">
               {{hospitalCount}}
@@ -120,11 +120,23 @@
         <FullScreen id="canvasStat1_full" link="canvasStat1" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
-            <legend-popover>
-              <template v-slot:title>Comment est-ce calculé ?</template>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Sapiente tempore libero fugit perferendis repellendus?
-            </legend-popover>
+            <div class="legend-custom">
+              <div class="text-center title">Evolution d'occupation des respirateurs</div>
+              <div class="d-flex flex-wrap justify-content-center align-items-center">
+                <div>
+                  <span class="legend-color total"></span>
+                  <Span>Ligne Totale</Span>
+                </div>
+                <div>
+                  <span class="legend-color respirator"></span>
+                  <Span>Respirateurs</Span>
+                </div>
+                <div>
+                  <span class="legend-color interpolation"></span>
+                  <Span>Interpolation</Span>
+                </div>
+              </div>
+            </div>
             <div class="chart-container">
               <canvas height="400" width="100vh" ref="canvasStat1" id="canvasStat1"></canvas>
             </div>
@@ -144,11 +156,23 @@
         <FullScreen id="canvasStat2_full" link="canvasStat2" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
-            <legend-popover>
-              <template v-slot:title>Comment est-ce calculé ?</template>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Sapiente tempore libero fugit perferendis repellendus?
-            </legend-popover>
+            <div class="legend-custom">
+              <div class="text-center title">Evolution d'occupation des lits de réanimation</div>
+              <div class="d-flex flex-wrap justify-content-center align-items-center">
+                <div>
+                  <span class="legend-color total"></span>
+                  <Span>Ligne Totale</Span>
+                </div>
+                <div>
+                  <span class="legend-color respirator"></span>
+                  <Span>Respirateurs</Span>
+                </div>
+                <div>
+                  <span class="legend-color interpolation"></span>
+                  <Span>Interpolation</Span>
+                </div>
+              </div>
+            </div>
             <div class="chart-container">
               <canvas height="400" width="100vh" ref="canvasStat2" id="canvasStat2"></canvas>
             </div>
@@ -168,6 +192,19 @@
         <FullScreen id="canvasStat3_full" link="canvasStat3" v-if="!isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+            <div class="legend-custom">
+              <div class="text-center title">Evolution global du taux d'occupation</div>
+              <div class="d-flex flex-wrap justify-content-center align-items-center">
+                <div>
+                  <span class="legend-color total"></span>
+                  <Span>Taux de Lits de réanimation</Span>
+                </div>
+                <div>
+                  <span class="legend-color respirator"></span>
+                  <Span>Taux de Respirateurs</Span>
+                </div>
+              </div>
+            </div>
             <div class="chart-container">
               <canvas height="400" width="100vh" ref="canvasStat3" id="canvasStat3"></canvas>
             </div>
@@ -400,7 +437,7 @@ export default {
                 mode: "horizontal",
                 scaleID: "y-axis-0",
                 value: data.respirators[data.respirators.length - 1],
-                borderColor: "magenta" ,
+                borderColor: "magenta",
                 label: { content: "label" },
                 borderWidth: 3,
               },
@@ -426,15 +463,16 @@ export default {
               backgroundColor: PALETTE.dash_red,
               borderColor: PALETTE.dash_red,
               data: data.occupied_respirators.map((x, i) => {
-                if(x == 0) return null
-                if(!+Respirators[i] ||
-                  (!+Respirators[i-1] && +data.occupied_respirators[i-1] ) ||
-                  (!+Respirators[i+1] && +data.occupied_respirators[i+1] )
-                ){
-                    return x
+                if (x == 0) return null;
+                if (
+                  !+Respirators[i] ||
+                  (!+Respirators[i - 1] && +data.occupied_respirators[i - 1]) ||
+                  (!+Respirators[i + 1] && +data.occupied_respirators[i + 1])
+                ) {
+                  return x;
                 }
 
-                return null
+                return null;
               }),
               fill: false,
               interpolate: true,
@@ -480,18 +518,21 @@ export default {
             },
             {
               label: "interpolation",
-              backgroundColor: PALETTE.dash_red ,
-              borderColor: PALETTE.dash_red ,
+              backgroundColor: PALETTE.dash_red,
+              borderColor: PALETTE.dash_red,
               data: data.occupied_resuscitation_beds.map((x, i) => {
-                if(x == 0) return null
-                if(!+Resuscitation_beds[i] ||
-                  (!+Resuscitation_beds[i-1] && +data.occupied_resuscitation_beds[i-1] ) ||
-                  (!+Resuscitation_beds[i+1] && +data.occupied_resuscitation_beds[i+1] )
-                ){
-                    return x
+                if (x == 0) return null;
+                if (
+                  !+Resuscitation_beds[i] ||
+                  (!+Resuscitation_beds[i - 1] &&
+                    +data.occupied_resuscitation_beds[i - 1]) ||
+                  (!+Resuscitation_beds[i + 1] &&
+                    +data.occupied_resuscitation_beds[i + 1])
+                ) {
+                  return x;
                 }
 
-                return null
+                return null;
               }),
               fill: false,
               interpolate: true,
@@ -569,8 +610,11 @@ export default {
           options: {
             responsive: true,
             maintainAspectRatio: false,
+            legend: {
+              display: false,
+            },
             title: {
-              display: true,
+              display: false,
               text: this.chartLabels[i].title,
               fontSize: 11,
             },
@@ -638,6 +682,7 @@ export default {
           this.$refs[`canvasStat${i + 1}`].getContext("2d"),
           config
         );
+        // this.lineCharts[i].generateLegend();
       }
     },
     backToTotalData() {
@@ -661,6 +706,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@~/sass/_variables";
 .fullscreen {
   .cardtype1 {
     canvas {
@@ -680,6 +726,30 @@ export default {
   #canvasStat1,
   #canvasStat2 {
     height: 400px !important ;
+  }
+  .legend-custom {
+    .title {
+      font-size: 0.8rem;
+    }
+    .legend-color {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: red;
+      + span {
+        margin-right: 5px;
+        font-size: 0.6rem;
+      }
+      &.total {
+        background: magenta;
+      }
+      &.respirator {
+        background: $dash_green;
+      }
+      &.interpolation {
+        background: $flux-presence;
+      }
+    }
   }
   .spinner-border {
     position: absolute;
