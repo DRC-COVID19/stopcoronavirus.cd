@@ -304,12 +304,14 @@
                   title="N'afficher que les présences jour"
                   :class="{'active' : typePresence == 2 || typePresence == 1 }"
                   @click="toggleTypePresence(2)"
+                  @dblclick="defineTypePresence(2)"
                 ></i>
                 <i
                   class="fa fa-moon"
                   title="N'afficher que les présences nuit"
                   :class="{'active' : typePresence == 3|| typePresence == 1}"
                   @click="toggleTypePresence(3)"
+                  @dblclick="defineTypePresence(3)"
                 ></i>
               </div>
             </div>
@@ -1368,6 +1370,9 @@ export default {
       }
       this.setTypePresence(type);
     },
+    defineTypePresence(type){
+      this.setTypePresence(type);
+    }
   },
 };
 </script>
@@ -1440,6 +1445,7 @@ export default {
   }
 }
 .btns-toggle-presence {
+  user-select: none;
   i {
     color: #7b7f88;
     font-size: 15px;
@@ -1448,6 +1454,9 @@ export default {
     transition: color 0.2s ease-in-out;
     &.active {
       color: #8bc34a;
+    }
+    &:active{
+      opacity : 0.6 ;
     }
   }
 }
