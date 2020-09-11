@@ -18368,6 +18368,7 @@ h3 {
 .top-menu .vue-daterange-picker div {
   background: rgba(224, 231, 255, 0.2);
   height: 32px;
+  font-size: 0.85rem;
 }
 
 .side-bottom .canva-chart {

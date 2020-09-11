@@ -72,33 +72,33 @@ class SelfTestController extends Controller
     private $questions = [
         [
             'id' => 1,
-            'q' => "Pensez-vous avoir ou avoir eu de la fièvre ces 48 dernières heures (frissons, sueurs) ?",
+            'q' => "Quelle a été votre température la plus élevée ces dernières 48 heures ?",
             'r' => 10,
         ],
         [
             'id' => 2,
-            'q' => "Ces derniers jours, avez-vous une toux ou une augmentation de votre toux habituelle ?",
+            'q' => "Avez-vous une toux ou votre toux habituelle s’est-elle modifiée ces derniers jours ?",
             'r' => 1
         ],
         [
             'id' => 3,
-            'q' => "Ces derniers jours, avez-vous noté une forte diminution ou perte de votre goût ou de votre odorat ?",
+            'q' => "Avez-vous noté une perte ou une forte diminution de votre goût ou de votre odorat ces derniers jours ?",
             'r' => 1
 
         ],
         [
             'id' => 4,
-            'q' => "Ces derniers jours, avez-vous eu un mal de gorge et/ou des douleurs musculaires et/ou des courbatures inhabituelles ?",
+            'q' => "Avez-vous un mal de gorge ou des douleurs musculaires ou des courbatures inhabituelles ou des maux de tête inhabituels ces derniers jours ?",
             'r' => 1,
         ],
         [
             'id' => 5,
-            'q' => "Ces dernières 24 heures, avez-vous de la diarrhée ? Avec au moins 3 selles molles.",
+            'q' => "Avez-vous de la diarrhée ces dernières 24 heures (au moins 3 selles molles) ?",
             'r' => 1,
         ],
         [
             'id' => 6,
-            'q' => "Ces derniers jours, avez-vous une fatigue inhabituelle ?",
+            'q' => "Avez-vous une fatigue inhabituelle ces derniers jours ? ",
             'r' => 1,
         ],
         [
@@ -137,47 +137,47 @@ class SelfTestController extends Controller
         ],
         [
             'id' => 13,
-            'q' => "Avez-vous de l’hypertension artérielle mal équilibrée ? Ou avez-vous une maladie cardiaque ou vasculaire ? Ou prenez vous un traitement à visée cardiologique ?",
+            'q' => "Avez-vous des antécédents de maladie cardiovasculaire : hypertension artérielle compliquée (avec complications cardiaques, rénales), accident vasculaire cérébral, maladie coronaire (infarctus), chirurgie cardiaque, insuffisance cardiaque avec essoufflement au moindre effort ?",
             'r' => 2
         ],
         [
             'id' => 14,
-            'q' => "Êtes-vous diabétique ?",
+            'q' => "Avez-vous un diabète mal équilibré ou avec des complications (yeux, reins) ?",
             'r' => 1
         ],
         [
             'id' => 15,
-            'q' => "Avez-vous ou avez-vous eu un cancer ces trois dernières années ?",
+            'q' => "Avez-vous un cancer évolutif sous traitement (hors hormonothérapie) ?",
             'r' => 1
         ],
         [
             'id' => 16,
-            'q' => "Avez-vous une maladie respiratoire ? Ou êtes-vous suivi par un pneumologue ?",
+            'q' => "Avez-vous une maladie respiratoire chronique (bronchopneumopathie obstructive, asthme sévère, fibrose pulmonaire, syndrome d’apnées du sommeil, mucoviscidose) ou êtes-vous suivi par un pneumologue ?",
             'r' => 1
         ],
         [
             'id' => 17,
-            'q' => "Avez-vous une insuffisance rénale chronique dialysée ?",
+            'q' => "Avez-vous une insuffisance rénale chronique avec besoin de faire de la dialyse ?",
             'r' => 1
         ],
         [
             'id' => 18,
-            'q' => "Avez-vous une maladie chronique du foie ?",
+            'q' => "Avez-vous une cirrhose ?",
             'r' => 1
         ],
         [
             'id' => 19,
-            'q' => "Êtes-vous enceinte ?",
+            'q' => "Êtes-vous enceinte au 3ème trimestre de votre grossesse ?",
             'r' => 8
         ],
         [
             'id' => 20,
-            'q' => "Avez-vous une maladie connue pour diminuer vos défenses immunitaires ?",
+            'q' => "Avez-vous une drépanocytose homozygote (forme majeure) ou avez-vous bénéficié d’une splénectomie (ablation de la rate) à cause de la drépanocytose ?",
             'r' => 2
         ],
         [
             'id' => 21,
-            'q' => "Prenez-vous un traitement immunosuppresseur ? C’est un traitement qui diminue vos défenses contre les infections. Voici quelques exemples : corticoïdes, méthotrexate, ciclosporine, tacrolimus, azathioprine, cyclophosphamide (liste non exhaustive).",
+            'q' => "Avez-vous une immunodépression, par exemple : médicamenteuse (chimiothérapie anti cancéreuse, traitement immunosuppresseur, biothérapie et/ou corticothérapie à dose immunosuppressive depuis plus de 15 jours) ; infection à VIH non contrôlée ou avec des CD4 <200/mm3 ; consécutive à une greffe d'organe solide ou de cellules souches hématopoïétiques ; liée à une hémopathie maligne en cours de traitement ?",
             'r' => 2
         ],
         [
@@ -876,7 +876,7 @@ class SelfTestController extends Controller
         $responses['orientation'] = $message['code'];
         $responses['results_message'] = $message['text'];
         $responses['algo_version'] = "2020-04-06";
-        $responses['form_version'] = "2020-04-06";
+        $responses['form_version'] = "2020-06-09";
         $responses['fever_algo'] = $this->hasFever($responses);
 
         switch ($responses['temperature_cat']) {
