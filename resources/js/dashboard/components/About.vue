@@ -189,7 +189,7 @@
                 <b-card class="default-card">
                   <div class="img-capture-wrapper">
                     <img src="/img/screen-capture/mobility-tendance.JPG" class="img-capture" alt
-                      @click="showModal" />
+                      @click="showModal" style="height:90px" />
                   </div>
                   <h5>Graphe de l'evolution de la tendance d'une zone</h5>
                   <p>
@@ -269,7 +269,7 @@
                 <b-card class="default-card">
                   <div class="img-capture-wrapper">
                     <img src="/img/screen-capture/infrastructure-taux.JPG" class="img-capture" alt
-                      @click="showModal" />
+                      @click="showModal"/>
                   </div>
                   <h5>Graphe d'evolution globale du taux d'occupation</h5>
                   <p>
