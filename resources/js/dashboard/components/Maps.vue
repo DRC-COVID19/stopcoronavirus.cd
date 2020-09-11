@@ -27,6 +27,11 @@ const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
   EPIDEMIC_LAYER = "EPIDEMIC_LAYER",
   HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER",
   COVID_HOSPITAL_SOURCE = "COVID_HOSPITAL_SOURCE";
+
+const popup = new Mapbox.Popup({
+  closeButton: false,
+  closeOnClick: false,
+});
 export default {
   components: { ToolTipMaps },
   props: {
@@ -183,11 +188,9 @@ export default {
     });
     U.init(map, Mapbox);
     map.addControl(new Mapbox.NavigationControl());
+    map.getCanvas().style.cursor = "default";
 
-    this.isMapLoaded = false;
     map.on("load", () => {
-      this.isMapLoaded = true;
-
       map.U.addGeoJSON(
         this.drcSourceId,
         { type: "FeatureCollection", features: [] },
@@ -815,15 +818,7 @@ export default {
         },
       });
 
-      const popup = new Mapbox.Popup({
-        closeButton: false,
-        closeOnClick: false,
-      });
-
       const mouseMove = (e) => {
-        // Change the cursor style as a UI indicator.
-        // map.getCanvas().style.cursor = "pointer";
-
         const coordinates = e.features[0].geometry.coordinates[0].slice();
 
         const item = e.features[0].properties;
@@ -845,7 +840,6 @@ export default {
       };
 
       const mouseOut = () => {
-        map.getCanvas().style.cursor = "";
         popup.remove();
       };
 
@@ -1368,8 +1362,6 @@ export default {
       });
 
       const mouseMove = (e) => {
-        // Change the cursor style as a UI indicator.
-        // map.getCanvas().style.cursor = "pointer";
         if (this.activeMenu != 1) {
           return;
         }
@@ -1397,7 +1389,7 @@ export default {
         if (this.activeMenu != 1) {
           return;
         }
-        map.getCanvas().style.cursor = "";
+
         popup.remove();
       };
 
@@ -1546,41 +1538,10 @@ export default {
         let referenceVolume = null;
         let observationVolume = null;
 
-        references.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
+        const result = this.formatFluxDataByMedian({
+          references,
+          observations,
         });
-        observations.sort((a, b) => {
-          return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
-        });
-
-        const countReference = references.length;
-        if (countReference > 0) {
-          if (countReference % 2 == 0) {
-            let index = (countReference + 1) / 2;
-            index = parseInt(index);
-            const volume1 = references[index].volume;
-            const volume2 = references[index - 1].volume;
-            referenceVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countReference + 1) / 2;
-            referenceVolume = references[index - 1].volume;
-          }
-        }
-
-        const countObservation = observations.length;
-        if (countObservation > 0) {
-          if (countObservation % 2 == 0) {
-            let index = (countObservation + 1) / 2;
-            index = parseInt(index);
-            const volume1 = observations[index].volume;
-            const volume2 = observations[index - 1].volume;
-            observationVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countObservation + 1) / 2;
-            observationVolume = observations[index - 1].volume;
-          }
-        }
-        const difference = observationVolume - referenceVolume;
 
         features.push({
           type: "Feature",
@@ -1596,10 +1557,10 @@ export default {
             color: includes(this.fluxGeoOptions, observations[0][key])
               ? PALETTE.flux_in_color
               : PALETTE.flux_out_color,
-            volume: observationVolume,
-            volumeReference: referenceVolume,
-            percent: Math.round((difference / referenceVolume) * 100),
-            difference: difference,
+            volume: result.observationVolume,
+            volumeReference: result.referenceVolume,
+            percent: result.percent,
+            difference: result.difference,
           },
         });
       };
@@ -1732,17 +1693,16 @@ export default {
       });
 
       let hoveredStateId = null;
-      const popup = new Mapbox.Popup({
-        closeButton: false,
-        closeOnClick: false,
-      });
+      // const popup = new Mapbox.Popup({
+      //   closeButton: false,
+      //   closeOnClick: false,
+      // });
       // When the user moves their mouse over the state-fill layer, we'll update the
       // feature state for the feature under the mouse.
       map.on("mouseenter", "fluxCircleDataLayer", () => {
         if (this.activeMenu != 1) {
           return;
         }
-        map.getCanvas().style.cursor = "pointer";
       });
       map.on("mousemove", "fluxCircleDataLayer", (e) => {
         if (this.activeMenu != 1) {
@@ -1782,7 +1742,7 @@ export default {
           );
         }
         hoveredStateId = null;
-        map.getCanvas().style.cursor = "";
+
         popup.remove();
       });
 
@@ -1849,6 +1809,7 @@ export default {
         },
       });
       map.addLayer(myDeckLayer);
+      map.getCanvas().style.cursor = "default";
     },
     infrastructure() {
       if (this.hospitals) {
@@ -1886,10 +1847,10 @@ export default {
           },
         });
 
-        const popup = new Mapbox.Popup({
-          closeButton: false,
-          closeOnClick: false,
-        });
+        // const popup = new Mapbox.Popup({
+        //   closeButton: false,
+        //   closeOnClick: false,
+        // });
 
         const mouseMove = (e) => {
           const coordinates = e.features[0].geometry.coordinates.slice();
@@ -1941,17 +1902,13 @@ export default {
         };
 
         const mouseOut = (e) => {
-          this.map.getCanvas().style.cursor = "";
-          popup.remove();
+          this.popup.remove();
         };
 
         const mouseClick = (e) => {
           this.selectHospital(e.features[0].properties);
         };
 
-        this.map.on("mouseenter", "covid9HospitalsLayer", () => {
-          this.map.getCanvas().style.cursor = "pointer";
-        });
         this.map.on("mouseleave", "covid9HospitalsLayer", mouseOut);
         this.map.on("mousemove", "covid9HospitalsLayer", mouseMove);
         this.map.on("click", "covid9HospitalsLayer", mouseClick);
