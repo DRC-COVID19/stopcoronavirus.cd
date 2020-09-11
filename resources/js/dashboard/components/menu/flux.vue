@@ -121,6 +121,7 @@ import {
   PREFERENCE_END,
   DATEFORMAT,
   FLUX_LAST_UPDATE,
+  FLUX_PREDEFINED_INPUT,
 } from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
@@ -162,37 +163,7 @@ export default {
         startDate: new Date("03/19/2020"),
         endDate: new Date("06/29/2020"),
       },
-      fluxPredefinedInput: [
-        {
-          id: 1,
-          name: "Aujourd'hui",
-        },
-        {
-          id: 2,
-          name: "Semaine en cours",
-        },
-        {
-          id: 3,
-          name: "Mois en cours",
-        },
-        {
-          id: 4,
-          name: "Mois passé",
-        },
-        {
-          id: 6,
-          name:
-            "Mobilité à la Gombe une semaine après le debut du confinement (24h)",
-        },
-        {
-          id: 5,
-          name: "Mobilité à la Gombe depuis le début du confinement",
-        },
-        {
-          id: 7,
-          name: "Mobilité générale à la Gombe depuis le début du confinement",
-        },
-      ],
+      fluxPredefinedInput:FLUX_PREDEFINED_INPUT,
       fluxFilterInput: "",
       fluxFilterInputProvince: "",
       fluxZonesArray: [],
