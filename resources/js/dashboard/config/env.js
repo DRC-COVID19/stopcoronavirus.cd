@@ -34,22 +34,22 @@ export const
     DATEFORMAT = "Y-MM-DD",
     INFRASTRUCTURE_FIRST_UPDATE = "2020-07-01" ,
     FLUX_PREDEFINED_INPUT = [
-        {
-            id: 1,
-            name: "Aujourd'hui"
-        },
-        {
-            id: 2,
-            name: "Semaine en cours"
-        },
-        {
-            id: 3,
-            name: "Mois en cours"
-        },
-        {
-            id: 4,
-            name: "Mois passé"
-        },
+        // {
+        //     id: 1,
+        //     name: "Aujourd'hui"
+        // },
+        // {
+        //     id: 2,
+        //     name: "Semaine en cours"
+        // },
+        // {
+        //     id: 3,
+        //     name: "Mois en cours"
+        // },
+        // {
+        //     id: 4,
+        //     name: "Mois passé"
+        // },
         {
             id: 6,
             name:

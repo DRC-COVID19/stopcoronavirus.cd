@@ -183,9 +183,39 @@ export default {
     });
     U.init(map, Mapbox);
     map.addControl(new Mapbox.NavigationControl());
+
     this.isMapLoaded = false;
     map.on("load", () => {
       this.isMapLoaded = true;
+
+      map.U.addGeoJSON(
+        this.drcSourceId,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true,
+        }
+      );
+      map.U.addGeoJSON(
+        this.drcHealthZone,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true,
+        }
+      );
+      map.U.addGeoJSON(
+        sourceHealthZoneGeojsonCentered,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true,
+        }
+      );
+      map.U.addGeoJSON(
+        sourceHealthProvinceGeojsonCentered,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true,
+        }
+      );
       // map.addSource(this.drcSourceId, {
       //   type: "geojson",
       //   generateId: true,
@@ -204,13 +234,13 @@ export default {
       // });
 
       if (this.healthZoneGeojson) {
-        // this.addZoneSource();
+        this.addZoneSource();
         this.addPolygoneLayer(2);
         this.addPolygoneHoverLayer(2);
         this.$emit("geoJsonLoaded", "healthZoneGeo");
       }
       if (this.healthProvinceGeojson) {
-        // this.addProvinceSource();
+        this.addProvinceSource();
         this.$emit("geoJsonLoaded", "provinceGeo");
       }
 
@@ -322,6 +352,7 @@ export default {
         this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
       } else {
         map.U.removeLayer([EPIDEMIC_LAYER]);
+        map.resize();
       }
     },
     hospitals() {
@@ -331,7 +362,7 @@ export default {
       this.getMedicalOrientations();
     },
     medicalOrientationSelected() {
-      this.medicalOrientationChanged()
+      this.medicalOrientationChanged();
     },
     sondages() {
       if (!this.sondages) {
@@ -623,50 +654,25 @@ export default {
         });
     },
     addProvinceSource() {
-      // if (!this.isMapLoaded) {
-      //   return;
-      // }
-      // map.U.addGeoJSON(
-      //   sourceHealthProvinceGeojsonCentered,
-      //   this.healthProvinceGeojsonCentered
-      // );
-      // map.U.addGeoJSON(this.drcSourceId, this.healthProvinceGeojson);
-
-      map.addSource(sourceHealthProvinceGeojsonCentered, {
-        type: "geojson",
-        generateId: true,
-        data: this.healthProvinceGeojsonCentered,
-      });
-
-      // map.U.addGeoJSON(this.drcHealthZone, this.healthZoneGeojson);
-
-      map.addSource(this.drcSourceId, {
-        type: "geojson",
-        generateId: true,
-        data: this.healthProvinceGeojson,
-      });
+      if (!map || !map.U) {
+        return;
+      }
+      map.U.setData(
+        sourceHealthProvinceGeojsonCentered,
+        this.healthProvinceGeojsonCentered
+      );
+      map.U.setData(this.drcSourceId, this.healthProvinceGeojson);
     },
     addZoneSource() {
-      // if (!this.isMapLoaded) {
-      //   return;
-      // }
-      // map.U.addGeoJSON(
-      //   sourceHealthZoneGeojsonCentered,
-      //   this.healthZoneGeojsonCentered
-      // );
-      map.addSource(sourceHealthZoneGeojsonCentered, {
-        type: "geojson",
-        generateId: true,
-        data: this.healthZoneGeojsonCentered,
-      });
+      if (!map || !map.U) {
+        return;
+      }
+      map.U.setData(
+        sourceHealthZoneGeojsonCentered,
+        this.healthZoneGeojsonCentered
+      );
 
-      // map.U.addGeoJSON(this.drcHealthZone, this.healthZoneGeojson);
-
-      map.addSource(this.drcHealthZone, {
-        type: "geojson",
-        generateId: true,
-        data: this.healthZoneGeojson,
-      });
+      map.U.setData(this.drcHealthZone, this.healthZoneGeojson);
     },
     covidHatchedStyle(
       covidCasesData,
@@ -680,6 +686,7 @@ export default {
         easing: function (t) {
           return t;
         },
+        pitch: 10,
         zoom: 3.5,
       });
       let features = covidCasesData.data.features;
@@ -935,8 +942,8 @@ export default {
         //   data = this.flux24DailyGenerale;
         // }
         let zone = null;
-        if (this.fluxGeoOptionsTmp && this.fluxGeoOptionsTmp.length > 0) {
-          zone = this.fluxGeoOptionsTmp[0];
+        if (this.fluxGeoOptions && this.fluxGeoOptions.length > 0) {
+          zone = this.fluxGeoOptions[0];
         }
         switch (this.fluxType) {
           case 1:
@@ -1852,6 +1859,7 @@ export default {
           easing: function (t) {
             return t;
           },
+          pitch: 10,
           zoom: 9,
         });
         this.map.addSource(COVID_HOSPITAL_SOURCE, this.hospitals);
@@ -1987,30 +1995,18 @@ export default {
       let total_fin5 = 0;
       let total_fin8 = 0;
       let AllMarkers = [];
+      const maxFin = Math.max(this.medicalOrientations.map((x) => x.FIN));
+      const maxFin8 = Math.max(this.medicalOrientations.map((x) => x.FIN8));
+      const maxFin5 = Math.max(this.medicalOrientations.map((x) => x.FIN5));
+
       this.medicalOrientations.map((item) => {
         var el = document.createElement("div");
         el.className = "pie";
         let total = item.FIN + item.FIN8 + item.FIN5;
 
-        if (total > 3840) {
-          el.style = "width:80px;height:80px;";
-        } else if (total > 1920) {
-          el.style = "width:75px;height:75px;";
-        } else if (total > 960) {
-          el.style = "width:70px;height:70px;";
-        } else if (total > 480) {
-          el.style = "width:65px;height:65px;";
-        } else if (total > 240) {
-          el.style = "width:60px;height:60px;";
-        } else if (total > 120) {
-          el.style = "width:55px;height:55px;";
-        } else if (total > 60) {
-          el.style = "width:50px;height:50px;";
-        } else if (total > 30) {
-          el.style = "width:45px;height:45px;";
-        } else if (total > 15) {
-          el.style = "width:40px;height:40px;";
-        }
+        const size = (total / maxFin + maxFin8 + maxFin5) * 50;
+        el.style = `width:${size}px;height:${size}px;`;
+
         let elSpan = document.createElement("span");
         let elSpan2 = document.createElement("span");
         let elSpan3 = document.createElement("span");
@@ -2204,35 +2200,31 @@ export default {
       if (!this.medicalOrientations || this.medicalOrientations.length == 0) {
         return;
       }
+      map.resize();
+      map.flyTo({
+        center: this.defaultCenterCoordinates,
+        easing: function (t) {
+          return t;
+        },
+        pitch: 10,
+        zoom: 3.5,
+      });
       if (this.medicalOrientationSelected == "ALL") {
         this.getMedicalOrientations();
         return;
       }
       this.RemoveOrientationMakers();
       let orientation = this.medicalOrientationSelected;
+      const max = Math.max(
+        ...this.medicalOrientations.map((x) => x[orientation])
+      );
       this.medicalOrientations.map((value) => {
         if (value[orientation] >= 0) {
           let el = document.createElement("div");
           el.className = `default-makers ${orientation}`;
-          if (value[orientation] > 3840) {
-            el.style = "width:100px;height:100px;";
-          } else if (value[orientation] > 1920) {
-            el.style = "width:90px;height:90px;";
-          } else if (value[orientation] > 960) {
-            el.style = "width:80px;height:80px;";
-          } else if (value[orientation] > 480) {
-            el.style = "width:70px;height:70px;";
-          } else if (value[orientation] > 240) {
-            el.style = "width:60px;height:60px;";
-          } else if (value[orientation] > 120) {
-            el.style = "width:50px;height:50px;";
-          } else if (value[orientation] > 60) {
-            el.style = "width:40px;height:40px;";
-          } else if (value[orientation] > 30) {
-            el.style = "width:30px;height:30px;";
-          } else if (value[orientation] > 15) {
-            el.style = "width:20px;height:20px;";
-          }
+          const x = value[orientation];
+          const size = (x / max) * 50;
+          el.style = `width:${size}px;height:${size}px;`;
           el.style.zIndex = value[orientation];
 
           let longitude = value.longitude;
