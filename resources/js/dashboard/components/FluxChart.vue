@@ -1,9 +1,9 @@
 <template>
   <div>
     <b-container class="p-0 flux-chart">
-      <b-row>
+      <b-row class="mb-2">
         <div class="col-md col-12">
-          <h3 class="d-flex align-items-center">
+          <h3 class="d-flex align-items-center mb-0">
             <span class="ml-2 mr-2">{{targetZone}}</span>
 
             <toggle-button
@@ -13,9 +13,26 @@
             ></toggle-button>
           </h3>
         </div>
-        <div class="col-md-auto col-12 text-right">
-          <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
-          <span class="small text-muted">Dernière mise à jour</span>
+        <div class="col-md col-12 d-flex justify-content-end">
+          <div>
+            <p class="small m-0 text-muted">
+              Données fournies par
+              <b>Orange</b>
+            </p>
+            <p class="small m-0">
+              <span class="text-muted">Mise à jour du</span>
+              <b>{{moment(last_update).format('Y-MM-DD')}}</b>
+            </p>
+          </div>
+          <div>
+            <b-img
+              width="38"
+              height="38"
+              src="/img/Orange_logo.svg"
+              class="logoPartenaire"
+              alt="orange logo"
+            />
+          </div>
         </div>
       </b-row>
 
@@ -39,11 +56,6 @@
 
           <FullScreen id="mobile_generale_full" link="general_flux" @change="fullscreenMobileDaily">
             <b-card no-body class="cardtype1 mb-3 p-2">
-              <legend-popover>
-                <template v-slot:title>Comment est-ce calculé ?</template>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Sapiente tempore libero fugit perferendis repellendus?
-              </legend-popover>
               <div class="chart-container">
                 <canvas height="200" width="100vh" ref="general_flux" id="general_flux"></canvas>
               </div>
@@ -54,11 +66,6 @@
             <b-col cols="12" md="4">
               <FullScreen id="general_top_asc" link="general_top_asc" @change="fullscreenFluxInOut">
                 <b-card no-body class="cardtype2 p-2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="400" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
                   </div>
@@ -73,11 +80,6 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="400" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
                   </div>
@@ -92,11 +94,6 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -167,11 +164,6 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="cardtype1 mb-3 p-2" ref="mobile_entrance_card">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_in" id="mobile_in"></canvas>
                   </div>
@@ -185,11 +177,6 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="cardtype2 p-2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -207,7 +194,6 @@
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
           <b-row class="mb-3">
             <b-col cols="12">
-
               <skeleton-loading class="mb-3" v-if="isLoading">
                 <square-skeleton
                   :boxProperties="{
@@ -252,13 +238,13 @@
                 </p>
               </b-card>
 
-              <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily" v-show="!isLoading">
+              <FullScreen
+                id="fullscreenOut"
+                link="mobile_out"
+                @change="fullscreenMobileDaily"
+                v-show="!isLoading"
+              >
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_out" id="mobile_out"></canvas>
                   </div>
@@ -272,11 +258,6 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="p-2 cardtype2">
-                  <legend-popover>
-                    <template v-slot:title>Comment est-ce calculé ?</template>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                    Sapiente tempore libero fugit perferendis repellendus?
-                  </legend-popover>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -292,23 +273,23 @@
         </b-col>
 
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
-        <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
+          <skeleton-loading class="mb-3" v-if="isLoading">
+            <square-skeleton
+              :boxProperties="{
                                 width: '100%',
                                 height: '175px'
                             }"
-                ></square-skeleton>
-              </skeleton-loading>
+            ></square-skeleton>
+          </skeleton-loading>
 
-              <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
+          <skeleton-loading class="mb-3" v-if="isLoading">
+            <square-skeleton
+              :boxProperties="{
                                 width: '100%',
                                 height: '200px'
                             }"
-                ></square-skeleton>
-              </skeleton-loading>
+            ></square-skeleton>
+          </skeleton-loading>
           <b-card
             class="mb-3 flux-mobility"
             :class="{'active':fluxType==3,'disabled':globalProgress && globalProgress<100}"
@@ -354,11 +335,6 @@
             v-show="!isLoading"
           >
             <b-card no-body class="mb-3 p-2 cardtype1" ref="mobile_presence_card">
-              <legend-popover>
-                <template v-slot:title>Comment est-ce calculé ?</template>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Sapiente tempore libero fugit perferendis repellendus?
-              </legend-popover>
               <div class="chart-container">
                 <canvas height="400" width="100vh" ref="mobile_presence" id="mobile_presence"></canvas>
               </div>
@@ -832,7 +808,8 @@ export default {
         this.fluxMobilityFluxZone(
           this.flux24DailyIn,
           "mobile_entrance_2_card",
-          "origin"
+          "origin",
+          PALETTE.flux_in_color
         );
       });
     },
@@ -841,7 +818,8 @@ export default {
         this.fluxMobilityFluxZone(
           this.flux24DailyOut,
           "mobile_out_2_card",
-          "destination"
+          "destination",
+          PALETTE.flux_out_color
         );
       });
     },
@@ -1017,7 +995,7 @@ export default {
       this.lineCharts[ref] = new Chart(reference.getContext("2d"), tempData);
       reference.style.height = 200;
     },
-    fluxMobilityFluxZone(InputData, ref, key) {
+    fluxMobilityFluxZone(InputData, ref, key, color) {
       if (!InputData) {
         return;
       }
@@ -1063,20 +1041,8 @@ export default {
       const maxVal = d3.max(localDataPercent);
       localData = localData.slice(0, 10);
 
-      this.drawHorizontalChart(
-        localData,
-        "zone",
-        ref,
-        key == "origin"
-          ? this.getRangeColors(
-              localData.map((x) => x.percent),
-              PALETTE.inflow_negatif.slice().reverse()
-            )
-          : this.getRangeColors(
-              localData.map((x) => x.percent),
-              PALETTE.outflow_negatif.slice().reverse()
-            )
-      );
+      // cond : key == origin
+      this.drawHorizontalChart(localData, "zone", ref, color);
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
       console.log("topHealthZonePandemics", inPutData);
@@ -1085,7 +1051,7 @@ export default {
         volume: item.confirmed,
       }));
       console.log("topHealthZonePandemics", data);
-      this.drawHorizontalChart(data, "zone", ref, "red", title);
+      this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color, title);
     },
     async fluxMobilityFluxGeneralZone(
       fluxDataIn,
@@ -1144,39 +1110,21 @@ export default {
           ascData,
           "zone",
           refAsc,
-          this.getRangeColors(
-            ascData.map((x) => x.percent),
-            PALETTE.general_positif,
-            PALETTE.general_negatif,
-            minVal,
-            maxVal
-          ),
+          PALETTE.flux_in_color,
           titleAsc
         );
         this.drawHorizontalChart(
           descData,
           "zone",
           refDesc,
-          this.getRangeColors(
-            descData.map((x) => x.percent),
-            PALETTE.general_positif,
-            PALETTE.general_negatif,
-            minVal,
-            maxVal
-          ),
+          PALETTE.flux_in_color,
           titleDesc
         );
         this.drawHorizontalChart(
           mobilityHealth,
           "zone",
           refHealth,
-          this.getRangeColors(
-            mobilityHealth.map((x) => x.percent),
-            PALETTE.general_positif,
-            PALETTE.general_negatif,
-            minVal,
-            maxVal
-          ),
+          PALETTE.flux_in_color,
           titleHelth
         );
       });
@@ -1511,5 +1459,10 @@ export default {
       opacity : 0.6 ;
     }
   }
+}
+.logoPartenaire {
+  height: 38px;
+  width: auto;
+  margin-left: 5px;
 }
 </style>
