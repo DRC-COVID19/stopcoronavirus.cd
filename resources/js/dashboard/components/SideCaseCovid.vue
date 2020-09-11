@@ -1,22 +1,34 @@
 <template>
   <b-container class="side-case-covid-container p-0">
     <b-row>
-      <b-col cols="12">
+      <b-col cols="12" v-if="isLoading">
+        <skeleton-loading >
+          <square-skeleton
+            :boxProperties="{
+                                width: '100%',
+                                height: '830px'
+                            }"
+          ></square-skeleton>
+        </skeleton-loading>
+      </b-col >
+      <b-col cols="12" v-else>
         <b-table striped outlined hover responsive :items="CovidCasesProvince" :fields="fields">
           <template v-slot:cell(name)="data">
             <span>{{ data.item.properties.name }}</span>
           </template>
-           <template v-slot:cell(last_update)="data">
-             <div class="text-right">{{ moment(data.item.properties.last_update).format("DD.MM.YYYY") }}</div>
+          <template v-slot:cell(last_update)="data">
+            <div
+              class="text-right"
+            >{{ moment(data.item.properties.last_update).format("DD.MM.YYYY") }}</div>
           </template>
-          <template v-slot:cell(confirmed)="data" >
+          <template v-slot:cell(confirmed)="data">
             <div class="text-right">{{ data.item.properties.confirmed }}</div>
           </template>
-          <template v-slot:cell(healed)="data" >
+          <template v-slot:cell(healed)="data">
             <div class="text-right">{{ data.item.properties.healed }}</div>
           </template>
-          
-           <template v-slot:cell(dead)="data" >
+
+          <template v-slot:cell(dead)="data">
             <div class="text-right">{{ data.item.properties.dead }}</div>
           </template>
         </b-table>
@@ -30,57 +42,61 @@ export default {
   props: {
     covidCases: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       fields: [
         {
           key: "name",
-          label: "Nom"
+          label: "Nom",
         },
         {
-          key:'last_update',
-          label:"Mise à jour",
-          variant:"info"
+          key: "last_update",
+          label: "Mise à jour",
+          variant: "info",
         },
         {
           key: "confirmed",
           label: "Confirmés",
-          variant: "warning"
+          variant: "warning",
         },
         {
           key: "Healed",
           label: "Guéris",
-          variant: "success"
+          variant: "success",
         },
         {
           key: "dead",
           label: "Décès",
-          variant: "danger"
-        }
-      ]
+          variant: "danger",
+        },
+      ],
     };
   },
   computed: {
     CovidCasesProvince() {
       return this.covidCases?.data.features;
-    }
+    },
   },
   methods: {
     stateColorWith(item, type) {
       let width = (item[type] * 100) / item.confirmed;
       if (width == 0) {
         return {
-          width: "10px"
+          width: "10px",
         };
       }
       return {
-        width: `${width}%`
+        width: `${width}%`,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
