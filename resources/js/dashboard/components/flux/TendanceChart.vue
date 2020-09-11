@@ -1,18 +1,13 @@
 <template>
-  <div class="fullscreen-container">
-    <fullscreen ref="fullscreen" @change="fullscreenChange">
-      <b-container fluid class="p-0 container-tendanceChart" ref="tendanceContainer">
-        <b-row no-gutters>
-          <b-col cols="12" class="pl-0 pr-2">
-            <canvas width="100vh" ref="tendanceChart" id="tendanceChart" />
-          </b-col>
-        </b-row>
-      </b-container>
-    </fullscreen>
-    <button type="button" @click="toggleFullscreen" class="fullscreen-btn mini">
-      <i class="fa fa-expand"></i>
-    </button>
-  </div>
+  <FullScreen id="fullscreenTendanceChart" link="tendanceChart" @change="fullscreenChange">
+    <b-container fluid class="p-0 container-tendanceChart" ref="tendanceContainer">
+      <b-row no-gutters>
+        <b-col cols="12" class="pl-0 pr-2">
+          <canvas width="100vh" ref="tendanceChart" id="tendanceChart" />
+        </b-col>
+      </b-row>
+    </b-container>
+  </FullScreen>
 </template>
 
 <script>
@@ -221,10 +216,6 @@ export default {
       if (this.myLineChart) this.myLineChart.destroy();
       this.myLineChart = new Chart(ref.getContext("2d"), tempData);
       const myLineChart2 = this.myLineChart;
-    },
-
-    toggleFullscreen() {
-      this.$refs['fullscreen'].toggle()
     },
     fullscreenChange (fullscreen) {
       this.fullscreen = fullscreen
