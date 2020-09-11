@@ -19,12 +19,6 @@ export default {
   },
   mounted() {
     this.$store.watch(
-      state => state.hospital.isLoading,
-      value => {
-        this.isLoading = value;
-      }
-    );
-    this.$store.watch(
       state => state.auth.isLogout,
       value => {
         this.isLoading = value;
