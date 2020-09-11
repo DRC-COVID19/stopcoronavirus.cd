@@ -15,14 +15,23 @@
         </div>
         <div class="col-md col-12 d-flex justify-content-end">
           <div>
-            <p class="small m-0">Données fournies par Orange</p>
+            <p class="small m-0 text-muted">
+              Données fournies par
+              <b>Orange</b>
+            </p>
             <p class="small m-0">
-              <span class="text-muted">Dernière mise à jour</span> :
-              {{moment(last_update).format('Y-MM-DD')}}
+              <span class="text-muted">Mise à jour du</span>
+              <b>{{moment(last_update).format('Y-MM-DD')}}</b>
             </p>
           </div>
           <div>
-            <img src="/img/Orange_logo.svg" class="logoPartenaire"alt />
+            <b-img
+              width="38"
+              height="38"
+              src="/img/Orange_logo.svg"
+              class="logoPartenaire"
+              alt="orange logo"
+            />
           </div>
         </div>
       </b-row>
@@ -185,7 +194,6 @@
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
           <b-row class="mb-3">
             <b-col cols="12">
-
               <skeleton-loading class="mb-3" v-if="isLoading">
                 <square-skeleton
                   :boxProperties="{
@@ -230,7 +238,12 @@
                 </p>
               </b-card>
 
-              <FullScreen id="fullscreenOut" link="mobile_out" @change="fullscreenMobileDaily" v-show="!isLoading">
+              <FullScreen
+                id="fullscreenOut"
+                link="mobile_out"
+                @change="fullscreenMobileDaily"
+                v-show="!isLoading"
+              >
                 <b-card no-body class="mb-3 p-2 cardtype1" :ref="`mobile_out_card`">
                   <div class="chart-container">
                     <canvas height="200" width="100vh" ref="mobile_out" id="mobile_out"></canvas>
@@ -260,23 +273,23 @@
         </b-col>
 
         <b-col cols="12" md="4" class="pr-0 pl-2" v-show="this.typeMobilite == 1">
-        <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
+          <skeleton-loading class="mb-3" v-if="isLoading">
+            <square-skeleton
+              :boxProperties="{
                                 width: '100%',
                                 height: '175px'
                             }"
-                ></square-skeleton>
-              </skeleton-loading>
+            ></square-skeleton>
+          </skeleton-loading>
 
-              <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
+          <skeleton-loading class="mb-3" v-if="isLoading">
+            <square-skeleton
+              :boxProperties="{
                                 width: '100%',
                                 height: '200px'
                             }"
-                ></square-skeleton>
-              </skeleton-loading>
+            ></square-skeleton>
+          </skeleton-loading>
           <b-card
             class="mb-3 flux-mobility"
             :class="{'active':fluxType==3,'disabled':globalProgress && globalProgress<100}"
@@ -793,7 +806,8 @@ export default {
         this.fluxMobilityFluxZone(
           this.flux24DailyIn,
           "mobile_entrance_2_card",
-          "origin"
+          "origin",
+          PALETTE.flux_in_color
         );
       });
     },
@@ -802,7 +816,8 @@ export default {
         this.fluxMobilityFluxZone(
           this.flux24DailyOut,
           "mobile_out_2_card",
-          "destination"
+          "destination",
+          PALETTE.flux_out_color
         );
       });
     },
@@ -978,7 +993,7 @@ export default {
       this.lineCharts[ref] = new Chart(reference.getContext("2d"), tempData);
       reference.style.height = 200;
     },
-    fluxMobilityFluxZone(InputData, ref, key) {
+    fluxMobilityFluxZone(InputData, ref, key, color) {
       if (!InputData) {
         return;
       }
@@ -1025,12 +1040,7 @@ export default {
       localData = localData.slice(0, 10);
 
       // cond : key == origin
-      this.drawHorizontalChart(
-        localData,
-        "zone",
-        ref,
-        PALETTE.flux_in_color
-      );
+      this.drawHorizontalChart(localData, "zone", ref, color);
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
       console.log("topHealthZonePandemics", inPutData);
@@ -1441,7 +1451,7 @@ export default {
     }
   }
 }
-.logoPartenaire{
+.logoPartenaire {
   height: 38px;
   width: auto;
   margin-left: 5px;
