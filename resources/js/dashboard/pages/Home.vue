@@ -499,7 +499,7 @@ export default {
         this.$set(this.loadings, "getCovidCases_stat", true);
         axios
           .get("/api/dashboard/cavid-cases/statistics",
-            { cancelToken: this.listAxiosToken.covidCases.slice(-1).token }
+            { cancelToken: this.listAxiosToken.covidCases.slice(-1)[0].token }
           )
           .then(({ data }) => {
             let labels = [],
@@ -529,7 +529,7 @@ export default {
         this.$set(this.loadings, "getCovidCases_statdaily", true);
         axios
           .get("/api/dashboard/cavid-cases/statistics/daily",
-            { cancelToken: this.listAxiosToken.covidCases.slice(-1).token }
+            { cancelToken: this.listAxiosToken.covidCases.slice(-1)[0].token }
           )
           .then(({ data }) => {
             let labels = [],
@@ -559,7 +559,7 @@ export default {
         this.$set(this.loadings, "getCovidCases_cases", true);
         axios
           .get(`/api/dashboard/cavid-cases`,
-            { cancelToken: this.listAxiosToken.covidCases.slice(-1).token }
+            { cancelToken: this.listAxiosToken.covidCases.slice(-1)[0].token }
           )
           .then(({ data }) => {
             let Features = data.map((value) => {
@@ -611,7 +611,7 @@ export default {
         this.$set(this.loadings, "orientation_medical", true);
         axios
           .get(`/api/dashboard/orientation-medical-result`,
-            { cancelToken: this.listAxiosToken.medicalOr.slice(-1).token }
+            { cancelToken: this.listAxiosToken.medicalOr.slice(-1)[0].token }
           )
           .then(({ data }) => {
             this.medicalOrientations = data;
@@ -644,7 +644,7 @@ export default {
         this.$set(this.loadings, "orientation_medical_stats", true);
         axios
           .get(`/api/dashboard/orientation-medical-stats`,
-            { cancelToken: this.listAxiosToken.medicalOr.slice(-1).token }
+            { cancelToken: this.listAxiosToken.medicalOr.slice(-1)[0].token }
           )
           .then(({ data }) => {
             let fin = [],
@@ -691,7 +691,7 @@ export default {
         this.$set(this.loadings, "hasSondageChecked", true);
         axios
           .get(`/api/dashboard/sondages`,
-            { cancelToken: this.listAxiosToken.hasSondage.slice(-1).token }
+            { cancelToken: this.listAxiosToken.hasSondage.slice(-1)[0].token }
           )
           .then(({ data }) => {
             this.$set(this.loadings, "hasSondageChecked", false);
@@ -740,9 +740,12 @@ export default {
       this.listAxiosToken.fluxZone.push(axiosInstance.CancelToken.source())
 
       axios.get("api/dashboard/flux-zone",
-        { cancelToken: this.listAxiosToken.fluxZone.slice(-1).token }
+        { cancelToken: this.listAxiosToken.fluxZone.slice(-1)[0].token }
       ).then(({ data }) => {
         this.fluxZones = data;
+      })
+      .catch((thrown) => {
+          //
       });
     },
     getFluxProvinces() {
@@ -750,14 +753,17 @@ export default {
 
       this.listAxiosToken.fluxProvince.push(axiosInstance.CancelToken.source())
       axios.get("api/dashboard/flux-provinces",
-        { cancelToken: this.listAxiosToken.fluxProvince.slice(-1).token }
+        { cancelToken: this.listAxiosToken.fluxProvince.slice(-1)[0].token }
       ).then(({ data }) => {
         this.fluxProvinces = data;
+      })
+      .catch((thrown) => {
+          //
       });
     },
     submitFluxForm(values) {
       if (this.isLoading) {
-        return;
+        //return;
       }
 
       // Cancel des requetes axios en attente
@@ -951,7 +957,7 @@ export default {
       axios
         .get(urlDaily, {
           params: values,
-          cancelToken: this.listAxiosToken.flux24Daily.slice(-1).token
+          cancelToken: this.listAxiosToken.flux24Daily.slice(-1)[0].token
         })
         .then(({ data }) => {
           this.flux24Daily = data;
@@ -969,7 +975,7 @@ export default {
       axios
         .get(urlDailyIn, {
           params: values,
-          cancelToken: this.listAxiosToken.flux.slice(-1).token
+          cancelToken: this.listAxiosToken.flux.slice(-1)[0].token
         })
         .then(({ data }) => {
           // this.flux24DailyIn = computedFluxData(
@@ -1004,7 +1010,7 @@ export default {
       axios
         .get(urlDailyOut, {
           params: values,
-          cancelToken: this.listAxiosToken.flux.slice(-1).token
+          cancelToken: this.listAxiosToken.flux.slice(-1)[0].token
         })
         .then(({ data }) => {
           // this.flux24DailyOut = computedFluxData(
@@ -1072,7 +1078,7 @@ export default {
       axios
         .get(urlPresenceDailyIn, {
           params: values,
-          cancelToken: this.listAxiosToken.flux.slice(-1).token
+          cancelToken: this.listAxiosToken.flux.slice(-1)[0].token
         })
         .then(({ data }) => {
           this.flux24PresenceDailyInData = data;
@@ -1114,10 +1120,13 @@ export default {
       axios
         .get("/api/dashboard/pandemics/top-confirmed", {
           params: pandemicParams,
-          cancelToken: this.listAxiosToken.flux.slice(-1).token
+          cancelToken: this.listAxiosToken.flux.slice(-1)[0].token
         })
         .then(({ data }) => {
           this.topHealthZoneConfirmed = data;
+        })
+        .catch((thrown) => {
+          //
         });
 
       const healthZones = this.healthZones.filter(
@@ -1151,7 +1160,7 @@ export default {
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
               params: healthZoneValues,
-              cancelToken: this.listAxiosToken.flux.slice(-1).token
+              cancelToken: this.listAxiosToken.flux.slice(-1)[0].token
             })
             .then(async (response) => {
               this.fluxZoneGlobalIn.push(response.data);
@@ -1199,7 +1208,7 @@ export default {
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
               params: healthZoneValues,
-              cancelToken: this.listAxiosToken.flux.slice(-1).token
+              cancelToken: this.listAxiosToken.flux.slice(-1)[0].token
             })
             .then(async (response) => {
               this.fluxZoneGlobalOut.push(response.data);
@@ -1274,7 +1283,7 @@ export default {
       axios
         .get(urlDailyCompare, {
           params: values,
-          cancelToken: this.listAxiosToken.fluxPredefined.slice(-1).token
+          cancelToken: this.listAxiosToken.fluxPredefined.slice(-1)[0].token
         })
         .then(({ data }) => {
           this.flux24DailyComparison = data;
@@ -1291,7 +1300,7 @@ export default {
       axios
         .get(urlDaily, {
           params: values,
-          cancelToken: this.listAxiosToken.flux24Daily.slice(-1).token
+          cancelToken: this.listAxiosToken.flux24Daily.slice(-1)[0].token
         })
         .then(({ data }) => {
           this.flux24Daily = data;
@@ -1331,7 +1340,7 @@ export default {
       axios
         .get(url, {
           params: values,
-          cancelToken: this.listAxiosToken.fluxPredefined.slice(-1).token
+          cancelToken: this.listAxiosToken.fluxPredefined.slice(-1)[0].token
         })
         .then(({ data }) => {
           this.flux24 = data;
@@ -1383,7 +1392,7 @@ export default {
             preference_start: PREFERENCE_START,
             preference_end: PREFERENCE_END,
           },
-          cancelToken: this.listAxiosToken.fluxGlobal.slice(-1).token
+          cancelToken: this.listAxiosToken.fluxGlobal.slice(-1)[0].token
         })
         .then(({ data }) => {
           const groupObservations = groupBy(data.observations, (d) => d.zone);
@@ -1395,6 +1404,9 @@ export default {
             });
           });
           this.$set(this.isFluxGlobalProvinceloading, "in", false);
+        })
+        .catch((thrown) => {
+          //
         });
 
       this.listAxiosToken.fluxGlobal.push(axiosInstance.CancelToken.source())
@@ -1407,7 +1419,7 @@ export default {
             preference_start: PREFERENCE_START,
             preference_end: PREFERENCE_END,
           },
-          cancelToken: this.listAxiosToken.fluxGlobal.slice(-1).token
+          cancelToken: this.listAxiosToken.fluxGlobal.slice(-1)[0].token
         })
         .then(({ data }) => {
           const groupObservations = groupBy(data.observations, (d) => d.zone);
@@ -1419,6 +1431,9 @@ export default {
             });
           });
           this.$set(this.isFluxGlobalProvinceloading, "out", false);
+        })
+        .catch((thrown) => {
+          //
         });
     },
     updateflux24DailyGenerale() {
@@ -1575,7 +1590,6 @@ export default {
       };
     },
     cancelAxios(token){
-      console.log('token', token)
       if(this.listAxiosToken[token]){
         this.listAxiosToken[token].forEach(x => {
           x.cancel('Operation canceled.');

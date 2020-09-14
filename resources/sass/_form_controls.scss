@@ -7,6 +7,8 @@
 }
 .style-chooser.style-chooser-multiple  .vs__selected {
   width : auto ;
+  text-overflow: unset;
+  overflow-x: visible;
 }
  .style-chooser  .vs__selected-options {
   width: calc(100% - 40px);
