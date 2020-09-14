@@ -43,7 +43,10 @@
       <b-row class="position-relative map-wrap" v-show="activeMenu != 3">
         <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
           <div class="layer-set-contenair" v-if="hasFlux24DailyIn && activeMenu==1">
-            <b-link :class="{'active':fluxMapStyle==2}" @click="layerSetSyle(2)">Arcs</b-link>
+            <b-link
+              :class="{'active':fluxMapStyle==2,'disabled':disabledArc}"
+              @click="layerSetSyle(2)"
+            >Arcs</b-link>
             <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
           </div>
           <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
@@ -92,23 +95,23 @@
           md="6"
           class="side-right mt-2 pl-2"
           :class="{'side-right-100':!hasCovidCases}"
-          v-if="hasRightSide || ( isLoading && activeMenu ==1)"
+          v-if="hasRightSide"
         >
           <b-card no-body>
             <b-tabs pills card>
               <b-tab
-                title="Covid-19 data"
-                v-if="!!covidCases && activeMenu==2"
+                title="Données Covid-19"
+                v-if="(!!covidCases || isLoading) && activeMenu==2"
                 :active="!!covidCases"
               >
-                <SideCaseCovid :covidCases="covidCases" />
+                <SideCaseCovid :covidCases="covidCases" :isLoading="isLoading" />
               </b-tab>
               <b-tab
-                title="Orientation data"
-                v-if="orientationCount != null && activeMenu==6"
+                title="Données Orientation médicale covid-19"
+                v-if="(orientationCount != null || isLoading) && activeMenu==6"
                 :active="orientationCount != null"
               >
-                <SideOrientation :medicalOrientations="medicalOrientations" />
+                <SideOrientation :medicalOrientations="medicalOrientations" :isLoading="isLoading" />
               </b-tab>
               <b-tab title="Province" v-if="activeMenu==1 ">
                 <b-row>
@@ -149,7 +152,7 @@
                 </b-row>
               </b-tab>
               <b-tab
-                title="FLux chart"
+                title="Mobilité"
                 v-if="(hasFlux24DailyIn || isLoading) && !isFirstLoad && this.activeMenu==1"
                 :active="hasFlux24DailyIn || isLoading"
               >
@@ -172,8 +175,8 @@
                 />
               </b-tab>
               <b-tab
-                title="Hôpital"
-                v-if="hospitalCount != null && activeMenu==5"
+                title="Infrastructures"
+                v-if="(hospitalCount != null || isLoading) && activeMenu==5"
                 :active="!!selectedHospital || activeMenu==5"
               >
                 <HospitalSituation :hospitalTotalData="hospitalTotalData" />
@@ -356,7 +359,8 @@ export default {
       globalProgress: null,
       orientationLegend: [],
       showBottom: false,
-      isFirstLoad:true,
+      isFirstLoad: true,
+      disabledArc: false,
     };
   },
   computed: {
@@ -376,7 +380,12 @@ export default {
         (this.flux24DailyIn.length > 0 && this.activeMenu == 1) ||
         (this.hospitalCount != null && this.activeMenu == 5) ||
         (this.fluxGlobalIn.length > 0 && this.activeMenu == 1) ||
-        (this.orientationCount != null && this.activeMenu == 6)
+        (this.orientationCount != null && this.activeMenu == 6) ||
+        (this.isLoading &&
+          (this.activeMenu == 1 ||
+            this.activeMenu == 5 ||
+            this.activeMenu == 2 ||
+            this.activeMenu == 6))
       );
     },
     hasBottom() {
@@ -436,17 +445,9 @@ export default {
     }
     this.getFluxProvinces();
     this.$store.watch(
-      (state) => state.nav.activeMenu,
+      (state) => state.hospital.isLoading,
       (value) => {
-        this.gethopitals(false);
-        switch (value) {
-          case 1:
-            break;
-          case 2:
-            break;
-          default:
-            break;
-        }
+        this.$set(this.loadings, "hospital", value);
       }
     );
     this.$store.watch(
@@ -457,10 +458,21 @@ export default {
     );
     this.loadFluxGLobalData();
     this.loadTownships();
+    this.$store.watch(
+      (state) => state.flux.fluxType,
+      (value) => {
+        if (value == 3 || value == 4) {
+          this.disabledArc = true;
+          this.setMapStyle(1);
+        } else {
+          this.disabledArc = false;
+        }
+      }
+    );
   },
   methods: {
     ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
-    ...mapMutations(["setMapStyle"]),
+    ...mapMutations(["setMapStyle", "setFluxType"]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
     },
@@ -772,7 +784,8 @@ export default {
       /**
        * formate les données flux
        */
-      this.isFirstLoad=false;
+      this.isFirstLoad = false;
+      this.setFluxType(1);
       const computedFluxData = (dataObservations, dataReferences) => {
         const dataOut = [];
         return dataObservations.map((item) => {
@@ -1718,7 +1731,7 @@ export default {
   top: 10px;
 }
 .layer-set-contenair {
-  background: #f4f6fc;
+  background: transparent;
   position: absolute;
   z-index: 7;
   top: 14px;
@@ -1729,12 +1742,15 @@ export default {
     padding: 5px;
     text-align: center;
     text-decoration: unset;
-    background: #2e5bff3d;
-    color: #2e5bff !important;
+    background: rgba(46, 91, 255, 0.7);
+    color: white !important;
     border-radius: 5px;
     &.active {
       background: $dash-green;
       color: white !important;
+    }
+    &:hover {
+      opacity: 0.8;
     }
   }
 }

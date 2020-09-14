@@ -31648,6 +31648,7 @@ h3 {
 .top-menu .vue-daterange-picker div {
   background: rgba(224, 231, 255, 0.2);
   height: 32px;
+  font-size: 0.85rem;
 }
 
 .side-bottom .canva-chart {
@@ -32321,6 +32322,7 @@ h3 {
 .style-chooser .vs__dropdown-toggle {
   height: 32px;
   position: relative;
+  font-size: 0.85rem;
 }
 
 .style-chooser > ul li {
@@ -32328,6 +32330,7 @@ h3 {
   min-width: -webkit-max-content;
   min-width: -moz-max-content;
   min-width: max-content;
+  font-size: 0.85rem;
 }
 
 .style-picker .reportrange-text {
