@@ -13,6 +13,7 @@ import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE, PALETTE } from "../config/env";
 import Mapbox from "mapbox-gl";
 import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
+import { Deck } from "@deck.gl/core";
 import ToolTipMaps from "./ToolTipMaps";
 import { mapState, mapMutations, mapActions } from "vuex";
 import U from "mapbox-gl-utils";
@@ -27,11 +28,12 @@ const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
   EPIDEMIC_LAYER = "EPIDEMIC_LAYER",
   HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER",
   COVID_HOSPITAL_SOURCE = "COVID_HOSPITAL_SOURCE";
-
+let deck=null;
 const popup = new Mapbox.Popup({
   closeButton: false,
   closeOnClick: false,
 });
+
 export default {
   components: { ToolTipMaps },
   props: {
@@ -172,6 +174,9 @@ export default {
       isZoneSourceLoaded: false,
       isProvinceSourceLoaded: false,
       defaultCenterCoordinates: [23.485632, -3.983283],
+      deck: new Deck({
+        layers: [],
+      }),
     };
   },
   created() {
@@ -1509,6 +1514,10 @@ export default {
       map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
       map.off("mouseleave", "fluxCircleDataLayer");
       map.off("mouseleave", "fluxCircleDataLayer");
+      // if (deck) {
+      //   deck.finalize();
+      // }
+      // this.deck.finalize();
 
       if (this.fluxType == 3 || this.fluxType == 4) {
         return;
@@ -1764,52 +1773,74 @@ export default {
       };
 
       // arcData=this.flux24.filter(x=>!x.isReference);
-      const myDeckLayer = new MapboxLayer({
-        id: "arc",
-        data: arcData,
-        type: ArcLayer,
-        stroked: true,
-        filled: true,
-        getSourcePosition: (d) => {
-          const coordinates = this.getHealthZoneCoordonate(
-            d.origin,
-            geoGranularity
-          );
-          return coordinates ?? d.position_start;
-        },
-        getTargetPosition: (d) => {
-          const coordinates = this.getHealthZoneCoordonate(
-            d.destination,
-            geoGranularity
-          );
-          return coordinates ?? d.position_end;
-        },
-        getSourceColor: (d) => {
-          return rgbColor(d.percent);
-        },
-        getTargetColor: (d) => {
-          return rgbColor(d.percent);
-        },
-        getHeight: 1,
-        getTilt: 1,
-        opacity: 0.7,
-        highlightColor: [51, 172, 46],
-        autoHighlight: true,
-        getWidth: (d) => {
-          // return (d.volume / maxArc) * 9 + 3;
-          return 3;
-        },
-        pickable: true,
-        onHover: (info, event) => {
-          this.$set(this.ArcLayerSelectedObject, "position", {
-            top: info.y,
-            left: info.x,
-          });
-          this.$set(this.ArcLayerSelectedObject, "item", info.object);
+
+      deck = new Deck({
+        gl: map.painter.context.gl,
+        layers: [
+          new ArcLayer({
+            id: "arc",
+            data: arcData,
+            // type: ArcLayer,
+            // stroked: true,
+            // filled: true,
+            pickable: true,
+            getSourcePosition: (d) => {
+              const coordinates = this.getHealthZoneCoordonate(
+                d.origin,
+                geoGranularity
+              );
+              return coordinates ?? d.position_start;
+            },
+            getTargetPosition: (d) => {
+              const coordinates = this.getHealthZoneCoordonate(
+                d.destination,
+                geoGranularity
+              );
+              return coordinates ?? d.position_end;
+            },
+            getSourceColor: (d) => {
+              return rgbColor(d.percent);
+            },
+            getTargetColor: (d) => {
+              return rgbColor(d.percent);
+            },
+            getHeight: 1,
+            getTilt: 1,
+            opacity: 0.7,
+            highlightColor: [51, 172, 46],
+            autoHighlight: true,
+            getWidth: (d) => {
+              // return (d.volume / maxArc) * 9 + 3;
+              return 3;
+            },
+
+            // onHover: (info, event) => {
+            //   this.$set(this.ArcLayerSelectedObject, "position", {
+            //     top: info.y,
+            //     left: info.x,
+            //   });
+            //   this.$set(this.ArcLayerSelectedObject, "item", info.object);
+            // },
+          }),
+        ],
+        // isPicking: true,
+        debug: true,
+        getCursor: () => "default",
+        getTooltip: ({ object }) => {
+          if (object) {
+            return object && `${object.from.name} to ${object.to.name}`;
+          }
+          console.log("getTooltip", object);
+          // return "YEs";
+          // return object && `${object.from.name} to ${object.to.name}`;
         },
       });
+
+      const myDeckLayer = new MapboxLayer({
+        id: "arc",
+        deck: deck,
+      });
       map.addLayer(myDeckLayer);
-      map.getCanvas().style.cursor = "default";
     },
     infrastructure() {
       if (this.hospitals) {
