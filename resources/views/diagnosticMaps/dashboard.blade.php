@@ -20,7 +20,7 @@
       <p>Fetching Data</p>
     </div>
 
-    <script src="{{asset('js/vueApp.js?v=2.879) }}"></script>
+    <script src="{{asset('js/vueApp.js?v=2.879') }}"></script>
 
 </body>
 </html>
