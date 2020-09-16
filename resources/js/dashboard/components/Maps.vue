@@ -167,6 +167,7 @@ export default {
       isZoneSourceLoaded: false,
       isProvinceSourceLoaded: false,
       defaultCenterCoordinates: [23.485632, -3.983283],
+      hatched_mobility_layer_popup : null
     };
   },
   created() {
@@ -1360,7 +1361,7 @@ export default {
         this.drcSourceId
       );
 
-      const popup = new Mapbox.Popup({
+      this.hatched_mobility_layer_popup = new Mapbox.Popup({
         closeButton: false,
         closeOnClick: false,
       });
@@ -1388,7 +1389,7 @@ export default {
 
         // Populate the popup and set its coordinates
         // based on the feature found.
-        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+        this.hatched_mobility_layer_popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
       };
 
       const mouseOut = () => {
@@ -1396,14 +1397,13 @@ export default {
           return;
         }
         map.getCanvas().style.cursor = "";
-        popup.remove();
+        this.hatched_mobility_layer_popup.remove();
       };
 
       map.off("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
       map.off("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
 
       map.on("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
-
       map.on("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
     },
     drawDesign() {
