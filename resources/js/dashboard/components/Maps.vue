@@ -662,7 +662,7 @@ export default {
         });
     },
     addProvinceSource() {
-      if (!map || !map.U) {
+      if (!this.isMapLoaded) {
         return;
       }
       map.U.setData(
@@ -672,7 +672,7 @@ export default {
       map.U.setData(this.drcSourceId, this.healthProvinceGeojson);
     },
     addZoneSource() {
-      if (!map || !map.U) {
+      if (!this.isMapLoaded) {
         return;
       }
       map.U.setData(
@@ -918,8 +918,6 @@ export default {
       } else if (area <= 10805419917.999899) {
         zoom = 7;
       }
-      console.log("area", area);
-      console.log("zoom", zoom);
       return zoom;
     },
     flux24Func() {

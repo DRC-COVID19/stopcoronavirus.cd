@@ -294,7 +294,7 @@ export default {
     fluxGeoGranularityChange(value) {
       this.resetFluxPredefinedControl();
       this.setFluxGeoGranularity(value);
-      this.fluxForm.fluxGeoOptions = [];
+      this.$set(this.fluxForm,'fluxGeoOptions',[]);
       if (value == 1) {
         this.fluxGeoOptions = this.fluxProvinces;
       } else {
@@ -302,6 +302,7 @@ export default {
       }
     },
     fluxGeoOptionsChange(value) {
+
       this.resetFluxPredefinedControl();
       this.setFluxGeoOptionsTmp(value);
     },
