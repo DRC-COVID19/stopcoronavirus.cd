@@ -20,7 +20,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
-        "@deck.gl/core": "^8.1.9",
+        "@deck.gl/core": "^8.2.8",
         "@deck.gl/layers": "^8.1.9",
         "@deck.gl/mapbox": "^8.1.9",
         "@fortawesome/fontawesome-free": "^5.14.0",

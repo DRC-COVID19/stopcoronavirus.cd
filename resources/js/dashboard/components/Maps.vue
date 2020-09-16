@@ -1,6 +1,7 @@
 <template>
   <div class="map-wrapper">
     <div id="map"></div>
+    <canvas id="deck-canvas" ref="deck_canvas"></canvas>
     <ToolTipMaps
       v-if="ArcLayerSelectedObject.item"
       :position="ArcLayerSelectedObject.position"
@@ -28,10 +29,10 @@ const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
   EPIDEMIC_LAYER = "EPIDEMIC_LAYER",
   HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER",
   COVID_HOSPITAL_SOURCE = "COVID_HOSPITAL_SOURCE";
-let deck=null;
+let deck = null;
 const popup = new Mapbox.Popup({
   closeButton: false,
-  closeOnClick: false,
+  closeOnClick: false
 });
 
 export default {
@@ -39,105 +40,105 @@ export default {
   props: {
     covidCases: {
       type: Object,
-      default: null,
+      default: null
     },
     hospitals: {
       type: Object,
-      default: null,
+      default: null
     },
     medicalOrientations: {
       type: Array,
-      default: null,
+      default: null
     },
     medicalOrientationSelected: {
       type: String,
-      default: null,
+      default: null
     },
     sondages: {
       type: Array,
-      default: null,
+      default: null
     },
     worried: {
       type: Boolean,
-      default: null,
+      default: null
     },
     catchVirus: {
       type: Boolean,
-      default: null,
+      default: null
     },
     priceIncrease: {
       type: Boolean,
-      default: null,
+      default: null
     },
     mask: {
       type: Boolean,
-      default: null,
+      default: null
     },
     makala: {
       type: Boolean,
-      default: null,
+      default: null
     },
     flour: {
       type: Boolean,
-      default: null,
+      default: null
     },
     antiBacterialGel: {
       type: Boolean,
-      default: null,
+      default: null
     },
     flux24: {
       type: Array,
-      default: [],
+      default: []
     },
     flux24DailyIn: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     flux24DailyOut: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     flux24DailyGenerale: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     isLoading: {
       type: Boolean,
-      default: null,
+      default: null
     },
     flux24Presence: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     fluxDataGroupedByDateOut: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     fluxDataGroupedByDateIn: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     fluxZoneGlobalIn: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
 
     isFluxGlobalProvinceloading: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     hasRightSide: {
       type: Boolean,
-      default: false,
+      default: false
     },
     showBottom: {
       type: Boolean,
-      default: false,
+      default: false
     },
     fluxZoneGlobalOut: {
       type: Array,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
   data() {
     return {
@@ -147,17 +148,17 @@ export default {
       countryLayer: {
         paint: {
           "line-color": "#627BC1",
-          "line-width": 1,
+          "line-width": 1
         },
-        type: "line",
+        type: "line"
       },
       kinLayer: {
         paint: {
           "line-color": "#627BC1",
-          "line-width": 1,
+          "line-width": 1
         },
         type: "line",
-        "source-layer": "carte-administrative-de-la-vi-csh5cj",
+        "source-layer": "carte-administrative-de-la-vi-csh5cj"
       },
       drcSourceId: "states",
       kinSourceId: "statesKin",
@@ -175,8 +176,8 @@ export default {
       isProvinceSourceLoaded: false,
       defaultCenterCoordinates: [23.485632, -3.983283],
       deck: new Deck({
-        layers: [],
-      }),
+        layers: []
+      })
     };
   },
   created() {
@@ -189,39 +190,40 @@ export default {
       center: this.defaultCenterCoordinates,
       zoom: 3.5,
       pitch: 10,
-      style: this.MAPBOX_DEFAULT_STYLE,
+      style: this.MAPBOX_DEFAULT_STYLE
     });
     U.init(map, Mapbox);
     map.addControl(new Mapbox.NavigationControl());
     map.getCanvas().style.cursor = "default";
-
+    this.isMapLoaded = false;
     map.on("load", () => {
+      this.isMapLoaded = true;
       map.U.addGeoJSON(
         this.drcSourceId,
         { type: "FeatureCollection", features: [] },
         {
-          generateId: true,
+          generateId: true
         }
       );
       map.U.addGeoJSON(
         this.drcHealthZone,
         { type: "FeatureCollection", features: [] },
         {
-          generateId: true,
+          generateId: true
         }
       );
       map.U.addGeoJSON(
         sourceHealthZoneGeojsonCentered,
         { type: "FeatureCollection", features: [] },
         {
-          generateId: true,
+          generateId: true
         }
       );
       map.U.addGeoJSON(
         sourceHealthProvinceGeojsonCentered,
         { type: "FeatureCollection", features: [] },
         {
-          generateId: true,
+          generateId: true
         }
       );
       // map.addSource(this.drcSourceId, {
@@ -261,8 +263,8 @@ export default {
 
     //watch store
     this.$store.watch(
-      (state) => state.flux.fluxGeoGranularityTemp,
-      (value) => {
+      state => state.flux.fluxGeoGranularityTemp,
+      value => {
         // if (this.activeMenu != 1) {
         //   return;
         // }
@@ -271,8 +273,8 @@ export default {
       }
     );
     this.$store.watch(
-      (state) => state.flux.mapStyle,
-      (value) => {
+      state => state.flux.mapStyle,
+      value => {
         // if (this.activeMenu != 1) {
         //   return;
         // }
@@ -280,8 +282,8 @@ export default {
       }
     );
     this.$store.watch(
-      (state) => state.flux.fluxType,
-      (value) => {
+      state => state.flux.fluxType,
+      value => {
         // if (this.activeMenu != 1) {
         //   return;
         // }
@@ -291,8 +293,8 @@ export default {
 
     //watch activeMenu store state
     this.$store.watch(
-      (state) => state.nav.activeMenu,
-      (value) => {
+      state => state.nav.activeMenu,
+      value => {
         this.drawDesign();
         // switch (value) {
         //   case 1:
@@ -308,41 +310,41 @@ export default {
 
     //watch flux legendHover store state
     this.$store.watch(
-      (state) => state.flux.legendHover,
-      (value) => {
+      state => state.flux.legendHover,
+      value => {
         this.flux24Func();
       }
     );
 
     this.$store.watch(
-      (state) => state.epidemic.legendEpidHover,
-      (value) => {
+      state => state.epidemic.legendEpidHover,
+      value => {
         this.covidHatchedStyle(this.covidCases, value);
       }
     );
   },
   computed: {
     ...mapState({
-      fluxMapStyle: (state) => state.flux.mapStyle,
-      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
-      fluxType: (state) => state.flux.fluxType,
-      fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
-      fluxGeoOptionsTmp: (state) => state.flux.fluxGeoOptionsTmp,
-      fluxEnabled: (state) => state.flux.fluxEnabled,
-      activeMenu: (state) => state.nav.activeMenu,
-      legendHover: (state) => state.flux.legendHover,
-      epidemicLengendHover: (state) => state.epidemic.legendEpidHover,
-      fluxGeoGranularityMenu: (state) => state.flux.fluxGeoGranularity,
-      healthZoneGeojsonCentered: (state) => state.app.healthZoneGeojsonCentered,
-      healthZoneGeojson: (state) => state.app.healthZoneGeojson,
-      healthProvinceGeojson: (state) => state.app.healthProvinceGeojson,
-      healthProvinceGeojsonCentered: (state) =>
+      fluxMapStyle: state => state.flux.mapStyle,
+      fluxGeoGranularity: state => state.flux.fluxGeoGranularityTemp,
+      fluxType: state => state.flux.fluxType,
+      fluxGeoOptions: state => state.flux.fluxGeoOptions,
+      fluxGeoOptionsTmp: state => state.flux.fluxGeoOptionsTmp,
+      fluxEnabled: state => state.flux.fluxEnabled,
+      activeMenu: state => state.nav.activeMenu,
+      legendHover: state => state.flux.legendHover,
+      epidemicLengendHover: state => state.epidemic.legendEpidHover,
+      fluxGeoGranularityMenu: state => state.flux.fluxGeoGranularity,
+      healthZoneGeojsonCentered: state => state.app.healthZoneGeojsonCentered,
+      healthZoneGeojson: state => state.app.healthZoneGeojson,
+      healthProvinceGeojson: state => state.app.healthProvinceGeojson,
+      healthProvinceGeojsonCentered: state =>
         state.app.healthProvinceGeojsonCentered,
-      typePresence: (state) => state.flux.typePresence,
+      typePresence: state => state.flux.typePresence
     }),
     flux24WithoutReference() {
-      return this.flux24.filter((x) => !x.isReference);
-    },
+      return this.flux24.filter(x => !x.isReference);
+    }
   },
   watch: {
     healthZoneGeojson() {
@@ -374,7 +376,7 @@ export default {
     },
     sondages() {
       if (!this.sondages) {
-        this.AllSondagesMarkers.map((item) => {
+        this.AllSondagesMarkers.map(item => {
           item.remove();
         });
       }
@@ -445,10 +447,10 @@ export default {
       map.resize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
-        easing: function (t) {
+        easing: function(t) {
           return t;
         },
-        zoom: 3.5,
+        zoom: 3.5
       });
       // }
     },
@@ -463,10 +465,10 @@ export default {
             zone,
             this.fluxGeoGranularityMenu
           ),
-          easing: function (t) {
+          easing: function(t) {
             return t;
           },
-          zoom: this.zoomByArea(area),
+          zoom: this.zoomByArea(area)
         });
       }
     },
@@ -483,17 +485,20 @@ export default {
     "isFluxGlobalProvinceloading.out"() {
       map.resize();
       map.flyTo({ center: this.defaultCenterCoordinates });
-    },
+    }
   },
   methods: {
     ...mapMutations([
       "selectHospital",
       "setFluxGeoOptions",
       "setDomaineExtValues",
-      "setEpidemicExtValues",
+      "setEpidemicExtValues"
     ]),
     ...mapActions(["resetState"]),
     addPolygoneLayer(geoGranularity) {
+      if (!this.isMapLoaded) {
+        return;
+      }
       map.U.removeLayer([this.drcSourceId]);
       map.addLayer(
         {
@@ -503,13 +508,16 @@ export default {
           layout: {},
           paint: {
             "line-color": PALETTE.bordure_shape_file,
-            "line-width": 1,
-          },
+            "line-width": 1
+          }
         },
         map.getLayer(EPIDEMIC_LAYER) ? EPIDEMIC_LAYER : null
       );
     },
     addPolygoneHoverLayer(geoGranularity) {
+      if (!this.isMapLoaded) {
+        return;
+      }
       map.U.removeLayer(["state-hover"]);
       let hoveredStateId = null;
       let hoveredStateKinId = null;
@@ -521,9 +529,9 @@ export default {
             "case",
             ["boolean", ["feature-state", "hover"], false],
             0.2,
-            0,
+            0
           ],
-          "fill-color": "#627BC1",
+          "fill-color": "#627BC1"
         })
       );
 
@@ -532,14 +540,14 @@ export default {
       map.off("click", "state-hover");
 
       //polygone hover
-      map.on("mousemove", "state-hover", (e) => {
+      map.on("mousemove", "state-hover", e => {
         if (e.features.length > 0) {
           if (hoveredStateId) {
             map.setFeatureState(
               {
                 source:
                   geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-                id: hoveredStateId,
+                id: hoveredStateId
               },
               { hover: false }
             );
@@ -549,7 +557,7 @@ export default {
             {
               source:
                 geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-              id: hoveredStateId,
+              id: hoveredStateId
             },
             { hover: true }
           );
@@ -562,7 +570,7 @@ export default {
             {
               source:
                 geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-              id: hoveredStateId,
+              id: hoveredStateId
             },
             { hover: false }
           );
@@ -570,7 +578,7 @@ export default {
         hoveredStateId = null;
       });
 
-      map.on("click", "state-hover", (e) => {
+      map.on("click", "state-hover", e => {
         this.centerCoordinates = [e.lngLat.lng, e.lngLat.lat];
         // map.flyTo({center: this.centerCoordinates})
 
@@ -594,14 +602,14 @@ export default {
           `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`,
           {
             headers: {
-              Accept: "application/json",
-            },
+              Accept: "application/json"
+            }
           }
         )
         .then(({ data }) => {
           this.isZoneSourceLoaded = false;
           this.healthZoneGeojson = data;
-          const features = data.features.map((item) => {
+          const features = data.features.map(item => {
             let polygone = null;
             switch (item.geometry.type) {
               case "MultiPolygon":
@@ -619,7 +627,7 @@ export default {
           });
           this.healthZoneGeojsonCentered = {
             type: "FeatureCollection",
-            features: features,
+            features: features
           };
           this.addZoneSource();
           this.addPolygoneLayer(2);
@@ -631,14 +639,14 @@ export default {
           `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`,
           {
             headers: {
-              Accept: "application/json",
-            },
+              Accept: "application/json"
+            }
           }
         )
         .then(({ data }) => {
           this.isProvinceSourceLoaded = false;
           this.healthProvinceGeojson = data;
-          const features = data.features.map((item) => {
+          const features = data.features.map(item => {
             let polygone = null;
             switch (item.geometry.type) {
               case "MultiPolygon":
@@ -656,7 +664,7 @@ export default {
           });
           this.healthProvinceGeojsonCentered = {
             type: "FeatureCollection",
-            features: features,
+            features: features
           };
           this.addProvinceSource();
         });
@@ -672,6 +680,7 @@ export default {
       map.U.setData(this.drcSourceId, this.healthProvinceGeojson);
     },
     addZoneSource() {
+      console.log("this.isMapLoaded", this.isMapLoaded);
       if (!this.isMapLoaded) {
         return;
       }
@@ -691,11 +700,11 @@ export default {
       map.resize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
-        easing: function (t) {
+        easing: function(t) {
           return t;
         },
         pitch: 10,
-        zoom: 3.5,
+        zoom: 3.5
       });
       let features = covidCasesData.data.features;
 
@@ -704,8 +713,8 @@ export default {
       });
 
       //domaine
-      const domaineMax = d3.max(features, (d) => d.properties[property]);
-      const domaineMin = d3.min(features, (d) => d.properties[property]);
+      const domaineMax = d3.max(features, d => d.properties[property]);
+      const domaineMin = d3.min(features, d => d.properties[property]);
 
       this.setEpidemicExtValues({ max: domaineMax, min: domaineMin });
 
@@ -721,7 +730,7 @@ export default {
 
       const colorExpression = [];
       colorExpression.push("case");
-      features.forEach((x) => {
+      features.forEach(x => {
         const color = colorScale(x.properties[property]);
         colorExpression.push(["==", ["get", dataKey], x.properties.name]);
         colorExpression.push(color);
@@ -737,7 +746,7 @@ export default {
 
       if (legendHover) {
         features = features.filter(
-          (x) =>
+          x =>
             x.properties[property] >= legendHover.de &&
             x.properties[property] <= legendHover.a
         );
@@ -798,9 +807,9 @@ export default {
           "circle-opacity": [
             "match",
             ["get", dataKey],
-            features.map((x) => x.properties.name),
+            features.map(x => x.properties.name),
             0.7,
-            0,
+            0
           ],
           "circle-radius": [
             "interpolate",
@@ -809,28 +818,28 @@ export default {
             0,
             0.2,
             22,
-            20,
+            20
           ],
           "circle-color": colorExpression,
           "circle-stroke-color": PALETTE.dash_green,
           "circle-stroke-width": [
             "match",
             ["get", dataKey],
-            features.map((x) => x.properties.name),
+            features.map(x => x.properties.name),
             0.5,
-            0,
-          ],
-        },
+            0
+          ]
+        }
       });
 
-      const mouseMove = (e) => {
+      const mouseMove = e => {
         const coordinates = e.features[0].geometry.coordinates[0].slice();
 
         const item = e.features[0].properties;
 
         const name = item["Zone+Peupl"] ?? item["name"];
         let value = null;
-        const feature = features.find((x) => x.properties.name == name);
+        const feature = features.find(x => x.properties.name == name);
 
         if (feature) {
           value = feature.properties[property];
@@ -841,18 +850,21 @@ export default {
 
         // Populate the popup and set its coordinates
         // based on the feature found.
-        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(HTML)
+          .addTo(map);
       };
 
       const mouseOut = () => {
         popup.remove();
       };
 
-      const mouseClick = (e) => {
+      const mouseClick = e => {
         const item = e.features[0].properties;
 
         const featureName = item["Zone+Peupl"] ?? item["name"];
-        const feature = features.find((x) => x.properties.name == featureName);
+        const feature = features.find(x => x.properties.name == featureName);
         if (!features) {
           return;
         }
@@ -863,7 +875,7 @@ export default {
           dead,
           sick,
           healed,
-          last_update,
+          last_update
         } = feature.properties;
 
         const template = `<div class="topToolTip" >
@@ -876,9 +888,9 @@ export default {
                             <div class="statLine">
                                 <div class="legendColor ongoing"></div>
                                 <div class="stat">Actifs</div>
-                                <div class="statCount">${
-                                  confirmed - healed - dead
-                                }</div>
+                                <div class="statCount">${confirmed -
+                                  healed -
+                                  dead}</div>
                             </div>
                             <div class="statLine">
                                 <div class="legendColor recovered"></div>
@@ -947,12 +959,12 @@ export default {
             if (this.fluxGeoGranularity == 1) {
               mapFlyOptions = {
                 center: this.defaultCenterCoordinates,
-                zoom: 3.5,
+                zoom: 3.5
               };
             } else {
               mapFlyOptions = {
                 center: this.getHealthZoneCoordonate(zone, 2),
-                zoom: 8,
+                zoom: 8
               };
               area = this.getHealthZoneArea(zone, 2);
               mapFlyOptions.zoom = this.zoomByArea(area);
@@ -964,12 +976,12 @@ export default {
             if (this.fluxGeoGranularity == 1) {
               mapFlyOptions = {
                 center: this.defaultCenterCoordinates,
-                zoom: 3.5,
+                zoom: 3.5
               };
             } else {
               mapFlyOptions = {
                 center: this.getHealthZoneCoordonate(zone, 2),
-                zoom: 8,
+                zoom: 8
               };
               area = this.getHealthZoneArea(zone, 2);
               mapFlyOptions.zoom = this.zoomByArea(area);
@@ -983,7 +995,7 @@ export default {
                 zone,
                 this.fluxGeoGranularity
               ),
-              zoom: 8,
+              zoom: 8
             };
             area = this.getHealthZoneArea(zone, this.fluxGeoGranularity);
             mapFlyOptions.zoom = this.zoomByArea(area);
@@ -993,8 +1005,8 @@ export default {
               data = [
                 {
                   presence_observation: this.flux24Presence.observationsByDate,
-                  presence_reference: this.flux24Presence.referencesByDate,
-                },
+                  presence_reference: this.flux24Presence.referencesByDate
+                }
               ];
             }
 
@@ -1002,7 +1014,7 @@ export default {
           case 4:
             mapFlyOptions = {
               center: this.getHealthZoneCoordonate(zone, 1),
-              zoom: 8,
+              zoom: 8
             };
             area = this.getHealthZoneArea(zone, 1);
             mapFlyOptions.zoom = this.zoomByArea(area);
@@ -1021,12 +1033,12 @@ export default {
 
               // This can be any easing function: it takes a number between
               // 0 and 1 and returns another number between 0 and 1.
-              easing: function (t) {
+              easing: function(t) {
                 return t;
               },
 
               // this animation is considered essential with respect to prefers-reduced-motion
-              essential: true,
+              essential: true
             };
             if (mapFlyOptions.center) {
               options.center = mapFlyOptions.center;
@@ -1051,12 +1063,12 @@ export default {
 
               // This can be any easing function: it takes a number between
               // 0 and 1 and returns another number between 0 and 1.
-              easing: function (t) {
+              easing: function(t) {
                 return t;
               },
 
               // this animation is considered essential with respect to prefers-reduced-motion
-              essential: true,
+              essential: true
             };
             if (mapFlyOptions.center) {
               optionsHatched.center = mapFlyOptions.center;
@@ -1103,12 +1115,12 @@ export default {
         ) {
           return {
             percent: null,
-            difference: null,
+            difference: null
           };
         }
         const result = this.formatFluxDataByMedian({
           references,
-          observations,
+          observations
         });
 
         features.push({
@@ -1118,7 +1130,7 @@ export default {
             coordinates:
               key == "origin"
                 ? observations[0].position_start
-                : observations[0].position_end,
+                : observations[0].position_end
           },
           properties: {
             origin: this.fixedZone(item.zone ?? observations[0][key]),
@@ -1126,8 +1138,8 @@ export default {
             volume: result.referenceVolume,
             volumeReference: result.referenceVolume,
             percent: result.percent,
-            difference: result.difference,
-          },
+            difference: result.difference
+          }
         });
       };
 
@@ -1135,7 +1147,7 @@ export default {
         if (!referencesByDate || !observationsByDate) {
           return {
             percent: null,
-            difference: null,
+            difference: null
           };
         }
         let referenceVolume = null;
@@ -1179,7 +1191,7 @@ export default {
           type: "Feature",
           geometry: {
             type: "Point",
-            coordinates: observationsByDate[0].position_start,
+            coordinates: observationsByDate[0].position_start
           },
           properties: {
             origin: this.fixedZone(observationsByDate[0].zone),
@@ -1187,13 +1199,13 @@ export default {
             volume: observationVolume,
             volumeReference: referenceVolume,
             percent: Math.round((difference / referenceVolume) * 100),
-            difference: difference,
-          },
+            difference: difference
+          }
         });
       };
 
       if (this.fluxType == 2) {
-        localData.map((item) => {
+        localData.map(item => {
           formatData(item, "destination");
         });
         formatCurrentZone(DataGroupByDate);
@@ -1201,44 +1213,44 @@ export default {
         //   formatData(item, "origin");
         // });
       } else if (this.fluxType == 3) {
-        localData.map((item) => {
+        localData.map(item => {
           let observations = item.presence_observation;
           let references = item.presence_reference;
           switch (this.typePresence) {
             case 2:
               observations = item.presence_observation.filter(
-                (x) => x.PresenceType == "Jour"
+                x => x.PresenceType == "Jour"
               );
               references = item.presence_reference.filter(
-                (x) => x.PresenceType == "Jour"
+                x => x.PresenceType == "Jour"
               );
               break;
             case 3:
               observations = item.presence_observation.filter(
-                (x) => x.PresenceType == "Nuit"
+                x => x.PresenceType == "Nuit"
               );
               references = item.presence_reference.filter(
-                (x) => x.PresenceType == "Nuit"
+                x => x.PresenceType == "Nuit"
               );
               break;
           }
           formatData(
             {
               observations,
-              references,
+              references
             },
             "zone"
           );
         });
       } else if (this.fluxTYpe == 4) {
-        localData.map((item) => {
+        localData.map(item => {
           formatData(item, "zone");
         });
         // localData.map((item) => {
         //   formatData(item, "targetZone");
         // });
       } else {
-        localData.map((item) => {
+        localData.map(item => {
           formatData(item, "origin");
         });
         formatCurrentZone(DataGroupByDate);
@@ -1246,13 +1258,13 @@ export default {
 
       // features = features.filter((x) => x.properties.volume != 0);
 
-      const max = d3.max(features, (d) => d.properties.volume);
+      const max = d3.max(features, d => d.properties.volume);
 
       map.U.removeSource(["fluxCircleDataSource"]);
       map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
 
-      const domaineMax = d3.max(features, (d) => d.properties.percent);
-      const domaineMin = d3.min(features, (d) => d.properties.percent);
+      const domaineMax = d3.max(features, d => d.properties.percent);
+      const domaineMin = d3.min(features, d => d.properties.percent);
 
       const colorScalePositive = d3.scaleQuantile();
       const colorScaleNegative = d3.scaleQuantile();
@@ -1265,7 +1277,7 @@ export default {
       this.setDomaineExtValues({
         min: domaineMin,
         max: domaineMax,
-        isPercent: true,
+        isPercent: true
       });
 
       switch (this.fluxType) {
@@ -1302,11 +1314,11 @@ export default {
 
       const colorExpression = [];
       colorExpression.push("case");
-      features.forEach((x) => {
+      features.forEach(x => {
         let color = PALETTE.dash_green;
         if (
           this.fluxGeoOptions.some(
-            (y) => this.fixedZone(y) == x.properties.origin
+            y => this.fixedZone(y) == x.properties.origin
           ) &&
           this.fluxType != 4 &&
           this.fluxType != 3
@@ -1327,7 +1339,7 @@ export default {
 
       if (legendHover) {
         features = features.filter(
-          (x) =>
+          x =>
             x.properties.percent >= legendHover.de &&
             x.properties.percent <= legendHover.a
         );
@@ -1351,20 +1363,20 @@ export default {
           fillOpacity: [
             "match",
             ["get", dataKey],
-            features.map((x) => x.properties.origin),
+            features.map(x => x.properties.origin),
             0.9,
-            0,
-          ],
+            0
+          ]
         }),
         this.drcSourceId
       );
 
       const popup = new Mapbox.Popup({
         closeButton: false,
-        closeOnClick: false,
+        closeOnClick: false
       });
 
-      const mouseMove = (e) => {
+      const mouseMove = e => {
         if (this.activeMenu != 1) {
           return;
         }
@@ -1374,7 +1386,7 @@ export default {
 
         const name = item["Zone+Peupl"] ?? item["name"];
         let value = null;
-        const feature = features.find((x) => x.properties.origin == name);
+        const feature = features.find(x => x.properties.origin == name);
 
         if (feature) {
           value = feature.properties.percent;
@@ -1385,7 +1397,10 @@ export default {
 
         // Populate the popup and set its coordinates
         // based on the feature found.
-        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(HTML)
+          .addTo(map);
       };
 
       const mouseOut = () => {
@@ -1406,7 +1421,7 @@ export default {
     drawDesign() {
       const mapFlyOptions = {
         center: this.defaultCenterCoordinates,
-        zoom: 3.5,
+        zoom: 3.5
       };
       this.flux24RemoveLayer();
       map.U.removeLayer([EPIDEMIC_LAYER]);
@@ -1447,14 +1462,14 @@ export default {
       if (geoGranularity == 1) {
         let newValue = this.fixedZone(value);
         const feature = this.healthProvinceGeojsonCentered.features.find(
-          (x) => x.properties[dataKey] == newValue
+          x => x.properties[dataKey] == newValue
         );
         if (feature) {
           coordinates = feature.geometry.coordinates;
         }
       } else {
         const feature = this.healthZoneGeojsonCentered.features.find(
-          (x) => x.properties[dataKey] == value
+          x => x.properties[dataKey] == value
         );
 
         if (feature) {
@@ -1472,14 +1487,14 @@ export default {
       if (geoGranularity == 1) {
         let newValue = this.fixedZone(value);
         const feature = this.healthProvinceGeojsonCentered.features.find(
-          (x) => x.properties[dataKey] == newValue
+          x => x.properties[dataKey] == newValue
         );
         if (feature) {
           area = feature.properties.area;
         }
       } else {
         const feature = this.healthZoneGeojsonCentered.features.find(
-          (x) => x.properties[dataKey] == value
+          x => x.properties[dataKey] == value
         );
 
         if (feature) {
@@ -1539,7 +1554,7 @@ export default {
         if (!observations || !references) {
           return {
             percent: null,
-            difference: null,
+            difference: null
           };
         }
         let referenceVolume = null;
@@ -1547,7 +1562,7 @@ export default {
 
         const result = this.formatFluxDataByMedian({
           references,
-          observations,
+          observations
         });
 
         features.push({
@@ -1557,7 +1572,7 @@ export default {
             coordinates: this.getHealthZoneCoordonate(
               observations[0][key],
               geoGranularity
-            ),
+            )
           },
           properties: {
             origin: observations[0][key],
@@ -1567,21 +1582,21 @@ export default {
             volume: result.observationVolume,
             volumeReference: result.referenceVolume,
             percent: result.percent,
-            difference: result.difference,
-          },
+            difference: result.difference
+          }
         });
       };
 
       if (this.fluxType == 2) {
-        FluxFiltered.map((item) => {
+        FluxFiltered.map(item => {
           formatData(item, "destination");
         });
       } else if (this.fluxType == 4) {
-        FluxFiltered.map((item) => {
+        FluxFiltered.map(item => {
           formatData(item, "zone");
         });
       } else {
-        FluxFiltered.map((item) => {
+        FluxFiltered.map(item => {
           formatData(item, "origin");
         });
       }
@@ -1598,44 +1613,44 @@ export default {
           difference: result.difference,
           volume_reference: result.referenceVolume,
           origin: item.observations[0].origin,
-          destination: item.observations[0].destination,
+          destination: item.observations[0].destination
         });
       };
 
       let arcBrutData = [];
       if (this.fluxType == 1) {
-        arcBrutData = FluxFiltered.map((item) => {
+        arcBrutData = FluxFiltered.map(item => {
           filterArcData(item, "origin");
         });
       } else if (this.fluxType == 4) {
-        arcBrutData = FluxFiltered.filter((item) => {
+        arcBrutData = FluxFiltered.filter(item => {
           return includes(this.fluxGeoOptions, item.targetZone);
-        }).map((item) => {
+        }).map(item => {
           filterArcData(item, "zone");
         });
       } else {
-        arcBrutData = FluxFiltered.map((item) => {
+        arcBrutData = FluxFiltered.map(item => {
           filterArcData(item, "destination");
         });
       }
 
-      const max = Math.max(...features.map((x) => x.properties.volume));
-      const minArc = Math.min(...arcData.map((x) => x.percent));
-      const maxArc = Math.max(...arcData.map((x) => x.percent));
+      const max = Math.max(...features.map(x => x.properties.volume));
+      const minArc = Math.min(...arcData.map(x => x.percent));
+      const maxArc = Math.max(...arcData.map(x => x.percent));
 
       this.setDomaineExtValues({ min: minArc, max: maxArc, isPercent: true });
 
       if (legendHover) {
         if (features.length > 0) {
           features = features.filter(
-            (x) =>
+            x =>
               x.properties.percent >= legendHover.de &&
               x.properties.percent <= legendHover.a
           );
         }
         if (arcData.length > 0) {
           arcData = arcData.filter(
-            (x) => x.percent >= legendHover.de && x.percent <= legendHover.a
+            x => x.percent >= legendHover.de && x.percent <= legendHover.a
           );
         }
       }
@@ -1645,8 +1660,8 @@ export default {
         generateId: true,
         data: {
           type: "FeatureCollection",
-          features: features,
-        },
+          features: features
+        }
       };
 
       const colorScalePositive = d3.scaleQuantile();
@@ -1670,34 +1685,34 @@ export default {
       }
 
       map.addSource("fluxCircleDataSource", circleData);
-      map.addLayer({
-        id: "fluxCircleDataLayer",
-        type: "circle",
-        source: "fluxCircleDataSource",
+      // map.addLayer({
+      //   id: "fluxCircleDataLayer",
+      //   type: "circle",
+      //   source: "fluxCircleDataSource",
 
-        paint: {
-          "circle-pitch-alignment": "map",
-          "circle-blur": 0.1,
-          "circle-opacity": [
-            "case",
-            ["boolean", ["feature-state", "hover"], false],
-            0.7,
-            0.5,
-          ],
-          "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["zoom"],
-            0,
-            0.2,
-            22,
-            ["+", ["*", ["/", ["get", "volume"], max], 30], 10],
-          ],
-          "circle-color": ["get", "color"],
-          "circle-stroke-color": ["get", "color"],
-          "circle-stroke-width": 1,
-        },
-      });
+      //   paint: {
+      //     "circle-pitch-alignment": "map",
+      //     "circle-blur": 0.1,
+      //     "circle-opacity": [
+      //       "case",
+      //       ["boolean", ["feature-state", "hover"], false],
+      //       0.7,
+      //       0.5
+      //     ],
+      //     "circle-radius": [
+      //       "interpolate",
+      //       ["linear"],
+      //       ["zoom"],
+      //       0,
+      //       0.2,
+      //       22,
+      //       ["+", ["*", ["/", ["get", "volume"], max], 30], 10]
+      //     ],
+      //     "circle-color": ["get", "color"],
+      //     "circle-stroke-color": ["get", "color"],
+      //     "circle-stroke-width": 1
+      //   }
+      // });
 
       let hoveredStateId = null;
       // const popup = new Mapbox.Popup({
@@ -1711,7 +1726,7 @@ export default {
           return;
         }
       });
-      map.on("mousemove", "fluxCircleDataLayer", (e) => {
+      map.on("mousemove", "fluxCircleDataLayer", e => {
         if (this.activeMenu != 1) {
           return;
         }
@@ -1733,7 +1748,10 @@ export default {
 
         // Populate the popup and set its coordinates
         // based on the feature found.
-        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+        popup
+          .setLngLat(e.lngLat)
+          .setHTML(HTML)
+          .addTo(map);
       });
 
       // When the mouse leaves the state-fill layer, update the feature state of the
@@ -1756,7 +1774,7 @@ export default {
       /**
        * get Rgb color from percent
        */
-      const rgbColor = (percent) => {
+      const rgbColor = percent => {
         let color = null;
 
         if (percent >= 0) {
@@ -1772,71 +1790,51 @@ export default {
 
       // arcData=this.flux24.filter(x=>!x.isReference);
 
-      deck = new Deck({
-        gl: map.painter.context.gl,
-        layers: [
-          new ArcLayer({
-            id: "arc",
-            data: arcData,
-            // type: ArcLayer,
-            // stroked: true,
-            // filled: true,
-            pickable: true,
-            getSourcePosition: (d) => {
-              const coordinates = this.getHealthZoneCoordonate(
-                d.origin,
-                geoGranularity
-              );
-              return coordinates ?? d.position_start;
-            },
-            getTargetPosition: (d) => {
-              const coordinates = this.getHealthZoneCoordonate(
-                d.destination,
-                geoGranularity
-              );
-              return coordinates ?? d.position_end;
-            },
-            getSourceColor: (d) => {
-              return rgbColor(d.percent);
-            },
-            getTargetColor: (d) => {
-              return rgbColor(d.percent);
-            },
-            getHeight: 1,
-            getTilt: 1,
-            opacity: 0.7,
-            highlightColor: [51, 172, 46],
-            autoHighlight: true,
-            getWidth: (d) => {
-              // return (d.volume / maxArc) * 9 + 3;
-              return 3;
-            },
-
-            // onHover: (info, event) => {
-            //   this.$set(this.ArcLayerSelectedObject, "position", {
-            //     top: info.y,
-            //     left: info.x,
-            //   });
-            //   this.$set(this.ArcLayerSelectedObject, "item", info.object);
-            // },
-          }),
-        ],
-        // isPicking: true,
-        debug: true,
-        getCursor: () => "default",
-        getTooltip: ({ object }) => {
-          if (object) {
-            return object && `${object.from.name} to ${object.to.name}`;
-          }
-          console.log("getTooltip", object);
-          // return "YEs";
-          // return object && `${object.from.name} to ${object.to.name}`;
-        },
-      });
-
       const myDeckLayer = new MapboxLayer({
         id: "arc",
-        deck: deck,
+        data: arcData,
+        type: ArcLayer,
+        // stroked: true,
+        // filled: true,
+
+        pickable: true,
+        getSourcePosition: d => {
+          const coordinates = this.getHealthZoneCoordonate(
+            d.origin,
+            geoGranularity
+          );
+          return coordinates ?? d.position_start;
+        },
+        getTargetPosition: d => {
+          const coordinates = this.getHealthZoneCoordonate(
+            d.destination,
+            geoGranularity
+          );
+          return coordinates ?? d.position_end;
+        },
+        getSourceColor: d => {
+          return rgbColor(d.percent);
+        },
+        getTargetColor: d => {
+          return rgbColor(d.percent);
+        },
+        getHeight: 1,
+        getTilt: 1,
+        opacity: 0.7,
+        highlightColor: [51, 172, 46],
+        autoHighlight: true,
+        getWidth: d => {
+          // return (d.volume / maxArc) * 9 + 3;
+          return 3;
+        },
+        onHover: (info, event) => {
+          map.getCanvas().style.cursor = "default";
+          this.$set(this.ArcLayerSelectedObject, "position", {
+            top: info.y,
+            left: info.x
+          });
+          this.$set(this.ArcLayerSelectedObject, "item", info.object);
+        }
       });
       map.addLayer(myDeckLayer);
     },
@@ -1846,11 +1844,11 @@ export default {
         map.resize();
         map.flyTo({
           center: this.getHealthZoneCoordonate("Kinshasa", 2),
-          easing: function (t) {
+          easing: function(t) {
             return t;
           },
           pitch: 10,
-          zoom: 9,
+          zoom: 9
         });
         this.map.addSource(COVID_HOSPITAL_SOURCE, this.hospitals);
 
@@ -1868,12 +1866,12 @@ export default {
             "text-field": String.fromCharCode("0xf47e"),
             "icon-optional": true,
             "text-font": ["Font Awesome 5 Free Solid"],
-            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25],
+            "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25]
           },
           paint: {
             "text-translate-anchor": "viewport",
-            "text-color": ["get", "color"],
-          },
+            "text-color": ["get", "color"]
+          }
         });
 
         // const popup = new Mapbox.Popup({
@@ -1881,7 +1879,7 @@ export default {
         //   closeOnClick: false,
         // });
 
-        const mouseMove = (e) => {
+        const mouseMove = e => {
           const coordinates = e.features[0].geometry.coordinates.slice();
           const {
             name,
@@ -1897,7 +1895,7 @@ export default {
             healed,
             last_update,
             resuscitation_beds,
-            occupied_resuscitation_beds,
+            occupied_resuscitation_beds
           } = e.features[0].properties;
 
           const HTML = `<div class="row">
@@ -1927,14 +1925,17 @@ export default {
                 <div class="col-9 small">Respirateurs occupés</div>
                 <div class="col-3 bold">${occupied_respirators}</div>
             </div>`;
-          popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+          popup
+            .setLngLat(e.lngLat)
+            .setHTML(HTML)
+            .addTo(map);
         };
 
-        const mouseOut = (e) => {
+        const mouseOut = e => {
           this.popup.remove();
         };
 
-        const mouseClick = (e) => {
+        const mouseClick = e => {
           this.selectHospital(e.features[0].properties);
         };
 
@@ -1953,8 +1954,8 @@ export default {
           layout: {},
           paint: {
             "line-color": "#627BC1",
-            "line-width": 1,
-          },
+            "line-width": 1
+          }
         });
       } else {
         map.addLayer({
@@ -1964,8 +1965,8 @@ export default {
           layout: {},
           paint: {
             "line-color": "#627BC1",
-            "line-width": 1,
-          },
+            "line-width": 1
+          }
         });
       }
       return;
@@ -1981,11 +1982,11 @@ export default {
       let total_fin5 = 0;
       let total_fin8 = 0;
       let AllMarkers = [];
-      const maxFin = Math.max(this.medicalOrientations.map((x) => x.FIN));
-      const maxFin8 = Math.max(this.medicalOrientations.map((x) => x.FIN8));
-      const maxFin5 = Math.max(this.medicalOrientations.map((x) => x.FIN5));
+      const maxFin = Math.max(this.medicalOrientations.map(x => x.FIN));
+      const maxFin8 = Math.max(this.medicalOrientations.map(x => x.FIN8));
+      const maxFin5 = Math.max(this.medicalOrientations.map(x => x.FIN5));
 
-      this.medicalOrientations.map((item) => {
+      this.medicalOrientations.map(item => {
         var el = document.createElement("div");
         el.className = "pie";
         let total = item.FIN + item.FIN8 + item.FIN5;
@@ -2033,14 +2034,14 @@ export default {
     },
     RemoveOrientationMakers() {
       if (this.medicalOrientationMakers) {
-        this.medicalOrientationMakers.map((item) => {
+        this.medicalOrientationMakers.map(item => {
           item.remove();
         });
       }
     },
     setMarkersSondage(sondage) {
-      let values = this.sondages.filter((x) => x[sondage] && x[sondage] > 0);
-      values.map((item) => {
+      let values = this.sondages.filter(x => x[sondage] && x[sondage] > 0);
+      values.map(item => {
         let el = document.createElement("div");
         let el2 = document.createElement("div");
         el.className = `default-makers ${sondage}`;
@@ -2065,11 +2066,11 @@ export default {
             el.innerText = worried_count;
             longitude = item.longitude + 100 / 100000;
             latitude = item.latitude + 800 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${
-              (worried * 100) / worried_count
-            }%, #ff3b3b ${(worried * 100) / worried_count}%, #ff3b3b ${
-              (not_worried * 100) / worried_count
-            }%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${(worried *
+              100) /
+              worried_count}%, #ff3b3b ${(worried * 100) /
+              worried_count}%, #ff3b3b ${(not_worried * 100) /
+              worried_count}%)`;
             break;
           case "catch_virus":
             let catch_virus = item.catch_virus ? item.catch_virus : 0;
@@ -2080,11 +2081,11 @@ export default {
             el.innerText = catch_virus_count;
             longitude = item.longitude - 200 / 10000;
             latitude = item.latitude - 200 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${
-              (catch_virus * 100) / catch_virus_count
-            }%, #ff3b3b ${(catch_virus * 100) / catch_virus_count}%, #ff3b3b ${
-              (not_catch_virus * 100) / catch_virus_count
-            }%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${(catch_virus *
+              100) /
+              catch_virus_count}%, #ff3b3b ${(catch_virus * 100) /
+              catch_virus_count}%, #ff3b3b ${(not_catch_virus * 100) /
+              catch_virus_count}%)`;
             break;
           case "price_increase":
             let price_increase = item.price_increase ? item.price_increase : 0;
@@ -2095,11 +2096,11 @@ export default {
             el.innerText = price_increase_count;
             longitude = item.longitude - 300 / 10000;
             latitude = item.latitude + 500 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${
-              (price_increase * 100) / price_increase_count
-            }%, #ff3b3b ${
-              (price_increase * 100) / price_increase_count
-            }%, #ff3b3b ${(not_price_increase * 100) / price_increase_count}%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${(price_increase *
+              100) /
+              price_increase_count}%, #ff3b3b ${(price_increase * 100) /
+              price_increase_count}%, #ff3b3b ${(not_price_increase * 100) /
+              price_increase_count}%)`;
             break;
           case "mask":
             let mask = item.mask ? item.mask : 0;
@@ -2108,11 +2109,10 @@ export default {
             el.innerText = mask_count;
             longitude = item.longitude - 350 / 100000;
             latitude = item.latitude - 300 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${
-              (mask * 100) / mask_count
-            }%, #ff3b3b ${(mask * 100) / mask_count}%, #ff3b3b ${
-              (not_mask * 100) / mask_count
-            }%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${(mask *
+              100) /
+              mask_count}%, #ff3b3b ${(mask * 100) /
+              mask_count}%, #ff3b3b ${(not_mask * 100) / mask_count}%)`;
             break;
           case "makala":
             let makala = item.makala ? item.makala : 0;
@@ -2121,11 +2121,10 @@ export default {
             el.innerText = makala_count;
             longitude = item.longitude + 300 / 10000;
             latitude = item.latitude + 150 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${
-              (makala * 100) / makala_count
-            }%, #ff3b3b ${(makala * 100) / makala_count}%, #ff3b3b ${
-              (not_makala * 100) / makala_count
-            }%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${(makala *
+              100) /
+              makala_count}%, #ff3b3b ${(makala * 100) /
+              makala_count}%, #ff3b3b ${(not_makala * 100) / makala_count}%)`;
             break;
           case "flour":
             let flour = item.flour ? item.flour : 0;
@@ -2134,11 +2133,10 @@ export default {
             el.innerText = flour_count;
             longitude = item.longitude - 330 / 10000;
             latitude = item.latitude - 250 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${
-              (flour * 100) / flour_count
-            }%, #ff3b3b ${(flour * 100) / flour_count}%, #ff3b3b ${
-              (not_flour * 100) / flour_count
-            }%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${(flour *
+              100) /
+              flour_count}%, #ff3b3b ${(flour * 100) /
+              flour_count}%, #ff3b3b ${(not_flour * 100) / flour_count}%)`;
             break;
           case "antibacterial_gel":
             let antibacterial_gel = item.antibacterial_gel
@@ -2152,13 +2150,12 @@ export default {
             el.innerText = antibacterial_gel_count;
             longitude = item.longitude - 200 / 10000;
             latitude = item.latitude + 800 / 100000;
-            el.style.background = `linear-gradient(to right,#00b065 ${
-              (antibacterial_gel * 100) / antibacterial_gel_count
-            }%, #ff3b3b ${
-              (antibacterial_gel * 100) / antibacterial_gel_count
-            }%, #ff3b3b ${
-              (not_antibacterial_gel * 100) / antibacterial_gel_count
-            }%)`;
+            el.style.background = `linear-gradient(to right,#00b065 ${(antibacterial_gel *
+              100) /
+              antibacterial_gel_count}%, #ff3b3b ${(antibacterial_gel * 100) /
+              antibacterial_gel_count}%, #ff3b3b ${(not_antibacterial_gel *
+              100) /
+              antibacterial_gel_count}%)`;
             break;
           default:
             break;
@@ -2178,7 +2175,7 @@ export default {
       });
     },
     removeMarkersSondage(sondage) {
-      this.AllSondagesMarkers.filter((x) => x[sondage]).map((item) => {
+      this.AllSondagesMarkers.filter(x => x[sondage]).map(item => {
         item.remove();
       });
     },
@@ -2189,11 +2186,11 @@ export default {
       map.resize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
-        easing: function (t) {
+        easing: function(t) {
           return t;
         },
         pitch: 10,
-        zoom: 3.5,
+        zoom: 3.5
       });
       if (this.medicalOrientationSelected == "ALL") {
         this.getMedicalOrientations();
@@ -2202,9 +2199,9 @@ export default {
       this.RemoveOrientationMakers();
       let orientation = this.medicalOrientationSelected;
       const max = Math.max(
-        ...this.medicalOrientations.map((x) => x[orientation])
+        ...this.medicalOrientations.map(x => x[orientation])
       );
-      this.medicalOrientations.map((value) => {
+      this.medicalOrientations.map(value => {
         if (value[orientation] >= 0) {
           let el = document.createElement("div");
           el.className = `default-makers ${orientation}`;
@@ -2232,8 +2229,8 @@ export default {
           this.medicalOrientationMakers.push(currentMarker);
         }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
