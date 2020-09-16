@@ -654,7 +654,7 @@ export default {
         });
     },
     addProvinceSource() {
-      if (!map || !map.U || typeof(map.U)==undefined) {
+      if (!this.isMapLoaded) {
         return;
       }
       map.U.setData(
@@ -664,7 +664,7 @@ export default {
       map.U.setData(this.drcSourceId, this.healthProvinceGeojson);
     },
     addZoneSource() {
-      if (!map || !map.U ||typeof(map.U)==undefined) {
+      if (!this.isMapLoaded) {
         return;
       }
       map.U.setData(
