@@ -177,7 +177,16 @@ export default {
       defaultCenterCoordinates: [23.485632, -3.983283],
       deck: new Deck({
         layers: []
-      })
+      }),
+      stateHover: {
+        hoveredStateId: null,
+        hoveredStateKinId: null,
+        geoGranularity: null
+      },
+      featuresData: {
+        features: []
+      },
+      fluxCircleDataLayer: {}
     };
   },
   created() {
@@ -518,9 +527,14 @@ export default {
       if (!this.isMapLoaded) {
         return;
       }
+      map.off("mousemove", "state-hover", this.stateHoverMouseMover);
+      map.off("mouseleave", "state-hover", this.stateHoverMouseLeave);
+      map.off("click", "state-hover", this.stateHoverClick);
+
       map.U.removeLayer(["state-hover"]);
-      let hoveredStateId = null;
-      let hoveredStateKinId = null;
+      this.stateHover.hoveredStateId = null;
+      this.stateHover.hoveredStateKinId = null;
+      this.stateHover.geoGranularity = geoGranularity;
       map.U.addFill(
         "state-hover",
         geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
@@ -535,66 +549,69 @@ export default {
         })
       );
 
-      map.off("mouseleave", "state-hover");
-      map.off("mousemove", "state-hover");
-      map.off("click", "state-hover");
-
       //polygone hover
-      map.on("mousemove", "state-hover", e => {
-        if (e.features.length > 0) {
-          if (hoveredStateId) {
-            map.setFeatureState(
-              {
-                source:
-                  geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-                id: hoveredStateId
-              },
-              { hover: false }
-            );
-          }
-          hoveredStateId = e.features[0].id;
+      map.on("mousemove", "state-hover", this.stateHoverMouseMove);
+      map.on("mouseleave", "state-hover", this.stateHoverMouseLeave);
+      map.on("click", "state-hover", this.stateHoverClick);
+    },
+    stateHoverMouseMove(e) {
+      if (e.features.length > 0) {
+        if (this.stateHover.hoveredStateId) {
           map.setFeatureState(
             {
               source:
-                geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-              id: hoveredStateId
-            },
-            { hover: true }
-          );
-        }
-      });
-
-      map.on("mouseleave", "state-hover", () => {
-        if (hoveredStateId) {
-          map.setFeatureState(
-            {
-              source:
-                geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
-              id: hoveredStateId
+                this.stateHover.geoGranularity != 2
+                  ? this.drcSourceId
+                  : this.drcHealthZone,
+              id: this.stateHover.hoveredStateId
             },
             { hover: false }
           );
         }
-        hoveredStateId = null;
-      });
+        this.stateHover.hoveredStateId = e.features[0].id;
+        map.setFeatureState(
+          {
+            source:
+              this.stateHover.geoGranularity != 2
+                ? this.drcSourceId
+                : this.drcHealthZone,
+            id: this.stateHover.hoveredStateId
+          },
+          { hover: true }
+        );
+      }
+    },
+    stateHoverMouseLeave(e) {
+      if (this.stateHover.hoveredStateId) {
+        map.setFeatureState(
+          {
+            source:
+              this.stateHover.geoGranularity != 2
+                ? this.drcSourceId
+                : this.drcHealthZone,
+            id: this.stateHover.hoveredStateId
+          },
+          { hover: false }
+        );
+      }
+      this.stateHover.hoveredStateId = null;
+    },
+    stateHoverClick(e) {
+      this.centerCoordinates = [e.lngLat.lng, e.lngLat.lat];
+      // map.flyTo({center: this.centerCoordinates})
 
-      map.on("click", "state-hover", e => {
-        this.centerCoordinates = [e.lngLat.lng, e.lngLat.lat];
-        // map.flyTo({center: this.centerCoordinates})
+      switch (this.activeMenu) {
+        case 1:
+          if (this.stateHover.geoGranularity != 2) {
+            this.setFluxGeoOptions([e.features[0].properties.name]);
+          } else {
+            this.setFluxGeoOptions([e.features[0].properties["Zone+Peupl"]]);
+          }
+          break;
 
-        switch (this.activeMenu) {
-          case 1:
-            if (geoGranularity != 2) {
-              this.setFluxGeoOptions([e.features[0].properties.name]);
-            } else {
-              this.setFluxGeoOptions([e.features[0].properties["Zone+Peupl"]]);
-            }
-            break;
-
-          default:
-            break;
-        }
-      });
+        default:
+          break;
+      }
     },
     loadSource() {
       axios
@@ -680,7 +697,7 @@ export default {
       map.U.setData(this.drcSourceId, this.healthProvinceGeojson);
     },
     addZoneSource() {
-      console.log("this.isMapLoaded", this.isMapLoaded);
+
       if (!this.isMapLoaded) {
         return;
       }
@@ -1085,10 +1102,20 @@ export default {
       }
     },
     flux24RemoveLayer() {
+      map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
+      map.off("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
+      map.off(
+        "mousemove",
+        "fluxCircleDataLayer",
+        this.fluxCircleDataLayerMouseMove
+      );
+      map.off(
+        "mouseout",
+        "fluxCircleDataLayer",
+        this.fluxCircleDataLayerMouseout
+      );
       map.U.removeSource(["fluxCircleDataSource"]);
       map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
-      map.off("mouseleave", "fluxCircleDataLayer");
-      map.off("mouseleave", "fluxCircleDataLayer");
     },
     fluxHatchedStyle(
       flux24Data,
@@ -1260,8 +1287,13 @@ export default {
 
       const max = d3.max(features, d => d.properties.volume);
 
-      map.U.removeSource(["fluxCircleDataSource"]);
-      map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
+      this.flux24RemoveLayer();
+
+      // map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
+      // map.off("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
+
+      // map.U.removeSource(["fluxCircleDataSource"]);
+      // map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
 
       const domaineMax = d3.max(features, d => d.properties.percent);
       const domaineMin = d3.min(features, d => d.properties.percent);
@@ -1376,47 +1408,44 @@ export default {
         closeOnClick: false
       });
 
-      const mouseMove = e => {
-        if (this.activeMenu != 1) {
-          return;
-        }
-        const coordinates = e.features[0].geometry.coordinates[0].slice();
+      this.featuresData.features = features;
+      map.on("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
 
-        const item = e.features[0].properties;
+      map.on("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
+    },
+    mouseMove(e) {
+      if (this.activeMenu != 1) {
+        return;
+      }
+      const coordinates = e.features[0].geometry.coordinates[0].slice();
 
-        const name = item["Zone+Peupl"] ?? item["name"];
-        let value = null;
-        const feature = features.find(x => x.properties.origin == name);
+      const item = e.features[0].properties;
 
-        if (feature) {
-          value = feature.properties.percent;
-        }
-        const HTML = `<div>${name} ${
-          value ? `: ${Math.round(value)}%` : ""
-        }</div>`;
+      const name = item["Zone+Peupl"] ?? item["name"];
+      let value = null;
+      const feature = this.featuresData.features.find(
+        x => x.properties.origin == name
+      );
 
-        // Populate the popup and set its coordinates
-        // based on the feature found.
-        popup
-          .setLngLat(e.lngLat)
-          .setHTML(HTML)
-          .addTo(map);
-      };
+      if (feature) {
+        value = feature.properties.percent;
+      }
+      const HTML = `<div>${name} ${
+        value ? `: ${Math.round(value)}%` : ""
+      }</div>`;
 
-      const mouseOut = () => {
-        if (this.activeMenu != 1) {
-          return;
-        }
-
-        popup.remove();
-      };
-
-      map.off("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
-      map.off("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
-
-      map.on("mousemove", HATCHED_MOBILITY_LAYER, mouseMove);
-
-      map.on("mouseout", HATCHED_MOBILITY_LAYER, mouseOut);
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(HTML)
+        .addTo(map);
+    },
+    mouseOut(e) {
+      if (this.activeMenu != 1) {
+        return;
+      }
+      popup.remove();
     },
     drawDesign() {
       const mapFlyOptions = {
@@ -1500,7 +1529,6 @@ export default {
         if (feature) {
           area = feature.properties.area;
         }
-        console.log("feature", feature);
       }
       return area;
     },
@@ -1523,10 +1551,13 @@ export default {
       return newValue;
     },
     fluxArcStyle(flux24Data, geoGranularity, legendHover = null) {
-      map.U.removeSource(["fluxCircleDataSource"]);
-      map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
-      map.off("mouseleave", "fluxCircleDataLayer");
-      map.off("mouseleave", "fluxCircleDataLayer");
+      this.flux24RemoveLayer();
+      // map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
+      // map.off("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
+      // map.U.removeSource(["fluxCircleDataSource"]);
+      // map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
+      // map.off("mouseleave", "fluxCircleDataLayer");
+      // map.off("mouseleave", "fluxCircleDataLayer");
       // if (deck) {
       //   deck.finalize();
       // }
@@ -1685,91 +1716,47 @@ export default {
       }
 
       map.addSource("fluxCircleDataSource", circleData);
-      // map.addLayer({
-      //   id: "fluxCircleDataLayer",
-      //   type: "circle",
-      //   source: "fluxCircleDataSource",
+      map.addLayer({
+        id: "fluxCircleDataLayer",
+        type: "circle",
+        source: "fluxCircleDataSource",
 
-      //   paint: {
-      //     "circle-pitch-alignment": "map",
-      //     "circle-blur": 0.1,
-      //     "circle-opacity": [
-      //       "case",
-      //       ["boolean", ["feature-state", "hover"], false],
-      //       0.7,
-      //       0.5
-      //     ],
-      //     "circle-radius": [
-      //       "interpolate",
-      //       ["linear"],
-      //       ["zoom"],
-      //       0,
-      //       0.2,
-      //       22,
-      //       ["+", ["*", ["/", ["get", "volume"], max], 30], 10]
-      //     ],
-      //     "circle-color": ["get", "color"],
-      //     "circle-stroke-color": ["get", "color"],
-      //     "circle-stroke-width": 1
-      //   }
-      // });
+        paint: {
+          "circle-pitch-alignment": "map",
+          "circle-blur": 0.1,
+          "circle-opacity": [
+            "case",
+            ["boolean", ["feature-state", "hover"], false],
+            0.7,
+            0.5
+          ],
+          "circle-radius": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            0.2,
+            22,
+            ["+", ["*", ["/", ["get", "volume"], max], 30], 10]
+          ],
+          "circle-color": ["get", "color"],
+          "circle-stroke-color": ["get", "color"],
+          "circle-stroke-width": 1
+        }
+      });
 
       let hoveredStateId = null;
-      // const popup = new Mapbox.Popup({
-      //   closeButton: false,
-      //   closeOnClick: false,
-      // });
-      // When the user moves their mouse over the state-fill layer, we'll update the
-      // feature state for the feature under the mouse.
-      map.on("mouseenter", "fluxCircleDataLayer", () => {
-        if (this.activeMenu != 1) {
-          return;
-        }
-      });
-      map.on("mousemove", "fluxCircleDataLayer", e => {
-        if (this.activeMenu != 1) {
-          return;
-        }
-        if (e.features.length > 0) {
-          if (hoveredStateId) {
-            map.setFeatureState(
-              { source: "fluxCircleDataSource", id: hoveredStateId },
-              { hover: false }
-            );
-          }
-          hoveredStateId = e.features[0].id;
-          map.setFeatureState(
-            { source: "fluxCircleDataSource", id: hoveredStateId },
-            { hover: true }
-          );
-        }
-        const { origin, volume } = e.features[0].properties;
-        const HTML = `<div>${origin} ${volume ? `: ${volume}` : ""}</div>`;
 
-        // Populate the popup and set its coordinates
-        // based on the feature found.
-        popup
-          .setLngLat(e.lngLat)
-          .setHTML(HTML)
-          .addTo(map);
-      });
-
-      // When the mouse leaves the state-fill layer, update the feature state of the
-      // previously hovered feature.
-      map.on("mouseout", "fluxCircleDataLayer", () => {
-        if (this.activeMenu != 1) {
-          return;
-        }
-        if (hoveredStateId) {
-          map.setFeatureState(
-            { source: "fluxCircleDataSource", id: hoveredStateId },
-            { hover: false }
-          );
-        }
-        hoveredStateId = null;
-
-        popup.remove();
-      });
+      map.on(
+        "mousemove",
+        "fluxCircleDataLayer",
+        this.fluxCircleDataLayerMouseMove
+      );
+      map.on(
+        "mouseout",
+        "fluxCircleDataLayer",
+        this.fluxCircleDataLayerMouseout
+      );
 
       /**
        * get Rgb color from percent
@@ -1837,6 +1824,56 @@ export default {
         }
       });
       map.addLayer(myDeckLayer);
+    },
+    fluxCircleDataLayerMouseout() {
+      if (this.activeMenu != 1) {
+        return;
+      }
+      if (this.fluxCircleDataLayer.hoveredStateId) {
+        map.setFeatureState(
+          {
+            source: "fluxCircleDataSource",
+            id: this.fluxCircleDataLayer.hoveredStateId
+          },
+          { hover: false }
+        );
+      }
+      this.fluxCircleDataLayer.hoveredStateId = null;
+
+      popup.remove();
+    },
+    fluxCircleDataLayerMouseMove(e) {
+      if (this.activeMenu != 1) {
+        return;
+      }
+      if (e.features.length > 0) {
+        if (this.fluxCircleDataLayer.hoveredStateId) {
+          map.setFeatureState(
+            {
+              source: "fluxCircleDataSource",
+              id: this.fluxCircleDataLayer.hoveredStateId
+            },
+            { hover: false }
+          );
+        }
+        this.fluxCircleDataLayer.hoveredStateId = e.features[0].id;
+        map.setFeatureState(
+          {
+            source: "fluxCircleDataSource",
+            id: this.fluxCircleDataLayer.hoveredStateId
+          },
+          { hover: true }
+        );
+      }
+      const { origin, volume } = e.features[0].properties;
+      const HTML = `<div>${origin} ${volume ? `: ${volume}` : ""}</div>`;
+
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(HTML)
+        .addTo(map);
     },
     infrastructure() {
       if (this.hospitals) {
