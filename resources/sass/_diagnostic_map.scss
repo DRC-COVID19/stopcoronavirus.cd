@@ -819,3 +819,6 @@
 .indicateurChart {
     @include card-style;
 }
+.mapboxgl-canvas {
+    cursor: default !important;
+}

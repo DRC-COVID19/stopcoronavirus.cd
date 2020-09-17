@@ -246,7 +246,8 @@ export default {
       // this.setFluxGeoGranularity(value);
       if (value != 2) this.resetFluxPredefinedControl();
 
-      this.form.geoOptions = [];
+      this.$set(this.form,"geoOptions",[]);
+      // this.form.geoOptions = [];
       if (value == 1) {
         this.geoOptions = this.fluxProvinces;
       } else {
