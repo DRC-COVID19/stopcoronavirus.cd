@@ -9,7 +9,7 @@ return [
     'menu_3'=>'Directives du Gouvernement',
     'menu_4'=>'Idées reçues & sondage',
     'menu_5'=>'Orientation médicale',
-    
+
     'submenu_1'=>'Idées reçues',
     'submenu_2'=>'Fact-checking',
     'submenu_3'=>'Sondage',
@@ -30,7 +30,7 @@ return [
     'active_text_situation_actuelle'=>'Actifs',
     'health_text_situation_actuelle'=>'Guéris',
     'death_text_situation_actuelle'=>'Décès',
-    'graphic_datas_text_situation_actuelle'=>'Données officielles validéespar le comité technique.',
+    'graphic_datas_text_situation_actuelle'=>'Données officielles validées par le comité technique.',
 
     'access_sondage_text_situation_actuelle'=>"Prenez deux minutes pour partager vos perceptions et réactions afin d'aider et d’orienter l'équipe de la riposte dans la lutte contre le COVID-19 :",
     'access_sondage_button_situation_actuelle'=>'Accédez au sondage',
@@ -62,20 +62,20 @@ return [
     'directives_button_situation_actuelle'=>'Voir toutes les directives du Gouvernement',
 
     // Mesures de protection Page
-    'title_mesures_de_protection'=>'Mesures de protection contre le Coronavirus COVID-19',    
-    'question_1_mesures_de_protection'=>'Qu’est-ce qu’un coronavirus ?',    
-    'response_1_mesures_de_protection'=>'Les coronavirus forment une vaste famille de virus qui peuvent être pathogènes chez l’homme et chez l’animal. On sait que, chez l’être humain, plusieurs coronavirus peuvent entraîner des infections respiratoires dont les manifestations vont du simple rhume à des maladies plus graves comme le syndrome respiratoire du Moyen-Orient (MERS) et le syndrome respiratoire aigu sévère (SRAS). Le dernier coronavirus qui a été découvert est responsable de la maladie à coronavirus 2019 (COVID-19).',
+    'title_mesures_de_protection'=>'Mesures de protection contre le Coronavirus COVID-19',
+    'question_1_mesures_de_protection'=>'Qu’est-ce qu’un coronavirus ?',
+    'response_1_mesures_de_protection'=>'Les coronavirus formentune vaste famille de virus qui peuvent être pathogènes chez l’homme et chez l’animal. On sait que, chez l’être humain, plusieurs coronavirus peuvent entraîner des infections respiratoires dont les manifestations vont du simple rhume à des maladies plus graves comme le syndrome respiratoire du Moyen-Orient (MERS) et le syndrome respiratoire aigu sévère (SRAS). Le dernier coronavirus qui a été découvert est responsable de la maladie à coronavirus 2019 (COVID-19).',
     'question_2_mesures_de_protection'=>'Quels sont les symptômes de la COVID-19 ?',
     'response_2_mesures_de_protection'=>'Les symptômes les plus courants de la COVID-19 sont la fièvre, la fatigue et une toux sèche. Certains patients présentent des douleurs, une congestion nasale, un écoulement nasal, des maux de gorge ou une diarrhée. Ces symptômes sont généralement bénins et apparaissent de manière progressive. Certaines personnes, bien qu’infectées, ne présentent aucun symptôme et se sentent bien. La plupart (environ 80 %) des personnes guérissent sans avoir besoin de traitement particulier. Environ une personne sur six contractant la maladie présente des symptômes plus graves, notamment une dyspnée. Les personnes âgées et celles qui ont d’autres problèmes de santé (hypertension artérielle, problèmes cardiaques ou diabète) ont plus de risques de présenter des symptômes graves. Toute personne qui a de la fièvre, qui tousse et qui a des difficultés à respirer doit consulter un médecin.',
     'question_3_mesures_de_protection'=>'Comment la COVID-19 se propage-t-elle ?',
     'response_3_mesures_de_protection'=>'La COVID-19 est transmise par des personnes porteuses du virus. La maladie peut se transmettre d’une personneà l’autre par le biais de gouttelettes respiratoires expulsées par le nez ou par la bouche lorsqu’une personne tousse ou éternue. Ces gouttelettes peuvent se retrouver sur des objets ou des surfaces autour de la personne en question. On peut alors contracter la COVID-19 si on touche ces objets ou cessurfaces et si on se touche ensuite les yeux, le nez ou la bouche. Il est également possible de contracter la COVID-19 en inhalant des gouttelettes d’une personne malade qui vient de tousser ou d’éternuer. C’est pourquoi il est important de se tenir à plusd’un mètre d’une personne malade.',
-    
-    'general_question_mesures_de_protection'=>'Comment puis-je me protéger et éviter que la maladie ne se propage ?',
+
+    'general_question_mesures_de_protection'=>'Comment puis-je me proté    ger et éviter que la maladie ne se propage ?',
     'subresponse_title_1_mesures_de_protection'=>'Se laver fréquemment les mains',
     'subresponse_paragraph_1_mesures_de_protection'=>'Se laver fréquemment les mains avec une solution hydroalcoolique ou à l’eau et au savon',
     'why_1_mesures_de_protection'=>'Pourquoi? Se laver les mains avec une solution hydroalcoolique ou à l’eau et au savon tue le virus s’il est présent sur vos mains.',
-    
-    'subresponse_title_2_mesures_de_protection'=>'Éviter les contacts proches',
+
+    'subresponse_title_2_mesures_de_protection'=>'Éviter les contacts proche    s',
     'subresponse_paragraph_2_mesures_de_protection'=>'Maintenir une distance d’au moins 1 mètre avec les autres personnes, en particulier si elles toussent, éternuent ou ont de la fièvre.',
     'why_2_mesures_de_protection'=>'Pourquoi? Lorsqu’une personne infectée par un virus respiratoire, comme la COVID-19, tousse ou éternue, elle projette de petites gouttelettes contenant le virus. Si vous êtes trop près, vous pouvez inhaler le virus.',
 
@@ -237,5 +237,5 @@ return [
     'bad_health_text_2_orientation_medicale'=>"#RestezChezVous - limitez les contacts avec d'autres personnes. Le virus peut être propagé par des porteurs ne montrant pas de symptômes.",
     'final_button_orientation_medicale'=>'Recommencez le test',
 
-    
+
 ];

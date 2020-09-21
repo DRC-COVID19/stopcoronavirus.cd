@@ -1,102 +1,103 @@
 <?php
+// LANGUE : LINGALA
 return [
     // Header
     'top_header_left'=>'Site officiel ya Minisiteli ya bokolongono bwa mboka',
     'top_header_right'=>'la radio du ministère de la santé', //TODO:1
 
     'menu_1'=>'likambu ya lelo',
-    'menu_2'=>'Mesures de protection',
-    'menu_3'=>'Directives du Gouvernement',
-    'menu_4'=>'Idées reçues & sondage',
-    'menu_5'=>'Orientation médicale',
-    
+    'menu_2'=>'Ndelo  ya komibatela',
+    'menu_3'=>'Mikano ya bakonzi',
+    'menu_4'=>'Makanisi tozwaki na bolukiluki',
+    'menu_5'=>'Batoli ya bokolongono',
+
     'submenu_1'=>'Idées reçues',
     'submenu_2'=>'Fact-checking',
     'submenu_3'=>'Sondage',
 
     // Footer
-    'partner_text_1_situation_actuelle'=>"Avec l'appui d'Internews au travers du projet Médias2I de l'Union Européenne et du programme MSDA financé par l'USAID avec un financement complémentaire de la Coopération Suédoise",
-    'partner_text_2_situation_actuelle'=>'Un projet réalisé avec le soutien de la Fondation Roi Baudouin et de la Loterie Nationale',
+    'partner_text_1_situation_actuelle'=>"Na lisungi ya Internews, na kati ya projet Medias21 ya Union Europeenne mpe na MSDA oyo esungami na USAID na lisungi mosusu ya cooperation suedoise",
+    'partner_text_2_situation_actuelle'=>'Projet oyo esalemi na lisungi ya Fondation Roi Baudoin, Loterie Nationale na Kinshasa Digital',
 
-    'design_by_KD'=>'Designed by Kinshasa Digital',
+    'design_by_KD'=>'Esalemi na Kinshasa Digital',
 
     // Situation actuelle Page
-    'title_situation_actuelle'=>'Stop Coronavirus COVID-19 RDC',
-    'slogan_situation_actuelle'=>"Site officiel d'informations et de conseils",
+    'title_situation_actuelle'=>'Keba Coronavirus covd 19 na RDC',
+    'slogan_situation_actuelle'=>"Esika ya ba sango mpe ba toli",
 
-    'title_1_situation_actuelle'=>'Situation Épidémiologique en RDC',
+    'title_1_situation_actuelle'=>'Makambo mitali bokono bwa coronavirus na rdc',
     'update_situation_actuelle'=>'Mise à jour le',
-    'confirm_text_situation_actuelle'=>'Confirmés',
+    'confirm_text_situation_actuelle'=>'Babeli',
     'active_text_situation_actuelle'=>'Actifs',
-    'health_text_situation_actuelle'=>'Guéris',
-    'death_text_situation_actuelle'=>'Décès',
-    'graphic_datas_text_situation_actuelle'=>'Données officielles validéespar le comité technique.',
+    'health_text_situation_actuelle'=>'Babiki',
+    'death_text_situation_actuelle'=>'Liwa',
+    'graphic_datas_text_situation_actuelle'=>'Sango epesami na bakonzi ',
 
-    'access_sondage_text_situation_actuelle'=>"Prenez deux minutes pour partager vos perceptions et réactions afin d'aider et d’orienter l'équipe de la riposte dans la lutte contre le COVID-19 :",
+    'access_sondage_text_situation_actuelle'=>"Zwa miniti mibale mpo na kokabola makanisi mpo na kosunga lisanga ya baye bazali kobundisa corona",
     'access_sondage_button_situation_actuelle'=>'Accédez au sondage',
-    'form_text_situation_actuelle'=>"Vous craignez d'avoir contracté le coronavirus ?",
-    'form_subtext_situation_actuelle'=>'Remplissez le questionnaire pour une orientation médicale et un conseil sur les étapes à suivre. ',
+    'form_text_situation_actuelle'=>"Boyobanga mpo na kozwa bokona bwa coronavirus?",
+    'form_subtext_situation_actuelle'=>'Yanola mituna oyo mpo ozwa lisalisi ya minganga na ba toil yakolandela',
     'form_button_situation_actuelle'=>'Accédez au questionnaire',
 
-    'title_2_situation_actuelle'=>'Quels sont les symptômes du COVID-19?',
-    'symptom_1_situation_actuelle'=>'Fièvre, fatigue, toux sèche',
-    'symptom_2_situation_actuelle'=>'Pour certains patients: Congestion nasale, écoulement nasal, maux degorge ou une diarrhée',
-    'symptom_3_situation_actuelle'=>'Pour d’autres: aucun symptôme',
-    'symptom_4_situation_actuelle'=>'Environ 80 % des personnes guérissent sans avoir besoin de traitement particulier.',
-    'symptom_5_situation_actuelle'=>'Les personnes âgées et celles qui ont d’autres problèmes de santé (hypertension artérielle, problèmes cardiaques ou diabète) ont plus de risquesde présenter des symptômes graves.',
+    'title_2_situation_actuelle'=>'COVID 19 ezali naba Bilembo nini ?',
+    'symptom_1_situation_actuelle'=>'Fefele, bolembu, kosukosu',
+    'symptom_2_situation_actuelle'=>'Mpo na baye maladi misusu : zolo kokangama, miyoyo, mpasi na kingo na pulupulu',
+    'symptom_3_situation_actuelle'=>'Mpo na misusu : elembo eza te',
+    'symptom_4_situation_actuelle'=>'80% ya Bato babikisami nakolendalea te yakomisalisa',
+    'symptom_5_situation_actuelle'=>'Mikolo mpe batu oyo bazali na maladi ya motema  na ya sukali bazali na likama yakozwa coronavirus',
 
-    'title_3_situation_actuelle'=>"Consignes de sécurité et d'hygiène",
-    'safety_instruction_1_situation_actuelle'=>"Restez chez vous ou limitez vos déplacements à l'essentiel",
-    'safety_instruction_2_situation_actuelle'=>'Éternuez ou toussez dans le pli du coude ou dans un mouchoir en papier jetable',
-    'safety_instruction_3_situation_actuelle'=>"Lavez vous les mains régulièrement à l'eau et au savon pendant 20 secondes",
-    'safety_instruction_4_situation_actuelle'=>'Utilisez un mouchoir à usage unique et le jeter après usage',
-    'safety_instruction_5_situation_actuelle'=>'Evitez de serrer des mains ou de faire la bise',
-    'safety_instruction_6_situation_actuelle'=>'Portez un masque médical jetable pour limiter la propagation du virus(le masque doit être changétoutes les 3 heures)',
+    'title_3_situation_actuelle'=>"bikatelo etali bokonongono mpe libateli",
+    'safety_instruction_1_situation_actuelle'=>"Vanda na ndaku na yo mpe tambola mukie kaka soki esengeli",
+    'safety_instruction_2_situation_actuelle'=>'Kosola kaka na kati ya libolongo to na muswale yako bwaka',
+    'safety_instruction_3_situation_actuelle'=>"Sukola maboko na mayi mpe na sabuni tango nyoso",
+    'safety_instruction_4_situation_actuelle'=>'Salisa muswale mbala moko mpe bwaka yango na sima yako salisa yango',
+    'safety_instruction_5_situation_actuelle'=>'Kopesa mbote na maboko te',
+    'safety_instruction_6_situation_actuelle'=>'Lata monganza to eloko ya ko zipa zolo na munoko nayo yako mpo na komibatela (esengeli kobwaka monganza wana na sima yako salela)',
     'safety_instruction_button_situation_actuelle'=>'Voir les détails sur les mesures de protection',
 
-    'title_4_situation_actuelle'=>'Directives prises par le Gouvernement',
-    'subtitle_4_situation_actuelle'=>'Information du 23 avril 2020',
-    'directives_text_1_situation_actuelle'=>"L'état d'urgence sanitaire décrété le 24 mars par le président de la République, Félix Antoine Tshisekedi, estprolongé jusqu'au 08 mai 2020.",
-    'directives_text_2_situation_actuelle'=>"Pour rappel, les rassemblements de plus de 20 personnes dans des lieux publics en dehors du domicile familial, les activités sportives, les discothèques, les bars, les cafés, les restaurants et l'organisation du deuil dans des salles sont interdits.",
-    'directives_text_3_situation_actuelle'=>'La mesure dans laquelle lesécoles, les universités, les instituts officiels et privés sont fermés persiste.',
+    'title_4_situation_actuelle'=>'Bikatelo epesamaki na bakonzi ya mboka',
+    'subtitle_4_situation_actuelle'=>'Sango ya 23 Avri 2020',
+    'directives_text_1_situation_actuelle'=>"Etat d’urgence esakolamaki na mokonzi ya mboka Felix Antoine Tshisekedi tii na 08 Mai 2020",
+    'directives_text_2_situation_actuelle'=>"Epekisami kosangana ya batu baleki ntuku  mibale na bisika nyoso, lokola na nganda, bisika ya komela masanga mpe bisika yakolela bibembe.",
+    'directives_text_3_situation_actuelle'=>'Kelasi mpe eteyelo minene nionso ya mboka ekotikala yako kangama',
     'directives_button_situation_actuelle'=>'Voir toutes les directives du Gouvernement',
 
     // Mesures de protection Page
-    'title_mesures_de_protection'=>'Mesures de protection contre le Coronavirus COVID-19',    
-    'question_1_mesures_de_protection'=>'Qu’est-ce qu’un coronavirus ?',    
-    'response_1_mesures_de_protection'=>'Les coronavirus forment une vaste famille de virus qui peuvent être pathogènes chez l’homme et chez l’animal. On sait que, chez l’être humain, plusieurs coronavirus peuvent entraîner des infections respiratoires dont les manifestations vont du simple rhume à des maladies plus graves comme le syndrome respiratoire du Moyen-Orient (MERS) et le syndrome respiratoire aigu sévère (SRAS). Le dernier coronavirus qui a été découvert est responsable de la maladie à coronavirus 2019 (COVID-19).',
-    'question_2_mesures_de_protection'=>'Quels sont les symptômes de la COVID-19 ?',
-    'response_2_mesures_de_protection'=>'Les symptômes les plus courants de la COVID-19 sont la fièvre, la fatigue et une toux sèche. Certains patients présentent des douleurs, une congestion nasale, un écoulement nasal, des maux de gorge ou une diarrhée. Ces symptômes sont généralement bénins et apparaissent de manière progressive. Certaines personnes, bien qu’infectées, ne présentent aucun symptôme et se sentent bien. La plupart (environ 80 %) des personnes guérissent sans avoir besoin de traitement particulier. Environ une personne sur six contractant la maladie présente des symptômes plus graves, notamment une dyspnée. Les personnes âgées et celles qui ont d’autres problèmes de santé (hypertension artérielle, problèmes cardiaques ou diabète) ont plus de risques de présenter des symptômes graves. Toute personne qui a de la fièvre, qui tousse et qui a des difficultés à respirer doit consulter un médecin.',
-    'question_3_mesures_de_protection'=>'Comment la COVID-19 se propage-t-elle ?',
-    'response_3_mesures_de_protection'=>'La COVID-19 est transmise par des personnes porteuses du virus. La maladie peut se transmettre d’une personneà l’autre par le biais de gouttelettes respiratoires expulsées par le nez ou par la bouche lorsqu’une personne tousse ou éternue. Ces gouttelettes peuvent se retrouver sur des objets ou des surfaces autour de la personne en question. On peut alors contracter la COVID-19 si on touche ces objets ou cessurfaces et si on se touche ensuite les yeux, le nez ou la bouche. Il est également possible de contracter la COVID-19 en inhalant des gouttelettes d’une personne malade qui vient de tousser ou d’éternuer. C’est pourquoi il est important de se tenir à plusd’un mètre d’une personne malade.',
-    
-    'general_question_mesures_de_protection'=>'Comment puis-je me protéger et éviter que la maladie ne se propage ?',
-    'subresponse_title_1_mesures_de_protection'=>'Se laver fréquemment les mains',
-    'subresponse_paragraph_1_mesures_de_protection'=>'Se laver fréquemment les mains avec une solution hydroalcoolique ou à l’eau et au savon',
-    'why_1_mesures_de_protection'=>'Pourquoi? Se laver les mains avec une solution hydroalcoolique ou à l’eau et au savon tue le virus s’il est présent sur vos mains.',
-    
-    'subresponse_title_2_mesures_de_protection'=>'Éviter les contacts proches',
-    'subresponse_paragraph_2_mesures_de_protection'=>'Maintenir une distance d’au moins 1 mètre avec les autres personnes, en particulier si elles toussent, éternuent ou ont de la fièvre.',
-    'why_2_mesures_de_protection'=>'Pourquoi? Lorsqu’une personne infectée par un virus respiratoire, comme la COVID-19, tousse ou éternue, elle projette de petites gouttelettes contenant le virus. Si vous êtes trop près, vous pouvez inhaler le virus.',
+    'title_mesures_de_protection'=>'Ndelo ya komibatela na coronavirus',
+    'question_1_mesures_de_protection'=>'Coronavirus ezali nini?',
+    'response_1_mesures_de_protection'=>'Coronavirus ezali moko ya bokono oyo ezuaka bato mpe banyama, Coronavirus ekoki ko mema mpasi ya ko pema tii na malady makasi lokola syndrome respiratoire du Moyen-Orient (MERS) et  le syndrome respiratoire aigu sévère (SRAS) Coronavirus oyo ewuti kozwama kala mingi te nde mukolo ya COVID-19',
+    'question_2_mesures_de_protection'=>'COVID 19 ezali naba Bilembo nini ?',
+    'response_2_mesures_de_protection'=>'Bilembo ya COVID-19  ezali mingi mingi Fefele, bolembu, kosukosu baye maladi misusu bazalaka na zolo ya ko kangama, miyoyo, mpasi na kingo na pulupulu na Mpo na misusu bazalaka na elembo moko te 80% ya Bato babikisami nakolendala te yakomisalisa mpe. Moto moko na kati ya bato motoba azalaka na bilembo ya makasi ya bokono bwa covid 19. Mikolo mpe batu oyo bazali na maladi ya motema  na ya sukali bazali na likama yakozwa coronavirus. Moto nyonso oyo azali na fefele mpe kosukosu esengeli akende na lombangu komona munganga',
+    'question_3_mesures_de_protection'=>'Coronavirus etambolaka lolenge nini ?',
+    'response_3_mesures_de_protection'=>'Coronavirus epesamaka na bato oyo babeli yango. Bokono oyo ekoki kozuama na soyi oyo ebimaka na munoko tango mutu azali ko kosola. Soyi wana ekoki kokota na biloko mpe na nzinga nzinga ya moto oyo akosoli. Soki moto mosusu asimbi bisika wana mpe atie loboko naye na misu to munoko akoki kozwa bokona bwa coronavirus. Okoki mpe kozwa coronavirus soki omeli soyi ya moto oyo abeli bokono bwa corona virus, yango esengeli kotelema mua musika na moto oyo aza na bokono (metre moko)',
 
-    'subresponse_title_3_mesures_de_protection'=>'Respecter les règles d’hygiène respiratoire',
-    'subresponse_paragraph_3_mesures_de_protection'=>'Se couvrir la bouche et le nez avec le pli du coude ou avec un mouchoir en cas de toux ou d’éternuement – jeter le mouchoir immédiatement après dans une poubelle fermée et se laver les mains avec une solution hydroalcoolique ou à l’eau et au savon.',
-    'why_3_mesures_de_protection'=>'Pourquoi ? Se couvrir la bouche et le nez en cas de toux ou d’éternuement permet d’éviter la propagation des virus et autres agents pathogènes.',
+    'general_question_mesures_de_protection'=>'Lolenge nini nakoki komibatela na bokono bwa coronavirus?',
+    'subresponse_title_1_mesures_de_protection'=>'Kosukola maboko tango nyonso',
+    'subresponse_paragraph_1_mesures_de_protection'=>'Kosukola maboko tango nyonso na sabuni to pe alkolo',
+    'why_1_mesures_de_protection'=>'Lolenge ya makasi yako mibatela pe kobatela batu misusu nabokono ya COVID-19 ezali ko sokola tango nionso maboko. Sabuni ebomaka bokono bwa crornavirus mbala moko .',
 
-    'subresponse_title_4_mesures_de_protection'=>'Éviter de se toucher les yeux, le nez et la bouche.',
-    'why_4_mesures_de_protection'=>'Pourquoi? Les mains sont en contact avec de nombreuses surfaces qui peuvent être contaminées par le virus. Si vous vous touchez les yeux, le nez ou la bouche, vous risquez d’être en contact avec le virus présent sur ces surfaces.',
+    'subresponse_title_2_mesures_de_protection'=>'Kozala na pene ya baninga te',
+    'subresponse_paragraph_2_mesures_de_protection'=>'Ko zala na musika  ya 1 mètre   ya batu oyo bazali ko kosola.',
+    'why_2_mesures_de_protection'=>'Pona nini ? tango moto oyo azali na bokono bwa coronavirus akosoli, abimisaka soyi mikie mikie oyo ezali kopanza coronavirus, soki ozali pene ya moto wana, okoki mpe kozua bokono bwa coronavirus.',
 
-    'info_title_5_mesures_de_protection'=>'Tenez-vous informé et suivez les conseils de votre médecin',
-    'info_text_5_mesures_de_protection'=>'Tenez-vous au courant des dernières évolutions concernant la COVID-19. Suivez les conseils de votre médecin, des autorités de santé nationales et locales ou de votre employeur pour savoir comment vous protéger et protéger les autres de la COVID-19.',
-    'info_why_5_mesures_de_protection'=>'Pourquoi ? Ce sont les autorités nationales et locales qui disposent des informations les plus récentes sur la propagation ou non de la COVID-19 dans la région où vous vous trouvez. Elles sont les mieux placées pour expliquer ce que les personnes dans votre région devraient faire pour se protéger.',
+    'subresponse_title_3_mesures_de_protection'=>'To landa mikano ya bokolongono mitali kopema',
+    'subresponse_paragraph_3_mesures_de_protection'=>'Kosola kaka na kati ya libolongo to na muswale yako bwaka salisa muswale mbala moko mpe bwaka yango na sima yako salisa yango lata monganza to eloko ya ko zipa zolo na munoko nayo yako mpo na komibatela sukola maboko na mayi mpe na sabuni tango nyoso',
+    'why_3_mesures_de_protection'=>'pona nini ? ko finika zolo na munoko ekoki ko sunga mpo ete ozua coronavirus te',
 
-    'info_title_6_mesures_de_protection'=>'Mesures de protection pour les personnes qui se trouvent ou qui se sont récemment rendues (au cours des 14 derniers jours) dans des régions où la COVID-19 se propage',
-    'element_1_mesures_de_protection'=>'Suivez les conseils présentés ci-dessus.',
-    'element_2_mesures_de_protection'=>'Si vous commencez à vous sentir mal, même si vous n’avez que des symptômes bénins comme des maux de tête et un faible écoulement nasal, restez chez vous jusqu’à la guérison. Pourquoi ? Éviter d’entrer en contact avec d’autres personnes et de se rendre dans des établissements de santé permettra à ces établissements de fonctionner plus efficacement et vous protègera, ainsi que les autres personnes, de la COVID-19 et d’autres maladies virales.',
-    'element_3_mesures_de_protection'=>'En cas de fièvre, de toux et de difficultés respiratoires, consultez un médecin sans tarder, car il peut s’agir d’une infection respiratoire ou d’une autre affection grave. Appelez votre médecin et indiquez-lui si vous avez récemment voyagé ou été en contact avec des voyageurs. Pourquoi ? Si vous l’appelez, votre médecin pourra vous orienter rapidement vers l’établissement de santé le plus adapté. En outre, cela vous protègera et évitera la propagation de la COVID-19 et d’autres maladies virales',
+    'subresponse_title_4_mesures_de_protection'=>'keba ko simba simba misu, zolo na munoko nayo',
+    'why_4_mesures_de_protection'=>'pona nini? Maboko esimbaka bisika ebele, ekoki mpe ko kotisa coronavirus na nzoto ya moto soki omisimbi simbi misu, zolo na munoko',
+
+    'info_title_5_mesures_de_protection'=>'Landa ba sango mpe ba toli ya minganga ',
+    'info_text_5_mesures_de_protection'=>'landa ba sango mpe ba toli ya bakonzi ya mboka oyo bazo konza makambu mitali bokolongono.',
+    'info_why_5_mesures_de_protection'=>'Ponanini ? esengeli kolanda kaka mikano ya bakonzi ya mboka mpo bango nde bayebi penza malamu makambo matali bokono bwa coronavirus',
+
+    'info_title_6_mesures_de_protection'=>'Ndelo yakobatela bato oyo bauti  bisika bokona virus epanzani (na mikolo 14 oyo eleki)',
+    'element_1_mesures_de_protection'=>'Bolanda ba toli oyo :',
+    'element_2_mesures_de_protection'=>'soki obandi koyoka mutu mpasi mpe mua miyoyo kobima na zolo, kobima lisusu te! vanda kaka na ndaku tii tango okoyoka malamu. Keba kokutana na bato mosusu, kokende na lopitalo te po omibatela na COVID-19 mpe na bato mosusu.',
+    'element_3_mesures_de_protection'=>'Soki oyoki fefele ya makasi, kosukosu mpe mpasi yako pema, kende na lombangu komona munganga mpo ekoki kozana bokoni mosusu. Benga munganga nayo mpe yebisa ye soki okendaki mobembo. Na sima yako benga munganga, ye nde akoyebisa yo na lopitalo nni esengeli okende mpo owa bobikisi na lombangu mpe kobatela bato mosusu na COVID-19 epanzana te.',
 
     // Directives du Gouvernement Page
-    'title_directives_du_gouvernement'=>'Directives prises par le Gouvernement',
+    'title_directives_du_gouvernement'=>'Bikatelo epesamaki na bakonzi ya mboka',
 
     // Sondage Sub Page
     'title_sondage'=>'Craintes et réactions au COVID-19',
@@ -237,5 +238,5 @@ return [
     'bad_health_text_2_orientation_medicale'=>"#RestezChezVous - limitez les contacts avec d'autres personnes. Le virus peut être propagé par des porteurs ne montrant pas de symptômes.",
     'final_button_orientation_medicale'=>'Recommencez le test',
 
-    
+
 ];
