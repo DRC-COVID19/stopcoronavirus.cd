@@ -101,11 +101,10 @@ Route::group([
                     Route::get('/global-out', 'Flux24ProvinceController@getGlobalDataOut');
                 });
                 Route::group(['prefix' => 'm-30'], function () {
-                    Route::get('/', 'DashBoardController@getFlux30DataFromOriginProvince');
-                    Route::get('/daily', 'DashBoardController@getFlux30DataFromOriginDailyProvince');
-                    Route::get('/daily-compare', 'DashBoardController@getFlux30DataFromOriginDailyProvinceCompare');
-                    Route::get('/daily-in', 'DashBoardController@getFlux30DataFromOriginDailyInProvince');
-                    Route::get('/daily-out', 'DashBoardController@getFlux30DataFromOriginDailyOutProvince');
+                    Route::get('/', 'Flux30ProvinceController@getFluxDataFromOriginProvince');
+                    Route::get('/daily', 'Flux30ProvinceController@getFluxDataFromOriginDailyProvince');
+                    Route::get('/daily-in', 'Flux30ProvinceController@getFluxDataFromOriginDailyInProvince');
+                    Route::get('/daily-out', 'Flux30ProvinceController@getFluxDataFromOriginDailyOutProvince');
                 });
 
                 Route::group(['prefix' => 'presence'], function () {
