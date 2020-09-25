@@ -152,42 +152,33 @@ class Flux30ProvinceController extends Controller
   {
     $data = $this->fluxValidator($request->all());
 
+    $day = $this->getDay($data['observation_start']);
     try {
-      $flux = Flux30Province::select(['Date as date', DB::raw('sum(volume)as volume')])
-        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+      $flux = Flux30Province::select(['Hour as hour', DB::raw('sum(volume)as volume')])
+        ->where('Date', $data['observation_start'])
         ->where('immobility', '3h')
-
         ->where(function ($q) use ($data) {
           $q->whereIn('Origin', $data['fluxGeoOptions'])
             ->orWhereIn('Destination', $data['fluxGeoOptions']);
         })
         ->where('destination', '!=', 'Hors_Zone')
         ->where('origin', '!=', 'Hors_Zone')
-        ->groupBy('Date')->get();
+        ->groupBy('hour')->get();
 
-      $fluxRefences = [];
-      if (isset($data['preference_start']) && isset($data['preference_end'])) {
-        $fluxRefences = Flux30Province::select(['Date as date', DB::raw('sum(volume)as volume')])
-          ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-          ->where('immobility', '3h')
-          ->where(function ($q) use ($data) {
-            $q->whereIn('Origin', $data['fluxGeoOptions'])
-              ->orWhereIn('Destination', $data['fluxGeoOptions']);
-          })
-          ->where('destination', '!=', 'Hors_Zone')
-          ->where('origin', '!=', 'Hors_Zone')
-          ->groupBy('Date')->get();
+      $fluxRefences = Flux30Province::select(['Date as date', 'Hour as hour', DB::raw('sum(volume)as volume, True as isReference')])
+        ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+        ->havingRaw("WEEKDAY(date)={$day}")
+        ->where('immobility', '3h')
+        ->where(function ($q) use ($data) {
+          $q->whereIn('Origin', $data['fluxGeoOptions'])
+            ->orWhereIn('Destination', $data['fluxGeoOptions']);
+        })
+        ->where('destination', '!=', 'Hors_Zone')
+        ->where('origin', '!=', 'Hors_Zone')
+        ->groupBy('hour', 'Date')->get();
 
-        if (count($fluxRefences) > 0) {
-          foreach ($fluxRefences as $value) {
-            $value->{'isReference'} = true;
-          }
-        }
-      }
-      if (is_array($fluxRefences)) {
-        return response()->json($flux);
-      }
-      return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+      $fluxRefArray = $this->median(array_values($fluxRefences->groupBy('date')->toArray()));
+      return response()->json(array_merge($fluxRefArray, $flux->toArray()));
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -196,37 +187,63 @@ class Flux30ProvinceController extends Controller
     }
   }
 
+  public function median($data)
+  {
+    $fluxGroupBy = $data;
+    $count = count($fluxGroupBy);
+
+    $fluxRefArray = [];
+
+    if ($count % 2 == 0) {
+      $fluxArray1 = $fluxGroupBy[(int) ($count / 2)];
+      $fluxArray2 = $fluxGroupBy[(int) (($count / 2) - 1)];
+      foreach ($fluxArray1 as $value) {
+        $element = [];
+        $element2 = array_filter($fluxArray2, function ($item) use ($value) {
+          return $item['hour'] == $value['hour'];
+        });
+        if (!isset($element2[0])) {
+          $element2['volume'] = $value['volume'];
+        } else {
+          $element2 = $element2[0];
+        }
+        $element['volume'] = $value['volume'] + $element2['volume'];
+        $element['hour'] = $value['hour'];
+        $element['isReference'] = true;
+        $fluxRefArray[] = $element;
+      }
+    } else {
+      $fluxRefArray = $fluxGroupBy[(int) ($count / 2)];
+    }
+    return $fluxRefArray;
+  }
+
   public function getFluxDataFromOriginDailyInProvince(Request $request)
   {
     $data = $this->fluxValidator($request->all());
 
     try {
-      $flux = Flux30Province::select(['Date as date','hour', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+      $day = $this->getDay($data['observation_start']);
+
+      $flux = Flux30Province::select(['Date as date', 'hour', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
         ->where('Date', $data['observation_start'])
         ->where('immobility', '3h')
         ->whereIn('Destination', $data['fluxGeoOptions'])
         // ->where('destination','!=','Hors_Zone')
         ->orderBy('date')
         ->where('origin', '!=', 'Hors_Zone')
-        ->groupBy('Date', 'day', 'destination', 'Origin','hour')->get();
+        ->groupBy('Date', 'day', 'destination', 'Origin', 'hour')->get();
 
-      $fluxRefences = Flux30Province::select(['Destination as destination','hour', 'Origin as origin', 'date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
+      $fluxRefences = Flux30Province::select(['Destination as destination', 'hour', 'Origin as origin', 'date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
         ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
         ->where('immobility', '3h')
         ->whereIn('Destination', $data['fluxGeoOptions'])
+        ->havingRaw("WEEKDAY(date)={$day}")
         // ->where('destination','!=','Hors_Zone')
         ->where('origin', '!=', 'Hors_Zone')
-        ->groupBy('day', 'Destination', 'Origin', 'Date','hour')
+        ->groupBy('day', 'Destination', 'Origin', 'Date', 'hour')
         ->orderBy('date')
         ->get();
-
-      // dump($fluxRefences->toArray());
-      // echo 'group';
-      dump($fluxRefences->groupBy('date'));
-
-      exit;
-
-
 
       $geoCodingFilePath = storage_path('app/fluxZones.json');
       $geoData = [];
@@ -247,8 +264,10 @@ class Flux30ProvinceController extends Controller
         }
       }
 
+      $fluxRefArray = $this->median(array_values($fluxRefences->groupBy('date')->toArray()));
+
       return response()->json([
-        'references' => $fluxRefences,
+        'references' => $fluxRefArray,
         'observations' => $flux,
       ]);
     } catch (\Throwable $th) {
@@ -264,26 +283,28 @@ class Flux30ProvinceController extends Controller
     $data = $this->fluxValidator($request->all());
 
     try {
-      $flux = Flux30Province::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
-        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+      $day = $this->getDay($data['observation_start']);
+
+      $flux = Flux30Province::select(['Date as date', 'hour', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+        ->where('Date', $data['observation_start'])
         ->where('immobility', '3h')
         ->whereIn('Origin', $data['fluxGeoOptions'])
         ->where('destination', '!=', 'Hors_Zone')
         // ->where('origin','!=','Hors_Zone')
         ->orderBy('date')
-        ->groupBy('Date', 'day', 'origin', 'Destination')->get();
+        ->groupBy('Date', 'day', 'origin', 'Destination', 'hour')->get();
 
       $fluxRefences = [];
-      if (isset($data['preference_start']) && isset($data['preference_end'])) {
-        $fluxRefences = Flux30Province::select(['Origin as origin', 'Destination as destination', 'Date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
-          ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-          ->where('immobility', '3h')
-          ->whereIn('Origin', $data['fluxGeoOptions'])
-          // ->where('destination','!=','Hors_Zone')
-          ->where('origin', '!=', 'Hors_Zone')
-          ->groupBy('day', 'Destination', 'Origin', 'Date')
-          ->orderBy('date')->get();
-      }
+      $fluxRefences = Flux30Province::select(['Origin as origin', 'hour', 'Destination as destination', 'date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
+        ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+        ->where('immobility', '3h')
+        ->havingRaw("WEEKDAY(date)={$day}")
+        ->whereIn('Origin', $data['fluxGeoOptions'])
+        // ->where('destination','!=','Hors_Zone')
+        ->where('origin', '!=', 'Hors_Zone')
+        ->groupBy('day', 'Destination', 'Origin', 'Date', 'hour')
+        ->orderBy('date')->get();
+
 
       $geoCodingFilePath = storage_path('app/fluxZones.json');
       $geoData = [];
@@ -304,8 +325,10 @@ class Flux30ProvinceController extends Controller
         }
       }
 
+      $fluxRefArray = $this->median(array_values($fluxRefences->groupBy('date')->toArray()));
+
       return response()->json([
-        'references' => $fluxRefences,
+        'references' => $fluxRefArray,
         'observations' => $flux,
       ]);
     } catch (\Throwable $th) {
@@ -335,5 +358,15 @@ class Flux30ProvinceController extends Controller
       'observation_start' => 'date|required',
       // 'observation_end' => 'date|required|after_or_equal:observation_start',
     ])->validate();
+  }
+
+  private function getDay($date)
+  {
+    $day = (int)date("w", strtotime($date));
+    $day -= 1;
+    if ($day < 0) {
+      $day = 6;
+    }
+    return $day;
   }
 }
