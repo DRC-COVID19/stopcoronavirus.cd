@@ -48,7 +48,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function tearDown():void
     {
-        // $this->artisan('migrate:reset');
+        $this->artisan('migrate:reset');
         parent::tearDown();
     }
 
