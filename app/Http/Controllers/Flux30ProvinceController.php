@@ -209,7 +209,9 @@ class Flux30ProvinceController extends Controller
         }
         $element['volume'] = $value['volume'] + $element2['volume'];
         $element['hour'] = $value['hour'];
-        $element['isReference'] = true;
+        if (isset($value['isReference'])) {
+          $element['isReference'] = true;
+        }
         $fluxRefArray[] = $element;
       }
     } else {
@@ -325,10 +327,10 @@ class Flux30ProvinceController extends Controller
         }
       }
 
-      $fluxRefArray = $this->median(array_values($fluxRefences->groupBy('date')->toArray()));
+      // $fluxRefArray = array_values($fluxRefences->groupBy('destination')->toArray());
 
       return response()->json([
-        'references' => $fluxRefArray,
+        'references' => $fluxRefences,
         'observations' => $flux,
       ]);
     } catch (\Throwable $th) {
