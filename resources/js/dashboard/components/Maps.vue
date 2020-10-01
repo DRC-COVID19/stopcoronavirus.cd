@@ -28,7 +28,9 @@ const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
   sourceHealthProvinceGeojson = "sourceHealthProvinceGeojson",
   EPIDEMIC_LAYER = "EPIDEMIC_LAYER",
   HATCHED_MOBILITY_LAYER = "HATCHED_MOBILITY_LAYER",
-  COVID_HOSPITAL_SOURCE = "COVID_HOSPITAL_SOURCE";
+  COVID_HOSPITAL_SOURCE = "COVID_HOSPITAL_SOURCE",
+  SOURCE_HOTSPOT_GEOJSON_CENTERED = "SOURCE_HOTSPOT_GEOJSON_CENTERED",
+  SOURCE_HOTSPOT_GEOJSON = "SOURCE_HOTSPOT_GEOJSON";
 let deck = null;
 const popup = new Mapbox.Popup({
   closeButton: false,
@@ -222,6 +224,13 @@ export default {
         }
       );
       map.U.addGeoJSON(
+        SOURCE_HOTSPOT_GEOJSON,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true
+        }
+      );
+      map.U.addGeoJSON(
         sourceHealthZoneGeojsonCentered,
         { type: "FeatureCollection", features: [] },
         {
@@ -230,6 +239,14 @@ export default {
       );
       map.U.addGeoJSON(
         sourceHealthProvinceGeojsonCentered,
+        { type: "FeatureCollection", features: [] },
+        {
+          generateId: true
+        }
+      );
+
+      map.U.addGeoJSON(
+        SOURCE_HOTSPOT_GEOJSON_CENTERED,
         { type: "FeatureCollection", features: [] },
         {
           generateId: true
@@ -261,6 +278,10 @@ export default {
       if (this.healthProvinceGeojson) {
         this.addProvinceSource();
         this.$emit("geoJsonLoaded", "provinceGeo");
+      }
+      if (this.hotspotGeojson) {
+        this.addHotspotSource();
+        this.$emit("geoJsonLoaded", "hotspotGeo");
       }
 
       // if (!this.isProvinceSourceLoaded && this.healthProvinceGeojson) {
@@ -349,6 +370,8 @@ export default {
       healthProvinceGeojson: state => state.app.healthProvinceGeojson,
       healthProvinceGeojsonCentered: state =>
         state.app.healthProvinceGeojsonCentered,
+      hotspotGeojson: state => state.app.hotspotGeojson,
+      hotspotGeojsonCentered: state => state.app.hotspotGeojsonCentered,
       typePresence: state => state.flux.typePresence
     }),
     flux24WithoutReference() {
@@ -365,6 +388,10 @@ export default {
     healthProvinceGeojson() {
       this.addProvinceSource();
       this.$emit("geoJsonLoaded", "provinceGeo");
+    },
+    hotspotGeojson() {
+      this.addHotspotSource();
+      this.$emit("geoJsonLoaded", "hotspotGeo");
     },
     covidCases() {
       if (this.covidCases) {
@@ -504,16 +531,46 @@ export default {
       "setEpidemicExtValues"
     ]),
     ...mapActions(["resetState"]),
+    addPolygoneLayerHotspot() {
+      if (!this.isMapLoaded) {
+        return;
+      }
+      map.U.removeLayer([SOURCE_HOTSPOT_GEOJSON]);
+      
+      map.addLayer(
+        {
+          id: SOURCE_HOTSPOT_GEOJSON,
+          type: "line",
+          source: SOURCE_HOTSPOT_GEOJSON,
+          layout: {},
+          paint: {
+            "line-color": PALETTE.bordure_shape_file,
+            "line-width": 1
+          }
+        },
+        map.getLayer(EPIDEMIC_LAYER) ? EPIDEMIC_LAYER : null
+      );
+    },
     addPolygoneLayer(geoGranularity) {
       if (!this.isMapLoaded) {
         return;
       }
+      map.U.removeLayer([SOURCE_HOTSPOT_GEOJSON]);
       map.U.removeLayer([this.drcSourceId]);
+      let source = this.drcSourceId;
+      switch (geoGranularity) {
+        case 1:
+          source = this.drcSourceId;
+          break;
+        case 2:
+          source = this.drcHealthZone;
+          break;
+      }
       map.addLayer(
         {
           id: this.drcSourceId,
           type: "line",
-          source: geoGranularity != 2 ? this.drcSourceId : this.drcHealthZone,
+          source: source,
           layout: {},
           paint: {
             "line-color": PALETTE.bordure_shape_file,
@@ -697,7 +754,6 @@ export default {
       map.U.setData(this.drcSourceId, this.healthProvinceGeojson);
     },
     addZoneSource() {
-
       if (!this.isMapLoaded) {
         return;
       }
@@ -707,6 +763,17 @@ export default {
       );
 
       map.U.setData(this.drcHealthZone, this.healthZoneGeojson);
+    },
+    addHotspotSource() {
+      if (!this.isMapLoaded) {
+        return;
+      }
+      map.U.setData(
+        SOURCE_HOTSPOT_GEOJSON_CENTERED,
+        this.hotspotGeojsonCentered
+      );
+
+      map.U.setData(SOURCE_HOTSPOT_GEOJSON, this.hotspotGeojson);
     },
     covidHatchedStyle(
       covidCasesData,
