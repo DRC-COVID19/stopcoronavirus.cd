@@ -11,7 +11,7 @@
               :options="fluxPredefinedInput"
               label="name"
               placeholder="Option"
-              :reduce="item=>item.id"
+              :reduce="item => item.id"
               class="style-chooser"
             />
           </b-form-group>
@@ -27,15 +27,22 @@
                   :options="fluxGeoGranularities"
                   label="name"
                   placeholder="Granularité"
-                  :reduce="item=>item.id"
+                  :reduce="item => item.id"
                   class="style-chooser"
                 />
               </b-form-group>
             </b-col>
             <b-col cols="12" md="6">
               <b-form-group
-                :invalid-feedback="flux24Errors.fluxGeoOptions ? flux24Errors.fluxGeoOptions[0] : null"
-                :state="flux24Errors.fluxGeoOptions && flux24Errors.fluxGeoOptions.lenght>0"
+                :invalid-feedback="
+                  flux24Errors.fluxGeoOptions
+                    ? flux24Errors.fluxGeoOptions[0]
+                    : null
+                "
+                :state="
+                  flux24Errors.fluxGeoOptions &&
+                    flux24Errors.fluxGeoOptions.lenght > 0
+                "
               >
                 <v-select
                   v-model="fluxForm.fluxGeoOptions"
@@ -44,7 +51,7 @@
                   :options="fluxGeoOptions"
                   placeholder="Localisation"
                   label="origin"
-                  :reduce="item=>item.origin"
+                  :reduce="item => item.origin"
                   @input="fluxGeoOptionsChange"
                   class="style-chooser style-chooser-multiple"
                 />
@@ -58,12 +65,13 @@
             <b-col cols="12" md="4">
               <b-form-group>
                 <v-select
+                  :disabled="true"
                   required
                   v-model="fluxForm.fluxTimeGranularity"
                   :options="fluxTimeGranularities"
                   label="name"
                   placeholder="Granularité"
-                  :reduce="item=>item.id"
+                  :reduce="item => item.id"
                   @input="resetFluxPredefinedControl"
                   class="style-chooser"
                 />
@@ -71,28 +79,45 @@
             </b-col>
             <b-col cols="12" md="8">
               <b-form-group
-                :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start?flux24Errors.observation_start[0]:''} ${flux24Errors.observation_end?flux24Errors.observation_end[0]:''}` : null"
-                :state="(flux24Errors.observation_start && flux24Errors.observation_start.lenght>0)|| (flux24Errors.observation_end && flux24Errors.observation_end.lenght>0)"
+                :invalid-feedback="
+                  flux24Errors.observation_start || flux24Errors.observation_end
+                    ? `${
+                        flux24Errors.observation_start
+                          ? flux24Errors.observation_start[0]
+                          : ''
+                      } ${
+                        flux24Errors.observation_end
+                          ? flux24Errors.observation_end[0]
+                          : ''
+                      }`
+                    : null
+                "
+                :state="
+                  (flux24Errors.observation_start &&
+                    flux24Errors.observation_start.lenght > 0) ||
+                    (flux24Errors.observation_end &&
+                      flux24Errors.observation_end.lenght > 0)
+                "
               >
                 <div class="d-flex">
                   <date-range-picker
                     ref="picker2"
-                    :locale-data="{
-                        firstDay: 1,
-                      format: 'dd-mm-yyyy',
-                      drops: 'up' }"
+                    :locale-data="rangeData"
                     v-model="dateRangeObservation"
                     :appendToBody="true"
                     opens="center"
+                    :timePicker="isHotspot"
+                    :timePicker24Hour="isHotspot"
                     :min-date="new Date('03/19/2020')"
                     :max-date="Observation_max_date"
                     @update="UpdateObservationDate"
                     :calculate-position="dateRangerPosition"
                     class="style-picker"
                   >
-                    <template
-                      v-slot:input="picker"
-                    >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
+                    <template v-slot:input="picker"
+                      >{{ picker.startDate | date }} -
+                      {{ picker.endDate | date }}</template
+                    >
                   </date-range-picker>
 
                   <b-button
@@ -107,7 +132,9 @@
           </b-row>
         </b-col>
         <b-col cols="12" md="2" class="row pl-3 pr-3">
-          <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue">Filtrer les données</b-button>
+          <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue"
+            >Filtrer les données</b-button
+          >
         </b-col>
       </b-form-row>
     </b-form>
@@ -122,6 +149,7 @@ import {
   DATEFORMAT,
   FLUX_LAST_UPDATE,
   FLUX_PREDEFINED_INPUT,
+  GEO_GRANULARITIES
 } from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
@@ -133,22 +161,22 @@ export default {
   props: {
     fluxZones: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     fluxProvinces: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     flux24Errors: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
   data() {
     return {
       dateRangePreference: {
         startDate: new Date(PREFERENCE_START),
-        endDate: new Date(PREFERENCE_END),
+        endDate: new Date(PREFERENCE_END)
       },
       Observation_max_date: new Date(FLUX_LAST_UPDATE),
       fluxForm: {
@@ -158,37 +186,30 @@ export default {
         observation_end: "2020-06-29",
         fluxGeoGranularity: 2,
         fluxTimeGranularity: 1,
+        time_start: "06:00",
+        time_end: "00:00"
       },
       dateRangeObservation: {
-        startDate: new Date("03/19/2020"),
-        endDate: new Date("06/29/2020"),
+        startDate: new Date("03/19/2020 06:00"),
+        endDate: new Date("06/29/2020 00:00:")
       },
-      fluxPredefinedInput:FLUX_PREDEFINED_INPUT,
+      fluxPredefinedInput: FLUX_PREDEFINED_INPUT,
       fluxFilterInput: "",
       fluxFilterInputProvince: "",
       fluxZonesArray: [],
       fluxProvincesArray: [],
       fluxGeoGranularity: null,
-      fluxGeoGranularities: [
-        {
-          id: 1,
-          name: "Provinces",
-        },
-        {
-          id: 2,
-          name: "Zones des santés",
-        },
-      ],
+      fluxGeoGranularities: GEO_GRANULARITIES,
       fluxGeoOptions: [],
       fluxTimeGranularities: [
         {
           id: 1,
-          name: "24h",
+          name: "24h"
         },
         {
           id: 2,
-          name: "30'",
-        },
+          name: "30'"
+        }
       ],
       fluxTimeGranularity: null,
       allZoneChecked: false,
@@ -197,17 +218,18 @@ export default {
       allProvincesCheckedIndeterminate: false,
       IsfluxParameterCollapse: false,
       fluxPredefinedControl: null,
+      isHotspot: false
     };
   },
   filters: {
-    date: (val) => {
+    date: val => {
       return val ? moment(val).format("DD.MM.YYYY") : "";
-    },
+    }
   },
   mounted() {
     this.$store.watch(
-      (state) => state.flux.fluxGeoOptions,
-      (value) => {
+      state => state.flux.fluxGeoOptions,
+      value => {
         this.$set(this.fluxForm, "fluxGeoOptions", value);
         if (
           this.fluxForm.observation_start &&
@@ -219,8 +241,8 @@ export default {
       }
     );
     this.$store.watch(
-      (state) => state.flux.tendanceChartSelectedValue,
-      (value) => {
+      state => state.flux.tendanceChartSelectedValue,
+      value => {
         const date = new Date(value.x);
         this.fluxForm.preference_end = this.moment(
           date.setDate(date.getDate() - 1)
@@ -234,10 +256,22 @@ export default {
     );
     this.fluxGeoGranularityChange(2);
   },
+  computed: {
+    ...mapState({
+      fluxHotSpot: state => state.app.fluxHotSpot
+    }),
+    rangeData() {
+      return {
+        firstDay: 1,
+        format: this.isHotspot ? "dd-mm-yyyy HH:mm" : "dd-mm-yyyy",
+        drops: "up"
+      };
+    }
+  },
   watch: {
     fluxZones() {
       this.fluxGeoGranularityChange(2);
-    },
+    }
   },
   methods: {
     ...mapMutations([
@@ -245,7 +279,7 @@ export default {
       "setFluxGeoOptions",
       "setFluxEnabled",
       "setFluxGeoOptionsTmp",
-      "setFluxGeoGranularityTemp",
+      "setFluxGeoGranularityTemp"
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -267,8 +301,11 @@ export default {
       this.fluxForm.preference_end = moment(endDate).format("YYYY/MM/DD");
     },
     UpdateObservationDate({ startDate, endDate }) {
+      console.log("data", { startDate, endDate });
       this.fluxForm.observation_start = moment(startDate).format("YYYY/MM/DD");
       this.fluxForm.observation_end = moment(endDate).format("YYYY/MM/DD");
+      this.fluxForm.time_start = moment(startDate).format("HH:mm");
+      this.fluxForm.time_end = moment(endDate).format("HH:mm");
       this.resetFluxPredefinedControl();
     },
     submitFluxForm() {
@@ -294,15 +331,28 @@ export default {
     fluxGeoGranularityChange(value) {
       this.resetFluxPredefinedControl();
       this.setFluxGeoGranularity(value);
-      this.$set(this.fluxForm,'fluxGeoOptions',[]);
-      if (value == 1) {
-        this.fluxGeoOptions = this.fluxProvinces;
-      } else {
-        this.fluxGeoOptions = this.fluxZones;
+      this.$set(this.fluxForm, "fluxGeoOptions", []);
+      this.$set(this.fluxForm,"fluxTimeGranularity",1);
+      this.isHotspot = false;
+      switch (value) {
+        case 1:
+          this.fluxGeoOptions = this.fluxProvinces;
+          break;
+        case 2:
+          this.fluxGeoOptions = this.fluxZones;
+          break;
+        case 3:
+          this.isHotspot = true;
+          this.fluxGeoOptions=this.fluxHotSpot.filter(x=>x.name!="ZoneGlobale").map(x=>({origin:x.name,id:x.id}));
+          this.fluxGeoOptions.unshift({origin:'Tout',id:'-1'});
+          this.$set(this.fluxForm,'fluxGeoOptions',["Tout"]);
+          this.$set(this.fluxForm,"fluxTimeGranularity",2);
+          break;
+        default:
+          break;
       }
     },
     fluxGeoOptionsChange(value) {
-
       this.resetFluxPredefinedControl();
       this.setFluxGeoOptionsTmp(value);
     },
@@ -324,8 +374,12 @@ export default {
           observation_end = this.moment().format(DATEFORMAT);
           break;
         case 2:
-          observation_start = this.moment().startOf("week").format(DATEFORMAT);
-          observation_end = this.moment().endOf("week").format(DATEFORMAT);
+          observation_start = this.moment()
+            .startOf("week")
+            .format(DATEFORMAT);
+          observation_end = this.moment()
+            .endOf("week")
+            .format(DATEFORMAT);
           break;
         case 3:
           observation_start = this.moment(new Date())
@@ -367,12 +421,12 @@ export default {
         observation_start,
         observation_end,
         fluxTimeGranularity: 1,
-        fluxGeoGranularity: 2,
+        fluxGeoGranularity: 2
       };
 
       this.dateRangeObservation = {
         startDate: new Date(observation_start),
-        endDate: new Date(observation_end),
+        endDate: new Date(observation_end)
       };
       this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularity(this.fluxForm.fluxGeoGranularity);
@@ -386,8 +440,8 @@ export default {
     },
     resetFluxPredefinedControl() {
       this.fluxPredefinedControl = null;
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>

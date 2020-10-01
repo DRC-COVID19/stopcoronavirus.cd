@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Validator;
 
 class Flux30ZoneSumController extends Controller
 {
+
+  public function __construct()
+  {
+    $this->middleware('auth:dashboard');
+  }
+
   public function getHotspotMaps(Request $request)
   {
     $data = $this->fluxValidator($request->all());
