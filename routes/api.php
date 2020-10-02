@@ -120,6 +120,8 @@ Route::group([
     Route::group(['prefix' => 'hotspots'], function () {
       Route::get('list', 'FluxHotSpotController@index');
       Route::get('maps', 'Flux30ZoneSumController@getHotspotMaps');
+      Route::get('tendance', 'Flux30ZoneSumController@getHotspotTendance');
+      Route::get('daily', 'Flux30ZoneSumController@getHotspotDaily');
     });
   });
   Route::group(['prefix' => 'hospital-situations'], function () {
