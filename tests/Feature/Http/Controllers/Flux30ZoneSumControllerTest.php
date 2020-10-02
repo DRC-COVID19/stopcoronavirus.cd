@@ -37,7 +37,7 @@ class Flux30ZoneSumControllerTest extends TestCase
    */
   public function testGetHotspotMaps()
   {
-    $query = "preference_start=2020-01-31&preference_end=2020-01-31&observation_start=2020-02-01&fluxGeoGranularity=1&fluxTimeGranularity=1&fluxGeoOptions[]=Kinshasa&time_start=06:00&time_end=00:00";
+    $query = "fluxGeoGranularity=1&fluxTimeGranularity=1&fluxGeoOptions[]=Kinshasa&preference_start=2020-02-18&preference_end=2020-03-18&observation_start=2020-03-19&observation_end=2020-03-28&time_start=06:00&time_end=23:30";
     $response = $this->get("/api/dashboard/flux/hotspots/maps?{$query}",$this->header);
     $response->dump()->assertStatus(200);
   }
