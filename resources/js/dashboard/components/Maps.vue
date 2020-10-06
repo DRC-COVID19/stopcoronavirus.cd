@@ -1102,7 +1102,7 @@ export default {
             0.9,
             0
           ]
-        })
+        }),this.drcSourceId
       );
       this.flux30FeaturesData = features;
       map.on("mousemove", SOURCE_HOTSPOT_GEOJSON, this.flux30mouseMove);
