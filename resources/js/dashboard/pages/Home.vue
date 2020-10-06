@@ -1,11 +1,16 @@
 <template>
   <div>
-    <b-container fluid class="dash-home-page" ref="dash_home_page" id="dash_home_page">
+    <b-container
+      fluid
+      class="dash-home-page"
+      ref="dash_home_page"
+      id="dash_home_page"
+    >
       <Header />
       <b-row class="mt-2 top-menu position-relative" style="z-index:8">
         <b-col>
           <MenuFlux
-            v-show="activeMenu==1"
+            v-show="activeMenu == 1"
             @submitFluxForm="submitFluxForm"
             @populationFluxChecked="populationFluxChecked"
             @flux::predefined::changed="fluxPredefinedChanged"
@@ -15,25 +20,25 @@
             :flux24Errors="flux24Errors"
           />
           <MenuEpidemology
-            v-show="activeMenu==2"
+            v-show="activeMenu == 2"
             @covidCaseChecked="getCovidCases"
             :covidCasesCount="covidCasesCount"
           />
           <MenuIndicateur
-            v-show="activeMenu==3"
+            v-show="activeMenu == 3"
             :fluxZones="fluxZones"
             :fluxProvinces="fluxProvinces"
             :flux24Errors="flux24Errors"
           />
           <MenuInfrastructure
-            v-show="activeMenu==5"
+            v-show="activeMenu == 5"
             :hospitalCount="hospitalCount"
             :townships="townships"
             @hopitalChecked="gethopitals"
             @submitInfrastructureForm="submitInfrastructureForm"
           />
           <MenuOrientation
-            v-show="activeMenu==6"
+            v-show="activeMenu == 6"
             @medicalOrientationChecked="getmedicalOrientations"
             @medicalOrientationChanged="medicalOrientationChanged"
           />
@@ -42,16 +47,32 @@
       <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
       <about v-if="activeMenu == 7"></about>
       <b-row class="position-relative map-wrap" v-show="showMaps">
-        <b-col cols="12" :class="`${hasRightSide?'col-md-6':'col-md-12'}`">
-          <div class="layer-set-contenair" v-if="hasFlux24DailyIn && activeMenu==1">
+        <b-col cols="12" :class="`${hasRightSide ? 'col-md-6' : 'col-md-12'}`">
+          <div
+            class="layer-set-contenair"
+            v-if="hasFlux24DailyIn && activeMenu == 1"
+          >
             <b-link
-              :class="{'active':fluxMapStyle==2,'disabled':disabledArc}"
+              :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
               @click="layerSetSyle(2)"
-            >Arcs</b-link>
-            <b-link :class="{'active':fluxMapStyle==1}" @click="layerSetSyle(1)">Hachurés</b-link>
+              >Arcs</b-link
+            >
+            <b-link
+              :class="{ active: fluxMapStyle == 1 }"
+              @click="layerSetSyle(1)"
+              >Hachurés</b-link
+            >
           </div>
-          <b-row class="map-container" :class="{'map-container-100':!hasCovidCases}">
-            <FullScreen id="fullscreenMap" no-flex link @change="fullscreenMapChange">
+          <b-row
+            class="map-container"
+            :class="{ 'map-container-100': !hasCovidCases }"
+          >
+            <FullScreen
+              id="fullscreenMap"
+              no-flex
+              link
+              @change="fullscreenMapChange"
+            >
               <Maps
                 :covidCases="covidCases"
                 :hospitals="hospitals"
@@ -79,14 +100,24 @@
                 @geoJsonLoaded="geoJsonLoaded"
                 :showBottom="showBottom"
                 :fluxZoneGlobalOut="fluxZoneGlobalOut"
+                :flux30MapsData="flux30MapsData"
               />
-              <MapsLegend v-if="flux24DailyIn.length > 0 && activeMenu == 1"></MapsLegend>
-              <MapsLegendEpidemic v-if="covidCases && activeMenu == 2"></MapsLegendEpidemic>
+              <MapsLegend
+                v-if="
+                  (flux24DailyIn.length > 0 || flux30MapsData.length > 0) &&
+                    activeMenu == 1
+                "
+              ></MapsLegend>
+              <MapsLegendEpidemic
+                v-if="covidCases && activeMenu == 2"
+              ></MapsLegendEpidemic>
               <Legend
                 showTotal
                 :data="orientationLegend"
                 class="legend-orientation"
-                v-if="orientationCount && orientationCount > 0 && activeMenu == 6"
+                v-if="
+                  orientationCount && orientationCount > 0 && activeMenu == 6
+                "
               ></Legend>
             </FullScreen>
           </b-row>
@@ -95,34 +126,42 @@
           cols="12"
           md="6"
           class="side-right mt-2 pl-2"
-          :class="{'side-right-100':!hasCovidCases}"
+          :class="{ 'side-right-100': !hasCovidCases }"
           v-if="hasRightSide"
         >
           <b-card no-body>
             <b-tabs pills card>
               <b-tab
                 title="Données Covid-19"
-                v-if="(!!covidCases || isLoading) && activeMenu==2"
+                v-if="(!!covidCases || isLoading) && activeMenu == 2"
                 :active="!!covidCases"
               >
-                <SideCaseCovid :covidCases="covidCases" :isLoading="isLoading" />
+                <SideCaseCovid
+                  :covidCases="covidCases"
+                  :isLoading="isLoading"
+                />
               </b-tab>
               <b-tab
                 title="Données Orientation médicale covid-19"
-                v-if="(orientationCount != null || isLoading) && activeMenu==6"
+                v-if="
+                  (orientationCount != null || isLoading) && activeMenu == 6
+                "
                 :active="orientationCount != null"
               >
-                <SideOrientation :medicalOrientations="medicalOrientations" :isLoading="isLoading" />
+                <SideOrientation
+                  :medicalOrientations="medicalOrientations"
+                  :isLoading="isLoading"
+                />
               </b-tab>
-              <b-tab title="Province" v-if="activeMenu==1 ">
+              <b-tab title="Province" v-if="activeMenu == 1">
                 <b-row>
                   <b-col cols="6" class="pr-2">
                     <skeleton-loading v-if="isLoading">
                       <square-skeleton
                         :boxProperties="{
-                                width: '100%',
-                                height: '830px'
-                            }"
+                          width: '100%',
+                          height: '830px'
+                        }"
                       ></square-skeleton>
                     </skeleton-loading>
                     <GlobalProvince
@@ -137,9 +176,9 @@
                     <skeleton-loading v-if="isLoading">
                       <square-skeleton
                         :boxProperties="{
-                                width: '100%',
-                                height: '830px'
-                            }"
+                          width: '100%',
+                          height: '830px'
+                        }"
                       ></square-skeleton>
                     </skeleton-loading>
                     <GlobalProvince
@@ -154,7 +193,11 @@
               </b-tab>
               <b-tab
                 title="Mobilité"
-                v-if="(hasFlux24DailyIn || isLoading) && !isFirstLoad && this.activeMenu==1"
+                v-if="
+                  (hasFlux24DailyIn || isLoading) &&
+                    !isFirstLoad &&
+                    this.activeMenu == 1
+                "
                 :active="hasFlux24DailyIn || isLoading"
               >
                 <FluxChart
@@ -177,8 +220,8 @@
               </b-tab>
               <b-tab
                 title="Infrastructures"
-                v-if="(hospitalCount != null || isLoading) && activeMenu==5"
-                :active="!!selectedHospital || activeMenu==5"
+                v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
+                :active="!!selectedHospital || activeMenu == 5"
               >
                 <HospitalSituation :hospitalTotalData="hospitalTotalData" />
               </b-tab>
@@ -191,16 +234,19 @@
           <div
             @click="toggleBottomBar"
             class="bottom-bar-button d-flex align-items-center justify-content-center"
-            :class="{'bottom-collapse':!showBottom}"
+            :class="{ 'bottom-collapse': !showBottom }"
           >
-            <span :class="{'rotate':showBottom}" class="fa fa-chevron-up"></span>
+            <span
+              :class="{ rotate: showBottom }"
+              class="fa fa-chevron-up"
+            ></span>
           </div>
         </b-col>
       </b-row>
       <transition name="bounce">
         <b-row
           class="row-side-bottom mb-2"
-          :class="{'mt-2':!showBottom}"
+          :class="{ 'mt-2': !showBottom }"
           v-if="activeMenu != 3 && hasBottom && showBottom"
         >
           <b-col class="side-bottom" cols="12">
@@ -208,7 +254,7 @@
               <b-tabs pills card>
                 <b-tab
                   title="Covid-19 chart"
-                  v-if="hasCovidCases && activeMenu==2"
+                  v-if="hasCovidCases && activeMenu == 2"
                   :active="hasCovidCases"
                 >
                   <CovidCaseChart
@@ -216,7 +262,10 @@
                     :covidCasesStatDaily="covidCasesStatDaily"
                   />
                 </b-tab>
-                <b-tab title="Flux comparaison" v-if="hasflux24DailyComparison && activeMenu==1">
+                <b-tab
+                  title="Flux comparaison"
+                  v-if="hasflux24DailyComparison && activeMenu == 1"
+                >
                   <FluxComparisonChart
                     :fluxGeoOptions="fluxGeoOptions"
                     :flux24DailyComparison="flux24DailyComparison"
@@ -224,7 +273,7 @@
                 </b-tab>
                 <b-tab
                   title="Flux tendance"
-                  v-if="hasFlux24Daily && activeMenu==1"
+                  v-if="hasFlux24Daily && activeMenu == 1"
                   :active="hasFlux24Daily"
                 >
                   <FluxTendanceChart :flux24Daily="flux24Daily" />
@@ -270,7 +319,7 @@ import {
   OBSERVATION_END,
   PALETTE,
   PREFERENCE_START,
-  PREFERENCE_END,
+  PREFERENCE_END
 } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
@@ -363,18 +412,19 @@ export default {
       showBottom: false,
       isFirstLoad: true,
       disabledArc: false,
+      flux30MapsData: []
     };
   },
   computed: {
     ...mapState({
-      hospitals: (state) => state.hospital.hospitalData,
-      hospitalCount: (state) => state.hospital.hospitalCount,
-      selectedHospital: (state) => state.hospital.selectedHospital,
-      hospitalTotalData: (state) => state.hospital.hospitalTotalData,
-      fluxMapStyle: (state) => state.flux.mapStyle,
-      activeMenu: (state) => state.nav.activeMenu,
-      healthZones: (state) => state.app.healthZones,
-      typePresence: (state) => state.flux.typePresence,
+      hospitals: state => state.hospital.hospitalData,
+      hospitalCount: state => state.hospital.hospitalCount,
+      selectedHospital: state => state.hospital.selectedHospital,
+      hospitalTotalData: state => state.hospital.hospitalTotalData,
+      fluxMapStyle: state => state.flux.mapStyle,
+      activeMenu: state => state.nav.activeMenu,
+      healthZones: state => state.app.healthZones,
+      typePresence: state => state.flux.typePresence
     }),
     hasRightSide() {
       return (
@@ -416,18 +466,18 @@ export default {
       return this.flux24DailyIn.length > 0;
     },
     flux24WithoutReference() {
-      return this.flux24.filter((x) => !x.isReference);
+      return this.flux24.filter(x => !x.isReference);
     },
     mapStyle() {
       return {
         height:
           this.getHasCoviCases() || this.getHasOrientation()
             ? `64vh`
-            : `calc(100vh - 52.5px)`,
+            : `calc(100vh - 52.5px)`
       };
     },
     isLoading() {
-      return Object.values(this.loadings).find((val) => val === true)
+      return Object.values(this.loadings).find(val => val === true)
         ? true
         : false;
     },
@@ -436,37 +486,39 @@ export default {
       else if (this.typePresence == 2) return this.flux24PresenceDailyInDay;
       else return this.flux24PresenceDailyIn;
     },
-    showMaps(){
-      if(this.activeMenu == 3 || this.activeMenu == 7) return false
-      return true
+    showMaps() {
+      if (this.activeMenu == 3 || this.activeMenu == 7) return false;
+      return true;
     }
   },
   mounted() {
     this.$set(this.loadings, "healthZoneGeo", true);
     this.$set(this.loadings, "provinceGeo", true);
+    this.$set(this.loadings, "hotspotGeo", true);
 
     this.getFluxZone();
     if (this.healthZones.length == 0) {
       this.getHealthZone();
     }
+    this.getFluxHotSpot();
     this.getFluxProvinces();
     this.$store.watch(
-      (state) => state.hospital.isLoading,
-      (value) => {
+      state => state.hospital.isLoading,
+      value => {
         this.$set(this.loadings, "hospital", value);
       }
     );
     this.$store.watch(
-      (state) => state.indicator.isLoading,
-      (value) => {
+      state => state.indicator.isLoading,
+      value => {
         this.$set(this.loadings, "indicator", value);
       }
     );
     this.loadFluxGLobalData();
     this.loadTownships();
     this.$store.watch(
-      (state) => state.flux.fluxType,
-      (value) => {
+      state => state.flux.fluxType,
+      value => {
         if (value == 3 || value == 4) {
           this.disabledArc = true;
           this.setMapStyle(1);
@@ -477,7 +529,12 @@ export default {
     );
   },
   methods: {
-    ...mapActions(["userMe", "getHospitalsData", "getHealthZone"]),
+    ...mapActions([
+      "userMe",
+      "getHospitalsData",
+      "getHealthZone",
+      "getFluxHotSpot"
+    ]),
     ...mapMutations(["setMapStyle", "setFluxType"]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
@@ -495,7 +552,7 @@ export default {
         height = this.$refs.dash_home_page.clientHeight;
       }
       this.menuColunmStyle = {
-        height: `calc(${height} - 70px)`,
+        height: `calc(${height} - 70px)`
       };
     },
     getHasCoviCases() {
@@ -520,7 +577,7 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
-            data.map(function (d) {
+            data.map(function(d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
               healed.push(d.healed);
@@ -530,11 +587,11 @@ export default {
               confirmed,
               dead,
               healed,
-              labels,
+              labels
             };
             this.$set(this.loadings, "getCovidCases_stat", false);
           })
-          .catch((response) => {
+          .catch(response => {
             this.$set(this.loadings, "getCovidCases_stat", false);
           });
 
@@ -547,7 +604,7 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
-            data.map(function (d) {
+            data.map(function(d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
               healed.push(d.healed);
@@ -557,11 +614,11 @@ export default {
               confirmed,
               dead,
               healed,
-              labels,
+              labels
             };
             this.$set(this.loadings, "getCovidCases_statdaily", false);
           })
-          .catch((response) => {
+          .catch(response => {
             this.$set(this.loadings, "getCovidCases_statdaily", false);
           });
 
@@ -570,13 +627,13 @@ export default {
         axios
           .get(`/api/dashboard/cavid-cases`)
           .then(({ data }) => {
-            let Features = data.map((value) => {
+            let Features = data.map(value => {
               confirmedCount += Number(value.confirmed);
               return {
                 type: "Feature",
                 geometry: {
                   type: "Point",
-                  coordinates: [value.longitude, value.latitude],
+                  coordinates: [value.longitude, value.latitude]
                 },
                 properties: {
                   name: value.name,
@@ -586,22 +643,22 @@ export default {
                   sick: Number(value.sick ?? 0),
                   last_update: value.last_update,
                   seriously: Number(value.seriously ?? 0),
-                  color: "#ED5F68",
-                },
+                  color: "#ED5F68"
+                }
               };
             });
             this.covidCases = {
               type: "geojson",
               data: {
                 type: "FeatureCollection",
-                features: Features,
-              },
+                features: Features
+              }
             };
 
             this.covidCasesCount = confirmedCount;
             this.$set(this.loadings, "getCovidCases_cases", false);
           })
-          .catch((response) => {
+          .catch(response => {
             this.$set(this.loadings, "getCovidCases_cases", false);
           });
       } else {
@@ -620,7 +677,7 @@ export default {
             let total_fin = 0;
             let total_fin5 = 0;
             let total_fin8 = 0;
-            data.map((item) => {
+            data.map(item => {
               total_fin += item.FIN ?? 0;
               total_fin5 += item.FIN5 ?? 0;
               total_fin8 += item.FIN8 ?? 0;
@@ -650,7 +707,7 @@ export default {
               fin5 = [],
               fin8 = [],
               labels = [];
-            data.map((item) => {
+            data.map(item => {
               fin.push(item.FIN);
               fin5.push(item.FIN5);
               fin8.push(item.FIN8);
@@ -660,7 +717,7 @@ export default {
               fin,
               fin5,
               fin8,
-              labels,
+              labels
             };
             this.$set(this.loadings, "orientation_medical_stats", false);
           })
@@ -676,7 +733,7 @@ export default {
       this.orientationLegend = [
         { color: "#3b9d3b", label: "Peu probale", caption: a },
         { color: "#ffb93b", label: "Probale", caption: b },
-        { color: "#ff3b3b", label: "Très probale", caption: c },
+        { color: "#ff3b3b", label: "Très probale", caption: c }
       ];
     },
     medicalOrientationChanged(item) {
@@ -743,6 +800,11 @@ export default {
       if (this.isLoading) {
         return;
       }
+
+      if (values.fluxTimeGranularity == 2) {
+        this.submitFlux30Form(values);
+        return;
+      }
       /**
        * formate les données flux
        */
@@ -750,9 +812,9 @@ export default {
       this.setFluxType(1);
       const computedFluxData = (dataObservations, dataReferences) => {
         const dataOut = [];
-        return dataObservations.map((item) => {
+        return dataObservations.map(item => {
           const references = dataReferences.filter(
-            (x) =>
+            x =>
               x.destination == item.destination &&
               x.origin == item.origin &&
               x.day == item.day
@@ -787,9 +849,9 @@ export default {
 
       const computedFluxPresenceData = (dataObservations, dataReferences) => {
         const dataOut = [];
-        return dataObservations.map((item) => {
+        return dataObservations.map(item => {
           const references = dataReferences.filter(
-            (x) => x.zone == item.zone && x.day == item.day
+            x => x.zone == item.zone && x.day == item.day
           );
           const count = references.length;
           if (count > 0) {
@@ -929,7 +991,7 @@ export default {
       this.$set(this.loadings, "urlDaily", true);
       axios
         .get(urlDaily, {
-          params: values,
+          params: values
         })
         .then(({ data }) => {
           this.flux24Daily = data;
@@ -945,19 +1007,19 @@ export default {
       this.$set(this.loadings, "urlDailyIn", true);
       axios
         .get(urlDailyIn, {
-          params: values,
+          params: values
         })
         .then(({ data }) => {
           // this.flux24DailyIn = computedFluxData(
           //   data.observations,
           //   data.references
           // );
-          const groupObservations = groupBy(data.observations, (d) => d.origin);
-          const groupReferences = groupBy(data.references, (d) => d.origin);
+          const groupObservations = groupBy(data.observations, d => d.origin);
+          const groupReferences = groupBy(data.references, d => d.origin);
           Object.entries(groupObservations).forEach(([key, value]) => {
             this.flux24DailyIn.push({
               references: groupReferences[key],
-              observations: groupObservations[key],
+              observations: groupObservations[key]
             });
           });
 
@@ -978,7 +1040,7 @@ export default {
       this.$set(this.loadings, "urlDailyOut", true);
       axios
         .get(urlDailyOut, {
-          params: values,
+          params: values
         })
         .then(({ data }) => {
           // this.flux24DailyOut = computedFluxData(
@@ -987,18 +1049,34 @@ export default {
           // );
           const groupObservations = groupBy(
             data.observations,
-            (d) => d.destination
+            d => d.destination
           );
-          const groupReferences = groupBy(
-            data.references,
-            (d) => d.destination
-          );
-          Object.entries(groupObservations).forEach(([key, value]) => {
-            this.flux24DailyOut.push({
-              references: groupReferences[key],
-              observations: groupObservations[key],
+          const groupReferences = groupBy(data.references, d => d.destination);
+          if (values.fluxTimeGranularity == 2) {
+            console.log("groupReferences", groupReferences);
+            const referenceGroupByDate = [];
+            Object.entries(groupReferences).forEach(([key, value]) => {
+              referenceGroupByDate.push(
+                groupBy(groupReferences[key], d => d.date)
+              );
             });
-          });
+
+            console.log("referenceGroupByDate", referenceGroupByDate);
+
+            Object.entries(groupObservations).forEach(([key, value]) => {
+              this.flux24DailyOut.push({
+                references: groupReferences[key],
+                observations: groupObservations[key]
+              });
+            });
+          } else {
+            Object.entries(groupObservations).forEach(([key, value]) => {
+              this.flux24DailyOut.push({
+                references: groupReferences[key],
+                observations: groupObservations[key]
+              });
+            });
+          }
 
           this.fluxDataGroupedByDateOut = computedFluxDataByDate(
             data.observations,
@@ -1044,7 +1122,7 @@ export default {
       this.$set(this.loadings, "urlPresenceDailyIn", true);
       axios
         .get(urlPresenceDailyIn, {
-          params: values,
+          params: values
         })
         .then(({ data }) => {
           this.flux24PresenceDailyInData = data;
@@ -1084,14 +1162,14 @@ export default {
       pandemicParams.fluxGeoOptions = pandemicParams.fluxGeoOptions[0];
       axios
         .get("/api/dashboard/pandemics/top-confirmed", {
-          params: pandemicParams,
+          params: pandemicParams
         })
         .then(({ data }) => {
           this.topHealthZoneConfirmed = data;
         });
 
       const healthZones = this.healthZones.filter(
-        (x) => x.province == values.fluxGeoOptions[0]
+        x => x.province == values.fluxGeoOptions[0]
       );
       let countAll = healthZones.length;
 
@@ -1119,9 +1197,9 @@ export default {
           //Get  zone in by province
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
-              params: healthZoneValues,
+              params: healthZoneValues
             })
-            .then(async (response) => {
+            .then(async response => {
               this.fluxZoneGlobalIn.push(response.data);
               countIn++;
               this.globalProgress =
@@ -1165,9 +1243,9 @@ export default {
           //Get  zone in by province
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
-              params: healthZoneValues,
+              params: healthZoneValues
             })
-            .then(async (response) => {
+            .then(async response => {
               this.fluxZoneGlobalOut.push(response.data);
               countOut++;
               this.globalProgress =
@@ -1206,6 +1284,60 @@ export default {
       globalInFunc();
       globalOutFunc();
     },
+    submitFlux30Form(values) {
+      const urlMaps = `api/dashboard/flux/hotspots/maps`;
+      const urlDaily = `api/dashboard/flux/hotspots/daily`;
+      const urlTendance = `api/dashboard/flux/hotspots/tendance`;
+
+      values.preference_start = "2020-05-17";
+      values.preference_end = "2020-05-31";
+
+      const mapsRequest = axios.get(urlMaps, {
+        params: values
+      });
+      const dailyRequest = axios.get(urlDaily, {
+        params: values
+      });
+      const tendanceRequest = axios.get(urlTendance, {
+        params: values
+      });
+
+      this.$set(this.loadings, "urlFluxTIme30", true);
+      this.flux30MapsData = [];
+      Promise.all([mapsRequest, dailyRequest, tendanceRequest])
+        .then(response => {
+          if (response[0]) {
+            const data = response[0].data;
+            const observations = data.observations;
+            const references = data.references;
+            observations.forEach(item => {
+              const referenceData = references.find(
+                x => (x.origin = item.origin)
+              );
+              const difference = item.volume - referenceData.volume;
+              const percent = (difference / referenceData.volume) * 100;
+              if (referenceData) {
+                console.log("observation", item);
+                console.log("reference", referenceData);
+                const element = {
+                  origin: item.origin,
+                  volume: item.volume,
+                  difference,
+                  percent,
+                  volumeReference: referenceData.volume
+                };
+                this.flux30MapsData.push(element);
+              }
+            });
+          }
+        })
+        .catch(response => {
+          console.log("catch", response);
+        })
+        .finally(() => {
+          this.$set(this.loadings, "urlFluxTIme30", false);
+        });
+    },
     submitInfrastructureForm(values) {
       this.getHospitalsData(values);
     },
@@ -1224,7 +1356,7 @@ export default {
       const values = {
         option: value,
         preference_start,
-        preference_end,
+        preference_end
       };
       this.flux24Errors = {};
 
@@ -1237,7 +1369,7 @@ export default {
       this.$set(this.loadings, "fluxPC_urlDailyCompare", true);
       axios
         .get(urlDailyCompare, {
-          params: values,
+          params: values
         })
         .then(({ data }) => {
           this.flux24DailyComparison = data;
@@ -1251,7 +1383,7 @@ export default {
       this.$set(this.loadings, "fluxPC_urlDaily", true);
       axios
         .get(urlDaily, {
-          params: values,
+          params: values
         })
         .then(({ data }) => {
           this.flux24Daily = data;
@@ -1289,7 +1421,7 @@ export default {
       this.$set(this.loadings, "fluxPC_flux24", true);
       axios
         .get(url, {
-          params: values,
+          params: values
         })
         .then(({ data }) => {
           this.flux24 = data;
@@ -1310,8 +1442,8 @@ export default {
       this.fullscreen = fullscreen;
     },
     computedFluxData(dataObservations, dataReferences) {
-      return dataObservations.map((item) => {
-        const reference = dataReferences.find((x) => x.zone == item.zone);
+      return dataObservations.map(item => {
+        const reference = dataReferences.find(x => x.zone == item.zone);
         if (reference) {
           item.volume_reference = reference.volume;
           const difference = item.volume - reference.volume;
@@ -1334,16 +1466,16 @@ export default {
             observation_start: OBSERVATION_START,
             observation_end: OBSERVATION_END,
             preference_start: PREFERENCE_START,
-            preference_end: PREFERENCE_END,
-          },
+            preference_end: PREFERENCE_END
+          }
         })
         .then(({ data }) => {
-          const groupObservations = groupBy(data.observations, (d) => d.zone);
-          const groupReferences = groupBy(data.references, (d) => d.zone);
+          const groupObservations = groupBy(data.observations, d => d.zone);
+          const groupReferences = groupBy(data.references, d => d.zone);
           Object.entries(groupObservations).forEach(([key, value]) => {
             this.fluxGlobalIn.push({
               references: groupReferences[key],
-              observations: groupObservations[key],
+              observations: groupObservations[key]
             });
           });
           this.$set(this.isFluxGlobalProvinceloading, "in", false);
@@ -1356,16 +1488,16 @@ export default {
             observation_start: OBSERVATION_START,
             observation_end: OBSERVATION_END,
             preference_start: PREFERENCE_START,
-            preference_end: PREFERENCE_END,
-          },
+            preference_end: PREFERENCE_END
+          }
         })
         .then(({ data }) => {
-          const groupObservations = groupBy(data.observations, (d) => d.zone);
-          const groupReferences = groupBy(data.references, (d) => d.zone);
+          const groupObservations = groupBy(data.observations, d => d.zone);
+          const groupReferences = groupBy(data.references, d => d.zone);
           Object.entries(groupObservations).forEach(([key, value]) => {
             this.fluxGlobalOut.push({
               references: groupReferences[key],
-              observations: groupObservations[key],
+              observations: groupObservations[key]
             });
           });
           this.$set(this.isFluxGlobalProvinceloading, "out", false);
@@ -1373,16 +1505,16 @@ export default {
     },
     updateflux24DailyGenerale() {
       const temp = [
-        ...this.flux24DailyIn.map((x) => {
+        ...this.flux24DailyIn.map(x => {
           x.zone = x.origin;
           x.targetZone = x.destination;
           return x;
         }),
-        ...this.flux24DailyOut.map((x) => {
+        ...this.flux24DailyOut.map(x => {
           x.targetZone = x.origin;
           x.zone = x.destination;
           return x;
-        }),
+        })
       ];
       this.flux24DailyGenerale = temp;
     },
@@ -1392,25 +1524,25 @@ export default {
       if (this.fluxDataGroupedByDateIn.referencesByDate)
         temp.referencesByDate = [
           ...temp.referencesByDate,
-          ...this.fluxDataGroupedByDateIn.referencesByDate,
+          ...this.fluxDataGroupedByDateIn.referencesByDate
         ];
 
       if (this.fluxDataGroupedByDateOut.referencesByDate)
         temp.referencesByDate = [
           ...temp.referencesByDate,
-          ...this.fluxDataGroupedByDateOut.referencesByDate,
+          ...this.fluxDataGroupedByDateOut.referencesByDate
         ];
 
       if (this.fluxDataGroupedByDateIn.observationsByDate)
         temp.observationsByDate = [
           ...temp.observationsByDate,
-          ...this.fluxDataGroupedByDateIn.observationsByDate,
+          ...this.fluxDataGroupedByDateIn.observationsByDate
         ];
 
       if (this.fluxDataGroupedByDateOut.observationsByDate)
         temp.observationsByDate = [
           ...temp.observationsByDate,
-          ...this.fluxDataGroupedByDateOut.observationsByDate,
+          ...this.fluxDataGroupedByDateOut.observationsByDate
         ];
 
       this.fluxDataGroupedByDateGen = this.computedFluxDataByDate(
@@ -1423,9 +1555,9 @@ export default {
       const referencesByDate = [];
       const observationsByDate = [];
 
-      dataReferences.map((item) => {
+      dataReferences.map(item => {
         const element = referencesByDate.find(
-          (x) => x.date == item.Date || x.date == item.date
+          x => x.date == item.Date || x.date == item.date
         );
         if (element) {
           element.volume += item.volume;
@@ -1434,13 +1566,13 @@ export default {
             date: item.Date || item.date,
             day: item.day,
             volume: item.volume,
-            zone: item[key],
+            zone: item[key]
           });
         }
       });
 
-      dataObservations.map((item) => {
-        const element = observationsByDate.find((x) => x.date == item.date);
+      dataObservations.map(item => {
+        const element = observationsByDate.find(x => x.date == item.date);
         if (element) {
           element.volume += item.volume;
         } else {
@@ -1448,14 +1580,14 @@ export default {
             date: item.date,
             day: item.day,
             volume: item.volume,
-            zone: item[key],
+            zone: item[key]
           });
         }
       });
 
       return {
         referencesByDate,
-        observationsByDate,
+        observationsByDate
       };
 
       // return dataObservations.map((item) => {
@@ -1489,8 +1621,8 @@ export default {
       const referencesByDate = [];
       const observationsByDate = [];
 
-      dataReferences.map((item) => {
-        const element = referencesByDate.find((x) => x.date == item.date);
+      dataReferences.map(item => {
+        const element = referencesByDate.find(x => x.date == item.date);
         if (element) {
           element.volume += item.volume;
         } else {
@@ -1499,13 +1631,13 @@ export default {
             day: item.day,
             volume: item.volume,
             PresenceType: item.PresenceType,
-            zone: item.zone,
+            zone: item.zone
           });
         }
       });
 
-      dataObservations.map((item) => {
-        const element = observationsByDate.find((x) => x.date == item.date);
+      dataObservations.map(item => {
+        const element = observationsByDate.find(x => x.date == item.date);
         if (element) {
           element.volume += item.volume;
         } else {
@@ -1514,14 +1646,14 @@ export default {
             day: item.day,
             volume: item.volume,
             PresenceType: item.PresenceType,
-            zone: item.zone,
+            zone: item.zone
           });
         }
       });
 
       return {
         referencesByDate,
-        observationsByDate,
+        observationsByDate
       };
     },
 
@@ -1529,7 +1661,7 @@ export default {
       axios.get("/api/dashboard/townships").then(({ data }) => {
         this.townships = data;
       });
-    },
+    }
   },
   watch: {
     fluxDataGroupedByDateIn() {
@@ -1548,19 +1680,19 @@ export default {
       }
 
       this.flux24PresenceDailyInDay = this.computedFluxPresenceDataByDate(
-        data.observations.filter((x) => x.PresenceType == "Jour"),
-        data.references.filter((x) => x.PresenceType == "Jour")
+        data.observations.filter(x => x.PresenceType == "Jour"),
+        data.references.filter(x => x.PresenceType == "Jour")
       );
       this.flux24PresenceDailyInNight = this.computedFluxPresenceDataByDate(
-        data.observations.filter((x) => x.PresenceType == "Nuit"),
-        data.references.filter((x) => x.PresenceType == "Nuit")
+        data.observations.filter(x => x.PresenceType == "Nuit"),
+        data.references.filter(x => x.PresenceType == "Nuit")
       );
       this.flux24PresenceDailyIn = this.computedFluxPresenceDataByDate(
         data.observations,
         data.references
       );
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
