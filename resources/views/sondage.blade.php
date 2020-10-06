@@ -24,29 +24,21 @@
             <h3 class="mb-4">Principales conclusions</h3>
             <div class="sondage-items">
                 <div class="sondage-item">
-                    <span> 68%</span>
+                    <span> 55%</span>
                     <p>des ménages ont vu leurs revenus baisser</p>
                 </div>
                 <div class="sondage-item">
-                  <span> 50%</span>
-                  <p>des ménages ont vu leurs coûts augmenter.</p>
+                  <span> 94%</span>
+                  <p>des ménages en RDC ont réduit leur consommation de biens et services de base pendant la pandémie.</p>
                 </div>
                 <div class="sondage-item">
-                  <span> 12%</span>
-                  <p>Seuls 12% des ménages ont déclaré que la consommation n'avait pas diminué et plus d'un
-                    tiers ont déclaré que leur consommation de nourriture et d'eau avait baissé (48% pour
-                    les ménages dont le revenu mensuel était inférieur à <200 USD).
+                  <span> 84%</span>
+                  <p>des ménages ont le sentiment que leur situation financière à long terme est susceptible d'évoluer négativement en raison de la pandémie de la COVID-19
                   </p>
                 </div>
                 <div class="sondage-item">
-                  <span> 79%</span>
-                  <p>des ménages voient le COVID-19 avoir un impact négatif à long terme sur leurs finances.</p>
-                </div>
-                <div class="sondage-item">
-                  <span> 65%</span>
-                  <p>des ménages qui ont vu leurs coûts augmenter ont déclaré que la principale raison était
-                    que les prix des produits de première nécessité (hors soins de santé) avaient augmenté
-                  </p>
+                  <span> 80%</span>
+                  <p>des ménages déclarent ne pas avoir connaissance d'une mesure ou d’une intervention décidée par le gouvernement pour répondre à leur difficulté.</p>
                 </div>
             </div>
         </div>
@@ -57,13 +49,13 @@
                     <div class="illustrator">
                         <img src="{{ asset('/img/icon/list.png')}}" />
                     </div>
-                    <p>1015 sondés</p>
+                    <p>2200 sondés</p>
                 </div>
                 <div class="sondage-methods-item">
                     <div class="illustrator">
                         <img src="{{ asset('/img/icon/calendar.png')}}" />
                     </div>
-                    <p>Du 31 juillet au 13 août 2020</p>
+                    <p>Du 14 août au 11 septembre 2020</p>
                 </div>
             </div>
         </div>
