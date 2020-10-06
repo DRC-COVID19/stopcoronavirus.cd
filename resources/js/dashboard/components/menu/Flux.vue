@@ -316,7 +316,7 @@ export default {
       let observation_end = null;
       let fluxGeoOptions = ["Gombe"];
 
-      if (value != 7) this.$emit("toggleShowMobiliteGenerale", false);
+      // if (value != 7) this.$emit("toggleShowMobiliteGenerale", false);
 
       switch (value) {
         case 1:
@@ -356,7 +356,7 @@ export default {
         case 7:
           observation_start = "2020-03-19";
           observation_end = this.moment().format(DATEFORMAT);
-          this.$emit("toggleShowMobiliteGenerale", true);
+          // this.$emit("toggleShowMobiliteGenerale", true);
           break;
       }
 
@@ -377,7 +377,6 @@ export default {
       this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularity(this.fluxForm.fluxGeoGranularity);
       this.setFluxGeoOptionsTmp(this.fluxForm.fluxGeoOptions);
-
       this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);
       this.$emit("submitFluxForm", this.fluxForm);
     },
