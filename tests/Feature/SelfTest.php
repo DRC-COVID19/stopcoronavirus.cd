@@ -271,7 +271,7 @@ class SelfTest extends TestCase
     #endregion
 
     #endregion
-    
+
     #region IF >= 1 facteurs pronostiques
 
     //IF < 2 facteur de gravité mineur => FIN3
@@ -474,7 +474,7 @@ class SelfTest extends TestCase
             'current_step' => '7'
         ]);
 
-        //Facteurs de gravité majeurs Difficultés importantes pour s’alimenter ou boire depuis plus de 24h 
+        //Facteurs de gravité majeurs Difficultés importantes pour s’alimenter ou boire depuis plus de 24h
         $response = $this->call("post", 'orientation-medicale-test', [
             'step_value' => $input[7],
             'current_step' => '8'
@@ -550,6 +550,6 @@ class SelfTest extends TestCase
         $view = $response->original;
         $response->assertStatus(200);
         $this->assertEquals($resultat, $response['resultat']['code']);
-        dump($response['resultat']);
+        // dump($response['resultat']);
     }
 }

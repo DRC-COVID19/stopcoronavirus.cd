@@ -23,12 +23,12 @@ abstract class TestCase extends BaseTestCase
         $this->withoutExceptionHandling();
         $this->disableExceptionHandling();
         $this->faker = Faker::create();
-        
+
     }
 
     protected function disableExceptionHandling()
     {
-        
+
         $this->app->instance(ExceptionHandler::class, new class extends Handler {
             public function __construct() {}
 
@@ -51,5 +51,5 @@ abstract class TestCase extends BaseTestCase
         $this->artisan('migrate:reset');
         parent::tearDown();
     }
-    
+
 }
