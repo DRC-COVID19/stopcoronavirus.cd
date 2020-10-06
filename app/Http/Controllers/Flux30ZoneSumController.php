@@ -21,7 +21,7 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSum::select(['hour', 'observation_Zone', DB::raw('volume as volume')]);
+      $fluxObservations = Flux30ZoneSum::select(['hour', 'observation_Zone', DB::raw('sum(volume) as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxObservations->where('Observation_Zone', $data['fluxGeoOptions']);
       }
@@ -29,12 +29,12 @@ class Flux30ZoneSumController extends Controller
         ->whereBetween('hour', [$data['time_start'], $data['time_end']])
         // ->where('destination', '!=', 'Hors_Zone')
         // ->where('origin', '!=', 'Hors_Zone')
-        // ->groupBy('hour', 'Observation_Zone')
+        ->groupBy('hour', 'Observation_Zone', "date")
         ->orderBy('volume')
         ->get();
 
 
-      $fluxReferences = Flux30ZoneSum::select(['hour', 'observation_Zone', DB::raw('volume as volume')]);
+      $fluxReferences = Flux30ZoneSum::select(['hour', 'observation_Zone', DB::raw(' sum(volume) as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxReferences->where('Observation_Zone', $data['fluxGeoOptions']);
       }
@@ -42,7 +42,7 @@ class Flux30ZoneSumController extends Controller
         ->whereBetween('hour', [$data['time_start'], $data['time_end']])
         // ->where('destination', '!=', 'Hors_Zone')
         // ->where('origin', '!=', 'Hors_Zone')
-        // ->groupBy('Date', 'hour', 'Observation_Zone')
+        ->groupBy('hour', 'Observation_Zone', 'date')
         ->orderBy('volume')
         ->get();
 

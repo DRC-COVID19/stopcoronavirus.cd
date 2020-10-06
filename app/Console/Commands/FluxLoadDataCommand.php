@@ -45,7 +45,7 @@ class FluxLoadDataCommand extends Command
       $pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
       $pdo->setAttribute(PDO::MYSQL_ATTR_LOCAL_INFILE, true);
       DB::beginTransaction();
-      for ($i = 1; $i < 32; $i++) {
+      for ($i = 1; $i < 30; $i++) {
         $this->output->title("Starting import {$i}");
         $index = $i;
         if ($i <= 9) {
@@ -53,7 +53,7 @@ class FluxLoadDataCommand extends Command
         }
 
         $rowCount = $pdo->exec(
-          "LOAD DATA INFILE 'minutes/Flux_30min_2020-05-{$index}.csv' INTO TABLE `covid_19`.`flux30_zones` CHARACTER SET utf8 FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (`Date`, `Hour`, `Day_type`, `Origin`, `Destination`, `Immobility`, `Home_Category`, `Activity_Category`, `Observation_Zone`, `Mode`, `Volume`);"
+          "LOAD DATA INFILE 'minutes/Flux_30min_2020-06-{$index}.csv' INTO TABLE `covid_19`.`flux30_zones` CHARACTER SET utf8 FIELDS TERMINATED BY ';' LINES TERMINATED BY '\n' IGNORE 1 LINES (`Date`, `Hour`, `Day_type`, `Origin`, `Destination`, `Immobility`, `Home_Category`, `Activity_Category`, `Observation_Zone`, `Mode`, `Volume`);"
         );
         $this->output->success("Import successful {$i} {$rowCount}");
       }

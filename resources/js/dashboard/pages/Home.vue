@@ -100,9 +100,13 @@
                 @geoJsonLoaded="geoJsonLoaded"
                 :showBottom="showBottom"
                 :fluxZoneGlobalOut="fluxZoneGlobalOut"
+                :flux30MapsData="flux30MapsData"
               />
               <MapsLegend
-                v-if="flux24DailyIn.length > 0 && activeMenu == 1"
+                v-if="
+                  (flux24DailyIn.length > 0 || flux30MapsData.length > 0) &&
+                    activeMenu == 1
+                "
               ></MapsLegend>
               <MapsLegendEpidemic
                 v-if="covidCases && activeMenu == 2"
@@ -407,7 +411,8 @@ export default {
       orientationLegend: [],
       showBottom: false,
       isFirstLoad: true,
-      disabledArc: false
+      disabledArc: false,
+      flux30MapsData: []
     };
   },
   computed: {
@@ -489,7 +494,7 @@ export default {
   mounted() {
     this.$set(this.loadings, "healthZoneGeo", true);
     this.$set(this.loadings, "provinceGeo", true);
-    this.$set(this.loadings,"hotspotGeo",true);
+    this.$set(this.loadings, "hotspotGeo", true);
 
     this.getFluxZone();
     if (this.healthZones.length == 0) {
@@ -524,7 +529,12 @@ export default {
     );
   },
   methods: {
-    ...mapActions(["userMe", "getHospitalsData", "getHealthZone","getFluxHotSpot"]),
+    ...mapActions([
+      "userMe",
+      "getHospitalsData",
+      "getHealthZone",
+      "getFluxHotSpot"
+    ]),
     ...mapMutations(["setMapStyle", "setFluxType"]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
@@ -790,6 +800,11 @@ export default {
       if (this.isLoading) {
         return;
       }
+
+      if (values.fluxTimeGranularity == 2) {
+        this.submitFlux30Form(values);
+        return;
+      }
       /**
        * formate les données flux
        */
@@ -1039,9 +1054,11 @@ export default {
           const groupReferences = groupBy(data.references, d => d.destination);
           if (values.fluxTimeGranularity == 2) {
             console.log("groupReferences", groupReferences);
-            const referenceGroupByDate=[];
+            const referenceGroupByDate = [];
             Object.entries(groupReferences).forEach(([key, value]) => {
-              referenceGroupByDate.push(groupBy(groupReferences[key],d=>d.date))
+              referenceGroupByDate.push(
+                groupBy(groupReferences[key], d => d.date)
+              );
             });
 
             console.log("referenceGroupByDate", referenceGroupByDate);
@@ -1267,12 +1284,59 @@ export default {
       globalInFunc();
       globalOutFunc();
     },
-    submitFlux30Form(values){
-
+    submitFlux30Form(values) {
       const urlMaps = `api/dashboard/flux/hotspots/maps`;
-      const urlDaily = `api/dashboard/flux/hotspots/daily;`;
-      // let urlDailyIn = `api/dashboard/flux/origin`;
-      // let urlDailyOut = `api/dashboard/flux/origin`;
+      const urlDaily = `api/dashboard/flux/hotspots/daily`;
+      const urlTendance = `api/dashboard/flux/hotspots/tendance`;
+
+      values.preference_start = "2020-05-17";
+      values.preference_end = "2020-05-31";
+
+      const mapsRequest = axios.get(urlMaps, {
+        params: values
+      });
+      const dailyRequest = axios.get(urlDaily, {
+        params: values
+      });
+      const tendanceRequest = axios.get(urlTendance, {
+        params: values
+      });
+
+      this.$set(this.loadings, "urlFluxTIme30", true);
+      this.flux30MapsData = [];
+      Promise.all([mapsRequest, dailyRequest, tendanceRequest])
+        .then(response => {
+          if (response[0]) {
+            const data = response[0].data;
+            const observations = data.observations;
+            const references = data.references;
+            observations.forEach(item => {
+              const referenceData = references.find(
+                x => (x.origin = item.origin)
+              );
+              const difference = item.volume - referenceData.volume;
+              const percent = (difference / referenceData.volume) * 100;
+              if (referenceData) {
+                console.log("observation", item);
+                console.log("reference", referenceData);
+                const element = {
+                  origin: item.origin,
+                  volume: item.volume,
+                  difference,
+                  percent,
+                  volumeReference: referenceData.volume
+                };
+                this.flux30MapsData.push(element);
+              }
+            });
+          }
+        })
+        .catch(response => {
+          console.log("catch", response);
+        })
+        .finally(() => {
+          this.$set(this.loadings, "urlFluxTIme30", false);
+        });
     },
     submitInfrastructureForm(values) {
       this.getHospitalsData(values);

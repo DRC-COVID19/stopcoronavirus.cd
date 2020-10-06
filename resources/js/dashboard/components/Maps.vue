@@ -140,6 +140,10 @@ export default {
     fluxZoneGlobalOut: {
       type: Array,
       default: () => []
+    },
+    flux30MapsData: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -177,6 +181,7 @@ export default {
       isZoneSourceLoaded: false,
       isProvinceSourceLoaded: false,
       defaultCenterCoordinates: [23.485632, -3.983283],
+      defaultKinshasaCoordinates: [15.31389, -4.33167],
       deck: new Deck({
         layers: []
       }),
@@ -188,11 +193,9 @@ export default {
       featuresData: {
         features: []
       },
-      fluxCircleDataLayer: {}
+      fluxCircleDataLayer: {},
+      flux30FeaturesData: []
     };
-  },
-  created() {
-    // this.loadSource();
   },
   mounted() {
     Mapbox.accessToken = this.MAPBOX_TOKEN;
@@ -342,7 +345,11 @@ export default {
     this.$store.watch(
       state => state.flux.legendHover,
       value => {
-        this.flux24Func();
+        if (this.fluxTimeGranularity == 1) {
+          this.flux24Func();
+        } else {
+          this.flux30Func();
+        }
       }
     );
 
@@ -372,7 +379,8 @@ export default {
         state.app.healthProvinceGeojsonCentered,
       hotspotGeojson: state => state.app.hotspotGeojson,
       hotspotGeojsonCentered: state => state.app.hotspotGeojsonCentered,
-      typePresence: state => state.flux.typePresence
+      typePresence: state => state.flux.typePresence,
+      fluxTimeGranularity: state => state.flux.fluxTimeGranularity
     }),
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
@@ -511,6 +519,9 @@ export default {
     typePresence() {
       this.flux24Func();
     },
+    flux30MapsData() {
+      this.flux30Func();
+    },
     // hasRightSide() {
     //   this.drawDesign();
     // },
@@ -536,7 +547,7 @@ export default {
         return;
       }
       map.U.removeLayer([SOURCE_HOTSPOT_GEOJSON]);
-      
+
       map.addLayer(
         {
           id: SOURCE_HOTSPOT_GEOJSON,
@@ -555,7 +566,7 @@ export default {
       if (!this.isMapLoaded) {
         return;
       }
-      map.U.removeLayer([SOURCE_HOTSPOT_GEOJSON]);
+      // map.U.removeLayer([SOURCE_HOTSPOT_GEOJSON]);
       map.U.removeLayer([this.drcSourceId]);
       let source = this.drcSourceId;
       switch (geoGranularity) {
@@ -580,15 +591,18 @@ export default {
         map.getLayer(EPIDEMIC_LAYER) ? EPIDEMIC_LAYER : null
       );
     },
-    addPolygoneHoverLayer(geoGranularity) {
-      if (!this.isMapLoaded) {
-        return;
-      }
+    removePolygoneHoverLayer() {
       map.off("mousemove", "state-hover", this.stateHoverMouseMover);
       map.off("mouseleave", "state-hover", this.stateHoverMouseLeave);
       map.off("click", "state-hover", this.stateHoverClick);
 
       map.U.removeLayer(["state-hover"]);
+    },
+    addPolygoneHoverLayer(geoGranularity) {
+      if (!this.isMapLoaded) {
+        return;
+      }
+      this.removePolygoneHoverLayer();
       this.stateHover.hoveredStateId = null;
       this.stateHover.hoveredStateKinId = null;
       this.stateHover.geoGranularity = geoGranularity;
@@ -1004,6 +1018,97 @@ export default {
 
       map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
     },
+    flux30Func() {
+      if (this.flux30MapsData.length > 0) {
+        this.flux30MapsDataFunc(this.flux30MapsData, this.legendHover);
+      }
+    },
+    /**
+     * Ajout de hotspot
+     */
+    flux30MapsDataFunc(flux30MapsData, legendHover) {
+      this.flux24RemoveLayer();
+
+      this.removePolygoneHoverLayer();
+      this.addPolygoneLayer(2);
+      map.flyTo({
+        center: this.defaultKinshasaCoordinates,
+        zoom: 10
+      });
+      let features = [...flux30MapsData];
+      const domaineMax = d3.max(features, d => d.percent);
+      const domaineMin = d3.min(features, d => d.percent);
+
+      const colorScalePositive = d3.scaleQuantile();
+      const colorScaleNegative = d3.scaleQuantile();
+
+      colorScalePositive.domain([0, domaineMax]);
+      colorScaleNegative.domain([domaineMin, 0]);
+
+      const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
+
+      this.setDomaineExtValues({
+        min: domaineMin,
+        max: domaineMax,
+        isPercent: false
+      });
+
+      colorScaleNegative.range(PALETTE.inflow_negatif);
+      colorScalePositive.range(PALETTE.inflow_positif);
+
+      const max = d3.max(features, d => d.volume);
+      const dataKey = "D�NOMMIN";
+      const colorExpression = [];
+      colorExpression.push("case");
+      features.forEach(x => {
+        let color = PALETTE.dash_green;
+        if (
+          this.fluxGeoOptions.some(y => this.fixedZone(y) == x.origin) &&
+          this.fluxType != 4 &&
+          this.fluxType != 3
+        ) {
+          color = PALETTE.dash_green;
+        } else {
+          if (x.percent >= 0) {
+            color = colorScalePositive(x.percent);
+          } else {
+            color = colorScaleNegative(x.percent);
+          }
+        }
+
+        colorExpression.push(["==", ["get", dataKey], x.origin]);
+        colorExpression.push(color);
+      });
+      colorExpression.push("white");
+
+      if (legendHover) {
+        features = features.filter(
+          x => x.percent >= legendHover.de && x.percent <= legendHover.a
+        );
+        if (features.length == 0) {
+          return;
+        }
+      }
+
+      map.U.addFill(
+        SOURCE_HOTSPOT_GEOJSON,
+        SOURCE_HOTSPOT_GEOJSON,
+        map.U.properties({
+          fillColor: colorExpression,
+          fillOpacity: [
+            "match",
+            ["get", dataKey],
+            features.map(x => x.origin),
+            0.9,
+            0
+          ]
+        })
+      );
+      this.flux30FeaturesData = features;
+      map.on("mousemove", SOURCE_HOTSPOT_GEOJSON, this.flux30mouseMove);
+
+      map.on("mouseout", SOURCE_HOTSPOT_GEOJSON, this.mouseOut);
+    },
     zoomByArea(area) {
       let zoom = 8;
       if (area > 10805419917.999899) {
@@ -1171,6 +1276,7 @@ export default {
     flux24RemoveLayer() {
       map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
       map.off("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
+      map.off("mousemove", SOURCE_HOTSPOT_GEOJSON, this.flux30mouseMove);
       map.off(
         "mousemove",
         "fluxCircleDataLayer",
@@ -1182,7 +1288,12 @@ export default {
         this.fluxCircleDataLayerMouseout
       );
       map.U.removeSource(["fluxCircleDataSource"]);
-      map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
+      map.U.removeLayer([
+        HATCHED_MOBILITY_LAYER,
+        "arc",
+        "fluxCircleDataLayer",
+        SOURCE_HOTSPOT_GEOJSON
+      ]);
     },
     fluxHatchedStyle(
       flux24Data,
@@ -1496,6 +1607,32 @@ export default {
 
       if (feature) {
         value = feature.properties.percent;
+      }
+      const HTML = `<div>${name} ${
+        value ? `: ${Math.round(value)}%` : ""
+      }</div>`;
+
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup
+        .setLngLat(e.lngLat)
+        .setHTML(HTML)
+        .addTo(map);
+    },
+    flux30mouseMove(e) {
+      if (this.activeMenu != 1) {
+        return;
+      }
+      const coordinates = e.features[0].geometry.coordinates[0].slice();
+
+      const item = e.features[0].properties;
+
+      const name = item["D�NOMMIN"];
+      let value = null;
+      const feature = this.flux30FeaturesData.find(x => x.origin == name);
+
+      if (feature) {
+        value = feature.percent;
       }
       const HTML = `<div>${name} ${
         value ? `: ${Math.round(value)}%` : ""

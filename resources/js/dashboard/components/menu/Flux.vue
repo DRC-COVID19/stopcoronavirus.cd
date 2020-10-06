@@ -156,7 +156,7 @@ import moment from "moment";
 import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
 export default {
   components: {
-    DateRangePicker,
+    DateRangePicker
   },
   props: {
     fluxZones: {
@@ -187,11 +187,11 @@ export default {
         fluxGeoGranularity: 2,
         fluxTimeGranularity: 1,
         time_start: "06:00",
-        time_end: "00:00"
+        time_end: "23:30"
       },
       dateRangeObservation: {
         startDate: new Date("03/19/2020 06:00"),
-        endDate: new Date("06/29/2020 00:00:")
+        endDate: new Date("06/29/2020 23:30:")
       },
       fluxPredefinedInput: FLUX_PREDEFINED_INPUT,
       fluxFilterInput: "",
@@ -279,7 +279,8 @@ export default {
       "setFluxGeoOptions",
       "setFluxEnabled",
       "setFluxGeoOptionsTmp",
-      "setFluxGeoGranularityTemp"
+      "setFluxGeoGranularityTemp",
+      "setFluxTimeGranularity"
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -312,6 +313,7 @@ export default {
       this.$emit("submitFluxForm", this.fluxForm);
       this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);
+      this.setFluxTimeGranularity(this.fluxForm.fluxTimeGranularity);
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
@@ -332,7 +334,7 @@ export default {
       this.resetFluxPredefinedControl();
       this.setFluxGeoGranularity(value);
       this.$set(this.fluxForm, "fluxGeoOptions", []);
-      this.$set(this.fluxForm,"fluxTimeGranularity",1);
+      this.$set(this.fluxForm, "fluxTimeGranularity", 1);
       this.isHotspot = false;
       switch (value) {
         case 1:
@@ -343,10 +345,12 @@ export default {
           break;
         case 3:
           this.isHotspot = true;
-          this.fluxGeoOptions=this.fluxHotSpot.filter(x=>x.name!="ZoneGlobale").map(x=>({origin:x.name,id:x.id}));
-          this.fluxGeoOptions.unshift({origin:'Tout',id:'-1'});
-          this.$set(this.fluxForm,'fluxGeoOptions',["Tout"]);
-          this.$set(this.fluxForm,"fluxTimeGranularity",2);
+          this.fluxGeoOptions = this.fluxHotSpot
+            .filter(x => x.name != "ZoneGlobale")
+            .map(x => ({ origin: x.name, id: x.id }));
+          this.fluxGeoOptions.unshift({ origin: "Tout", id: "-1" });
+          this.$set(this.fluxForm, "fluxGeoOptions", ["Tout"]);
+          this.$set(this.fluxForm, "fluxTimeGranularity", 2);
           break;
         default:
           break;
@@ -432,6 +436,7 @@ export default {
       this.setFluxGeoGranularity(this.fluxForm.fluxGeoGranularity);
       this.setFluxGeoOptionsTmp(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);
+      this.setFluxTimeGranularity(this.fluxForm.fluxTimeGranularity);
       this.$emit("submitFluxForm", this.fluxForm);
     },
     mobilityDetailToggle() {
