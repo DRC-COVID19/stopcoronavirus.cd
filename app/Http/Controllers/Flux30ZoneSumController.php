@@ -34,7 +34,7 @@ class Flux30ZoneSumController extends Controller
         ->get();
 
 
-      $fluxReferences = Flux30ZoneSum::select(['hour', 'observation_Zone', DB::raw(' sum(volume) as volume')]);
+      $fluxReferences = Flux30ZoneSum::select(['hour', 'observation_Zone', DB::raw('sum(volume) as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxReferences->where('Observation_Zone', $data['fluxGeoOptions']);
       }

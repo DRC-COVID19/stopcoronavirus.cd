@@ -1312,7 +1312,7 @@ export default {
             const references = data.references;
             observations.forEach(item => {
               const referenceData = references.find(
-                x => (x.origin = item.origin)
+                x => (x.origin == item.origin)
               );
               const difference = item.volume - referenceData.volume;
               const percent = (difference / referenceData.volume) * 100;
