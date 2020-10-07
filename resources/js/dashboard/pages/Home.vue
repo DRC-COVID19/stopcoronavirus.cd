@@ -387,6 +387,7 @@ export default {
       flux24DailyIn: [],
       flux24DailyOut: [],
       flux24DailyGenerale: [],
+      fluxGeneralTendance: [],
       fluxGeoOptions: [],
       menuColunmStyle: {},
       flux24PrensenceDaily: [],
@@ -1304,6 +1305,15 @@ export default {
 
       this.$set(this.loadings, "urlFluxTIme30", true);
       this.flux30MapsData = [];
+      this.flux24Daily = [];
+      this.flux24DailyIn = [];
+      this.flux24DailyOut = [];
+      this.flux24Presence = [];
+      this.flux24 = [];
+      this.flux24PresenceDailyInData = {};
+      this.fluxZoneGlobalIn = [];
+      this.fluxZoneGlobalOut = [];
+      this.topHealthZoneConfirmed = [];
       Promise.all([mapsRequest, dailyRequest, tendanceRequest])
         .then(response => {
           if (response[0]) {
@@ -1312,7 +1322,7 @@ export default {
             const references = data.references;
             observations.forEach(item => {
               const referenceData = references.find(
-                x => (x.origin == item.origin)
+                x => x.origin == item.origin
               );
               const difference = item.volume - referenceData.volume;
               const percent = (difference / referenceData.volume) * 100;
@@ -1330,10 +1340,13 @@ export default {
               }
             });
           }
+          if (response[2]) {
+            this.flux24Daily = response[2].data.observations;
+          }
         })
-        .catch(response => {
-          console.log("catch", response);
-        })
+        // .catch(({ data }) => {
+        //   console.log("catch", data);
+        // })
         .finally(() => {
           this.$set(this.loadings, "urlFluxTIme30", false);
         });
