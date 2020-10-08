@@ -501,6 +501,7 @@ export default {
     this.$set(this.loadings, "healthZoneGeo", true);
     this.$set(this.loadings, "provinceGeo", true);
     this.$set(this.loadings, "hotspotGeo", true);
+    this.$set(this.loadings, "hotspotPointGeo", true);
 
     this.getFluxZone();
     if (this.healthZones.length == 0) {
