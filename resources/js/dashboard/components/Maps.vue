@@ -1058,6 +1058,10 @@ export default {
       this.addPolygoneLayer(2);
       map.flyTo({
         center: this.defaultKinshasaCoordinates,
+        easing: function(t) {
+          return t;
+        },
+        pitch: 10,
         zoom: 10
       });
       let features = [...flux30MapsData];
