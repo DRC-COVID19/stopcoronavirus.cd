@@ -1308,6 +1308,8 @@ export default {
         params: values
       });
 
+      this.isFirstLoad = false;
+
       this.$set(this.loadings, "urlFluxTIme30", true);
       this.flux30MapsData = [];
       this.flux24Daily = [];

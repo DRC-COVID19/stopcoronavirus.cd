@@ -42,7 +42,7 @@
           cols="12"
           md="12"
           class="pl-0 col-mobilite-generale"
-          v-if="!isLoading"
+          v-show="!isLoading"
         >
           <FullScreen
             id="flux_30_daily"
@@ -612,6 +612,7 @@ export default {
       targetZone: null,
       typeMobilite: 1,
       fluxGeoGranularity: 2,
+      areZoomable:[]
     };
   },
   computed: {
@@ -662,7 +663,11 @@ export default {
     },
     flux30Daily() {
       this.$nextTick(() => {
-        this.flux30Chart(this.flux30Daily, "flux_30_daily_chart");
+        this.flux30Chart(
+          this.flux30Daily,
+          "flux_30_daily_chart",
+          PALETTE.flux_in_color
+        );
       });
     },
     fluxZoneGlobalIn() {
@@ -1135,11 +1140,23 @@ export default {
       this.lineCharts[ref] = new Chart(reference.getContext("2d"), tempData);
       reference.style.height = 200;
     },
-    flux30Chart(data, ref, color) {
-      const max = d3.max(data.map((x) => x.percent));
-      const min = d3.min(data.map((x) => x.percent));
+    flux30Chart(data, ref, color, title = null) {
+      const dataFormatted = [];
+      data.map((x) => {
+        x.map((item) => {
+          dataFormatted.push({
+            x: moment(`${item.date} ${item.hour}`),
+            y: item.percent,
+          });
+        });
+      });
 
-      const tempData = {
+      const max = d3.max(dataFormatted.map((x) => x.y));
+      const min = d3.min(dataFormatted.map((x) => x.y));
+      dataFormatted.sort((a, b) => {
+        return a.x.toDate() - b.x.toDate();
+      });
+      this.configBarChart[ref] = {
         type: "line",
         data: {
           // labels: data.map(x => new Date(x.date)),
@@ -1149,7 +1166,7 @@ export default {
               fill: false,
               borderColor: color,
               backgroundColor: "rgb(166,180,205, 0.2)",
-              data: data.map((x) => ({ x: moment(x.date), y: x.percent })),
+              data: dataFormatted,
               interpolate: true,
               showLine: true,
               borderWidth: 1.5,
@@ -1175,8 +1192,12 @@ export default {
                 width: 1, // crosshair line width
                 dashPattern: [5, 5], // crosshair line dash pattern
               },
-              zoom: {
-                enabled: false,
+               zoom: {
+                enabled:  false, // enable zooming
+                zoomboxBackgroundColor: "rgba(66,133,244,0.2)", // background color of zoom box
+                zoomboxBorderColor: "#48F", // border color of zoom box
+                zoomButtonText: "Reset Zoom", // reset zoom button text
+                zoomButtonClass: "reset-zoom" // reset zoom button class
               },
               sync: {
                 enabled: false, // enable trace line syncing with other charts
@@ -1243,8 +1264,8 @@ export default {
                 display: true,
                 ticks: {
                   fontSize: 9,
-                  min: min < -100 ? min.toFixed(2) : -100,
-                  max: max >= 100 ? max.toFixed(2) : 100,
+                  min: min < -100 ? (min+10).toFixed(0) : -100,
+                  max: max >= 100 ? (max+10).toFixed(0) : 100,
                   callback: function (value) {
                     return value + "%";
                   },
@@ -1260,9 +1281,8 @@ export default {
         },
       };
       let reference = this.$refs[ref];
-      reference.style.height = 200;
       if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
-      this.lineCharts[ref] = new Chart(reference.getContext("2d"), tempData);
+      this.lineCharts[ref] = new Chart(reference.getContext("2d"), this.configBarChart[ref]);
       reference.style.height = 200;
     },
     fluxMobilityFluxZone(InputData, ref, key, color) {
@@ -1535,11 +1555,18 @@ export default {
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
+        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled=false;
         this.$refs[ref].style.height = "200px";
+        this.$refs[ref].style.MaxHeight = "200px";
         this.$refs[ref].height = "200px";
+        // this.lineCharts[ref].resetZoom();
+        this.lineCharts[ref].update();
       } else {
+        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled=true;
         this.$refs[ref].style.height = "400px";
         this.$refs[ref].height = "400px";
+        
+        this.lineCharts[ref].update();
       }
     },
     fullscreenFluxInOut(fullscreen, ref) {
