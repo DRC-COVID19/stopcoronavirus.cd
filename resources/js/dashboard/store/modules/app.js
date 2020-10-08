@@ -11,6 +11,7 @@ export default {
     hotspotGeojson: null,
     hotspotGeojsonCentered: null,
     isLoading: false,
+    hospotPointJson:null,
 
   },
   mutations: {
@@ -139,6 +140,19 @@ export default {
             features: features,
           };
         });
-    },
+    
+      axios
+        .get(
+          `${location.protocol}//${location.host}/storage/geojson/hotpostpoint.json`,
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        )
+        .then(({ data }) => {
+          state.hospotPointJson = data;
+        });
+      },
   }
 }
