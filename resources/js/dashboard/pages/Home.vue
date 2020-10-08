@@ -1291,11 +1291,11 @@ export default {
       globalInFunc();
       globalOutFunc();
     },
-    submitFlux30Form(values) {
+    submitFlux30Form(input) {
       const urlMaps = `api/dashboard/flux/hotspots/maps`;
       const urlDaily = `api/dashboard/flux/hotspots/daily`;
       const urlTendance = `api/dashboard/flux/hotspots/tendance`;
-
+      const values=Object.assign({},input);
       values.preference_start = "2020-05-17";
       values.preference_end = "2020-05-31";
 
