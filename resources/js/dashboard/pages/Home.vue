@@ -194,11 +194,11 @@
               <b-tab
                 title="Mobilité"
                 v-if="
-                  (hasFlux24DailyIn || isLoading) &&
+                  (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
                     !isFirstLoad &&
                     this.activeMenu == 1
                 "
-                :active="hasFlux24DailyIn || isLoading"
+                :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
               >
                 <FluxChart
                   :flux24Daily="flux24Daily"
@@ -216,6 +216,7 @@
                   :topHealthZoneConfirmed="topHealthZoneConfirmed"
                   :globalProgress="globalProgress"
                   :isLoading="isLoading"
+                  :flux30Daily="flux30Daily"
                 />
               </b-tab>
               <b-tab
@@ -387,6 +388,7 @@ export default {
       flux24DailyIn: [],
       flux24DailyOut: [],
       flux24DailyGenerale: [],
+      fluxGeneralTendance: [],
       fluxGeoOptions: [],
       menuColunmStyle: {},
       flux24PrensenceDaily: [],
@@ -412,7 +414,8 @@ export default {
       showBottom: false,
       isFirstLoad: true,
       disabledArc: false,
-      flux30MapsData: []
+      flux30MapsData: [],
+      flux30Daily: []
     };
   },
   computed: {
@@ -429,7 +432,7 @@ export default {
     hasRightSide() {
       return (
         (this.getHasCoviCases() && this.activeMenu == 2) ||
-        (this.flux24DailyIn.length > 0 && this.activeMenu == 1) ||
+        ((this.flux24DailyIn.length > 0 || this.flux30Daily.lenth>0) && this.activeMenu == 1) ||
         (this.hospitalCount != null && this.activeMenu == 5) ||
         (this.fluxGlobalIn.length > 0 && this.activeMenu == 1) ||
         (this.orientationCount != null && this.activeMenu == 6) ||
@@ -465,6 +468,9 @@ export default {
     hasFlux24DailyIn() {
       return this.flux24DailyIn.length > 0;
     },
+    hasFlux30Daily() {
+      return this.flux30Daily.length > 0;
+    },
     flux24WithoutReference() {
       return this.flux24.filter(x => !x.isReference);
     },
@@ -495,6 +501,7 @@ export default {
     this.$set(this.loadings, "healthZoneGeo", true);
     this.$set(this.loadings, "provinceGeo", true);
     this.$set(this.loadings, "hotspotGeo", true);
+    this.$set(this.loadings, "hotspotPointGeo", true);
 
     this.getFluxZone();
     if (this.healthZones.length == 0) {
@@ -1302,8 +1309,19 @@ export default {
         params: values
       });
 
+      this.isFirstLoad = false;
+
       this.$set(this.loadings, "urlFluxTIme30", true);
       this.flux30MapsData = [];
+      this.flux24Daily = [];
+      this.flux24DailyIn = [];
+      this.flux24DailyOut = [];
+      this.flux24Presence = [];
+      this.flux24 = [];
+      this.flux24PresenceDailyInData = {};
+      this.fluxZoneGlobalIn = [];
+      this.fluxZoneGlobalOut = [];
+      this.topHealthZoneConfirmed = [];
       Promise.all([mapsRequest, dailyRequest, tendanceRequest])
         .then(response => {
           if (response[0]) {
@@ -1312,7 +1330,7 @@ export default {
             const references = data.references;
             observations.forEach(item => {
               const referenceData = references.find(
-                x => (x.origin == item.origin)
+                x => x.origin == item.origin
               );
               const difference = item.volume - referenceData.volume;
               const percent = (difference / referenceData.volume) * 100;
@@ -1330,9 +1348,16 @@ export default {
               }
             });
           }
+          if (response[1]) {
+            this.flux30Daily = response[1].data.observations;
+          }
+          if (response[2]) {
+            this.flux24Daily = response[2].data.observations;
+          }
         })
         .catch(response => {
-          console.log("catch", response);
+          throw response;
+          console.log("catch", data);
         })
         .finally(() => {
           this.$set(this.loadings, "urlFluxTIme30", false);
