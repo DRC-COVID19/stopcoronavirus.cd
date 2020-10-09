@@ -1061,15 +1061,12 @@ export default {
           );
           const groupReferences = groupBy(data.references, d => d.destination);
           if (values.fluxTimeGranularity == 2) {
-            console.log("groupReferences", groupReferences);
             const referenceGroupByDate = [];
             Object.entries(groupReferences).forEach(([key, value]) => {
               referenceGroupByDate.push(
                 groupBy(groupReferences[key], d => d.date)
               );
             });
-
-            console.log("referenceGroupByDate", referenceGroupByDate);
 
             Object.entries(groupObservations).forEach(([key, value]) => {
               this.flux24DailyOut.push({
@@ -1336,8 +1333,6 @@ export default {
               const difference = item.volume - referenceData.volume;
               const percent = (difference / referenceData.volume) * 100;
               if (referenceData) {
-                console.log("observation", item);
-                console.log("reference", referenceData);
                 const element = {
                   origin: item.origin,
                   volume: item.volume,
@@ -1358,7 +1353,6 @@ export default {
         })
         .catch(response => {
           throw response;
-          console.log("catch", data);
         })
         .finally(() => {
           this.$set(this.loadings, "urlFluxTIme30", false);

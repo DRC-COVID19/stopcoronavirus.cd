@@ -1687,14 +1687,13 @@ export default {
       const feature = this.flux30FeaturesData.find((x) => x.origin == name);
 
       if (feature) {
-        value = feature.properties.percent;
         this.$set(this.ArcLayerSelectedObject, "position", {
           top: e.point.y,
           left: e.point.x,
         });
         this.$set(this.ArcLayerSelectedObject, "item", {
-          origin: feature.properties.origin,
-          percent: feature.properties.percent,
+          origin: feature.origin,
+          percent: feature.percent,
         });
       } else {
         this.$set(this.ArcLayerSelectedObject, "item", null);
