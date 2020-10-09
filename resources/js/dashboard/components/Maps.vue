@@ -550,6 +550,9 @@ export default {
       map.resize();
       map.flyTo({ center: this.defaultCenterCoordinates });
     },
+    showBottom(){
+      map.resize();
+    }
   },
   methods: {
     ...mapMutations([

@@ -483,6 +483,7 @@ export default {
       };
     },
     isLoading() {
+      this.showBottom=false;
       return Object.values(this.loadings).find(val => val === true)
         ? true
         : false;
