@@ -18925,7 +18925,7 @@ h3 {
 }
 
 .mapboxgl-canvas {
-  cursor: default !important;
+  cursor: pointer !important;
 }
 
 .footer-partners {
