@@ -27,13 +27,14 @@ export default {
   props: {
     flux24Daily: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
       myLineChart: null,
-      fluxTimeGranularity: null
+      fluxTimeGranularity: null,
+      configChar: null,
     };
   },
   watch: {
@@ -43,19 +44,19 @@ export default {
           this.drawChart(this.flux24Daily, this.$refs.tendanceChart);
         });
       }
-    }
+    },
   },
   computed: {
     ...mapState({
       // fluxTimeGranularity: state => state.flux.fluxTimeGranularity,
-      fluxGeoOptions: state => state.flux.fluxGeoOptions
-    })
+      fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
+    }),
   },
   mounted() {
     this.fluxTimeGranularity = this.$store.state.flux.fluxTimeGranularity;
     this.$store.watch(
-      state => state.flux.fluxTimeGranularity,
-      value => {
+      (state) => state.flux.fluxTimeGranularity,
+      (value) => {
         this.fluxTimeGranularity = value;
       }
     );
@@ -73,23 +74,23 @@ export default {
       }
       const labels = [];
       const localData = [];
-      data.map(x => {
+      data.map((x) => {
         if (this.fluxTimeGranularity == 1) {
           // labels.push(new Date(x.date));
           localData.push({ x: moment(x.date), y: x.volume });
         } else {
-          x.map(item => {
+          x.map((item) => {
             // labels.push(moment(`${item.date} ${item.hour}`));
             localData.push({
               x: moment(`${item.date} ${item.hour}`),
-              y: item.volume
+              y: item.volume,
             });
           });
         }
       });
-      const maxDate = moment.max(localData.map(item => item.x));
-      const minDate = moment.min(localData.map(item => item.x));
-      const tempData = {
+      const maxDate = moment.max(localData.map((item) => item.x));
+      const minDate = moment.min(localData.map((item) => item.x));
+      this.configChar = {
         type: "line",
         data: {
           // labels: labels,
@@ -105,9 +106,9 @@ export default {
               pointRadius: 1,
               borderWidth: 1.5,
               lineTension: 0.3,
-              xAxisID: "x-axis-0"
-            }
-          ]
+              xAxisID: "x-axis-0",
+            },
+          ],
         },
         options: {
           responsive: true,
@@ -124,12 +125,12 @@ export default {
             }
           },
           legend: {
-            display: false
+            display: false,
           },
           title: {
             display: true,
             text: "Flux de tendance" + this.getZone,
-            fontSize: 9
+            fontSize: 9,
           },
           scales: {
             xAxes: [
@@ -138,7 +139,7 @@ export default {
                 // id: "x-axis-0",
                 scaleLabel: {
                   display: false,
-                  labelString: "Month"
+                  labelString: "Month",
                 },
                 type: "time",
                 time: {
@@ -147,8 +148,8 @@ export default {
                   displayFormats: {
                     day: "DD.MM",
                     hour: "HH:mm",
-                    minute: "HH:mm"
-                  }
+                    minute: "HH:mm",
+                  },
                 },
                 ticks: {
                   fontSize: 9,
@@ -156,27 +157,27 @@ export default {
                     enabled: true,
                     fontStyle: "bold",
                     fontColor: PALETTE.flux_in_color,
-                    fontSize: 12
-                  }
-                }
-              }
+                    fontSize: 12,
+                  },
+                },
+              },
             ],
             yAxes: [
               {
                 display: true,
                 scaleLabel: {
                   display: false,
-                  labelString: "Value"
+                  labelString: "Value",
                 },
                 ticks: {
                   fontSize: 9,
                   beginAtZero: false,
                   callback: (value, index, values) => {
                     return this.formatCash(value);
-                  }
-                }
-              }
-            ]
+                  },
+                },
+              },
+            ],
           },
           tooltips: {
             enabled: true,
@@ -192,20 +193,22 @@ export default {
                 }
                 return titleFormat;
               },
-              label: function(i, d) {
+              label: function (i, d) {
                 return (
                   d.datasets[i.datasetIndex].label + ": " + i.yLabel.toFixed(0)
                 );
-              }
-            }
+              },
+            },
           },
           annotation: {
             events: ["mouseenter", "mouseleave"],
             drawTime: "afterDraw",
             annotations: DRC_COVID_EVENT.filter(
-              x =>
-                x.measures.some(z =>
-                  z.zones.some(y => [...this.fluxGeoOptions, "ALL"].includes(y))
+              (x) =>
+                x.measures.some((z) =>
+                  z.zones.some((y) =>
+                    [...this.fluxGeoOptions, "ALL"].includes(y)
+                  )
                 ) &&
                 new Date(x.date) >= minDate &&
                 new Date(x.date) <= maxDate
@@ -222,14 +225,14 @@ export default {
                 borderWidth: item.isImportant ? 3 : 2,
                 label: {
                   content: item.measures
-                    .filter(x =>
-                      x.zones.some(y =>
+                    .filter((x) =>
+                      x.zones.some((y) =>
                         [...this.fluxGeoOptions, "ALL"].includes(y)
                       )
                     )
-                    .map(x => x.item),
+                    .map((x) => x.item),
                   enabled: false,
-                  position: "top"
+                  position: "top",
                 },
                 onMouseenter(e) {
                   this.options.borderColor = PALETTE.flux_in_color;
@@ -242,48 +245,58 @@ export default {
                     : PALETTE.flux_out_color;
                   this.options.label.enabled = false;
                   myLineChart2.update();
-                }
+                },
               };
-            })
+            }),
           },
           plugins: {
             crosshair: {
               sync: {
-                enabled: false
+                enabled: false,
               },
               zoom: {
-                enabled: true, // enable zooming
+                enabled: false, // enable zooming
                 zoomboxBackgroundColor: "rgba(66,133,244,0.2)", // background color of zoom box
                 zoomboxBorderColor: "#48F", // border color of zoom box
                 zoomButtonText: "Reset Zoom", // reset zoom button text
-                zoomButtonClass: "reset-zoom" // reset zoom button class
-              }
-            }
-          }
-        }
+                zoomButtonClass: "reset-zoom", // reset zoom button class
+              },
+            },
+          },
+        },
       };
       if (this.myLineChart) this.myLineChart.destroy();
-      this.myLineChart = new Chart(ref.getContext("2d"), tempData);
+      this.myLineChart = new Chart(ref.getContext("2d"), this.configChar);
       const myLineChart2 = this.myLineChart;
     },
-    fullscreenChange(fullscreen) {
+    fullscreenChange(fullscreen, ref) {
       this.fullscreen = fullscreen;
       if (!fullscreen) {
+        const buttonResetZoom = this.myLineChart.crosshair.button;
+        if (buttonResetZoom) {
+          buttonResetZoom.click();
+        }
+        this.configChar.options.plugins.crosshair.zoom.enabled = false;
         this.$refs.tendanceChart.style.height = "100%";
         this.$refs.tendanceChart.height = "100%";
+        this.myLineChart.update();
       }
-    }
+      else{
+        this.configChar.options.plugins.crosshair.zoom.enabled = true;
+        this.myLineChart.update();
+      }
+    },
   },
   computed: {
     ...mapState({
-      fluxGeoOptions: state => state.flux.fluxGeoOptions
+      fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
     }),
     getZone() {
       if (this.fluxGeoOptions && this.fluxGeoOptions.length > 0)
         return " à " + this.fluxGeoOptions[0];
       else return "";
-    }
-  }
+    },
+  },
 };
 </script>
 
