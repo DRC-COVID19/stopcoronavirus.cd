@@ -157,7 +157,7 @@ export default {
                     enabled: true,
                     fontStyle: "bold",
                     fontColor: PALETTE.flux_in_color,
-                    fontSize: 12,
+                    fontSize: 10,
                   },
                 },
               },
