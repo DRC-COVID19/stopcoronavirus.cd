@@ -1563,11 +1563,16 @@ export default {
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
+        const buttonResetZoom=this.lineCharts[ref].crosshair.button;
+        if (buttonResetZoom) {
+         buttonResetZoom.click();
+  }
+        
         this.configBarChart[ref].options.plugins.crosshair.zoom.enabled=false;
         this.$refs[ref].style.height = "200px";
         this.$refs[ref].style.MaxHeight = "200px";
         this.$refs[ref].height = "200px";
-        // this.lineCharts[ref].resetZoom();
+        
         this.lineCharts[ref].update();
       } else {
         this.configBarChart[ref].options.plugins.crosshair.zoom.enabled=true;
