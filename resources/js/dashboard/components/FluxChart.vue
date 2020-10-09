@@ -1025,7 +1025,9 @@ export default {
       const max = d3.max(data.map((x) => x.percent));
       const min = d3.min(data.map((x) => x.percent));
 
-      const tempData = {
+      console.log(ref,data);
+
+      this.configBarChart[ref] = {
         type: "line",
         data: {
           labels: data.map((x) => new Date(x.date)),
@@ -1040,7 +1042,7 @@ export default {
               showLine: true,
               borderWidth: 1.5,
               pointRadius: 1,
-              lineTension: 0.4,
+              lineTension: 0.2,
             },
           ],
         },
@@ -1103,10 +1105,16 @@ export default {
                 ticks: {
                   fontSize: 9,
                   beginAtZero: true,
+                   major: {
+                    enabled: true,
+                    fontStyle: "bold",
+                    fontColor: PALETTE.flux_in_color,
+                    fontSize: 10
+                  }
                 },
                 time: {
                   unit: "day",
-                  unitStepSize: 1,
+                   unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM",
                   },
@@ -1118,8 +1126,8 @@ export default {
                 display: true,
                 ticks: {
                   fontSize: 9,
-                  min: min < -100 ? min.toFixed(2) : -100,
-                  max: max >= 100 ? max.toFixed(2) : 100,
+                  min: min < -100 ? (min+10).toFixed(0) : -100,
+                  max: max >= 100 ? (max+10).toFixed(0) : 100,
                   callback: function (value) {
                     return value + "%";
                   },
@@ -1137,7 +1145,7 @@ export default {
       let reference = this.$refs[ref];
       reference.style.height = 200;
       if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
-      this.lineCharts[ref] = new Chart(reference.getContext("2d"), tempData);
+      this.lineCharts[ref] = new Chart(reference.getContext("2d"), this.configBarChart[ref]);
       reference.style.height = 200;
     },
     flux30Chart(data, ref, color, title = null) {

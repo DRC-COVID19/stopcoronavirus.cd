@@ -102,8 +102,9 @@ export default {
               data: localData,
               interpolate: true,
               showLine: true,
-              pointRadius: 2,
-              lineTension: 0.5,
+              pointRadius: 1,
+              borderWidth: 1.5,
+              lineTension: 0.3,
               xAxisID: "x-axis-0"
             }
           ]
@@ -142,7 +143,7 @@ export default {
                 type: "time",
                 time: {
                   unit: this.fluxTimeGranularity == 1 ? "day" : "hour",
-                  // unitStepSize: 1,
+                  unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM",
                     hour: "HH:mm",
