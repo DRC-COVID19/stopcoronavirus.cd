@@ -550,9 +550,9 @@ export default {
       map.resize();
       map.flyTo({ center: this.defaultCenterCoordinates });
     },
-    showBottom(){
+    showBottom() {
       map.resize();
-    }
+    },
   },
   methods: {
     ...mapMutations([
@@ -1660,7 +1660,7 @@ export default {
           origin: feature.properties.origin,
           percent: feature.properties.percent,
         });
-      }else{
+      } else {
         this.$set(this.ArcLayerSelectedObject, "item", null);
       }
       // const HTML = `<div>${name} ${
@@ -1687,21 +1687,24 @@ export default {
       const feature = this.flux30FeaturesData.find((x) => x.origin == name);
 
       if (feature) {
-        value = feature.percent;
+        value = feature.properties.percent;
+        this.$set(this.ArcLayerSelectedObject, "position", {
+          top: e.point.y,
+          left: e.point.x,
+        });
+        this.$set(this.ArcLayerSelectedObject, "item", {
+          origin: feature.properties.origin,
+          percent: feature.properties.percent,
+        });
+      } else {
+        this.$set(this.ArcLayerSelectedObject, "item", null);
       }
-      const HTML = `<div>${name} ${
-        value ? `: ${Math.round(value)}%` : ""
-      }</div>`;
-
-      // Populate the popup and set its coordinates
-      // based on the feature found.
-      popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
     },
     mouseOut(e) {
       if (this.activeMenu != 1) {
         return;
       }
-      this.$set(this.ArcLayerSelectedObject, "item",null);
+      this.$set(this.ArcLayerSelectedObject, "item", null);
       popup.remove();
     },
     drawDesign() {
