@@ -2098,7 +2098,7 @@ export default {
         );
       }
       this.fluxCircleDataLayer.hoveredStateId = null;
-
+      this.$set(this.ArcLayerSelectedObject, "item", null);
       popup.remove();
     },
     fluxCircleDataLayerMouseMove(e) {
@@ -2124,12 +2124,27 @@ export default {
           { hover: true }
         );
       }
-      const { origin, volume } = e.features[0].properties;
-      const HTML = `<div>${origin} ${volume ? `: ${volume}` : ""}</div>`;
+      const feature= e.features[0];
+      // const HTML = `<div>${origin} ${volume ? `: ${volume}` : ""}</div>`;
+
+      if (feature) {
+        const { origin, volume } = e.features[0].properties;
+        this.$set(this.ArcLayerSelectedObject, "position", {
+          top: e.point.y,
+          left: e.point.x,
+        });
+        this.$set(this.ArcLayerSelectedObject, "item", {
+          origin: origin,
+          percent: volume,
+          isAbsolute:true,
+        });
+      } else {
+        this.$set(this.ArcLayerSelectedObject, "item", null);
+      }
 
       // Populate the popup and set its coordinates
       // based on the feature found.
-      popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+      // popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
     },
     infrastructure() {
       if (this.hospitals) {
