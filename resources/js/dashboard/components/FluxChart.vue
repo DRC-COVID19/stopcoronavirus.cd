@@ -1025,8 +1025,6 @@ export default {
       const max = d3.max(data.map((x) => x.percent));
       const min = d3.min(data.map((x) => x.percent));
 
-      console.log(ref,data);
-
       this.configBarChart[ref] = {
         type: "line",
         data: {
@@ -1343,12 +1341,10 @@ export default {
       this.drawHorizontalChart(localData, "zone", ref, color);
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
-      console.log("topHealthZonePandemics", inPutData);
       const data = inPutData.map((item) => ({
         zone: item.name,
         volume: item.confirmed,
       }));
-      console.log("topHealthZonePandemics", data);
       this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color, title);
     },
     async fluxMobilityFluxGeneralZone(
