@@ -1,7 +1,7 @@
 <template>
   <div class="tooltip-map" :style="{left: position.left+15, top: position.top}">
     <div v-if="item.destination">{{`${item.origin} => ${item.destination}: ${Math.round(item.percent) }${!item.isAbsolute?'%':''}`}} </div>
-    <div v-else>{{`${item.origin}: ${Math.round(item.percent) }${!item.isAbsolute?'%':''}`}} </div>
+    <div v-else>{{`${item.origin} ${item.percent?`: ${Math.round(item.percent) }${!item.isAbsolute?'%':''}`:''}`}} </div>
     <div v-if="item.inversed_volume">{{`${item.destination} => ${item.origin} : ${item.inversed_volume }`}} </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
   padding: 8px;
   background: #000;
   color: #fff;
-  min-width: 80px;
+  min-width: 20px;
   max-height: 240px;
   overflow-y: hidden;
 }
