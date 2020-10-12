@@ -1177,7 +1177,7 @@ export default {
               showLine: true,
               borderWidth: 1.5,
               pointRadius: 1,
-              lineTension: 0.4,
+              lineTension: 0.08,
             },
           ],
         },
