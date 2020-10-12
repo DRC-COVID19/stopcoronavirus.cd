@@ -647,7 +647,8 @@ export default {
     },
     stateHoverMouseMove(e) {
       if (e.features.length > 0) {
-        if (this.stateHover.hoveredStateId) {
+        
+        if (this.stateHover.hoveredStateId!=null) {
           map.setFeatureState(
             {
               source:
@@ -673,7 +674,7 @@ export default {
       }
     },
     stateHoverMouseLeave(e) {
-      if (this.stateHover.hoveredStateId) {
+      if (this.stateHover.hoveredStateId!=null) {
         map.setFeatureState(
           {
             source:
@@ -1649,19 +1650,21 @@ export default {
       const feature = this.featuresData.features.find(
         (x) => x.properties.origin == name
       );
-
-      if (feature) {
-        value = feature.properties.percent;
-        this.$set(this.ArcLayerSelectedObject, "position", {
+      this.$set(this.ArcLayerSelectedObject, "position", {
           top: e.point.y,
           left: e.point.x,
         });
+      if (feature) {
+        value = feature.properties.percent;
+        
         this.$set(this.ArcLayerSelectedObject, "item", {
           origin: feature.properties.origin,
           percent: feature.properties.percent,
         });
       } else {
-        this.$set(this.ArcLayerSelectedObject, "item", null);
+        this.$set(this.ArcLayerSelectedObject, "item",  {
+          origin: name,
+        });
       }
       // const HTML = `<div>${name} ${
       //   value ? `: ${Math.round(value)}%` : ""
