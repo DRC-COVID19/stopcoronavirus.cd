@@ -1319,6 +1319,9 @@ export default {
       }
     },
     flux24RemoveLayer() {
+      if (this.activeMenu==3) {
+        return;
+      }
       map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
       map.off("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
       map.off("mousemove", SOURCE_HOTSPOT_GEOJSON, this.flux30mouseMove);
@@ -1714,6 +1717,9 @@ export default {
         center: this.defaultCenterCoordinates,
         zoom: 3.5,
       };
+      if (this.activeMenu==3) {
+          return;
+      }
       this.flux24RemoveLayer();
       map.U.removeLayer([EPIDEMIC_LAYER]);
       map.U.removeSource(COVID_HOSPITAL_SOURCE);
