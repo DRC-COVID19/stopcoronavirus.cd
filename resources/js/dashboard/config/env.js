@@ -7,15 +7,15 @@ export const
     ADMIN_HOSPITAL = "admin-hospital",
     PALETTE = {
         inflow: ["#2166ac", "#4393c3", "#92c5de", "#d1e5f0", "#fddbc7", "#f4a582", "#d6604d", "#b2182b"],
-        inflow_positif: ["rgb(253, 219, 199)", "rgb(244, 165, 130)" , "rgb(214, 96, 77)" , "rgb(178, 24, 43)" , "rgb(103, 0, 31)" ],
+        inflow_positif: ["rgb(253, 219, 199)", "rgb(244, 165, 130)", "rgb(214, 96, 77)", "rgb(178, 24, 43)", "rgb(103, 0, 31)"],
         inflow_negatif: ["rgb(5, 48, 97)", "rgb(33, 102, 172)", "rgb(67, 147, 195)", "rgb(146, 197, 222)", "rgb(209, 229, 240)"],
         outflow: ["#2d004b", "#542788", "#8073ac", "#b2abd2", "#fdb863", "#e08214", "#b35806", "#7f3b08"],
-        outflow_positif: ["rgb(254, 224, 182)", "rgb(253, 184, 99)", "rgb(224, 130, 20)" , "rgb(179, 88, 6)" , "rgb(127, 59, 8)"],
+        outflow_positif: ["rgb(254, 224, 182)", "rgb(253, 184, 99)", "rgb(224, 130, 20)", "rgb(179, 88, 6)", "rgb(127, 59, 8)"],
         outflow_negatif: ["rgb(45, 0, 75)", "rgb(84, 39, 136)", "rgb(128, 115, 172)", "rgb(178, 171, 210)", "rgb(216, 218, 235)"],
-        general_positif:['#d3f9ce','#93d691','#47c357','#108337','#035d21'],
-        general_negatif:['#2c012f','#7d0088','#a048af','#c790d2','#e9cbea'],
-        presence_positif:['#fdbb84','#fc8d59','#ef6548','#d7301f','#990000'],
-        presence_negatif:['#182f4d','#3b4c61','#5875a6','#7d9cd1','#b4c3dc'],
+        general_positif: ['#d3f9ce', '#93d691', '#47c357', '#108337', '#035d21'],
+        general_negatif: ['#2c012f', '#7d0088', '#a048af', '#c790d2', '#e9cbea'],
+        presence_positif: ['#fdbb84', '#fc8d59', '#ef6548', '#d7301f', '#990000'],
+        presence_negatif: ['#182f4d', '#3b4c61', '#5875a6', '#7d9cd1', '#b4c3dc'],
         present: ["#E31A1C"],
         nodata: "#eeeeee",
         bordure_shape_file: " #BFC5D2",
@@ -28,11 +28,11 @@ export const
     },
     PREFERENCE_START = "2020-02-18",
     PREFERENCE_END = "2020-03-18",
-    FLUX_LAST_UPDATE="2020-06-29",
-    OBSERVATION_START="2020-03-19",
-    OBSERVATION_END="2020-06-29",
+    FLUX_LAST_UPDATE = "2020-06-29",
+    OBSERVATION_START = "2020-03-19",
+    OBSERVATION_END = "2020-06-29",
     DATEFORMAT = "Y-MM-DD",
-    INFRASTRUCTURE_FIRST_UPDATE = "2020-07-01" ,
+    INFRASTRUCTURE_FIRST_UPDATE = "2020-07-01",
     FLUX_PREDEFINED_INPUT = [
         // {
         //     id: 1,
@@ -114,18 +114,18 @@ export const
             name: 'Mobilité vs Epidémiologie à la Gombe, une semaine après le debut du confinement'
         },
         {
-          id: 2,
-          name: 'Mobilité vs Nombre de cas, depuis le debut du confinement'
+            id: 2,
+            name: 'Mobilité vs Nombre de cas, depuis le debut du confinement'
         }
     ],
     DRC_COVID_EVENT = [
         {
             id: 1,
-            name: 'First case of COVID-19 confirmed (Congolese national returning from France)',
+            name: 'Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)',
             date: '2020-03-10',
             measures: [
                 {
-                    item: 'First case of COVID-19 confirmed (Congolese national returning from France)',
+                    item: 'Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)',
                     zones: ['Kinshasa']
                 }
             ],
@@ -133,11 +133,15 @@ export const
         },
         {
             id: 2,
-            name: "First restriction measures put in place for international and national travel/ flight arrivals (health information sheets and temperature/ symptom checks on arrival at airports and ports)",
+            name: `Premières mesures de restriction mises en place pour les voyages / vols internationaux et nationaux 
+(fiches d'information sanitaire et contrôles de température / symptômes à l'arrivée dans les aéroports
+et les ports)`,
             date: '2020-03-13',
             measures: [
                 {
-                    item: 'First restriction measures put in place for international and national travel/ flight arrivals (health information sheets and temperature/ symptom checks on arrival at airports and ports)',
+                    item: `Premières mesures de restriction mises en place pour les voyages / vols internationaux et nationaux 
+(fiches d'information sanitaire et contrôles de température / symptômes à l'arrivée dans les aéroports
+et les ports)`,
                     zones: ["Kinshasa"]
                 }
             ],
@@ -145,14 +149,16 @@ export const
         },
         {
             id: 3,
-            name: 'Flights from at-risk countries suspended (exept some cargo)',
+            name: 'Vols en provenance de pays à risque suspendus (sauf certaines cargaisons)',
             measures: [
                 {
-                    item: `Flights from at-risk countries suspended (exept some cargo)`,
+                    item: `Vols en provenance de pays à risque suspendus (sauf certaines cargaisons)`,
                     zones: ['Kinshasa']
                 },
                 {
-                    item: `Bars, restaurants closed; schools closed; gatherings of more than 20 people banned; religious gatherings and sports events suspended until further notice; passengers limited on public transport in Kinshasa`,
+                    item: `Bars, restaurants fermés; écoles fermées; les rassemblements de plus de 20 personnes interdits;
+                    les rassemblements religieux et les événements sportifs suspendus jusqu'à nouvel ordre; passagers
+                    limités dans les transports publics à Kinshasa`,
                     zones: ['Kinshasa']
                 }
 
@@ -163,10 +169,10 @@ export const
         },
         {
             id: 4,
-            name: 'All travel to or from Kinshasa banned (except cargo)',
+            name: 'Tous les voyages à destination ou en provenance de Kinshasa sont interdits (sauf le fret)',
             measures: [
                 {
-                    item: `All travel to or from Kinshasa banned (except cargo)`,
+                    item: `Tous les voyages à destination ou en provenance de Kinshasa sont interdits (sauf le fret)`,
                     zones: ["Kinshasa"]
                 }
             ],
@@ -175,10 +181,10 @@ export const
         },
         {
             id: 5,
-            name: 'First COVID-19 related death recorded in the DRC',
+            name: 'Premier décès lié au COVID-19 enregistré en RDC',
             measures: [
                 {
-                    item: 'First COVID-19 related death recorded in the DRC',
+                    item: 'Premier décès lié au COVID-19 enregistré en RDC',
                     zones: ['Kinshasa']
                 }
             ],
@@ -187,10 +193,10 @@ export const
         },
         {
             id: 6,
-            name: '48 hour lockdown (two suspected cases coming off a plane from Kinshasa)',
+            name: `Confinement de 48 heures (deux cas suspects sortant d'un avion de Kinshasa)`,
             measures: [
                 {
-                    item: '48 hour lockdown (two suspected cases coming off a plane from Kinshasa)',
+                    item: `Confinement de 48 heures (deux cas suspects sortant d'un avion de Kinshasa)`,
                     zones: ['Lubumbashi']
                 }
             ],
@@ -199,10 +205,10 @@ export const
         },
         {
             id: 7,
-            name: 'State of emergency declared by Congolese government',
+            name: `État d'urgence déclaré par le gouvernement congolais`,
             measures: [
                 {
-                    item: 'State of emergency declared by Congolese government',
+                    item: `État d'urgence déclaré par le gouvernement congolais`,
                     zones: ['Lubumbashi']
                 }
             ],
@@ -211,10 +217,10 @@ export const
         },
         {
             id: 8,
-            name: 'Domestic travel between Kinshasa and the rest of the country suspended; all borders closed except for trade',
+            name: `Les voyages intérieurs entre Kinshasa et le reste du pays sont suspendus; toutes les frontières sont fermées sauf pour le commerce`,
             measures: [
                 {
-                    item: 'Domestic travel between Kinshasa and the rest of the country suspended; all borders closed except for trade',
+                    item: `Les voyages intérieurs entre Kinshasa et le reste du pays sont suspendus; toutes les frontières sont fermées sauf pour le commerce`,
                     zones: ['ALL']
                 }
             ],
@@ -223,10 +229,10 @@ export const
         },
         {
             id: 9,
-            name: 'Prohibition of all gatherings of people in public spaces',
+            name: `Interdiction de tout rassemblement de personnes dans les espaces publics`,
             measures: [
                 {
-                    item: 'Prohibition of all gatherings of people in public spaces',
+                    item: `Interdiction de tout rassemblement de personnes dans les espaces publics`,
                     zones: ['ALL']
                 }
             ],
@@ -235,22 +241,22 @@ export const
         },
         {
             id: 10,
-            name: 'Income tax suspension for all civil servants and other state employees for 3 months',
+            name: `Suspension de l'impôt sur le revenu pour tous les fonctionnaires et autres employés de l'État pendant 3 mois`,
             measures: [
                 {
-                    item: 'Income tax suspension for all civil servants and other state employees for 3 months',
+                    item: `Suspension de l'impôt sur le revenu pour tous les fonctionnaires et autres employés de l'État pendant 3 mois`,
                     zones: ["ALL"]
                 },
                 {
-                    item: 'First COVID-19 case in Ituri Province',
+                    item: `Premier cas de COVID-19 dans la province d'Ituri`,
                     zones: ["Ituri"]
                 },
                 {
-                    item: '3 week lockdown announced by Governor of Kinshasa from March 28th-April 27th',
+                    item: `Confinement de 3 semaines annoncé par le gouverneur de Kinshasa du 28 mars au 27 avril`,
                     zones: ["Kinshasa"]
                 },
                 {
-                    item: 'Lockdown in Kinshasa postponed amid insecurity and price speculation on basic goods',
+                    item: `Le confinement à Kinshasa reporté dans un contexte d'insécurité et de spéculation sur les prix des produits de base`,
                     zones: ['Kinshasa']
                 }
             ],
@@ -259,10 +265,10 @@ export const
         },
         {
             id: 11,
-            name: 'First COVID-19 case (Bunia)',
+            name: 'Premier cas COVID-19 (Bunia)',
             measures: [
                 {
-                    item: 'First COVID-19 case (Bunia)',
+                    item: 'Premier cas COVID-19 (Bunia)',
                     zones: ["Bunia", "Ituri"]
                 }
             ],
@@ -270,10 +276,10 @@ export const
         },
         {
             id: 12,
-            name: 'First COVID-19 case (Beni)',
+            name: 'Premier cas COVID-19 (Beni)',
             measures: [
                 {
-                    item: 'First COVID-19 case (Bunia)',
+                    item: 'Premier cas COVID-19 (Beni)',
                     zones: ["Beni", "Nord-kivu"]
                 }
             ],
@@ -281,10 +287,10 @@ export const
         },
         {
             id: 13,
-            name: 'First COVID-19 case (Idiofa)',
+            name: 'Premier cas COVID-19 (Idiofa)',
             measures: [
                 {
-                    item: 'First COVID-19 case (Bunia)',
+                    item: 'Premier cas COVID-19 (Idiofa)',
                     zones: ["Idiofa", "Kwilu"]
                 }
             ],
@@ -292,10 +298,10 @@ export const
         },
         {
             id: 14,
-            name: '2 week "lockdown"/ confinement introduced in Goma',
+            name: "2 semaines de «confinement» / confinement introduit à Goma",
             measures: [
                 {
-                    item: '2 week "lockdown"/ confinement introduced in Goma',
+                    item: "2 semaines de «confinement» / confinement introduit à Goma",
                     zones: ["Goma", "Nord-kivu"]
                 }
             ],
@@ -303,18 +309,21 @@ export const
         },
         {
             id: 15,
-            name: 'Outward movements from Goma, Beni, Butemo suspended (6/4 - 20/4) ("14 day confinement"), residents required to stay at home',
+            name: `Mouvements vers l'extérieur de Goma, Beni et Butembo suspendus 
+(""confinement de 14 jours""), les résidents doivent rester chez eux`,
             measures: [
                 {
-                    item: 'Outward movements from Goma, Beni, Butemo suspended (6/4 - 20/4) ("14 day confinement"), residents required to stay at home',
+                    item: `Mouvements vers l'extérieur de Goma, Beni et Butembo suspendus
+(""confinement de 14 jours""), les résidents doivent rester chez eux`,
                     zones: ["Nord-kivu"]
                 },
                 {
-                    item: 'Travel between Goma and Bukavu suspended (6/4 - 20/4)',
+                    item: 'Voyage entre Goma et Bukavu suspendu',
                     zones: ["Nord-kivu", "Sud-kivu"]
                 },
                 {
-                    item: '2 week "lockdown"/ confinement introduced (6/4 - 20/4) (people cannot leave homes) in Gombe',
+                    item: `Mise en place d'un «confinement» / confinement de 2 semaines
+                    (les gens ne peuvent pas quitter leur domicile) à Gombe`,
                     zones: ["Gombe", "Kinshasa"]
                 }
             ],
@@ -322,10 +331,10 @@ export const
         },
         {
             id: 16,
-            name: 'Lockdown measures in North Kivu province extended (until 30/4)',
+            name: `Prolongation des mesures de confinement dans la province du Nord-Kivu (jusqu'au 30/4)`,
             measures: [
                 {
-                    item: 'Lockdown measures in North Kivu province extended (until 30/4)',
+                    item: `Prolongation des mesures de confinement dans la province du Nord-Kivu (jusqu'au 30/4)`,
                     zones: ["Nord-kivu"]
                 }
             ],
@@ -333,22 +342,23 @@ export const
         },
         {
             id: 17,
-            name: 'Face masks mandatory in public spaces in Kinshasa (5000 CF if masks not worn)',
+            name: `Masques faciaux obligatoires dans les espaces publics à Kinshasa  (5000 CF si les masques ne sont pas portés)`,
             measures: [
                 {
-                    item: 'Face masks mandatory in public spaces in Kinshasa (5000 CF if masks not worn)',
+                    item: `Masques faciaux obligatoires dans les espaces publics à Kinshasa  (5000 CF si les masques ne sont pas portés)`,
                     zones: ["Kinshasa"]
                 },
                 {
-                    item: 'Self-quarantine for high-risk people (over age 60 or with preexisting conditions) mandatory in South Kivu.',
+                    item: `Auto-quarantaine pour les personnes à haut risque (plus de 60 ans ou avec des conditions
+                        préexistantes) obligatoire au Sud-Kivu.`,
                     zones: ["Sud-kivu"]
                 },
                 {
-                    item: 'Internal travel between the towns of Goma, Beni and Butembo continued to be suspended',
+                    item: `Les déplacements internes entre les villes de Goma, Beni et Butembo ont continué d'être suspendus`,
                     zones: ["Nord-kivu"]
                 },
                 {
-                    item: 'Curfew in Lualaba and Lubumbashi from 10 p.m. to 5 a.m',
+                    item: 'Couvre-feu à Lualaba et Lubumbashi à partir de 22h à 5 h',
                     zones: ["Lualaba", "Lubumbashi"]
                 }
             ],
@@ -356,10 +366,10 @@ export const
         },
         {
             id: 17,
-            name: 'State of emergency extended by Congolese government - 20 days (21/4 - 10/5) ',
+            name: `État d'urgence prorogé par le gouvernement congolais - 20 jours (21/4 - 10/5)`,
             measures: [
                 {
-                    item: 'State of emergency extended by Congolese government - 20 days (21/4 - 10/5) ',
+                    item: `État d'urgence prorogé par le gouvernement congolais - 20 jours (21/4 - 10/5)`,
                     zones: ["ALL"]
                 },
             ],
@@ -367,10 +377,12 @@ export const
         },
         {
             id: 18,
-            name: 'Gombe lockdown restrictions eased (reopening of banks and some shops selling food)',
+            name: `Les restrictions de confinement de Gombe assouplies (réouverture des banques et de certains
+magasins vendant de la nourriture)`,
             measures: [
                 {
-                    item: 'Gombe lockdown restrictions eased (reopening of banks and some shops selling food)',
+                    item: `Les restrictions de confinement de Gombe assouplies (réouverture des banques et de certains
+magasins vendant de la nourriture)`,
                     zones: ["Gombe", "Kinshasa"]
                 },
             ],
@@ -378,10 +390,10 @@ export const
         },
         {
             id: 19,
-            name: 'State of health emergency extended by Parliament for two weeks.',
+            name: `L'état d'urgence sanitaire a été prolongé par le Parlement pour deux semaines.`,
             measures: [
                 {
-                    item: 'State of health emergency extended by Parliament for two weeks. ',
+                    item: `L'état d'urgence sanitaire a été prolongé par le Parlement pour deux semaines.`,
                     zones: ["ALL"]
                 },
             ],
@@ -389,10 +401,10 @@ export const
         },
         {
             id: 20,
-            name: 'First confirmed COVID-19 case in Lubumbashi',
+            name: 'Premier cas de COVID-19 confirmé à Lubumbashi',
             measures: [
                 {
-                    item: 'First confirmed COVID-19 case in Lubumbashi',
+                    item: 'Premier cas de COVID-19 confirmé à Lubumbashi',
                     zones: ["Lubumbashi"]
                 },
             ],
@@ -400,10 +412,10 @@ export const
         },
         {
             id: 21,
-            name: 'Lubumbashi and Kasumbalesa under a 24-hour lockdown for contact tracing',
+            name: `Lubumbashi et Kasumbalesa sous un confinement de 24 heures pour la recherche des contacts`,
             measures: [
                 {
-                    item: 'Lubumbashi and Kasumbalesa under a 24-hour lockdown for contact tracing',
+                    item: `Lubumbashi et Kasumbalesa sous un confinement de 24 heures pour la recherche des contacts`,
                     zones: ["Lubumbashi", "Kasumbalesa"]
                 },
             ],
@@ -411,10 +423,12 @@ export const
         },
         {
             id: 22,
-            name: 'Face masks mandatory in public spaces (Lubumbashi) 5000 CF fine for non-compliers',
+            name: `Masques faciaux obligatoires dans les espaces publics (Lubumbashi) Amende de 5000 CF pour
+les non-conformes`,
             measures: [
                 {
-                    item: 'Face masks mandatory in public spaces (Lubumbashi) 5000 CF fine for non-compliers',
+                    item: `Masques faciaux obligatoires dans les espaces publics (Lubumbashi) Amende de 5000 CF pour
+les non-conformes`,
                     zones: ["Lubumbashi"]
                 },
             ],
@@ -425,9 +439,10 @@ export const
             name: 'Communication from the governor of Ituri',
             measures: [
                 {
-                    item: `"Communication from the governor of Ituri:
-                    - Commercial flights between Ituri - Isiro - Goma - Kisangani via CAA and Congo Airways resumed
-                    - Passengers coming from Kinshasa also allowed, as long as they respect IPC measures on board and on arrival in Ituri"`,
+                    item: `Communication du gouverneur de l'Ituri:
+                    - Les vols commerciaux entre Ituri - Isiro - Goma - Kisangani via CAA et Congo Airways ont repris
+                    - Les passagers en provenance de Kinshasa sont également autorisés, à condition qu'ils respectent 
+                    les mesures IPC à bord et à leur arrivée en Ituri`,
                     zones: ["Ituri"]
                 },
             ],
@@ -435,10 +450,10 @@ export const
         },
         {
             id: 24,
-            name: 'Partial reopening of border between DRC and Zambia for pedestrians following clashes between civilians and security forces',
+            name: `Réouverture partielle de la frontière entre la RDC et la Zambie aux piétons suite aux affrontements entre civils et forces de sécurité`,
             measures: [
                 {
-                    item: `Partial reopening of border between DRC and Zambia for pedestrians following clashes between civilians and security forces`,
+                    item: `Réouverture partielle de la frontière entre la RDC et la Zambie aux piétons suite aux affrontements entre civils et forces de sécurité`,
                     zones: ["Kasumbalesa"]
                 },
             ],
@@ -446,10 +461,10 @@ export const
         },
         {
             id: 25,
-            name: 'Face masks mandatory in public spaces in Matadi (Kongo Central province)',
+            name: 'Masques faciaux obligatoires dans les espaces publics de Matadi (province du Kongo Central)',
             measures: [
                 {
-                    item: `Face masks mandatory in public spaces in Matadi (Kongo Central province)`,
+                    item: `Masques faciaux obligatoires dans les espaces publics de Matadi (province du Kongo Central)`,
                     zones: ["Matadi", "Kongo-central"]
                 },
             ],
@@ -457,10 +472,16 @@ export const
         },
         {
             id: 26,
-            name: 'Income tax (suspended on 27th March for 3 months for civil servants/state employees) reinstated to address shortfall of $11 million USD (finance minister justifies this move by blaming mine and border closures for loss in revenue for Kinshasa',
+            name: `L'impôt sur le revenu (suspendu le 27 mars pendant 3 mois pour les fonctionnaires / employés 
+de l'État) a été rétabli pour combler le déficit de 11 millions de dollars américains (le ministre 
+des Finances justifie cette décision en accusant les fermetures de mines et de frontières de perte
+de revenus pour Kinshasa`,
             measures: [
                 {
-                    item: `Income tax (suspended on 27th March for 3 months for civil servants/state employees) reinstated to address shortfall of $11 million USD (finance minister justifies this move by blaming mine and border closures for loss in revenue for Kinshasa`,
+                    item: `L'impôt sur le revenu (suspendu le 27 mars pendant 3 mois pour les fonctionnaires / employés 
+                        de l'État) a été rétabli pour combler le déficit de 11 millions de dollars américains (le ministre 
+                        des Finances justifie cette décision en accusant les fermetures de mines et de frontières de perte
+                        de revenus pour Kinshasa`,
                     zones: ["Kinshasa"]
                 },
             ],
@@ -468,12 +489,12 @@ export const
         },
         {
             id: 27,
-            name: `"Curfew (from 20h00) and isolation of Goma from other territories in province for 14 days
-            - Police instructed to enforce curfew measures"`,
+            name: `Couvre-feu (à partir de 20h00) et isolement de Goma des autres territoires de la province pendant 14 jours
+- La police est chargée d’appliquer les mesures de couvre-feu`,
             measures: [
                 {
-                    item: `"Curfew (from 20h00) and isolation of Goma from other territories in province for 14 days
-                    - Police instructed to enforce curfew measures"`,
+                    item: `Couvre-feu (à partir de 20h00) et isolement de Goma des autres territoires de la province pendant 14 jours
+                    - La police est chargée d’appliquer les mesures de couvre-feu`,
                     zones: ["Goma"]
                 },
             ],
@@ -481,10 +502,10 @@ export const
         },
         {
             id: 28,
-            name: `Goma town hall activities suspended until further notice (member tested positive for COVID)`,
+            name: `Activités de la mairie de Goma suspendues jusqu'à nouvel ordre (membre testé positif au COVID)`,
             measures: [
                 {
-                    item: `Goma town hall activities suspended until further notice (member tested positive for COVID)`,
+                    item: `Activités de la mairie de Goma suspendues jusqu'à nouvel ordre (membre testé positif au COVID)`,
                     zones: ["Goma"]
                 },
             ],
@@ -492,14 +513,18 @@ export const
         },
         {
             id: 29,
-            name: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa;
-            - Resulted in pausing of surveillence and contact tracing activities
-            - Most recent recorded in Kimbanseke health zone (concerning violence against three agents de la riposte who were held in a household in the Maviokele district)"`,
+            name: `Des rapports d'attaques contre les équipes de riposte au COVID se sont multipliées 
+            au niveau communautaire à Kinshasa;
+            - A entraîné une interruption des activités de surveillance et de recherche des contacts
+            - Plus récent enregistré dans la zone de santé de Kimbanseke (concernant des violences contre
+            trois agents de la riposte qui étaient détenus dans un ménage du district de Maviokele)`,
             measures: [
                 {
-                    item: `"Reports that seizures and attacks on the COVID response teams have multiplied at the community level in Kinshasa;
-                    - Resulted in pausing of surveillence and contact tracing activities
-                    - Most recent recorded in Kimbanseke health zone (concerning violence against three agents de la riposte who were held in a household in the Maviokele district)"`,
+                    item: `Des rapports d'attaques contre les équipes de riposte au COVID se sont multipliées 
+                    au niveau communautaire à Kinshasa;
+                    - A entraîné une interruption des activités de surveillance et de recherche des contacts
+                    - Plus récent enregistré dans la zone de santé de Kimbanseke (concernant des violences contre
+                    trois agents de la riposte qui étaient détenus dans un ménage du district de Maviokele)`,
                     zones: ["Kinshasa"]
                 },
             ],
@@ -507,10 +532,10 @@ export const
         },
         {
             id: 30,
-            name: `Traffic between Goma and Bukavu suspended`,
+            name: `Le trafic entre Goma et Bukavu suspendu`,
             measures: [
                 {
-                    item: `Traffic between Goma and Bukavu suspended`,
+                    item: `Le trafic entre Goma et Bukavu suspendu`,
                     zones: ["Goma"]
                 },
             ],
@@ -518,10 +543,10 @@ export const
         },
         {
             id: 31,
-            name: `Parliament vote to extend period of health emergency for 15 days`,
+            name: `Le Parlement vote pour prolonger la période d'urgence sanitaire de 15 jours`,
             measures: [
                 {
-                    item: `Parliament vote to extend period of health emergency for 15 days`,
+                    item: `Le Parlement vote pour prolonger la période d'urgence sanitaire de 15 jours`,
                     zones: ["ALL"]
                 },
             ],
@@ -529,10 +554,10 @@ export const
         },
         {
             id: 32,
-            name: `COVID screening centre opens at Martyrs stadium`,
+            name: `Ouverture du centre de dépistage COVID au stade des Martyrs`,
             measures: [
                 {
-                    item: `COVID screening centre opens at Martyrs stadium`,
+                    item: `Ouverture du centre de dépistage COVID au stade des Martyrs`,
                     zones: ["Kinshasa"]
                 },
             ],
@@ -540,10 +565,10 @@ export const
         },
         {
             id: 33,
-            name: `Containment of Ibanda commune, Bukavu, and city-wide curfew (8pm-5pm)`,
+            name: `Confinement de la commune d'Ibanda, Bukavu et couvre-feu à l'échelle de la ville (20h-17h)`,
             measures: [
                 {
-                    item: `Containment of Ibanda commune, Bukavu, and city-wide curfew (8pm-5pm)`,
+                    item: `Confinement de la commune d'Ibanda, Bukavu et couvre-feu à l'échelle de la ville (20h-17h)`,
                     zones: ["Bukavu"]
                 },
             ],
@@ -551,14 +576,15 @@ export const
         },
         {
             id: 34,
-            name: `Curfew in Goma lifted`,
+            name: `Couvre-feu à Goma levé`,
             measures: [
                 {
-                    item: `Curfew in Goma lifted`,
+                    item: `Couvre-feu à Goma levé`,
                     zones: ["Goma"]
                 },
                 {
-                    item: `Suspension of isolation of Goma and surroundings (except travel between Goma and Bukavu, and air travel)`,
+                    item: `Suspension de l'isolement de Goma et de ses environs (sauf voyage entre Goma et Bukavu et 
+                        voyage en avion)`,
                     zones: ["Goma"]
                 },
             ],
@@ -566,10 +592,10 @@ export const
         },
         {
             id: 35,
-            name: `State of emergency extended for 15 days (from 8/6/20)`,
+            name: `État d'urgence prolongé de 15 jours (à partir du 06/08/20)`,
             measures: [
                 {
-                    item: `State of emergency extended for 15 days (from 8/6/20)`,
+                    item: `État d'urgence prolongé de 15 jours (à partir du 06/08/20)`,
                     zones: ["ALL"]
                 },
             ],
@@ -577,10 +603,12 @@ export const
         },
         {
             id: 36,
-            name: `3 dead in protests against COVID restrictions in Kinshasa central market (merchants were trading despite mandated closure)`,
+            name: `3 morts dans des manifestations contre les restrictions COVID sur le marché central de Kinshasa 
+            (les commerçants faisaient du commerce malgré la fermeture obligatoire)`,
             measures: [
                 {
-                    item: `3 dead in protests against COVID restrictions in Kinshasa central market (merchants were trading despite mandated closure)`,
+                    item: `3 morts dans des manifestations contre les restrictions COVID sur le marché central de Kinshasa 
+            (les commerçants faisaient du commerce malgré la fermeture obligatoire)`,
                     zones: ["Kinshasa"]
                 },
             ],
@@ -588,14 +616,14 @@ export const
         },
         {
             id: 37,
-            name: `Localised lockdown in haut-katanga province (incl. Lubumbashi) for mass COVID testing campaign (20th and 21st)`,
+            name: `Confinement localisé dans la province du Haut-Katanga (y compris Lubumbashi) pour la campagne de tests de masse COVID (20e et 21e)`,
             measures: [
                 {
-                    item: `Localised lockdown in haut-katanga province (incl. Lubumbashi) for mass COVID testing campaign (20th and 21st)`,
+                    item: `Confinement localisé dans la province du Haut-Katanga (y compris Lubumbashi) pour la campagne de tests de masse COVID (20e et 21e)`,
                     zones: ["Haut-katanga"]
                 },
                 {
-                    item: `State of Health Emergency extended until July 5th`,
+                    item: `État d'urgence sanitaire prolongé jusqu'au 5 juillet`,
                     zones: ["ALL"]
                 },
             ],
@@ -603,10 +631,10 @@ export const
         },
         {
             id: 38,
-            name: `COVID-19 declared in Sud-Ubangi province (14th province in DRC to confirm cases)`,
+            name: `COVID-19 déclaré dans la province du Sud-Ubangi (14e province en RDC à confirmer les cas)`,
             measures: [
                 {
-                    item: `COVID-19 declared in Sud-Ubangi province (14th province in DRC to confirm cases)`,
+                    item: `COVID-19 déclaré dans la province du Sud-Ubangi (14e province en RDC à confirmer les cas)`,
                     zones: ["Sud-Ubangi"]
                 },
             ],
@@ -614,10 +642,10 @@ export const
         },
         {
             id: 39,
-            name: `(With exception of central market) clubs, bars, schools, universities to open/ restrictions lifted`,
+            name: `(À l'exception du marché central) Ouverture de clubs, bars, écoles, universités / restrictions levées`,
             measures: [
                 {
-                    item: `(With exception of central market) clubs, bars, schools, universities to open/ restrictions lifted`,
+                    item: `(À l'exception du marché central) Ouverture de clubs, bars, écoles, universités / restrictions levées`,
                     zones: ["Kinshasa", "Gombe"]
                 },
             ],
@@ -625,10 +653,10 @@ export const
         },
         {
             id: 40,
-            name: `3rd case confirmed in Ituri province (Mahagi town)`,
+            name: `3e cas confirmé dans la province d'Ituri (ville de Mahagi)`,
             measures: [
                 {
-                    item: `3rd case confirmed in Ituri province (Mahagi town)`,
+                    item: `3e cas confirmé dans la province d'Ituri (ville de Mahagi)`,
                     zones: ["Ituri", "Mahagi"]
                 },
             ],
@@ -636,10 +664,10 @@ export const
         },
         {
             id: 41,
-            name: `COVID-19 state of emergency lifted (banks, shops, restaurants and bars allowed to open)`,
+            name: `État d'urgence du COVID-19 levé (ouverture des banques, des magasins, des restaurants et des bars)`,
             measures: [
                 {
-                    item: `COVID-19 state of emergency lifted (banks, shops, restaurants and bars allowed to open)`,
+                    item: `État d'urgence du COVID-19 levé (ouverture des banques, des magasins, des restaurants et des bars)`,
                     zones: ["ALL"]
                 },
             ],
@@ -647,10 +675,10 @@ export const
         },
         {
             id: 42,
-            name: `Schools, universities, academic institutions can open`,
+            name: `Les écoles, les universités, les institutions académiques peuvent ouvrir`,
             measures: [
                 {
-                    item: `Schools, universities, academic institutions can open`,
+                    item: `Les écoles, les universités, les institutions académiques peuvent ouvrir`,
                     zones: ["ALL"]
                 },
             ],
@@ -658,10 +686,10 @@ export const
         },
         {
             id: 43,
-            name: `Places of worship, stadiums, airports, international borders open`,
+            name: `Lieux de culte, stades, aéroports, frontières internationales ouvertes`,
             measures: [
                 {
-                    item: `Places of worship, stadiums, airports, international borders open`,
+                    item: `Lieux de culte, stades, aéroports, frontières internationales ouvertes`,
                     zones: ["ALL"]
                 },
             ],
