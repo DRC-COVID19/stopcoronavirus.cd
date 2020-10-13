@@ -120,6 +120,16 @@
  * SOFTWARE.
  */
 
+/*@preserve!
+ * chartjs-plugin-annotation.js
+ * http://chartjs.org/
+ * Version: 0.5.7
+ *
+ * Copyright 2016 Evert Timberg
+ * Released under the MIT license
+ * https://github.com/chartjs/Chart.Annotation.js/blob/master/LICENSE.md
+ */
+
 //! moment.js
 
 //! moment.js locale configuration
