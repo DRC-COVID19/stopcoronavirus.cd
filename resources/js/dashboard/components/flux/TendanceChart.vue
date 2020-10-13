@@ -21,7 +21,7 @@
 <script>
 import { DRC_COVID_EVENT, PALETTE } from "../../config/env";
 import Chart from "chart.js";
-import "chartjs-plugin-annotation";
+import "../../lib/chartjs-plugin-annotation.min.js";
 import { mapState, mapMutations } from "vuex";
 export default {
   props: {
@@ -153,6 +153,8 @@ export default {
                 },
                 ticks: {
                   fontSize: 9,
+                  max: maxDate,
+                  min: minDate,
                   major: {
                     enabled: true,
                     fontStyle: "bold",
@@ -212,7 +214,11 @@ export default {
                 ) &&
                 new Date(x.date) >= minDate &&
                 new Date(x.date) <= maxDate
-            ).map((item, index) => {
+            ).map((item, index,array) => {
+              let xAdjust=0;
+              if (index==array.length-1) {
+                xAdjust=80;
+              }
               return {
                 id: "line" + index,
                 type: "line",
@@ -224,6 +230,8 @@ export default {
                   : PALETTE.flux_out_color,
                 borderWidth: item.isImportant ? 3 : 2,
                 label: {
+                  fontSize:9,
+                  xAdjust,
                   content: item.measures
                     .filter((x) =>
                       x.zones.some((y) =>
@@ -280,8 +288,7 @@ export default {
         this.$refs.tendanceChart.style.height = "100%";
         this.$refs.tendanceChart.height = "100%";
         this.myLineChart.update();
-      }
-      else{
+      } else {
         this.configChar.options.plugins.crosshair.zoom.enabled = true;
         this.myLineChart.update();
       }
