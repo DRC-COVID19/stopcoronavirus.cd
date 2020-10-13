@@ -132,7 +132,7 @@
           </b-row>
         </b-col>
         <b-col cols="12" md="2" class="row pl-3 pr-3">
-          <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue"
+          <b-button type="submit" :disabled="!isButtonEnabled" block class="btn-submit mt-2 btn-dash-blue"
             >Filtrer les données</b-button
           >
         </b-col>
@@ -260,6 +260,11 @@ export default {
     ...mapState({
       fluxHotSpot: state => state.app.fluxHotSpot
     }),
+    isButtonEnabled(){
+      return this.fluxForm.fluxGeoGranularity && this.fluxForm.fluxGeoOptions 
+      && this.fluxForm.fluxGeoOptions.length>0 
+       && this.dateRangeObservation.startDate && this.dateRangeObservation.endDate
+    },
     rangeData() {
       return {
         firstDay: 1,
@@ -369,6 +374,7 @@ export default {
       let observation_start = null;
       let observation_end = null;
       let fluxGeoOptions = ["Gombe"];
+       this.fluxGeoGranularityChange(2);
 
       // if (value != 7) this.$emit("toggleShowMobiliteGenerale", false);
 
