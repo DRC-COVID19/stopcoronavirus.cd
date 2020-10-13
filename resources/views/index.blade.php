@@ -10,7 +10,7 @@
                 <p class="lead">Site officiel d'informations et de conseils</p>
             </div>
             <div class="cols-12 col-md-5">
-                <a href="https://wa.me/243844434444?text=salut" target="_blank"><img class="img-fluid" src="{{asset('/img/covid_bot.png')}}" alt="Whatsapp bot"></a>
+                <a href="https://wa.me/243844434444?text=salut" target="_blank"><img class="img-fluid" src="{{asset('/img/covid_bot.jpg')}}" alt="Whatsapp bot"></a>
                 
             </div>
         </div>
