@@ -73,10 +73,10 @@ export const
       id: 2,
       name: "Zones des santés"
     },
-    // {
-    //   id: 3,
-    //   name: "Hotspot"
-    // }
+    {
+      id: 3,
+      name: "Hotspot"
+    }
   ],
   TEMP_GRANULARITIES = [
     {

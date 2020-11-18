@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Diagnostic;
-use App\Http\MyTrait\GeoConding;
+use App\Http\MyTrait\GeoCoding;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -15,9 +15,9 @@ use Illuminate\Support\Facades\Validator;
  */
 class SelfTestController extends Controller
 {
-    
-    use GeoConding;
-    
+
+    use GeoCoding;
+
 
     private $message = [
         'msg-1' =>
@@ -57,14 +57,14 @@ class SelfTestController extends Controller
             'code' => "FIN7"
         ],
         'msg-7' => [
-            'text' => "Votre situation ne relève probablement pas du Covid-19. 
+            'text' => "Votre situation ne relève probablement pas du Covid-19.
             N'hésitez pas à contacter votre médecin ou l’hôpital en cas de doute.
              Vous pouvez refaire le test en cas de nouveau symptôme pour réévaluer la situation.",
             'code' => "FIN8"
         ],
         'msg-8' => [
-            'text' => "Cette application n’est pas faite pour les personnes de moins de 15 ans. 
-            Prenez contact avec votre médecin généraliste au moindre doute. 
+            'text' => "Cette application n’est pas faite pour les personnes de moins de 15 ans.
+            Prenez contact avec votre médecin généraliste au moindre doute.
             En cas d’urgence, appelez le 101, 109 ou 110.",
             'code' => "FIN1"
         ],
@@ -676,7 +676,7 @@ class SelfTestController extends Controller
                 } else { // SI 0 facteur pronostique
                     $message = $this->message['msg-3'];
                     /**
-                     * Votre situation peut relever d’un COVID 19. 
+                     * Votre situation peut relever d’un COVID 19.
                      * Demandez une téléconsultation ou un médecin généraliste ou une visite à domicile (SOS médecins, etc.)
                      */
                     $this->storeDiagnostic($responses, $this->message['msg-3']);
@@ -714,7 +714,7 @@ class SelfTestController extends Controller
                     if ($this->minorGravity($responses) == 0) {
                         if ($responses['age'] < 50) {
                             $message = $this->message['msg-5'];
-                            /*Votre situation peut relever d’un COVID 19 qu’il faut surveiller. 
+                            /*Votre situation peut relever d’un COVID 19 qu’il faut surveiller.
                             Si de nouveaux symptômes apparaissent, refaites le test ou consultez votre médecin.
                             Nous vous conseillons de rester à votre domicile.
                             */
@@ -955,7 +955,7 @@ class SelfTestController extends Controller
         }
     }
 
-    
+
 
     public function updateDatabase()
     {
@@ -1079,5 +1079,5 @@ class SelfTestController extends Controller
         }
     }
 
-    
+
 }
