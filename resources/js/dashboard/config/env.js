@@ -28,9 +28,9 @@ export const
   },
   PREFERENCE_START = "2020-02-18",
   PREFERENCE_END = "2020-03-18",
-  FLUX_LAST_UPDATE = "2020-06-29",
+  FLUX_LAST_UPDATE = "2020-08-12",
   OBSERVATION_START = "2020-03-19",
-  OBSERVATION_END = "2020-06-29",
+  OBSERVATION_END = "2020-08-12",
   DATEFORMAT = "Y-MM-DD",
   INFRASTRUCTURE_FIRST_UPDATE = "2020-07-01",
   FLUX_PREDEFINED_INPUT = [
@@ -137,13 +137,13 @@ export const
     },
     {
         id: 2,
-        name: `Premières mesures de restriction mises en place pour les voyages / vols internationaux et nationaux 
+        name: `Premières mesures de restriction mises en place pour les voyages / vols internationaux et nationaux
 (fiches d'information sanitaire et contrôles de température / symptômes à l'arrivée dans les aéroports
 et les ports)`,
         date: '2020-03-13',
         measures: [
             {
-                item: `Premières mesures de restriction mises en place pour les voyages / vols internationaux et nationaux 
+                item: `Premières mesures de restriction mises en place pour les voyages / vols internationaux et nationaux
 (fiches d'information sanitaire et contrôles de température / symptômes à l'arrivée dans les aéroports
 et les ports)`,
                 zones: ["Kinshasa"]
@@ -313,7 +313,7 @@ et les ports)`,
     },
     {
         id: 15,
-        name: `Mouvements vers l'extérieur de Goma, Beni et Butembo suspendus 
+        name: `Mouvements vers l'extérieur de Goma, Beni et Butembo suspendus
 (""confinement de 14 jours""), les résidents doivent rester chez eux`,
         measures: [
             {
@@ -445,7 +445,7 @@ les non-conformes`,
             {
                 item: `Communication du gouverneur de l'Ituri:
                 - Les vols commerciaux entre Ituri - Isiro - Goma - Kisangani via CAA et Congo Airways ont repris
-                - Les passagers en provenance de Kinshasa sont également autorisés, à condition qu'ils respectent 
+                - Les passagers en provenance de Kinshasa sont également autorisés, à condition qu'ils respectent
                 les mesures IPC à bord et à leur arrivée en Ituri`,
                 zones: ["Ituri"]
             },
@@ -476,14 +476,14 @@ les non-conformes`,
     },
     {
         id: 26,
-        name: `L'impôt sur le revenu (suspendu le 27 mars pendant 3 mois pour les fonctionnaires / employés 
-de l'État) a été rétabli pour combler le déficit de 11 millions de dollars américains (le ministre 
+        name: `L'impôt sur le revenu (suspendu le 27 mars pendant 3 mois pour les fonctionnaires / employés
+de l'État) a été rétabli pour combler le déficit de 11 millions de dollars américains (le ministre
 des Finances justifie cette décision en accusant les fermetures de mines et de frontières de perte
 de revenus pour Kinshasa`,
         measures: [
             {
-                item: `L'impôt sur le revenu (suspendu le 27 mars pendant 3 mois pour les fonctionnaires / employés 
-                    de l'État) a été rétabli pour combler le déficit de 11 millions de dollars américains (le ministre 
+                item: `L'impôt sur le revenu (suspendu le 27 mars pendant 3 mois pour les fonctionnaires / employés
+                    de l'État) a été rétabli pour combler le déficit de 11 millions de dollars américains (le ministre
                     des Finances justifie cette décision en accusant les fermetures de mines et de frontières de perte
                     de revenus pour Kinshasa`,
                 zones: ["Kinshasa"]
@@ -517,14 +517,14 @@ de revenus pour Kinshasa`,
     },
     {
         id: 29,
-        name: `Des rapports d'attaques contre les équipes de riposte au COVID se sont multipliées 
+        name: `Des rapports d'attaques contre les équipes de riposte au COVID se sont multipliées
         au niveau communautaire à Kinshasa;
         - A entraîné une interruption des activités de surveillance et de recherche des contacts
         - Plus récent enregistré dans la zone de santé de Kimbanseke (concernant des violences contre
         trois agents de la riposte qui étaient détenus dans un ménage du district de Maviokele)`,
         measures: [
             {
-                item: `Des rapports d'attaques contre les équipes de riposte au COVID se sont multipliées 
+                item: `Des rapports d'attaques contre les équipes de riposte au COVID se sont multipliées
                 au niveau communautaire à Kinshasa;
                 - A entraîné une interruption des activités de surveillance et de recherche des contacts
                 - Plus récent enregistré dans la zone de santé de Kimbanseke (concernant des violences contre
@@ -587,7 +587,7 @@ de revenus pour Kinshasa`,
                 zones: ["Goma"]
             },
             {
-                item: `Suspension de l'isolement de Goma et de ses environs (sauf voyage entre Goma et Bukavu et 
+                item: `Suspension de l'isolement de Goma et de ses environs (sauf voyage entre Goma et Bukavu et
                     voyage en avion)`,
                 zones: ["Goma"]
             },
@@ -607,11 +607,11 @@ de revenus pour Kinshasa`,
     },
     {
         id: 36,
-        name: `3 morts dans des manifestations contre les restrictions COVID sur le marché central de Kinshasa 
+        name: `3 morts dans des manifestations contre les restrictions COVID sur le marché central de Kinshasa
         (les commerçants faisaient du commerce malgré la fermeture obligatoire)`,
         measures: [
             {
-                item: `3 morts dans des manifestations contre les restrictions COVID sur le marché central de Kinshasa 
+                item: `3 morts dans des manifestations contre les restrictions COVID sur le marché central de Kinshasa
         (les commerçants faisaient du commerce malgré la fermeture obligatoire)`,
                 zones: ["Kinshasa"]
             },

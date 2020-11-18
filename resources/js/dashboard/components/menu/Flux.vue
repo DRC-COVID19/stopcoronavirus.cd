@@ -183,7 +183,7 @@ export default {
         preference_start: PREFERENCE_START,
         preference_end: PREFERENCE_END,
         observation_start: "2020-03-19",
-        observation_end: "2020-06-29",
+        observation_end: "2020-08-12",
         fluxGeoGranularity: 2,
         fluxTimeGranularity: 1,
         time_start: "06:00",
@@ -191,7 +191,7 @@ export default {
       },
       dateRangeObservation: {
         startDate: new Date("03/19/2020 06:00"),
-        endDate: new Date("06/29/2020 23:30:")
+        endDate: new Date("12/08/2020 23:30:")
       },
       fluxPredefinedInput: FLUX_PREDEFINED_INPUT,
       fluxFilterInput: "",
