@@ -16,7 +16,7 @@ class CreateAfricelTravelProvincesTable extends Migration
         Schema::create('africel_travel_provinces', function (Blueprint $table) {
             $table->id();
             $table->string('province_name');
-            $table->date('date');
+            $table->string('date');
             $table->double('volume');
             $table->timestamps();
         });
