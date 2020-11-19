@@ -15,6 +15,12 @@ class CreateAfricelFlowInterZonesTable extends Migration
     {
         Schema::create('africel_flow_inter_zones', function (Blueprint $table) {
             $table->id();
+            $table->string('zone_A');
+            $table->string('zone_B');
+            $table->string('date');
+            $table->double('flow_AB');
+            $table->double('flow-BA');
+            $table->double('flow_tot');
             $table->timestamps();
         });
     }

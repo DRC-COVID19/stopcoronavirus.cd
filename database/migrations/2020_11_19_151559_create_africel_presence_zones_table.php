@@ -15,6 +15,9 @@ class CreateAfricelPresenceZonesTable extends Migration
     {
         Schema::create('africel_presence_zones', function (Blueprint $table) {
             $table->id();
+            $table->string('zone_name');
+            $table->string('date');
+            $table->double('volume');
             $table->timestamps();
         });
     }
