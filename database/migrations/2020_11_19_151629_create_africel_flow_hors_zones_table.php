@@ -19,7 +19,6 @@ class CreateAfricelFlowHorsZonesTable extends Migration
             $table->string('date');
             $table->double('flow_out');
             $table->double('flow_in');
-            $table->double('flow_out');
             $table->double('flow_tot');
             $table->timestamps();
         });
