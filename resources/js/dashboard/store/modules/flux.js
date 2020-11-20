@@ -13,7 +13,8 @@ export default {
     tendanceChartSelectedValue: null,
     isProvinceStatSeeing: false,
     legendHover: null, // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
-    typePresence: 1
+    typePresence: 1,
+    afriFluxType: 1,
   },
   mutations: {
     setIsWatchingfluxGeoOptions(state, payload) {
@@ -58,6 +59,10 @@ export default {
     setTypePresence(state, payload) {
       state.typePresence = payload;
     },
+    setAfriFluxType(state, payload) {
+      console.log(payload);
+      state.afriFluxType = payload;
+    }
   },
   actions: {
     resetState({ state }) {
