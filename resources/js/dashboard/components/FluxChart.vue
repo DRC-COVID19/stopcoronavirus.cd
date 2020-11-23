@@ -1563,18 +1563,18 @@ export default {
         if (buttonResetZoom) {
          buttonResetZoom.click();
   }
-        
+
         this.configBarChart[ref].options.plugins.crosshair.zoom.enabled=false;
         this.$refs[ref].style.height = "200px";
         this.$refs[ref].style.MaxHeight = "200px";
         this.$refs[ref].height = "200px";
-        
+
         this.lineCharts[ref].update();
       } else {
         this.configBarChart[ref].options.plugins.crosshair.zoom.enabled=true;
         this.$refs[ref].style.height = "400px";
         this.$refs[ref].height = "400px";
-        
+
         this.lineCharts[ref].update();
       }
     },
