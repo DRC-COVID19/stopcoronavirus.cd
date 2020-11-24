@@ -78,27 +78,7 @@
               </b-form-group>
             </b-col>
             <b-col cols="12" md="9">
-              <b-form-group
-                :invalid-feedback="
-                  flux24Errors.observation_start || flux24Errors.observation_end
-                    ? `${
-                        flux24Errors.observation_start
-                          ? flux24Errors.observation_start[0]
-                          : ''
-                      } ${
-                        flux24Errors.observation_end
-                          ? flux24Errors.observation_end[0]
-                          : ''
-                      }`
-                    : null
-                "
-                :state="
-                  (flux24Errors.observation_start &&
-                    flux24Errors.observation_start.lenght > 0) ||
-                  (flux24Errors.observation_end &&
-                    flux24Errors.observation_end.lenght > 0)
-                "
-              >
+              <b-form-group>
                 <div class="d-flex">
                   <div class="mr-2">
                     <date-range-picker
@@ -114,13 +94,20 @@
                       @update="UpdatePreferenceDate"
                       :calculate-position="dateRangerPosition"
                       class="style-picker"
+                      :class="{ 'style-picker-has-error': referenceHasError }"
                     >
                       <template v-slot:input="picker"
                         >{{ picker.startDate | date }} -
                         {{ picker.endDate | date }}</template
                       >
                     </date-range-picker>
-                    <span class="range-lbl">Péd. Référence</span>
+                    <span class="range-lbl" :class="{'text-danger':referenceHasError}">Péd. Référence </span>
+                    <span
+                      v-if="referenceHasError"
+                      v-b-tooltip.hover
+                      :title="referenceErrorMessage"
+                      class="fa fa-info-circle text-danger text-right range-lbl"
+                    ></span>
                   </div>
                   <div>
                     <date-range-picker
@@ -256,6 +243,8 @@ export default {
       IsfluxParameterCollapse: false,
       fluxPredefinedControl: null,
       isHotspot: false,
+      referenceThrowError: false,
+      referenceErrorMessage: null,
     };
   },
   filters: {
@@ -303,7 +292,8 @@ export default {
         this.fluxForm.fluxGeoOptions &&
         this.fluxForm.fluxGeoOptions.length > 0 &&
         this.dateRangeObservation.startDate &&
-        this.dateRangeObservation.endDate
+        this.dateRangeObservation.endDate &&
+        !this.referenceHasError
       );
     },
     rangeData() {
@@ -312,6 +302,9 @@ export default {
         format: this.isHotspot ? "dd-mm-yyyy HH:mm" : "dd-mm-yyyy",
         drops: "up",
       };
+    },
+    referenceHasError() {
+      return this.referenceThrowError;
     },
   },
   watch: {
@@ -344,8 +337,17 @@ export default {
       }
     },
     UpdatePreferenceDate({ startDate, endDate }) {
-      this.fluxForm.preference_start = moment(startDate).format("YYYY/MM/DD");
-      this.fluxForm.preference_end = moment(endDate).format("YYYY/MM/DD");
+      const localStartDate = moment(startDate);
+      const localEndDate = moment(endDate);
+      const dateDiff = localEndDate.diff(localStartDate, "days");
+      this.referenceThrowError = false;
+      this.referenceErrorMessage = null;
+      if (dateDiff < 7) {
+        this.referenceThrowError = true;
+        this.referenceErrorMessage = "La plage doit avoir au moins 7 jours";
+      }
+      this.fluxForm.preference_start = localStartDate.format("YYYY/MM/DD");
+      this.fluxForm.preference_end = localEndDate.format("YYYY/MM/DD");
       this.dateRangeObservation = { startDate: null, endDate: null };
       this.fluxForm.observation_start = null;
       this.fluxForm.observation_end = null;
@@ -380,6 +382,8 @@ export default {
       this.fluxForm.observation_end = null;
       this.fluxForm.preference_start = null;
       this.fluxForm.preference_end = null;
+      this.referenceThrowError = false;
+      this.referenceErrorMessage = null;
       this.resetFluxPredefinedControl();
     },
     changeCalendarLimit() {
@@ -405,7 +409,8 @@ export default {
       this.$set(this.fluxForm, "fluxGeoOptions", []);
       this.$set(this.fluxForm, "fluxTimeGranularity", 1);
       this.isHotspot = false;
-
+      this.referenceThrowError = false;
+      this.referenceErrorMessage = null;
       switch (value) {
         case 1:
           this.fluxGeoOptions = this.fluxProvinces;
