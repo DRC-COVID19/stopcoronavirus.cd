@@ -1,7 +1,7 @@
 import moment from 'moment'
 export default {
     methods: {
-        moment(value, local = 'fr') {
+        moment(value, local = 'en') {
             moment.locale(local);
             return moment(value);
         },
@@ -36,7 +36,7 @@ export default {
             observations.sort((a, b) => {
               return new Number(a.volume ?? 0) > new Number(b.volume ?? 0) ? 1 : -1;
             });
-            
+
             const countReference = references.length;
             if (countReference > 0) {
                 if (countReference % 2 == 0) {
@@ -131,7 +131,7 @@ export default {
                 },
               ],
             };
-      
+
             this.configBarChart2 = {
               type: "horizontalBar",
               data: dataChart,
@@ -179,7 +179,7 @@ export default {
                 },
               },
             };
-      
+
             if (this.barChart2[ref]) this.barChart2[ref].destroy();
             this.barChart2[ref] = new Chart(
               this.$refs[ref].getContext("2d"),

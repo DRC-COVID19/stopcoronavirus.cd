@@ -18377,7 +18377,7 @@ h3 {
 
 .column-left .vue-daterange-picker,
 .top-menu .vue-daterange-picker {
-  width: 80%;
+  width: 100%;
 }
 
 .column-left .vue-daterange-picker div,
@@ -18926,6 +18926,10 @@ h3 {
 
 .mapboxgl-canvas {
   cursor: pointer !important;
+}
+
+.style-picker-has-error .form-control {
+  border-color: #dc3545 !important;
 }
 
 .footer-partners {
