@@ -342,7 +342,7 @@ export default {
       const dateDiff = localEndDate.diff(localStartDate, "days");
       this.referenceThrowError = false;
       this.referenceErrorMessage = null;
-      if (dateDiff < 7) {
+      if (dateDiff+1 < 7) {
         this.referenceThrowError = true;
         this.referenceErrorMessage = "La plage doit avoir au moins 7 jours";
       }
