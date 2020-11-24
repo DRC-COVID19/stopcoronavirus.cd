@@ -500,6 +500,10 @@
         </b-col>
       </b-row>
     </b-container>
+    <!-- <ChartToolTip
+      :item="toolTipItem"
+      :position="toolTipItem ? toolTipItem.position : null"
+    /> -->
   </div>
 </template>
 
@@ -511,8 +515,10 @@ import GlobalProvice from "./flux/GLobalProvince";
 import ToggleButton from "../components/ToggleButton";
 import { difference } from "@turf/turf";
 import { debounce, includes } from "lodash";
+import ChartToolTip from "./ChartToolTip";
 import Chart from "chart.js";
 import "chartjs-plugin-annotation";
+
 Chart.defaults.global.defaultFontFamily = "'Rubik',sans-serif";
 Chart.defaults.global.defaultFontColor = "#7b7f88";
 
@@ -520,6 +526,7 @@ export default {
   components: {
     GlobalProvice,
     ToggleButton,
+    ChartToolTip,
   },
   props: {
     flux24Daily: {
@@ -612,7 +619,8 @@ export default {
       targetZone: null,
       typeMobilite: 1,
       fluxGeoGranularity: 2,
-      areZoomable:[]
+      areZoomable: [],
+      toolTipItem: {},
     };
   },
   computed: {
@@ -1070,20 +1078,46 @@ export default {
             },
           },
           tooltips: {
+            enabled: true,
             mode: "interpolate",
             intersect: false,
+            // custom: (tooltipModel) => {
+            //   if (!tooltipModel || !tooltipModel.dataPoints) {
+            //     this.toolTipItem = null;
+            //     return;
+            //   }
+            //   const i = tooltipModel.dataPoints[0];
+            //   const element = data.find(
+            //     (x) => x.date == i.xLabel.format("YYYY-MM-DD")
+            //   );
+
+            //   // `this` will be the overall tooltip
+            //   const position = this.lineCharts[
+            //     ref
+            //   ].canvas.getBoundingClientRect();
+            //   element.position = {
+            //     left: position.left + tooltipModel.caretX + window.pageXOffset,
+            //     top: position.top + tooltipModel.caretY + window.pageYOffset,
+            //   };
+            //   this.toolTipItem = element;
+            //   console.log("dataPoints", tooltipModel);
+            // },
             callbacks: {
               title: (a, d) => {
                 return this.moment(a[0].xLabel).format("DD.MM");
               },
-              label: function (i, d) {
-                return (
-                  d.datasets[i.datasetIndex].label +
-                  ": " +
-                  Math.round(i.yLabel, 0).toLocaleString(undefined, {
-                    minimumFractionDigits: 0,
-                  })
+              label: (i, d) => {
+                const element = data.find(
+                  (x) => x.date == i.xLabel.format("YYYY-MM-DD")
                 );
+                if (!element) {
+                  return;
+                }
+                return [
+                  `volume: ${this.formatCash(element.volume)}`,
+                  `Médiane: ${this.formatCash(element.volume_reference)}`,
+                  `Vol. en %: ${Math.round(element.percent)}`,
+                ];
               },
             },
           },
@@ -1103,16 +1137,16 @@ export default {
                 ticks: {
                   fontSize: 9,
                   beginAtZero: true,
-                   major: {
+                  major: {
                     enabled: true,
                     fontStyle: "bold",
                     fontColor: PALETTE.flux_in_color,
-                    fontSize: 10
-                  }
+                    fontSize: 10,
+                  },
                 },
                 time: {
                   unit: "day",
-                   unitStepSize: 1,
+                  unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM",
                   },
@@ -1124,8 +1158,8 @@ export default {
                 display: true,
                 ticks: {
                   fontSize: 9,
-                  min: min < -100 ? (min+10).toFixed(0) : -100,
-                  max: max >= 100 ? (max+10).toFixed(0) : 100,
+                  min: min < -100 ? (min + 10).toFixed(0) : -100,
+                  max: max >= 100 ? (max + 10).toFixed(0) : 100,
                   callback: function (value) {
                     return value + "%";
                   },
@@ -1143,7 +1177,10 @@ export default {
       let reference = this.$refs[ref];
       reference.style.height = 200;
       if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
-      this.lineCharts[ref] = new Chart(reference.getContext("2d"), this.configBarChart[ref]);
+      this.lineCharts[ref] = new Chart(
+        reference.getContext("2d"),
+        this.configBarChart[ref]
+      );
       reference.style.height = 200;
     },
     flux30Chart(data, ref, color, title = null) {
@@ -1198,12 +1235,12 @@ export default {
                 width: 1, // crosshair line width
                 dashPattern: [5, 5], // crosshair line dash pattern
               },
-               zoom: {
-                enabled:  false, // enable zooming
+              zoom: {
+                enabled: false, // enable zooming
                 zoomboxBackgroundColor: "rgba(66,133,244,0.2)", // background color of zoom box
                 zoomboxBorderColor: "#48F", // border color of zoom box
                 zoomButtonText: "Reset Zoom", // reset zoom button text
-                zoomButtonClass: "reset-zoom" // reset zoom button class
+                zoomButtonClass: "reset-zoom", // reset zoom button class
               },
               sync: {
                 enabled: false, // enable trace line syncing with other charts
@@ -1270,8 +1307,8 @@ export default {
                 display: true,
                 ticks: {
                   fontSize: 9,
-                  min: min < -100 ? (min+10).toFixed(0) : -100,
-                  max: max >= 100 ? (max+10).toFixed(0) : 100,
+                  min: min < -100 ? (min + 10).toFixed(0) : -100,
+                  max: max >= 100 ? (max + 10).toFixed(0) : 100,
                   callback: function (value) {
                     return value + "%";
                   },
@@ -1288,7 +1325,10 @@ export default {
       };
       let reference = this.$refs[ref];
       if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
-      this.lineCharts[ref] = new Chart(reference.getContext("2d"), this.configBarChart[ref]);
+      this.lineCharts[ref] = new Chart(
+        reference.getContext("2d"),
+        this.configBarChart[ref]
+      );
       reference.style.height = 200;
     },
     fluxMobilityFluxZone(InputData, ref, key, color) {
@@ -1559,19 +1599,19 @@ export default {
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
-        const buttonResetZoom=this.lineCharts[ref].crosshair.button;
+        const buttonResetZoom = this.lineCharts[ref].crosshair.button;
         if (buttonResetZoom) {
-         buttonResetZoom.click();
-  }
+          buttonResetZoom.click();
+        }
 
-        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled=false;
+        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = false;
         this.$refs[ref].style.height = "200px";
         this.$refs[ref].style.MaxHeight = "200px";
         this.$refs[ref].height = "200px";
 
         this.lineCharts[ref].update();
       } else {
-        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled=true;
+        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = true;
         this.$refs[ref].style.height = "400px";
         this.$refs[ref].height = "400px";
 
