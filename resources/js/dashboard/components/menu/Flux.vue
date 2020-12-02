@@ -101,7 +101,7 @@
                         {{ picker.endDate | date }}</template
                       >
                     </date-range-picker>
-                    <span class="range-lbl" :class="{'text-danger':referenceHasError}">Période d'information </span>
+                    <span class="range-lbl" :class="{'text-danger':referenceHasError}">Période de référence </span>
                     <span
                       v-if="referenceHasError"
                       v-b-tooltip.hover
