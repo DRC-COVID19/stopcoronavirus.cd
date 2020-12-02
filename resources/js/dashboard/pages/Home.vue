@@ -242,6 +242,103 @@
                 </b-tab>
               </b-tabs>
             </transition>
+            <b-tabs pills card>
+              <b-tab
+                title="Données Covid-19"
+                v-if="(!!covidCases || isLoading) && activeMenu == 2"
+                :active="!!covidCases"
+              >
+                <SideCaseCovid
+                  :covidCases="covidCases"
+                  :isLoading="isLoading"
+                />
+              </b-tab>
+              <b-tab
+                title="Données Orientation médicale covid-19"
+                v-if="
+                  (orientationCount != null || isLoading) && activeMenu == 6
+                "
+                :active="orientationCount != null"
+              >
+                <SideOrientation
+                  :medicalOrientations="medicalOrientations"
+                  :isLoading="isLoading"
+                />
+              </b-tab>
+              <b-tab title="Province" v-if="activeMenu == 1">
+                <b-row>
+                  <b-col cols="6" class="pr-2">
+                    <skeleton-loading v-if="isLoading">
+                      <square-skeleton
+                        :boxProperties="{
+                          width: '100%',
+                          height: '830px',
+                        }"
+                      ></square-skeleton>
+                    </skeleton-loading>
+                    <GlobalProvince
+                      v-else
+                      title="Mobilité entrante"
+                      :color="palette.flux_in_color"
+                      :globalData="fluxGlobalIn"
+                      reference="fluxglobalIn"
+                    />
+                  </b-col>
+                  <b-col cols="6" class="pl-2">
+                    <skeleton-loading v-if="isLoading">
+                      <square-skeleton
+                        :boxProperties="{
+                          width: '100%',
+                          height: '830px',
+                        }"
+                      ></square-skeleton>
+                    </skeleton-loading>
+                    <GlobalProvince
+                      v-else
+                      title="Mobilité sortante"
+                      :color="palette.flux_out_color"
+                      :globalData="fluxGlobalOut"
+                      reference="fluxglobalOut"
+                    />
+                  </b-col>
+                </b-row>
+              </b-tab>
+              <b-tab
+                title="Mobilité"
+                v-if="
+                  (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
+                  !isFirstLoad &&
+                  this.activeMenu == 1
+                "
+                :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
+              >
+                <FluxChart
+                  :flux24Daily="flux24Daily"
+                  :flux24DailyIn="flux24DailyIn"
+                  :flux24DailyOut="flux24DailyOut"
+                  :flux24DailyGenerale="flux24DailyGenerale"
+                  :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
+                  :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
+                  :fluxDataGroupedByDateGen="fluxDataGroupedByDateGen"
+                  :flux24Presence="flux24Presence"
+                  :flux24PresenceDailyIn="flux24PresenceDailyInFormat"
+                  :fluxZoneGlobalIn="fluxZoneGlobalIn"
+                  :fluxZoneGlobalOut="fluxZoneGlobalOut"
+                  :mobiliteGenerale="showMobiliteGenerale"
+                  :topHealthZoneConfirmed="topHealthZoneConfirmed"
+                  :globalProgress="globalProgress"
+                  :isLoading="isLoading"
+                  :flux30Daily="flux30Daily"
+                />
+              </b-tab>
+              <b-tab
+                title="Infrastructures"
+                v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
+                :active="!!selectedHospital || activeMenu == 5"
+              >
+                <HospitalSituation :hospitalTotalData="hospitalTotalData" />
+              </b-tab>
+            </b-tabs>
           </b-card>
         </b-col>
       </b-row>
@@ -1330,6 +1427,8 @@ export default {
       const values = Object.assign({}, input);
       values.preference_start = "2020-05-17";
       values.preference_end = "2020-05-31";
+      // values.preference_start = "2020-05-17";
+      // values.preference_end = "2020-05-31";
 
       const mapsRequest = axios.get(urlMaps, {
         params: values,
@@ -1364,6 +1463,9 @@ export default {
               const referenceData = references.find(
                 (x) => x.origin == item.origin
               );
+              if (!item || !referenceData) {
+                return;
+              }
               const difference = item.volume - referenceData.volume;
               const percent = (difference / referenceData.volume) * 100;
               if (referenceData) {

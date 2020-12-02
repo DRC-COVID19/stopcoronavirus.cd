@@ -75,13 +75,14 @@ export default {
       const labels = [];
       const localData = [];
       data.map((x) => {
-        if (this.fluxTimeGranularity == 1) {
+        if (this.fluxTimeGranularity == 1 || this.fluxTimeGranularity == 2) {
           // labels.push(new Date(x.date));
-          localData.push({ x: moment(x.date), y: x.volume });
+          localData.push({ x: moment(x.date), y: x.volume, date: x.date });
         } else {
           x.map((item) => {
             // labels.push(moment(`${item.date} ${item.hour}`));
             localData.push({
+              date: item.date,
               x: moment(`${item.date} ${item.hour}`),
               y: item.volume,
             });
@@ -90,6 +91,23 @@ export default {
       });
       const maxDate = moment.max(localData.map((item) => item.x));
       const minDate = moment.min(localData.map((item) => item.x));
+
+      const mainEvent = DRC_COVID_EVENT.filter(
+        (x) =>
+          x.measures.some((z) =>
+            z.zones.some((y) => [...this.fluxGeoOptions, "ALL"].includes(y))
+          ) &&
+          new Date(x.date) >= minDate &&
+          new Date(x.date) <= maxDate
+      ).map((item) => {
+        const element = localData.find((x) => x.date == item.date);
+        return {
+          x: moment(item.date),
+          y: element.y,
+          measures: item.measures,
+        };
+      });
+
       this.configChar = {
         type: "line",
         data: {
@@ -108,22 +126,37 @@ export default {
               lineTension: 0.3,
               xAxisID: "x-axis-0",
             },
+            {
+              label: "Event",
+              fill: true,
+              borderColor: "#225ea8",
+              backgroundColor: "#225ea8ad",
+              data: mainEvent,
+              interpolate: true,
+              // showLine: false,
+              pointStyle: "circle",
+              radius: 5,
+              borderWidth: 1.5,
+              lineTension: 0.3,
+              xAxisID: "x-axis-0",
+              type: "bubble",
+            },
           ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           // events: ["click"],
-          onClick: (e, argument) => {
-            if (argument.length > 0) {
-              const firstPoint = argument[0];
-              const value =
-                myLineChart2.data.datasets[firstPoint._datasetIndex].data[
-                  firstPoint._index
-                ];
-              this.setTendanceChartSelectedValue(value);
-            }
-          },
+          // onClick: (e, argument) => {
+          //   if (argument.length > 0) {
+          //     const firstPoint = argument[0];
+          //     const value =
+          //       myLineChart2.data.datasets[firstPoint._datasetIndex].data[
+          //         firstPoint._index
+          //       ];
+          //     this.setTendanceChartSelectedValue(value);
+          //   }
+          // },
           legend: {
             display: false,
           },
@@ -183,80 +216,90 @@ export default {
           },
           tooltips: {
             enabled: true,
-            mode: "interpolate",
+            // mode: "interpolate",
             intersect: false,
             callbacks: {
               title: (a, d) => {
                 let titleFormat = this.moment(a[0].xLabel).format("DD.MM.Y");
-                if (this.fluxTimeGranularity == 2) {
+                if (this.fluxTimeGranularity == 3) {
                   titleFormat = this.moment(a[0].xLabel).format(
                     "DD.MM.Y HH:mm"
                   );
                 }
                 return titleFormat;
               },
-              label: function (i, d) {
-                return (
-                  d.datasets[i.datasetIndex].label + ": " + i.yLabel.toFixed(0)
+              label: (i, d) =>{
+                if (i.datasetIndex==1) {
+                  return;
+                }
+                const element = mainEvent.find(
+                  (x) =>x.x.format("DD.MM.Y") == moment(i.xLabel).format("DD.MM.Y")
                 );
+                const measures=[];
+                if (element) {
+                  element.measures.forEach(item=>{
+                    measures.push(item.item)
+                  });
+                }
+                return [`Volume:${this.formatCash(i.yLabel)}`,...measures];
               },
             },
           },
-          annotation: {
-            events: ["mouseenter", "mouseleave"],
-            drawTime: "afterDraw",
-            annotations: DRC_COVID_EVENT.filter(
-              (x) =>
-                x.measures.some((z) =>
-                  z.zones.some((y) =>
-                    [...this.fluxGeoOptions, "ALL"].includes(y)
-                  )
-                ) &&
-                new Date(x.date) >= minDate &&
-                new Date(x.date) <= maxDate
-            ).map((item, index,array) => {
-              let xAdjust=0;
-              if (index==array.length-1) {
-                xAdjust=80;
-              }
-              return {
-                id: "line" + index,
-                type: "line",
-                mode: "vertical",
-                scaleID: "x-axis-0",
-                value: new Date(item.date),
-                borderColor: item.isImportant
-                  ? PALETTE.flux_presence
-                  : PALETTE.flux_out_color,
-                borderWidth: item.isImportant ? 3 : 2,
-                label: {
-                  fontSize:9,
-                  xAdjust,
-                  content: item.measures
-                    .filter((x) =>
-                      x.zones.some((y) =>
-                        [...this.fluxGeoOptions, "ALL"].includes(y)
-                      )
-                    )
-                    .map((x) => x.item),
-                  enabled: false,
-                  position: "top",
-                },
-                onMouseenter(e) {
-                  this.options.borderColor = PALETTE.flux_in_color;
-                  this.options.label.enabled = true;
-                  myLineChart2.update();
-                },
-                onMouseleave(e) {
-                  this.options.borderColor = item.isImportant
-                    ? PALETTE.flux_presence
-                    : PALETTE.flux_out_color;
-                  this.options.label.enabled = false;
-                  myLineChart2.update();
-                },
-              };
-            }),
-          },
+          // annotation: {
+          //   events: ["mouseenter", "mouseleave"],
+          //   drawTime: "afterDraw",
+          //   annotations: DRC_COVID_EVENT.filter(
+          //     (x) =>
+          //       x.measures.some((z) =>
+          //         z.zones.some((y) =>
+          //           [...this.fluxGeoOptions, "ALL"].includes(y)
+          //         )
+          //       ) &&
+          //       new Date(x.date) >= minDate &&
+          //       new Date(x.date) <= maxDate
+          //   ).map((item, index, array) => {
+          //     let xAdjust = 0;
+          //     if (index == array.length - 1) {
+          //       xAdjust = 80;
+          //     }
+          //     return {
+          //       id: "line" + index,
+          //       type: "line",
+          //       mode: "vertical",
+          //       scaleID: "x-axis-0",
+          //       value: new Date(item.date),
+          //       borderColor: item.isImportant
+          //         ? PALETTE.flux_presence
+          //         : PALETTE.flux_out_color,
+          //       borderWidth: item.isImportant ? 3 : 2,
+          //       label: {
+          //         fontSize: 9,
+          //         xAdjust,
+          //         content: item.measures
+          //           .filter((x) =>
+          //             x.zones.some((y) =>
+          //               [...this.fluxGeoOptions, "ALL"].includes(y)
+          //             )
+          //           )
+          //           .map((x) => x.item),
+          //         enabled: false,
+          //         position: "top",
+          //       },
+          //       onMouseenter(e) {
+          //         this.options.borderColor = PALETTE.flux_in_color;
+          //         this.options.label.enabled = true;
+          //         myLineChart2.update();
+          //       },
+          //       onMouseleave(e) {
+          //         this.options.borderColor = item.isImportant
+          //           ? PALETTE.flux_presence
+          //           : PALETTE.flux_out_color;
+          //         this.options.label.enabled = false;
+          //         myLineChart2.update();
+          //       },
+          //     };
+          //   }),
+          // },
           plugins: {
             crosshair: {
               sync: {

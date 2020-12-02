@@ -24,21 +24,24 @@
             <h3 class="mb-4">Principales conclusions</h3>
             <div class="sondage-items">
                 <div class="sondage-item">
-                    <span> 55%</span>
-                    <p>des ménages ont vu leurs revenus baisser</p>
+                    <span> 57%</span>
+                    <p>La proportion des ménages déclarant une baisse de leurs revenus comparativement au niveau précédant la pandémie reste élevée</p>
                 </div>
                 <div class="sondage-item">
-                  <span> 94%</span>
-                  <p>des ménages en RDC ont réduit leur consommation de biens et services de base pendant la pandémie.</p>
+                  <span> 57%</span>
+                  <p>des ménages ont signalé une augmentation des coûts auxquels ils ont dû faire face en septembre comparativement au mois d’août où cette proportion était de 50%.</p>
                 </div>
                 <div class="sondage-item">
-                  <span> 84%</span>
-                  <p>des ménages ont le sentiment que leur situation financière à long terme est susceptible d'évoluer négativement en raison de la pandémie de la COVID-19
-                  </p>
+                  <span> 89%</span>
+                  <p>des ménages estiment que la pandémie aura un impact négatif à long terme sur leurs finances.</p>
                 </div>
                 <div class="sondage-item">
-                  <span> 80%</span>
-                  <p>des ménages déclarent ne pas avoir connaissance d'une mesure ou d’une intervention décidée par le gouvernement pour répondre à leur difficulté.</p>
+                  <span> 2/3</span>
+                  <p>des ménages à faibles revenus ont vu leur consommation en nourriture et en eau diminuer comparativement au niveau précédant la pandémie.</p>
+                </div>
+                <div class="sondage-item">
+                  <span>39%</span>
+                  <p>des ménages ne savent pas s'ils pourront effectuer leur prochain remboursement de dette.</p>
                 </div>
             </div>
         </div>
@@ -55,7 +58,7 @@
                     <div class="illustrator">
                         <img src="{{ asset('/img/icon/calendar.png')}}" />
                     </div>
-                    <p>Du 14 août au 11 septembre 2020</p>
+                    <p>Du 22 Septembre au 13 Octobre 2020</p>
                 </div>
             </div>
         </div>

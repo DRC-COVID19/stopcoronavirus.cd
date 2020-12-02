@@ -364,7 +364,7 @@
     font-size: 0.8rem;
   }
   .vue-daterange-picker {
-    width: 80%;
+    width: 100%;
     div {
       background: $dash-input-backColor;
       height: 32px;
@@ -866,5 +866,10 @@
         position: relative;
       }
     }
+  }
+}
+.style-picker-has-error {
+  .form-control {
+    border-color: #dc3545 !important;
   }
 }
