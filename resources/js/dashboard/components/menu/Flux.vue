@@ -308,8 +308,8 @@ export default {
     },
   },
   watch: {
-    fluxZones() {
-      this.fluxGeoGranularityChange(2);
+    fluxProvinces() {
+      this.fluxGeoGranularityChange(1);
     },
   },
   methods: {

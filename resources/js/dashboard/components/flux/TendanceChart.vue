@@ -218,6 +218,8 @@ export default {
             enabled: true,
             // mode: "interpolate",
             intersect: false,
+            bodyFontSize:10,
+            displayColors:false,
             callbacks: {
               title: (a, d) => {
                 let titleFormat = this.moment(a[0].xLabel).format("DD.MM.Y");
@@ -228,6 +230,7 @@ export default {
                 }
                 return titleFormat;
               },
+
               label: (i, d) =>{
                 if (i.datasetIndex==1) {
                   return;
@@ -238,10 +241,14 @@ export default {
                 const measures=[];
                 if (element) {
                   element.measures.forEach(item=>{
-                    measures.push(item.item)
+                    let itemText=`* ${item.item}`;
+                    if (item.isSuite) {
+                        itemText=item.item;
+                    }
+                    measures.push(itemText);
                   });
                 }
-                return [`Volume:${this.formatCash(i.yLabel)}`,...measures];
+                return [`* Volume:${this.formatCash(i.yLabel)}`,...measures];
               },
             },
           },
