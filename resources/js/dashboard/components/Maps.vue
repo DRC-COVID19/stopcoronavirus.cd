@@ -647,7 +647,7 @@ export default {
     },
     stateHoverMouseMove(e) {
       if (e.features.length > 0) {
-        
+
         if (this.stateHover.hoveredStateId!=null) {
           map.setFeatureState(
             {
@@ -1077,7 +1077,7 @@ export default {
       this.setDomaineExtValues({
         min: domaineMin,
         max: domaineMax,
-        isPercent: false,
+        isPercent: true,
       });
 
       colorScaleNegative.range(PALETTE.inflow_negatif);
@@ -1659,7 +1659,7 @@ export default {
         });
       if (feature) {
         value = feature.properties.percent;
-        
+
         this.$set(this.ArcLayerSelectedObject, "item", {
           origin: feature.properties.origin,
           percent: feature.properties.percent,
