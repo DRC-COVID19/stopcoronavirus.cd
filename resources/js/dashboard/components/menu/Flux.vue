@@ -101,7 +101,7 @@
                         {{ picker.endDate | date }}</template
                       >
                     </date-range-picker>
-                    <span class="range-lbl" :class="{'text-danger':referenceHasError}">Période d'information </span>
+                    <span class="range-lbl" :class="{'text-danger':referenceHasError}">Période de référence </span>
                     <span
                       v-if="referenceHasError"
                       v-b-tooltip.hover
@@ -208,7 +208,7 @@ export default {
         preference_end: PREFERENCE_END,
         observation_start: "2020-03-19",
         observation_end: "2020-08-12",
-        fluxGeoGranularity: 2,
+        fluxGeoGranularity: 1,
         fluxTimeGranularity: 1,
         time_start: "06:00",
         time_end: "23:30",
@@ -280,7 +280,7 @@ export default {
         this.submitFluxForm();
       }
     );
-    this.fluxGeoGranularityChange(2);
+    this.fluxGeoGranularityChange(1);
   },
   computed: {
     ...mapState({
@@ -308,8 +308,8 @@ export default {
     },
   },
   watch: {
-    fluxZones() {
-      this.fluxGeoGranularityChange(2);
+    fluxProvinces() {
+      this.fluxGeoGranularityChange(1);
     },
   },
   methods: {
