@@ -10,21 +10,30 @@
 import Waiting from "./components/Waiting";
 export default {
   components: {
-    Waiting
+    Waiting,
   },
   data() {
     return {
-      isLoading: false
+      isLoading: false,
     };
   },
   mounted() {
     this.$store.watch(
-      state => state.auth.isLogout,
-      value => {
+      (state) => state.auth.isLogout,
+      (value) => {
         this.isLoading = value;
       }
     );
+
+    this.$store.watch(
+      (state) => state.auth.user,
+      (user) => {
+        if (user && user.email) {
+          this.$ga.set({ userId: user.email });
+        }
+      }
+    );
   },
-  methods: {}
+  methods: {},
 };
 </script>

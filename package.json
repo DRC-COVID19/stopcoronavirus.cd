@@ -41,6 +41,7 @@
         "moment": "^2.26.0",
         "vue": "^2.6.11",
         "vue-airbnb-style-datepicker": "^2.7.1",
+        "vue-analytics": "^5.22.1",
         "vue-ellipse-progress": "^1.2.0",
         "vue-form-wizard": "^0.8.4",
         "vue-fullscreen": "^2.1.6",
