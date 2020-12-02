@@ -15264,7 +15264,6 @@ a.text-dark:focus {
   align-items: center;
   justify-content: center;
   vertical-align: middle;
-  flex-shrink: 0;
   width: 2.5rem;
   height: 2.5rem;
   font-size: inherit;
@@ -15357,7 +15356,7 @@ a.text-dark:focus {
   border-radius: 10em;
   font-size: 70%;
   font-weight: 700;
-  z-index: 1;
+  z-index: 5;
 }
 
 .b-avatar-sm {
@@ -15397,7 +15396,7 @@ a.text-dark:focus {
 
 .b-avatar-group a.b-avatar:hover:not(.disabled):not(disabled),
 .b-avatar-group .btn.b-avatar:hover:not(.disabled):not(disabled) {
-  z-index: 1;
+  z-index: 3;
 }
 
 .b-calendar {
@@ -16221,16 +16220,6 @@ input[type=color].form-control:disabled {
   line-height: 1.5;
 }
 
-.media-aside {
-  display: flex;
-  margin-right: 1rem;
-}
-
-.media-aside-right {
-  margin-right: 0;
-  margin-left: 1rem;
-}
-
 .modal-backdrop {
   opacity: 0.5;
 }
@@ -16748,8 +16737,6 @@ input[type=color].form-control:disabled {
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.12);
   cursor: wait;
-  -webkit-mask-image: radial-gradient(white, black);
-          mask-image: radial-gradient(white, black);
 }
 
 .b-skeleton::before {
