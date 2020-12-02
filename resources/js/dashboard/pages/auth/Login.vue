@@ -78,7 +78,7 @@ export default {
           let dashboardRole = user.roles.find(x => x.name == "admin-dashboard");
           let hospitalRole = user.roles.find(x => x.name == "agent-hospital");
           let adminHospitalRole = user.roles.find(x => x.name == "admin-hospital");
-
+          // this.$ga.set({userId: user.email});
           if (dashboardRole || hospitalRole || adminHospitalRole) {
             this.$router
               .push({
