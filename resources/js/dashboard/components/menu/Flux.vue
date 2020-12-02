@@ -280,7 +280,7 @@ export default {
         this.submitFluxForm();
       }
     );
-    this.fluxGeoGranularityChange(2);
+    this.fluxGeoGranularityChange(1);
   },
   computed: {
     ...mapState({
