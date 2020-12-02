@@ -29,7 +29,12 @@ export default {
       (state) => state.auth.user,
       (user) => {
         if (user && user.email) {
-          this.$ga.set({ userId: user.email });
+          // console.log("user.email", user);
+          this.$ga.set(
+            "userId",
+            `${user.name.replace(" ", "_")}_kd_${user.id}`
+          );
+          //  ga("set", "userId", user.email)
         }
       }
     );
