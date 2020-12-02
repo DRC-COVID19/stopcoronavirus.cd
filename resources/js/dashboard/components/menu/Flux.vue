@@ -208,7 +208,7 @@ export default {
         preference_end: PREFERENCE_END,
         observation_start: "2020-03-19",
         observation_end: "2020-08-12",
-        fluxGeoGranularity: 2,
+        fluxGeoGranularity: 1,
         fluxTimeGranularity: 1,
         time_start: "06:00",
         time_end: "23:30",
