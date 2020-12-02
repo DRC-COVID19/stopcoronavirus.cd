@@ -101,7 +101,7 @@
                         {{ picker.endDate | date }}</template
                       >
                     </date-range-picker>
-                    <span class="range-lbl" :class="{'text-danger':referenceHasError}">Péd. Référence </span>
+                    <span class="range-lbl" :class="{'text-danger':referenceHasError}">Période d'information </span>
                     <span
                       v-if="referenceHasError"
                       v-b-tooltip.hover
@@ -129,7 +129,7 @@
                         {{ picker.endDate | date }}</template
                       >
                     </date-range-picker>
-                    <span class="range-lbl">Péd. Observation</span>
+                    <span class="range-lbl">Période d'observation</span>
                   </div>
                   <b-button
                     @click="clearObservationDate"

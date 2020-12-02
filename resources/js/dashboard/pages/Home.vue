@@ -7,7 +7,7 @@
       id="dash_home_page"
     >
       <Header />
-      <b-row class="mt-2 top-menu position-relative" style="z-index:8">
+      <b-row class="mt-2 top-menu position-relative" style="z-index: 8">
         <b-col>
           <MenuFlux
             v-show="activeMenu == 1"
@@ -105,7 +105,7 @@
               <MapsLegend
                 v-if="
                   (flux24DailyIn.length > 0 || flux30MapsData.length > 0) &&
-                    activeMenu == 1
+                  activeMenu == 1
                 "
               ></MapsLegend>
               <MapsLegendEpidemic
@@ -160,7 +160,7 @@
                       <square-skeleton
                         :boxProperties="{
                           width: '100%',
-                          height: '830px'
+                          height: '830px',
                         }"
                       ></square-skeleton>
                     </skeleton-loading>
@@ -177,7 +177,7 @@
                       <square-skeleton
                         :boxProperties="{
                           width: '100%',
-                          height: '830px'
+                          height: '830px',
                         }"
                       ></square-skeleton>
                     </skeleton-loading>
@@ -195,8 +195,8 @@
                 title="Mobilité"
                 v-if="
                   (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
-                    !isFirstLoad &&
-                    this.activeMenu == 1
+                  !isFirstLoad &&
+                  this.activeMenu == 1
                 "
                 :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
               >
@@ -320,7 +320,7 @@ import {
   OBSERVATION_END,
   PALETTE,
   PREFERENCE_START,
-  PREFERENCE_END
+  PREFERENCE_END,
 } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
@@ -354,7 +354,7 @@ export default {
     MenuOrientation,
     MenuIndicateur,
     GlobalProvince,
-    About
+    About,
   },
   data() {
     return {
@@ -415,24 +415,25 @@ export default {
       isFirstLoad: true,
       disabledArc: false,
       flux30MapsData: [],
-      flux30Daily: []
+      flux30Daily: [],
     };
   },
   computed: {
     ...mapState({
-      hospitals: state => state.hospital.hospitalData,
-      hospitalCount: state => state.hospital.hospitalCount,
-      selectedHospital: state => state.hospital.selectedHospital,
-      hospitalTotalData: state => state.hospital.hospitalTotalData,
-      fluxMapStyle: state => state.flux.mapStyle,
-      activeMenu: state => state.nav.activeMenu,
-      healthZones: state => state.app.healthZones,
-      typePresence: state => state.flux.typePresence
+      hospitals: (state) => state.hospital.hospitalData,
+      hospitalCount: (state) => state.hospital.hospitalCount,
+      selectedHospital: (state) => state.hospital.selectedHospital,
+      hospitalTotalData: (state) => state.hospital.hospitalTotalData,
+      fluxMapStyle: (state) => state.flux.mapStyle,
+      activeMenu: (state) => state.nav.activeMenu,
+      healthZones: (state) => state.app.healthZones,
+      typePresence: (state) => state.flux.typePresence,
     }),
     hasRightSide() {
       return (
         (this.getHasCoviCases() && this.activeMenu == 2) ||
-        ((this.flux24DailyIn.length > 0 || this.flux30Daily.lenth>0) && this.activeMenu == 1) ||
+        ((this.flux24DailyIn.length > 0 || this.flux30Daily.lenth > 0) &&
+          this.activeMenu == 1) ||
         (this.hospitalCount != null && this.activeMenu == 5) ||
         (this.fluxGlobalIn.length > 0 && this.activeMenu == 1) ||
         (this.orientationCount != null && this.activeMenu == 6) ||
@@ -472,19 +473,19 @@ export default {
       return this.flux30Daily.length > 0;
     },
     flux24WithoutReference() {
-      return this.flux24.filter(x => !x.isReference);
+      return this.flux24.filter((x) => !x.isReference);
     },
     mapStyle() {
       return {
         height:
           this.getHasCoviCases() || this.getHasOrientation()
             ? `64vh`
-            : `calc(100vh - 52.5px)`
+            : `calc(100vh - 52.5px)`,
       };
     },
     isLoading() {
-      this.showBottom=false;
-      return Object.values(this.loadings).find(val => val === true)
+      this.showBottom = false;
+      return Object.values(this.loadings).find((val) => val === true)
         ? true
         : false;
     },
@@ -496,7 +497,7 @@ export default {
     showMaps() {
       if (this.activeMenu == 3 || this.activeMenu == 7) return false;
       return true;
-    }
+    },
   },
   mounted() {
     this.$set(this.loadings, "healthZoneGeo", true);
@@ -511,22 +512,22 @@ export default {
     this.getFluxHotSpot();
     this.getFluxProvinces();
     this.$store.watch(
-      state => state.hospital.isLoading,
-      value => {
+      (state) => state.hospital.isLoading,
+      (value) => {
         this.$set(this.loadings, "hospital", value);
       }
     );
     this.$store.watch(
-      state => state.indicator.isLoading,
-      value => {
+      (state) => state.indicator.isLoading,
+      (value) => {
         this.$set(this.loadings, "indicator", value);
       }
     );
     this.loadFluxGLobalData();
     this.loadTownships();
     this.$store.watch(
-      state => state.flux.fluxType,
-      value => {
+      (state) => state.flux.fluxType,
+      (value) => {
         if (value == 3 || value == 4) {
           this.disabledArc = true;
           this.setMapStyle(1);
@@ -541,7 +542,7 @@ export default {
       "userMe",
       "getHospitalsData",
       "getHealthZone",
-      "getFluxHotSpot"
+      "getFluxHotSpot",
     ]),
     ...mapMutations(["setMapStyle", "setFluxType"]),
     toggleBottomBar() {
@@ -560,7 +561,7 @@ export default {
         height = this.$refs.dash_home_page.clientHeight;
       }
       this.menuColunmStyle = {
-        height: `calc(${height} - 70px)`
+        height: `calc(${height} - 70px)`,
       };
     },
     getHasCoviCases() {
@@ -585,7 +586,7 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
-            data.map(function(d) {
+            data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
               healed.push(d.healed);
@@ -595,11 +596,11 @@ export default {
               confirmed,
               dead,
               healed,
-              labels
+              labels,
             };
             this.$set(this.loadings, "getCovidCases_stat", false);
           })
-          .catch(response => {
+          .catch((response) => {
             this.$set(this.loadings, "getCovidCases_stat", false);
           });
 
@@ -612,7 +613,7 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
-            data.map(function(d) {
+            data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
               healed.push(d.healed);
@@ -622,11 +623,11 @@ export default {
               confirmed,
               dead,
               healed,
-              labels
+              labels,
             };
             this.$set(this.loadings, "getCovidCases_statdaily", false);
           })
-          .catch(response => {
+          .catch((response) => {
             this.$set(this.loadings, "getCovidCases_statdaily", false);
           });
 
@@ -635,13 +636,13 @@ export default {
         axios
           .get(`/api/dashboard/cavid-cases`)
           .then(({ data }) => {
-            let Features = data.map(value => {
+            let Features = data.map((value) => {
               confirmedCount += Number(value.confirmed);
               return {
                 type: "Feature",
                 geometry: {
                   type: "Point",
-                  coordinates: [value.longitude, value.latitude]
+                  coordinates: [value.longitude, value.latitude],
                 },
                 properties: {
                   name: value.name,
@@ -651,22 +652,22 @@ export default {
                   sick: Number(value.sick ?? 0),
                   last_update: value.last_update,
                   seriously: Number(value.seriously ?? 0),
-                  color: "#ED5F68"
-                }
+                  color: "#ED5F68",
+                },
               };
             });
             this.covidCases = {
               type: "geojson",
               data: {
                 type: "FeatureCollection",
-                features: Features
-              }
+                features: Features,
+              },
             };
 
             this.covidCasesCount = confirmedCount;
             this.$set(this.loadings, "getCovidCases_cases", false);
           })
-          .catch(response => {
+          .catch((response) => {
             this.$set(this.loadings, "getCovidCases_cases", false);
           });
       } else {
@@ -685,7 +686,7 @@ export default {
             let total_fin = 0;
             let total_fin5 = 0;
             let total_fin8 = 0;
-            data.map(item => {
+            data.map((item) => {
               total_fin += item.FIN ?? 0;
               total_fin5 += item.FIN5 ?? 0;
               total_fin8 += item.FIN8 ?? 0;
@@ -715,7 +716,7 @@ export default {
               fin5 = [],
               fin8 = [],
               labels = [];
-            data.map(item => {
+            data.map((item) => {
               fin.push(item.FIN);
               fin5.push(item.FIN5);
               fin8.push(item.FIN8);
@@ -725,7 +726,7 @@ export default {
               fin,
               fin5,
               fin8,
-              labels
+              labels,
             };
             this.$set(this.loadings, "orientation_medical_stats", false);
           })
@@ -741,7 +742,7 @@ export default {
       this.orientationLegend = [
         { color: "#3b9d3b", label: "Peu probale", caption: a },
         { color: "#ffb93b", label: "Probale", caption: b },
-        { color: "#ff3b3b", label: "Très probale", caption: c }
+        { color: "#ff3b3b", label: "Très probale", caption: c },
       ];
     },
     medicalOrientationChanged(item) {
@@ -820,9 +821,9 @@ export default {
       this.setFluxType(1);
       const computedFluxData = (dataObservations, dataReferences) => {
         const dataOut = [];
-        return dataObservations.map(item => {
+        return dataObservations.map((item) => {
           const references = dataReferences.filter(
-            x =>
+            (x) =>
               x.destination == item.destination &&
               x.origin == item.origin &&
               x.day == item.day
@@ -857,9 +858,9 @@ export default {
 
       const computedFluxPresenceData = (dataObservations, dataReferences) => {
         const dataOut = [];
-        return dataObservations.map(item => {
+        return dataObservations.map((item) => {
           const references = dataReferences.filter(
-            x => x.zone == item.zone && x.day == item.day
+            (x) => x.zone == item.zone && x.day == item.day
           );
           const count = references.length;
           if (count > 0) {
@@ -999,7 +1000,7 @@ export default {
       this.$set(this.loadings, "urlDaily", true);
       axios
         .get(urlDaily, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24Daily = data;
@@ -1015,19 +1016,19 @@ export default {
       this.$set(this.loadings, "urlDailyIn", true);
       axios
         .get(urlDailyIn, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           // this.flux24DailyIn = computedFluxData(
           //   data.observations,
           //   data.references
           // );
-          const groupObservations = groupBy(data.observations, d => d.origin);
-          const groupReferences = groupBy(data.references, d => d.origin);
+          const groupObservations = groupBy(data.observations, (d) => d.origin);
+          const groupReferences = groupBy(data.references, (d) => d.origin);
           Object.entries(groupObservations).forEach(([key, value]) => {
             this.flux24DailyIn.push({
               references: groupReferences[key],
-              observations: groupObservations[key]
+              observations: groupObservations[key],
             });
           });
 
@@ -1048,7 +1049,7 @@ export default {
       this.$set(this.loadings, "urlDailyOut", true);
       axios
         .get(urlDailyOut, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           // this.flux24DailyOut = computedFluxData(
@@ -1057,28 +1058,31 @@ export default {
           // );
           const groupObservations = groupBy(
             data.observations,
-            d => d.destination
+            (d) => d.destination
           );
-          const groupReferences = groupBy(data.references, d => d.destination);
+          const groupReferences = groupBy(
+            data.references,
+            (d) => d.destination
+          );
           if (values.fluxTimeGranularity == 2) {
             const referenceGroupByDate = [];
             Object.entries(groupReferences).forEach(([key, value]) => {
               referenceGroupByDate.push(
-                groupBy(groupReferences[key], d => d.date)
+                groupBy(groupReferences[key], (d) => d.date)
               );
             });
 
             Object.entries(groupObservations).forEach(([key, value]) => {
               this.flux24DailyOut.push({
                 references: groupReferences[key],
-                observations: groupObservations[key]
+                observations: groupObservations[key],
               });
             });
           } else {
             Object.entries(groupObservations).forEach(([key, value]) => {
               this.flux24DailyOut.push({
                 references: groupReferences[key],
-                observations: groupObservations[key]
+                observations: groupObservations[key],
               });
             });
           }
@@ -1127,7 +1131,7 @@ export default {
       this.$set(this.loadings, "urlPresenceDailyIn", true);
       axios
         .get(urlPresenceDailyIn, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24PresenceDailyInData = data;
@@ -1167,14 +1171,14 @@ export default {
       pandemicParams.fluxGeoOptions = pandemicParams.fluxGeoOptions[0];
       axios
         .get("/api/dashboard/pandemics/top-confirmed", {
-          params: pandemicParams
+          params: pandemicParams,
         })
         .then(({ data }) => {
           this.topHealthZoneConfirmed = data;
         });
 
       const healthZones = this.healthZones.filter(
-        x => x.province == values.fluxGeoOptions[0]
+        (x) => x.province == values.fluxGeoOptions[0]
       );
       let countAll = healthZones.length;
 
@@ -1202,9 +1206,9 @@ export default {
           //Get  zone in by province
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-in/province`, {
-              params: healthZoneValues
+              params: healthZoneValues,
             })
-            .then(async response => {
+            .then(async (response) => {
               this.fluxZoneGlobalIn.push(response.data);
               countIn++;
               this.globalProgress =
@@ -1248,9 +1252,9 @@ export default {
           //Get  zone in by province
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
-              params: healthZoneValues
+              params: healthZoneValues,
             })
-            .then(async response => {
+            .then(async (response) => {
               this.fluxZoneGlobalOut.push(response.data);
               countOut++;
               this.globalProgress =
@@ -1293,18 +1297,18 @@ export default {
       const urlMaps = `api/dashboard/flux/hotspots/maps`;
       const urlDaily = `api/dashboard/flux/hotspots/daily`;
       const urlTendance = `api/dashboard/flux/hotspots/tendance`;
-      const values=Object.assign({},input);
+      const values = Object.assign({}, input);
       // values.preference_start = "2020-05-17";
       // values.preference_end = "2020-05-31";
 
       const mapsRequest = axios.get(urlMaps, {
-        params: values
+        params: values,
       });
       const dailyRequest = axios.get(urlDaily, {
-        params: values
+        params: values,
       });
       const tendanceRequest = axios.get(urlTendance, {
-        params: values
+        params: values,
       });
 
       this.isFirstLoad = false;
@@ -1321,15 +1325,18 @@ export default {
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
       Promise.all([mapsRequest, dailyRequest, tendanceRequest])
-        .then(response => {
+        .then((response) => {
           if (response[0]) {
             const data = response[0].data;
             const observations = data.observations;
             const references = data.references;
-            observations.forEach(item => {
+            observations.forEach((item) => {
               const referenceData = references.find(
-                x => x.origin == item.origin
+                (x) => x.origin == item.origin
               );
+              if (!item || !referenceData) {
+                return;
+              }
               const difference = item.volume - referenceData.volume;
               const percent = (difference / referenceData.volume) * 100;
               if (referenceData) {
@@ -1338,7 +1345,7 @@ export default {
                   volume: item.volume,
                   difference,
                   percent,
-                  volumeReference: referenceData.volume
+                  volumeReference: referenceData.volume,
                 };
                 this.flux30MapsData.push(element);
               }
@@ -1351,7 +1358,7 @@ export default {
             this.flux24Daily = response[2].data.observations;
           }
         })
-        .catch(response => {
+        .catch((response) => {
           throw response;
         })
         .finally(() => {
@@ -1376,7 +1383,7 @@ export default {
       const values = {
         option: value,
         preference_start,
-        preference_end
+        preference_end,
       };
       this.flux24Errors = {};
 
@@ -1389,7 +1396,7 @@ export default {
       this.$set(this.loadings, "fluxPC_urlDailyCompare", true);
       axios
         .get(urlDailyCompare, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24DailyComparison = data;
@@ -1403,7 +1410,7 @@ export default {
       this.$set(this.loadings, "fluxPC_urlDaily", true);
       axios
         .get(urlDaily, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24Daily = data;
@@ -1441,7 +1448,7 @@ export default {
       this.$set(this.loadings, "fluxPC_flux24", true);
       axios
         .get(url, {
-          params: values
+          params: values,
         })
         .then(({ data }) => {
           this.flux24 = data;
@@ -1462,8 +1469,8 @@ export default {
       this.fullscreen = fullscreen;
     },
     computedFluxData(dataObservations, dataReferences) {
-      return dataObservations.map(item => {
-        const reference = dataReferences.find(x => x.zone == item.zone);
+      return dataObservations.map((item) => {
+        const reference = dataReferences.find((x) => x.zone == item.zone);
         if (reference) {
           item.volume_reference = reference.volume;
           const difference = item.volume - reference.volume;
@@ -1486,16 +1493,16 @@ export default {
             observation_start: OBSERVATION_START,
             observation_end: OBSERVATION_END,
             preference_start: PREFERENCE_START,
-            preference_end: PREFERENCE_END
-          }
+            preference_end: PREFERENCE_END,
+          },
         })
         .then(({ data }) => {
-          const groupObservations = groupBy(data.observations, d => d.zone);
-          const groupReferences = groupBy(data.references, d => d.zone);
+          const groupObservations = groupBy(data.observations, (d) => d.zone);
+          const groupReferences = groupBy(data.references, (d) => d.zone);
           Object.entries(groupObservations).forEach(([key, value]) => {
             this.fluxGlobalIn.push({
               references: groupReferences[key],
-              observations: groupObservations[key]
+              observations: groupObservations[key],
             });
           });
           this.$set(this.isFluxGlobalProvinceloading, "in", false);
@@ -1508,16 +1515,16 @@ export default {
             observation_start: OBSERVATION_START,
             observation_end: OBSERVATION_END,
             preference_start: PREFERENCE_START,
-            preference_end: PREFERENCE_END
-          }
+            preference_end: PREFERENCE_END,
+          },
         })
         .then(({ data }) => {
-          const groupObservations = groupBy(data.observations, d => d.zone);
-          const groupReferences = groupBy(data.references, d => d.zone);
+          const groupObservations = groupBy(data.observations, (d) => d.zone);
+          const groupReferences = groupBy(data.references, (d) => d.zone);
           Object.entries(groupObservations).forEach(([key, value]) => {
             this.fluxGlobalOut.push({
               references: groupReferences[key],
-              observations: groupObservations[key]
+              observations: groupObservations[key],
             });
           });
           this.$set(this.isFluxGlobalProvinceloading, "out", false);
@@ -1525,16 +1532,16 @@ export default {
     },
     updateflux24DailyGenerale() {
       const temp = [
-        ...this.flux24DailyIn.map(x => {
+        ...this.flux24DailyIn.map((x) => {
           x.zone = x.origin;
           x.targetZone = x.destination;
           return x;
         }),
-        ...this.flux24DailyOut.map(x => {
+        ...this.flux24DailyOut.map((x) => {
           x.targetZone = x.origin;
           x.zone = x.destination;
           return x;
-        })
+        }),
       ];
       this.flux24DailyGenerale = temp;
     },
@@ -1544,25 +1551,25 @@ export default {
       if (this.fluxDataGroupedByDateIn.referencesByDate)
         temp.referencesByDate = [
           ...temp.referencesByDate,
-          ...this.fluxDataGroupedByDateIn.referencesByDate
+          ...this.fluxDataGroupedByDateIn.referencesByDate,
         ];
 
       if (this.fluxDataGroupedByDateOut.referencesByDate)
         temp.referencesByDate = [
           ...temp.referencesByDate,
-          ...this.fluxDataGroupedByDateOut.referencesByDate
+          ...this.fluxDataGroupedByDateOut.referencesByDate,
         ];
 
       if (this.fluxDataGroupedByDateIn.observationsByDate)
         temp.observationsByDate = [
           ...temp.observationsByDate,
-          ...this.fluxDataGroupedByDateIn.observationsByDate
+          ...this.fluxDataGroupedByDateIn.observationsByDate,
         ];
 
       if (this.fluxDataGroupedByDateOut.observationsByDate)
         temp.observationsByDate = [
           ...temp.observationsByDate,
-          ...this.fluxDataGroupedByDateOut.observationsByDate
+          ...this.fluxDataGroupedByDateOut.observationsByDate,
         ];
 
       this.fluxDataGroupedByDateGen = this.computedFluxDataByDate(
@@ -1575,9 +1582,9 @@ export default {
       const referencesByDate = [];
       const observationsByDate = [];
 
-      dataReferences.map(item => {
+      dataReferences.map((item) => {
         const element = referencesByDate.find(
-          x => x.date == item.Date || x.date == item.date
+          (x) => x.date == item.Date || x.date == item.date
         );
         if (element) {
           element.volume += item.volume;
@@ -1586,13 +1593,13 @@ export default {
             date: item.Date || item.date,
             day: item.day,
             volume: item.volume,
-            zone: item[key]
+            zone: item[key],
           });
         }
       });
 
-      dataObservations.map(item => {
-        const element = observationsByDate.find(x => x.date == item.date);
+      dataObservations.map((item) => {
+        const element = observationsByDate.find((x) => x.date == item.date);
         if (element) {
           element.volume += item.volume;
         } else {
@@ -1600,14 +1607,14 @@ export default {
             date: item.date,
             day: item.day,
             volume: item.volume,
-            zone: item[key]
+            zone: item[key],
           });
         }
       });
 
       return {
         referencesByDate,
-        observationsByDate
+        observationsByDate,
       };
 
       // return dataObservations.map((item) => {
@@ -1641,8 +1648,8 @@ export default {
       const referencesByDate = [];
       const observationsByDate = [];
 
-      dataReferences.map(item => {
-        const element = referencesByDate.find(x => x.date == item.date);
+      dataReferences.map((item) => {
+        const element = referencesByDate.find((x) => x.date == item.date);
         if (element) {
           element.volume += item.volume;
         } else {
@@ -1651,13 +1658,13 @@ export default {
             day: item.day,
             volume: item.volume,
             PresenceType: item.PresenceType,
-            zone: item.zone
+            zone: item.zone,
           });
         }
       });
 
-      dataObservations.map(item => {
-        const element = observationsByDate.find(x => x.date == item.date);
+      dataObservations.map((item) => {
+        const element = observationsByDate.find((x) => x.date == item.date);
         if (element) {
           element.volume += item.volume;
         } else {
@@ -1666,14 +1673,14 @@ export default {
             day: item.day,
             volume: item.volume,
             PresenceType: item.PresenceType,
-            zone: item.zone
+            zone: item.zone,
           });
         }
       });
 
       return {
         referencesByDate,
-        observationsByDate
+        observationsByDate,
       };
     },
 
@@ -1681,7 +1688,7 @@ export default {
       axios.get("/api/dashboard/townships").then(({ data }) => {
         this.townships = data;
       });
-    }
+    },
   },
   watch: {
     fluxDataGroupedByDateIn() {
@@ -1700,19 +1707,19 @@ export default {
       }
 
       this.flux24PresenceDailyInDay = this.computedFluxPresenceDataByDate(
-        data.observations.filter(x => x.PresenceType == "Jour"),
-        data.references.filter(x => x.PresenceType == "Jour")
+        data.observations.filter((x) => x.PresenceType == "Jour"),
+        data.references.filter((x) => x.PresenceType == "Jour")
       );
       this.flux24PresenceDailyInNight = this.computedFluxPresenceDataByDate(
-        data.observations.filter(x => x.PresenceType == "Nuit"),
-        data.references.filter(x => x.PresenceType == "Nuit")
+        data.observations.filter((x) => x.PresenceType == "Nuit"),
+        data.references.filter((x) => x.PresenceType == "Nuit")
       );
       this.flux24PresenceDailyIn = this.computedFluxPresenceDataByDate(
         data.observations,
         data.references
       );
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
