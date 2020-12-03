@@ -551,7 +551,11 @@ export default {
       map.flyTo({ center: this.defaultCenterCoordinates });
     },
     showBottom() {
-      map.resize();
+      // le side bottom prend 500ms pour reprendre sa position initiale
+      // donc on attend 600ms avant d'effectuer le resize
+      setTimeout(function(){
+        map.resize();
+      },600)
     },
   },
   methods: {
