@@ -1088,7 +1088,7 @@ export default {
       colorScalePositive.range(PALETTE.inflow_positif);
 
       const max = d3.max(features, (d) => d.volume);
-      const dataKey = "D�NOMMIN";
+      const dataKey = "DENOMMIN";
       const colorExpression = [];
       colorExpression.push("case");
       features.forEach((x) => {
@@ -1692,7 +1692,7 @@ export default {
 
       const item = e.features[0].properties;
 
-      const name = item["D�NOMMIN"];
+      const name = item["DENOMMIN"];
       let value = null;
       const feature = this.flux30FeaturesData.find((x) => x.origin == name);
 
