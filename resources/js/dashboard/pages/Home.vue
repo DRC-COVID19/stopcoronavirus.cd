@@ -428,6 +428,7 @@ export default {
       activeMenu: (state) => state.nav.activeMenu,
       healthZones: (state) => state.app.healthZones,
       typePresence: (state) => state.flux.typePresence,
+      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularity,
     }),
     hasRightSide() {
       return (
@@ -470,9 +471,8 @@ export default {
       return this.flux24DailyIn.length > 0;
     },
     hasFlux30Daily() {
-      console.log('flux30Daily', this.flux30Daily)
-      return this.flux30Daily.length > 0;
-      // return this.flux30Daily ? true : false ;
+      return this.flux30Daily && this.fluxGeoGranularity == 3 ? true : false ;
+      // return this.flux30Daily.length > 0;
     },
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
@@ -1354,6 +1354,7 @@ export default {
             });
           }
           if (response[1]) {
+            // this.flux30Daily = []
             this.flux30Daily = response[1].data.observations;
           }
           if (response[2]) {

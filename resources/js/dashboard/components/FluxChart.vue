@@ -50,6 +50,7 @@
             @change="fullscreenMobileDaily"
           >
             <b-card no-body class="cardtype1 mb-3 p-2">
+              <p class="text-center text-muted" v-if="this.flux30Daily.length == 0">Données non disponibles</p> 
               <div class="chart-container">
                 <canvas
                   height="200"
