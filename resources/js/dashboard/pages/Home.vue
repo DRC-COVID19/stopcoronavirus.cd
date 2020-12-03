@@ -1374,6 +1374,7 @@ export default {
             this.flux30Daily = this.flux30Daily = response[1].data.observations;
           }
           if (response[2]) {
+
             this.flux24Daily = response[2].data.observations;
           }
         })
