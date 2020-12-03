@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Flux30ZoneSum;
+use App\Flux30ZoneSumByDate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -21,28 +22,28 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSum::select(['hour', 'observation_Zone', DB::raw('sum(volume) as volume')]);
+      $fluxObservations = Flux30ZoneSumByDate::select(['observation_Zone', DB::raw('sum(volume) as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxObservations->where('Observation_Zone', $data['fluxGeoOptions']);
       }
       $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-        ->whereBetween('hour', [$data['time_start'], $data['time_end']])
+        // ->whereBetween('hour', [$data['time_start'], $data['time_end']])
         // ->where('destination', '!=', 'Hors_Zone')
         // ->where('origin', '!=', 'Hors_Zone')
-        ->groupBy('hour', 'Observation_Zone', "date")
+        ->groupBy('Observation_Zone', "date")
         ->orderBy('volume')
         ->get();
 
 
-      $fluxReferences = Flux30ZoneSum::select(['hour', 'observation_Zone', DB::raw('sum(volume) as volume')]);
+      $fluxReferences = Flux30ZoneSumByDate::select(['observation_Zone', DB::raw('sum(volume) as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxReferences->where('Observation_Zone', $data['fluxGeoOptions']);
       }
       $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-        ->whereBetween('hour', [$data['time_start'], $data['time_end']])
+        // ->whereBetween([$data['time_start'], $data['time_end']])
         // ->where('destination', '!=', 'Hors_Zone')
         // ->where('origin', '!=', 'Hors_Zone')
-        ->groupBy('hour', 'Observation_Zone', 'date')
+        ->groupBy('Observation_Zone', 'date')
         ->orderBy('volume')
         ->get();
 
@@ -70,6 +71,50 @@ class Flux30ZoneSumController extends Controller
       return  response()->json([
         "observations" => $fluxObservationWithMedian,
         "references" => $fluxReferenceWithMedian
+      ], 200);
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
+  }
+
+  public function getHotspotGeneral(Request $request)
+  {
+    $data = $this->fluxValidator($request->all());
+    try {
+      $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
+      $fluxObservations = Flux30ZoneSumByDate::select([DB::raw('sum(volume) as volume')]);
+      if ($data['fluxGeoOptions'] != 'Tout') {
+        $fluxObservations->where('Observation_Zone', $data['fluxGeoOptions']);
+      }
+      $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+        // ->whereBetween('hour', [$data['time_start'], $data['time_end']])
+        // ->where('destination', '!=', 'Hors_Zone')
+        // ->where('origin', '!=', 'Hors_Zone')
+        ->groupBy("date")
+        ->orderBy('volume')
+        ->get();
+
+      $fluxReferences = Flux30ZoneSumByDate::select([DB::raw('sum(volume) as volume')]);
+      if ($data['fluxGeoOptions'] != 'Tout') {
+        $fluxReferences->where('Observation_Zone', $data['fluxGeoOptions']);
+      }
+      $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+        // ->whereBetween([$data['time_start'], $data['time_end']])
+        // ->where('destination', '!=', 'Hors_Zone')
+        // ->where('origin', '!=', 'Hors_Zone')
+        ->groupBy('date')
+        ->orderBy('volume')
+        ->get();
+
+      $observationMedia = $fluxObservations->median('volume');
+      $referenceMedia = $fluxReferences->median('volume');
+
+      return  response()->json([
+        "observations" => $observationMedia,
+        "references" => $referenceMedia
       ], 200);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
