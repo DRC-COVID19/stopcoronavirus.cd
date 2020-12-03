@@ -1096,13 +1096,13 @@ export default {
         ) {
           color = PALETTE.dash_green;
         } else {
-          if (x.percent >= 0) {
+          if (x.empty) color = PALETTE.dash_green;
+          else if (x.percent >= 0) {
             color = colorScalePositive(x.percent);
           } else {
             color = colorScaleNegative(x.percent);
           }
         }
-
         colorExpression.push(["==", ["get", dataKey], x.origin]);
         colorExpression.push(color);
       });

@@ -76,7 +76,10 @@ export default {
     },
     lastValue() {
       if (this.domaineExtValues.max <= 0) return 100;
-      else return Math.ceil(this.domaineExtValues.max);
+      else{
+        const value = Math.ceil(this.domaineExtValues.max);
+        return isNaN(value) ? "" : value
+      }
     },
   },
   methods: {
@@ -112,9 +115,15 @@ export default {
 
       if (i == 5) {
         return 0;
-      } else if (i < 5)
-        return Math.floor(this.domaineExtValues.min + i * this.pourcentNegatif);
-      else return Math.floor((i - 5) * this.pourcentPositif);
+      } 
+      else if (i < 5){
+        const value = Math.floor(this.domaineExtValues.min + i * this.pourcentNegatif);
+        return isNaN(value) ? "" : value
+      }
+      else{
+        const value = Math.floor((i - 5) * this.pourcentPositif);
+        return isNaN(value) ? "" : value
+      }
     },
   },
 };

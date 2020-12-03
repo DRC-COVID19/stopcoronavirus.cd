@@ -1302,6 +1302,7 @@ export default {
       const values = Object.assign({}, input);
       // values.preference_start = "2020-05-17";
       // values.preference_end = "2020-05-31";
+      // values.fluxGeoOptions = ["Malawi"];
 
       const mapsRequest = axios.get(urlMaps, {
         params: values,
@@ -1332,6 +1333,10 @@ export default {
             const data = response[0].data;
             const observations = data.observations;
             const references = data.references;
+
+            // const observations = [];
+            // const references = [];
+            
             observations.forEach((item) => {
               const referenceData = references.find(
                 (x) => x.origin == item.origin
@@ -1352,10 +1357,21 @@ export default {
                 this.flux30MapsData.push(element);
               }
             });
+            // si aucune donnée n'existe pour ce hotspot
+            if(this.flux30MapsData.length == 0){
+              const element = {
+                  origin: values.fluxGeoOptions[0],
+                  volume: null,
+                  difference: null ,
+                  percent: null ,
+                  volumeReference: null ,
+                  empty : true
+                };
+                this.flux30MapsData.push(element);
+            }
           }
           if (response[1]) {
-            // this.flux30Daily = []
-            this.flux30Daily = response[1].data.observations;
+            this.flux30Daily = this.flux30Daily = response[1].data.observations;
           }
           if (response[2]) {
             this.flux24Daily = response[2].data.observations;
