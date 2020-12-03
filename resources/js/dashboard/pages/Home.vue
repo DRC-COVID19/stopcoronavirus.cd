@@ -470,6 +470,7 @@ export default {
       return this.flux24DailyIn.length > 0;
     },
     hasFlux30Daily() {
+      console.log('flux30Daily', this.flux30Daily)
       return this.flux30Daily.length > 0;
     },
     flux24WithoutReference() {
