@@ -72,10 +72,11 @@ export default {
       if (!data) {
         return;
       }
+
       const labels = [];
       const localData = [];
       data.map((x) => {
-        if (this.fluxTimeGranularity == 1 || this.fluxTimeGranularity == 2) {
+        if (this.fluxTimeGranularity == 1) {
           // labels.push(new Date(x.date));
           localData.push({ x: moment(x.date), y: x.volume, date: x.date });
         } else {
@@ -89,6 +90,7 @@ export default {
           });
         }
       });
+
       const maxDate = moment.max(localData.map((item) => item.x));
       const minDate = moment.min(localData.map((item) => item.x));
 
@@ -100,9 +102,18 @@ export default {
           new Date(x.date) >= minDate &&
           new Date(x.date) <= maxDate
       ).map((item) => {
-        const element = localData.find((x) => x.date == item.date);
+        let element = {};
+
+        if (this.fluxTimeGranularity == 1) {
+          element = localData.find((x) => x.date == item.date);
+        } else {
+          element = localData
+            .filter((x) => x.date == item.date)
+            .sort((a, b) => b.y - a.y)[0];
+        }
+
         return {
-          x: moment(item.date),
+          x:element.x,
           y: element.y,
           measures: item.measures,
         };
@@ -218,12 +229,12 @@ export default {
             enabled: true,
             // mode: "interpolate",
             intersect: false,
-            bodyFontSize:10,
-            displayColors:false,
+            bodyFontSize: 10,
+            displayColors: false,
             callbacks: {
               title: (a, d) => {
                 let titleFormat = this.moment(a[0].xLabel).format("DD.MM.Y");
-                if (this.fluxTimeGranularity == 3) {
+                if (this.fluxTimeGranularity == 2) {
                   titleFormat = this.moment(a[0].xLabel).format(
                     "DD.MM.Y HH:mm"
                   );
@@ -231,24 +242,25 @@ export default {
                 return titleFormat;
               },
 
-              label: (i, d) =>{
-                if (i.datasetIndex==1) {
+              label: (i, d) => {
+                if (i.datasetIndex == 1) {
                   return;
                 }
                 const element = mainEvent.find(
-                  (x) =>x.x.format("DD.MM.Y") == moment(i.xLabel).format("DD.MM.Y")
+                  (x) =>
+                    x.x.format("DD.MM.Y") == moment(i.xLabel).format("DD.MM.Y")
                 );
-                const measures=[];
+                const measures = [];
                 if (element) {
-                  element.measures.forEach(item=>{
-                    let itemText=`* ${item.item}`;
+                  element.measures.forEach((item) => {
+                    let itemText = `* ${item.item}`;
                     if (item.isSuite) {
-                        itemText=item.item;
+                      itemText = item.item;
                     }
                     measures.push(itemText);
                   });
                 }
-                return [`* Volume:${this.formatCash(i.yLabel)}`,...measures];
+                return [`* Volume:${this.formatCash(i.yLabel)}`, ...measures];
               },
             },
           },
