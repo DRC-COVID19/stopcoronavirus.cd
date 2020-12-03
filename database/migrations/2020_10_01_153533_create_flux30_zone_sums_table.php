@@ -15,15 +15,15 @@ class CreateFlux30ZoneSumsTable extends Migration
     {
         Schema::create('flux30_zone_sums', function (Blueprint $table) {
             $table->id();
-            $table->date('Date')->nullable();
-            $table->time('Hour')->nullable();
+            $table->date('Date')->nullable()->index();
+            $table->time('Hour')->nullable()->index();
             $table->string('Day_type');
-            $table->string('Origin')->nullable();
-            $table->string('Destination')->nullable();
+            $table->string('Origin')->nullable()->index();
+            $table->string('Destination')->nullable()->index();
             $table->string('Immobility')->nullable();
             $table->string('Home_Category')->nullable();
             $table->string('Activity_Category')->nullable();
-            $table->string('Observation_Zone')->nullable();
+            $table->string('Observation_Zone')->nullable()->index();
             $table->string("Mode")->nullable();
             $table->float('Volume')->default(0)->nullable();
             $table->timestamps();
