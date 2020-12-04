@@ -130,14 +130,22 @@
           v-if="hasRightSide"
         >
           <b-card no-body>
-            <toggle-button
+            <!-- <toggle-button
               class="flux-data-toggle"
               :labels="fluxDataProvider"
               :value="selectedFluxDataProvider"
               @input="fluxDataProvideChanged"
-            ></toggle-button>
+            ></toggle-button> -->
+
             <transition name="fade">
-              <b-tabs pills card v-if="selectedFluxDataProvider == 1">
+              <b-tabs pills card v-if="selectedSource == 2">
+                <b-tab title="Mobilité africell" v-if="activeMenu == 1">
+                  <AfriFluxChart />
+                </b-tab>
+              </b-tabs>
+            </transition>
+            <transition name="fade">
+              <b-tabs pills card v-if="selectedSource == 1">
                 <b-tab
                   title="Données Covid-19"
                   v-if="(!!covidCases || isLoading) && activeMenu == 2"
@@ -224,6 +232,7 @@
                     :globalProgress="globalProgress"
                     :isLoading="isLoading"
                     :flux30Daily="flux30Daily"
+                    :flux30General="flux30General"
                   />
                 </b-tab>
                 <b-tab
@@ -235,111 +244,6 @@
                 </b-tab>
               </b-tabs>
             </transition>
-            <transition name="fade">
-              <b-tabs pills card v-if="selectedFluxDataProvider == 2">
-                <b-tab title="Mobilité africell" v-if="activeMenu == 1">
-                  <AfriFluxChart/>
-                </b-tab>
-              </b-tabs>
-            </transition>
-            <b-tabs pills card>
-              <b-tab
-                title="Données Covid-19"
-                v-if="(!!covidCases || isLoading) && activeMenu == 2"
-                :active="!!covidCases"
-              >
-                <SideCaseCovid
-                  :covidCases="covidCases"
-                  :isLoading="isLoading"
-                />
-              </b-tab>
-              <b-tab
-                title="Données Orientation médicale covid-19"
-                v-if="
-                  (orientationCount != null || isLoading) && activeMenu == 6
-                "
-                :active="orientationCount != null"
-              >
-                <SideOrientation
-                  :medicalOrientations="medicalOrientations"
-                  :isLoading="isLoading"
-                />
-              </b-tab>
-              <b-tab title="Province" v-if="activeMenu == 1">
-                <b-row>
-                  <b-col cols="6" class="pr-2">
-                    <skeleton-loading v-if="isLoading">
-                      <square-skeleton
-                        :boxProperties="{
-                          width: '100%',
-                          height: '830px',
-                        }"
-                      ></square-skeleton>
-                    </skeleton-loading>
-                    <GlobalProvince
-                      v-else
-                      title="Mobilité entrante"
-                      :color="palette.flux_in_color"
-                      :globalData="fluxGlobalIn"
-                      reference="fluxglobalIn"
-                    />
-                  </b-col>
-                  <b-col cols="6" class="pl-2">
-                    <skeleton-loading v-if="isLoading">
-                      <square-skeleton
-                        :boxProperties="{
-                          width: '100%',
-                          height: '830px',
-                        }"
-                      ></square-skeleton>
-                    </skeleton-loading>
-                    <GlobalProvince
-                      v-else
-                      title="Mobilité sortante"
-                      :color="palette.flux_out_color"
-                      :globalData="fluxGlobalOut"
-                      reference="fluxglobalOut"
-                    />
-                  </b-col>
-                </b-row>
-              </b-tab>
-              <b-tab
-                title="Mobilité"
-                v-if="
-                  (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
-                  !isFirstLoad &&
-                  this.activeMenu == 1
-                "
-                :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
-              >
-                <FluxChart
-                  :flux24Daily="flux24Daily"
-                  :flux24DailyIn="flux24DailyIn"
-                  :flux24DailyOut="flux24DailyOut"
-                  :flux24DailyGenerale="flux24DailyGenerale"
-                  :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
-                  :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
-                  :fluxDataGroupedByDateGen="fluxDataGroupedByDateGen"
-                  :flux24Presence="flux24Presence"
-                  :flux24PresenceDailyIn="flux24PresenceDailyInFormat"
-                  :fluxZoneGlobalIn="fluxZoneGlobalIn"
-                  :fluxZoneGlobalOut="fluxZoneGlobalOut"
-                  :mobiliteGenerale="showMobiliteGenerale"
-                  :topHealthZoneConfirmed="topHealthZoneConfirmed"
-                  :globalProgress="globalProgress"
-                  :isLoading="isLoading"
-                  :flux30Daily="flux30Daily"
-                  :flux30General="flux30General"
-                />
-              </b-tab>
-              <b-tab
-                title="Infrastructures"
-                v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
-                :active="!!selectedHospital || activeMenu == 5"
-              >
-                <HospitalSituation :hospitalTotalData="hospitalTotalData" />
-              </b-tab>
-            </b-tabs>
           </b-card>
         </b-col>
       </b-row>
@@ -440,7 +344,7 @@ import {
 import { mapState, mapActions, mapMutations } from "vuex";
 import { difference } from "@turf/turf";
 import ToggleButton from "../components/ToggleButton";
-import AfriFluxChart from '../components/africell/AfriFluxChart';
+import AfriFluxChart from "../components/africell/AfriFluxChart";
 const preference_start = "2020-02-01";
 const preference_end = "2020-03-18";
 
@@ -471,7 +375,7 @@ export default {
     GlobalProvince,
     About,
     ToggleButton,
-    AfriFluxChart
+    AfriFluxChart,
   },
   data() {
     return {
@@ -557,6 +461,7 @@ export default {
       activeMenu: (state) => state.nav.activeMenu,
       healthZones: (state) => state.app.healthZones,
       typePresence: (state) => state.flux.typePresence,
+      selectedSource: (state) => state.flux.selectedSource,
     }),
     hasRightSide() {
       return (
@@ -1462,7 +1367,7 @@ export default {
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
 
-      this.$ga.event('fluxData', 'getRequest', 'hotspots', "SendRequest");
+      this.$ga.event("fluxData", "getRequest", "hotspots", "SendRequest");
 
       Promise.all([mapsRequest, dailyRequest, tendanceRequest, generalRequest])
         .then((response) => {
@@ -1510,11 +1415,11 @@ export default {
               percent,
             };
           }
-          this.$ga.event('fluxData', 'get', 'hotspots', "ReceiveResponse");
+          this.$ga.event("fluxData", "get", "hotspots", "ReceiveResponse");
         })
         .catch((error) => {
-          const exception = error.message || error
-          this.$ga.exception(exception)
+          const exception = error.message || error;
+          this.$ga.exception(exception);
         })
         .finally(() => {
           this.$set(this.loadings, "urlFluxTIme30", false);

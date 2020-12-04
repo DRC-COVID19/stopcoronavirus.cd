@@ -4,11 +4,11 @@
       <b-form-row>
         <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
           <b-form-group>
-            <label for class="text-dash-color">Rapports prédefinis</label>
+            <label for class="text-dash-color">Sources</label>
             <v-select
-              @input="fluxPredefinedInputChanged"
-              v-model="fluxPredefinedControl"
-              :options="fluxPredefinedInput"
+              @input="selectedFluxSourceChanged"
+              v-model="selectedFluxSource"
+              :options="fluxSource"
               label="name"
               placeholder="Option"
               :reduce="(item) => item.id"
@@ -245,6 +245,17 @@ export default {
       isHotspot: false,
       referenceThrowError: false,
       referenceErrorMessage: null,
+      fluxSource:[
+        {
+          id:1,
+          name:"Orange"
+        },
+        {
+          id:2,
+          name:"Africell"
+        }
+      ],
+      selectedFluxSource:1,
     };
   },
   filters: {
@@ -320,6 +331,7 @@ export default {
       "setFluxGeoOptionsTmp",
       "setFluxGeoGranularityTemp",
       "setFluxTimeGranularity",
+      "setSelectedSource"
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -540,6 +552,9 @@ export default {
     resetFluxPredefinedControl() {
       this.fluxPredefinedControl = null;
     },
+    selectedFluxSourceChanged(value){
+      this.setSelectedSource(value);
+    }
   },
 };
 </script>

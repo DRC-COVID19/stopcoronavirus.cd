@@ -52,8 +52,18 @@ Route::group([
 
   Route::group(['prefix' => 'flux', 'middleware' => 'cache.headers:private;max_age=3600'], function () {
 
-    Route::group(['prefix' => 'africel'], function () {
-        Route::get('health-zone', 'AfricelHealthZoneController@index');
+    Route::group(['prefix' => 'africell'], function () {
+      Route::get('health-zone', 'AfricelHealthZoneController@index');
+      Route::group(['prefix' => 'presence'], function () {
+        Route::get('provinces', 'AfricelTravelProvinceController@getByProvince');
+        Route::get('zones', 'AfricelPresenceZoneController@getByName');
+      });
+      Route::group(['prefix' => 'hors-zone'], function () {
+        Route::get('zones', 'AfricelFlowHorsZoneController@getByName');
+      });
+      Route::group(['prefix' => 'in-out'], function () {
+        Route::get('zones', 'AfricelFlowInterZoneController@getByName');
+      });
     });
 
     Route::group(['prefix' => 'predefined'], function () {
