@@ -15,7 +15,6 @@
         <div class="inner" v-for="(data, i) in colors[color]" :key="i">
           <span class="lbl">
             {{valDe(i)}}
-            <span v-if="domaineExtValues.isPercent">%</span>
           </span>
 
           <div
@@ -29,7 +28,6 @@
         <div class="inner inner-last">
           <span class="lbl">
             {{lastValue}}
-            <span v-if="domaineExtValues.isPercent">%</span>
           </span>
         </div>
       </div>
@@ -59,6 +57,9 @@ export default {
     ...mapState({
       domaineExtValues: (state) => state.flux.domaineExtValues,
     }),
+    suffix : function(){
+      return this.domaineExtValues.isPercent ? "%" : ""
+    },
     color: function () {
       if (this.fluxType) {
         if (this.colors[this.fluxType - 1]) return this.fluxType - 1;
@@ -78,7 +79,7 @@ export default {
       if (this.domaineExtValues.max <= 0) return 100;
       else{
         const value = Math.ceil(this.domaineExtValues.max);
-        return isNaN(value) ? "" : value
+        return isNaN(value) ? "" : value + this.suffix
       }
     },
   },
@@ -115,14 +116,14 @@ export default {
 
       if (i == 5) {
         return 0;
-      } 
+      }
       else if (i < 5){
         const value = Math.floor(this.domaineExtValues.min + i * this.pourcentNegatif);
-        return isNaN(value) ? "" : value
+        return isNaN(value) ? "" : value + this.suffix
       }
       else{
         const value = Math.floor((i - 5) * this.pourcentPositif);
-        return isNaN(value) ? "" : value
+        return isNaN(value) ? "" : value + this.suffix
       }
     },
   },

@@ -1347,7 +1347,7 @@ export default {
 
             // const observations = [];
             // const references = [];
-            
+
             observations.forEach((item) => {
               const referenceData = references.find(
                 (x) => x.origin == item.origin
@@ -1772,9 +1772,9 @@ export default {
 .dash-home-page {
   // height: 100vh;
   background: $dash-background;
-  .side-bottom {
+  // .side-bottom {
     // height: calc(20vh - 72.5px);
-  }
+  // }
 
   .bounce-enter-active {
     animation: slideInUp 0.5s;
