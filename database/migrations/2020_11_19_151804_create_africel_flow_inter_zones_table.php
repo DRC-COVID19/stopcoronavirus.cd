@@ -17,7 +17,7 @@ class CreateAfricelFlowInterZonesTable extends Migration
             $table->id();
             $table->string('zone_A');
             $table->string('zone_B');
-            $table->string('date');
+            $table->date('date');
             $table->double('flow_AB');
             $table->double('flow-BA');
             $table->double('flow_tot');
