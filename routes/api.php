@@ -122,6 +122,7 @@ Route::group([
       Route::get('maps', 'Flux30ZoneSumController@getHotspotMaps');
       Route::get('tendance', 'Flux30ZoneSumController@getHotspotTendance');
       Route::get('daily', 'Flux30ZoneSumController@getHotspotDaily');
+      Route::get('general', 'Flux30ZoneSumController@getHotspotGeneral');
     });
   });
   Route::group(['prefix' => 'hospital-situations'], function () {

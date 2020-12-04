@@ -8883,6 +8883,11 @@ vue-airbnb-style-datepicker@^2.7.1:
   dependencies:
     v-click-outside "^2.0.1"
 
+vue-analytics@^5.22.1:
+  version "5.22.1"
+  resolved "https://registry.yarnpkg.com/vue-analytics/-/vue-analytics-5.22.1.tgz#9d6b32da56daee1b9dfb23a267b50349a03f710f"
+  integrity sha512-HPKQMN7gfcUqS5SxoO0VxqLRRSPkG1H1FqglsHccz6BatBatNtm/Vyy8brApktZxNCfnAkrSVDpxg3/FNDeOgQ==
+
 vue-ellipse-progress@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/vue-ellipse-progress/-/vue-ellipse-progress-1.2.0.tgz#a8e21211885aba4ef82c5be455a5520915e13a59"
