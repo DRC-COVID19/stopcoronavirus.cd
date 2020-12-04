@@ -59,13 +59,12 @@
           >
             <v-select
               v-model="form.geoOptions"
-              multiple
               :options="geoOptions"
               placeholder="Localisation"
               label="origin"
               :reduce="item=>item.origin"
-              class="style-chooser style-chooser-multiple"
-              @input="resetFluxPredefinedControl"
+              class="style-chooser"
+              @input="fluxGeoOptionsChange"
             />
           </b-form-group>
         </b-col>
@@ -275,6 +274,10 @@ export default {
     filtredDate(value) {
       return this.$options.filters.date(value);
     },
+    fluxGeoOptionsChange(value){
+      this.$set(this.form, "geoOptions", [value]);
+      this.resetFluxPredefinedControl();
+    }
   },
 };
 </script>
