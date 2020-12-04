@@ -4,7 +4,9 @@
       <b-row class="mb-2">
         <div class="col-md col-12">
           <h3 class="d-flex align-items-center mb-0">
-            <span class="ml-2 mr-2">{{ targetZone }}</span>
+            <span v-if="fluxGeoGranularity != 3" class="ml-2 mr-2">{{
+              targetZone
+            }}</span>
 
             <toggle-button
               v-if="fluxTimeGranularity == 1"
@@ -44,6 +46,19 @@
           class="pl-0 col-mobilite-generale"
           v-show="!isLoading"
         >
+
+          <b-card class="mb-3 flux-mobility">
+            <h5 class="percent-title">Présence {{ targetZone }}</h5>
+            <div class="percent flux-presence">
+              {{ Math.round(flux30General.percent) }}%​
+            </div>
+            <p class="percent-p text-dash-color mb-0">
+              {{formatCash(flux30General.difference) }} personnes de
+              <span v-if="flux30General.difference > 0">plus</span>
+              <span v-else>moins</span>
+              ont été prsentes dans la zone
+            </p>
+          </b-card>
           <FullScreen
             id="flux_30_daily"
             link="flux_30_daily_chart"
@@ -69,7 +84,16 @@
           class="pl-0 col-mobilite-generale"
           v-if="isLoading"
         >
-          <skeleton-loading class="mb-3">
+          <skeleton-loading class="mb-3" v-if="isLoading">
+            <square-skeleton
+              :boxProperties="{
+                width: '100%',
+                height: '175px',
+              }"
+            ></square-skeleton>
+          </skeleton-loading>
+
+          <skeleton-loading class="mb-3" v-if="isLoading">
             <square-skeleton
               :boxProperties="{
                 width: '100%',
@@ -592,6 +616,10 @@ export default {
     flux30Daily: {
       type: Array,
       default: () => [],
+    },
+    flux30General: {
+      type: Object,
+      default: () => {},
     },
   },
   data() {
@@ -1733,6 +1761,9 @@ export default {
   .see-province-stat {
     font-size: 1rem;
     cursor: pointer;
+  }
+  .chart-box-sub-title {
+    font-size: 1.2rem;
   }
 }
 .return-global {

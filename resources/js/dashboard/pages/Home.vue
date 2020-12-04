@@ -217,6 +217,7 @@
                   :globalProgress="globalProgress"
                   :isLoading="isLoading"
                   :flux30Daily="flux30Daily"
+                  :flux30General="flux30General"
                 />
               </b-tab>
               <b-tab
@@ -416,6 +417,7 @@ export default {
       disabledArc: false,
       flux30MapsData: [],
       flux30Daily: [],
+      flux30General: {},
     };
   },
   computed: {
@@ -1299,6 +1301,8 @@ export default {
       const urlMaps = `api/dashboard/flux/hotspots/maps`;
       const urlDaily = `api/dashboard/flux/hotspots/daily`;
       const urlTendance = `api/dashboard/flux/hotspots/tendance`;
+      const urlGeneral = `api/dashboard/flux/hotspots/general`;
+
       const values = Object.assign({}, input);
       // values.preference_start = "2020-05-17";
       // values.preference_end = "2020-05-31";
@@ -1311,6 +1315,10 @@ export default {
         params: values,
       });
       const tendanceRequest = axios.get(urlTendance, {
+        params: values,
+      });
+
+      const generalRequest = axios.get(urlGeneral, {
         params: values,
       });
 
@@ -1327,7 +1335,10 @@ export default {
       this.fluxZoneGlobalIn = [];
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
-      Promise.all([mapsRequest, dailyRequest, tendanceRequest])
+
+      this.$ga.event('fluxData', 'getRequest', 'hotspots', "SendRequest");
+
+      Promise.all([mapsRequest, dailyRequest, tendanceRequest, generalRequest])
         .then((response) => {
           if (response[0]) {
             const data = response[0].data;
@@ -1374,12 +1385,26 @@ export default {
             this.flux30Daily = this.flux30Daily = response[1].data.observations;
           }
           if (response[2]) {
-
             this.flux24Daily = response[2].data.observations;
           }
+          if (response[3]) {
+            const observation = response[3].data.observations;
+            const reference = response[3].data.references;
+            const difference = observation - reference;
+            const percent = (difference * 100) / reference;
+            // console.log('flux30General',this.flux30General);
+            this.flux30General = {
+              observation,
+              reference,
+              difference,
+              percent,
+            };
+          }
+          this.$ga.event('fluxData', 'get', 'hotspots', "ReceiveResponse");
         })
-        .catch((response) => {
-          throw response;
+        .catch((error) => {
+          const exception = error.message || error
+          this.$ga.exception(exception)
         })
         .finally(() => {
           this.$set(this.loadings, "urlFluxTIme30", false);
