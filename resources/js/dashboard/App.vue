@@ -17,6 +17,22 @@ export default {
       isLoading: false,
     };
   },
+  created() {
+    axios.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        // console.log("error.response", error.response);
+        if (error.response.status == 401) {
+          this.$store.commit("logoutSuccess");
+          this.$router.push({
+            name: "login",
+          });
+        }
+        // return Promise.reject(error);
+        // throw error;
+      }
+    );
+  },
   mounted() {
     this.$store.watch(
       (state) => state.auth.isLogout,

@@ -34,7 +34,9 @@ Vue.use(VueSkeletonLoading);
 
 
 if (store.state.auth.isAuthenticated) {
-    store.dispatch('userMe');
+    store.dispatch('userMe').catch(error=>{
+
+    });
 }
 
 store.dispatch('loadSource');
