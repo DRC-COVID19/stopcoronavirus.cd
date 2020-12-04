@@ -32401,6 +32401,65 @@ h3 {
   cursor: pointer !important;
 }
 
+.flux-chart .card {
+  background: white;
+  border-radius: unset;
+  border-color: #2e5bff14;
+}
+
+.flux-chart .card .card-header {
+  background: white;
+}
+
+.flux-chart .see-province-stat {
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.flux-chart .flux-mobility {
+  cursor: pointer;
+}
+
+.flux-chart .flux-mobility.active {
+  background: #2e5bff14;
+}
+
+.flux-chart .flux-mobility .legend {
+  list-style: none;
+}
+
+.flux-chart .flux-mobility .legend li span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.flux-chart .flux-mobility .legend li span.reference {
+  background: #9e9e9e;
+}
+
+.flux-chart .flux-mobility .legend li span.observation {
+  background: #4caf50;
+}
+
+.flux-chart .flux-mobility .percent-title {
+  font-size: 1rem;
+}
+
+.flux-chart .flux-mobility .percent {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.flux-chart .flux-mobility .percent-p {
+  font-size: 0.7rem;
+}
+
+.flux-chart .flux-mobility .chart-container div {
+  position: relative;
+}
+
 .style-picker-has-error .form-control {
   border-color: #dc3545 !important;
 }
