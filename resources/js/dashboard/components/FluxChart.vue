@@ -48,24 +48,29 @@
         >
 
           <b-card class="mb-3 flux-mobility">
-            <h5 class="percent-title">Présence</h5>
-            <div class="percent flux-presence">
-              {{ Math.round(flux30General.percent) }}%​
-            </div>
-            <p class="percent-p text-dash-color mb-0">
-              {{formatCash(flux30General.difference) }} personnes de
-              <span v-if="flux30General.difference > 0">plus</span>
-              <span v-else>moins</span>
-              ont été prsentes dans la zone
+            <h5 class="percent-title">Présence {{ targetZone }}</h5>
+            <p class="text-muted" v-if="!flux30General.percent">
+              Données non disponibles
             </p>
+            <div v-else>
+              <div class="percent flux-presence">
+                {{ Math.round(flux30General.percent) }}%​
+              </div>
+              <p class="percent-p text-dash-color mb-0">
+                {{formatCash(flux30General.difference) }} personnes de
+                <span v-if="flux30General.difference > 0">plus</span>
+                <span v-else>moins</span>
+                ont été présentes dans la zone
+              </p>
+            </div>
           </b-card>
           <FullScreen
             id="flux_30_daily"
             link="flux_30_daily_chart"
             @change="fullscreenMobileDaily"
+            v-if="this.flux30Daily.length != 0"
           >
-            <b-card no-body class="cardtype1 mb-3 p-2">
-              <div class="chart-container">
+            <b-card no-body class="cardtype1 mb-3 p-2">              <div class="chart-container">
                 <canvas
                   height="200"
                   width="100vh"
