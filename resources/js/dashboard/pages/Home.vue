@@ -1864,7 +1864,7 @@ export default {
   background: $dash-background;
   // .side-bottom {
     // height: calc(20vh - 72.5px);
-  }
+  // }
   .side-right {
     .flux-data-toggle {
       position: absolute;
