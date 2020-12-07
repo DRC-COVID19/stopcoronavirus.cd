@@ -579,6 +579,8 @@ export default {
       if (checked) {
         let confirmedCount = 0;
 
+        this.$ga.event('Epidémiologie', 'Get flux data', 'state request', "send");
+
         this.$set(this.loadings, "getCovidCases_stat", true);
         axios
           .get("/api/dashboard/cavid-cases/statistics")
@@ -601,9 +603,11 @@ export default {
               labels,
             };
             this.$set(this.loadings, "getCovidCases_stat", false);
+            this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response covid-cases statistics");
           })
           .catch((response) => {
             this.$set(this.loadings, "getCovidCases_stat", false);
+            this.$ga.exception(JSON.stringify(response))
           });
 
         this.$set(this.loadings, "getCovidCases_statdaily", true);
@@ -628,9 +632,11 @@ export default {
               labels,
             };
             this.$set(this.loadings, "getCovidCases_statdaily", false);
+            this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response covid-cases statistics daily");
           })
           .catch((response) => {
             this.$set(this.loadings, "getCovidCases_statdaily", false);
+            this.$ga.exception(JSON.stringify(response))
           });
 
         this.$set(this.loadings, "getCovidCases_cases", true);
@@ -668,9 +674,11 @@ export default {
 
             this.covidCasesCount = confirmedCount;
             this.$set(this.loadings, "getCovidCases_cases", false);
+            this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response covid-cases");
           })
           .catch((response) => {
             this.$set(this.loadings, "getCovidCases_cases", false);
+            this.$ga.exception(JSON.stringify(response))
           });
       } else {
         this.covidCases = null;
