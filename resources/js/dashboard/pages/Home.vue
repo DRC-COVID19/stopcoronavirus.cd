@@ -689,6 +689,7 @@ export default {
     getmedicalOrientations(checked) {
       if (checked) {
         this.$set(this.loadings, "orientation_medical", true);
+        this.$ga.event('Orientation medical', 'Get flux data', 'state request', "send");
         axios
           .get(`/api/dashboard/orientation-medical-result`)
           .then(({ data }) => {
@@ -712,10 +713,12 @@ export default {
 
             this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = total_fin + total_fin8 + total_fin5;
+            this.$ga.event('Orientation medical', 'Get flux data', 'state request', "receive response");
           })
-          .catch(() => {
+          .catch((response) => {
             this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = null;
+            this.$ga.exception(JSON.stringify(response))
           });
 
         this.$set(this.loadings, "orientation_medical_stats", true);
@@ -739,9 +742,11 @@ export default {
               labels,
             };
             this.$set(this.loadings, "orientation_medical_stats", false);
+            this.$ga.event('Orientation medical', 'Get flux data', 'state request', "receive response stat");
           })
-          .catch(() => {
+          .catch((response) => {
             this.$set(this.loadings, "orientation_medical_stats", false);
+            this.$ga.exception(JSON.stringify(response))
           });
       } else {
         this.medicalOrientations = null;
