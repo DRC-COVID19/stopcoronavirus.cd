@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { data } from 'jquery';
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from '../../config/env';
+import {event} from 'vue-analytics';
 
 export default {
   state: {
@@ -36,10 +37,12 @@ export default {
         localStorage.setItem('dashboard_access_token', payload.token);
         window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + payload.token;
       }
+      event('User', 'login', 'state request', "login success");
     },
     loginFail(state) {
       state.isAuthenticating = false;
       state.authError = true;
+      event('User', 'login', 'state request', "login failed");
     },
     authenticating(state) {
       state.isAuthenticating = true;
@@ -51,6 +54,7 @@ export default {
       state.user = null;
       localStorage.removeItem('dashboard_access_token');
       localStorage.removeItem('dashboard_access_role');
+      event('User', 'logout', 'state request', "logout success");
     }
   },
   actions: {
@@ -96,6 +100,8 @@ export default {
     },
     logout({ commit, state }) {
       state.isLogout = true;
+      event('User', 'logout', 'state request', "send");
+
       return new Promise((resolve, reject) => {
         axios.post('/api/dashboard/auth/logout', {}).then(() => {
           commit('logoutSuccess');

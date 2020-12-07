@@ -7,6 +7,7 @@
   </div>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex';
 import Waiting from "./components/Waiting";
 export default {
   components: {
@@ -17,12 +18,18 @@ export default {
       isLoading: false,
     };
   },
+  computed : {
+    ...mapState({
+      isAuthenticated: (state) => state.auth.isAuthenticated,
+    })
+  },
   created() {
     axios.interceptors.response.use(
       (response) => response,
       (error) => {
         // console.log("error.response", error.response);
         if (error.response.status == 401) {
+          this.$ga.event('User', 'logout', 'state', "session expired");
           this.$store.commit("logoutSuccess");
           this.$router.push({
             name: "login",
@@ -54,7 +61,13 @@ export default {
         }
       }
     );
+
+    if (this.isAuthenticated) {
+        this.userMe()
+    }
   },
-  methods: {},
+  methods: {
+    ...mapActions(['userMe'])
+  },
 };
 </script>
