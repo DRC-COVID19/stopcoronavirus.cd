@@ -68,7 +68,7 @@
             id="flux_30_daily"
             link="flux_30_daily_chart"
             @change="fullscreenMobileDaily"
-            v-if="this.flux30Daily.length != 0"
+            v-show="this.flux30Daily.length > 0"
           >
             <b-card no-body class="cardtype1 mb-3 p-2">              <div class="chart-container">
                 <canvas
