@@ -1,4 +1,5 @@
 
+import {event, exception} from 'vue-analytics';
 
 export default {
   state: {
@@ -20,6 +21,9 @@ export default {
   },
   actions: {
     submitFilters({ state }, form) {
+      event('Indicateurs', 'Get flux data', 'state request', "send");
+      event('Indicateurs', 'Get flux data', 'filtres', JSON.stringify(form));
+
       state.isLoading = true;
       let url = "/api/dashboard/indicators";
       switch (form.geoGranularity) {
@@ -71,8 +75,11 @@ export default {
           item.xProdY = item.x * item.y;
         });
         state.indicatorData = statisticData;
+
+        event('Indicateurs', 'Get flux data', 'state request', "receive response");
       }).catch(response => {
         state.formErrors = response.data.errors
+        exception(JSON.stringify(response))
       }).finally(() => {
         state.isLoading = false;
       });
