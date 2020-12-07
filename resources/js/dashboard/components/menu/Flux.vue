@@ -47,14 +47,13 @@
               >
                 <v-select
                   v-model="fluxForm.fluxGeoOptions"
-                  multiple
                   :disabled="!fluxForm.fluxGeoGranularity"
                   :options="fluxGeoOptions"
                   placeholder="Localisation"
                   label="origin"
                   :reduce="(item) => item.origin"
                   @input="fluxGeoOptionsChange"
-                  class="style-chooser style-chooser-multiple"
+                  class="style-chooser"
                 />
               </b-form-group>
             </b-col>
@@ -492,8 +491,9 @@ export default {
       }
     },
     fluxGeoOptionsChange(value) {
+      this.$set(this.fluxForm, "fluxGeoOptions", [value]);
       this.resetFluxPredefinedControl();
-      this.setFluxGeoOptionsTmp(value);
+      this.setFluxGeoOptionsTmp([value]);
     },
     fluxPredefinedInputChanged(value) {
       if (!value) {
