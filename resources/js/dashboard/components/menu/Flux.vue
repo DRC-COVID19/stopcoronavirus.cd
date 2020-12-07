@@ -380,6 +380,7 @@ export default {
       this.resetFluxPredefinedControl();
     },
     submitFluxForm() {
+      this.setSelectedSource(this.fluxForm.selectedFluxSource);
       this.$emit("submitFluxForm", this.fluxForm);
       this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);

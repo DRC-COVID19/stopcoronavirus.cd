@@ -140,7 +140,10 @@
             <transition name="fade">
               <b-tabs pills card v-if="selectedSource == 2">
                 <b-tab title="Mobilité africell" v-if="activeMenu == 1">
-                  <AfriFluxChart />
+                  <AfriFluxChart
+                    :fluxAfricellDaily="fluxAfricellDaily"
+                    :fluxAfricelPresence="fluxAfricelPresence"
+                  />
                 </b-tab>
               </b-tabs>
             </transition>
@@ -449,6 +452,8 @@ export default {
       ],
       selectedFluxDataProvider: 1,
       flux30General: {},
+      fluxAfricellDaily: [],
+      fluxAfricelPresence: [],
     };
   },
   computed: {
@@ -841,6 +846,10 @@ export default {
     },
     submitFluxForm(values) {
       if (this.isLoading) {
+        return;
+      }
+      if (values.selectedFluxSource == 2) {
+        this.submitFluxAfricell(values);
         return;
       }
 
@@ -1326,6 +1335,46 @@ export default {
 
       globalInFunc();
       globalOutFunc();
+    },
+    submitFluxAfricell(values) {
+      const urlDaily = `api/dashboard/flux/africell/hors-zone/zones`;
+      const urlPresenceZone = `api/dashboard/flux/africell/presence/zones`;
+
+      this.$set(this.loadings, "urlFluxAfricell", true);
+
+      const dailyRequest = axios.get(urlDaily, {
+        params: values,
+      });
+
+      const presenceRequest = axios.get(urlPresenceZone, {
+        params: values,
+      });
+
+      this.fluxAfricellDaily = [];
+      this.fluxAfricelPresence = [];
+      Promise.all([dailyRequest, presenceRequest])
+        .then((response) => {
+          if (response[0]) {
+            this.fluxAfricellDaily = response[0].data;
+          }
+          if (response[1]) {
+            this.fluxAfricelPresence = response[1].data;
+          }
+
+          this.$ga.event(
+            "fluxData",
+            "getRequest",
+            "africell-daily",
+            "SendRequest"
+          );
+        })
+        .catch((error) => {
+          const exception = error.message || error;
+          this.$ga.exception(exception);
+        })
+        .finally(() => {
+          this.$set(this.loadings, "urlFluxAfricell", false);
+        });
     },
     submitFlux30Form(input) {
       const urlMaps = `api/dashboard/flux/hotspots/maps`;
