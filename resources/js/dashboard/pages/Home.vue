@@ -143,6 +143,7 @@
                   <AfriFluxChart
                     :fluxAfricellDaily="fluxAfricellDaily"
                     :fluxAfricelPresence="fluxAfricelPresence"
+                    :fluxAfricelInOut="fluxAfricelInOut"
                   />
                 </b-tab>
               </b-tabs>
@@ -454,6 +455,7 @@ export default {
       flux30General: {},
       fluxAfricellDaily: [],
       fluxAfricelPresence: [],
+      fluxAfricelInOut:[]
     };
   },
   computed: {
@@ -584,7 +586,7 @@ export default {
       "getHealthZone",
       "getFluxHotSpot",
     ]),
-    ...mapMutations(["setMapStyle", "setFluxType"]),
+    ...mapMutations(["setMapStyle", "setFluxType", "setObservationDate"]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
     },
@@ -1340,6 +1342,7 @@ export default {
     submitFluxAfricell(values) {
       const urlDaily = `api/dashboard/flux/africell/hors-zone/zones`;
       const urlPresenceZone = `api/dashboard/flux/africell/presence/zones`;
+      const urlInOutZone = `api/dashboard/flux/africell/in-out/zones`;
 
       this.$set(this.loadings, "urlFluxAfricell", true);
 
@@ -1351,15 +1354,35 @@ export default {
         params: values,
       });
 
+      const inOutRequest = axios.get(urlInOutZone, {
+        params: values,
+      });
+
+      this.setObservationDate({
+        start: values.observation_start,
+        end: values.observation_end,
+      });
+
+      const allRequest = [dailyRequest, presenceRequest];
+
+      if (values.observation_start == values.observation_end) {
+        allRequest.push(inOutRequest);
+      }
+
       this.fluxAfricellDaily = [];
       this.fluxAfricelPresence = [];
-      Promise.all([dailyRequest, presenceRequest])
+      this.fluxAfricelInOut=[];
+
+      Promise.all(allRequest)
         .then((response) => {
           if (response[0]) {
             this.fluxAfricellDaily = response[0].data;
           }
           if (response[1]) {
             this.fluxAfricelPresence = response[1].data;
+          }
+          if (response[2]) {
+            this.fluxAfricelInOut = response[2].data;
           }
 
           this.$ga.event(
@@ -1451,16 +1474,16 @@ export default {
               }
             });
             // si aucune donnée n'existe pour ce hotspot
-            if(this.flux30MapsData.length == 0){
+            if (this.flux30MapsData.length == 0) {
               const element = {
-                  origin: values.fluxGeoOptions[0],
-                  volume: null,
-                  difference: null ,
-                  percent: null ,
-                  volumeReference: null ,
-                  empty : true
-                };
-                this.flux30MapsData.push(element);
+                origin: values.fluxGeoOptions[0],
+                volume: null,
+                difference: null,
+                percent: null,
+                volumeReference: null,
+                empty: true,
+              };
+              this.flux30MapsData.push(element);
             }
           }
           if (response[1]) {
@@ -1863,7 +1886,7 @@ export default {
   // height: 100vh;
   background: $dash-background;
   // .side-bottom {
-    // height: calc(20vh - 72.5px);
+  // height: calc(20vh - 72.5px);
   // }
   .side-right {
     .flux-data-toggle {

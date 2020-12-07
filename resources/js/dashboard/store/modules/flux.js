@@ -15,7 +15,8 @@ export default {
     legendHover: null, // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
     typePresence: 1,
     afriFluxType: 1,
-    selectedSource: 1
+    selectedSource: 1,
+    observationDate: {}
   },
   mutations: {
     setIsWatchingfluxGeoOptions(state, payload) {
@@ -65,8 +66,10 @@ export default {
       state.afriFluxType = payload;
     },
     setSelectedSource(state, payload) {
-
       state.selectedSource = payload;
+    },
+    setObservationDate(state, payload) {
+      state.observationDate = payload;
     }
   },
   actions: {

@@ -21,7 +21,7 @@
           <b-img
             width="38"
             height="38"
-            src="/img/Orange_logo.svg"
+            src="/img/africell_logo.jpg"
             class="logoPartenaire"
             alt="orange logo"
           />
@@ -30,7 +30,7 @@
     </b-row>
     <b-row no-gutters>
       <b-col cols="12" md="6" class="pr-1 pl-0">
-        <b-skeleton-wrapper :loading="isLoading">
+        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
           <template #loading>
             <b-card class="mb-3 flux-mobility">
               <b-skeleton width="90%" height="20"></b-skeleton>
@@ -60,6 +60,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`mobile_out_in_tot_card`"
           >
+            <div class="text-center">Title</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -70,9 +71,27 @@
             </div>
           </b-card>
         </FullScreen>
+
+        <FullScreen
+          id="fullscreenOut2"
+          link="affricel_mobile_in"
+          @change="fullscreenFluxInOut"
+          v-if="isStartEnd"
+        >
+          <b-card no-body class="p-2 cardtype2">
+            <div class="chart-container">
+              <canvas
+                height="400"
+                width="100vh"
+                ref="affricel_mobile_in"
+                id="affricel_mobile_in"
+              ></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
       </b-col>
       <b-col cols="12" md="6" class="pr-1 pl-1">
-        <b-skeleton-wrapper :loading="isLoading">
+        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
           <template #loading>
             <b-card class="mb-3 flux-mobility">
               <b-skeleton width="90%" height="20"></b-skeleton>
@@ -102,6 +121,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`africell_prensence_card`"
           >
+            <div class="text-center">Title</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -118,7 +138,7 @@
 </template>
 
 <script>
-import { PALETTE,AFRICELL_LAST_UPDATE } from "../../config/env";
+import { PALETTE, AFRICELL_LAST_UPDATE } from "../../config/env";
 import { mapMutations, mapState } from "vuex";
 export default {
   components: {},
@@ -132,6 +152,10 @@ export default {
       default: () => [],
     },
     fluxAfricelPresence: {
+      type: Array,
+      default: () => [],
+    },
+    fluxAfricelInOut: {
       type: Array,
       default: () => [],
     },
@@ -156,9 +180,10 @@ export default {
       selectedMobilityType: 1,
       lineCharts: [],
       configBarChart: {},
+      barChart:[],
       flow_tot: null,
       volume: null,
-      last_update:AFRICELL_LAST_UPDATE
+      last_update: AFRICELL_LAST_UPDATE,
     };
   },
   mounted() {
@@ -182,7 +207,14 @@ export default {
   watch: {
     fluxAfricellDaily(newVal) {
       this.$nextTick(() => {
-        this.mobileCalc(newVal, "mobile_out_in_tot", "red", "flow_tot");
+        const inData = newVal.filter((x) => x.zoneB == this.targetZone[0]);
+        this.drawHorizontalChart(
+          inData,
+          "affricel_mobile_in",
+          "flow_AB",
+          "red",
+          "flow_tot"
+        );
       });
     },
     fluxAfricelPresence(newVal) {
@@ -190,12 +222,21 @@ export default {
         this.mobileCalc(newVal, "africell_prensence", "red", "volume");
       });
     },
+    fluxAfricelInOut(newVal) {
+      this.$nextTick(() => {
+        this.mobileCalc(newVal, "affricel_mobile_in", "red", "volume");
+      });
+    },
   },
   computed: {
     ...mapState({
       afriFluxType: (state) => state.flux.afriFluxType,
       targetZone: (state) => state.flux.fluxGeoOptions,
+      observationDate: (state) => state.flux.observationDate,
     }),
+    isStartEnd() {
+      return this.observationDate.start == this.observationDate.end;
+    },
   },
   methods: {
     ...mapMutations(["setAfriFluxType"]),
@@ -337,6 +378,82 @@ export default {
       );
       reference.style.height = 200;
     },
+    drawHorizontalChart(localData, ref, key, color, title = null) {
+      const datasets = [];
+
+      datasets.push({
+        label: "Observation",
+        backgroundColor: color,
+        borderColor: color,
+        data: localData.map((d) => ({x:new Date(x.date), y:x[key]})),
+      });
+
+      this.configBarChart[ref] = {
+        type: "horizontalBar",
+        data: {
+        // labels: localData.map((d) => d[key]),
+        datasets: datasets,
+      },
+        options: {
+          elements: {
+            rectangle: {
+              borderWidth: 2,
+            },
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            position: "bottom",
+            labels: {
+              fontSize: 9,
+            },
+          },
+          title: {
+            display: !!title,
+            text: title,
+            fontSize: 15,
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontSize: 9,
+                  callback: (value, index, values) => {
+
+                    return value;
+                  },
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: 9,
+                  callback: function (label, index, labels) {
+                    return label;
+                  },
+                },
+              },
+            ],
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: false, // enable trace line syncing with other charts
+              },
+            },
+          },
+        },
+      };
+      const reference = this.$refs[ref];
+      if (this.barChart[ref]) this.barChart[ref].destroy();
+      this.barChart[ref] = new Chart(
+        reference.getContext("2d"),
+        this.configBarChart[ref]
+      );
+      reference.style.height = 400;
+    },
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
@@ -359,6 +476,33 @@ export default {
         this.lineCharts[ref].update();
       }
     },
+    fullscreenFluxInOut(fullscreen, ref) {
+      //this.fullscreen = fullscreen
+      const element = this.$refs[ref];
+      const parent_2 = element.parentElement.parentElement;
+      if (!fullscreen) {
+        element.style.height = "400px";
+        element.height = "400px";
+        element.parentElement.style.width = "";
+        parent_2.style.display = "";
+        parent_2.style.alignItem = "";
+        parent_2.style.justifyContent = "";
+        this.configBarChart[ref].options.legend.labels.fontSize = 9;
+        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 9;
+        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9;
+        this.barChart[ref].update();
+      } else {
+        // element.parentElement.style.width = "80%";
+        // parent_2.style.display = "flex";
+        // parent_2.style.alignItems = "center";
+        // parent_2.style.justifyContent = "center";
+
+        this.configBarChart[ref].options.legend.labels.fontSize = 12;
+        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 12;
+        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 12;
+        this.barChart[ref].update();
+      }
+    },
   },
 };
 </script>
@@ -366,4 +510,9 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 @import "@~/sass/_mixins";
+.logoPartenaire {
+  height: 38px;
+  width: auto;
+  margin-left: 5px;
+}
 </style>
