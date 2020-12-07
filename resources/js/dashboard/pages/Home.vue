@@ -192,7 +192,9 @@
                 </b-row>
               </b-tab>
               <b-tab
-                title="Mobilité"
+                :title="
+                  fluxGeoGranularity == 3 ? 'Présence hotspots' : 'Mobilité'
+                "
                 v-if="
                   (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
                   !isFirstLoad &&
@@ -430,6 +432,7 @@ export default {
       activeMenu: (state) => state.nav.activeMenu,
       healthZones: (state) => state.app.healthZones,
       typePresence: (state) => state.flux.typePresence,
+      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
     }),
     hasRightSide() {
       return (
@@ -472,7 +475,7 @@ export default {
       return this.flux24DailyIn.length > 0;
     },
     hasFlux30Daily() {
-      return this.flux30Daily.length > 0;
+      return this.flux30Daily && this.fluxGeoGranularity == 3;
     },
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
@@ -1333,7 +1336,7 @@ export default {
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
 
-      this.$ga.event('fluxData', 'getRequest', 'hotspots', "SendRequest");
+      this.$ga.event("fluxData", "getRequest", "hotspots", "SendRequest");
 
       Promise.all([mapsRequest, dailyRequest, tendanceRequest, generalRequest])
         .then((response) => {
@@ -1371,9 +1374,14 @@ export default {
           if (response[3]) {
             const observation = response[3].data.observations;
             const reference = response[3].data.references;
-            const difference = observation - reference;
-            const percent = (difference * 100) / reference;
-            // console.log('flux30General',this.flux30General);
+            let difference = null;
+            let percent = null;
+
+            if (reference) {
+              difference = observation - reference;
+              percent = (difference * 100) / reference;
+            }
+
             this.flux30General = {
               observation,
               reference,
@@ -1381,11 +1389,12 @@ export default {
               percent,
             };
           }
-          this.$ga.event('fluxData', 'get', 'hotspots', "ReceiveResponse");
+          this.$ga.event("fluxData", "get", "hotspots", "ReceiveResponse");
         })
         .catch((error) => {
-          const exception = error.message || error
-          this.$ga.exception(exception)
+          console.log('error',error);
+          const exception = error.message || error;
+          this.$ga.exception(exception);
         })
         .finally(() => {
           this.$set(this.loadings, "urlFluxTIme30", false);

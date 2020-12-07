@@ -4,7 +4,7 @@
       <b-row class="mb-2">
         <div class="col-md col-12">
           <h3 class="d-flex align-items-center mb-0">
-            <span v-if="fluxGeoGranularity != 3" class="ml-2 mr-2">{{
+            <span  class="ml-2 mr-2">{{
               targetZone
             }}</span>
 
@@ -48,7 +48,7 @@
         >
 
           <b-card class="mb-3 flux-mobility">
-            <h5 class="percent-title">Présence {{ targetZone }}</h5>
+            <h5 class="percent-title">Présence</h5>
             <div class="percent flux-presence">
               {{ Math.round(flux30General.percent) }}%​
             </div>
@@ -702,7 +702,7 @@ export default {
         this.flux30Chart(
           this.flux30Daily,
           "flux_30_daily_chart",
-          PALETTE.flux_in_color
+          PALETTE.flux_presence
         );
       });
     },
@@ -798,7 +798,7 @@ export default {
       this.flux30Chart(
         this.flux30Daily,
         "flux_30_daily_chart",
-        PALETTE.flux_in_color
+        PALETTE.flux_presence
       );
     });
 
@@ -1236,7 +1236,7 @@ export default {
               label: "Volume",
               fill: false,
               borderColor: color,
-              backgroundColor: "rgb(166,180,205, 0.2)",
+              backgroundColor: color,
               data: dataFormatted,
               interpolate: true,
               showLine: true,
