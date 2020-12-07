@@ -63,11 +63,11 @@ router.beforeEach((to, from, next) => {
 Vue.use(VueAnalytics, {
   id: GOOGLE_ANALYTICS_ID,
   router,
-  // debug: {
-  //   enabled: true, // default value
-  //   trace: true, // default value
-  //   sendHitTask: true // default value
-  // }
+  debug: {
+    enabled: true, // default value
+    trace: false, // default value
+    sendHitTask: false // default value
+  }
 });
 
 const app = new Vue({

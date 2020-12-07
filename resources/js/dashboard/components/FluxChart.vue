@@ -56,7 +56,7 @@
               {{formatCash(flux30General.difference) }} personnes de
               <span v-if="flux30General.difference > 0">plus</span>
               <span v-else>moins</span>
-              ont été prsentes dans la zone
+              ont été présentes dans la zone
             </p>
           </b-card>
           <FullScreen
@@ -743,6 +743,7 @@ export default {
       }
     },
     typeMobilite() {
+      console.log('typeMobilite', this.typeMobilite)
       if (this.typeMobilite == 2) {
         this.selectFluxType(4);
       } else if (this.typeMobilite == 1) {
@@ -826,6 +827,7 @@ export default {
       "setTypePresence",
     ]),
     selectFluxType(value) {
+      if(value == this.fluxType) return ;
       this.setFluxType(value);
     },
     fluxInPercent({ referencesByDate, observationsByDate }) {

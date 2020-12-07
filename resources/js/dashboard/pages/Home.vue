@@ -998,6 +998,10 @@ export default {
       //     this.$set(this.loadings, "urlDailyCompare", false);
       //   });
 
+
+      this.$ga.event('Mobilité', 'Get flux data', 'state request', "send");
+      this.$ga.event('Mobilité', 'Get flux data', 'filtres', JSON.stringify(values));
+
       this.flux24Daily = [];
       this.$set(this.loadings, "urlDaily", true);
       axios
@@ -1007,9 +1011,11 @@ export default {
         .then(({ data }) => {
           this.flux24Daily = data;
           this.$set(this.loadings, "urlDaily", false);
+          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response flux24Daily");
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlDaily", false);
+          this.$ga.exception(JSON.stringify(response))
         });
 
       // get flux data in
@@ -1040,9 +1046,11 @@ export default {
             "destination"
           );
           this.$set(this.loadings, "urlDailyIn", false);
+          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response flux24DailyIn");
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlDailyIn", false);
+          this.$ga.exception(JSON.stringify(response))
         });
 
       // get flux data out
@@ -1096,9 +1104,11 @@ export default {
           );
 
           this.$set(this.loadings, "urlDailyOut", false);
+          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response flux24DailyOut");
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlDailyOut", false);
+          this.$ga.exception(JSON.stringify(response))
         });
 
       this.flux24Presence = [];
@@ -1139,9 +1149,11 @@ export default {
           this.flux24PresenceDailyInData = data;
 
           this.$set(this.loadings, "urlPresenceDailyIn", false);
+          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response flux24DailyPresence");
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlPresenceDailyIn", false);
+          this.$ga.exception(JSON.stringify(response))
         });
 
       this.flux24 = [];
@@ -1177,6 +1189,7 @@ export default {
         })
         .then(({ data }) => {
           this.topHealthZoneConfirmed = data;
+          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response top-confirmed");
         });
 
       const healthZones = this.healthZones.filter(
@@ -1227,11 +1240,17 @@ export default {
               if (healthIndexIn <= healthZones.length) {
                 globalInFunc();
               }
+              this.$ga.event('Mobilité', 'Get flux data', 'state request',
+                `receive response of ${countIn}/${countAll} zone(s) in by province(${values.fluxGeoOptions[0]})`
+              );
+
             })
-            .catch(() => {
+            .catch((error) => {
               countIn++;
               this.globalProgress =
                 ((countIn + countOut) / (countAll * 2)) * 100;
+
+              this.$ga.exception(JSON.stringify(error))
             });
 
           //Get  zone out by province
@@ -1251,7 +1270,7 @@ export default {
           const healthZoneValues = Object.assign({}, values);
           healthZoneValues.fluxGeoOptions = item.zone;
 
-          //Get  zone in by province
+          //Get  zone out by province
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
               params: healthZoneValues,
@@ -1273,11 +1292,15 @@ export default {
               if (healthIndexOut <= healthZones.length) {
                 globalOutFunc();
               }
+              this.$ga.event('Mobilité', 'Get flux data', 'state request',
+                `receive response of ${countOut}/${countAll} zone(s) out by province(${values.fluxGeoOptions[0]})`
+              );
             })
-            .catch(() => {
+            .catch((error) => {
               countOut++;
               this.globalProgress =
                 ((countIn + countOut) / (countAll * 2)) * 100;
+              this.$ga.exception(JSON.stringify(error))
             });
 
           //Get  zone out by province
@@ -1333,7 +1356,9 @@ export default {
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
 
-      this.$ga.event('fluxData', 'getRequest', 'hotspots', "SendRequest");
+      this.$ga.event('Mobilité', 'Get hotspots', 'state request', "send");
+      this.$ga.event('Mobilité', 'Get hotspots', 'filtres', JSON.stringify(values));
+
 
       Promise.all([mapsRequest, dailyRequest, tendanceRequest, generalRequest])
         .then((response) => {
@@ -1381,11 +1406,11 @@ export default {
               percent,
             };
           }
-          this.$ga.event('fluxData', 'get', 'hotspots', "ReceiveResponse");
+          this.$ga.event('Mobilité', 'Get hotspots', 'state request', "receive response");
         })
         .catch((error) => {
           const exception = error.message || error
-          this.$ga.exception(exception)
+          this.$ga.exception(JSON.stringify(exception))
         })
         .finally(() => {
           this.$set(this.loadings, "urlFluxTIme30", false);
