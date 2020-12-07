@@ -158,7 +158,19 @@ class Flux30ZoneSumController extends Controller
       $fluxReferenceGroup = $fluxReferences->groupBy('day');
       $ObservationFormatted = [];
 
+      // dd([ 'observation'=>$fluxObservationGroup->toArray(),
+      // 'reference'=>$fluxReferenceGroup->toArray()]);
+
+      // if ($fluxReferenceGroup->count()==0) {
+      //   return  response()->json([
+      //     "observations" => [],
+      //   ], 200);
+      // }
+
       foreach ($fluxObservationGroup as $key => $observation) {
+        if (!isset($fluxReferenceGroup[$key])) {
+          continue;
+        }
         $reference = $fluxReferenceGroup[$key]->toArray();
         foreach ($observation as $value) {
           $referenceHour = array_filter($reference, function ($item) use ($value) {

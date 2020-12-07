@@ -467,6 +467,7 @@ export default {
       healthZones: (state) => state.app.healthZones,
       typePresence: (state) => state.flux.typePresence,
       selectedSource: (state) => state.flux.selectedSource,
+      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
     }),
     hasRightSide() {
       return (
@@ -509,7 +510,7 @@ export default {
       return this.flux24DailyIn.length > 0;
     },
     hasFlux30Daily() {
-      return this.flux30Daily.length > 0;
+      return this.flux30Daily && this.fluxGeoGranularity == 3;
     },
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
@@ -1387,6 +1388,7 @@ export default {
       values.preference_end = "2020-05-31";
       // values.preference_start = "2020-05-17";
       // values.preference_end = "2020-05-31";
+      // values.fluxGeoOptions = ["Malawi"];
 
       const mapsRequest = axios.get(urlMaps, {
         params: values,
@@ -1424,6 +1426,10 @@ export default {
             const data = response[0].data;
             const observations = data.observations;
             const references = data.references;
+
+            // const observations = [];
+            // const references = [];
+
             observations.forEach((item) => {
               const referenceData = references.find(
                 (x) => x.origin == item.origin
@@ -1444,9 +1450,21 @@ export default {
                 this.flux30MapsData.push(element);
               }
             });
+            // si aucune donnée n'existe pour ce hotspot
+            if(this.flux30MapsData.length == 0){
+              const element = {
+                  origin: values.fluxGeoOptions[0],
+                  volume: null,
+                  difference: null ,
+                  percent: null ,
+                  volumeReference: null ,
+                  empty : true
+                };
+                this.flux30MapsData.push(element);
+            }
           }
           if (response[1]) {
-            this.flux30Daily = response[1].data.observations;
+            this.flux30Daily = this.flux30Daily = response[1].data.observations;
           }
           if (response[2]) {
             this.flux24Daily = response[2].data.observations;
@@ -1454,9 +1472,14 @@ export default {
           if (response[3]) {
             const observation = response[3].data.observations;
             const reference = response[3].data.references;
-            const difference = observation - reference;
-            const percent = (difference * 100) / reference;
-            // console.log('flux30General',this.flux30General);
+            let difference = null;
+            let percent = null;
+
+            if (reference) {
+              difference = observation - reference;
+              percent = (difference * 100) / reference;
+            }
+
             this.flux30General = {
               observation,
               reference,
@@ -1839,7 +1862,7 @@ export default {
 .dash-home-page {
   // height: 100vh;
   background: $dash-background;
-  .side-bottom {
+  // .side-bottom {
     // height: calc(20vh - 72.5px);
   }
   .side-right {
@@ -1848,6 +1871,8 @@ export default {
       right: 0;
     }
   }
+  // }
+
   .bounce-enter-active {
     animation: slideInUp 0.5s;
   }
