@@ -1,3 +1,5 @@
+import {event, exception} from 'vue-analytics';
+
 export default {
     state: {
         hospitalData: null,
@@ -31,6 +33,9 @@ export default {
                 if(payload.observation_end) state.observation_end = payload.observation_end
                 if(payload.observation_start) state.observation_start = payload.observation_start
                 state.township = payload.township
+
+                event('Infrastructures', 'Get flux data', 'state request', "send");
+                event('Infrastructures', 'Get flux data', 'filtres', JSON.stringify(payload));
 
                 axios
                     .get(`/api/dashboard/hospitals`, {
@@ -95,9 +100,12 @@ export default {
                         };
                         state.hospitalCount = data.length;
                         state.isLoading = false;
+
+                        event('Infrastructures', 'Get flux data', 'state request', "receive response");
                     })
-                    .catch(() => {
+                    .catch((error) => {
                         state.isLoading = false;
+                        exception(JSON.stringify(error))
                     });
 
                 axios
@@ -110,7 +118,11 @@ export default {
                     })
                     .then(({ data }) => {
                         state.hospitalTotalData = data
+                        event('Infrastructures', 'Get flux data', 'state request', "receive response totaux");
                     })
+                    .catch((error) => {
+                      exception(JSON.stringify(error))
+                    });
             } else {
                 state.hospitalData = null;
                 state.hospitalCount = null;
@@ -122,19 +134,31 @@ export default {
         getSituationHospital({ state }, payload) {
             const selectedHospital = payload ? payload : ''
             state.situationHospitalLoading = true
+            const params = {
+              observation_end : state.observation_end ,
+              observation_start : state.observation_start ,
+              township : state.township
+            }
+            console.log('state', state)
+            event('Infrastructures', 'Get hospital evolution', 'state request', "send");
+            event('Infrastructures', 'Get hospital evolution', 'filtres',
+              JSON.stringify({...params, selectedHospital}));
+
             axios
                 .get(`/api/dashboard/hospitals/evolution/${selectedHospital}`,
                 {
-                  params : {
-                    observation_end : state.observation_end ,
-                    observation_start : state.observation_start ,
-                    township : state.township
-                  }
+                  params
                 })
                 .then(({ data }) => {
+                    console.log('data', data)
+
                     state.situationHospital = data
                     state.situationHospitalLoading = false
+                    event('Infrastructures', 'Get hospital evolution', 'state request', "receive response");
                 })
+                .catch((error) => {
+                  exception(JSON.stringify(error))
+                });
         }
     }
 }
