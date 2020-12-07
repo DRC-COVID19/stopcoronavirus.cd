@@ -645,7 +645,7 @@ export default {
           break;
         case 6:
           observation_start = "2020-03-19";
-          observation_end = "2020-03-28";
+          observation_end = "2020-08-12";
           break;
       }
 

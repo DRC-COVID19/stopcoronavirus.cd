@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\MyTrait;
+namespace App\MyTrait;
 
 use Google_Client;
 use Google_Service_Sheets;

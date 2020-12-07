@@ -8,13 +8,14 @@ import commont from './mixins/common';
 import VueLazyLoad from 'vue-lazyload';
 import vSelect from 'vue-select';
 import App from "./App.vue";
+import {GOOGLE_ANALYTICS_ID} from './config/env';
 import GlobalComponents from './globalComponents'
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env';
 import "chartjs-plugin-crosshair";
 import fullscreen from 'vue-fullscreen';
 import VueEllipseProgress from "vue-ellipse-progress";
 import VueSkeletonLoading from 'vue-skeleton-loading';
- 
+import VueAnalytics from 'vue-analytics';
 
 
 require('./helper');
@@ -30,8 +31,12 @@ Vue.use(fullscreen);
 Vue.use(VueEllipseProgress);
 Vue.use(VueSkeletonLoading);
 
+
+
 if (store.state.auth.isAuthenticated) {
-    store.dispatch('userMe');
+    store.dispatch('userMe').catch(error=>{
+
+    });
 }
 
 store.dispatch('loadSource');
@@ -53,6 +58,16 @@ router.beforeEach((to, from, next) => {
     }
 
     next()
+});
+
+Vue.use(VueAnalytics, {
+  id: GOOGLE_ANALYTICS_ID,
+  router,
+  // debug: {
+  //   enabled: true, // default value
+  //   trace: true, // default value
+  //   sendHitTask: true // default value
+  // }
 });
 
 const app = new Vue({

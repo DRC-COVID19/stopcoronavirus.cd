@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\MyTrait;
+namespace App\MyTrait;
 
 use Illuminate\Support\Str;
 
 /**
- * 
+ *
  */
-trait GeoConding
+trait GeoCoding
 {
     private $townGeocoding = [];
 

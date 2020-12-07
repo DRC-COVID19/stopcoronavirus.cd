@@ -16,8 +16,8 @@ use App\Http\Resources\HospitalResources;
 use App\Http\Resources\HospitalTotauxResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\MyTrait\GClientSheet;
-use App\Http\MyTrait\GeoConding;
+use App\MyTrait\GClientSheet;
+use App\MyTrait\GeoCoding;
 use App\Imports\FluxImport;
 use App\PandemicStat;
 use Illuminate\Support\Facades\Validator;
@@ -26,7 +26,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class DashBoardController extends Controller
 {
-    use GClientSheet, GeoConding;
+    use GClientSheet, GeoCoding;
 
     public function __construct()
     {
