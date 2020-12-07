@@ -603,7 +603,7 @@ export default {
               labels,
             };
             this.$set(this.loadings, "getCovidCases_stat", false);
-            this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response covid-cases statistics");
+            this.$ga.event('Epidémiologie', 'Get flux data', 'state request', "receive response covid-cases statistics");
           })
           .catch((response) => {
             this.$set(this.loadings, "getCovidCases_stat", false);
@@ -632,7 +632,7 @@ export default {
               labels,
             };
             this.$set(this.loadings, "getCovidCases_statdaily", false);
-            this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response covid-cases statistics daily");
+            this.$ga.event('Epidémiologie', 'Get flux data', 'state request', "receive response covid-cases statistics daily");
           })
           .catch((response) => {
             this.$set(this.loadings, "getCovidCases_statdaily", false);
@@ -674,7 +674,7 @@ export default {
 
             this.covidCasesCount = confirmedCount;
             this.$set(this.loadings, "getCovidCases_cases", false);
-            this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response covid-cases");
+            this.$ga.event('Epidémiologie', 'Get flux data', 'state request', "receive response covid-cases");
           })
           .catch((response) => {
             this.$set(this.loadings, "getCovidCases_cases", false);
