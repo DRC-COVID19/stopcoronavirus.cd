@@ -32463,6 +32463,7 @@ h3 {
 
 .legend-container .datas {
   display: flex;
+  align-items: flex-end;
 }
 
 .legend-container .lbl {
@@ -32504,6 +32505,16 @@ h3 {
 
 .style-chooser.style-chooser-multiple .vs__selected {
   width: auto;
+  max-width: calc(100% - 5px);
+  padding-right: 22px;
+  position: relative;
+}
+
+.style-chooser.style-chooser-multiple .vs__selected .vs__deselect {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .style-chooser .vs__selected-options {
@@ -32522,6 +32533,7 @@ h3 {
   overflow: hidden;
   max-height: 32px;
   height: auto;
+  width: calc(100% - 25px);
   transition: max-height 0.6s ease-in-out;
 }
 
