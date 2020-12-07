@@ -22,7 +22,7 @@ class AfricelFlowHorsZoneController extends Controller
   {
     $data = $this->fluxValidator($request->all());
     try {
-      $zoneData = AfricelFlowHorsZone::select(['zone_name as reference', 'africel_health_zones.name', 'date','flow_out','flow_in', 'flow_tot'])
+      $zoneData = AfricelFlowHorsZone::select(['zone_name as reference', 'africel_health_zones.name as name', 'date','flow_out','flow_in', 'flow_tot'])
         ->join('africel_health_zones', function ($q) {
           $q->on('africel_health_zones.reference', '=', 'africel_flow_hors_zones.zone_name');
         })
