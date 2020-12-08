@@ -4,7 +4,7 @@
       <b-row class="mb-2">
         <div class="col-md col-12">
           <h3 class="d-flex align-items-center mb-0">
-            <span v-if="fluxGeoGranularity != 3" class="ml-2 mr-2">{{
+            <span  class="ml-2 mr-2">{{
               targetZone
             }}</span>
 
@@ -49,23 +49,28 @@
 
           <b-card class="mb-3 flux-mobility">
             <h5 class="percent-title">Présence {{ targetZone }}</h5>
-            <div class="percent flux-presence">
-              {{ Math.round(flux30General.percent) }}%​
-            </div>
-            <p class="percent-p text-dash-color mb-0">
-              {{formatCash(flux30General.difference) }} personnes de
-              <span v-if="flux30General.difference > 0">plus</span>
-              <span v-else>moins</span>
-              ont été prsentes dans la zone
+            <p class="text-muted" v-if="!flux30General.percent">
+              Données non disponibles
             </p>
+            <div v-else>
+              <div class="percent flux-presence">
+                {{ Math.round(flux30General.percent) }}%​
+              </div>
+              <p class="percent-p text-dash-color mb-0">
+                {{formatCash(flux30General.difference) }} personnes de
+                <span v-if="flux30General.difference > 0">plus</span>
+                <span v-else>moins</span>
+                ont été présentes dans la zone
+              </p>
+            </div>
           </b-card>
           <FullScreen
             id="flux_30_daily"
             link="flux_30_daily_chart"
             @change="fullscreenMobileDaily"
+            v-show="this.flux30Daily.length > 0"
           >
-            <b-card no-body class="cardtype1 mb-3 p-2">
-              <div class="chart-container">
+            <b-card no-body class="cardtype1 mb-3 p-2">              <div class="chart-container">
                 <canvas
                   height="200"
                   width="100vh"
@@ -702,7 +707,7 @@ export default {
         this.flux30Chart(
           this.flux30Daily,
           "flux_30_daily_chart",
-          PALETTE.flux_in_color
+          PALETTE.flux_presence
         );
       });
     },
@@ -798,7 +803,7 @@ export default {
       this.flux30Chart(
         this.flux30Daily,
         "flux_30_daily_chart",
-        PALETTE.flux_in_color
+        PALETTE.flux_presence
       );
     });
 
@@ -1236,7 +1241,7 @@ export default {
               label: "Volume",
               fill: false,
               borderColor: color,
-              backgroundColor: "rgb(166,180,205, 0.2)",
+              backgroundColor: color,
               data: dataFormatted,
               interpolate: true,
               showLine: true,

@@ -21,7 +21,7 @@
           <b-img
             width="38"
             height="38"
-            src="/img/Orange_logo.svg"
+            src="/img/africell_logo.jpg"
             class="logoPartenaire"
             alt="orange logo"
           />
@@ -30,7 +30,7 @@
     </b-row>
     <b-row no-gutters>
       <b-col cols="12" md="6" class="pr-1 pl-0">
-        <b-skeleton-wrapper :loading="isLoading">
+        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
           <template #loading>
             <b-card class="mb-3 flux-mobility">
               <b-skeleton width="90%" height="20"></b-skeleton>
@@ -46,20 +46,23 @@
           >
             <h5 class="percent-title">Flow_tot</h5>
 
-            <div class="percent flux-in-color">{{ flow_tot.toFixed(2) }}%​</div>
+            <div class="percent flux-in-color">
+              {{ flow_tot ? flow_tot.toFixed(2) : "NAN" }}%​
+            </div>
           </b-card>
         </b-skeleton-wrapper>
         <FullScreen
           id="fullscreenOut"
           link="mobile_out_in_tot"
           @change="fullscreenMobileDaily"
-          v-show="!isLoading"
+          v-show="!isStartEnd"
         >
           <b-card
             no-body
             class="mb-3 p-2 cardtype1"
             :ref="`mobile_out_in_tot_card`"
           >
+            <div class="text-center">Title flow tot</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -70,9 +73,28 @@
             </div>
           </b-card>
         </FullScreen>
+
+        <FullScreen
+          id="fullscreenIn"
+          link="affricel_mobile_in"
+          @change="fullscreenFluxInOut"
+          v-show="isStartEnd"
+        >
+          <b-card no-body class="p-2 cardtype2">
+            <div class="text-center">Title flow in</div>
+            <div class="chart-container">
+              <canvas
+                height="400"
+                width="100vh"
+                ref="affricel_mobile_in"
+                id="affricel_mobile_in"
+              ></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
       </b-col>
       <b-col cols="12" md="6" class="pr-1 pl-1">
-        <b-skeleton-wrapper :loading="isLoading">
+        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
           <template #loading>
             <b-card class="mb-3 flux-mobility">
               <b-skeleton width="90%" height="20"></b-skeleton>
@@ -88,20 +110,23 @@
           >
             <h5 class="percent-title">Présence</h5>
 
-            <div class="percent flux-in-color">{{ volume.toFixed(2) }}%​</div>
+            <div class="percent flux-presence">
+              {{ volume ? volume.toFixed(2) : "NAN" }}%​
+            </div>
           </b-card>
         </b-skeleton-wrapper>
         <FullScreen
           id="fullscreenOut"
           link="africell_prensence"
           @change="fullscreenMobileDaily"
-          v-show="!isLoading"
+          v-show="!isStartEnd"
         >
           <b-card
             no-body
             class="mb-3 p-2 cardtype1"
             :ref="`africell_prensence_card`"
           >
+            <div class="text-center">Title presence</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -112,13 +137,31 @@
             </div>
           </b-card>
         </FullScreen>
+        <FullScreen
+          id="fullscreenOut"
+          link="affricel_mobile_out"
+          @change="fullscreenFluxInOut"
+          v-show="isStartEnd"
+        >
+          <b-card no-body class="p-2 cardtype2">
+            <div class="text-center">Title flow out</div>
+            <div class="chart-container">
+              <canvas
+                height="400"
+                width="100vh"
+                ref="affricel_mobile_out"
+                id="affricel_mobile_out"
+              ></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
-import { PALETTE,AFRICELL_LAST_UPDATE } from "../../config/env";
+import { PALETTE, AFRICELL_LAST_UPDATE } from "../../config/env";
 import { mapMutations, mapState } from "vuex";
 export default {
   components: {},
@@ -132,6 +175,10 @@ export default {
       default: () => [],
     },
     fluxAfricelPresence: {
+      type: Array,
+      default: () => [],
+    },
+    fluxAfricelInOut: {
       type: Array,
       default: () => [],
     },
@@ -156,9 +203,10 @@ export default {
       selectedMobilityType: 1,
       lineCharts: [],
       configBarChart: {},
+      barChart: [],
       flow_tot: null,
       volume: null,
-      last_update:AFRICELL_LAST_UPDATE
+      last_update: AFRICELL_LAST_UPDATE,
     };
   },
   mounted() {
@@ -178,6 +226,9 @@ export default {
         "volume"
       );
     });
+    this.$nextTick(() => {
+      this.africellDataInOut(this.fluxAfricelInOut);
+    });
   },
   watch: {
     fluxAfricellDaily(newVal) {
@@ -190,15 +241,48 @@ export default {
         this.mobileCalc(newVal, "africell_prensence", "red", "volume");
       });
     },
+    fluxAfricelInOut(newVal) {
+      this.$nextTick(() => {
+        this.africellDataInOut(newVal);
+      });
+    },
   },
   computed: {
     ...mapState({
       afriFluxType: (state) => state.flux.afriFluxType,
       targetZone: (state) => state.flux.fluxGeoOptions,
+      observationDate: (state) => state.flux.observationDate,
     }),
+    isStartEnd() {
+      return this.observationDate.start == this.observationDate.end;
+    },
   },
   methods: {
     ...mapMutations(["setAfriFluxType"]),
+    africellDataInOut(data) {
+      if (!this.isStartEnd) {
+        return;
+      }
+      const inData = data.filter((x) => x.zoneB == this.targetZone[0]);
+      const outData = data.filter((x) => x.zoneA == this.targetZone[0]);
+
+      this.drawHorizontalChart(
+        inData,
+        "affricel_mobile_in",
+        "zoneA",
+        "flow_AB",
+        PALETTE.flux_in_color,
+        "flow_tot"
+      );
+      this.drawHorizontalChart(
+        outData,
+        "affricel_mobile_out",
+        "zoneB",
+        "flow_AB",
+        PALETTE.flux_out_color,
+        "flow_tot"
+      );
+    },
     selectFluxType(value) {
       this.setAfriFluxType(value);
     },
@@ -337,6 +421,86 @@ export default {
       );
       reference.style.height = 200;
     },
+    drawHorizontalChart(data, ref, YKey, XKey, color, title = null) {
+      const localData = data.map((d) => ({ x: d[XKey], y: d[YKey] }));
+      this.configBarChart[ref] = {
+        type: "horizontalBar",
+        data: {
+          labels: localData.map((d) => d.y),
+          datasets: [
+            {
+              label: "Observation",
+              backgroundColor: color,
+              borderColor: color,
+              data: localData,
+            },
+          ],
+        },
+        options: {
+          elements: {
+            rectangle: {
+              borderWidth: 2,
+            },
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            display: false,
+            position: "bottom",
+            labels: {
+              fontSize: 9,
+            },
+          },
+          title: {
+            display: false,
+            text: title,
+            fontSize: 15,
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontSize: 9,
+                  // callback: (value, index, values) => {
+                  //   return value;
+                  // },
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: 9,
+                  callback: function (label, index, labels) {
+                    const value = localData.find((x) => x.y == label);
+                    if (value && value.x) {
+                      return `${label} (${value.x.toFixed(1)}%)`;
+                    } else {
+                      return label;
+                    }
+                  },
+                },
+              },
+            ],
+          },
+          plugins: {
+            crosshair: {
+              sync: {
+                enabled: false, // enable trace line syncing with other charts
+              },
+            },
+          },
+        },
+      };
+      const reference = this.$refs[ref];
+      if (this.barChart[ref]) this.barChart[ref].destroy();
+      this.barChart[ref] = new Chart(
+        reference.getContext("2d"),
+        this.configBarChart[ref]
+      );
+      reference.style.height = 400;
+    },
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
       if (!fullscreen) {
@@ -359,6 +523,33 @@ export default {
         this.lineCharts[ref].update();
       }
     },
+    fullscreenFluxInOut(fullscreen, ref) {
+      //this.fullscreen = fullscreen
+      const element = this.$refs[ref];
+      const parent_2 = element.parentElement.parentElement;
+      if (!fullscreen) {
+        element.style.height = "400px";
+        element.height = "400px";
+        element.parentElement.style.width = "";
+        parent_2.style.display = "";
+        parent_2.style.alignItem = "";
+        parent_2.style.justifyContent = "";
+        this.configBarChart[ref].options.legend.labels.fontSize = 9;
+        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 9;
+        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9;
+        this.barChart[ref].update();
+      } else {
+        // element.parentElement.style.width = "80%";
+        // parent_2.style.display = "flex";
+        // parent_2.style.alignItems = "center";
+        // parent_2.style.justifyContent = "center";
+
+        this.configBarChart[ref].options.legend.labels.fontSize = 12;
+        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 12;
+        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 12;
+        this.barChart[ref].update();
+      }
+    },
   },
 };
 </script>
@@ -366,4 +557,9 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 @import "@~/sass/_mixins";
+.logoPartenaire {
+  height: 38px;
+  width: auto;
+  margin-left: 5px;
+}
 </style>
