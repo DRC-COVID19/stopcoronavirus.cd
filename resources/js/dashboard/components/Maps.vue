@@ -553,9 +553,9 @@ export default {
     showBottom() {
       // le side bottom prend 500ms pour reprendre sa position initiale
       // donc on attend 600ms avant d'effectuer le resize
-      setTimeout(function(){
+      setTimeout(function () {
         map.resize();
-      },600)
+      }, 600);
     },
   },
   methods: {
@@ -651,8 +651,7 @@ export default {
     },
     stateHoverMouseMove(e) {
       if (e.features.length > 0) {
-
-        if (this.stateHover.hoveredStateId!=null) {
+        if (this.stateHover.hoveredStateId != null) {
           map.setFeatureState(
             {
               source:
@@ -678,7 +677,7 @@ export default {
       }
     },
     stateHoverMouseLeave(e) {
-      if (this.stateHover.hoveredStateId!=null) {
+      if (this.stateHover.hoveredStateId != null) {
         map.setFeatureState(
           {
             source:
@@ -1058,13 +1057,19 @@ export default {
 
       this.removePolygoneHoverLayer();
       this.addPolygoneLayer(2);
+      let mapCenter = this.defaultKinshasaCoordinates;
+      let mapZoom = 10;
+      if (this.fluxGeoOptions[0] != "Tout") {
+        mapCenter = this.getHospotCoordonate(this.fluxGeoOptions[0]);
+        mapZoom = 14;
+      }
       map.flyTo({
-        center: this.defaultKinshasaCoordinates,
+        center: mapCenter,
         easing: function (t) {
           return t;
         },
         pitch: 10,
-        zoom: 10,
+        zoom: mapZoom,
       });
       let features = [...flux30MapsData];
       const domaineMax = d3.max(features, (d) => d.percent);
@@ -1113,12 +1118,20 @@ export default {
       colorExpression.push("white");
 
       if (legendHover) {
-        features = features.filter(
-          (x) => x.percent >= legendHover.de && x.percent <= legendHover.a
-        );
+        let from;
+        let to;
+        if (typeof legendHover.de == "string") {
+          from =Number(legendHover.de.replace("%", ""));
+        }
+        if (typeof legendHover.a == "string") {
+          to =Number(legendHover.a.replace("%", ""))+1;
+        }
+
+        features = features.filter((x) => x.percent >= from && x.percent <= to);
         if (features.length == 0) {
           return;
         }
+
       }
 
       map.U.addCircle(
@@ -1323,7 +1336,7 @@ export default {
       }
     },
     flux24RemoveLayer() {
-      if (this.activeMenu==3) {
+      if (this.activeMenu == 3) {
         return;
       }
       map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
@@ -1658,9 +1671,9 @@ export default {
         (x) => x.properties.origin == name
       );
       this.$set(this.ArcLayerSelectedObject, "position", {
-          top: e.point.y,
-          left: e.point.x,
-        });
+        top: e.point.y,
+        left: e.point.x,
+      });
       if (feature) {
         value = feature.properties.percent;
 
@@ -1669,7 +1682,7 @@ export default {
           percent: feature.properties.percent,
         });
       } else {
-        this.$set(this.ArcLayerSelectedObject, "item",  {
+        this.$set(this.ArcLayerSelectedObject, "item", {
           origin: name,
         });
       }
@@ -1721,8 +1734,8 @@ export default {
         center: this.defaultCenterCoordinates,
         zoom: 3.5,
       };
-      if (this.activeMenu==3) {
-          return;
+      if (this.activeMenu == 3) {
+        return;
       }
       this.flux24RemoveLayer();
       map.U.removeLayer([EPIDEMIC_LAYER]);
@@ -1776,6 +1789,16 @@ export default {
         if (feature) {
           coordinates = feature.geometry.coordinates;
         }
+      }
+      return coordinates;
+    },
+    getHospotCoordonate(name) {
+      let coordinates = [];
+      const feature = this.hotspotGeojsonCentered.features.find(
+        (x) => x.properties.DENOMMIN == name
+      );
+      if (feature) {
+        coordinates = feature.geometry.coordinates;
       }
       return coordinates;
     },
@@ -2137,7 +2160,7 @@ export default {
           { hover: true }
         );
       }
-      const feature= e.features[0];
+      const feature = e.features[0];
       // const HTML = `<div>${origin} ${volume ? `: ${volume}` : ""}</div>`;
 
       if (feature) {
@@ -2149,7 +2172,7 @@ export default {
         this.$set(this.ArcLayerSelectedObject, "item", {
           origin: origin,
           percent: volume,
-          isAbsolute:true,
+          isAbsolute: true,
         });
       } else {
         this.$set(this.ArcLayerSelectedObject, "item", null);
