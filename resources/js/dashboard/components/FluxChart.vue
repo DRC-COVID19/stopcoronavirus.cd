@@ -47,8 +47,8 @@
           v-show="!isLoading"
         >
 
-          <b-card class="mb-3 flux-mobility">
-            <h5 class="percent-title">Présence {{ targetZone }}</h5>
+          <b-card class="mb-3 flux-mobility active">
+            <h5 class="percent-title">Présence</h5>
             <p class="text-muted" v-if="!flux30General.percent">
               Données non disponibles
             </p>
