@@ -275,7 +275,8 @@ export default {
       return this.$options.filters.date(value);
     },
     fluxGeoOptionsChange(value){
-      this.$set(this.form, "geoOptions", [value]);
+      const newVal = value === null ? [] : [value]
+      this.$set(this.form, "geoOptions", newVal);
       this.resetFluxPredefinedControl();
     }
   },

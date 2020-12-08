@@ -449,9 +449,10 @@ export default {
       }
     },
     fluxGeoOptionsChange(value) {
-      this.$set(this.fluxForm, "fluxGeoOptions", [value]);
+      const newVal = value === null ? [] : [value]
+      this.$set(this.fluxForm, "fluxGeoOptions", newVal);
       this.resetFluxPredefinedControl();
-      this.setFluxGeoOptionsTmp([value]);
+      this.setFluxGeoOptionsTmp(newVal);
     },
     fluxPredefinedInputChanged(value) {
       if (!value) {
