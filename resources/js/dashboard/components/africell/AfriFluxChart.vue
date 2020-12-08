@@ -46,7 +46,9 @@
           >
             <h5 class="percent-title">Flow_tot</h5>
 
-            <div class="percent flux-in-color">{{ flow_tot.toFixed(2) }}%​</div>
+            <div class="percent flux-in-color">
+              {{ flow_tot ? flow_tot.toFixed(2) : "NAN" }}%​
+            </div>
           </b-card>
         </b-skeleton-wrapper>
         <FullScreen
@@ -76,7 +78,7 @@
           id="fullscreenIn"
           link="affricel_mobile_in"
           @change="fullscreenFluxInOut"
-          v-if="isStartEnd"
+          v-show="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
             <div class="text-center">Title flow in</div>
@@ -108,7 +110,9 @@
           >
             <h5 class="percent-title">Présence</h5>
 
-            <div class="percent flux-presence">{{ volume.toFixed(2) }}%​</div>
+            <div class="percent flux-presence">
+              {{ volume ? volume.toFixed(2) : "NAN" }}%​
+            </div>
           </b-card>
         </b-skeleton-wrapper>
         <FullScreen
@@ -137,7 +141,7 @@
           id="fullscreenOut"
           link="affricel_mobile_out"
           @change="fullscreenFluxInOut"
-          v-if="isStartEnd"
+          v-show="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
             <div class="text-center">Title flow out</div>
@@ -441,7 +445,7 @@ export default {
           responsive: true,
           maintainAspectRatio: false,
           legend: {
-            display:false,
+            display: false,
             position: "bottom",
             labels: {
               fontSize: 9,
