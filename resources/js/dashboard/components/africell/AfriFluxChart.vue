@@ -53,7 +53,7 @@
           id="fullscreenOut"
           link="mobile_out_in_tot"
           @change="fullscreenMobileDaily"
-          v-show="!isLoading"
+          v-show="!isStartEnd"
         >
           <b-card
             no-body
@@ -73,12 +73,13 @@
         </FullScreen>
 
         <FullScreen
-          id="fullscreenOut2"
+          id="fullscreenIn"
           link="affricel_mobile_in"
           @change="fullscreenFluxInOut"
           v-if="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
+            <div class="text-center">Title</div>
             <div class="chart-container">
               <canvas
                 height="400"
@@ -107,14 +108,14 @@
           >
             <h5 class="percent-title">Présence</h5>
 
-            <div class="percent flux-in-color">{{ volume.toFixed(2) }}%​</div>
+            <div class="percent flux-presence">{{ volume.toFixed(2) }}%​</div>
           </b-card>
         </b-skeleton-wrapper>
         <FullScreen
           id="fullscreenOut"
           link="africell_prensence"
           @change="fullscreenMobileDaily"
-          v-show="!isLoading"
+          v-show="!isStartEnd"
         >
           <b-card
             no-body
@@ -128,6 +129,24 @@
                 width="100vh"
                 ref="africell_prensence"
                 id="africell_prensence"
+              ></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
+        <FullScreen
+          id="fullscreenOut"
+          link="affricel_mobile_out"
+          @change="fullscreenFluxInOut"
+          v-if="isStartEnd"
+        >
+          <b-card no-body class="p-2 cardtype2">
+            <div class="text-center">Title</div>
+            <div class="chart-container">
+              <canvas
+                height="400"
+                width="100vh"
+                ref="affricel_mobile_out"
+                id="affricel_mobile_out"
               ></canvas>
             </div>
           </b-card>
@@ -180,7 +199,7 @@ export default {
       selectedMobilityType: 1,
       lineCharts: [],
       configBarChart: {},
-      barChart:[],
+      barChart: [],
       flow_tot: null,
       volume: null,
       last_update: AFRICELL_LAST_UPDATE,
@@ -203,18 +222,14 @@ export default {
         "volume"
       );
     });
+    this.$nextTick(() => {
+      this.africellDataInOut(this.fluxAfricelInOut);
+    });
   },
   watch: {
     fluxAfricellDaily(newVal) {
       this.$nextTick(() => {
-        const inData = newVal.filter((x) => x.zoneB == this.targetZone[0]);
-        this.drawHorizontalChart(
-          inData,
-          "affricel_mobile_in",
-          "flow_AB",
-          "red",
-          "flow_tot"
-        );
+        this.mobileCalc(newVal, "mobile_out_in_tot", "red", "flow_tot");
       });
     },
     fluxAfricelPresence(newVal) {
@@ -224,7 +239,7 @@ export default {
     },
     fluxAfricelInOut(newVal) {
       this.$nextTick(() => {
-        this.mobileCalc(newVal, "affricel_mobile_in", "red", "volume");
+        this.africellDataInOut(newVal);
       });
     },
   },
@@ -240,6 +255,30 @@ export default {
   },
   methods: {
     ...mapMutations(["setAfriFluxType"]),
+    africellDataInOut(data) {
+      if (!this.isStartEnd) {
+        return;
+      }
+      const inData = data.filter((x) => x.zoneB == this.targetZone[0]);
+      const outData = data.filter((x) => x.zoneA == this.targetZone[0]);
+
+      this.drawHorizontalChart(
+        inData,
+        "affricel_mobile_in",
+        "zoneA",
+        "flow_AB",
+        PALETTE.flux_in_color,
+        "flow_tot"
+      );
+      this.drawHorizontalChart(
+        outData,
+        "affricel_mobile_out",
+        "zoneB",
+        "flow_AB",
+        PALETTE.flux_out_color,
+        "flow_tot"
+      );
+    },
     selectFluxType(value) {
       this.setAfriFluxType(value);
     },
@@ -378,22 +417,21 @@ export default {
       );
       reference.style.height = 200;
     },
-    drawHorizontalChart(localData, ref, key, color, title = null) {
-      const datasets = [];
-
-      datasets.push({
-        label: "Observation",
-        backgroundColor: color,
-        borderColor: color,
-        data: localData.map((d) => ({x:new Date(x.date), y:x[key]})),
-      });
-
+    drawHorizontalChart(data, ref, YKey, XKey, color, title = null) {
+      const localData = data.map((d) => ({ x: d[XKey], y: d[YKey] }));
       this.configBarChart[ref] = {
         type: "horizontalBar",
         data: {
-        // labels: localData.map((d) => d[key]),
-        datasets: datasets,
-      },
+          labels: localData.map((d) => d.y),
+          datasets: [
+            {
+              label: "Observation",
+              backgroundColor: color,
+              borderColor: color,
+              data: localData,
+            },
+          ],
+        },
         options: {
           elements: {
             rectangle: {
@@ -403,13 +441,14 @@ export default {
           responsive: true,
           maintainAspectRatio: false,
           legend: {
+            display:false,
             position: "bottom",
             labels: {
               fontSize: 9,
             },
           },
           title: {
-            display: !!title,
+            display: false,
             text: title,
             fontSize: 15,
           },
@@ -419,10 +458,9 @@ export default {
                 ticks: {
                   beginAtZero: true,
                   fontSize: 9,
-                  callback: (value, index, values) => {
-
-                    return value;
-                  },
+                  // callback: (value, index, values) => {
+                  //   return value;
+                  // },
                 },
               },
             ],
@@ -431,7 +469,12 @@ export default {
                 ticks: {
                   fontSize: 9,
                   callback: function (label, index, labels) {
-                    return label;
+                    const value = localData.find((x) => x.y == label);
+                    if (value && value.x) {
+                      return `${label} (${value.x.toFixed(1)}%)`;
+                    } else {
+                      return label;
+                    }
                   },
                 },
               },
