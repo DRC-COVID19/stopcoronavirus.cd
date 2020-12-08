@@ -101,6 +101,8 @@
                 :showBottom="showBottom"
                 :fluxZoneGlobalOut="fluxZoneGlobalOut"
                 :flux30MapsData="flux30MapsData"
+                :fluxAfricelInOut="fluxAfricelInOut"
+                :fluxAfricelPresence="fluxAfricelPresence"
               />
               <MapsLegend
                 v-if="

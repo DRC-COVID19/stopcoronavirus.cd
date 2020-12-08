@@ -60,7 +60,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`mobile_out_in_tot_card`"
           >
-            <div class="text-center">Title</div>
+            <div class="text-center">Title flow tot</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -79,7 +79,7 @@
           v-if="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">Title</div>
+            <div class="text-center">Title flow in</div>
             <div class="chart-container">
               <canvas
                 height="400"
@@ -122,7 +122,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`africell_prensence_card`"
           >
-            <div class="text-center">Title</div>
+            <div class="text-center">Title presence</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -140,7 +140,7 @@
           v-if="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">Title</div>
+            <div class="text-center">Title flow out</div>
             <div class="chart-container">
               <canvas
                 height="400"
