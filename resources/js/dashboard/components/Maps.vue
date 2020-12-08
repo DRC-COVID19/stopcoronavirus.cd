@@ -1107,7 +1107,12 @@ export default {
         pitch: 10,
         zoom: 10,
       });
-      if (!data || data.length == 0) {
+      if (
+        !data ||
+        data.length == 0 ||
+        (this.observationDate.start &&
+          this.observationDate.start != this.observationDate.end)
+      ) {
         return;
       }
       let features = [...data];
@@ -1196,7 +1201,12 @@ export default {
         pitch: 10,
         zoom: 10,
       });
-      if (!data || data.length == 0) {
+      if (
+        !data ||
+        data.length == 0 ||
+        (this.observationDate.start &&
+          this.observationDate.start != this.observationDate.end)
+      ) {
         return;
       }
       let features = [...data];
