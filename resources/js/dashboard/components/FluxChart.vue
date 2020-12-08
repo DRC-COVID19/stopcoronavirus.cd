@@ -4,9 +4,7 @@
       <b-row class="mb-2">
         <div class="col-md col-12">
           <h3 class="d-flex align-items-center mb-0">
-            <span  class="ml-2 mr-2">{{
-              targetZone
-            }}</span>
+            <span class="ml-2 mr-2">{{ targetZone }}</span>
 
             <toggle-button
               v-if="fluxTimeGranularity == 1"
@@ -46,7 +44,6 @@
           class="pl-0 col-mobilite-generale"
           v-show="!isLoading"
         >
-
           <b-card class="mb-3 flux-mobility active">
             <h5 class="percent-title">Présence</h5>
             <p class="text-muted" v-if="!flux30General.percent">
@@ -57,7 +54,7 @@
                 {{ Math.round(flux30General.percent) }}%​
               </div>
               <p class="percent-p text-dash-color mb-0">
-                {{formatCash(flux30General.difference) }} personnes de
+                {{ formatCash(flux30General.difference) }} personnes de
                 <span v-if="flux30General.difference > 0">plus</span>
                 <span v-else>moins</span>
                 ont été présentes dans la zone
@@ -70,7 +67,8 @@
             @change="fullscreenMobileDaily"
             v-show="this.flux30Daily.length > 0"
           >
-            <b-card no-body class="cardtype1 mb-3 p-2">              <div class="chart-container">
+            <b-card no-body class="cardtype1 mb-3 p-2">
+              <div class="chart-container">
                 <canvas
                   height="200"
                   width="100vh"
@@ -140,6 +138,7 @@
             @change="fullscreenMobileDaily"
           >
             <b-card no-body class="cardtype1 mb-3 p-2">
+              <div class="general-top-title">Mobilité générale intérieure de la zone</div>
               <div class="chart-container">
                 <canvas
                   height="200"
@@ -159,6 +158,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Les 5 zones de santé avec la plus forte décroissance de
+                    mobilité
+                  </div>
+
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -178,6 +182,11 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Les 5 zones de santé avec la plus faible décroissance de
+                    mobilité
+                  </div>
+
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -197,6 +206,10 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Impacte sur la mobilité pour les 5 zones de santé les plus
+                    affectées
+                  </div>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -984,8 +997,7 @@ export default {
         this.mobileCalc(
           Object.assign({}, general),
           `general_flux`,
-          PALETTE.flux_in_color,
-          "Mobilité générale intérieure de la zone"
+          PALETTE.flux_in_color
         );
       });
     },
@@ -1477,22 +1489,19 @@ export default {
           ascData,
           "zone",
           refAsc,
-          PALETTE.flux_in_color,
-          titleAsc
+          PALETTE.flux_in_color
         );
         this.drawHorizontalChart(
           descData,
           "zone",
           refDesc,
-          PALETTE.flux_in_color,
-          titleDesc
+          PALETTE.flux_in_color
         );
         this.drawHorizontalChart(
           mobilityHealth,
           "zone",
           refHealth,
-          PALETTE.flux_in_color,
-          titleHelth
+          PALETTE.flux_in_color
         );
       });
     },
@@ -1505,6 +1514,7 @@ export default {
           backgroundColor: "#33ac2e",
           borderColor: "#33ac2e",
           borderWidth: 1,
+          barThickness:12,
           data: volumeReferences,
         });
       }
@@ -1513,6 +1523,7 @@ export default {
         label: "Observation",
         backgroundColor: color,
         borderColor: color,
+        barThickness:12,
         data: localData.map((d) => d.volume),
       });
       const dataChart = {
@@ -1846,5 +1857,12 @@ export default {
   height: 38px;
   width: auto;
   margin-left: 5px;
+}
+.general-top-title {
+  font-size: 0.7rem;
+  text-align: center;
+  margin-bottom: 5px;
+  color: #6c757d;
+  font-weight: bold;
 }
 </style>
