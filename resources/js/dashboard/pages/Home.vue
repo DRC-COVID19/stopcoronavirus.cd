@@ -50,7 +50,7 @@
         <b-col cols="12" :class="`${hasRightSide ? 'col-md-6' : 'col-md-12'}`">
           <div
             class="layer-set-contenair"
-            v-if="hasFlux24DailyIn && activeMenu == 1"
+            v-if="hasFlux24DailyIn && activeMenu == 1 && selectedSource==1"
           >
             <b-link
               :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
@@ -106,7 +106,7 @@
               />
               <MapsLegend
                 v-if="
-                  (flux24DailyIn.length > 0 || flux30MapsData.length > 0) &&
+                  (((flux24DailyIn.length > 0 || flux30MapsData.length > 0)&& selectedSource==1) || (fluxAfricelInOut.length>0 && isStartEndDate)) &&
                   activeMenu == 1
                 "
               ></MapsLegend>
@@ -253,7 +253,7 @@
           </b-card>
         </b-col>
       </b-row>
-      <b-row v-if="hasBottom">
+      <b-row v-if="hasBottom && selectedSource==1">
         <b-col cols="12" class="d-flex justify-content-center">
           <div
             @click="toggleBottomBar"
@@ -271,7 +271,7 @@
         <b-row
           class="row-side-bottom mb-2"
           :class="{ 'mt-2': !showBottom }"
-          v-if="activeMenu != 3 && hasBottom && showBottom"
+          v-if="activeMenu != 3 && hasBottom && showBottom "
         >
           <b-col class="side-bottom" cols="12">
             <b-card no-body>
@@ -472,7 +472,11 @@ export default {
       typePresence: (state) => state.flux.typePresence,
       selectedSource: (state) => state.flux.selectedSource,
       fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
+      observationDate: (state) => state.flux.observationDate,
     }),
+    isStartEndDate() {
+      return this.observationDate.start == this.observationDate.end;
+    },
     hasRightSide() {
       return (
         (this.getHasCoviCases() && this.activeMenu == 2) ||
