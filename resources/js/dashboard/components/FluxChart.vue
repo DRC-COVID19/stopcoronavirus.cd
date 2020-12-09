@@ -165,7 +165,7 @@
 
                   <div class="chart-container">
                     <canvas
-                      height="400"
+                      height="200"
                       width="100vh"
                       ref="general_top_asc"
                       id="general_top_asc"
@@ -189,7 +189,7 @@
 
                   <div class="chart-container">
                     <canvas
-                      height="400"
+                      height="200"
                       width="100vh"
                       ref="general_top_desc"
                       id="general_top_desc"
@@ -212,7 +212,7 @@
                   </div>
                   <div class="chart-container">
                     <canvas
-                      height="400"
+                      height="200"
                       width="100vh"
                       ref="pandemic_top_desc"
                       id="pandemic_top_desc"
@@ -1423,14 +1423,14 @@ export default {
       localData = localData.slice(0, 10);
 
       // cond : key == origin
-      this.drawHorizontalChart(localData, "zone", ref, color);
+      this.drawHorizontalChart(localData, "zone", ref, color,400);
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
       const data = inPutData.map((item) => ({
         zone: item.name,
         volume: item.confirmed,
       }));
-      this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color, title);
+      this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color,200, title);
     },
     async fluxMobilityFluxGeneralZone(
       fluxDataIn,
@@ -1489,23 +1489,26 @@ export default {
           ascData,
           "zone",
           refAsc,
-          PALETTE.flux_in_color
+          PALETTE.flux_in_color,
+          200
         );
         this.drawHorizontalChart(
           descData,
           "zone",
           refDesc,
-          PALETTE.flux_in_color
+          PALETTE.flux_in_color,
+          200
         );
         this.drawHorizontalChart(
           mobilityHealth,
           "zone",
           refHealth,
-          PALETTE.flux_in_color
+          PALETTE.flux_in_color,
+          200
         );
       });
     },
-    drawHorizontalChart(localData, key, ref, color, title = null) {
+    drawHorizontalChart(localData, key, ref, color,height, title = null) {
       const datasets = [];
       const volumeReferences = localData.map((d) => d.volume_reference);
       if (volumeReferences.some((x) => x)) {
@@ -1597,7 +1600,8 @@ export default {
         reference.getContext("2d"),
         this.configBarChart[ref]
       );
-      reference.style.height = 400;
+      this.configBarChart[ref].height=height;
+      reference.style.height = height;
     },
     getRangeColors(
       data,
@@ -1667,8 +1671,8 @@ export default {
       const element = this.$refs[ref];
       const parent_2 = element.parentElement.parentElement;
       if (!fullscreen) {
-        element.style.height = "400px";
-        element.height = "400px";
+        element.style.height = this.configBarChart[ref].height;
+        element.height = this.configBarChart[ref].height;
         element.parentElement.style.width = "";
         parent_2.style.display = "";
         parent_2.style.alignItem = "";
