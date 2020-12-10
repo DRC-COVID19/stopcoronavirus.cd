@@ -30,7 +30,7 @@ class AfricelFlowInterZoneController extends Controller
           ->orOn('africel_health_zones.reference', '=', 'africel_flow_inter_zones.zone_B');
         })
         ->where('africel_health_zones.name', $data['fluxGeoOptions'])
-        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])->get();
+        ->whereBetween('date', [$data['observation_start'], $data['observation_end']])->get();
         return response()->json($zoneData);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {

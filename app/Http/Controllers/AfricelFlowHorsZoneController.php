@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AfricelFlowHorsZone;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AfricelFlowHorsZoneController extends Controller
@@ -27,7 +28,7 @@ class AfricelFlowHorsZoneController extends Controller
           $q->on('africel_health_zones.reference', '=', 'africel_flow_hors_zones.zone_name');
         })
         ->where('africel_health_zones.name', $data['fluxGeoOptions'])
-        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])->get();
+        ->whereBetween('date', [$data['observation_start'], $data['observation_end']])->get();
       return response()->json($zoneData);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
