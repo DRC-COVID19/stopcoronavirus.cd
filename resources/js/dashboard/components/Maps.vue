@@ -434,7 +434,7 @@ export default {
         this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
       } else {
         map.U.removeLayer([EPIDEMIC_LAYER]);
-        map.resize();
+        this.mapResize();
       }
     },
     hospitals() {
@@ -510,13 +510,13 @@ export default {
     },
     isLoading() {
       if (this.centerCoordinates.length > 0) {
-        map.resize();
+        this.mapResize();
         map.flyTo({ center: this.centerCoordinates });
       }
     },
     fluxGeoGranularityMenu() {
       // if (this.fluxGeoGranularity == 1) {
-      map.resize();
+      this.mapResize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
         easing: function (t) {
@@ -531,7 +531,7 @@ export default {
       if (this.fluxGeoGranularityMenu == 2 && lenGeoOptions > 0) {
         const zone = this.fluxGeoOptionsTmp[lenGeoOptions - 1];
         const area = this.getHealthZoneArea(zone, 2);
-        map.resize();
+        this.mapResize();
         map.flyTo({
           center: this.getHealthZoneCoordonate(
             zone,
@@ -554,25 +554,24 @@ export default {
     //   this.drawDesign();
     // },
     "isFluxGlobalProvinceloading.in"() {
-      map.resize();
+      this.mapResize();
       map.flyTo({ center: this.defaultCenterCoordinates });
     },
     "isFluxGlobalProvinceloading.out"() {
-      map.resize();
+      this.mapResize();
       map.flyTo({ center: this.defaultCenterCoordinates });
     },
     showBottom() {
       // le side bottom prend 500ms pour reprendre sa position initiale
       // donc on attend 600ms avant d'effectuer le resize
-      setTimeout(function () {
-        map.resize();
-      }, 600);
+      this.mapResize();
     },
     fluxAfricelInOut() {
       this.africellFluxFunc();
     },
     afriFluxType() {
       this.africellFluxFunc();
+      this.mapResize();
     },
   },
   methods: {
@@ -583,6 +582,11 @@ export default {
       "setEpidemicExtValues",
     ]),
     ...mapActions(["resetState"]),
+    mapResize(){
+      setTimeout(function () {
+        map.resize();
+      }, 600);
+    },
     addPolygoneLayerHotspot() {
       if (!this.isMapLoaded) {
         return;
@@ -841,7 +845,7 @@ export default {
       property = "confirmed",
       geoGranularity = 2
     ) {
-      map.resize();
+      this.mapResize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
         easing: function (t) {
@@ -1062,6 +1066,7 @@ export default {
       map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
     },
     flux30Func() {
+      this.mapResize();
       if (this.flux30MapsData.length > 0) {
         this.flux30MapsDataFunc(this.flux30MapsData, this.legendHover);
       }
@@ -1288,13 +1293,19 @@ export default {
 
       this.removePolygoneHoverLayer();
       this.addPolygoneLayer(2);
+      let mapCenter = this.defaultKinshasaCoordinates;
+      let mapZoom = 10;
+      if (this.fluxGeoOptions[0] != "Tout") {
+        mapCenter = this.getHospotCoordonate(this.fluxGeoOptions[0]);
+        mapZoom = 14;
+      }
       map.flyTo({
-        center: this.defaultKinshasaCoordinates,
+        center: mapCenter,
         easing: function (t) {
           return t;
         },
         pitch: 10,
-        zoom: 10,
+        zoom: mapZoom,
       });
       let features = [...flux30MapsData];
       const domaineMax = d3.max(features, (d) => d.percent);
@@ -1343,12 +1354,20 @@ export default {
       colorExpression.push("white");
 
       if (legendHover) {
-        features = features.filter(
-          (x) => x.percent >= legendHover.de && x.percent <= legendHover.a
-        );
+        let from;
+        let to;
+        if (typeof legendHover.de == "string") {
+          from =Number(legendHover.de.replace("%", ""));
+        }
+        if (typeof legendHover.a == "string") {
+          to =Number(legendHover.a.replace("%", ""))+1;
+        }
+
+        features = features.filter((x) => x.percent >= from && x.percent <= to);
         if (features.length == 0) {
           return;
         }
+
       }
 
       map.U.addCircle(
@@ -1544,7 +1563,7 @@ export default {
             if (mapFlyOptions.zoom) {
               optionsHatched.zoom = mapFlyOptions.zoom;
             }
-            map.resize();
+            this.mapResize();
             map.flyTo(optionsHatched);
             break;
         }
@@ -1959,7 +1978,7 @@ export default {
       map.U.removeLayer([EPIDEMIC_LAYER]);
       map.U.removeSource(COVID_HOSPITAL_SOURCE);
       this.RemoveOrientationMakers();
-      map.resize();
+      this.mapResize();
       switch (this.activeMenu) {
         case 1:
           this.flux24Func();
@@ -2007,6 +2026,16 @@ export default {
         if (feature) {
           coordinates = feature.geometry.coordinates;
         }
+      }
+      return coordinates;
+    },
+    getHospotCoordonate(name) {
+      let coordinates = [];
+      const feature = this.hotspotGeojsonCentered.features.find(
+        (x) => x.properties.DENOMMIN == name
+      );
+      if (feature) {
+        coordinates = feature.geometry.coordinates;
       }
       return coordinates;
     },
@@ -2393,7 +2422,7 @@ export default {
     infrastructure() {
       if (this.hospitals) {
         map.U.removeSource(COVID_HOSPITAL_SOURCE);
-        map.resize();
+        this.mapResize();
         map.flyTo({
           center: this.getHealthZoneCoordonate("Kinshasa", 2),
           easing: function (t) {
@@ -2736,7 +2765,7 @@ export default {
       if (!this.medicalOrientations || this.medicalOrientations.length == 0) {
         return;
       }
-      map.resize();
+      this.mapResize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
         easing: function (t) {

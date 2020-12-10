@@ -47,6 +47,18 @@ export default {
       state.fluxEnabled = payload;
     },
     setLegendHover(state, sectionHover) {
+      if (sectionHover) {
+        let from = null;
+        let to = null;
+        if (typeof sectionHover.de == "string") {
+          from = Number(sectionHover.de.replace("%", ""));
+        }
+        if (typeof sectionHover.a == "string") {
+          to = Number(sectionHover.a.replace("%", "")) + 1;
+        }
+        sectionHover.de = from;
+        sectionHover.a = to;
+      }
       state.legendHover = sectionHover
     },
     setDomaineExtValues(state, payload) {

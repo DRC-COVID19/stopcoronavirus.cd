@@ -5,7 +5,7 @@
   */
 
 /*!
- * BootstrapVue Icons, generated from Bootstrap Icons 1.0.0
+ * BootstrapVue Icons, generated from Bootstrap Icons 1.0.0-alpha5
  *
  * @link https://icons.getbootstrap.com/
  * @license MIT
@@ -131,5 +131,7 @@
  */
 
 //! moment.js
+
+//! moment.js language configuration
 
 //! moment.js locale configuration

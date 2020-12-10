@@ -18991,6 +18991,14 @@ h3 {
   border-color: #dc3545 !important;
 }
 
+.general-top-title {
+  font-size: 0.7rem;
+  text-align: center;
+  margin-bottom: 5px;
+  color: #6c757d;
+  font-weight: bold;
+}
+
 .footer-partners {
   padding: 4rem 0 0 0;
   background-color: #999;

@@ -862,6 +862,11 @@ export default {
         return;
       }
 
+      this.setObservationDate({
+        start: values.observation_start,
+        end: values.observation_end,
+      });
+
       if (values.fluxTimeGranularity == 2) {
         this.submitFlux30Form(values);
         return;
