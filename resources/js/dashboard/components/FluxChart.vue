@@ -676,6 +676,7 @@ export default {
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
       typePresence: (state) => state.flux.typePresence,
       fluxTimeGranularity: (state) => state.flux.fluxTimeGranularity,
+      observationDate: state=>state.flux.observationDate
     }),
     typesMobilite() {
       let types = [{ val: 1, lbl: "Détails" }];
@@ -843,6 +844,9 @@ export default {
       "setIsProvinceStatSeeing",
       "setTypePresence",
     ]),
+       isStartIsEnd(){
+      return this.observationDate.start && this.observationDate.start==this.observationDate.end;
+    },
     selectFluxType(value) {
       this.setFluxType(value);
     },
@@ -1231,12 +1235,32 @@ export default {
     flux30Chart(data, ref, color, title = null) {
       const dataFormatted = [];
       data.map((x) => {
+        if (this.isStartIsEnd()){
         x.map((item) => {
           dataFormatted.push({
             x: moment(`${item.date} ${item.hour}`),
             y: item.percent,
           });
         });
+        }else{
+          let item={};
+              if (x.length%2==0) {
+                let indice = x.length / 2;
+
+                    const volume1 = x[indice].volume;
+                    const volume2 = x[indice - 1].volume;
+                item.date=x[indice].date;
+                item.volume=volume1+volume2;
+              }else{
+                let indice=(x.length+1)/2;
+                item=x[indice];
+              }
+             dataFormatted.push({
+              date: item.date,
+              x:moment(item.date),
+              y: item.volume,
+            });
+        }
       });
 
       const max = d3.max(dataFormatted.map((x) => x.y));
@@ -1298,7 +1322,7 @@ export default {
             callbacks: {
               title: (a, d) => {
                 let titleFormat = this.moment(a[0].xLabel).format("DD.MM.Y");
-                if (this.fluxTimeGranularity == 2) {
+                if (this.fluxTimeGranularity == 2 && this.isStartIsEnd()) {
                   titleFormat = this.moment(a[0].xLabel).format(
                     "DD.MM.Y HH:mm"
                   );
@@ -1328,7 +1352,7 @@ export default {
                 },
                 type: "time",
                 time: {
-                  unit: this.fluxTimeGranularity == 1 ? "day" : "hour",
+                  unit: this.fluxTimeGranularity == 2 && this.isStartIsEnd() ? "hour" : "day",
                   // unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM",

@@ -549,7 +549,7 @@ export default {
       "getHealthZone",
       "getFluxHotSpot",
     ]),
-    ...mapMutations(["setMapStyle", "setFluxType"]),
+    ...mapMutations(["setMapStyle", "setFluxType","setObservationDate"]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
     },
@@ -814,6 +814,11 @@ export default {
       if (this.isLoading) {
         return;
       }
+
+      this.setObservationDate({
+        start: values.observation_start,
+        end: values.observation_end,
+      });
 
       if (values.fluxTimeGranularity == 2) {
         this.submitFlux30Form(values);
@@ -1409,7 +1414,6 @@ export default {
           this.$ga.event("fluxData", "get", "hotspots", "ReceiveResponse");
         })
         .catch((error) => {
-          console.log('error',error);
           const exception = error.message || error;
           this.$ga.exception(exception);
         })
