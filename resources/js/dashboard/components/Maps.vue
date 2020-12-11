@@ -294,7 +294,7 @@ export default {
         this.$emit("geoJsonLoaded", "healthZoneGeo");
       }
       if (this.healthProvinceGeojson) {
-        this.addProvinceSource(1);
+        this.addProvinceSource();
         this.addPolygoneLayer(1);
         this.addPolygoneHoverLayer(1);
         this.$emit("geoJsonLoaded", "provinceGeo");
@@ -560,11 +560,11 @@ export default {
     // },
     "isFluxGlobalProvinceloading.in"() {
       this.mapResize();
-      map.flyTo({ center: this.defaultCenterCoordinates });
+      // map.flyTo({ center: this.defaultCenterCoordinates });
     },
     "isFluxGlobalProvinceloading.out"() {
-      this.mapResize();
-      map.flyTo({ center: this.defaultCenterCoordinates });
+      // this.mapResize();
+      // map.flyTo({ center: this.defaultCenterCoordinates });
     },
     showBottom() {
       // le side bottom prend 500ms pour reprendre sa position initiale
