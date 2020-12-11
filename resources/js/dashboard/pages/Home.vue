@@ -1357,6 +1357,8 @@ export default {
 
       this.$set(this.loadings, "urlFluxAfricell", true);
 
+
+
       const dailyRequest = axios.get(urlDaily, {
         params: values,
       });
@@ -1418,11 +1420,7 @@ export default {
       const urlGeneral = `api/dashboard/flux/hotspots/general`;
 
       const values = Object.assign({}, input);
-      values.preference_start = "2020-05-17";
-      values.preference_end = "2020-05-31";
-      // values.preference_start = "2020-05-17";
-      // values.preference_end = "2020-05-31";
-      // values.fluxGeoOptions = ["Malawi"];
+
 
       const mapsRequest = axios.get(urlMaps, {
         params: values,

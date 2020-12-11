@@ -1425,16 +1425,7 @@ export default {
       colorExpression.push("white");
 
       if (legendHover) {
-        let from;
-        let to;
-        if (typeof legendHover.de == "string") {
-          from = Number(legendHover.de.replace("%", ""));
-        }
-        if (typeof legendHover.a == "string") {
-          to = Number(legendHover.a.replace("%", "")) + 1;
-        }
-
-        features = features.filter((x) => x.percent >= from && x.percent <= to);
+        features = features.filter((x) => x.percent >= legendHover.de && x.percent <= legendHover.a);
         if (features.length == 0) {
           return;
         }
