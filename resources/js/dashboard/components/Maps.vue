@@ -10,7 +10,12 @@
   </div>
 </template>
 <script>
-import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE, PALETTE } from "../config/env";
+import {
+  MAPBOX_TOKEN,
+  MAPBOX_DEFAULT_STYLE,
+  PALETTE,
+  HOTSPOT_TYPE,
+} from "../config/env";
 import Mapbox from "mapbox-gl";
 import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
@@ -1231,13 +1236,12 @@ export default {
         })
         // this.drcHealthZone
       );
-      this.fluxAfricellInOutFeaturesData = {features, aKey, valuekey};
+      this.fluxAfricellInOutFeaturesData = { features, aKey, valuekey };
       map.on("mousemove", AFRICELL_HEALTH_ZONE, this.africellInOutmouseMove);
 
       map.on("mouseout", AFRICELL_HEALTH_ZONE, this.mouseOut);
     },
     africellInOutmouseMove(e) {
-
       if (this.activeMenu != 1) {
         return;
       }
@@ -1247,8 +1251,10 @@ export default {
 
       const name = item["Zone+Peupl"];
       let value = null;
-      const {aKey,valuekey}=this.fluxAfricellInOutFeaturesData;
-      const feature = this.fluxAfricellInOutFeaturesData.features.find((x) => x[aKey] == name);
+      const { aKey, valuekey } = this.fluxAfricellInOutFeaturesData;
+      const feature = this.fluxAfricellInOutFeaturesData.features.find(
+        (x) => x[aKey] == name
+      );
       if (feature) {
         this.$set(this.ArcLayerSelectedObject, "position", {
           top: e.point.y,
@@ -1400,8 +1406,20 @@ export default {
       colorScalePositive.range(PALETTE.inflow_positif);
 
       const max = d3.max(features, (d) => d.volume);
+
+      if (legendHover) {
+        features = features.filter(
+          (x) => x.percent >= legendHover.de && x.percent <= legendHover.a
+        );
+        if (features.length == 0) {
+          return;
+        }
+      }
+
       const dataKey = "DENOMMIN";
       const colorExpression = [];
+      const hotspotPoint = [];
+
       colorExpression.push("case");
       features.forEach((x) => {
         let color = PALETTE.dash_green;
@@ -1419,27 +1437,61 @@ export default {
             color = colorScaleNegative(x.percent);
           }
         }
-        colorExpression.push(["==", ["get", dataKey], x.origin]);
-        colorExpression.push(color);
+
+        let point, polygone;
+
+        const itemPolygone = this.hotspotGeojson.features.find(
+          (geoZone) => geoZone.properties.DENOMMIN == x.origin
+        );
+
+        if (itemPolygone) {
+          switch (itemPolygone.geometry.type) {
+            case "MultiPolygon":
+              polygone = turf.multiPolygon(itemPolygone.geometry.coordinates);
+              break;
+            case "Polygon":
+              polygone = turf.polygon(itemPolygone.geometry.coordinates);
+              break;
+            default:
+              break;
+          }
+        }
+        this.hospotPointJson.features.map((itemPoint) => {
+          if (itemPoint && itemPoint.geometry.type == "Point") {
+            point = turf.point(itemPoint.geometry.coordinates);
+            if (point && polygone) {
+              const isPoint = turf.booleanPointInPolygon(point, polygone);
+              if (isPoint) {
+                hotspotPoint.push(itemPoint.properties.DENOMMIN);
+                colorExpression.push(["==", ["get", dataKey], itemPoint.properties.DENOMMIN]);
+                colorExpression.push(color);
+              }
+            }
+          }
+        });
+
+
+
       });
       colorExpression.push("white");
 
-      if (legendHover) {
-        features = features.filter((x) => x.percent >= legendHover.de && x.percent <= legendHover.a);
-        if (features.length == 0) {
-          return;
-        }
-      }
+      const pointColorExpression = [];
+      pointColorExpression.push("case");
+      HOTSPOT_TYPE.forEach((item) => {
+        pointColorExpression.push(["==", ["get", 'Type'], item.name]);
+        pointColorExpression.push(item.color);
+      });
+      pointColorExpression.push("white");
 
       map.U.addCircle(
         SOURCE_HOTSPOT_POINT_GEOJSON,
         SOURCE_HOTSPOT_POINT_GEOJSON,
         map.U.properties({
-          circleColor: "black",
+          circleColor: colorExpression,
           circleOpacity: [
             "match",
             ["get", dataKey],
-            features.map((x) => x.origin),
+            [...new Set(hotspotPoint)],
             0.9,
             0,
           ],
@@ -1447,16 +1499,17 @@ export default {
         }),
         this.drcSourceId
       );
+
       map.U.addFill(
         SOURCE_HOTSPOT_GEOJSON,
         SOURCE_HOTSPOT_GEOJSON,
         map.U.properties({
-          fillColor: colorExpression,
+          fillColor: pointColorExpression,
           fillOpacity: [
             "match",
             ["get", dataKey],
             features.map((x) => x.origin),
-            0.9,
+            1,
             0,
           ],
         }),
