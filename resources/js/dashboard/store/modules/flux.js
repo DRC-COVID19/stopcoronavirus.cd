@@ -14,7 +14,9 @@ export default {
     isProvinceStatSeeing: false,
     legendHover: null, // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
     typePresence: 1,
-    observationDate:{}
+    afriFluxType: 1,
+    selectedSource: 1,
+    observationDate: {}
   },
   mutations: {
     setIsWatchingfluxGeoOptions(state, payload) {
@@ -70,6 +72,13 @@ export default {
     },
     setTypePresence(state, payload) {
       state.typePresence = payload;
+    },
+    setAfriFluxType(state, payload) {
+
+      state.afriFluxType = payload;
+    },
+    setSelectedSource(state, payload) {
+      state.selectedSource = payload;
     },
     setObservationDate(state, payload) {
       state.observationDate = payload;

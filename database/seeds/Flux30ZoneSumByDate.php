@@ -12,6 +12,7 @@ class Flux30ZoneSumByDate extends Seeder
    */
   public function run()
   {
+    DB::table('flux30_zone_sum_by_dates')->delete();
     DB::insert('insert into flux30_zone_sum_by_dates (volume,date,Observation_Zone) select sum(volume),date,Observation_Zone from flux30_zone_sums group by date,Observation_Zone');
   }
 }
