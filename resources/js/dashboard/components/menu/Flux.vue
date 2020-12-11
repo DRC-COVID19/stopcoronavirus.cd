@@ -178,6 +178,8 @@ import {
   OBSERVATION_END,
   AFRICELL_PREFERENCE_START,
   AFRICELL_PREFERENCE_END,
+  AFRICELL_OBSERVATION_START,
+  AFRICELL_OBSERVATION_END,
 } from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
@@ -424,8 +426,8 @@ export default {
         ),
       };
       this.dateRangeObservation = {
-        startDate: new Date(`${OBSERVATION_START} 06:00`),
-        endDate: new Date(`${OBSERVATION_END} 23:30`),
+        startDate: new Date(`${this.fluxForm.selectedFluxSource == 1?OBSERVATION_START:AFRICELL_OBSERVATION_START} 06:00`),
+        endDate: new Date(`${this.fluxForm.selectedFluxSource == 1?OBSERVATION_END:AFRICELL_OBSERVATION_END} 23:30`),
       };
       this.reference_min_date = moment(
         this.fluxForm.selectedFluxSource == 1
@@ -436,14 +438,20 @@ export default {
         .format("YYYY-MM-DD");
       this.fluxForm.preference_start =
         this.fluxForm.selectedFluxSource == 1
-          ? PREFERENCE_END
-          : AFRICELL_PREFERENCE_END;
+          ? PREFERENCE_START
+          : AFRICELL_PREFERENCE_START;
       this.fluxForm.preference_end =
         this.fluxForm.selectedFluxSource == 1
           ? PREFERENCE_END
           : AFRICELL_PREFERENCE_END;
-      this.fluxForm.observation_start = OBSERVATION_START;
-      this.fluxForm.observation_end = OBSERVATION_END;
+      this.fluxForm.observation_start =
+        this.fluxForm.selectedFluxSource == 1
+          ? OBSERVATION_START
+          : AFRICELL_OBSERVATION_START;
+      this.fluxForm.observation_end =
+        this.fluxForm.selectedFluxSource == 1
+          ? OBSERVATION_END
+          : AFRICELL_OBSERVATION_END;
     },
     fluxGeoGranularityChange(value) {
       this.resetFluxPredefinedControl();
@@ -492,7 +500,7 @@ export default {
       }
     },
     fluxGeoOptionsChange(value) {
-      const newVal = value === null ? [] : [value]
+      const newVal = value === null ? [] : [value];
       this.$set(this.fluxForm, "fluxGeoOptions", newVal);
       this.resetFluxPredefinedControl();
       this.setFluxGeoOptionsTmp(newVal);

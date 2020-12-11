@@ -249,7 +249,7 @@
 
         <FullScreen
           id="fullscreenIn"
-          link="affricel_mobile_in"
+          link="affricel_mobile_tot"
           @change="fullscreenFluxInOut"
           v-show="isStartEnd"
         >
@@ -316,8 +316,8 @@ export default {
 
       barChart: [],
       flow_tot: null,
-      flow_in:null,
-      flow_out:null,
+      flow_in: null,
+      flow_out: null,
       volume: null,
       last_update: AFRICELL_LAST_UPDATE,
     };
@@ -351,7 +351,7 @@ export default {
       this.mobileCalc(
         this.fluxAfricelPresence,
         "africell_prensence",
-        "red",
+        PALETTE.flux_presence,
         "volume"
       );
     });
@@ -365,7 +365,7 @@ export default {
         this.mobileCalc(
           this.fluxAfricellDaily,
           "mobile_out_in_tot",
-          PALETTE.flux_out_color,
+          PALETTE.dash_green,
           "flow_tot"
         );
       });
@@ -388,7 +388,12 @@ export default {
     },
     fluxAfricelPresence(newVal) {
       this.$nextTick(() => {
-        this.mobileCalc(newVal, "africell_prensence", "red", "volume");
+        this.mobileCalc(
+          this.fluxAfricelPresence,
+          "africell_prensence",
+          PALETTE.flux_presence,
+          "volume"
+        );
       });
     },
     fluxAfricelInOut(newVal) {
@@ -719,5 +724,19 @@ export default {
   height: 38px;
   width: auto;
   margin-left: 5px;
+}
+.fullscreen {
+  .cardtype1 {
+    canvas {
+      width: calc(100vw - 19px) !important;
+      height: 500px !important;
+    }
+  }
+  .cardtype2 {
+    canvas {
+      width: 700px !important;
+      height: calc(100vh - 32px) !important;
+    }
+  }
 }
 </style>
