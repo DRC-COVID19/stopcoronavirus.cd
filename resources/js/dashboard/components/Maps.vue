@@ -1231,6 +1231,36 @@ export default {
         })
         // this.drcHealthZone
       );
+      this.fluxAfricellInOutFeaturesData = {features, aKey, valuekey};
+      map.on("mousemove", AFRICELL_HEALTH_ZONE, this.africellInOutmouseMove);
+
+      map.on("mouseout", AFRICELL_HEALTH_ZONE, this.mouseOut);
+    },
+    africellInOutmouseMove(e) {
+
+      if (this.activeMenu != 1) {
+        return;
+      }
+      const coordinates = e.features[0].geometry.coordinates[0].slice();
+
+      const item = e.features[0].properties;
+
+      const name = item["Zone+Peupl"];
+      let value = null;
+      const {aKey,valuekey}=this.fluxAfricellInOutFeaturesData;
+      const feature = this.fluxAfricellInOutFeaturesData.features.find((x) => x[aKey] == name);
+      if (feature) {
+        this.$set(this.ArcLayerSelectedObject, "position", {
+          top: e.point.y,
+          left: e.point.x,
+        });
+        this.$set(this.ArcLayerSelectedObject, "item", {
+          origin: feature[aKey],
+          percent: feature[valuekey],
+        });
+      } else {
+        this.$set(this.ArcLayerSelectedObject, "item", null);
+      }
     },
     africellPresenceFunc(data, legendHover = null) {
       this.flux24RemoveLayer();
