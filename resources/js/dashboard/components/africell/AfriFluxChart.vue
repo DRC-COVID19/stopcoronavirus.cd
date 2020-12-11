@@ -28,7 +28,14 @@
         </div>
       </b-col>
     </b-row>
-    <b-row no-gutters>
+    <b-row no-gutters v-if="fluxAfricellDaily.length == 0">
+      <b-col cols="12" md="12" class="pr-1 pl-1">
+        <b-card class="mb-3 flux-mobility active">
+          <p class="text-muted">Données non disponibles</p>
+        </b-card>
+      </b-col>
+    </b-row>
+    <b-row no-gutters v-else>
       <b-col cols="12" md="12" class="pr-1 pl-1">
         <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
           <template #loading>
@@ -415,7 +422,7 @@ export default {
   methods: {
     ...mapMutations(["setAfriFluxType"]),
     africellDataInOut(data) {
-      if (!this.isStartEnd) {
+      if (!this.isStartEnd || data.length==0) {
         return;
       }
       const inData = data.filter((x) => x.zoneB == this.targetZone[0]);
@@ -452,6 +459,9 @@ export default {
     mobileCalc(data, ref, color, attribut, title = null) {
       // const max = d3.max(data.map((x) => x.percent));
       // const min = d3.min(data.map((x) => x.percent));
+      if (data.length==0) {
+        return;
+      }
       if (data.length > 0) {
         this[attribut] = data[0][attribut];
       }
