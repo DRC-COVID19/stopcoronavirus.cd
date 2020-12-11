@@ -36,7 +36,7 @@ export const
   HOTSPOT_OBSERVATION_START = "2020-05-25",
   HOTSPOT_OBSERVATION_END = "2020-08-11",
   FLUX_LAST_UPDATE = "2020-08-12",
-  AFRICELL_LAST_UPDATE="2020-11-03",
+  AFRICELL_LAST_UPDATE = "2020-11-03",
   OBSERVATION_START = "2020-03-19",
   OBSERVATION_END = "2020-08-12",
   AFRICELL_OBSERVATION_START = "2020-03-18",
@@ -634,7 +634,7 @@ de revenus pour Kinshasa`,
           zones: ["Kinshasa"]
         },
         {
-          isSuite:true,
+          isSuite: true,
           item: `(les commerçants faisaient du commerce malgré la fermeture obligatoire)`,
           zones: ["Kinshasa"]
         },
@@ -726,4 +726,16 @@ de revenus pour Kinshasa`,
       ],
       date: '2020-08-15'
     },
-  ]
+  ],
+  HOTSPOT_TYPE = [
+    { name: "BureauAdmin", color: '#3399ff' },
+    { name: "Eglises", color: "#339966" },
+    { name: "Commerces", color: '#cc3300' },
+    { name: "Supermarche", color: '#996633' },
+    { name: "Marché", color: '#666699' },
+    { name: "Hotels", color: '#669900' },
+    { name: "ArretTransport", color: '#cc0099' },
+    { name: "Restaurants", color: '#99cc00' },
+    { name: "Hopitaux", color: '#cc66ff' },
+    { name: "Cimetiere", color: '#99ff33' }
+  ];
