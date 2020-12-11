@@ -41,8 +41,8 @@
 
           <b-card
             class="mb-3 flux-mobility"
-            :class="{ active: afriFluxType == 2 }"
-            @click="selectFluxType(2)"
+            :class="{ active: afriFluxType == 3 }"
+            @click="selectFluxType(3)"
           >
             <h5 class="percent-title">Présence</h5>
 
@@ -86,8 +86,8 @@
 
           <b-card
             class="mb-3 flux-mobility"
-            :class="{ active: afriFluxType == 4 }"
-            @click="selectFluxType(4)"
+            :class="{ active: afriFluxType == 1 }"
+            @click="selectFluxType(1)"
           >
             <h5 class="percent-title">flow_in</h5>
 
@@ -150,8 +150,8 @@
 
           <b-card
             class="mb-3 flux-mobility"
-            :class="{ active: afriFluxType == 3 }"
-            @click="selectFluxType(3)"
+            :class="{ active: afriFluxType == 2 }"
+            @click="selectFluxType(2)"
           >
             <h5 class="percent-title">flow_out</h5>
 
@@ -214,8 +214,8 @@
 
           <b-card
             class="mb-3 flux-mobility"
-            :class="{ active: afriFluxType == 1 }"
-            @click="selectFluxType(1)"
+            :class="{ active: afriFluxType == 4 }"
+            @click="selectFluxType(4)"
           >
             <h5 class="percent-title">Flow_tot</h5>
 

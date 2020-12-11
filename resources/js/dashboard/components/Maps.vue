@@ -295,7 +295,7 @@ export default {
       }
       if (this.healthProvinceGeojson) {
         this.addProvinceSource(1);
-         this.addPolygoneLayer(1);
+        this.addPolygoneLayer(1);
         this.addPolygoneHoverLayer(1);
         this.$emit("geoJsonLoaded", "provinceGeo");
       }
@@ -366,10 +366,14 @@ export default {
     this.$store.watch(
       (state) => state.flux.legendHover,
       (value) => {
-        if (this.fluxTimeGranularity == 1) {
-          this.flux24Func();
+        if (this.selectedSource == 2) {
+          this.africellFluxFunc();
         } else {
-          this.flux30Func();
+          if (this.fluxTimeGranularity == 1) {
+            this.flux24Func();
+          } else {
+            this.flux30Func();
+          }
         }
       }
     );
@@ -405,6 +409,7 @@ export default {
       fluxTimeGranularity: (state) => state.flux.fluxTimeGranularity,
       afriFluxType: (state) => state.flux.afriFluxType,
       observationDate: (state) => state.flux.observationDate,
+      selectedSource: (state) => state.flux.selectedSource,
     }),
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
@@ -1080,18 +1085,15 @@ export default {
           );
           this.africellInOutFunc(
             data,
-            "flow_tot",
+            "flow_AB",
             "zoneA",
             "zoneB",
             this.legendHover,
-            PALETTE.general_negatif,
-            PALETTE.general_positif
+            PALETTE.inflow_negatif,
+            PALETTE.inflow_positif
           );
           break;
         case 2:
-          this.africellPresenceFunc(this.fluxAfricelPresence, this.legendHover);
-          break;
-        case 3:
           data = this.fluxAfricelInOut.filter(
             (x) => x.zoneA == this.fluxGeoOptions[0]
           );
@@ -1105,20 +1107,24 @@ export default {
             PALETTE.outflow_positif
           );
           break;
+        case 3:
+          this.africellPresenceFunc(this.fluxAfricelPresence, this.legendHover);
+          break;
         case 4:
           data = this.fluxAfricelInOut.filter(
             (x) => x.zoneB == this.fluxGeoOptions[0]
           );
           this.africellInOutFunc(
             data,
-            "flow_AB",
+            "flow_tot",
             "zoneA",
             "zoneB",
             this.legendHover,
-            PALETTE.inflow_negatif,
-            PALETTE.inflow_positif
+            PALETTE.general_negatif,
+            PALETTE.general_positif
           );
           break;
+
         default:
           break;
       }
@@ -1129,8 +1135,8 @@ export default {
       aKey = "zoneA",
       bKey = "zoneB",
       legendHover = null,
-      negativeColor=PALETTE.inflow_negatif,
-      positiveColor=PALETTE.inflow_positif
+      negativeColor,
+      positiveColor
     ) {
       this.flux24RemoveLayer();
       this.removePolygoneHoverLayer();
