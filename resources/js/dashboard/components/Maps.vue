@@ -291,12 +291,12 @@ export default {
 
       if (this.healthZoneGeojson) {
         this.addZoneSource();
-        this.addPolygoneLayer(2);
-        this.addPolygoneHoverLayer(2);
         this.$emit("geoJsonLoaded", "healthZoneGeo");
       }
       if (this.healthProvinceGeojson) {
-        this.addProvinceSource();
+        this.addProvinceSource(1);
+         this.addPolygoneLayer(1);
+        this.addPolygoneHoverLayer(1);
         this.$emit("geoJsonLoaded", "provinceGeo");
       }
       if (this.hotspotGeojson) {
@@ -582,7 +582,7 @@ export default {
       "setEpidemicExtValues",
     ]),
     ...mapActions(["resetState"]),
-    mapResize(){
+    mapResize() {
       setTimeout(function () {
         map.resize();
       }, 600);
@@ -1072,9 +1072,10 @@ export default {
       }
     },
     africellFluxFunc() {
+      let data;
       switch (this.afriFluxType) {
         case 1:
-          const data = this.fluxAfricelInOut.filter(
+          data = this.fluxAfricelInOut.filter(
             (x) => x.zoneB == this.fluxGeoOptions[0]
           );
           this.africellInOutFunc(
@@ -1082,11 +1083,42 @@ export default {
             "flow_tot",
             "zoneA",
             "zoneB",
-            this.legendHover
+            this.legendHover,
+            PALETTE.general_negatif,
+            PALETTE.general_positif
           );
           break;
         case 2:
           this.africellPresenceFunc(this.fluxAfricelPresence, this.legendHover);
+          break;
+        case 3:
+          data = this.fluxAfricelInOut.filter(
+            (x) => x.zoneA == this.fluxGeoOptions[0]
+          );
+          this.africellInOutFunc(
+            data,
+            "flow_AB",
+            "zoneB",
+            "zoneA",
+            this.legendHover,
+            PALETTE.outflow_negatif,
+            PALETTE.outflow_positif
+          );
+          break;
+        case 4:
+          data = this.fluxAfricelInOut.filter(
+            (x) => x.zoneB == this.fluxGeoOptions[0]
+          );
+          this.africellInOutFunc(
+            data,
+            "flow_AB",
+            "zoneA",
+            "zoneB",
+            this.legendHover,
+            PALETTE.inflow_negatif,
+            PALETTE.inflow_positif
+          );
+          break;
         default:
           break;
       }
@@ -1096,7 +1128,9 @@ export default {
       valuekey = "flow_tot",
       aKey = "zoneA",
       bKey = "zoneB",
-      legendHover = null
+      legendHover = null,
+      negativeColor=PALETTE.inflow_negatif,
+      positiveColor=PALETTE.inflow_positif
     ) {
       this.flux24RemoveLayer();
       this.removePolygoneHoverLayer();
@@ -1121,6 +1155,7 @@ export default {
         return;
       }
       let features = [...data];
+
       const domaineMax = d3.max(features, (d) => d[valuekey]);
       const domaineMin = d3.min(features, (d) => d[valuekey]);
 
@@ -1138,8 +1173,8 @@ export default {
         isPercent: true,
       });
 
-      colorScaleNegative.range(PALETTE.inflow_negatif);
-      colorScalePositive.range(PALETTE.inflow_positif);
+      colorScaleNegative.range(negativeColor);
+      colorScalePositive.range(positiveColor);
 
       const max = d3.max(features, (d) => d[valuekey]);
       const dataKey = "Zone+Peupl";
@@ -1357,17 +1392,16 @@ export default {
         let from;
         let to;
         if (typeof legendHover.de == "string") {
-          from =Number(legendHover.de.replace("%", ""));
+          from = Number(legendHover.de.replace("%", ""));
         }
         if (typeof legendHover.a == "string") {
-          to =Number(legendHover.a.replace("%", ""))+1;
+          to = Number(legendHover.a.replace("%", "")) + 1;
         }
 
         features = features.filter((x) => x.percent >= from && x.percent <= to);
         if (features.length == 0) {
           return;
         }
-
       }
 
       map.U.addCircle(

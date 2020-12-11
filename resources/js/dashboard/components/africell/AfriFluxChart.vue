@@ -29,71 +29,7 @@
       </b-col>
     </b-row>
     <b-row no-gutters>
-      <b-col cols="12" md="6" class="pr-1 pl-0">
-        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
-          <template #loading>
-            <b-card class="mb-3 flux-mobility">
-              <b-skeleton width="90%" height="20"></b-skeleton>
-              <b-skeleton width="30%" height="60"></b-skeleton>
-              <b-skeleton width="100%" height="50"></b-skeleton>
-            </b-card>
-          </template>
-
-          <b-card
-            class="mb-3 flux-mobility"
-            :class="{ active: afriFluxType == 1 }"
-            @click="selectFluxType(1)"
-          >
-            <h5 class="percent-title">Flow_tot</h5>
-
-            <div class="percent flux-in-color">
-              {{ flow_tot ? flow_tot.toFixed(2) : "NAN" }}%​
-            </div>
-          </b-card>
-        </b-skeleton-wrapper>
-        <FullScreen
-          id="fullscreenOut"
-          link="mobile_out_in_tot"
-          @change="fullscreenMobileDaily"
-          v-show="!isStartEnd"
-        >
-          <b-card
-            no-body
-            class="mb-3 p-2 cardtype1"
-            :ref="`mobile_out_in_tot_card`"
-          >
-            <div class="text-center">Title flow tot</div>
-            <div class="chart-container">
-              <canvas
-                height="200"
-                width="100vh"
-                ref="mobile_out_in_tot"
-                id="mobile_out_in_tot"
-              ></canvas>
-            </div>
-          </b-card>
-        </FullScreen>
-
-        <FullScreen
-          id="fullscreenIn"
-          link="affricel_mobile_in"
-          @change="fullscreenFluxInOut"
-          v-show="isStartEnd"
-        >
-          <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">Title flow in</div>
-            <div class="chart-container">
-              <canvas
-                height="400"
-                width="100vh"
-                ref="affricel_mobile_in"
-                id="affricel_mobile_in"
-              ></canvas>
-            </div>
-          </b-card>
-        </FullScreen>
-      </b-col>
-      <b-col cols="12" md="6" class="pr-1 pl-1">
+      <b-col cols="12" md="12" class="pr-1 pl-1">
         <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
           <template #loading>
             <b-card class="mb-3 flux-mobility">
@@ -137,6 +73,116 @@
             </div>
           </b-card>
         </FullScreen>
+      </b-col>
+      <b-col cols="12" md="4" class="pr-1 pl-0">
+        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
+          <template #loading>
+            <b-card class="mb-3 flux-mobility">
+              <b-skeleton width="90%" height="20"></b-skeleton>
+              <b-skeleton width="30%" height="60"></b-skeleton>
+              <b-skeleton width="100%" height="50"></b-skeleton>
+            </b-card>
+          </template>
+
+          <b-card
+            class="mb-3 flux-mobility"
+            :class="{ active: afriFluxType == 4 }"
+            @click="selectFluxType(4)"
+          >
+            <h5 class="percent-title">flow_in</h5>
+
+            <div class="percent flux-in-color">
+              {{ flow_in ? flow_in.toFixed(2) : "NAN" }}%​
+            </div>
+          </b-card>
+        </b-skeleton-wrapper>
+        <FullScreen
+          id="fullscreenOut"
+          link="mobile_in"
+          @change="fullscreenMobileDaily"
+          v-show="!isStartEnd"
+        >
+          <b-card
+            no-body
+            class="mb-3 p-2 cardtype1"
+            :ref="`mobile_out_in_tot_card`"
+          >
+            <div class="text-center">Title flow in</div>
+            <div class="chart-container">
+              <canvas
+                height="200"
+                width="100vh"
+                ref="mobile_in"
+                id="mobile_in"
+              ></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
+
+        <FullScreen
+          id="fullscreenIn"
+          link="affricel_mobile_in"
+          @change="fullscreenFluxInOut"
+          v-show="isStartEnd"
+        >
+          <b-card no-body class="p-2 cardtype2">
+            <div class="text-center">Title flow in</div>
+            <div class="chart-container">
+              <canvas
+                height="400"
+                width="100vh"
+                ref="affricel_mobile_in"
+                id="affricel_mobile_in"
+              ></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
+      </b-col>
+      <b-col cols="12" md="4" class="pr-1 pl-0">
+        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
+          <template #loading>
+            <b-card class="mb-3 flux-mobility">
+              <b-skeleton width="90%" height="20"></b-skeleton>
+              <b-skeleton width="30%" height="60"></b-skeleton>
+              <b-skeleton width="100%" height="50"></b-skeleton>
+            </b-card>
+          </template>
+
+          <b-card
+            class="mb-3 flux-mobility"
+            :class="{ active: afriFluxType == 3 }"
+            @click="selectFluxType(3)"
+          >
+            <h5 class="percent-title">flow_out</h5>
+
+            <div class="percent flux-out-color">
+              {{ flow_out ? flow_out.toFixed(2) : "NAN" }}%​
+            </div>
+          </b-card>
+        </b-skeleton-wrapper>
+        <FullScreen
+          id="fullscreenOut"
+          link="mobile_out"
+          @change="fullscreenMobileDaily"
+          v-show="!isStartEnd"
+        >
+          <b-card
+            no-body
+            class="mb-3 p-2 cardtype1"
+            :ref="`mobile_out_in_tot_card`"
+          >
+            <div class="text-center">Title flow out</div>
+            <div class="chart-container">
+              <canvas
+                height="200"
+                width="100vh"
+                ref="mobile_out"
+                id="mobile_out"
+              ></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
+
         <FullScreen
           id="fullscreenOut"
           link="affricel_mobile_out"
@@ -151,6 +197,70 @@
                 width="100vh"
                 ref="affricel_mobile_out"
                 id="affricel_mobile_out"
+              ></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
+      </b-col>
+      <b-col cols="12" md="4" class="pr-1 pl-0">
+        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
+          <template #loading>
+            <b-card class="mb-3 flux-mobility">
+              <b-skeleton width="90%" height="20"></b-skeleton>
+              <b-skeleton width="30%" height="60"></b-skeleton>
+              <b-skeleton width="100%" height="50"></b-skeleton>
+            </b-card>
+          </template>
+
+          <b-card
+            class="mb-3 flux-mobility"
+            :class="{ active: afriFluxType == 1 }"
+            @click="selectFluxType(1)"
+          >
+            <h5 class="percent-title">Flow_tot</h5>
+
+            <div class="percent dash-green">
+              {{ flow_tot ? flow_tot.toFixed(2) : "NAN" }}%​
+            </div>
+          </b-card>
+        </b-skeleton-wrapper>
+        <FullScreen
+          id="fullscreenOut"
+          link="mobile_out_in_tot"
+          @change="fullscreenMobileDaily"
+          v-show="!isStartEnd"
+        >
+          <b-card
+            no-body
+            class="mb-3 p-2 cardtype1"
+            :ref="`mobile_out_in_tot_card`"
+          >
+            <div class="text-center">Title flow tot</div>
+            <div class="chart-container">
+              <canvas
+                height="200"
+                width="100vh"
+                ref="mobile_out_in_tot"
+                id="mobile_out_in_tot"
+              ></canvas>
+            </div>
+          </b-card>
+        </FullScreen>
+
+        <FullScreen
+          id="fullscreenIn"
+          link="affricel_mobile_in"
+          @change="fullscreenFluxInOut"
+          v-show="isStartEnd"
+        >
+          <b-card no-body class="p-2 cardtype2">
+            <div class="text-center">Title flow tot</div>
+            <div class="chart-container">
+              <canvas
+                height="400"
+                width="100vh"
+                ref="affricel_mobile_tot"
+                id="affricel_mobile_tot"
               ></canvas>
             </div>
           </b-card>
@@ -203,8 +313,11 @@ export default {
       selectedMobilityType: 1,
       lineCharts: [],
       configBarChart: {},
+
       barChart: [],
       flow_tot: null,
+      flow_in:null,
+      flow_out:null,
       volume: null,
       last_update: AFRICELL_LAST_UPDATE,
     };
@@ -214,8 +327,24 @@ export default {
       this.mobileCalc(
         this.fluxAfricellDaily,
         "mobile_out_in_tot",
-        "red",
+        PALETTE.dash_green,
         "flow_tot"
+      );
+    });
+    this.$nextTick(() => {
+      this.mobileCalc(
+        this.fluxAfricellDaily,
+        "mobile_in",
+        PALETTE.flux_in_color,
+        "flow_in"
+      );
+    });
+    this.$nextTick(() => {
+      this.mobileCalc(
+        this.fluxAfricellDaily,
+        "mobile_out",
+        PALETTE.flux_out_color,
+        "flow_out"
       );
     });
     this.$nextTick(() => {
@@ -233,7 +362,28 @@ export default {
   watch: {
     fluxAfricellDaily(newVal) {
       this.$nextTick(() => {
-        this.mobileCalc(newVal, "mobile_out_in_tot", "red", "flow_tot");
+        this.mobileCalc(
+          this.fluxAfricellDaily,
+          "mobile_out_in_tot",
+          PALETTE.flux_out_color,
+          "flow_tot"
+        );
+      });
+      this.$nextTick(() => {
+        this.mobileCalc(
+          this.fluxAfricellDaily,
+          "mobile_in",
+          PALETTE.flux_in_color,
+          "flow_in"
+        );
+      });
+      this.$nextTick(() => {
+        this.mobileCalc(
+          this.fluxAfricellDaily,
+          "mobile_out",
+          PALETTE.flux_out_color,
+          "flow_out"
+        );
       });
     },
     fluxAfricelPresence(newVal) {
@@ -280,6 +430,14 @@ export default {
         "zoneB",
         "flow_AB",
         PALETTE.flux_out_color,
+        "flow_tot"
+      );
+      this.drawHorizontalChart(
+        outData,
+        "affricel_mobile_tot",
+        "zoneB",
+        "flow_tot",
+        PALETTE.dash_green,
         "flow_tot"
       );
     },
