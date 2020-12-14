@@ -1157,7 +1157,7 @@ export default {
                 dashPattern: [5, 5], // crosshair line dash pattern
               },
               zoom: {
-                enabled: false,
+                enabled: true,
               },
               sync: {
                 enabled: false, // enable trace line syncing with other charts
@@ -1268,7 +1268,8 @@ export default {
         reference.getContext("2d"),
         this.configBarChart[ref]
       );
-      reference.style.height = 200;
+      reference.style.height = "200px";
+      reference.style.maxHeight = "200px";
     },
     flux30Chart(data, ref, color, title = null) {
       const dataFormatted = [];
@@ -1343,7 +1344,7 @@ export default {
                 dashPattern: [5, 5], // crosshair line dash pattern
               },
               zoom: {
-                enabled: false, // enable zooming
+                enabled: true, // enable zooming
                 zoomboxBackgroundColor: "rgba(66,133,244,0.2)", // background color of zoom box
                 zoomboxBorderColor: "#48F", // border color of zoom box
                 zoomButtonText: "Reset Zoom", // reset zoom button text
@@ -1433,13 +1434,15 @@ export default {
           },
         },
       };
+    
       let reference = this.$refs[ref];
       if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
       this.lineCharts[ref] = new Chart(
         reference.getContext("2d"),
         this.configBarChart[ref]
       );
-      reference.style.height = 200;
+      reference.style.height = "200px";
+      reference.style.maxHeight = "200px";
     },
     fluxMobilityFluxZone(InputData, ref, key, color) {
       if (!InputData) {
@@ -1673,7 +1676,8 @@ export default {
         this.configBarChart[ref]
       );
       this.configBarChart[ref].height = height;
-      reference.style.height = height;
+      reference.style.height = `${height}px`;;
+      reference.style.maxHeight = `${height}px`;
     },
     getRangeColors(
       data,
@@ -1717,23 +1721,27 @@ export default {
       return rangeColors;
     },
     fullscreenMobileDaily(fullscreen, ref) {
-      //this.fullscreen = fullscreen
+      
       if (!fullscreen) {
         const buttonResetZoom = this.lineCharts[ref].crosshair.button;
         if (buttonResetZoom) {
+          console.log('buttonResetZoomd',buttonResetZoom);
           buttonResetZoom.click();
         }
 
-        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = false;
-        this.$refs[ref].style.height = "200px";
+        // this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = false;
         this.$refs[ref].style.MaxHeight = "200px";
+        this.$refs[ref].style.height = "200px";
         this.$refs[ref].height = "200px";
 
         this.lineCharts[ref].update();
       } else {
         this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = true;
+         this.$refs[ref].style.MaxHeight = "400px";
         this.$refs[ref].style.height = "400px";
         this.$refs[ref].height = "400px";
+
+        // console.log('this.$refs[ref].style.MaxHeight',this.$refs[ref].style);
 
         this.lineCharts[ref].update();
       }
@@ -1903,13 +1911,16 @@ export default {
   .cardtype1 {
     canvas {
       width: calc(100vw - 19px) !important;
+      max-height: 500px !important;
       height: 500px !important;
+
     }
   }
   .cardtype2 {
     canvas {
       width: 700px !important;
       height: calc(100vh - 32px) !important;
+      max-height:calc(100vh - 32px) !important;;
     }
   }
 }
