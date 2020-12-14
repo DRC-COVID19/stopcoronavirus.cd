@@ -44,27 +44,10 @@
           class="pl-0 col-mobilite-generale"
           v-show="!isLoading"
         >
-<<<<<<< HEAD
-
-          <b-card class="mb-3 flux-mobility">
-            <h5 class="percent-title">Présence {{ targetZone }}</h5>
-<<<<<<< HEAD
-            <div class="percent flux-presence">
-              {{ Math.round(flux30General.percent) }}%​
-            </div>
-            <p class="percent-p text-dash-color mb-0">
-              {{formatCash(flux30General.difference) }} personnes de
-              <span v-if="flux30General.difference > 0">plus</span>
-              <span v-else>moins</span>
-              ont été présentes dans la zone
-=======
-=======
           <b-card class="mb-3 flux-mobility active">
             <h5 class="percent-title">Présence</h5>
->>>>>>> origin/dev
             <p class="text-muted" v-if="!flux30General.percent">
               Données non disponibles
->>>>>>> dev
             </p>
             <div v-else>
               <div class="percent flux-presence">
@@ -814,7 +797,6 @@ export default {
       }
     },
     typeMobilite() {
-      console.log('typeMobilite', this.typeMobilite)
       if (this.typeMobilite == 2) {
         this.selectFluxType(4);
       } else if (this.typeMobilite == 1) {
@@ -904,7 +886,6 @@ export default {
       );
     },
     selectFluxType(value) {
-      if(value == this.fluxType) return ;
       this.setFluxType(value);
     },
     fluxInPercent({ referencesByDate, observationsByDate }) {
