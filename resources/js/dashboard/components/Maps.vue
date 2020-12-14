@@ -1,7 +1,6 @@
 <template>
   <div class="map-wrapper">
     <div id="map"></div>
-    <canvas id="deck-canvas" ref="deck_canvas"></canvas>
     <ToolTipMaps
       v-if="ArcLayerSelectedObject.item"
       :position="ArcLayerSelectedObject.position"
@@ -197,9 +196,6 @@ export default {
       isProvinceSourceLoaded: false,
       defaultCenterCoordinates: [23.485632, -3.983283],
       defaultKinshasaCoordinates: [15.31389, -4.33167],
-      deck: new Deck({
-        layers: [],
-      }),
       stateHover: {
         hoveredStateId: null,
         hoveredStateKinId: null,
@@ -1478,7 +1474,7 @@ export default {
       const pointColorExpression = [];
       pointColorExpression.push("case");
       HOTSPOT_TYPE.forEach((item) => {
-        pointColorExpression.push(["==", ["get", 'Type'], item.name]);
+        pointColorExpression.push(["==", ["get", 'Type_'], item.name]);
         pointColorExpression.push(item.color);
       });
       pointColorExpression.push("white");
@@ -1487,15 +1483,15 @@ export default {
         SOURCE_HOTSPOT_POINT_GEOJSON,
         SOURCE_HOTSPOT_POINT_GEOJSON,
         map.U.properties({
-          circleColor: colorExpression,
+          circleColor: pointColorExpression,
           circleOpacity: [
             "match",
             ["get", dataKey],
             [...new Set(hotspotPoint)],
-            0.9,
+            1,
             0,
           ],
-          circleRadius: ["interpolate", ["linear"], ["zoom"], 0, 0.2, 22, 6],
+          circleRadius: ["interpolate", ["linear"], ["zoom"], 0, 0.1, 22, 5],
         }),
         this.drcSourceId
       );
@@ -1504,12 +1500,12 @@ export default {
         SOURCE_HOTSPOT_GEOJSON,
         SOURCE_HOTSPOT_GEOJSON,
         map.U.properties({
-          fillColor: pointColorExpression,
+          fillColor:colorExpression ,
           fillOpacity: [
             "match",
             ["get", dataKey],
             features.map((x) => x.origin),
-            1,
+            0.9,
             0,
           ],
         }),
@@ -2198,17 +2194,6 @@ export default {
     },
     fluxArcStyle(flux24Data, geoGranularity, legendHover = null) {
       this.flux24RemoveLayer();
-      // map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
-      // map.off("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
-      // map.U.removeSource(["fluxCircleDataSource"]);
-      // map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
-      // map.off("mouseleave", "fluxCircleDataLayer");
-      // map.off("mouseleave", "fluxCircleDataLayer");
-      // if (deck) {
-      //   deck.finalize();
-      // }
-      // this.deck.finalize();
-
       if (this.fluxType == 3 || this.fluxType == 4) {
         return;
       }
