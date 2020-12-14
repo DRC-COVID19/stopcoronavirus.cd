@@ -46,6 +46,7 @@
         "vue-form-wizard": "^0.8.4",
         "vue-fullscreen": "^2.1.6",
         "vue-google-charts": "^0.3.2",
+        "vue-gtag": "^1.10.0",
         "vue-input-only-number": "^1.1.0",
         "vue-lazyload": "^1.3.3",
         "vue-mapbox": "^0.4.1",

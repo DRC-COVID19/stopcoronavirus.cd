@@ -1,3 +1,5 @@
+import { event } from 'vue-gtag';
+
 export default {
   state: {
     fluxGeoGranularity: null,
@@ -35,6 +37,27 @@ export default {
       state.mapStyle = payload;
     },
     setFluxType(state, payload) {
+      let fluxType = "";
+
+      switch (payload) {
+        case 1:
+          fluxType = "Entrante";
+          break;
+        case 2:
+          fluxType = "Sortante";
+          break;
+        case 3:
+          fluxType = "Présences";
+          break;
+        case 4:
+          fluxType = "Général";
+          break;
+      }
+
+      event("switch_mobility_type", {
+        event_category: "mobility_switch",
+        event_label: fluxType,
+      })
       state.fluxType = payload
     },
     setFluxGeoOptions(state, payload) {
@@ -68,9 +91,28 @@ export default {
       state.tendanceChartSelectedValue = payload;
     },
     setIsProvinceStatSeeing(state, payload) {
+      // if (payload) event('Mobilité', 'Switch type mobilité', 'Mobilité', 'zones');
       state.isProvinceStatSeeing = payload;
     },
     setTypePresence(state, payload) {
+      let fluxType = ""
+
+      switch (payload) {
+        case 1:
+          fluxType = "Jour & Nuit";
+          break;
+        case 2:
+          fluxType = "Jour"
+          break;
+        case 3:
+          fluxType = "Nuit"
+          break;
+      }
+
+      event("switch_presence_type", {
+        event_category: "switch_presence",
+        event_label: fluxType,
+      })
       state.typePresence = payload;
     },
     setAfriFluxType(state, payload) {
