@@ -728,14 +728,14 @@ de revenus pour Kinshasa`,
     },
   ],
   HOTSPOT_TYPE = [
-    { name: "BureauAdmin", color: '#3399ff' },
+    { name: "BureauAdmin", color: '#1E3B27' },
     { name: "Eglises", color: "#339966" },
-    { name: "Commerces", color: '#cc3300' },
-    { name: "Supermarche", color: '#996633' },
-    { name: "Marché", color: '#666699' },
+    { name: "Commerces", color: '#6E436A' },
+    { name: "Supermarche", color: '#9D00B3' },
+    { name: "Marché", color: '#F6C2FF' },
     { name: "Hotels", color: '#669900' },
     { name: "ArretTransport", color: '#cc0099' },
     { name: "Restaurants", color: '#99cc00' },
-    { name: "Hopitaux", color: '#cc66ff' },
-    { name: "Cimetiere", color: '#99ff33' }
+    { name: "Hopitaux", color: '#E419FF' },
+    { name: "Cimetiere", color: '#CAE823' }
   ];

@@ -18,7 +18,7 @@ import {
 import Mapbox from "mapbox-gl";
 import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
-import { Deck } from "@deck.gl/core";
+// import { Deck } from "@deck.gl/core";
 import ToolTipMaps from "./ToolTipMaps";
 import { mapState, mapMutations, mapActions } from "vuex";
 import U from "mapbox-gl-utils";
@@ -37,7 +37,7 @@ const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
   SOURCE_HOTSPOT_GEOJSON = "SOURCE_HOTSPOT_GEOJSON",
   SOURCE_HOTSPOT_POINT_GEOJSON = "SOURCE_HOTSPOT_POINT_GEOJSON",
   AFRICELL_HEALTH_ZONE = "AFRICELL_HEALTH_ZONE";
-let deck = null;
+
 const popup = new Mapbox.Popup({
   closeButton: false,
   closeOnClick: false,
