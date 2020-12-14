@@ -8,7 +8,7 @@
     >
       <Header />
       <b-row class="mt-2 top-menu position-relative" style="z-index: 8">
-        <b-col>
+        <b-col class="pl-2">
           <MenuFlux
             v-show="activeMenu == 1"
             @submitFluxForm="submitFluxForm"
@@ -129,7 +129,7 @@
         <b-col
           cols="12"
           md="6"
-          class="side-right mt-2 pl-2"
+          class="side-right mt-2 pl-2 pr-2"
           :class="{ 'side-right-100': !hasCovidCases }"
           v-if="hasRightSide"
         >
@@ -195,7 +195,7 @@
                         reference="fluxglobalIn"
                       />
                     </b-col>
-                    <b-col cols="6" class="pl-2">
+                    <b-col cols="6" class="pl-2 pr-2">
                       <skeleton-loading v-if="isLoading">
                         <square-skeleton
                           :boxProperties="{

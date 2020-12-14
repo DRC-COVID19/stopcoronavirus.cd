@@ -81,10 +81,10 @@
           </FullScreen>
           <b-row>
             <b-col cols="12">
-              <div class="text-center mt-2 mb-3">Title</div>
+              <h3 class=" mt-2 mb-3">Légende type de Hotspot</h3>
             </b-col>
           </b-row>
-          <b-row align-h="center">
+          <b-row align-h="start">
             <b-col cols="12" md="3">
               <div
                 v-for="(item, index) in hotspotType.slice(0, 5)"
