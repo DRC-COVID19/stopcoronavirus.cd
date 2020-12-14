@@ -592,7 +592,8 @@ export default {
         reference.getContext("2d"),
         this.configBarChart[ref]
       );
-      reference.style.height = 200;
+      reference.style.height = "200px";
+      reference.style.maxHeight = "200px";
     },
     drawHorizontalChart(data, ref, YKey, XKey, color, title = null) {
       const localData = data.map((d) => ({ x: d[XKey], y: d[YKey] }));
@@ -672,7 +673,8 @@ export default {
         reference.getContext("2d"),
         this.configBarChart[ref]
       );
-      reference.style.height = 400;
+      reference.style.height = "400px";
+      reference.style.maxHeight = "400px";
     },
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
