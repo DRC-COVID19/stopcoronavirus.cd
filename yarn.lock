@@ -2877,7 +2877,7 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-bootstrap-vue@^2.15.0:
+bootstrap-vue@^2.20.1:
   version "2.20.1"
   resolved "https://registry.yarnpkg.com/bootstrap-vue/-/bootstrap-vue-2.20.1.tgz#1b6cd4368632c1a6dd4a5ed161242baa131c3cd5"
   integrity sha512-s+w83q0T2mo/RbFwTM8gExbLJMEOYpdTUqmyFaHv2Ir+TFprMvTWpeAzeNuawJ130W1gePZ3LW3cNp1t/tZbOw==
@@ -8914,6 +8914,11 @@ vue-google-charts@^0.3.2:
   integrity sha512-dvp5C0m3uAfB7PbAWPOqnYGJLUKyK0NPmnjOE8FDUhVySeErojOPZVd5zNOq4m9RhhwmNFP31bsxVYNb+0+f9w==
   dependencies:
     debounce "^1.1.0"
+
+vue-gtag@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/vue-gtag/-/vue-gtag-1.10.0.tgz#787d62eb4f1135dfa2997b465f1b11e5cf8fb0c9"
+  integrity sha512-pGbe6m/12a2DHftnWQOHBmkS+a3kPAZNU6ouP426mF/MPc/43DcHCEySUtB3MeJCPuXaUQQgGsRosIZWPdl/MQ==
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"

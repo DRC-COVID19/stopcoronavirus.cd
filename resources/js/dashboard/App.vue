@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState } from "vuex";
 import Waiting from "./components/Waiting";
 export default {
   components: {
@@ -18,10 +18,10 @@ export default {
       isLoading: false,
     };
   },
-  computed : {
+  computed: {
     ...mapState({
       isAuthenticated: (state) => state.auth.isAuthenticated,
-    })
+    }),
   },
   created() {
     axios.interceptors.response.use(
@@ -29,7 +29,10 @@ export default {
       (error) => {
         // console.log("error.response", error.response);
         if (error.response.status == 401) {
-          this.$ga.event('User', 'logout', 'state', "session expired");
+          this.$gtag.event("auto-logout", {
+            event_category: "logout",
+            event_label: "auto-logout",
+          });
           this.$store.commit("logoutSuccess");
           this.$router.push({
             name: "login",
@@ -53,21 +56,20 @@ export default {
       (user) => {
         if (user && user.email) {
           // console.log("user.email", user);
-          this.$ga.set(
-            "userId",
-            `${user.name.replace(" ", "_")}_kd_${user.id}`
-          );
+          this.$gtag.set({
+            userId: `${user.name.replace(" ", "_")}_kd_${user.id}`,
+          });
           //  ga("set", "userId", user.email)
         }
       }
     );
 
     if (this.isAuthenticated) {
-        this.userMe()
+      this.userMe();
     }
   },
   methods: {
-    ...mapActions(['userMe'])
+    ...mapActions(["userMe"]),
   },
 };
 </script>

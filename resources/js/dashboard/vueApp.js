@@ -8,7 +8,7 @@ import commont from './mixins/common';
 import VueLazyLoad from 'vue-lazyload';
 import vSelect from 'vue-select';
 import App from "./App.vue";
-import {GOOGLE_ANALYTICS_ID} from './config/env';
+import { GOOGLE_ANALYTICS_ID } from './config/env';
 import GlobalComponents from './globalComponents'
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env';
 import "chartjs-plugin-crosshair";
@@ -16,7 +16,7 @@ import fullscreen from 'vue-fullscreen';
 import VueEllipseProgress from "vue-ellipse-progress";
 import VueSkeletonLoading from 'vue-skeleton-loading';
 import VueAnalytics from 'vue-analytics';
-
+import VueGtag from "vue-gtag";
 
 require('./helper');
 
@@ -34,46 +34,44 @@ Vue.use(VueSkeletonLoading);
 
 
 if (store.state.auth.isAuthenticated) {
-    store.dispatch('userMe').catch(error=>{
+  store.dispatch('userMe').catch(error => {
 
-    });
+  });
 }
 
 store.dispatch('loadSource');
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(route => route.meta.requiresAuth) && (!store.state.auth.isAuthenticated || !store.state.auth.userRole)) {
-        next({ name: 'login' });
-        return
-    }
-
-    // if logged in redirect to dashboard
-    if (to.name === 'login' && store.state.auth.isAuthenticated && store.state.auth.userRole) {
-        next({ name: 'landing' });
-        return
-    }
-    if (to.meta.role && !to.meta.role.some(x => store.state.auth.userRole.includes(x)) && to.name != "acces.denied") {
-        next({ name: 'acces.denied' });
-        return
-    }
-
-    next()
-});
-
-Vue.use(VueAnalytics, {
-  id: GOOGLE_ANALYTICS_ID,
-  router,
-  debug: {
-    enabled: true, // default value
-    trace: false, // default value
-    sendHitTask: false // default value
+  if (to.matched.some(route => route.meta.requiresAuth) && (!store.state.auth.isAuthenticated || !store.state.auth.userRole)) {
+    next({ name: 'login' });
+    return
   }
+
+  // if logged in redirect to dashboard
+  if (to.name === 'login' && store.state.auth.isAuthenticated && store.state.auth.userRole) {
+    next({ name: 'landing' });
+    return
+  }
+  if (to.meta.role && !to.meta.role.some(x => store.state.auth.userRole.includes(x)) && to.name != "acces.denied") {
+    next({ name: 'acces.denied' });
+    return
+  }
+
+  next()
 });
+
+Vue.use(VueGtag,
+  {
+    config: {
+      id: GOOGLE_ANALYTICS_ID,
+      pageTrackerScreenviewEnabled: true
+    }, router
+  });
 
 const app = new Vue({
-    el: '#app',
-    render: h => h(App),
-    store,
-    router
+  el: '#app',
+  render: h => h(App),
+  store,
+  router
 });
 export default app;

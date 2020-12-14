@@ -50,7 +50,7 @@
         <b-col cols="12" :class="`${hasRightSide ? 'col-md-6' : 'col-md-12'}`">
           <div
             class="layer-set-contenair"
-            v-if="hasFlux24DailyIn && activeMenu == 1 && selectedSource==1"
+            v-if="hasFlux24DailyIn && activeMenu == 1 && selectedSource == 1"
           >
             <b-link
               :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
@@ -106,7 +106,9 @@
               />
               <MapsLegend
                 v-if="
-                  (((flux24DailyIn.length > 0 || flux30MapsData.length > 0)&& selectedSource==1) || (fluxAfricelInOut.length>0 && isStartEndDate)) &&
+                  (((flux24DailyIn.length > 0 || flux30MapsData.length > 0) &&
+                    selectedSource == 1) ||
+                    (fluxAfricelInOut.length > 0 && isStartEndDate)) &&
                   activeMenu == 1
                 "
               ></MapsLegend>
@@ -253,7 +255,7 @@
           </b-card>
         </b-col>
       </b-row>
-      <b-row v-if="hasBottom && selectedSource==1">
+      <b-row v-if="hasBottom && selectedSource == 1">
         <b-col cols="12" class="d-flex justify-content-center">
           <div
             @click="toggleBottomBar"
@@ -271,7 +273,7 @@
         <b-row
           class="row-side-bottom mb-2"
           :class="{ 'mt-2': !showBottom }"
-          v-if="activeMenu != 3 && hasBottom && showBottom "
+          v-if="activeMenu != 3 && hasBottom && showBottom"
         >
           <b-col class="side-bottom" cols="12">
             <b-card no-body>
@@ -457,7 +459,7 @@ export default {
       flux30General: {},
       fluxAfricellDaily: [],
       fluxAfricelPresence: [],
-      fluxAfricelInOut:[]
+      fluxAfricelInOut: [],
     };
   },
   computed: {
@@ -625,7 +627,10 @@ export default {
       if (checked) {
         let confirmedCount = 0;
 
-        this.$ga.event('Epidémiologie', 'Get flux data', 'state request', "send");
+        this.$gtag.event("fetch_epidemioloy_data_request", {
+          event_category: "fetch_epidemioloy_data",
+          event_label: "covid_data_req_send",
+        });
 
         this.$set(this.loadings, "getCovidCases_stat", true);
         axios
@@ -649,11 +654,15 @@ export default {
               labels,
             };
             this.$set(this.loadings, "getCovidCases_stat", false);
-            this.$ga.event('Epidémiologie', 'Get flux data', 'state request', "receive response covid-cases statistics");
+
+            this.$gtag.event("fetch_epidemioloy_data_response", {
+              event_category: "fetch_epidemioloy_data",
+              event_label: "getCovidCases_stat",
+            });
           })
-          .catch((response) => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "getCovidCases_stat", false);
-            this.$ga.exception(JSON.stringify(response))
+            this.$gtag.exception(response);
           });
 
         this.$set(this.loadings, "getCovidCases_statdaily", true);
@@ -678,11 +687,14 @@ export default {
               labels,
             };
             this.$set(this.loadings, "getCovidCases_statdaily", false);
-            this.$ga.event('Epidémiologie', 'Get flux data', 'state request', "receive response covid-cases statistics daily");
+            this.$gtag.event("fetch_epidemioloy_data_response", {
+              event_category: "fetch_epidemioloy_data",
+              event_label: "getCovidCases_statdaily",
+            });
           })
-          .catch((response) => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "getCovidCases_statdaily", false);
-            this.$ga.exception(JSON.stringify(response))
+            this.$gtag.exception(response);
           });
 
         this.$set(this.loadings, "getCovidCases_cases", true);
@@ -720,11 +732,14 @@ export default {
 
             this.covidCasesCount = confirmedCount;
             this.$set(this.loadings, "getCovidCases_cases", false);
-            this.$ga.event('Epidémiologie', 'Get flux data', 'state request', "receive response covid-cases");
+            this.$gtag.event("fetch_epidemioloy_data_response", {
+              event_category: "fetch_epidemioloy_data",
+              event_label: "getCovidCases_cases",
+            });
           })
-          .catch((response) => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "getCovidCases_cases", false);
-            this.$ga.exception(JSON.stringify(response))
+            this.$gtag.exception(response);
           });
       } else {
         this.covidCases = null;
@@ -735,7 +750,11 @@ export default {
     getmedicalOrientations(checked) {
       if (checked) {
         this.$set(this.loadings, "orientation_medical", true);
-        this.$ga.event('Orientation medical', 'Get flux data', 'state request', "send");
+
+        this.$gtag.event("fetch_medical_orientation_data_request", {
+          event_category: "fetch_medical_orientation",
+          event_label: "medical_orientation_req_send",
+        });
         axios
           .get(`/api/dashboard/orientation-medical-result`)
           .then(({ data }) => {
@@ -759,12 +778,16 @@ export default {
 
             this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = total_fin + total_fin8 + total_fin5;
-            this.$ga.event('Orientation medical', 'Get flux data', 'state request', "receive response");
+
+            this.$gtag.event("fetch_medical_orientation_data_response", {
+              event_category: "fetch_medical_orientation",
+              event_label: "orientation_medical",
+            });
           })
-          .catch((response) => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = null;
-            this.$ga.exception(JSON.stringify(response))
+            this.$gtag.exception(response);
           });
 
         this.$set(this.loadings, "orientation_medical_stats", true);
@@ -788,11 +811,15 @@ export default {
               labels,
             };
             this.$set(this.loadings, "orientation_medical_stats", false);
-            this.$ga.event('Orientation medical', 'Get flux data', 'state request', "receive response stat");
+
+            this.$gtag.event("fetch_medical_orientation_data_response", {
+              event_category: "fetch_medical_orientation",
+              event_label: "orientation_medical_stats",
+            });
           })
-          .catch((response) => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "orientation_medical_stats", false);
-            this.$ga.exception(JSON.stringify(response))
+            this.$gtag.exception(response);
           });
       } else {
         this.medicalOrientations = null;
@@ -1066,9 +1093,10 @@ export default {
       //     this.$set(this.loadings, "urlDailyCompare", false);
       //   });
 
-
-      this.$ga.event('Mobilité', 'Get flux data', 'state request', "send");
-      this.$ga.event('Mobilité', 'Get flux data', 'filtres', JSON.stringify(values));
+      this.$gtag.event("fetch_orange_flux_data_request", {
+        event_category: "fetch_orange_flux",
+        event_label: "fetch_orange_flux_req_send",
+      });
 
       this.flux24Daily = [];
       this.$set(this.loadings, "urlDaily", true);
@@ -1079,11 +1107,15 @@ export default {
         .then(({ data }) => {
           this.flux24Daily = data;
           this.$set(this.loadings, "urlDaily", false);
-          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response flux24Daily");
+
+          this.$gtag.event("fetch_orange_flux_data_response", {
+            event_category: "fetch_orange_flux",
+            event_label: "urlDaily",
+          });
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlDaily", false);
-          this.$ga.exception(JSON.stringify(response))
+          this.$gtag.exception(response);
         });
 
       // get flux data in
@@ -1114,11 +1146,15 @@ export default {
             "destination"
           );
           this.$set(this.loadings, "urlDailyIn", false);
-          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response flux24DailyIn");
+
+          this.$gtag.event("fetch_orange_flux_data_response", {
+            event_category: "fetch_orange_flux",
+            event_label: "urlDailyIn",
+          });
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlDailyIn", false);
-          this.$ga.exception(JSON.stringify(response))
+          this.$gtag.exception(response);
         });
 
       // get flux data out
@@ -1172,11 +1208,14 @@ export default {
           );
 
           this.$set(this.loadings, "urlDailyOut", false);
-          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response flux24DailyOut");
+          this.$gtag.event("fetch_orange_flux_data_response", {
+            event_category: "fetch_orange_flux",
+            event_label: "urlDailyOut",
+          });
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlDailyOut", false);
-          this.$ga.exception(JSON.stringify(response))
+          this.$gtag.exception(response);
         });
 
       this.flux24Presence = [];
@@ -1217,11 +1256,15 @@ export default {
           this.flux24PresenceDailyInData = data;
 
           this.$set(this.loadings, "urlPresenceDailyIn", false);
-          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response flux24DailyPresence");
+
+          this.$gtag.event("fetch_orange_flux_data_response", {
+            event_category: "fetch_orange_flux",
+            event_label: "urlPresenceDailyIn",
+          });
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlPresenceDailyIn", false);
-          this.$ga.exception(JSON.stringify(response))
+          this.$gtag.exception(response);
         });
 
       this.flux24 = [];
@@ -1248,7 +1291,10 @@ export default {
       if (values.fluxGeoGranularity == 2) {
         return;
       }
-
+      this.$gtag.event("fetch_pandemics_top_confirmed_data_request", {
+        event_category: "fetch_pandemics_top_confirmed",
+        event_label: "top_confirmed_req_send",
+      });
       const pandemicParams = Object.assign({}, values);
       pandemicParams.fluxGeoOptions = pandemicParams.fluxGeoOptions[0];
       axios
@@ -1257,7 +1303,11 @@ export default {
         })
         .then(({ data }) => {
           this.topHealthZoneConfirmed = data;
-          this.$ga.event('Mobilité', 'Get flux data', 'state request', "receive response top-confirmed");
+
+          this.$gtag.event("fetch_pandemics_top_confirmed_data_response", {
+            event_category: "fetch_pandemics_top_confirmed",
+            event_label: "top_confirmed",
+          });
         });
 
       const healthZones = this.healthZones.filter(
@@ -1308,17 +1358,17 @@ export default {
               if (healthIndexIn <= healthZones.length) {
                 globalInFunc();
               }
-              this.$ga.event('Mobilité', 'Get flux data', 'state request',
-                `receive response of ${countIn}/${countAll} zone(s) in by province(${values.fluxGeoOptions[0]})`
-              );
-
+              this.$gtag.event("fetch_orange_flux_data_request", {
+                event_category: "fetch_orange_flux",
+                event_label: "global_in_provinces",
+              });
             })
-            .catch((error) => {
+            .catch(({ error }) => {
               countIn++;
               this.globalProgress =
                 ((countIn + countOut) / (countAll * 2)) * 100;
 
-              this.$ga.exception(JSON.stringify(error))
+              this.$gtag.exception(error);
             });
 
           //Get  zone out by province
@@ -1360,15 +1410,17 @@ export default {
               if (healthIndexOut <= healthZones.length) {
                 globalOutFunc();
               }
-              this.$ga.event('Mobilité', 'Get flux data', 'state request',
-                `receive response of ${countOut}/${countAll} zone(s) out by province(${values.fluxGeoOptions[0]})`
-              );
+
+              this.$gtag.event("fetch_orange_flux_data_response", {
+                event_category: "fetch_orange_flux",
+                event_label: "global_out_provinces",
+              });
             })
             .catch((error) => {
               countOut++;
               this.globalProgress =
                 ((countIn + countOut) / (countAll * 2)) * 100;
-              this.$ga.exception(JSON.stringify(error))
+              this.$gtag.exception(error);
             });
 
           //Get  zone out by province
@@ -1392,8 +1444,6 @@ export default {
       const urlInOutZone = `api/dashboard/flux/africell/in-out/zones`;
 
       this.$set(this.loadings, "urlFluxAfricell", true);
-
-
 
       const dailyRequest = axios.get(urlDaily, {
         params: values,
@@ -1420,7 +1470,12 @@ export default {
 
       this.fluxAfricellDaily = [];
       this.fluxAfricelPresence = [];
-      this.fluxAfricelInOut=[];
+      this.fluxAfricelInOut = [];
+
+      this.$gtag.event("fetch_africell_flux_data_request", {
+        event_category: "fetch_africell_flux",
+        event_label: "fluxAfricell_req_send",
+      });
 
       Promise.all(allRequest)
         .then((response) => {
@@ -1433,17 +1488,13 @@ export default {
           if (response[2]) {
             this.fluxAfricelInOut = response[2].data;
           }
-
-          this.$ga.event(
-            "fluxData",
-            "getRequest",
-            "africell-daily",
-            "SendRequest"
-          );
+          this.$gtag.event("fetch_africell_flux_data_response", {
+            event_category: "fetch_africell_flux",
+            event_label: "fluxAfricell_response",
+          });
         })
-        .catch((error) => {
-          const exception = error.message || error;
-          this.$ga.exception(exception);
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
         })
         .finally(() => {
           this.$set(this.loadings, "urlFluxAfricell", false);
@@ -1456,7 +1507,6 @@ export default {
       const urlGeneral = `api/dashboard/flux/hotspots/general`;
 
       const values = Object.assign({}, input);
-
 
       const mapsRequest = axios.get(urlMaps, {
         params: values,
@@ -1486,8 +1536,10 @@ export default {
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
 
-      this.$ga.event('Mobilité', 'Get hotspots', 'state request', "send");
-      this.$ga.event('Mobilité', 'Get hotspots', 'filtres', JSON.stringify(values));
+      this.$gtag.event("fetch_orange_flux_hotspot_data_request", {
+        event_category: "fetch_orange_flux_hotspot",
+        event_label: "fetch_orange_flux_hotspot_req_send",
+      });
 
       Promise.all([mapsRequest, dailyRequest, tendanceRequest, generalRequest])
         .then((response) => {
@@ -1556,11 +1608,14 @@ export default {
               percent,
             };
           }
-          this.$ga.event('Mobilité', 'Get hotspots', 'state request', "receive response");
+
+          this.$gtag.event("fetch_orange_flux_hotspot_data_response", {
+            event_category: "fetch_orange_flux_hotspot",
+            event_label: "fetch_orange_flux_hotspot_response",
+          });
         })
-        .catch((error) => {
-          const exception = error.message || error
-          this.$ga.exception(JSON.stringify(exception))
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
         })
         .finally(() => {
           this.$set(this.loadings, "urlFluxTIme30", false);
