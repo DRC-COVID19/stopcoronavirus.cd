@@ -426,8 +426,20 @@ export default {
         ),
       };
       this.dateRangeObservation = {
-        startDate: new Date(`${this.fluxForm.selectedFluxSource == 1?OBSERVATION_START:AFRICELL_OBSERVATION_START} 06:00`),
-        endDate: new Date(`${this.fluxForm.selectedFluxSource == 1?OBSERVATION_END:AFRICELL_OBSERVATION_END} 23:30`),
+        startDate: new Date(
+          `${
+            this.fluxForm.selectedFluxSource == 1
+              ? OBSERVATION_START
+              : AFRICELL_OBSERVATION_START
+          } 06:00`
+        ),
+        endDate: new Date(
+          `${
+            this.fluxForm.selectedFluxSource == 1
+              ? OBSERVATION_END
+              : AFRICELL_OBSERVATION_END
+          } 23:30`
+        ),
       };
       this.reference_min_date = moment(
         this.fluxForm.selectedFluxSource == 1
@@ -472,21 +484,12 @@ export default {
           break;
         case 3:
           this.clearObservationDate();
-          this.dateRangePreference = {
-            startDate: new Date(`${HOTSPOT_PREFERENCE_START} 06:00`),
-            endDate: new Date(`${HOTSPOT_PREFERENCE_END} 23:30`),
-          };
-          this.dateRangeObservation = {
-            startDate: new Date(`${HOTSPOT_OBSERVATION_START} 06:00`),
-            endDate: new Date(`${HOTSPOT_OBSERVATION_END} 23:30`),
-          };
-          this.reference_min_date = moment(HOTSPOT_PREFERENCE_START)
-            .subtract(1, "days")
-            .format("YYYY-MM-DD");
-          this.fluxForm.preference_start = HOTSPOT_PREFERENCE_START;
-          this.fluxForm.preference_end = HOTSPOT_PREFERENCE_END;
-          this.fluxForm.observation_start = HOTSPOT_OBSERVATION_START;
-          this.fluxForm.observation_end = HOTSPOT_OBSERVATION_END;
+          this.fluxHostpotSwitchPeriode(
+            HOTSPOT_PREFERENCE_START,
+            HOTSPOT_PREFERENCE_END,
+            HOTSPOT_OBSERVATION_START,
+            HOTSPOT_OBSERVATION_END
+          );
           this.isHotspot = true;
           this.fluxGeoOptions = this.fluxHotSpot
             .filter((x) => x.name != "ZoneGlobale")
@@ -499,7 +502,56 @@ export default {
           break;
       }
     },
+    fluxHostpotSwitchPeriode(
+      preferenceStart,
+      preferenceEnd,
+      observationStart,
+      observationEnd
+    ) {
+      this.dateRangePreference = {
+        startDate: new Date(`${preferenceStart} 06:00`),
+        endDate: new Date(`${preferenceEnd} 23:30`),
+      };
+      this.dateRangeObservation = {
+        startDate: new Date(`${observationStart} 06:00`),
+        endDate: new Date(`${observationEnd} 23:30`),
+      };
+      this.reference_min_date = moment(preferenceStart)
+        .subtract(1, "days")
+        .format("YYYY-MM-DD");
+      this.fluxForm.preference_start = preferenceStart;
+      this.fluxForm.preference_end = preferenceEnd;
+      this.fluxForm.observation_start = observationStart;
+      this.fluxForm.observation_end = observationEnd;
+    },
     fluxGeoOptionsChange(value) {
+      if (this.fluxForm.fluxGeoGranularity == 3) {
+        const hotspot = this.fluxHotSpot.find((x) => x.name == value);
+        if (hotspot) {
+          this.clearObservationDate();
+          const referenceStart = hotspot.min_date;
+          const referenceEnd = moment(referenceStart)
+            .add(7, "days")
+            .format("YYYY-MM-DD");
+          const observationStart = moment(referenceStart)
+            .add(8, "days")
+            .format("YYYY-MM-DD");
+
+          this.fluxHostpotSwitchPeriode(
+            referenceStart,
+            referenceEnd,
+            observationStart,
+            HOTSPOT_OBSERVATION_END
+          );
+        } else {
+          this.fluxHostpotSwitchPeriode(
+            HOTSPOT_PREFERENCE_START,
+            HOTSPOT_PREFERENCE_END,
+            HOTSPOT_OBSERVATION_START,
+            HOTSPOT_OBSERVATION_END
+          );
+        }
+      }
       const newVal = value === null ? [] : [value];
       this.$set(this.fluxForm, "fluxGeoOptions", newVal);
       this.resetFluxPredefinedControl();
