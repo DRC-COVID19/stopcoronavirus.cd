@@ -15,7 +15,10 @@ export default {
     tendanceChartSelectedValue: null,
     isProvinceStatSeeing: false,
     legendHover: null, // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
-    typePresence: 1
+    typePresence: 1,
+    afriFluxType: 1,
+    selectedSource: 1,
+    observationDate: {}
   },
   mutations: {
     setIsWatchingfluxGeoOptions(state, payload) {
@@ -53,6 +56,18 @@ export default {
       state.fluxEnabled = payload;
     },
     setLegendHover(state, sectionHover) {
+      if (sectionHover) {
+        let from = null;
+        let to = null;
+        if (typeof sectionHover.de == "string") {
+          from = Number(sectionHover.de.replace("%", ""));
+        }
+        if (typeof sectionHover.a == "string") {
+          to = Number(sectionHover.a.replace("%", "")) + 1;
+        }
+        sectionHover.de = from;
+        sectionHover.a = to;
+      }
       state.legendHover = sectionHover
     },
     setDomaineExtValues(state, payload) {
@@ -74,6 +89,16 @@ export default {
       event('Mobilité', 'Switch type presence mobilité', 'Presence', fluxType);
       state.typePresence = payload;
     },
+    setAfriFluxType(state, payload) {
+
+      state.afriFluxType = payload;
+    },
+    setSelectedSource(state, payload) {
+      state.selectedSource = payload;
+    },
+    setObservationDate(state, payload) {
+      state.observationDate = payload;
+    }
   },
   actions: {
     resetState({ state }) {

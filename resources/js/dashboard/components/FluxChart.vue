@@ -4,9 +4,7 @@
       <b-row class="mb-2">
         <div class="col-md col-12">
           <h3 class="d-flex align-items-center mb-0">
-            <span  class="ml-2 mr-2">{{
-              targetZone
-            }}</span>
+            <span class="ml-2 mr-2">{{ targetZone }}</span>
 
             <toggle-button
               v-if="fluxTimeGranularity == 1"
@@ -39,13 +37,14 @@
         </div>
       </b-row>
 
-      <b-row no-gutters v-show="fluxTimeGranularity == 2">
+      <b-row no-gutters v-show="fluxTimeGranularity == 2" class="mb-4">
         <b-col
           cols="12"
           md="12"
           class="pl-0 col-mobilite-generale"
           v-show="!isLoading"
         >
+<<<<<<< HEAD
 
           <b-card class="mb-3 flux-mobility">
             <h5 class="percent-title">Présence {{ targetZone }}</h5>
@@ -59,6 +58,10 @@
               <span v-else>moins</span>
               ont été présentes dans la zone
 =======
+=======
+          <b-card class="mb-3 flux-mobility active">
+            <h5 class="percent-title">Présence</h5>
+>>>>>>> origin/dev
             <p class="text-muted" v-if="!flux30General.percent">
               Données non disponibles
 >>>>>>> dev
@@ -68,7 +71,7 @@
                 {{ Math.round(flux30General.percent) }}%​
               </div>
               <p class="percent-p text-dash-color mb-0">
-                {{formatCash(flux30General.difference) }} personnes de
+                {{ formatCash(flux30General.difference) }} personnes de
                 <span v-if="flux30General.difference > 0">plus</span>
                 <span v-else>moins</span>
                 ont été présentes dans la zone
@@ -81,7 +84,9 @@
             @change="fullscreenMobileDaily"
             v-show="this.flux30Daily.length > 0"
           >
-            <b-card no-body class="cardtype1 mb-3 p-2">              <div class="chart-container">
+            <b-card no-body class="cardtype1 mb-3 p-2">
+              <div class="general-top-title">Title</div>
+              <div class="chart-container">
                 <canvas
                   height="200"
                   width="100vh"
@@ -91,6 +96,37 @@
               </div>
             </b-card>
           </FullScreen>
+          <b-row>
+            <b-col cols="12">
+              <div class="text-center mt-2 mb-3">Title</div>
+            </b-col>
+          </b-row>
+          <b-row align-h="center">
+            <b-col cols="12" md="3">
+              <div
+                v-for="(item, index) in hotspotType.slice(0, 5)"
+                :key="index"
+              >
+                <span
+                  class="flux-chart-lenged-color"
+                  :style="{ background: item.color }"
+                ></span>
+                <span class="flux-chart-lenged-text">{{ item.name }}</span>
+              </div>
+            </b-col>
+            <b-col cols="12" md="3">
+              <div
+                v-for="(item, index) in hotspotType.slice(5, 10)"
+                :key="index"
+              >
+                <span
+                  class="flux-chart-lenged-color"
+                  :style="{ background: item.color }"
+                ></span>
+                <span class="flux-chart-lenged-text">{{ item.name }}</span>
+              </div>
+            </b-col>
+          </b-row>
         </b-col>
 
         <b-col
@@ -151,6 +187,9 @@
             @change="fullscreenMobileDaily"
           >
             <b-card no-body class="cardtype1 mb-3 p-2">
+              <div class="general-top-title">
+                Mobilité générale intérieure de la zone
+              </div>
               <div class="chart-container">
                 <canvas
                   height="200"
@@ -170,9 +209,14 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Les 5 zones de santé avec la plus forte décroissance de
+                    mobilité
+                  </div>
+
                   <div class="chart-container">
                     <canvas
-                      height="400"
+                      height="200"
                       width="100vh"
                       ref="general_top_asc"
                       id="general_top_asc"
@@ -189,9 +233,14 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Les 5 zones de santé avec la plus faible décroissance de
+                    mobilité
+                  </div>
+
                   <div class="chart-container">
                     <canvas
-                      height="400"
+                      height="200"
                       width="100vh"
                       ref="general_top_desc"
                       id="general_top_desc"
@@ -208,9 +257,13 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Impacte sur la mobilité pour les 5 zones de santé les plus
+                    affectées
+                  </div>
                   <div class="chart-container">
                     <canvas
-                      height="400"
+                      height="200"
                       width="100vh"
                       ref="pandemic_top_desc"
                       id="pandemic_top_desc"
@@ -550,7 +603,7 @@
 <script>
 import * as d3 from "d3";
 import { mapState, mapMutations } from "vuex";
-import { PALETTE, FLUX_LAST_UPDATE } from "../config/env";
+import { PALETTE, FLUX_LAST_UPDATE, HOTSPOT_TYPE } from "../config/env";
 import GlobalProvice from "./flux/GLobalProvince";
 import ToggleButton from "../components/ToggleButton";
 import { difference } from "@turf/turf";
@@ -665,6 +718,7 @@ export default {
       fluxGeoGranularity: 2,
       areZoomable: [],
       toolTipItem: {},
+      hotspotType: HOTSPOT_TYPE,
     };
   },
   computed: {
@@ -674,6 +728,7 @@ export default {
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
       typePresence: (state) => state.flux.typePresence,
       fluxTimeGranularity: (state) => state.flux.fluxTimeGranularity,
+      observationDate: (state) => state.flux.observationDate,
     }),
     typesMobilite() {
       let types = [{ val: 1, lbl: "Détails" }];
@@ -842,6 +897,12 @@ export default {
       "setIsProvinceStatSeeing",
       "setTypePresence",
     ]),
+    isStartIsEnd() {
+      return (
+        this.observationDate.start &&
+        this.observationDate.start == this.observationDate.end
+      );
+    },
     selectFluxType(value) {
       if(value == this.fluxType) return ;
       this.setFluxType(value);
@@ -997,8 +1058,7 @@ export default {
         this.mobileCalc(
           Object.assign({}, general),
           `general_flux`,
-          PALETTE.flux_in_color,
-          "Mobilité générale intérieure de la zone"
+          PALETTE.flux_in_color
         );
       });
     },
@@ -1232,12 +1292,32 @@ export default {
     flux30Chart(data, ref, color, title = null) {
       const dataFormatted = [];
       data.map((x) => {
-        x.map((item) => {
-          dataFormatted.push({
-            x: moment(`${item.date} ${item.hour}`),
-            y: item.percent,
+        if (this.isStartIsEnd()) {
+          x.map((item) => {
+            dataFormatted.push({
+              x: moment(`${item.date} ${item.hour}`),
+              y: item.percent,
+            });
           });
-        });
+        } else {
+          let item = {};
+          if (x.length % 2 == 0) {
+            let indice = x.length / 2;
+
+            const volume1 = x[indice].volume;
+            const volume2 = x[indice - 1].volume;
+            item.date = x[indice].date;
+            item.volume = volume1 + volume2;
+          } else {
+            let indice = (x.length + 1) / 2;
+            item = x[indice];
+          }
+          dataFormatted.push({
+            date: item.date,
+            x: moment(item.date),
+            y: item.volume,
+          });
+        }
       });
 
       const max = d3.max(dataFormatted.map((x) => x.y));
@@ -1299,7 +1379,7 @@ export default {
             callbacks: {
               title: (a, d) => {
                 let titleFormat = this.moment(a[0].xLabel).format("DD.MM.Y");
-                if (this.fluxTimeGranularity == 2) {
+                if (this.fluxTimeGranularity == 2 && this.isStartIsEnd()) {
                   titleFormat = this.moment(a[0].xLabel).format(
                     "DD.MM.Y HH:mm"
                   );
@@ -1329,7 +1409,10 @@ export default {
                 },
                 type: "time",
                 time: {
-                  unit: this.fluxTimeGranularity == 1 ? "day" : "hour",
+                  unit:
+                    this.fluxTimeGranularity == 2 && this.isStartIsEnd()
+                      ? "hour"
+                      : "day",
                   // unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM",
@@ -1424,14 +1507,21 @@ export default {
       localData = localData.slice(0, 10);
 
       // cond : key == origin
-      this.drawHorizontalChart(localData, "zone", ref, color);
+      this.drawHorizontalChart(localData, "zone", ref, color, 400);
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
       const data = inPutData.map((item) => ({
         zone: item.name,
         volume: item.confirmed,
       }));
-      this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color, title);
+      this.drawHorizontalChart(
+        data,
+        "zone",
+        ref,
+        PALETTE.flux_in_color,
+        200,
+        title
+      );
     },
     async fluxMobilityFluxGeneralZone(
       fluxDataIn,
@@ -1491,25 +1581,25 @@ export default {
           "zone",
           refAsc,
           PALETTE.flux_in_color,
-          titleAsc
+          200
         );
         this.drawHorizontalChart(
           descData,
           "zone",
           refDesc,
           PALETTE.flux_in_color,
-          titleDesc
+          200
         );
         this.drawHorizontalChart(
           mobilityHealth,
           "zone",
           refHealth,
           PALETTE.flux_in_color,
-          titleHelth
+          200
         );
       });
     },
-    drawHorizontalChart(localData, key, ref, color, title = null) {
+    drawHorizontalChart(localData, key, ref, color, height, title = null) {
       const datasets = [];
       const volumeReferences = localData.map((d) => d.volume_reference);
       if (volumeReferences.some((x) => x)) {
@@ -1518,6 +1608,7 @@ export default {
           backgroundColor: "#33ac2e",
           borderColor: "#33ac2e",
           borderWidth: 1,
+          barThickness: 12,
           data: volumeReferences,
         });
       }
@@ -1526,6 +1617,7 @@ export default {
         label: "Observation",
         backgroundColor: color,
         borderColor: color,
+        barThickness: 12,
         data: localData.map((d) => d.volume),
       });
       const dataChart = {
@@ -1599,7 +1691,8 @@ export default {
         reference.getContext("2d"),
         this.configBarChart[ref]
       );
-      reference.style.height = 400;
+      this.configBarChart[ref].height = height;
+      reference.style.height = height;
     },
     getRangeColors(
       data,
@@ -1669,8 +1762,8 @@ export default {
       const element = this.$refs[ref];
       const parent_2 = element.parentElement.parentElement;
       if (!fullscreen) {
-        element.style.height = "400px";
-        element.height = "400px";
+        element.style.height = this.configBarChart[ref].height;
+        element.height = this.configBarChart[ref].height;
         element.parentElement.style.width = "";
         parent_2.style.display = "";
         parent_2.style.alignItem = "";
@@ -1859,5 +1952,20 @@ export default {
   height: 38px;
   width: auto;
   margin-left: 5px;
+}
+.general-top-title {
+  font-size: 0.7rem;
+  text-align: center;
+  margin-bottom: 5px;
+  color: #6c757d;
+  font-weight: bold;
+}
+.flux-chart-lenged-color {
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+}
+.flux-chart-lenged-text {
+  font-size: 0.8rem;
 }
 </style>

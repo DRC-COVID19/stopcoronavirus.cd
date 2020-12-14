@@ -4,11 +4,11 @@
       <b-form-row>
         <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
           <b-form-group>
-            <label for class="text-dash-color">Rapports prédefinis</label>
+            <label for class="text-dash-color">Sources</label>
             <v-select
-              @input="fluxPredefinedInputChanged"
-              v-model="fluxPredefinedControl"
-              :options="fluxPredefinedInput"
+              @input="selectedFluxSourceChanged"
+              v-model="fluxForm.selectedFluxSource"
+              :options="fluxSource"
               label="name"
               placeholder="Option"
               :reduce="(item) => item.id"
@@ -22,6 +22,7 @@
             <b-col cols="12" md="6">
               <b-form-group>
                 <v-select
+                  :disabled="fluxForm.selectedFluxSource == 2"
                   @input="fluxGeoGranularityChange"
                   v-model="fluxForm.fluxGeoGranularity"
                   :options="fluxGeoGranularities"
@@ -81,6 +82,7 @@
                 <div class="d-flex">
                   <div class="mr-2">
                     <date-range-picker
+                      :disabled="fluxForm.selectedFluxSource == 2"
                       ref="picker1"
                       :locale-data="rangeData"
                       v-model="dateRangePreference"
@@ -100,7 +102,11 @@
                         {{ picker.endDate | date }}</template
                       >
                     </date-range-picker>
-                    <span class="range-lbl" :class="{'text-danger':referenceHasError}">Période de référence </span>
+                    <span
+                      class="range-lbl"
+                      :class="{ 'text-danger': referenceHasError }"
+                      >Période de référence
+                    </span>
                     <span
                       v-if="referenceHasError"
                       v-b-tooltip.hover
@@ -170,6 +176,10 @@ import {
   HOTSPOT_OBSERVATION_END,
   OBSERVATION_START,
   OBSERVATION_END,
+  AFRICELL_PREFERENCE_START,
+  AFRICELL_PREFERENCE_END,
+  AFRICELL_OBSERVATION_START,
+  AFRICELL_OBSERVATION_END,
 } from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
@@ -211,6 +221,7 @@ export default {
         fluxTimeGranularity: 1,
         time_start: "06:00",
         time_end: "23:30",
+        selectedFluxSource: 1,
       },
       dateRangeObservation: {
         startDate: new Date(`${OBSERVATION_START} 06:00`),
@@ -244,6 +255,16 @@ export default {
       isHotspot: false,
       referenceThrowError: false,
       referenceErrorMessage: null,
+      fluxSource: [
+        {
+          id: 1,
+          name: "Orange",
+        },
+        {
+          id: 2,
+          name: "Africell",
+        },
+      ],
     };
   },
   filters: {
@@ -319,6 +340,7 @@ export default {
       "setFluxGeoOptionsTmp",
       "setFluxGeoGranularityTemp",
       "setFluxTimeGranularity",
+      "setSelectedSource",
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -341,7 +363,7 @@ export default {
       const dateDiff = localEndDate.diff(localStartDate, "days");
       this.referenceThrowError = false;
       this.referenceErrorMessage = null;
-      if (dateDiff+1 < 7) {
+      if (dateDiff + 1 < 7) {
         this.referenceThrowError = true;
         this.referenceErrorMessage = "La plage doit avoir au moins 7 jours";
       }
@@ -360,6 +382,7 @@ export default {
       this.resetFluxPredefinedControl();
     },
     submitFluxForm() {
+      this.setSelectedSource(this.fluxForm.selectedFluxSource);
       this.$emit("submitFluxForm", this.fluxForm);
       this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);
@@ -387,20 +410,60 @@ export default {
     },
     changeCalendarLimit() {
       this.dateRangePreference = {
-        startDate: new Date(`${PREFERENCE_START} 06:00`),
-        endDate: new Date(`${PREFERENCE_END} 23:30`),
+        startDate: new Date(
+          `${
+            this.fluxForm.selectedFluxSource == 1
+              ? PREFERENCE_START
+              : AFRICELL_PREFERENCE_START
+          } 06:00`
+        ),
+        endDate: new Date(
+          `${
+            this.fluxForm.selectedFluxSource == 1
+              ? PREFERENCE_END
+              : AFRICELL_PREFERENCE_END
+          } 23:30`
+        ),
       };
       this.dateRangeObservation = {
-        startDate: new Date(`${OBSERVATION_START} 06:00`),
-        endDate: new Date(`${OBSERVATION_END} 23:30`),
+        startDate: new Date(
+          `${
+            this.fluxForm.selectedFluxSource == 1
+              ? OBSERVATION_START
+              : AFRICELL_OBSERVATION_START
+          } 06:00`
+        ),
+        endDate: new Date(
+          `${
+            this.fluxForm.selectedFluxSource == 1
+              ? OBSERVATION_END
+              : AFRICELL_OBSERVATION_END
+          } 23:30`
+        ),
       };
-      this.reference_min_date = moment(PREFERENCE_START)
+      this.reference_min_date = moment(
+        this.fluxForm.selectedFluxSource == 1
+          ? PREFERENCE_END
+          : AFRICELL_PREFERENCE_END
+      )
         .subtract(1, "days")
         .format("YYYY-MM-DD");
-      this.fluxForm.preference_start = PREFERENCE_START;
-      this.fluxForm.preference_end = PREFERENCE_END;
-      this.fluxForm.observation_start = OBSERVATION_START;
-      this.fluxForm.observation_end = OBSERVATION_END;
+      this.fluxForm.preference_start =
+        this.fluxForm.selectedFluxSource == 1
+          ? PREFERENCE_START
+          : AFRICELL_PREFERENCE_START;
+      this.fluxForm.preference_end =
+        this.fluxForm.selectedFluxSource == 1
+          ? PREFERENCE_END
+          : AFRICELL_PREFERENCE_END;
+      this.fluxForm.observation_start =
+        this.fluxForm.selectedFluxSource == 1
+          ? OBSERVATION_START
+          : AFRICELL_OBSERVATION_START;
+      this.fluxForm.observation_end =
+        this.fluxForm.selectedFluxSource == 1
+          ? OBSERVATION_END
+          : AFRICELL_OBSERVATION_END;
     },
     fluxGeoGranularityChange(value) {
       this.resetFluxPredefinedControl();
@@ -421,21 +484,12 @@ export default {
           break;
         case 3:
           this.clearObservationDate();
-          this.dateRangePreference = {
-            startDate: new Date(`${HOTSPOT_PREFERENCE_START} 06:00`),
-            endDate: new Date(`${HOTSPOT_PREFERENCE_END} 23:30`),
-          };
-          this.dateRangeObservation = {
-            startDate: new Date(`${HOTSPOT_OBSERVATION_START} 06:00`),
-            endDate: new Date(`${HOTSPOT_OBSERVATION_END} 23:30`),
-          };
-          this.reference_min_date = moment(HOTSPOT_PREFERENCE_START)
-            .subtract(1, "days")
-            .format("YYYY-MM-DD");
-          this.fluxForm.preference_start = HOTSPOT_PREFERENCE_START;
-          this.fluxForm.preference_end = HOTSPOT_PREFERENCE_END;
-          this.fluxForm.observation_start = HOTSPOT_OBSERVATION_START;
-          this.fluxForm.observation_end = HOTSPOT_OBSERVATION_END;
+          this.fluxHostpotSwitchPeriode(
+            HOTSPOT_PREFERENCE_START,
+            HOTSPOT_PREFERENCE_END,
+            HOTSPOT_OBSERVATION_START,
+            HOTSPOT_OBSERVATION_END
+          );
           this.isHotspot = true;
           this.fluxGeoOptions = this.fluxHotSpot
             .filter((x) => x.name != "ZoneGlobale")
@@ -448,10 +502,60 @@ export default {
           break;
       }
     },
+    fluxHostpotSwitchPeriode(
+      preferenceStart,
+      preferenceEnd,
+      observationStart,
+      observationEnd
+    ) {
+      this.dateRangePreference = {
+        startDate: new Date(`${preferenceStart} 06:00`),
+        endDate: new Date(`${preferenceEnd} 23:30`),
+      };
+      this.dateRangeObservation = {
+        startDate: new Date(`${observationStart} 06:00`),
+        endDate: new Date(`${observationEnd} 23:30`),
+      };
+      this.reference_min_date = moment(preferenceStart)
+        .subtract(1, "days")
+        .format("YYYY-MM-DD");
+      this.fluxForm.preference_start = preferenceStart;
+      this.fluxForm.preference_end = preferenceEnd;
+      this.fluxForm.observation_start = observationStart;
+      this.fluxForm.observation_end = observationEnd;
+    },
     fluxGeoOptionsChange(value) {
-      this.$set(this.fluxForm, "fluxGeoOptions", [value]);
+      if (this.fluxForm.fluxGeoGranularity == 3) {
+        const hotspot = this.fluxHotSpot.find((x) => x.name == value);
+        if (hotspot) {
+          this.clearObservationDate();
+          const referenceStart = hotspot.min_date;
+          const referenceEnd = moment(referenceStart)
+            .add(7, "days")
+            .format("YYYY-MM-DD");
+          const observationStart = moment(referenceStart)
+            .add(8, "days")
+            .format("YYYY-MM-DD");
+
+          this.fluxHostpotSwitchPeriode(
+            referenceStart,
+            referenceEnd,
+            observationStart,
+            HOTSPOT_OBSERVATION_END
+          );
+        } else {
+          this.fluxHostpotSwitchPeriode(
+            HOTSPOT_PREFERENCE_START,
+            HOTSPOT_PREFERENCE_END,
+            HOTSPOT_OBSERVATION_START,
+            HOTSPOT_OBSERVATION_END
+          );
+        }
+      }
+      const newVal = value === null ? [] : [value];
+      this.$set(this.fluxForm, "fluxGeoOptions", newVal);
       this.resetFluxPredefinedControl();
-      this.setFluxGeoOptionsTmp([value]);
+      this.setFluxGeoOptionsTmp(newVal);
     },
     fluxPredefinedInputChanged(value) {
       if (!value) {
@@ -539,6 +643,16 @@ export default {
     },
     resetFluxPredefinedControl() {
       this.fluxPredefinedControl = null;
+    },
+    selectedFluxSourceChanged(value) {
+      // this.setSelectedSource(value);
+      if (value == 2) {
+        this.$set(this.fluxForm, "fluxGeoGranularity", 2);
+        this.fluxGeoGranularityChange(2);
+      } else {
+        this.$set(this.fluxForm, "fluxGeoGranularity", 1);
+        this.fluxGeoGranularityChange(1);
+      }
     },
   },
 };
