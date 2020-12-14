@@ -15,7 +15,6 @@ import "chartjs-plugin-crosshair";
 import fullscreen from 'vue-fullscreen';
 import VueEllipseProgress from "vue-ellipse-progress";
 import VueSkeletonLoading from 'vue-skeleton-loading';
-import VueAnalytics from 'vue-analytics';
 import VueGtag from "vue-gtag";
 
 require('./helper');
@@ -60,13 +59,12 @@ router.beforeEach((to, from, next) => {
   next()
 });
 
-Vue.use(VueGtag,
-  {
+Vue.use(VueGtag,{
     config: {
       id: GOOGLE_ANALYTICS_ID,
       pageTrackerScreenviewEnabled: true
-    }, router
-  });
+    }
+  },router);
 
 const app = new Vue({
   el: '#app',

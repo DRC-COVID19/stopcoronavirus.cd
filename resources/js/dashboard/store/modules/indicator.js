@@ -1,5 +1,5 @@
 
-import {event, exception} from 'vue-analytics';
+import { event } from 'vue-gtag';
 
 export default {
   state: {
@@ -21,8 +21,11 @@ export default {
   },
   actions: {
     submitFilters({ state }, form) {
-      event('Indicateurs', 'Get flux data', 'state request', "send");
-      event('Indicateurs', 'Get flux data', 'filtres', JSON.stringify(form));
+      
+      event("fetch_indicator_data_request", {
+        event_category: "fetch_indicator_data",
+        event_label: "indicators_req_send",
+      });
 
       state.isLoading = true;
       let url = "/api/dashboard/indicators";
@@ -76,10 +79,13 @@ export default {
         });
         state.indicatorData = statisticData;
 
-        event('Indicateurs', 'Get flux data', 'state request', "receive response");
-      }).catch(response => {
+        event("fetch_indicator_data_response", {
+          event_category: "fetch_indicator_data",
+          event_label: "indicators",
+        });
+      }).catch(({response}) => {
         state.formErrors = response.data.errors
-        exception(JSON.stringify(response))
+        exception(response)
       }).finally(() => {
         state.isLoading = false;
       });
