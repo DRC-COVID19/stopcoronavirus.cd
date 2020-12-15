@@ -18,7 +18,8 @@ export default {
     typePresence: 1,
     afriFluxType: 1,
     selectedSource: 1,
-    observationDate: {}
+    observationDate: {},
+    fluxHotspotType: null,
   },
   mutations: {
     setIsWatchingfluxGeoOptions(state, payload) {
@@ -124,6 +125,9 @@ export default {
     },
     setObservationDate(state, payload) {
       state.observationDate = payload;
+    },
+    setFluxHotspotType(state, payload) {
+      state.fluxHotspotType = payload;
     }
   },
   actions: {

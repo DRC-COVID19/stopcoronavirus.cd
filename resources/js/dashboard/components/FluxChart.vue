@@ -85,11 +85,12 @@
             </b-col>
           </b-row>
           <b-row align-h="start">
-            <b-col cols="12" md="3">
+            <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
               <div
                 v-for="(item, index) in hotspotType.slice(0, 5)"
                 :key="index"
                 class="flux-chart-lenged-item"
+                @mouseenter="setFluxHotspotType(item)"
               >
                 <span
                   class="flux-chart-lenged-color"
@@ -98,11 +99,12 @@
                 <span class="flux-chart-lenged-text">{{ item.pseudo }}</span>
               </div>
             </b-col>
-            <b-col cols="12" md="3">
+            <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
               <div
                 v-for="(item, index) in hotspotType.slice(5, 10)"
                 :key="index"
                 class="flux-chart-lenged-item"
+                @mouseenter="setFluxHotspotType(item)"
               >
                 <span
                   class="flux-chart-lenged-color"
@@ -880,6 +882,7 @@ export default {
       "setFluxType",
       "setIsProvinceStatSeeing",
       "setTypePresence",
+      "setFluxHotspotType",
     ]),
     isStartIsEnd() {
       return (
