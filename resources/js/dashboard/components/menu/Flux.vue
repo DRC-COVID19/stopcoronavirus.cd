@@ -51,10 +51,18 @@
                   :options="fluxGeoOptions"
                   placeholder="Localisation"
                   label="origin"
+                  :selectable="(item) => !item.isTitle"
                   :reduce="(item) => item.origin"
                   @input="fluxGeoOptionsChange"
                   class="style-chooser"
-                />
+                >
+                  <template v-slot:option="option">
+                    <div v-if="option.isTitle" class="v-select-group">
+                      {{ option.origin }}
+                    </div>
+                    <div v-else>{{ option.origin }}</div>
+                  </template>
+                </v-select>
               </b-form-group>
             </b-col>
           </b-row>
@@ -180,6 +188,7 @@ import {
   AFRICELL_PREFERENCE_END,
   AFRICELL_OBSERVATION_START,
   AFRICELL_OBSERVATION_END,
+  HOTSPOT_TYPE,
 } from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
@@ -341,6 +350,7 @@ export default {
       "setFluxGeoGranularityTemp",
       "setFluxTimeGranularity",
       "setSelectedSource",
+      "setFluxHotspotType",
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -382,11 +392,20 @@ export default {
       this.resetFluxPredefinedControl();
     },
     submitFluxForm() {
-      this.setSelectedSource(this.fluxForm.selectedFluxSource);
-      this.$emit("submitFluxForm", this.fluxForm);
-      this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
-      this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);
-      this.setFluxTimeGranularity(this.fluxForm.fluxTimeGranularity);
+      const fluxForm = { ...this.fluxForm };
+      this.setSelectedSource(fluxForm.selectedFluxSource);
+      if (fluxForm.fluxGeoGranularity == 3) {
+        if (HOTSPOT_TYPE.some((x) => x.pseudo == fluxForm.fluxGeoOptions[0])) {
+          fluxForm.fluxGeoOptions[0] = "Tout";
+          this.setFluxHotspotType(this.fluxForm.fluxGeoOptions[0]);
+        } else {
+          this.setFluxHotspotType(null);
+        }
+      }
+      this.$emit("submitFluxForm", fluxForm);
+      this.setFluxGeoOptions(fluxForm.fluxGeoOptions);
+      this.setFluxGeoGranularityTemp(fluxForm.fluxGeoGranularity);
+      this.setFluxTimeGranularity(fluxForm.fluxTimeGranularity);
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
@@ -491,10 +510,20 @@ export default {
             HOTSPOT_OBSERVATION_END
           );
           this.isHotspot = true;
-          this.fluxGeoOptions = this.fluxHotSpot
-            .filter((x) => x.name != "ZoneGlobale")
-            .map((x) => ({ origin: x.name, id: x.id }));
-          this.fluxGeoOptions.unshift({ origin: "Tout", id: "-1" });
+          const geoOptions = [
+            { origin: "Tout", id: "0" },
+            { isTitle: true, origin: "Type Hotspot" },
+          ];
+          geoOptions.push(
+            ...HOTSPOT_TYPE.map((x) => ({ origin: x.pseudo, id: x.id }))
+          );
+          geoOptions.push({ isTitle: true, origin: "Hotspot" });
+          geoOptions.push(
+            ...this.fluxHotSpot
+              .filter((x) => x.name != "ZoneGlobale")
+              .map((x) => ({ origin: x.name, id: x.id }))
+          );
+          this.fluxGeoOptions = geoOptions;
           this.$set(this.fluxForm, "fluxGeoOptions", ["Tout"]);
           this.$set(this.fluxForm, "fluxTimeGranularity", 2);
           break;
@@ -657,6 +686,21 @@ export default {
   },
 };
 </script>
+<style lang="scss">
+.vs__dropdown-option--disabled {
+  background: #ededed !important;
+  color: #a6a6a6 !important;
+  cursor: text;
+  pointer-events: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  &:hover {
+    cursor: inherit;
+  }
+}
+</style>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .flux-form {
@@ -677,5 +721,8 @@ export default {
 }
 .btn-submit {
   font-size: 14px;
+}
+
+.v-select-group {
 }
 </style>
