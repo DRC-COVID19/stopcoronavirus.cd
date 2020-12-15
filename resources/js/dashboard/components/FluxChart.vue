@@ -81,7 +81,7 @@
           </FullScreen>
           <b-row>
             <b-col cols="12">
-              <h3 class=" mt-2 mb-3">Légende type de Hotspot</h3>
+              <h4 class="mt-2 mb-3">Légende</h4>
             </b-col>
           </b-row>
           <b-row align-h="start">
@@ -89,24 +89,26 @@
               <div
                 v-for="(item, index) in hotspotType.slice(0, 5)"
                 :key="index"
+                class="flux-chart-lenged-item"
               >
                 <span
                   class="flux-chart-lenged-color"
                   :style="{ background: item.color }"
                 ></span>
-                <span class="flux-chart-lenged-text">{{ item.name }}</span>
+                <span class="flux-chart-lenged-text">{{ item.pseudo }}</span>
               </div>
             </b-col>
             <b-col cols="12" md="3">
               <div
                 v-for="(item, index) in hotspotType.slice(5, 10)"
                 :key="index"
+                class="flux-chart-lenged-item"
               >
                 <span
                   class="flux-chart-lenged-color"
                   :style="{ background: item.color }"
                 ></span>
-                <span class="flux-chart-lenged-text">{{ item.name }}</span>
+                <span class="flux-chart-lenged-text">{{ item.pseudo }}</span>
               </div>
             </b-col>
           </b-row>
@@ -1434,7 +1436,7 @@ export default {
           },
         },
       };
-    
+
       let reference = this.$refs[ref];
       if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
       this.lineCharts[ref] = new Chart(
@@ -1676,7 +1678,7 @@ export default {
         this.configBarChart[ref]
       );
       this.configBarChart[ref].height = height;
-      reference.style.height = `${height}px`;;
+      reference.style.height = `${height}px`;
       reference.style.maxHeight = `${height}px`;
     },
     getRangeColors(
@@ -1721,11 +1723,10 @@ export default {
       return rangeColors;
     },
     fullscreenMobileDaily(fullscreen, ref) {
-      
       if (!fullscreen) {
         const buttonResetZoom = this.lineCharts[ref].crosshair.button;
         if (buttonResetZoom) {
-          console.log('buttonResetZoomd',buttonResetZoom);
+          console.log("buttonResetZoomd", buttonResetZoom);
           buttonResetZoom.click();
         }
 
@@ -1737,7 +1738,7 @@ export default {
         this.lineCharts[ref].update();
       } else {
         this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = true;
-         this.$refs[ref].style.MaxHeight = "400px";
+        this.$refs[ref].style.MaxHeight = "400px";
         this.$refs[ref].style.height = "400px";
         this.$refs[ref].height = "400px";
 
@@ -1913,14 +1914,13 @@ export default {
       width: calc(100vw - 19px) !important;
       max-height: 500px !important;
       height: 500px !important;
-
     }
   }
   .cardtype2 {
     canvas {
       width: 700px !important;
       height: calc(100vh - 32px) !important;
-      max-height:calc(100vh - 32px) !important;;
+      max-height: calc(100vh - 32px) !important;
     }
   }
 }
@@ -1956,6 +1956,12 @@ export default {
   display: inline-block;
   height: 15px;
   width: 15px;
+}
+.flux-chart-lenged-item {
+  &:hover {
+    cursor: pointer;
+    opacity: 0.7;
+  }
 }
 .flux-chart-lenged-text {
   font-size: 0.8rem;
