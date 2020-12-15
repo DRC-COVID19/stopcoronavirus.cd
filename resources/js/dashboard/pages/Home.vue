@@ -129,7 +129,7 @@
         <b-col
           cols="12"
           md="6"
-          class="side-right mt-2 pl-2 pr-2"
+          class="side-right mt-2 pl-2"
           :class="{ 'side-right-100': !hasCovidCases }"
           v-if="hasRightSide"
         >

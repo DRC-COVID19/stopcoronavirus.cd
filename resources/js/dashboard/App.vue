@@ -56,10 +56,13 @@ export default {
       (user) => {
         if (user && user.email) {
           // console.log("user.email", user);
+          
           this.$gtag.set({
-            userId: `${user.name.replace(" ", "_")}_kd_${user.id}`,
+            user_id: `${user.name.replace(" ", "_")}_kd_${user.id}`,
           });
           //  ga("set", "userId", user.email)
+          // gtag('set', {'user_id': `${user.name.replace(" ", "_")}_kd_${user.id}`}); // Set the user ID using signed-in user_id.
+         
         }
       }
     );
