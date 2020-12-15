@@ -1491,7 +1491,7 @@ export default {
             1,
             0,
           ],
-          circleRadius: ["interpolate", ["linear"], ["zoom"], 0, 0.1, 22, 5],
+          circleRadius: ["interpolate", ["linear"], ["zoom"], 0, 0.1, 22, 8],
         }),
         this.drcSourceId
       );
