@@ -19,7 +19,7 @@ export default {
     afriFluxType: 1,
     selectedSource: 1,
     observationDate: {},
-    fluxHotspotType: null
+    fluxHotspotType: null,
   },
   mutations: {
     setIsWatchingfluxGeoOptions(state, payload) {

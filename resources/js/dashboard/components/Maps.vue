@@ -206,6 +206,7 @@ export default {
       },
       fluxCircleDataLayer: {},
       flux30FeaturesData: [],
+      fluxHotspotType: null,
     };
   },
   mounted() {
@@ -308,10 +309,6 @@ export default {
         this.addHotspotPointSource();
         this.$emit("geoJsonLoaded", "hotspotPointGeo");
       }
-
-      // if (!this.isProvinceSourceLoaded && this.healthProvinceGeojson) {
-      //   this.addProvinceSource();
-      // }
     });
 
     this.map = map;
@@ -320,9 +317,6 @@ export default {
     this.$store.watch(
       (state) => state.flux.fluxGeoGranularityTemp,
       (value) => {
-        // if (this.activeMenu != 1) {
-        //   return;
-        // }
         this.addPolygoneLayer(value);
         this.addPolygoneHoverLayer(value);
       }
@@ -330,18 +324,12 @@ export default {
     this.$store.watch(
       (state) => state.flux.mapStyle,
       (value) => {
-        // if (this.activeMenu != 1) {
-        //   return;
-        // }
         this.flux24Func();
       }
     );
     this.$store.watch(
       (state) => state.flux.fluxType,
       (value) => {
-        // if (this.activeMenu != 1) {
-        //   return;
-        // }
         this.flux24Func();
       }
     );
@@ -351,15 +339,6 @@ export default {
       (state) => state.nav.activeMenu,
       (value) => {
         this.drawDesign();
-        // switch (value) {
-        //   case 1:
-        //     break;
-        //   case 5:
-        //     this.addPolygoneLayer(2);
-        //     this.addPolygoneHoverLayer(2);
-        //   default:
-        //     break;
-        // }
       }
     );
 
@@ -383,6 +362,13 @@ export default {
       (state) => state.epidemic.legendEpidHover,
       (value) => {
         this.covidHatchedStyle(this.covidCases, value);
+      }
+    );
+    this.$store.watch(
+      (state) => state.flux.fluxHotspotType,
+      (value) => {
+        this.fluxHotspotType = value;
+        this.flux30Func();
       }
     );
   },
@@ -411,6 +397,7 @@ export default {
       afriFluxType: (state) => state.flux.afriFluxType,
       observationDate: (state) => state.flux.observationDate,
       selectedSource: (state) => state.flux.selectedSource,
+      fluxHotSpot: (state) => state.app.fluxHotSpot,
     }),
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
@@ -1074,7 +1061,11 @@ export default {
     flux30Func() {
       this.mapResize();
       if (this.flux30MapsData.length > 0) {
-        this.flux30MapsDataFunc(this.flux30MapsData, this.legendHover);
+        this.flux30MapsDataFunc(
+          this.flux30MapsData,
+          this.legendHover,
+          this.fluxHotspotType
+        );
       }
     },
     africellFluxFunc() {
@@ -1361,7 +1352,7 @@ export default {
     /**
      * Ajout de hotspot
      */
-    flux30MapsDataFunc(flux30MapsData, legendHover) {
+    flux30MapsDataFunc(flux30MapsData, legendHover, fluxHotspotType) {
       this.flux24RemoveLayer();
 
       this.removePolygoneHoverLayer();
@@ -1402,6 +1393,17 @@ export default {
       colorScalePositive.range(PALETTE.inflow_positif);
 
       const max = d3.max(features, (d) => d.volume);
+
+      // if (fluxHotspotType) {
+      //   features = features.filter((x) =>
+      //     this.fluxHotSpot.some(
+      //       (y) => y.type == fluxHotspotType.name && y.name == x.origin
+      //     )
+      //   );
+      //   if (features.length == 0) {
+      //     return;
+      //   }
+      // }
 
       if (legendHover) {
         features = features.filter(
@@ -1452,29 +1454,37 @@ export default {
               break;
           }
         }
+
         this.hospotPointJson.features.map((itemPoint) => {
           if (itemPoint && itemPoint.geometry.type == "Point") {
             point = turf.point(itemPoint.geometry.coordinates);
             if (point && polygone) {
               const isPoint = turf.booleanPointInPolygon(point, polygone);
               if (isPoint) {
-                hotspotPoint.push(itemPoint.properties.DENOMMIN);
-                colorExpression.push(["==", ["get", dataKey], itemPoint.properties.DENOMMIN]);
+                colorExpression.push([
+                  "==",
+                  ["get", dataKey],
+                  itemPoint.properties.DENOMMIN,
+                ]);
                 colorExpression.push(color);
+
+                if (fluxHotspotType) {
+                  if (itemPoint.properties.Type_ != fluxHotspotType.name) {
+                    return;
+                  }
+                }
+                hotspotPoint.push(itemPoint.properties.DENOMMIN);
               }
             }
           }
         });
-
-
-
       });
       colorExpression.push("white");
 
       const pointColorExpression = [];
       pointColorExpression.push("case");
       HOTSPOT_TYPE.forEach((item) => {
-        pointColorExpression.push(["==", ["get", 'Type_'], item.name]);
+        pointColorExpression.push(["==", ["get", "Type_"], item.name]);
         pointColorExpression.push(item.color);
       });
       pointColorExpression.push("white");
@@ -1500,7 +1510,7 @@ export default {
         SOURCE_HOTSPOT_GEOJSON,
         SOURCE_HOTSPOT_GEOJSON,
         map.U.properties({
-          fillColor:colorExpression ,
+          fillColor: colorExpression,
           fillOpacity: [
             "match",
             ["get", dataKey],

@@ -85,11 +85,12 @@
             </b-col>
           </b-row>
           <b-row align-h="start">
-            <b-col cols="12" md="3">
+            <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
               <div
                 v-for="(item, index) in hotspotType.slice(0, 5)"
                 :key="index"
                 class="flux-chart-lenged-item"
+                @mouseenter="setFluxHotspotType(item)"
               >
                 <span
                   class="flux-chart-lenged-color"
@@ -98,11 +99,12 @@
                 <span class="flux-chart-lenged-text">{{ item.pseudo }}</span>
               </div>
             </b-col>
-            <b-col cols="12" md="3">
+            <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
               <div
                 v-for="(item, index) in hotspotType.slice(5, 10)"
                 :key="index"
                 class="flux-chart-lenged-item"
+                @mouseenter="setFluxHotspotType(item)"
               >
                 <span
                   class="flux-chart-lenged-color"
@@ -880,6 +882,7 @@ export default {
       "setFluxType",
       "setIsProvinceStatSeeing",
       "setTypePresence",
+      "setFluxHotspotType",
     ]),
     isStartIsEnd() {
       return (
@@ -1288,10 +1291,15 @@ export default {
           if (x.length % 2 == 0) {
             let indice = x.length / 2;
 
+            const volume_reference1 = x[indice].volume_reference;
+            const volume_reference2 = x[indice - 1].volume_reference;
             const volume1 = x[indice].volume;
             const volume2 = x[indice - 1].volume;
             item.date = x[indice].date;
             item.volume = volume1 + volume2;
+            item.volume_reference = volume_reference1 + volume_reference2;
+            item.difference = item.volume - item.volume_reference;
+            item.percent = (item.difference * 100) / item.volume_reference;
           } else {
             let indice = (x.length + 1) / 2;
             item = x[indice];
@@ -1299,7 +1307,7 @@ export default {
           dataFormatted.push({
             date: item.date,
             x: moment(item.date),
-            y: item.volume,
+            y: item.percent,
           });
         }
       });
@@ -1377,7 +1385,7 @@ export default {
                   ": " +
                   Math.round(i.yLabel, 0).toLocaleString(undefined, {
                     minimumFractionDigits: 0,
-                  })
+                  })+"%"
                 );
               },
             },
