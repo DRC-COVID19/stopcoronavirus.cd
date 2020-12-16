@@ -1291,10 +1291,15 @@ export default {
           if (x.length % 2 == 0) {
             let indice = x.length / 2;
 
+            const volume_reference1 = x[indice].volume_reference;
+            const volume_reference2 = x[indice - 1].volume_reference;
             const volume1 = x[indice].volume;
             const volume2 = x[indice - 1].volume;
             item.date = x[indice].date;
             item.volume = volume1 + volume2;
+            item.volume_reference = volume_reference1 + volume_reference2;
+            item.difference = item.volume - item.volume_reference;
+            item.percent = (item.difference * 100) / item.volume_reference;
           } else {
             let indice = (x.length + 1) / 2;
             item = x[indice];
@@ -1302,7 +1307,7 @@ export default {
           dataFormatted.push({
             date: item.date,
             x: moment(item.date),
-            y: item.volume,
+            y: item.percent,
           });
         }
       });
@@ -1380,7 +1385,7 @@ export default {
                   ": " +
                   Math.round(i.yLabel, 0).toLocaleString(undefined, {
                     minimumFractionDigits: 0,
-                  })
+                  })+"%"
                 );
               },
             },
