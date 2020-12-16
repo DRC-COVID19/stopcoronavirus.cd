@@ -394,14 +394,14 @@ export default {
     submitFluxForm() {
       const fluxForm = { ...this.fluxForm };
       this.setSelectedSource(fluxForm.selectedFluxSource);
-      if (fluxForm.fluxGeoGranularity == 3) {
-        if (HOTSPOT_TYPE.some((x) => x.pseudo == fluxForm.fluxGeoOptions[0])) {
-          fluxForm.fluxGeoOptions[0] = "Tout";
-          this.setFluxHotspotType(this.fluxForm.fluxGeoOptions[0]);
-        } else {
-          this.setFluxHotspotType(null);
-        }
-      }
+      // if (fluxForm.fluxGeoGranularity == 3) {
+      //   if (HOTSPOT_TYPE.some((x) => x.pseudo == fluxForm.fluxGeoOptions[0])) {
+      //     fluxForm.fluxGeoOptions[0] = "Tout";
+      //     this.setFluxHotspotType(this.fluxForm.fluxGeoOptions[0]);
+      //   } else {
+      //     this.setFluxHotspotType(null);
+      //   }
+      // }
       this.$emit("submitFluxForm", fluxForm);
       this.setFluxGeoOptions(fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularityTemp(fluxForm.fluxGeoGranularity);
