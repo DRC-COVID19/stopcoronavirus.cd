@@ -35,7 +35,7 @@ export default {
       myLineChart: null,
       fluxTimeGranularity: null,
       configChar: null,
-      observationDate:{}
+      observationDate: {},
     };
   },
   watch: {
@@ -53,7 +53,6 @@ export default {
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
       // observationDate: (state) =>state.flux.observationDate
     }),
-
   },
   mounted() {
     this.fluxTimeGranularity = this.$store.state.flux.fluxTimeGranularity;
@@ -63,7 +62,7 @@ export default {
         this.fluxTimeGranularity = value;
       }
     );
-    this.observationDate =this.$store.state.flux.observationDate;
+    this.observationDate = this.$store.state.flux.observationDate;
 
     this.$store.watch(
       (state) => state.flux.observationDate,
@@ -79,8 +78,11 @@ export default {
   },
   methods: {
     ...mapMutations(["setTendanceChartSelectedValue"]),
-       isStartIsEnd(){
-      return this.observationDate.start && this.observationDate.start==this.observationDate.end;
+    isStartIsEnd() {
+      return (
+        this.observationDate.start &&
+        this.observationDate.start == this.observationDate.end
+      );
     },
     drawChart(data, ref) {
       if (!data) {
@@ -94,40 +96,23 @@ export default {
           // labels.push(new Date(x.date));
           localData.push({ x: moment(x.date), y: x.volume, date: x.date });
         } else {
-          if (true) {
-            x.map((item) => {
-            // labels.push(moment(`${item.date} ${item.hour}`));
-            // let date=moment(`${item.date}`);
-            // if (this.observationDate.start && this.observationDate.start==this.observationDate.end) {
-            //   date=moment(`${item.date} ${item.hour}`);
-            // }
+          let item = {};
+          if (x.length % 2 == 0) {
+            let indice = x.length / 2;
 
-            localData.push({
-              date: item.date,
-              x: moment(`${item.date} ${item.hour}`),
-              y: item.volume,
-            });
+            const volume1 = x[indice].volume;
+            const volume2 = x[indice - 1].volume;
+            item.date = x[indice].date;
+            item.volume = volume1 + volume2;
+          } else {
+            let indice = (x.length + 1) / 2;
+            item = x[indice];
+          }
+          localData.push({
+            date: item.date,
+            x: moment(item.date),
+            y: item.volume,
           });
-          }
-          else{
-              let item={};
-              if (x.length%2==0) {
-                let indice = x.length / 2;
-
-                    const volume1 = x[indice].volume;
-                    const volume2 = x[indice - 1].volume;
-                item.date=x[indice].date;
-                item.volume=volume1+volume2;
-              }else{
-                let indice=(x.length+1)/2;
-                item=x[indice];
-              }
-             localData.push({
-              date: item.date,
-              x:moment(item.date),
-              y: item.volume,
-            });
-          }
         }
       });
 
@@ -153,7 +138,7 @@ export default {
         }
 
         return {
-          x:element.x,
+          x: element.x,
           y: element.y,
           measures: item.measures,
         };
@@ -227,7 +212,7 @@ export default {
                 },
                 type: "time",
                 time: {
-                  unit:"day",// this.fluxTimeGranularity == 2 && this.isStartIsEnd() ? "hour" : "day",
+                  unit: "day", // this.fluxTimeGranularity == 2 && this.isStartIsEnd() ? "hour" : "day",
                   unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM",
