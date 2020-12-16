@@ -347,6 +347,7 @@ import {
   PALETTE,
   PREFERENCE_START,
   PREFERENCE_END,
+  HOTSPOT_TYPE,
 } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
@@ -475,6 +476,7 @@ export default {
       selectedSource: (state) => state.flux.selectedSource,
       fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
       observationDate: (state) => state.flux.observationDate,
+      fluxHotspotType: (state) => state.flux.fluxHotspotType,
     }),
     isStartEndDate() {
       return this.observationDate.start == this.observationDate.end;
@@ -547,6 +549,36 @@ export default {
     showMaps() {
       if (this.activeMenu == 3 || this.activeMenu == 7) return false;
       return true;
+    },
+  },
+  watch: {
+    fluxDataGroupedByDateIn() {
+      this.updateFluxDataGroupedByDateGen();
+    },
+    fluxDataGroupedByDateOut() {
+      this.updateFluxDataGroupedByDateGen();
+    },
+    flux24PresenceDailyInData() {
+      let data = { observations: [], references: [] };
+      if (this.flux24PresenceDailyInData.observations) {
+        data.observations = this.flux24PresenceDailyInData.observations;
+      }
+      if (this.flux24PresenceDailyInData.references) {
+        data.references = this.flux24PresenceDailyInData.references;
+      }
+
+      this.flux24PresenceDailyInDay = this.computedFluxPresenceDataByDate(
+        data.observations.filter((x) => x.PresenceType == "Jour"),
+        data.references.filter((x) => x.PresenceType == "Jour")
+      );
+      this.flux24PresenceDailyInNight = this.computedFluxPresenceDataByDate(
+        data.observations.filter((x) => x.PresenceType == "Nuit"),
+        data.references.filter((x) => x.PresenceType == "Nuit")
+      );
+      this.flux24PresenceDailyIn = this.computedFluxPresenceDataByDate(
+        data.observations,
+        data.references
+      );
     },
   },
   mounted() {
@@ -911,11 +943,13 @@ export default {
         this.submitFlux30Form(values);
         return;
       }
+
+      this.isFirstLoad = false;
+      this.setFluxType(1);
       /**
        * formate les données flux
        */
-      this.isFirstLoad = false;
-      this.setFluxType(1);
+
       const computedFluxData = (dataObservations, dataReferences) => {
         const dataOut = [];
         return dataObservations.map((item) => {
@@ -1065,34 +1099,6 @@ export default {
       this.flux24DailyComparison = [];
       this.fluxGeoOptions = [];
 
-      // this.$set(this.loadings, "urlDailyCompare", true);
-      // axios
-      //   .get(urlDailyCompare, {
-      //     params: values,
-      //   })
-      //   .then(({ data }) => {
-      //     if (values.fluxGeoGranularity == 2) {
-      //       const origin = data.origin;
-      //       origin.map((item) => {
-      //         const element = data.destination.find(
-      //           (x) => x.origin == item.origin && x.date == item.date
-      //         );
-      //         if (element) {
-      //           item.volume += element.volume;
-      //         }
-      //       });
-      //       this.flux24DailyComparison = origin;
-      //     } else {
-      //       this.flux24DailyComparison = data;
-      //     }
-
-      //     this.fluxGeoOptions = values.fluxGeoOptions;
-      //     this.$set(this.loadings, "urlDailyCompare", false);
-      //   })
-      //   .catch(({ response }) => {
-      //     this.$set(this.loadings, "urlDailyCompare", false);
-      //   });
-
       this.$gtag.event("fetch_orange_flux_data_request", {
         event_category: "fetch_orange_flux",
         event_label: "fetch_orange_flux_req_send",
@@ -1127,10 +1133,6 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          // this.flux24DailyIn = computedFluxData(
-          //   data.observations,
-          //   data.references
-          // );
           const groupObservations = groupBy(data.observations, (d) => d.origin);
           const groupReferences = groupBy(data.references, (d) => d.origin);
           Object.entries(groupObservations).forEach(([key, value]) => {
@@ -1166,10 +1168,6 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          // this.flux24DailyOut = computedFluxData(
-          //   data.observations,
-          //   data.references
-          // );
           const groupObservations = groupBy(
             data.observations,
             (d) => d.destination
@@ -1219,32 +1217,6 @@ export default {
         });
 
       this.flux24Presence = [];
-      // this.$set(this.loadings, "urlPresence", true);
-      // axios
-      //   .get(urlPresence, {
-      //     params: values,
-      //   })
-      //   .then(({ data }) => {
-      //     this.flux24Presence = data;
-      //     this.$set(this.loadings, "urlPresence", false);
-      //   })
-      //   .catch(({ response }) => {
-      //     this.$set(this.loadings, "urlPresence", false);
-      //   });
-
-      // this.$set(this.loadings, "urlPresenceDaily", true);
-      // this.flux24PrensenceDaily = [];
-      // axios
-      //   .get(urlPresenceDaily, {
-      //     params: values,
-      //   })
-      //   .then(({ data }) => {
-      //     this.flux24PrensenceDaily = data;
-      //     this.$set(this.loadings, "urlPresenceDaily", false);
-      //   })
-      //   .catch(({ response }) => {
-      //     this.$set(this.loadings, "urlPresenceDaily", false);
-      //   });
 
       this.flux24PresenceDailyInData = {};
       this.$set(this.loadings, "urlPresenceDailyIn", true);
@@ -1501,12 +1473,26 @@ export default {
         });
     },
     submitFlux30Form(input) {
-      const urlMaps = `api/dashboard/flux/hotspots/maps`;
-      const urlDaily = `api/dashboard/flux/hotspots/daily`;
-      const urlTendance = `api/dashboard/flux/hotspots/tendance`;
-      const urlGeneral = `api/dashboard/flux/hotspots/general`;
+      let urlMaps = `api/dashboard/flux/hotspots`;
+      let urlDaily = `api/dashboard/flux/hotspots`;
+      let urlTendance = `api/dashboard/flux/hotspots`;
+      let urlGeneral = `api/dashboard/flux/hotspots`;
 
-      const values = Object.assign({}, input);
+      const values = { ...input };
+      const hotspot=HOTSPOT_TYPE.find((x) => x.pseudo == input.fluxGeoOptions[0]);
+      if (hotspot) {
+        urlMaps += `/types`;
+        urlDaily += `/types`;
+        urlTendance += `/types`;
+        urlGeneral += `/types`;
+        values.fluxGeoOptions=[hotspot.name];
+        
+      }
+
+      urlMaps += `/maps`;
+      urlDaily += `/daily`;
+      urlTendance += `/tendance`;
+      urlGeneral += `/general`;
 
       const mapsRequest = axios.get(urlMaps, {
         params: values,
@@ -1947,36 +1933,6 @@ export default {
     },
     fluxDataProvideChanged(value) {
       this.selectedFluxDataProvider = value;
-    },
-  },
-  watch: {
-    fluxDataGroupedByDateIn() {
-      this.updateFluxDataGroupedByDateGen();
-    },
-    fluxDataGroupedByDateOut() {
-      this.updateFluxDataGroupedByDateGen();
-    },
-    flux24PresenceDailyInData() {
-      let data = { observations: [], references: [] };
-      if (this.flux24PresenceDailyInData.observations) {
-        data.observations = this.flux24PresenceDailyInData.observations;
-      }
-      if (this.flux24PresenceDailyInData.references) {
-        data.references = this.flux24PresenceDailyInData.references;
-      }
-
-      this.flux24PresenceDailyInDay = this.computedFluxPresenceDataByDate(
-        data.observations.filter((x) => x.PresenceType == "Jour"),
-        data.references.filter((x) => x.PresenceType == "Jour")
-      );
-      this.flux24PresenceDailyInNight = this.computedFluxPresenceDataByDate(
-        data.observations.filter((x) => x.PresenceType == "Nuit"),
-        data.references.filter((x) => x.PresenceType == "Nuit")
-      );
-      this.flux24PresenceDailyIn = this.computedFluxPresenceDataByDate(
-        data.observations,
-        data.references
-      );
     },
   },
 };

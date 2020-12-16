@@ -1359,7 +1359,10 @@ export default {
       this.addPolygoneLayer(2);
       let mapCenter = this.defaultKinshasaCoordinates;
       let mapZoom = 10;
-      if (this.fluxGeoOptions[0] != "Tout") {
+      if (
+        this.fluxGeoOptions[0] != "Tout" &&
+        !HOTSPOT_TYPE.some((x) => x.pseudo == this.fluxGeoOptions[0])
+      ) {
         mapCenter = this.getHospotCoordonate(this.fluxGeoOptions[0]);
         mapZoom = 14;
       }
@@ -1393,17 +1396,6 @@ export default {
       colorScalePositive.range(PALETTE.inflow_positif);
 
       const max = d3.max(features, (d) => d.volume);
-
-      // if (fluxHotspotType) {
-      //   features = features.filter((x) =>
-      //     this.fluxHotSpot.some(
-      //       (y) => y.type == fluxHotspotType.name && y.name == x.origin
-      //     )
-      //   );
-      //   if (features.length == 0) {
-      //     return;
-      //   }
-      // }
 
       if (legendHover) {
         features = features.filter(

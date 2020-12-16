@@ -554,6 +554,7 @@ export default {
       this.fluxForm.observation_end = observationEnd;
     },
     fluxGeoOptionsChange(value) {
+      
       if (this.fluxForm.fluxGeoGranularity == 3) {
         const hotspot = this.fluxHotSpot.find((x) => x.name == value);
         if (hotspot) {
