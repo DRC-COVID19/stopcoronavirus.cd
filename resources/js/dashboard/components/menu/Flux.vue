@@ -274,6 +274,7 @@ export default {
           name: "Africell",
         },
       ],
+      fluxFormCached: {},
     };
   },
   filters: {
@@ -295,6 +296,19 @@ export default {
         }
       }
     );
+    this.$store.watch(
+      (state) => state.flux.fluxHotspotClicked,
+      (value) => {
+        if (value) {
+
+          this.fluxFormCached.fluxGeoOptions = [value];
+          this.fluxForm = this.fluxFormCached;
+          this.setFluxGeoOptions(this.fluxFormCached.fluxGeoOptions);
+          this.$emit("submitFluxForm", this.fluxFormCached);
+        }
+      }
+    );
+
     this.$store.watch(
       (state) => state.flux.tendanceChartSelectedValue,
       (value) => {
@@ -351,6 +365,7 @@ export default {
       "setFluxTimeGranularity",
       "setSelectedSource",
       "setFluxHotspotType",
+      "setFluxHotspotClicked",
     ]),
     ...mapActions(["resetState"]),
     populationFluxToggle(checked) {
@@ -394,18 +409,12 @@ export default {
     submitFluxForm() {
       const fluxForm = { ...this.fluxForm };
       this.setSelectedSource(fluxForm.selectedFluxSource);
-      // if (fluxForm.fluxGeoGranularity == 3) {
-      //   if (HOTSPOT_TYPE.some((x) => x.pseudo == fluxForm.fluxGeoOptions[0])) {
-      //     fluxForm.fluxGeoOptions[0] = "Tout";
-      //     this.setFluxHotspotType(this.fluxForm.fluxGeoOptions[0]);
-      //   } else {
-      //     this.setFluxHotspotType(null);
-      //   }
-      // }
+      this.fluxFormCached = fluxForm;
       this.$emit("submitFluxForm", fluxForm);
       this.setFluxGeoOptions(fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularityTemp(fluxForm.fluxGeoGranularity);
       this.setFluxTimeGranularity(fluxForm.fluxTimeGranularity);
+      this.setFluxHotspotClicked(null);
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
@@ -554,7 +563,6 @@ export default {
       this.fluxForm.observation_end = observationEnd;
     },
     fluxGeoOptionsChange(value) {
-      
       if (this.fluxForm.fluxGeoGranularity == 3) {
         const hotspot = this.fluxHotSpot.find((x) => x.name == value);
         if (hotspot) {

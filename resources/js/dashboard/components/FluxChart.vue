@@ -91,6 +91,7 @@
                 :key="index"
                 class="flux-chart-lenged-item"
                 @mouseenter="setFluxHotspotType(item)"
+                @click="setFluxHotspotClicked(item.pseudo)"
               >
                 <span
                   class="flux-chart-lenged-color"
@@ -105,6 +106,7 @@
                 :key="index"
                 class="flux-chart-lenged-item"
                 @mouseenter="setFluxHotspotType(item)"
+                @click="setFluxHotspotClicked(item.pseudo)"
               >
                 <span
                   class="flux-chart-lenged-color"
@@ -883,6 +885,7 @@ export default {
       "setIsProvinceStatSeeing",
       "setTypePresence",
       "setFluxHotspotType",
+      "setFluxHotspotClicked",
     ]),
     isStartIsEnd() {
       return (
@@ -1385,7 +1388,8 @@ export default {
                   ": " +
                   Math.round(i.yLabel, 0).toLocaleString(undefined, {
                     minimumFractionDigits: 0,
-                  })+"%"
+                  }) +
+                  "%"
                 );
               },
             },

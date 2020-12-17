@@ -99,7 +99,6 @@ export default {
           let item = {};
           if (x.length % 2 == 0) {
             let indice = x.length / 2;
-
             const volume1 = x[indice].volume;
             const volume2 = x[indice - 1].volume;
             item.date = x[indice].date;
@@ -258,13 +257,7 @@ export default {
             displayColors: false,
             callbacks: {
               title: (a, d) => {
-                let titleFormat = this.moment(a[0].xLabel).format("DD.MM.Y");
-                if (this.fluxTimeGranularity == 2) {
-                  titleFormat = this.moment(a[0].xLabel).format(
-                    "DD.MM.Y HH:mm"
-                  );
-                }
-                return titleFormat;
+                return this.moment(a[0].xLabel).format("DD.MM.Y");
               },
 
               label: (i, d) => {

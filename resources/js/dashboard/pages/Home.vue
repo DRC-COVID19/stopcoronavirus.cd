@@ -1478,15 +1478,16 @@ export default {
       let urlTendance = `api/dashboard/flux/hotspots`;
       let urlGeneral = `api/dashboard/flux/hotspots`;
 
-      const values = { ...input };
-      const hotspot=HOTSPOT_TYPE.find((x) => x.pseudo == input.fluxGeoOptions[0]);
+      let values = { ...input };
+      const hotspot = HOTSPOT_TYPE.find(
+        (x) => x.pseudo == input.fluxGeoOptions[0]
+      );
       if (hotspot) {
-        urlMaps += `/types`;
+        // urlMaps += `/types`;
         urlDaily += `/types`;
         urlTendance += `/types`;
         urlGeneral += `/types`;
-        values.fluxGeoOptions=[hotspot.name];
-        
+        values.fluxGeoOptions = [hotspot.name];
       }
 
       urlMaps += `/maps`;
@@ -1494,9 +1495,6 @@ export default {
       urlTendance += `/tendance`;
       urlGeneral += `/general`;
 
-      const mapsRequest = axios.get(urlMaps, {
-        params: values,
-      });
       const dailyRequest = axios.get(urlDaily, {
         params: values,
       });
@@ -1504,7 +1502,15 @@ export default {
         params: values,
       });
 
+      if (hotspot) {
+        values = { ...values };
+        values.fluxGeoOptions = ["Tout"];
+      }
       const generalRequest = axios.get(urlGeneral, {
+        params: values,
+      });
+
+      const mapsRequest = axios.get(urlMaps, {
         params: values,
       });
 
