@@ -726,6 +726,17 @@ de revenus pour Kinshasa`,
       ],
       date: '2020-08-15'
     },
+    {
+      id: 44,
+      name: `Couvre feu déclaré sur toutes l'étendu du territoire national`,
+      measures: [
+        {
+          item: `Couvre feu déclaré sur toutes l'étendu du territoire national`,
+          zones: ["ALL"]
+        },
+      ],
+      date: '2020-12-18'
+    },
   ],
   HOTSPOT_TYPE = [
     { id: -1, name: "BureauAdmin", color: '#1E3B27', pseudo: 'Bureau Admin' },

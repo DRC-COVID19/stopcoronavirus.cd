@@ -573,6 +573,7 @@ export default {
       "setFluxGeoOptions",
       "setDomaineExtValues",
       "setEpidemicExtValues",
+      "setFluxHotspotClicked",
     ]),
     ...mapActions(["resetState"]),
     mapResize() {
@@ -1349,6 +1350,10 @@ export default {
         // this.drcHealthZone
       );
     },
+
+    getHospot(value, property = "pseudo") {
+      return HOTSPOT_TYPE.find((x) => x[property] == value);
+    },
     /**
      * Ajout de hotspot
      */
@@ -1359,7 +1364,10 @@ export default {
       this.addPolygoneLayer(2);
       let mapCenter = this.defaultKinshasaCoordinates;
       let mapZoom = 10;
-      if (this.fluxGeoOptions[0] != "Tout") {
+      if (
+        this.fluxGeoOptions[0] != "Tout" &&
+        !this.getHospot(this.fluxGeoOptions[0])
+      ) {
         mapCenter = this.getHospotCoordonate(this.fluxGeoOptions[0]);
         mapZoom = 14;
       }
@@ -1393,17 +1401,6 @@ export default {
       colorScalePositive.range(PALETTE.inflow_positif);
 
       const max = d3.max(features, (d) => d.volume);
-
-      // if (fluxHotspotType) {
-      //   features = features.filter((x) =>
-      //     this.fluxHotSpot.some(
-      //       (y) => y.type == fluxHotspotType.name && y.name == x.origin
-      //     )
-      //   );
-      //   if (features.length == 0) {
-      //     return;
-      //   }
-      // }
 
       if (legendHover) {
         features = features.filter(
@@ -1468,10 +1465,16 @@ export default {
                 ]);
                 colorExpression.push(color);
 
-                if (fluxHotspotType) {
-                  if (itemPoint.properties.Type_ != fluxHotspotType.name) {
-                    return;
-                  }
+                if (
+                  fluxHotspotType &&
+                  itemPoint.properties.Type_ != fluxHotspotType.name
+                ) {
+                  return;
+                }
+
+                const hotspot = this.getHospot(this.fluxGeoOptions[0]);
+                if (hotspot && itemPoint.properties.Type_ != hotspot.name) {
+                  return;
                 }
                 hotspotPoint.push(itemPoint.properties.DENOMMIN);
               }
@@ -1479,6 +1482,11 @@ export default {
           }
         });
       });
+
+      if (hotspotPoint.length == 0) {
+        return;
+      }
+
       colorExpression.push("white");
 
       const pointColorExpression = [];
@@ -1524,7 +1532,12 @@ export default {
 
       this.flux30FeaturesData = features;
       map.on("mousemove", SOURCE_HOTSPOT_GEOJSON, this.flux30mouseMove);
-
+      map.on(
+        "mousemove",
+        SOURCE_HOTSPOT_POINT_GEOJSON,
+        this.flux30PointmouseMove
+      );
+      map.on("click", SOURCE_HOTSPOT_GEOJSON, this.flux30Click);
       map.on("mouseout", SOURCE_HOTSPOT_GEOJSON, this.mouseOut);
     },
     zoomByArea(area) {
@@ -1698,6 +1711,12 @@ export default {
       map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
       map.off("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
       map.off("mousemove", SOURCE_HOTSPOT_GEOJSON, this.flux30mouseMove);
+      map.off(
+        "mousemove",
+        SOURCE_HOTSPOT_POINT_GEOJSON,
+        this.flux30PointmouseMove
+      );
+      map.off("click", SOURCE_HOTSPOT_GEOJSON, this.flux30Click);
       map.off(
         "mousemove",
         "fluxCircleDataLayer",
@@ -2077,6 +2096,42 @@ export default {
         });
       } else {
         this.$set(this.ArcLayerSelectedObject, "item", null);
+      }
+    },
+    flux30PointmouseMove(e) {
+      if (this.activeMenu != 1) {
+        return;
+      }
+      // const coordinates = e.features[0].geometry.coordinates[0].slice();
+
+      const item = e.features[0].properties;
+
+      const name = item["DENOMMIN"];
+
+      if (item) {
+        this.$set(this.ArcLayerSelectedObject, "position", {
+          top: e.point.y,
+          left: e.point.x,
+        });
+        this.$set(this.ArcLayerSelectedObject, "item", {
+          origin: item.DENOMMIN,
+          type:HOTSPOT_TYPE.find(x=>x.name==item.Type_)?.pseudo
+        });
+      } else {
+        this.$set(this.ArcLayerSelectedObject, "item", null);
+      }
+    },
+    flux30Click(e) {
+      if (this.activeMenu != 1) {
+        return;
+      }
+
+      const item = e.features[0].properties;
+      const name = item["DENOMMIN"];
+      let value = null;
+      const feature = this.flux30FeaturesData.find((x) => x.origin == name);
+      if (feature) {
+        this.setFluxHotspotClicked(feature.origin);
       }
     },
     mouseOut(e) {
