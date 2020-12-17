@@ -1,3 +1,5 @@
+import { event } from 'vue-gtag';
+
 export default {
   state: {
     fluxGeoGranularity: null,
@@ -13,7 +15,13 @@ export default {
     tendanceChartSelectedValue: null,
     isProvinceStatSeeing: false,
     legendHover: null, // null ou {'de' : interger , 'a' : integer} ou {'de' : null, 'a' : null}
-    typePresence: 1
+    typePresence: 1,
+    afriFluxType: 1,
+    selectedSource: 1,
+    observationDate: {},
+    fluxHotspotType: null,
+    fluxHotspotClicked: null,
+    fluxForm: null
   },
   mutations: {
     setIsWatchingfluxGeoOptions(state, payload) {
@@ -32,6 +40,27 @@ export default {
       state.mapStyle = payload;
     },
     setFluxType(state, payload) {
+      let fluxType = "";
+
+      switch (payload) {
+        case 1:
+          fluxType = "Entrante";
+          break;
+        case 2:
+          fluxType = "Sortante";
+          break;
+        case 3:
+          fluxType = "Présences";
+          break;
+        case 4:
+          fluxType = "Général";
+          break;
+      }
+
+      event("switch_mobility_type", {
+        event_category: "mobility_switch",
+        event_label: fluxType,
+      })
       state.fluxType = payload
     },
     setFluxGeoOptions(state, payload) {
@@ -44,6 +73,18 @@ export default {
       state.fluxEnabled = payload;
     },
     setLegendHover(state, sectionHover) {
+      if (sectionHover) {
+        let from = null;
+        let to = null;
+        if (typeof sectionHover.de == "string") {
+          from = Number(sectionHover.de.replace("%", ""));
+        }
+        if (typeof sectionHover.a == "string") {
+          to = Number(sectionHover.a.replace("%", "")) + 1;
+        }
+        sectionHover.de = from;
+        sectionHover.a = to;
+      }
       state.legendHover = sectionHover
     },
     setDomaineExtValues(state, payload) {
@@ -53,11 +94,49 @@ export default {
       state.tendanceChartSelectedValue = payload;
     },
     setIsProvinceStatSeeing(state, payload) {
+      // if (payload) event('Mobilité', 'Switch type mobilité', 'Mobilité', 'zones');
       state.isProvinceStatSeeing = payload;
     },
     setTypePresence(state, payload) {
+      let fluxType = ""
+
+      switch (payload) {
+        case 1:
+          fluxType = "Jour & Nuit";
+          break;
+        case 2:
+          fluxType = "Jour"
+          break;
+        case 3:
+          fluxType = "Nuit"
+          break;
+      }
+
+      event("switch_presence_type", {
+        event_category: "switch_presence",
+        event_label: fluxType,
+      })
       state.typePresence = payload;
     },
+    setAfriFluxType(state, payload) {
+
+      state.afriFluxType = payload;
+    },
+    setSelectedSource(state, payload) {
+      state.selectedSource = payload;
+    },
+    setObservationDate(state, payload) {
+      state.observationDate = payload;
+    },
+    setFluxHotspotType(state, payload) {
+      state.fluxHotspotType = payload;
+    },
+    setFluxHotspotClicked(state, payload) {
+      state.fluxHotspotClicked = payload;
+    },
+    setFluxForm(state, payload) {
+      state.fluxForm = payload;
+    }
   },
   actions: {
     resetState({ state }) {

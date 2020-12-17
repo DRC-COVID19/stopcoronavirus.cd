@@ -1,4 +1,5 @@
 
+import { event } from 'vue-gtag';
 
 export default {
   state: {
@@ -20,6 +21,12 @@ export default {
   },
   actions: {
     submitFilters({ state }, form) {
+      
+      event("fetch_indicator_data_request", {
+        event_category: "fetch_indicator_data",
+        event_label: "indicators_req_send",
+      });
+
       state.isLoading = true;
       let url = "/api/dashboard/indicators";
       switch (form.geoGranularity) {
@@ -71,8 +78,14 @@ export default {
           item.xProdY = item.x * item.y;
         });
         state.indicatorData = statisticData;
-      }).catch(response => {
+
+        event("fetch_indicator_data_response", {
+          event_category: "fetch_indicator_data",
+          event_label: "indicators",
+        });
+      }).catch(({response}) => {
         state.formErrors = response.data.errors
+        exception(response)
       }).finally(() => {
         state.isLoading = false;
       });

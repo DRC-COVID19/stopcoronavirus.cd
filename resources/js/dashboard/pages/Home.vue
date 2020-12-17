@@ -8,7 +8,7 @@
     >
       <Header />
       <b-row class="mt-2 top-menu position-relative" style="z-index: 8">
-        <b-col>
+        <b-col class="pl-2">
           <MenuFlux
             v-show="activeMenu == 1"
             @submitFluxForm="submitFluxForm"
@@ -50,7 +50,7 @@
         <b-col cols="12" :class="`${hasRightSide ? 'col-md-6' : 'col-md-12'}`">
           <div
             class="layer-set-contenair"
-            v-if="hasFlux24DailyIn && activeMenu == 1"
+            v-if="hasFlux24DailyIn && activeMenu == 1 && selectedSource == 1"
           >
             <b-link
               :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
@@ -101,10 +101,14 @@
                 :showBottom="showBottom"
                 :fluxZoneGlobalOut="fluxZoneGlobalOut"
                 :flux30MapsData="flux30MapsData"
+                :fluxAfricelInOut="fluxAfricelInOut"
+                :fluxAfricelPresence="fluxAfricelPresence"
               />
               <MapsLegend
                 v-if="
-                  (flux24DailyIn.length > 0 || flux30MapsData.length > 0) &&
+                  (((flux24DailyIn.length > 0 || flux30MapsData.length > 0) &&
+                    selectedSource == 1) ||
+                    (fluxAfricelInOut.length > 0 && isStartEndDate)) &&
                   activeMenu == 1
                 "
               ></MapsLegend>
@@ -130,108 +134,128 @@
           v-if="hasRightSide"
         >
           <b-card no-body>
-            <b-tabs pills card>
-              <b-tab
-                title="Données Covid-19"
-                v-if="(!!covidCases || isLoading) && activeMenu == 2"
-                :active="!!covidCases"
-              >
-                <SideCaseCovid
-                  :covidCases="covidCases"
-                  :isLoading="isLoading"
-                />
-              </b-tab>
-              <b-tab
-                title="Données Orientation médicale covid-19"
-                v-if="
-                  (orientationCount != null || isLoading) && activeMenu == 6
-                "
-                :active="orientationCount != null"
-              >
-                <SideOrientation
-                  :medicalOrientations="medicalOrientations"
-                  :isLoading="isLoading"
-                />
-              </b-tab>
-              <b-tab title="Province" v-if="activeMenu == 1">
-                <b-row>
-                  <b-col cols="6" class="pr-2">
-                    <skeleton-loading v-if="isLoading">
-                      <square-skeleton
-                        :boxProperties="{
-                          width: '100%',
-                          height: '830px',
-                        }"
-                      ></square-skeleton>
-                    </skeleton-loading>
-                    <GlobalProvince
-                      v-else
-                      title="Mobilité entrante"
-                      :color="palette.flux_in_color"
-                      :globalData="fluxGlobalIn"
-                      reference="fluxglobalIn"
-                    />
-                  </b-col>
-                  <b-col cols="6" class="pl-2">
-                    <skeleton-loading v-if="isLoading">
-                      <square-skeleton
-                        :boxProperties="{
-                          width: '100%',
-                          height: '830px',
-                        }"
-                      ></square-skeleton>
-                    </skeleton-loading>
-                    <GlobalProvince
-                      v-else
-                      title="Mobilité sortante"
-                      :color="palette.flux_out_color"
-                      :globalData="fluxGlobalOut"
-                      reference="fluxglobalOut"
-                    />
-                  </b-col>
-                </b-row>
-              </b-tab>
-              <b-tab
-                title="Mobilité"
-                v-if="
-                  (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
-                  !isFirstLoad &&
-                  this.activeMenu == 1
-                "
-                :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
-              >
-                <FluxChart
-                  :flux24Daily="flux24Daily"
-                  :flux24DailyIn="flux24DailyIn"
-                  :flux24DailyOut="flux24DailyOut"
-                  :flux24DailyGenerale="flux24DailyGenerale"
-                  :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
-                  :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
-                  :fluxDataGroupedByDateGen="fluxDataGroupedByDateGen"
-                  :flux24Presence="flux24Presence"
-                  :flux24PresenceDailyIn="flux24PresenceDailyInFormat"
-                  :fluxZoneGlobalIn="fluxZoneGlobalIn"
-                  :fluxZoneGlobalOut="fluxZoneGlobalOut"
-                  :mobiliteGenerale="showMobiliteGenerale"
-                  :topHealthZoneConfirmed="topHealthZoneConfirmed"
-                  :globalProgress="globalProgress"
-                  :isLoading="isLoading"
-                  :flux30Daily="flux30Daily"
-                  :flux30General="flux30General"
-                />
-              </b-tab>
-              <b-tab
-                title="Infrastructures"
-                v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
-                :active="!!selectedHospital || activeMenu == 5"
-              >
-                <HospitalSituation :hospitalTotalData="hospitalTotalData" />
-              </b-tab>
-            </b-tabs>
+            <!-- <toggle-button
+              class="flux-data-toggle"
+              :labels="fluxDataProvider"
+              :value="selectedFluxDataProvider"
+              @input="fluxDataProvideChanged"
+            ></toggle-button> -->
+
+            <transition name="fade">
+              <b-tabs pills card v-if="selectedSource == 2">
+                <b-tab title="Mobilité africell" v-if="activeMenu == 1">
+                  <AfriFluxChart
+                    :fluxAfricellDaily="fluxAfricellDaily"
+                    :fluxAfricelPresence="fluxAfricelPresence"
+                    :fluxAfricelInOut="fluxAfricelInOut"
+                  />
+                </b-tab>
+              </b-tabs>
+            </transition>
+            <transition name="fade">
+              <b-tabs pills card v-if="selectedSource == 1">
+                <b-tab
+                  title="Données Covid-19"
+                  v-if="(!!covidCases || isLoading) && activeMenu == 2"
+                  :active="!!covidCases"
+                >
+                  <SideCaseCovid
+                    :covidCases="covidCases"
+                    :isLoading="isLoading"
+                  />
+                </b-tab>
+                <b-tab
+                  title="Données Orientation médicale covid-19"
+                  v-if="
+                    (orientationCount != null || isLoading) && activeMenu == 6
+                  "
+                  :active="orientationCount != null"
+                >
+                  <SideOrientation
+                    :medicalOrientations="medicalOrientations"
+                    :isLoading="isLoading"
+                  />
+                </b-tab>
+                <b-tab title="Province" v-if="activeMenu == 1">
+                  <b-row>
+                    <b-col cols="6" class="pr-2">
+                      <skeleton-loading v-if="isLoading">
+                        <square-skeleton
+                          :boxProperties="{
+                            width: '100%',
+                            height: '830px',
+                          }"
+                        ></square-skeleton>
+                      </skeleton-loading>
+                      <GlobalProvince
+                        v-else
+                        title="Mobilité entrante"
+                        :color="palette.flux_in_color"
+                        :globalData="fluxGlobalIn"
+                        reference="fluxglobalIn"
+                      />
+                    </b-col>
+                    <b-col cols="6" class="pl-2 pr-2">
+                      <skeleton-loading v-if="isLoading">
+                        <square-skeleton
+                          :boxProperties="{
+                            width: '100%',
+                            height: '830px',
+                          }"
+                        ></square-skeleton>
+                      </skeleton-loading>
+                      <GlobalProvince
+                        v-else
+                        title="Mobilité sortante"
+                        :color="palette.flux_out_color"
+                        :globalData="fluxGlobalOut"
+                        reference="fluxglobalOut"
+                      />
+                    </b-col>
+                  </b-row>
+                </b-tab>
+                <b-tab
+                  title="Mobilité"
+                  v-if="
+                    (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
+                    !isFirstLoad &&
+                    this.activeMenu == 1
+                  "
+                  :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
+                >
+                  <FluxChart
+                    :flux24Daily="flux24Daily"
+                    :flux24DailyIn="flux24DailyIn"
+                    :flux24DailyOut="flux24DailyOut"
+                    :flux24DailyGenerale="flux24DailyGenerale"
+                    :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
+                    :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
+                    :fluxDataGroupedByDateGen="fluxDataGroupedByDateGen"
+                    :flux24Presence="flux24Presence"
+                    :flux24PresenceDailyIn="flux24PresenceDailyInFormat"
+                    :fluxZoneGlobalIn="fluxZoneGlobalIn"
+                    :fluxZoneGlobalOut="fluxZoneGlobalOut"
+                    :mobiliteGenerale="showMobiliteGenerale"
+                    :topHealthZoneConfirmed="topHealthZoneConfirmed"
+                    :globalProgress="globalProgress"
+                    :isLoading="isLoading"
+                    :flux30Daily="flux30Daily"
+                    :flux30General="flux30General"
+                  />
+                </b-tab>
+                <b-tab
+                  title="Infrastructures"
+                  v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
+                  :active="!!selectedHospital || activeMenu == 5"
+                >
+                  <HospitalSituation :hospitalTotalData="hospitalTotalData" />
+                </b-tab>
+              </b-tabs>
+            </transition>
           </b-card>
         </b-col>
       </b-row>
-      <b-row v-if="hasBottom">
+      <b-row v-if="hasBottom && selectedSource == 1">
         <b-col cols="12" class="d-flex justify-content-center">
           <div
             @click="toggleBottomBar"
@@ -316,17 +340,20 @@ import MenuIndicateur from "../components/menu/Indicateur";
 import GlobalProvince from "../components/flux/GLobalProvince";
 import About from "../components/About";
 import { groupBy } from "lodash";
+
 import {
   OBSERVATION_START,
   OBSERVATION_END,
   PALETTE,
   PREFERENCE_START,
   PREFERENCE_END,
+  HOTSPOT_TYPE,
 } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
 import { difference } from "@turf/turf";
-
+import ToggleButton from "../components/ToggleButton";
+import AfriFluxChart from "../components/africell/AfriFluxChart";
 const preference_start = "2020-02-01";
 const preference_end = "2020-03-18";
 
@@ -356,6 +383,8 @@ export default {
     MenuIndicateur,
     GlobalProvince,
     About,
+    ToggleButton,
+    AfriFluxChart,
   },
   data() {
     return {
@@ -417,7 +446,21 @@ export default {
       disabledArc: false,
       flux30MapsData: [],
       flux30Daily: [],
+      fluxDataProvider: [
+        {
+          lbl: "Orange",
+          val: 1,
+        },
+        {
+          lbl: "Africell",
+          val: 2,
+        },
+      ],
+      selectedFluxDataProvider: 1,
       flux30General: {},
+      fluxAfricellDaily: [],
+      fluxAfricelPresence: [],
+      fluxAfricelInOut: [],
     };
   },
   computed: {
@@ -430,7 +473,14 @@ export default {
       activeMenu: (state) => state.nav.activeMenu,
       healthZones: (state) => state.app.healthZones,
       typePresence: (state) => state.flux.typePresence,
+      selectedSource: (state) => state.flux.selectedSource,
+      fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
+      observationDate: (state) => state.flux.observationDate,
+      fluxHotspotType: (state) => state.flux.fluxHotspotType,
     }),
+    isStartEndDate() {
+      return this.observationDate.start == this.observationDate.end;
+    },
     hasRightSide() {
       return (
         (this.getHasCoviCases() && this.activeMenu == 2) ||
@@ -472,7 +522,7 @@ export default {
       return this.flux24DailyIn.length > 0;
     },
     hasFlux30Daily() {
-      return this.flux30Daily.length > 0;
+      return this.flux30Daily && this.fluxGeoGranularity == 3;
     },
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
@@ -499,6 +549,36 @@ export default {
     showMaps() {
       if (this.activeMenu == 3 || this.activeMenu == 7) return false;
       return true;
+    },
+  },
+  watch: {
+    fluxDataGroupedByDateIn() {
+      this.updateFluxDataGroupedByDateGen();
+    },
+    fluxDataGroupedByDateOut() {
+      this.updateFluxDataGroupedByDateGen();
+    },
+    flux24PresenceDailyInData() {
+      let data = { observations: [], references: [] };
+      if (this.flux24PresenceDailyInData.observations) {
+        data.observations = this.flux24PresenceDailyInData.observations;
+      }
+      if (this.flux24PresenceDailyInData.references) {
+        data.references = this.flux24PresenceDailyInData.references;
+      }
+
+      this.flux24PresenceDailyInDay = this.computedFluxPresenceDataByDate(
+        data.observations.filter((x) => x.PresenceType == "Jour"),
+        data.references.filter((x) => x.PresenceType == "Jour")
+      );
+      this.flux24PresenceDailyInNight = this.computedFluxPresenceDataByDate(
+        data.observations.filter((x) => x.PresenceType == "Nuit"),
+        data.references.filter((x) => x.PresenceType == "Nuit")
+      );
+      this.flux24PresenceDailyIn = this.computedFluxPresenceDataByDate(
+        data.observations,
+        data.references
+      );
     },
   },
   mounted() {
@@ -546,7 +626,7 @@ export default {
       "getHealthZone",
       "getFluxHotSpot",
     ]),
-    ...mapMutations(["setMapStyle", "setFluxType"]),
+    ...mapMutations(["setMapStyle", "setFluxType", "setObservationDate"]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
     },
@@ -579,6 +659,11 @@ export default {
       if (checked) {
         let confirmedCount = 0;
 
+        this.$gtag.event("fetch_epidemioloy_data_request", {
+          event_category: "fetch_epidemioloy_data",
+          event_label: "covid_data_req_send",
+        });
+
         this.$set(this.loadings, "getCovidCases_stat", true);
         axios
           .get("/api/dashboard/cavid-cases/statistics")
@@ -601,9 +686,15 @@ export default {
               labels,
             };
             this.$set(this.loadings, "getCovidCases_stat", false);
+
+            this.$gtag.event("fetch_epidemioloy_data_response", {
+              event_category: "fetch_epidemioloy_data",
+              event_label: "getCovidCases_stat",
+            });
           })
-          .catch((response) => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "getCovidCases_stat", false);
+            this.$gtag.exception(response);
           });
 
         this.$set(this.loadings, "getCovidCases_statdaily", true);
@@ -628,9 +719,14 @@ export default {
               labels,
             };
             this.$set(this.loadings, "getCovidCases_statdaily", false);
+            this.$gtag.event("fetch_epidemioloy_data_response", {
+              event_category: "fetch_epidemioloy_data",
+              event_label: "getCovidCases_statdaily",
+            });
           })
-          .catch((response) => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "getCovidCases_statdaily", false);
+            this.$gtag.exception(response);
           });
 
         this.$set(this.loadings, "getCovidCases_cases", true);
@@ -668,9 +764,14 @@ export default {
 
             this.covidCasesCount = confirmedCount;
             this.$set(this.loadings, "getCovidCases_cases", false);
+            this.$gtag.event("fetch_epidemioloy_data_response", {
+              event_category: "fetch_epidemioloy_data",
+              event_label: "getCovidCases_cases",
+            });
           })
-          .catch((response) => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "getCovidCases_cases", false);
+            this.$gtag.exception(response);
           });
       } else {
         this.covidCases = null;
@@ -681,6 +782,11 @@ export default {
     getmedicalOrientations(checked) {
       if (checked) {
         this.$set(this.loadings, "orientation_medical", true);
+
+        this.$gtag.event("fetch_medical_orientation_data_request", {
+          event_category: "fetch_medical_orientation",
+          event_label: "medical_orientation_req_send",
+        });
         axios
           .get(`/api/dashboard/orientation-medical-result`)
           .then(({ data }) => {
@@ -704,10 +810,16 @@ export default {
 
             this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = total_fin + total_fin8 + total_fin5;
+
+            this.$gtag.event("fetch_medical_orientation_data_response", {
+              event_category: "fetch_medical_orientation",
+              event_label: "orientation_medical",
+            });
           })
-          .catch(() => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "orientation_medical", false);
             this.orientationCount = null;
+            this.$gtag.exception(response);
           });
 
         this.$set(this.loadings, "orientation_medical_stats", true);
@@ -731,9 +843,15 @@ export default {
               labels,
             };
             this.$set(this.loadings, "orientation_medical_stats", false);
+
+            this.$gtag.event("fetch_medical_orientation_data_response", {
+              event_category: "fetch_medical_orientation",
+              event_label: "orientation_medical_stats",
+            });
           })
-          .catch(() => {
+          .catch(({ response }) => {
             this.$set(this.loadings, "orientation_medical_stats", false);
+            this.$gtag.exception(response);
           });
       } else {
         this.medicalOrientations = null;
@@ -811,16 +929,27 @@ export default {
       if (this.isLoading) {
         return;
       }
+      if (values.selectedFluxSource == 2) {
+        this.submitFluxAfricell(values);
+        return;
+      }
+
+      this.setObservationDate({
+        start: values.observation_start,
+        end: values.observation_end,
+      });
 
       if (values.fluxTimeGranularity == 2) {
         this.submitFlux30Form(values);
         return;
       }
+
+      this.isFirstLoad = false;
+      this.setFluxType(1);
       /**
        * formate les données flux
        */
-      this.isFirstLoad = false;
-      this.setFluxType(1);
+
       const computedFluxData = (dataObservations, dataReferences) => {
         const dataOut = [];
         return dataObservations.map((item) => {
@@ -970,33 +1099,10 @@ export default {
       this.flux24DailyComparison = [];
       this.fluxGeoOptions = [];
 
-      // this.$set(this.loadings, "urlDailyCompare", true);
-      // axios
-      //   .get(urlDailyCompare, {
-      //     params: values,
-      //   })
-      //   .then(({ data }) => {
-      //     if (values.fluxGeoGranularity == 2) {
-      //       const origin = data.origin;
-      //       origin.map((item) => {
-      //         const element = data.destination.find(
-      //           (x) => x.origin == item.origin && x.date == item.date
-      //         );
-      //         if (element) {
-      //           item.volume += element.volume;
-      //         }
-      //       });
-      //       this.flux24DailyComparison = origin;
-      //     } else {
-      //       this.flux24DailyComparison = data;
-      //     }
-
-      //     this.fluxGeoOptions = values.fluxGeoOptions;
-      //     this.$set(this.loadings, "urlDailyCompare", false);
-      //   })
-      //   .catch(({ response }) => {
-      //     this.$set(this.loadings, "urlDailyCompare", false);
-      //   });
+      this.$gtag.event("fetch_orange_flux_data_request", {
+        event_category: "fetch_orange_flux",
+        event_label: "fetch_orange_flux_req_send",
+      });
 
       this.flux24Daily = [];
       this.$set(this.loadings, "urlDaily", true);
@@ -1007,9 +1113,15 @@ export default {
         .then(({ data }) => {
           this.flux24Daily = data;
           this.$set(this.loadings, "urlDaily", false);
+
+          this.$gtag.event("fetch_orange_flux_data_response", {
+            event_category: "fetch_orange_flux",
+            event_label: "urlDaily",
+          });
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlDaily", false);
+          this.$gtag.exception(response);
         });
 
       // get flux data in
@@ -1021,10 +1133,6 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          // this.flux24DailyIn = computedFluxData(
-          //   data.observations,
-          //   data.references
-          // );
           const groupObservations = groupBy(data.observations, (d) => d.origin);
           const groupReferences = groupBy(data.references, (d) => d.origin);
           Object.entries(groupObservations).forEach(([key, value]) => {
@@ -1040,9 +1148,15 @@ export default {
             "destination"
           );
           this.$set(this.loadings, "urlDailyIn", false);
+
+          this.$gtag.event("fetch_orange_flux_data_response", {
+            event_category: "fetch_orange_flux",
+            event_label: "urlDailyIn",
+          });
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlDailyIn", false);
+          this.$gtag.exception(response);
         });
 
       // get flux data out
@@ -1054,10 +1168,6 @@ export default {
           params: values,
         })
         .then(({ data }) => {
-          // this.flux24DailyOut = computedFluxData(
-          //   data.observations,
-          //   data.references
-          // );
           const groupObservations = groupBy(
             data.observations,
             (d) => d.destination
@@ -1096,38 +1206,17 @@ export default {
           );
 
           this.$set(this.loadings, "urlDailyOut", false);
+          this.$gtag.event("fetch_orange_flux_data_response", {
+            event_category: "fetch_orange_flux",
+            event_label: "urlDailyOut",
+          });
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlDailyOut", false);
+          this.$gtag.exception(response);
         });
 
       this.flux24Presence = [];
-      // this.$set(this.loadings, "urlPresence", true);
-      // axios
-      //   .get(urlPresence, {
-      //     params: values,
-      //   })
-      //   .then(({ data }) => {
-      //     this.flux24Presence = data;
-      //     this.$set(this.loadings, "urlPresence", false);
-      //   })
-      //   .catch(({ response }) => {
-      //     this.$set(this.loadings, "urlPresence", false);
-      //   });
-
-      // this.$set(this.loadings, "urlPresenceDaily", true);
-      // this.flux24PrensenceDaily = [];
-      // axios
-      //   .get(urlPresenceDaily, {
-      //     params: values,
-      //   })
-      //   .then(({ data }) => {
-      //     this.flux24PrensenceDaily = data;
-      //     this.$set(this.loadings, "urlPresenceDaily", false);
-      //   })
-      //   .catch(({ response }) => {
-      //     this.$set(this.loadings, "urlPresenceDaily", false);
-      //   });
 
       this.flux24PresenceDailyInData = {};
       this.$set(this.loadings, "urlPresenceDailyIn", true);
@@ -1139,9 +1228,15 @@ export default {
           this.flux24PresenceDailyInData = data;
 
           this.$set(this.loadings, "urlPresenceDailyIn", false);
+
+          this.$gtag.event("fetch_orange_flux_data_response", {
+            event_category: "fetch_orange_flux",
+            event_label: "urlPresenceDailyIn",
+          });
         })
         .catch(({ response }) => {
           this.$set(this.loadings, "urlPresenceDailyIn", false);
+          this.$gtag.exception(response);
         });
 
       this.flux24 = [];
@@ -1168,7 +1263,10 @@ export default {
       if (values.fluxGeoGranularity == 2) {
         return;
       }
-
+      this.$gtag.event("fetch_pandemics_top_confirmed_data_request", {
+        event_category: "fetch_pandemics_top_confirmed",
+        event_label: "top_confirmed_req_send",
+      });
       const pandemicParams = Object.assign({}, values);
       pandemicParams.fluxGeoOptions = pandemicParams.fluxGeoOptions[0];
       axios
@@ -1177,6 +1275,11 @@ export default {
         })
         .then(({ data }) => {
           this.topHealthZoneConfirmed = data;
+
+          this.$gtag.event("fetch_pandemics_top_confirmed_data_response", {
+            event_category: "fetch_pandemics_top_confirmed",
+            event_label: "top_confirmed",
+          });
         });
 
       const healthZones = this.healthZones.filter(
@@ -1227,11 +1330,17 @@ export default {
               if (healthIndexIn <= healthZones.length) {
                 globalInFunc();
               }
+              this.$gtag.event("fetch_orange_flux_data_request", {
+                event_category: "fetch_orange_flux",
+                event_label: "global_in_provinces",
+              });
             })
-            .catch(() => {
+            .catch(({ error }) => {
               countIn++;
               this.globalProgress =
                 ((countIn + countOut) / (countAll * 2)) * 100;
+
+              this.$gtag.exception(error);
             });
 
           //Get  zone out by province
@@ -1251,7 +1360,7 @@ export default {
           const healthZoneValues = Object.assign({}, values);
           healthZoneValues.fluxGeoOptions = item.zone;
 
-          //Get  zone in by province
+          //Get  zone out by province
           axios
             .get(`/api/dashboard/flux/origin/zones/h-24/global-out/province`, {
               params: healthZoneValues,
@@ -1273,11 +1382,17 @@ export default {
               if (healthIndexOut <= healthZones.length) {
                 globalOutFunc();
               }
+
+              this.$gtag.event("fetch_orange_flux_data_response", {
+                event_category: "fetch_orange_flux",
+                event_label: "global_out_provinces",
+              });
             })
-            .catch(() => {
+            .catch((error) => {
               countOut++;
               this.globalProgress =
                 ((countIn + countOut) / (countAll * 2)) * 100;
+              this.$gtag.exception(error);
             });
 
           //Get  zone out by province
@@ -1295,19 +1410,91 @@ export default {
       globalInFunc();
       globalOutFunc();
     },
-    submitFlux30Form(input) {
-      const urlMaps = `api/dashboard/flux/hotspots/maps`;
-      const urlDaily = `api/dashboard/flux/hotspots/daily`;
-      const urlTendance = `api/dashboard/flux/hotspots/tendance`;
-      const urlGeneral = `api/dashboard/flux/hotspots/general`;
+    submitFluxAfricell(values) {
+      const urlDaily = `api/dashboard/flux/africell/hors-zone/zones`;
+      const urlPresenceZone = `api/dashboard/flux/africell/presence/zones`;
+      const urlInOutZone = `api/dashboard/flux/africell/in-out/zones`;
 
-      const values = Object.assign({}, input);
-      // values.preference_start = "2020-05-17";
-      // values.preference_end = "2020-05-31";
+      this.$set(this.loadings, "urlFluxAfricell", true);
 
-      const mapsRequest = axios.get(urlMaps, {
+      const dailyRequest = axios.get(urlDaily, {
         params: values,
       });
+
+      const presenceRequest = axios.get(urlPresenceZone, {
+        params: values,
+      });
+
+      const inOutRequest = axios.get(urlInOutZone, {
+        params: values,
+      });
+
+      this.setObservationDate({
+        start: values.observation_start,
+        end: values.observation_end,
+      });
+
+      const allRequest = [dailyRequest, presenceRequest];
+
+      if (values.observation_start == values.observation_end) {
+        allRequest.push(inOutRequest);
+      }
+
+      this.fluxAfricellDaily = [];
+      this.fluxAfricelPresence = [];
+      this.fluxAfricelInOut = [];
+
+      this.$gtag.event("fetch_africell_flux_data_request", {
+        event_category: "fetch_africell_flux",
+        event_label: "fluxAfricell_req_send",
+      });
+
+      Promise.all(allRequest)
+        .then((response) => {
+          if (response[0]) {
+            this.fluxAfricellDaily = response[0].data;
+          }
+          if (response[1]) {
+            this.fluxAfricelPresence = response[1].data;
+          }
+          if (response[2]) {
+            this.fluxAfricelInOut = response[2].data;
+          }
+          this.$gtag.event("fetch_africell_flux_data_response", {
+            event_category: "fetch_africell_flux",
+            event_label: "fluxAfricell_response",
+          });
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
+        })
+        .finally(() => {
+          this.$set(this.loadings, "urlFluxAfricell", false);
+        });
+    },
+    submitFlux30Form(input) {
+      let urlMaps = `api/dashboard/flux/hotspots`;
+      let urlDaily = `api/dashboard/flux/hotspots`;
+      let urlTendance = `api/dashboard/flux/hotspots`;
+      let urlGeneral = `api/dashboard/flux/hotspots`;
+
+      let values = { ...input };
+      const hotspot = HOTSPOT_TYPE.find(
+        (x) => x.pseudo == input.fluxGeoOptions[0]
+      );
+      if (hotspot) {
+        // urlMaps += `/types`;
+        urlDaily += `/types`;
+        urlTendance += `/types`;
+        urlGeneral += `/types`;
+        values.fluxGeoOptions = [hotspot.name];
+      }
+
+      urlMaps += `/maps`;
+      urlDaily += `/daily`;
+      urlTendance += `/tendance`;
+      urlGeneral += `/general`;
+
       const dailyRequest = axios.get(urlDaily, {
         params: values,
       });
@@ -1315,7 +1502,15 @@ export default {
         params: values,
       });
 
+      if (hotspot) {
+        values = { ...values };
+        values.fluxGeoOptions = ["Tout"];
+      }
       const generalRequest = axios.get(urlGeneral, {
+        params: values,
+      });
+
+      const mapsRequest = axios.get(urlMaps, {
         params: values,
       });
 
@@ -1333,7 +1528,10 @@ export default {
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
 
-      this.$ga.event('fluxData', 'getRequest', 'hotspots', "SendRequest");
+      this.$gtag.event("fetch_orange_flux_hotspot_data_request", {
+        event_category: "fetch_orange_flux_hotspot",
+        event_label: "fetch_orange_flux_hotspot_req_send",
+      });
 
       Promise.all([mapsRequest, dailyRequest, tendanceRequest, generalRequest])
         .then((response) => {
@@ -1341,6 +1539,10 @@ export default {
             const data = response[0].data;
             const observations = data.observations;
             const references = data.references;
+
+            // const observations = [];
+            // const references = [];
+
             observations.forEach((item) => {
               const referenceData = references.find(
                 (x) => x.origin == item.origin
@@ -1361,9 +1563,21 @@ export default {
                 this.flux30MapsData.push(element);
               }
             });
+            // si aucune donnée n'existe pour ce hotspot
+            if (this.flux30MapsData.length == 0) {
+              const element = {
+                origin: values.fluxGeoOptions[0],
+                volume: null,
+                difference: null,
+                percent: null,
+                volumeReference: null,
+                empty: true,
+              };
+              this.flux30MapsData.push(element);
+            }
           }
           if (response[1]) {
-            this.flux30Daily = response[1].data.observations;
+            this.flux30Daily = this.flux30Daily = response[1].data.observations;
           }
           if (response[2]) {
             this.flux24Daily = response[2].data.observations;
@@ -1371,9 +1585,14 @@ export default {
           if (response[3]) {
             const observation = response[3].data.observations;
             const reference = response[3].data.references;
-            const difference = observation - reference;
-            const percent = (difference * 100) / reference;
-            // console.log('flux30General',this.flux30General);
+            let difference = null;
+            let percent = null;
+
+            if (reference) {
+              difference = observation - reference;
+              percent = (difference * 100) / reference;
+            }
+
             this.flux30General = {
               observation,
               reference,
@@ -1381,11 +1600,14 @@ export default {
               percent,
             };
           }
-          this.$ga.event('fluxData', 'get', 'hotspots', "ReceiveResponse");
+
+          this.$gtag.event("fetch_orange_flux_hotspot_data_response", {
+            event_category: "fetch_orange_flux_hotspot",
+            event_label: "fetch_orange_flux_hotspot_response",
+          });
         })
-        .catch((error) => {
-          const exception = error.message || error
-          this.$ga.exception(exception)
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
         })
         .finally(() => {
           this.$set(this.loadings, "urlFluxTIme30", false);
@@ -1715,35 +1937,8 @@ export default {
         this.townships = data;
       });
     },
-  },
-  watch: {
-    fluxDataGroupedByDateIn() {
-      this.updateFluxDataGroupedByDateGen();
-    },
-    fluxDataGroupedByDateOut() {
-      this.updateFluxDataGroupedByDateGen();
-    },
-    flux24PresenceDailyInData() {
-      let data = { observations: [], references: [] };
-      if (this.flux24PresenceDailyInData.observations) {
-        data.observations = this.flux24PresenceDailyInData.observations;
-      }
-      if (this.flux24PresenceDailyInData.references) {
-        data.references = this.flux24PresenceDailyInData.references;
-      }
-
-      this.flux24PresenceDailyInDay = this.computedFluxPresenceDataByDate(
-        data.observations.filter((x) => x.PresenceType == "Jour"),
-        data.references.filter((x) => x.PresenceType == "Jour")
-      );
-      this.flux24PresenceDailyInNight = this.computedFluxPresenceDataByDate(
-        data.observations.filter((x) => x.PresenceType == "Nuit"),
-        data.references.filter((x) => x.PresenceType == "Nuit")
-      );
-      this.flux24PresenceDailyIn = this.computedFluxPresenceDataByDate(
-        data.observations,
-        data.references
-      );
+    fluxDataProvideChanged(value) {
+      this.selectedFluxDataProvider = value;
     },
   },
 };
@@ -1753,9 +1948,16 @@ export default {
 .dash-home-page {
   // height: 100vh;
   background: $dash-background;
-  .side-bottom {
-    // height: calc(20vh - 72.5px);
+  // .side-bottom {
+  // height: calc(20vh - 72.5px);
+  // }
+  .side-right {
+    .flux-data-toggle {
+      position: absolute;
+      right: 0;
+    }
   }
+  // }
 
   .bounce-enter-active {
     animation: slideInUp 0.5s;

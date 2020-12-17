@@ -6,30 +6,30 @@
         <div
           class="range empty"
           :style="'background-color : ' + color_nodata"
-          :class="{hover : legendHover !== null && legendHover.de === null }"
-          @mouseenter="setLegendHover({de : null, a : null})"
+          :class="{ hover: legendHover !== null && legendHover.de === null }"
+          @mouseenter="setLegendHover({ de: null, a: null })"
           @mouseleave="setLegendHover(null)"
         ></div>
       </div>
       <div class="datas">
         <div class="inner" v-for="(data, i) in colors[color]" :key="i">
           <span class="lbl">
-            {{valDe(i)}}
-            <span v-if="domaineExtValues.isPercent">%</span>
+            {{ valDe(i) }}
           </span>
 
           <div
             class="range"
-            :style="'background-color :' + data "
-            :class="{hover : legendHover !== null && legendHover.de == valDe(i) }"
-            @mouseenter="setLegendHover({de : valDe(i), a : valDe(i+1) })"
+            :style="'background-color :' + data"
+            :class="{
+              hover: legendHover !== null && legendHover.de == valDe(i),
+            }"
+            @mouseenter="setLegendHover({ de: valDe(i), a: valDe(i + 1) })"
             @mouseleave="setLegendHover(null)"
           ></div>
         </div>
         <div class="inner inner-last">
           <span class="lbl">
-            {{lastValue}}
-            <span v-if="domaineExtValues.isPercent">%</span>
+            {{ lastValue }}
           </span>
         </div>
       </div>
@@ -58,11 +58,24 @@ export default {
     ...mapGetters(["fluxType", "legendHover"]),
     ...mapState({
       domaineExtValues: (state) => state.flux.domaineExtValues,
+      afriFluxType: (state) => state.flux.afriFluxType,
+      selectedSource: (state) => state.flux.selectedSource,
     }),
+    suffix: function () {
+      return this.domaineExtValues.isPercent ? "%" : "";
+    },
     color: function () {
-      if (this.fluxType) {
-        if (this.colors[this.fluxType - 1]) return this.fluxType - 1;
-        return 0;
+      if (this.selectedSource == 1) {
+        if (this.fluxType) {
+          if (this.colors[this.fluxType - 1]) return this.fluxType - 1;
+          return 0;
+        }
+      }
+      else{
+        if (this.afriFluxType) {
+          if (this.colors[this.afriFluxType - 1]) return this.afriFluxType - 1;
+          return 0;
+        }
       }
       return 0;
     },
@@ -76,7 +89,10 @@ export default {
     },
     lastValue() {
       if (this.domaineExtValues.max <= 0) return 100;
-      else return Math.ceil(this.domaineExtValues.max);
+      else {
+        const value = Math.ceil(this.domaineExtValues.max);
+        return isNaN(value) ? "" : value + this.suffix;
+      }
     },
   },
   methods: {
@@ -112,9 +128,15 @@ export default {
 
       if (i == 5) {
         return 0;
-      } else if (i < 5)
-        return Math.floor(this.domaineExtValues.min + i * this.pourcentNegatif);
-      else return Math.floor((i - 5) * this.pourcentPositif);
+      } else if (i < 5) {
+        const value = Math.floor(
+          this.domaineExtValues.min + i * this.pourcentNegatif
+        );
+        return isNaN(value) ? "" : value + this.suffix;
+      } else {
+        const value = Math.floor((i - 5) * this.pourcentPositif);
+        return isNaN(value) ? "" : value + this.suffix;
+      }
     },
   },
 };

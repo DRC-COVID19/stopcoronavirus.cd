@@ -4,9 +4,7 @@
       <b-row class="mb-2">
         <div class="col-md col-12">
           <h3 class="d-flex align-items-center mb-0">
-            <span v-if="fluxGeoGranularity != 3" class="ml-2 mr-2">{{
-              targetZone
-            }}</span>
+            <span class="ml-2 mr-2">{{ targetZone }}</span>
 
             <toggle-button
               v-if="fluxTimeGranularity == 1"
@@ -39,32 +37,38 @@
         </div>
       </b-row>
 
-      <b-row no-gutters v-show="fluxTimeGranularity == 2">
+      <b-row no-gutters v-show="fluxTimeGranularity == 2" class="mb-4">
         <b-col
           cols="12"
           md="12"
           class="pl-0 col-mobilite-generale"
           v-show="!isLoading"
         >
-
-          <b-card class="mb-3 flux-mobility">
-            <h5 class="percent-title">Présence {{ targetZone }}</h5>
-            <div class="percent flux-presence">
-              {{ Math.round(flux30General.percent) }}%​
-            </div>
-            <p class="percent-p text-dash-color mb-0">
-              {{formatCash(flux30General.difference) }} personnes de
-              <span v-if="flux30General.difference > 0">plus</span>
-              <span v-else>moins</span>
-              ont été prsentes dans la zone
+          <b-card class="mb-3 flux-mobility active">
+            <h5 class="percent-title">Présence</h5>
+            <p class="text-muted" v-if="!flux30General.percent">
+              Données non disponibles
             </p>
+            <div v-else>
+              <div class="percent flux-presence">
+                {{ Math.round(flux30General.percent) }}%​
+              </div>
+              <p class="percent-p text-dash-color mb-0">
+                {{ formatCash(flux30General.difference) }} personnes de
+                <span v-if="flux30General.difference > 0">plus</span>
+                <span v-else>moins</span>
+                ont été présentes dans la zone
+              </p>
+            </div>
           </b-card>
           <FullScreen
             id="flux_30_daily"
             link="flux_30_daily_chart"
             @change="fullscreenMobileDaily"
+            v-show="this.flux30Daily.length > 0"
           >
             <b-card no-body class="cardtype1 mb-3 p-2">
+              <div class="general-top-title">Title</div>
               <div class="chart-container">
                 <canvas
                   height="200"
@@ -75,6 +79,43 @@
               </div>
             </b-card>
           </FullScreen>
+          <b-row>
+            <b-col cols="12">
+              <h4 class="mt-2 mb-3">Légende</h4>
+            </b-col>
+          </b-row>
+          <b-row align-h="start">
+            <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
+              <div
+                v-for="(item, index) in hotspotType.slice(0, 5)"
+                :key="index"
+                class="flux-chart-lenged-item"
+                @mouseenter="setFluxHotspotType(item)"
+                @click="setFluxHotspotClicked(item.pseudo)"
+              >
+                <span
+                  class="flux-chart-lenged-color"
+                  :style="{ background: item.color }"
+                ></span>
+                <span class="flux-chart-lenged-text">{{ item.pseudo }}</span>
+              </div>
+            </b-col>
+            <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
+              <div
+                v-for="(item, index) in hotspotType.slice(5, 10)"
+                :key="index"
+                class="flux-chart-lenged-item"
+                @mouseenter="setFluxHotspotType(item)"
+                @click="setFluxHotspotClicked(item.pseudo)"
+              >
+                <span
+                  class="flux-chart-lenged-color"
+                  :style="{ background: item.color }"
+                ></span>
+                <span class="flux-chart-lenged-text">{{ item.pseudo }}</span>
+              </div>
+            </b-col>
+          </b-row>
         </b-col>
 
         <b-col
@@ -135,6 +176,9 @@
             @change="fullscreenMobileDaily"
           >
             <b-card no-body class="cardtype1 mb-3 p-2">
+              <div class="general-top-title">
+                Mobilité générale intérieure de la zone
+              </div>
               <div class="chart-container">
                 <canvas
                   height="200"
@@ -154,9 +198,14 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Les 5 zones de santé avec la plus forte décroissance de
+                    mobilité
+                  </div>
+
                   <div class="chart-container">
                     <canvas
-                      height="400"
+                      height="200"
                       width="100vh"
                       ref="general_top_asc"
                       id="general_top_asc"
@@ -173,9 +222,14 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Les 5 zones de santé avec la plus faible décroissance de
+                    mobilité
+                  </div>
+
                   <div class="chart-container">
                     <canvas
-                      height="400"
+                      height="200"
                       width="100vh"
                       ref="general_top_desc"
                       id="general_top_desc"
@@ -192,9 +246,13 @@
                 @change="fullscreenFluxInOut"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Impacte sur la mobilité pour les 5 zones de santé les plus
+                    affectées
+                  </div>
                   <div class="chart-container">
                     <canvas
-                      height="400"
+                      height="200"
                       width="100vh"
                       ref="pandemic_top_desc"
                       id="pandemic_top_desc"
@@ -534,7 +592,7 @@
 <script>
 import * as d3 from "d3";
 import { mapState, mapMutations } from "vuex";
-import { PALETTE, FLUX_LAST_UPDATE } from "../config/env";
+import { PALETTE, FLUX_LAST_UPDATE, HOTSPOT_TYPE } from "../config/env";
 import GlobalProvice from "./flux/GLobalProvince";
 import ToggleButton from "../components/ToggleButton";
 import { difference } from "@turf/turf";
@@ -649,6 +707,7 @@ export default {
       fluxGeoGranularity: 2,
       areZoomable: [],
       toolTipItem: {},
+      hotspotType: HOTSPOT_TYPE,
     };
   },
   computed: {
@@ -658,6 +717,7 @@ export default {
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
       typePresence: (state) => state.flux.typePresence,
       fluxTimeGranularity: (state) => state.flux.fluxTimeGranularity,
+      observationDate: (state) => state.flux.observationDate,
     }),
     typesMobilite() {
       let types = [{ val: 1, lbl: "Détails" }];
@@ -702,7 +762,7 @@ export default {
         this.flux30Chart(
           this.flux30Daily,
           "flux_30_daily_chart",
-          PALETTE.flux_in_color
+          PALETTE.flux_presence
         );
       });
     },
@@ -798,7 +858,7 @@ export default {
       this.flux30Chart(
         this.flux30Daily,
         "flux_30_daily_chart",
-        PALETTE.flux_in_color
+        PALETTE.flux_presence
       );
     });
 
@@ -824,7 +884,15 @@ export default {
       "setFluxType",
       "setIsProvinceStatSeeing",
       "setTypePresence",
+      "setFluxHotspotType",
+      "setFluxHotspotClicked",
     ]),
+    isStartIsEnd() {
+      return (
+        this.observationDate.start &&
+        this.observationDate.start == this.observationDate.end
+      );
+    },
     selectFluxType(value) {
       this.setFluxType(value);
     },
@@ -979,8 +1047,7 @@ export default {
         this.mobileCalc(
           Object.assign({}, general),
           `general_flux`,
-          PALETTE.flux_in_color,
-          "Mobilité générale intérieure de la zone"
+          PALETTE.flux_in_color
         );
       });
     },
@@ -1098,7 +1165,7 @@ export default {
                 dashPattern: [5, 5], // crosshair line dash pattern
               },
               zoom: {
-                enabled: false,
+                enabled: true,
               },
               sync: {
                 enabled: false, // enable trace line syncing with other charts
@@ -1209,17 +1276,43 @@ export default {
         reference.getContext("2d"),
         this.configBarChart[ref]
       );
-      reference.style.height = 200;
+      reference.style.height = "200px";
+      reference.style.maxHeight = "200px";
     },
     flux30Chart(data, ref, color, title = null) {
       const dataFormatted = [];
       data.map((x) => {
-        x.map((item) => {
+        if (this.isStartIsEnd()) {
+          x.map((item) => {
+            dataFormatted.push({
+              x: moment(`${item.date} ${item.hour}`),
+              y: item.percent,
+            });
+          });
+        } else {
+          let item = {};
+          if (x.length % 2 == 0) {
+            let indice = x.length / 2;
+
+            const volume_reference1 = x[indice].volume_reference;
+            const volume_reference2 = x[indice - 1].volume_reference;
+            const volume1 = x[indice].volume;
+            const volume2 = x[indice - 1].volume;
+            item.date = x[indice].date;
+            item.volume = volume1 + volume2;
+            item.volume_reference = volume_reference1 + volume_reference2;
+            item.difference = item.volume - item.volume_reference;
+            item.percent = (item.difference * 100) / item.volume_reference;
+          } else {
+            let indice = (x.length + 1) / 2;
+            item = x[indice];
+          }
           dataFormatted.push({
-            x: moment(`${item.date} ${item.hour}`),
+            date: item.date,
+            x: moment(item.date),
             y: item.percent,
           });
-        });
+        }
       });
 
       const max = d3.max(dataFormatted.map((x) => x.y));
@@ -1236,7 +1329,7 @@ export default {
               label: "Volume",
               fill: false,
               borderColor: color,
-              backgroundColor: "rgb(166,180,205, 0.2)",
+              backgroundColor: color,
               data: dataFormatted,
               interpolate: true,
               showLine: true,
@@ -1264,7 +1357,7 @@ export default {
                 dashPattern: [5, 5], // crosshair line dash pattern
               },
               zoom: {
-                enabled: false, // enable zooming
+                enabled: true, // enable zooming
                 zoomboxBackgroundColor: "rgba(66,133,244,0.2)", // background color of zoom box
                 zoomboxBorderColor: "#48F", // border color of zoom box
                 zoomButtonText: "Reset Zoom", // reset zoom button text
@@ -1281,7 +1374,7 @@ export default {
             callbacks: {
               title: (a, d) => {
                 let titleFormat = this.moment(a[0].xLabel).format("DD.MM.Y");
-                if (this.fluxTimeGranularity == 2) {
+                if (this.fluxTimeGranularity == 2 && this.isStartIsEnd()) {
                   titleFormat = this.moment(a[0].xLabel).format(
                     "DD.MM.Y HH:mm"
                   );
@@ -1295,7 +1388,8 @@ export default {
                   ": " +
                   Math.round(i.yLabel, 0).toLocaleString(undefined, {
                     minimumFractionDigits: 0,
-                  })
+                  }) +
+                  "%"
                 );
               },
             },
@@ -1311,7 +1405,10 @@ export default {
                 },
                 type: "time",
                 time: {
-                  unit: this.fluxTimeGranularity == 1 ? "day" : "hour",
+                  unit:
+                    this.fluxTimeGranularity == 2 && this.isStartIsEnd()
+                      ? "hour"
+                      : "day",
                   // unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM",
@@ -1351,13 +1448,15 @@ export default {
           },
         },
       };
+
       let reference = this.$refs[ref];
       if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
       this.lineCharts[ref] = new Chart(
         reference.getContext("2d"),
         this.configBarChart[ref]
       );
-      reference.style.height = 200;
+      reference.style.height = "200px";
+      reference.style.maxHeight = "200px";
     },
     fluxMobilityFluxZone(InputData, ref, key, color) {
       if (!InputData) {
@@ -1406,14 +1505,21 @@ export default {
       localData = localData.slice(0, 10);
 
       // cond : key == origin
-      this.drawHorizontalChart(localData, "zone", ref, color);
+      this.drawHorizontalChart(localData, "zone", ref, color, 400);
     },
     topHealthZonePandemics(inPutData, ref, title = null) {
       const data = inPutData.map((item) => ({
         zone: item.name,
         volume: item.confirmed,
       }));
-      this.drawHorizontalChart(data, "zone", ref, PALETTE.flux_in_color, title);
+      this.drawHorizontalChart(
+        data,
+        "zone",
+        ref,
+        PALETTE.flux_in_color,
+        200,
+        title
+      );
     },
     async fluxMobilityFluxGeneralZone(
       fluxDataIn,
@@ -1473,25 +1579,25 @@ export default {
           "zone",
           refAsc,
           PALETTE.flux_in_color,
-          titleAsc
+          200
         );
         this.drawHorizontalChart(
           descData,
           "zone",
           refDesc,
           PALETTE.flux_in_color,
-          titleDesc
+          200
         );
         this.drawHorizontalChart(
           mobilityHealth,
           "zone",
           refHealth,
           PALETTE.flux_in_color,
-          titleHelth
+          200
         );
       });
     },
-    drawHorizontalChart(localData, key, ref, color, title = null) {
+    drawHorizontalChart(localData, key, ref, color, height, title = null) {
       const datasets = [];
       const volumeReferences = localData.map((d) => d.volume_reference);
       if (volumeReferences.some((x) => x)) {
@@ -1500,6 +1606,7 @@ export default {
           backgroundColor: "#33ac2e",
           borderColor: "#33ac2e",
           borderWidth: 1,
+          barThickness: 12,
           data: volumeReferences,
         });
       }
@@ -1508,6 +1615,7 @@ export default {
         label: "Observation",
         backgroundColor: color,
         borderColor: color,
+        barThickness: 12,
         data: localData.map((d) => d.volume),
       });
       const dataChart = {
@@ -1581,7 +1689,9 @@ export default {
         reference.getContext("2d"),
         this.configBarChart[ref]
       );
-      reference.style.height = 400;
+      this.configBarChart[ref].height = height;
+      reference.style.height = `${height}px`;
+      reference.style.maxHeight = `${height}px`;
     },
     getRangeColors(
       data,
@@ -1625,23 +1735,26 @@ export default {
       return rangeColors;
     },
     fullscreenMobileDaily(fullscreen, ref) {
-      //this.fullscreen = fullscreen
       if (!fullscreen) {
         const buttonResetZoom = this.lineCharts[ref].crosshair.button;
         if (buttonResetZoom) {
+          console.log("buttonResetZoomd", buttonResetZoom);
           buttonResetZoom.click();
         }
 
-        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = false;
-        this.$refs[ref].style.height = "200px";
+        // this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = false;
         this.$refs[ref].style.MaxHeight = "200px";
+        this.$refs[ref].style.height = "200px";
         this.$refs[ref].height = "200px";
 
         this.lineCharts[ref].update();
       } else {
         this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = true;
+        this.$refs[ref].style.MaxHeight = "400px";
         this.$refs[ref].style.height = "400px";
         this.$refs[ref].height = "400px";
+
+        // console.log('this.$refs[ref].style.MaxHeight',this.$refs[ref].style);
 
         this.lineCharts[ref].update();
       }
@@ -1651,8 +1764,8 @@ export default {
       const element = this.$refs[ref];
       const parent_2 = element.parentElement.parentElement;
       if (!fullscreen) {
-        element.style.height = "400px";
-        element.height = "400px";
+        element.style.height = this.configBarChart[ref].height;
+        element.height = this.configBarChart[ref].height;
         element.parentElement.style.width = "";
         parent_2.style.display = "";
         parent_2.style.alignItem = "";
@@ -1811,6 +1924,7 @@ export default {
   .cardtype1 {
     canvas {
       width: calc(100vw - 19px) !important;
+      max-height: 500px !important;
       height: 500px !important;
     }
   }
@@ -1818,6 +1932,7 @@ export default {
     canvas {
       width: 700px !important;
       height: calc(100vh - 32px) !important;
+      max-height: calc(100vh - 32px) !important;
     }
   }
 }
@@ -1841,5 +1956,26 @@ export default {
   height: 38px;
   width: auto;
   margin-left: 5px;
+}
+.general-top-title {
+  font-size: 0.7rem;
+  text-align: center;
+  margin-bottom: 5px;
+  color: #6c757d;
+  font-weight: bold;
+}
+.flux-chart-lenged-color {
+  display: inline-block;
+  height: 15px;
+  width: 15px;
+}
+.flux-chart-lenged-item {
+  &:hover {
+    cursor: pointer;
+    opacity: 0.7;
+  }
+}
+.flux-chart-lenged-text {
+  font-size: 0.8rem;
 }
 </style>

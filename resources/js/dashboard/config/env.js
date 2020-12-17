@@ -29,13 +29,18 @@ export const
   },
   PREFERENCE_START = "2020-02-18",
   PREFERENCE_END = "2020-03-18",
+  AFRICELL_PREFERENCE_START = "2020-02-16",
+  AFRICELL_PREFERENCE_END = "2020-03-17",
   HOTSPOT_PREFERENCE_START = "2020-05-17",
   HOTSPOT_PREFERENCE_END = "2020-05-24",
   HOTSPOT_OBSERVATION_START = "2020-05-25",
   HOTSPOT_OBSERVATION_END = "2020-08-11",
   FLUX_LAST_UPDATE = "2020-08-12",
+  AFRICELL_LAST_UPDATE = "2020-11-03",
   OBSERVATION_START = "2020-03-19",
   OBSERVATION_END = "2020-08-12",
+  AFRICELL_OBSERVATION_START = "2020-03-18",
+  AFRICELL_OBSERVATION_END = "2020-11-03",
   DATEFORMAT = "Y-MM-DD",
   INFRASTRUCTURE_FIRST_UPDATE = "2020-07-01",
   FLUX_PREDEFINED_INPUT = [
@@ -629,7 +634,7 @@ de revenus pour Kinshasa`,
           zones: ["Kinshasa"]
         },
         {
-          isSuite:true,
+          isSuite: true,
           item: `(les commerçants faisaient du commerce malgré la fermeture obligatoire)`,
           zones: ["Kinshasa"]
         },
@@ -721,4 +726,27 @@ de revenus pour Kinshasa`,
       ],
       date: '2020-08-15'
     },
-  ]
+    {
+      id: 44,
+      name: `Couvre feu déclaré sur toutes l'étendu du territoire national`,
+      measures: [
+        {
+          item: `Couvre feu déclaré sur toutes l'étendu du territoire national`,
+          zones: ["ALL"]
+        },
+      ],
+      date: '2020-12-18'
+    },
+  ],
+  HOTSPOT_TYPE = [
+    { id: -1, name: "BureauAdmin", color: '#1E3B27', pseudo: 'Bureau Admin' },
+    { id: -2, name: "Eglises", color: "#339966", pseudo: 'Eglises' },
+    { id: -3, name: "Commerces", color: '#6E436A', pseudo: 'Commerces' },
+    { id: -4, name: "Supermarche", color: '#9D00B3', pseudo: 'Supermarché' },
+    { id: -5, name: "Marché", color: '#F6C2FF', pseudo: 'Marché' },
+    { id: -6, name: "Hotels", color: '#669900', pseudo: 'Hôtels' },
+    { id: -7, name: "ArretTransport", color: '#cc0099', pseudo: 'Arrêt Transport' },
+    { id: -8, name: "Restaurants", color: '#99cc00', pseudo: 'Restaurants' },
+    { id: -9, name: "Hopitaux", color: '#E419FF', pseudo: 'Hôpitaux' },
+    { id: -10, name: "Cimetiere", color: '#CAE823', pseudo: "Cimetière" }
+  ];

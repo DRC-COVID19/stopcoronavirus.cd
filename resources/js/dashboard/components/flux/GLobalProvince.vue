@@ -1,9 +1,10 @@
 <template>
   <FullScreen id="fullscreen" :link="reference" @change="fullscreenChange">
-  
+
       <b-row no-gutters class="global_province_container">
         <b-col cols="12" class="pr-0">
           <b-card no-body class="p-2 rounded-0 cardtype2">
+            <div class="general-top-title">{{title}}</div>
             <canvas height="600" :ref="reference" class="global_province"></canvas>
           </b-card>
         </b-col>
@@ -132,6 +133,7 @@ export default {
             label: "Observation",
             backgroundColor: this.color,
             borderColor: this.color,
+            barThickness:12,
             borderWidth: 1,
             data: localData.map((d) => d.percent),
           },
@@ -152,7 +154,7 @@ export default {
             },
           },
           title: {
-            display: !!this.title,
+            display: false,
             text: this.title,
             color: "#6c757d",
             fontSize: 9,

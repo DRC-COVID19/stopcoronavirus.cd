@@ -1,7 +1,6 @@
 <template>
   <div class="map-wrapper">
     <div id="map"></div>
-    <canvas id="deck-canvas" ref="deck_canvas"></canvas>
     <ToolTipMaps
       v-if="ArcLayerSelectedObject.item"
       :position="ArcLayerSelectedObject.position"
@@ -10,11 +9,16 @@
   </div>
 </template>
 <script>
-import { MAPBOX_TOKEN, MAPBOX_DEFAULT_STYLE, PALETTE } from "../config/env";
+import {
+  MAPBOX_TOKEN,
+  MAPBOX_DEFAULT_STYLE,
+  PALETTE,
+  HOTSPOT_TYPE,
+} from "../config/env";
 import Mapbox from "mapbox-gl";
 import { ScatterplotLayer, ArcLayer } from "@deck.gl/layers";
 import { MapboxLayer } from "@deck.gl/mapbox";
-import { Deck } from "@deck.gl/core";
+// import { Deck } from "@deck.gl/core";
 import ToolTipMaps from "./ToolTipMaps";
 import { mapState, mapMutations, mapActions } from "vuex";
 import U from "mapbox-gl-utils";
@@ -31,8 +35,9 @@ const sourceHealthZoneGeojsonCentered = "sourHealthZoneGeojsonCentered",
   COVID_HOSPITAL_SOURCE = "COVID_HOSPITAL_SOURCE",
   SOURCE_HOTSPOT_GEOJSON_CENTERED = "SOURCE_HOTSPOT_GEOJSON_CENTERED",
   SOURCE_HOTSPOT_GEOJSON = "SOURCE_HOTSPOT_GEOJSON",
-  SOURCE_HOTSPOT_POINT_GEOJSON = "SOURCE_HOTSPOT_POINT_GEOJSON";
-let deck = null;
+  SOURCE_HOTSPOT_POINT_GEOJSON = "SOURCE_HOTSPOT_POINT_GEOJSON",
+  AFRICELL_HEALTH_ZONE = "AFRICELL_HEALTH_ZONE";
+
 const popup = new Mapbox.Popup({
   closeButton: false,
   closeOnClick: false,
@@ -146,6 +151,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    fluxAfricelInOut: {
+      type: Array,
+      default: () => [],
+    },
+    fluxAfricelPresence: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -183,9 +196,6 @@ export default {
       isProvinceSourceLoaded: false,
       defaultCenterCoordinates: [23.485632, -3.983283],
       defaultKinshasaCoordinates: [15.31389, -4.33167],
-      deck: new Deck({
-        layers: [],
-      }),
       stateHover: {
         hoveredStateId: null,
         hoveredStateKinId: null,
@@ -196,6 +206,7 @@ export default {
       },
       fluxCircleDataLayer: {},
       flux30FeaturesData: [],
+      fluxHotspotType: null,
     };
   },
   mounted() {
@@ -282,12 +293,12 @@ export default {
 
       if (this.healthZoneGeojson) {
         this.addZoneSource();
-        this.addPolygoneLayer(2);
-        this.addPolygoneHoverLayer(2);
         this.$emit("geoJsonLoaded", "healthZoneGeo");
       }
       if (this.healthProvinceGeojson) {
         this.addProvinceSource();
+        this.addPolygoneLayer(1);
+        this.addPolygoneHoverLayer(1);
         this.$emit("geoJsonLoaded", "provinceGeo");
       }
       if (this.hotspotGeojson) {
@@ -298,10 +309,6 @@ export default {
         this.addHotspotPointSource();
         this.$emit("geoJsonLoaded", "hotspotPointGeo");
       }
-
-      // if (!this.isProvinceSourceLoaded && this.healthProvinceGeojson) {
-      //   this.addProvinceSource();
-      // }
     });
 
     this.map = map;
@@ -310,9 +317,6 @@ export default {
     this.$store.watch(
       (state) => state.flux.fluxGeoGranularityTemp,
       (value) => {
-        // if (this.activeMenu != 1) {
-        //   return;
-        // }
         this.addPolygoneLayer(value);
         this.addPolygoneHoverLayer(value);
       }
@@ -320,18 +324,12 @@ export default {
     this.$store.watch(
       (state) => state.flux.mapStyle,
       (value) => {
-        // if (this.activeMenu != 1) {
-        //   return;
-        // }
         this.flux24Func();
       }
     );
     this.$store.watch(
       (state) => state.flux.fluxType,
       (value) => {
-        // if (this.activeMenu != 1) {
-        //   return;
-        // }
         this.flux24Func();
       }
     );
@@ -341,15 +339,6 @@ export default {
       (state) => state.nav.activeMenu,
       (value) => {
         this.drawDesign();
-        // switch (value) {
-        //   case 1:
-        //     break;
-        //   case 5:
-        //     this.addPolygoneLayer(2);
-        //     this.addPolygoneHoverLayer(2);
-        //   default:
-        //     break;
-        // }
       }
     );
 
@@ -357,10 +346,14 @@ export default {
     this.$store.watch(
       (state) => state.flux.legendHover,
       (value) => {
-        if (this.fluxTimeGranularity == 1) {
-          this.flux24Func();
+        if (this.selectedSource == 2) {
+          this.africellFluxFunc();
         } else {
-          this.flux30Func();
+          if (this.fluxTimeGranularity == 1) {
+            this.flux24Func();
+          } else {
+            this.flux30Func();
+          }
         }
       }
     );
@@ -369,6 +362,13 @@ export default {
       (state) => state.epidemic.legendEpidHover,
       (value) => {
         this.covidHatchedStyle(this.covidCases, value);
+      }
+    );
+    this.$store.watch(
+      (state) => state.flux.fluxHotspotType,
+      (value) => {
+        this.fluxHotspotType = value;
+        this.flux30Func();
       }
     );
   },
@@ -394,6 +394,10 @@ export default {
       hospotPointJson: (state) => state.app.hospotPointJson,
       typePresence: (state) => state.flux.typePresence,
       fluxTimeGranularity: (state) => state.flux.fluxTimeGranularity,
+      afriFluxType: (state) => state.flux.afriFluxType,
+      observationDate: (state) => state.flux.observationDate,
+      selectedSource: (state) => state.flux.selectedSource,
+      fluxHotSpot: (state) => state.app.fluxHotSpot,
     }),
     flux24WithoutReference() {
       return this.flux24.filter((x) => !x.isReference);
@@ -423,7 +427,7 @@ export default {
         this.covidHatchedStyle(this.covidCases, this.epidemicLengendHover);
       } else {
         map.U.removeLayer([EPIDEMIC_LAYER]);
-        map.resize();
+        this.mapResize();
       }
     },
     hospitals() {
@@ -499,13 +503,13 @@ export default {
     },
     isLoading() {
       if (this.centerCoordinates.length > 0) {
-        map.resize();
+        this.mapResize();
         map.flyTo({ center: this.centerCoordinates });
       }
     },
     fluxGeoGranularityMenu() {
       // if (this.fluxGeoGranularity == 1) {
-      map.resize();
+      this.mapResize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
         easing: function (t) {
@@ -520,7 +524,7 @@ export default {
       if (this.fluxGeoGranularityMenu == 2 && lenGeoOptions > 0) {
         const zone = this.fluxGeoOptionsTmp[lenGeoOptions - 1];
         const area = this.getHealthZoneArea(zone, 2);
-        map.resize();
+        this.mapResize();
         map.flyTo({
           center: this.getHealthZoneCoordonate(
             zone,
@@ -543,19 +547,24 @@ export default {
     //   this.drawDesign();
     // },
     "isFluxGlobalProvinceloading.in"() {
-      map.resize();
-      map.flyTo({ center: this.defaultCenterCoordinates });
+      this.mapResize();
+      // map.flyTo({ center: this.defaultCenterCoordinates });
     },
     "isFluxGlobalProvinceloading.out"() {
-      map.resize();
-      map.flyTo({ center: this.defaultCenterCoordinates });
+      // this.mapResize();
+      // map.flyTo({ center: this.defaultCenterCoordinates });
     },
     showBottom() {
       // le side bottom prend 500ms pour reprendre sa position initiale
       // donc on attend 600ms avant d'effectuer le resize
-      setTimeout(function(){
-        map.resize();
-      },600)
+      this.mapResize();
+    },
+    fluxAfricelInOut() {
+      this.africellFluxFunc();
+    },
+    afriFluxType() {
+      this.africellFluxFunc();
+      this.mapResize();
     },
   },
   methods: {
@@ -564,8 +573,14 @@ export default {
       "setFluxGeoOptions",
       "setDomaineExtValues",
       "setEpidemicExtValues",
+      "setFluxHotspotClicked",
     ]),
     ...mapActions(["resetState"]),
+    mapResize() {
+      setTimeout(function () {
+        map.resize();
+      }, 600);
+    },
     addPolygoneLayerHotspot() {
       if (!this.isMapLoaded) {
         return;
@@ -651,8 +666,7 @@ export default {
     },
     stateHoverMouseMove(e) {
       if (e.features.length > 0) {
-
-        if (this.stateHover.hoveredStateId!=null) {
+        if (this.stateHover.hoveredStateId != null) {
           map.setFeatureState(
             {
               source:
@@ -678,7 +692,7 @@ export default {
       }
     },
     stateHoverMouseLeave(e) {
-      if (this.stateHover.hoveredStateId!=null) {
+      if (this.stateHover.hoveredStateId != null) {
         map.setFeatureState(
           {
             source:
@@ -825,7 +839,7 @@ export default {
       property = "confirmed",
       geoGranularity = 2
     ) {
-      map.resize();
+      this.mapResize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
         easing: function (t) {
@@ -1046,25 +1060,324 @@ export default {
       map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
     },
     flux30Func() {
+      this.mapResize();
       if (this.flux30MapsData.length > 0) {
-        this.flux30MapsDataFunc(this.flux30MapsData, this.legendHover);
+        this.flux30MapsDataFunc(
+          this.flux30MapsData,
+          this.legendHover,
+          this.fluxHotspotType
+        );
       }
     },
-    /**
-     * Ajout de hotspot
-     */
-    flux30MapsDataFunc(flux30MapsData, legendHover) {
-      this.flux24RemoveLayer();
+    africellFluxFunc() {
+      let data;
+      switch (this.afriFluxType) {
+        case 1:
+          data = this.fluxAfricelInOut.filter(
+            (x) => x.zoneB == this.fluxGeoOptions[0]
+          );
+          this.africellInOutFunc(
+            data,
+            "flow_AB",
+            "zoneA",
+            "zoneB",
+            this.legendHover,
+            PALETTE.inflow_negatif,
+            PALETTE.inflow_positif
+          );
+          break;
+        case 2:
+          data = this.fluxAfricelInOut.filter(
+            (x) => x.zoneA == this.fluxGeoOptions[0]
+          );
+          this.africellInOutFunc(
+            data,
+            "flow_AB",
+            "zoneB",
+            "zoneA",
+            this.legendHover,
+            PALETTE.outflow_negatif,
+            PALETTE.outflow_positif
+          );
+          break;
+        case 3:
+          this.africellPresenceFunc(this.fluxAfricelPresence, this.legendHover);
+          break;
+        case 4:
+          data = this.fluxAfricelInOut.filter(
+            (x) => x.zoneB == this.fluxGeoOptions[0]
+          );
+          this.africellInOutFunc(
+            data,
+            "flow_tot",
+            "zoneA",
+            "zoneB",
+            this.legendHover,
+            PALETTE.general_negatif,
+            PALETTE.general_positif
+          );
+          break;
 
+        default:
+          break;
+      }
+    },
+    africellInOutFunc(
+      data,
+      valuekey = "flow_tot",
+      aKey = "zoneA",
+      bKey = "zoneB",
+      legendHover = null,
+      negativeColor,
+      positiveColor
+    ) {
+      this.flux24RemoveLayer();
       this.removePolygoneHoverLayer();
       this.addPolygoneLayer(2);
+      const zone = this.fluxGeoOptions[0];
+      const area = this.getHealthZoneArea(zone, 2);
+      const zoom = this.zoomByArea(area);
       map.flyTo({
-        center: this.defaultKinshasaCoordinates,
+        center: this.getHealthZoneCoordonate(zone, 2),
         easing: function (t) {
           return t;
         },
         pitch: 10,
         zoom: 10,
+      });
+      if (
+        !data ||
+        data.length == 0 ||
+        (this.observationDate.start &&
+          this.observationDate.start != this.observationDate.end)
+      ) {
+        return;
+      }
+      let features = [...data];
+
+      const domaineMax = d3.max(features, (d) => d[valuekey]);
+      const domaineMin = d3.min(features, (d) => d[valuekey]);
+
+      const colorScalePositive = d3.scaleQuantile();
+      const colorScaleNegative = d3.scaleQuantile();
+
+      colorScalePositive.domain([0, domaineMax]);
+      colorScaleNegative.domain([domaineMin, 0]);
+
+      const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
+
+      this.setDomaineExtValues({
+        min: domaineMin,
+        max: domaineMax,
+        isPercent: true,
+      });
+
+      colorScaleNegative.range(negativeColor);
+      colorScalePositive.range(positiveColor);
+
+      const max = d3.max(features, (d) => d[valuekey]);
+      const dataKey = "Zone+Peupl";
+      const colorExpression = [];
+      colorExpression.push("case");
+
+      features.forEach((x) => {
+        let color = PALETTE.dash_green;
+        if (this.fluxGeoOptions.some((y) => this.fixedZone(y) == x[aKey])) {
+          color = PALETTE.dash_green;
+        } else {
+          if (x.empty) color = PALETTE.dash_green;
+          else if (x[valuekey] >= 0) {
+            color = colorScalePositive(x[valuekey]);
+          } else {
+            color = colorScaleNegative(x[valuekey]);
+          }
+        }
+        colorExpression.push(["==", ["get", dataKey], x[aKey]]);
+        colorExpression.push(color);
+      });
+
+      colorExpression.push(["==", ["get", dataKey], this.fluxGeoOptions[0]]);
+      colorExpression.push(PALETTE.dash_green);
+      colorExpression.push("white");
+
+      if (legendHover) {
+        features = features.filter(
+          (x) => x[valuekey] >= legendHover.de && x[valuekey] <= legendHover.a
+        );
+        if (features.length == 0) {
+          return;
+        }
+      }
+
+      map.U.addFill(
+        AFRICELL_HEALTH_ZONE,
+        this.drcHealthZone,
+        map.U.properties({
+          fillColor: colorExpression,
+          fillOpacity: [
+            "match",
+            ["get", dataKey],
+            [...features.map((x) => x[aKey]), this.fluxGeoOptions[0]],
+            0.9,
+            0,
+          ],
+        })
+        // this.drcHealthZone
+      );
+      this.fluxAfricellInOutFeaturesData = { features, aKey, valuekey };
+      map.on("mousemove", AFRICELL_HEALTH_ZONE, this.africellInOutmouseMove);
+
+      map.on("mouseout", AFRICELL_HEALTH_ZONE, this.mouseOut);
+    },
+    africellInOutmouseMove(e) {
+      if (this.activeMenu != 1) {
+        return;
+      }
+      const coordinates = e.features[0].geometry.coordinates[0].slice();
+
+      const item = e.features[0].properties;
+
+      const name = item["Zone+Peupl"];
+      let value = null;
+      const { aKey, valuekey } = this.fluxAfricellInOutFeaturesData;
+      const feature = this.fluxAfricellInOutFeaturesData.features.find(
+        (x) => x[aKey] == name
+      );
+      if (feature) {
+        this.$set(this.ArcLayerSelectedObject, "position", {
+          top: e.point.y,
+          left: e.point.x,
+        });
+        this.$set(this.ArcLayerSelectedObject, "item", {
+          origin: feature[aKey],
+          percent: feature[valuekey],
+        });
+      } else {
+        this.$set(this.ArcLayerSelectedObject, "item", null);
+      }
+    },
+    africellPresenceFunc(data, legendHover = null) {
+      this.flux24RemoveLayer();
+      this.removePolygoneHoverLayer();
+      this.addPolygoneLayer(2);
+      const zone = this.fluxGeoOptions[0];
+      const area = this.getHealthZoneArea(zone, 2);
+      const zoom = this.zoomByArea(area);
+      map.flyTo({
+        center: this.getHealthZoneCoordonate(zone, 2),
+        easing: function (t) {
+          return t;
+        },
+        pitch: 10,
+        zoom: 10,
+      });
+      if (
+        !data ||
+        data.length == 0 ||
+        (this.observationDate.start &&
+          this.observationDate.start != this.observationDate.end)
+      ) {
+        return;
+      }
+      let features = [...data];
+      const domaineMax = d3.max(features, (d) => d.volume);
+      const domaineMin = d3.min(features, (d) => d.volume);
+
+      const colorScalePositive = d3.scaleQuantile();
+      const colorScaleNegative = d3.scaleQuantile();
+
+      colorScalePositive.domain([0, domaineMax]);
+      colorScaleNegative.domain([domaineMin, 0]);
+
+      const colorScale = d3.scaleQuantile().domain([domaineMin, domaineMax]);
+
+      this.setDomaineExtValues({
+        min: domaineMin,
+        max: domaineMax,
+        isPercent: true,
+      });
+
+      colorScaleNegative.range(PALETTE.inflow_negatif);
+      colorScalePositive.range(PALETTE.inflow_positif);
+
+      const max = d3.max(features, (d) => d.volume);
+      const dataKey = "Zone+Peupl";
+      const colorExpression = [];
+      colorExpression.push("case");
+
+      features.forEach((x) => {
+        let color = PALETTE.dash_green;
+        if (this.fluxGeoOptions.some((y) => this.fixedZone(y) == x.name)) {
+          color = PALETTE.dash_green;
+        } else {
+          if (x.empty) color = PALETTE.dash_green;
+          else if (x.volume >= 0) {
+            color = colorScalePositive(x.volume);
+          } else {
+            color = colorScaleNegative(x.volume);
+          }
+        }
+        colorExpression.push(["==", ["get", dataKey], x.name]);
+        colorExpression.push(color);
+      });
+
+      // colorExpression.push(["==", ["get", dataKey], this.fluxGeoOptions[0]]);
+      // colorExpression.push(PALETTE.dash_green);
+      colorExpression.push("white");
+
+      if (legendHover) {
+        features = features.filter(
+          (x) => x.volume >= legendHover.de && x.volume <= legendHover.a
+        );
+        if (features.length == 0) {
+          return;
+        }
+      }
+
+      map.U.addFill(
+        AFRICELL_HEALTH_ZONE,
+        this.drcHealthZone,
+        map.U.properties({
+          fillColor: colorExpression,
+          fillOpacity: [
+            "match",
+            ["get", dataKey],
+            features.map((x) => x.name),
+            0.9,
+            0,
+          ],
+        })
+        // this.drcHealthZone
+      );
+    },
+
+    getHospot(value, property = "pseudo") {
+      return HOTSPOT_TYPE.find((x) => x[property] == value);
+    },
+    /**
+     * Ajout de hotspot
+     */
+    flux30MapsDataFunc(flux30MapsData, legendHover, fluxHotspotType) {
+      this.flux24RemoveLayer();
+
+      this.removePolygoneHoverLayer();
+      this.addPolygoneLayer(2);
+      let mapCenter = this.defaultKinshasaCoordinates;
+      let mapZoom = 10;
+      if (
+        this.fluxGeoOptions[0] != "Tout" &&
+        !this.getHospot(this.fluxGeoOptions[0])
+      ) {
+        mapCenter = this.getHospotCoordonate(this.fluxGeoOptions[0]);
+        mapZoom = 14;
+      }
+      map.flyTo({
+        center: mapCenter,
+        easing: function (t) {
+          return t;
+        },
+        pitch: 10,
+        zoom: mapZoom,
       });
       let features = [...flux30MapsData];
       const domaineMax = d3.max(features, (d) => d.percent);
@@ -1088,29 +1401,6 @@ export default {
       colorScalePositive.range(PALETTE.inflow_positif);
 
       const max = d3.max(features, (d) => d.volume);
-      const dataKey = "DENOMMIN";
-      const colorExpression = [];
-      colorExpression.push("case");
-      features.forEach((x) => {
-        let color = PALETTE.dash_green;
-        if (
-          this.fluxGeoOptions.some((y) => this.fixedZone(y) == x.origin) &&
-          this.fluxType != 4 &&
-          this.fluxType != 3
-        ) {
-          color = PALETTE.dash_green;
-        } else {
-          if (x.percent >= 0) {
-            color = colorScalePositive(x.percent);
-          } else {
-            color = colorScaleNegative(x.percent);
-          }
-        }
-
-        colorExpression.push(["==", ["get", dataKey], x.origin]);
-        colorExpression.push(color);
-      });
-      colorExpression.push("white");
 
       if (legendHover) {
         features = features.filter(
@@ -1121,22 +1411,109 @@ export default {
         }
       }
 
+      const dataKey = "DENOMMIN";
+      const colorExpression = [];
+      const hotspotPoint = [];
+
+      colorExpression.push("case");
+      features.forEach((x) => {
+        let color = PALETTE.dash_green;
+        if (
+          this.fluxGeoOptions.some((y) => this.fixedZone(y) == x.origin) &&
+          this.fluxType != 4 &&
+          this.fluxType != 3
+        ) {
+          color = PALETTE.dash_green;
+        } else {
+          if (x.empty) color = PALETTE.dash_green;
+          else if (x.percent >= 0) {
+            color = colorScalePositive(x.percent);
+          } else {
+            color = colorScaleNegative(x.percent);
+          }
+        }
+
+        let point, polygone;
+
+        const itemPolygone = this.hotspotGeojson.features.find(
+          (geoZone) => geoZone.properties.DENOMMIN == x.origin
+        );
+
+        if (itemPolygone) {
+          switch (itemPolygone.geometry.type) {
+            case "MultiPolygon":
+              polygone = turf.multiPolygon(itemPolygone.geometry.coordinates);
+              break;
+            case "Polygon":
+              polygone = turf.polygon(itemPolygone.geometry.coordinates);
+              break;
+            default:
+              break;
+          }
+        }
+
+        this.hospotPointJson.features.map((itemPoint) => {
+          if (itemPoint && itemPoint.geometry.type == "Point") {
+            point = turf.point(itemPoint.geometry.coordinates);
+            if (point && polygone) {
+              const isPoint = turf.booleanPointInPolygon(point, polygone);
+              if (isPoint) {
+                colorExpression.push([
+                  "==",
+                  ["get", dataKey],
+                  itemPoint.properties.DENOMMIN,
+                ]);
+                colorExpression.push(color);
+
+                if (
+                  fluxHotspotType &&
+                  itemPoint.properties.Type_ != fluxHotspotType.name
+                ) {
+                  return;
+                }
+
+                const hotspot = this.getHospot(this.fluxGeoOptions[0]);
+                if (hotspot && itemPoint.properties.Type_ != hotspot.name) {
+                  return;
+                }
+                hotspotPoint.push(itemPoint.properties.DENOMMIN);
+              }
+            }
+          }
+        });
+      });
+
+      if (hotspotPoint.length == 0) {
+        return;
+      }
+
+      colorExpression.push("white");
+
+      const pointColorExpression = [];
+      pointColorExpression.push("case");
+      HOTSPOT_TYPE.forEach((item) => {
+        pointColorExpression.push(["==", ["get", "Type_"], item.name]);
+        pointColorExpression.push(item.color);
+      });
+      pointColorExpression.push("white");
+
       map.U.addCircle(
         SOURCE_HOTSPOT_POINT_GEOJSON,
         SOURCE_HOTSPOT_POINT_GEOJSON,
         map.U.properties({
-          circleColor: "black",
+          circleColor: pointColorExpression,
           circleOpacity: [
             "match",
             ["get", dataKey],
-            features.map((x) => x.origin),
-            0.9,
+            [...new Set(hotspotPoint)],
+            1,
             0,
           ],
-          circleRadius: ["interpolate", ["linear"], ["zoom"], 0, 0.2, 22, 6],
+          circleRadius: ["interpolate", ["linear"], ["zoom"], 0, 0.1, 22, 8],
         }),
         this.drcSourceId
       );
+
       map.U.addFill(
         SOURCE_HOTSPOT_GEOJSON,
         SOURCE_HOTSPOT_GEOJSON,
@@ -1155,7 +1532,12 @@ export default {
 
       this.flux30FeaturesData = features;
       map.on("mousemove", SOURCE_HOTSPOT_GEOJSON, this.flux30mouseMove);
-
+      map.on(
+        "mousemove",
+        SOURCE_HOTSPOT_POINT_GEOJSON,
+        this.flux30PointmouseMove
+      );
+      map.on("click", SOURCE_HOTSPOT_GEOJSON, this.flux30Click);
       map.on("mouseout", SOURCE_HOTSPOT_GEOJSON, this.mouseOut);
     },
     zoomByArea(area) {
@@ -1314,7 +1696,7 @@ export default {
             if (mapFlyOptions.zoom) {
               optionsHatched.zoom = mapFlyOptions.zoom;
             }
-            map.resize();
+            this.mapResize();
             map.flyTo(optionsHatched);
             break;
         }
@@ -1323,12 +1705,18 @@ export default {
       }
     },
     flux24RemoveLayer() {
-      if (this.activeMenu==3) {
+      if (this.activeMenu == 3) {
         return;
       }
       map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
       map.off("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
       map.off("mousemove", SOURCE_HOTSPOT_GEOJSON, this.flux30mouseMove);
+      map.off(
+        "mousemove",
+        SOURCE_HOTSPOT_POINT_GEOJSON,
+        this.flux30PointmouseMove
+      );
+      map.off("click", SOURCE_HOTSPOT_GEOJSON, this.flux30Click);
       map.off(
         "mousemove",
         "fluxCircleDataLayer",
@@ -1346,6 +1734,7 @@ export default {
         "fluxCircleDataLayer",
         SOURCE_HOTSPOT_GEOJSON,
         SOURCE_HOTSPOT_POINT_GEOJSON,
+        AFRICELL_HEALTH_ZONE,
       ]);
     },
     fluxHatchedStyle(
@@ -1658,9 +2047,9 @@ export default {
         (x) => x.properties.origin == name
       );
       this.$set(this.ArcLayerSelectedObject, "position", {
-          top: e.point.y,
-          left: e.point.x,
-        });
+        top: e.point.y,
+        left: e.point.x,
+      });
       if (feature) {
         value = feature.properties.percent;
 
@@ -1669,7 +2058,7 @@ export default {
           percent: feature.properties.percent,
         });
       } else {
-        this.$set(this.ArcLayerSelectedObject, "item",  {
+        this.$set(this.ArcLayerSelectedObject, "item", {
           origin: name,
         });
       }
@@ -1709,6 +2098,42 @@ export default {
         this.$set(this.ArcLayerSelectedObject, "item", null);
       }
     },
+    flux30PointmouseMove(e) {
+      if (this.activeMenu != 1) {
+        return;
+      }
+      // const coordinates = e.features[0].geometry.coordinates[0].slice();
+
+      const item = e.features[0].properties;
+
+      const name = item["DENOMMIN"];
+
+      if (item) {
+        this.$set(this.ArcLayerSelectedObject, "position", {
+          top: e.point.y,
+          left: e.point.x,
+        });
+        this.$set(this.ArcLayerSelectedObject, "item", {
+          origin: item.DENOMMIN,
+          type:HOTSPOT_TYPE.find(x=>x.name==item.Type_)?.pseudo
+        });
+      } else {
+        this.$set(this.ArcLayerSelectedObject, "item", null);
+      }
+    },
+    flux30Click(e) {
+      if (this.activeMenu != 1) {
+        return;
+      }
+
+      const item = e.features[0].properties;
+      const name = item["DENOMMIN"];
+      let value = null;
+      const feature = this.flux30FeaturesData.find((x) => x.origin == name);
+      if (feature) {
+        this.setFluxHotspotClicked(feature.origin);
+      }
+    },
     mouseOut(e) {
       if (this.activeMenu != 1) {
         return;
@@ -1721,14 +2146,14 @@ export default {
         center: this.defaultCenterCoordinates,
         zoom: 3.5,
       };
-      if (this.activeMenu==3) {
-          return;
+      if (this.activeMenu == 3) {
+        return;
       }
       this.flux24RemoveLayer();
       map.U.removeLayer([EPIDEMIC_LAYER]);
       map.U.removeSource(COVID_HOSPITAL_SOURCE);
       this.RemoveOrientationMakers();
-      map.resize();
+      this.mapResize();
       switch (this.activeMenu) {
         case 1:
           this.flux24Func();
@@ -1779,6 +2204,16 @@ export default {
       }
       return coordinates;
     },
+    getHospotCoordonate(name) {
+      let coordinates = [];
+      const feature = this.hotspotGeojsonCentered.features.find(
+        (x) => x.properties.DENOMMIN == name
+      );
+      if (feature) {
+        coordinates = feature.geometry.coordinates;
+      }
+      return coordinates;
+    },
     getHealthZoneArea(value, geoGranularity) {
       let area = null;
       let dataKey = "name";
@@ -1824,17 +2259,6 @@ export default {
     },
     fluxArcStyle(flux24Data, geoGranularity, legendHover = null) {
       this.flux24RemoveLayer();
-      // map.off("mousemove", HATCHED_MOBILITY_LAYER, this.mouseMove);
-      // map.off("mouseout", HATCHED_MOBILITY_LAYER, this.mouseOut);
-      // map.U.removeSource(["fluxCircleDataSource"]);
-      // map.U.removeLayer([HATCHED_MOBILITY_LAYER, "arc", "fluxCircleDataLayer"]);
-      // map.off("mouseleave", "fluxCircleDataLayer");
-      // map.off("mouseleave", "fluxCircleDataLayer");
-      // if (deck) {
-      //   deck.finalize();
-      // }
-      // this.deck.finalize();
-
       if (this.fluxType == 3 || this.fluxType == 4) {
         return;
       }
@@ -2137,7 +2561,7 @@ export default {
           { hover: true }
         );
       }
-      const feature= e.features[0];
+      const feature = e.features[0];
       // const HTML = `<div>${origin} ${volume ? `: ${volume}` : ""}</div>`;
 
       if (feature) {
@@ -2149,7 +2573,7 @@ export default {
         this.$set(this.ArcLayerSelectedObject, "item", {
           origin: origin,
           percent: volume,
-          isAbsolute:true,
+          isAbsolute: true,
         });
       } else {
         this.$set(this.ArcLayerSelectedObject, "item", null);
@@ -2162,7 +2586,7 @@ export default {
     infrastructure() {
       if (this.hospitals) {
         map.U.removeSource(COVID_HOSPITAL_SOURCE);
-        map.resize();
+        this.mapResize();
         map.flyTo({
           center: this.getHealthZoneCoordonate("Kinshasa", 2),
           easing: function (t) {
@@ -2505,7 +2929,7 @@ export default {
       if (!this.medicalOrientations || this.medicalOrientations.length == 0) {
         return;
       }
-      map.resize();
+      this.mapResize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
         easing: function (t) {
