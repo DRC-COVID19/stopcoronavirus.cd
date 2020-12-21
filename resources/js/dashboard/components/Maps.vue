@@ -2115,7 +2115,7 @@ export default {
         });
         this.$set(this.ArcLayerSelectedObject, "item", {
           origin: item.DENOMMIN,
-          type:HOTSPOT_TYPE.find(x=>x.name==item.Type_)?.pseudo
+          type: HOTSPOT_TYPE.find((x) => x.name == item.Type_)?.pseudo,
         });
       } else {
         this.$set(this.ArcLayerSelectedObject, "item", null);
@@ -2585,8 +2585,20 @@ export default {
     },
     infrastructure() {
       if (this.hospitals) {
+        map.off("mouseleave", "covid9HospitalsLayer", this.infranstructureMouseOut);
+        map.off(
+          "mousemove",
+          "covid9HospitalsLayer",
+          this.infrastructureMouseMove
+        );
+        map.off(
+          "click",
+          "covid9HospitalsLayer",
+          this.infranstructureMouseClick
+        );
         map.U.removeSource(COVID_HOSPITAL_SOURCE);
-        this.mapResize();
+        // this.mapResize();
+        map.resize();
         map.flyTo({
           center: this.getHealthZoneCoordonate("Kinshasa", 2),
           easing: function (t) {
@@ -2595,9 +2607,9 @@ export default {
           pitch: 10,
           zoom: 9,
         });
-        this.map.addSource(COVID_HOSPITAL_SOURCE, this.hospitals);
+        map.addSource(COVID_HOSPITAL_SOURCE, this.hospitals);
 
-        this.map.addLayer({
+        map.addLayer({
           id: "covid9HospitalsLayer",
           type: "symbol",
           source: COVID_HOSPITAL_SOURCE,
@@ -2619,31 +2631,37 @@ export default {
           },
         });
 
-        // const popup = new Mapbox.Popup({
-        //   closeButton: false,
-        //   closeOnClick: false,
-        // });
 
-        const mouseMove = (e) => {
-          const coordinates = e.features[0].geometry.coordinates.slice();
-          const {
-            name,
-            address,
-            beds,
-            occupied_beds,
-            masks,
-            respirators,
-            occupied_respirators,
-            confirmed,
-            dead,
-            sick,
-            healed,
-            last_update,
-            resuscitation_beds,
-            occupied_resuscitation_beds,
-          } = e.features[0].properties;
 
-          const HTML = `<div class="row">
+        map.on("mouseleave", "covid9HospitalsLayer", this.infranstructureMouseOut);
+        map.on(
+          "mousemove",
+          "covid9HospitalsLayer",
+          this.infrastructureMouseMove
+        );
+        map.on("click", "covid9HospitalsLayer", this.infranstructureMouseClick);
+      }
+    },
+    infrastructureMouseMove(e) {
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const {
+        name,
+        address,
+        beds,
+        occupied_beds,
+        masks,
+        respirators,
+        occupied_respirators,
+        confirmed,
+        dead,
+        sick,
+        healed,
+        last_update,
+        resuscitation_beds,
+        occupied_resuscitation_beds,
+      } = e.features[0].properties;
+
+      const HTML = `<div class="row">
                 <div class="col-12 bold text-center hospital-name">${name}</div>
                 <hr class="col-12 m-0 p-0">
 
@@ -2670,21 +2688,13 @@ export default {
                 <div class="col-9 small">Respirateurs occupés</div>
                 <div class="col-3 bold">${occupied_respirators}</div>
             </div>`;
-          popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
-        };
-
-        const mouseOut = (e) => {
-          this.popup.remove();
-        };
-
-        const mouseClick = (e) => {
-          this.selectHospital(e.features[0].properties);
-        };
-
-        this.map.on("mouseleave", "covid9HospitalsLayer", mouseOut);
-        this.map.on("mousemove", "covid9HospitalsLayer", mouseMove);
-        this.map.on("click", "covid9HospitalsLayer", mouseClick);
-      }
+      popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
+    },
+    infranstructureMouseClick(e) {
+      this.selectHospital(e.features[0].properties);
+    },
+    infranstructureMouseOut(){
+      popup.remove();
     },
     mapGeoJsonSourceFlux(fluxGeoGranularity) {
       map.removeLayer(this.drcSourceId);
