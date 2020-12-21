@@ -839,7 +839,7 @@ export default {
       property = "confirmed",
       geoGranularity = 2
     ) {
-      this.mapResize();
+      map.resize();
       map.flyTo({
         center: this.defaultCenterCoordinates,
         easing: function (t) {
@@ -879,6 +879,10 @@ export default {
       });
       colorExpression.push("white");
 
+      map.off("click", EPIDEMIC_LAYER, this.epidemologyMouseClick);
+      map.off("mousemove", EPIDEMIC_LAYER, this.epidemologyMouseMove);
+      map.off("mouseout", EPIDEMIC_LAYER, this.infranstructureMouseOut);
+
       //remove previous layer
       map.U.removeLayer([EPIDEMIC_LAYER]);
 
@@ -896,44 +900,6 @@ export default {
           return;
         }
       }
-
-      //Added layer
-      // map.U.addFill(
-      //   this.hashedLayerId,
-      //   geoGranularity == 1 ? this.drcSourceId : this.drcHealthZone,
-      //   map.U.properties({
-      //     fillColor: colorExpression,
-      //     fillOpacity: [
-      //       "match",
-      //       ["get", dataKey],
-      //       features.map(x => x.properties.name),
-      //       0.9,
-      //       0
-      //     ]
-      //   }),
-      //   this.drcSourceId
-      // );
-
-      // map.U.addCircle(
-      //   this.hashedLayerId,
-      //   geoGranularity == 1
-      //     ? sourceHealthProvinceGeojsonCentered
-      //     : sourceHealthZoneGeojsonCentered,
-      //   map.U.properties({
-      //     circleColor: colorExpression,
-      //     circlePitchAlignment: "map",
-      //     circleBlur: 0.1,
-      //     circleRaduis: 200,
-      //     cirleOpacity: [
-      //       "match",
-      //       ["get", dataKey],
-      //       features.map(x => x.properties.name),
-      //       0.7,
-      //       0
-      //     ],
-      //   }),
-      //   this.drcSourceId
-      // );
 
       map.addLayer({
         id: EPIDEMIC_LAYER,
@@ -974,50 +940,33 @@ export default {
         },
       });
 
-      const mouseMove = (e) => {
-        const coordinates = e.features[0].geometry.coordinates[0].slice();
+      this.epidemologyData = { features, property };
+      map.on("click", EPIDEMIC_LAYER, this.epidemologyMouseClick);
+      map.on("mousemove", EPIDEMIC_LAYER, this.epidemologyMouseMove);
+      map.on("mouseout", EPIDEMIC_LAYER, this.infranstructureMouseOut);
+    },
+    epidemologyMouseClick(e) {
+      const item = e.features[0].properties;
 
-        const item = e.features[0].properties;
+      const featureName = item["Zone+Peupl"] ?? item["name"];
+      const feature = this.epidemologyData.features.find(
+        (x) => x.properties.name == featureName
+      );
+      popup.remove();
+      if (!feature) {
+        return;
+      }
 
-        const name = item["Zone+Peupl"] ?? item["name"];
-        let value = null;
-        const feature = features.find((x) => x.properties.name == name);
+      const {
+        name,
+        confirmed,
+        dead,
+        sick,
+        healed,
+        last_update,
+      } = feature.properties;
 
-        if (feature) {
-          value = feature.properties[property];
-        }
-        const HTML = `<div>${name} ${
-          value ? `: ${Math.round(value)} cas` : ""
-        }</div>`;
-
-        // Populate the popup and set its coordinates
-        // based on the feature found.
-        popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
-      };
-
-      const mouseOut = () => {
-        popup.remove();
-      };
-
-      const mouseClick = (e) => {
-        const item = e.features[0].properties;
-
-        const featureName = item["Zone+Peupl"] ?? item["name"];
-        const feature = features.find((x) => x.properties.name == featureName);
-        if (!features) {
-          return;
-        }
-        popup.remove();
-        const {
-          name,
-          confirmed,
-          dead,
-          sick,
-          healed,
-          last_update,
-        } = feature.properties;
-
-        const template = `<div class="topToolTip" >
+      const template = `<div class="topToolTip" >
                             <div class="titleInfoBox">${name}</div>
                             <div class="statLine">
                                 <div class="stat total">Nombre total de cas</div>
@@ -1043,21 +992,27 @@ export default {
                             </div>
                             <i></i>
                         </div>`;
-        new Mapbox.Popup()
-          .setLngLat(e.lngLat)
-          .setHTML(template)
-          .addTo(this.map);
-      };
+      popup.setLngLat(e.lngLat).setHTML(template).addTo(this.map);
+    },
+    epidemologyMouseMove(e) {
+      const item = e.features[0].properties;
 
-      map.off("mousemove", EPIDEMIC_LAYER, mouseMove);
-      map.off("mouseout", EPIDEMIC_LAYER, mouseOut);
-      map.off("click", EPIDEMIC_LAYER, mouseClick);
+      const name = item["Zone+Peupl"] ?? item["name"];
+      let value = null;
+      const feature = this.epidemologyData.features.find(
+        (x) => x.properties.name == name
+      );
 
-      map.on("click", EPIDEMIC_LAYER, mouseClick);
+      if (feature) {
+        value = feature.properties[this.epidemologyData.property];
+      }
+      const HTML = `<div>${name} ${
+        value ? `: ${Math.round(value)} cas` : ""
+      }</div>`;
 
-      map.on("mousemove", EPIDEMIC_LAYER, mouseMove);
-
-      map.on("mouseout", EPIDEMIC_LAYER, mouseOut);
+      // Populate the popup and set its coordinates
+      // based on the feature found.
+      popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
     },
     flux30Func() {
       this.mapResize();
@@ -2146,6 +2101,9 @@ export default {
         center: this.defaultCenterCoordinates,
         zoom: 3.5,
       };
+
+      popup.remove();
+
       if (this.activeMenu == 3) {
         return;
       }
@@ -2585,7 +2543,11 @@ export default {
     },
     infrastructure() {
       if (this.hospitals) {
-        map.off("mouseleave", "covid9HospitalsLayer", this.infranstructureMouseOut);
+        map.off(
+          "mouseleave",
+          "covid9HospitalsLayer",
+          this.infranstructureMouseOut
+        );
         map.off(
           "mousemove",
           "covid9HospitalsLayer",
@@ -2631,9 +2593,11 @@ export default {
           },
         });
 
-
-
-        map.on("mouseleave", "covid9HospitalsLayer", this.infranstructureMouseOut);
+        map.on(
+          "mouseleave",
+          "covid9HospitalsLayer",
+          this.infranstructureMouseOut
+        );
         map.on(
           "mousemove",
           "covid9HospitalsLayer",
@@ -2693,7 +2657,7 @@ export default {
     infranstructureMouseClick(e) {
       this.selectHospital(e.features[0].properties);
     },
-    infranstructureMouseOut(){
+    infranstructureMouseOut() {
       popup.remove();
     },
     mapGeoJsonSourceFlux(fluxGeoGranularity) {
