@@ -69,7 +69,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`africell_prensence_card`"
           >
-            <div class="text-center">Title presence</div>
+            <div class="text-center">Evolution de la présence par rapport à la période de référence</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -114,7 +114,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`mobile_out_in_tot_card`"
           >
-            <div class="text-center">Title flow in</div>
+            <div class="text-center">Evolution du nombre d'entrées</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -178,7 +178,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`mobile_out_in_tot_card`"
           >
-            <div class="text-center">Title flow out</div>
+            <div class="text-center">Evolution du nombre de sorties</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -242,7 +242,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`mobile_out_in_tot_card`"
           >
-            <div class="text-center">Title flow tot</div>
+            <div class="text-center">Evolution du nombre d'entrées-sorties</div>
             <div class="chart-container">
               <canvas
                 height="200"

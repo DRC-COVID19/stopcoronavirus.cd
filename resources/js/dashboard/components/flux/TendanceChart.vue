@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { DRC_COVID_EVENT, PALETTE } from "../../config/env";
+import { DRC_COVID_EVENT, PALETTE, PREFERENCE_END } from "../../config/env";
 import Chart from "chart.js";
 import "../../lib/chartjs-plugin-annotation.min.js";
 import { mapState, mapMutations } from "vuex";
@@ -283,59 +283,24 @@ export default {
             },
           },
           // annotation: {
-          //   events: ["mouseenter", "mouseleave"],
           //   drawTime: "afterDraw",
-          //   annotations: DRC_COVID_EVENT.filter(
-          //     (x) =>
-          //       x.measures.some((z) =>
-          //         z.zones.some((y) =>
-          //           [...this.fluxGeoOptions, "ALL"].includes(y)
-          //         )
-          //       ) &&
-          //       new Date(x.date) >= minDate &&
-          //       new Date(x.date) <= maxDate
-          //   ).map((item, index, array) => {
-          //     let xAdjust = 0;
-          //     if (index == array.length - 1) {
-          //       xAdjust = 80;
-          //     }
-          //     return {
-          //       id: "line" + index,
+          //   annotations: [
+          //     {
+          //       id: "line 1",
           //       type: "line",
           //       mode: "vertical",
           //       scaleID: "x-axis-0",
-          //       value: new Date(item.date),
-          //       borderColor: item.isImportant
-          //         ? PALETTE.flux_presence
-          //         : PALETTE.flux_out_color,
-          //       borderWidth: item.isImportant ? 3 : 2,
+          //       value: new Date(PREFERENCE_END),
+          //       borderColor: PALETTE.flux_presence,
+          //       borderWidth: 1,
           //       label: {
           //         fontSize: 9,
-          //         xAdjust,
-          //         content: item.measures
-          //           .filter((x) =>
-          //             x.zones.some((y) =>
-          //               [...this.fluxGeoOptions, "ALL"].includes(y)
-          //             )
-          //           )
-          //           .map((x) => x.item),
+          //         content:"Référence",
           //         enabled: false,
           //         position: "top",
           //       },
-          //       onMouseenter(e) {
-          //         this.options.borderColor = PALETTE.flux_in_color;
-          //         this.options.label.enabled = true;
-          //         myLineChart2.update();
-          //       },
-          //       onMouseleave(e) {
-          //         this.options.borderColor = item.isImportant
-          //           ? PALETTE.flux_presence
-          //           : PALETTE.flux_out_color;
-          //         this.options.label.enabled = false;
-          //         myLineChart2.update();
-          //       },
-          //     };
-          //   }),
+          //     }
+          //   ]
           // },
           plugins: {
             crosshair: {
