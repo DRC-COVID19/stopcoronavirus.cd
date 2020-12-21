@@ -505,7 +505,7 @@ export default {
       switch (value) {
         case 1:
           this.fluxGeoOptions = this.fluxProvinces;
-          this.changeCalendarLimit(OBSERVATION_END_PROVINCE);
+          this.changeCalendarLimit(OBSERVATION_END);
           break;
         case 2:
           this.fluxGeoOptions = this.fluxZones;

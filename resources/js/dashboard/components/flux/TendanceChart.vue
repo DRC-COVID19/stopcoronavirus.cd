@@ -282,26 +282,26 @@ export default {
               },
             },
           },
-          annotation: {
-            drawTime: "afterDraw",
-            annotations: [
-              {
-                id: "line 1",
-                type: "line",
-                mode: "vertical",
-                scaleID: "x-axis-0",
-                value: new Date(PREFERENCE_END),
-                borderColor: PALETTE.flux_presence,
-                borderWidth: 1,
-                label: {
-                  fontSize: 9,
-                  content:"Référence",
-                  enabled: false,
-                  position: "top",
-                },
-              }
-            ]
-          },
+          // annotation: {
+          //   drawTime: "afterDraw",
+          //   annotations: [
+          //     {
+          //       id: "line 1",
+          //       type: "line",
+          //       mode: "vertical",
+          //       scaleID: "x-axis-0",
+          //       value: new Date(PREFERENCE_END),
+          //       borderColor: PALETTE.flux_presence,
+          //       borderWidth: 1,
+          //       label: {
+          //         fontSize: 9,
+          //         content:"Référence",
+          //         enabled: false,
+          //         position: "top",
+          //       },
+          //     }
+          //   ]
+          // },
           plugins: {
             crosshair: {
               sync: {

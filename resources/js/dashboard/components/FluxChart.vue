@@ -68,7 +68,7 @@
             v-show="this.flux30Daily.length > 0"
           >
             <b-card no-body class="cardtype1 mb-3 p-2">
-              <div class="general-top-title">Title</div>
+              <div class="general-top-title">Evolution de la présence par rapport à la période de référence</div>
               <div class="chart-container">
                 <canvas
                   height="200"
