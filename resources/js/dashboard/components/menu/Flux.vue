@@ -189,6 +189,7 @@ import {
   AFRICELL_OBSERVATION_START,
   AFRICELL_OBSERVATION_END,
   HOTSPOT_TYPE,
+  OBSERVATION_END_PROVINCE
 } from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
@@ -436,7 +437,7 @@ export default {
       this.referenceErrorMessage = null;
       this.resetFluxPredefinedControl();
     },
-    changeCalendarLimit() {
+    changeCalendarLimit(OBSERVATION_END) {
       this.dateRangePreference = {
         startDate: new Date(
           `${
@@ -504,11 +505,11 @@ export default {
       switch (value) {
         case 1:
           this.fluxGeoOptions = this.fluxProvinces;
-          this.changeCalendarLimit();
+          this.changeCalendarLimit(OBSERVATION_END_PROVINCE);
           break;
         case 2:
           this.fluxGeoOptions = this.fluxZones;
-          this.changeCalendarLimit();
+          this.changeCalendarLimit(OBSERVATION_END);
           break;
         case 3:
           this.clearObservationDate();
