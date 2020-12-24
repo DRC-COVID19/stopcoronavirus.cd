@@ -749,5 +749,6 @@ de revenus pour Kinshasa`,
     { id: -7, name: "ArretTransport", color: '#cc0099', pseudo: 'Arrêt Transport' },
     { id: -8, name: "Restaurants", color: '#99cc00', pseudo: 'Restaurants' },
     { id: -9, name: "Hopitaux", color: '#E419FF', pseudo: 'Hôpitaux' },
-    { id: -10, name: "Cimetiere", color: '#CAE823', pseudo: "Cimetière" }
+    { id: -10, name: "Cimetiere", color: '#CAE823', pseudo: "Cimetière" },
+    { id: -11, name: 'Aéroport', color: 'blue', pseudo: "Aéroport" }
   ];

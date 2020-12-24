@@ -1334,6 +1334,7 @@ export default {
         pitch: 10,
         zoom: mapZoom,
       });
+      console.log('flux30MapsData',flux30MapsData);
       let features = [...flux30MapsData];
       const domaineMax = d3.max(features, (d) => d.percent);
       const domaineMin = d3.min(features, (d) => d.percent);
@@ -1468,6 +1469,8 @@ export default {
         }),
         this.drcSourceId
       );
+
+      console.log('features',features.map(x=>x.origin));
 
       map.U.addFill(
         SOURCE_HOTSPOT_GEOJSON,
