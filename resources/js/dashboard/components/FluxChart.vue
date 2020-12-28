@@ -1305,7 +1305,7 @@ export default {
             item.percent = (item.difference * 100) / item.volume_reference;
           } else {
             let indice = (x.length + 1) / 2;
-            item = x[indice];
+            item = x[indice-1];
           }
           dataFormatted.push({
             date: item.date,
@@ -1738,7 +1738,6 @@ export default {
       if (!fullscreen) {
         const buttonResetZoom = this.lineCharts[ref].crosshair.button;
         if (buttonResetZoom) {
-          console.log("buttonResetZoomd", buttonResetZoom);
           buttonResetZoom.click();
         }
 
