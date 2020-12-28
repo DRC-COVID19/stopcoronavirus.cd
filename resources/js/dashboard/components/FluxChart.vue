@@ -87,7 +87,7 @@
           <b-row align-h="start">
             <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
               <div
-                v-for="(item, index) in hotspotType.slice(0, 5)"
+                v-for="(item, index) in hotspotType.slice(0, 6)"
                 :key="index"
                 class="flux-chart-lenged-item"
                 @mouseenter="setFluxHotspotType(item)"
@@ -102,7 +102,7 @@
             </b-col>
             <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
               <div
-                v-for="(item, index) in hotspotType.slice(5, 10)"
+                v-for="(item, index) in hotspotType.slice(6, 11)"
                 :key="index"
                 class="flux-chart-lenged-item"
                 @mouseenter="setFluxHotspotType(item)"
