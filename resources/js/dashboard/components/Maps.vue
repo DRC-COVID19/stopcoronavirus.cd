@@ -1469,7 +1469,6 @@ export default {
         this.drcSourceId
       );
 
-
       map.U.addFill(
         SOURCE_HOTSPOT_GEOJSON,
         SOURCE_HOTSPOT_GEOJSON,
