@@ -1,21 +1,24 @@
 <template>
   <FullScreen id="fullscreen" :link="reference" @change="fullscreenChange">
-
-      <b-row no-gutters class="global_province_container">
-        <b-col cols="12" class="pr-0">
-          <b-card no-body class="p-2 rounded-0 cardtype2">
-            <div class="general-top-title">{{title}}</div>
-            <canvas height="600" :ref="reference" class="global_province"></canvas>
-          </b-card>
-        </b-col>
-      </b-row>
+    <b-row no-gutters class="global_province_container">
+      <b-col cols="12" class="pr-0">
+        <b-card no-body class="p-2 rounded-0 cardtype2">
+          <div class="general-top-title">{{ title }}</div>
+          <canvas
+            height="600"
+            :ref="reference"
+            class="global_province"
+          ></canvas>
+        </b-card>
+      </b-col>
+    </b-row>
   </FullScreen>
 </template>
 
 <script>
 import Chart from "chart.js";
 import "chartjs-plugin-annotation";
-Chart.defaults.global.defaultFontFamily = 'Rubik,sans-serif';
+Chart.defaults.global.defaultFontFamily = "Rubik,sans-serif";
 import { PALETTE } from "../../config/env";
 export default {
   props: {
@@ -133,7 +136,7 @@ export default {
             label: "Observation",
             backgroundColor: this.color,
             borderColor: this.color,
-            barThickness:12,
+            barThickness: 12,
             borderWidth: 1,
             data: localData.map((d) => d.percent),
           },
@@ -166,9 +169,9 @@ export default {
                   beginAtZero: false,
                   fontSize: 9,
                   callback: (value, index, values) => {
-                    const sign=value<0?'-':'';
+                    const sign = value < 0 ? "-" : "";
                     return `${sign}${this.formatCash(value)}`;
-                  }
+                  },
                 },
               },
             ],
@@ -184,7 +187,7 @@ export default {
                     } else {
                       return label;
                     }
-                  }
+                  },
                 },
               },
             ],
@@ -207,12 +210,20 @@ export default {
         this.$refs[this.reference].getContext("2d"),
         this.configBarChart
       );
+      if (localData && localData.length <= 5) {
+        this.configBarChart.height = "200px";
+        this.$refs[this.reference].style.height = "200px";
+        this.$refs[this.reference].style.maxHeight = "200px";
+      } else {
+        this.configBarChart.height = "600px";
+        this.$refs[this.reference].style.height = "600px";
+        this.$refs[this.reference].style.maxHeight = "600px";
+      }
     },
-    fullscreenChange(fullscreen,ref) {
+    fullscreenChange(fullscreen, ref) {
       const element = this.$refs[ref];
       const parent_2 = element.parentElement.parentElement;
       if (!fullscreen) {
-
         element.style.height = "400px";
         element.height = "400px";
         element.style.width = "700px";

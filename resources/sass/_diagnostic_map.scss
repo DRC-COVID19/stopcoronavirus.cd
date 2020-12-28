@@ -465,10 +465,10 @@
             > div {
               height: inherit;
               .global_province_container {
-                height: calc(100vh - 220px);
+                // height: calc(100vh - 220px);
                 @include card-style;
                 div {
-                  height: inherit;
+                  // height: inherit;
                   .global_province {
                     height: 100% !important;
                   }
