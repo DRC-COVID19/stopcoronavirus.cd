@@ -32003,10 +32003,6 @@ h3 {
   height: inherit;
 }
 
-.side-right > .card > .tabs > .tab-content > .card-body > div > div .global_province_container {
-  height: calc(100vh - 220px);
-}
-
 .side-right > .card > .tabs > .tab-content > .card-body > div > div .global_province_container .card {
   background: white;
   border-radius: unset;
@@ -32015,10 +32011,6 @@ h3 {
 
 .side-right > .card > .tabs > .tab-content > .card-body > div > div .global_province_container .card .card-header {
   background: white;
-}
-
-.side-right > .card > .tabs > .tab-content > .card-body > div > div .global_province_container div {
-  height: inherit;
 }
 
 .side-right > .card > .tabs > .tab-content > .card-body > div > div .global_province_container div .global_province {

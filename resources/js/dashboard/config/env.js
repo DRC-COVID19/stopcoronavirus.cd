@@ -34,11 +34,11 @@ export const
   HOTSPOT_PREFERENCE_START = "2020-05-17",
   HOTSPOT_PREFERENCE_END = "2020-05-24",
   HOTSPOT_OBSERVATION_START = "2020-05-25",
-  HOTSPOT_OBSERVATION_END = "2020-08-11",
+  HOTSPOT_OBSERVATION_END = "2020-10-26",
   FLUX_LAST_UPDATE = "2020-08-12",
   AFRICELL_LAST_UPDATE = "2020-11-03",
   OBSERVATION_START = "2020-03-19",
-  OBSERVATION_END = "2020-08-12",
+  OBSERVATION_END = "2020-10-26",
   OBSERVATION_END_PROVINCE = "2020-10-26",
   AFRICELL_OBSERVATION_START = "2020-03-18",
   AFRICELL_OBSERVATION_END = "2020-11-03",
@@ -749,5 +749,6 @@ de revenus pour Kinshasa`,
     { id: -7, name: "ArretTransport", color: '#cc0099', pseudo: 'Arrêt Transport' },
     { id: -8, name: "Restaurants", color: '#99cc00', pseudo: 'Restaurants' },
     { id: -9, name: "Hopitaux", color: '#E419FF', pseudo: 'Hôpitaux' },
-    { id: -10, name: "Cimetiere", color: '#CAE823', pseudo: "Cimetière" }
+    { id: -10, name: "Cimetiere", color: '#CAE823', pseudo: "Cimetière" },
+    { id: -11, name: 'Aéroport', color: 'blue', pseudo: "Aéroport" }
   ];
