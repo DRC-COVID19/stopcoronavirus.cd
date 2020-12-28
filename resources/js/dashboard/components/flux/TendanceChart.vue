@@ -105,7 +105,11 @@ export default {
             item.volume = volume1 + volume2;
           } else {
             let indice = (x.length + 1) / 2;
-            item = x[indice];
+            item = x[indice-1];
+          }
+          if (!item) {
+            // console.log('x',x);
+            return;
           }
           localData.push({
             date: item.date,
@@ -134,6 +138,10 @@ export default {
           element = localData
             .filter((x) => x.date == item.date)
             .sort((a, b) => b.y - a.y)[0];
+        }
+        if (!element) {
+            // console.log('item',item);
+            return;
         }
 
         return {
