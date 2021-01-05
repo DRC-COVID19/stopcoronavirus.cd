@@ -740,15 +740,15 @@ de revenus pour Kinshasa`,
     },
   ],
   HOTSPOT_TYPE = [
-    { id: -1, name: "BureauAdmin", color: '#1E3B27', pseudo: 'Bureau Admin' },
+    { id: -1, name: "BureauAdmin", color: '#1A3322', pseudo: 'Bureau Admin' },
     { id: -2, name: "Eglises", color: "#339966", pseudo: 'Eglises' },
-    { id: -3, name: "Commerces", color: '#6E436A', pseudo: 'Commerces' },
-    { id: -4, name: "Supermarche", color: '#9D00B3', pseudo: 'Supermarché' },
+    { id: -3, name: "Commerces", color: '#EBDDA7', pseudo: 'Commerces' },
+    { id: -4, name: "Supermarche", color: '#AB5D32', pseudo: 'Supermarché' },
     { id: -5, name: "Marché", color: '#F6C2FF', pseudo: 'Marché' },
     { id: -6, name: "Hotels", color: '#669900', pseudo: 'Hôtels' },
     { id: -7, name: "ArretTransport", color: '#cc0099', pseudo: 'Arrêt Transport' },
     { id: -8, name: "Restaurants", color: '#99cc00', pseudo: 'Restaurants' },
-    { id: -9, name: "Hopitaux", color: '#E419FF', pseudo: 'Hôpitaux' },
-    { id: -10, name: "Cimetiere", color: '#CAE823', pseudo: "Cimetière" },
-    { id: -11, name: 'Aéroport', color: 'blue', pseudo: "Aéroport" }
+    { id: -9, name: "Hopitaux", color: '#E31A1C', pseudo: 'Hôpitaux' },
+    { id: -10, name: "Cimetiere", color: '#F7D116', pseudo: "Cimetière" },
+    { id: -11, name: 'Aéroport', color: '#0C46E8', pseudo: "Aéroport" }
   ];
