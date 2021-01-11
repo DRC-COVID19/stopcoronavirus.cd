@@ -51,7 +51,10 @@
             :class="{ active: afriFluxType == 3 }"
             @click="selectFluxType(3)"
           >
-            <h5 class="percent-title">Présence</h5>
+            <h5 class="percent-title">
+              Pourcentage de changement de la présence par rapport à la
+              référence
+            </h5>
 
             <div class="percent flux-presence">
               {{ volume ? volume.toFixed(2) : "NAN" }}%​
@@ -69,7 +72,9 @@
             class="mb-3 p-2 cardtype1"
             :ref="`africell_prensence_card`"
           >
-            <div class="text-center">Evolution de la présence par rapport à la période de référence</div>
+            <div class="text-center">
+              Evolution de la présence par rapport à la période de référence
+            </div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -96,7 +101,9 @@
             :class="{ active: afriFluxType == 1 }"
             @click="selectFluxType(1)"
           >
-            <h5 class="percent-title">flow_in</h5>
+            <h5 class="percent-title">
+              % de changement du nombre d'entrées
+            </h5>
 
             <div class="percent flux-in-color">
               {{ flow_in ? flow_in.toFixed(2) : "NAN" }}%​
@@ -133,7 +140,9 @@
           v-show="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">Title flow in</div>
+            <div class="text-center">
+              % de changement du nombre d'entrées par origine
+            </div>
             <div class="chart-container">
               <canvas
                 height="400"
@@ -160,7 +169,9 @@
             :class="{ active: afriFluxType == 2 }"
             @click="selectFluxType(2)"
           >
-            <h5 class="percent-title">flow_out</h5>
+            <h5 class="percent-title">
+              % de changement du nombre de sorties
+            </h5>
 
             <div class="percent flux-out-color">
               {{ flow_out ? flow_out.toFixed(2) : "NAN" }}%​
@@ -197,7 +208,9 @@
           v-show="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">Title flow out</div>
+            <div class="text-center">
+              % de changement du nombre de sorties par destination
+            </div>
             <div class="chart-container">
               <canvas
                 height="400"
@@ -224,7 +237,9 @@
             :class="{ active: afriFluxType == 4 }"
             @click="selectFluxType(4)"
           >
-            <h5 class="percent-title">Flow_tot</h5>
+            <h5 class="percent-title">
+              % de changement du nombre d'entrées-sorties
+            </h5>
 
             <div class="percent dash-green">
               {{ flow_tot ? flow_tot.toFixed(2) : "NAN" }}%​
@@ -261,7 +276,9 @@
           v-show="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">Title flow tot</div>
+            <div class="text-center">
+              % de changement du nombre d'entrées-sorties par zone
+            </div>
             <div class="chart-container">
               <canvas
                 height="400"
@@ -422,7 +439,7 @@ export default {
   methods: {
     ...mapMutations(["setAfriFluxType"]),
     africellDataInOut(data) {
-      if (!this.isStartEnd || data.length==0) {
+      if (!this.isStartEnd || data.length == 0) {
         return;
       }
       const inData = data.filter((x) => x.zoneB == this.targetZone[0]);
@@ -459,7 +476,7 @@ export default {
     mobileCalc(data, ref, color, attribut, title = null) {
       // const max = d3.max(data.map((x) => x.percent));
       // const min = d3.min(data.map((x) => x.percent));
-      if (data.length==0) {
+      if (data.length == 0) {
         return;
       }
       if (data.length > 0) {

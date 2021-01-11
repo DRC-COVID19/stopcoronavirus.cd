@@ -57,7 +57,7 @@ export default {
       if (this.user.roles === undefined) return routesAccess;
 
       if (this.user.roles.find((a) => a.name == ADMIN_DASHBOARD)) {
-        routesAccess.push({ slug: "Administration dashboard", name: "home" });
+        routesAccess.push({ slug: "Dashboard", name: "home" });
       }
 
       if (this.user.roles.find((a) => a.name == AGENT_HOSPITAL)) {

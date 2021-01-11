@@ -1,181 +1,2177 @@
-{"type":"FeatureCollection", "features": [
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.317937,-4.297454]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Beach Ngobila","LATTITUDE":-4.297454,"LONGITUTE":15.317937,"Index":13,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.317937,-4.301284]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Place de la gare centrale","LATTITUDE":-4.301284,"LONGITUTE":15.317937,"Index":83,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.319361,-4.299534]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Sep Congo","LATTITUDE":-4.299534,"LONGITUTE":15.319361,"Index":89,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.317937,-4.301284]},"properties":{"Type_":"Eglises","DENOMMIN":"Paroisse Saint - Anne","LATTITUDE":-4.301284,"LONGITUTE":15.317937,"Index":161,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.317487,-4.30014]},"properties":{"Type_":"Hotels","DENOMMIN":"Hotel Béatrice","LATTITUDE":-4.30014,"LONGITUTE":15.317487,"Index":214,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.317458,-4.304084]},"properties":{"Type_":"Supermarche","DENOMMIN":"New Lys I","LATTITUDE":-4.304084,"LONGITUTE":15.317458,"Index":67,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.320513,-4.305381]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Institut National des arts","LATTITUDE":-4.305381,"LONGITUTE":15.320513,"Index":105,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.319028,-4.306496]},"properties":{"Type_":"Commerces","DENOMMIN":"INA et ORCA","LATTITUDE":-4.306496,"LONGITUTE":15.319028,"Index":146,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.312816,-4.304047]},"properties":{"Type_":"Hotels","DENOMMIN":"Hotel Memling","LATTITUDE":-4.304047,"LONGITUTE":15.312816,"Index":213,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.311778,-4.298331]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Congo Trade Center","LATTITUDE":-4.298331,"LONGITUTE":15.311778,"Index":85,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.311778,-4.298331]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"FBNBANK HQ","LATTITUDE":-4.298331,"LONGITUTE":15.311778,"Index":86,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.313187,-4.301678]},"properties":{"Type_":"Commerces","DENOMMIN":"Fiesta Club","LATTITUDE":-4.301678,"LONGITUTE":15.313187,"Index":143,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.312266,-4.300345]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"ONATRA","LATTITUDE":-4.300345,"LONGITUTE":15.312266,"Index":87,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.308782,-4.301182]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Rond Point Forescom","LATTITUDE":-4.301182,"LONGITUTE":15.308782,"Index":90,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.309722,-4.300212]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Equity Bank Congo","LATTITUDE":-4.300212,"LONGITUTE":15.309722,"Index":88,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.311321,-4.302459]},"properties":{"Type_":"Restaurants","DENOMMIN":"Al Dar","LATTITUDE":-4.302459,"LONGITUTE":15.311321,"Index":235,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.309845,-4.303628]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Immeuble BCDC","LATTITUDE":-4.303628,"LONGITUTE":15.309845,"Index":99,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.30771,-4.304409]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Poste","LATTITUDE":-4.304409,"LONGITUTE":15.30771,"Index":100,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.306667,-4.304278]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"K towers","LATTITUDE":-4.304278,"LONGITUTE":15.306667,"Index":98,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.308486,-4.30613]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Hotel  de ville de Kinshasa","LATTITUDE":-4.30613,"LONGITUTE":15.308486,"Index":106,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.306576,-4.302997]},"properties":{"Type_":"Hopitaux","DENOMMIN":"Centre medical de la Mongala","LATTITUDE":-4.302997,"LONGITUTE":15.306576,"Index":207,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.310085,-4.307414]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"DGI","LATTITUDE":-4.307414,"LONGITUTE":15.310085,"Index":107,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.312767,-4.310591]},"properties":{"Type_":"Marché","DENOMMIN":"Marché central","LATTITUDE":-4.310591,"LONGITUTE":15.312767,"Index":219,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.322473,-4.314793]},"properties":{"Type_":"Eglises","DENOMMIN":"Eglise Saint Paul","LATTITUDE":-4.314793,"LONGITUTE":15.322473,"Index":167,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.315447,-4.313275]},"properties":{"Type_":"Eglises","DENOMMIN":"Eglise locale Cbfc Itaga","LATTITUDE":-4.313275,"LONGITUTE":15.315447,"Index":166,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.311618,-4.315363]},"properties":{"Type_":"Eglises","DENOMMIN":"Mosqué Centrale Usoke","LATTITUDE":-4.315363,"LONGITUTE":15.311618,"Index":165,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.308727,-4.313721]},"properties":{"Type_":"Eglises","DENOMMIN":"Eglise des assemblées de dieu","LATTITUDE":-4.313721,"LONGITUTE":15.308727,"Index":164,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.306173,-4.308866]},"properties":{"Type_":"Hopitaux","DENOMMIN":"Hopital general de Kinshasa","LATTITUDE":-4.308866,"LONGITUTE":15.306173,"Index":208,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.308054,-4.308776]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Avenue du Commerce et Kasa vubu","LATTITUDE":-4.308776,"LONGITUTE":15.308054,"Index":47,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.305122,-4.304348]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Immeuble Congo Futur","LATTITUDE":-4.304348,"LONGITUTE":15.305122,"Index":108,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.305122,-4.304348]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"SONAS","LATTITUDE":-4.304348,"LONGITUTE":15.305122,"Index":109,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.299699,-4.304794]},"properties":{"Type_":"Commerces","DENOMMIN":"Le premier Shopping Mall","LATTITUDE":-4.304794,"LONGITUTE":15.299699,"Index":145,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.297049,-4.304351]},"properties":{"Type_":"Restaurants","DENOMMIN":"Le roi du Cossa","LATTITUDE":-4.304351,"LONGITUTE":15.297049,"Index":245,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.297408,-4.301842]},"properties":{"Type_":"Restaurants","DENOMMIN":"Majestic River","LATTITUDE":-4.301842,"LONGITUTE":15.297408,"Index":244,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.298953,-4.30349]},"properties":{"Type_":"Restaurants","DENOMMIN":"Dvin","LATTITUDE":-4.30349,"LONGITUTE":15.298953,"Index":243,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.297408,-4.301842]},"properties":{"Type_":"Restaurants","DENOMMIN":"Majestic River","LATTITUDE":-4.301842,"LONGITUTE":15.297408,"Index":244,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.299964,-4.309526]},"properties":{"Type_":"Eglises","DENOMMIN":"Eglise Notre Dame de Fatima","LATTITUDE":-4.309526,"LONGITUTE":15.299964,"Index":162,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.295353,-4.306669]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Brussels airlines Check in","LATTITUDE":-4.306669,"LONGITUTE":15.295353,"Index":102,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.295775,-4.307079]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Immeuble CNSS","LATTITUDE":-4.307079,"LONGITUTE":15.295775,"Index":111,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.296108,-4.311187]},"properties":{"Type_":"Commerces","DENOMMIN":"Golf de Kinshasa","LATTITUDE":-4.311187,"LONGITUTE":15.296108,"Index":147,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.293458,-4.313102]},"properties":{"Type_":"Restaurants","DENOMMIN":"Le cerlce gourmand","LATTITUDE":-4.313102,"LONGITUTE":15.293458,"Index":250,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.289882,-4.308079]},"properties":{"Type_":"Hotels","DENOMMIN":"Hotel Sultani","LATTITUDE":-4.308079,"LONGITUTE":15.289882,"Index":216,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.287449,-4.311188]},"properties":{"Type_":"Supermarche","DENOMMIN":"Petite Epicerie","LATTITUDE":-4.311188,"LONGITUTE":15.287449,"Index":66,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.284033,-4.30768]},"properties":{"Type_":"Eglises","DENOMMIN":"Paroisse Sacre Coeur","LATTITUDE":-4.30768,"LONGITUTE":15.284033,"Index":163,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.281425,-4.30937]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Ministere des affaires etrangeres","LATTITUDE":-4.30937,"LONGITUTE":15.281425,"Index":115,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.281253,-4.311172]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Palais de Justice","LATTITUDE":-4.311172,"LONGITUTE":15.281253,"Index":116,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.286629,-4.317705]},"properties":{"Type_":"Commerces","DENOMMIN":"Hall de la Gombe","LATTITUDE":-4.317705,"LONGITUTE":15.286629,"Index":148,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.285727,-4.315749]},"properties":{"Type_":"Restaurants","DENOMMIN":"Spirit Club","LATTITUDE":-4.315749,"LONGITUTE":15.285727,"Index":251,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.282962,-4.313589]},"properties":{"Type_":"ArretTransport","DENOMMIN":"HOTEL DU GOUVERNEMENT","LATTITUDE":-4.313589,"LONGITUTE":15.282962,"Index":16,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.276328,-4.310868]},"properties":{"Type_":"Commerces","DENOMMIN":"Shark Club","LATTITUDE":-4.310868,"LONGITUTE":15.276328,"Index":150,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.278704,-4.317082]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Rond point Batetela","LATTITUDE":-4.317082,"LONGITUTE":15.278704,"Index":17,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.274304,-4.318434]},"properties":{"Type_":"Hotels","DENOMMIN":"Hotel Rotana","LATTITUDE":-4.318434,"LONGITUTE":15.274304,"Index":218,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.27533,-4.320217]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Socimat","LATTITUDE":-4.320217,"LONGITUTE":15.27533,"Index":24,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.270098,-4.311994]},"properties":{"Type_":"Hotels","DENOMMIN":"Hotel du Fleuve","LATTITUDE":-4.311994,"LONGITUTE":15.270098,"Index":217,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.278196,-4.322972]},"properties":{"Type_":"ArretTransport","DENOMMIN":"ROND POINT SAFRICAS","LATTITUDE":-4.322972,"LONGITUTE":15.278196,"Index":15,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.279063,-4.323286]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Haute Cour Militaire","LATTITUDE":-4.323286,"LONGITUTE":15.279063,"Index":118,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.26901,-4.317423]},"properties":{"Type_":"Eglises","DENOMMIN":"Mosqué Shia","LATTITUDE":-4.317423,"LONGITUTE":15.26901,"Index":171,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.271578,-4.322639]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"HQ Orange","LATTITUDE":-4.322639,"LONGITUTE":15.271578,"Index":120,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.272369,-4.322089]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Utex Africa","LATTITUDE":-4.322089,"LONGITUTE":15.272369,"Index":22,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.274704,-4.328705]},"properties":{"Type_":"Supermarche","DENOMMIN":"Shoprite","LATTITUDE":-4.328705,"LONGITUTE":15.274704,"Index":70,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.276185,-4.329454]},"properties":{"Type_":"Commerces","DENOMMIN":"Decathlon","LATTITUDE":-4.329454,"LONGITUTE":15.276185,"Index":153,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.279411,-4.328822]},"properties":{"Type_":"Restaurants","DENOMMIN":"Chez Cactus","LATTITUDE":-4.328822,"LONGITUTE":15.279411,"Index":254,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.262836,-4.331456]},"properties":{"Type_":"Restaurants","DENOMMIN":"O'Poeta","LATTITUDE":-4.331456,"LONGITUTE":15.262836,"Index":257,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.264129,-4.330938]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Komoriko","LATTITUDE":-4.330938,"LONGITUTE":15.264129,"Index":26,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.266048,-4.338542]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Stade velodrome","LATTITUDE":-4.338542,"LONGITUTE":15.266048,"Index":30,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.266046,-4.338633]},"properties":{"Type_":"Commerces","DENOMMIN":"Stade  Velodrome","LATTITUDE":-4.338633,"LONGITUTE":15.266046,"Index":159,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.264828,-4.334777]},"properties":{"Type_":"Restaurants","DENOMMIN":"Gabriella","LATTITUDE":-4.334777,"LONGITUTE":15.264828,"Index":265,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.265928,-4.336868]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Western Union CFC","LATTITUDE":-4.336868,"LONGITUTE":15.265928,"Index":124,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.265282,-4.346173]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Telecel Alingwa","LATTITUDE":-4.346173,"LONGITUTE":15.265282,"Index":35,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.2629,-4.345307]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret marylene","LATTITUDE":-4.345307,"LONGITUTE":15.2629,"Index":36,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.264582,-4.346258]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Station Macampagne (ML)","LATTITUDE":-4.346258,"LONGITUTE":15.264582,"Index":34,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.262332,-4.345075]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Camp Babylone","LATTITUDE":-4.345075,"LONGITUTE":15.262332,"Index":31,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.270884,-4.33445]},"properties":{"Type_":"Hopitaux","DENOMMIN":"Hopital general de Kintambo","LATTITUDE":-4.33445,"LONGITUTE":15.270884,"Index":210,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.281386,-4.341727]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Bakayaou","LATTITUDE":-4.341727,"LONGITUTE":15.281386,"Index":49,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.250517,-4.32978]},"properties":{"Type_":"Commerces","DENOMMIN":"Parc Mont Ngaliema","LATTITUDE":-4.32978,"LONGITUTE":15.250517,"Index":152,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.250549,-4.331674]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Maison communale de Ngaliema","LATTITUDE":-4.331674,"LONGITUTE":15.250549,"Index":127,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.251912,-4.330957]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"INBTP","LATTITUDE":-4.330957,"LONGITUTE":15.251912,"Index":128,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.260533,-4.339644]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Centre hospitalier de Kintambo","LATTITUDE":-4.339644,"LONGITUTE":15.260533,"Index":32,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.25784,-4.33361]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Rond point Kintambo","LATTITUDE":-4.33361,"LONGITUTE":15.25784,"Index":28,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.25916,-4.336659]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Rond point Kwado","LATTITUDE":-4.336659,"LONGITUTE":15.25916,"Index":29,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.257984,-4.331107]},"properties":{"Type_":"Commerces","DENOMMIN":"Symphonie des arts","LATTITUDE":-4.331107,"LONGITUTE":15.257984,"Index":151,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.255527,-4.329064]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Chanic Chantier Naval","LATTITUDE":-4.329064,"LONGITUTE":15.255527,"Index":125,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.255527,-4.329064]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Poste de Ngaliema","LATTITUDE":-4.329064,"LONGITUTE":15.255527,"Index":126,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.244015,-4.335461]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"TASOK","LATTITUDE":-4.335461,"LONGITUTE":15.244015,"Index":129,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.241245,-4.34265]},"properties":{"Type_":"ArretTransport","DENOMMIN":"CHK","LATTITUDE":-4.34265,"LONGITUTE":15.241245,"Index":25,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.239126,-4.348896]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Station Centre Superieur","LATTITUDE":-4.348896,"LONGITUTE":15.239126,"Index":23,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.239174,-4.347325]},"properties":{"Type_":"Supermarche","DENOMMIN":"Kin Marché Binza","LATTITUDE":-4.347325,"LONGITUTE":15.239174,"Index":74,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.249355,-4.349002]},"properties":{"Type_":"Restaurants","DENOMMIN":"La grande Marmitte","LATTITUDE":-4.349002,"LONGITUTE":15.249355,"Index":269,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.250175,-4.350225]},"properties":{"Type_":"Supermarche","DENOMMIN":"Food Market Macampagne","LATTITUDE":-4.350225,"LONGITUTE":15.250175,"Index":79,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.250828,-4.35138]},"properties":{"Type_":"Restaurants","DENOMMIN":"La villa Hesbaye","LATTITUDE":-4.35138,"LONGITUTE":15.250828,"Index":268,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.256205,-4.354174]},"properties":{"Type_":"Commerces","DENOMMIN":"Immeuble Cosmos","LATTITUDE":-4.354174,"LONGITUTE":15.256205,"Index":155,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.262232,-4.351767]},"properties":{"Type_":"Restaurants","DENOMMIN":"Maman colonel Ngaliema","LATTITUDE":-4.351767,"LONGITUTE":15.262232,"Index":267,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.267062,-4.360195]},"properties":{"Type_":"Cimetiere","DENOMMIN":"Cimetiere Kintambo","LATTITUDE":-4.360195,"LONGITUTE":15.267062,"Index":133,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.262862,-4.35799]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret Sakombi","LATTITUDE":-4.35799,"LONGITUTE":15.262862,"Index":33,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.236628,-4.326212]},"properties":{"Type_":"Restaurants","DENOMMIN":"Mimoza plaza","LATTITUDE":-4.326212,"LONGITUTE":15.236628,"Index":271,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.232465,-4.330416]},"properties":{"Type_":"Restaurants","DENOMMIN":"Site touristique Maman Wiva","LATTITUDE":-4.330416,"LONGITUTE":15.232465,"Index":272,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.212177,-4.342041]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Carrigres","LATTITUDE":-4.342041,"LONGITUTE":15.212177,"Index":130,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.219756,-4.338637]},"properties":{"Type_":"Supermarche","DENOMMIN":"SK Supermarche","LATTITUDE":-4.338637,"LONGITUTE":15.219756,"Index":76,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.221778,-4.335545]},"properties":{"Type_":"Supermarche","DENOMMIN":"Kjelsie","LATTITUDE":-4.335545,"LONGITUTE":15.221778,"Index":75,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.223885,-4.336]},"properties":{"Type_":"Commerces","DENOMMIN":"Terrain de Basket du camp Mimosa","LATTITUDE":-4.336,"LONGITUTE":15.223885,"Index":157,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.223123,-4.332159]},"properties":{"Type_":"Restaurants","DENOMMIN":"La voix du fleuve","LATTITUDE":-4.332159,"LONGITUTE":15.223123,"Index":273,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.184513,-4.367199]},"properties":{"Type_":"BureauAdmin","DENOMMIN":"Safricas","LATTITUDE":-4.367199,"LONGITUTE":15.184513,"Index":131,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.186219,-4.359698]},"properties":{"Type_":"Commerces","DENOMMIN":"Mbudi Nature","LATTITUDE":-4.359698,"LONGITUTE":15.186219,"Index":158,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.205628,-4.354005]},"properties":{"Type_":"Cimetiere","DENOMMIN":"Kinsuka","LATTITUDE":-4.354005,"LONGITUTE":15.205628,"Index":136,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.2397906,-4.3580679]},"properties":{"Type_":"ArretTransport","DENOMMIN":"DGC barre","LATTITUDE":-4.3580679,"LONGITUTE":15.2397906,"Index":18,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.243216,-4.362]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Gramalique","LATTITUDE":-4.362,"LONGITUTE":15.243216,"Index":19,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.256517,-4.376818]},"properties":{"Type_":"Commerces","DENOMMIN":"Terrain de Delvaux","LATTITUDE":-4.376818,"LONGITUTE":15.256517,"Index":156,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.257861,-4.37832]},"properties":{"Type_":"Marché","DENOMMIN":"Marché Delvaux","LATTITUDE":-4.37832,"LONGITUTE":15.257861,"Index":231,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.258298,-4.374133]},"properties":{"Type_":"Restaurants","DENOMMIN":"Salle de fete de la Rotonde Binza","LATTITUDE":-4.374133,"LONGITUTE":15.258298,"Index":270,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.256583,-4.406777]},"properties":{"Type_":"ArretTransport","DENOMMIN":"UPN Djelo","LATTITUDE":-4.406777,"LONGITUTE":15.256583,"Index":21,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.260579,-4.390131]},"properties":{"Type_":"Supermarche","DENOMMIN":"Peloustore KIVU","LATTITUDE":-4.390131,"LONGITUTE":15.260579,"Index":72,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.259856,-4.382902]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Binza Arret Maternite","LATTITUDE":-4.382902,"LONGITUTE":15.259856,"Index":27,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.284416,-4.350786]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Inga","LATTITUDE":-4.350786,"LONGITUTE":15.284416,"Index":51,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.285303,-4.350617]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Avenue Kimbondo et Pierre Mulele","LATTITUDE":-4.350617,"LONGITUTE":15.285303,"Index":44,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.284131,-4.37408]},"properties":{"Type_":"Marché","DENOMMIN":"Marché selembao","LATTITUDE":-4.37408,"LONGITUTE":15.284131,"Index":228,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.286178,-4.370404]},"properties":{"Type_":"Eglises","DENOMMIN":"ECC/CEC/BUMBU","LATTITUDE":-4.370404,"LONGITUTE":15.286178,"Index":206,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.291688,-4.347944]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Arret moulard","LATTITUDE":-4.347944,"LONGITUTE":15.291688,"Index":50,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.289149,-4.349188]},"properties":{"Type_":"Marché","DENOMMIN":"Marché Moulaert ou Marché Lumumba","LATTITUDE":-4.349188,"LONGITUTE":15.289149,"Index":227,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.300903,-4.366263]},"properties":{"Type_":"Marché","DENOMMIN":"Wenze Muselu/Gambela","LATTITUDE":-4.366263,"LONGITUTE":15.300903,"Index":229,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.300628,-4.351855]},"properties":{"Type_":"Marché","DENOMMIN":"Marché BAYAKA","LATTITUDE":-4.351855,"LONGITUTE":15.300628,"Index":226,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.296574,-4.326304]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Avenue kalembelembe et Pierre Mulele (ASSANEF)","LATTITUDE":-4.326304,"LONGITUTE":15.296574,"Index":45,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.306243,-4.32349]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Huillerie","LATTITUDE":-4.32349,"LONGITUTE":15.306243,"Index":46,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.31537,-4.396538]},"properties":{"Type_":"Eglises","DENOMMIN":"Baruti Tabernacle","LATTITUDE":-4.396538,"LONGITUTE":15.31537,"Index":201,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.319645,-4.393452]},"properties":{"Type_":"Eglises","DENOMMIN":"Centre Missionnaire Evangelique au Congo","LATTITUDE":-4.393452,"LONGITUTE":15.319645,"Index":199,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.317878,-4.393333]},"properties":{"Type_":"Eglises","DENOMMIN":"CE TRINITE","LATTITUDE":-4.393333,"LONGITUTE":15.317878,"Index":200,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.311535,-4.393104]},"properties":{"Type_":"Eglises","DENOMMIN":"Paroisse Marie Reine des Apotres","LATTITUDE":-4.393104,"LONGITUTE":15.311535,"Index":203,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.313091,-4.388729]},"properties":{"Type_":"Eglises","DENOMMIN":"St.Christine","LATTITUDE":-4.388729,"LONGITUTE":15.313091,"Index":204,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.31462,-4.389887]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Rond Point Ngaba","LATTITUDE":-4.389887,"LONGITUTE":15.31462,"Index":42,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.318392,-4.374545]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Croissement Kianza et Universite","LATTITUDE":-4.374545,"LONGITUTE":15.318392,"Index":48,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.248467,-4.448616]},"properties":{"Type_":"Marché","DENOMMIN":"Matadi Kibala","LATTITUDE":-4.448616,"LONGITUTE":15.248467,"Index":233,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.242454,-4.450294]},"properties":{"Type_":"Cimetiere","DENOMMIN":"Cimetiere Kimbanseke","LATTITUDE":-4.450294,"LONGITUTE":15.242454,"Index":138,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.218732,-4.491931]},"properties":{"Type_":"Cimetiere","DENOMMIN":"Benseke Nouvelle Cite","LATTITUDE":-4.491931,"LONGITUTE":15.218732,"Index":134,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.183985,-4.522548]},"properties":{"Type_":"Cimetiere","DENOMMIN":"Cimetiere Mingadi","LATTITUDE":-4.522548,"LONGITUTE":15.183985,"Index":140,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.236893,-4.471472]},"properties":{"Type_":"Cimetiere","DENOMMIN":"Cimetiere sans fil","LATTITUDE":-4.471472,"LONGITUTE":15.236893,"Index":137,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.359359,-4.475098]},"properties":{"Type_":"Cimetiere","DENOMMIN":"Cimetiere Ndjili Brasserie","LATTITUDE":-4.475098,"LONGITUTE":15.359359,"Index":139,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.328676,-4.422761]},"properties":{"Type_":"Marché","DENOMMIN":"Marché Bumbu","LATTITUDE":-4.422761,"LONGITUTE":15.328676,"Index":223,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.341366,-4.425577]},"properties":{"Type_":"Marché","DENOMMIN":"Maché De Kadi","LATTITUDE":-4.425577,"LONGITUTE":15.341366,"Index":222,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.316305,-4.417746]},"properties":{"Type_":"Marché","DENOMMIN":"Marché de Mbanza Lemba","LATTITUDE":-4.417746,"LONGITUTE":15.316305,"Index":224,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.315177,-4.414084]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Intendance (UNIKIN)","LATTITUDE":-4.414084,"LONGITUTE":15.315177,"Index":43,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.347397,-4.391996]},"properties":{"Type_":"Marché","DENOMMIN":"Marché Matete","LATTITUDE":-4.391996,"LONGITUTE":15.347397,"Index":230,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.327646,-4.388988]},"properties":{"Type_":"Eglises","DENOMMIN":"Eglise FEPACO Nzambe Malamu","LATTITUDE":-4.388988,"LONGITUTE":15.327646,"Index":196,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.328401,-4.387227]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Lemba Terminus","LATTITUDE":-4.387227,"LONGITUTE":15.328401,"Index":38,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.329373,-4.389764]},"properties":{"Type_":"Eglises","DENOMMIN":"Paroisse Saint Benoit","LATTITUDE":-4.389764,"LONGITUTE":15.329373,"Index":195,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.332431,-4.388593]},"properties":{"Type_":"Eglises","DENOMMIN":"eglise les Semeurs","LATTITUDE":-4.388593,"LONGITUTE":15.332431,"Index":194,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.335366,-4.37961]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Rond point super lemba","LATTITUDE":-4.37961,"LONGITUTE":15.335366,"Index":39,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.336248,-4.384077]},"properties":{"Type_":"Eglises","DENOMMIN":"eglise protestante de lemba","LATTITUDE":-4.384077,"LONGITUTE":15.336248,"Index":191,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.335709,-4.382183]},"properties":{"Type_":"Marché","DENOMMIN":"Marché de super lemba","LATTITUDE":-4.382183,"LONGITUTE":15.335709,"Index":225,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.335733,-4.384633]},"properties":{"Type_":"Eglises","DENOMMIN":"Saint Augustin de Lemba","LATTITUDE":-4.384633,"LONGITUTE":15.335733,"Index":192,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.336911,-4.376859]},"properties":{"Type_":"Eglises","DENOMMIN":"Eglise Kimbanguiste","LATTITUDE":-4.376859,"LONGITUTE":15.336911,"Index":188,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.340406,-4.376054]},"properties":{"Type_":"Eglises","DENOMMIN":"Paroisse Notre-Dame d'Afrique","LATTITUDE":-4.376054,"LONGITUTE":15.340406,"Index":189,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.340562,-4.378751]},"properties":{"Type_":"Eglises","DENOMMIN":"Eglise La Semence Seeds Church","LATTITUDE":-4.378751,"LONGITUTE":15.340562,"Index":187,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.338378,-4.37247]},"properties":{"Type_":"Commerces","DENOMMIN":"FIKIN","LATTITUDE":-4.37247,"LONGITUTE":15.338378,"Index":160,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.344851,-4.376305]},"properties":{"Type_":"Eglises","DENOMMIN":"CREFM Eglise La Compassion","LATTITUDE":-4.376305,"LONGITUTE":15.344851,"Index":185,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.348966,-4.373042]},"properties":{"Type_":"Eglises","DENOMMIN":"Ministere combat spirituel","LATTITUDE":-4.373042,"LONGITUTE":15.348966,"Index":184,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.353134,-4.372162]},"properties":{"Type_":"Eglises","DENOMMIN":"Terrain d'Assemblee des Temoins de Jeohovah","LATTITUDE":-4.372162,"LONGITUTE":15.353134,"Index":182,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.351617,-4.375963]},"properties":{"Type_":"Eglises","DENOMMIN":"Eglise Neo Apostolique RDC Ouest","LATTITUDE":-4.375963,"LONGITUTE":15.351617,"Index":183,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.352492,-4.382152]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Pont Matete","LATTITUDE":-4.382152,"LONGITUTE":15.352492,"Index":40,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.357668,-4.361655]},"properties":{"Type_":"Eglises","DENOMMIN":"Centre Evangelique Emmanuel Langa-langa","LATTITUDE":-4.361655,"LONGITUTE":15.357668,"Index":173,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.37012,-4.378647]},"properties":{"Type_":"Eglises","DENOMMIN":"eglise de Jesus-Christ des saints des derniers jours","LATTITUDE":-4.378647,"LONGITUTE":15.37012,"Index":181,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.37329,-4.385948]},"properties":{"Type_":"Eglises","DENOMMIN":"Communaute Evagelique La Presence de Dieu/ MASINA","LATTITUDE":-4.385948,"LONGITUTE":15.37329,"Index":179,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.369036,-4.379931]},"properties":{"Type_":"Eglises","DENOMMIN":"Paroisse Marie Auxiliatrice","LATTITUDE":-4.379931,"LONGITUTE":15.369036,"Index":180,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.370533,-4.38032]},"properties":{"Type_":"Eglises","DENOMMIN":"Ejcev Nouvelle Alliance Bima","LATTITUDE":-4.38032,"LONGITUTE":15.370533,"Index":177,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.37226,-4.379421]},"properties":{"Type_":"Eglises","DENOMMIN":"eglise Source de vie","LATTITUDE":-4.379421,"LONGITUTE":15.37226,"Index":176,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.372221,-4.406363]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Place sainte therese","LATTITUDE":-4.406363,"LONGITUTE":15.372221,"Index":55,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.376832,-4.398432]},"properties":{"Type_":"Marché","DENOMMIN":"Marché Mangobo","LATTITUDE":-4.398432,"LONGITUTE":15.376832,"Index":221,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.370506,-4.388886]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Quartier 1 (croissement Boulevard Lumumba)","LATTITUDE":-4.388886,"LONGITUTE":15.370506,"Index":56,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.376957,-4.386681]},"properties":{"Type_":"Eglises","DENOMMIN":"Eglise Catholique Divin Maître","LATTITUDE":-4.386681,"LONGITUTE":15.376957,"Index":178,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.349406,-4.34033]},"properties":{"Type_":"Eglises","DENOMMIN":"le pain de vie","LATTITUDE":-4.34033,"LONGITUTE":15.349406,"Index":172,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.344345,-4.330715]},"properties":{"Type_":"Eglises","DENOMMIN":"Mosqué Kingabwa","LATTITUDE":-4.330715,"LONGITUTE":15.344345,"Index":170,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.379016,-4.371679]},"properties":{"Type_":"Eglises","DENOMMIN":"Centre d'Evangelisation Peniel CEPE","LATTITUDE":-4.371679,"LONGITUTE":15.379016,"Index":175,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.384479,-4.39243]},"properties":{"Type_":"Marché","DENOMMIN":"Marché de la liberté","LATTITUDE":-4.39243,"LONGITUTE":15.384479,"Index":220,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.38102,-4.39055]},"properties":{"Type_":"Hopitaux","DENOMMIN":"Hopital Biamba Marie Mutombo","LATTITUDE":-4.39055,"LONGITUTE":15.38102,"Index":211,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.332757,-4.351001]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Place Commercial de limete(7e rue)","LATTITUDE":-4.351001,"LONGITUTE":15.332757,"Index":53,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.329777,-4.340507]},"properties":{"Type_":"Hopitaux","DENOMMIN":"Hj Hospitals","LATTITUDE":-4.340507,"LONGITUTE":15.329777,"Index":209,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.329841,-4.318822]},"properties":{"Type_":"ArretTransport","DENOMMIN":"Bon Marché","LATTITUDE":-4.318822,"LONGITUTE":15.329841,"Index":52,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.330286,-4.318093]},"properties":{"Type_":"Eglises","DENOMMIN":"Paroisse saint Eloi","LATTITUDE":-4.318093,"LONGITUTE":15.330286,"Index":168,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.3338,-4.319652]},"properties":{"Type_":"Eglises","DENOMMIN":"Mosqué Bon Marche","LATTITUDE":-4.319652,"LONGITUTE":15.3338,"Index":169,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.374004,-4.371975]},"properties":{"Type_":"Eglises","DENOMMIN":"Paroisse saint François-Xavier","LATTITUDE":-4.371975,"LONGITUTE":15.374004,"Index":174,"remove":""}},
-{"type":"Feature","geometry":{"type":"Point","coordinates":[15.592172,-4.239315]},"properties":{"Type_":"Cimetiere","DENOMMIN":"Necropole entre ciel et terre","LATTITUDE":-4.239315,"LONGITUTE":15.592172,"Index":141,"remove":""}}
-]}
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.317937, -4.297454] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Beach Ngobila",
+        "LATTITUDE": -4.297454,
+        "LONGITUTE": 15.317937,
+        "Index": 13,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.317937, -4.301284] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Place de la gare centrale",
+        "LATTITUDE": -4.301284,
+        "LONGITUTE": 15.317937,
+        "Index": 83,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.319361, -4.299534] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Sep Congo",
+        "LATTITUDE": -4.299534,
+        "LONGITUTE": 15.319361,
+        "Index": 89,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.317937, -4.301284] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Paroisse Saint - Anne",
+        "LATTITUDE": -4.301284,
+        "LONGITUTE": 15.317937,
+        "Index": 161,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.317487, -4.30014] },
+      "properties": {
+        "Type_": "Hotels",
+        "DENOMMIN": "Hotel Béatrice",
+        "LATTITUDE": -4.30014,
+        "LONGITUTE": 15.317487,
+        "Index": 214,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.317458, -4.304084] },
+      "properties": {
+        "Type_": "Supermarche",
+        "DENOMMIN": "New Lys I",
+        "LATTITUDE": -4.304084,
+        "LONGITUTE": 15.317458,
+        "Index": 67,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.320513, -4.305381] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Institut National des arts",
+        "LATTITUDE": -4.305381,
+        "LONGITUTE": 15.320513,
+        "Index": 105,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.319028, -4.306496] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "INA et ORCA",
+        "LATTITUDE": -4.306496,
+        "LONGITUTE": 15.319028,
+        "Index": 146,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.312816, -4.304047] },
+      "properties": {
+        "Type_": "Hotels",
+        "DENOMMIN": "Hotel Memling",
+        "LATTITUDE": -4.304047,
+        "LONGITUTE": 15.312816,
+        "Index": 213,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.311778, -4.298331] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Congo Trade Center",
+        "LATTITUDE": -4.298331,
+        "LONGITUTE": 15.311778,
+        "Index": 85,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.311778, -4.298331] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "FBNBANK HQ",
+        "LATTITUDE": -4.298331,
+        "LONGITUTE": 15.311778,
+        "Index": 86,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.313187, -4.301678] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Fiesta Club",
+        "LATTITUDE": -4.301678,
+        "LONGITUTE": 15.313187,
+        "Index": 143,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.312266, -4.300345] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "ONATRA",
+        "LATTITUDE": -4.300345,
+        "LONGITUTE": 15.312266,
+        "Index": 87,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.308782, -4.301182] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Rond Point Forescom",
+        "LATTITUDE": -4.301182,
+        "LONGITUTE": 15.308782,
+        "Index": 90,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.309722, -4.300212] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Equity Bank Congo",
+        "LATTITUDE": -4.300212,
+        "LONGITUTE": 15.309722,
+        "Index": 88,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.311321, -4.302459] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Al Dar",
+        "LATTITUDE": -4.302459,
+        "LONGITUTE": 15.311321,
+        "Index": 235,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.309845, -4.303628] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Immeuble BCDC",
+        "LATTITUDE": -4.303628,
+        "LONGITUTE": 15.309845,
+        "Index": 99,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.30771, -4.304409] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Poste",
+        "LATTITUDE": -4.304409,
+        "LONGITUTE": 15.30771,
+        "Index": 100,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.306667, -4.304278] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "K towers",
+        "LATTITUDE": -4.304278,
+        "LONGITUTE": 15.306667,
+        "Index": 98,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.308486, -4.30613] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Hotel  de ville de Kinshasa",
+        "LATTITUDE": -4.30613,
+        "LONGITUTE": 15.308486,
+        "Index": 106,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.306576, -4.302997] },
+      "properties": {
+        "Type_": "Hopitaux",
+        "DENOMMIN": "Centre medical de la Mongala",
+        "LATTITUDE": -4.302997,
+        "LONGITUTE": 15.306576,
+        "Index": 207,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.310085, -4.307414] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "DGI",
+        "LATTITUDE": -4.307414,
+        "LONGITUTE": 15.310085,
+        "Index": 107,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.312767, -4.310591] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché central",
+        "LATTITUDE": -4.310591,
+        "LONGITUTE": 15.312767,
+        "Index": 219,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.322473, -4.314793] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Eglise Saint Paul",
+        "LATTITUDE": -4.314793,
+        "LONGITUTE": 15.322473,
+        "Index": 167,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.315447, -4.313275] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Eglise locale Cbfc Itaga",
+        "LATTITUDE": -4.313275,
+        "LONGITUTE": 15.315447,
+        "Index": 166,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.311618, -4.315363] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Mosqué Centrale Usoke",
+        "LATTITUDE": -4.315363,
+        "LONGITUTE": 15.311618,
+        "Index": 165,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.308727, -4.313721] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Eglise des assemblées de dieu",
+        "LATTITUDE": -4.313721,
+        "LONGITUTE": 15.308727,
+        "Index": 164,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.306173, -4.308866] },
+      "properties": {
+        "Type_": "Hopitaux",
+        "DENOMMIN": "Hopital general de Kinshasa",
+        "LATTITUDE": -4.308866,
+        "LONGITUTE": 15.306173,
+        "Index": 208,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.308054, -4.308776] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Avenue du Commerce et Kasa vubu",
+        "LATTITUDE": -4.308776,
+        "LONGITUTE": 15.308054,
+        "Index": 47,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.305122, -4.304348] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Immeuble Congo Futur",
+        "LATTITUDE": -4.304348,
+        "LONGITUTE": 15.305122,
+        "Index": 108,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.305122, -4.304348] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "SONAS",
+        "LATTITUDE": -4.304348,
+        "LONGITUTE": 15.305122,
+        "Index": 109,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.299699, -4.304794] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Le premier Shopping Mall",
+        "LATTITUDE": -4.304794,
+        "LONGITUTE": 15.299699,
+        "Index": 145,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.297049, -4.304351] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Le roi du Cossa",
+        "LATTITUDE": -4.304351,
+        "LONGITUTE": 15.297049,
+        "Index": 245,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.297408, -4.301842] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Majestic River",
+        "LATTITUDE": -4.301842,
+        "LONGITUTE": 15.297408,
+        "Index": 244,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.298953, -4.30349] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Dvin",
+        "LATTITUDE": -4.30349,
+        "LONGITUTE": 15.298953,
+        "Index": 243,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.297408, -4.301842] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Majestic River",
+        "LATTITUDE": -4.301842,
+        "LONGITUTE": 15.297408,
+        "Index": 244,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.299964, -4.309526] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Eglise Notre Dame de Fatima",
+        "LATTITUDE": -4.309526,
+        "LONGITUTE": 15.299964,
+        "Index": 162,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.295353, -4.306669] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Brussels airlines Check in",
+        "LATTITUDE": -4.306669,
+        "LONGITUTE": 15.295353,
+        "Index": 102,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.295775, -4.307079] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Immeuble CNSS",
+        "LATTITUDE": -4.307079,
+        "LONGITUTE": 15.295775,
+        "Index": 111,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.296108, -4.311187] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Golf de Kinshasa",
+        "LATTITUDE": -4.311187,
+        "LONGITUTE": 15.296108,
+        "Index": 147,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.293458, -4.313102] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Le cerlce gourmand",
+        "LATTITUDE": -4.313102,
+        "LONGITUTE": 15.293458,
+        "Index": 250,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.289882, -4.308079] },
+      "properties": {
+        "Type_": "Hotels",
+        "DENOMMIN": "Hotel Sultani",
+        "LATTITUDE": -4.308079,
+        "LONGITUTE": 15.289882,
+        "Index": 216,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.287449, -4.311188] },
+      "properties": {
+        "Type_": "Supermarche",
+        "DENOMMIN": "Petite Epicerie",
+        "LATTITUDE": -4.311188,
+        "LONGITUTE": 15.287449,
+        "Index": 66,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.284033, -4.30768] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Paroisse Sacre Coeur",
+        "LATTITUDE": -4.30768,
+        "LONGITUTE": 15.284033,
+        "Index": 163,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.281425, -4.30937] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Ministere des affaires etrangeres",
+        "LATTITUDE": -4.30937,
+        "LONGITUTE": 15.281425,
+        "Index": 115,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.281253, -4.311172] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Palais de Justice",
+        "LATTITUDE": -4.311172,
+        "LONGITUTE": 15.281253,
+        "Index": 116,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.286629, -4.317705] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Hall de la Gombe",
+        "LATTITUDE": -4.317705,
+        "LONGITUTE": 15.286629,
+        "Index": 148,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.285727, -4.315749] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Spirit Club",
+        "LATTITUDE": -4.315749,
+        "LONGITUTE": 15.285727,
+        "Index": 251,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.282962, -4.313589] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "HOTEL DU GOUVERNEMENT",
+        "LATTITUDE": -4.313589,
+        "LONGITUTE": 15.282962,
+        "Index": 16,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.276328, -4.310868] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Shark Club",
+        "LATTITUDE": -4.310868,
+        "LONGITUTE": 15.276328,
+        "Index": 150,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.278704, -4.317082] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Rond point Batetela",
+        "LATTITUDE": -4.317082,
+        "LONGITUTE": 15.278704,
+        "Index": 17,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.274304, -4.318434] },
+      "properties": {
+        "Type_": "Hotels",
+        "DENOMMIN": "Hotel Rotana",
+        "LATTITUDE": -4.318434,
+        "LONGITUTE": 15.274304,
+        "Index": 218,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.27533, -4.320217] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Socimat",
+        "LATTITUDE": -4.320217,
+        "LONGITUTE": 15.27533,
+        "Index": 24,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.270098, -4.311994] },
+      "properties": {
+        "Type_": "Hotels",
+        "DENOMMIN": "Hotel du Fleuve",
+        "LATTITUDE": -4.311994,
+        "LONGITUTE": 15.270098,
+        "Index": 217,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.278196, -4.322972] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "ROND POINT SAFRICAS",
+        "LATTITUDE": -4.322972,
+        "LONGITUTE": 15.278196,
+        "Index": 15,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.279063, -4.323286] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Haute Cour Militaire",
+        "LATTITUDE": -4.323286,
+        "LONGITUTE": 15.279063,
+        "Index": 118,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.26901, -4.317423] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Mosqué Shia",
+        "LATTITUDE": -4.317423,
+        "LONGITUTE": 15.26901,
+        "Index": 171,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.271578, -4.322639] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "HQ Orange",
+        "LATTITUDE": -4.322639,
+        "LONGITUTE": 15.271578,
+        "Index": 120,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.272369, -4.322089] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Utex Africa",
+        "LATTITUDE": -4.322089,
+        "LONGITUTE": 15.272369,
+        "Index": 22,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.274704, -4.328705] },
+      "properties": {
+        "Type_": "Supermarche",
+        "DENOMMIN": "Shoprite",
+        "LATTITUDE": -4.328705,
+        "LONGITUTE": 15.274704,
+        "Index": 70,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.276185, -4.329454] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Decathlon",
+        "LATTITUDE": -4.329454,
+        "LONGITUTE": 15.276185,
+        "Index": 153,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.279411, -4.328822] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Chez Cactus",
+        "LATTITUDE": -4.328822,
+        "LONGITUTE": 15.279411,
+        "Index": 254,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.262836, -4.331456] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "O'Poeta",
+        "LATTITUDE": -4.331456,
+        "LONGITUTE": 15.262836,
+        "Index": 257,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.264129, -4.330938] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Komoriko",
+        "LATTITUDE": -4.330938,
+        "LONGITUTE": 15.264129,
+        "Index": 26,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.266048, -4.338542] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Stade velodrome",
+        "LATTITUDE": -4.338542,
+        "LONGITUTE": 15.266048,
+        "Index": 30,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.266046, -4.338633] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Stade  Velodrome",
+        "LATTITUDE": -4.338633,
+        "LONGITUTE": 15.266046,
+        "Index": 159,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.264828, -4.334777] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Gabriella",
+        "LATTITUDE": -4.334777,
+        "LONGITUTE": 15.264828,
+        "Index": 265,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.265928, -4.336868] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Western Union CFC",
+        "LATTITUDE": -4.336868,
+        "LONGITUTE": 15.265928,
+        "Index": 124,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.265282, -4.346173] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Telecel Alingwa",
+        "LATTITUDE": -4.346173,
+        "LONGITUTE": 15.265282,
+        "Index": 35,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.2629, -4.345307] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret marylene",
+        "LATTITUDE": -4.345307,
+        "LONGITUTE": 15.2629,
+        "Index": 36,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.264582, -4.346258] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Station Macampagne (ML)",
+        "LATTITUDE": -4.346258,
+        "LONGITUTE": 15.264582,
+        "Index": 34,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.262332, -4.345075] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Camp Babylone",
+        "LATTITUDE": -4.345075,
+        "LONGITUTE": 15.262332,
+        "Index": 31,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.270884, -4.33445] },
+      "properties": {
+        "Type_": "Hopitaux",
+        "DENOMMIN": "Hopital general de Kintambo",
+        "LATTITUDE": -4.33445,
+        "LONGITUTE": 15.270884,
+        "Index": 210,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.281386, -4.341727] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Bakayaou",
+        "LATTITUDE": -4.341727,
+        "LONGITUTE": 15.281386,
+        "Index": 49,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.250517, -4.32978] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Parc Mont Ngaliema",
+        "LATTITUDE": -4.32978,
+        "LONGITUTE": 15.250517,
+        "Index": 152,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.250549, -4.331674] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Maison communale de Ngaliema",
+        "LATTITUDE": -4.331674,
+        "LONGITUTE": 15.250549,
+        "Index": 127,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.251912, -4.330957] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "INBTP",
+        "LATTITUDE": -4.330957,
+        "LONGITUTE": 15.251912,
+        "Index": 128,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.260533, -4.339644] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Centre hospitalier de Kintambo",
+        "LATTITUDE": -4.339644,
+        "LONGITUTE": 15.260533,
+        "Index": 32,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.25784, -4.33361] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Rond point Kintambo",
+        "LATTITUDE": -4.33361,
+        "LONGITUTE": 15.25784,
+        "Index": 28,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.25916, -4.336659] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Rond point Kwado",
+        "LATTITUDE": -4.336659,
+        "LONGITUTE": 15.25916,
+        "Index": 29,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.257984, -4.331107] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Symphonie des arts",
+        "LATTITUDE": -4.331107,
+        "LONGITUTE": 15.257984,
+        "Index": 151,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.255527, -4.329064] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Chanic Chantier Naval",
+        "LATTITUDE": -4.329064,
+        "LONGITUTE": 15.255527,
+        "Index": 125,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.255527, -4.329064] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Poste de Ngaliema",
+        "LATTITUDE": -4.329064,
+        "LONGITUTE": 15.255527,
+        "Index": 126,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.244015, -4.335461] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "TASOK",
+        "LATTITUDE": -4.335461,
+        "LONGITUTE": 15.244015,
+        "Index": 129,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.241245, -4.34265] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "CHK",
+        "LATTITUDE": -4.34265,
+        "LONGITUTE": 15.241245,
+        "Index": 25,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.239126, -4.348896] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Station Centre Superieur",
+        "LATTITUDE": -4.348896,
+        "LONGITUTE": 15.239126,
+        "Index": 23,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.239174, -4.347325] },
+      "properties": {
+        "Type_": "Supermarche",
+        "DENOMMIN": "Kin Marché Binza",
+        "LATTITUDE": -4.347325,
+        "LONGITUTE": 15.239174,
+        "Index": 74,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.249355, -4.349002] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "La grande Marmitte",
+        "LATTITUDE": -4.349002,
+        "LONGITUTE": 15.249355,
+        "Index": 269,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.250175, -4.350225] },
+      "properties": {
+        "Type_": "Supermarche",
+        "DENOMMIN": "Food Market Macampagne",
+        "LATTITUDE": -4.350225,
+        "LONGITUTE": 15.250175,
+        "Index": 79,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.250828, -4.35138] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "La villa Hesbaye",
+        "LATTITUDE": -4.35138,
+        "LONGITUTE": 15.250828,
+        "Index": 268,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.256205, -4.354174] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Immeuble Cosmos",
+        "LATTITUDE": -4.354174,
+        "LONGITUTE": 15.256205,
+        "Index": 155,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.262232, -4.351767] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Maman colonel Ngaliema",
+        "LATTITUDE": -4.351767,
+        "LONGITUTE": 15.262232,
+        "Index": 267,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.267062, -4.360195] },
+      "properties": {
+        "Type_": "Cimetiere",
+        "DENOMMIN": "Cimetiere Kintambo",
+        "LATTITUDE": -4.360195,
+        "LONGITUTE": 15.267062,
+        "Index": 133,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.262862, -4.35799] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret Sakombi",
+        "LATTITUDE": -4.35799,
+        "LONGITUTE": 15.262862,
+        "Index": 33,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.236628, -4.326212] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Mimoza plaza",
+        "LATTITUDE": -4.326212,
+        "LONGITUTE": 15.236628,
+        "Index": 271,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.232465, -4.330416] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Site touristique Maman Wiva",
+        "LATTITUDE": -4.330416,
+        "LONGITUTE": 15.232465,
+        "Index": 272,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.212177, -4.342041] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Carrigres",
+        "LATTITUDE": -4.342041,
+        "LONGITUTE": 15.212177,
+        "Index": 130,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.219756, -4.338637] },
+      "properties": {
+        "Type_": "Supermarche",
+        "DENOMMIN": "SK Supermarche",
+        "LATTITUDE": -4.338637,
+        "LONGITUTE": 15.219756,
+        "Index": 76,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.221778, -4.335545] },
+      "properties": {
+        "Type_": "Supermarche",
+        "DENOMMIN": "Kjelsie",
+        "LATTITUDE": -4.335545,
+        "LONGITUTE": 15.221778,
+        "Index": 75,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.223885, -4.336] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Terrain de Basket du camp Mimosa",
+        "LATTITUDE": -4.336,
+        "LONGITUTE": 15.223885,
+        "Index": 157,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.223123, -4.332159] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "La voix du fleuve",
+        "LATTITUDE": -4.332159,
+        "LONGITUTE": 15.223123,
+        "Index": 273,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.184513, -4.367199] },
+      "properties": {
+        "Type_": "BureauAdmin",
+        "DENOMMIN": "Safricas",
+        "LATTITUDE": -4.367199,
+        "LONGITUTE": 15.184513,
+        "Index": 131,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.186219, -4.359698] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Mbudi Nature",
+        "LATTITUDE": -4.359698,
+        "LONGITUTE": 15.186219,
+        "Index": 158,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.205628, -4.354005] },
+      "properties": {
+        "Type_": "Cimetiere",
+        "DENOMMIN": "Kinsuka",
+        "LATTITUDE": -4.354005,
+        "LONGITUTE": 15.205628,
+        "Index": 136,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.2397906, -4.3580679] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "DGC barre",
+        "LATTITUDE": -4.3580679,
+        "LONGITUTE": 15.2397906,
+        "Index": 18,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.243216, -4.362] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Gramalique",
+        "LATTITUDE": -4.362,
+        "LONGITUTE": 15.243216,
+        "Index": 19,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.256517, -4.376818] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "Terrain de Delvaux",
+        "LATTITUDE": -4.376818,
+        "LONGITUTE": 15.256517,
+        "Index": 156,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.257861, -4.37832] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché Delvaux",
+        "LATTITUDE": -4.37832,
+        "LONGITUTE": 15.257861,
+        "Index": 231,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.258298, -4.374133] },
+      "properties": {
+        "Type_": "Restaurants",
+        "DENOMMIN": "Salle de fete de la Rotonde Binza",
+        "LATTITUDE": -4.374133,
+        "LONGITUTE": 15.258298,
+        "Index": 270,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.256583, -4.406777] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "UPN Djelo",
+        "LATTITUDE": -4.406777,
+        "LONGITUTE": 15.256583,
+        "Index": 21,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.260579, -4.390131] },
+      "properties": {
+        "Type_": "Supermarche",
+        "DENOMMIN": "Peloustore KIVU",
+        "LATTITUDE": -4.390131,
+        "LONGITUTE": 15.260579,
+        "Index": 72,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.259856, -4.382902] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Binza Arret Maternite",
+        "LATTITUDE": -4.382902,
+        "LONGITUTE": 15.259856,
+        "Index": 27,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.284416, -4.350786] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Inga",
+        "LATTITUDE": -4.350786,
+        "LONGITUTE": 15.284416,
+        "Index": 51,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.285303, -4.350617] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Avenue Kimbondo et Pierre Mulele",
+        "LATTITUDE": -4.350617,
+        "LONGITUTE": 15.285303,
+        "Index": 44,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.284131, -4.37408] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché selembao",
+        "LATTITUDE": -4.37408,
+        "LONGITUTE": 15.284131,
+        "Index": 228,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.286178, -4.370404] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "ECC/CEC/BUMBU",
+        "LATTITUDE": -4.370404,
+        "LONGITUTE": 15.286178,
+        "Index": 206,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.291688, -4.347944] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Arret moulard",
+        "LATTITUDE": -4.347944,
+        "LONGITUTE": 15.291688,
+        "Index": 50,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.289149, -4.349188] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché Moulaert ou Marché Lumumba",
+        "LATTITUDE": -4.349188,
+        "LONGITUTE": 15.289149,
+        "Index": 227,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.300903, -4.366263] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Wenze Muselu/Gambela",
+        "LATTITUDE": -4.366263,
+        "LONGITUTE": 15.300903,
+        "Index": 229,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.300628, -4.351855] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché BAYAKA",
+        "LATTITUDE": -4.351855,
+        "LONGITUTE": 15.300628,
+        "Index": 226,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.296574, -4.326304] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Avenue kalembelembe et Pierre Mulele (ASSANEF)",
+        "LATTITUDE": -4.326304,
+        "LONGITUTE": 15.296574,
+        "Index": 45,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.306243, -4.32349] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Huillerie",
+        "LATTITUDE": -4.32349,
+        "LONGITUTE": 15.306243,
+        "Index": 46,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.31537, -4.396538] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Baruti Tabernacle",
+        "LATTITUDE": -4.396538,
+        "LONGITUTE": 15.31537,
+        "Index": 201,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.319645, -4.393452] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Centre Missionnaire Evangelique au Congo",
+        "LATTITUDE": -4.393452,
+        "LONGITUTE": 15.319645,
+        "Index": 199,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.317878, -4.393333] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "CE TRINITE",
+        "LATTITUDE": -4.393333,
+        "LONGITUTE": 15.317878,
+        "Index": 200,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.311535, -4.393104] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Paroisse Marie Reine des Apotres",
+        "LATTITUDE": -4.393104,
+        "LONGITUTE": 15.311535,
+        "Index": 203,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.313091, -4.388729] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "St.Christine",
+        "LATTITUDE": -4.388729,
+        "LONGITUTE": 15.313091,
+        "Index": 204,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.31462, -4.389887] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Rond Point Ngaba",
+        "LATTITUDE": -4.389887,
+        "LONGITUTE": 15.31462,
+        "Index": 42,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.318392, -4.374545] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Croissement Kianza et Universite",
+        "LATTITUDE": -4.374545,
+        "LONGITUTE": 15.318392,
+        "Index": 48,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.248467, -4.448616] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Matadi Kibala",
+        "LATTITUDE": -4.448616,
+        "LONGITUTE": 15.248467,
+        "Index": 233,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.242454, -4.450294] },
+      "properties": {
+        "Type_": "Cimetiere",
+        "DENOMMIN": "Cimetiere Kimbanseke",
+        "LATTITUDE": -4.450294,
+        "LONGITUTE": 15.242454,
+        "Index": 138,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.218732, -4.491931] },
+      "properties": {
+        "Type_": "Cimetiere",
+        "DENOMMIN": "Benseke Nouvelle Cite",
+        "LATTITUDE": -4.491931,
+        "LONGITUTE": 15.218732,
+        "Index": 134,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.183985, -4.522548] },
+      "properties": {
+        "Type_": "Cimetiere",
+        "DENOMMIN": "Cimetiere Mingadi",
+        "LATTITUDE": -4.522548,
+        "LONGITUTE": 15.183985,
+        "Index": 140,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.236893, -4.471472] },
+      "properties": {
+        "Type_": "Cimetiere",
+        "DENOMMIN": "Cimetiere sans fil",
+        "LATTITUDE": -4.471472,
+        "LONGITUTE": 15.236893,
+        "Index": 137,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.359359, -4.475098] },
+      "properties": {
+        "Type_": "Cimetiere",
+        "DENOMMIN": "Cimetiere Ndjili Brasserie",
+        "LATTITUDE": -4.475098,
+        "LONGITUTE": 15.359359,
+        "Index": 139,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.328676, -4.422761] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché Bumbu",
+        "LATTITUDE": -4.422761,
+        "LONGITUTE": 15.328676,
+        "Index": 223,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.341366, -4.425577] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Maché De Kadi",
+        "LATTITUDE": -4.425577,
+        "LONGITUTE": 15.341366,
+        "Index": 222,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.316305, -4.417746] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché de Mbanza Lemba",
+        "LATTITUDE": -4.417746,
+        "LONGITUTE": 15.316305,
+        "Index": 224,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.315177, -4.414084] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Intendance (UNIKIN)",
+        "LATTITUDE": -4.414084,
+        "LONGITUTE": 15.315177,
+        "Index": 43,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.347397, -4.391996] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché Matete",
+        "LATTITUDE": -4.391996,
+        "LONGITUTE": 15.347397,
+        "Index": 230,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.327646, -4.388988] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Eglise FEPACO Nzambe Malamu",
+        "LATTITUDE": -4.388988,
+        "LONGITUTE": 15.327646,
+        "Index": 196,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.328401, -4.387227] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Lemba Terminus",
+        "LATTITUDE": -4.387227,
+        "LONGITUTE": 15.328401,
+        "Index": 38,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.329373, -4.389764] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Paroisse Saint Benoit",
+        "LATTITUDE": -4.389764,
+        "LONGITUTE": 15.329373,
+        "Index": 195,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.332431, -4.388593] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "eglise les Semeurs",
+        "LATTITUDE": -4.388593,
+        "LONGITUTE": 15.332431,
+        "Index": 194,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.335366, -4.37961] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Rond point super lemba",
+        "LATTITUDE": -4.37961,
+        "LONGITUTE": 15.335366,
+        "Index": 39,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.336248, -4.384077] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "eglise protestante de lemba",
+        "LATTITUDE": -4.384077,
+        "LONGITUTE": 15.336248,
+        "Index": 191,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.335709, -4.382183] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché de super lemba",
+        "LATTITUDE": -4.382183,
+        "LONGITUTE": 15.335709,
+        "Index": 225,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.335733, -4.384633] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Saint Augustin de Lemba",
+        "LATTITUDE": -4.384633,
+        "LONGITUTE": 15.335733,
+        "Index": 192,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.336911, -4.376859] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Eglise Kimbanguiste",
+        "LATTITUDE": -4.376859,
+        "LONGITUTE": 15.336911,
+        "Index": 188,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.340406, -4.376054] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Paroisse Notre-Dame d'Afrique",
+        "LATTITUDE": -4.376054,
+        "LONGITUTE": 15.340406,
+        "Index": 189,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.340562, -4.378751] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Eglise La Semence Seeds Church",
+        "LATTITUDE": -4.378751,
+        "LONGITUTE": 15.340562,
+        "Index": 187,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.338378, -4.37247] },
+      "properties": {
+        "Type_": "Commerces",
+        "DENOMMIN": "FIKIN",
+        "LATTITUDE": -4.37247,
+        "LONGITUTE": 15.338378,
+        "Index": 160,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.344851, -4.376305] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "CREFM Eglise La Compassion",
+        "LATTITUDE": -4.376305,
+        "LONGITUTE": 15.344851,
+        "Index": 185,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.348966, -4.373042] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Ministere combat spirituel",
+        "LATTITUDE": -4.373042,
+        "LONGITUTE": 15.348966,
+        "Index": 184,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.353134, -4.372162] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Terrain d'Assemblee des Temoins de Jeohovah",
+        "LATTITUDE": -4.372162,
+        "LONGITUTE": 15.353134,
+        "Index": 182,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.351617, -4.375963] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Eglise Neo Apostolique RDC Ouest",
+        "LATTITUDE": -4.375963,
+        "LONGITUTE": 15.351617,
+        "Index": 183,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.352492, -4.382152] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Pont Matete",
+        "LATTITUDE": -4.382152,
+        "LONGITUTE": 15.352492,
+        "Index": 40,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.357668, -4.361655] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Centre Evangelique Emmanuel Langa-langa",
+        "LATTITUDE": -4.361655,
+        "LONGITUTE": 15.357668,
+        "Index": 173,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.37012, -4.378647] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "eglise de Jesus-Christ des saints des derniers jours",
+        "LATTITUDE": -4.378647,
+        "LONGITUTE": 15.37012,
+        "Index": 181,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.37329, -4.385948] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Communaute Evagelique La Presence de Dieu/ MASINA",
+        "LATTITUDE": -4.385948,
+        "LONGITUTE": 15.37329,
+        "Index": 179,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.369036, -4.379931] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Paroisse Marie Auxiliatrice",
+        "LATTITUDE": -4.379931,
+        "LONGITUTE": 15.369036,
+        "Index": 180,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.370533, -4.38032] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Ejcev Nouvelle Alliance Bima",
+        "LATTITUDE": -4.38032,
+        "LONGITUTE": 15.370533,
+        "Index": 177,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.37226, -4.379421] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "eglise Source de vie",
+        "LATTITUDE": -4.379421,
+        "LONGITUTE": 15.37226,
+        "Index": 176,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.372221, -4.406363] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Place sainte therese",
+        "LATTITUDE": -4.406363,
+        "LONGITUTE": 15.372221,
+        "Index": 55,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.376832, -4.398432] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché Mangobo",
+        "LATTITUDE": -4.398432,
+        "LONGITUTE": 15.376832,
+        "Index": 221,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.370506, -4.388886] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Quartier 1 (croissement Boulevard Lumumba)",
+        "LATTITUDE": -4.388886,
+        "LONGITUTE": 15.370506,
+        "Index": 56,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.376957, -4.386681] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Eglise Catholique Divin Maître",
+        "LATTITUDE": -4.386681,
+        "LONGITUTE": 15.376957,
+        "Index": 178,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.349406, -4.34033] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "le pain de vie",
+        "LATTITUDE": -4.34033,
+        "LONGITUTE": 15.349406,
+        "Index": 172,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.344345, -4.330715] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Mosqué Kingabwa",
+        "LATTITUDE": -4.330715,
+        "LONGITUTE": 15.344345,
+        "Index": 170,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.379016, -4.371679] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Centre d'Evangelisation Peniel CEPE",
+        "LATTITUDE": -4.371679,
+        "LONGITUTE": 15.379016,
+        "Index": 175,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.384479, -4.39243] },
+      "properties": {
+        "Type_": "Marché",
+        "DENOMMIN": "Marché de la liberté",
+        "LATTITUDE": -4.39243,
+        "LONGITUTE": 15.384479,
+        "Index": 220,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.38102, -4.39055] },
+      "properties": {
+        "Type_": "Hopitaux",
+        "DENOMMIN": "Hopital Biamba Marie Mutombo",
+        "LATTITUDE": -4.39055,
+        "LONGITUTE": 15.38102,
+        "Index": 211,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.332757, -4.351001] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Place Commercial de limete(7e rue)",
+        "LATTITUDE": -4.351001,
+        "LONGITUTE": 15.332757,
+        "Index": 53,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.329777, -4.340507] },
+      "properties": {
+        "Type_": "Hopitaux",
+        "DENOMMIN": "Hj Hospitals",
+        "LATTITUDE": -4.340507,
+        "LONGITUTE": 15.329777,
+        "Index": 209,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.329841, -4.318822] },
+      "properties": {
+        "Type_": "ArretTransport",
+        "DENOMMIN": "Bon Marché",
+        "LATTITUDE": -4.318822,
+        "LONGITUTE": 15.329841,
+        "Index": 52,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.330286, -4.318093] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Paroisse saint Eloi",
+        "LATTITUDE": -4.318093,
+        "LONGITUTE": 15.330286,
+        "Index": 168,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.3338, -4.319652] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Mosqué Bon Marche",
+        "LATTITUDE": -4.319652,
+        "LONGITUTE": 15.3338,
+        "Index": 169,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.374004, -4.371975] },
+      "properties": {
+        "Type_": "Eglises",
+        "DENOMMIN": "Paroisse saint François-Xavier",
+        "LATTITUDE": -4.371975,
+        "LONGITUTE": 15.374004,
+        "Index": 174,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [15.592172, -4.239315] },
+      "properties": {
+        "Type_": "Cimetiere",
+        "DENOMMIN": "Necropole entre ciel et terre",
+        "LATTITUDE": -4.239315,
+        "LONGITUTE": 15.592172,
+        "Index": 141,
+        "remove": ""
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.326963293739981, -4.327073327632261]
+      },
+      "properties": {
+        "Index": 300,
+        "Type_": "Aéroport",
+        "DENOMMIN": "Aéroport Ndolo"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [15.447178557278184, -4.386064983639196]
+      },
+      "properties": {
+        "Index": 301,
+        "Type_": "Aéroport",
+        "DENOMMIN": "Aéroport Ndjili"
+      }
+    }
+  ]
+}
