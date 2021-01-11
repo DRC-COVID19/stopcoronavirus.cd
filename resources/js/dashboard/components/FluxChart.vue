@@ -68,7 +68,9 @@
             v-show="this.flux30Daily.length > 0"
           >
             <b-card no-body class="cardtype1 mb-3 p-2">
-              <div class="general-top-title">Evolution de la présence par rapport à la période de référence</div>
+              <div class="general-top-title">
+                Evolution de la présence par rapport à la période de référence
+              </div>
               <div class="chart-container">
                 <canvas
                   height="200"
@@ -159,7 +161,10 @@
             :class="{ active: fluxType == 4 }"
             @click="selectFluxType(4)"
           >
-            <h5 class="percent-title">Mobilité générale</h5>
+            <h5 class="percent-title">
+              Pourcentage de changement de la mobilité total par rapport à la
+              référence
+            </h5>
             <div class="percent flux-in-color">{{ percentGenerale }}%​</div>
 
             <p class="percent-p text-dash-color mb-0">
@@ -177,7 +182,7 @@
           >
             <b-card no-body class="cardtype1 mb-3 p-2">
               <div class="general-top-title">
-                Mobilité générale intérieure de la zone
+                Evolution de la mobilité total (%)
               </div>
               <div class="chart-container">
                 <canvas
@@ -330,6 +335,9 @@
                   class="cardtype1 mb-3 p-2"
                   ref="mobile_entrance_card"
                 >
+                  <div class="general-top-title">
+                    Evolution du nombre d'entrées (%)
+                  </div>
                   <div class="chart-container">
                     <canvas
                       height="200"
@@ -425,6 +433,9 @@
                   class="mb-3 p-2 cardtype1"
                   :ref="`mobile_out_card`"
                 >
+                  <div class="general-top-title">
+                    Evolution du nombre de sorties (%)
+                  </div>
                   <div class="chart-container">
                     <canvas
                       height="200"
@@ -532,6 +543,9 @@
               class="mb-3 p-2 cardtype1"
               ref="mobile_presence_card"
             >
+              <div class="general-top-title">
+                Evolution de la présence (%)
+              </div>
               <div class="chart-container">
                 <canvas
                   height="400"
@@ -1305,7 +1319,7 @@ export default {
             item.percent = (item.difference * 100) / item.volume_reference;
           } else {
             let indice = (x.length + 1) / 2;
-            item = x[indice-1];
+            item = x[indice - 1];
           }
           dataFormatted.push({
             date: item.date,
