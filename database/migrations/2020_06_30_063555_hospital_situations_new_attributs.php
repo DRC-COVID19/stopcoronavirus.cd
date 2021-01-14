@@ -97,76 +97,162 @@ class HospitalSituationsNewAttributs extends Migration
     public function down()
     {
         Schema::table('hospital_situations', function (Blueprint $table) {
-
-            // Par genre
-            $table->dropColumn('confirmed_female');
-            $table->dropColumn('sick_female');
-            $table->dropColumn('healed_female');
-            $table->dropColumn('dead_female');
-
-            $table->dropColumn('confirmed_male');
-            $table->dropColumn('sick_male');
-            $table->dropColumn('healed_male');
-            $table->dropColumn('dead_male');
-
-            //Tranche d'age 0-19
-            $table->dropColumn('confirmed_0_19');
-            $table->dropColumn('sick_0_19');
-            $table->dropColumn('healed_0_19');
-            $table->dropColumn('dead_0_19');
-
-            //Tranche d'age 20-40
-            $table->dropColumn('confirmed_20_40');
-            $table->dropColumn('sick_20_40');
-            $table->dropColumn('healed_20_40');
-            $table->dropColumn('dead_20_40');
-
-            //Tranche d'age 45-50
-            $table->dropColumn('confirmed_45_50');
-            $table->dropColumn('sick_45_50');
-            $table->dropColumn('healed_45_50');
-            $table->dropColumn('dead_45_50');
-
-            //Tranche d'age 55-64
-            $table->dropColumn('confirmed_55_64');
-            $table->dropColumn('sick_55_64');
-            $table->dropColumn('healed_55_64');
-            $table->dropColumn('dead_55_64');
-
-            //Tranche d'age 65-74
-            $table->dropColumn('confirmed_65_74');
-            $table->dropColumn('sick_65_74');
-            $table->dropColumn('healed_65_74');
-            $table->dropColumn('dead_65_74');
-
-            //Tranche d'age 75-84
-            $table->dropColumn('confirmed_75_84');
-            $table->dropColumn('sick_75_84');
-            $table->dropColumn('healed_75_84');
-            $table->dropColumn('dead_75_84');
-
-            //Tranche d'age >=85
-            $table->dropColumn('confirmed_85');
-            $table->dropColumn('sick_85');
-            $table->dropColumn('healed_85');
-            $table->dropColumn('dead_85');
-            $table->dropColumn('occupied_Beds');
-            $table->dropColumn('occupied_respirators');
-            $table->dropColumn('masks');
-            $table->dropColumn('occupied_foam_beds');
-            $table->dropColumn('occupied_resuscitation_beds');
-            $table->dropColumn('individual_protection_equipment');
-            $table->dropColumn('gel_hydro_alcoolique');
-            $table->dropColumn('resuscitation_ventilator');
-            $table->dropColumn('oxygenator');
-            $table->dropColumn('rapid_screening');
-            $table->dropColumn('automate_genexpert');
-            $table->dropColumn('x_ray');
-            $table->dropColumn('check_point');
-            $table->dropColumn('chloroquine');
-            $table->dropColumn('hydrochloroquine');
-            $table->dropColumn('azytromicine');
-            $table->dropColumn('Vitamince_c');
+          $table->dropColumn('confirmed_female');
         });
+
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('sick_female');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('healed_female');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('dead_female');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('confirmed_male');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('sick_male');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('healed_male');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('dead_male');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('confirmed_0_19');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('sick_0_19');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('healed_0_19');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('dead_0_19');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('confirmed_20_40');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('sick_20_40');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('healed_20_40');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('dead_20_40');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('confirmed_45_50');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('sick_45_50');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('healed_45_50');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('dead_45_50');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('confirmed_55_64');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('healed_55_64');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('dead_55_64');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('confirmed_65_74');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('sick_65_74');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('healed_65_74');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('dead_65_74');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('confirmed_75_84');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('sick_75_84');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('healed_75_84');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('dead_75_84');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('confirmed_85');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('sick_85');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('healed_85');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('dead_85');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('occupied_Beds');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('occupied_respirators');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('masks');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('occupied_foam_beds');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('occupied_resuscitation_beds');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('individual_protection_equipment');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('gel_hydro_alcoolique');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('resuscitation_ventilator');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('oxygenator');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('rapid_screening');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('automate_genexpert');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('x_ray');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('check_point');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('chloroquine');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('hydrochloroquine');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('azytromicine');
+        });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+          $table->dropColumn('Vitamince_c');
+        });
+
     }
 }

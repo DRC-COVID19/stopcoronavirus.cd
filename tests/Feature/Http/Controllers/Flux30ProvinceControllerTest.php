@@ -23,7 +23,6 @@ class Flux30ProvinceControllerTest extends TestCase
     parent::setUp();
     // $this->refreshDatabase();
     Flux30Province::insert($this->data);
-    Flux30Province::insert($this->data2);
     $user = factory(Administrator::class)->create();
     $token = JWTAuth::fromUser($user);
     // $this->refreshApplication();

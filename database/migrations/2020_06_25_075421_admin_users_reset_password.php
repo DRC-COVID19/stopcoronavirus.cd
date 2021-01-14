@@ -28,7 +28,9 @@ class AdminUsersResetPassword extends Migration
     {
         Schema::table('admin_users', function (Blueprint $table) {
             $table->dropColumn('reset_password_token');
-            $table->dropColumn('reset_password_token_date');
         });
+        Schema::table('admin_users', function (Blueprint $table) {
+          $table->dropColumn('reset_password_token_date');
+      });
     }
 }
