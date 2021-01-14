@@ -176,27 +176,27 @@ class Flux24ProvinceController extends Controller
         try {
             $flux = Flux24Province::select(['Date as date', DB::raw('sum("Volume") as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->where('immobility', '3h')
+                ->where('Immobility', '3h')
 
                 ->where(function ($q) use ($data) {
                     $q->whereIn('Origin', $data['fluxGeoOptions'])
                         ->orWhereIn('Destination', $data['fluxGeoOptions']);
                 })
-                ->where('destination', '!=', 'Hors_Zone')
-                ->where('origin', '!=', 'Hors_Zone')
+                ->where('Destination', '!=', 'Hors_Zone')
+                ->where('Origin', '!=', 'Hors_Zone')
                 ->groupBy('Date')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
                 $fluxRefences = Flux24Province::select(['Date as date', DB::raw('sum("Volume") as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->where('immobility', '3h')
+                    ->where('Immobility', '3h')
                     ->where(function ($q) use ($data) {
                         $q->whereIn('Origin', $data['fluxGeoOptions'])
                             ->orWhereIn('Destination', $data['fluxGeoOptions']);
                     })
-                    ->where('destination', '!=', 'Hors_Zone')
-                    ->where('origin', '!=', 'Hors_Zone')
+                    ->where('Destination', '!=', 'Hors_Zone')
+                    ->where('Origin', '!=', 'Hors_Zone')
                     ->groupBy('Date')->get();
 
                 if (count($fluxRefences) > 0) {
@@ -245,24 +245,24 @@ class Flux24ProvinceController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux24Province::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum("Volume") as volume,WEEKDAY(DATE) AS day')])
+            $flux = Flux24Province::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum("Volume") as volume,WEEKDAY("Date") AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->where('immobility', '3h')
+                ->where('Immobility', '3h')
                 ->whereIn('Destination', $data['fluxGeoOptions'])
                 // ->where('destination','!=','Hors_Zone')
-                ->orderBy('date')
-                ->where('origin', '!=', 'Hors_Zone')
-                ->groupBy('Date', 'day', 'destination', 'Origin')->get();
+                ->orderBy('Date')
+                ->where('Origin', '!=', 'Hors_Zone')
+                ->groupBy('Date', 'day', 'Destination', 'Origin')->get();
 
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Province::select(['Destination as destination', 'Origin as origin', 'Date', DB::raw('sum("Volume") as volume, WEEKDAY(DATE) AS day')])
+                $fluxRefences = Flux24Province::select(['Destination as destination', 'Origin as origin', 'Date', DB::raw('sum("Volume") as volume, WEEKDAY("Date") AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->where('immobility', '3h')
+                    ->where('Immobility', '3h')
                     ->whereIn('Destination', $data['fluxGeoOptions'])
                     // ->where('destination','!=','Hors_Zone')
-                    ->where('origin', '!=', 'Hors_Zone')
+                    ->where('Origin', '!=', 'Hors_Zone')
                     ->groupBy('day', 'Destination', 'Origin', 'Date')
-                    ->orderBy('date')
+                    ->orderBy('Date')
                     ->get();
             }
             $geoCodingFilePath = storage_path('app/fluxZones.json');

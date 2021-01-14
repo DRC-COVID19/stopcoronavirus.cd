@@ -282,7 +282,7 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSum::select(['Date as date', 'hour', DB::raw('sum(volume) as volume, WEEKDAY(date) as day')])
+      $fluxObservations = Flux30ZoneSum::select(['Date as date', 'Hour as hour', DB::raw('sum("Volume") as volume, WEEKDAY("Date") as day')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sums.Observation_Zone');
         });
@@ -291,12 +291,12 @@ class Flux30ZoneSumController extends Controller
       }
       $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
 
-        ->whereBetween('hour', [$data['time_start'], $data['time_end']])
-        ->groupBy('Date', 'hour', 'day',)
+        ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
+        ->groupBy('Date', 'Hour', 'day',)
         ->orderBy('volume')
         ->get();
 
-      $fluxReferences = Flux30ZoneSum::select(['Date as date', 'hour', DB::raw('sum(volume) as volume, WEEKDAY(date) as day')])
+      $fluxReferences = Flux30ZoneSum::select(['Date as date', 'Hour as hour', DB::raw('sum("Volume") as volume, WEEKDAY("Date") as day')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sums.Observation_Zone');
         });;
@@ -304,8 +304,8 @@ class Flux30ZoneSumController extends Controller
         $fluxReferences->where('flux_hot_spots.type', $data['fluxGeoOptions']);
       }
       $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-        ->whereBetween('hour', [$data['time_start'], $data['time_end']])
-        ->groupBy('Date', 'hour', 'day')
+        ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
+        ->groupBy('Date', 'Hour', 'day')
         ->orderBy('volume')
         ->get();
 

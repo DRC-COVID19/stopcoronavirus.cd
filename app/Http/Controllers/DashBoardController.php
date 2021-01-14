@@ -528,7 +528,7 @@ class DashBoardController extends Controller
     public function getFluxProvinces()
     {
         try {
-            $zones = DB::select('SELECT origin FROM flux24_provinces UNION SELECT destination AS origin FROM flux24_provinces');
+            $zones = DB::select('SELECT "Origin" as origin FROM flux24_provinces UNION SELECT "Destination" AS origin FROM flux24_provinces');
             return response()->json($zones);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {

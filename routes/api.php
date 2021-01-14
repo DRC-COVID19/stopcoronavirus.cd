@@ -50,7 +50,7 @@ Route::group([
   });
 
 
-  Route::group(['prefix' => 'flux', 'middleware' => 'cache.headers:private;max_age=3600'], function () {
+Route::group(['prefix' => 'flux', /*'middleware' => 'cache.headers:private;max_age=3600'*/], function () {
 
     Route::group(['prefix' => 'africell'], function () {
       Route::get('health-zone', 'AfricelHealthZoneController@index');
