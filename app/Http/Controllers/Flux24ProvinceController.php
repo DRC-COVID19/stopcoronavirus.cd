@@ -24,21 +24,22 @@ class Flux24ProvinceController extends Controller
         $data = $this->fluxGlobalValidator($request->all());;
 
         try {
-            $flux = Flux24Province::select(['destination as zone', 'date', DB::raw('sum(volume)as volume')])
+            $flux = Flux24Province::select(['Destination as zone', 'Date as date', DB::raw('sum("Volume") as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->where('immobility', '3h')
-                ->where('destination', '!=', 'Hors_Zone')
-                ->where('origin', '!=', 'Hors_Zone')
+                ->where('Immobility', '3h')
+                ->where('Destination', '!=', 'Hors_Zone')
+                ->where('Origin', '!=', 'Hors_Zone')
                 ->orderBy('volume')
-                ->groupBy('destination', 'date')->get();
+                ->groupBy('Destination', 'date')->get();
 
-            $flux_reference = Flux24Province::select(['destination as zone', 'date', DB::raw('sum(volume)as volume')])
+
+            $flux_reference = Flux24Province::select(['Destination as zone', 'Date as date', DB::raw('sum("Volume") as volume')])
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                ->where('immobility', '3h')
-                ->where('destination', '!=', 'Hors_Zone')
-                ->where('origin', '!=', 'Hors_Zone')
+                ->where('Immobility', '3h')
+                ->where('Destination', '!=', 'Hors_Zone')
+                ->where('Origin', '!=', 'Hors_Zone')
                 ->orderBy('volume')
-                ->groupBy('destination', 'date')->get();
+                ->groupBy('Destination', 'Date')->get();
 
             return response()->json([
                 'observations' => $flux,
@@ -56,21 +57,21 @@ class Flux24ProvinceController extends Controller
         $data = $this->fluxGlobalValidator($request->all());
 
         try {
-            $flux = Flux24Province::select(['origin as zone', 'Date as date', DB::raw('sum(volume)as volume')])
+            $flux = Flux24Province::select(['Origin as zone', 'Date as date', DB::raw('sum("Volume") as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->where('immobility', '3h')
-                ->where('destination', '!=', 'Hors_Zone')
-                ->where('origin', '!=', 'Hors_Zone')
+                ->where('Immobility', '3h')
+                ->where('Destination', '!=', 'Hors_Zone')
+                ->where('Origin', '!=', 'Hors_Zone')
                 ->orderBy('volume')
-                ->groupBy('origin', 'Date')->get();
+                ->groupBy('Origin', 'Date')->get();
 
-            $flux_reference = Flux24Province::select(['origin as zone', 'Date as date', DB::raw('sum(volume)as volume')])
+            $flux_reference = Flux24Province::select(['Origin as zone', 'Date as date', DB::raw('sum("Volume") as volume')])
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                ->where('immobility', '3h')
-                ->where('destination', '!=', 'Hors_Zone')
-                ->where('origin', '!=', 'Hors_Zone')
+                ->where('Immobility', '3h')
+                ->where('Destination', '!=', 'Hors_Zone')
+                ->where('Origin', '!=', 'Hors_Zone')
                 ->orderBy('volume')
-                ->groupBy('origin', 'Date')->get();
+                ->groupBy('Origin', 'Date')->get();
 
             return response()->json([
                 'observations' => $flux,
@@ -89,7 +90,7 @@ class Flux24ProvinceController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux24Province::select(['origin', 'destination', DB::raw('sum(volume) as volume')])
+            $flux = Flux24Province::select(['origin', 'destination', DB::raw('sum("Volume")  as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where(function ($q) use ($data) {
                     $q->whereIn('Origin', $data['fluxGeoOptions'])
@@ -106,7 +107,7 @@ class Flux24ProvinceController extends Controller
             }
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Province::select(['origin', 'destination', DB::raw('sum(volume) as volume')])
+                $fluxRefences = Flux24Province::select(['origin', 'destination', DB::raw('sum("Volume")  as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where(function ($q) use ($data) {
                         $q->whereIn('Origin', $data['fluxGeoOptions'])
@@ -173,7 +174,7 @@ class Flux24ProvinceController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux24Province::select(['Date as date', DB::raw('sum(volume)as volume')])
+            $flux = Flux24Province::select(['Date as date', DB::raw('sum("Volume") as volume')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where('immobility', '3h')
 
@@ -187,7 +188,7 @@ class Flux24ProvinceController extends Controller
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Province::select(['Date as date', DB::raw('sum(volume)as volume')])
+                $fluxRefences = Flux24Province::select(['Date as date', DB::raw('sum("Volume") as volume')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where('immobility', '3h')
                     ->where(function ($q) use ($data) {
@@ -220,15 +221,15 @@ class Flux24ProvinceController extends Controller
     {
         $data = $this->fluxValidator($request->all());
         try {
-            $flux = DB::select("SELECT origin, DATE as date , SUM(volume) AS volume
+            $flux = DB::select('SELECT origin, DATE as date , sum("Volume")  AS volume
             FROM (
-                SELECT origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY origin, DATE
+                SELECT origin,DATE, sum("Volume")  AS volume FROM flux24_provinces GROUP BY origin, DATE
                 UNION ALL
-                SELECT destination AS origin,DATE, SUM(volume) AS volume FROM flux24_provinces GROUP BY destination, DATE
+                SELECT destination AS origin,DATE, sum("Volume")  AS volume FROM flux24_provinces GROUP BY destination, DATE
                 )
                 AS t
                 WHERE DATE BETWEEN ? and ?
-                GROUP BY origin,DATE ", [$data['preference_start'], $data['observation_end']]);
+                GROUP BY origin,DATE ', [$data['preference_start'], $data['observation_end']]);
 
             return response()->json($flux);
         } catch (\Throwable $th) {
@@ -244,7 +245,7 @@ class Flux24ProvinceController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux24Province::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+            $flux = Flux24Province::select(['Date as date', 'Destination as destination', 'Origin as origin', DB::raw('sum("Volume") as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where('immobility', '3h')
                 ->whereIn('Destination', $data['fluxGeoOptions'])
@@ -254,7 +255,7 @@ class Flux24ProvinceController extends Controller
                 ->groupBy('Date', 'day', 'destination', 'Origin')->get();
 
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Province::select(['Destination as destination', 'Origin as origin', 'Date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
+                $fluxRefences = Flux24Province::select(['Destination as destination', 'Origin as origin', 'Date', DB::raw('sum("Volume") as volume, WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where('immobility', '3h')
                     ->whereIn('Destination', $data['fluxGeoOptions'])
@@ -300,7 +301,7 @@ class Flux24ProvinceController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux24Province::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+            $flux = Flux24Province::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum("Volume") as volume,WEEKDAY(DATE) AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where('immobility', '3h')
                 ->whereIn('Origin', $data['fluxGeoOptions'])
@@ -311,7 +312,7 @@ class Flux24ProvinceController extends Controller
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Province::select(['Origin as origin', 'Destination as destination', 'Date', DB::raw('sum(volume)as volume, WEEKDAY(DATE) AS day')])
+                $fluxRefences = Flux24Province::select(['Origin as origin', 'Destination as destination', 'Date', DB::raw('sum("Volume") as volume, WEEKDAY(DATE) AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->where('immobility', '3h')
                     ->whereIn('Origin', $data['fluxGeoOptions'])
