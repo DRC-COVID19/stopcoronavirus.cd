@@ -20,32 +20,32 @@ const adminHospital = "admin-hospital";
 export default [
     {
         name: "login",
-        path: "/dashboard-maps/login",
+        path: "/login",
         component: Login,
 
     },
     {
         name: "lostPassword",
-        path: "/dashboard-maps/lost-password",
+        path: "/lost-password",
         component: LostPassword
     },
     {
         name: "password.reset.thanks",
-        path: "/dashboard-maps/lost-password-send",
+        path: "/lost-password-send",
         component: ResetPasswordThank
     },
     {
         name: "password.reset.token",
-        path: "/dashboard-maps/password-reset/:token",
+        path: "/password-reset/:token",
         component: ResetPasseword
     },
     {
         name: "password.reset.complete.thanks",
-        path: "/dashboard-maps/password-reset/complete",
+        path: "/password-reset/complete",
         component: PasswordResetComplete
     },
     {
-        path: "/dashboard-maps",
+        path: "/",
         component: Home,
         name: "home",
         meta: {
@@ -54,7 +54,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/hospitals",
+        path: "/hospitals",
         name: "hospital.home",
         component: HospitalsHome,
         meta: {
@@ -63,7 +63,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/admin/hospitals",
+        path: "/admin/hospitals",
         name: "hospital.admin",
         component: HospitalAdmin,
         meta: {
@@ -72,7 +72,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/admin/hospitals/:hospital_id",
+        path: "/admin/hospitals/:hospital_id",
         name: "hospital.admin.data",
         component: HospitalAdminData,
         meta: {
@@ -81,7 +81,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/hospitals/data",
+        path: "/hospitals/data",
         name: "hospital.data",
         component: HospitalData,
         meta: {
@@ -90,7 +90,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/hospitals/new",
+        path: "/hospitals/new",
         name: "hospital.create",
         component: HospitalsCreate,
         meta: {
@@ -99,7 +99,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/hospitals/:hospital_id/show/:update_id",
+        path: "/hospitals/:hospital_id/show/:update_id",
         name: "hospital.detail",
         component: HospitalsDetail,
         meta: {
@@ -108,7 +108,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/hospitals/edit/:hospital_id",
+        path: "/hospitals/edit/:hospital_id",
         name: "hospital.edit",
         component: HospitalsCreate,
         meta: {
@@ -117,7 +117,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/acces-denied",
+        path: "/acces-denied",
         name: "acces.denied",
         component: NotAcces,
         meta: {
@@ -125,7 +125,7 @@ export default [
         },
     },
     {
-        path: "/dashboard-maps/landing",
+        path: "/landing",
         name: "landing",
         component: Landing,
         meta: {
