@@ -15,8 +15,11 @@ class WeekdayMigration extends Migration
   public function up()
   {
     //we create function Weekday for pgsql
+
     if (env('DB_CONNECTION') == 'pgsql') {
-      DB::raw("CREATE OR REPLACE FUNCTION WEEKDAY(date) RETURNS double precision LANGUAGE 'sql' COST 100 VOLATILE AS $$ SELECT EXTRACT(isodow FROM cast($1 as date))-1; $$;");
+      echo env('DB_CONNECTION') ;
+      DB::statement("CREATE OR REPLACE FUNCTION WEEKDAY(date) RETURNS double precision LANGUAGE 'sql' COST 100 VOLATILE AS $$ SELECT EXTRACT(isodow FROM cast($1 as date))-1; $$;");
+
     }
     // if (env('APP_ENV') == 'testing') {
     //   function WEEKDAY($string)
@@ -37,7 +40,7 @@ class WeekdayMigration extends Migration
   public function down()
   {
     if (env('DB_CONNECTION') == 'pgsql') {
-      DB::raw('DROP FUNCTION WEEKDAY');
+      DB::statement('DROP FUNCTION WEEKDAY');
     }
   }
 }
