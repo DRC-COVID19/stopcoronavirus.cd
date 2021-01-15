@@ -131,7 +131,7 @@
           md="6"
           class="side-right mt-2 pl-2"
           :class="{ 'side-right-100': !hasCovidCases }"
-          v-if="hasRightSide"
+          v-if="true"
         >
           <b-card no-body>
             <!-- <toggle-button

@@ -22,21 +22,21 @@ class Flux24PresenceProvinceController extends Controller
     public function getFlux24PresenceDailyInProvince(Request $request)
     {
         $data = $this->fluxValidator($request->all());
-    
+
         try {
-            $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone','PresenceType', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+            $flux = Flux24PresenceProvince::select(['Date as date', 'Zone as zone','PresenceType', DB::raw('sum("Volume") as volume,WEEKDAY("Date") AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->WhereIn('Zone', $data['fluxGeoOptions'])
                 ->groupBy('Date', 'Zone', 'day','PresenceType')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24PresenceProvince::select(['Zone as zone', 'Date as date','PresenceType', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+                $fluxRefences = Flux24PresenceProvince::select(['Zone as zone', 'Date as date','PresenceType', DB::raw('sum("Volume") as volume,WEEKDAY("Date") AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                     ->WhereIn('Zone', $data['fluxGeoOptions'])
                     ->groupBy('day', 'Zone', 'date','PresenceType')->get();
             }
-            
+
             return response()->json([
                 'references' => $fluxRefences,
                 'observations' => $flux,

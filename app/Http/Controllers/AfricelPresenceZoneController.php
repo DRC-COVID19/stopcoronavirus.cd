@@ -37,8 +37,10 @@ class AfricelPresenceZoneController extends Controller
           $q->on('africel_health_zones.reference', '=', 'africel_presence_zones.zone_name');
         })
         ->where('africel_health_zones.name', $data['fluxGeoOptions'])
-        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])->get();
-      return response()->json($zoneData);
+        ->whereBetween('date', [$data['observation_start'], $data['observation_end']])->get();
+
+
+      return response()->json($zoneData,200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);

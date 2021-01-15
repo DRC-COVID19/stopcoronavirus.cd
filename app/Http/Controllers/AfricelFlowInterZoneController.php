@@ -24,14 +24,14 @@ class AfricelFlowInterZoneController extends Controller
   {
     $data = $this->fluxValidator($request->all());
     try {
-      $zoneData = AfricelFlowInterZone::select(['date', 'flow_AB', 'flow_BA', 'flow_tot',DB::raw('(select name from africel_health_zones where reference=zone_A  ) as zoneA,(select name from africel_health_zones where reference=zone_B  ) as zoneB')])
+      $zoneData = AfricelFlowInterZone::select(['date', 'flow_AB', 'flow_BA', 'flow_tot',DB::raw('(select name from africel_health_zones where reference="zone_A"  ) as "zoneA",(select name from africel_health_zones where reference="zone_B"  ) as "zoneB"')])
         ->join('africel_health_zones', function ($q) {
           $q->on('africel_health_zones.reference', '=', 'africel_flow_inter_zones.zone_A')
           ->orOn('africel_health_zones.reference', '=', 'africel_flow_inter_zones.zone_B');
         })
         ->where('africel_health_zones.name', $data['fluxGeoOptions'])
         ->whereBetween('date', [$data['observation_start'], $data['observation_end']])->get();
-        return response()->json($zoneData);
+        return response()->json($zoneData,200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);

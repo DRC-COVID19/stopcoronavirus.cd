@@ -301,25 +301,25 @@ class Flux24ProvinceController extends Controller
         $data = $this->fluxValidator($request->all());
 
         try {
-            $flux = Flux24Province::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum("Volume") as volume,WEEKDAY(DATE) AS day')])
+            $flux = Flux24Province::select(['Date as date', 'Origin as origin', 'Destination as destination', DB::raw('sum("Volume") as volume,WEEKDAY("Date") AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->where('immobility', '3h')
+                ->where('Immobility', '3h')
                 ->whereIn('Origin', $data['fluxGeoOptions'])
-                ->where('destination', '!=', 'Hors_Zone')
+                ->where('Destination', '!=', 'Hors_Zone')
                 // ->where('origin','!=','Hors_Zone')
-                ->orderBy('date')
+                ->orderBy('Date')
                 ->groupBy('Date', 'day', 'origin', 'Destination')->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Province::select(['Origin as origin', 'Destination as destination', 'Date', DB::raw('sum("Volume") as volume, WEEKDAY(DATE) AS day')])
+                $fluxRefences = Flux24Province::select(['Origin as origin', 'Destination as destination', 'Date', DB::raw('sum("Volume") as volume, WEEKDAY("Date") AS day')])
                     ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->where('immobility', '3h')
+                    ->where('Immobility', '3h')
                     ->whereIn('Origin', $data['fluxGeoOptions'])
                     // ->where('destination','!=','Hors_Zone')
-                    ->where('origin', '!=', 'Hors_Zone')
+                    ->where('Origin', '!=', 'Hors_Zone')
                     ->groupBy('day', 'Destination', 'Origin', 'Date')
-                    ->orderBy('date')->get();
+                    ->orderBy('Date')->get();
             }
 
             $geoCodingFilePath = storage_path('app/fluxZones.json');

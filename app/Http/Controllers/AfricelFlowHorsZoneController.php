@@ -29,7 +29,7 @@ class AfricelFlowHorsZoneController extends Controller
         })
         ->where('africel_health_zones.name', $data['fluxGeoOptions'])
         ->whereBetween('date', [$data['observation_start'], $data['observation_end']])->get();
-      return response()->json($zoneData);
+      return response()->json($zoneData,200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);

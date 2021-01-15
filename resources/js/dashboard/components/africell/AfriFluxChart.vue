@@ -365,6 +365,7 @@ export default {
     });
     this.$nextTick(() => {
       this.mobileCalc(
+
         this.fluxAfricellDaily,
         "mobile_out",
         PALETTE.flux_out_color,
@@ -480,7 +481,7 @@ export default {
         return;
       }
       if (data.length > 0) {
-        this[attribut] = data[0][attribut];
+        this[attribut] = Number(data[0][attribut]);
       }
       this.configBarChart[ref] = {
         type: "line",
