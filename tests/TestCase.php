@@ -8,10 +8,11 @@ use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Faker\Factory as Faker;
 use App\Exceptions\Handler;
 use Illuminate\Contracts\Debug\ExceptionHandler;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 abstract class TestCase extends BaseTestCase
 {
-    use CreatesApplication, DatabaseMigrations, DatabaseTransactions;
+    use CreatesApplication, DatabaseMigrations, RefreshDatabase;
     protected $faker;
 
     /**
@@ -48,7 +49,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function tearDown():void
     {
-        $this->artisan('migrate:reset');
+        // $this->artisan('migrate:reset');
         parent::tearDown();
     }
 
