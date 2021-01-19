@@ -33,6 +33,8 @@ Route::get('/pandemicstatsasc', function () {
   return new PandemicStatResource(PandemicStat::orderBy('last_update', 'ASC')->get());
 });
 
+Route::post('/medicale-orientation', 'DiagnosticController@store');
+
 Route::group([
   'prefix' => 'dashboard',
   // 'middleware' => 'auth:dashboard',
