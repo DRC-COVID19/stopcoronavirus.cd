@@ -1737,7 +1737,7 @@ export default {
           properties: {
             origin: this.fixedZone(item.zone ?? observations[0][key]),
             color: "#ED5F68",
-            volume: result.referenceVolume,
+            volume: result.observationVolume,
             volumeReference: result.referenceVolume,
             percent: result.percent,
             difference: result.difference,
@@ -1810,6 +1810,7 @@ export default {
         localData.map((item) => {
           formatData(item, "destination");
         });
+
         formatCurrentZone(DataGroupByDate);
         // localData.map((item) => {
         //   formatData(item, "origin");
@@ -1857,6 +1858,8 @@ export default {
         });
         formatCurrentZone(DataGroupByDate);
       }
+      console.log('localData',localData);
+      console.log('features',features);
 
       // features = features.filter((x) => x.properties.volume != 0);
 

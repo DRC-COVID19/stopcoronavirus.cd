@@ -55,13 +55,13 @@ Route::group([
 Route::group(['prefix' => 'flux', 'middleware' => 'cache.headers:private;max_age=3600'], function () {
 
     Route::group(['prefix' => 'africell'], function () {
-      Route::get('health-zone', 'AfricelHealthZoneController@index');
+      Route::get('health-zone', 'AfricelHealthZoneController@index'); //ok
       Route::group(['prefix' => 'presence'], function () {
-        Route::get('provinces', 'AfricelTravelProvinceController@getByProvince');
+        Route::get('provinces', 'AfricelTravelProvinceController@getByProvince');//ok
         Route::get('zones', 'AfricelPresenceZoneController@getByName'); //ok
       });
       Route::group(['prefix' => 'hors-zone'], function () {
-        Route::get('zones', 'AfricelFlowHorsZoneController@getByName');
+        Route::get('zones', 'AfricelFlowHorsZoneController@getByName'); //ok
       });
       Route::group(['prefix' => 'in-out'], function () {
         Route::get('zones', 'AfricelFlowInterZoneController@getByName'); //ok
@@ -85,7 +85,7 @@ Route::group(['prefix' => 'flux', 'middleware' => 'cache.headers:private;max_age
         Route::group(['prefix' => 'h-24'], function () {
           Route::get('/', 'Flux24ZoneController@getFluxDataFromOrigin');
           Route::get('/daily', 'Flux24ZoneController@getFluxDataFromOriginDaily'); //ok
-          Route::get('/daily-compare', 'Flux24ZoneController@getFluxDataFromOriginDailyCompare');
+          Route::get('/daily-compare', 'Flux24ZoneController@getFluxDataFromOriginDailyCompare'); //ok
           Route::get('daily-in', 'Flux24ZoneController@getFluxDataFromOriginDailyIn'); //ok
           Route::get('daily-out', 'Flux24ZoneController@getFluxDataFromOriginDailyOut'); //ok
           Route::get('/global-in/province', 'Flux24ZoneController@getGlobalDataInByProvince'); //ok
@@ -101,8 +101,8 @@ Route::group(['prefix' => 'flux', 'middleware' => 'cache.headers:private;max_age
 
         Route::group(['prefix' => 'presence'], function () {
           Route::group(['prefix' => 'h-24'], function () {
-            Route::get('/', 'DashBoardController@getFlux24PresenceZone');
-            Route::get('/daily', 'DashBoardController@getFlux24PresenceZoneDaily');
+            Route::get('/', 'DashBoardController@getFlux24PresenceZone'); //ok
+            Route::get('/daily', 'DashBoardController@getFlux24PresenceZoneDaily'); //ok
             Route::get('/daily-in', 'Flux24PresenceZoneController@getFlux24PresenceDailyInZone'); //ok
           });
         });

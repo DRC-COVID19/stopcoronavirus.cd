@@ -45,7 +45,7 @@ class Flux24PresenceZoneController extends Controller
       return response()->json([
         'references' => $fluxRefences,
         'observations' => $flux,
-      ]);
+      ],200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);

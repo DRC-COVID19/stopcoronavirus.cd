@@ -119,7 +119,7 @@ class Flux24ZoneController extends Controller
                 ->groupBy('destination', 'date')
                 ->get();
 
-            return response()->json(['origin' => $fluxOrigin, 'destination' => $fluxDestination]);
+            return response()->json(['origin' => $fluxOrigin, 'destination' => $fluxDestination],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -166,9 +166,9 @@ class Flux24ZoneController extends Controller
                 }
             }
             if (is_array($fluxRefences)) {
-                return response()->json($flux);
+                return response()->json($flux,200,[],JSON_NUMERIC_CHECK);
             }
-            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()),200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -223,7 +223,7 @@ class Flux24ZoneController extends Controller
             return response()->json([
                 'references' => $fluxRefences,
                 'observations' => $flux,
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -279,7 +279,7 @@ class Flux24ZoneController extends Controller
             return response()->json([
                 'references' => $fluxRefences,
                 'observations' => $flux,
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -372,7 +372,7 @@ class Flux24ZoneController extends Controller
                 'general_reference' => $general_reference,
                 'general_observation' => $general_observation,
                 'zone' => $data['fluxGeoOptions']
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -431,7 +431,7 @@ class Flux24ZoneController extends Controller
                 'references' => $flux_reference,
                 'presence_observation' => $presence_observation,
                 'presence_reference' => $presence_reference
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
