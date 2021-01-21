@@ -2,8 +2,5 @@
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
     "/css/vueApp.css": "/css/vueApp.css",
-    "/js/vueApp.js": "/js/vueApp.js",
-    "/js/vueApp.a8ec0c2c984a9d9c865f.hot-update.js": "/js/vueApp.a8ec0c2c984a9d9c865f.hot-update.js",
-    "/js/vueApp.b827b87bfaf5bf3ed418.hot-update.js": "/js/vueApp.b827b87bfaf5bf3ed418.hot-update.js",
-    "/js/vueApp.38169165dd904e86e11e.hot-update.js": "/js/vueApp.38169165dd904e86e11e.hot-update.js"
+    "/js/vueApp.js": "/js/vueApp.js"
 }
