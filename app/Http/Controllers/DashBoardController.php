@@ -45,7 +45,7 @@ class DashBoardController extends Controller
             FROM pandemics p1
             INNER JOIN health_zones p2 ON p1.health_zone_id=p2.id
             GROUP BY p2.name, p2.latitude, p2.longitude");
-            return response()->json($pandemics);
+            return response()->json($pandemics,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -73,7 +73,7 @@ class DashBoardController extends Controller
                 ) AS dead
                 FROM pandemics p1
                 GROUP BY p1.last_update");
-            return response()->json($pandemics);
+            return response()->json($pandemics,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -89,7 +89,7 @@ class DashBoardController extends Controller
             SUM(p1.sick) as sick, sum(p1.seriously) as seriously,
             sum(p1.healed) as healed, sum(p1.dead) as dead, p1.last_update
             FROM pandemics p1 GROUP BY p1.last_update");
-            return response()->json($pandemics);
+            return response()->json($pandemics,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -146,7 +146,7 @@ class DashBoardController extends Controller
             }
         }
 
-        return response()->json(array_values($newArray));
+        return response()->json(array_values($newArray),200,[],JSON_NUMERIC_CHECK);
     }
 
     function getAllDiagnosticStat()
@@ -191,7 +191,7 @@ class DashBoardController extends Controller
             }
         }
 
-        return response()->json(array_values($newArray));
+        return response()->json(array_values($newArray),200,[],JSON_NUMERIC_CHECK);
     }
 
     public function getSondages()
@@ -384,7 +384,7 @@ class DashBoardController extends Controller
                 }
             }
         }
-        return response()->json(array_values($formattedArray));
+        return response()->json(array_values($formattedArray),200,[],JSON_NUMERIC_CHECK);
     }
 
     public function getFluxData(Request $request)
@@ -459,7 +459,7 @@ class DashBoardController extends Controller
             if (is_array($fluxRefences)) {
                 return response()->json($fluxData);
             }
-            return response()->json(array_merge($fluxRefencesData, $fluxData));
+            return response()->json(array_merge($fluxRefencesData, $fluxData),200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -501,9 +501,9 @@ class DashBoardController extends Controller
                 }
             }
             if (is_array($fluxRefences)) {
-                return response()->json($flux);
+                return response()->json($flux,200,[],JSON_NUMERIC_CHECK);
             }
-            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()),200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -529,7 +529,7 @@ class DashBoardController extends Controller
     {
         try {
             $zones = DB::select('SELECT "Origin" as origin FROM flux24_provinces UNION SELECT "Destination" AS origin FROM flux24_provinces');
-            return response()->json($zones);
+            return response()->json($zones,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -1851,9 +1851,9 @@ class DashBoardController extends Controller
                 $fluxData[] = $value;
             }
             if (is_array($fluxRefences)) {
-                return response()->json($fluxData);
+                return response()->json($fluxData,200,[],JSON_NUMERIC_CHECK);
             }
-            return response()->json(array_merge($fluxRefencesData, $fluxData));
+            return response()->json(array_merge($fluxRefencesData, $fluxData,200,[],JSON_NUMERIC_CHECK));
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -1886,9 +1886,9 @@ class DashBoardController extends Controller
                 }
             }
             if (is_array($fluxRefences)) {
-                return response()->json($flux);
+                return response()->json($flux,200,[],JSON_NUMERIC_CHECK);
             }
-            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()),200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

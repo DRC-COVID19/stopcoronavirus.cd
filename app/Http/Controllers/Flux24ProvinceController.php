@@ -44,7 +44,7 @@ class Flux24ProvinceController extends Controller
             return response()->json([
                 'observations' => $flux,
                 'references' => $flux_reference,
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -76,7 +76,7 @@ class Flux24ProvinceController extends Controller
             return response()->json([
                 'observations' => $flux,
                 'references' => $flux_reference,
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -160,7 +160,7 @@ class Flux24ProvinceController extends Controller
             if (is_array($fluxRefences)) {
                 return response()->json($fluxData);
             }
-            return response()->json(array_merge($fluxRefencesData, $fluxData));
+            return response()->json(array_merge($fluxRefencesData, $fluxData),200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -208,7 +208,7 @@ class Flux24ProvinceController extends Controller
             if (is_array($fluxRefences)) {
                 return response()->json($flux);
             }
-            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()),200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -287,7 +287,7 @@ class Flux24ProvinceController extends Controller
             return response()->json([
                 'references' => $fluxRefences,
                 'observations' => $flux,
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -344,7 +344,7 @@ class Flux24ProvinceController extends Controller
             return response()->json([
                 'references' => $fluxRefences,
                 'observations' => $flux,
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

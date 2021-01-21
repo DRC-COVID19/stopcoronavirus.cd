@@ -74,7 +74,7 @@ class IndicatorController extends Controller
             }
             $mergeArray = array_merge($axeX->toArray(), $axeY->toArray());
 
-            return response()->json($mergeArray);
+            return response()->json($mergeArray,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

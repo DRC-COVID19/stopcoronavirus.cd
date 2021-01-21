@@ -18,7 +18,7 @@ class FluxHotSpotController extends Controller
   {
     try {
       $hotspots = FluxHotSpot::orderBy('name')->get();
-      return response()->json($hotspots->toArray());
+      return response()->json($hotspots->toArray(),200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);

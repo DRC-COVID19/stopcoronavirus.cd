@@ -64,7 +64,7 @@ class Flux30ZoneSumController extends Controller
       return  response()->json([
         "observations" => $fluxObservationWithMedian,
         "references" => $fluxReferenceWithMedian
-      ], 200);
+      ],200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -125,7 +125,7 @@ class Flux30ZoneSumController extends Controller
       return  response()->json([
         "observations" => $fluxObservationWithMedian,
         "references" => $fluxReferenceWithMedian
-      ], 200);
+      ],200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -163,7 +163,7 @@ class Flux30ZoneSumController extends Controller
       return  response()->json([
         "observations" => $observationMedia,
         "references" => $referenceMedia
-      ], 200);
+      ],200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -207,7 +207,7 @@ class Flux30ZoneSumController extends Controller
       return  response()->json([
         "observations" => $observationMedia,
         "references" => $referenceMedia
-      ], 200);
+      ],200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -268,7 +268,7 @@ class Flux30ZoneSumController extends Controller
 
       return  response()->json([
         "observations" => array_values(collect($ObservationFormatted)->sortBy('hour')->groupBy('date')->toArray()),
-      ], 200);
+      ],200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -337,7 +337,7 @@ class Flux30ZoneSumController extends Controller
 
       return  response()->json([
         "observations" => array_values(collect($ObservationFormatted)->sortBy('hour')->groupBy('date')->toArray()),
-      ], 200);
+      ],200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -365,7 +365,7 @@ class Flux30ZoneSumController extends Controller
       $fluxGroup = array_values($flux->groupBy('date')->toArray());
       return  response()->json([
         "observations" => $fluxGroup,
-      ], 200);
+      ],200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -398,7 +398,7 @@ class Flux30ZoneSumController extends Controller
 
       return  response()->json([
         "observations" => $fluxGroup,
-      ], 200);
+      ],200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
