@@ -30,13 +30,13 @@ class IndicatorController extends Controller
             $axeY = [];
             switch ($data['x']) {
                 case 1:
-                    $axeX = Flux::select(['Origin as name', 'Date as date', DB::raw('sum(volume)as x')])
+                    $axeX = Flux::select(['Origin as name', 'Date as date', DB::raw('sum("Volume") as x')])
                         ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                         ->WhereIn('Origin', $data['geoOptions'])
                         ->groupBy('Origin', 'Date')->get();
                     break;
                 case 2:
-                    $axeX = Flux::select(['Destination as name', 'Date as date', DB::raw('sum(volume) as x')])
+                    $axeX = Flux::select(['Destination as name', 'Date as date', DB::raw('sum("Volume") as x')])
                         ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                         ->WhereIn('Destination', $data['geoOptions'])
                         ->groupBy('Destination', 'Date')->get();

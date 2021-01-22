@@ -307,13 +307,13 @@ class HospitalController extends Controller
                   // pour l'hopital x à la date $last_update sur laquelle on boucle
                   $query->select(DB::raw(1))
                   ->from(DB::raw('hospital_situations AS h'))
-                  ->whereRaw('h.hospital_id = hospital_situations.hospital_id
-                      AND h.last_update <= "' . $last_update . '"
+                  ->whereRaw("h.hospital_id = hospital_situations.hospital_id
+                      AND h.last_update <='{$last_update}'
                       AND (
                         h.last_update > hospital_situations.last_update OR
                         (h.last_update = hospital_situations.last_update AND h.id > hospital_situations.id )
                       )
-                    ') ;
+                    ") ;
               })
               ->first();
 
