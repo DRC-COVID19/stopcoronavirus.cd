@@ -53,14 +53,14 @@
             v-if="hasFlux24DailyIn && activeMenu == 1 && selectedSource == 1"
           >
             <b-link
-              :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
-              @click="layerSetSyle(2)"
-              >Arcs</b-link
-            >
-            <b-link
               :class="{ active: fluxMapStyle == 1 }"
               @click="layerSetSyle(1)"
               >Hachurés</b-link
+            >
+            <b-link
+              :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
+              @click="layerSetSyle(2)"
+              >Arcs</b-link
             >
           </div>
           <b-row
@@ -176,7 +176,7 @@
                     :isLoading="isLoading"
                   />
                 </b-tab>
-                <b-tab title="Province" v-if="activeMenu == 1">
+                <b-tab title="Vue Globale des Provinces" v-if="activeMenu == 1">
                   <b-row>
                     <b-col cols="6" class="pr-2">
                       <skeleton-loading v-if="isLoading">
@@ -215,7 +215,7 @@
                   </b-row>
                 </b-tab>
                 <b-tab
-                  title="Mobilité"
+                  :title="titleMobility"
                   v-if="
                     (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
                     !isFirstLoad &&
@@ -478,6 +478,18 @@ export default {
       observationDate: (state) => state.flux.observationDate,
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
     }),
+    titleMobility() {
+      let name = "Provinces";
+      switch (this.fluxGeoGranularity) {
+        case 2:
+          name = "Zone de santé";
+          break;
+        case 3:
+          name = "Hotspot";
+          break;
+      }
+      return name;
+    },
     isStartEndDate() {
       return this.observationDate.start == this.observationDate.end;
     },
@@ -2044,7 +2056,7 @@ export default {
     padding: 5px;
     text-align: center;
     text-decoration: unset;
-    background: rgba(46, 91, 255, 0.7);
+    background: rgba(46, 91, 255, 0.5);
     color: white !important;
     border-radius: 5px;
     &.active {
