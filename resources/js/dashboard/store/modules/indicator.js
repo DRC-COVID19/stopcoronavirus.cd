@@ -21,7 +21,7 @@ export default {
   },
   actions: {
     submitFilters({ state }, form) {
-      
+
       event("fetch_indicator_data_request", {
         event_category: "fetch_indicator_data",
         event_label: "indicators_req_send",
@@ -44,6 +44,7 @@ export default {
         params: form
       }).then(({ data }) => {
         const dates = [...new Set(data.map(x => x.date))];
+        console.log('dates',dates);
         const statisticData = [];
         let totalX = 0;
         let totalY = 0;
