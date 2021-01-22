@@ -44,7 +44,6 @@ export default {
         params: form
       }).then(({ data }) => {
         const dates = [...new Set(data.map(x => x.date))];
-        console.log('dates',dates);
         const statisticData = [];
         let totalX = 0;
         let totalY = 0;
