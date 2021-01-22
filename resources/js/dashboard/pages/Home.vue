@@ -153,7 +153,7 @@
               </b-tabs>
             </transition>
             <transition name="fade">
-              <b-tabs pills card v-if="selectedSource == 1">
+              <b-tabs pills card v-if="selectedSource == 1 || activeMenu == 5">
                 <b-tab
                   title="Données Covid-19"
                   v-if="(!!covidCases || isLoading) && activeMenu == 2"
@@ -218,8 +218,8 @@
                   :title="titleMobility"
                   v-if="
                     (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
-                    !isFirstLoad &&
-                    this.activeMenu == 1
+                    !isFirstLoad && (
+                    this.activeMenu == 1 )
                   "
                   :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
                 >
