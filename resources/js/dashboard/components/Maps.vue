@@ -1858,8 +1858,6 @@ export default {
         });
         formatCurrentZone(DataGroupByDate);
       }
-      console.log('localData',localData);
-      console.log('features',features);
 
       // features = features.filter((x) => x.properties.volume != 0);
 

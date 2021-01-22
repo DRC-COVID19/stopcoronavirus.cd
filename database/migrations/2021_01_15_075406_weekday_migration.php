@@ -17,7 +17,6 @@ class WeekdayMigration extends Migration
     //we create function Weekday for pgsql
 
     if (env('DB_CONNECTION') == 'pgsql') {
-      echo env('DB_CONNECTION') ;
       DB::statement("CREATE OR REPLACE FUNCTION WEEKDAY(date) RETURNS double precision LANGUAGE 'sql' COST 100 VOLATILE AS $$ SELECT EXTRACT(isodow FROM cast($1 as date))-1; $$;");
 
     }
