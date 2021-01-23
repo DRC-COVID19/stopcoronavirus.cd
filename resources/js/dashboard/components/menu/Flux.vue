@@ -88,7 +88,7 @@
             <b-col cols="12" md="9">
               <b-form-group>
                 <div class="d-flex">
-                  <div class="mr-2">
+                  <div class="mr-2 picker-container">
                     <date-range-picker
                       :disabled="fluxForm.selectedFluxSource == 2"
                       ref="picker1"
@@ -122,7 +122,7 @@
                       class="fa fa-info-circle text-danger text-right range-lbl"
                     ></span>
                   </div>
-                  <div>
+                  <div class="picker-container">
                     <date-range-picker
                       ref="picker2"
                       :locale-data="rangeData"
@@ -189,7 +189,7 @@ import {
   AFRICELL_OBSERVATION_START,
   AFRICELL_OBSERVATION_END,
   HOTSPOT_TYPE,
-  OBSERVATION_END_PROVINCE
+  OBSERVATION_END_PROVINCE,
 } from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
@@ -301,7 +301,6 @@ export default {
       (state) => state.flux.fluxHotspotClicked,
       (value) => {
         if (value) {
-
           this.fluxFormCached.fluxGeoOptions = [value];
           this.fluxForm = this.fluxFormCached;
           this.setFluxGeoOptions(this.fluxFormCached.fluxGeoOptions);
@@ -732,7 +731,12 @@ export default {
 .btn-submit {
   font-size: 14px;
 }
-
-.v-select-group {
+.picker-container {
+  width: 40%;
+}
+@media screen and (min-width: 1300px) {
+  .picker-container {
+    width: 100%;
+  }
 }
 </style>
