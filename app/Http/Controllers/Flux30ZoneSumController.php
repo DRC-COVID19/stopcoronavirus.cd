@@ -41,8 +41,8 @@ class Flux30ZoneSumController extends Controller
         ->orderBy('volume')
         ->get();
 
-      $fluxObservationGroup = $fluxObservations->groupBy('observation_Zone');
-      $fluxReferenceGroup = $fluxReferences->groupBy('observation_Zone');
+      $fluxObservationGroup = $fluxObservations->groupBy('Observation_Zone');
+      $fluxReferenceGroup = $fluxReferences->groupBy('Observation_Zone');
       $fluxObservationWithMedian = [];
       $fluxReferenceWithMedian = [];
 
