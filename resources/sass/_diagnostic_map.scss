@@ -854,7 +854,9 @@
       }
     }
     .percent-title {
-      font-size: 1rem;
+      font-size: 0.8rem;
+      color: $title-color;
+      font-weight: bold;
     }
     .percent {
       font-size: 2.5rem;
@@ -879,6 +881,6 @@
   font-size: 0.7rem;
   text-align: center;
   margin-bottom: 5px;
-  color: #6c757d;
+  color: $title-color;
   font-weight: bold;
 }

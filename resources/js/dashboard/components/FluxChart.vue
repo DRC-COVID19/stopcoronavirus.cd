@@ -1918,9 +1918,7 @@ export default {
     }
   }
 }
-.percent-title {
-  font-size: 1rem;
-}
+
 .percent {
   font-size: 2.5rem;
   font-weight: bold;

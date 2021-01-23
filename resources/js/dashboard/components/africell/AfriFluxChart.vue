@@ -72,7 +72,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`africell_prensence_card`"
           >
-            <div class="text-center">
+            <div class="text-center general-top-title">
               Evolution de la présence par rapport à la période de référence
             </div>
             <div class="chart-container">
@@ -121,7 +121,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`mobile_out_in_tot_card`"
           >
-            <div class="text-center">Evolution du nombre d'entrées</div>
+            <div class="text-center general-top-title">Evolution du nombre d'entrées</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -140,7 +140,7 @@
           v-show="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">
+            <div class="text-center general-top-title">
               % de changement du nombre d'entrées par origine
             </div>
             <div class="chart-container">
@@ -189,7 +189,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`mobile_out_in_tot_card`"
           >
-            <div class="text-center">Evolution du nombre de sorties</div>
+            <div class="text-center general-top-title">Evolution du nombre de sorties</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -208,7 +208,7 @@
           v-show="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">
+            <div class="text-center general-top-title">
               % de changement du nombre de sorties par destination
             </div>
             <div class="chart-container">
@@ -257,7 +257,7 @@
             class="mb-3 p-2 cardtype1"
             :ref="`mobile_out_in_tot_card`"
           >
-            <div class="text-center">Evolution du nombre d'entrées-sorties</div>
+            <div class="text-center general-top-title">Evolution du nombre d'entrées-sorties</div>
             <div class="chart-container">
               <canvas
                 height="200"
@@ -276,7 +276,7 @@
           v-show="isStartEnd"
         >
           <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">
+            <div class="text-center general-top-title">
               % de changement du nombre d'entrées-sorties par zone
             </div>
             <div class="chart-container">
