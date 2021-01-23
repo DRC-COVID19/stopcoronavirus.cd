@@ -216,8 +216,7 @@ class HospitalController extends Controller
             )
             ->first();
 
-            $results =
-            $hospitals->merge($hospitalsSituation1)->merge($hospitalsSituation2);
+            $results =$hospitals->merge($hospitalsSituation1)->merge($hospitalsSituation2);
 
             return response()->json($results,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
