@@ -148,6 +148,7 @@
                     :fluxAfricellDaily="fluxAfricellDaily"
                     :fluxAfricelPresence="fluxAfricelPresence"
                     :fluxAfricelInOut="fluxAfricelInOut"
+                    :isLoading="isLoading"
                   />
                 </b-tab>
               </b-tabs>
