@@ -266,12 +266,17 @@
   }
 
   @include card-style;
+
   .vs__dropdown-toggle {
     background: $dash-input-backColor !important;
     border-color: $dash-input-border-color;
   }
 
-
+  .zone-has-error {
+    .vs__dropdown-toggle {
+      border-color: $primary;
+    }
+  }
 
   h1 {
     font-size: 1.3rem;

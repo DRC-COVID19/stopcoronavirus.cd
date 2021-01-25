@@ -55,6 +55,7 @@
                   :reduce="(item) => item.origin"
                   @input="fluxGeoOptionsChange"
                   class="style-chooser"
+                  :class="{ 'zone-has-error': IsGeoOptionEmpty }"
                 >
                   <template v-slot:option="option">
                     <div v-if="option.isTitle" class="v-select-group">
@@ -63,6 +64,9 @@
                     <div v-else>{{ option.origin }}</div>
                   </template>
                 </v-select>
+                <span v-if="IsGeoOptionEmpty" class="range-lbl text-danger"
+                  >{{ messaGeoOptionsNull }}
+                </span>
               </b-form-group>
             </b-col>
           </b-row>
@@ -348,6 +352,25 @@ export default {
     },
     referenceHasError() {
       return this.referenceThrowError;
+    },
+    messaGeoOptionsNull() {
+      let geoGanularity = "une province";
+      switch (this.fluxForm.fluxGeoGranularity) {
+        case 2:
+          geoGanularity = "une zone";
+          break;
+        case 3:
+          geoGanularity = "un hotspot";
+          break;
+      }
+      return `Sélectionnez ${geoGanularity}`;
+    },
+    IsGeoOptionEmpty() {
+      return (
+        !this.fluxForm.fluxGeoOptions ||
+        (this.fluxForm.fluxGeoOptions &&
+          this.fluxForm.fluxGeoOptions.length == 0)
+      );
     },
   },
   watch: {
