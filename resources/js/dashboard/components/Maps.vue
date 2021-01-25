@@ -2543,6 +2543,9 @@ export default {
       // popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
     },
     infrastructure() {
+      if (this.activeMenu != 5) {
+        return;
+      }
       if (this.hospitals) {
         map.off(
           "mouseleave",

@@ -180,14 +180,32 @@
                 <b-tab title="Vue Globale des Provinces" v-if="activeMenu == 1">
                   <b-row>
                     <b-col cols="6" class="pr-2">
-                      <skeleton-loading v-if="isLoading">
+                      <!-- <skeleton-loading v-if="isLoading">
                         <square-skeleton
                           :boxProperties="{
                             width: '100%',
                             height: '830px',
                           }"
                         ></square-skeleton>
-                      </skeleton-loading>
+                      </skeleton-loading> -->
+                      <div v-if="isLoading">
+                        <b-skeleton-wrapper :loading="isLoading">
+                          <template #loading>
+                            <b-card no-body class="p-2 rounded-0 cardtype2">
+                              <b-skeleton
+                                class="m-auto"
+                                width="60%"
+                                height="20"
+                              ></b-skeleton>
+                              <b-skeleton
+                                class="mt-2"
+                                width="100%"
+                                height="820px"
+                              ></b-skeleton>
+                            </b-card>
+                          </template>
+                        </b-skeleton-wrapper>
+                      </div>
                       <GlobalProvince
                         v-else
                         title="Mobilité entrante"
@@ -197,14 +215,33 @@
                       />
                     </b-col>
                     <b-col cols="6" class="pl-2 pr-2">
-                      <skeleton-loading v-if="isLoading">
+                      <!-- <skeleton-loading v-if="isLoading">
                         <square-skeleton
                           :boxProperties="{
                             width: '100%',
                             height: '830px',
                           }"
                         ></square-skeleton>
-                      </skeleton-loading>
+                      </skeleton-loading> -->
+
+                      <div v-if="isLoading">
+                        <b-skeleton-wrapper :loading="isLoading">
+                          <template #loading>
+                            <b-card no-body class="p-2 rounded-0 cardtype2">
+                              <b-skeleton
+                                class="m-auto"
+                                width="60%"
+                                height="20"
+                              ></b-skeleton>
+                              <b-skeleton
+                                class="mt-2"
+                                width="100%"
+                                height="820px"
+                              ></b-skeleton>
+                            </b-card>
+                          </template>
+                        </b-skeleton-wrapper>
+                      </div>
                       <GlobalProvince
                         v-else
                         title="Mobilité sortante"
@@ -219,8 +256,8 @@
                   :title="titleMobility"
                   v-if="
                     (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
-                    !isFirstLoad && (
-                    this.activeMenu == 1 )
+                    !isFirstLoad &&
+                    this.activeMenu == 1
                   "
                   :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
                 >
@@ -349,6 +386,7 @@ import {
   PREFERENCE_START,
   PREFERENCE_END,
   HOTSPOT_TYPE,
+  INFRASTRUCTURE_FIRST_UPDATE,
 } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
@@ -631,6 +669,14 @@ export default {
         }
       }
     );
+
+    // Prefetch infranstructure data
+    this.getHospitalsData({
+      observation_end: moment().format("YYYY-MM-DD"),
+      observation_start: INFRASTRUCTURE_FIRST_UPDATE,
+      township: 0,
+      isLoading: false,
+    });
   },
   methods: {
     ...mapActions([
@@ -638,6 +684,7 @@ export default {
       "getHospitalsData",
       "getHealthZone",
       "getFluxHotSpot",
+      "getSituationHospital",
     ]),
     ...mapMutations(["setMapStyle", "setFluxType", "setObservationDate"]),
     toggleBottomBar() {
@@ -1515,10 +1562,10 @@ export default {
         params: values,
       });
 
-      if (hotspot) {
-        values = { ...values };
-        values.fluxGeoOptions = ["Tout"];
-      }
+      // if (hotspot) {
+      //   values = { ...values };
+      //   values.fluxGeoOptions = ["Tout"];
+      // }
       const generalRequest = axios.get(urlGeneral, {
         params: values,
       });
@@ -1627,6 +1674,7 @@ export default {
         });
     },
     submitInfrastructureForm(values) {
+      values.isLoading = true;
       this.getHospitalsData(values);
     },
     seeSide() {

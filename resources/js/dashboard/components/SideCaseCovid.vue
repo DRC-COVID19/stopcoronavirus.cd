@@ -2,24 +2,30 @@
   <b-container class="side-case-covid-container p-0">
     <b-row>
       <b-col cols="12" v-if="isLoading">
-        <skeleton-loading >
-          <square-skeleton
-            :boxProperties="{
-                                width: '100%',
-                                height: '830px'
-                            }"
-          ></square-skeleton>
-        </skeleton-loading>
-      </b-col >
+        <b-skeleton-table
+          :rows="15"
+          :columns="5"
+          :table-props="{ striped: true, outlined: true, responsive: true }"
+        ></b-skeleton-table>
+      </b-col>
       <b-col cols="12" v-else>
-        <b-table striped outlined hover responsive :items="CovidCasesProvince" :fields="fields">
+        <b-table
+          striped
+          outlined
+          hover
+          responsive
+          :items="CovidCasesProvince"
+          :fields="fields"
+        >
           <template v-slot:cell(name)="data">
             <span>{{ data.item.properties.name }}</span>
           </template>
           <template v-slot:cell(last_update)="data">
-            <div
-              class="text-right"
-            >{{ moment(data.item.properties.last_update).format("DD.MM.YYYY") }}</div>
+            <div class="text-right">
+              {{
+                moment(data.item.properties.last_update).format("DD.MM.YYYY")
+              }}
+            </div>
           </template>
           <template v-slot:cell(confirmed)="data">
             <div class="text-right">{{ data.item.properties.confirmed }}</div>

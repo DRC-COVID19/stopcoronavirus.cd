@@ -177,7 +177,7 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSumByDate::select([DB::raw('sum(volume) as volume')])
+      $fluxObservations = Flux30ZoneSumByDate::select([DB::raw('sum("volume") as volume')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sum_by_dates.Observation_Zone');
         });

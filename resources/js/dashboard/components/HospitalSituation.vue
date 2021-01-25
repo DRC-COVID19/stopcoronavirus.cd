@@ -18,7 +18,10 @@
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
-          <div class="text-right text-black-50 col" v-if="lastUpdate && !isLoading">
+          <div
+            class="text-right text-black-50 col"
+            v-if="lastUpdate && !isLoading"
+          >
             Mise à jour du {{ moment(lastUpdate).format("DD.MM.Y") }}
           </div>
           <div class="col-12 text-right" v-if="!isLoading">
@@ -141,22 +144,24 @@
 
     <b-row no-gutters class="mb-2">
       <b-col cols="12" md="6" class="pr-1">
-        <skeleton-loading v-if="isLoading">
-          <square-skeleton
-            :boxProperties="{
-              width: '100%',
-              height: '430px',
-            }"
-          ></square-skeleton>
-        </skeleton-loading>
-        <FullScreen id="canvasStat1_full" link="canvasStat1" v-if="!isLoading">
+        <div v-if="situationHospitalLoading|| isLoading">
+          <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
+            <template #loading>
+              <b-card no-body class="default-card card-chart p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+        </div>
+        <FullScreen id="canvasStat1_full" link="canvasStat1" v-show="!situationHospitalLoading && !isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner
               label="Chargement..."
               v-if="situationHospitalLoading"
             ></b-spinner>
             <div class="legend-custom">
-              <div class="text-center title">
+              <div class="text-center title  general-top-title">
                 Evolution d'occupation des respirateurs
               </div>
               <div
@@ -178,7 +183,7 @@
             </div>
             <div class="chart-container">
               <canvas
-                height="400"
+                height="200"
                 width="100vh"
                 ref="canvasStat1"
                 id="canvasStat1"
@@ -189,22 +194,24 @@
       </b-col>
 
       <b-col cols="12" md="6" class="pl-1">
-        <skeleton-loading v-if="isLoading">
-          <square-skeleton
-            :boxProperties="{
-              width: '100%',
-              height: '430px',
-            }"
-          ></square-skeleton>
-        </skeleton-loading>
-        <FullScreen id="canvasStat2_full" link="canvasStat2" v-if="!isLoading">
+        <div v-if="situationHospitalLoading|| isLoading">
+          <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
+            <template #loading>
+              <b-card no-body class="default-card card-chart p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+        </div>
+        <FullScreen id="canvasStat2_full" link="canvasStat2" v-show="!situationHospitalLoading && !isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner
               label="Chargement..."
               v-if="situationHospitalLoading"
             ></b-spinner>
             <div class="legend-custom">
-              <div class="text-center title">
+              <div class="text-center title  general-top-title">
                 Evolution d'occupation des lits de réanimation
               </div>
               <div
@@ -226,7 +233,7 @@
             </div>
             <div class="chart-container">
               <canvas
-                height="400"
+                height="200"
                 width="100vh"
                 ref="canvasStat2"
                 id="canvasStat2"
@@ -237,22 +244,28 @@
       </b-col>
 
       <b-col cols="12" class="mt-2">
-        <skeleton-loading v-if="isLoading">
-          <square-skeleton
-            :boxProperties="{
-              width: '100%',
-              height: '430px',
-            }"
-          ></square-skeleton>
-        </skeleton-loading>
-        <FullScreen id="canvasStat3_full" link="canvasStat3" v-if="!isLoading">
+        <div v-if="situationHospitalLoading|| isLoading">
+          <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
+            <template #loading>
+              <b-card no-body class="default-card card-chart p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+        </div>
+        <FullScreen
+          id="canvasStat3_full"
+          link="canvasStat3"
+          v-show="!situationHospitalLoading && !isLoading"
+        >
           <b-card no-body class="default-card card-chart p-2 cardtype1">
-            <b-spinner
+            <!-- <b-spinner
               label="Chargement..."
               v-if="situationHospitalLoading"
-            ></b-spinner>
+            ></b-spinner> -->
             <div class="legend-custom">
-              <div class="text-center title">
+              <div class="text-center title  general-top-title">
                 Evolution global du taux d'occupation
               </div>
               <div
@@ -338,12 +351,11 @@ export default {
     lastUpdate() {
       if (this.selectedHospital != null)
         return this.selectedHospital.last_update;
-      else if (this.dataGlobal){
+      else if (this.dataGlobal) {
         return this.dataGlobal.last_update[
           this.dataGlobal.last_update.length - 1
         ];
-        }
-      else return null;
+      } else return null;
     },
   },
   watch: {
@@ -412,7 +424,6 @@ export default {
             const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
 
             return y;
-
           }
         }
         return item;
@@ -459,8 +470,6 @@ export default {
               const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
 
               return y;
-
-
             }
           }
           return item;
@@ -745,12 +754,14 @@ export default {
             },
           },
         };
-
+        const reference=this.$refs[`canvasStat${i + 1}`];
         if (this.lineCharts[i]) this.lineCharts[i].destroy();
         this.lineCharts[i] = new Chart(
-          this.$refs[`canvasStat${i + 1}`].getContext("2d"),
+          reference.getContext("2d"),
           config
         );
+        reference.style.height = "200px";
+        reference.style.maxHeight = "200px";
         // this.lineCharts[i].generateLegend();
       }
     },
