@@ -1309,6 +1309,9 @@ export default {
       );
     },
 
+    /**
+     * Get one hotspot by property==value
+     */
     getHospot(value, property = "pseudo") {
       return HOTSPOT_TYPE.find((x) => x[property] == value);
     },
@@ -1427,13 +1430,8 @@ export default {
             if (point && polygone) {
               const isPoint = turf.booleanPointInPolygon(point, polygone);
               if (isPoint) {
-                colorExpression.push([
-                  "==",
-                  ["get", dataKey],
-                  itemPoint.properties.DENOMMIN,
-                ]);
-                colorExpression.push(color);
 
+                //check hotspot match by type if fluxHospotype exist
                 if (
                   fluxHotspotType &&
                   itemPoint.properties.Type_ != fluxHotspotType.name
@@ -1445,7 +1443,16 @@ export default {
                 if (hotspot && itemPoint.properties.Type_ != hotspot.name) {
                   return;
                 }
+
                 hotspotPoint.push(itemPoint.properties.DENOMMIN);
+
+                //Put colorExpression only for hotspot zone where hospotpoints are present
+                colorExpression.push([
+                  "==",
+                  ["get", dataKey],
+                  itemPoint.properties.DENOMMIN,
+                ]);
+                colorExpression.push(color);
               }
             }
           }

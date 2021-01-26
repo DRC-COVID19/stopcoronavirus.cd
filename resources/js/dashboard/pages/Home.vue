@@ -1562,16 +1562,17 @@ export default {
         params: values,
       });
 
-      // if (hotspot) {
-      //   values = { ...values };
-      //   values.fluxGeoOptions = ["Tout"];
-      // }
       const generalRequest = axios.get(urlGeneral, {
         params: values,
       });
 
+      let mapsValues = values;
+      if (hotspot) {
+        mapsValues = { ...values };
+        mapsValues.fluxGeoOptions = ["Tout"];
+      }
       const mapsRequest = axios.get(urlMaps, {
-        params: values,
+        params: mapsValues,
       });
 
       this.isFirstLoad = false;

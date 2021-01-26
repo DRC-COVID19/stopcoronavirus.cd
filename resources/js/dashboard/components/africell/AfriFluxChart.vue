@@ -185,7 +185,7 @@
                   <b-skeleton
                     class="mt-2"
                     width="100%"
-                    height="490"
+                    height="380"
                   ></b-skeleton>
                 </b-card>
               </template>
@@ -282,7 +282,7 @@
                   <b-skeleton
                     class="mt-2"
                     width="100%"
-                    height="490"
+                    height="380"
                   ></b-skeleton>
                 </b-card>
               </template>
@@ -381,7 +381,7 @@
                   <b-skeleton
                     class="mt-2"
                     width="100%"
-                    height="490"
+                    height="380"
                   ></b-skeleton>
                 </b-card>
               </template>

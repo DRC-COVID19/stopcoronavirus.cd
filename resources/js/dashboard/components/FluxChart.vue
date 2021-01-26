@@ -285,32 +285,6 @@
         >
           <b-row class="mb-3">
             <b-col cols="12">
-              <!-- <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
-                    width: '100%',
-                    height: '175px',
-                  }"
-                ></square-skeleton>
-              </skeleton-loading>
-
-              <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
-                    width: '100%',
-                    height: '200px',
-                  }"
-                ></square-skeleton>
-              </skeleton-loading>
-
-              <skeleton-loading v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
-                    width: '100%',
-                    height: '400px',
-                  }"
-                ></square-skeleton>
-              </skeleton-loading> -->
 
               <b-skeleton-wrapper :loading="isLoading">
                 <template #loading>

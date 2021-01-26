@@ -81,7 +81,7 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSumByDate::select(['observation_Zone', DB::raw('sum(volume) as volume')])
+      $fluxObservations = Flux30ZoneSumByDate::select(['Observation_Zone', DB::raw('sum("volume") as volume')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sum_by_dates.Observation_Zone');
         });
@@ -94,7 +94,7 @@ class Flux30ZoneSumController extends Controller
         ->orderBy('volume')
         ->get();
 
-      $fluxReferences = Flux30ZoneSumByDate::select(['observation_Zone', DB::raw('sum(volume) as volume')])
+      $fluxReferences = Flux30ZoneSumByDate::select(['Observation_Zone', DB::raw('sum("volume") as volume')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sum_by_dates.Observation_Zone');
         });
@@ -107,8 +107,8 @@ class Flux30ZoneSumController extends Controller
         ->orderBy('volume')
         ->get();
 
-      $fluxObservationGroup = $fluxObservations->groupBy('observation_Zone');
-      $fluxReferenceGroup = $fluxReferences->groupBy('observation_Zone');
+      $fluxObservationGroup = $fluxObservations->groupBy('Observation_Zone');
+      $fluxReferenceGroup = $fluxReferences->groupBy('Observation_Zone');
       $fluxObservationWithMedian = [];
       $fluxReferenceWithMedian = [];
 
