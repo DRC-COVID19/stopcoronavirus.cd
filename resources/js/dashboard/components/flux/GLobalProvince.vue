@@ -171,14 +171,7 @@ export default {
             ],
           },
           plugins: {
-            crosshair: {
-              sync: {
-                enabled: false, // enable trace line syncing with other charts
-              },
-              zoom: {
-                enabled: false,
-              },
-            },
+            crosshair: false,
           },
         },
       };

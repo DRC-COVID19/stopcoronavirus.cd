@@ -1,297 +1,417 @@
 <template>
-  <b-container class="p-0 flux-chart">
-    <b-row class="mb-2">
-      <b-col cols="12" md="6">
-        <h3 class="d-flex align-items-center mb-0">
-          <span class="ml-2 mr-2">{{ targetZone ? targetZone[0] : null }}</span>
-        </h3>
-      </b-col>
-      <b-col cols="12" md="6" class="d-flex justify-content-end">
-        <div>
-          <p class="small m-0 text-muted">
-            Données fournies par
-            <b>Africell</b>
-          </p>
-          <p class="small m-0">
-            <span class="text-muted">Mise à jour du</span>
-            <b>{{ moment(last_update).format("Y-MM-DD") }}</b>
-          </p>
-        </div>
-        <div>
-          <b-img
-            width="38"
-            height="38"
-            src="/img/africell_logo.jpg"
-            class="logoPartenaire"
-            alt="orange logo"
-          />
-        </div>
-      </b-col>
-    </b-row>
-    <b-row no-gutters v-if="fluxAfricellDaily.length == 0">
-      <b-col cols="12" md="12" class="pr-1 pl-1">
-        <b-card class="mb-3 flux-mobility active">
-          <p class="text-muted">Données non disponibles</p>
-        </b-card>
-      </b-col>
-    </b-row>
-    <b-row no-gutters v-else>
-      <b-col cols="12" md="12" class="pr-1 pl-1">
-        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
-          <template #loading>
-            <b-card class="mb-3 flux-mobility">
-              <b-skeleton width="90%" height="20"></b-skeleton>
-              <b-skeleton width="30%" height="60"></b-skeleton>
-              <b-skeleton width="100%" height="50"></b-skeleton>
+  <div>
+    <!-- <b-container v-if="isLoading"> </b-container> -->
+    <b-container class="p-0 flux-chart">
+      <b-row class="mb-2">
+        <b-col cols="12" md="6">
+          <h3 class="d-flex align-items-center mb-0">
+            <span class="ml-2 mr-2">{{
+              targetZone ? targetZone[0] : null
+            }}</span>
+          </h3>
+        </b-col>
+        <b-col cols="12" md="6" class="d-flex justify-content-end">
+          <div>
+            <b-skeleton-wrapper :loading="isLoading">
+              <template #loading>
+                <b-skeleton width="171" height="20"></b-skeleton>
+                <b-skeleton width="150" height="20"></b-skeleton>
+              </template>
+              <p class="small m-0 text-muted">
+                Données fournies par
+                <b>Africell</b>
+              </p>
+              <p class="small m-0">
+                <span class="text-muted">Mise à jour du</span>
+                <b>{{ moment(last_update).format("Y-MM-DD") }}</b>
+              </p>
+            </b-skeleton-wrapper>
+          </div>
+          <div>
+            <div class="logoPartenaire" v-if="isLoading">
+              <b-skeleton-img
+                width="35"
+                height="38"
+
+              ></b-skeleton-img>
+            </div>
+
+            <b-img
+              v-show="!isLoading"
+              width="38"
+              height="38"
+              src="/img/africell_logo.jpg"
+              class="logoPartenaire"
+              alt="orange logo"
+            />
+          </div>
+        </b-col>
+      </b-row>
+      <b-row no-gutters v-if="fluxAfricellDaily.length == 0 && !isLoading">
+        <b-col cols="12" md="12" class="pr-1 pl-1">
+          <b-card class="mb-3 flux-mobility active">
+            <p class="text-muted">Données non disponibles</p>
+          </b-card>
+        </b-col>
+      </b-row>
+      <b-row no-gutters v-else>
+        <b-col cols="12" md="12" class="pr-1 pl-1">
+          <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
+            <template #loading>
+              <b-card class="mb-3 flux-mobility">
+                <b-skeleton width="90%" height="20"></b-skeleton>
+                <b-skeleton width="30%" height="60"></b-skeleton>
+              </b-card>
+            </template>
+
+            <b-card
+              class="mb-3 flux-mobility"
+              :class="{ active: afriFluxType == 3 }"
+              @click="selectFluxType(3)"
+            >
+              <h5 class="percent-title">
+                Pourcentage de changement de la présence par rapport à la
+                référence
+              </h5>
+
+              <div class="percent flux-presence">
+                {{ volume ? volume.toFixed(2) : "NAN" }}%​
+              </div>
             </b-card>
-          </template>
+          </b-skeleton-wrapper>
 
-          <b-card
-            class="mb-3 flux-mobility"
-            :class="{ active: afriFluxType == 3 }"
-            @click="selectFluxType(3)"
+          <b-skeleton-wrapper
+            :loading="isLoading"
+            v-if="!isStartEnd && isLoading"
           >
-            <h5 class="percent-title">
-              Pourcentage de changement de la présence par rapport à la
-              référence
-            </h5>
-
-            <div class="percent flux-presence">
-              {{ volume ? volume.toFixed(2) : "NAN" }}%​
-            </div>
-          </b-card>
-        </b-skeleton-wrapper>
-        <FullScreen
-          id="fullscreenOut"
-          link="africell_prensence"
-          @change="fullscreenMobileDaily"
-          v-show="!isStartEnd"
-        >
-          <b-card
-            no-body
-            class="mb-3 p-2 cardtype1"
-            :ref="`africell_prensence_card`"
+            <template #loading>
+              <b-card no-body class="mb-3 p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+          <FullScreen
+            id="fullscreenOut"
+            link="africell_prensence"
+            @change="fullscreenMobileDaily"
+            v-show="!isStartEnd && !isLoading"
           >
-            <div class="text-center">
-              Evolution de la présence par rapport à la période de référence
-            </div>
-            <div class="chart-container">
-              <canvas
-                height="200"
-                width="100vh"
-                ref="africell_prensence"
-                id="africell_prensence"
-              ></canvas>
-            </div>
-          </b-card>
-        </FullScreen>
-      </b-col>
-      <b-col cols="12" md="4" class="pr-1 pl-0">
-        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
-          <template #loading>
-            <b-card class="mb-3 flux-mobility">
-              <b-skeleton width="90%" height="20"></b-skeleton>
-              <b-skeleton width="30%" height="60"></b-skeleton>
-              <b-skeleton width="100%" height="50"></b-skeleton>
+            <b-card
+              no-body
+              class="mb-3 p-2 cardtype1"
+              :ref="`africell_prensence_card`"
+            >
+              <div class="text-center general-top-title">
+                Evolution de la présence par rapport à la période de référence
+              </div>
+              <div class="chart-container">
+                <canvas
+                  height="200"
+                  width="100vh"
+                  ref="africell_prensence"
+                  id="africell_prensence"
+                ></canvas>
+              </div>
             </b-card>
-          </template>
+          </FullScreen>
+        </b-col>
+        <b-col cols="12" md="4" class="pr-1 pl-0">
+          <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
+            <template #loading>
+              <b-card class="mb-3 flux-mobility">
+                <b-skeleton width="90%" height="20"></b-skeleton>
+                <b-skeleton width="60%" height="60"></b-skeleton>
+              </b-card>
+            </template>
 
-          <b-card
-            class="mb-3 flux-mobility"
-            :class="{ active: afriFluxType == 1 }"
-            @click="selectFluxType(1)"
-          >
-            <h5 class="percent-title">
-              % de changement du nombre d'entrées
-            </h5>
+            <b-card
+              class="mb-3 flux-mobility"
+              :class="{ active: afriFluxType == 1 }"
+              @click="selectFluxType(1)"
+            >
+              <h5 class="percent-title">% de changement du nombre d'entrées</h5>
 
-            <div class="percent flux-in-color">
-              {{ flow_in ? flow_in.toFixed(2) : "NAN" }}%​
-            </div>
-          </b-card>
-        </b-skeleton-wrapper>
-        <FullScreen
-          id="fullscreenOut"
-          link="mobile_in"
-          @change="fullscreenMobileDaily"
-          v-show="!isStartEnd"
-        >
-          <b-card
-            no-body
-            class="mb-3 p-2 cardtype1"
-            :ref="`mobile_out_in_tot_card`"
-          >
-            <div class="text-center">Evolution du nombre d'entrées</div>
-            <div class="chart-container">
-              <canvas
-                height="200"
-                width="100vh"
-                ref="mobile_in"
-                id="mobile_in"
-              ></canvas>
-            </div>
-          </b-card>
-        </FullScreen>
-
-        <FullScreen
-          id="fullscreenIn"
-          link="affricel_mobile_in"
-          @change="fullscreenFluxInOut"
-          v-show="isStartEnd"
-        >
-          <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">
-              % de changement du nombre d'entrées par origine
-            </div>
-            <div class="chart-container">
-              <canvas
-                height="400"
-                width="100vh"
-                ref="affricel_mobile_in"
-                id="affricel_mobile_in"
-              ></canvas>
-            </div>
-          </b-card>
-        </FullScreen>
-      </b-col>
-      <b-col cols="12" md="4" class="pr-1 pl-0">
-        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
-          <template #loading>
-            <b-card class="mb-3 flux-mobility">
-              <b-skeleton width="90%" height="20"></b-skeleton>
-              <b-skeleton width="30%" height="60"></b-skeleton>
-              <b-skeleton width="100%" height="50"></b-skeleton>
+              <div class="percent flux-in-color">
+                {{ flow_in ? flow_in.toFixed(2) : "NAN" }}%​
+              </div>
             </b-card>
-          </template>
+          </b-skeleton-wrapper>
 
-          <b-card
-            class="mb-3 flux-mobility"
-            :class="{ active: afriFluxType == 2 }"
-            @click="selectFluxType(2)"
+          <b-skeleton-wrapper
+            :loading="isLoading"
+            v-if="!isStartEnd && isLoading"
           >
-            <h5 class="percent-title">
-              % de changement du nombre de sorties
-            </h5>
-
-            <div class="percent flux-out-color">
-              {{ flow_out ? flow_out.toFixed(2) : "NAN" }}%​
-            </div>
-          </b-card>
-        </b-skeleton-wrapper>
-        <FullScreen
-          id="fullscreenOut"
-          link="mobile_out"
-          @change="fullscreenMobileDaily"
-          v-show="!isStartEnd"
-        >
-          <b-card
-            no-body
-            class="mb-3 p-2 cardtype1"
-            :ref="`mobile_out_in_tot_card`"
+            <template #loading>
+              <b-card no-body class="mb-3 p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="190"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+          <FullScreen
+            id="fullscreenOut"
+            link="mobile_in"
+            @change="fullscreenMobileDaily"
+            v-show="!isStartEnd && !isLoading"
           >
-            <div class="text-center">Evolution du nombre de sorties</div>
-            <div class="chart-container">
-              <canvas
-                height="200"
-                width="100vh"
-                ref="mobile_out"
-                id="mobile_out"
-              ></canvas>
-            </div>
-          </b-card>
-        </FullScreen>
-
-        <FullScreen
-          id="fullscreenOut"
-          link="affricel_mobile_out"
-          @change="fullscreenFluxInOut"
-          v-show="isStartEnd"
-        >
-          <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">
-              % de changement du nombre de sorties par destination
-            </div>
-            <div class="chart-container">
-              <canvas
-                height="400"
-                width="100vh"
-                ref="affricel_mobile_out"
-                id="affricel_mobile_out"
-              ></canvas>
-            </div>
-          </b-card>
-        </FullScreen>
-      </b-col>
-      <b-col cols="12" md="4" class="pr-1 pl-0">
-        <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
-          <template #loading>
-            <b-card class="mb-3 flux-mobility">
-              <b-skeleton width="90%" height="20"></b-skeleton>
-              <b-skeleton width="30%" height="60"></b-skeleton>
-              <b-skeleton width="100%" height="50"></b-skeleton>
+            <b-card
+              no-body
+              class="mb-3 p-2 cardtype1"
+              :ref="`mobile_out_in_tot_card`"
+            >
+              <div class="text-center general-top-title">
+                Evolution du nombre d'entrées
+              </div>
+              <div class="chart-container">
+                <canvas
+                  height="200"
+                  width="100vh"
+                  ref="mobile_in"
+                  id="mobile_in"
+                ></canvas>
+              </div>
             </b-card>
-          </template>
-
-          <b-card
-            class="mb-3 flux-mobility"
-            :class="{ active: afriFluxType == 4 }"
-            @click="selectFluxType(4)"
+          </FullScreen>
+          <div v-if="isStartEnd && isLoading">
+            <b-skeleton-wrapper :loading="isLoading">
+              <template #loading>
+                <b-card no-body class="p-2 cardtype2">
+                  <b-skeleton
+                    class="m-auto"
+                    width="60%"
+                    height="20"
+                  ></b-skeleton>
+                  <b-skeleton
+                    class="mt-2"
+                    width="100%"
+                    height="380"
+                  ></b-skeleton>
+                </b-card>
+              </template>
+            </b-skeleton-wrapper>
+          </div>
+          <FullScreen
+            id="fullscreenIn"
+            link="affricel_mobile_in"
+            @change="fullscreenFluxInOut"
+            v-show="isStartEnd && !isLoading"
           >
-            <h5 class="percent-title">
-              % de changement du nombre d'entrées-sorties
-            </h5>
+            <b-card no-body class="p-2 cardtype2">
+              <div class="text-center general-top-title">
+                % de changement du nombre d'entrées par origine
+              </div>
+              <div class="chart-container">
+                <canvas
+                  height="400"
+                  width="100vh"
+                  ref="affricel_mobile_in"
+                  id="affricel_mobile_in"
+                ></canvas>
+              </div>
+            </b-card>
+          </FullScreen>
+        </b-col>
+        <b-col cols="12" md="4" class="pr-1 pl-0">
+          <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
+            <template #loading>
+              <b-card class="mb-3 flux-mobility">
+                <b-skeleton width="90%" height="20"></b-skeleton>
+                <b-skeleton width="60%" height="60"></b-skeleton>
+              </b-card>
+            </template>
 
-            <div class="percent dash-green">
-              {{ flow_tot ? flow_tot.toFixed(2) : "NAN" }}%​
-            </div>
-          </b-card>
-        </b-skeleton-wrapper>
-        <FullScreen
-          id="fullscreenOut"
-          link="mobile_out_in_tot"
-          @change="fullscreenMobileDaily"
-          v-show="!isStartEnd"
-        >
-          <b-card
-            no-body
-            class="mb-3 p-2 cardtype1"
-            :ref="`mobile_out_in_tot_card`"
+            <b-card
+              class="mb-3 flux-mobility"
+              :class="{ active: afriFluxType == 2 }"
+              @click="selectFluxType(2)"
+            >
+              <h5 class="percent-title">
+                % de changement du nombre de sorties
+              </h5>
+
+              <div class="percent flux-out-color">
+                {{ flow_out ? flow_out.toFixed(2) : "NAN" }}%​
+              </div>
+            </b-card>
+          </b-skeleton-wrapper>
+          <b-skeleton-wrapper
+            :loading="isLoading"
+            v-if="!isStartEnd && isLoading"
           >
-            <div class="text-center">Evolution du nombre d'entrées-sorties</div>
-            <div class="chart-container">
-              <canvas
-                height="200"
-                width="100vh"
-                ref="mobile_out_in_tot"
-                id="mobile_out_in_tot"
-              ></canvas>
-            </div>
-          </b-card>
-        </FullScreen>
+            <template #loading>
+              <b-card no-body class="p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="190"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+          <FullScreen
+            id="fullscreenOut"
+            link="mobile_out"
+            @change="fullscreenMobileDaily"
+            v-show="!isStartEnd && !isLoading"
+          >
+            <b-card
+              no-body
+              class="mb-3 p-2 cardtype1"
+              :ref="`mobile_out_in_tot_card`"
+            >
+              <div class="text-center general-top-title">
+                Evolution du nombre de sorties
+              </div>
+              <div class="chart-container">
+                <canvas
+                  height="200"
+                  width="100vh"
+                  ref="mobile_out"
+                  id="mobile_out"
+                ></canvas>
+              </div>
+            </b-card>
+          </FullScreen>
+          <div v-if="isStartEnd && isLoading">
+            <b-skeleton-wrapper :loading="isLoading">
+              <template #loading>
+                <b-card no-body class="p-2 cardtype2">
+                  <b-skeleton
+                    class="m-auto"
+                    width="60%"
+                    height="20"
+                  ></b-skeleton>
+                  <b-skeleton
+                    class="mt-2"
+                    width="100%"
+                    height="380"
+                  ></b-skeleton>
+                </b-card>
+              </template>
+            </b-skeleton-wrapper>
+          </div>
 
-        <FullScreen
-          id="fullscreenIn"
-          link="affricel_mobile_tot"
-          @change="fullscreenFluxInOut"
-          v-show="isStartEnd"
-        >
-          <b-card no-body class="p-2 cardtype2">
-            <div class="text-center">
-              % de changement du nombre d'entrées-sorties par zone
-            </div>
-            <div class="chart-container">
-              <canvas
-                height="400"
-                width="100vh"
-                ref="affricel_mobile_tot"
-                id="affricel_mobile_tot"
-              ></canvas>
-            </div>
-          </b-card>
-        </FullScreen>
-      </b-col>
-    </b-row>
-  </b-container>
+          <FullScreen
+            id="fullscreenOut"
+            link="affricel_mobile_out"
+            @change="fullscreenFluxInOut"
+            v-show="isStartEnd && !isLoading"
+          >
+            <b-card no-body class="p-2 cardtype2">
+              <div class="text-center general-top-title">
+                % de changement du nombre de sorties par destination
+              </div>
+              <div class="chart-container">
+                <canvas
+                  height="400"
+                  width="100vh"
+                  ref="affricel_mobile_out"
+                  id="affricel_mobile_out"
+                ></canvas>
+              </div>
+            </b-card>
+          </FullScreen>
+        </b-col>
+        <b-col cols="12" md="4" class="pr-1 pl-0">
+          <b-skeleton-wrapper :loading="isLoading" v-if="isStartEnd">
+            <template #loading>
+              <b-card class="mb-3 flux-mobility">
+                <b-skeleton width="90%" height="20"></b-skeleton>
+                <b-skeleton width="60%" height="60"></b-skeleton>
+              </b-card>
+            </template>
+
+            <b-card
+              class="mb-3 flux-mobility"
+              :class="{ active: afriFluxType == 4 }"
+              @click="selectFluxType(4)"
+            >
+              <h5 class="percent-title">
+                % de changement du nombre d'entrées-sorties
+              </h5>
+
+              <div class="percent dash-green">
+                {{ flow_tot ? flow_tot.toFixed(2) : "NAN" }}%​
+              </div>
+            </b-card>
+          </b-skeleton-wrapper>
+          <b-skeleton-wrapper
+            :loading="isLoading"
+            v-if="!isStartEnd && isLoading"
+          >
+            <template #loading>
+              <b-card no-body class="p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="190"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+          <FullScreen
+            id="fullscreenOut"
+            link="mobile_out_in_tot"
+            @change="fullscreenMobileDaily"
+            v-show="!isStartEnd && !isLoading"
+          >
+            <b-card
+              no-body
+              class="mb-3 p-2 cardtype1"
+              :ref="`mobile_out_in_tot_card`"
+            >
+              <div class="text-center general-top-title">
+                Evolution du nombre d'entrées-sorties
+              </div>
+              <div class="chart-container">
+                <canvas
+                  height="200"
+                  width="100vh"
+                  ref="mobile_out_in_tot"
+                  id="mobile_out_in_tot"
+                ></canvas>
+              </div>
+            </b-card>
+          </FullScreen>
+
+          <div v-if="isStartEnd && isLoading">
+            <b-skeleton-wrapper :loading="isLoading">
+              <template #loading>
+                <b-card no-body class="p-2 cardtype2">
+                  <b-skeleton
+                    class="m-auto"
+                    width="60%"
+                    height="20"
+                  ></b-skeleton>
+                  <b-skeleton
+                    class="mt-2"
+                    width="100%"
+                    height="380"
+                  ></b-skeleton>
+                </b-card>
+              </template>
+            </b-skeleton-wrapper>
+          </div>
+
+          <FullScreen
+            id="fullscreenIn"
+            link="affricel_mobile_tot"
+            @change="fullscreenFluxInOut"
+            v-show="isStartEnd && !isLoading"
+          >
+            <b-card no-body class="p-2 cardtype2">
+              <div class="text-center general-top-title">
+                % de changement du nombre d'entrées-sorties par zone
+              </div>
+              <div class="chart-container">
+                <canvas
+                  height="400"
+                  width="100vh"
+                  ref="affricel_mobile_tot"
+                  id="affricel_mobile_tot"
+                ></canvas>
+              </div>
+            </b-card>
+          </FullScreen>
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script>
@@ -365,7 +485,6 @@ export default {
     });
     this.$nextTick(() => {
       this.mobileCalc(
-
         this.fluxAfricellDaily,
         "mobile_out",
         PALETTE.flux_out_color,
