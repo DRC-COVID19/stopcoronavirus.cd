@@ -285,7 +285,6 @@
         >
           <b-row class="mb-3">
             <b-col cols="12">
-
               <b-skeleton-wrapper :loading="isLoading">
                 <template #loading>
                   <b-card class="mb-3 flux-mobility">
@@ -1780,11 +1779,7 @@ export default {
             ],
           },
           plugins: {
-            crosshair: {
-              sync: {
-                enabled: false, // enable trace line syncing with other charts
-              },
-            },
+            crosshair: false,
           },
         },
       };
