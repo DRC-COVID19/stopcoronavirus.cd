@@ -31754,6 +31754,11 @@ h3 {
   border-color: #E0E7FF;
 }
 
+.column-left .zone-has-error .vs__dropdown-toggle,
+.top-menu .zone-has-error .vs__dropdown-toggle {
+  border-color: #e6222e;
+}
+
 .column-left h1,
 .top-menu h1 {
   font-size: 1.3rem;
@@ -32449,7 +32454,9 @@ h3 {
 }
 
 .flux-chart .flux-mobility .percent-title {
-  font-size: 1rem;
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-weight: bold;
 }
 
 .flux-chart .flux-mobility .percent {
@@ -32475,6 +32482,10 @@ h3 {
   margin-bottom: 5px;
   color: #6c757d;
   font-weight: bold;
+}
+
+.b-skeleton-text {
+  border-radius: unset;
 }
 
 .legend-container {
