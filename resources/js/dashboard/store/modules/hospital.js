@@ -158,9 +158,9 @@ export default {
         event_category: "fetch_Infrastructures_data",
         event_label: "fetch_Infrastructures_evolution_data_req_send",
       });
-
+      const url=`/api/dashboard/hospitals/evolution${selectedHospital?`/${selectedHospital}`:''}`;
       axios
-        .get(`/api/dashboard/hospitals/evolution/${selectedHospital}`,
+        .get(url,
           {
             params
           })
