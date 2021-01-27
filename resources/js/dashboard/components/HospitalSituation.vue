@@ -3,31 +3,36 @@
     <b-row>
       <b-col cols="12 mb-2">
         <div class="row align-items-center">
-          <skeleton-loading v-if="isLoading" class="col-12 col-md-6">
+          <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
             <square-skeleton
               :boxProperties="{
-                                width: '70%',
-                                height: '40px'
-                            }"
+                width: '30%',
+                height: '40px',
+              }"
             ></square-skeleton>
           </skeleton-loading>
           <h4 class="col m-0 d-flex align-items-baseline" v-if="!isLoading">
-            <span>{{hospital.name || "Rapport global"}}</span>
-            <b-badge v-if="hospitalCount" style="font-size:12px" class="ml-2">
-              {{hospitalCount}}
+            <span>{{ hospital.name || "Rapport global" }}</span>
+            <b-badge v-if="hospitalCount" style="font-size: 12px" class="ml-2">
+              {{ hospitalCount }}
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
           <div
             class="text-right text-black-50 col"
-          >Mise à jour du {{moment(lastUpdate()).format('DD.MM.Y')}}</div>
+            v-if="lastUpdate && !isLoading"
+          >
+            Mise à jour du {{ moment(lastUpdate).format("DD.MM.Y") }}
+          </div>
           <div class="col-12 text-right" v-if="!isLoading">
             <button
               class="btn btn-sm btn-primary"
-              style="font-size: 12px;"
+              style="font-size: 12px"
               @click="backToTotalData()"
               v-if="!isGlobal"
-            >Retour aux données globales</button>
+            >
+              Retour aux données globales
+            </button>
           </div>
         </div>
       </b-col>
@@ -37,31 +42,59 @@
         <skeleton-loading v-if="isLoading" class="mb-2">
           <square-skeleton
             :boxProperties="{
-                                width: '100%',
-                                height: '340px'
-                            }"
+              width: '100%',
+              height: '340px',
+            }"
           ></square-skeleton>
         </skeleton-loading>
         <b-card class="col-12 default-card mb-2" v-else>
           <h5 class="bold">Capacité de prise en charge</h5>
           <div>
-            <div>Lits avec mousse: {{parseData(hospital.foam_beds)}}</div>
-            <div>Lits avec mousse occupés: {{parseData(hospital.occupied_foam_beds)}}</div>
-            <div>Lits de réanimation: {{parseData(hospital.resuscitation_beds)}}</div>
-            <div>Lits de réanimation occupés: {{parseData(hospital.occupied_resuscitation_beds)}}</div>
-            <div>Respirateurs: {{parseData(hospital.respirators)}}</div>
-            <div>Respirateurs occupés: {{parseData(hospital.occupied_respirators)}}</div>
-            <div>Ventilateur de réanimation : {{parseData(hospital.resuscitation_ventilator)}}</div>
-            <div>Oxygénérateur: {{parseData(hospital.oxygenator)}}</div>
-            <div
-              v-if="!isGlobal"
-            >Equipement de protection individuelle: {{parseData(hospital.individual_protection_equipment)}}</div>
-            <div v-if="!isGlobal">Masques N95/FFP2: {{parseData(hospital.masks)}}</div>
-            <div v-if="!isGlobal">Dépistage rapide: {{parseData(hospital.rapid_screening)}}</div>
-            <div v-if="!isGlobal">Radiographie: {{parseData(hospital.x_ray)}}</div>
-            <div v-if="!isGlobal">Automate Genexpert: {{parseData(hospital.automate_genexpert)}}</div>
-            <div v-if="!isGlobal">Gel hydro alcoolique: {{parseData(hospital.gel_hydro_alcoolique)}}</div>
-            <div v-if="!isGlobal">check point: {{parseData(hospital.check_point)}}</div>
+            <div>Lits avec mousse: {{ parseData(hospital.foam_beds) }}</div>
+            <div>
+              Lits avec mousse occupés:
+              {{ parseData(hospital.occupied_foam_beds) }}
+            </div>
+            <div>
+              Lits de réanimation: {{ parseData(hospital.resuscitation_beds) }}
+            </div>
+            <div>
+              Lits de réanimation occupés:
+              {{ parseData(hospital.occupied_resuscitation_beds) }}
+            </div>
+            <div>Respirateurs: {{ parseData(hospital.respirators) }}</div>
+            <div>
+              Respirateurs occupés:
+              {{ parseData(hospital.occupied_respirators) }}
+            </div>
+            <div>
+              Ventilateur de réanimation :
+              {{ parseData(hospital.resuscitation_ventilator) }}
+            </div>
+            <div>Oxygénérateur: {{ parseData(hospital.oxygenator) }}</div>
+            <div v-if="!isGlobal">
+              Equipement de protection individuelle:
+              {{ parseData(hospital.individual_protection_equipment) }}
+            </div>
+            <div v-if="!isGlobal">
+              Masques N95/FFP2: {{ parseData(hospital.masks) }}
+            </div>
+            <div v-if="!isGlobal">
+              Dépistage rapide: {{ parseData(hospital.rapid_screening) }}
+            </div>
+            <div v-if="!isGlobal">
+              Radiographie: {{ parseData(hospital.x_ray) }}
+            </div>
+            <div v-if="!isGlobal">
+              Automate Genexpert: {{ parseData(hospital.automate_genexpert) }}
+            </div>
+            <div v-if="!isGlobal">
+              Gel hydro alcoolique:
+              {{ parseData(hospital.gel_hydro_alcoolique) }}
+            </div>
+            <div v-if="!isGlobal">
+              check point: {{ parseData(hospital.check_point) }}
+            </div>
           </div>
         </b-card>
       </b-col>
@@ -69,60 +102,71 @@
         <skeleton-loading v-if="isLoading" class="mb-2">
           <square-skeleton
             :boxProperties="{
-                                width: '100%',
-                                height: '170px'
-                            }"
+              width: '100%',
+              height: '170px',
+            }"
           ></square-skeleton>
         </skeleton-loading>
         <b-card class="col-12 default-card mb-2" v-if="!isLoading">
           <h5 class="bold">Situations épidemologiques</h5>
           <div>
-            <div>Confirmés: {{parseData(hospital.confirmed)}}</div>
-            <div>Hospitalisés: {{parseData(hospital.sick)}}</div>
-            <div>Guéris: {{parseData(hospital.healed)}}</div>
-            <div>décès: {{parseData(hospital.dead)}}</div>
+            <div>Confirmés: {{ parseData(hospital.confirmed) }}</div>
+            <div>Hospitalisés: {{ parseData(hospital.sick) }}</div>
+            <div>Guéris: {{ parseData(hospital.healed) }}</div>
+            <div>décès: {{ parseData(hospital.dead) }}</div>
           </div>
         </b-card>
         <b-card class="col-12 default-card mb-2" v-if="!isGlobal && !isLoading">
           <h5 class="bold">Médicaments</h5>
-          <div>Chloroquine: {{parseData(hospital.chloroquine)}}</div>
-          <div>Hydrochloroquine: {{parseData(hospital.hydrochloroquine)}}</div>
-          <div>Azytromicine: {{parseData(hospital.azytromicine)}}</div>
-          <div>Vitamince C: {{parseData(hospital.Vitamince_c)}}</div>
+          <div>Chloroquine: {{ parseData(hospital.chloroquine) }}</div>
+          <div>
+            Hydrochloroquine: {{ parseData(hospital.hydrochloroquine) }}
+          </div>
+          <div>Azytromicine: {{ parseData(hospital.azytromicine) }}</div>
+          <div>Vitamince C: {{ parseData(hospital.Vitamince_c) }}</div>
         </b-card>
         <skeleton-loading v-if="isLoading" class="mb-2">
           <square-skeleton
             :boxProperties="{
-                                width: '100%',
-                                height: '170px'
-                            }"
+              width: '100%',
+              height: '170px',
+            }"
           ></square-skeleton>
         </skeleton-loading>
         <b-card class="col-12 default-card mb-2" v-if="!isLoading">
           <h5 class="bold">Personnels</h5>
-          <div>Médicins: {{parseData(hospital.doctors)}}</div>
-          <div>Infirmiers: {{parseData(hospital.nurses)}}</div>
-          <div>Para Médicaux: {{parseData(hospital.para_medicals)}}</div>
+          <div>Médicins: {{ parseData(hospital.doctors) }}</div>
+          <div>Infirmiers: {{ parseData(hospital.nurses) }}</div>
+          <div>Para Médicaux: {{ parseData(hospital.para_medicals) }}</div>
         </b-card>
       </b-col>
     </b-row>
 
     <b-row no-gutters class="mb-2">
       <b-col cols="12" md="6" class="pr-1">
-        <skeleton-loading v-if="isLoading">
-          <square-skeleton
-            :boxProperties="{
-                                width: '100%',
-                                height: '430px'
-                            }"
-          ></square-skeleton>
-        </skeleton-loading>
-        <FullScreen id="canvasStat1_full" link="canvasStat1" v-if="!isLoading">
+        <div v-if="situationHospitalLoading|| isLoading">
+          <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
+            <template #loading>
+              <b-card no-body class="default-card card-chart p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+        </div>
+        <FullScreen id="canvasStat1_full" link="canvasStat1" v-show="!situationHospitalLoading && !isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
-            <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+            <b-spinner
+              label="Chargement..."
+              v-if="situationHospitalLoading"
+            ></b-spinner>
             <div class="legend-custom">
-              <div class="text-center title">Evolution d'occupation des respirateurs</div>
-              <div class="d-flex flex-wrap justify-content-center align-items-center">
+              <div class="text-center title  general-top-title">
+                Evolution d'occupation des respirateurs
+              </div>
+              <div
+                class="d-flex flex-wrap justify-content-center align-items-center"
+              >
                 <div>
                   <span class="legend-color total"></span>
                   <Span>Ligne Totale</Span>
@@ -138,27 +182,41 @@
               </div>
             </div>
             <div class="chart-container">
-              <canvas height="400" width="100vh" ref="canvasStat1" id="canvasStat1"></canvas>
+              <canvas
+                height="200"
+                width="100vh"
+                ref="canvasStat1"
+                id="canvasStat1"
+              ></canvas>
             </div>
           </b-card>
         </FullScreen>
       </b-col>
 
       <b-col cols="12" md="6" class="pl-1">
-        <skeleton-loading v-if="isLoading">
-          <square-skeleton
-            :boxProperties="{
-                                width: '100%',
-                                height: '430px'
-                            }"
-          ></square-skeleton>
-        </skeleton-loading>
-        <FullScreen id="canvasStat2_full" link="canvasStat2" v-if="!isLoading">
+        <div v-if="situationHospitalLoading|| isLoading">
+          <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
+            <template #loading>
+              <b-card no-body class="default-card card-chart p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+        </div>
+        <FullScreen id="canvasStat2_full" link="canvasStat2" v-show="!situationHospitalLoading && !isLoading">
           <b-card no-body class="default-card card-chart p-2 cardtype1">
-            <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+            <b-spinner
+              label="Chargement..."
+              v-if="situationHospitalLoading"
+            ></b-spinner>
             <div class="legend-custom">
-              <div class="text-center title">Evolution d'occupation des lits de réanimation</div>
-              <div class="d-flex flex-wrap justify-content-center align-items-center">
+              <div class="text-center title  general-top-title">
+                Evolution d'occupation des lits de réanimation
+              </div>
+              <div
+                class="d-flex flex-wrap justify-content-center align-items-center"
+              >
                 <div>
                   <span class="legend-color total"></span>
                   <Span>Ligne Totale</Span>
@@ -174,27 +232,45 @@
               </div>
             </div>
             <div class="chart-container">
-              <canvas height="400" width="100vh" ref="canvasStat2" id="canvasStat2"></canvas>
+              <canvas
+                height="200"
+                width="100vh"
+                ref="canvasStat2"
+                id="canvasStat2"
+              ></canvas>
             </div>
           </b-card>
         </FullScreen>
       </b-col>
 
       <b-col cols="12" class="mt-2">
-        <skeleton-loading v-if="isLoading">
-          <square-skeleton
-            :boxProperties="{
-                                width: '100%',
-                                height: '430px'
-                            }"
-          ></square-skeleton>
-        </skeleton-loading>
-        <FullScreen id="canvasStat3_full" link="canvasStat3" v-if="!isLoading">
+        <div v-if="situationHospitalLoading|| isLoading">
+          <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
+            <template #loading>
+              <b-card no-body class="default-card card-chart p-2 cardtype1">
+                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
+                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
+              </b-card>
+            </template>
+          </b-skeleton-wrapper>
+        </div>
+        <FullScreen
+          id="canvasStat3_full"
+          link="canvasStat3"
+          v-show="!situationHospitalLoading && !isLoading"
+        >
           <b-card no-body class="default-card card-chart p-2 cardtype1">
-            <b-spinner label="Chargement..." v-if="situationHospitalLoading"></b-spinner>
+            <!-- <b-spinner
+              label="Chargement..."
+              v-if="situationHospitalLoading"
+            ></b-spinner> -->
             <div class="legend-custom">
-              <div class="text-center title">Evolution global du taux d'occupation</div>
-              <div class="d-flex flex-wrap justify-content-center align-items-center">
+              <div class="text-center title  general-top-title">
+                Evolution global du taux d'occupation
+              </div>
+              <div
+                class="d-flex flex-wrap justify-content-center align-items-center"
+              >
                 <div>
                   <span class="legend-color total"></span>
                   <Span>Taux de Lits de réanimation</Span>
@@ -206,7 +282,12 @@
               </div>
             </div>
             <div class="chart-container">
-              <canvas height="400" width="100vh" ref="canvasStat3" id="canvasStat3"></canvas>
+              <canvas
+                height="400"
+                width="100vh"
+                ref="canvasStat3"
+                id="canvasStat3"
+              ></canvas>
             </div>
           </b-card>
         </FullScreen>
@@ -266,6 +347,15 @@ export default {
     },
     isGlobal() {
       return this.selectedHospital != null ? false : true;
+    },
+    lastUpdate() {
+      if (this.selectedHospital != null)
+        return this.selectedHospital.last_update;
+      else if (this.dataGlobal) {
+        return this.dataGlobal.last_update[
+          this.dataGlobal.last_update.length - 1
+        ];
+      } else return null;
     },
   },
   watch: {
@@ -334,22 +424,6 @@ export default {
             const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
 
             return y;
-
-            console.log([
-              {
-                y1,
-                x1,
-              },
-              {
-                x,
-                y,
-                index,
-              },
-              {
-                y2,
-                x2,
-              },
-            ]);
           }
         }
         return item;
@@ -396,22 +470,6 @@ export default {
               const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
 
               return y;
-
-              console.log([
-                {
-                  y1,
-                  x1,
-                },
-                {
-                  x,
-                  y,
-                  index,
-                },
-                {
-                  y2,
-                  x2,
-                },
-              ]);
             }
           }
           return item;
@@ -696,26 +754,19 @@ export default {
             },
           },
         };
-
+        const reference=this.$refs[`canvasStat${i + 1}`];
         if (this.lineCharts[i]) this.lineCharts[i].destroy();
         this.lineCharts[i] = new Chart(
-          this.$refs[`canvasStat${i + 1}`].getContext("2d"),
+          reference.getContext("2d"),
           config
         );
+        reference.style.height = "200px";
+        reference.style.maxHeight = "200px";
         // this.lineCharts[i].generateLegend();
       }
     },
     backToTotalData() {
       this.selectHospital(null);
-    },
-    lastUpdate() {
-      if (this.selectedHospital != null)
-        return this.selectedHospital.last_update;
-      else if (this.dataGlobal)
-        return this.dataGlobal.last_update[
-          this.dataGlobal.last_update.length - 1
-        ];
-      else return null;
     },
     parseData(data) {
       if (data == null) return "N/A";

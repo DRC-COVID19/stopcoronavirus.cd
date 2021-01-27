@@ -274,22 +274,6 @@ export default {
           generateId: true,
         }
       );
-      // map.addSource(this.drcSourceId, {
-      //   type: "geojson",
-      //   generateId: true,
-      //   data: `${location.protocol}//${location.host}/storage/geojson/rd_congo_admin_4_provinces.geojson`,
-      // });
-
-      // map.addSource(this.drcHealthZone, {
-      //   type: "geojson",
-      //   generateId: true,
-      //   data: `${location.protocol}//${location.host}/storage/geojson/rdc_micro_zonesdedante_regroupees.json`,
-      // });
-
-      // map.addSource(this.kinSourceId, {
-      //   type: "vector",
-      //   url: "mapbox://merki230.4airwoxt"
-      // });
 
       if (this.healthZoneGeojson) {
         this.addZoneSource();
@@ -313,7 +297,7 @@ export default {
 
     this.map = map;
 
-    //watch store
+    //watch store flux geogranularity filter
     this.$store.watch(
       (state) => state.flux.fluxGeoGranularityTemp,
       (value) => {
@@ -321,6 +305,7 @@ export default {
         this.addPolygoneHoverLayer(value);
       }
     );
+
     this.$store.watch(
       (state) => state.flux.mapStyle,
       (value) => {
@@ -347,12 +332,12 @@ export default {
       (state) => state.flux.legendHover,
       (value) => {
         if (this.selectedSource == 2) {
-          this.africellFluxFunc();
+          this.africellFluxFunc(true);
         } else {
           if (this.fluxTimeGranularity == 1) {
-            this.flux24Func();
+            this.flux24Func(true);
           } else {
-            this.flux30Func();
+            this.flux30Func(true);
           }
         }
       }
@@ -368,7 +353,7 @@ export default {
       (state) => state.flux.fluxHotspotType,
       (value) => {
         this.fluxHotspotType = value;
-        this.flux30Func();
+        this.flux30Func(true);
       }
     );
   },
@@ -1014,17 +999,18 @@ export default {
       // based on the feature found.
       popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
     },
-    flux30Func() {
+    flux30Func(isLegendHover = false) {
       this.mapResize();
       if (this.flux30MapsData.length > 0) {
         this.flux30MapsDataFunc(
           this.flux30MapsData,
           this.legendHover,
-          this.fluxHotspotType
+          this.fluxHotspotType,
+          isLegendHover
         );
       }
     },
-    africellFluxFunc() {
+    africellFluxFunc(isLegendHover = false) {
       let data;
       switch (this.afriFluxType) {
         case 1:
@@ -1038,7 +1024,8 @@ export default {
             "zoneB",
             this.legendHover,
             PALETTE.inflow_negatif,
-            PALETTE.inflow_positif
+            PALETTE.inflow_positif,
+            isLegendHover
           );
           break;
         case 2:
@@ -1052,11 +1039,16 @@ export default {
             "zoneA",
             this.legendHover,
             PALETTE.outflow_negatif,
-            PALETTE.outflow_positif
+            PALETTE.outflow_positif,
+            isLegendHover
           );
           break;
         case 3:
-          this.africellPresenceFunc(this.fluxAfricelPresence, this.legendHover);
+          this.africellPresenceFunc(
+            this.fluxAfricelPresence,
+            this.legendHover,
+            isLegendHover
+          );
           break;
         case 4:
           data = this.fluxAfricelInOut.filter(
@@ -1069,7 +1061,8 @@ export default {
             "zoneB",
             this.legendHover,
             PALETTE.general_negatif,
-            PALETTE.general_positif
+            PALETTE.general_positif,
+            isLegendHover
           );
           break;
 
@@ -1084,22 +1077,28 @@ export default {
       bKey = "zoneB",
       legendHover = null,
       negativeColor,
-      positiveColor
+      positiveColor,
+      isLegendHover = false
     ) {
       this.flux24RemoveLayer();
       this.removePolygoneHoverLayer();
       this.addPolygoneLayer(2);
-      const zone = this.fluxGeoOptions[0];
-      const area = this.getHealthZoneArea(zone, 2);
-      const zoom = this.zoomByArea(area);
-      map.flyTo({
-        center: this.getHealthZoneCoordonate(zone, 2),
-        easing: function (t) {
-          return t;
-        },
-        pitch: 10,
-        zoom: 10,
-      });
+
+      //Don't zoom if trigger from legendhover
+      if (!isLegendHover) {
+        const zone = this.fluxGeoOptions[0];
+        const area = this.getHealthZoneArea(zone, 2);
+        const zoom = this.zoomByArea(area);
+        map.flyTo({
+          center: this.getHealthZoneCoordonate(zone, 2),
+          easing: function (t) {
+            return t;
+          },
+          pitch: 10,
+          zoom: 10,
+        });
+      }
+
       if (
         !data ||
         data.length == 0 ||
@@ -1211,21 +1210,25 @@ export default {
         this.$set(this.ArcLayerSelectedObject, "item", null);
       }
     },
-    africellPresenceFunc(data, legendHover = null) {
+    africellPresenceFunc(data, legendHover = null, isLegendHover = false) {
       this.flux24RemoveLayer();
       this.removePolygoneHoverLayer();
       this.addPolygoneLayer(2);
-      const zone = this.fluxGeoOptions[0];
-      const area = this.getHealthZoneArea(zone, 2);
-      const zoom = this.zoomByArea(area);
-      map.flyTo({
-        center: this.getHealthZoneCoordonate(zone, 2),
-        easing: function (t) {
-          return t;
-        },
-        pitch: 10,
-        zoom: 10,
-      });
+
+      if (isLegendHover) {
+        const zone = this.fluxGeoOptions[0];
+        const area = this.getHealthZoneArea(zone, 2);
+        const zoom = this.zoomByArea(area);
+        map.flyTo({
+          center: this.getHealthZoneCoordonate(zone, 2),
+          easing: function (t) {
+            return t;
+          },
+          pitch: 10,
+          zoom: 10,
+        });
+      }
+
       if (
         !data ||
         data.length == 0 ||
@@ -1306,19 +1309,28 @@ export default {
       );
     },
 
+    /**
+     * Get one hotspot by property==value
+     */
     getHospot(value, property = "pseudo") {
       return HOTSPOT_TYPE.find((x) => x[property] == value);
     },
     /**
      * Ajout de hotspot
      */
-    flux30MapsDataFunc(flux30MapsData, legendHover, fluxHotspotType) {
+    flux30MapsDataFunc(
+      flux30MapsData,
+      legendHover,
+      fluxHotspotType,
+      isLegendHover = false
+    ) {
       this.flux24RemoveLayer();
 
       this.removePolygoneHoverLayer();
       this.addPolygoneLayer(2);
       let mapCenter = this.defaultKinshasaCoordinates;
       let mapZoom = 10;
+
       if (
         this.fluxGeoOptions[0] != "Tout" &&
         !this.getHospot(this.fluxGeoOptions[0])
@@ -1326,14 +1338,19 @@ export default {
         mapCenter = this.getHospotCoordonate(this.fluxGeoOptions[0]);
         mapZoom = 14;
       }
-      map.flyTo({
-        center: mapCenter,
-        easing: function (t) {
-          return t;
-        },
-        pitch: 10,
-        zoom: mapZoom,
-      });
+
+      //Don't zoom if trigger come from legende
+      if (!isLegendHover) {
+        map.flyTo({
+          center: mapCenter,
+          easing: function (t) {
+            return t;
+          },
+          pitch: 10,
+          zoom: mapZoom,
+        });
+      }
+
       let features = [...flux30MapsData];
       const domaineMax = d3.max(features, (d) => d.percent);
       const domaineMin = d3.min(features, (d) => d.percent);
@@ -1413,13 +1430,8 @@ export default {
             if (point && polygone) {
               const isPoint = turf.booleanPointInPolygon(point, polygone);
               if (isPoint) {
-                colorExpression.push([
-                  "==",
-                  ["get", dataKey],
-                  itemPoint.properties.DENOMMIN,
-                ]);
-                colorExpression.push(color);
 
+                //check hotspot match by type if fluxHospotype exist
                 if (
                   fluxHotspotType &&
                   itemPoint.properties.Type_ != fluxHotspotType.name
@@ -1431,7 +1443,16 @@ export default {
                 if (hotspot && itemPoint.properties.Type_ != hotspot.name) {
                   return;
                 }
+
                 hotspotPoint.push(itemPoint.properties.DENOMMIN);
+
+                //Put colorExpression only for hotspot zone where hospotpoints are present
+                colorExpression.push([
+                  "==",
+                  ["get", dataKey],
+                  itemPoint.properties.DENOMMIN,
+                ]);
+                colorExpression.push(color);
               }
             }
           }
@@ -1507,7 +1528,7 @@ export default {
       }
       return zoom;
     },
-    flux24Func() {
+    flux24Func(isLegendHover = false) {
       if (this.flux24DailyIn.length > 0) {
         this.addPolygoneLayer(this.fluxGeoGranularity);
         this.addPolygoneHoverLayer(this.fluxGeoGranularity);
@@ -1516,19 +1537,13 @@ export default {
         let DataGroupByDate = [];
         let mapFlyOptions = {};
         let area = null;
-        // if (this.fluxType == 1) {
-        //   data = this.flux24DailyIn;
-        //   DataGroupByDate = this.fluxDataGroupedByDateIn;
-        // } else if (this.fluxType == 2) {
-        //   data = this.flux24DailyOut;
-        //   DataGroupByDate = this.fluxDataGroupedByDateOut;
-        // } else if (this.fluxType == 4) {
-        //   data = this.flux24DailyGenerale;
-        // }
+
         let zone = null;
         if (this.fluxGeoOptions && this.fluxGeoOptions.length > 0) {
           zone = this.fluxGeoOptions[0];
         }
+
+        //fetch and format data by flux type
         switch (this.fluxType) {
           case 1:
             if (this.fluxGeoGranularity == 1) {
@@ -1598,6 +1613,7 @@ export default {
           default:
             break;
         }
+
         switch (this.fluxMapStyle) {
           case 2:
             this.fluxArcStyle(data, this.fluxGeoGranularity, this.legendHover);
@@ -1606,7 +1622,6 @@ export default {
               speed: 0.2, // make the flying slow
               curve: 1, // change the speed at which it zooms out
 
-              // This can be any easing function: it takes a number between
               // 0 and 1 and returns another number between 0 and 1.
               easing: function (t) {
                 return t;
@@ -1615,13 +1630,15 @@ export default {
               // this animation is considered essential with respect to prefers-reduced-motion
               essential: true,
             };
-            if (mapFlyOptions.center) {
+            if (!isLegendHover && mapFlyOptions.center) {
               options.center = mapFlyOptions.center;
             }
             if (mapFlyOptions.zoom) {
-              options.zoom = mapFlyOptions.zoom;
+              options.zoom = isLegendHover ? map.getZoom() : mapFlyOptions.zoom;
             }
+
             map.flyTo(options);
+
             break;
           case 1:
           default:
@@ -1645,13 +1662,16 @@ export default {
               // this animation is considered essential with respect to prefers-reduced-motion
               essential: true,
             };
-            if (mapFlyOptions.center) {
+            if (!isLegendHover && mapFlyOptions.center) {
               optionsHatched.center = mapFlyOptions.center;
             }
             if (mapFlyOptions.zoom) {
-              optionsHatched.zoom = mapFlyOptions.zoom;
+              optionsHatched.zoom = isLegendHover
+                ? map.getZoom()
+                : mapFlyOptions.zoom;
             }
             this.mapResize();
+
             map.flyTo(optionsHatched);
             break;
         }
@@ -1737,7 +1757,7 @@ export default {
           properties: {
             origin: this.fixedZone(item.zone ?? observations[0][key]),
             color: "#ED5F68",
-            volume: result.referenceVolume,
+            volume: result.observationVolume,
             volumeReference: result.referenceVolume,
             percent: result.percent,
             difference: result.difference,
@@ -1810,6 +1830,7 @@ export default {
         localData.map((item) => {
           formatData(item, "destination");
         });
+
         formatCurrentZone(DataGroupByDate);
         // localData.map((item) => {
         //   formatData(item, "origin");
@@ -2542,6 +2563,9 @@ export default {
       // popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
     },
     infrastructure() {
+      if (this.activeMenu != 5) {
+        return;
+      }
       if (this.hospitals) {
         map.off(
           "mouseleave",

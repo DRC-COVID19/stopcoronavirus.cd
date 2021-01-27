@@ -93,7 +93,7 @@ class HospitalController extends Controller
 
             $hospitalsFiltred = $this->getHospitalsFromFiltre($observation_start, $observation_end, $township) ;
             $dataHospitals = HospitalResources::collection($hospitalsFiltred);
-            return response()->json($dataHospitals);
+            return response()->json($dataHospitals,200,[],JSON_NUMERIC_CHECK);
 
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
@@ -216,10 +216,9 @@ class HospitalController extends Controller
             )
             ->first();
 
-            $results =
-            $hospitals->merge($hospitalsSituation1)->merge($hospitalsSituation2);
+            $results =$hospitals->merge($hospitalsSituation1)->merge($hospitalsSituation2);
 
-            return response()->json($results);
+            return response()->json($results,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -307,13 +306,13 @@ class HospitalController extends Controller
                   // pour l'hopital x à la date $last_update sur laquelle on boucle
                   $query->select(DB::raw(1))
                   ->from(DB::raw('hospital_situations AS h'))
-                  ->whereRaw('h.hospital_id = hospital_situations.hospital_id
-                      AND h.last_update <= "' . $last_update . '"
+                  ->whereRaw("h.hospital_id = hospital_situations.hospital_id
+                      AND h.last_update <='{$last_update}'
                       AND (
                         h.last_update > hospital_situations.last_update OR
                         (h.last_update = hospital_situations.last_update AND h.id > hospital_situations.id )
                       )
-                    ') ;
+                    ") ;
               })
               ->first();
 
@@ -325,7 +324,7 @@ class HospitalController extends Controller
 
             }
 
-            return response()->json($results);
+            return response()->json($results,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

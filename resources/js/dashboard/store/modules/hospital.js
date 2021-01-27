@@ -28,7 +28,7 @@ export default {
   },
   actions: {
     getHospitalsData({ state }, payload) {
-      state.isLoading = true;
+      state.isLoading = payload.isLoading;
       if (payload) {
         if (payload.observation_end) state.observation_end = payload.observation_end
         if (payload.observation_start) state.observation_start = payload.observation_start
@@ -165,8 +165,6 @@ export default {
             params
           })
         .then(({ data }) => {
-          console.log('data', data)
-
           state.situationHospital = data
           state.situationHospitalLoading = false
 

@@ -21,7 +21,7 @@ export default {
   },
   actions: {
     submitFilters({ state }, form) {
-      
+
       event("fetch_indicator_data_request", {
         event_category: "fetch_indicator_data",
         event_label: "indicators_req_send",

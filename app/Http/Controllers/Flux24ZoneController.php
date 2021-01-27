@@ -107,7 +107,7 @@ class Flux24ZoneController extends Controller
         $data = $this->fluxValidatorOld($request->all());
         try {
             // $flux = DB::select("SELECT origin,  date , volume FROM (
-            //     SELECT origin,date, volume AS volume FROM flux24_sums 
+            //     SELECT origin,date, volume AS volume FROM flux24_sums
 
             //     UNION ALL
             //     SELECT destination AS origin,date, volume FROM flux24_sums )
@@ -119,7 +119,7 @@ class Flux24ZoneController extends Controller
                 ->groupBy('destination', 'date')
                 ->get();
 
-            return response()->json(['origin' => $fluxOrigin, 'destination' => $fluxDestination]);
+            return response()->json(['origin' => $fluxOrigin, 'destination' => $fluxDestination],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -133,30 +133,30 @@ class Flux24ZoneController extends Controller
         $data = $this->fluxValidatorOld($request->all());
 
         try {
-            $flux = Flux24Sum::select(['Date as date', DB::raw('sum(volume) as volume')])
+            $flux = Flux24Sum::select(['date as date', DB::raw('sum(volume) as volume')])
                 // ->where('Observation_Zone', 'ZoneGlobale')
-                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->whereBetween('date', [$data['observation_start'], $data['observation_end']])
                 ->where(function ($q) use ($data) {
-                    $q->whereIn('Origin', $data['fluxGeoOptions'])
-                        ->orWhereIn('Destination', $data['fluxGeoOptions']);
+                    $q->whereIn('origin', $data['fluxGeoOptions'])
+                        ->orWhereIn('destination', $data['fluxGeoOptions']);
                 })
                 ->where('destination', '!=', 'Hors_Zone')
                 ->where('origin', '!=', 'Hors_Zone')
-                ->groupBy('Date')
+                ->groupBy('date')
                 ->get();
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Sum::select(['Date as date', DB::raw('sum(volume) as volume')])
+                $fluxRefences = Flux24Sum::select(['date as date', DB::raw('sum(volume) as volume')])
                     // ->where('Observation_Zone', 'ZoneGlobale')
-                    ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                    ->whereBetween('date', [$data['preference_start'], $data['preference_end']])
                     ->where(function ($q) use ($data) {
-                        $q->whereIn('Origin', $data['fluxGeoOptions'])
-                            ->orWhereIn('Destination', $data['fluxGeoOptions']);
+                        $q->whereIn('origin', $data['fluxGeoOptions'])
+                            ->orWhereIn('destination', $data['fluxGeoOptions']);
                     })
                     ->where('destination', '!=', 'Hors_Zone')
                     ->where('origin', '!=', 'Hors_Zone')
-                    ->groupBy('Date')
+                    ->groupBy('date')
                     ->get();
 
                 if (count($fluxRefences) > 0) {
@@ -166,9 +166,9 @@ class Flux24ZoneController extends Controller
                 }
             }
             if (is_array($fluxRefences)) {
-                return response()->json($flux);
+                return response()->json($flux,200,[],JSON_NUMERIC_CHECK);
             }
-            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()));
+            return response()->json(array_merge($fluxRefences->toArray(), $flux->toArray()),200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -181,20 +181,20 @@ class Flux24ZoneController extends Controller
         $data = $this->fluxValidatorOld($request->all());
 
         try {
-            $flux = Flux24Sum::select(['Date as date', 'Destination as destination', 'Origin as origin', 'volume', 'day'])
+            $flux = Flux24Sum::select(['date as date', 'destination as destination', 'origin as origin', 'volume', 'day'])
                 // ->where('Observation_Zone', 'ZoneGlobale')
-                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->whereIn('Destination', $data['fluxGeoOptions'])
+                ->whereBetween('date', [$data['observation_start'], $data['observation_end']])
+                ->whereIn('destination', $data['fluxGeoOptions'])
                 // ->where('destination', '!=', 'Hors_Zone')
                 ->where('origin', '!=', 'Hors_Zone')
                 // ->groupBy('Date', 'day', 'destination', 'Origin')
                 ->get();
 
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Sum::select(['Destination as destination', 'Origin as origin', 'date', 'volume', 'day'])
+                $fluxRefences = Flux24Sum::select(['destination as destination', 'origin as origin', 'date', 'volume', 'day'])
                     // ->where('Observation_Zone', 'ZoneGlobale')
-                    ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->whereIn('Destination', $data['fluxGeoOptions'])
+                    ->whereBetween('date', [$data['preference_start'], $data['preference_end']])
+                    ->whereIn('destination', $data['fluxGeoOptions'])
                     // ->where('destination', '!=', 'Hors_Zone')
                     ->where('origin', '!=', 'Hors_Zone')
                     // ->groupBy('day', 'Destination', 'Origin', 'Date')
@@ -223,7 +223,7 @@ class Flux24ZoneController extends Controller
             return response()->json([
                 'references' => $fluxRefences,
                 'observations' => $flux,
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -236,10 +236,10 @@ class Flux24ZoneController extends Controller
         $data = $this->fluxValidatorOld($request->all());
 
         try {
-            $flux = Flux24Sum::select(['Date as date', 'Origin as origin', 'Destination as destination', 'volume', 'day'])
+            $flux = Flux24Sum::select(['date as date', 'origin as origin', 'destination as destination', 'volume', 'day'])
                 // ->where('Observation_Zone', 'ZoneGlobale')
-                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                ->whereIn('Origin', $data['fluxGeoOptions'])
+                ->whereBetween('date', [$data['observation_start'], $data['observation_end']])
+                ->whereIn('origin', $data['fluxGeoOptions'])
                 ->where('destination', '!=', 'Hors_Zone')
                 // ->where('origin', '!=', 'Hors_Zone')
                 // ->groupBy('Date', 'day', 'origin', 'Destination')
@@ -247,10 +247,10 @@ class Flux24ZoneController extends Controller
 
             $fluxRefences = [];
             if (isset($data['preference_start']) && isset($data['preference_end'])) {
-                $fluxRefences = Flux24Sum::select(['Origin as origin', 'Destination as destination', 'Date', 'volume', 'day'])
+                $fluxRefences = Flux24Sum::select(['origin as origin', 'destination as destination', 'date', 'volume', 'day'])
                     // ->where('Observation_Zone', 'ZoneGlobale')
-                    ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-                    ->whereIn('Origin', $data['fluxGeoOptions'])
+                    ->whereBetween('date', [$data['preference_start'], $data['preference_end']])
+                    ->whereIn('origin', $data['fluxGeoOptions'])
                     ->where('destination', '!=', 'Hors_Zone')
                     // ->where('origin', '!=', 'Hors_Zone')
                     // ->groupBy('day', 'Destination', 'Origin', 'Date')
@@ -279,7 +279,7 @@ class Flux24ZoneController extends Controller
             return response()->json([
                 'references' => $fluxRefences,
                 'observations' => $flux,
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -320,7 +320,7 @@ class Flux24ZoneController extends Controller
             //     ->whereIn('provinces.name', $data['fluxGeoOptions'])
             //     ->get()->pluck('name');
 
-            $general_observation = Flux24Sum::select(['Date as date', DB::raw('sum(volume) as volume, WEEKDAY(DATE) AS day')])
+            $general_observation = Flux24Sum::select(['date as date', DB::raw('sum(volume) as volume, WEEKDAY(date) AS day')])
                 // ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('date', [$data['observation_start'], $data['observation_end']])
                 ->where(function ($q) use ($data) {
@@ -333,7 +333,7 @@ class Flux24ZoneController extends Controller
                 ->groupBy('date', 'day')
                 ->get();
 
-            $general_reference = Flux24Sum::select(['Date as date', DB::raw('sum(volume) as volume, WEEKDAY(DATE) AS day')])
+            $general_reference = Flux24Sum::select(['date as date', DB::raw('sum(volume) as volume, WEEKDAY(date) AS day')])
                 // ->where('Observation_Zone', 'ZoneGlobale')
                 ->whereBetween('date', [$data['preference_start'], $data['preference_end']])
                 ->where(function ($q) use ($data) {
@@ -346,9 +346,9 @@ class Flux24ZoneController extends Controller
                 ->groupBy('date', 'day')
                 ->get();
 
-            $flux = Flux24Sum::select(['destination as zone', 'Date as date', 'volume'])
+            $flux = Flux24Sum::select(['destination as zone', 'date as date', 'volume'])
                 // ->where('Observation_Zone', 'ZoneGlobale')
-                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->whereBetween('date', [$data['observation_start'], $data['observation_end']])
                 ->orderBy('volume', 'desc')
                 ->where('destination', $data['fluxGeoOptions'])
                 ->where('origin', '!=', 'Hors_Zone')
@@ -356,9 +356,9 @@ class Flux24ZoneController extends Controller
                 ->orderBy('volume')
                 ->get();
 
-            $flux_reference = Flux24Sum::select(['destination as zone', 'Date as date', 'volume'])
+            $flux_reference = Flux24Sum::select(['destination as zone', 'date as date', 'volume'])
                 // ->where('Observation_Zone', 'ZoneGlobale')
-                ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                ->whereBetween('date', [$data['preference_start'], $data['preference_end']])
                 ->orderBy('volume', 'desc')
                 ->where('destination', $data['fluxGeoOptions'])
                 // ->where('destination','!=','Hors_Zone')
@@ -372,7 +372,7 @@ class Flux24ZoneController extends Controller
                 'general_reference' => $general_reference,
                 'general_observation' => $general_observation,
                 'zone' => $data['fluxGeoOptions']
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -390,9 +390,9 @@ class Flux24ZoneController extends Controller
             //     ->whereIn('provinces.name', $data['fluxGeoOptions'])
             //     ->get()->pluck('name');
 
-            $flux = Flux24Sum::select(['origin as zone', 'Date as date', 'volume'])
+            $flux = Flux24Sum::select(['origin as zone', 'date as date', 'volume'])
                 // ->where('Observation_Zone', 'ZoneGlobale')
-                ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+                ->whereBetween('date', [$data['observation_start'], $data['observation_end']])
                 ->where('origin', $data['fluxGeoOptions'])
                 ->orderBy('volume', 'desc')
                 ->where('destination', '!=', 'Hors_Zone')
@@ -400,9 +400,9 @@ class Flux24ZoneController extends Controller
                 // ->where('origin','!=','Hors_Zone')
                 // ->groupBy('origin', 'Date')
                 ->get();
-            $flux_reference = Flux24Sum::select(['origin as zone', 'Date as date', 'volume'])
+            $flux_reference = Flux24Sum::select(['origin as zone', 'date as date', 'volume'])
                 // ->where('Observation_Zone', 'ZoneGlobale')
-                ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+                ->whereBetween('date', [$data['preference_start'], $data['preference_end']])
                 ->where('origin', $data['fluxGeoOptions'])
                 ->orderBy('volume', 'desc')
                 ->where('destination', '!=', 'Hors_Zone')
@@ -411,14 +411,14 @@ class Flux24ZoneController extends Controller
                 // ->groupBy('origin', 'date')
                 ->get();
 
-            $presence_observation = Flux24PresenceZone::select(['Date as date', 'Zone as zone', 'PresenceType', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+            $presence_observation = Flux24PresenceZone::select(['Date as date', 'Zone as zone', 'PresenceType', DB::raw('sum("Volume")as volume,WEEKDAY("Date") AS day')])
                 ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
                 ->where('Zone', $data['fluxGeoOptions'])
                 ->groupBy('Date', 'Zone', 'day', 'PresenceType')
                 ->orderBy('volume')
                 ->get();
 
-            $presence_reference = Flux24PresenceZone::select(['Zone as zone', 'Date as date', 'PresenceType', DB::raw('sum(volume)as volume,WEEKDAY(DATE) AS day')])
+            $presence_reference = Flux24PresenceZone::select(['Zone as zone', 'Date as date', 'PresenceType', DB::raw('sum("Volume") as volume,WEEKDAY("Date") AS day')])
                 ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
                 ->where('Zone', $data['fluxGeoOptions'])
                 ->groupBy('day', 'Zone', 'Date', 'PresenceType')
@@ -431,7 +431,7 @@ class Flux24ZoneController extends Controller
                 'references' => $flux_reference,
                 'presence_observation' => $presence_observation,
                 'presence_reference' => $presence_reference
-            ]);
+            ],200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

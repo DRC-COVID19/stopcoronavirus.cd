@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Flux;
 use App\Flux24Province;
+use App\Flux24Sum;
 use App\Pandemic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,16 +31,18 @@ class IndicatorController extends Controller
             $axeY = [];
             switch ($data['x']) {
                 case 1:
-                    $axeX = Flux::select(['Origin as name', 'Date as date', DB::raw('sum(volume)as x')])
-                        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                        ->WhereIn('Origin', $data['geoOptions'])
-                        ->groupBy('Origin', 'Date')->get();
+                    $axeX =Flux24Sum::select(['origin as name', 'date as date', DB::raw('sum("volume") as x')])
+                        ->whereBetween('date', [$data['observation_start'], $data['observation_end']])
+                        ->WhereIn('origin', $data['geoOptions'])
+                        ->groupBy('origin', 'date')
+                        ->orderBy('date')
+                        ->get();
                     break;
                 case 2:
-                    $axeX = Flux::select(['Destination as name', 'Date as date', DB::raw('sum(volume) as x')])
-                        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-                        ->WhereIn('Destination', $data['geoOptions'])
-                        ->groupBy('Destination', 'Date')->get();
+                    $axeX = Flux24Sum::select(['destination as name', 'date as date', DB::raw('sum("volume") as x')])
+                        ->whereBetween('date', [$data['observation_start'], $data['observation_end']])
+                        ->WhereIn('destination', $data['geoOptions'])
+                        ->groupBy('destination', 'date')->orderBy('date')->get();
                     break;
                 default:
                     # code...
@@ -74,7 +77,7 @@ class IndicatorController extends Controller
             }
             $mergeArray = array_merge($axeX->toArray(), $axeY->toArray());
 
-            return response()->json($mergeArray);
+            return response()->json($mergeArray,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
