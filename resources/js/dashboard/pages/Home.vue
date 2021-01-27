@@ -1594,7 +1594,15 @@ export default {
         event_label: "fetch_orange_flux_hotspot_req_send",
       });
 
-      Promise.all([mapsRequest, dailyRequest, tendanceRequest, generalRequest])
+      tendanceRequest
+        .then(({ data }) => {
+          this.flux24Daily = data.observations;
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
+        });
+
+      Promise.all([mapsRequest, dailyRequest, generalRequest])
         .then((response) => {
           if (response[0]) {
             const data = response[0].data;
@@ -1640,12 +1648,12 @@ export default {
           if (response[1]) {
             this.flux30Daily = this.flux30Daily = response[1].data.observations;
           }
+          // if (response[2]) {
+          //   this.flux24Daily = response[2].data.observations;
+          // }
           if (response[2]) {
-            this.flux24Daily = response[2].data.observations;
-          }
-          if (response[3]) {
-            const observation = response[3].data.observations;
-            const reference = response[3].data.references;
+            const observation = response[2].data.observations;
+            const reference = response[2].data.references;
             let difference = null;
             let percent = null;
 
