@@ -3,7 +3,7 @@ import { create } from 'axios';
 import moment from 'moment';
 
 let axiosCreate = create({
-    baseURL: `${location.protocol}//${location.host}/`,
+    baseURL: `${location.protocol}//${location.host}`,
 });
 
 window.axios = axiosCreate;
