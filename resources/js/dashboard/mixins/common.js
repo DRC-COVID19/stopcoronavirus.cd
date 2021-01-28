@@ -42,8 +42,8 @@ export default {
                 if (countReference % 2 == 0) {
                     let index = (countReference + 1) / 2;
                     index = parseInt(index);
-                    const volume1 = references[index].volume;
-                    const volume2 = references[index - 1].volume;
+                    const volume1 =Number(references[index].volume);
+                    const volume2 =Number(references[index - 1].volume);
                     referenceVolume = (volume1 + volume2) / 2;
                 } else {
                     const index = (countReference + 1) / 2;
@@ -56,8 +56,8 @@ export default {
                 if (countObservation % 2 == 0) {
                     let index = (countObservation + 1) / 2;
                     index = parseInt(index);
-                    const volume1 = observations[index].volume;
-                    const volume2 = observations[index - 1].volume;
+                    const volume1 =Number(observations[index].volume);
+                    const volume2 =Number(observations[index - 1].volume);
                     observationVolume = (volume1 + volume2) / 2;
                 } else {
                     const index = (countObservation + 1) / 2;

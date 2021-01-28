@@ -28,7 +28,10 @@ class HospitalSituationManagerName extends Migration
     {
         Schema::table('hospital_situations', function (Blueprint $table) {
             $table->dropColumn('updated_manager_name');
-            $table->dropColumn('created_manager_name');
         });
+        Schema::table('hospital_situations', function (Blueprint $table) {
+
+          $table->dropColumn('created_manager_name');
+      });
     }
 }

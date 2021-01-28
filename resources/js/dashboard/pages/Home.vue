@@ -53,14 +53,14 @@
             v-if="hasFlux24DailyIn && activeMenu == 1 && selectedSource == 1"
           >
             <b-link
-              :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
-              @click="layerSetSyle(2)"
-              >Arcs</b-link
-            >
-            <b-link
               :class="{ active: fluxMapStyle == 1 }"
               @click="layerSetSyle(1)"
               >Hachurés</b-link
+            >
+            <b-link
+              :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
+              @click="layerSetSyle(2)"
+              >Arcs</b-link
             >
           </div>
           <b-row
@@ -131,7 +131,7 @@
           md="6"
           class="side-right mt-2 pl-2"
           :class="{ 'side-right-100': !hasCovidCases }"
-          v-if="hasRightSide"
+          v-if="true"
         >
           <b-card no-body>
             <!-- <toggle-button
@@ -148,12 +148,13 @@
                     :fluxAfricellDaily="fluxAfricellDaily"
                     :fluxAfricelPresence="fluxAfricelPresence"
                     :fluxAfricelInOut="fluxAfricelInOut"
+                    :isLoading="isLoading"
                   />
                 </b-tab>
               </b-tabs>
             </transition>
             <transition name="fade">
-              <b-tabs pills card v-if="selectedSource == 1">
+              <b-tabs pills card v-if="selectedSource == 1 || activeMenu == 5">
                 <b-tab
                   title="Données Covid-19"
                   v-if="(!!covidCases || isLoading) && activeMenu == 2"
@@ -176,17 +177,35 @@
                     :isLoading="isLoading"
                   />
                 </b-tab>
-                <b-tab title="Province" v-if="activeMenu == 1">
+                <b-tab title="Vue Globale des Provinces" v-if="activeMenu == 1">
                   <b-row>
                     <b-col cols="6" class="pr-2">
-                      <skeleton-loading v-if="isLoading">
+                      <!-- <skeleton-loading v-if="isLoading">
                         <square-skeleton
                           :boxProperties="{
                             width: '100%',
                             height: '830px',
                           }"
                         ></square-skeleton>
-                      </skeleton-loading>
+                      </skeleton-loading> -->
+                      <div v-if="isLoading">
+                        <b-skeleton-wrapper :loading="isLoading">
+                          <template #loading>
+                            <b-card no-body class="p-2 rounded-0 cardtype2">
+                              <b-skeleton
+                                class="m-auto"
+                                width="60%"
+                                height="20"
+                              ></b-skeleton>
+                              <b-skeleton
+                                class="mt-2"
+                                width="100%"
+                                height="820px"
+                              ></b-skeleton>
+                            </b-card>
+                          </template>
+                        </b-skeleton-wrapper>
+                      </div>
                       <GlobalProvince
                         v-else
                         title="Mobilité entrante"
@@ -196,14 +215,33 @@
                       />
                     </b-col>
                     <b-col cols="6" class="pl-2 pr-2">
-                      <skeleton-loading v-if="isLoading">
+                      <!-- <skeleton-loading v-if="isLoading">
                         <square-skeleton
                           :boxProperties="{
                             width: '100%',
                             height: '830px',
                           }"
                         ></square-skeleton>
-                      </skeleton-loading>
+                      </skeleton-loading> -->
+
+                      <div v-if="isLoading">
+                        <b-skeleton-wrapper :loading="isLoading">
+                          <template #loading>
+                            <b-card no-body class="p-2 rounded-0 cardtype2">
+                              <b-skeleton
+                                class="m-auto"
+                                width="60%"
+                                height="20"
+                              ></b-skeleton>
+                              <b-skeleton
+                                class="mt-2"
+                                width="100%"
+                                height="820px"
+                              ></b-skeleton>
+                            </b-card>
+                          </template>
+                        </b-skeleton-wrapper>
+                      </div>
                       <GlobalProvince
                         v-else
                         title="Mobilité sortante"
@@ -215,7 +253,7 @@
                   </b-row>
                 </b-tab>
                 <b-tab
-                  title="Mobilité"
+                  :title="titleMobility"
                   v-if="
                     (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
                     !isFirstLoad &&
@@ -348,6 +386,7 @@ import {
   PREFERENCE_START,
   PREFERENCE_END,
   HOTSPOT_TYPE,
+  INFRASTRUCTURE_FIRST_UPDATE,
 } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
@@ -478,6 +517,18 @@ export default {
       observationDate: (state) => state.flux.observationDate,
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
     }),
+    titleMobility() {
+      let name = "Provinces";
+      switch (this.fluxGeoGranularity) {
+        case 2:
+          name = "Zone de santé";
+          break;
+        case 3:
+          name = "Hotspot";
+          break;
+      }
+      return name;
+    },
     isStartEndDate() {
       return this.observationDate.start == this.observationDate.end;
     },
@@ -618,6 +669,14 @@ export default {
         }
       }
     );
+
+    // Prefetch infranstructure data
+    this.getHospitalsData({
+      observation_end: moment().format("YYYY-MM-DD"),
+      observation_start: INFRASTRUCTURE_FIRST_UPDATE,
+      township: 0,
+      isLoading: false,
+    });
   },
   methods: {
     ...mapActions([
@@ -625,6 +684,7 @@ export default {
       "getHospitalsData",
       "getHealthZone",
       "getFluxHotSpot",
+      "getSituationHospital",
     ]),
     ...mapMutations(["setMapStyle", "setFluxType", "setObservationDate"]),
     toggleBottomBar() {
@@ -1502,16 +1562,17 @@ export default {
         params: values,
       });
 
-      if (hotspot) {
-        values = { ...values };
-        values.fluxGeoOptions = ["Tout"];
-      }
       const generalRequest = axios.get(urlGeneral, {
         params: values,
       });
 
+      let mapsValues = values;
+      if (hotspot) {
+        mapsValues = { ...values };
+        mapsValues.fluxGeoOptions = ["Tout"];
+      }
       const mapsRequest = axios.get(urlMaps, {
-        params: values,
+        params: mapsValues,
       });
 
       this.isFirstLoad = false;
@@ -1533,7 +1594,15 @@ export default {
         event_label: "fetch_orange_flux_hotspot_req_send",
       });
 
-      Promise.all([mapsRequest, dailyRequest, tendanceRequest, generalRequest])
+      tendanceRequest
+        .then(({ data }) => {
+          this.flux24Daily = data.observations;
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
+        });
+
+      Promise.all([mapsRequest, dailyRequest, generalRequest])
         .then((response) => {
           if (response[0]) {
             const data = response[0].data;
@@ -1579,12 +1648,12 @@ export default {
           if (response[1]) {
             this.flux30Daily = this.flux30Daily = response[1].data.observations;
           }
+          // if (response[2]) {
+          //   this.flux24Daily = response[2].data.observations;
+          // }
           if (response[2]) {
-            this.flux24Daily = response[2].data.observations;
-          }
-          if (response[3]) {
-            const observation = response[3].data.observations;
-            const reference = response[3].data.references;
+            const observation = response[2].data.observations;
+            const reference = response[2].data.references;
             let difference = null;
             let percent = null;
 
@@ -1614,6 +1683,7 @@ export default {
         });
     },
     submitInfrastructureForm(values) {
+      values.isLoading = true;
       this.getHospitalsData(values);
     },
     seeSide() {
@@ -2044,7 +2114,7 @@ export default {
     padding: 5px;
     text-align: center;
     text-decoration: unset;
-    background: rgba(46, 91, 255, 0.7);
+    background: rgba(46, 91, 255, 0.5);
     color: white !important;
     border-radius: 5px;
     &.active {

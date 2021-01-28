@@ -24,7 +24,7 @@ class AfricelHealthZoneController extends Controller
      */
     public function index()
     {
-        return response()->json(AfricelHealthZone::all());
+        return response()->json(AfricelHealthZone::all(),200,[],JSON_NUMERIC_CHECK);
     }
 
     /**

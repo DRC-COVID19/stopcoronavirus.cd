@@ -28,7 +28,7 @@ export default {
   },
   actions: {
     getHospitalsData({ state }, payload) {
-      state.isLoading = true;
+      state.isLoading = payload.isLoading;
       if (payload) {
         if (payload.observation_end) state.observation_end = payload.observation_end
         if (payload.observation_start) state.observation_start = payload.observation_start
@@ -158,15 +158,13 @@ export default {
         event_category: "fetch_Infrastructures_data",
         event_label: "fetch_Infrastructures_evolution_data_req_send",
       });
-
+      const url=`/api/dashboard/hospitals/evolution${selectedHospital?`/${selectedHospital}`:''}`;
       axios
-        .get(`/api/dashboard/hospitals/evolution/${selectedHospital}`,
+        .get(url,
           {
             params
           })
         .then(({ data }) => {
-          console.log('data', data)
-
           state.situationHospital = data
           state.situationHospitalLoading = false
 

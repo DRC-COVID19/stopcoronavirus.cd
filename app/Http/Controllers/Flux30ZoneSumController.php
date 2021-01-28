@@ -22,27 +22,30 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSumByDate::select(['observation_Zone', DB::raw('sum(volume) as volume')]);
+      $fluxObservations = Flux30ZoneSumByDate::select(['Observation_Zone', DB::raw('sum("volume") as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxObservations->where('Observation_Zone', $data['fluxGeoOptions']);
       }
-      $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+
+      $fluxObservations = $fluxObservations->whereBetween('date', [$data['observation_start'], $data['observation_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
         ->groupBy('Observation_Zone', "date")
         ->orderBy('volume')
         ->get();
 
 
-      $fluxReferences = Flux30ZoneSumByDate::select(['observation_Zone', DB::raw('sum(volume) as volume')]);
+      $fluxReferences = Flux30ZoneSumByDate::select(['Observation_Zone', DB::raw('sum("volume") as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxReferences->where('Observation_Zone', $data['fluxGeoOptions']);
       }
-      $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+      $fluxReferences = $fluxReferences->whereBetween('date', [$data['preference_start'], $data['preference_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
         ->groupBy('Observation_Zone', 'date')
         ->orderBy('volume')
         ->get();
 
-      $fluxObservationGroup = $fluxObservations->groupBy('observation_Zone');
-      $fluxReferenceGroup = $fluxReferences->groupBy('observation_Zone');
+      $fluxObservationGroup = $fluxObservations->groupBy('Observation_Zone');
+      $fluxReferenceGroup = $fluxReferences->groupBy('Observation_Zone');
       $fluxObservationWithMedian = [];
       $fluxReferenceWithMedian = [];
 
@@ -64,7 +67,7 @@ class Flux30ZoneSumController extends Controller
       return  response()->json([
         "observations" => $fluxObservationWithMedian,
         "references" => $fluxReferenceWithMedian
-      ], 200);
+      ], 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -78,7 +81,7 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSumByDate::select(['observation_Zone', DB::raw('sum(volume) as volume')])
+      $fluxObservations = Flux30ZoneSumByDate::select(['Observation_Zone', DB::raw('sum("volume") as volume')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sum_by_dates.Observation_Zone');
         });
@@ -86,11 +89,12 @@ class Flux30ZoneSumController extends Controller
         $fluxObservations->where('flux_hot_spots.type', $data['fluxGeoOptions']);
       }
       $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
         ->groupBy('Observation_Zone', "date")
         ->orderBy('volume')
         ->get();
 
-      $fluxReferences = Flux30ZoneSumByDate::select(['observation_Zone', DB::raw('sum(volume) as volume')])
+      $fluxReferences = Flux30ZoneSumByDate::select(['Observation_Zone', DB::raw('sum("volume") as volume')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sum_by_dates.Observation_Zone');
         });
@@ -98,12 +102,13 @@ class Flux30ZoneSumController extends Controller
         $fluxReferences->where('flux_hot_spots.type', $data['fluxGeoOptions']);
       }
       $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
         ->groupBy('Observation_Zone', 'date')
         ->orderBy('volume')
         ->get();
 
-      $fluxObservationGroup = $fluxObservations->groupBy('observation_Zone');
-      $fluxReferenceGroup = $fluxReferences->groupBy('observation_Zone');
+      $fluxObservationGroup = $fluxObservations->groupBy('Observation_Zone');
+      $fluxReferenceGroup = $fluxReferences->groupBy('Observation_Zone');
       $fluxObservationWithMedian = [];
       $fluxReferenceWithMedian = [];
 
@@ -125,7 +130,7 @@ class Flux30ZoneSumController extends Controller
       return  response()->json([
         "observations" => $fluxObservationWithMedian,
         "references" => $fluxReferenceWithMedian
-      ], 200);
+      ], 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -139,20 +144,22 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSumByDate::select([DB::raw('sum(volume) as volume')]);
+      $fluxObservations = Flux30ZoneSumByDate::select([DB::raw('sum("volume") as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxObservations->where('Observation_Zone', $data['fluxGeoOptions']);
       }
-      $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+      $fluxObservations = $fluxObservations->whereBetween('date', [$data['observation_start'], $data['observation_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
         ->groupBy("date")
         ->orderBy('volume')
         ->get();
 
-      $fluxReferences = Flux30ZoneSumByDate::select([DB::raw('sum(volume) as volume')]);
+      $fluxReferences = Flux30ZoneSumByDate::select([DB::raw('sum("volume") as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxReferences->where('Observation_Zone', $data['fluxGeoOptions']);
       }
-      $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+      $fluxReferences = $fluxReferences->whereBetween('date', [$data['preference_start'], $data['preference_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
         ->groupBy('date')
         ->orderBy('volume')
         ->get();
@@ -163,7 +170,7 @@ class Flux30ZoneSumController extends Controller
       return  response()->json([
         "observations" => $observationMedia,
         "references" => $referenceMedia
-      ], 200);
+      ], 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -177,14 +184,15 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSumByDate::select([DB::raw('sum(volume) as volume')])
+      $fluxObservations = Flux30ZoneSumByDate::select([DB::raw('sum("volume") as volume')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sum_by_dates.Observation_Zone');
         });
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxObservations->where('flux_hot_spots.type', $data['fluxGeoOptions']);
       }
-      $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+      $fluxObservations = $fluxObservations->whereBetween('date', [$data['observation_start'], $data['observation_end']])
+        ->where('flux30_zone_sum_by_dates.Observation_Zone', '!=', 'Inconnue')
         ->groupBy("date")
         ->orderBy('volume')
         ->get();
@@ -196,18 +204,22 @@ class Flux30ZoneSumController extends Controller
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxReferences->where('flux_hot_spots.type', $data['fluxGeoOptions']);
       }
-      $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+      $fluxReferences = $fluxReferences->whereBetween('date', [$data['preference_start'], $data['preference_end']])
+        ->where('flux30_zone_sum_by_dates.Observation_Zone', '!=', 'Inconnue')
         ->groupBy('date')
         ->orderBy('volume')
         ->get();
 
+
+
       $observationMedia = $fluxObservations->median('volume');
       $referenceMedia = $fluxReferences->median('volume');
+
 
       return  response()->json([
         "observations" => $observationMedia,
         "references" => $referenceMedia
-      ], 200);
+      ], 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -221,23 +233,25 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSum::select(['Date as date', 'hour', DB::raw('sum(volume) as volume, WEEKDAY(date) as day')]);
+      $fluxObservations = Flux30ZoneSum::select(['Date as date', 'Hour as hour', DB::raw('sum("Volume") as volume, WEEKDAY("Date") as day')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxObservations->where('Observation_Zone', $data['fluxGeoOptions']);
       }
       $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-        ->whereBetween('hour', [$data['time_start'], $data['time_end']])
-        ->groupBy('Date', 'hour', 'day',)
+        ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
+        ->groupBy('Date', 'Hour', 'day',)
         ->orderBy('volume')
         ->get();
 
-      $fluxReferences = Flux30ZoneSum::select(['Date as date', 'hour', DB::raw('sum(volume) as volume, WEEKDAY(date) as day')]);
+      $fluxReferences = Flux30ZoneSum::select(['Date as date', 'Hour as hour', DB::raw('sum("Volume") as volume, WEEKDAY("Date") as day')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxReferences->where('Observation_Zone', $data['fluxGeoOptions']);
       }
       $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-        ->whereBetween('hour', [$data['time_start'], $data['time_end']])
-        ->groupBy('Date', 'hour', 'day')
+        ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
+        ->groupBy('Date', 'Hour', 'day')
         ->orderBy('volume')
         ->get();
 
@@ -268,7 +282,7 @@ class Flux30ZoneSumController extends Controller
 
       return  response()->json([
         "observations" => array_values(collect($ObservationFormatted)->sortBy('hour')->groupBy('date')->toArray()),
-      ], 200);
+      ], 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -282,7 +296,7 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $fluxObservations = Flux30ZoneSum::select(['Date as date', 'hour', DB::raw('sum(volume) as volume, WEEKDAY(date) as day')])
+      $fluxObservations = Flux30ZoneSum::select(['Date as date', 'Hour as hour', DB::raw('sum("Volume") as volume, WEEKDAY("Date") as day')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sums.Observation_Zone');
         });
@@ -291,12 +305,13 @@ class Flux30ZoneSumController extends Controller
       }
       $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
 
-        ->whereBetween('hour', [$data['time_start'], $data['time_end']])
-        ->groupBy('Date', 'hour', 'day',)
+        ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
+        ->groupBy('Date', 'Hour', 'day',)
         ->orderBy('volume')
         ->get();
 
-      $fluxReferences = Flux30ZoneSum::select(['Date as date', 'hour', DB::raw('sum(volume) as volume, WEEKDAY(date) as day')])
+      $fluxReferences = Flux30ZoneSum::select(['Date as date', 'Hour as hour', DB::raw('sum("Volume") as volume, WEEKDAY("Date") as day')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sums.Observation_Zone');
         });;
@@ -304,8 +319,9 @@ class Flux30ZoneSumController extends Controller
         $fluxReferences->where('flux_hot_spots.type', $data['fluxGeoOptions']);
       }
       $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-        ->whereBetween('hour', [$data['time_start'], $data['time_end']])
-        ->groupBy('Date', 'hour', 'day')
+        ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
+        ->groupBy('Date', 'Hour', 'day')
         ->orderBy('volume')
         ->get();
 
@@ -337,7 +353,7 @@ class Flux30ZoneSumController extends Controller
 
       return  response()->json([
         "observations" => array_values(collect($ObservationFormatted)->sortBy('hour')->groupBy('date')->toArray()),
-      ], 200);
+      ], 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -351,21 +367,22 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $flux = Flux30ZoneSum::select(['Date as date', 'hour', DB::raw('sum(volume) as volume')]);
+      $flux = Flux30ZoneSum::select(['Date as date', 'Hour as hour', DB::raw('sum("Volume") as volume')]);
       if ($data['fluxGeoOptions'] != 'Tout') {
         $flux->where('Observation_Zone', $data['fluxGeoOptions']);
       }
       $flux = $flux->whereBetween('Date', [$data['preference_start'], $data['observation_end']])
-        ->whereBetween('hour', [$data['time_start'], $data['time_end']])
-        ->groupBy('Date', 'hour')
-        ->orderBy('date')
-        ->orderBy('hour')
+        ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
+        ->where('Observation_Zone', '!=', 'Inconnue')
+        ->groupBy('Date', 'Hour')
+        ->orderBy('Date')
+        ->orderBy('Hour')
         ->get();
 
       $fluxGroup = array_values($flux->groupBy('date')->toArray());
       return  response()->json([
         "observations" => $fluxGroup,
-      ], 200);
+      ], 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -379,7 +396,7 @@ class Flux30ZoneSumController extends Controller
     $data = $this->fluxValidator($request->all());
     try {
       $data['fluxGeoOptions'] = $data['fluxGeoOptions'][0];
-      $flux = Flux30ZoneSum::select(['Date as date', 'hour', DB::raw('sum(volume) as volume')])
+      $flux = Flux30ZoneSum::select(['Date as date', 'Hour as hour', DB::raw('sum("Volume") as volume')])
         ->join('flux_hot_spots', function ($q) {
           $q->on('flux_hot_spots.name', 'flux30_zone_sums.Observation_Zone');
         });
@@ -389,16 +406,17 @@ class Flux30ZoneSumController extends Controller
 
       $flux = $flux->whereBetween('Date', [$data['preference_start'], $data['observation_end']])
         // ->whereBetween('hour', [$data['time_start'], $data['time_end']])
-        ->groupBy('Date', 'hour')
-        ->orderBy('date')
-        ->orderBy('hour')
+        ->where('Observation_Zone', '!=', 'Inconnue')
+        ->groupBy('Date', 'Hour')
+        ->orderBy('Date')
+        ->orderBy('Hour')
         ->get();
 
       $fluxGroup = array_values($flux->groupBy('date')->toArray());
 
       return  response()->json([
         "observations" => $fluxGroup,
-      ], 200);
+      ], 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);

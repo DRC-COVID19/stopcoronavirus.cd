@@ -69,36 +69,12 @@ export default {
         if (!referencesByDate || !observationsByDate) {
           return;
         }
-        let referenceVolume = null;
-        let observationVolume = null;
-        const countReference = referencesByDate.length;
-        if (countReference > 0) {
-          if (countReference % 2 == 0) {
-            let index = (countReference + 1) / 2;
-            index = parseInt(index);
-            const volume1 = referencesByDate[index].volume;
-            const volume2 = referencesByDate[index - 1].volume;
-            referenceVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countReference + 1) / 2;
-            referenceVolume = referencesByDate[index - 1].volume;
-          }
-        }
 
-        const countObservation = observationsByDate.length;
-        if (countObservation > 0) {
-          if (countObservation % 2 == 0) {
-            let index = (countObservation + 1) / 2;
-            index = parseInt(index);
-            const volume1 = observationsByDate[index].volume;
-            const volume2 = observationsByDate[index - 1].volume;
-            observationVolume = (volume1 + volume2) / 2;
-          } else {
-            const index = (countObservation + 1) / 2;
-            observationVolume = observationsByDate[index - 1].volume;
-          }
-        }
-        const difference = observationVolume - referenceVolume;
+        const result = this.formatFluxDataByMedian({
+          references: referencesByDate,
+          observations: observationsByDate,
+        });
+
         let zone = null;
         if (observationsByDate[0]) {
           zone = observationsByDate[0].zone;
@@ -111,12 +87,14 @@ export default {
 
         localData.push({
           zone: zone,
-          volume: observationVolume,
-          volume_reference: referenceVolume,
-          percent: Math.round((difference / referenceVolume) * 100),
-          difference: difference,
+          volume: result.observationVolume,
+          volume_reference: result.referenceVolume,
+          percent: result.percent,
+          difference: result.difference,
         });
+
       });
+
 
       localData.sort((a, b) => {
         return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
@@ -193,14 +171,7 @@ export default {
             ],
           },
           plugins: {
-            crosshair: {
-              sync: {
-                enabled: false, // enable trace line syncing with other charts
-              },
-              zoom: {
-                enabled: false,
-              },
-            },
+            crosshair: false,
           },
         },
       };

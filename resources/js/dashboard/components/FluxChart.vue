@@ -16,17 +16,27 @@
         </div>
         <div class="col-md col-12 d-flex justify-content-end">
           <div>
-            <p class="small m-0 text-muted">
-              Données fournies par
-              <b>Orange</b>
-            </p>
-            <p class="small m-0">
-              <span class="text-muted">Mise à jour du</span>
-              <b>{{ moment(last_update).format("Y-MM-DD") }}</b>
-            </p>
+            <b-skeleton-wrapper :loading="isLoading">
+              <template #loading>
+                <b-skeleton width="171" height="20"></b-skeleton>
+                <b-skeleton width="150" height="20"></b-skeleton>
+              </template>
+              <p class="small m-0 text-muted">
+                Données fournies par
+                <b>Orange</b>
+              </p>
+              <p class="small m-0">
+                <span class="text-muted">Mise à jour du</span>
+                <b>{{ moment(last_update).format("Y-MM-DD") }}</b>
+              </p>
+            </b-skeleton-wrapper>
           </div>
           <div>
+            <div class="logoPartenaire" v-if="isLoading">
+              <b-skeleton-img width="35" height="38"></b-skeleton-img>
+            </div>
             <b-img
+              v-show="!isLoading"
               width="38"
               height="38"
               src="/img/Orange_logo.svg"
@@ -38,34 +48,56 @@
       </b-row>
 
       <b-row no-gutters v-show="fluxTimeGranularity == 2" class="mb-4">
-        <b-col
-          cols="12"
-          md="12"
-          class="pl-0 col-mobilite-generale"
-          v-show="!isLoading"
-        >
-          <b-card class="mb-3 flux-mobility active">
-            <h5 class="percent-title">Présence</h5>
-            <p class="text-muted" v-if="!flux30General.percent">
-              Données non disponibles
-            </p>
-            <div v-else>
-              <div class="percent flux-presence">
-                {{ Math.round(flux30General.percent) }}%​
-              </div>
-              <p class="percent-p text-dash-color mb-0">
-                {{ formatCash(flux30General.difference) }} personnes de
-                <span v-if="flux30General.difference > 0">plus</span>
-                <span v-else>moins</span>
-                ont été présentes dans la zone
+        <b-col cols="12" md="12" class="pl-0 col-mobilite-generale">
+          <b-skeleton-wrapper :loading="isLoading">
+            <template #loading>
+              <b-card class="mb-3 flux-mobility active">
+                <b-skeleton width="30%" height="20"></b-skeleton>
+                <b-skeleton width="20%" height="50"></b-skeleton>
+                <b-skeleton width="90%" height="20"></b-skeleton>
+              </b-card>
+            </template>
+            <b-card class="mb-3 flux-mobility active">
+              <h5 class="percent-title">Présence</h5>
+              <p class="text-muted" v-if="!flux30General.percent">
+                Données non disponibles
               </p>
-            </div>
-          </b-card>
+              <div v-else>
+                <div class="percent flux-presence">
+                  {{ Math.round(flux30General.percent) }}%​
+                </div>
+                <p class="percent-p text-dash-color mb-0">
+                  {{ formatCash(flux30General.difference) }} personnes de
+                  <span v-if="flux30General.difference > 0">plus</span>
+                  <span v-else>moins</span>
+                  ont été présentes dans la zone
+                </p>
+              </div>
+            </b-card>
+          </b-skeleton-wrapper>
+          <div v-if="isLoading">
+            <b-skeleton-wrapper :loading="isLoading">
+              <template #loading>
+                <b-card no-body class="cardtype1 mb-3 p-2">
+                  <b-skeleton
+                    class="m-auto"
+                    width="60%"
+                    height="20"
+                  ></b-skeleton>
+                  <b-skeleton
+                    class="mt-2"
+                    width="100%"
+                    height="180"
+                  ></b-skeleton>
+                </b-card>
+              </template>
+            </b-skeleton-wrapper>
+          </div>
           <FullScreen
             id="flux_30_daily"
             link="flux_30_daily_chart"
             @change="fullscreenMobileDaily"
-            v-show="this.flux30Daily.length > 0"
+            v-show="this.flux30Daily.length > 0 && !isLoading"
           >
             <b-card no-body class="cardtype1 mb-3 p-2">
               <div class="general-top-title">
@@ -118,31 +150,6 @@
               </div>
             </b-col>
           </b-row>
-        </b-col>
-
-        <b-col
-          cols="12"
-          md="12"
-          class="pl-0 col-mobilite-generale"
-          v-if="isLoading"
-        >
-          <skeleton-loading class="mb-3" v-if="isLoading">
-            <square-skeleton
-              :boxProperties="{
-                width: '100%',
-                height: '175px',
-              }"
-            ></square-skeleton>
-          </skeleton-loading>
-
-          <skeleton-loading class="mb-3" v-if="isLoading">
-            <square-skeleton
-              :boxProperties="{
-                width: '100%',
-                height: '200px',
-              }"
-            ></square-skeleton>
-          </skeleton-loading>
         </b-col>
       </b-row>
 
@@ -278,52 +285,51 @@
         >
           <b-row class="mb-3">
             <b-col cols="12">
-              <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
-                    width: '100%',
-                    height: '175px',
-                  }"
-                ></square-skeleton>
-              </skeleton-loading>
+              <b-skeleton-wrapper :loading="isLoading">
+                <template #loading>
+                  <b-card class="mb-3 flux-mobility">
+                    <b-skeleton width="60%" height="20"></b-skeleton>
+                    <b-skeleton width="50%" height="50"></b-skeleton>
+                    <b-skeleton width="100%" height="50"></b-skeleton>
+                  </b-card>
+                </template>
 
-              <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
-                    width: '100%',
-                    height: '200px',
-                  }"
-                ></square-skeleton>
-              </skeleton-loading>
+                <b-card
+                  class="mb-3 flux-mobility"
+                  :class="{ active: fluxType == 1 }"
+                  @click="selectFluxType(1)"
+                >
+                  <h5 class="percent-title">Mobilité entrante</h5>
 
-              <skeleton-loading v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
-                    width: '100%',
-                    height: '400px',
-                  }"
-                ></square-skeleton>
-              </skeleton-loading>
-
-              <b-card
-                class="mb-3 flux-mobility"
-                :class="{ active: fluxType == 1 }"
-                @click="selectFluxType(1)"
-                v-show="!isLoading"
-              >
-                <h5 class="percent-title">Mobilité entrante</h5>
-
-                <div class="percent flux-in-color">{{ percentIn }}%​</div>
-                <p class="percent-p text-dash-color mb-0">
-                  {{ differenceIn }} personnes de
-                  <span v-if="differenceIn > 0">plus</span>
-                  <span v-else>moins</span>
-                  sont entrées dans la zone
-                  <br />
-                  <span style="opacity: 0">-</span>
-                </p>
-              </b-card>
-
+                  <div class="percent flux-in-color">{{ percentIn }}%​</div>
+                  <p class="percent-p text-dash-color mb-0">
+                    {{ differenceIn }} personnes de
+                    <span v-if="differenceIn > 0">plus</span>
+                    <span v-else>moins</span>
+                    sont entrées dans la zone
+                    <br />
+                    <span style="opacity: 0">-</span>
+                  </p>
+                </b-card>
+              </b-skeleton-wrapper>
+              <div v-if="isLoading">
+                <b-skeleton-wrapper :loading="isLoading">
+                  <template #loading>
+                    <b-card no-body class="p-2 cardtype1 mb-3">
+                      <b-skeleton
+                        class="m-auto"
+                        width="90%"
+                        height="20"
+                      ></b-skeleton>
+                      <b-skeleton
+                        class="mt-2"
+                        width="100%"
+                        height="180"
+                      ></b-skeleton>
+                    </b-card>
+                  </template>
+                </b-skeleton-wrapper>
+              </div>
               <FullScreen
                 id="fullscreenEntrance"
                 link="mobile_in"
@@ -349,6 +355,24 @@
                 </b-card>
               </FullScreen>
 
+              <div v-if="isLoading">
+                <b-skeleton-wrapper :loading="isLoading">
+                  <template #loading>
+                    <b-card no-body class="cardtype2 p-2">
+                      <b-skeleton
+                        class="m-auto"
+                        width="90%"
+                        height="20"
+                      ></b-skeleton>
+                      <b-skeleton
+                        class="mt-2"
+                        width="100%"
+                        height="390"
+                      ></b-skeleton>
+                    </b-card>
+                  </template>
+                </b-skeleton-wrapper>
+              </div>
               <FullScreen
                 id="fullscreenEntrance2"
                 link="mobile_entrance_2_card"
@@ -378,7 +402,7 @@
         >
           <b-row class="mb-3">
             <b-col cols="12">
-              <skeleton-loading class="mb-3" v-if="isLoading">
+              <!-- <skeleton-loading class="mb-3" v-if="isLoading">
                 <square-skeleton
                   :boxProperties="{
                     width: '100%',
@@ -403,25 +427,50 @@
                     height: '400px',
                   }"
                 ></square-skeleton>
-              </skeleton-loading>
-              <b-card
-                class="mb-3 flux-mobility"
-                :class="{ active: fluxType == 2 }"
-                @click="selectFluxType(2)"
-                v-show="!isLoading"
-              >
-                <h5 class="percent-title">Mobilité sortante</h5>
-                <div class="percent flux-out-color">{{ percentOut }}%​</div>
-                <p class="percent-p text-dash-color mb-0">
-                  {{ differenceOut }} personnes de
-                  <span v-if="differenceOut > 0">plus</span>
-                  <span v-else>moins</span>
-                  sont sorties de la zone
-                  <br />
-                  <span style="opacity: 0">-</span>
-                </p>
-              </b-card>
-
+              </skeleton-loading> -->
+              <b-skeleton-wrapper :loading="isLoading">
+                <template #loading>
+                  <b-card class="mb-3 flux-mobility">
+                    <b-skeleton width="60%" height="20"></b-skeleton>
+                    <b-skeleton width="50%" height="50"></b-skeleton>
+                    <b-skeleton width="100%" height="50"></b-skeleton>
+                  </b-card>
+                </template>
+                <b-card
+                  class="mb-3 flux-mobility"
+                  :class="{ active: fluxType == 2 }"
+                  @click="selectFluxType(2)"
+                >
+                  <h5 class="percent-title">Mobilité sortante</h5>
+                  <div class="percent flux-out-color">{{ percentOut }}%​</div>
+                  <p class="percent-p text-dash-color mb-0">
+                    {{ differenceOut }} personnes de
+                    <span v-if="differenceOut > 0">plus</span>
+                    <span v-else>moins</span>
+                    sont sorties de la zone
+                    <br />
+                    <span style="opacity: 0">-</span>
+                  </p>
+                </b-card>
+              </b-skeleton-wrapper>
+              <div v-if="isLoading">
+                <b-skeleton-wrapper :loading="isLoading">
+                  <template #loading>
+                    <b-card no-body class="p-2 cardtype1 mb-3 p-2">
+                      <b-skeleton
+                        class="m-auto"
+                        width="90%"
+                        height="20"
+                      ></b-skeleton>
+                      <b-skeleton
+                        class="mt-2"
+                        width="100%"
+                        height="180"
+                      ></b-skeleton>
+                    </b-card>
+                  </template>
+                </b-skeleton-wrapper>
+              </div>
               <FullScreen
                 id="fullscreenOut"
                 link="mobile_out"
@@ -446,7 +495,24 @@
                   </div>
                 </b-card>
               </FullScreen>
-
+              <div v-if="isLoading">
+                <b-skeleton-wrapper :loading="isLoading">
+                  <template #loading>
+                    <b-card no-body class="cardtype2 p-2">
+                      <b-skeleton
+                        class="m-auto"
+                        width="90%"
+                        height="20"
+                      ></b-skeleton>
+                      <b-skeleton
+                        class="mt-2"
+                        width="100%"
+                        height="390"
+                      ></b-skeleton>
+                    </b-card>
+                  </template>
+                </b-skeleton-wrapper>
+              </div>
               <FullScreen
                 id="fullscreenOut2"
                 link="mobile_out_2_card"
@@ -474,7 +540,7 @@
           class="pr-0 pl-2"
           v-show="this.typeMobilite == 1"
         >
-          <skeleton-loading class="mb-3" v-if="isLoading">
+          <!-- <skeleton-loading class="mb-3" v-if="isLoading">
             <square-skeleton
               :boxProperties="{
                 width: '100%',
@@ -490,48 +556,74 @@
                 height: '200px',
               }"
             ></square-skeleton>
-          </skeleton-loading>
-          <b-card
-            class="mb-3 flux-mobility"
-            :class="{
-              active: fluxType == 3,
-              disabled: globalProgress && globalProgress < 100,
-            }"
-            @click="selectFluxType(3)"
-            v-show="!isLoading"
-          >
-            <div class="row justify-content-between">
-              <h5 class="percent-title">Présences</h5>
-              <div class="btns-toggle-presence">
-                <i
-                  class="fa fa-sun"
-                  title="N'afficher que les présences jour"
-                  :class="{ active: typePresence == 2 || typePresence == 1 }"
-                  @click="toggleTypePresence(2)"
-                  @dblclick="defineTypePresence(2)"
-                ></i>
-                <i
-                  class="fa fa-moon"
-                  title="N'afficher que les présences nuit"
-                  :class="{ active: typePresence == 3 || typePresence == 1 }"
-                  @click="toggleTypePresence(3)"
-                  @dblclick="defineTypePresence(3)"
-                ></i>
+          </skeleton-loading> -->
+          <b-skeleton-wrapper :loading="isLoading">
+            <template #loading>
+              <b-card class="mb-3 flux-mobility">
+                <b-skeleton width="60%" height="20"></b-skeleton>
+                <b-skeleton width="50%" height="50"></b-skeleton>
+                <b-skeleton width="100%" height="50"></b-skeleton>
+              </b-card>
+            </template>
+            <b-card
+              class="mb-3 flux-mobility"
+              :class="{
+                active: fluxType == 3,
+                disabled: globalProgress && globalProgress < 100,
+              }"
+              @click="selectFluxType(3)"
+            >
+              <div class="row justify-content-between">
+                <h5 class="percent-title">Présences</h5>
+                <div class="btns-toggle-presence">
+                  <i
+                    class="fa fa-sun"
+                    title="N'afficher que les présences jour"
+                    :class="{ active: typePresence == 2 || typePresence == 1 }"
+                    @click="toggleTypePresence(2)"
+                    @dblclick="defineTypePresence(2)"
+                  ></i>
+                  <i
+                    class="fa fa-moon"
+                    title="N'afficher que les présences nuit"
+                    :class="{ active: typePresence == 3 || typePresence == 1 }"
+                    @click="toggleTypePresence(3)"
+                    @dblclick="defineTypePresence(3)"
+                  ></i>
+                </div>
               </div>
-            </div>
-            <div class="percent flux-presence">{{ percentPresence }}%​</div>
-            <p class="percent-p text-dash-color mb-0">
-              {{ differencePresence }} personnes de
-              <span v-if="differencePresence > 0">plus</span>
-              <span v-else>moins</span>
-              étaient présentes dans la zone
-              <br />
-              <span v-if="typePresence == 2">durant la journée</span>
-              <span v-else-if="typePresence == 3">durant la nuit</span>
-              <span v-else style="opacity: 0">-</span>
-            </p>
-          </b-card>
+              <div class="percent flux-presence">{{ percentPresence }}%​</div>
+              <p class="percent-p text-dash-color mb-0">
+                {{ differencePresence }} personnes de
+                <span v-if="differencePresence > 0">plus</span>
+                <span v-else>moins</span>
+                étaient présentes dans la zone
+                <br />
+                <span v-if="typePresence == 2">durant la journée</span>
+                <span v-else-if="typePresence == 3">durant la nuit</span>
+                <span v-else style="opacity: 0">-</span>
+              </p>
+            </b-card>
+          </b-skeleton-wrapper>
 
+          <div v-if="isLoading">
+            <b-skeleton-wrapper :loading="isLoading">
+              <template #loading>
+                <b-card no-body class="mb-3 p-2 cardtype1">
+                  <b-skeleton
+                    class="m-auto"
+                    width="90%"
+                    height="20"
+                  ></b-skeleton>
+                  <b-skeleton
+                    class="mt-2"
+                    width="100%"
+                    height="180"
+                  ></b-skeleton>
+                </b-card>
+              </template>
+            </b-skeleton-wrapper>
+          </div>
           <FullScreen
             id="mobile_presence_full"
             link="mobile_presence"
@@ -543,9 +635,7 @@
               class="mb-3 p-2 cardtype1"
               ref="mobile_presence_card"
             >
-              <div class="general-top-title">
-                Evolution de la présence (%)
-              </div>
+              <div class="general-top-title">Evolution de la présence (%)</div>
               <div class="chart-container">
                 <canvas
                   height="400"
@@ -1689,11 +1779,7 @@ export default {
             ],
           },
           plugins: {
-            crosshair: {
-              sync: {
-                enabled: false, // enable trace line syncing with other charts
-              },
-            },
+            crosshair: false,
           },
         },
       };
@@ -1918,9 +2004,7 @@ export default {
     }
   }
 }
-.percent-title {
-  font-size: 1rem;
-}
+
 .percent {
   font-size: 2.5rem;
   font-weight: bold;
