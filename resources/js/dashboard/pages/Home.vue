@@ -7,7 +7,10 @@
       id="dash_home_page"
     >
       <Header />
-      <b-row class="mt-2 top-menu position-relative" style="z-index: 8">
+      <b-row
+        class="mt-2 top-menu position-relative d-none d-sm-block"
+        style="z-index: 8"
+      >
         <b-col class="pl-2">
           <MenuFlux
             v-show="activeMenu == 1"
@@ -46,8 +49,164 @@
       </b-row>
       <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
       <about v-if="activeMenu == 7"></about>
-      <b-row class="position-relative map-wrap" v-show="showMaps">
-        <b-col cols="12" :class="`${hasRightSide ? 'col-md-6' : 'col-md-12'}`">
+      <b-row
+        class="position-relative map-wrap flex-lg-row-reverse"
+        v-show="showMaps"
+      >
+        <b-col
+          cols="12"
+          lg="6"
+          class="side-right mt-2 pl-2"
+          :class="{ 'side-right-100': !hasCovidCases }"
+          v-if="true"
+        >
+          <b-card no-body>
+            <transition name="fade">
+              <b-tabs pills card v-if="selectedSource == 2">
+                <b-tab title="Mobilité africell" v-if="activeMenu == 1">
+                  <AfriFluxChart
+                    :fluxAfricellDaily="fluxAfricellDaily"
+                    :fluxAfricelPresence="fluxAfricelPresence"
+                    :fluxAfricelInOut="fluxAfricelInOut"
+                    :isLoading="isLoading"
+                  />
+                </b-tab>
+              </b-tabs>
+            </transition>
+            <transition name="fade">
+              <b-tabs
+                pills
+                card
+                v-if="selectedSource == 1 || activeMenu == 5"
+                @input="rightTabActived"
+              >
+                <b-tab title="Carte" :active="isSmOrMd" v-if="isSmOrMd"></b-tab>
+                <b-tab
+                  title="Données Covid-19"
+                  v-if="(!!covidCases || isLoading) && activeMenu == 2"
+                  :active="!!covidCases"
+                >
+                  <SideCaseCovid
+                    :covidCases="covidCases"
+                    :isLoading="isLoading"
+                  />
+                </b-tab>
+                <b-tab
+                  title="Données Orientation médicale covid-19"
+                  v-if="
+                    (orientationCount != null || isLoading) && activeMenu == 6
+                  "
+                  :active="orientationCount != null"
+                >
+                  <SideOrientation
+                    :medicalOrientations="medicalOrientations"
+                    :isLoading="isLoading"
+                  />
+                </b-tab>
+                <b-tab title="Vue Globale des Provinces" v-if="activeMenu == 1">
+                  <b-row>
+                    <b-col cols="12" md="6" class="pr-2">
+                      <div v-if="isLoading">
+                        <b-skeleton-wrapper :loading="isLoading">
+                          <template #loading>
+                            <b-card no-body class="p-2 rounded-0 cardtype2">
+                              <b-skeleton
+                                class="m-auto"
+                                width="60%"
+                                height="20"
+                              ></b-skeleton>
+                              <b-skeleton
+                                class="mt-2"
+                                width="100%"
+                                height="820px"
+                              ></b-skeleton>
+                            </b-card>
+                          </template>
+                        </b-skeleton-wrapper>
+                      </div>
+                      <GlobalProvince
+                        v-else
+                        title="Mobilité entrante"
+                        :color="palette.flux_in_color"
+                        :globalData="fluxGlobalIn"
+                        reference="fluxglobalIn"
+                      />
+                    </b-col>
+                    <b-col cols="12" md="6" class="pl-2 pr-2">
+                      <div v-if="isLoading">
+                        <b-skeleton-wrapper :loading="isLoading">
+                          <template #loading>
+                            <b-card no-body class="p-2 rounded-0 cardtype2">
+                              <b-skeleton
+                                class="m-auto"
+                                width="60%"
+                                height="20"
+                              ></b-skeleton>
+                              <b-skeleton
+                                class="mt-2"
+                                width="100%"
+                                height="820px"
+                              ></b-skeleton>
+                            </b-card>
+                          </template>
+                        </b-skeleton-wrapper>
+                      </div>
+                      <GlobalProvince
+                        v-else
+                        title="Mobilité sortante"
+                        :color="palette.flux_out_color"
+                        :globalData="fluxGlobalOut"
+                        reference="fluxglobalOut"
+                      />
+                    </b-col>
+                  </b-row>
+                </b-tab>
+                <b-tab
+                  :title="titleMobility"
+                  v-if="
+                    (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
+                    !isFirstLoad &&
+                    this.activeMenu == 1
+                  "
+                  :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
+                >
+                  <FluxChart
+                    :flux24Daily="flux24Daily"
+                    :flux24DailyIn="flux24DailyIn"
+                    :flux24DailyOut="flux24DailyOut"
+                    :flux24DailyGenerale="flux24DailyGenerale"
+                    :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
+                    :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
+                    :fluxDataGroupedByDateGen="fluxDataGroupedByDateGen"
+                    :flux24Presence="flux24Presence"
+                    :flux24PresenceDailyIn="flux24PresenceDailyInFormat"
+                    :fluxZoneGlobalIn="fluxZoneGlobalIn"
+                    :fluxZoneGlobalOut="fluxZoneGlobalOut"
+                    :mobiliteGenerale="showMobiliteGenerale"
+                    :topHealthZoneConfirmed="topHealthZoneConfirmed"
+                    :globalProgress="globalProgress"
+                    :isLoading="isLoading"
+                    :flux30Daily="flux30Daily"
+                    :flux30General="flux30General"
+                  />
+                </b-tab>
+                <b-tab
+                  title="Infrastructures"
+                  v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
+                  :active="!!selectedHospital || activeMenu == 5"
+                >
+                  <HospitalSituation :hospitalTotalData="hospitalTotalData" />
+                </b-tab>
+              </b-tabs>
+            </transition>
+          </b-card>
+        </b-col>
+        <b-col
+          cols="12"
+          class="map-md"
+          v-show="canShowMapMobile"
+          :class="`${hasRightSide ? 'col-lg-6' : 'col-lg-12'}`"
+        >
           <div
             class="layer-set-contenair"
             v-if="hasFlux24DailyIn && activeMenu == 1 && selectedSource == 1"
@@ -125,172 +284,6 @@
               ></Legend>
             </FullScreen>
           </b-row>
-        </b-col>
-        <b-col
-          cols="12"
-          md="6"
-          class="side-right mt-2 pl-2"
-          :class="{ 'side-right-100': !hasCovidCases }"
-          v-if="true"
-        >
-          <b-card no-body>
-            <!-- <toggle-button
-              class="flux-data-toggle"
-              :labels="fluxDataProvider"
-              :value="selectedFluxDataProvider"
-              @input="fluxDataProvideChanged"
-            ></toggle-button> -->
-
-            <transition name="fade">
-              <b-tabs pills card v-if="selectedSource == 2">
-                <b-tab title="Mobilité africell" v-if="activeMenu == 1">
-                  <AfriFluxChart
-                    :fluxAfricellDaily="fluxAfricellDaily"
-                    :fluxAfricelPresence="fluxAfricelPresence"
-                    :fluxAfricelInOut="fluxAfricelInOut"
-                    :isLoading="isLoading"
-                  />
-                </b-tab>
-              </b-tabs>
-            </transition>
-            <transition name="fade">
-              <b-tabs pills card v-if="selectedSource == 1 || activeMenu == 5">
-                <b-tab
-                  title="Données Covid-19"
-                  v-if="(!!covidCases || isLoading) && activeMenu == 2"
-                  :active="!!covidCases"
-                >
-                  <SideCaseCovid
-                    :covidCases="covidCases"
-                    :isLoading="isLoading"
-                  />
-                </b-tab>
-                <b-tab
-                  title="Données Orientation médicale covid-19"
-                  v-if="
-                    (orientationCount != null || isLoading) && activeMenu == 6
-                  "
-                  :active="orientationCount != null"
-                >
-                  <SideOrientation
-                    :medicalOrientations="medicalOrientations"
-                    :isLoading="isLoading"
-                  />
-                </b-tab>
-                <b-tab title="Vue Globale des Provinces" v-if="activeMenu == 1">
-                  <b-row>
-                    <b-col cols="6" class="pr-2">
-                      <!-- <skeleton-loading v-if="isLoading">
-                        <square-skeleton
-                          :boxProperties="{
-                            width: '100%',
-                            height: '830px',
-                          }"
-                        ></square-skeleton>
-                      </skeleton-loading> -->
-                      <div v-if="isLoading">
-                        <b-skeleton-wrapper :loading="isLoading">
-                          <template #loading>
-                            <b-card no-body class="p-2 rounded-0 cardtype2">
-                              <b-skeleton
-                                class="m-auto"
-                                width="60%"
-                                height="20"
-                              ></b-skeleton>
-                              <b-skeleton
-                                class="mt-2"
-                                width="100%"
-                                height="820px"
-                              ></b-skeleton>
-                            </b-card>
-                          </template>
-                        </b-skeleton-wrapper>
-                      </div>
-                      <GlobalProvince
-                        v-else
-                        title="Mobilité entrante"
-                        :color="palette.flux_in_color"
-                        :globalData="fluxGlobalIn"
-                        reference="fluxglobalIn"
-                      />
-                    </b-col>
-                    <b-col cols="6" class="pl-2 pr-2">
-                      <!-- <skeleton-loading v-if="isLoading">
-                        <square-skeleton
-                          :boxProperties="{
-                            width: '100%',
-                            height: '830px',
-                          }"
-                        ></square-skeleton>
-                      </skeleton-loading> -->
-
-                      <div v-if="isLoading">
-                        <b-skeleton-wrapper :loading="isLoading">
-                          <template #loading>
-                            <b-card no-body class="p-2 rounded-0 cardtype2">
-                              <b-skeleton
-                                class="m-auto"
-                                width="60%"
-                                height="20"
-                              ></b-skeleton>
-                              <b-skeleton
-                                class="mt-2"
-                                width="100%"
-                                height="820px"
-                              ></b-skeleton>
-                            </b-card>
-                          </template>
-                        </b-skeleton-wrapper>
-                      </div>
-                      <GlobalProvince
-                        v-else
-                        title="Mobilité sortante"
-                        :color="palette.flux_out_color"
-                        :globalData="fluxGlobalOut"
-                        reference="fluxglobalOut"
-                      />
-                    </b-col>
-                  </b-row>
-                </b-tab>
-                <b-tab
-                  :title="titleMobility"
-                  v-if="
-                    (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
-                    !isFirstLoad &&
-                    this.activeMenu == 1
-                  "
-                  :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
-                >
-                  <FluxChart
-                    :flux24Daily="flux24Daily"
-                    :flux24DailyIn="flux24DailyIn"
-                    :flux24DailyOut="flux24DailyOut"
-                    :flux24DailyGenerale="flux24DailyGenerale"
-                    :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
-                    :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
-                    :fluxDataGroupedByDateGen="fluxDataGroupedByDateGen"
-                    :flux24Presence="flux24Presence"
-                    :flux24PresenceDailyIn="flux24PresenceDailyInFormat"
-                    :fluxZoneGlobalIn="fluxZoneGlobalIn"
-                    :fluxZoneGlobalOut="fluxZoneGlobalOut"
-                    :mobiliteGenerale="showMobiliteGenerale"
-                    :topHealthZoneConfirmed="topHealthZoneConfirmed"
-                    :globalProgress="globalProgress"
-                    :isLoading="isLoading"
-                    :flux30Daily="flux30Daily"
-                    :flux30General="flux30General"
-                  />
-                </b-tab>
-                <b-tab
-                  title="Infrastructures"
-                  v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
-                  :active="!!selectedHospital || activeMenu == 5"
-                >
-                  <HospitalSituation :hospitalTotalData="hospitalTotalData" />
-                </b-tab>
-              </b-tabs>
-            </transition>
-          </b-card>
         </b-col>
       </b-row>
       <b-row v-if="hasBottom && selectedSource == 1">
@@ -500,6 +493,7 @@ export default {
       fluxAfricellDaily: [],
       fluxAfricelPresence: [],
       fluxAfricelInOut: [],
+      showMobileMaps: true,
     };
   },
   computed: {
@@ -517,6 +511,15 @@ export default {
       observationDate: (state) => state.flux.observationDate,
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
     }),
+    isSmOrMd() {
+      return this.$mq == "md" || this.$mq == "sm";
+    },
+    canShowMapMobile() {
+      if (this.isSmOrMd) {
+        return this.showMobileMaps;
+      }
+      return true;
+    },
     titleMobility() {
       let name = "Provinces";
       switch (this.fluxGeoGranularity) {
@@ -2010,6 +2013,9 @@ export default {
     fluxDataProvideChanged(value) {
       this.selectedFluxDataProvider = value;
     },
+    rightTabActived(newTabIndex) {
+      this.showMobileMaps = newTabIndex == 0 ? true : false;
+    },
   },
 };
 </script>
@@ -2131,5 +2137,15 @@ export default {
   bottom: 20px;
   left: 20px;
   z-index: 200;
+}
+
+.map-md {
+  @media (max-width: 1023px) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 5%;
+  }
 }
 </style>
