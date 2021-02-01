@@ -103,7 +103,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #00000052;
+  background: $waiting_background;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -406,6 +406,9 @@
             color: white !important;
             background: $dash-green !important;
           }
+        }
+        @media (max-width: 1023px) {
+          margin-bottom: 10px;
         }
       }
     }
@@ -889,6 +892,6 @@
   color: $title-color;
   font-weight: bold;
 }
-.b-skeleton-text{
+.b-skeleton-text {
   border-radius: unset;
 }

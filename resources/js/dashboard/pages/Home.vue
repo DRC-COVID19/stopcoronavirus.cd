@@ -6,12 +6,26 @@
       ref="dash_home_page"
       id="dash_home_page"
     >
+      <div class="container-filter-btn d-lg-none" v-if="!canShowNavMobile">
+        <b-button @click="toggleNavMobile" class="btn-dash-blue">
+          <i class="fa fa-filter"></i>
+        </b-button>
+      </div>
+
       <Header />
-      <b-row
-        class="mt-2 top-menu position-relative d-none d-sm-block"
+      <div
+        class="mt-lg-2 top-menu"
+        :class="{ 'mob-header-container': isSmOrMd, row: !isSmOrMd }"
         style="z-index: 8"
+        v-show="!isSmOrMd ||(isSmOrMd &&canShowNavMobile)"
       >
-        <b-col class="pl-2">
+        <b-col cols="12" class="pl-lg-2">
+          <div
+            @click="toggleNavMobile"
+            class="container-filter-btn-close d-lg-none"
+          >
+            <i class="fa fa-times"></i>
+          </div>
           <MenuFlux
             v-show="activeMenu == 1"
             @submitFluxForm="submitFluxForm"
@@ -46,7 +60,7 @@
             @medicalOrientationChanged="medicalOrientationChanged"
           />
         </b-col>
-      </b-row>
+      </div>
       <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
       <about v-if="activeMenu == 7"></about>
       <b-row
@@ -84,7 +98,7 @@
                 <b-tab
                   title="Données Covid-19"
                   v-if="(!!covidCases || isLoading) && activeMenu == 2"
-                  :active="!!covidCases"
+                  :active="!!covidCases "
                 >
                   <SideCaseCovid
                     :covidCases="covidCases"
@@ -510,6 +524,7 @@ export default {
       fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
       observationDate: (state) => state.flux.observationDate,
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
+      canShowNavMobile: (state) => state.app.canShowNavMobile,
     }),
     isSmOrMd() {
       return this.$mq == "md" || this.$mq == "sm";
@@ -689,7 +704,12 @@ export default {
       "getFluxHotSpot",
       "getSituationHospital",
     ]),
-    ...mapMutations(["setMapStyle", "setFluxType", "setObservationDate"]),
+    ...mapMutations([
+      "setMapStyle",
+      "setFluxType",
+      "setObservationDate",
+      "setCanShowNavMobile",
+    ]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
     },
@@ -719,6 +739,7 @@ export default {
       // this.getHospitalsData(checked);
     },
     getCovidCases(checked) {
+      this.setCanShowNavMobile(false);
       if (checked) {
         let confirmedCount = 0;
 
@@ -989,6 +1010,7 @@ export default {
       });
     },
     submitFluxForm(values) {
+      this.setCanShowNavMobile(false);
       if (this.isLoading) {
         return;
       }
@@ -1686,6 +1708,7 @@ export default {
         });
     },
     submitInfrastructureForm(values) {
+      this.setCanShowNavMobile(false);
       values.isLoading = true;
       this.getHospitalsData(values);
     },
@@ -2016,6 +2039,9 @@ export default {
     rightTabActived(newTabIndex) {
       this.showMobileMaps = newTabIndex == 0 ? true : false;
     },
+    toggleNavMobile() {
+      this.setCanShowNavMobile(!this.canShowNavMobile);
+    },
   },
 };
 </script>
@@ -2145,7 +2171,36 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    top: 5%;
+    top: 10%;
   }
+}
+.container-filter-btn {
+  position: absolute;
+  right: 2%;
+  top: 40%;
+  z-index: 10;
+  button {
+    box-shadow: 0px 0px 8px 0px #2e5bffb8;
+  }
+}
+.container-filter-btn-close {
+  position: absolute;
+  right: 5%;
+  top: -10%;
+  z-index: 10;
+  i {
+    font-size: 1.5rem;
+    color: #eee;
+  }
+}
+.mob-header-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $waiting_background;
+  display: flex;
+  place-items: center;
 }
 </style>
