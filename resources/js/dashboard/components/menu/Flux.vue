@@ -2,7 +2,7 @@
   <b-card no-body class="rounded-0 p-2 pb-3">
     <b-form class="flux-form" @submit.prevent="submitFluxForm">
       <b-form-row>
-        <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" md="6" lg="2" class="nav-zone pl-3 pr-3 mb-2 mb-lg-0">
           <b-form-group>
             <label for class="text-dash-color">Sources</label>
             <v-select
@@ -16,10 +16,10 @@
             />
           </b-form-group>
         </b-col>
-        <b-col cols="12" md="3" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" md="6" lg="3" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Géographiques</label>
           <b-row>
-            <b-col cols="12" md="6">
+            <b-col cols="12" md="6" class="mb-2 mb-lg-0">
               <b-form-group>
                 <v-select
                   :disabled="fluxForm.selectedFluxSource == 2"
@@ -33,7 +33,7 @@
                 />
               </b-form-group>
             </b-col>
-            <b-col cols="12" md="6">
+            <b-col cols="12" md="6" class="mb-2 mb-lg-0">
               <b-form-group
                 :invalid-feedback="
                   flux24Errors.fluxGeoOptions
@@ -71,10 +71,10 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="5" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" md="12" lg="5" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
           <b-row>
-            <b-col cols="12" md="3">
+            <b-col cols="12" md="3" class="mb-2 mb-lg-0">
               <b-form-group>
                 <v-select
                   :disabled="true"
@@ -159,7 +159,7 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="2" class="row pl-3 pr-3">
+        <b-col cols="12" md="3" lg="2" class="pl-3 pr-3" :class="{'row':!isSmOrMd}">
           <b-button
             type="submit"
             :disabled="!isButtonEnabled"
