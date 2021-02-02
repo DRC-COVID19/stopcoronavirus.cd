@@ -394,6 +394,7 @@
       padding: 0.5rem 1.25rem;
       .nav-item {
         margin-right: 20px;
+
         .nav-link {
           background: $dash-shadow-color;
           color: $dash-blue;
@@ -406,9 +407,6 @@
             color: white !important;
             background: $dash-green !important;
           }
-        }
-        @media (max-width: 1023px) {
-          margin-bottom: 10px;
         }
       }
     }
@@ -448,6 +446,9 @@
         border-radius: unset;
         .nav-item {
           margin-right: 20px;
+          @media screen and (max-width: 1023px) {
+            margin-bottom: 10px;
+          }
           .nav-link {
             background: $dash-shadow-color;
             color: $dash-blue;
@@ -468,6 +469,9 @@
         > .card-body {
           height: auto;
           padding: 10px 0;
+          @media screen and (max-width: 1023px){
+            padding: 0;
+          }
           > div {
             height: inherit;
             > div {

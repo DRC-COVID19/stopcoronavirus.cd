@@ -6,7 +6,7 @@
       ref="dash_home_page"
       id="dash_home_page"
     >
-      <div class="container-filter-btn d-lg-none" v-if="!canShowNavMobile">
+      <div class="container-filter-btn d-lg-none" v-show="!canShowNavMobile">
         <b-button @click="toggleNavMobile" class="btn-dash-blue">
           <i class="fa fa-filter"></i>
         </b-button>
@@ -17,7 +17,7 @@
         class="mt-lg-2 top-menu"
         :class="{ 'mob-header-container': isSmOrMd, row: !isSmOrMd }"
         style="z-index: 8"
-        v-show="!isSmOrMd ||(isSmOrMd &&canShowNavMobile)"
+        v-show="!isSmOrMd || (isSmOrMd && canShowNavMobile)"
       >
         <b-col cols="12" class="pl-lg-2">
           <div
@@ -93,12 +93,13 @@
                 card
                 v-if="selectedSource == 1 || activeMenu == 5"
                 @input="rightTabActived"
+                v-model="activeRightSide"
               >
                 <b-tab title="Carte" :active="isSmOrMd" v-if="isSmOrMd"></b-tab>
                 <b-tab
                   title="Données Covid-19"
                   v-if="(!!covidCases || isLoading) && activeMenu == 2"
-                  :active="!!covidCases "
+                  :active="!!covidCases"
                 >
                   <SideCaseCovid
                     :covidCases="covidCases"
@@ -182,7 +183,10 @@
                     !isFirstLoad &&
                     this.activeMenu == 1
                   "
-                  :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
+                  :active="
+                    !isSmOrMd &&
+                    (hasFlux24DailyIn || isLoading || hasFlux30Daily)
+                  "
                 >
                   <FluxChart
                     :flux24Daily="flux24Daily"
@@ -508,6 +512,7 @@ export default {
       fluxAfricelPresence: [],
       fluxAfricelInOut: [],
       showMobileMaps: true,
+      activeRightSide: 0,
     };
   },
   computed: {
@@ -526,9 +531,7 @@ export default {
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
       canShowNavMobile: (state) => state.app.canShowNavMobile,
     }),
-    isSmOrMd() {
-      return this.$mq == "md" || this.$mq == "sm";
-    },
+
     canShowMapMobile() {
       if (this.isSmOrMd) {
         return this.showMobileMaps;
@@ -606,6 +609,7 @@ export default {
     },
     isLoading() {
       this.showBottom = false;
+      this.activeRightSide = 0;
       return Object.values(this.loadings).find((val) => val === true)
         ? true
         : false;
@@ -676,9 +680,11 @@ export default {
     );
     this.loadFluxGLobalData();
     this.loadTownships();
+
     this.$store.watch(
       (state) => state.flux.fluxType,
       (value) => {
+        this.activeRightSide = 0;
         if (value == 3 || value == 4) {
           this.disabledArc = true;
           this.setMapStyle(1);
@@ -1031,81 +1037,8 @@ export default {
 
       this.isFirstLoad = false;
       this.setFluxType(1);
-      /**
-       * formate les données flux
-       */
-
-      const computedFluxData = (dataObservations, dataReferences) => {
-        const dataOut = [];
-        return dataObservations.map((item) => {
-          const references = dataReferences.filter(
-            (x) =>
-              x.destination == item.destination &&
-              x.origin == item.origin &&
-              x.day == item.day
-          );
-          const count = references.length;
-          if (count > 0) {
-            let referenceVolume = null;
-            if (count % 2 == 0) {
-              let index = (count + 1) / 2;
-              index = parseInt(index);
-              const volume1 = references[index].volume;
-              const volume2 = references[index - 1].volume;
-              referenceVolume = (volume1 + volume2) / 2;
-            } else {
-              const index = (count + 1) / 2;
-              referenceVolume = references[index - 1].volume;
-            }
-            item.volume_reference = referenceVolume;
-            const difference = item.volume - referenceVolume;
-            item.difference = difference;
-            item.percent = (difference / referenceVolume) * 100;
-          } else {
-            item.volume_reference = 0;
-            item.difference = item.volume;
-            item.percent = 0;
-          }
-          return Object.assign({}, item);
-        });
-      };
 
       const computedFluxDataByDate = this.computedFluxDataByDate;
-
-      const computedFluxPresenceData = (dataObservations, dataReferences) => {
-        const dataOut = [];
-        return dataObservations.map((item) => {
-          const references = dataReferences.filter(
-            (x) => x.zone == item.zone && x.day == item.day
-          );
-          const count = references.length;
-          if (count > 0) {
-            let referenceVolume = null;
-            if (count % 2 == 0) {
-              let index = (count + 1) / 2;
-              index = parseInt(index);
-              const volume1 = references[index].volume;
-              const volume2 = references[index - 1].volume;
-              referenceVolume = (volume1 + volume2) / 2;
-            } else {
-              const index = (count + 1) / 2;
-              referenceVolume = references[index - 1].volume;
-            }
-            item.volume_reference = referenceVolume;
-            const difference = item.volume - referenceVolume;
-            item.difference = difference;
-            item.percent = (difference / referenceVolume) * 100;
-          } else {
-            item.volume_reference = 0;
-            item.difference = item.volume;
-            item.percent = 0;
-          }
-          return Object.assign({}, item);
-        });
-      };
-
-      const computedFluxPresenceDataByDate = this
-        .computedFluxPresenceDataByDate;
 
       this.flux24Errors = {};
 
@@ -1325,22 +1258,6 @@ export default {
         });
 
       this.flux24 = [];
-      // this.$set(this.loadings, "flux24", true);
-      // axios
-      //   .get(url, {
-      //     params: values,
-      //   })
-      //   .then(({ data }) => {
-      //     this.flux24 = computedFluxData(data.observations, data.references);
-      //     this.$set(this.loadings, "flux24", false);
-      //   })
-      //   .catch(({ response }) => {
-      //     this.flux24Errors = response.data.errors;
-      //     this.$set(this.loadings, "flux24", false);
-      //   });
-
-      //if geo granularity is health zone
-
       this.fluxZoneGlobalIn = [];
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
@@ -2166,12 +2083,19 @@ export default {
 }
 
 .map-md {
-  @media (max-width: 1023px) {
+  @media screen and (max-width: 1023px) {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    top: 10%;
+    top: 5%;
+  }
+  @media screen and (max-width: 576px) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 12%;
   }
 }
 .container-filter-btn {
@@ -2186,7 +2110,7 @@ export default {
 .container-filter-btn-close {
   position: absolute;
   right: 5%;
-  top: -10%;
+  top: -30px;;
   z-index: 10;
   i {
     font-size: 1.5rem;
