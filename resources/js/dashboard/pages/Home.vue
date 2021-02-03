@@ -70,7 +70,7 @@
         <b-col
           cols="12"
           lg="6"
-          class="side-right mt-2 pl-2"
+          class="side-right mt-2"
           :class="{ 'side-right-100': !hasCovidCases }"
           v-if="true"
         >
@@ -609,7 +609,10 @@ export default {
     },
     isLoading() {
       this.showBottom = false;
-      this.activeRightSide = 0;
+      if (this.isSmOrMd) {
+        this.activeRightSide = 0;
+      }
+
       return Object.values(this.loadings).find((val) => val === true)
         ? true
         : false;
@@ -684,7 +687,9 @@ export default {
     this.$store.watch(
       (state) => state.flux.fluxType,
       (value) => {
-        this.activeRightSide = 0;
+        if (this.isSmOrMd) {
+          this.activeRightSide = 0;
+        }
         if (value == 3 || value == 4) {
           this.disabledArc = true;
           this.setMapStyle(1);
@@ -2110,7 +2115,7 @@ export default {
 .container-filter-btn-close {
   position: absolute;
   right: 5%;
-  top: -30px;;
+  top: -30px;
   z-index: 10;
   i {
     font-size: 1.5rem;
