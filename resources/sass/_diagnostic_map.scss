@@ -899,3 +899,10 @@
 .b-skeleton-text {
   border-radius: unset;
 }
+.default-border{
+  border-radius: 5px;
+  border-color: $dash-blue !important;
+  span{
+    color: $dash-blue !important;
+  }
+}

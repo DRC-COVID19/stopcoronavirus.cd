@@ -9038,10 +9038,10 @@ vue2-circle-progress@^1.2.3:
     jquery-easing "0.0.1"
     vue "^2.0.0"
 
-vue2-daterange-picker@^0.5.1:
-  version "0.5.1"
-  resolved "https://registry.yarnpkg.com/vue2-daterange-picker/-/vue2-daterange-picker-0.5.1.tgz#f41f3cd20b242b7f34ce16eeea9534d9cbe9f4d7"
-  integrity sha512-p0y9RyI6wqqwffKM5EYgxvNM51un/fBu9hLZ/GxXVOBqTMxjDuV8mz9iUTj4p5R80lWSBwIY7GshW5RYgS8+rw==
+vue2-daterange-picker@^0.6.3:
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/vue2-daterange-picker/-/vue2-daterange-picker-0.6.3.tgz#1fdd852d77c5660dbd2efb0b2face37d304c6700"
+  integrity sha512-AT0KKr6qBXbELBIHxp51trjwaGiwSYbdJ5OytYsyi2oXcJ7MUKvsoAbCBgy24W3vIzSJojCdWqtuWiMuMr0c4g==
   dependencies:
     vue "^2.6.10"
 

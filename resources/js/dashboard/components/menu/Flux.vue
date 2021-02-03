@@ -96,6 +96,7 @@
                     <date-range-picker
                       :disabled="fluxForm.selectedFluxSource == 2"
                       ref="picker1"
+                      id="picker1"
                       :locale-data="rangeData"
                       v-model="dateRangePreference"
                       :appendToBody="true"
@@ -128,6 +129,7 @@
                   </div>
                   <div class="picker-container">
                     <date-range-picker
+                      id="picker2"
                       ref="picker2"
                       :locale-data="rangeData"
                       v-model="dateRangeObservation"
@@ -441,7 +443,12 @@ export default {
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
-      dropdownList.style.left = `${left}px`;
+      if (component.$attrs.id=='picker1') {
+        dropdownList.style.left = `${Number(left) + Number(this.isSmOrMd? 110: 0)}px`;
+      }
+      else{
+        dropdownList.style.left = `${left}px`;
+      }
     },
     clearPrefenceDate() {
       this.dateRangePreference = { startDate: null, endDate: null };

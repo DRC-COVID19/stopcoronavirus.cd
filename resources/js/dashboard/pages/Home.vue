@@ -76,7 +76,9 @@
         >
           <b-card no-body>
             <transition name="fade">
-              <b-tabs pills card v-if="selectedSource == 2">
+              <b-tabs @input="rightTabActived"
+                v-model="activeRightSide" pills card v-if="selectedSource == 2">
+                <b-tab title="Carte" :active="isSmOrMd" v-if="isSmOrMd"></b-tab>
                 <b-tab title="Mobilité africell" v-if="activeMenu == 1">
                   <AfriFluxChart
                     :fluxAfricellDaily="fluxAfricellDaily"
@@ -99,7 +101,7 @@
                 <b-tab
                   title="Données Covid-19"
                   v-if="(!!covidCases || isLoading) && activeMenu == 2"
-                  :active="!!covidCases"
+                  :active="!isSmOrMd && !!covidCases"
                 >
                   <SideCaseCovid
                     :covidCases="covidCases"

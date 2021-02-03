@@ -5,23 +5,61 @@
         <b-navbar-brand class="mr-5">
           <h1 class="title m-0">Dashboard Covid-19</h1>
         </b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+        <b-navbar-toggle target="nav-collapse" class="default-border">
+          <span class="fa fa-bars"></span>
+        </b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
-            <b-nav-item :class="{'active':activeMenu==1}" @click="selectMenu(1)">Mobilité</b-nav-item>
-            <b-nav-item :class="{'active':activeMenu==2}" @click="selectMenu(2)">Epidémiologie </b-nav-item>
-            <b-nav-item :class="{'active':activeMenu==3}" @click="selectMenu(3)">Indicateurs</b-nav-item>
+            <b-nav-item
+              :class="{ active: activeMenu == 1 }"
+              @click="selectMenu(1)"
+              >Mobilité</b-nav-item
+            >
+            <b-nav-item
+              :class="{ active: activeMenu == 2 }"
+              @click="selectMenu(2)"
+              >Epidémiologie
+            </b-nav-item>
+            <b-nav-item
+              :class="{ active: activeMenu == 3 }"
+              @click="selectMenu(3)"
+              >Indicateurs</b-nav-item
+            >
             <!-- <b-nav-item :class="{'active':activeMenu==4}" @click="selectMenu(4)">Sondages</b-nav-item> -->
-            <b-nav-item :class="{'active':activeMenu==5}" @click="selectMenu(5)">Infrastructures</b-nav-item>
+            <b-nav-item
+              :class="{ active: activeMenu == 5 }"
+              @click="selectMenu(5)"
+              >Infrastructures</b-nav-item
+            >
             <!-- <b-nav-item :class="{'active':activeMenu==6}" @click="selectMenu(6)">Orientation</b-nav-item> -->
             <!-- <b-nav-item :class="{'active':activeMenu==7}" @click="selectMenu(7)">A propos</b-nav-item> -->
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item>
-              <div class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center">
-                <img src="/img/partners_top.png" height="30" width="100" class="img-fluid" alt />
-                <img src="/img/commite_riposte.jpg" height="30" width="100" class="img-fluid" alt />
-                <img src="/img/logo-control-room.png" height="30" width="100" class="img-fluid" alt />
+              <div
+                class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
+              >
+                <img
+                  src="/img/partners_top.png"
+                  height="30"
+                  width="100"
+                  class="img-fluid"
+                  alt
+                />
+                <img
+                  src="/img/commite_riposte.jpg"
+                  height="30"
+                  width="100"
+                  class="img-fluid"
+                  alt
+                />
+                <img
+                  src="/img/logo-control-room.png"
+                  height="30"
+                  width="100"
+                  class="img-fluid"
+                  alt
+                />
                 <div
                   @mouseleave="userAvatarMouseLeave"
                   @mouseenter="userAvatarMouseEnter"
@@ -38,13 +76,19 @@
                   />
                   <b-card class="user-card text-center" v-if="showUserCard">
                     <p>
-                      <span class="d-block">{{user.username}}</span>
-                      <span class="d-block">{{user.name}}</span>
-                      <span class="d-block" v-if="user.email">{{user.email}}</span>
+                      <span class="d-block">{{ user.username }}</span>
+                      <span class="d-block">{{ user.name }}</span>
+                      <span class="d-block" v-if="user.email">{{
+                        user.email
+                      }}</span>
 
-                      <router-link class="small" :to="{name : 'landing'}">Revenir à l'accueil</router-link>
+                      <router-link class="small" :to="{ name: 'landing' }"
+                        >Revenir à l'accueil</router-link
+                      >
                     </p>
-                    <b-button @click="userLogout" variant="danger" block>Deconnexion</b-button>
+                    <b-button @click="userLogout" variant="danger" block
+                      >Deconnexion</b-button
+                    >
                   </b-card>
                 </div>
               </div>
@@ -61,14 +105,14 @@ import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      showUserCard: false
+      showUserCard: false,
     };
   },
   computed: {
     ...mapState({
-      user: state => state.auth.user,
-      activeMenu: state => state.nav.activeMenu
-    })
+      user: (state) => state.auth.user,
+      activeMenu: (state) => state.nav.activeMenu,
+    }),
   },
   methods: {
     ...mapActions(["logout"]),
@@ -82,14 +126,14 @@ export default {
     userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: "login"
+          name: "login",
         });
       });
     },
     selectMenu(value) {
       this.setActiveMenu(value);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -134,17 +178,17 @@ export default {
       z-index: 99;
     }
   }
-  .img-fluid{
+  .img-fluid {
     width: auto;
     max-width: none;
     height: 30px;
   }
 
-  @media screen and (min-width:992px) and (max-width:1200px){
-    .img-fluid{
+  @media screen and (min-width: 992px) and (max-width: 1200px) {
+    .img-fluid {
       height: 20px;
     }
-    .title{
+    .title {
       font-size: 18px;
     }
   }
