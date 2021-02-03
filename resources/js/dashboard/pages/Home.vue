@@ -282,6 +282,7 @@
                 :flux30MapsData="flux30MapsData"
                 :fluxAfricelInOut="fluxAfricelInOut"
                 :fluxAfricelPresence="fluxAfricelPresence"
+                :activeRightSide="activeRightSide"
               />
               <MapsLegend
                 v-if="

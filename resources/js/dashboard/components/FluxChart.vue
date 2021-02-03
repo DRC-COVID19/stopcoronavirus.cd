@@ -2,7 +2,7 @@
   <div>
     <b-container class="p-0 flux-chart">
       <b-row class="mb-2">
-        <div class="col-md col-12 mb-2 mb-md-0">
+        <div class="col-md-7 col-12 mb-2 mb-md-0">
           <h3 class="d-flex align-items-center mb-0">
             <span class="mr-2">{{ targetZone }}</span>
 
@@ -14,7 +14,7 @@
             ></toggle-button>
           </h3>
         </div>
-        <div class="col-md col-12 d-flex justify-content-end">
+        <div class="col-md-5 col-12 d-flex justify-content-end">
           <div>
             <b-skeleton-wrapper :loading="isLoading">
               <template #loading>
