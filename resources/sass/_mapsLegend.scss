@@ -1,10 +1,11 @@
 .legend-container{
     position : relative ;
     top: -50px;
-    left: 50%;
-    transform: translateX(-50%);
     height: 0px;
     z-index: 2;
+    @media screen and (max-width: 576px){
+      top:-70px;
+    }
 
     .legend{
       display: flex;
@@ -15,9 +16,15 @@
     }
     .no-data{
         margin-right: 25px;
+        @media screen and (max-width: 576px){
+          margin-right: unset;
+        }
     }
     .range{
         width: 50px;
+        @media screen and (max-width: 576px) {
+          width: 25px;
+        }
         height: 12px;
         border: 2px solid rgba(0, 0, 0, .3) ;
         position: relative;
@@ -58,6 +65,9 @@
         box-sizing: border-box;
         border-radius: 5px;
         font-size: 11px;
+        @media screen and (max-width: 576px){
+          font-size: 0.5rem;
+        }
     }
     .datas .lbl{
         transform: translateX(-50%);

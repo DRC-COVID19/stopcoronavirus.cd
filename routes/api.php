@@ -30,6 +30,9 @@ Route::get('/pandemicstats', function () {
 });
 
 Route::get('/pandemicstatsasc', function () {
+  /**
+   * Récupère la situation epidémiologique
+   */
   return new PandemicStatResource(PandemicStat::orderBy('last_update', 'ASC')->get());
 });
 

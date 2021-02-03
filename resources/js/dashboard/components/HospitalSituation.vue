@@ -11,7 +11,7 @@
               }"
             ></square-skeleton>
           </skeleton-loading>
-          <h4 class="col m-0 d-flex align-items-baseline" v-if="!isLoading">
+          <h4 class="col-12 col-md-6 mb-3 mb-md-0 m-0 d-flex align-items-baseline" v-if="!isLoading">
             <span>{{ hospital.name || "Rapport global" }}</span>
             <b-badge v-if="hospitalCount" style="font-size: 12px" class="ml-2">
               {{ hospitalCount }}
@@ -19,7 +19,7 @@
             </b-badge>
           </h4>
           <div
-            class="text-right text-black-50 col"
+            class="text-right text-black-50 col-12 col-md-6"
             v-if="lastUpdate && !isLoading"
           >
             Mise à jour du {{ moment(lastUpdate).format("DD.MM.Y") }}

@@ -112,7 +112,7 @@
           </b-row>
         </b-col>
 
-        <b-col cols="12" md="2" class="row pl-3 pr-3">
+        <b-col cols="12" md="2" class="pl-3 pr-3" :class="{ row: !isSmOrMd }">
           <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue">Filtrer les données</b-button>
         </b-col>
       </b-form-row>

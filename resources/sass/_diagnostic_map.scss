@@ -103,7 +103,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #00000052;
+  background: $waiting_background;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -394,6 +394,7 @@
       padding: 0.5rem 1.25rem;
       .nav-item {
         margin-right: 20px;
+
         .nav-link {
           background: $dash-shadow-color;
           color: $dash-blue;
@@ -445,6 +446,9 @@
         border-radius: unset;
         .nav-item {
           margin-right: 20px;
+          @media screen and (max-width: 1023px) {
+            margin-bottom: 10px;
+          }
           .nav-link {
             background: $dash-shadow-color;
             color: $dash-blue;
@@ -465,6 +469,9 @@
         > .card-body {
           height: auto;
           padding: 10px 0;
+          @media screen and (max-width: 1023px){
+            padding: 0;
+          }
           > div {
             height: inherit;
             > div {
@@ -889,6 +896,13 @@
   color: $title-color;
   font-weight: bold;
 }
-.b-skeleton-text{
+.b-skeleton-text {
   border-radius: unset;
+}
+.default-border{
+  border-radius: 5px;
+  border-color: $dash-blue !important;
+  span{
+    color: $dash-blue !important;
+  }
 }
