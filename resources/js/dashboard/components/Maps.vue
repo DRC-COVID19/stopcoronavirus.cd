@@ -159,6 +159,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    activeRightSide: {
+      type: Number,
+      default: null,
+    },
   },
   data() {
     return {
@@ -549,6 +553,9 @@ export default {
     },
     afriFluxType() {
       this.africellFluxFunc();
+      this.mapResize();
+    },
+    activeRightSide() {
       this.mapResize();
     },
   },
@@ -1430,7 +1437,6 @@ export default {
             if (point && polygone) {
               const isPoint = turf.booleanPointInPolygon(point, polygone);
               if (isPoint) {
-
                 //check hotspot match by type if fluxHospotype exist
                 if (
                   fluxHotspotType &&
