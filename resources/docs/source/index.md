@@ -17,6 +17,101 @@ Welcome to the generated API reference.
 
 <!-- END_INFO -->
 
+#AdminiRole management
+
+
+<!-- START_6b710b60044785af19560ab9f91fd740 -->
+## Display a listing of the admin_roles.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+> Example response (200):
+
+```json
+[
+    {
+        "id": 1,
+        "name": "Administrator",
+        "slug": "administrator",
+        "created_at": "2020-03-24T17:17:05.000000Z",
+        "updated_at": "2020-03-24T17:17:05.000000Z"
+    }
+]
+```
+
+### HTTP Request
+`GET api/admin_roles`
+
+
+<!-- END_6b710b60044785af19560ab9f91fd740 -->
+
+<!-- START_593ce68eea712cf6757763a71b641cb1 -->
+## Store a newly created resource in storage.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+
+### HTTP Request
+`POST api/admin_roles`
+
+
+<!-- END_593ce68eea712cf6757763a71b641cb1 -->
+
+<!-- START_72bec43a5269d7f1743ded7b03c40336 -->
+## Display the specified resource.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated."
+}
+```
+
+### HTTP Request
+`GET api/admin_roles/{admin_role}`
+
+
+<!-- END_72bec43a5269d7f1743ded7b03c40336 -->
+
+<!-- START_b3719d13e4f86b02bfbe6bb88ffcaff3 -->
+## Update the specified resource in storage.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+
+### HTTP Request
+`PUT api/admin_roles/{admin_role}`
+
+`PATCH api/admin_roles/{admin_role}`
+
+
+<!-- END_b3719d13e4f86b02bfbe6bb88ffcaff3 -->
+
+<!-- START_c7b622488e9e39d56ee3808da74537a8 -->
+## Remove the specified resource from storage.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+
+### HTTP Request
+`DELETE api/admin_roles/{admin_role}`
+
+
+<!-- END_c7b622488e9e39d56ee3808da74537a8 -->
+
 #Administrator management
 
 
@@ -170,10 +265,33 @@ Parameter | Status | Description
 > Example request:
 
 
-> Example response (201):
+> Example response (200):
 
 ```json
-null
+{
+    "id": 1,
+    "name": "Admin",
+    "email": "admin@kinhsasadigital.com",
+    "usernmae": "admin",
+    "avatar": "http:\/\/localhost:8000\/img\/admin\/avatar_placeholder.png",
+    "roles": [
+        {
+            "id": 1,
+            "name": "Adm",
+            "slug": "adm",
+            "created_at": "2020-03-24 17:17:05",
+            "updated_at": "2020-03-24 17:17:05",
+            "pivot": {
+                "user_id": 1,
+                "role_id": 1
+            }
+        }
+    ],
+    "isAdmin": true,
+    "isHospitalManager": false,
+    "hospital": null,
+    "isHospitalAdmin": false
+}
 ```
 > Example response (401):
 

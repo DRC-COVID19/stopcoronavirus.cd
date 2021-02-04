@@ -40,6 +40,8 @@ Route::post('/medicale-orientation', 'DiagnosticController@store');
 
 Route::apiResource('admin_users','AdministratorController');
 
+Route::apiResource('admin_roles','AdminRoleController');
+
 Route::group([
   'prefix' => 'dashboard',
   // 'middleware' => 'auth:dashboard',

@@ -38,6 +38,67 @@
 <h1>Info</h1>
 <p>Welcome to the generated API reference.</p>
 <!-- END_INFO -->
+<h1>AdminiRole management</h1>
+<!-- START_6b710b60044785af19560ab9f91fd740 -->
+<h2>Display a listing of the admin_roles.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">[
+    {
+        "id": 1,
+        "name": "Administrator",
+        "slug": "administrator",
+        "created_at": "2020-03-24T17:17:05.000000Z",
+        "updated_at": "2020-03-24T17:17:05.000000Z"
+    }
+]</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/admin_roles</code></p>
+<!-- END_6b710b60044785af19560ab9f91fd740 -->
+<!-- START_593ce68eea712cf6757763a71b641cb1 -->
+<h2>Store a newly created resource in storage.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<h3>HTTP Request</h3>
+<p><code>POST api/admin_roles</code></p>
+<!-- END_593ce68eea712cf6757763a71b641cb1 -->
+<!-- START_72bec43a5269d7f1743ded7b03c40336 -->
+<h2>Display the specified resource.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated."
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/admin_roles/{admin_role}</code></p>
+<!-- END_72bec43a5269d7f1743ded7b03c40336 -->
+<!-- START_b3719d13e4f86b02bfbe6bb88ffcaff3 -->
+<h2>Update the specified resource in storage.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<h3>HTTP Request</h3>
+<p><code>PUT api/admin_roles/{admin_role}</code></p>
+<p><code>PATCH api/admin_roles/{admin_role}</code></p>
+<!-- END_b3719d13e4f86b02bfbe6bb88ffcaff3 -->
+<!-- START_c7b622488e9e39d56ee3808da74537a8 -->
+<h2>Remove the specified resource from storage.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/admin_roles/{admin_role}</code></p>
+<!-- END_c7b622488e9e39d56ee3808da74537a8 -->
 <h1>Administrator management</h1>
 <!-- START_7e2b7a1ebbd3335d2dab3468cd7b48ef -->
 <h2>Display a listing of the admin_users paginate by 15.</h2>
@@ -214,9 +275,32 @@
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
-<p>Example response (201):</p>
+<p>Example response (200):</p>
 </blockquote>
-<pre><code class="language-json">null</code></pre>
+<pre><code class="language-json">{
+    "id": 1,
+    "name": "Admin",
+    "email": "admin@kinhsasadigital.com",
+    "usernmae": "admin",
+    "avatar": "http:\/\/localhost:8000\/img\/admin\/avatar_placeholder.png",
+    "roles": [
+        {
+            "id": 1,
+            "name": "Adm",
+            "slug": "adm",
+            "created_at": "2020-03-24 17:17:05",
+            "updated_at": "2020-03-24 17:17:05",
+            "pivot": {
+                "user_id": 1,
+                "role_id": 1
+            }
+        }
+    ],
+    "isAdmin": true,
+    "isHospitalManager": false,
+    "hospital": null,
+    "isHospitalAdmin": false
+}</code></pre>
 <blockquote>
 <p>Example response (401):</p>
 </blockquote>
