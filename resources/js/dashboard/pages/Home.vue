@@ -76,8 +76,13 @@
         >
           <b-card no-body>
             <transition name="fade">
-              <b-tabs @input="rightTabActived"
-                v-model="activeRightSide" pills card v-if="selectedSource == 2">
+              <b-tabs
+                @input="rightTabActived"
+                v-model="activeRightSide"
+                pills
+                card
+                v-if="selectedSource == 2"
+              >
                 <b-tab title="Carte" :active="isSmOrMd" v-if="isSmOrMd"></b-tab>
                 <b-tab title="Mobilité africell" v-if="activeMenu == 1">
                   <AfriFluxChart
@@ -96,6 +101,7 @@
                 v-if="selectedSource == 1 || activeMenu == 5"
                 @input="rightTabActived"
                 v-model="activeRightSide"
+                ref="tabs_right"
               >
                 <b-tab title="Carte" :active="isSmOrMd" v-if="isSmOrMd"></b-tab>
                 <b-tab
@@ -226,6 +232,7 @@
           class="map-md"
           v-show="canShowMapMobile"
           :class="`${hasRightSide ? 'col-lg-6' : 'col-lg-12'}`"
+          :style="{ top: mapMdTop }"
         >
           <div
             class="layer-set-contenair"
@@ -516,6 +523,7 @@ export default {
       fluxAfricelInOut: [],
       showMobileMaps: true,
       activeRightSide: 0,
+      mapMdTop: 46.4,
     };
   },
   computed: {
@@ -534,7 +542,6 @@ export default {
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
       canShowNavMobile: (state) => state.app.canShowNavMobile,
     }),
-
     canShowMapMobile() {
       if (this.isSmOrMd) {
         return this.showMobileMaps;
@@ -615,7 +622,7 @@ export default {
       if (this.isSmOrMd) {
         this.activeRightSide = 0;
       }
-
+      this.resizeTopMap();
       return Object.values(this.loadings).find((val) => val === true)
         ? true
         : false;
@@ -709,6 +716,14 @@ export default {
       township: 0,
       isLoading: false,
     });
+
+    //watch activeMenu store state
+    this.$store.watch(
+      (state) => state.nav.activeMenu,
+      (value) => {
+        this.resizeTopMap();
+      }
+    );
   },
   methods: {
     ...mapActions([
@@ -1966,6 +1981,16 @@ export default {
     },
     toggleNavMobile() {
       this.setCanShowNavMobile(!this.canShowNavMobile);
+    },
+    resizeTopMap() {
+      if (!this.isSmOrMd) {
+        return;
+      }
+      if (this.$refs.tabs_right) {
+        setTimeout(() => {
+          this.mapMdTop = this.$refs.tabs_right.$refs.nav.clientHeight + 16.4;
+        },100);
+      }
     },
   },
 };
