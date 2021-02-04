@@ -19,7 +19,49 @@ class AdministratorController extends Controller
 {
   /**
    * Display a listing of the admin_users paginate by 15.
-   *
+   * @response 200 {
+   * "data": [
+   *     {
+   *         "id": 1,
+   *         "name": "Admin",
+   *         "email": "admin@kinhsasadigital.com",
+   *        "usernmae": "admin",
+   *         "avatar": "http:\/\/localhost:8000\/img\/admin\/avatar_placeholder.png",
+   *        "roles": [
+   *           {
+   *              "id": 1,
+   *             "name": "Adm",
+   *            "slug": "adm",
+   *         "created_at": "2020-03-24 17:17:05",
+   *         "updated_at": "2020-03-24 17:17:05",
+   *                  "pivot": {
+   *                     "user_id": 1,
+   *                    "role_id": 1
+   *                }
+   *             }
+   *         ],
+   *        "isAdmin": true,
+   *        "isHospitalManager": false,
+   *       "hospital": null,
+   *      "isHospitalAdmin": false
+   *  }
+   * ],
+   *"links": {
+   *   "first": "http:\/\/localhost\/api\/admin_users?page=1",
+   *    "last": "http:\/\/localhost\/api\/admin_users?page=7",
+   *    "prev": null,
+   *   "next": "http:\/\/localhost\/api\/admin_users?page=2"
+   * },
+   *"meta": {
+   *    "current_page": 1,
+   *    "from": 1,
+   *   "last_page": 7,
+   *  "path": "http:\/\/localhost\/api\/admin_users",
+   *  "per_page": 15,
+   *  "to": 15,
+   *  "total": 95
+   *}
+   *}
    * @return \Illuminate\Http\Response
    */
   public function index()
@@ -75,7 +117,31 @@ class AdministratorController extends Controller
 
   /**
    * Display a admin_users by id.
-   *
+   * @urlParam  admin_users required The ID of the post
+   * @response 200 {
+   *         "id": 1,
+   *         "name": "Admin",
+   *         "email": "admin@kinhsasadigital.com",
+   *        "usernmae": "admin",
+   *         "avatar": "http:\/\/localhost:8000\/img\/admin\/avatar_placeholder.png",
+   *        "roles": [
+   *           {
+   *              "id": 1,
+   *             "name": "Adm",
+   *            "slug": "adm",
+   *         "created_at": "2020-03-24 17:17:05",
+   *         "updated_at": "2020-03-24 17:17:05",
+   *                  "pivot": {
+   *                     "user_id": 1,
+   *                    "role_id": 1
+   *                }
+   *             }
+   *         ],
+   *        "isAdmin": true,
+   *        "isHospitalManager": false,
+   *       "hospital": null,
+   *      "isHospitalAdmin": false
+   *}
    * @param  \App\Administrator  $administrator
    * @return \Illuminate\Http\Response
    */
@@ -94,9 +160,41 @@ class AdministratorController extends Controller
 
   /**
    * Update the specified admin_user by id in storage.
-   *
+   * @urlParam  admin_users required The ID of the post.
+   * @bodyParam  username string required username.
+   * @bodyParam  password string required password
+   * @bodyParam  name string required name
+   * @bodyParam  email email required email
+   * @bodyParam  roles_id array required roles_id
+   * @response 200 {
+   *         "id": 1,
+   *         "name": "Admin",
+   *         "email": "admin@kinhsasadigital.com",
+   *        "usernmae": "admin",
+   *         "avatar": "http:\/\/localhost:8000\/img\/admin\/avatar_placeholder.png",
+   *        "roles": [
+   *           {
+   *              "id": 1,
+   *             "name": "Adm",
+   *            "slug": "adm",
+   *         "created_at": "2020-03-24 17:17:05",
+   *         "updated_at": "2020-03-24 17:17:05",
+   *                  "pivot": {
+   *                     "user_id": 1,
+   *                    "role_id": 1
+   *                }
+   *             }
+   *         ],
+   *        "isAdmin": true,
+   *        "isHospitalManager": false,
+   *       "hospital": null,
+   *      "isHospitalAdmin": false
+   *}
+   * @response  401 {
+   *  "message": "Unauthenticated"
+   * }
+   * @param    $admin_user_id
    * @param  \Illuminate\Http\Request  $request
-   * @param  \App\Administrator  $administrator
    * @return \Illuminate\Http\Response
    */
   public function update(Request $request, $admin_user_id)
@@ -126,14 +224,22 @@ class AdministratorController extends Controller
   }
 
   /**
-   * Remove the specified resource from storage.
-   *
+   * Remove the specified resource by id from storage.
+   * @urlParam  admin_users required The ID of the post
    * @param  \App\Administrator  $administrator
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Administrator $administrator)
+  public function destroy($admin_user_id)
   {
-    //
+    try {
+      $administrator = Administrator::find($admin_user_id);
+      $administrator->delete();
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
   }
 
   public function form_validate($data, $id = null)

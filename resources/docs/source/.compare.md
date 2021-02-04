@@ -17,6 +17,212 @@ Welcome to the generated API reference.
 
 <!-- END_INFO -->
 
+#Administrator management
+
+
+<!-- START_7e2b7a1ebbd3335d2dab3468cd7b48ef -->
+## Display a listing of the admin_users paginate by 15.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 1,
+            "name": "Admin",
+            "email": "admin@kinhsasadigital.com",
+            "usernmae": "admin",
+            "avatar": "http:\/\/localhost:8000\/img\/admin\/avatar_placeholder.png",
+            "roles": [
+                {
+                    "id": 1,
+                    "name": "Adm",
+                    "slug": "adm",
+                    "created_at": "2020-03-24 17:17:05",
+                    "updated_at": "2020-03-24 17:17:05",
+                    "pivot": {
+                        "user_id": 1,
+                        "role_id": 1
+                    }
+                }
+            ],
+            "isAdmin": true,
+            "isHospitalManager": false,
+            "hospital": null,
+            "isHospitalAdmin": false
+        }
+    ],
+    "links": {
+        "first": "http:\/\/localhost\/api\/admin_users?page=1",
+        "last": "http:\/\/localhost\/api\/admin_users?page=7",
+        "prev": null,
+        "next": "http:\/\/localhost\/api\/admin_users?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 7,
+        "path": "http:\/\/localhost\/api\/admin_users",
+        "per_page": 15,
+        "to": 15,
+        "total": 95
+    }
+}
+```
+
+### HTTP Request
+`GET api/admin_users`
+
+
+<!-- END_7e2b7a1ebbd3335d2dab3468cd7b48ef -->
+
+<!-- START_2c7c40eba56e473f8e40f6f212c7db36 -->
+## Store a newly created admin_users in storage.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+> Example response (201):
+
+```json
+null
+```
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated"
+}
+```
+
+### HTTP Request
+`POST api/admin_users`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `username` | string |  required  | username.
+        `password` | string |  required  | password
+        `password_confirmation` | string |  required  | password_confirmation
+        `name` | string |  required  | name
+        `email` | email |  required  | email
+        `roles_id` | array |  required  | roles_id
+    
+<!-- END_2c7c40eba56e473f8e40f6f212c7db36 -->
+
+<!-- START_77d0a2d5bb8f4587de5f705abe169e91 -->
+## Display a admin_users by id.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+> Example response (200):
+
+```json
+{
+    "id": 1,
+    "name": "Admin",
+    "email": "admin@kinhsasadigital.com",
+    "usernmae": "admin",
+    "avatar": "http:\/\/localhost:8000\/img\/admin\/avatar_placeholder.png",
+    "roles": [
+        {
+            "id": 1,
+            "name": "Adm",
+            "slug": "adm",
+            "created_at": "2020-03-24 17:17:05",
+            "updated_at": "2020-03-24 17:17:05",
+            "pivot": {
+                "user_id": 1,
+                "role_id": 1
+            }
+        }
+    ],
+    "isAdmin": true,
+    "isHospitalManager": false,
+    "hospital": null,
+    "isHospitalAdmin": false
+}
+```
+
+### HTTP Request
+`GET api/admin_users/{admin_user}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `admin_users` |  required  | The ID of the post
+
+<!-- END_77d0a2d5bb8f4587de5f705abe169e91 -->
+
+<!-- START_5153b8bc63349e63de278397894ab00f -->
+## Update the specified admin_user by id in storage.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+> Example response (201):
+
+```json
+null
+```
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated"
+}
+```
+
+### HTTP Request
+`PUT api/admin_users/{admin_user}`
+
+`PATCH api/admin_users/{admin_user}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `admin_users` |  required  | The ID of the post.
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `username` | string |  required  | username.
+        `password` | string |  required  | password
+        `name` | string |  required  | name
+        `email` | email |  required  | email
+        `roles_id` | array |  required  | roles_id
+    
+<!-- END_5153b8bc63349e63de278397894ab00f -->
+
+<!-- START_3c2aaa798572fdf62053d5cf4eb65ace -->
+## Remove the specified resource by id from storage.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+
+
+### HTTP Request
+`DELETE api/admin_users/{admin_user}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `admin_users` |  required  | The ID of the post
+
+<!-- END_3c2aaa798572fdf62053d5cf4eb65ace -->
+
 #Auth management
 
 
@@ -115,41 +321,6 @@ APIs for managing users Auth
 
 
 <!-- END_0f4c99b97ea7c2a47962807aca43f9e8 -->
-
-<!-- START_d9a354dd198979374d00652d49243f2b -->
-## Store a newly created admin_users in storage.
-
-<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
-> Example request:
-
-
-> Example response (201):
-
-```json
-null
-```
-> Example response (401):
-
-```json
-{
-    "message": "Unauthenticated"
-}
-```
-
-### HTTP Request
-`POST api/dashboard/auth/register`
-
-#### Body Parameters
-Parameter | Type | Status | Description
---------- | ------- | ------- | ------- | -----------
-    `username` | string |  required  | username.
-        `password` | string |  required  | password
-        `password_confirmation` | string |  required  | password_confirmation
-        `name` | string |  required  | name
-        `email` | email |  required  | email
-        `roles_id` | array |  required  | roles_id
-    
-<!-- END_d9a354dd198979374d00652d49243f2b -->
 
 #User management
 

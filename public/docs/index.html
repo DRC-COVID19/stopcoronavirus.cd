@@ -38,6 +38,281 @@
 <h1>Info</h1>
 <p>Welcome to the generated API reference.</p>
 <!-- END_INFO -->
+<h1>Administrator management</h1>
+<!-- START_7e2b7a1ebbd3335d2dab3468cd7b48ef -->
+<h2>Display a listing of the admin_users paginate by 15.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 1,
+            "name": "Admin",
+            "email": "admin@kinhsasadigital.com",
+            "usernmae": "admin",
+            "avatar": "http:\/\/localhost:8000\/img\/admin\/avatar_placeholder.png",
+            "roles": [
+                {
+                    "id": 1,
+                    "name": "Adm",
+                    "slug": "adm",
+                    "created_at": "2020-03-24 17:17:05",
+                    "updated_at": "2020-03-24 17:17:05",
+                    "pivot": {
+                        "user_id": 1,
+                        "role_id": 1
+                    }
+                }
+            ],
+            "isAdmin": true,
+            "isHospitalManager": false,
+            "hospital": null,
+            "isHospitalAdmin": false
+        }
+    ],
+    "links": {
+        "first": "http:\/\/localhost\/api\/admin_users?page=1",
+        "last": "http:\/\/localhost\/api\/admin_users?page=7",
+        "prev": null,
+        "next": "http:\/\/localhost\/api\/admin_users?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 7,
+        "path": "http:\/\/localhost\/api\/admin_users",
+        "per_page": 15,
+        "to": 15,
+        "total": 95
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/admin_users</code></p>
+<!-- END_7e2b7a1ebbd3335d2dab3468cd7b48ef -->
+<!-- START_2c7c40eba56e473f8e40f6f212c7db36 -->
+<h2>Store a newly created admin_users in storage.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+<p>Example response (201):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/admin_users</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>username</code></td>
+<td>string</td>
+<td>required</td>
+<td>username.</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>string</td>
+<td>required</td>
+<td>password</td>
+</tr>
+<tr>
+<td><code>password_confirmation</code></td>
+<td>string</td>
+<td>required</td>
+<td>password_confirmation</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required</td>
+<td>name</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>email</td>
+<td>required</td>
+<td>email</td>
+</tr>
+<tr>
+<td><code>roles_id</code></td>
+<td>array</td>
+<td>required</td>
+<td>roles_id</td>
+</tr>
+</tbody>
+</table>
+<!-- END_2c7c40eba56e473f8e40f6f212c7db36 -->
+<!-- START_77d0a2d5bb8f4587de5f705abe169e91 -->
+<h2>Display a admin_users by id.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "id": 1,
+    "name": "Admin",
+    "email": "admin@kinhsasadigital.com",
+    "usernmae": "admin",
+    "avatar": "http:\/\/localhost:8000\/img\/admin\/avatar_placeholder.png",
+    "roles": [
+        {
+            "id": 1,
+            "name": "Adm",
+            "slug": "adm",
+            "created_at": "2020-03-24 17:17:05",
+            "updated_at": "2020-03-24 17:17:05",
+            "pivot": {
+                "user_id": 1,
+                "role_id": 1
+            }
+        }
+    ],
+    "isAdmin": true,
+    "isHospitalManager": false,
+    "hospital": null,
+    "isHospitalAdmin": false
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/admin_users/{admin_user}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>admin_users</code></td>
+<td>required</td>
+<td>The ID of the post</td>
+</tr>
+</tbody>
+</table>
+<!-- END_77d0a2d5bb8f4587de5f705abe169e91 -->
+<!-- START_5153b8bc63349e63de278397894ab00f -->
+<h2>Update the specified admin_user by id in storage.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+<p>Example response (201):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/admin_users/{admin_user}</code></p>
+<p><code>PATCH api/admin_users/{admin_user}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>admin_users</code></td>
+<td>required</td>
+<td>The ID of the post.</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>username</code></td>
+<td>string</td>
+<td>required</td>
+<td>username.</td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>string</td>
+<td>required</td>
+<td>password</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>string</td>
+<td>required</td>
+<td>name</td>
+</tr>
+<tr>
+<td><code>email</code></td>
+<td>email</td>
+<td>required</td>
+<td>email</td>
+</tr>
+<tr>
+<td><code>roles_id</code></td>
+<td>array</td>
+<td>required</td>
+<td>roles_id</td>
+</tr>
+</tbody>
+</table>
+<!-- END_5153b8bc63349e63de278397894ab00f -->
+<!-- START_3c2aaa798572fdf62053d5cf4eb65ace -->
+<h2>Remove the specified resource by id from storage.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<h3>HTTP Request</h3>
+<p><code>DELETE api/admin_users/{admin_user}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>admin_users</code></td>
+<td>required</td>
+<td>The ID of the post</td>
+</tr>
+</tbody>
+</table>
+<!-- END_3c2aaa798572fdf62053d5cf4eb65ace -->
 <h1>Auth management</h1>
 <p>APIs for managing users Auth</p>
 <!-- START_3ec94b50b1c8c9ba798a36fdfacd3fef -->
@@ -100,72 +375,6 @@
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/auth/reset-password/{user_id}</code></p>
 <!-- END_0f4c99b97ea7c2a47962807aca43f9e8 -->
-<!-- START_d9a354dd198979374d00652d49243f2b -->
-<h2>Store a newly created resource in storage.</h2>
-<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
-<blockquote>
-<p>Example request:</p>
-<p>Example response (201):</p>
-</blockquote>
-<pre><code class="language-json">null</code></pre>
-<blockquote>
-<p>Example response (401):</p>
-</blockquote>
-<pre><code class="language-json">{
-    "message": "Unauthenticated"
-}</code></pre>
-<h3>HTTP Request</h3>
-<p><code>POST api/dashboard/auth/register</code></p>
-<h4>Body Parameters</h4>
-<table>
-<thead>
-<tr>
-<th>Parameter</th>
-<th>Type</th>
-<th>Status</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>username</code></td>
-<td>string</td>
-<td>required</td>
-<td>username.</td>
-</tr>
-<tr>
-<td><code>password</code></td>
-<td>string</td>
-<td>required</td>
-<td>password</td>
-</tr>
-<tr>
-<td><code>password_confirmation</code></td>
-<td>string</td>
-<td>required</td>
-<td>password_confirmation</td>
-</tr>
-<tr>
-<td><code>name</code></td>
-<td>string</td>
-<td>required</td>
-<td>name</td>
-</tr>
-<tr>
-<td><code>email</code></td>
-<td>email</td>
-<td>required</td>
-<td>email</td>
-</tr>
-<tr>
-<td><code>roles_id</code></td>
-<td>array</td>
-<td>required</td>
-<td>roles_id</td>
-</tr>
-</tbody>
-</table>
-<!-- END_d9a354dd198979374d00652d49243f2b -->
 <h1>User management</h1>
 <p>APIs for managing users</p>
 <!-- START_60fdb642281a006b32553e18909d0533 -->
