@@ -38,6 +38,8 @@ Route::get('/pandemicstatsasc', function () {
 
 Route::post('/medicale-orientation', 'DiagnosticController@store');
 
+Route::apiResource('admin_users','AdministratorController');
+
 Route::group([
   'prefix' => 'dashboard',
   // 'middleware' => 'auth:dashboard',
@@ -52,6 +54,7 @@ Route::group([
     Route::post('lost-password', 'AuthController@asKResetPassword');
     Route::get('check-token/{token}', 'AuthController@checkResetPasswordToken');
     Route::post('reset-password/{user_id}', 'AuthController@resetPassword');
+    Route::post('register', 'AuthController@store');
   });
 
 
