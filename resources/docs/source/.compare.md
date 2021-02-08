@@ -254,7 +254,7 @@ Parameter | Type | Status | Description
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `admin_users` |  required  | The ID of the post
+    `admin_users` |  required  | The ID of the admin_users
 
 <!-- END_77d0a2d5bb8f4587de5f705abe169e91 -->
 
@@ -310,7 +310,7 @@ Parameter | Status | Description
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `admin_users` |  required  | The ID of the post.
+    `admin_users` |  required  | The ID of the admin_users.
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
@@ -329,6 +329,18 @@ Parameter | Type | Status | Description
 > Example request:
 
 
+> Example response (200):
+
+```json
+null
+```
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated"
+}
+```
 
 ### HTTP Request
 `DELETE api/admin_users/{admin_user}`
@@ -337,7 +349,7 @@ Parameter | Type | Status | Description
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `admin_users` |  required  | The ID of the post
+    `admin_users` |  required  | The ID of the admin_users
 
 <!-- END_3c2aaa798572fdf62053d5cf4eb65ace -->
 

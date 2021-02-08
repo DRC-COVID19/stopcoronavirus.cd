@@ -265,7 +265,7 @@
 <tr>
 <td><code>admin_users</code></td>
 <td>required</td>
-<td>The ID of the post</td>
+<td>The ID of the admin_users</td>
 </tr>
 </tbody>
 </table>
@@ -323,7 +323,7 @@
 <tr>
 <td><code>admin_users</code></td>
 <td>required</td>
-<td>The ID of the post.</td>
+<td>The ID of the admin_users.</td>
 </tr>
 </tbody>
 </table>
@@ -376,7 +376,15 @@
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
+<p>Example response (200):</p>
 </blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated"
+}</code></pre>
 <h3>HTTP Request</h3>
 <p><code>DELETE api/admin_users/{admin_user}</code></p>
 <h4>URL Parameters</h4>
@@ -392,7 +400,7 @@
 <tr>
 <td><code>admin_users</code></td>
 <td>required</td>
-<td>The ID of the post</td>
+<td>The ID of the admin_users</td>
 </tr>
 </tbody>
 </table>

@@ -17,6 +17,17 @@ use Illuminate\Support\Facades\Validator;
  */
 class AdministratorController extends Controller
 {
+
+  /**
+   * Create a new AuthController instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('auth:dashboard');
+  }
+
   /**
    * Display a listing of the admin_users paginate by 15.
    * @response 200 {
@@ -117,7 +128,7 @@ class AdministratorController extends Controller
 
   /**
    * Display a admin_users by id.
-   * @urlParam  admin_users required The ID of the post
+   * @urlParam  admin_users required The ID of the admin_users
    * @response 200 {
    *         "id": 1,
    *         "name": "Admin",
@@ -148,6 +159,7 @@ class AdministratorController extends Controller
   public function show($admin_user_id)
   {
     try {
+
       $administrator = Administrator::find($admin_user_id);
       return response()->json(AdministratorResource::make($administrator), 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
@@ -160,7 +172,7 @@ class AdministratorController extends Controller
 
   /**
    * Update the specified admin_user by id in storage.
-   * @urlParam  admin_users required The ID of the post.
+   * @urlParam  admin_users required The ID of the admin_users.
    * @bodyParam  username string required username.
    * @bodyParam  password string required password
    * @bodyParam  name string required name
@@ -225,15 +237,24 @@ class AdministratorController extends Controller
 
   /**
    * Remove the specified resource by id from storage.
-   * @urlParam  admin_users required The ID of the post
+   * @urlParam  admin_users required The ID of the admin_users
+   * @response  200 null
+   * @response  401 {
+   *  "message": "Unauthenticated"
+   * }
    * @param  \App\Administrator  $administrator
    * @return \Illuminate\Http\Response
    */
   public function destroy($admin_user_id)
   {
     try {
+      $response = $this->check_is_admin_user();
+      if ($response) {
+        return $response;
+      }
       $administrator = Administrator::find($admin_user_id);
       $administrator->delete();
+      return response()->json(null, 201, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -253,5 +274,13 @@ class AdministratorController extends Controller
       'email' => 'required|email',
       'roles_id' => 'required|array',
     ])->validate();
+  }
+
+  public function check_is_admin_user()
+  {
+    if (!Auth::user()->isRole('administrator')) {
+      return response()->json(["message" => "Unauthenticated"])->setStatusCode(401);
+    }
+    return null;
   }
 }
