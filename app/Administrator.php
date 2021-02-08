@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Administrator.
@@ -23,6 +24,7 @@ class Administrator extends Model implements JWTSubject, AuthenticatableContract
     use HasPermissions;
     use DefaultDatetimeFormat;
     use Notifiable;
+    use SoftDeletes;
 
     protected $fillable = ['username', 'password', 'name', 'avatar', 'email'];
 

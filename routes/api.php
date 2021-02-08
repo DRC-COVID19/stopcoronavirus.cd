@@ -30,10 +30,17 @@ Route::get('/pandemicstats', function () {
 });
 
 Route::get('/pandemicstatsasc', function () {
+  /**
+   * Récupère la situation epidémiologique
+   */
   return new PandemicStatResource(PandemicStat::orderBy('last_update', 'ASC')->get());
 });
 
 Route::post('/medicale-orientation', 'DiagnosticController@store');
+
+Route::apiResource('admin_users','AdministratorController');
+
+Route::apiResource('admin_roles','AdminRoleController');
 
 Route::group([
   'prefix' => 'dashboard',
@@ -49,6 +56,7 @@ Route::group([
     Route::post('lost-password', 'AuthController@asKResetPassword');
     Route::get('check-token/{token}', 'AuthController@checkResetPasswordToken');
     Route::post('reset-password/{user_id}', 'AuthController@resetPassword');
+    Route::post('register', 'AuthController@store');
   });
 
 

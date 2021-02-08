@@ -16,6 +16,7 @@ import fullscreen from 'vue-fullscreen';
 import VueEllipseProgress from "vue-ellipse-progress";
 import VueSkeletonLoading from 'vue-skeleton-loading';
 import VueGtag from "vue-gtag";
+import VueMq from 'vue-mq'
 
 require('./helper');
 
@@ -30,6 +31,13 @@ Vue.use(fullscreen);
 Vue.use(VueEllipseProgress);
 Vue.use(VueSkeletonLoading);
 
+Vue.use(VueMq, {
+  breakpoints: {
+    sm: 768,
+    md: 1024,
+    lg: Infinity
+  }
+});
 
 
 if (store.state.auth.isAuthenticated) {
