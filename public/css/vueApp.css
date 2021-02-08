@@ -31976,6 +31976,12 @@ h3 {
   margin-right: 20px;
 }
 
+@media screen and (max-width: 1023px) {
+  .side-right > .card > .tabs > .card-header .nav-item {
+    margin-bottom: 10px;
+  }
+}
+
 .side-right > .card > .tabs > .card-header .nav-item .nav-link {
   background: #2e5bff14;
   color: #2e5bff;
@@ -31998,6 +32004,12 @@ h3 {
 .side-right > .card > .tabs > .tab-content > .card-body {
   height: auto;
   padding: 10px 0;
+}
+
+@media screen and (max-width: 1023px) {
+  .side-right > .card > .tabs > .tab-content > .card-body {
+    padding: 0;
+  }
 }
 
 .side-right > .card > .tabs > .tab-content > .card-body > div {
@@ -32488,13 +32500,26 @@ h3 {
   border-radius: unset;
 }
 
+.default-border {
+  border-radius: 5px;
+  border-color: #2e5bff !important;
+}
+
+.default-border span {
+  color: #2e5bff !important;
+}
+
 .legend-container {
   position: relative;
   top: -50px;
-  left: 50%;
-  transform: translateX(-50%);
   height: 0px;
   z-index: 2;
+}
+
+@media screen and (max-width: 576px) {
+  .legend-container {
+    top: -70px;
+  }
 }
 
 .legend-container .legend {
@@ -32509,12 +32534,24 @@ h3 {
   margin-right: 25px;
 }
 
+@media screen and (max-width: 576px) {
+  .legend-container .no-data {
+    margin-right: unset;
+  }
+}
+
 .legend-container .range {
   width: 50px;
   height: 12px;
   border: 2px solid rgba(0, 0, 0, 0.3);
   position: relative;
   transition: border 0.3s ease-in-out;
+}
+
+@media screen and (max-width: 576px) {
+  .legend-container .range {
+    width: 25px;
+  }
 }
 
 .legend-container .range.hover {
@@ -32558,6 +32595,12 @@ h3 {
   box-sizing: border-box;
   border-radius: 5px;
   font-size: 11px;
+}
+
+@media screen and (max-width: 576px) {
+  .legend-container .lbl {
+    font-size: 0.5rem;
+  }
 }
 
 .legend-container .datas .lbl {
