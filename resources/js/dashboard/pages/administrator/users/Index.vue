@@ -1,13 +1,17 @@
 <template>
-    <div>index</div>
+    <div class="main">
+
+    </div>
 </template>
 
 <script>
-export default {
+    export default {
 
-}
+    }
 </script>
 
 <style>
-
+    .main {
+        background-color: rgb(241, 232, 232);
+    }
 </style>

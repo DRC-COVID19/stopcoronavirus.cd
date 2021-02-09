@@ -1,14 +1,26 @@
 <template>
   <div>
-    <div>header</div>
-    <div>menu</div>
-    <router-view></router-view>
+    <div>
+      <Header />
+    </div>
+    <div class="row">
+      <Menu />
+      <router-view class="col-10"></router-view>
+    </div>
   </div>
 </template>
 
 <script>
-export default {};
+  import Header from './../components/Header';
+  import Menu from './administrator/users/components/Menu';
+  export default {
+    components: {
+      Header,
+      Menu
+    }
+  };
 </script>
 
 <style>
+  
 </style>
