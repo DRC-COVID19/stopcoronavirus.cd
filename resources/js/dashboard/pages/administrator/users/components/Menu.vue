@@ -1,8 +1,14 @@
 <template>
   <div class="col-2 side-menu">
+    <div class="header-menu">
+      <div class="d-flex justify-content-center my-3">
+        <img alt="Avatar" class="avatar" src="../../../../../../../public/img/admin/avatar_placeholder.png" />
+      </div>
+      <h5 class="h6 text-center">Administrateur</h5>
+    </div>
     <div class="parent" v-for="item in items" :key="item.key" @mouseover="hover = item.key" @mouseleave="hover = -1">
       <div class="elmt" :class="{active : activeItem == item.key || hover == item.key}">
-        {{item.label}}
+        <b-link class="elmt" :to="{name:item.path}">{{item.label}}</b-link> 
       </div>
     </div>
   </div>
@@ -15,10 +21,10 @@
         activeItem: 1,
         hover: -1,
         items: [
-          {key: 1, label: "Dashboard"},
-          {key: 2, label: "Carte"},
-          {key: 3, label: "Graphique"},
-          {key: 4, label: "Administrateurs"},
+          {key: 1, label: "Dashboard", path: 'users'},
+          {key: 2, label: "Carte", path: 'maps'},
+          {key: 3, label: "Graphique", path: 'graph'},
+          {key: 4, label: "Administrateurs", path: 'admin'}
         ]
       }
     }
@@ -40,16 +46,19 @@
   }
   .elmt {
     font-size: 20px;
+    text-decoration: none;
     padding: 5px;
     margin: 10px 0;
   }
   .active {
     border-radius: 10px;
     background-color: rgb(220, 220, 220);
-    color: blue;
     font-weight: bold;
   }
   .parent {
     padding: 0 20px;
+  }
+  .header-menu {
+    margin: 25px auto;
   }
 </style>

@@ -133,6 +133,7 @@ export default [
     children: [
       {
         path: 'users',
+        name: 'administrator.users',
         component: AdminUserIndex
       },
       {
