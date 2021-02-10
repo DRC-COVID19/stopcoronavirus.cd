@@ -21,7 +21,7 @@
 
 <style>
   .header_d {
-    margin: 20px 5%;
+    margin: 20px 5% 10px 5%;
     padding: 10px;
   }
   i {

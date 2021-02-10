@@ -12,7 +12,26 @@
     </b-row>
     <b-row>
       <b-col>
-        <b-table striped hover :items="users" :filter="filter"></b-table>
+        <b-table 
+          striped 
+          hover
+          :fields="fields"
+          :items="users" 
+          :filter="filter"
+          :per-page="perPage"
+          :current-page="currentPage"
+        >
+          <template
+            v-slot:cell(actions)="data"
+            class="action-btn-group"
+          >
+            <i @click="deleteUser(data.users.id)" class="fas fa-user-times"></i>
+            <i @click="updateUser(data.users.id)" class="fas fa-user-edit"></i>
+            <!--<b-button variant="danger" @click="deleteUser(data.users.id)" class="btn-remove"><i class="fas fa-user-times"></i></b-button>
+            <b-button variant="primary" @click="deleteUser(data.users.id)" class="btn-edit"><i class="fas fa-user-edit"></i></b-button>-->
+          </template>
+        </b-table>
+        <b-pagination v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>
       </b-col>
     </b-row>
   </div>
@@ -28,8 +47,46 @@
     },
     data () {
       return {
-        filter: ''
+        fields: ['id', 'username', 'name', 'role', 'actions'],
+        filter: '',
+        perPage: 15,
+        currentPage: 1
+      }
+    },
+    computed: {
+      rows () {
+        return this.users.length
+      }
+    },
+    methods: {
+      deleteUser (id) {
+
+      },
+      updateUser (id) {
+
       }
     }
   }
 </script>
+<style lang='scss' scoped>
+  @import "@~/sass/_variables";
+  .fa-user-times {
+    color: $dash-red;
+    font-size: 16px;
+  }
+  .fa-user-edit {
+    color: $fin-8;
+    font-size: 16px;
+  }
+  .btn-remove {
+    background-color: $dash-red;
+  }
+  .btn-edit {
+    background-color: $fin-8;
+  }
+  .action-btn-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+</style>
