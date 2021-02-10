@@ -23,16 +23,16 @@
                 title: "Utilisateurs",
                 iconClass: "fa fa-home",
                 users: [
-                    { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-                    { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-                    { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-                    { age: 38, first_name: 'Jami', last_name: 'Carney' },
-                    { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-                    { age: 38, first_name: 'Jami', last_name: 'Carney' },
-                    { age: 38, first_name: 'Jami', last_name: 'Carney' },
-                    { age: 38, first_name: 'Jami', last_name: 'Carney' },
-                    { age: 38, first_name: 'Jami', last_name: 'Carney' },
-                    { age: 38, first_name: 'Jami', last_name: 'Carney' }
+                    { id: 2, username: 'Dickerson', name: 'Macdonald', role: 'Admin', action: '' },
+                    { id: 21, username: 'Larsen', name: 'Shaw', role: 'User', action: '' },
+                    { id: 39, username: 'Geneva', name: 'Wilson', role: 'User', action: '' },
+                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin', action: '' },
+                    { id: 89, username: 'Geneva', name: 'Wilson', role: 'Admin', action: '' },
+                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin', action: '' },
+                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin', action: '' },
+                    { id: 33, username: 'Jami', name: 'Carney', role: 'Admin', action: '' },
+                    { id: 57, username: 'Jami', name: 'Carney', role: 'Admin', action: '' },
+                    { id: 78, username: 'Jami', name: 'Carney', role: 'Admin', action: '' }
                 ]
             }
         }
