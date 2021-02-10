@@ -1,5 +1,5 @@
 <template>
-  <div class="col-2 side-menu">
+  <div class="col-sm-2  side-menu">
     <div class="header-menu">
       <div class="d-flex justify-content-center my-3">
         <img alt="Avatar" class="avatar" src="../../../../../../public/img/admin/avatar_placeholder.png" />
@@ -8,7 +8,7 @@
     </div>
     <div class="parent" v-for="item in items" :key="item.key" @mouseover="hover = item.key" @mouseleave="hover = -1">
       <div class="elmt" :class="{active : activeItem == item.key || hover == item.key}">
-        <b-link class="elmt" :to="{name:item.path}">{{item.label}}</b-link> 
+        <b-link class="elmt nav-link" :to="{name:item.path}">{{item.label}}</b-link> 
       </div>
     </div>
   </div>
@@ -21,8 +21,8 @@
         activeItem: 1,
         hover: -1,
         items: [
-          {key: 1, label: "Utilisateurs", path: 'users'},
-          {key: 2, label: "Situation Epidemiologique", path: 'maps'}
+          {key: 1, label: "Utilisateurs", path: 'administrator.users'},
+          {key: 2, label: "Situation Epidemiologique", path: 'administrator.users.create'}
         ]
       }
     }
@@ -43,7 +43,6 @@
     width: 20%;
   }
   .elmt {
-    font-size: 18px;
     text-decoration: none;
     padding: 5px;
     margin: 10px 0;

@@ -1,13 +1,17 @@
 <template>
   <div>
-    <b-row>
-      <b-col md="3" class="d-flex justify-content-end">
+    <b-row class="my-3 d-flex space-between">
+      <b-col md="4" class="">
         <b-form-input
-          class="my-3"
           v-model="filter"
           type="search"
-          placeholder='Recherche'
+          placeholder='Filtrer'
         ></b-form-input>
+      </b-col>
+      <b-col md="4" class="ml-auto">
+        <div class="d-flex justify-content-end">
+          <b-button class="btn-dash-blue" variant="success"><i class="fa fa-plus"></i></b-button>
+        </div>
       </b-col>
     </b-row>
     <b-row>
@@ -25,15 +29,16 @@
             v-slot:cell(actions)="data"
             class="action-btn-group"
           >
-            <i @click="deleteUser(data.users.id)" class="fas fa-user-times"></i>
-            <i @click="updateUser(data.users.id)" class="fas fa-user-edit"></i>
-            <!--<b-button variant="danger" @click="deleteUser(data.users.id)" class="btn-remove"><i class="fas fa-user-times"></i></b-button>
-            <b-button variant="primary" @click="deleteUser(data.users.id)" class="btn-edit"><i class="fas fa-user-edit"></i></b-button>-->
+            <i @click="deleteUser(data.item.id)" class="fas fa-user-times"></i>
+            <i @click="updateUser(data.item.id)" class="fas fa-user-edit"></i>
+            <!--<b-button variant="danger" @click="deleteUser(data.item.id)" class="btn-remove"><i class="fas fa-user-times"></i></b-button>
+            <b-button variant="primary" @click="deleteUser(data.item.id)" class="btn-edit"><i class="fas fa-user-edit"></i></b-button>-->
           </template>
         </b-table>
         <b-pagination v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>
       </b-col>
     </b-row>
+    <b-modal v-model="deleteModalShow">Voulez-vous supprimer l'utilisateurs {{currentUserId}} ?</b-modal>
   </div>
 </template>
 
@@ -50,7 +55,10 @@
         fields: ['id', 'username', 'name', 'role', 'actions'],
         filter: '',
         perPage: 15,
-        currentPage: 1
+        currentPage: 1,
+        deleteModalShow: false,
+        editModalShow: false,
+        currentUserId: -1
       }
     },
     computed: {
@@ -60,7 +68,8 @@
     },
     methods: {
       deleteUser (id) {
-
+        this.deleteModalShow = true
+        this.currentUserId = id
       },
       updateUser (id) {
 

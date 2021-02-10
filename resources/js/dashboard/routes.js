@@ -138,6 +138,7 @@ export default [
       },
       {
         path: 'users/create',
+        name: 'administrator.users.create',
         component: AdminUserCreate,
       }
     ]

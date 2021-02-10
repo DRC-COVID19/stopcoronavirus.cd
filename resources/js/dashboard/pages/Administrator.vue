@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div>
+    <div class="main-menu">
       <Header />
     </div>
     <div class="row">
       <Menu />
-      <router-view class="col-10"></router-view>
+      <router-view class="col-sm-10"></router-view>
     </div>
   </div>
 </template>
@@ -21,6 +21,10 @@
   };
 </script>
 
-<style>
-  
+<style lang='scss' scoped >
+  .main-menu {
+    @media screen and (max-width: 576px) {
+      display: none;
+    }
+  }
 </style>
