@@ -10,7 +10,9 @@
       </b-col>
       <b-col md="4" class="ml-auto">
         <div class="d-flex justify-content-end">
-          <b-button class="btn-dash-blue" variant="success"><i class="fa fa-plus"></i></b-button>
+          <b-button class="btn-dash-blue" variant="success">
+            <b-link :to="{name:'administrator.users.create'}"><i class="fa fa-plus"></i></b-link>
+          </b-button>
         </div>
       </b-col>
     </b-row>

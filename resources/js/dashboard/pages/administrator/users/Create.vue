@@ -1,15 +1,15 @@
 <template>
-  <div>
+  <div class="main">
     create
   </div>
 </template>
 
 <script>
-export default {
+  export default {
 
-}
+  }
 </script>
 
-<style>
+<style lang='scss' scoped>
 
 </style>

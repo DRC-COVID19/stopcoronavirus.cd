@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="main-menu">
-      <Header />
+      <MainHeader />
     </div>
     <div class="row">
       <Menu />
@@ -11,11 +11,11 @@
 </template>
 
 <script>
-  import Header from './../components/Header';
+  import MainHeader from './administrator/components/MainHeader';
   import Menu from './administrator/components/Menu';
   export default {
     components: {
-      Header,
+      MainHeader,
       Menu
     }
   };
