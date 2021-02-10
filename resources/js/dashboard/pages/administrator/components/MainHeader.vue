@@ -35,7 +35,7 @@
                   class="img-fluid"
                   alt
                 />
-                <div
+                <!--<div
                   @mouseleave="userAvatarMouseLeave"
                   @mouseenter="userAvatarMouseEnter"
                   class="avatar-container ml-3"
@@ -65,7 +65,7 @@
                       >Deconnexion</b-button
                     >
                   </b-card>
-                </div>
+                </div>-->
               </div>
             </b-nav-item>
           </b-navbar-nav>

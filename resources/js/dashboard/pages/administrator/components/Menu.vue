@@ -8,7 +8,7 @@
     </div>
     <div class="parent" v-for="item in items" :key="item.key" @mouseover="hover = item.key" @mouseleave="hover = -1">
       <div class="elmt" :class="{active : activeItem == item.key || hover == item.key}">
-        <b-link class="elmt nav-link" :to="{name:item.path}">{{item.label}}</b-link> 
+        <b-link class="elmt nav-link" :to="{name:item.path}" @click="switchActivePage(item.key)">{{item.label}}</b-link> 
       </div>
     </div>
   </div>
@@ -24,6 +24,11 @@
           {key: 1, label: "Utilisateurs", path: 'administrator.users'},
           {key: 2, label: "Situation Epidemiologique", path: 'administrator.users.create'}
         ]
+      }
+    },
+    methods: {
+      switchActivePage (key) {
+        this.activeItem = key
       }
     }
   }
