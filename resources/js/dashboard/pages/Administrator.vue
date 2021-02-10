@@ -12,7 +12,7 @@
 
 <script>
   import Header from './../components/Header';
-  import Menu from './administrator/users/components/Menu';
+  import Menu from './administrator/components/Menu';
   export default {
     components: {
       Header,
