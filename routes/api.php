@@ -155,6 +155,7 @@ Route::group([
       Route::get('maps', 'Flux30ZoneSumController@getHotspotMaps'); //ok
       Route::get('tendance', 'Flux30ZoneSumController@getHotspotTendance'); //ok
       Route::get('daily', 'Flux30ZoneSumController@getHotspotDaily'); //ok
+      Route::get('daily-date', 'Flux30ZoneSumController@getHotspotDailyByDate'); //ok
       Route::get('general', 'Flux30ZoneSumController@getHotspotGeneral'); //ok
 
       Route::group(['prefix' => 'types'], function () {
@@ -162,6 +163,7 @@ Route::group([
         Route::get('maps', 'Flux30ZoneSumController@getHotspotTypeMaps'); //ok
         Route::get('tendance', 'Flux30ZoneSumController@getHotspotTypeTendance'); //ok
         Route::get('daily', 'Flux30ZoneSumController@getHotspotTypeDaily'); //ok
+        Route::get('daily-date', 'Flux30ZoneSumController@getHotspotTypeDailyByDate');
         Route::get('general', 'Flux30ZoneSumController@getHotspotTypeGeneral'); //ok
       });
     });
