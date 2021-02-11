@@ -19,7 +19,7 @@ class AdministratorController extends Controller
 {
 
   /**
-   * Create a new AuthController instance.
+   * Create a new instance.
    *
    * @return void
    */
@@ -212,7 +212,7 @@ class AdministratorController extends Controller
   public function update(Request $request, $admin_user_id)
   {
     $data = Validator::make($request->all(), [
-      'username' => 'required|string||unique:admin_users,username' . ($admin_user_id ? ",$admin_user_id" : ""),
+      'username' => 'required|string|unique:admin_users,username' . ($admin_user_id ? ",$admin_user_id" : ""),
       'name' => 'required|string',
       'avatar' => 'nullable',
       'remember_token' => 'nullable',
@@ -266,7 +266,7 @@ class AdministratorController extends Controller
   public function form_validate($data, $id = null)
   {
     return Validator::make($data, [
-      'username' => 'required|string||unique:admin_users,username' . ($id ? ",$id" : ""),
+      'username' => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
       'password' => 'required|confirmed',
       'name' => 'required|string',
       'avatar' => 'nullable',
