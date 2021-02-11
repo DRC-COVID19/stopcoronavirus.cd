@@ -1516,7 +1516,12 @@ export default {
       }
 
       urlMaps += `/maps`;
-      urlDaily += `/daily`;
+      if (values.observation_start==values.observation_end) {
+        urlDaily += `/daily`;
+      }else{
+        urlDaily += `/daily-date`;
+      }
+
       urlTendance += `/tendance`;
       urlGeneral += `/general`;
 
