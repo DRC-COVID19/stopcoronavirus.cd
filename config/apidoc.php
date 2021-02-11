@@ -242,7 +242,7 @@ return [
      *
      */
     'example_languages' => [
-        // 'javascript',
+        'javascript',
         //'php'
     ],
 
