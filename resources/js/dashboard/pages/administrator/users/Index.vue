@@ -19,7 +19,9 @@
             return {
                 title: "Utilisateurs",
                 iconClass: "fa fa-home",
-                users: [
+                isLoading: false,
+                users: [],
+                userDisplay: [
                     { id: 2, username: 'Dickerson', name: 'Macdonald', role: 'Admin' },
                     { id: 21, username: 'Larsen', name: 'Shaw', role: 'User' },
                     { id: 39, username: 'Geneva', name: 'Wilson', role: 'User' },
@@ -39,6 +41,39 @@
                     { id: 38, username: 'Jami', name: 'Carney', role: 'Admin' },
                     { id: 38, username: 'Jami', name: 'Carney', role: 'Admin' }
                 ]
+            }
+        },
+        mounted () {
+            this.getUserList()
+        },
+        methods: {
+            getUserList (page = 1) {
+                this.isLoading = true
+                axios.get('/api/admin_users', {
+                    params: {page}
+                })
+                    .then(({data}) => {
+                        this.users = data.data
+                        this.isLoading = false
+                    })
+                    // let newUser = {
+                    //         id: '',
+                    //         name: '',
+                    //         username: '',
+                    //         role: '',
+                    //     }
+                    //     for (let elmt in data.data) {
+                    //         newUser.id = elmt.id
+                    //         newUser.name = elmt.name
+                    //         newUser.username = elmt.username
+                    //         // newUser.role = elmt.roles[0].name
+                    //         this.users.push(newUser)
+                    //     } 
+                    //     this.isLoading = false
+                    .catch(e => console.log(e))
+            },
+            switchPage (page) {
+                this.getUserList(page)
             }
         }
     }

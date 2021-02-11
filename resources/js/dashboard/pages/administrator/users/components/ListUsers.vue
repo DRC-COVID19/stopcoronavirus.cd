@@ -54,7 +54,7 @@
     },
     data () {
       return {
-        fields: ['id', 'username', 'name', 'role', 'actions'],
+        fields: ['id', 'usernmae', 'name', 'role', 'actions'], // usernmae instead of username (see backend response)
         filter: '',
         perPage: 15,
         currentPage: 1,

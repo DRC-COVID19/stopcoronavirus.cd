@@ -36,15 +36,23 @@
           required
         ></b-form-input>
       </b-form-group>
-
-      <b-form-group id="input-group-3" label="Role" label-for="input-3">
-        <b-form-select
-          id="input-3"
-          v-model="form.roles"
-          :options="roles"
-          required
-        ></b-form-select>
-      </b-form-group>
+      <label for="text-password">Roles</label>
+      <b-form-checkbox-group
+        id="checkbox-group-1"
+        v-model="selected"
+        :options="roles"
+        :aria-describedby="ariaDescribedby"
+        name="flavour-1"
+      ></b-form-checkbox-group>
+      <label for="text-password">Choisir l'image de profil</label>
+      <b-form-file multiple>
+        <template slot="file-name" slot-scope="{ names }">
+          <b-badge variant="dark">{{ names[0] }}</b-badge>
+          <b-badge v-if="names.length > 1" variant="dark" class="ml-1">
+            + {{ names.length - 1 }} More files
+          </b-badge>
+        </template>
+      </b-form-file>
       <label for="text-password">Mot de passe</label>
       <b-form-input type="password" id="text-password" aria-describedby="password-help-block" v-model="form.password"></b-form-input>
       <b-form-text id="password-help-block">
@@ -94,7 +102,11 @@
           confrimPassword: '',
           checked: []
         },
-        roles: [{ text: 'Choir un role', value: null }, 'Admininstrateur', 'Utilisateur'],
+        selected: [],
+        roles: [
+          { text: 'Administrateur', value: 'admin-user' },
+          { text: 'Admin hopital', value: 'admin-hospital' },
+        ],
         show: true
       }
     },
