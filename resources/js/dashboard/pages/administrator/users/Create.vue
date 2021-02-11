@@ -55,23 +55,8 @@
       <b-form-text id="password-help-block">
         {{warningMissMatch}}
       </b-form-text>
-
-      <!--<b-form-group id="input-group-4" v-slot="{ ariaDescribedby }">
-        <b-form-checkbox-group
-          v-model="form.checked"
-          id="checkboxes-4"
-          :aria-describedby="ariaDescribedby"
-        >
-          <b-form-checkbox value="me">Check me out</b-form-checkbox>
-          <b-form-checkbox value="that">Check that out</b-form-checkbox>
-        </b-form-checkbox-group>
-      </b-form-group>-->
-
       <b-button type="submit" variant="primary" class="my-2 btn-dash-blue">Enreigistrer</b-button>
     </b-form>
-    <!--<b-card class="mt-3" header="Form Data Result">
-      <pre class="m-0">{{ form }}</pre>
-    </b-card>-->
   </div>
 </template>
 
