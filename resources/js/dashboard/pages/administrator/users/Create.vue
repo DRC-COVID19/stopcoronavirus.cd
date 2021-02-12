@@ -16,12 +16,12 @@
         ></b-form-input>
       </b-form-group>
       <b-form-group
-        id="input-group-1"
+        id="input-group-2"
         label="Email address *"
-        label-for="input-1"
+        label-for="input-2"
       >
         <b-form-input
-          id="input-1"
+          id="input-2"
           v-model="form.email"
           type="email"
           placeholder="Enter email"
@@ -30,9 +30,9 @@
         ></b-form-input>
       </b-form-group>
       <b-alert show v-if="validateMailMessage !== ''" variant="light">{{validateMailMessage}}</b-alert>
-      <b-form-group id="input-group-2" label="Nom *" label-for="input-2">
+      <b-form-group id="input-group-3" label="Nom *" label-for="input-3">
         <b-form-input
-          id="input-2"
+          id="input-3"
           v-model="form.name"
           placeholder="Entrer le nom"
           required
@@ -82,18 +82,19 @@
         form: {
           username: '',
           name: '',
-          roles: null,
+          roles: [],
           email: '',
           password: '',
           confrimPassword: '',
         },
         selected: [],
-        roles: [
-          { text: 'Administrateur', value: 0 },
-          { text: 'Admin hopital', value: 1 },
-        ],
+        roles: [],
         show: true
       }
+    },
+    mounted () {
+      // Fetch the user roles
+      this.getUserRoles()
     },
     methods: {
       onSubmit(event) {
@@ -123,15 +124,24 @@
         if (!re.test(String(this.form.email).toLowerCase())){
           this.validateMailMessage = 'Adresse email incorrecte'
         };
+      },
+      getUserRoles () {
+        axios.get('/api/admin_roles', {
+          params: {}
+        })
+          .then(({data}) => {
+            this.roles = data
+            console.log(this.roles)
+          })
+          .catch(error => {
+            console.log(error);
+          })
       }
     },
     computed: {
       warningMissMatch () {
         return this.form.password === this.form.confrimPassword ? '' : 'Les mot de passes ne correspondent pas'
-      },
-      // incorrectEmail () {
-      //   return this.validateMail() ? '' : 'Adresse email incorrecte'
-      // }
+      }
     }
   }
 </script>
