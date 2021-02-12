@@ -20,7 +20,7 @@
       <p>Fetching Data</p>
     </div>
 
-    <script src="{{aaset('js/vueApp.js?v=2.936',env('REDIRECT_HTTPS')) }}"></script>
+    <script src="{{asset('js/vueApp.js?v=2.936',env('REDIRECT_HTTPS')) }}"></script>
 
 </body>
 </html>
