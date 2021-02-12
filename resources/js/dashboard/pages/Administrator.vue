@@ -4,8 +4,8 @@
       <MainHeader />
     </div>
     <div class="row">
-      <Menu />
-      <router-view class="col-sm-10"></router-view>
+      <!--<Menu />-->
+      <router-view class="col-sm-12"></router-view>
     </div>
   </div>
 </template>

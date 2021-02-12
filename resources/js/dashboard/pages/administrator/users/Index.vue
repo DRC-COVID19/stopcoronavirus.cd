@@ -2,7 +2,8 @@
     <div class="main">
         <Header :title="title" :iconClass="iconClass"/>
         <div class="list-user">
-            <ListUser :users="users"/>
+            <ListUser class="col-md-6" :users="users"/>
+            <Create class="col-md-6" />
         </div>
     </div>
 </template>
@@ -10,9 +11,11 @@
 <script>
     import Header from '../components/Header';
     import ListUser from './components/ListUsers';
+    import Create from './components/ListUsers';
     export default {
         components: {
             Header,
+            Create,
             ListUser
         },
         data () {
@@ -56,20 +59,6 @@
                         this.users = data.data
                         this.isLoading = false
                     })
-                    // let newUser = {
-                    //         id: '',
-                    //         name: '',
-                    //         username: '',
-                    //         role: '',
-                    //     }
-                    //     for (let elmt in data.data) {
-                    //         newUser.id = elmt.id
-                    //         newUser.name = elmt.name
-                    //         newUser.username = elmt.username
-                    //         // newUser.role = elmt.roles[0].name
-                    //         this.users.push(newUser)
-                    //     } 
-                    //     this.isLoading = false
                     .catch(e => console.log(e))
             },
             switchPage (page) {
@@ -82,6 +71,7 @@
 <style>
     .main {
         background-color: rgb(235, 245, 255);
+        height: 100vh;
     }
     .list-user {
         padding: 30px 3%;
