@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <Header :title="title" :iconClass="iconClass"/>
-    <b-form @submit="onSubmit" @reset="onReset" v-if="show" class="col-sm-10 col-md-6 mx-auto my-3 bg-light p-3" >
+    <b-form @submit="onSubmit" v-if="show" class="col-sm-10 col-md-6 mx-auto my-3 bg-light p-3" >
       <b-form-group
         id="input-group-1"
         label="Nom d'utilisateur *"
@@ -86,37 +86,43 @@
           email: '',
           password: '',
           confrimPassword: '',
-          checked: []
         },
         selected: [],
         roles: [
-          { text: 'Administrateur', value: 'admin-user' },
-          { text: 'Admin hopital', value: 'admin-hospital' },
+          { text: 'Administrateur', value: 0 },
+          { text: 'Admin hopital', value: 1 },
         ],
         show: true
       }
     },
     methods: {
       onSubmit(event) {
-        event.preventDefault()
-        alert(JSON.stringify(this.form))
+        if (this.password === this.confrimPassword) {
+          axios.post('/api/admin_users', {
+            username: this.form.username,
+            name: this.form.name,
+            roles_id: this.selected,
+            email: this.form.email,
+            password: this.form.password,
+            password_confirmation: this.form.confrimPassword
+          })
+            .then(({data}) => {
+              if (data === null) {
+                console.log('Added')
+              } else {
+                console.log('Error')
+              }
+            })
+            .catch(e => console.log(e))
+        } else {
+
+        }
       },
       validateMail () {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (!re.test(String(this.form.email).toLowerCase())){
           this.validateMailMessage = 'Adresse email incorrecte'
         };
-      },
-      onReset(event) {
-        event.preventDefault()
-        this.form.email = ''
-        this.form.name = ''
-        this.form.food = null
-        this.form.checked = []
-        this.show = false
-        this.$nextTick(() => {
-          this.show = true
-        })
       }
     },
     computed: {
