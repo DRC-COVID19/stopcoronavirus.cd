@@ -232,7 +232,7 @@
           class="map-md"
           v-show="canShowMapMobile"
           :class="`${hasRightSide ? 'col-lg-6' : 'col-lg-12'}`"
-          :style="{ top: mapMdTop }"
+          :style="{ top:isSmOrMd? mapMdTop :0}"
         >
           <div
             class="layer-set-contenair"
