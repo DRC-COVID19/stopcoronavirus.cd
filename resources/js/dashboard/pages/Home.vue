@@ -214,6 +214,7 @@
                     :isLoading="isLoading"
                     :flux30Daily="flux30Daily"
                     :flux30General="flux30General"
+                    :flux30MapsData="flux30MapsData"
                   />
                 </b-tab>
                 <b-tab
