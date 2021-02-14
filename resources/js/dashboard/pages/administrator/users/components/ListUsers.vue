@@ -8,13 +8,13 @@
           placeholder='Filtrer'
         ></b-form-input>
       </b-col>
-      <b-col md="4" class="ml-auto">
+      <!-- <b-col md="4" class="ml-auto">
         <div class="d-flex justify-content-end">
           <b-button class="btn-dash-blue" variant="success">
             <b-link :to="{name:'administrator.users.create'}"><i class="fa fa-plus"></i></b-link>
           </b-button>
         </div>
-      </b-col>
+      </b-col> -->
     </b-row>
     <b-row>
       <b-col>
@@ -49,7 +49,8 @@
     props: {
       users: {
         type: Array,
-        required: true
+        default: () => [],
+        required: false
       }
     },
     data () {

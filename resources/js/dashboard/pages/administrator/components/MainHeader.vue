@@ -10,16 +10,16 @@
         </b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
-            <b-nav-link
+            <b-link
               :class="{ active: activeMenu == 1 }"
               @click="selectMenu(1)"
               :to="{name:'administrator.users'}"
-              >Utilisateurs</b-nav-link>
-            <b-nav-link
+              >Utilisateurs</b-link>
+            <b-link
               :class="{ active: activeMenu == 2 }"
               @click="selectMenu(2)"
               :to="{name:'administrator.epidemie'}"
-              >Situation Epidémiologie</b-nav-link>
+              >Situation Epidémiologie</b-link>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item>
@@ -127,7 +127,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-b-nav-link {
+b-link {
   padding: 10px;
 }
 .header {

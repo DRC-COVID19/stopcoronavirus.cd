@@ -1,17 +1,31 @@
 <template>
-    <div class="main">
+    <b-container fluid>
+    <b-row>
         <Header :title="title" :iconClass="iconClass"/>
+    </b-row>
+        
+        <b-row>
+            <b-col cols="12" md="8">
+                <ListUser :users="users"/>
+            </b-col>
+            <b-col cols="12" md="4">
+                <Create /> 
+            </b-col>
+        </b-row>
+    </b-container>
+    <!-- <div class="main">
+        
         <div class="list-user">
-            <ListUser class="col-md-6" :users="users"/>
-            <Create class="col-md-6" />
+            
+            <Create class="col-md-6" /> 
         </div>
-    </div>
+    </div> -->
 </template>
 
 <script>
     import Header from '../components/Header';
     import ListUser from './components/ListUsers';
-    import Create from './components/ListUsers';
+    import Create from './components/Create';
     export default {
         components: {
             Header,
@@ -24,26 +38,6 @@
                 iconClass: "fa fa-home",
                 isLoading: false,
                 users: [],
-                userDisplay: [
-                    { id: 2, username: 'Dickerson', name: 'Macdonald', role: 'Admin' },
-                    { id: 21, username: 'Larsen', name: 'Shaw', role: 'User' },
-                    { id: 39, username: 'Geneva', name: 'Wilson', role: 'User' },
-                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 89, username: 'Geneva', name: 'Wilson', role: 'Admin' },
-                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 33, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 57, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 78, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 89, username: 'Geneva', name: 'Wilson', role: 'Admin' },
-                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 33, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 57, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 78, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin' },
-                    { id: 38, username: 'Jami', name: 'Carney', role: 'Admin' }
-                ]
             }
         },
         mounted () {
@@ -68,13 +62,9 @@
     }
 </script>
 
-<style>
+<style scoped>
     .main {
         background-color: rgb(235, 245, 255);
-        height: 100vh;
-    }
-    .list-user {
-        padding: 30px 3%;
     }
     .fa-plus {
         color: white;

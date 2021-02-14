@@ -1,13 +1,11 @@
 <template>
-  <div>
-    <div class="main-menu">
+  <b-container fluid>
+
       <MainHeader />
-    </div>
-    <div class="row">
-      <!--<Menu />-->
-      <router-view class="col-sm-12"></router-view>
-    </div>
-  </div>
+    <b-row>
+      <router-view ></router-view>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
