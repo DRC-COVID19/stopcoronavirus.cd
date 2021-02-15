@@ -4,6 +4,7 @@
       <b-col cols="12" md="6">
         <b-form-input
           v-model="filter"
+          class="input-dash"
           type="search"
           placeholder='Filtrer'
         ></b-form-input>

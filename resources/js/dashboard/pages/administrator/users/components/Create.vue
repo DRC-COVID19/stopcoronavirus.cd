@@ -1,14 +1,16 @@
 <template>
   <b-container>
-      <div class="px-5 py-5 main">
+      <div class="px-4 py-4 main">
         <h2 class="h2"> Ajouter un utiisateur</h2>
-        <b-form @submit="onSubmit" v-if="show">
+        <b-form @submit="onSubmit" v-if="show" label-class="text-dash-color">
           <b-form-group
+            label-class="text-dash-color"
             id="input-group-1"
             label="Nom d'utilisateur *"
             label-for="input-1"
           >
             <b-form-input
+              class="input-dash"
               id="input-1"
               v-model="form.username"
               type="text"
@@ -19,9 +21,11 @@
           <b-form-group
             id="input-group-2"
             label="Email address *"
+            label-class="text-dash-color"
             label-for="input-2"
           >
             <b-form-input
+              class="input-dash"
               id="input-2"
               v-model="form.email"
               type="email"
@@ -31,31 +35,31 @@
             ></b-form-input>
           </b-form-group>
           <b-alert show v-if="validateMailMessage !== ''" variant="light">{{validateMailMessage}}</b-alert>
-          <b-form-group id="input-group-3" label="Nom *" label-for="input-3">
+          <b-form-group label-class="text-dash-color" id="input-group-3" label="Nom *" label-for="input-3">
             <b-form-input
               id="input-3"
+              class="input-dash"
               v-model="form.name"
               placeholder="Entrer le nom"
               required
             ></b-form-input>
           </b-form-group>
-          <label for="text-password">Roles *</label>
+          <label class="text-dash-color" for="check-group-1">Roles *</label>
           <b-form-checkbox-group
             id="checkbox-group-1"
             v-model="selected"
             :options="roles"
-            :aria-describedby="ariaDescribedby"
             name="flavour-1"
           ></b-form-checkbox-group>
-          <label for="text-password">Mot de passe *</label>
-          <b-form-input type="password" id="text-password" aria-describedby="password-help-block" v-model="form.password"></b-form-input>
+          <label class="text-dash-color" for="text-password">Mot de passe *</label>
+          <b-form-input class="input-dash" type="password" id="text-password" aria-describedby="password-help-block" v-model="form.password"></b-form-input>
           <b-form-text id="password-help-block">
             Votre mot de passe doit contenir 8 carateres au minimum 
           </b-form-text>
-          <label for="text-password-confirm">Confirmation de mot de passe *</label>
-          <b-form-input type="password" id="text-password-confirm" aria-describedby="password-help-block" v-model="form.confirmPassword"></b-form-input>
+          <label class="text-dash-color" for="text-password-confirm">Confirmation de mot de passe *</label>
+          <b-form-input class="input-dash" type="password" id="text-password-confirm" aria-describedby="password-help-block" v-model="form.confirmPassword"></b-form-input>
           <b-alert show variant="light">{{warningMissMatch}}</b-alert>
-          <b-button type="submit" variant="primary" class="my-2 btn-dash-blue">Enreigistrer</b-button>
+          <b-button type="submit" variant="primary" class="btn-dash-blue">Enreigistrer</b-button>
         </b-form>
       </div>
   </b-container>
@@ -119,8 +123,9 @@
           params: {}
         })
           .then(({data}) => {
-            this.roles = data
-            console.log(this.roles)
+            for (let i = 0; i < data.length;  i++) {
+              this.roles.push(data[i].name)
+            }
           })
           .catch(error => {
             console.log(error);
