@@ -15,6 +15,7 @@ import Landing from './pages/Landing';
 import Administrator from './pages/Administrator';
 import AdminUserIndex from './pages/administrator/users/Index';
 import AdminUserCreate from './pages/administrator/users/Create';
+import PageNotFound from './pages/NotFound';
 
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
@@ -148,5 +149,10 @@ export default [
     meta: {
       requiresAuth: true
     },
+  },
+  {
+    name: "not_found",
+    path: "*",
+    component: PageNotFound
   }
 ];

@@ -1,8 +1,10 @@
 @import "variables";
+@import "animate";
 @import "mixins";
 @import url("https://fonts.googleapis.com/css2?family=Rubik");
 @import "node_modules/bootstrap/scss/bootstrap";
 @import "node_modules/bootstrap-vue/src/index.scss";
+@import "~timeline-vuejs/dist/timeline-vuejs.css";
 @import "vue-select/src/scss/vue-select.scss";
 @import "~@fortawesome/fontawesome-free";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
@@ -21,6 +23,7 @@
 @import "mapsLegend";
 @import "form_controls";
 @import "fullscreen";
+@import "apropos";
 @import url("https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css");
 body {
   font-family: $font-family-base;

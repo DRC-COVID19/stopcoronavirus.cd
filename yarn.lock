@@ -8556,6 +8556,13 @@ thunky@^1.0.2:
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.1.0.tgz#5abaf714a9405db0504732bbccd2cedd9ef9537d"
   integrity sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==
 
+timeline-vuejs@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/timeline-vuejs/-/timeline-vuejs-1.1.7.tgz#56b5c242fbf15cd477171836fb2802c8b57a1bae"
+  integrity sha512-YZ4R0fw/ETpVkFrNImXWgtJDiIvi3aPDByRcRMVAkm1TiI927OoOmPvsK8vTG5exB69UG5KxKgNdj6ucoWW3RQ==
+  dependencies:
+    vue "^2.5.17"
+
 timers-browserify@^2.0.4:
   version "2.0.11"
   resolved "https://registry.yarnpkg.com/timers-browserify/-/timers-browserify-2.0.11.tgz#800b1f3eee272e5bc53ee465a04d0e804c31211f"
@@ -9045,7 +9052,7 @@ vue2-daterange-picker@^0.6.3:
   dependencies:
     vue "^2.6.10"
 
-vue@^2.0.0, vue@^2.5.2, vue@^2.6.10, vue@^2.6.11:
+vue@^2.0.0, vue@^2.5.17, vue@^2.5.2, vue@^2.6.10, vue@^2.6.11:
   version "2.6.12"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
   integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==

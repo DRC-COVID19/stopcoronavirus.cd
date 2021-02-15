@@ -2,8 +2,7 @@
   <div class="apropos">
     <b-card no-body class="default-card">
       <b-tabs pills card vertical>
-
-        <b-tab title="Mobilité" active>
+        <!-- <b-tab title="Mobilité" active>
             <b-row>
               <b-col cols="12" md="6">
                 <b-card class="default-card">
@@ -280,11 +279,37 @@
                 </b-card>
               </b-col>
             </b-row>
+        </b-tab> -->
+
+        <b-tab title="Change log">
+          <b-row>
+            <b-col cols="12" md="12">
+              <b-card class="default-card">
+                <Timeline
+                  :timeline-items="timelineItems"
+                  :message-when-no-items="messageWhenNoItems"
+                  dateLocale="fr-fr"
+                  class="timeline"
+                />
+              </b-card>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="d-flex justify-content-end" >
+              <b-pagination
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+                aria-controls="my-table"
+
+              ></b-pagination>
+            </b-col>
+          </b-row>
         </b-tab>
       </b-tabs>
     </b-card>
 
-     <b-modal id="modal-img" centered hide-footer>
+    <b-modal id="modal-img" centered hide-footer>
       <div class="text-center wrapper-img-modal">
         <img :src="modalSourceImg" class="img-capture" alt />
       </div>
@@ -293,80 +318,61 @@
 </template>
 
 <script>
+import Timeline from "timeline-vuejs";
 export default {
-  data(){
+  components: {
+    Timeline,
+  },
+  data() {
     return {
-      modalSourceImg : null
-    }
+      modalSourceImg: null,
+      messageWhenNoItems: "There are not items",
+      currentPage: 1,
+      rows: 10,
+      perPage: 1,
+      timelineItems: [
+        {
+          from: new Date(2018, 7),
+          title: "Name",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+          showDayAndMonth: true,
+        },
+
+        {
+          from: new Date(2016, 1),
+          title: "Name",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+          showDayAndMonth: true,
+        },
+        {
+          from: new Date(2016, 6),
+          title: "Name",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+          showDayAndMonth: true,
+        },
+        {
+          from: new Date(2012, 1),
+          title: "Name",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+          showDayAndMonth: true,
+        },
+      ],
+    };
   },
   methods: {
-    showModal(e){
-      console.log(e)
-      this.modalSourceImg = e.target.src
-      this.$bvModal.show('modal-img')
-    }
+    showModal(e) {
+      console.log(e);
+      this.modalSourceImg = e.target.src;
+      this.$bvModal.show("modal-img");
+    },
   },
-}
+};
 </script>
 
-<style lang="scss">
-  @import "@~/sass/_variables";
-  html{
-    background-color: $dash-background ;
-  }
-  .apropos{
-    height : 100vh ;
-    .nav-pills .nav-link{
-      text-decoration: none ;
-      color : $dash-text-100 ;
-      &.active{
-        background-color: $dash-blue;
-        color : white ;
-      }
-    }
-    .tab-content{
-      background-color: #eef2ff;
-       > .tab-pane {
-        padding-top: 0.75rem;
-      }
-      .row{
-        justify-content: left;
-        >div{
-          margin-bottom: 30px;
-          display: flex;
-        }
-      }
-      .img-capture-wrapper{
-        overflow: hidden;
-        float: right ;
-        margin-left: 20px;
-        margin-bottom: 10px;
-        .img-capture{
-          width : 150px ;
-          cursor: zoom-in;
-          transition: 0.3s ease-in-out;
-          transform-origin: center;
-          &:hover{
-            opacity: 0.6;
-            transform: scale(1.1);
-          }
-        }
-      }
-    }
-  }
-  .wrapper-img-modal{
-    width: max-content;
-    margin: auto;
-    img{
-      max-width: 900px;
-    }
-  }
-  .modal-dialog {
-    max-width: 1000px !important;
-    width: max-content;
-    min-width: 500px;
-  }
-  .modal-header .close:focus{
-    outline: none;
-  }
+<style lang="scss" scoped >
+@import "@~/sass/_variables";
 </style>

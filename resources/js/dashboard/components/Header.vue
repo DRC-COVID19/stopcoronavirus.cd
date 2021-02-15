@@ -32,9 +32,63 @@
               >Infrastructures</b-nav-item
             >
             <!-- <b-nav-item :class="{'active':activeMenu==6}" @click="selectMenu(6)">Orientation</b-nav-item> -->
-            <!-- <b-nav-item :class="{'active':activeMenu==7}" @click="selectMenu(7)">A propos</b-nav-item> -->
+            <b-nav-item
+              :class="{ active: activeMenu == 7 }"
+              @click="selectMenu(7)"
+              >A propos</b-nav-item
+            >
           </b-navbar-nav>
-          <b-navbar-nav class="ml-auto">
+          <b-navbar-nav class="ml-auto" align="center">
+            <li class="position-relative nav-item d-flex align-items-center">
+              <a
+                class="nav-link"
+                href="#"
+                @click.prevent="toggleHeaderNotification"
+                v-click-outside="clickOutsideNotification"
+              >
+                <div
+                  class="icon-hallo d-flex justify-content-center align-items-center"
+                >
+                  <i class="fas fa-bell"></i>
+                </div>
+
+                <span class="notification-count">8</span>
+              </a>
+              <div class="dropdown-nav" v-show="showHeaderNotification">
+                <div class="item-header">
+                  <h6 class="item-title">Change log</h6>
+                </div>
+                <div class="item-content">
+                  <div class="media">
+                    <div class="item-icon bg-skyblue">
+                      <i class="fas fa-history"></i>
+                    </div>
+                    <div class="media-body space-sm">
+                      <div class="post-title">Complete Today Task</div>
+                      <span>1 Mins ago</span>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="item-icon bg-orange">
+                      <i class="fas fa-history"></i>
+                    </div>
+                    <div class="media-body space-sm">
+                      <div class="post-title">Director Metting</div>
+                      <span>20 Mins ago</span>
+                    </div>
+                  </div>
+                  <div class="media">
+                    <div class="item-icon bg-violet-blue">
+                      <i class="fas fa-history"></i>
+                    </div>
+                    <div class="media-body space-sm">
+                      <div class="post-title">Update Password</div>
+                      <span>45 Mins ago</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
             <b-nav-item>
               <div
                 class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
@@ -106,6 +160,7 @@ export default {
   data() {
     return {
       showUserCard: false,
+      showHeaderNotification: false,
     };
   },
   computed: {
@@ -133,6 +188,14 @@ export default {
     selectMenu(value) {
       this.setActiveMenu(value);
     },
+    toggleHeaderNotification() {
+      this.showHeaderNotification = !this.showHeaderNotification;
+    },
+    clickOutsideNotification() {
+      if (this.showHeaderNotification) {
+        this.showHeaderNotification = false;
+      }
+    },
   },
 };
 </script>
@@ -141,8 +204,82 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .header {
+  a {
+    text-decoration: none;
+  }
   background: white;
+
   border-bottom: 1px solid $dash-shadow-color;
+  .icon-hallo {
+    width: 30px;
+    height: 30px;
+    background: $dash-background;
+    border-radius: 50px;
+  }
+  .notification-count {
+    position: absolute;
+    top: 0px;
+    right: -1px;
+    height: 20px;
+    width: 20px;
+    color: #ffffff;
+    font-size: 0.8rem;
+    background-color: #ff3131;
+    border-radius: 50%;
+    display: block;
+    text-align: center;
+  }
+  .dropdown-nav {
+    position: absolute;
+    top: 55px;
+    min-width: 300px;
+    padding: 0;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px 0px rgb(33 30 30 / 15%);
+    animation: dropdownanimate 200ms ease-in;
+    z-index: 20;
+    background-color: #fff;
+    :after {
+      content: "";
+      height: 0;
+      width: 0;
+      border-bottom: 10px solid $dash-blue;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      position: absolute;
+      top: -8px;
+      left: 14px;
+    }
+    .item-header {
+      text-align: center;
+      background-color: $dash-blue;
+      padding: 20px 25px;
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      .item-title {
+        margin-bottom: 0;
+        color: #fff;
+      }
+    }
+    .item-content {
+      padding: 20px 25px;
+      .media {
+        border-bottom: 1px solid #eaeaea;
+        padding-bottom: 14px;
+        margin-bottom: 18px;
+        .item-icon {
+          height: 30px;
+          width: 30px;
+          border-radius: 50%;
+          line-height: 31px;
+          text-align: center;
+        }
+        .media-body.space-sm {
+          margin-left: 15px;
+        }
+      }
+    }
+  }
 
   .title {
     font-size: 20px;

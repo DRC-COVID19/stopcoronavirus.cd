@@ -18,6 +18,7 @@ import VueSkeletonLoading from 'vue-skeleton-loading';
 import VueGtag from "vue-gtag";
 import VueMq from 'vue-mq'
 
+import './directive';
 require('./helper');
 
 Vue.use(BootstrapVue);

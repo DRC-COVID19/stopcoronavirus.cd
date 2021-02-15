@@ -39,6 +39,7 @@
         "mapbox-gl": "^1.10.1",
         "mapbox-gl-utils": "^0.32.1",
         "moment": "^2.26.0",
+        "timeline-vuejs": "^1.1.7",
         "vue": "^2.6.11",
         "vue-airbnb-style-datepicker": "^2.7.1",
         "vue-analytics": "^5.22.1",
