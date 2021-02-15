@@ -1,20 +1,20 @@
 <template>
-  <div>
-    <b-row class="my-3 d-flex space-between">
-      <b-col md="4" class="">
+  <div class="px-5">
+    <b-row class="my-3 d-flex justif-content-start">
+      <b-col cols="12" md="6">
         <b-form-input
           v-model="filter"
           type="search"
           placeholder='Filtrer'
         ></b-form-input>
       </b-col>
-      <!-- <b-col md="4" class="ml-auto">
-        <div class="d-flex justify-content-end">
+      <b-col cols="12" md="6" class="ml-auto">
+         <!-- <div class="d-flex justify-content-end">
           <b-button class="btn-dash-blue" variant="success">
             <b-link :to="{name:'administrator.users.create'}"><i class="fa fa-plus"></i></b-link>
           </b-button>
-        </div>
-      </b-col> -->
+        </div> -->
+      </b-col>
     </b-row>
     <b-row>
       <b-col>

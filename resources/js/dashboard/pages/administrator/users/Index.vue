@@ -1,25 +1,18 @@
 <template>
-    <b-container fluid>
-    <b-row>
-        <Header :title="title" :iconClass="iconClass"/>
-    </b-row>
-        
+    <b-container  fluid>
+            
         <b-row>
             <b-col cols="12" md="8">
+                <b-row class="d-flex justify-content-start">
+                    <Header :title="title" :iconClass="iconClass"/>
+                </b-row>
                 <ListUser :users="users"/>
             </b-col>
-            <b-col cols="12" md="4">
+            <b-col cols="12" md="4" class="mt-5">
                 <Create /> 
             </b-col>
         </b-row>
     </b-container>
-    <!-- <div class="main">
-        
-        <div class="list-user">
-            
-            <Create class="col-md-6" /> 
-        </div>
-    </div> -->
 </template>
 
 <script>
@@ -62,10 +55,8 @@
     }
 </script>
 
-<style scoped>
-    .main {
-        background-color: rgb(235, 245, 255);
-    }
+<style lang='scss' scoped>
+    @import "@~/sass/_variables";
     .fa-plus {
         color: white;
         font-size: 14px;

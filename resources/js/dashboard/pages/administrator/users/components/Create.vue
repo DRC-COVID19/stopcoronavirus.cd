@@ -1,6 +1,7 @@
 <template>
   <b-container>
-      <div class="main">
+      <div class="px-5 py-5 main">
+        <h2 class="h2"> Ajouter un utiisateur</h2>
         <b-form @submit="onSubmit" v-if="show">
           <b-form-group
             id="input-group-1"
@@ -134,6 +135,13 @@
   }
 </script>
 
-<style>
-
+<style lang='scss' scoped>
+  @import "@~/sass/_variables";
+  .main {
+    background-color: white;
+    border-radius: 10px;
+    h2 {
+      margin-bottom: 20px;  
+    }
+  }
 </style>

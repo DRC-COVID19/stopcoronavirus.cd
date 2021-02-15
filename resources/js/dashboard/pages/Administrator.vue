@@ -1,6 +1,5 @@
 <template>
-  <b-container fluid>
-
+  <b-container fluid class="main">
       <MainHeader />
     <b-row>
       <router-view ></router-view>
@@ -20,9 +19,9 @@
 </script>
 
 <style lang='scss' scoped >
-  .main-menu {
-    @media screen and (max-width: 576px) {
-      display: none;
-    }
+  @import "@~/sass/_variables";
+  .main {
+    background-color: $dash-background;
+    height: 100vh;
   }
 </style>
