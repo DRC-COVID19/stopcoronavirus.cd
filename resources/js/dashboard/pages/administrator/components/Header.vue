@@ -19,7 +19,7 @@
   }
 </script>
 
-<style>
+<style lang='scss' scoped>
   .header_d {
     margin: 20px 2% 10px 2%;
     padding: 10px;

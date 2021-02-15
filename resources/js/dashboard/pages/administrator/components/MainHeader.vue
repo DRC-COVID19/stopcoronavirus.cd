@@ -1,7 +1,7 @@
 <template>
   <b-row class="header">
     <b-col cols="12" class="map-form-header">
-            <b-navbar toggleable="lg" type="light">
+        <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
           <h1 class="title m-0">Dashboard Covid-19</h1>
         </b-navbar-brand>
@@ -11,11 +11,13 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
             <b-link
+              class="mx-2"
               :class="{ active: activeMenu == 1 }"
               @click="selectMenu(1)"
               :to="{name:'administrator.users'}"
               >Utilisateurs</b-link>
             <b-link
+              class="mx-2"
               :class="{ active: activeMenu == 2 }"
               @click="selectMenu(2)"
               :to="{name:'administrator.epidemie'}"
@@ -138,6 +140,9 @@ b-link {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+  }
+  b-link {
+    margin: auto 30px;
   }
   .nav-container {
     a {
