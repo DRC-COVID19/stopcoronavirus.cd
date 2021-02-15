@@ -37,6 +37,11 @@
             <!--<b-button variant="danger" @click="deleteUser(data.item.id)" class="btn-remove"><i class="fas fa-user-times"></i></b-button>
             <b-button variant="primary" @click="deleteUser(data.item.id)" class="btn-edit"><i class="fas fa-user-edit"></i></b-button>-->
           </template>
+          <template 
+            v-slot:cell(role)="data"
+          >
+            <b-badge variant="secondary">{{data.value.name}}</b-badge>
+          </template>
         </b-table>
         <b-pagination v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>
       </b-col>
@@ -83,6 +88,9 @@
 </script>
 <style lang='scss' scoped>
   @import "@~/sass/_variables";
+  i {
+    margin-left: 10px;
+  }
   .fa-user-times {
     color: $dash-red;
     font-size: 16px;
