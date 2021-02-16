@@ -57,7 +57,7 @@
           <b-button type="submit" variant="primary" class="btn-dash-blue">Enreigistrer</b-button>
         </b-form>
       </div>
-      <b-alert show="showWarnig" variant="light"><i class="minus-circle"></i> Veuillez entrer des donnees correctes</b-alert>
+      <b-alert :show="showWarnig" variant="light"><i class="minus-circle"></i> Veuillez entrer des donnees correctes</b-alert>
   </b-container>
 </template>
 
@@ -93,6 +93,11 @@
       this.getUserRoles(),
       this.resetForm ()
     },
+    watch: {
+      userAdded() {
+        this.resetForm()
+      }
+    },
     methods: {
       onSubmit(event) {
         if (this.form.password === this.form.confirmPassword && this.form.roles.length !== 0) {
@@ -120,12 +125,7 @@
       },
       resetForm () {
         if (this.userAdded) {
-          this.form.username= ''
-          this.form.name= ''
-          this.form.roles= []
-          this.form.email= ''
-          this.form.password= ''
-          this.form.confirmPassword= ''
+          this.form = {}
         }
       }
     },
