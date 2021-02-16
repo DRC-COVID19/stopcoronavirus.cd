@@ -214,6 +214,7 @@
                     :isLoading="isLoading"
                     :flux30Daily="flux30Daily"
                     :flux30General="flux30General"
+                    :flux30MapsData="flux30MapsData"
                   />
                 </b-tab>
                 <b-tab
@@ -232,7 +233,7 @@
           class="map-md"
           v-show="canShowMapMobile"
           :class="`${hasRightSide ? 'col-lg-6' : 'col-lg-12'}`"
-          :style="{ top: mapMdTop }"
+          :style="{ top:isSmOrMd? mapMdTop :0}"
         >
           <div
             class="layer-set-contenair"
@@ -1516,7 +1517,12 @@ export default {
       }
 
       urlMaps += `/maps`;
-      urlDaily += `/daily`;
+      if (values.observation_start==values.observation_end) {
+        urlDaily += `/daily`;
+      }else{
+        urlDaily += `/daily-date`;
+      }
+
       urlTendance += `/tendance`;
       urlGeneral += `/general`;
 

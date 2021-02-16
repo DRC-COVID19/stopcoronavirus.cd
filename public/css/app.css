@@ -18435,6 +18435,7 @@ h3 {
   background: rgba(224, 231, 255, 0.2);
   height: 32px;
   font-size: 0.85rem;
+  border-color: #E0E7FF;
 }
 
 .side-bottom .canva-chart {
