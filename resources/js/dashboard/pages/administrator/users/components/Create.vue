@@ -62,11 +62,19 @@
           <b-button type="submit" variant="primary" class="btn-dash-blue">Enreigistrer</b-button>
         </b-form>
       </div>
+      <b-alert show="showWarnig" variant="light"><i class="minus-circle"></i> Veuillez entrer des donnees correctes</b-alert>
   </b-container>
 </template>
 
 <script>
   export default {
+    props : {
+      userAdded: {
+        type: Boolean,
+        required: false,
+        default: () => false
+      }
+    },
     data() {
       return {
         title: "Creation d'un utilisateur",
@@ -81,20 +89,21 @@
           password: '',
           confirmPassword: '',
         },
-        // roles: [],
-        show: true
+        show: true,
+        showWarning: false
       }
     },
     mounted () {
       // Fetch the user roles
-      this.getUserRoles()
+      this.getUserRoles(),
+      this.resetForm ()
     },
     methods: {
       onSubmit(event) {
-        if (this.password === this.confrimPassword) {
+        if (this.form.password === this.form.confirmPassword && this.form.selected.length !== 0) {
           this.$emit('onCreate', this.form)
         } else {
-          
+          this.showWarning = true
         }
       },
       validateMail () {
@@ -115,6 +124,17 @@
           .catch(error => {
             console.log(error);
           })
+      },
+      resetForm () {
+        if (this.userAdded) {
+          this.form.username= ''
+          this.form.name= ''
+          this.form.roles= []
+          this.form.selected= []
+          this.form.email= ''
+          this.form.password= ''
+          this.form.confirmPassword= ''
+        }
       }
     },
     computed: {

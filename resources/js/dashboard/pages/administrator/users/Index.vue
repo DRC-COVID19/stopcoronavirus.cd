@@ -9,9 +9,10 @@
                 <ListUser :users="users"/>
             </b-col>
             <b-col cols="12" md="4" class="mt-5">
-                <Create @onCreate='createUser' /> 
+                <Create @onCreate='createUser' :userAdded="userAdded" /> 
             </b-col>
         </b-row>
+        <Waiting v-if="isLoading" />
     </b-container>
 </template>
 
@@ -19,10 +20,12 @@
     import Header from '../components/Header';
     import ListUser from './components/ListUsers';
     import Create from './components/Create';
+    import Waiting from "../../../components/Waiting";
     export default {
         components: {
             Header,
             Create,
+            Waiting,
             ListUser
         },
         data () {
@@ -31,6 +34,7 @@
                 iconClass: "fa fa-home",
                 isLoading: false,
                 users: [],
+                userAdded: false
             }
         },
         mounted () {
@@ -38,7 +42,22 @@
         },
         methods: {
             createUser(form) {
-                console.log(form)
+                console.log('processing')
+                this.isLoading = true
+                axios.post('/api/admin_user', {
+                    username: form.username,
+                    name: form.name,
+                    password: form.password,
+                    password_confirmation: from.confirmPassword,
+                    email: form.email,
+                    role_id: form.selected
+                })
+                    .then(({data}) => {
+                        console.log('success')
+                        this.userAdded = true
+                        this.isLoading = false
+                    })
+                    .catch((e) => console.log(e))
             },
             getUserList (page = 1) {
                 this.isLoading = true
