@@ -51,7 +51,7 @@
         },
         methods: {
             createUser(form) {
-                console.log('processing')
+                this.userAdded = false
                 this.isLoading = true
                 axios.post('/api/admin_users', {
                     username: form.username,
@@ -65,6 +65,7 @@
                     this.userAdded = true
                     this.isLoading = false
                     this.showSuccess=true
+                    this.getUserList(1)
                 })
                 .catch((response) => {
                     console.log('response',response);
