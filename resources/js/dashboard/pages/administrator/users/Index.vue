@@ -9,7 +9,7 @@
                 <ListUser :users="users"/>
             </b-col>
             <b-col cols="12" md="4" class="mt-5">
-                <Create /> 
+                <Create @onCreate='createUser' /> 
             </b-col>
         </b-row>
     </b-container>
@@ -37,6 +37,9 @@
             this.getUserList()
         },
         methods: {
+            createUser(form) {
+                console.log(form)
+            },
             getUserList (page = 1) {
                 this.isLoading = true
                 axios.get('/api/admin_users', {

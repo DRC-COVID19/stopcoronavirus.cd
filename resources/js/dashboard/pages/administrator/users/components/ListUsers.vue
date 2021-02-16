@@ -34,8 +34,6 @@
           >
             <i @click="deleteUser(data.item.id)" class="fas fa-user-times"></i>
             <i @click="updateUser(data.item.id)" class="fas fa-user-edit"></i>
-            <!--<b-button variant="danger" @click="deleteUser(data.item.id)" class="btn-remove"><i class="fas fa-user-times"></i></b-button>
-            <b-button variant="primary" @click="deleteUser(data.item.id)" class="btn-edit"><i class="fas fa-user-edit"></i></b-button>-->
           </template>
           <template 
             v-slot:cell(role)="data"

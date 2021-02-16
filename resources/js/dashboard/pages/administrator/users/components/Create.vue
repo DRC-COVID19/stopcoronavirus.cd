@@ -2,7 +2,7 @@
   <b-container>
       <div class="px-4 py-4 main">
         <h2 class="h2"> Ajouter un utiisateur</h2>
-        <b-form @submit="onSubmit" v-if="show" label-class="text-dash-color">
+        <b-form @submit.prevent="onSubmit" v-if="show" label-class="text-dash-color">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-1"
@@ -47,8 +47,8 @@
           <label class="text-dash-color" for="check-group-1">Roles *</label>
           <b-form-checkbox-group
             id="checkbox-group-1"
-            v-model="selected"
-            :options="roles"
+            v-model="form.selected"
+            :options="form.roles"
             name="flavour-1"
           ></b-form-checkbox-group>
           <label class="text-dash-color" for="text-password">Mot de passe *</label>
@@ -76,12 +76,12 @@
           username: '',
           name: '',
           roles: [],
+          selected: [],
           email: '',
           password: '',
-          confrimPassword: '',
+          confirmPassword: '',
         },
-        selected: [],
-        roles: [],
+        // roles: [],
         show: true
       }
     },
@@ -92,24 +92,9 @@
     methods: {
       onSubmit(event) {
         if (this.password === this.confrimPassword) {
-          axios.post('/api/admin_users', {
-            username: this.form.username,
-            name: this.form.name,
-            roles_id: this.selected,
-            email: this.form.email,
-            password: this.form.password,
-            password_confirmation: this.form.confrimPassword
-          })
-            .then(({data}) => {
-              if (data === null) {
-                console.log('Added')
-              } else {
-                console.log('Error')
-              }
-            })
-            .catch(e => console.log(e))
+          this.$emit('onCreate', this.form)
         } else {
-
+          
         }
       },
       validateMail () {
@@ -124,7 +109,7 @@
         })
           .then(({data}) => {
             for (let i = 0; i < data.length;  i++) {
-              this.roles.push(data[i].name)
+              this.form.roles.push(data[i].id)
             }
           })
           .catch(error => {
@@ -134,7 +119,7 @@
     },
     computed: {
       warningMissMatch () {
-        return this.form.password === this.form.confrimPassword ? '' : 'Les mot de passes ne correspondent pas'
+        return this.form.password === this.form.confirmPassword ? '' : 'Les mot de passes ne correspondent pas'
       }
     }
   }
