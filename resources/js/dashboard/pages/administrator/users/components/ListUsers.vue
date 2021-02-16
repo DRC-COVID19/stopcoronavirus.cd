@@ -39,7 +39,7 @@
           <template 
             v-slot:cell(role)="data"
           >
-            <b-badge class="mx-1" v-for="(role, index) in data.item.roles" variant="secondary" :key="index">{{role.name}}</b-badge>
+            <b-badge class="mx-1 my-1" v-for="(role, index) in data.item.roles" variant="secondary" :key="index">{{role.name}}</b-badge>
           </template>
         </b-table>
         <b-pagination page-class="text-blue-dash" v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>

@@ -9,6 +9,16 @@
                 <ListUser :users="users"/>
             </b-col>
             <b-col cols="12" md="4" class="mt-5">
+                <b-alert
+                    variant="success" 
+                    :show="showSuccess" 
+                    dismissible 
+                    fade 
+                    @dismiss-count-down="timeOut" 
+                    class="mx-3"
+                >
+                    Utilisateur cree avec success
+                </b-alert>
                 <Create @onCreate='createUser' :userAdded="userAdded" /> 
             </b-col>
         </b-row>
@@ -31,7 +41,9 @@
                 iconClass: "fa fa-home",
                 isLoading: false,
                 users: [],
-                userAdded: false
+                userAdded: false,
+                showSuccess: false,
+                timeOut: 3
             }
         },
         mounted () {
@@ -52,7 +64,7 @@
                 .then(({data}) => {
                     this.userAdded = true
                     this.isLoading = false
-                    alert('Utilisateur enreigistrE avec succes')
+                    this.showSuccess=true
                 })
                 .catch((response) => {
                     console.log('response',response);
@@ -64,7 +76,6 @@
                     params: {page}
                 })
                     .then(({data}) => {
-                        console.log(data.data)
                         this.users = data.data
                         this.isLoading = false
                     })
