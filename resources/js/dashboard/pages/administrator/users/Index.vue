@@ -47,14 +47,16 @@
                     password: form.password,
                     password_confirmation: form.confirmPassword,
                     email: form.email,
-                    role_id: form.selected
+                    role_id: form.roles
                 })
-                    .then(({data}) => {
-                        console.log('success')
-                        this.userAdded = true
-                        this.isLoading = false
-                    })
-                    .catch((e) => console.log(e))
+                .then(({data}) => {
+                    console.log('success')
+                    this.userAdded = true
+                    this.isLoading = false
+                })
+                .catch((response) => {
+                    console.log('response',response);
+                })
             },
             getUserList (page = 1) {
                 this.isLoading = true

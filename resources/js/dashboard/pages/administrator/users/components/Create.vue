@@ -45,12 +45,7 @@
             ></b-form-input>
           </b-form-group>
           <label class="text-dash-color" for="check-group-1">Roles *</label>
-          <b-form-checkbox-group
-            id="checkbox-group-1"
-            v-model="form.selected"
-            :options="form.roles"
-            name="flavour-1"
-          ></b-form-checkbox-group>
+          <v-select v-model="form.roles" multiple :options="roles" label="name" :reduce="item=>item.id" />
           <label class="text-dash-color" for="text-password">Mot de passe *</label>
           <b-form-input class="input-dash" type="password" id="text-password" aria-describedby="password-help-block" v-model="form.password"></b-form-input>
           <b-form-text id="password-help-block">
@@ -84,13 +79,13 @@
           username: '',
           name: '',
           roles: [],
-          selected: [],
           email: '',
           password: '',
           confirmPassword: '',
         },
         show: true,
-        showWarning: false
+        showWarning: false,
+        roles:[]
       }
     },
     mounted () {
@@ -100,7 +95,7 @@
     },
     methods: {
       onSubmit(event) {
-        if (this.form.password === this.form.confirmPassword && this.form.selected.length !== 0) {
+        if (this.form.password === this.form.confirmPassword && this.form.roles.length !== 0) {
           this.$emit('onCreate', this.form)
         } else {
           this.showWarning = true
@@ -117,9 +112,7 @@
           params: {}
         })
           .then(({data}) => {
-            for (let i = 0; i < data.length;  i++) {
-              this.form.roles.push(data[i].id)
-            }
+            this.roles=data;
           })
           .catch(error => {
             console.log(error);
@@ -130,7 +123,6 @@
           this.form.username= ''
           this.form.name= ''
           this.form.roles= []
-          this.form.selected= []
           this.form.email= ''
           this.form.password= ''
           this.form.confirmPassword= ''
