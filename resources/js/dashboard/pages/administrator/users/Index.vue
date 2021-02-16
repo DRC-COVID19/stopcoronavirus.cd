@@ -47,12 +47,12 @@
                     password: form.password,
                     password_confirmation: form.confirmPassword,
                     email: form.email,
-                    role_id: form.roles
+                    roles_id: form.roles
                 })
                 .then(({data}) => {
-                    console.log('success')
                     this.userAdded = true
                     this.isLoading = false
+                    alert('Utilisateur enreigistrE avec succes')
                 })
                 .catch((response) => {
                     console.log('response',response);
