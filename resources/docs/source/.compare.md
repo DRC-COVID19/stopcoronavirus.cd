@@ -2,6 +2,7 @@
 title: API Reference
 
 language_tabs:
+- javascript
 
 includes:
 
@@ -25,6 +26,25 @@ Welcome to the generated API reference.
 
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_roles"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -53,6 +73,25 @@ Welcome to the generated API reference.
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_roles"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -66,6 +105,25 @@ Welcome to the generated API reference.
 
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_roles/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -88,6 +146,25 @@ Welcome to the generated API reference.
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_roles/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -103,6 +180,25 @@ Welcome to the generated API reference.
 
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_roles/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 
@@ -120,6 +216,25 @@ Welcome to the generated API reference.
 
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -182,6 +297,35 @@ Welcome to the generated API reference.
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "username": "architecto",
+    "password": "vero",
+    "password_confirmation": "aut",
+    "name": "quibusdam",
+    "email": "temporibus",
+    "roles_id": []
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (201):
 
@@ -216,6 +360,25 @@ Parameter | Type | Status | Description
 
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -254,7 +417,7 @@ Parameter | Type | Status | Description
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `admin_users` |  required  | The ID of the post
+    `admin_users` |  required  | The ID of the admin_users
 
 <!-- END_77d0a2d5bb8f4587de5f705abe169e91 -->
 
@@ -263,6 +426,34 @@ Parameter | Status | Description
 
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "username": "labore",
+    "password": "ut",
+    "name": "praesentium",
+    "email": "illum",
+    "roles_id": []
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -310,7 +501,7 @@ Parameter | Status | Description
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `admin_users` |  required  | The ID of the post.
+    `admin_users` |  required  | The ID of the admin_users.
 #### Body Parameters
 Parameter | Type | Status | Description
 --------- | ------- | ------- | ------- | -----------
@@ -328,7 +519,38 @@ Parameter | Type | Status | Description
 <br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/admin_users/1"
+);
 
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+null
+```
+> Example response (401):
+
+```json
+{
+    "message": "Unauthenticated"
+}
+```
 
 ### HTTP Request
 `DELETE api/admin_users/{admin_user}`
@@ -337,7 +559,7 @@ Parameter | Type | Status | Description
 
 Parameter | Status | Description
 --------- | ------- | ------- | -------
-    `admin_users` |  required  | The ID of the post
+    `admin_users` |  required  | The ID of the admin_users
 
 <!-- END_3c2aaa798572fdf62053d5cf4eb65ace -->
 
@@ -349,6 +571,25 @@ APIs for managing users Auth
 ## Get a JWT token via given credentials.
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/login"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 
@@ -363,6 +604,25 @@ APIs for managing users Auth
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/logout"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -375,6 +635,25 @@ APIs for managing users Auth
 ## Refresh a token.
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/refresh"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 
@@ -389,6 +668,25 @@ APIs for managing users Auth
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/me"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -401,6 +699,25 @@ APIs for managing users Auth
 ## api/dashboard/auth/lost-password
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/lost-password"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -412,6 +729,25 @@ APIs for managing users Auth
 <!-- START_26d65dc82ba5f697509288fb8771a15c -->
 ## api/dashboard/auth/check-token/{token}
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/check-token/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (410):
@@ -432,6 +768,25 @@ APIs for managing users Auth
 ## api/dashboard/auth/reset-password/{user_id}
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/reset-password/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -439,6 +794,294 @@ APIs for managing users Auth
 
 
 <!-- END_0f4c99b97ea7c2a47962807aca43f9e8 -->
+
+#PandemicStat management
+
+
+<!-- START_899a7c38cc8e101353d8be8601041afe -->
+## api/pandemic-stats
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/pandemic-stats"
+);
+
+let params = {
+    "order": "exercitationem",
+};
+Object.keys(params)
+    .forEach(key => url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "data": [
+        {
+            "id": 6,
+            "confirmed": 1,
+            "sick": null,
+            "seriously": null,
+            "healed": null,
+            "dead": null,
+            "imported": null,
+            "local": null,
+            "last_update": "2020-03-10 00:00:00",
+            "created_at": "2020-03-27T01:53:25.000000Z",
+            "updated_at": "2020-03-27T01:53:25.000000Z"
+        }
+    ],
+    "links": {
+        "first": "http:\/\/localhost:8000\/api\/pandemic-stats?page=1",
+        "last": "http:\/\/localhost:8000\/api\/pandemic-stats?page=19",
+        "prev": null,
+        "next": "http:\/\/localhost:8000\/api\/pandemic-stats?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 19,
+        "path": "http:\/\/localhost:8000\/api\/pandemic-stats",
+        "per_page": 15,
+        "to": 15,
+        "total": 281
+    }
+}
+```
+
+### HTTP Request
+`GET api/pandemic-stats`
+
+#### Query Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -----------
+    `order` |  optional  | optional default ASC last_update order
+
+<!-- END_899a7c38cc8e101353d8be8601041afe -->
+
+<!-- START_93c494ef5765386d61f789a6744ac5d4 -->
+## Store a newly created admin_users in storage.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/pandemic-stats"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "confirmed": 19,
+    "local": 11,
+    "imported": 15,
+    "sick": 13,
+    "seriously": 7,
+    "healed": 18,
+    "dead": 6,
+    "last_update": "inventore"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (201):
+
+```json
+null
+```
+> Example response (422):
+
+```json
+{
+    "message": "The given data was invalid.",
+    "errors": {
+        "last_update": [
+            "La valeur du champ last update est déjà utilisée."
+        ]
+    }
+}
+```
+
+### HTTP Request
+`POST api/pandemic-stats`
+
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `confirmed` | integer |  optional  | optional confirmed.
+        `local` | integer |  optional  | optional local
+        `imported` | integer |  optional  | optional imported
+        `sick` | integer |  optional  | optional sick
+        `seriously` | integer |  optional  | optional seriously
+        `healed` | integer |  optional  | optional healed
+        `dead` | integer |  optional  | optional dead
+        `last_update` | Date |  optional  | required|unique last_update
+    
+<!-- END_93c494ef5765386d61f789a6744ac5d4 -->
+
+<!-- START_565517e1afaf7d3185e01454eb9bf3c0 -->
+## Display a PandemicStat by id.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/pandemic-stats/consequatur"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "id": 17,
+    "confirmed": 109,
+    "sick": 97,
+    "seriously": null,
+    "healed": 3,
+    "dead": 9,
+    "imported": null,
+    "local": null,
+    "last_update": "2020-03-31 00:00:00",
+    "created_at": "2020-04-01T01:27:03.000000Z",
+    "updated_at": "2020-04-01T01:27:03.000000Z"
+}
+```
+
+### HTTP Request
+`GET api/pandemic-stats/{pandemic_stat_id}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `pandemic_stat_id` |  required  | The ID of the PandemicStat
+
+<!-- END_565517e1afaf7d3185e01454eb9bf3c0 -->
+
+<!-- START_0e45a5f5869b888ad069efe157a92dff -->
+## Update a PandemicStat in storage.
+
+<br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small>
+> Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/pandemic-stats/qui"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "confirmed": 12,
+    "local": 2,
+    "imported": 12,
+    "sick": 1,
+    "seriously": 9,
+    "healed": 14,
+    "dead": 6,
+    "last_update": "ut"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
+
+> Example response (200):
+
+```json
+{
+    "id": 17,
+    "confirmed": 109,
+    "sick": 97,
+    "seriously": null,
+    "healed": 3,
+    "dead": 9,
+    "imported": null,
+    "local": null,
+    "last_update": "2020-03-31 00:00:00",
+    "created_at": "2020-04-01T01:27:03.000000Z",
+    "updated_at": "2020-04-01T01:27:03.000000Z"
+}
+```
+
+### HTTP Request
+`PUT api/pandemic-stats/{pandemic_stat_id}`
+
+#### URL Parameters
+
+Parameter | Status | Description
+--------- | ------- | ------- | -------
+    `pandemic_stat_id` |  required  | The ID of the PandemicStat
+#### Body Parameters
+Parameter | Type | Status | Description
+--------- | ------- | ------- | ------- | -----------
+    `confirmed` | integer |  optional  | optional confirmed.
+        `local` | integer |  optional  | optional local
+        `imported` | integer |  optional  | optional imported
+        `sick` | integer |  optional  | optional sick
+        `seriously` | integer |  optional  | optional seriously
+        `healed` | integer |  optional  | optional healed
+        `dead` | integer |  optional  | optional dead
+        `last_update` | Date |  optional  | required|unique last_update
+    
+<!-- END_0e45a5f5869b888ad069efe157a92dff -->
 
 #User management
 
@@ -448,6 +1091,55 @@ APIs for managing users
 ## Test diagnostic covid-19
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/self-test"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "temperature_cat": 6,
+    "cough": 17,
+    "agueusia_anosmia": 11,
+    "sore_throat_aches": 9,
+    "diarrhea": 2,
+    "tiredness": 1,
+    "tiredness_details": 1,
+    "feeding_day": 8,
+    "breathlessness": 9,
+    "age": 11,
+    "size": 1,
+    "weight": 8,
+    "heart_disease": 1,
+    "diabetes": 12,
+    "cancer": 17,
+    "breathing_disease": 9,
+    "kidney_disease": 4,
+    "liver_disease": 3,
+    "pregnant": 7,
+    "immunosuppressant_disease": 19,
+    "immunosuppressant_drug": 6,
+    "province": "eius",
+    "town": "deleniti",
+    "township": "dolorem",
+    "longitude": "quia",
+    "latitude": "similique"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 
@@ -494,6 +1186,25 @@ Parameter | Type | Status | Description
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/medicale-orientation"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -506,6 +1217,25 @@ Parameter | Type | Status | Description
 ## Display a listing of the resource.
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/health-zone"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -525,6 +1255,25 @@ Parameter | Type | Status | Description
 <!-- START_a5a559225335a0534cb5858a2448816e -->
 ## api/dashboard/flux/africell/presence/provinces
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/presence/provinces"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -556,6 +1305,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/africell/presence/zones
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/presence/zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -585,6 +1353,25 @@ Parameter | Type | Status | Description
 <!-- START_262c3b29e4a6764190590b3308d86b32 -->
 ## api/dashboard/flux/africell/hors-zone/zones
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/hors-zone/zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -616,6 +1403,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/africell/in-out/zones
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/in-out/zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -646,6 +1452,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/predefined/zones/h-24
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -664,6 +1489,25 @@ Parameter | Type | Status | Description
 <!-- START_000dbfc8b1531adc7aded98e5279b8da -->
 ## api/dashboard/flux/predefined/zones/h-24/daily
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -684,6 +1528,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/predefined/zones/h-24/daily-compare
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24/daily-compare"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -702,6 +1565,25 @@ Parameter | Type | Status | Description
 <!-- START_486e8a162349f460091b87f1bf95fcdd -->
 ## api/dashboard/flux/predefined/zones/h-24/daily-in
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -722,6 +1604,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/predefined/zones/h-24/daily-out
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -740,6 +1641,25 @@ Parameter | Type | Status | Description
 <!-- START_5364843de6936b05dbc20b180cfe4589 -->
 ## api/dashboard/flux/origin/zones/h-24
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -771,6 +1691,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/zones/h-24/daily
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -800,6 +1739,25 @@ Parameter | Type | Status | Description
 <!-- START_03802abdb7f036f49433ee24e09477e5 -->
 ## api/dashboard/flux/origin/zones/h-24/daily-compare
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/daily-compare"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -831,6 +1789,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/zones/h-24/daily-in
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -860,6 +1837,25 @@ Parameter | Type | Status | Description
 <!-- START_8d5adf4f7ec9f65f7b4d6a91fac9101d -->
 ## api/dashboard/flux/origin/zones/h-24/daily-out
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -891,6 +1887,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/zones/h-24/global-in/province
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/global-in/province"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -920,6 +1935,25 @@ Parameter | Type | Status | Description
 <!-- START_fa35a9c1161bf86912a7edf2ec613406 -->
 ## api/dashboard/flux/origin/zones/h-24/global-out/province
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/global-out/province"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -951,6 +1985,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/zones/m-30
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -969,6 +2022,25 @@ Parameter | Type | Status | Description
 <!-- START_8c58af349ae17c522c2e2776ae2fa29a -->
 ## api/dashboard/flux/origin/zones/m-30/daily-compare
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30/daily-compare"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -989,6 +2061,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/zones/m-30/daily
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -1007,6 +2098,25 @@ Parameter | Type | Status | Description
 <!-- START_77e42f65ee0b3499e6679ae5d63ad0ee -->
 ## api/dashboard/flux/origin/zones/m-30/daily-in
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -1027,6 +2137,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/zones/m-30/daily-out
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -1045,6 +2174,25 @@ Parameter | Type | Status | Description
 <!-- START_8ecbb8b195e3c5ac6067120bcdeea82b -->
 ## api/dashboard/flux/origin/zones/presence/h-24
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/presence/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -1065,6 +2213,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/zones/presence/h-24/daily
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/presence/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -1083,6 +2250,25 @@ Parameter | Type | Status | Description
 <!-- START_1748656ff3a79479501b5a2f4496d466 -->
 ## api/dashboard/flux/origin/zones/presence/h-24/daily-in
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/presence/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -1114,6 +2300,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/provinces/h-24
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -1143,6 +2348,25 @@ Parameter | Type | Status | Description
 <!-- START_9bf08575078436d688451b9d973a8bd4 -->
 ## api/dashboard/flux/origin/provinces/h-24/daily
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -1174,6 +2398,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/provinces/h-24/daily-compare
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/daily-compare"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -1203,6 +2446,25 @@ Parameter | Type | Status | Description
 <!-- START_8f4e77268c1c25aeade9284e8efcfbf2 -->
 ## api/dashboard/flux/origin/provinces/h-24/daily-in
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -1234,6 +2496,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/provinces/h-24/daily-out
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -1264,6 +2545,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/provinces/h-24/global-in
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/global-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -1290,6 +2590,25 @@ Parameter | Type | Status | Description
 <!-- START_a262e264fb04610474ea74e8f19609b5 -->
 ## api/dashboard/flux/origin/provinces/h-24/global-out
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/global-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -1318,6 +2637,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/provinces/m-30
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/m-30"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -1344,6 +2682,25 @@ Parameter | Type | Status | Description
 <!-- START_46719746661518ecdcbe467aef294dfe -->
 ## api/dashboard/flux/origin/provinces/m-30/daily
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/m-30/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -1372,6 +2729,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/provinces/m-30/daily-in
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/m-30/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (422):
 
@@ -1398,6 +2774,25 @@ Parameter | Type | Status | Description
 <!-- START_4198ab63a10e383fa69b21ddf7d0708d -->
 ## api/dashboard/flux/origin/provinces/m-30/daily-out
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/m-30/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -1426,6 +2821,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/provinces/presence/h-24
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/presence/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -1445,6 +2859,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/origin/provinces/presence/h-24/daily
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/presence/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -1463,6 +2896,25 @@ Parameter | Type | Status | Description
 <!-- START_f90bba3387315f2542178f9be214307c -->
 ## api/dashboard/flux/origin/provinces/presence/h-24/daily-in
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/presence/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -1494,6 +2946,25 @@ Parameter | Type | Status | Description
 ## Display a listing of the resource.
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/list"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -2337,6 +3808,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/hotspots/maps
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/maps"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -2355,6 +3845,25 @@ Parameter | Type | Status | Description
 <!-- START_8b52af129fda3aa4bffd3f9bd77fbdb1 -->
 ## api/dashboard/flux/hotspots/tendance
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/tendance"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -2375,6 +3884,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/hotspots/daily
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -2393,6 +3921,25 @@ Parameter | Type | Status | Description
 <!-- START_385228fd442def1591f20fc6edd4e290 -->
 ## api/dashboard/flux/hotspots/general
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/general"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -2413,6 +3960,25 @@ Parameter | Type | Status | Description
 ## Display a listing of the resource.
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/list"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -3256,6 +4822,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/hotspots/types/maps
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/maps"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -3274,6 +4859,25 @@ Parameter | Type | Status | Description
 <!-- START_b4d41abb78d5917d1bf6f8d91c804c1f -->
 ## api/dashboard/flux/hotspots/types/tendance
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/tendance"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -3294,6 +4898,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/hotspots/types/daily
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -3313,6 +4936,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux/hotspots/types/general
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/general"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -3331,6 +4973,25 @@ Parameter | Type | Status | Description
 <!-- START_70750654f1ddb3eee06bcbacd62d9301 -->
 ## api/dashboard/hospital-situations/by-hospital/{hospital_id}
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/by-hospital/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -3817,6 +5478,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/hospital-situations/agent-last-update
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/agent-last-update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (200):
 
@@ -3894,6 +5574,25 @@ Parameter | Type | Status | Description
 <!-- START_ce9a88f8d8c1d0ee8eb8fd59910bb7cd -->
 ## api/dashboard/health-zones
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/health-zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -6070,6 +7769,25 @@ Parameter | Type | Status | Description
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (500):
 
@@ -6090,6 +7808,25 @@ Parameter | Type | Status | Description
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -6102,6 +7839,25 @@ Parameter | Type | Status | Description
 ## Display the specified resource.
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (404):
@@ -6123,6 +7879,25 @@ Parameter | Type | Status | Description
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -6138,6 +7913,25 @@ Parameter | Type | Status | Description
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -6150,6 +7944,25 @@ Parameter | Type | Status | Description
 ## Display a listing of the resource.
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 
@@ -6164,6 +7977,25 @@ Parameter | Type | Status | Description
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -6176,6 +8008,25 @@ Parameter | Type | Status | Description
 ## Display the specified resource.
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -6213,6 +8064,25 @@ Parameter | Type | Status | Description
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -6228,6 +8098,25 @@ Parameter | Type | Status | Description
 
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -6239,6 +8128,25 @@ Parameter | Type | Status | Description
 <!-- START_1b8aef954674d784e0b63a36cfb82cae -->
 ## api/dashboard/hospitals
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -6256,6 +8164,25 @@ Parameter | Type | Status | Description
 <!-- START_6d9b14ea14a0c32ad5c3fafe8c939bc5 -->
 ## api/dashboard/hospitals/evolution/{hospital?}
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals/evolution/"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -6279,6 +8206,25 @@ Parameter | Type | Status | Description
 <!-- START_06607724e5312805e02e892542fb6fcd -->
 ## api/dashboard/hospitals/totaux
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals/totaux"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -6313,6 +8259,25 @@ Parameter | Type | Status | Description
 <!-- START_8679f7d39354383993193c6430007af1 -->
 ## api/dashboard/indicators/zones
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/indicators/zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):
@@ -6350,6 +8315,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/orientation-medical-result
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/orientation-medical-result"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -6368,6 +8352,25 @@ Parameter | Type | Status | Description
 <!-- START_ce9bdf13f8013c328effc5cbbbf0f160 -->
 ## api/dashboard/orientation-medical-stats
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/orientation-medical-stats"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -6388,6 +8391,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/sondages
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/sondages"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -6406,6 +8428,25 @@ Parameter | Type | Status | Description
 <!-- START_291357dbc409969f13556bc458e7bf4a -->
 ## api/dashboard/cavid-cases
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/cavid-cases"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -6426,6 +8467,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/cavid-cases/statistics
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/cavid-cases/statistics"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -6444,6 +8504,25 @@ Parameter | Type | Status | Description
 <!-- START_5741b81535e88b26744143bb531f5696 -->
 ## api/dashboard/cavid-cases/statistics/daily
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/cavid-cases/statistics/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (401):
@@ -6464,6 +8543,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux-24
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 
 ### HTTP Request
@@ -6475,6 +8573,25 @@ Parameter | Type | Status | Description
 <!-- START_cf56dfdb4e0db197c92d3c976f80810f -->
 ## api/dashboard/flux-24-daily
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux-24-daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 
@@ -6488,6 +8605,25 @@ Parameter | Type | Status | Description
 ## Display a listing of the resource.
 
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux-zone"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (200):
@@ -7422,6 +9558,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/flux-provinces
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/flux-provinces"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (200):
 
@@ -7521,6 +9676,25 @@ Parameter | Type | Status | Description
 ## api/dashboard/townships
 > Example request:
 
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/townships"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
+
 
 > Example response (401):
 
@@ -7539,6 +9713,25 @@ Parameter | Type | Status | Description
 <!-- START_92726ed280897baec1fa2f410d062622 -->
 ## api/dashboard/pandemics/top-confirmed
 > Example request:
+
+```javascript
+const url = new URL(
+    "http://localhost:8000/api/dashboard/pandemics/top-confirmed"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response => response.json())
+    .then(json => console.log(json));
+```
 
 
 > Example response (422):

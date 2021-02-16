@@ -34,7 +34,7 @@
   }
 </script>
 
-<style>
+<style lang='scss' scoped>
   .side-menu {
     height: 100vh;
   }

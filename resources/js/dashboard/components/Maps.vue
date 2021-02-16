@@ -566,6 +566,7 @@ export default {
       "setDomaineExtValues",
       "setEpidemicExtValues",
       "setFluxHotspotClicked",
+      "setHotspotTopVariation",
     ]),
     ...mapActions(["resetState"]),
     mapResize() {
@@ -1393,7 +1394,8 @@ export default {
       const dataKey = "DENOMMIN";
       const colorExpression = [];
       const hotspotPoint = [];
-
+      const hotspotTopVariation = [];
+      const hotspot = this.getHospot(this.fluxGeoOptions[0]);
       colorExpression.push("case");
       features.forEach((x) => {
         let color = PALETTE.dash_green;
@@ -1445,7 +1447,7 @@ export default {
                   return;
                 }
 
-                const hotspot = this.getHospot(this.fluxGeoOptions[0]);
+
                 if (hotspot && itemPoint.properties.Type_ != hotspot.name) {
                   return;
                 }
@@ -1463,7 +1465,15 @@ export default {
             }
           }
         });
+        const hotspotType=fluxHotspotType||hotspot;
+        if (hotspotType && !this.hospotPointJson.features.find(item=>item.properties.DENOMMIN==x.origin && item.properties.Type_==hotspotType.name) ) {
+          return;
+        }
+        hotspotTopVariation.push(x);
       });
+
+      //Put hotpost
+      this.setHotspotTopVariation(hotspotTopVariation);
 
       if (hotspotPoint.length == 0) {
         return;

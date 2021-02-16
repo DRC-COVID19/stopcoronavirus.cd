@@ -1,13 +1,10 @@
 <template>
-  <div>
-    <div class="main-menu">
+  <b-container fluid class="main">
       <MainHeader />
-    </div>
-    <div class="row">
-      <Menu />
-      <router-view class="col-sm-10"></router-view>
-    </div>
-  </div>
+    <b-row>
+      <router-view ></router-view>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -22,9 +19,9 @@
 </script>
 
 <style lang='scss' scoped >
-  .main-menu {
-    @media screen and (max-width: 576px) {
-      display: none;
-    }
+  @import "@~/sass/_variables";
+  .main {
+    background-color: $dash-background;
+    height: 100vh;
   }
 </style>

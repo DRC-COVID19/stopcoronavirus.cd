@@ -19,14 +19,15 @@
   }
 </script>
 
-<style>
+<style lang='scss' scoped>
   .header_d {
     margin: 20px 2% 10px 2%;
     padding: 10px;
+    i {
+      color: blue;
+      font-size: 24px;
+      margin: 0 10px
+    }
   }
-  i {
-    color: blue;
-    font-size: 24px;
-    margin: 0 10px
-  }
+
 </style>

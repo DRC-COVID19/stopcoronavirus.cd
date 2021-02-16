@@ -21,7 +21,8 @@ export default {
     observationDate: {},
     fluxHotspotType: null,
     fluxHotspotClicked: null,
-    fluxForm: null
+    fluxForm: null,
+    hotspotTopVariation: []
   },
   mutations: {
     setIsWatchingfluxGeoOptions(state, payload) {
@@ -136,6 +137,9 @@ export default {
     },
     setFluxForm(state, payload) {
       state.fluxForm = payload;
+    },
+    setHotspotTopVariation(state, payload) {
+      state.hotspotTopVariation = payload;
     }
   },
   actions: {

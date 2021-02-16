@@ -1,7 +1,7 @@
 <template>
   <b-row class="header">
     <b-col cols="12" class="map-form-header">
-      <b-navbar toggleable="lg" type="light">
+        <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
           <h1 class="title m-0">Dashboard Covid-19</h1>
         </b-navbar-brand>
@@ -9,6 +9,20 @@
           <span class="fa fa-bars"></span>
         </b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
+          <b-navbar-nav class="nav-container">
+            <b-link
+              class="mx-2"
+              :class="{ active: activeMenu == 1 }"
+              @click="selectMenu(1)"
+              :to="{name:'administrator.users'}"
+              >Utilisateurs</b-link>
+            <b-link
+              class="mx-2"
+              :class="{ active: activeMenu == 2 }"
+              @click="selectMenu(2)"
+              :to="{name:'administrator.epidemie'}"
+              >Situation Epidémiologie</b-link>
+          </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item>
               <div
@@ -35,7 +49,7 @@
                   class="img-fluid"
                   alt
                 />
-                <!--<div
+                <div
                   @mouseleave="userAvatarMouseLeave"
                   @mouseenter="userAvatarMouseEnter"
                   class="avatar-container ml-3"
@@ -65,7 +79,7 @@
                       >Deconnexion</b-button
                     >
                   </b-card>
-                </div>-->
+                </div>
               </div>
             </b-nav-item>
           </b-navbar-nav>
@@ -115,6 +129,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+b-link {
+  padding: 10px;
+}
 .header {
   background: white;
   border-bottom: 1px solid $dash-shadow-color;
@@ -123,6 +140,9 @@ export default {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+  }
+  b-link {
+    margin: auto 30px;
   }
   .nav-container {
     a {
@@ -135,7 +155,7 @@ export default {
     }
     .active {
       a {
-        color: $dash-blue;
+        color: $dash-blue !important;
       }
     }
   }
