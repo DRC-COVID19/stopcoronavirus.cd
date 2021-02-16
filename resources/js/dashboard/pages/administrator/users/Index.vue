@@ -64,6 +64,7 @@
                     params: {page}
                 })
                     .then(({data}) => {
+                        console.log(data.data)
                         this.users = data.data
                         this.isLoading = false
                     })
