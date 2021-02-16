@@ -1,0 +1,111 @@
+<template>
+  <div class="px-5">
+    <b-row class="my-3 d-flex justif-content-start">
+      <b-col cols="12" md="6">
+        <b-form-input
+          v-model="filter"
+          class="input-dash"
+          type="search"
+          placeholder='Filtrer'
+        ></b-form-input>
+      </b-col>
+      <b-col cols="12" md="6" class="ml-auto">
+         <!-- <div class="d-flex justify-content-end">
+          <b-button class="btn-dash-blue" variant="success">
+            <b-link :to="{name:'administrator.users.create'}"><i class="fa fa-plus"></i></b-link>
+          </b-button>
+        </div> -->
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-table 
+          striped 
+          hover
+          :fields="fields"
+          :items="users" 
+          :filter="filter"
+          :per-page="perPage"
+          :current-page="currentPage"
+        >
+          <template
+            v-slot:cell(actions)="data"
+            class="action-btn-group"
+          >
+            <i @click="deleteUser(data.item.id)" class="fas fa-user-times"></i>
+            <i @click="updateUser(data.item.id)" class="fas fa-user-edit"></i>
+          </template>
+          <template 
+            v-slot:cell(role)="data"
+          >
+            <b-badge variant="secondary">{{data.value.name}}</b-badge>
+          </template>
+        </b-table>
+        <b-pagination v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>
+      </b-col>
+    </b-row>
+    <b-modal v-model="deleteModalShow">Voulez-vous supprimer l'utilisateurs {{currentUserId}} ?</b-modal>
+  </div>
+</template>
+
+<script>
+  export default {
+    props: {
+      users: {
+        type: Array,
+        default: () => [],
+        required: false
+      }
+    },
+    data () {
+      return {
+        fields: ['id', 'usernmae', 'name', 'role', 'actions'], // usernmae instead of username (see backend response)
+        filter: '',
+        perPage: 15,
+        currentPage: 1,
+        deleteModalShow: false,
+        editModalShow: false,
+        currentUserId: -1
+      }
+    },
+    computed: {
+      rows () {
+        return this.users.length
+      }
+    },
+    methods: {
+      deleteUser (id) {
+        this.deleteModalShow = true
+        this.currentUserId = id
+      },
+      updateUser (id) {
+
+      }
+    }
+  }
+</script>
+<style lang='scss' scoped>
+  @import "@~/sass/_variables";
+  i {
+    margin-left: 10px;
+  }
+  .fa-user-times {
+    color: $dash-red;
+    font-size: 16px;
+  }
+  .fa-user-edit {
+    color: $fin-8;
+    font-size: 16px;
+  }
+  .btn-remove {
+    background-color: $dash-red;
+  }
+  .btn-edit {
+    background-color: $fin-8;
+  }
+  .action-btn-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+</style>

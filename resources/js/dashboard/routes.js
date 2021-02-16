@@ -14,7 +14,8 @@ import NotAcces from './pages/NotAccess';
 import Landing from './pages/Landing';
 import Administrator from './pages/Administrator';
 import AdminUserIndex from './pages/administrator/users/Index';
-import AdminUserCreate from './pages/administrator/users/Create';
+import ShowUser from './pages/administrator/users/ShowUser';
+import Epidemie from './pages/administrator/epidemy/Epidemy';
 
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
@@ -132,12 +133,19 @@ export default [
     component: Administrator,
     children: [
       {
-        path: 'users',
+        path: 'users/',
+        name: 'administrator.users',
         component: AdminUserIndex
       },
       {
-        path: 'users/create',
-        component: AdminUserCreate,
+        path: 'show/',
+        name: 'administrator.user.show',
+        component: ShowUser,
+      },
+      {
+        path: 'epidemie/',
+        name: 'administrator.epidemie',
+        component: Epidemie,
       }
     ]
   },
