@@ -10,11 +10,6 @@
         ></b-form-input>
       </b-col>
       <b-col cols="12" md="6" class="ml-auto">
-         <!-- <div class="d-flex justify-content-end">
-          <b-button class="btn-dash-blue" variant="success">
-            <b-link :to="{name:'administrator.users.create'}"><i class="fa fa-plus"></i></b-link>
-          </b-button>
-        </div> -->
       </b-col>
     </b-row>
     <b-row>
@@ -33,7 +28,7 @@
             v-slot:cell(actions)="data"
             class="action-btn-group"
           >
-            <i @click="deleteUser(data.item.name, data.item.id)" class="fas fa-user-times"></i>
+            <i @click="deleteUser(data.item.name, data.item.id)" class="mx-2 fas fa-user-times"></i>
             <i @click="updateUser(data.item.name, data.item.id, data.item.usernmae, data.item.roles, data.item.email)" class="fas fa-user-edit"></i>
           </template>
           <template 
@@ -115,9 +110,6 @@
 </script>
 <style lang='scss' scoped>
   @import "@~/sass/_variables";
-  i {
-    margin-left: 10px;
-  }
   .fa-user-times {
     color: $dash-red;
     font-size: 16px;

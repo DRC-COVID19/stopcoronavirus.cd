@@ -1,8 +1,8 @@
 <template>
   <b-container>
       <div class="px-4 py-4 main">
-        <h2 class="h2">{{formTitle}}</h2>
-        <b-form @submit.prevent="onSubmit" v-if="show" label-class="text-dash-color">
+        <h2 class="h2">{{title}}</h2>
+        <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" v-if="show" label-class="text-dash-color">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-1"
@@ -54,7 +54,10 @@
           <label class="text-dash-color" for="text-password-confirm">Confirmation de mot de passe *</label>
           <b-form-input class="input-dash" type="password" id="text-password-confirm" aria-describedby="password-help-block" v-model="form.confirmPassword"></b-form-input>
           <b-alert show variant="light">{{warningMissMatch}}</b-alert>
-          <b-button type="submit" variant="primary" class="btn-dash-blue">Enreigistrer</b-button>
+          <b-row>
+            <b-button type="submit" variant="primary" class="btn-dash-blue">{{btnTitle}}</b-button>
+            <b-button type="reset" v-if="title !== 'Creation d\'un utilisateur'" variant="primary" class="btn-edit">Annuler</b-button>
+          </b-row>
         </b-form>
       </div>
       <b-alert :show="showWarning" variant="light"><i class="minus-circle"></i> Veuillez entrer des données correctes</b-alert>
@@ -73,16 +76,12 @@
         type: Object,
         required: false,
         default: () => {}
-      },
-      formTitle: {
-        type: String,
-        required: false,
-        default: () => "Ajouter un utiisateur"
       }
     },
     data() {
       return {
         title: "Creation d'un utilisateur",
+        btnTitle: 'Enreigistrer',
         iconClass: 'fas fa-plus-square',
         validateMailMessage: '',
         form: {
@@ -95,6 +94,7 @@
         },
         show: true,
         showWarning: false,
+        toBeCanceled: true,
         roles:[]
       }
     },
@@ -112,12 +112,23 @@
       }
     },
     methods: {
-      onSubmit() {
-        if (this.form.password === this.form.confirmPassword && this.form.roles.length !== 0) {
-          this.$emit('onCreate', this.form)
+      onSubmit () {
+        if (this.btnTitle === "Enreigistrer") {
+          if (this.form.password === this.form.confirmPassword && this.form.roles.length !== 0) {
+            this.$emit('onCreate', this.form)
+          } else {
+            this.showWarning = true
+          }
         } else {
-          this.showWarning = true
+          // To handle the update route
         }
+      },
+      onReset () {
+        this.toToCanceled = true
+        this.form = {}
+        this.title = "Creation d'un utilisateur"
+        this.btnTitle = "Enreigistrer"
+        this.$emit('onCancelUpdate', {})
       },
       validateMail () {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -142,11 +153,12 @@
         }
       },
       populateForm () {
-        console.log('populating ...')
-        this.form.username = this.formToPopulate.username
+        this.form.username = this.formToPopulate.usernmae
         this.form.email = this.formToPopulate.email
         // this.form.roles = this.formToPopulate.roles  // We don't need it anymore to be updated
         this.form.name = this.formToPopulate.name
+        this.title = "Modification de l'utilisateur"
+        this.btnTitle = "Modifier"
       }
     },
     computed: {

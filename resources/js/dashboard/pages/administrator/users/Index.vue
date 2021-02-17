@@ -16,7 +16,7 @@
                 >
                     Utilisateur supprime avec success
                 </b-alert>
-                <ListUser :users="users" @onDeleteUser="deleteUser" @onUpdateUser='populateForm' />
+                <ListUser :class="{hidden_list:updating}" :users="users" @onDeleteUser="deleteUser" @onUpdateUser='populateForm' />
             </b-col>
             <b-col cols="12" md="4" class="mt-5">
                 <b-alert
@@ -29,7 +29,7 @@
                 >
                     Utilisateur cree avec success
                 </b-alert>
-                <Create @onCreate='createUser' :userAdded="userAdded" :formToPopulate="formToPopulate" /> 
+                <Create @onCreate='createUser' @onCancelUpdate="cancelUpdate" :userAdded="userAdded" :formToPopulate="formToPopulate" /> 
             </b-col>
         </b-row>
     </b-container>
@@ -55,7 +55,8 @@
                 showSuccess: false,
                 isUserDeleted: false,
                 timeOut: 3,
-                formToPopulate: {}
+                formToPopulate: {},
+                updating: false
             }
         },
         mounted () {
@@ -76,7 +77,11 @@
                 })
             },
             populateForm (currentUser) {
+                this.updating = true
                 this.formToPopulate = currentUser
+            },
+            cancelUpdate () {
+                this.updating = false
             },
             createUser(form) {
                 this.userAdded = false
@@ -122,5 +127,8 @@
     .fa-plus {
         color: white;
         font-size: 14px;
+    }
+    .hidden_list {
+        opacity: 0.07;
     }
 </style>
