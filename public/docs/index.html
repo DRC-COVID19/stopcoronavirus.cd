@@ -10,6 +10,11 @@
     <script src="js/all.js"></script>
 
 
+          <script>
+        $(function() {
+            setupLanguages(["javascript"]);
+        });
+      </script>
       </head>
 
   <body class="">
@@ -21,6 +26,9 @@
     </a>
     <div class="tocify-wrapper">
         <img src="images/logo.png" />
+                    <div class="lang-selector">
+                                  <a href="#" data-language-name="javascript">javascript</a>
+                            </div>
                             <div class="search">
               <input type="text" class="search" id="input-search" placeholder="Search">
             </div>
@@ -44,6 +52,24 @@
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_roles"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">[
@@ -64,6 +90,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_roles"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/admin_roles</code></p>
 <!-- END_593ce68eea712cf6757763a71b641cb1 -->
@@ -72,6 +114,24 @@
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_roles/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -86,6 +146,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_roles/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>PUT api/admin_roles/{admin_role}</code></p>
 <p><code>PATCH api/admin_roles/{admin_role}</code></p>
@@ -96,6 +172,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_roles/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>DELETE api/admin_roles/{admin_role}</code></p>
 <!-- END_c7b622488e9e39d56ee3808da74537a8 -->
@@ -105,6 +197,24 @@
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -158,6 +268,34 @@
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_users"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "username": "architecto",
+    "password": "vero",
+    "password_confirmation": "aut",
+    "name": "quibusdam",
+    "email": "temporibus",
+    "roles_id": []
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (201):</p>
 </blockquote>
 <pre><code class="language-json">null</code></pre>
@@ -224,6 +362,24 @@
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -265,7 +421,7 @@
 <tr>
 <td><code>admin_users</code></td>
 <td>required</td>
-<td>The ID of the post</td>
+<td>The ID of the admin_users</td>
 </tr>
 </tbody>
 </table>
@@ -275,6 +431,33 @@
 <p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "username": "labore",
+    "password": "ut",
+    "name": "praesentium",
+    "email": "illum",
+    "roles_id": []
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -323,7 +506,7 @@
 <tr>
 <td><code>admin_users</code></td>
 <td>required</td>
-<td>The ID of the post.</td>
+<td>The ID of the admin_users.</td>
 </tr>
 </tbody>
 </table>
@@ -377,6 +560,32 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/admin_users/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (401):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "Unauthenticated"
+}</code></pre>
 <h3>HTTP Request</h3>
 <p><code>DELETE api/admin_users/{admin_user}</code></p>
 <h4>URL Parameters</h4>
@@ -392,7 +601,7 @@
 <tr>
 <td><code>admin_users</code></td>
 <td>required</td>
-<td>The ID of the post</td>
+<td>The ID of the admin_users</td>
 </tr>
 </tbody>
 </table>
@@ -404,6 +613,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/login"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/auth/login</code></p>
 <!-- END_3ec94b50b1c8c9ba798a36fdfacd3fef -->
@@ -412,6 +637,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/logout"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/auth/logout</code></p>
 <!-- END_c06cffaa29eb1a4afb4762c6f9371f54 -->
@@ -420,6 +661,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/refresh"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/auth/refresh</code></p>
 <!-- END_cc5e781c890dcdb5df9a044e41b6d046 -->
@@ -428,6 +685,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/me"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/auth/me</code></p>
 <!-- END_a42a29c08e1a8f12410ef29926b9cf37 -->
@@ -436,6 +709,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/lost-password"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/auth/lost-password</code></p>
 <!-- END_e01b76a41eaf415c2592c091d5cbceac -->
@@ -443,6 +732,24 @@
 <h2>api/dashboard/auth/check-token/{token}</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/check-token/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (410):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -456,9 +763,413 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/auth/reset-password/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/auth/reset-password/{user_id}</code></p>
 <!-- END_0f4c99b97ea7c2a47962807aca43f9e8 -->
+<h1>PandemicStat management</h1>
+<!-- START_899a7c38cc8e101353d8be8601041afe -->
+<h2>api/pandemic-stats</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/pandemic-stats"
+);
+
+let params = {
+    "order": "exercitationem",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "data": [
+        {
+            "id": 6,
+            "confirmed": 1,
+            "sick": null,
+            "seriously": null,
+            "healed": null,
+            "dead": null,
+            "imported": null,
+            "local": null,
+            "last_update": "2020-03-10 00:00:00",
+            "created_at": "2020-03-27T01:53:25.000000Z",
+            "updated_at": "2020-03-27T01:53:25.000000Z"
+        }
+    ],
+    "links": {
+        "first": "http:\/\/localhost:8000\/api\/pandemic-stats?page=1",
+        "last": "http:\/\/localhost:8000\/api\/pandemic-stats?page=19",
+        "prev": null,
+        "next": "http:\/\/localhost:8000\/api\/pandemic-stats?page=2"
+    },
+    "meta": {
+        "current_page": 1,
+        "from": 1,
+        "last_page": 19,
+        "path": "http:\/\/localhost:8000\/api\/pandemic-stats",
+        "per_page": 15,
+        "to": 15,
+        "total": 281
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/pandemic-stats</code></p>
+<h4>Query Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order</code></td>
+<td>optional</td>
+<td>optional default ASC last_update order</td>
+</tr>
+</tbody>
+</table>
+<!-- END_899a7c38cc8e101353d8be8601041afe -->
+<!-- START_93c494ef5765386d61f789a6744ac5d4 -->
+<h2>Store a newly created admin_users in storage.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/pandemic-stats"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "confirmed": 19,
+    "local": 11,
+    "imported": 15,
+    "sick": 13,
+    "seriously": 7,
+    "healed": 18,
+    "dead": 6,
+    "last_update": "inventore"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (201):</p>
+</blockquote>
+<pre><code class="language-json">null</code></pre>
+<blockquote>
+<p>Example response (422):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "message": "The given data was invalid.",
+    "errors": {
+        "last_update": [
+            "La valeur du champ last update est déjà utilisée."
+        ]
+    }
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>POST api/pandemic-stats</code></p>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>confirmed</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional confirmed.</td>
+</tr>
+<tr>
+<td><code>local</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional local</td>
+</tr>
+<tr>
+<td><code>imported</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional imported</td>
+</tr>
+<tr>
+<td><code>sick</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional sick</td>
+</tr>
+<tr>
+<td><code>seriously</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional seriously</td>
+</tr>
+<tr>
+<td><code>healed</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional healed</td>
+</tr>
+<tr>
+<td><code>dead</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional dead</td>
+</tr>
+<tr>
+<td><code>last_update</code></td>
+<td>Date</td>
+<td>optional</td>
+<td>required</td>
+<td>unique last_update</td>
+</tr>
+</tbody>
+</table>
+<!-- END_93c494ef5765386d61f789a6744ac5d4 -->
+<!-- START_565517e1afaf7d3185e01454eb9bf3c0 -->
+<h2>Display a PandemicStat by id.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/pandemic-stats/consequatur"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "id": 17,
+    "confirmed": 109,
+    "sick": 97,
+    "seriously": null,
+    "healed": 3,
+    "dead": 9,
+    "imported": null,
+    "local": null,
+    "last_update": "2020-03-31 00:00:00",
+    "created_at": "2020-04-01T01:27:03.000000Z",
+    "updated_at": "2020-04-01T01:27:03.000000Z"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>GET api/pandemic-stats/{pandemic_stat_id}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pandemic_stat_id</code></td>
+<td>required</td>
+<td>The ID of the PandemicStat</td>
+</tr>
+</tbody>
+</table>
+<!-- END_565517e1afaf7d3185e01454eb9bf3c0 -->
+<!-- START_0e45a5f5869b888ad069efe157a92dff -->
+<h2>Update a PandemicStat in storage.</h2>
+<p><br><small style="padding: 1px 9px 2px;font-weight: bold;white-space: nowrap;color: #ffffff;-webkit-border-radius: 9px;-moz-border-radius: 9px;border-radius: 9px;background-color: #3a87ad;">Requires authentication</small></p>
+<blockquote>
+<p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/pandemic-stats/qui"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "confirmed": 12,
+    "local": 2,
+    "imported": 12,
+    "sick": 1,
+    "seriously": 9,
+    "healed": 14,
+    "dead": 6,
+    "last_update": "ut"
+}
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
+<p>Example response (200):</p>
+</blockquote>
+<pre><code class="language-json">{
+    "id": 17,
+    "confirmed": 109,
+    "sick": 97,
+    "seriously": null,
+    "healed": 3,
+    "dead": 9,
+    "imported": null,
+    "local": null,
+    "last_update": "2020-03-31 00:00:00",
+    "created_at": "2020-04-01T01:27:03.000000Z",
+    "updated_at": "2020-04-01T01:27:03.000000Z"
+}</code></pre>
+<h3>HTTP Request</h3>
+<p><code>PUT api/pandemic-stats/{pandemic_stat_id}</code></p>
+<h4>URL Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pandemic_stat_id</code></td>
+<td>required</td>
+<td>The ID of the PandemicStat</td>
+</tr>
+</tbody>
+</table>
+<h4>Body Parameters</h4>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Status</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>confirmed</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional confirmed.</td>
+</tr>
+<tr>
+<td><code>local</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional local</td>
+</tr>
+<tr>
+<td><code>imported</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional imported</td>
+</tr>
+<tr>
+<td><code>sick</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional sick</td>
+</tr>
+<tr>
+<td><code>seriously</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional seriously</td>
+</tr>
+<tr>
+<td><code>healed</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional healed</td>
+</tr>
+<tr>
+<td><code>dead</code></td>
+<td>integer</td>
+<td>optional</td>
+<td>optional dead</td>
+</tr>
+<tr>
+<td><code>last_update</code></td>
+<td>Date</td>
+<td>optional</td>
+<td>required</td>
+<td>unique last_update</td>
+</tr>
+</tbody>
+</table>
+<!-- END_0e45a5f5869b888ad069efe157a92dff -->
 <h1>User management</h1>
 <p>APIs for managing users</p>
 <!-- START_60fdb642281a006b32553e18909d0533 -->
@@ -466,6 +1177,52 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/self-test"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+let body = {
+    "temperature_cat": 6,
+    "cough": 17,
+    "agueusia_anosmia": 11,
+    "sore_throat_aches": 9,
+    "diarrhea": 2,
+    "tiredness": 1,
+    "tiredness_details": 1,
+    "feeding_day": 8,
+    "breathlessness": 9,
+    "age": 11,
+    "size": 1,
+    "weight": 8,
+    "heart_disease": 1,
+    "diabetes": 12,
+    "cancer": 17,
+    "breathing_disease": 9,
+    "kidney_disease": 4,
+    "liver_disease": 3,
+    "pregnant": 7,
+    "immunosuppressant_disease": 19,
+    "immunosuppressant_drug": 6,
+    "province": "eius",
+    "town": "deleniti",
+    "township": "dolorem",
+    "longitude": "quia",
+    "latitude": "similique"
+}
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: body
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/self-test</code></p>
 <h4>Body Parameters</h4>
@@ -644,6 +1401,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/medicale-orientation"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/medicale-orientation</code></p>
 <!-- END_d6261f926c26d068ce14643c8bb66ab1 -->
@@ -651,6 +1424,24 @@
 <h2>Display a listing of the resource.</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/health-zone"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -663,6 +1454,24 @@
 <h2>api/dashboard/flux/africell/presence/provinces</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/presence/provinces"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -686,6 +1495,24 @@
 <h2>api/dashboard/flux/africell/presence/zones</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/presence/zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -709,6 +1536,24 @@
 <h2>api/dashboard/flux/africell/hors-zone/zones</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/hors-zone/zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -732,6 +1577,24 @@
 <h2>api/dashboard/flux/africell/in-out/zones</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/africell/in-out/zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -755,6 +1618,24 @@
 <h2>api/dashboard/flux/predefined/zones/h-24</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -767,6 +1648,24 @@
 <h2>api/dashboard/flux/predefined/zones/h-24/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -779,6 +1678,24 @@
 <h2>api/dashboard/flux/predefined/zones/h-24/daily-compare</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24/daily-compare"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -791,6 +1708,24 @@
 <h2>api/dashboard/flux/predefined/zones/h-24/daily-in</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -803,6 +1738,24 @@
 <h2>api/dashboard/flux/predefined/zones/h-24/daily-out</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/predefined/zones/h-24/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -815,6 +1768,24 @@
 <h2>api/dashboard/flux/origin/zones/h-24</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -838,6 +1809,24 @@
 <h2>api/dashboard/flux/origin/zones/h-24/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -861,6 +1850,24 @@
 <h2>api/dashboard/flux/origin/zones/h-24/daily-compare</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/daily-compare"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -884,6 +1891,24 @@
 <h2>api/dashboard/flux/origin/zones/h-24/daily-in</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -907,6 +1932,24 @@
 <h2>api/dashboard/flux/origin/zones/h-24/daily-out</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -930,6 +1973,24 @@
 <h2>api/dashboard/flux/origin/zones/h-24/global-in/province</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/global-in/province"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -953,6 +2014,24 @@
 <h2>api/dashboard/flux/origin/zones/h-24/global-out/province</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/h-24/global-out/province"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -976,6 +2055,24 @@
 <h2>api/dashboard/flux/origin/zones/m-30</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -988,6 +2085,24 @@
 <h2>api/dashboard/flux/origin/zones/m-30/daily-compare</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30/daily-compare"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1000,6 +2115,24 @@
 <h2>api/dashboard/flux/origin/zones/m-30/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1012,6 +2145,24 @@
 <h2>api/dashboard/flux/origin/zones/m-30/daily-in</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1024,6 +2175,24 @@
 <h2>api/dashboard/flux/origin/zones/m-30/daily-out</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/m-30/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1036,6 +2205,24 @@
 <h2>api/dashboard/flux/origin/zones/presence/h-24</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/presence/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1048,6 +2235,24 @@
 <h2>api/dashboard/flux/origin/zones/presence/h-24/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/presence/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1060,6 +2265,24 @@
 <h2>api/dashboard/flux/origin/zones/presence/h-24/daily-in</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/zones/presence/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1083,6 +2306,24 @@
 <h2>api/dashboard/flux/origin/provinces/h-24</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1106,6 +2347,24 @@
 <h2>api/dashboard/flux/origin/provinces/h-24/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1129,6 +2388,24 @@
 <h2>api/dashboard/flux/origin/provinces/h-24/daily-compare</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/daily-compare"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1152,6 +2429,24 @@
 <h2>api/dashboard/flux/origin/provinces/h-24/daily-in</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1175,6 +2470,24 @@
 <h2>api/dashboard/flux/origin/provinces/h-24/daily-out</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1198,6 +2511,24 @@
 <h2>api/dashboard/flux/origin/provinces/h-24/global-in</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/global-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1218,6 +2549,24 @@
 <h2>api/dashboard/flux/origin/provinces/h-24/global-out</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/h-24/global-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1238,6 +2587,24 @@
 <h2>api/dashboard/flux/origin/provinces/m-30</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/m-30"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1258,6 +2625,24 @@
 <h2>api/dashboard/flux/origin/provinces/m-30/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/m-30/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1278,6 +2663,24 @@
 <h2>api/dashboard/flux/origin/provinces/m-30/daily-in</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/m-30/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1298,6 +2701,24 @@
 <h2>api/dashboard/flux/origin/provinces/m-30/daily-out</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/m-30/daily-out"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1318,6 +2739,24 @@
 <h2>api/dashboard/flux/origin/provinces/presence/h-24</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/presence/h-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1330,6 +2769,24 @@
 <h2>api/dashboard/flux/origin/provinces/presence/h-24/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/presence/h-24/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1342,6 +2799,24 @@
 <h2>api/dashboard/flux/origin/provinces/presence/h-24/daily-in</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/origin/provinces/presence/h-24/daily-in"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -1365,6 +2840,24 @@
 <h2>Display a listing of the resource.</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/list"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">[
@@ -2200,6 +3693,24 @@
 <h2>api/dashboard/flux/hotspots/maps</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/maps"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -2212,6 +3723,24 @@
 <h2>api/dashboard/flux/hotspots/tendance</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/tendance"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -2224,6 +3753,24 @@
 <h2>api/dashboard/flux/hotspots/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -2236,6 +3783,24 @@
 <h2>api/dashboard/flux/hotspots/general</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/general"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -2248,6 +3813,24 @@
 <h2>Display a listing of the resource.</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/list"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">[
@@ -3083,6 +4666,24 @@
 <h2>api/dashboard/flux/hotspots/types/maps</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/maps"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -3095,6 +4696,24 @@
 <h2>api/dashboard/flux/hotspots/types/tendance</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/tendance"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -3107,6 +4726,24 @@
 <h2>api/dashboard/flux/hotspots/types/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -3119,6 +4756,24 @@
 <h2>api/dashboard/flux/hotspots/types/general</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux/hotspots/types/general"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -3131,6 +4786,24 @@
 <h2>api/dashboard/hospital-situations/by-hospital/{hospital_id}</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/by-hospital/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -3609,6 +5282,24 @@
 <h2>api/dashboard/hospital-situations/agent-last-update</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/agent-last-update"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">[
@@ -3680,6 +5371,24 @@
 <h2>api/dashboard/health-zones</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/health-zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">[
@@ -5847,6 +7556,24 @@
 <h2>Display a listing of the resource.</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (500):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -5860,6 +7587,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/hospital-situations</code></p>
 <!-- END_957f11ff0b3df14a2d886ac1fdcd08a9 -->
@@ -5867,6 +7610,24 @@
 <h2>Display the specified resource.</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (404):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -5880,6 +7641,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>PUT api/dashboard/hospital-situations/{hospital_situation}</code></p>
 <p><code>PATCH api/dashboard/hospital-situations/{hospital_situation}</code></p>
@@ -5889,6 +7666,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospital-situations/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>DELETE api/dashboard/hospital-situations/{hospital_situation}</code></p>
 <!-- END_0b970c309ab0229e808aa38a74fc84a8 -->
@@ -5897,6 +7690,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>GET api/dashboard/hospitals-data</code></p>
 <!-- END_de8cce562755cf4fdcc198710d40a5a8 -->
@@ -5905,6 +7714,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/hospitals-data</code></p>
 <!-- END_645864c0263b5836f5893134dacdd87d -->
@@ -5912,6 +7737,24 @@
 <h2>Display the specified resource.</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -5941,6 +7784,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "PUT",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>PUT api/dashboard/hospitals-data/{hospitals_datum}</code></p>
 <p><code>PATCH api/dashboard/hospitals-data/{hospitals_datum}</code></p>
@@ -5950,6 +7809,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals-data/1"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "DELETE",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>DELETE api/dashboard/hospitals-data/{hospitals_datum}</code></p>
 <!-- END_33b36d6b54cd47ecf6e072e1a030e79f -->
@@ -5957,6 +7832,24 @@
 <h2>api/dashboard/hospitals</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">[]</code></pre>
@@ -5967,6 +7860,24 @@
 <h2>api/dashboard/hospitals/evolution/{hospital?}</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals/evolution/"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -5983,6 +7894,24 @@
 <h2>api/dashboard/hospitals/totaux</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/hospitals/totaux"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -6010,6 +7939,24 @@
 <h2>api/dashboard/indicators/zones</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/indicators/zones"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -6039,6 +7986,24 @@
 <h2>api/dashboard/orientation-medical-result</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/orientation-medical-result"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -6051,6 +8016,24 @@
 <h2>api/dashboard/orientation-medical-stats</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/orientation-medical-stats"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -6063,6 +8046,24 @@
 <h2>api/dashboard/sondages</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/sondages"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -6075,6 +8076,24 @@
 <h2>api/dashboard/cavid-cases</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/cavid-cases"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -6087,6 +8106,24 @@
 <h2>api/dashboard/cavid-cases/statistics</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/cavid-cases/statistics"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -6099,6 +8136,24 @@
 <h2>api/dashboard/cavid-cases/statistics/daily</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/cavid-cases/statistics/daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -6112,6 +8167,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux-24"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/flux-24</code></p>
 <!-- END_501198afdc35c7405e31e9ddc276f946 -->
@@ -6120,6 +8191,22 @@
 <blockquote>
 <p>Example request:</p>
 </blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux-24-daily"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "POST",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
 <h3>HTTP Request</h3>
 <p><code>POST api/dashboard/flux-24-daily</code></p>
 <!-- END_cf56dfdb4e0db197c92d3c976f80810f -->
@@ -6127,6 +8214,24 @@
 <h2>Display a listing of the resource.</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux-zone"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">[
@@ -7053,6 +9158,24 @@
 <h2>api/dashboard/flux-provinces</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/flux-provinces"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (200):</p>
 </blockquote>
 <pre><code class="language-json">[
@@ -7145,6 +9268,24 @@
 <h2>api/dashboard/townships</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/townships"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (401):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -7157,6 +9298,24 @@
 <h2>api/dashboard/pandemics/top-confirmed</h2>
 <blockquote>
 <p>Example request:</p>
+</blockquote>
+<pre><code class="language-javascript">const url = new URL(
+    "http://localhost:8000/api/dashboard/pandemics/top-confirmed"
+);
+
+let headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer {token}",
+};
+
+fetch(url, {
+    method: "GET",
+    headers: headers,
+})
+    .then(response =&gt; response.json())
+    .then(json =&gt; console.log(json));</code></pre>
+<blockquote>
 <p>Example response (422):</p>
 </blockquote>
 <pre><code class="language-json">{
@@ -7172,6 +9331,9 @@
 <!-- END_92726ed280897baec1fa2f410d062622 -->
       </div>
       <div class="dark-box">
+                        <div class="lang-selector">
+                                    <a href="#" data-language-name="javascript">javascript</a>
+                              </div>
                 </div>
     </div>
   </body>
