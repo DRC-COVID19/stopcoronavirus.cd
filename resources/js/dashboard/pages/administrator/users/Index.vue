@@ -129,6 +129,6 @@
         font-size: 14px;
     }
     .hidden_list {
-        opacity: 0.07;
+        opacity: 1
     }
 </style>
