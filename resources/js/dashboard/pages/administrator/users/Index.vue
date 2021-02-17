@@ -16,7 +16,7 @@
                 >
                     Utilisateur supprime avec success
                 </b-alert>
-                <ListUser :users="users"/>
+                <ListUser :users="users" @onDeleteUser="deleteUser" />
             </b-col>
             <b-col cols="12" md="4" class="mt-5">
                 <b-alert
@@ -61,8 +61,9 @@
             this.getUserList()
         },
         methods: {
-            onDeleteUser (userId) {
-                axios.delete('/api/admin_users/'+userId, {
+            deleteUser (currentUserId) {
+                console.log('proceeding')
+                axios.delete('/api/admin_users/'+currentUserId, {
                     params: {}
                 })
                 .then(() => {

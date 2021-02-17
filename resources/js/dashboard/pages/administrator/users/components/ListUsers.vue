@@ -33,8 +33,8 @@
             v-slot:cell(actions)="data"
             class="action-btn-group"
           >
-            <i @click="deleteUser(data.item.id)" class="fas fa-user-times"></i>
-            <i @click="updateUser(data.item.id)" class="fas fa-user-edit"></i>
+            <i @click="deleteUser(data.item.name, data.item.id)" class="fas fa-user-times"></i>
+            <i @click="updateUser(data.item.name, data.item.id)" class="fas fa-user-edit"></i>
           </template>
           <template 
             v-slot:cell(role)="data"
@@ -46,17 +46,15 @@
       </b-col>
     </b-row>
     <b-modal  v-model="isDeleteModalShown">
-      Voulez-vous supprimer l'utilisateurs {{currentUserId}} ?
-      <template #modal-footer="{ ok, cancel}">
-      <b>Custom Footer</b>
-      <!-- Emulate built in modal footer ok and cancel button actions -->
-      <b-button size="sm" variant="success" @click="ok()">
-        Accepter 
-      </b-button>
-      <b-button size="sm" variant="danger" @click="cancel()">
-        Annuler
-      </b-button>
-    </template>
+      Voulez-vous vraiment supprimer l'utilisateurs {{currentUser.name}} ?
+      <template #modal-footer>
+        <b-button size="sm" variant="success" @click="onValidateDelection()">
+          Accepter 
+        </b-button>
+        <b-button size="sm" variant="danger" @click="onCancelDelection()">
+          Annuler
+        </b-button>
+      </template>
     </b-modal>
   </div>
 </template>
@@ -77,7 +75,10 @@
         perPage: 15,
         currentPage: 1,
         isDeleteModalShown: false,
-        currentUserId: -1,
+        currentUser: {
+          id: -1,
+          name: ''
+        },
         editModalShow: false
       }
     },
@@ -87,9 +88,17 @@
       }
     },
     methods: {
-      deleteUser (userId) {
+      deleteUser (name, userId) {
         this.isDeleteModalShown = true
-        this.currentUserId = userId
+        this.currentUser.id = userId
+        this.currentUser.name = name
+      },
+      onValidateDelection () {
+        this.$emit('onDeleteUser', this.currentUser.id)
+        this.isDeleteModalShown = false
+      },
+      onCancelDelection () {
+        this.isDeleteModalShown = false
       },
       updateUser (id) {
 

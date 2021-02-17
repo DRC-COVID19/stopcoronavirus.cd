@@ -29,7 +29,7 @@
               id="input-2"
               v-model="form.email"
               type="email"
-              placeholder="Enter email"
+              placeholder="Entre email"
               required
               @blur="validateMail()"
             ></b-form-input>
@@ -57,7 +57,7 @@
           <b-button type="submit" variant="primary" class="btn-dash-blue">Enreigistrer</b-button>
         </b-form>
       </div>
-      <b-alert :show="showWarnig" variant="light"><i class="minus-circle"></i> Veuillez entrer des donnees correctes</b-alert>
+      <b-alert :show="showWarning" variant="light"><i class="minus-circle"></i> Veuillez entrer des données correctes</b-alert>
   </b-container>
 </template>
 
