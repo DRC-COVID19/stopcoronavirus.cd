@@ -34,7 +34,7 @@
             class="action-btn-group"
           >
             <i @click="deleteUser(data.item.name, data.item.id)" class="fas fa-user-times"></i>
-            <i @click="updateUser(data.item.name, data.item.id)" class="fas fa-user-edit"></i>
+            <i @click="updateUser(data.item.name, data.item.id, data.item.usernmae, data.item.roles, data.item.email)" class="fas fa-user-edit"></i>
           </template>
           <template 
             v-slot:cell(role)="data"
@@ -100,8 +100,15 @@
       onCancelDelection () {
         this.isDeleteModalShown = false
       },
-      updateUser (id) {
-
+      updateUser (name, id, usernmae, roles, email) {
+        this.currentUser = {
+          id,
+          name,
+          usernmae,
+          roles,
+          email
+        }
+        this.$emit('onUpdateUser', this.currentUser)
       }
     }
   }

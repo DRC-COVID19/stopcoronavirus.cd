@@ -1,7 +1,7 @@
 <template>
   <b-container>
       <div class="px-4 py-4 main">
-        <h2 class="h2"> Ajouter un utiisateur</h2>
+        <h2 class="h2">{{formTitle}}</h2>
         <b-form @submit.prevent="onSubmit" v-if="show" label-class="text-dash-color">
           <b-form-group
             label-class="text-dash-color"
@@ -68,6 +68,16 @@
         type: Boolean,
         required: false,
         default: () => false
+      },
+      formToPopulate: {
+        type: Object,
+        required: false,
+        default: () => {}
+      },
+      formTitle: {
+        type: String,
+        required: false,
+        default: () => "Ajouter un utiisateur"
       }
     },
     data() {
@@ -94,8 +104,11 @@
       this.resetForm ()
     },
     watch: {
-      userAdded() {
+      userAdded () {
         this.resetForm()
+      },
+      formToPopulate () {
+        this.populateForm()
       }
     },
     methods: {
@@ -127,6 +140,13 @@
         if (this.userAdded) {
           this.form = {}
         }
+      },
+      populateForm () {
+        console.log('populating ...')
+        this.form.username = this.formToPopulate.username
+        this.form.email = this.formToPopulate.email
+        // this.form.roles = this.formToPopulate.roles  // We don't need it anymore to be updated
+        this.form.name = this.formToPopulate.name
       }
     },
     computed: {

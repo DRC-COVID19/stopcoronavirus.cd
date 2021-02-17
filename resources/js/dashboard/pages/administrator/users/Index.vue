@@ -16,20 +16,20 @@
                 >
                     Utilisateur supprime avec success
                 </b-alert>
-                <ListUser :users="users" @onDeleteUser="deleteUser" />
+                <ListUser :users="users" @onDeleteUser="deleteUser" @onUpdateUser='populateForm' />
             </b-col>
             <b-col cols="12" md="4" class="mt-5">
                 <b-alert
                     variant="success" 
                     :show="showSuccess" 
                     dismissible 
-                    fade 
+                    fade
                     @dismiss-count-down="timeOut" 
                     class="mx-3"
                 >
                     Utilisateur cree avec success
                 </b-alert>
-                <Create @onCreate='createUser' :userAdded="userAdded" /> 
+                <Create @onCreate='createUser' :userAdded="userAdded" :formToPopulate="formToPopulate" /> 
             </b-col>
         </b-row>
     </b-container>
@@ -54,7 +54,8 @@
                 userAdded: false,
                 showSuccess: false,
                 isUserDeleted: false,
-                timeOut: 3
+                timeOut: 3,
+                formToPopulate: {}
             }
         },
         mounted () {
@@ -73,6 +74,9 @@
                 .catch(() => {
                     console.log('failed')
                 })
+            },
+            populateForm (currentUser) {
+                this.formToPopulate = currentUser
             },
             createUser(form) {
                 this.userAdded = false
