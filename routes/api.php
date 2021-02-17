@@ -1,10 +1,12 @@
 <?php
 
+use App\Flux;
 use App\Http\Controllers\HospitalSituationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\PandemicStat;
 use App\Http\Resources\PandemicStat as PandemicStatResource;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +52,24 @@ Route::group(['prefix' => 'pandemic-stats'], function () {
   Route::delete('/{pandemic_stat_id}', 'PandemicStatController@destroy');
 });
 
+Route::get('/data-2', function () {
+  $data = Flux::on('mysql')
+    ->select(['origin', DB::raw('sum("Volume")')])
+    ->join('provinces', function ($q) {
+      $q->on('provinces.id', 'health_zones.province_id');
+    })
+    ->join('health_zones', function ($q) {
+      $q->on('health_zones.name', 'flux_24.origin');
+    })
+    ->where('Destination', "Gombe")
+    ->where('Home_Category', 'Origin_Zone_Resident')
+    ->where('provinces.name', 'Kinshasasa')
+    ->whereBetween('Date',['2020-02-01','2020-06-01'])
+    ->groupBy('origin')
+    ->get();
+  return response()->json($data);
+});
+
 Route::group([
   'prefix' => 'dashboard',
   // 'middleware' => 'auth:dashboard',
@@ -66,6 +86,8 @@ Route::group([
     Route::post('reset-password/{user_id}', 'AuthController@resetPassword');
     Route::post('register', 'AuthController@store');
   });
+
+
 
 
   Route::group(['prefix' => 'flux', 'middleware' => 'cache.headers:private;max_age=3600'], function () {

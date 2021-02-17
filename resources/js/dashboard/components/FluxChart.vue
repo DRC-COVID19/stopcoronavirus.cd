@@ -1697,12 +1697,9 @@ export default {
       });
       localData = localData.filter((x) => x.percent);
       localData.sort((a, b) => {
-        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
+        return Number(a.difference ?? 0) < Number(b.difference ?? 0) ? 1 : -1;
       });
 
-      localData.sort((a, b) => {
-        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
-      });
 
       const localDataPercent = localData.map((x) => x.percent);
       const minVal = d3.min(localDataPercent);
@@ -1805,23 +1802,23 @@ export default {
     drawHorizontalChart(localData, key, ref, color, height, title = null) {
       const datasets = [];
       const volumeReferences = localData.map((d) => d.volume_reference);
-      if (volumeReferences.some((x) => x)) {
-        datasets.push({
-          label: "Référence",
-          backgroundColor: "#33ac2e",
-          borderColor: "#33ac2e",
-          borderWidth: 1,
-          barThickness: 12,
-          data: volumeReferences,
-        });
-      }
+      // if (volumeReferences.some((x) => x)) {
+      //   datasets.push({
+      //     label: "Référence",
+      //     backgroundColor: "#33ac2e",
+      //     borderColor: "#33ac2e",
+      //     borderWidth: 1,
+      //     barThickness: 12,
+      //     data: volumeReferences,
+      //   });
+      // }
 
       datasets.push({
         label: "Observation",
         backgroundColor: color,
         borderColor: color,
         barThickness: 12,
-        data: localData.map((d) => d.volume),
+        data: localData.map((d) => d.difference),
       });
       const dataChart = {
         labels: localData.map((d) => d[key]),
@@ -1842,6 +1839,7 @@ export default {
           legend: {
             position: "bottom",
             labels: {
+              display:false,
               fontSize: 9,
             },
           },

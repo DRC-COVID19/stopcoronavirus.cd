@@ -103,8 +103,7 @@
                       opens="center"
                       :timePicker="isHotspot"
                       :timePicker24Hour="isHotspot"
-                      :min-date="reference_min_date"
-                      :max-date="Observation_max_date"
+
                       @update="UpdatePreferenceDate"
                       :calculate-position="dateRangerPosition"
                       class="style-picker"
