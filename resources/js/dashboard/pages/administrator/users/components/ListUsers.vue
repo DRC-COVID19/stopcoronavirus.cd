@@ -45,7 +45,19 @@
         <b-pagination page-class="text-blue-dash" v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>
       </b-col>
     </b-row>
-    <b-modal v-model="deleteModalShow">Voulez-vous supprimer l'utilisateurs {{currentUserId}} ?</b-modal>
+    <b-modal  v-model="isDeleteModalShown">
+      Voulez-vous supprimer l'utilisateurs {{currentUserId}} ?
+      <template #modal-footer="{ ok, cancel}">
+      <b>Custom Footer</b>
+      <!-- Emulate built in modal footer ok and cancel button actions -->
+      <b-button size="sm" variant="success" @click="ok()">
+        Accepter 
+      </b-button>
+      <b-button size="sm" variant="danger" @click="cancel()">
+        Annuler
+      </b-button>
+    </template>
+    </b-modal>
   </div>
 </template>
 
@@ -64,9 +76,9 @@
         filter: '',
         perPage: 15,
         currentPage: 1,
-        deleteModalShow: false,
-        editModalShow: false,
-        currentUserId: -1
+        isDeleteModalShown: false,
+        currentUserId: -1,
+        editModalShow: false
       }
     },
     computed: {
@@ -75,9 +87,9 @@
       }
     },
     methods: {
-      deleteUser (id) {
-        this.deleteModalShow = true
-        this.currentUserId = id
+      deleteUser (userId) {
+        this.isDeleteModalShown = true
+        this.currentUserId = userId
       },
       updateUser (id) {
 

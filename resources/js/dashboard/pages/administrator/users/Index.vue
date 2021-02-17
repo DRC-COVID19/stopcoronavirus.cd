@@ -6,6 +6,16 @@
                 <b-row class="d-flex justify-content-start">
                     <Header :title="title" :iconClass="iconClass"/>
                 </b-row>
+                <b-alert
+                    variant="success" 
+                    :show="isUserDeleted" 
+                    dismissible 
+                    fade 
+                    @dismiss-count-down="timeOut" 
+                    class="mx-3"
+                >
+                    Utilisateur supprime avec success
+                </b-alert>
                 <ListUser :users="users"/>
             </b-col>
             <b-col cols="12" md="4" class="mt-5">
@@ -43,6 +53,7 @@
                 users: [],
                 userAdded: false,
                 showSuccess: false,
+                isUserDeleted: false,
                 timeOut: 3
             }
         },
@@ -50,6 +61,18 @@
             this.getUserList()
         },
         methods: {
+            onDeleteUser (userId) {
+                axios.delete('/api/admin_users/'+userId, {
+                    params: {}
+                })
+                .then(() => {
+                    this.getUserList()
+                    this.isUserDeleted = true
+                })
+                .catch(() => {
+                    console.log('failed')
+                })
+            },
             createUser(form) {
                 this.userAdded = false
                 this.isLoading = true

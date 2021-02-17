@@ -99,7 +99,7 @@
       }
     },
     methods: {
-      onSubmit(event) {
+      onSubmit() {
         if (this.form.password === this.form.confirmPassword && this.form.roles.length !== 0) {
           this.$emit('onCreate', this.form)
         } else {
