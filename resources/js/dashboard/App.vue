@@ -27,8 +27,9 @@ export default {
     axios.interceptors.response.use(
       (response) => response,
       (error) => {
-        // console.log("error.response", error.response);
-        if (error.response.status == 401) {
+        // console.log("error.response", error);
+        if (error && error.response.status == 401 && this.$route.name != "login") {
+          console.log('login','login-true');
           this.$gtag.event("auto-logout", {
             event_category: "logout",
             event_label: "auto-logout",
@@ -38,8 +39,7 @@ export default {
             name: "login",
           });
         }
-        // return Promise.reject(error);
-        // throw error;
+        return Promise.reject(error);
       }
     );
   },
@@ -56,13 +56,12 @@ export default {
       (user) => {
         if (user && user.email) {
           // console.log("user.email", user);
-          
+
           this.$gtag.set({
             user_id: `${user.name.replace(" ", "_")}_kd_${user.id}`,
           });
           //  ga("set", "userId", user.email)
           // gtag('set', {'user_id': `${user.name.replace(" ", "_")}_kd_${user.id}`}); // Set the user ID using signed-in user_id.
-         
         }
       }
     );
