@@ -1,7 +1,7 @@
 <template>
     <b-container  fluid>
             
-        <b-row>
+        <b-row class="md-reverse">
             <b-col cols="12" md="8">
                 <b-row class="d-flex justify-content-start">
                     <Header :title="title" :iconClass="iconClass"/>

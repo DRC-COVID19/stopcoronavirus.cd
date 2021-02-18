@@ -34,7 +34,7 @@
               @blur="validateMail()"
             ></b-form-input>
           </b-form-group>
-          <b-alert show v-if="validateMailMessage !== ''" variant="light">{{validateMailMessage}}</b-alert>
+          <b-form-text id="password-help-block">{{validateMailMessage}}</b-form-text>
           <b-form-group label-class="text-dash-color" id="input-group-3" label="Nom *" label-for="input-3">
             <b-form-input
               id="input-3"
@@ -53,10 +53,10 @@
           </b-form-text>
           <label class="text-dash-color" for="text-password-confirm">Confirmation de mot de passe *</label>
           <b-form-input class="input-dash" type="password" id="text-password-confirm" aria-describedby="password-help-block" v-model="form.confirmPassword"></b-form-input>
-          <b-alert show variant="light">{{warningMissMatch}}</b-alert>
-          <b-row>
+          <b-form-text id="password-help-block">{{warningMissMatch}}</b-form-text>
+          <b-row class="px-3 pt-4 d=flex justify-content-start">
             <b-button type="submit" variant="primary" class="btn-dash-blue">{{btnTitle}}</b-button>
-            <b-button type="reset" v-if="title !== 'Creation d\'un utilisateur'" variant="primary" class="btn-edit">Annuler</b-button>
+            <b-button type="reset" v-if="title !== 'Creation d\'un utilisateur'" variant="primary" class="ml-4 btn-edit">Annuler</b-button>
           </b-row>
         </b-form>
       </div>
