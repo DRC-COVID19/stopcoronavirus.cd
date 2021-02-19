@@ -5,16 +5,17 @@
         <b-row class="d-flex justify-content-start">
           <Header :title="title" :iconClass="iconClass" />
         </b-row>
-        <b-row>
+        <b-row class="mx-4">
           <b-col md="6">
-            <b-text>Selectionner la province</b-text>
+            Selectionner la province
             <v-select v-model="selectedProvince" multiple :options="provinces" label="name" :reduce="item=>item.id" />
           </b-col>
           <b-col md="6">
-            <b-text>Selectionner la ville</b-text>
+            Selectionner la ville
             <v-select v-model="selectedVille" multiple :options="villes" label="name" :reduce="item=>item.id" />
-          </b-col>          
+          </b-col>        
         </b-row>
+        <ListSituation />
       </b-col>
       <b-col md="4">
       </b-col>
@@ -24,9 +25,11 @@
 
 <script>
   import Header from '../components/Header';
+  import ListSituation from './components/ListSituation';
   export default {
     components: {
-      Header
+      Header,
+      ListSituation
     },
     data () {
       return {
