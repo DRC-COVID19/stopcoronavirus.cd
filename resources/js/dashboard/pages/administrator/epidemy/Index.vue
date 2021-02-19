@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid>
+  <b-container fluid class="align-center">
     <b-row>
       <b-col md="8">
         <b-row class="d-flex justify-content-start">
@@ -18,6 +18,7 @@
         <ListSituation />
       </b-col>
       <b-col md="4">
+        <CreateSituation />
       </b-col>
     </b-row>
   </b-container>
@@ -26,10 +27,12 @@
 <script>
   import Header from '../components/Header';
   import ListSituation from './components/ListSituation';
+  import CreateSituation from './components/CreateSituation';
   export default {
     components: {
       Header,
-      ListSituation
+      ListSituation,
+      CreateSituation
     },
     data () {
       return {

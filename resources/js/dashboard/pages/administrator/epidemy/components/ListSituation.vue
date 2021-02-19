@@ -29,13 +29,14 @@
             class="action-btn-group"
           >
             <i @click="editSituation(data.item.last_update)" class="mx-2 fas fa-edit"></i>
+            <i @click="deleteSituation(data.item.last_update)" class="mx-2 fas fa-trash"></i>
           </template>
         </b-table>
         <b-pagination page-class="text-blue-dash" v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>
       </b-col>
     </b-row>
     <b-modal  v-model="isDeleteModalShown">
-      Voulez-vous vraiment supprimer la situation {{currentSituation.id}} ?
+      Voulez-vous supprimer la mise à jour du {{currentSituation.last_update}} ?
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter 
@@ -59,7 +60,7 @@
     },
     data () {
       return {
-        fields: ['Date', 'Confirmé', 'Actifs', 'Graves', 'Guéris', 'Décès', 'Importé', 'Locale', 'actions'],
+        fields: ['last_update', 'confirmed', 'sick', 'seriously', 'healed', 'dead', 'imported', 'local', 'actions'],
         filter: '',
         perPage: 15,
         currentPage: 1,
@@ -87,6 +88,10 @@
       }
     },
     methods: {
+      deleteSituation (last_update) {
+        this.isDeleteModalShown = true
+        this.currentSituation.last_update = last_update
+      },
       editSituation (last_update) {
         console.log('Edit')
         // this.isDeleteModalShown = true
@@ -117,7 +122,11 @@
   @import "@~/sass/_variables";
   .fa-edit {
     color: $fin-8;
-    font-size: 16px;
+    font-size: 18px;
+  }
+  .fa-trash {
+    color: $fin-5;
+    font-size: 18px; 
   }
   .btn-remove {
     background-color: $dash-red;
