@@ -1,17 +1,17 @@
 <template>
     <b-container  fluid>
             
-        <b-row class="md-reverse">
+        <b-row>
             <b-col cols="12" md="8">
                 <b-row class="d-flex justify-content-start">
                     <Header :title="title" :iconClass="iconClass"/>
                 </b-row>
                 <b-alert
                     variant="success" 
-                    :show="isUserDeleted" 
-                    dismissible 
-                    fade 
-                    @dismiss-count-down="timeOut" 
+                    :show="isUserDeleted"
+                    dismissible
+                    fade
+                    @dismiss-count-down="timeOut"
                     class="mx-3"
                 >
                     Utilisateur supprime avec success
@@ -20,11 +20,11 @@
             </b-col>
             <b-col cols="12" md="4" class="mt-5">
                 <b-alert
-                    variant="success" 
-                    :show="showSuccess" 
-                    dismissible 
+                    variant="success"
+                    :show="showSuccess"
+                    dismissible
                     fade
-                    @dismiss-count-down="timeOut" 
+                    @dismiss-count-down="timeOut"
                     class="mx-3"
                 >
                     Utilisateur cree avec success
@@ -129,6 +129,6 @@
         font-size: 14px;
     }
     .hidden_list {
-        opacity: 1
+        opacity: 0.4
     }
 </style>

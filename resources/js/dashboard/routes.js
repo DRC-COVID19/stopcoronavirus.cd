@@ -15,7 +15,7 @@ import Landing from './pages/Landing';
 import Administrator from './pages/Administrator';
 import AdminUserIndex from './pages/administrator/users/Index';
 import ShowUser from './pages/administrator/users/ShowUser';
-import Epidemie from './pages/administrator/epidemy/Epidemy';
+import Epidemie from './pages/administrator/epidemy/Index';
 
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
