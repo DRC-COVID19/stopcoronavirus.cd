@@ -2,24 +2,30 @@
   <div class="px-5">
     <b-row class="my-3 d-flex justif-content-start">
       <b-col cols="12" md="6">
-        <b-form-input
+        <b-form-datepicker
+          id="datepicker"
+          v-model="filter"
+          placeholder="Choisir la date"
+          class="mb-2">
+        </b-form-datepicker>
+        <!-- <b-form-input
           v-model="filter"
           class="input-dash"
           type="search"
           placeholder='Filtrer'
-        ></b-form-input>
+        ></b-form-input> -->
       </b-col>
       <b-col cols="12" md="6" class="ml-auto">
       </b-col>
     </b-row>
     <b-row>
       <b-col>
-        <b-table 
+        <b-table
           responsive
-          striped 
+          striped
           hover
           :fields="fields"
-          :items="situations" 
+          :items="situations"
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
@@ -34,7 +40,7 @@
           <template
             v-slot:cell(last_update)="data"
           >
-            {{data.item.last_update}}
+            {{moment(data.item.last_update).format('D MMMM YYYY')}}
           </template>
         </b-table>
         <b-pagination page-class="text-blue-dash" v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>
