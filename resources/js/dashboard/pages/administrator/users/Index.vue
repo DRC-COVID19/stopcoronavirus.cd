@@ -94,10 +94,10 @@
                     email: form.email,
                     roles_id: form.roles
                 })
-                .then(({data}) => {
+                .then(() => {
                     this.userAdded = true
                     this.isLoading = false
-                    this.showSuccess=true
+                    this.showSuccess =true
                     this.getUserList(1)
                 })
                 .catch((response) => {

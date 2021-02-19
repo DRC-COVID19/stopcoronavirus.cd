@@ -10,12 +10,12 @@
               label="Date *"
               label-for="datepicker"
             >
-              <b-form-datepicker id="datepicker" v-model="last_update" class="mb-2"></b-form-datepicker>
+              <b-form-datepicker id="datepicker" v-model="form.last_update" class="mb-2"></b-form-datepicker>
             </b-form-group>
           </b-row>
           <b-row class="d-flex justify-content-start">
             <b-col md="4">
-              <b-form-group label-class="text-dash-color" id="input-group-3" label="Confirmes *" label-for="input-3">
+              <b-form-group label-class="text-dash-color" id="input-group-3" label="Confirmés " label-for="input-3">
                 <b-form-input
                   id="input-one"
                   class="input-dash"
@@ -26,7 +26,7 @@
               </b-form-group>
             </b-col>
             <b-col md="4">
-              <b-form-group label-class="text-dash-color" id="input-group-3" label="Actifs *" label-for="input-3">
+              <b-form-group label-class="text-dash-color" id="input-group-3" label="Actifs " label-for="input-3">
                 <b-form-input
                   id="input-two"
                   class="input-dash"
@@ -37,7 +37,7 @@
               </b-form-group>
             </b-col>
             <b-col md="4">
-              <b-form-group label-class="text-dash-color" id="input-group-3" label="Grave *" label-for="input-3">
+              <b-form-group label-class="text-dash-color" id="input-group-3" label="Grave " label-for="input-3">
                 <b-form-input
                   id="input-three"
                   class="input-dash"
@@ -48,7 +48,7 @@
               </b-form-group>
             </b-col>
             <b-col md="4">
-              <b-form-group label-class="text-dash-color" id="input-group-3" label="Deces *" label-for="input-3">
+              <b-form-group label-class="text-dash-color" id="input-group-3" label="Déces " label-for="input-3">
                 <b-form-input
                   id="input-four"
                   class="input-dash"
@@ -59,7 +59,7 @@
               </b-form-group>
             </b-col>
             <b-col md="4">
-              <b-form-group label-class="text-dash-color" id="input-group-3" label="Importes *" label-for="input-3">
+              <b-form-group label-class="text-dash-color" id="input-group-3" label="Importés " label-for="input-3">
                 <b-form-input
                   id="input-five"
                   class="input-dash"
@@ -70,7 +70,7 @@
               </b-form-group>
             </b-col>
             <b-col md="4">
-              <b-form-group label-class="text-dash-color" id="input-group-3" label="Locales *" label-for="input-3">
+              <b-form-group label-class="text-dash-color" id="input-group-3" label="Locales " label-for="input-3">
                 <b-form-input
                   id="input-six"
                   class="input-dash"
@@ -81,7 +81,7 @@
               </b-form-group>
             </b-col>
             <b-col md="4">
-              <b-form-group label-class="text-dash-color" id="input-group-3" label="Guéris *" label-for="input-3">
+              <b-form-group label-class="text-dash-color" id="input-group-3" label="Guéris " label-for="input-3">
                 <b-form-input
                   id="input-seven"
                   class="input-dash"
@@ -105,7 +105,7 @@
 <script>
   export default {
     props : {
-      situationAdded: {
+      isSituationAdded: {
         type: Boolean,
         required: false,
         default: () => false
@@ -154,8 +154,8 @@
     methods: {
       onSubmit () {
         if (this.btnTitle === "Envoyer") {
-          if (this.form.password === this.form.confirmPassword && this.form.roles.length !== 0) {
-            this.$emit('onCreate', this.form)
+          if (this.form.last_update.trim() !== '') {
+            this.$emit('onCreateSituation', this.form)
           } else {
             this.showWarning = true
           }
