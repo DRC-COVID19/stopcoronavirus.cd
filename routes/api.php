@@ -1,11 +1,16 @@
 <?php
 
 use App\Flux;
+use App\Flux24PresenceZone;
+use App\Flux24Province;
+use App\Flux30ZoneSum;
+use App\Flux30ZoneSumByDate;
 use App\Http\Controllers\HospitalSituationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\PandemicStat;
 use App\Http\Resources\PandemicStat as PandemicStatResource;
+use Encore\Admin\Grid\Filter\Where;
 use Illuminate\Support\Facades\DB;
 
 /*
@@ -52,23 +57,233 @@ Route::group(['prefix' => 'pandemic-stats'], function () {
   Route::delete('/{pandemic_stat_id}', 'PandemicStatController@destroy');
 });
 
-Route::get('/data-2', function () {
-  $data = Flux::on('mysql')
-    ->select(['origin', DB::raw('sum("Volume")')])
-    ->join('provinces', function ($q) {
-      $q->on('provinces.id', 'health_zones.province_id');
-    })
-    ->join('health_zones', function ($q) {
-      $q->on('health_zones.name', 'flux_24.origin');
-    })
-    ->where('Destination', "Gombe")
-    ->where('Home_Category', 'Origin_Zone_Resident')
-    ->where('provinces.name', 'Kinshasasa')
-    ->whereBetween('Date',['2020-02-01','2020-06-01'])
-    ->groupBy('origin')
-    ->get();
-  return response()->json($data);
+Route::group(['prefix' => 'flux-test', 'middleware' => 'cache.headers:private;max_age=3600'], function () {
+  Route::get('/data-1', function (Request $request) {
+    $activity = $request->get('activity');
+    $data = Flux::on('mysql')->select(['date', DB::raw('sum(volume) as volume')])
+      ->where('Destination', "Gombe")
+      ->whereBetween('Date', ['2020-02-01', '2020-12-31'])
+      ->where('Immobility', '3h')
+      ->orderBy('date')
+      ->groupBy('date');
+
+    if ($activity == 'work') {
+      $data->where('Activity_Category', 'Destination_Zone_Worker');
+    } else if ($activity == 'study') {
+      $data->where('Activity_Category', 'Study_Zone_Worker');
+    }
+
+    $data = $data->get();
+    return response()->json($data);
+  });
+
+  Route::get('/data-2', function (Request $request) {
+    $start = $request->get('start');
+    $end = $request->get('end');
+    $data = Flux::on('mysql')
+      ->select(['origin', DB::raw('sum(volume)  AS volume,MONTH(date) as month')])
+      ->join('health_zones', function ($q) {
+        $q->on('health_zones.name', 'flux_24.origin');
+      })
+      ->join('provinces', function ($q) {
+        $q->on('provinces.id', 'health_zones.province_id');
+      })
+      ->where('Destination', "Gombe")
+      ->where('Immobility', '3h')
+      ->where('Home_Category', 'Origin_Zone_Resident')
+      ->where('provinces.name', 'Kinshasa')
+      ->whereBetween('Date', [$start, $end])
+      ->groupBy('origin', 'month')
+      ->orderBy('volume', 'DESC')
+      ->get();
+
+    $dataGroup = $data->groupBy('origin');
+    $dataFormatted = [];
+    foreach ($dataGroup as $key => $value) {
+      $avg = $value->avg('volume');
+      $dataFormatted[] = [
+        'origin' => $key,
+        'volume' => round($avg)
+      ];
+    }
+    return response()->json($dataFormatted);
+  });
+
+  Route::get('/data-3', function (Request $request) {
+    $zone = $request->get('zone');
+    $data = Flux30ZoneSum::select(['Hour', 'Date', DB::raw('sum("Volume")  AS volume')])
+      ->where('Destination', $zone)
+      ->whereBetween('Date', ['2020-11-17', '2020-12-18'])
+      ->groupBy('Hour', 'Date')
+      ->orderBy('Date')
+      ->get();
+    $dataAfter = Flux30ZoneSum::select(['Hour', 'Date', DB::raw('sum("Volume")  AS volume')])
+      ->where('Destination', $zone)
+      ->whereBetween('Date', ['2020-12-18', '2020-12-31'])
+      ->groupBy('Hour', 'Date')
+      ->orderBy('Date')
+      ->get();
+
+    $dataGoupAfter = $dataAfter->groupBy("Hour");
+    $dataFormattedAfter = [];
+    foreach ($dataGoupAfter as  $key => $value) {
+      $avg = $value->average('volume');
+      $dataFormattedAfter[] = [
+        'date' => $key,
+        'volume' => round($avg)
+      ];
+    }
+    $dataGoup = $data->groupBy("Hour");
+    $dataFormatted = [];
+    foreach ($dataGoup as  $key => $value) {
+      $avg = $value->average('volume');
+      $dataFormatted[] = [
+        'date' => $key,
+        'volume' => round($avg)
+      ];
+    }
+    return response()->json(['before' => $dataFormatted, 'after' => $dataFormattedAfter]);
+  });
+
+  Route::get('/data-3-out', function (Request $request) {
+    $zone = $request->get('zone');
+    $data = Flux30ZoneSum::select(['Hour', 'Date', DB::raw('sum("Volume")  AS volume')])
+      ->where('Origin', $zone)
+      ->whereBetween('Date', ['2020-11-17', '2020-12-18'])
+      ->groupBy('Hour', 'Date')
+      ->orderBy('Date')
+      ->get();
+    $dataAfter = Flux30ZoneSum::select(['Hour', 'Date', DB::raw('sum("Volume")  AS volume')])
+      ->where('Origin', $zone)
+      ->whereBetween('Date', ['2020-12-18', '2020-12-31'])
+      ->groupBy('Hour', 'Date')
+      ->orderBy('Date')
+      ->get();
+
+    $dataGoupAfter = $dataAfter->groupBy("Hour");
+    $dataFormattedAfter = [];
+    foreach ($dataGoupAfter as  $key => $value) {
+      $avg = $value->average('volume');
+      $dataFormattedAfter[] = [
+        'date' => $key,
+        'volume' => round($avg)
+      ];
+    }
+    $dataGoup = $data->groupBy("Hour");
+    $dataFormatted = [];
+    foreach ($dataGoup as  $key => $value) {
+      $avg = $value->average('volume');
+      $dataFormatted[] = [
+        'date' => $key,
+        'volume' => round($avg)
+      ];
+    }
+    return response()->json(['before' => $dataFormatted, 'after' => $dataFormattedAfter]);
+  });
+
+  Route::get('/data-4', function (Request $request) {
+    $zone = $request->get('zone');
+    $data = Flux24PresenceZone::select(['Zone as zone', 'Date as date', DB::raw('SUM("Volume")  AS volume')])
+      // ->join('health_zones', function ($q) {
+      //   $q->on('health_zones.name', 'flux24_presence_zones.Zone');
+      // })
+      // ->join('provinces', function ($q) {
+      //   $q->on('provinces.id', 'health_zones.province_id');
+      // })
+      ->where('PresenceType', 'Nuit')
+      ->where('Zone', $zone)
+      ->whereRaw('"Home_Zone"="Zone"')
+      // ->where('provinces.name', 'Kinshasa')
+      ->whereBetween('Date', ['2020-02-01', '2020-12-31'])
+      ->groupBy('Zone', 'Date')
+      // ->orderBy('Volume', 'DESC')
+      ->get();
+    return response()->json($data);
+  });
+  Route::get('/data-4-1', function (Request $request) {
+    // $zone = $request->get('zone');
+    $data = Flux24PresenceZone::select(['Zone as zone', DB::raw('SUM("Volume")  AS volume')])
+      ->join('health_zones', function ($q) {
+        $q->on('health_zones.name', 'flux24_presence_zones.Zone');
+      })
+      ->join('provinces', function ($q) {
+        $q->on('provinces.id', 'health_zones.province_id');
+      })
+      ->where('PresenceType', 'Nuit')
+      ->whereRaw('"Home_Zone"="Zone"')
+      ->where('provinces.name', 'Kinshasa')
+      ->whereBetween('Date', ['2020-02-01', '2020-12-31'])
+      ->groupBy('Zone', 'Date')
+      ->orderBy('volume', 'DESC')
+      ->get();
+
+    $dataGoup = $data->groupBy("zone");
+    $dataFormatted = [];
+
+    foreach ($dataGoup as  $key => $value) {
+      $avg = $value->average('volume');
+      $dataFormatted[] = [
+        'origin' => $key,
+        'volume' => round($avg)
+      ];
+    }
+    return response()->json($dataFormatted);
+  });
+
+  Route::get('/data-6', function (Request $request) {
+    $zone = $request->get('zone');
+    $data = Flux30ZoneSumByDate::select(['date as date', "Observation_Zone", 'volume'])
+      ->where('Observation_Zone', $zone)
+      ->whereBetween('date', ['2020-02-01', '2020-12-31'])
+      ->orderBy('date')
+      ->get();
+    return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
+  });
+
+  Route::get('/data-7-in', function (Request $request) {
+    $data = Flux24Province::select(['Date as date', DB::raw('sum("Volume")  AS volume')])
+      ->where('Destination', "Kinshasa")
+      ->whereBetween('Date', ['2020-02-01', '2020-12-31'])
+      ->groupBy('Date')
+      ->orderBy('Date')
+      ->get();
+    return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
+  });
+
+  Route::get('/data-7-out', function (Request $request) {
+    $data = Flux24Province::select(['Date as date', DB::raw('sum("Volume")  AS volume')])
+      ->where('Origin', "Kinshasa")
+      ->whereBetween('Date', ['2020-02-01', '2020-12-31'])
+      ->groupBy('Date')
+      ->orderBy('Date')
+      ->get();
+    return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
+  });
+
+  Route::get('/data-7-top-in', function (Request $request) {
+    $date_start = $request->get('date_start');
+    $date_end = $request->get('date_end');
+    $data = Flux24Province::select(['Origin as origin', DB::raw('sum("Volume")  AS volume,date_trunc(\'month\', "Date") as month')])
+      ->where('Destination', "Kinshasa")
+      ->whereBetween('Date', [$date_start, $date_end])
+      ->groupBy('Origin', 'month')
+      ->orderBy('volume', 'DESC')
+      // ->limit(10)
+      ->get();
+    $dataGroup = $data->groupBy('origin');
+
+    $dataFormatted = [];
+    foreach ($dataGroup as $key => $value) {
+      $avg = $value->avg('volume');
+      $dataFormatted[] = [
+        'origin' => $key,
+        'volume' => round($avg)
+      ];
+    }
+    return response()->json($dataFormatted, 200, [], JSON_NUMERIC_CHECK);
+  });
 });
+
 
 Route::group([
   'prefix' => 'dashboard',
