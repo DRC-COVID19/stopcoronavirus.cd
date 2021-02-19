@@ -28,7 +28,7 @@
             v-slot:cell(actions)="data"
             class="action-btn-group"
           >
-            <i @click="editSituation(data.item.last_update)" class="mx-2 fas fa-edit"></i>
+            <i @click="editSituation(data.item.last_update, data.item.confirmed, data.item.sick, data.item.dead, data.item.healed, data.item.imported, data.item.local, data.item.seriously)" class="mx-2 fas fa-edit"></i>
             <i @click="deleteSituation(data.item.last_update)" class="mx-2 fas fa-trash"></i>
           </template>
           <template
@@ -115,17 +115,7 @@
       },
       onCancelDelection () {
         this.isDeleteModalShown = false
-      },
-      // updateSituation (name, id, usernmae, roles, email) {
-      //   this.currentUser = {
-      //     id,
-      //     name,
-      //     usernmae,
-      //     roles,
-      //     email
-      //   }
-      //   this.$emit('onUpdateUser', this.currentUser)
-      // }
+      }
     }
   }
 </script>

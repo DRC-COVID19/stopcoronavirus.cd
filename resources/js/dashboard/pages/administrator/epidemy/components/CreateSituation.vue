@@ -142,7 +142,7 @@
       this.resetForm ()
     },
     watch: {
-      situationAdded () {
+      isSituationAdded () {
         this.resetForm()
       },
       formToPopulate () {
@@ -151,7 +151,7 @@
     },
     methods: {
       onSubmit () {
-        if (this.btnTitle === "Envoyer" && typeof this.form.confirmed === 'number' && typeof this.form.sick === 'number' && typeof this.form.dead === 'number' && typeof this.form.local === 'number' && typeof this.form.seriously === 'number' ) {
+        if (this.btnTitle === "Envoyer" ) {
           if (this.form.last_update.trim() !== '') {
             this.$emit('onCreateSituation', this.form)
           } else {
@@ -186,7 +186,7 @@
           })
       },
       resetForm () {
-        if (this.situationAdded) {
+        if (this.isSituationAdded) {
           this.form = {}
         }
       },
@@ -199,6 +199,8 @@
         this.form.imported = this.formToPopulate.imported
         this.form.local = this.formToPopulate.local
         this.form.healed = this.formToPopulate.healed
+        this.title = "Editer la situation"
+        this.btnTitle = "Valider"
       }
     },
     computed: {

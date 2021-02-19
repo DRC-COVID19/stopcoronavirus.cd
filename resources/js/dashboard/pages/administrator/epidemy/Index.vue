@@ -1,11 +1,11 @@
 <template>
-  <b-container fluid class="align-center">
+  <b-container fluid vertical-align='canter'>
     <b-row>
       <b-col md="8">
         <b-row class="d-flex justify-content-start">
           <Header :title="title" :iconClass="iconClass" />
         </b-row>
-        <ListSituation :situations="situations" @onEditSituation="editSituation" />
+        <ListSituation :class="{hidden_list:isUpdating}" :situations="situations" @onEditSituation="editSituation" />
       </b-col>
       <b-col md="4">
         <b-alert
@@ -18,7 +18,7 @@
         >
           Situation ajoutee avec success
         </b-alert>
-        <CreateSituation @onCreateSituation="createSituation" :isSituationAdded="isSituationAdded" :formToPopulate="formToPopulate" />
+        <CreateSituation @onCancelUpdate="cancelUpdate" @onCreateSituation="createSituation" :isSituationAdded="isSituationAdded" :formToPopulate="formToPopulate" />
       </b-col>
     </b-row>
   </b-container>
@@ -46,10 +46,14 @@
         showSuccess: false,
         timeOut: 3,
         situations: [],
+        isUpdating: false,
+        formToPopulate: {}
       }
     },
     methods: {
       createSituation (form) {
+        this.isSituationAdded = false;
+        this.isLoading = true
         axios.post('/api/pandemic-stats', {
           confirmed: form.confirmed,
           local: form.local,
@@ -65,8 +69,9 @@
           this.isSituationAdded = true;
           this.isLoading = false;
           this.showSuccess = true;
+          this.getSituationList()
         }).catch((err) => {
-          
+          console.local(err)
         });
       },
       editSituation (form) {
@@ -81,9 +86,11 @@
         .then(({data}) => {
           this.situations = data.data;
           this.isLoading = false;
-          this.getSituationList();
         })
         .catch(e => console.log(e))
+      },
+      cancelUpdate () {
+        this.isUpdating = false;
       },
       switchPage (page) {
         this.getSituationList(page)
@@ -93,5 +100,7 @@
 </script>
 
 <style lang="scss" scoped>
-
+  .hidden_list {
+    opacity: 0.6
+  }
 </style>

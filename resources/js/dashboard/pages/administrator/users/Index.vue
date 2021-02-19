@@ -1,6 +1,5 @@
 <template>
-    <b-container  fluid>
-            
+    <b-container  fluid>    
         <b-row>
             <b-col cols="12" md="8">
                 <b-row class="d-flex justify-content-start">
@@ -129,6 +128,6 @@
         font-size: 14px;
     }
     .hidden_list {
-        opacity: 0.4
+        opacity: 0.6
     }
 </style>
