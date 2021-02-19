@@ -5,7 +5,17 @@
         <b-row class="d-flex justify-content-start">
           <Header :title="title" :iconClass="iconClass" />
         </b-row>
-        <ListSituation :class="{hidden_list:isUpdating}" :situations="situations" @onEditSituation="editSituation" />
+        <b-alert
+          variant="success" 
+          :show="isSituationDeleted"
+          dismissible
+          fade
+          @dismiss-count-down="timeOut"
+          class="mx-3"
+        >
+          Situation supprimee avec succes
+        </b-alert>
+        <ListSituation @onDeleteSituation="deleteSituation" :class="{hidden_list:isUpdating}" :situations="situations" @onEditSituation="editSituation" />
       </b-col>
       <b-col md="4">
         <b-alert
@@ -42,6 +52,7 @@
         title: 'Epidemie',
         iconClass: "fas fa-file-medical",
         isSituationAdded: false,
+        isSituationDeleted: false,
         isLoading: false,
         showSuccess: false,
         timeOut: 3,
@@ -51,6 +62,21 @@
       }
     },
     methods: {
+      deleteSituation (currentSituationId) {
+        axios.delete('/api/pandemic-stats/'+currentSituationId, {
+          params: {}
+        })
+        .then(() => {
+          this.getSituationList
+          setTimeout(() => {
+            this.isSituationDeleted = false
+          }, 3000);
+          this.isSituationDeleted = true
+        })
+        .catch(() => {
+          console.log('failed')
+        })
+      },
       createSituation (form) {
         this.isSituationAdded = false;
         this.isLoading = true

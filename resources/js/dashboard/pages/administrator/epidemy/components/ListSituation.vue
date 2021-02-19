@@ -110,8 +110,8 @@
         this.$emit('onEditSituation', this.currentSituation)
       },
       onValidateDelection () {
-        // this.$emit('onEditSituation', this.currentUser.id)
-        // this.isDeleteModalShown = false
+        this.$emit('onDeleteSituation', this.currentSituation.last_update)
+        this.isDeleteModalShown = false
       },
       onCancelDelection () {
         this.isDeleteModalShown = false
