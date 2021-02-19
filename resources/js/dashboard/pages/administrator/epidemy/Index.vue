@@ -5,7 +5,7 @@
         <b-row class="d-flex justify-content-start">
           <Header :title="title" :iconClass="iconClass" />
         </b-row>
-        <ListSituation :situations="situations" />
+        <ListSituation :situations="situations" @onEditSituation="editSituation" />
       </b-col>
       <b-col md="4">
         <b-alert
@@ -18,7 +18,7 @@
         >
           Situation ajoutee avec success
         </b-alert>
-        <CreateSituation @onCreateSituation="createSituation" :isSituationAdded="isSituationAdded" />
+        <CreateSituation @onCreateSituation="createSituation" :isSituationAdded="isSituationAdded" :formToPopulate="formToPopulate" />
       </b-col>
     </b-row>
   </b-container>
@@ -58,6 +58,7 @@
           seriously: form.seriously,
           healed: form.healed,
           dead: form.dead,
+          isUpdating: false,
           last_update: form.last_update
         })
         .then(() => {
@@ -68,6 +69,10 @@
           
         });
       },
+      editSituation (form) {
+        this.isUpdating = true;
+        this.formToPopulate = form
+      },
       getSituationList (page = 1) {
         this.isLoading = true;
         axios.get('/api/pandemic-stats', {
@@ -76,6 +81,7 @@
         .then(({data}) => {
           this.situations = data.data;
           this.isLoading = false;
+          this.getSituationList();
         })
         .catch(e => console.log(e))
       },

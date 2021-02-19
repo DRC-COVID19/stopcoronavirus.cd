@@ -31,6 +31,11 @@
             <i @click="editSituation(data.item.last_update)" class="mx-2 fas fa-edit"></i>
             <i @click="deleteSituation(data.item.last_update)" class="mx-2 fas fa-trash"></i>
           </template>
+          <template
+            v-slot:cell(last_update)="data"
+          >
+            {{data.item.last_update}}
+          </template>
         </b-table>
         <b-pagination page-class="text-blue-dash" v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>
       </b-col>
@@ -76,20 +81,9 @@
         currentPage: 1,
         isDeleteModalShown: false,
         currentSituation: {
-          id: -1,
           last_update: ''
         },
         editModalShow: false,
-        // situations: [
-        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-        //   {last_update:'12.07.2020', confirmed: 4903, sick: 399, seriously: 341, healed: 238, dead: 31, imported: 13, local: 123},
-        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 341, healed: 238, dead: 31, imported: 13, local: 123},
-        //   {last_update:'12.01.2021', confirmed: 203, sick: 339, seriously: 81, healed: 238, dead: 31, imported: 13, local: 123},
-        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-        // ]
       }
     },
     computed: {
@@ -102,11 +96,18 @@
         this.isDeleteModalShown = true
         this.currentSituation.last_update = last_update
       },
-      editSituation (last_update) {
-        console.log('Edit')
-        // this.isDeleteModalShown = true
-        // this.currentUser.id = userId
-        // this.currentUser.name = name
+      editSituation (last_update, confirmed, sick, dead, healed, imported, local, seriously) {
+        this.currentSituation = {
+          last_update,
+          confirmed,
+          sick,
+          dead,
+          local,
+          imported,
+          seriously,
+          healed
+        }
+        this.$emit('onEditSituation', this.currentSituation)
       },
       onValidateDelection () {
         // this.$emit('onEditSituation', this.currentUser.id)

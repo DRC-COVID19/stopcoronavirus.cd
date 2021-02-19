@@ -21,7 +21,6 @@
                   class="input-dash"
                   v-model="form.confirmed"
                   placeholder=""
-                  required
                 ></b-form-input>
               </b-form-group>
             </b-col>
@@ -32,7 +31,6 @@
                   class="input-dash"
                   v-model="form.sick"
                   placeholder=""
-                  required
                 ></b-form-input>
               </b-form-group>
             </b-col>
@@ -43,7 +41,6 @@
                   class="input-dash"
                   v-model="form.seriously"
                   placeholder=""
-                  required
                 ></b-form-input>
               </b-form-group>
             </b-col>
@@ -54,7 +51,6 @@
                   class="input-dash"
                   v-model="form.dead"
                   placeholder=""
-                  required
                 ></b-form-input>
               </b-form-group>
             </b-col>
@@ -65,7 +61,6 @@
                   class="input-dash"
                   v-model="form.imported"
                   placeholder=""
-                  required
                 ></b-form-input>
               </b-form-group>
             </b-col>
@@ -76,7 +71,6 @@
                   class="input-dash"
                   v-model="form.local"
                   placeholder=""
-                  required
                 ></b-form-input>
               </b-form-group>
             </b-col>
@@ -87,14 +81,13 @@
                   class="input-dash"
                   v-model="form.healed"
                   placeholder=""
-                  required
                 ></b-form-input>
               </b-form-group>
             </b-col>
           </b-row>
           <b-row class="px-3 pt-4 d-flex justify-content-start">
             <b-button type="submit" variant="primary" class="btn-dash-blue">{{btnTitle}}</b-button>
-            <b-button type="reset" v-if="title !== 'Creation d\'un utilisateur'" variant="primary" class="ml-4 btn-edit">Annuler</b-button>
+            <b-button type="reset" v-if="title !== 'Nouvelle Situation'" variant="primary" class="ml-4 btn-edit">Annuler</b-button>
           </b-row>
         </b-form>
       </div>
@@ -138,6 +131,11 @@
         roles:[]
       }
     },
+    watch: {
+      formToPopulate () {
+        this.populateForm
+      }
+    },
     mounted () {
       // Fetch the user roles
       this.getUserRoles(),
@@ -153,7 +151,7 @@
     },
     methods: {
       onSubmit () {
-        if (this.btnTitle === "Envoyer") {
+        if (this.btnTitle === "Envoyer" && typeof this.form.confirmed === 'number' && typeof this.form.sick === 'number' && typeof this.form.dead === 'number' && typeof this.form.local === 'number' && typeof this.form.seriously === 'number' ) {
           if (this.form.last_update.trim() !== '') {
             this.$emit('onCreateSituation', this.form)
           } else {
@@ -193,11 +191,14 @@
         }
       },
       populateForm () {
-        this.form.username = this.formToPopulate.usernmae
-        this.form.email = this.formToPopulate.email
-        this.form.name = this.formToPopulate.name
-        this.title = "Modification de l'utilisateur"
-        this.btnTitle = "Modifier"
+        this.form.last_update = this.formToPopulate.last_update
+        this.form.confirmed = this.formToPopulate.confirmed
+        this.form.sick = this.formToPopulate.sick
+        this.form.seriously = this.formToPopulate.seriously
+        this.form.dead = this.formToPopulate.dead
+        this.form.imported = this.formToPopulate.imported
+        this.form.local = this.formToPopulate.local
+        this.form.healed = this.formToPopulate.healed
       }
     },
     computed: {
