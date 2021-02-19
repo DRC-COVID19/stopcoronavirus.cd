@@ -8,12 +8,6 @@
           placeholder="Choisir la date"
           class="mb-2">
         </b-form-datepicker>
-        <!-- <b-form-input
-          v-model="filter"
-          class="input-dash"
-          type="search"
-          placeholder='Filtrer'
-        ></b-form-input> -->
       </b-col>
       <b-col cols="12" md="6" class="ml-auto">
       </b-col>
