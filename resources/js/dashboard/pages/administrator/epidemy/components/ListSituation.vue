@@ -52,15 +52,25 @@
 <script>
   export default {
     props: {
-      // situations: {
-      //   type: Array,
-      //   default: () => [],
-      //   required: false
-      // }
+      situations: {
+        type: Array,
+        default: () => [],
+        required: false
+      }
     },
     data () {
       return {
-        fields: ['last_update', 'confirmed', 'sick', 'seriously', 'healed', 'dead', 'imported', 'local', 'actions'],
+        fields: [
+          {key: 'last_update', label: 'Date'}, 
+          {key: 'confirmed', label: 'Confirme', sortable: true}, 
+          {key: 'sick', label: 'Actifs', sortable: true}, 
+          {key: 'seriously', label: 'Grave', sortable: true}, 
+          {key: 'healed', label: 'Gueris', sortable: true}, 
+          {key: 'dead', label: 'Deces', sortable: true}, 
+          {key: 'imported', label: 'Importes', sortable: true}, 
+          {key: 'local', label: 'Local', sortable: true}, 
+          'actions'
+        ],
         filter: '',
         perPage: 15,
         currentPage: 1,
@@ -70,16 +80,16 @@
           last_update: ''
         },
         editModalShow: false,
-        situations: [
-          {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-          {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-          {last_update:'12.07.2020', confirmed: 4903, sick: 399, seriously: 341, healed: 238, dead: 31, imported: 13, local: 123},
-          {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-          {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 341, healed: 238, dead: 31, imported: 13, local: 123},
-          {last_update:'12.01.2021', confirmed: 203, sick: 339, seriously: 81, healed: 238, dead: 31, imported: 13, local: 123},
-          {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-          {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
-        ]
+        // situations: [
+        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
+        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
+        //   {last_update:'12.07.2020', confirmed: 4903, sick: 399, seriously: 341, healed: 238, dead: 31, imported: 13, local: 123},
+        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
+        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 341, healed: 238, dead: 31, imported: 13, local: 123},
+        //   {last_update:'12.01.2021', confirmed: 203, sick: 339, seriously: 81, healed: 238, dead: 31, imported: 13, local: 123},
+        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
+        //   {last_update:'12.01.2021', confirmed: 203, sick: 239, seriously: 31, healed: 238, dead: 31, imported: 13, local: 123},
+        // ]
       }
     },
     computed: {

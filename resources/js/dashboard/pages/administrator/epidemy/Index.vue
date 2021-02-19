@@ -5,20 +5,7 @@
         <b-row class="d-flex justify-content-start">
           <Header :title="title" :iconClass="iconClass" />
         </b-row>
-        <b-row class="mx-4" vertical-align="center">
-          <b-col md="5">
-            Selectionner la province
-            <v-select v-model="selectedProvince" :options="provinces" label="name" :reduce="item=>item.id" />
-          </b-col>
-          <b-col md="5">
-            Selectionner la ville
-            <v-select v-model="selectedVille" :options="villes" label="name" :reduce="item=>item.id" />
-          </b-col>
-          <b-col md="2" class="mt-3">
-            <b-button type="submit" variant="success">Trier</b-button>
-          </b-col>
-        </b-row>
-        <ListSituation />
+        <ListSituation :situations="situations" />
       </b-col>
       <b-col md="4">
         <b-alert
@@ -47,6 +34,9 @@
       ListSituation,
       CreateSituation
     },
+    mounted () {
+      this.getSituationList()
+    },
     data () {
       return {
         title: 'Epidemie',
@@ -55,19 +45,7 @@
         isLoading: false,
         showSuccess: false,
         timeOut: 3,
-        provinces: [
-          "Kinshasa",
-          "Bandundu",
-          "Nord-kivu"
-        ],
-        villes: [
-          "Goma",
-          "Kinshasa",
-          "Lubumbashi",
-          "Bukavu"
-        ],
-        selectedVille: "",
-        selectedProvince: ""
+        situations: [],
       }
     },
     methods: {
@@ -89,6 +67,20 @@
         }).catch((err) => {
           
         });
+      },
+      getSituationList (page = 1) {
+        this.isLoading = true;
+        axios.get('/api/pandemic-stats', {
+          params: {page}
+        })
+        .then(({data}) => {
+          this.situations = data.data;
+          this.isLoading = false;
+        })
+        .catch(e => console.log(e))
+      },
+      switchPage (page) {
+        this.getSituationList(page)
       }
     }
   }
