@@ -9,11 +9,9 @@
 
 <script>
   import MainHeader from './administrator/components/MainHeader';
-  import Menu from './administrator/components/Menu';
   export default {
     components: {
       MainHeader,
-      Menu
     }
   };
 </script>

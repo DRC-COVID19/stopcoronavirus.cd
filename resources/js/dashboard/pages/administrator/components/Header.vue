@@ -1,7 +1,9 @@
 <template>
-  <div class="header_d">
-    <h3 class="h3"><i :class="`${iconClass}`"></i>{{title}}</h3>
-  </div>
+  <b-container class="d-flex flex-start ml-1">
+    <b-row class="header_d">
+      <h3 class="h3"><i :class="`${iconClass}`"></i>{{title}}</h3>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
