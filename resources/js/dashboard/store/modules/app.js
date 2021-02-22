@@ -11,15 +11,50 @@ export default {
     hotspotGeojson: null,
     hotspotGeojsonCentered: null,
     isLoading: false,
-    hospotPointJson:null,
-    canShowNavMobile:true,
+    hospotPointJson: null,
+    canShowNavMobile: true,
+    changeLogs: [
+      {
+        from: new Date(2018, 7),
+        title: "Name",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+        showDayAndMonth: true,
+        notRead:true
+      },
+
+      {
+        from: new Date(2016, 1),
+        title: "Name",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+        showDayAndMonth: true,
+      },
+      {
+        from: new Date(2016, 6),
+        title: "Name",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+        showDayAndMonth: true,
+      },
+      {
+        from: new Date(2012, 1),
+        title: "Name",
+        description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+        showDayAndMonth: true,
+      },
+    ]
   },
   mutations: {
     setIsLoading(state, payload) {
       state.isLoading = payload;
     },
-    setCanShowNavMobile(state,payload){
-      state.canShowNavMobile=payload;
+    setCanShowNavMobile(state, payload) {
+      state.canShowNavMobile = payload;
+    },
+    setChangeLogs(state, payload) {
+      state.changeLogs = payload;
     }
   },
   actions: {
@@ -156,6 +191,11 @@ export default {
         .then(({ data }) => {
           state.hospotPointJson = data;
         });
-      },
+    },
+  },
+  getters: {
+    getChangeLogNotRead(state) {
+      return state.changeLogs.filter((x) => x.notRead);
+    }
   }
 }

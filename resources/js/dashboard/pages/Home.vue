@@ -370,11 +370,13 @@
         </b-row>
       </transition>
       <Waiting v-if="isLoading" />
+      <ChangeLogModal id="change-log-modal"/>
     </b-container>
   </div>
 </template>
 
 <script>
+import ChangeLogModal from '../components/ChangeLogModal';
 import Maps from "../components/Maps";
 import MapsLegend from "../components/MapsLegend";
 import MapsLegendEpidemic from "../components/MapsLegendEpidemic";
@@ -446,6 +448,7 @@ export default {
     About,
     ToggleButton,
     AfriFluxChart,
+    ChangeLogModal
   },
   data() {
     return {
@@ -669,6 +672,7 @@ export default {
     },
   },
   mounted() {
+    this.$bvModal.show('change-log-modal');
     this.$set(this.loadings, "healthZoneGeo", true);
     this.$set(this.loadings, "provinceGeo", true);
     this.$set(this.loadings, "hotspotGeo", true);

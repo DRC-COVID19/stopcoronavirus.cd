@@ -52,38 +52,39 @@
                   <i class="fas fa-bell"></i>
                 </div>
 
-                <span class="notification-count">8</span>
+                <span class="notification-count">{{
+                  getChangeLogNotRead.length
+                }}</span>
               </a>
               <div class="dropdown-nav" v-show="showHeaderNotification">
                 <div class="item-header">
                   <h6 class="item-title">Change log</h6>
                 </div>
-                <div class="item-content">
-                  <div class="media">
-                    <div class="item-icon bg-skyblue">
+                <div class="item-content" v-if="getChangeLogNotRead.length">
+                  <div
+                    class="media align-items-center d-flex"
+                    v-for="(item, index) in getChangeLogNotRead"
+                    :key="index"
+                    @click="selectMenu(7)"
+                  >
+                    <div
+                      class="item-icon bg-skyblue d-flex align-items-center justify-content-center"
+                    >
                       <i class="fas fa-history"></i>
                     </div>
                     <div class="media-body space-sm">
-                      <div class="post-title">Complete Today Task</div>
-                      <span>1 Mins ago</span>
+                      <div class="post-title">{{ item.title }}</div>
+                      <span>{{ moment(item.from).format("DD.MM.YYYY") }}</span>
                     </div>
                   </div>
-                  <div class="media">
-                    <div class="item-icon bg-orange">
-                      <i class="fas fa-history"></i>
-                    </div>
+                </div>
+                <div class="item-content" v-else>
+                  <div class="media align-items-center d-flex">
+                    <div
+                      class="item-icon bg-skyblue d-flex align-items-center justify-content-center"
+                    ></div>
                     <div class="media-body space-sm">
-                      <div class="post-title">Director Metting</div>
-                      <span>20 Mins ago</span>
-                    </div>
-                  </div>
-                  <div class="media">
-                    <div class="item-icon bg-violet-blue">
-                      <i class="fas fa-history"></i>
-                    </div>
-                    <div class="media-body space-sm">
-                      <div class="post-title">Update Password</div>
-                      <span>45 Mins ago</span>
+                      <div class="post-title">Aucune notification</div>
                     </div>
                   </div>
                 </div>
@@ -155,7 +156,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -167,7 +168,12 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       activeMenu: (state) => state.nav.activeMenu,
+      changeLogs: (state) => state.app.changeLogs,
     }),
+    ...mapGetters(["getChangeLogNotRead"]),
+    countReadChangeLogs() {
+      return getChangeLogNotRead.length;
+    },
   },
   methods: {
     ...mapActions(["logout"]),
@@ -262,11 +268,14 @@ export default {
       }
     }
     .item-content {
-      padding: 20px 25px;
       .media {
         border-bottom: 1px solid #eaeaea;
         padding-bottom: 14px;
-        margin-bottom: 18px;
+        padding: 20px 25px;
+        cursor: pointer;
+        &:hover {
+          background: $waiting_background;
+        }
         .item-icon {
           height: 30px;
           width: 30px;
