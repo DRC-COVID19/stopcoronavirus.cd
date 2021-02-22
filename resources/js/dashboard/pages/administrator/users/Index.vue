@@ -1,12 +1,12 @@
 <template>
-    <b-container  fluid>    
-        <b-row>
+    <b-container  fluid>
+        <b-row class="flex-xs-reverse">
             <b-col cols="12" md="8">
                 <b-row class="d-flex justify-content-start">
                     <Header :title="title" :iconClass="iconClass"/>
                 </b-row>
                 <b-alert
-                    variant="success" 
+                    variant="success"
                     :show="isUserDeleted"
                     dismissible
                     fade
@@ -63,7 +63,6 @@
         },
         methods: {
             deleteUser (currentUserId) {
-                console.log('proceeding')
                 axios.delete('/api/admin_users/'+currentUserId, {
                     params: {}
                 })

@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="main">
-      <MainHeader />
+    <MainHeader />
     <b-row>
       <router-view ></router-view>
     </b-row>

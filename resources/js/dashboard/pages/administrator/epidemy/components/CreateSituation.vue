@@ -115,6 +115,7 @@
         btnTitle: 'Envoyer',
         iconClass: 'fas fa-plus-square',
         validateMailMessage: '',
+        warningMessage: '',
         form: {
           last_update: '',
           confirmed: '',
@@ -181,8 +182,8 @@
           .then(({data}) => {
             this.roles=data;
           })
-          .catch(error => {
-            console.log(error);
+          .catch(res => {
+            this.warningMessage=res.message  
           })
       },
       resetForm () {

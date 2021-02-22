@@ -31,18 +31,21 @@
         <CreateSituation @onCancelUpdate="cancelUpdate" @onCreateSituation="createSituation" :isSituationAdded="isSituationAdded" :formToPopulate="formToPopulate" />
       </b-col>
     </b-row>
+    <waiting v-if="isLoading" />
   </b-container>
 </template>
 
 <script>
   import Header from '../components/Header';
+  import Waiting from '../../../components/Waiting';
   import ListSituation from './components/ListSituation';
   import CreateSituation from './components/CreateSituation';
   export default {
     components: {
       Header,
       ListSituation,
-      CreateSituation
+      CreateSituation,
+      Waiting
     },
     mounted () {
       this.getSituationList()
@@ -53,7 +56,7 @@
         iconClass: "fas fa-file-medical",
         isSituationAdded: false,
         isSituationDeleted: false,
-        isLoading: false,
+        isLoading: true,
         showSuccess: false,
         timeOut: 3,
         situations: [],
@@ -67,14 +70,11 @@
           params: {}
         })
         .then(() => {
-          this.getSituationList
-          setTimeout(() => {
-            this.isSituationDeleted = false
-          }, 3000);
-          this.isSituationDeleted = true
+          this.getSituationList;
+          this.isSituationDeleted = true;
         })
-        .catch(() => {
-          console.log('failed')
+        .catch((res) => {
+          console.log(res)
         })
       },
       createSituation (form) {
