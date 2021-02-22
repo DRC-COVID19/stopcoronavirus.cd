@@ -97,18 +97,7 @@ export default {
       showUserCard: false,
     };
   },
-  computed: {
-    ...mapState({
-      user: (state) => state.auth.user,
-      activeMenu: (state) => state.nav.activeMenu,
-    }),
-  },
   methods: {
-    ...mapActions(["logout"]),
-    ...mapMutations(["setActiveMenu"]),
-    userAvatarMouseEnter() {
-      this.showUserCard = true;
-    },
     userAvatarMouseLeave() {
       this.showUserCard = false;
     },
