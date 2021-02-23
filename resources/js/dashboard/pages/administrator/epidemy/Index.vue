@@ -26,7 +26,8 @@
         >
           Situation supprimee avec succes
         </b-alert>
-        <ListSituation @onDeleteSituation="deleteSituation" :class="{hidden_list:isUpdating}" :situations="situations" @onEditSituation="editSituation" />
+        <b-row v-if="isUpdating" class="mask"></b-row>
+        <ListSituation @onDeleteSituation="deleteSituation" :situations="situations" @onEditSituation="editSituation" />
       </b-col>
     </b-row>
     <waiting v-if="isLoading" />
@@ -124,7 +125,13 @@
 </script>
 
 <style lang="scss" scoped>
-  .hidden_list {
-    opacity: 0.6
+  @import "@~/sass/_variables";
+  .mask {
+    position: absolute;
+    z-index: 100;
+    background-color: $dash-background;
+    opacity: 0.5;
+    height: 100vh;
+    width: 100%;
   }
 </style>

@@ -26,7 +26,8 @@
                 >
                     Utilisateur supprime avec success
                 </b-alert>
-                <ListUser :class="{hidden_list:updating}" :users="users" @onDeleteUser="deleteUser" @onUpdateUser='populateForm' />
+                <b-row v-if="updating" class="mask"></b-row>
+                <ListUser :users="users" @onDeleteUser="deleteUser" @onUpdateUser='populateForm' />
             </b-col>
         </b-row>
     </b-container>
@@ -94,6 +95,7 @@
                     this.showSuccess = true;
                     this.isLoading = false;
                     this.getUserList(1);
+                    console.log('okay')
                 })
                 .catch()
             },
@@ -144,7 +146,12 @@
         color: white;
         font-size: 14px;
     }
-    .hidden_list {
-        opacity: 0.6
+    .mask {
+        position: absolute;
+        z-index: 100;
+        background-color: $dash-background;
+        opacity: 0.5;
+        height: 100vh;
+        width: 100%;
     }
 </style>
