@@ -1,5 +1,5 @@
 <template>
-  <b-container class="px-5 my-5">
+  <b-container class="px-md-4 my-5">
       <div class="px-3 py-4 main">
         <h2 class="h2">{{title}}</h2>
         <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" v-if="show" label-class="text-dash-color">

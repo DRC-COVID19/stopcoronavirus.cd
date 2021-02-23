@@ -1,5 +1,5 @@
 <template>
-  <div class="px-5">
+  <b-container>
     <b-row class="my-3 d-flex justif-content-start">
       <b-col cols="12" md="6">
         <b-form-input
@@ -51,7 +51,7 @@
         </b-button>
       </template>
     </b-modal>
-  </div>
+  </b-container>
 </template>
 
 <script>

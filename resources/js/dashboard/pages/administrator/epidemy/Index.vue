@@ -1,22 +1,6 @@
 <template>
   <b-container fluid vertical-align='canter'>
-    <b-row>
-      <b-col md="8">
-        <b-row class="d-flex justify-content-start">
-          <Header :title="title" :iconClass="iconClass" />
-        </b-row>
-        <b-alert
-          variant="success" 
-          :show="isSituationDeleted"
-          dismissible
-          fade
-          @dismiss-count-down="timeOut"
-          class="mx-3"
-        >
-          Situation supprimee avec succes
-        </b-alert>
-        <ListSituation @onDeleteSituation="deleteSituation" :class="{hidden_list:isUpdating}" :situations="situations" @onEditSituation="editSituation" />
-      </b-col>
+    <b-row class="flex-md-row-reverse">
       <b-col md="4">
         <b-alert
           variant="success"
@@ -29,6 +13,20 @@
           Situation ajoutee avec success
         </b-alert>
         <CreateSituation @onCancelUpdate="cancelUpdate" @onCreateSituation="createSituation" :isSituationAdded="isSituationAdded" :formToPopulate="formToPopulate" />
+      </b-col>
+      <b-col md="8">
+        <Header :title="title" :iconClass="iconClass" />
+        <b-alert
+          variant="success" 
+          :show="isSituationDeleted"
+          dismissible
+          fade
+          @dismiss-count-down="timeOut"
+          class="mx-3"
+        >
+          Situation supprimee avec succes
+        </b-alert>
+        <ListSituation @onDeleteSituation="deleteSituation" :class="{hidden_list:isUpdating}" :situations="situations" @onEditSituation="editSituation" />
       </b-col>
     </b-row>
     <waiting v-if="isLoading" />
