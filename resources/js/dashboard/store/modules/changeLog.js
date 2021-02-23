@@ -1,5 +1,5 @@
 
-const data = {
+const datap = {
   data: [
     {
       from: new Date(2018, 7),
@@ -52,6 +52,7 @@ export default {
   mutations: {
     setListChangeLogs(state, payload) {
       state.listChangeLogs = payload;
+      console.log('data', state.listChangeLogs);
     },
     setIsLoading(state, payload) {
       state.isLoading = payload;
@@ -59,17 +60,41 @@ export default {
   },
   actions: {
     getListChangedLogs({ state, commit }, payload) {
+
       commit("setIsLoading", true);
       return new Promise((resolve, reject) => {
-        commit('setListChangeLogs', data);
-        resolve(true)
-        commit("setIsLoading", false);
+        axios.get('/api/dashboard/change-log')
+          .then(({ data }) => {
+            data.data.map((item => {
+              item.from = new Date(item.from);
+            }));
+            commit('setListChangeLogs', data);
+            commit("setIsLoading", false);
+            resolve(true)
+          })
+          .catch((response) => {
+            console.log(response);
+            reject(response);
+          })
+
+
       })
     },
-    setChangeLogsRead({ state }) {
-      state.listChangeLogs.data.map(item => {
-        item.notRead = false;
-      });
+    setChangeLogsRead({ state, dispatch }) {
+      return new Promise((resolve, reject) => {
+        state.listChangeLogs.data.map(item => {
+          item.notRead = false;
+        });
+        axios.post('/api/dashboard/change-log/read').then(({ data }) => {
+          dispatch('getListChangedLogs');
+          resolve(true);
+        })
+          .catch(response => {
+            console.log(response);
+            reject(response);
+          })
+      })
+
     }
   },
   getters: {

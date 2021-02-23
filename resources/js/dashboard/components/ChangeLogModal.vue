@@ -1,5 +1,5 @@
 <template>
-  <b-modal :id="id" title="Change log">
+  <b-modal size="lg" :id="id" title="Change log">
     <b-container>
       <b-row>
         <b-col cols="12" md="12">
@@ -8,6 +8,7 @@
             :message-when-no-items="messageWhenNoItems"
             dateLocale="fr-fr"
             class="timeline"
+            :uniqueYear="true"
           />
         </b-col>
       </b-row>
