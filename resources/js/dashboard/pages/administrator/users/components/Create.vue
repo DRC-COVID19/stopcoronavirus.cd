@@ -121,6 +121,7 @@
           }
         } else {
           // To handle the update route
+          this.$emit(onUpdate, this.form)
         }
       },
       onReset () {
@@ -155,7 +156,7 @@
       populateForm () {
         this.form.username = this.formToPopulate.usernmae
         this.form.email = this.formToPopulate.email
-        // this.form.roles = this.formToPopulate.roles  // We don't need it anymore to be updated
+        this.form.roles = this.formToPopulate.roles 
         this.form.name = this.formToPopulate.name
         this.title = "Modification de l'utilisateur"
         this.btnTitle = "Modifier"

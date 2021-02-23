@@ -1,6 +1,19 @@
 <template>
     <b-container  fluid>
-        <b-row class="flex-xs-reverse">
+        <b-row class="flex-md-row-reverse">
+            <b-col cols="12" md="4" class="mt-5">
+                <b-alert
+                    variant="success"
+                    :show="showSuccess"
+                    dismissible
+                    fade
+                    @dismiss-count-down="timeOut"
+                    class="mx-3"
+                >
+                    Utilisateur cree avec success
+                </b-alert>
+                <Create @onCreate='createUser' @onCancelUpdate="cancelUpdate" :userAdded="userAdded" :formToPopulate="formToPopulate" /> 
+            </b-col>
             <b-col cols="12" md="8">
                 <Header :title="title" :iconClass="iconClass"/>
                 <b-alert
@@ -14,19 +27,6 @@
                     Utilisateur supprime avec success
                 </b-alert>
                 <ListUser :class="{hidden_list:updating}" :users="users" @onDeleteUser="deleteUser" @onUpdateUser='populateForm' />
-            </b-col>
-            <b-col cols="12" md="4" class="mt-5">
-                <b-alert
-                    variant="success"
-                    :show="showSuccess"
-                    dismissible
-                    fade
-                    @dismiss-count-down="timeOut"
-                    class="mx-3"
-                >
-                    Utilisateur cree avec success
-                </b-alert>
-                <Create @onCreate='createUser' @onCancelUpdate="cancelUpdate" :userAdded="userAdded" :formToPopulate="formToPopulate" /> 
             </b-col>
         </b-row>
     </b-container>

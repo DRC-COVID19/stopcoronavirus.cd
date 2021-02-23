@@ -12,13 +12,13 @@
           <b-navbar-nav class="nav-container">
             <b-link
               class="mx-2"
-              :class="{ active: activeMenu == 1 }"
+              :class="{ active: $route.name === 'administrator.users' }"
               @click="selectMenu(1)"
               :to="{name:'administrator.users'}"
               >Utilisateurs</b-link>
             <b-link
               class="mx-2"
-              :class="{ active: activeMenu == 2 }"
+              :class="{ active: $route.name === 'administrator.epidemie' }"
               @click="selectMenu(2)"
               :to="{name:'administrator.epidemie'}"
               >Situation Epidémiologie</b-link>

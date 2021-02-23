@@ -1,7 +1,7 @@
 <template>
   <b-container fluid vertical-align='canter'>
     <b-row class="flex-md-row-reverse">
-      <b-col md="4">
+      <b-col cols="12" md="4">
         <b-alert
           variant="success"
           :show="showSuccess"
@@ -14,7 +14,7 @@
         </b-alert>
         <CreateSituation @onCancelUpdate="cancelUpdate" @onCreateSituation="createSituation" :isSituationAdded="isSituationAdded" :formToPopulate="formToPopulate" />
       </b-col>
-      <b-col md="8">
+      <b-col cols="12" md="8">
         <Header :title="title" :iconClass="iconClass" />
         <b-alert
           variant="success" 
