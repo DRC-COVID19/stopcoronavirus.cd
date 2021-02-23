@@ -97,7 +97,7 @@
           this.showSuccess = true;
           this.getSituationList()
         }).catch((err) => {
-          console.local(err)
+          console.log(err)
         });
       },
       editSituation (form) {
