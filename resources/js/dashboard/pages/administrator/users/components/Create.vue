@@ -47,12 +47,12 @@
           <label class="text-dash-color" for="check-group-1">Roles *</label>
           <v-select v-model="form.roles" multiple :options="roles" label="name" :reduce="item=>item.id" />
           <label class="text-dash-color" for="text-password">Mot de passe *</label>
-          <b-form-input class="input-dash" type="password" id="text-password" aria-describedby="password-help-block" v-model="form.password"></b-form-input>
+          <b-form-input :disabled="disablePassword" class="input-dash" type="password" id="text-password" aria-describedby="password-help-block" v-model="form.password"></b-form-input>
           <b-form-text id="password-help-block">
-            Votre mot de passe doit contenir 8 carateres au minimum 
+            {{passwordIndicator}} 
           </b-form-text>
           <label class="text-dash-color" for="text-password-confirm">Confirmation de mot de passe *</label>
-          <b-form-input class="input-dash" type="password" id="text-password-confirm" aria-describedby="password-help-block" v-model="form.confirmPassword"></b-form-input>
+          <b-form-input :disabled="disablePassword" class="input-dash" type="password" id="text-password-confirm" aria-describedby="password-help-block" v-model="form.confirmPassword"></b-form-input>
           <b-form-text id="password-help-block">{{warningMissMatch}}</b-form-text>
           <b-row class="px-3 pt-4 d-flex justify-content-start">
             <b-button type="submit" variant="primary" class="btn-dash-blue">{{btnTitle}}</b-button>
@@ -89,6 +89,7 @@
         btnTitle: 'Enreigistrer',
         iconClass: 'fas fa-plus-square',
         validateMailMessage: '',
+        disablePassword: false,
         form: {
           username: '',
           name: '',
@@ -161,6 +162,7 @@
         }
       },
       populateForm () {
+        this.disablePassword = true;
         this.form.username = this.formToPopulate.usernmae
         this.form.email = this.formToPopulate.email
         this.form.roles = this.formToPopulate.roles 
@@ -170,6 +172,9 @@
       }
     },
     computed: {
+      passwordIndicator () {
+        return this.disablePassword === false ? "Votre mot de passe doit contenir 8 carateres au minimum" : "Votre mot de passe reste le meme"
+      },
       warningMissMatch () {
         return this.form.password === this.form.confirmPassword ? '' : 'Les mot de passes ne correspondent pas'
       }

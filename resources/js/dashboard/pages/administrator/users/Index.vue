@@ -10,7 +10,7 @@
                     @dismiss-count-down="timeOut"
                     class="mx-3"
                 >
-                    Utilisateur cree avec success
+                    {{userAdded ? 'Utilisateur cree avec success' : 'Utilisateur modifie avec succes'}}
                 </b-alert>
                 <Create @onUpdate="updateUser" @onCreate='createUser' @onCancelUpdate="cancelUpdate" :userAdded="userAdded" :userUpdated="userUpdated" :formToPopulate="formToPopulate" /> 
             </b-col>
@@ -83,23 +83,23 @@
             updateUser (currentUser) {
                 this.isLoading = true;
                 this.userUpdated = false;
-                axios.put('/api/admin_user/form.', {
-                    username: currentUser.username,
+                axios.put('/api/admin_user/'+currentUser.id, {
+                    usernmae: currentUser.usernmae,
                     name: currentUser.name,
                     email: currentUser.email,
                     roles_id: currentUser.roles
                 })
                 .then(() => {
                     this.userUpdated = true;
-                    this.isLoading = false;
                     this.showSuccess = true;
+                    this.isLoading = false;
                     this.getUserList(1);
                 })
                 .catch()
             },
             createUser(form) {
-                this.userAdded = false
-                this.isLoading = true
+                this.userAdded = false;
+                this.isLoading = true;
                 axios.post('/api/admin_users', {
                     username: form.username,
                     name: form.name,
@@ -110,12 +110,12 @@
                 })
                 .then(() => {
                     this.userAdded = true;
-                    this.isLoading = false;
                     this.showSuccess = true;
+                    this.isLoading = false;
                     this.getUserList(1);
                 })
-                .catch((response) => {
-                    console.log('response',response);
+                .catch(({ response }) => {
+                    this.$gtag.exception(response);
                 })
             },
             getUserList (page = 1) {
@@ -123,11 +123,13 @@
                 axios.get('/api/admin_users', {
                     params: {page}
                 })
-                    .then(({data}) => {
-                        this.users = data.data
-                        this.isLoading = false
-                    })
-                    .catch(e => console.log(e))
+                .then(({data}) => {
+                    this.users = data.data
+                    this.isLoading = false
+                })
+                .catch(({ response }) => {
+                    this.$gtag.exception(response);
+                })
             },
             switchPage (page) {
                 this.getUserList(page)
