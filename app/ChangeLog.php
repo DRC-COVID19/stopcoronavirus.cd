@@ -14,6 +14,6 @@ class ChangeLog extends Model
 
   public function administratorRead()
   {
-    return $this->belongsToMany(Administrator::class, 'administrator_read_change_logs', 'change_log_id','administrator_id');
+    return $this->belongsToMany(Administrator::class, 'administrator_read_change_logs','change_log_id', 'administrator_id');
   }
 }
