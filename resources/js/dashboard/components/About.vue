@@ -286,7 +286,7 @@
             <b-col cols="12" md="12">
               <b-card class="default-card">
                 <Timeline
-                  :timeline-items="timelineItems"
+                  :timeline-items="changeLogs.data"
                   :message-when-no-items="messageWhenNoItems"
                   dateLocale="fr-fr"
                   class="timeline"
@@ -295,13 +295,12 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col class="d-flex justify-content-end" >
+            <b-col class="d-flex justify-content-end">
               <b-pagination
                 v-model="currentPage"
-                :total-rows="rows"
-                :per-page="perPage"
+                :total-rows="changeLogsMeta.total"
+                :per-page="changeLogsMeta.perPage"
                 aria-controls="my-table"
-
               ></b-pagination>
             </b-col>
           </b-row>
@@ -319,6 +318,7 @@
 
 <script>
 import Timeline from "timeline-vuejs";
+import { mapState } from "vuex";
 export default {
   components: {
     Timeline,
@@ -362,6 +362,24 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    ...mapState({
+      changeLogs: (state) => state.changeLog.listChangeLogs,
+    }),
+    changeLogsMeta() {
+      return this.changeLogs.meta
+        ? this.changeLogs.meta
+        : {
+            current_page: 1,
+            from: 1,
+            last_page: 1,
+            path: "#",
+            per_page: 1,
+            to: 1,
+            total: 1,
+          };
+    },
   },
   methods: {
     showModal(e) {

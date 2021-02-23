@@ -176,7 +176,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["logout"]),
+    ...mapActions(["logout", "setChangeLogsRead"]),
     ...mapMutations(["setActiveMenu"]),
     userAvatarMouseEnter() {
       this.showUserCard = true;
@@ -200,6 +200,7 @@ export default {
     clickOutsideNotification() {
       if (this.showHeaderNotification) {
         this.showHeaderNotification = false;
+        this.setChangeLogsRead();
       }
     },
   },

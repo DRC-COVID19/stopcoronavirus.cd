@@ -13,14 +13,16 @@
       </b-row>
     </b-container>
     <template #modal-footer="{ hide }">
-      <b-link>Voir plus</b-link>
-      <b-button size="sm" variant="success" @click="hide(id)"> Fermer </b-button>
+      <b-link @click.prevent="gotoAboutPage" class="mr-3">Voir plus</b-link>
+      <b-button size="sm" variant="success" @click="hide(id)">
+        Fermer
+      </b-button>
     </template>
   </b-modal>
 </template>
 
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import Timeline from "timeline-vuejs";
 export default {
   components: {
@@ -39,6 +41,13 @@ export default {
   },
   computed: {
     ...mapGetters(["getChangeLogNotRead"]),
+  },
+  methods: {
+    ...mapMutations(["setActiveMenu"]),
+    gotoAboutPage() {
+      this.setActiveMenu(7);
+      this.$bvModal.hide(this.id);
+    },
   },
 };
 </script>

@@ -233,7 +233,7 @@
           class="map-md"
           v-show="canShowMapMobile"
           :class="`${hasRightSide ? 'col-lg-6' : 'col-lg-12'}`"
-          :style="{ top:isSmOrMd? mapMdTop :0}"
+          :style="{ top: isSmOrMd ? mapMdTop : 0 }"
         >
           <div
             class="layer-set-contenair"
@@ -370,13 +370,13 @@
         </b-row>
       </transition>
       <Waiting v-if="isLoading" />
-      <ChangeLogModal id="change-log-modal"/>
+      <ChangeLogModal id="change-log-modal" />
     </b-container>
   </div>
 </template>
 
 <script>
-import ChangeLogModal from '../components/ChangeLogModal';
+import ChangeLogModal from "../components/ChangeLogModal";
 import Maps from "../components/Maps";
 import MapsLegend from "../components/MapsLegend";
 import MapsLegendEpidemic from "../components/MapsLegendEpidemic";
@@ -448,7 +448,7 @@ export default {
     About,
     ToggleButton,
     AfriFluxChart,
-    ChangeLogModal
+    ChangeLogModal,
   },
   data() {
     return {
@@ -672,7 +672,6 @@ export default {
     },
   },
   mounted() {
-    this.$bvModal.show('change-log-modal');
     this.$set(this.loadings, "healthZoneGeo", true);
     this.$set(this.loadings, "provinceGeo", true);
     this.$set(this.loadings, "hotspotGeo", true);
@@ -727,6 +726,16 @@ export default {
       (state) => state.nav.activeMenu,
       (value) => {
         this.resizeTopMap();
+      }
+    );
+
+    //Watch unread changelogs
+    this.$store.watch(
+      (state) => state.changeLog.listChangeLogs,
+      (value) => {
+        if (value.data && value.data.filter((x) => x.notRead).length) {
+          this.$bvModal.show("change-log-modal");
+        }
       }
     );
   },
@@ -1521,9 +1530,9 @@ export default {
       }
 
       urlMaps += `/maps`;
-      if (values.observation_start==values.observation_end) {
+      if (values.observation_start == values.observation_end) {
         urlDaily += `/daily`;
-      }else{
+      } else {
         urlDaily += `/daily-date`;
       }
 
@@ -1999,7 +2008,7 @@ export default {
       if (this.$refs.tabs_right) {
         setTimeout(() => {
           this.mapMdTop = this.$refs.tabs_right.$refs.nav.clientHeight + 16.4;
-        },100);
+        }, 100);
       }
     },
   },
