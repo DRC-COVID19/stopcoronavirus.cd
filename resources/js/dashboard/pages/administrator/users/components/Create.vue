@@ -70,12 +70,17 @@
       userAdded: {
         type: Boolean,
         required: false,
-        default: () => false
+        default: false
+      },
+      userUpdated: {
+        type: Boolean,
+        required: false,
+        default: false
       },
       formToPopulate: {
         type: Object,
         required: false,
-        default: () => {}
+        default: () => {return {}}
       }
     },
     data() {
@@ -105,7 +110,10 @@
     },
     watch: {
       userAdded () {
-        this.resetForm()
+        this.resetForm ()
+      },
+      userUpdated () {
+        this.resetForm ()
       },
       formToPopulate () {
         this.populateForm()
@@ -115,13 +123,12 @@
       onSubmit () {
         if (this.btnTitle === "Enreigistrer") {
           if (this.form.password === this.form.confirmPassword && this.form.roles.length !== 0) {
-            this.$emit('onCreate', this.form)
+            this.$emit('onCreate', this.form);
           } else {
-            this.showWarning = true
+            this.showWarning = true;
           }
         } else {
-          // To handle the update route
-          this.$emit(onUpdate, this.form)
+          this.$emit("onUpdate", this.form);
         }
       },
       onReset () {
@@ -149,7 +156,7 @@
           })
       },
       resetForm () {
-        if (this.userAdded) {
+        if (this.userAdded | this.userUpdated) {
           this.form = {}
         }
       },

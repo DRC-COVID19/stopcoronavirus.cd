@@ -12,7 +12,7 @@
                 >
                     Utilisateur cree avec success
                 </b-alert>
-                <Create @onCreate='createUser' @onCancelUpdate="cancelUpdate" :userAdded="userAdded" :formToPopulate="formToPopulate" /> 
+                <Create @onUpdate="updateUser" @onCreate='createUser' @onCancelUpdate="cancelUpdate" :userAdded="userAdded" :userUpdated="userUpdated" :formToPopulate="formToPopulate" /> 
             </b-col>
             <b-col cols="12" md="8">
                 <Header :title="title" :iconClass="iconClass"/>
@@ -48,6 +48,7 @@
                 iconClass: "fa fa-home",
                 isLoading: false,
                 users: [],
+                userUpdated: false,
                 userAdded: false,
                 showSuccess: false,
                 isUserDeleted: false,
@@ -79,6 +80,23 @@
             cancelUpdate () {
                 this.updating = false
             },
+            updateUser (currentUser) {
+                this.isLoading = true;
+                this.userUpdated = false;
+                axios.put('/api/admin_user/form.', {
+                    username: currentUser.username,
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    roles_id: currentUser.roles
+                })
+                .then(() => {
+                    this.userUpdated = true;
+                    this.isLoading = false;
+                    this.showSuccess = true;
+                    this.getUserList(1);
+                })
+                .catch()
+            },
             createUser(form) {
                 this.userAdded = false
                 this.isLoading = true
@@ -91,10 +109,10 @@
                     roles_id: form.roles
                 })
                 .then(() => {
-                    this.userAdded = true
-                    this.isLoading = false
-                    this.showSuccess =true
-                    this.getUserList(1)
+                    this.userAdded = true;
+                    this.isLoading = false;
+                    this.showSuccess = true;
+                    this.getUserList(1);
                 })
                 .catch((response) => {
                     console.log('response',response);

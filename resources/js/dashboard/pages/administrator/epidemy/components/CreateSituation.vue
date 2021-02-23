@@ -152,12 +152,13 @@
       onSubmit () {
         if (this.btnTitle === "Envoyer" ) {
           if (this.form.last_update.trim() !== '') {
-            this.$emit('onCreateSituation', this.form)
+            this.$emit('onCreateSituation', this.form);
           } else {
             this.showWarning = true
           }
         } else {
           // To handle the update route
+          this.$emit('onUpdateSituation', this.form);
         }
       },
       onReset () {

@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <b-row class="my-3 d-flex justif-content-start">
+    <b-row class="my-3" align-h="start">
       <b-col cols="12" md="6">
         <b-form-datepicker
           id="datepicker"
@@ -8,8 +8,6 @@
           placeholder="Choisir la date"
           class="mb-2">
         </b-form-datepicker>
-      </b-col>
-      <b-col cols="12" md="6" class="ml-auto">
       </b-col>
     </b-row>
     <b-row>
