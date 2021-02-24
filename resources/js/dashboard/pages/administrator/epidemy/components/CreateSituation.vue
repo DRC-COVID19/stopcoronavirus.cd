@@ -2,7 +2,7 @@
   <b-container class="px-md-4 my-5">
       <div class="px-3 py-4 main">
         <h2 class="h2">{{title}}</h2>
-        <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" v-if="show" label-class="text-dash-color">
+        <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" label-class="text-dash-color">
           <b-row class="mx-1 d-flex justify-content-start">
             <b-form-group
               label-class="text-dash-color"
@@ -133,7 +133,6 @@
           local: '',
           healed: '',
         },
-        show: true,
         showWarning: false,
         toBeCanceled: true,
         roles:[]

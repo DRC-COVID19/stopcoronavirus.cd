@@ -66,15 +66,13 @@
     },
     methods: {
       deleteSituation (currentSituationId) {
-        axios.delete('/api/pandemic-stats/'+currentSituationId, {
-          params: {}
-        })
+        axios.delete('/api/pandemic-stats/'+currentSituationId)
         .then(() => {
           this.getSituationList;
           this.isSituationDeleted = true;
         })
-        .catch((res) => {
-          console.log(res)
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
         })
       },
       updateSit (form) {

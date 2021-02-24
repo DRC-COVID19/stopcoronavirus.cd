@@ -27,7 +27,7 @@
             class="action-btn-group"
           >
             <i @click="editSituation(data.item.id, data.item.last_update, data.item.confirmed, data.item.sick, data.item.dead, data.item.healed, data.item.imported, data.item.local, data.item.seriously)" class="mx-2 fas fa-edit"></i>
-            <i @click="deleteSituation(data.item.last_update)" class="mx-2 fas fa-trash"></i>
+            <i @click="deleteSituation(data.item.id)" class="mx-2 fas fa-trash"></i>
           </template>
           <template
             v-slot:cell(last_update)="data"
@@ -91,9 +91,9 @@
       }
     },
     methods: {
-      deleteSituation (last_update) {
+      deleteSituation (id) {
         this.isDeleteModalShown = true
-        this.currentSituation.last_update = last_update
+        this.currentSituation.id = id
       },
       editSituation (id, last_update, confirmed, sick, dead, healed, imported, local, seriously) {
         this.currentSituation = {
