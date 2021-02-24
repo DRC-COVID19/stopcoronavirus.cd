@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Administrator;
 use App\ChangeLog;
 use App\Http\Resources\ChangeLogResource;
+use App\Mail\changeLogEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 
 class ChangeLogController extends Controller
 {
@@ -59,16 +64,6 @@ class ChangeLogController extends Controller
   }
 
   /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function create()
-  {
-    //
-  }
-
-  /**
    * Store a newly created resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request
@@ -76,7 +71,30 @@ class ChangeLogController extends Controller
    */
   public function store(Request $request)
   {
-    //
+    try {
+      $data = $this->validate_form($request->all());
+      $data['published_by'] = Auth::user()->id;
+      $change_log = ChangeLog::create($data);
+      if ($change_log) {
+        $users = Administrator::whereHas('roles', function ($q) {
+          $q->where('name', 'admin-dashboard');
+        })->get();
+
+        foreach ($users as $user) {
+          try {
+            Mail::to($user->email)->queue(new changeLogEmail($user, $change_log));
+          } catch (\Throwable $th) {
+            Log::error($th->message);
+          }
+        }
+      }
+      return response()->json(null, 201);
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
   }
 
   /**
@@ -86,17 +104,6 @@ class ChangeLogController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function show(ChangeLog $changeLog)
-  {
-    //
-  }
-
-  /**
-   * Show the form for editing the specified resource.
-   *
-   * @param  \App\ChangeLog  $changeLog
-   * @return \Illuminate\Http\Response
-   */
-  public function edit(ChangeLog $changeLog)
   {
     //
   }
@@ -122,5 +129,14 @@ class ChangeLogController extends Controller
   public function destroy(ChangeLog $changeLog)
   {
     //
+  }
+
+  public function validate_form($data, $id = null)
+  {
+    return Validator::make($data, [
+      'title' => 'required|string',
+      'description' => 'nullable|string',
+      'publish_date' => 'date|required'
+    ])->validate();
   }
 }
