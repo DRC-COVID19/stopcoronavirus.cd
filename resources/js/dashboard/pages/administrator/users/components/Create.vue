@@ -88,7 +88,7 @@
         title: "Creation d'un utilisateur",
         btnTitle: 'Enreigistrer',
         iconClass: 'fas fa-plus-square',
-        updating: false, 
+        updating: false,
         validateMailMessage: '',
         disablePassword: false,
         form: {

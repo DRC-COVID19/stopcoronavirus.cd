@@ -10,9 +10,9 @@
           @dismiss-count-down="timeOut"
           class="mx-3 mt-3"
         >
-          Situation ajoutee avec success
+          {{isSituationAdded ? 'Situation ajoutee avec success' : 'Situation modifiee avec succes'}}
         </b-alert>
-        <CreateSituation @onCancelUpdate="cancelUpdate" @onCreateSituation="createSituation" :isSituationAdded="isSituationAdded" :formToPopulate="formToPopulate" />
+        <CreateSituation @onUpdateSituation="updateSit" @onCancelUpdate="cancelUpdate" @onCreateSituation="createSituation" :isSituationAdded="isSituationAdded" :isSituationUpdated="isSituationUpdated" :formToPopulate="formToPopulate" />
       </b-col>
       <b-col cols="12" md="8">
         <Header :title="title" :iconClass="iconClass" />
@@ -54,6 +54,7 @@
         title: 'Epidemie',
         iconClass: "fas fa-file-medical",
         isSituationAdded: false,
+        isSituationUpdated: false,
         isSituationDeleted: false,
         isLoading: true,
         showSuccess: false,
@@ -76,6 +77,30 @@
           console.log(res)
         })
       },
+      updateSit (form) {
+        this.isLoading = true;
+        this.isSituationUpdated = false;
+        axios.put('/api/pandemic-stats/'+form.id, {
+          confirmed: form.confirmed,
+          local: form.local,
+          imported: form.imported,
+          sick: form.sick,
+          seriously: form.seriously,
+          healed: form.healed,
+          dead: form.dead,
+          last_update: form.last_update
+        })
+        .then(() => {
+          this.isSituationUpdated = true;
+          this.showSuccess = true;
+          this.isLoading = false;
+          this.isUpdating = false;
+          this.getSituationList()
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
+        })
+      },
       createSituation (form) {
         this.isSituationAdded = false;
         this.isLoading = true
@@ -87,11 +112,11 @@
           seriously: form.seriously,
           healed: form.healed,
           dead: form.dead,
-          isUpdating: false,
           last_update: form.last_update
         })
         .then(() => {
           this.isSituationAdded = true;
+          this.isUpdating = false,
           this.isLoading = false;
           this.showSuccess = true;
           this.getSituationList()

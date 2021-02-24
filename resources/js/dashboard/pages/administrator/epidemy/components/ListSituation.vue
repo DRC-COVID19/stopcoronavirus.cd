@@ -26,7 +26,7 @@
             v-slot:cell(actions)="data"
             class="action-btn-group"
           >
-            <i @click="editSituation(data.item.last_update, data.item.confirmed, data.item.sick, data.item.dead, data.item.healed, data.item.imported, data.item.local, data.item.seriously)" class="mx-2 fas fa-edit"></i>
+            <i @click="editSituation(data.item.id, data.item.last_update, data.item.confirmed, data.item.sick, data.item.dead, data.item.healed, data.item.imported, data.item.local, data.item.seriously)" class="mx-2 fas fa-edit"></i>
             <i @click="deleteSituation(data.item.last_update)" class="mx-2 fas fa-trash"></i>
           </template>
           <template
@@ -64,6 +64,7 @@
     data () {
       return {
         fields: [
+          {key: 'id', label: 'ID'},
           {key: 'last_update', label: 'Date'}, 
           {key: 'confirmed', label: 'Confirme', sortable: true}, 
           {key: 'sick', label: 'Actifs', sortable: true}, 
@@ -94,8 +95,9 @@
         this.isDeleteModalShown = true
         this.currentSituation.last_update = last_update
       },
-      editSituation (last_update, confirmed, sick, dead, healed, imported, local, seriously) {
+      editSituation (id, last_update, confirmed, sick, dead, healed, imported, local, seriously) {
         this.currentSituation = {
+          id,
           last_update,
           confirmed,
           sick,
@@ -105,6 +107,7 @@
           seriously,
           healed
         }
+        console.log(this.currentSituation);
         this.$emit('onEditSituation', this.currentSituation)
       },
       onValidateDelection () {

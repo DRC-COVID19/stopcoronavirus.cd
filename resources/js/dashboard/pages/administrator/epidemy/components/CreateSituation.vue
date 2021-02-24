@@ -10,7 +10,7 @@
               label="Date *"
               label-for="datepicker"
             >
-              <b-form-datepicker id="datepicker" v-model="form.last_update" class="mb-2"></b-form-datepicker>
+              <b-form-datepicker :disabled="disableDate" id="datepicker" v-model="form.last_update" class="mb-2"></b-form-datepicker>
             </b-form-group>
           </b-row>
           <b-row class="d-flex justify-content-start">
@@ -87,7 +87,7 @@
           </b-row>
           <b-row class="px-3 pt-4 d-flex justify-content-start">
             <b-button type="submit" variant="primary" class="btn-dash-blue">{{btnTitle}}</b-button>
-            <b-button type="reset" v-if="title !== 'Nouvelle Situation'" variant="primary" class="ml-4 btn-edit">Annuler</b-button>
+            <b-button type="reset" v-if="isUpdating" variant="primary" class="ml-4 btn-edit">Annuler</b-button>
           </b-row>
         </b-form>
       </div>
@@ -101,12 +101,17 @@
       isSituationAdded: {
         type: Boolean,
         required: false,
-        default: () => false
+        default: false
+      },
+      isSituationUpdated: {
+        type: Boolean,
+        required: false,
+        default: false
       },
       formToPopulate: {
         type: Object,
         required: false,
-        default: () => {}
+        default: () => {return {}}
       }
     },
     data() {
@@ -115,6 +120,8 @@
         btnTitle: 'Envoyer',
         iconClass: 'fas fa-plus-square',
         validateMailMessage: '',
+        disableDate: false,
+        isUpdating: false,
         warningMessage: '',
         form: {
           last_update: '',
@@ -133,6 +140,12 @@
       }
     },
     watch: {
+      isSituationAdded () {
+        this.resetForm()
+      },
+      isSituationUpdated () {
+        this.resetForm()
+      },
       formToPopulate () {
         this.populateForm
       }
@@ -157,7 +170,6 @@
             this.showWarning = true
           }
         } else {
-          // To handle the update route
           this.$emit('onUpdateSituation', this.form);
         }
       },
@@ -176,10 +188,15 @@
       },
       resetForm () {
         if (this.isSituationAdded) {
-          this.form = {}
+          this.form = {};
+          this.btnTitle = 'Envoyer';
+          this.title = "Nouvelle Situation";
+          this.isUpdating = false;
         }
       },
       populateForm () {
+        this.disableDate = true;
+        this.form.id = this.formToPopulate.id,
         this.form.last_update = this.formToPopulate.last_update
         this.form.confirmed = this.formToPopulate.confirmed
         this.form.sick = this.formToPopulate.sick

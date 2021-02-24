@@ -82,7 +82,6 @@
                 this.updating = false
             },
             updateUser (currentUser) {
-                console.log(currentUser)
                 this.isLoading = true;
                 this.userUpdated = false;
                 axios.put('/api/admin_users/'+currentUser.id, {
