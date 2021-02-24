@@ -56,7 +56,7 @@
           <b-form-text id="password-help-block">{{warningMissMatch}}</b-form-text>
           <b-row class="px-3 pt-4 d-flex justify-content-start">
             <b-button type="submit" variant="primary" class="btn-dash-blue">{{btnTitle}}</b-button>
-            <b-button type="reset" v-if="title !== 'Creation d\'un utilisateur'" variant="primary" class="ml-4 btn-edit">Annuler</b-button>
+            <b-button type="reset" v-if="updating" variant="primary" class="ml-4 btn-edit">Annuler</b-button>
           </b-row>
         </b-form>
       </div>
@@ -88,6 +88,7 @@
         title: "Creation d'un utilisateur",
         btnTitle: 'Enreigistrer',
         iconClass: 'fas fa-plus-square',
+        updating: false, 
         validateMailMessage: '',
         disablePassword: false,
         form: {
@@ -158,17 +159,21 @@
       },
       resetForm () {
         if (this.userAdded | this.userUpdated) {
-          this.form = {}
+          this.form= {};
+          this.btnTitle = 'Enreigistrer';
+          this.title = "Creation d'un utilisateur";
+          this.updating = false;
         }
       },
       populateForm () {
         this.disablePassword = true;
-        this.form.username = this.formToPopulate.usernmae
-        this.form.email = this.formToPopulate.email
-        this.form.roles = this.formToPopulate.roles 
-        this.form.name = this.formToPopulate.name
-        this.title = "Modification de l'utilisateur"
-        this.btnTitle = "Modifier"
+        this.form.id = this.formToPopulate.id;
+        this.form.username = this.formToPopulate.usernmae;
+        this.form.email = this.formToPopulate.email;
+        this.form.roles = this.formToPopulate.roles;
+        this.form.name = this.formToPopulate.name;
+        this.title = "Modification de l'utilisateur";
+        this.btnTitle = "Modifier";
       }
     },
     computed: {

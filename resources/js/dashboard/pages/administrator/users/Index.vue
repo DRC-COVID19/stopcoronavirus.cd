@@ -70,8 +70,8 @@
                     this.getUserList()
                     this.isUserDeleted = true
                 })
-                .catch(() => {
-                    console.log('failed')
+                .catch(({ response }) => {
+                    this.$gtag.exception(response);
                 })
             },
             populateForm (currentUser) {
@@ -82,10 +82,11 @@
                 this.updating = false
             },
             updateUser (currentUser) {
+                console.log(currentUser)
                 this.isLoading = true;
                 this.userUpdated = false;
-                axios.put('/api/admin_user/'+currentUser.id, {
-                    usernmae: currentUser.usernmae,
+                axios.put('/api/admin_users/'+currentUser.id, {
+                    username: currentUser.username,
                     name: currentUser.name,
                     email: currentUser.email,
                     roles_id: currentUser.roles
@@ -94,10 +95,12 @@
                     this.userUpdated = true;
                     this.showSuccess = true;
                     this.isLoading = false;
+                    this.updating = false
                     this.getUserList(1);
-                    console.log('okay')
                 })
-                .catch()
+                .catch(({ response }) => {
+                    this.$gtag.exception(response);
+                })
             },
             createUser(form) {
                 this.userAdded = false;
