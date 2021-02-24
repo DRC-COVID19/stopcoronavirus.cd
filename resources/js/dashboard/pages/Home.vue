@@ -800,6 +800,10 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
+
+            data.sort((a, b) => {
+              return a.last_update < b.last_update ? 1 : -1;
+            });
             data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
@@ -833,6 +837,9 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
+            data.sort((a, b) => {
+              return a.last_update < b.last_update ? 1 : -1;
+            });
             data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
