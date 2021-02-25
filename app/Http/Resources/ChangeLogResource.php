@@ -22,7 +22,8 @@ class ChangeLogResource extends JsonResource
       'title' => $this->title,
       'description' => $this->description,
       'showDayAndMonth' => true,
-      'notRead' => !$this->administratorRead()->find(Auth::user()->id)
+      'notRead' => !$this->administratorRead()->find(Auth::user()->id),
+      "color"=> '#e74c3c'
     ];
   }
 }

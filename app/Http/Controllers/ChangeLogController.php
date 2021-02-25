@@ -33,7 +33,7 @@ class ChangeLogController extends Controller
   public function index()
   {
     try {
-      $change_logs = ChangeLog::paginate(15);
+      $change_logs = ChangeLog::orderBy('updated_at','DESC')->paginate(15);
       return ChangeLogResource::collection($change_logs);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
@@ -49,7 +49,7 @@ class ChangeLogController extends Controller
       $user_id = Auth::user()->id;
       $data = ChangeLog::whereDoesntHave('administratorRead', function ($q) {
         $q->where('admin_users.id', Auth::user()->id);
-      })->where('publish_date', '<', date('Y-m-d'))->get();
+      })->get();
 
       foreach ($data as $key => $value) {
         $value->administratorRead()->attach($user_id);

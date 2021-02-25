@@ -63,9 +63,9 @@
                 <div class="item-content" v-if="getChangeLogNotRead.length">
                   <div
                     class="media align-items-center d-flex"
-                    v-for="(item, index) in getChangeLogNotRead"
+                    v-for="(item, index) in getChangeLogNotRead.slice(0, 5)"
                     :key="index"
-                    @click="selectMenu(7)"
+                    @click="selectNotification(item)"
                   >
                     <div
                       class="item-icon bg-skyblue d-flex align-items-center justify-content-center"
@@ -177,7 +177,7 @@ export default {
   },
   methods: {
     ...mapActions(["logout", "setChangeLogsRead"]),
-    ...mapMutations(["setActiveMenu"]),
+    ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
     userAvatarMouseEnter() {
       this.showUserCard = true;
     },
@@ -190,6 +190,10 @@ export default {
           name: "login",
         });
       });
+    },
+    selectNotification(item) {
+      this.setSelectedChangeLog(item);
+      this.setActiveMenu(7);
     },
     selectMenu(value) {
       this.setActiveMenu(value);
@@ -215,7 +219,6 @@ export default {
     text-decoration: none;
   }
   background: white;
-
   border-bottom: 1px solid $dash-shadow-color;
   .icon-hallo {
     width: 30px;

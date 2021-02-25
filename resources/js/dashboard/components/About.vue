@@ -283,16 +283,37 @@
 
         <b-tab title="Change log">
           <b-row>
-            <b-col cols="12" md="12">
-              <b-card class="default-card">
+            <b-card class="default-card">
+              <!-- <b-col cols="12" md="12">
+
                 <Timeline
                   :timeline-items="changeLogs.data"
                   :message-when-no-items="messageWhenNoItems"
                   dateLocale="fr-fr"
                   class="timeline"
                 />
-              </b-card>
-            </b-col>
+
+            </b-col> -->
+              <b-col
+                cols="12"
+                class="mb-0"
+                v-for="(item, index) in changeLogsData"
+                :key="index"
+                :class="{
+                  'timeline-selected': activeItem(item),
+                }"
+              >
+                <vue-timeline-update
+                  :date="new Date(item.from)"
+                  :dateString="moment(item.from).format('DD.MM.yyyy')"
+                  :title="item.title"
+                  dateLocale="fr"
+                  :description="item.description"
+                  icon="code"
+                  color="black"
+                />
+              </b-col>
+            </b-card>
           </b-row>
           <b-row>
             <b-col class="d-flex justify-content-end">
@@ -301,6 +322,7 @@
                 :total-rows="changeLogsMeta.total"
                 :per-page="changeLogsMeta.perPage"
                 aria-controls="my-table"
+                @change="switchPage"
               ></b-pagination>
             </b-col>
           </b-row>
@@ -318,7 +340,8 @@
 
 <script>
 import Timeline from "timeline-vuejs";
-import { mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
+
 export default {
   components: {
     Timeline,
@@ -363,10 +386,22 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.getListChangedLogs().then(() => {
+      this.setChangeLogsRead();
+    });
+  },
   computed: {
     ...mapState({
       changeLogs: (state) => state.changeLog.listChangeLogs,
+      selectedChangeLog: (state) => state.changeLog.selectedChangeLog,
     }),
+    changeLogsData() {
+      return this.changeLogs.data.sort((a, b) => {
+        return new Date(a.from) < new Date(b.from) ? 1 : -1;
+      });
+    },
+
     changeLogsMeta() {
       return this.changeLogs.meta
         ? this.changeLogs.meta
@@ -382,10 +417,30 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(["setSelectedChangeLog"]),
+    ...mapActions([
+      "getListChangedLogs",
+      "setChangeLogsRead",
+      "getListChangedLogs",
+    ]),
+    activeItem(item) {
+      if (this.selectedChangeLog && this.selectedChangeLog.id == item.id) {
+        setTimeout(() => {
+          this.setSelectedChangeLog(null);
+        }, 3000);
+        return true;
+      }
+      return false;
+    },
     showModal(e) {
       console.log(e);
       this.modalSourceImg = e.target.src;
       this.$bvModal.show("modal-img");
+    },
+    switchPage(page) {
+      this.getListChangedLogs({ page }).then(() => {
+        window.scrollTo(0, 0);
+      });
     },
   },
 };
@@ -393,4 +448,7 @@ export default {
 
 <style lang="scss" scoped >
 @import "@~/sass/_variables";
+.timeline-selected {
+  background: $waiting_background;
+}
 </style>

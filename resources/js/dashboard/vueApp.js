@@ -16,7 +16,9 @@ import fullscreen from 'vue-fullscreen';
 import VueEllipseProgress from "vue-ellipse-progress";
 import VueSkeletonLoading from 'vue-skeleton-loading';
 import VueGtag from "vue-gtag";
-import VueMq from 'vue-mq'
+import VueMq from 'vue-mq';
+import VueTimeline from "@growthbunker/vuetimeline";
+
 
 import './directive';
 require('./helper');
@@ -31,6 +33,10 @@ Vue.use(onlyInt);
 Vue.use(fullscreen);
 Vue.use(VueEllipseProgress);
 Vue.use(VueSkeletonLoading);
+
+Vue.use(VueTimeline, {
+  theme: "light",
+});
 
 Vue.use(VueMq, {
   breakpoints: {
@@ -68,12 +74,12 @@ router.beforeEach((to, from, next) => {
   next()
 });
 
-Vue.use(VueGtag,{
-    config: {
-      id: GOOGLE_ANALYTICS_ID,
-      pageTrackerScreenviewEnabled: true
-    }
-  },router);
+Vue.use(VueGtag, {
+  config: {
+    id: GOOGLE_ANALYTICS_ID,
+    pageTrackerScreenviewEnabled: true
+  }
+}, router);
 
 const app = new Vue({
   el: '#app',

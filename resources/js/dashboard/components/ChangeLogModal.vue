@@ -2,13 +2,20 @@
   <b-modal size="lg" :id="id" title="Change log">
     <b-container>
       <b-row>
-        <b-col cols="12" md="12">
-          <Timeline
-            :timeline-items="getChangeLogNotRead"
-            :message-when-no-items="messageWhenNoItems"
-            dateLocale="fr-fr"
-            class="timeline"
-            :uniqueYear="true"
+        <b-col
+          cols="12"
+          class="mb-0"
+          v-for="(item, index) in getChangeLogNotRead.slice(0, 5)"
+          :key="index"
+        >
+          <vue-timeline-update
+            :date="new Date(item.from)"
+            :dateString="moment(item.from).format('DD.MM.yyyy')"
+            :title="item.title"
+            dateLocale="fr"
+            :description="item.description"
+            icon="code"
+            color="black"
           />
         </b-col>
       </b-row>
@@ -25,6 +32,7 @@
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import Timeline from "timeline-vuejs";
+
 export default {
   components: {
     Timeline,

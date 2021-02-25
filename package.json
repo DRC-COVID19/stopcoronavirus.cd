@@ -24,6 +24,7 @@
         "@deck.gl/layers": "^8.1.9",
         "@deck.gl/mapbox": "^8.1.9",
         "@fortawesome/fontawesome-free": "^5.14.0",
+        "@growthbunker/vuetimeline": "^0.1.17",
         "@mapbox/expression-jamsession": "^0.4.2",
         "@turf/buffer": "^5.1.5",
         "@turf/collect": "^6.0.1",
