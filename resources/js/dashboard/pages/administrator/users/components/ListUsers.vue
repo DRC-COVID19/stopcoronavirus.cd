@@ -123,6 +123,9 @@
     color: $dash-red;
     font-size: 16px;
   }
+  .loading-height{
+    height: 660px;
+  }
   .fa-user-edit {
     color: $fin-8;
     font-size: 16px;

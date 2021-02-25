@@ -58,7 +58,7 @@
         <b-col cols="12" class="d-flex justify-content-end">
           <b-pagination
             page-class="text-blue-dash"
-            v-model="currentPage"
+            v-model="situationMeta.currentPage"
             :per-page="situationMeta.perPage"
             :total-rows="situationMeta.total"
             @change="getSituationList"
@@ -191,7 +191,6 @@ export default {
         })
         .catch(({ response }) => {
           this.errors = response.data.errors;
-          console.log(response.data.errors);
           this.$gtag.exception(response);
           this.showAlert();
           this.isLoading = false;
@@ -227,24 +226,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
-.mask {
-  position: absolute;
-  z-index: 100;
-  background-color: $dash-background;
-  opacity: 0.5;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-.alert {
-  position: absolute;
-  z-index: 100;
-  opacity: 0.6;
-  top: 0;
-  right: 0;
-  width: 100%;
-}
+  @import "@~/sass/_variables";
+  .mask {
+    position: absolute;
+    z-index: 100;
+    background-color: $dash-background;
+    opacity: 0.5;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .alert {
+    position: absolute;
+    z-index: 100;
+    opacity: 0.6;
+    top: 0;
+    right: 0;
+    width: 100%;
+  }
 </style>

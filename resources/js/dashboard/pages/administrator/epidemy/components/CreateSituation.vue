@@ -12,7 +12,13 @@
               :invalid-feedback="errors.last_update ? errors.last_update[0] : null"
               :state="!errors.last_update"
             >
-              <b-form-datepicker :state="errors.last_update ? false : null" :disabled="disableDate" id="datepicker" v-model="form.last_update" class="mb-2"></b-form-datepicker>
+              <b-form-datepicker 
+                :state="errors.last_update ? false : null" 
+                :disabled="disableDate"
+                id="datepicker"
+                v-model="form.last_update"
+                class="mb-2">
+              </b-form-datepicker>
             </b-form-group>
           </b-row>
           <b-row class="d-flex justify-content-start">

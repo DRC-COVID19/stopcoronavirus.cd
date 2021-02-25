@@ -8,6 +8,8 @@
             id="input-group-1"
             label="Nom d'utilisateur *"
             label-for="input-1"
+            :invalid-feedback="errors.username ? errors.username[0] : null"
+            :state="!errors.username"
           >
             <b-form-input
               class="input-dash"
@@ -85,6 +87,10 @@
       roles: {
         type: Array,
         default: () => {return []}
+      },
+      errors: {
+        type: Object,
+        default: () => ({})
       }
     },
     data() {

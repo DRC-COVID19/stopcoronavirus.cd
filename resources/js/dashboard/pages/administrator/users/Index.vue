@@ -8,7 +8,7 @@
                     dismissible
                     fade
                     @dismiss-count-down="timeOut"
-                    class="mx-3"
+                    class="mx-3 alert"
                 >
                     {{userAdded ? 'Utilisateur cree avec success' : 'Utilisateur modifie avec succes'}}
                 </b-alert>
@@ -20,6 +20,7 @@
                     :userUpdated="userUpdated"
                     :formToPopulate="formToPopulate"
                     :roles="roles"
+                    :errors="errors"
                 /> 
             </b-col>
             <b-col cols="12" md="8">
@@ -82,6 +83,7 @@
                 timeOut: 3,
                 formToPopulate: {},
                 updating: false,
+                errors: {},
                 currentPage: 1,
                 roles: []
             }
@@ -149,6 +151,7 @@
             createUser(form) {
                 this.userAdded = false;
                 this.isLoading = true;
+                this.errors = {}
                 axios.post('/api/admin_users', {
                     username: form.username,
                     name: form.name,
@@ -165,6 +168,8 @@
                 })
                 .catch(({ response }) => {
                     this.$gtag.exception(response);
+                    this.isLoading = false;
+                    this.errors = response.data.errors;
                 })
             },
             getUserList (page = 1) {
@@ -207,7 +212,17 @@
         z-index: 100;
         background-color: $dash-background;
         opacity: 0.5;
-        height: 100vh;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    .alert {
+        position: absolute;
+        z-index: 100;
+        opacity: 0.6;
+        top: 0;
+        right: 0;
         width: 100%;
     }
 </style>
