@@ -23,7 +23,14 @@
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
+          :busy="isLoading"
         >
+          <template #table-busy>
+            <div class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong>Loading...</strong>
+            </div>
+          </template>
           <template
             v-slot:cell(actions)="data"
             class="action-btn-group"
@@ -59,7 +66,10 @@
       users: {
         type: Object,
         default: () => ({}),
-        required: false
+      },
+      isLoading: {
+        type: Boolean,
+        default: false
       }
     },
     data () {

@@ -78,7 +78,6 @@ export default {
     situations: {
       type: Object,
       default: () => ({}),
-      required: false,
     },
     isLoading: {
       type: Boolean,

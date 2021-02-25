@@ -12,10 +12,20 @@
                 >
                     {{userAdded ? 'Utilisateur cree avec success' : 'Utilisateur modifie avec succes'}}
                 </b-alert>
-                <Create @onUpdate="updateUser" @onCreate='createUser' @onCancelUpdate="cancelUpdate" :userAdded="userAdded" :userUpdated="userUpdated" :formToPopulate="formToPopulate" /> 
+                <Create
+                    @onUpdate="updateUser"
+                    @onCreate='createUser'
+                    @onCancelUpdate="cancelUpdate"
+                    :userAdded="userAdded"
+                    :userUpdated="userUpdated"
+                    :formToPopulate="formToPopulate" 
+                /> 
             </b-col>
             <b-col cols="12" md="8">
-                <Header :title="title" :iconClass="iconClass"/>
+                <Header 
+                    :title="title"
+                    :iconClass="iconClass"
+                />
                 <b-alert
                     variant="success"
                     :show="isUserDeleted"
@@ -27,7 +37,12 @@
                     Utilisateur supprime avec success
                 </b-alert>
                 <b-row v-if="updating" class="mask"></b-row>
-                <ListUser :users="users" @onDeleteUser="deleteUser" @onUpdateUser='populateForm' />
+                <ListUser 
+                    :users="users"
+                    @onDeleteUser="deleteUser"
+                    @onUpdateUser='populateForm'
+                    :isLoading="isLoading"
+                />
                 <b-col cols="12" class="d-flex justify-content-end">
                     <b-pagination
                         page-class="text-blue-dash"
