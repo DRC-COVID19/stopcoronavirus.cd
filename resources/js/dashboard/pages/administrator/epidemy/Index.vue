@@ -7,14 +7,24 @@
           :show="showSuccess"
           dismissible
           fade
-          @dismiss-count-down="timeOut"
-          class="mx-3 mt-3"
+          @dismiss-count-down="countDownChangedS"
+          class="mx-3 mt-3 alert"
         >
           {{
             isSituationAdded
               ? "Situation ajoutee avec success"
               : "Situation modifiee avec succes"
           }}
+        </b-alert>
+        <b-alert
+          :show="showWarning"
+          dismissible
+          fade
+          variant="danger"
+          class="mx-3 mt-3 alert"
+          @dismiss-count-down="countDownChanged"
+        >
+          {{WarningMessageCreate}}
         </b-alert>
         <CreateSituation
           @onUpdateSituation="updateSit"
@@ -82,7 +92,9 @@ export default {
       isSituationUpdated: false,
       isSituationDeleted: false,
       isLoading: true,
-      showSuccess: false,
+      showSuccess: 0,
+      showWarning: 0,
+      WarningMessageCreate: '',
       timeOut: 3,
       situations: {},
       isUpdating: false,
@@ -107,6 +119,15 @@ export default {
     },
   },
   methods: {
+    countDownChangedS (showSuccess) {
+      this.showSuccess = showSuccess;
+    },
+    countDownChanged (showWarning) {
+      this.showWarning = showWarning;
+    },
+    showAlert() {
+      this.showWarning = this.timeOut;
+    },
     deleteSituation(currentSituationId) {
       axios
         .delete("/api/pandemic-stats/" + currentSituationId)
@@ -134,7 +155,7 @@ export default {
         })
         .then(() => {
           this.isSituationUpdated = true;
-          this.showSuccess = true;
+          this.showSuccess = this.timeOut;
           this.isLoading = false;
           this.isUpdating = false;
           this.getSituationList();
@@ -159,12 +180,16 @@ export default {
         })
         .then(() => {
           this.isSituationAdded = true;
-          (this.isUpdating = false), (this.isLoading = false);
-          this.showSuccess = true;
+          this.isUpdating = false;
+          this.isLoading = false;
+          this.showSuccess = this.timeOut;
           this.getSituationList();
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
+          this.showAlert();
+          this.isLoading = false;
+          this.WarningMessageCreate = response.data.message;
         });
     },
     editSituation(form) {
@@ -201,6 +226,17 @@ export default {
   background-color: $dash-background;
   opacity: 0.5;
   height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.alert {
+  position: absolute;
+  z-index: 100;
+  opacity: 0.6;
+  top: 0;
+  right: 0;
   width: 100%;
 }
 </style>
