@@ -56,7 +56,7 @@
           <b-form-text id="password-help-block">{{warningMissMatch}}</b-form-text>
           <b-row class="px-3 pt-4 d-flex justify-content-start">
             <b-button type="submit" variant="primary" class="btn-dash-blue">{{btnTitle}}</b-button>
-            <b-button type="reset" v-if="updating" variant="primary" class="ml-4 btn-edit">Annuler</b-button>
+            <b-button type="reset" :v-if="updating" variant="primary" class="ml-4 btn-edit">Annuler</b-button>
           </b-row>
         </b-form>
       </div>
@@ -166,6 +166,7 @@
         }
       },
       populateForm () {
+        this.updating = true;
         this.disablePassword = true;
         this.form.id = this.formToPopulate.id;
         this.form.username = this.formToPopulate.usernmae;

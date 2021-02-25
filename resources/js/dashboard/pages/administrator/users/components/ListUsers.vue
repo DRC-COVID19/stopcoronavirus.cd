@@ -19,7 +19,7 @@
           striped 
           hover
           :fields="fields"
-          :items="users" 
+          :items="users.data" 
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
@@ -37,7 +37,6 @@
             <b-badge class="mx-1 my-1" v-for="(role, index) in data.item.roles" variant="secondary" :key="index">{{role.name}}</b-badge>
           </template>
         </b-table>
-        <b-pagination page-class="text-blue-dash" v-model="currentPage" :per-page="perPage" :total-rows="rows"></b-pagination>
       </b-col>
     </b-row>
     <b-modal  v-model="isDeleteModalShown">
@@ -58,8 +57,8 @@
   export default {
     props: {
       users: {
-        type: Array,
-        default: () => [],
+        type: Object,
+        default: () => ({}),
         required: false
       }
     },

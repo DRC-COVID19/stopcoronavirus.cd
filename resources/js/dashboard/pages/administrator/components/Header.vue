@@ -1,5 +1,5 @@
 <template>
-  <b-container class="d-flex flex-start ml-1">
+  <b-container class="d-flex flex-start ml-0">
     <b-row class="header_d">
       <h3 class="h3"><i :class="`${iconClass}`"></i>{{title}}</h3>
     </b-row>

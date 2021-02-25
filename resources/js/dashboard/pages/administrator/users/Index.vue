@@ -28,6 +28,16 @@
                 </b-alert>
                 <b-row v-if="updating" class="mask"></b-row>
                 <ListUser :users="users" @onDeleteUser="deleteUser" @onUpdateUser='populateForm' />
+                <b-col cols="12" class="d-flex justify-content-end">
+                    <b-pagination
+                        page-class="text-blue-dash"
+                        v-model="currentPage"
+                        :per-page="userMeta.perPage"
+                        :total-rows="userMeta.total"
+                        @change="getUserList"
+                        :disabled="updating"
+                    ></b-pagination>
+                </b-col>
             </b-col>
         </b-row>
     </b-container>
@@ -48,18 +58,35 @@
                 title: "Utilisateurs",
                 iconClass: "fa fa-home",
                 isLoading: false,
-                users: [],
+                users: {},
                 userUpdated: false,
                 userAdded: false,
                 showSuccess: false,
                 isUserDeleted: false,
                 timeOut: 3,
                 formToPopulate: {},
-                updating: false
+                updating: false,
+                currentPage: 1
             }
         },
         mounted () {
             this.getUserList()
+        },
+        computed: {
+            userMeta () {
+                if (!this.users.meta) {
+                    return {
+                        current_page: 1,
+                        from: 1,
+                        last_page: 1,
+                        path: "#",
+                        per_page: 1,
+                        to: 1,
+                        total: 1,
+                    }
+                }
+                return this.users.meta;
+            }
         },
         methods: {
             deleteUser (currentUserId) {
@@ -67,19 +94,19 @@
                     params: {}
                 })
                 .then(() => {
-                    this.getUserList()
-                    this.isUserDeleted = true
+                    this.getUserList();
+                    this.isUserDeleted = true;
                 })
                 .catch(({ response }) => {
                     this.$gtag.exception(response);
                 })
             },
             populateForm (currentUser) {
-                this.updating = true
-                this.formToPopulate = currentUser
+                this.updating = true;
+                this.formToPopulate = currentUser;
             },
             cancelUpdate () {
-                this.updating = false
+                this.updating = false;
             },
             updateUser (currentUser) {
                 this.isLoading = true;
@@ -128,7 +155,7 @@
                     params: {page}
                 })
                 .then(({data}) => {
-                    this.users = data.data
+                    this.users = data
                     this.isLoading = false
                 })
                 .catch(({ response }) => {

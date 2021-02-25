@@ -59,8 +59,7 @@
       </b-col>
     </b-row>
     <b-modal v-model="isDeleteModalShown">
-      Voulez-vous supprimer la mise à jour du
-      {{ currentSituation.last_update }} ?
+      Voulez-vous supprimer la mise à jour du {{ currentSituation.last_update }} ?
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter

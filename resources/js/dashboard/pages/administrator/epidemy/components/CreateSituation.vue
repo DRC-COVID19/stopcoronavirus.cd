@@ -150,7 +150,7 @@
       }
     },
     mounted () {
-      this.resetForm ()
+      this.resetForm ();
     },
     watch: {
       isSituationAdded () {
@@ -173,11 +173,12 @@
         }
       },
       onReset () {
-        this.toToCanceled = true
-        this.form = {}
-        this.title = "Nouvelle Situation"
-        this.btnTitle = "Envoyer"
-        this.$emit('onCancelUpdate', {})
+        this.toToCanceled = true;
+        this.resetForm();
+        this.form = {};
+        this.title = "Nouvelle Situation";
+        this.btnTitle = "Envoyer";
+        this.$emit('onCancelUpdate', {});
       },
       validateMail () {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -191,10 +192,12 @@
           this.btnTitle = 'Envoyer';
           this.title = "Nouvelle Situation";
           this.isUpdating = false;
+          console.log(this.isUpdating);
         }
       },
       populateForm () {
         this.disableDate = true;
+        this.isUpdating = true;
         this.form.id = this.formToPopulate.id,
         this.form.last_update = this.formToPopulate.last_update
         this.form.confirmed = this.formToPopulate.confirmed
