@@ -187,12 +187,12 @@
         };
       },
       resetForm () {
-        if (this.isSituationAdded) {
+        this.isUpdating = false;
+        this.disableDate = false;
+        if (this.isSituationAdded | this.isSituationUpdated) {
           this.form = {};
           this.btnTitle = 'Envoyer';
           this.title = "Nouvelle Situation";
-          this.isUpdating = false;
-          console.log(this.isUpdating);
         }
       },
       populateForm () {
