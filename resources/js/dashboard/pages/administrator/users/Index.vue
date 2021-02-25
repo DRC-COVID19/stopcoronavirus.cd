@@ -18,7 +18,8 @@
                     @onCancelUpdate="cancelUpdate"
                     :userAdded="userAdded"
                     :userUpdated="userUpdated"
-                    :formToPopulate="formToPopulate" 
+                    :formToPopulate="formToPopulate"
+                    :roles="roles"
                 /> 
             </b-col>
             <b-col cols="12" md="8">
@@ -81,11 +82,13 @@
                 timeOut: 3,
                 formToPopulate: {},
                 updating: false,
-                currentPage: 1
+                currentPage: 1,
+                roles: []
             }
         },
         mounted () {
-            this.getUserList()
+            this.getUserList();
+            this.getUserRoles();
         },
         computed: {
             userMeta () {
@@ -172,6 +175,15 @@
                 .then(({data}) => {
                     this.users = data
                     this.isLoading = false
+                })
+                .catch(({ response }) => {
+                    this.$gtag.exception(response);
+                })
+            },
+            getUserRoles () {
+                axios.get('/api/admin_roles')
+                .then(({data}) => {
+                    this.roles=data;
                 })
                 .catch(({ response }) => {
                     this.$gtag.exception(response);

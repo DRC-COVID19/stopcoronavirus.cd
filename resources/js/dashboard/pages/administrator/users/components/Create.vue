@@ -81,6 +81,10 @@
         type: Object,
         required: false,
         default: () => {return {}}
+      },
+      roles: {
+        type: Array,
+        default: () => {return []}
       }
     },
     data() {
@@ -102,12 +106,11 @@
         show: true,
         showWarning: false,
         toBeCanceled: true,
-        roles:[]
       }
     },
     mounted () {
       // Fetch the user roles
-      this.getUserRoles(),
+      // this.getUserRoles(),
       this.resetForm ()
     },
     watch: {
@@ -145,17 +148,6 @@
         if (!re.test(String(this.form.email).toLowerCase())){
           this.validateMailMessage = 'Adresse email incorrecte'
         };
-      },
-      getUserRoles () {
-        axios.get('/api/admin_roles', {
-          params: {}
-        })
-          .then(({data}) => {
-            this.roles=data;
-          })
-          .catch(error => {
-            console.log(error);
-          })
       },
       resetForm () {
         this.updating = false;
