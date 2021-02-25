@@ -9,8 +9,10 @@
               id="input-group-1"
               label="Date *"
               label-for="datepicker"
+              :invalid-feedback="errors.last_update ? errors.last_update[0] : null"
+              :state="!errors.last_update"
             >
-              <b-form-datepicker :disabled="disableDate" id="datepicker" v-model="form.last_update" class="mb-2"></b-form-datepicker>
+              <b-form-datepicker :state="errors.last_update ? false : null" :disabled="disableDate" id="datepicker" v-model="form.last_update" class="mb-2"></b-form-datepicker>
             </b-form-group>
           </b-row>
           <b-row class="d-flex justify-content-start">
@@ -19,6 +21,7 @@
                 <b-form-input
                   id="input-one"
                   class="input-dash"
+                  v-int
                   v-model="form.confirmed"
                   placeholder=""
                 ></b-form-input>
@@ -30,6 +33,7 @@
                   id="input-two"
                   class="input-dash"
                   v-model="form.sick"
+                  v-int
                   placeholder=""
                 ></b-form-input>
               </b-form-group>
@@ -39,6 +43,7 @@
                 <b-form-input
                   id="input-three"
                   class="input-dash"
+                  v-int
                   v-model="form.seriously"
                   placeholder=""
                 ></b-form-input>
@@ -48,6 +53,7 @@
               <b-form-group label-class="text-dash-color" id="input-group-3" label="Déces " label-for="input-3">
                 <b-form-input
                   id="input-four"
+                  v-int
                   class="input-dash"
                   v-model="form.dead"
                   placeholder=""
@@ -59,6 +65,7 @@
                 <b-form-input
                   id="input-five"
                   class="input-dash"
+                  v-int
                   v-model="form.imported"
                   placeholder=""
                 ></b-form-input>
@@ -69,6 +76,7 @@
                 <b-form-input
                   id="input-six"
                   class="input-dash"
+                  v-int
                   v-model="form.local"
                   placeholder=""
                 ></b-form-input>
@@ -79,6 +87,7 @@
                 <b-form-input
                   id="input-seven"
                   class="input-dash"
+                  v-int
                   v-model="form.healed"
                   placeholder=""
                 ></b-form-input>
@@ -112,6 +121,10 @@
         type: Object,
         required: false,
         default: () => {return {}}
+      },
+      errors: {
+        type: Object,
+        default: () => ({})
       }
     },
     data() {

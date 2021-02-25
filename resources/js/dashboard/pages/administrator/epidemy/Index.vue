@@ -33,6 +33,7 @@
           :isSituationAdded="isSituationAdded"
           :isSituationUpdated="isSituationUpdated"
           :formToPopulate="formToPopulate"
+          :errors="errors"
         />
       </b-col>
       <b-col cols="12" md="8">
@@ -92,6 +93,7 @@ export default {
       isSituationUpdated: false,
       isSituationDeleted: false,
       isLoading: true,
+      errors: {},
       showSuccess: 0,
       showWarning: 0,
       WarningMessageCreate: '',
@@ -186,6 +188,8 @@ export default {
           this.getSituationList();
         })
         .catch(({ response }) => {
+          this.errors = response.data.errors;
+          console.log(response.data.errors);
           this.$gtag.exception(response);
           this.showAlert();
           this.isLoading = false;
