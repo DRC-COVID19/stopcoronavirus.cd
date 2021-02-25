@@ -131,6 +131,7 @@ export default {
       this.showWarning = this.timeOut;
     },
     deleteSituation(currentSituationId) {
+      this.errors = {};
       axios
         .delete("/api/pandemic-stats/" + currentSituationId)
         .then(() => {
@@ -169,6 +170,7 @@ export default {
     createSituation(form) {
       this.isSituationAdded = false;
       this.isLoading = true;
+      this.errors = {}
       axios
         .post("/api/pandemic-stats", {
           confirmed: form.confirmed,
@@ -198,6 +200,7 @@ export default {
     },
     editSituation(form) {
       this.isUpdating = true;
+      this.errors = {};
       this.formToPopulate = form;
     },
     getSituationList(page = 1) {
@@ -213,6 +216,7 @@ export default {
         .catch((e) => console.log(e));
     },
     cancelUpdate() {
+      this.errors = {};
       this.isUpdating = false;
     },
     switchPage(page) {
