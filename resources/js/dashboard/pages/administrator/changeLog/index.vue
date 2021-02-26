@@ -271,7 +271,23 @@ export default {
     },
     onValidate() {
       this.$bvModal.hide("confirmation-box");
-      this.removeChangeLog(this.itemToRemove);
+      this.removeChangeLog(this.itemToRemove)
+        .then(() => {
+          this.$notify({
+            group: "alert",
+            title: "Supprimer log",
+            text: "Supprimer avec succès",
+            type: "success",
+          });
+        })
+        .catch(() => {
+          this.$notify({
+            group: "alert",
+            title: "Supprimer log",
+            text: "Une erreur est surveni",
+            type: "error",
+          });
+        });
     },
     remove(item) {
       this.itemToRemove = item;
