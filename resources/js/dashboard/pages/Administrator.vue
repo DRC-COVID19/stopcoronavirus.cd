@@ -3,6 +3,7 @@
     <div>header</div>
     <div>menu</div>
     <router-view></router-view>
+    <notifications group="alert" />
   </div>
 </template>
 

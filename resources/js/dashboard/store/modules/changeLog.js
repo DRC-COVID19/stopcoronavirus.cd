@@ -3,7 +3,8 @@ export default {
     listChangeLogs: {},
     currentPage: 1,
     selectedChangeLog: null,
-    isLoading: false
+    isLoading: false,
+    isCreating: false,
   },
   mutations: {
     setListChangeLogs(state, payload) {
@@ -15,9 +16,46 @@ export default {
     setIsLoading(state, payload) {
       state.isLoading = payload;
     },
+    setIsCreating(state, payload) {
+      state.isCreating = payload;
+    }
   },
   actions: {
-    getListChangedLogs({ state, commit }, payload={}) {
+    createChangeLog({ state, commit, dispatch }, payload = {}) {
+      commit("setIsCreating", true);
+      return new Promise((resolve, reject) => {
+        axios.post('/api/dashboard/change-log', payload)
+          .then(({ data }) => {
+            dispatch('getListChangedLogs');
+            resolve(true)
+          })
+          .catch((response) => {
+            console.log(response);
+            reject(response);
+          })
+          .finally(() => {
+            commit("setIsCreating", false);
+          });
+      });
+    },
+    updateChangeLog({ state, commit, dispatch }, payload = {}) {
+      commit("setIsCreating", true);
+      return new Promise((resolve, reject) => {
+        axios.put(`/api/dashboard/change-log/${payload.id}`, payload)
+          .then(({ data }) => {
+            dispatch('getListChangedLogs');
+            resolve(true)
+          })
+          .catch((response) => {
+            console.log(response);
+            reject(response);
+          })
+          .finally(() => {
+            commit("setIsCreating", false);
+          });
+      });
+    },
+    getListChangedLogs({ state, commit }, payload = {}) {
 
       commit("setIsLoading", true);
       return new Promise((resolve, reject) => {

@@ -42,6 +42,40 @@
     opacity: 0.6;
   }
 }
+.btn-dash-sucess {
+  background: $success;
+  border: 3px solid $success !important;
+  border-radius: 5px;
+  &:hover,
+  &:focus,
+  &:active,
+  &:disabled {
+    background: $success !important;
+  }
+  &:focus {
+    box-shadow: none;
+  }
+  &:active {
+    opacity: 0.6;
+  }
+}
+.btn-dash-danger {
+  background: $primary;
+  border: 3px solid $primary !important;
+  border-radius: 5px;
+  &:hover,
+  &:focus,
+  &:active,
+  &:disabled {
+    background: $primary !important;
+  }
+  &:focus {
+    box-shadow: none;
+  }
+  &:active {
+    opacity: 0.6;
+  }
+}
 .text-dash-color {
   color: $dash-text-100 !important;
 }
@@ -907,9 +941,28 @@
     color: $dash-blue !important;
   }
 }
-.page-item.active .page-link {
-  z-index: 3;
-  color: #fff;
-  background-color: $dash-blue;
-  border-color: $dash-blue;
+.page-item {
+  &.active {
+    .page-link {
+      z-index: 3;
+      color: #fff;
+      background-color: $dash-blue;
+      border-color: $dash-blue;
+    }
+  }
+  .page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: $dash-blue;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    &:focus {
+      z-index: 3;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem #2e5bff40;
+    }
+  }
 }

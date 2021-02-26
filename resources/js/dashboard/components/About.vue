@@ -318,10 +318,9 @@
           <b-row>
             <b-col class="d-flex justify-content-end">
               <b-pagination
-                v-model="currentPage"
+                v-model="changeLogsMeta.current_page"
                 :total-rows="changeLogsMeta.total"
-                :per-page="changeLogsMeta.perPage"
-                aria-controls="my-table"
+                :per-page="changeLogsMeta.per_page"
                 @change="switchPage"
               ></b-pagination>
             </b-col>
@@ -399,8 +398,8 @@ export default {
     changeLogsData() {
       return this.changeLogs.data;
     },
-
     changeLogsMeta() {
+
       return this.changeLogs.meta
         ? this.changeLogs.meta
         : {

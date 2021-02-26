@@ -4,6 +4,7 @@
       <router-view></router-view>
     </transition>
     <Waiting v-if="isLoading" />
+
   </div>
 </template>
 <script>

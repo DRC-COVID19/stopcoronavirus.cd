@@ -71,14 +71,15 @@ class ChangeLogController extends Controller
    */
   public function store(Request $request)
   {
+    $data = $this->validate_form($request->all());
     try {
-      $data = $this->validate_form($request->all());
+
       $data['published_by'] = Auth::user()->id;
       $change_log = ChangeLog::create($data);
       if ($change_log) {
         $users = Administrator::whereHas('roles', function ($q) {
           $q->where('name', 'admin-dashboard');
-        })->get();
+        })->limit(2)->get();
 
         foreach ($users as $user) {
           try {

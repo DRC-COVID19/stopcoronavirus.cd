@@ -16,6 +16,7 @@ import Administrator from './pages/Administrator';
 import AdminUserIndex from './pages/administrator/users/Index';
 import AdminUserCreate from './pages/administrator/users/Create';
 import PageNotFound from './pages/NotFound';
+import ChangeLogIndex from './pages/administrator/changeLog/index';
 
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
@@ -139,6 +140,10 @@ export default [
       {
         path: 'users/create',
         component: AdminUserCreate,
+      },
+      {
+        path: 'change-logs',
+        component: ChangeLogIndex
       }
     ]
   },

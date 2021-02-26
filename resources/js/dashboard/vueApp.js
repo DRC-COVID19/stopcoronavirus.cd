@@ -18,7 +18,7 @@ import VueSkeletonLoading from 'vue-skeleton-loading';
 import VueGtag from "vue-gtag";
 import VueMq from 'vue-mq';
 import VueTimeline from "@growthbunker/vuetimeline";
-
+import Notifications from 'vue-notification';
 
 import './directive';
 require('./helper');
@@ -33,6 +33,7 @@ Vue.use(onlyInt);
 Vue.use(fullscreen);
 Vue.use(VueEllipseProgress);
 Vue.use(VueSkeletonLoading);
+Vue.use(Notifications);
 
 Vue.use(VueTimeline, {
   theme: "light",
