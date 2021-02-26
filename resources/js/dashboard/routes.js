@@ -21,6 +21,7 @@ import ChangeLogIndex from './pages/administrator/changeLog/index';
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
 const adminHospital = "admin-hospital";
+const administrator="Administrator";
 
 export default [
   {
@@ -143,7 +144,11 @@ export default [
       },
       {
         path: 'change-logs',
-        component: ChangeLogIndex
+        component: ChangeLogIndex,
+        meta: {
+          requiresAuth: true,
+          role: [administrator]
+        },
       }
     ]
   },

@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { data } from 'jquery';
-import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from '../../config/env';
+import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL, ADMINISTRATOR } from '../../config/env';
 import { event } from 'vue-gtag';
 
 export default {
@@ -23,6 +23,7 @@ export default {
       let dashboardRole = payload.user.roles.find(x => x.name == ADMIN_DASHBOARD);
       let hospitalRole = payload.user.roles.find(x => x.name == AGENT_HOSPITAL);
       let adminHospitalRole = payload.user.roles.find(x => x.name == ADMIN_HOSPITAL);
+      let administrator = payload.user.roles.find(x => x.name == ADMINISTRATOR);
       if (dashboardRole) {
         state.userRole.push(ADMIN_DASHBOARD);
       }
@@ -31,6 +32,9 @@ export default {
       }
       if (adminHospitalRole) {
         state.userRole.push(ADMIN_HOSPITAL);
+      }
+      if (administrator) {
+        state.userRole.push(ADMINISTRATOR);
       }
       localStorage.setItem('dashboard_access_role', state.userRole);
       if (payload.token) {
