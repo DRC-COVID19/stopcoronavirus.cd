@@ -33,7 +33,7 @@ class ChangeLogController extends Controller
   public function index()
   {
     try {
-      $change_logs = ChangeLog::orderBy('updated_at','DESC')->paginate(15);
+      $change_logs = ChangeLog::orderBy('updated_at', 'DESC')->paginate(15);
       return ChangeLogResource::collection($change_logs);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
@@ -118,7 +118,16 @@ class ChangeLogController extends Controller
    */
   public function update(Request $request, ChangeLog $changeLog)
   {
-    //
+    $data = $this->validate_form($request->all());
+    try {
+      $changeLog->update($data);
+      return response()->json(null, 202);
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
   }
 
   /**
@@ -129,7 +138,14 @@ class ChangeLogController extends Controller
    */
   public function destroy(ChangeLog $changeLog)
   {
-    //
+    try {
+      $changeLog->delete();
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
   }
 
   public function validate_form($data, $id = null)

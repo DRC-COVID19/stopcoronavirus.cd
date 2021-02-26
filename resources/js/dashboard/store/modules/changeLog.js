@@ -55,6 +55,23 @@ export default {
           });
       });
     },
+    removeChangeLog({ state, commit, dispatch }, payload = {}) {
+      commit("setIsCreating", true);
+      return new Promise((resolve, reject) => {
+        axios.delete(`/api/dashboard/change-log/${payload.id}`, payload)
+          .then(({ data }) => {
+            dispatch('getListChangedLogs');
+            resolve(true)
+          })
+          .catch((response) => {
+            console.log(response);
+            reject(response);
+          })
+          .finally(() => {
+            commit("setIsCreating", false);
+          });
+      });
+    },
     getListChangedLogs({ state, commit }, payload = {}) {
 
       commit("setIsLoading", true);

@@ -29,7 +29,10 @@
               class="mx-2 fas fa-edit btn-action text-warning"
               @click="toEdit(data.item)"
             ></i>
-            <i class="mx-2 fas fa-trash btn-action text-danger"></i>
+            <i
+              class="mx-2 fas fa-trash btn-action text-danger"
+              @click="remove(data.item)"
+            ></i>
           </template>
         </b-table>
         <b-row>
@@ -118,6 +121,17 @@
         </b-form>
       </b-col>
     </b-row>
+    <b-modal id="confirmation-box">
+      Voulez-vous supprimer cette ligne ?
+      <template #modal-footer="{ hide }">
+        <b-button size="sm" variant="success" @click="onValidate">
+          Accepter
+        </b-button>
+        <b-button size="sm" variant="danger" @click="hide('confirmation-box')">
+          Annuler
+        </b-button>
+      </template>
+    </b-modal>
   </b-container>
 </template>
 
@@ -151,6 +165,7 @@ export default {
       form: {},
       errors: {},
       isEditingMode: false,
+      itemToRemove: {},
     };
   },
   mounted() {
@@ -182,7 +197,7 @@ export default {
   },
   methods: {
     ...mapActions(["createChangeLog"]),
-    ...mapActions(["getListChangedLogs", "updateChangeLog"]),
+    ...mapActions(["getListChangedLogs", "updateChangeLog", "removeChangeLog"]),
     submit_form() {
       if (this.isEditingMode) {
         this.submitUpdatingChangeLog();
@@ -247,12 +262,20 @@ export default {
     },
     toEdit(item) {
       this.isEditingMode = true;
-      this.form = item;
+      this.form = { ...item };
       this.form.publish_date = item.from;
     },
     cancelEditMode() {
       this.isEditingMode = false;
       this.form = {};
+    },
+    onValidate() {
+      this.$bvModal.hide("confirmation-box");
+      this.removeChangeLog(this.itemToRemove);
+    },
+    remove(item) {
+      this.itemToRemove = item;
+      this.$bvModal.show("confirmation-box");
     },
   },
 };

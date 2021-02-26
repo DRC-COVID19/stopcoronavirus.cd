@@ -70,9 +70,8 @@ Route::group([
 
   Route::group(['prefix' => 'change-log'], function () {
     Route::post('read', 'ChangeLogController@setChangeLogRead');
-    Route::apiResource('/', "ChangeLogController");
   });
-
+  Route::apiResource('change-log', "ChangeLogController");
 
 
   Route::group(['prefix' => 'flux', 'middleware' => 'cache.headers:private;max_age=3600'], function () {
