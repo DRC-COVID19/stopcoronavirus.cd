@@ -397,9 +397,7 @@ export default {
       selectedChangeLog: (state) => state.changeLog.selectedChangeLog,
     }),
     changeLogsData() {
-      return this.changeLogs.data.sort((a, b) => {
-        return new Date(a.from) < new Date(b.from) ? 1 : -1;
-      });
+      return this.changeLogs.data;
     },
 
     changeLogsMeta() {

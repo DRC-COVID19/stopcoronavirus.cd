@@ -376,7 +376,7 @@
       background: $dash-input-backColor;
       height: 32px;
       font-size: 0.85rem;
-      border-color:$dash-input-border-color
+      border-color: $dash-input-border-color;
     }
   }
 }
@@ -470,7 +470,7 @@
         > .card-body {
           height: auto;
           padding: 10px 0;
-          @media screen and (max-width: 1023px){
+          @media screen and (max-width: 1023px) {
             padding: 0;
           }
           > div {
@@ -900,10 +900,16 @@
 .b-skeleton-text {
   border-radius: unset;
 }
-.default-border{
+.default-border {
   border-radius: 5px;
   border-color: $dash-blue !important;
-  span{
+  span {
     color: $dash-blue !important;
   }
+}
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: $dash-blue;
+  border-color: $dash-blue;
 }

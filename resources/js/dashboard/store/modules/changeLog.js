@@ -59,9 +59,9 @@ export default {
       if (!state.listChangeLogs.data) {
         return []
       }
-      return state.listChangeLogs.data.filter((x) => x.notRead).sort((a, b) => {
+      return state.listChangeLogs.data.filter((x) => x.notRead)/*.sort((a, b) => {
         return new Date(a.from) < new Date(b.from) ? 1 : -1;
-      });
+      })*/;
     }
   }
 }

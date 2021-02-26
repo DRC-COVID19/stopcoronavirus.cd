@@ -733,7 +733,11 @@ export default {
     this.$store.watch(
       (state) => state.changeLog.listChangeLogs,
       (value) => {
-        if (value.data && value.data.filter((x) => x.notRead).length) {
+        if (
+          value.data &&
+          value.data.filter((x) => x.notRead).length &&
+          this.activeMenu != 7
+        ) {
           this.$bvModal.show("change-log-modal");
         }
       }

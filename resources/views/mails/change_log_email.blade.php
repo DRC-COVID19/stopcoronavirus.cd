@@ -4,7 +4,7 @@
         Nouvelles mises à jour
     </h1>
     <p>
-        Bonjour {{ $user->name }}, le dashboard-covid vient d'être mise à jour
+        Cher(e) {{ $user->name }}, le dashboard-covid vient d'être mise à jour
     </p>
     <p>Voici les nouveautés qui ont été introduites:</p>
     <div class="jumbotron">
