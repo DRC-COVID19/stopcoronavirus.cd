@@ -1,8 +1,84 @@
 <template>
   <b-container fluid>
-    <b-row>
-      <b-col cols="12" md="9">
+    <b-row class="flex-md-row-reverse">
+       <b-col cols="12" md="4" >
+        <b-card class="mt-3">
+          <h3>Nouveau log</h3>
+          <b-form @submit.prevent="submit_form">
+            <b-form-group
+              label="Date"
+              label-class="text-dash-color"
+              :invalid-feedback="
+                errors.publish_date ? errors.publish_date[0] : null
+              "
+              :state="errors.publish_date ? false : null"
+              :disabled="isCreating"
+            >
+              <b-form-datepicker
+                v-model="form.publish_date"
+                :state="errors.publish_date ? false : null"
+                class="input-dash"
+                :max="new Date()"
+                required
+              />
+            </b-form-group>
+            <b-form-group
+              :invalid-feedback="errors.title ? errors.title[0] : null"
+              :state="errors.title ? false : null"
+              label="Titre"
+              label-class="text-dash-color"
+              :disabled="isCreating"
+            >
+              <b-form-input
+                v-model="form.title"
+                :state="errors.title ? false : null"
+                class="input-dash"
+                required
+              />
+            </b-form-group>
+            <b-form-group
+              :invalid-feedback="
+                errors.description ? errors.description[0] : null
+              "
+              :state="errors.description ? false : null"
+              label="Déscription"
+              label-class="text-dash-color"
+              :disabled="isCreating"
+            >
+              <b-form-textarea
+                rows="10"
+                v-model="form.description"
+                :state="errors.description ? false : null"
+                class="input-dash"
+              />
+            </b-form-group>
+            <b-button
+              type="submit"
+              class="btn-dash-sucess"
+              :disabled="isCreating"
+            >
+              <span v-if="isCreating"
+                ><b-spinner class="align-middle"></b-spinner>
+                <span>en cours ...</span>
+              </span>
+              <div v-else>
+                <span v-if="isEditingMode">Modifier</span>
+                <span v-else>Enregistrer</span>
+              </div>
+            </b-button>
+            <b-button
+              :disabled="isCreating"
+              v-if="isEditingMode"
+              class="btn-dash-danger"
+              @click="cancelEditMode"
+              >Annuler</b-button
+            >
+          </b-form>
+        </b-card>
+      </b-col>
+      <b-col cols="12" md="8">
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
+         <Header title="Change log" iconClass="fa fa-history" />
         <b-skeleton-table
           v-if="isLoading"
           :rows="15"
@@ -47,79 +123,7 @@
           </b-col>
         </b-row>
       </b-col>
-      <b-col cols="12" md="3">
-        <h3>Nouveau log</h3>
-        <b-form @submit.prevent="submit_form">
-          <b-form-group
-            label="Date"
-            label-class="text-dash-color"
-            :invalid-feedback="
-              errors.publish_date ? errors.publish_date[0] : null
-            "
-            :state="errors.publish_date ? false : null"
-            :disabled="isCreating"
-          >
-            <b-form-datepicker
-              v-model="form.publish_date"
-              :state="errors.publish_date ? false : null"
-              class="input-dash"
-              :max="new Date()"
-              required
-            />
-          </b-form-group>
-          <b-form-group
-            :invalid-feedback="errors.title ? errors.title[0] : null"
-            :state="errors.title ? false : null"
-            label="Titre"
-            label-class="text-dash-color"
-            :disabled="isCreating"
-          >
-            <b-form-input
-              v-model="form.title"
-              :state="errors.title ? false : null"
-              class="input-dash"
-              required
-            />
-          </b-form-group>
-          <b-form-group
-            :invalid-feedback="
-              errors.description ? errors.description[0] : null
-            "
-            :state="errors.description ? false : null"
-            label="Déscription"
-            label-class="text-dash-color"
-            :disabled="isCreating"
-          >
-            <b-form-textarea
-              rows="10"
-              v-model="form.description"
-              :state="errors.description ? false : null"
-              class="input-dash"
-            />
-          </b-form-group>
-          <b-button
-            type="submit"
-            class="btn-dash-sucess"
-            :disabled="isCreating"
-          >
-            <span v-if="isCreating"
-              ><b-spinner class="align-middle"></b-spinner>
-              <span>en cours ...</span>
-            </span>
-            <div v-else>
-              <span v-if="isEditingMode">Modifier</span>
-              <span v-else>Enregistrer</span>
-            </div>
-          </b-button>
-          <b-button
-            :disabled="isCreating"
-            v-if="isEditingMode"
-            class="btn-dash-danger"
-            @click="cancelEditMode"
-            >Annuler</b-button
-          >
-        </b-form>
-      </b-col>
+
     </b-row>
     <b-modal id="confirmation-box">
       Voulez-vous supprimer cette ligne ?
@@ -137,7 +141,11 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Header from "../components/Header";
 export default {
+  components:{
+    Header
+  },
   data() {
     return {
       fields: [

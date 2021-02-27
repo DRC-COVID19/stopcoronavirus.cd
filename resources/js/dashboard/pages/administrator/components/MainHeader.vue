@@ -1,7 +1,7 @@
 <template>
   <b-row class="header">
     <b-col cols="12" class="map-form-header">
-        <b-navbar toggleable="lg" type="light">
+      <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
           <h1 class="title m-0">Dashboard Covid-19</h1>
         </b-navbar-brand>
@@ -13,15 +13,21 @@
             <b-link
               class="mx-2"
               :class="{ active: $route.name === 'administrator.users' }"
-              @click="selectMenu(1)"
-              :to="{name:'administrator.users'}"
-              >Utilisateurs</b-link>
+              :to="{ name: 'administrator.users' }"
+              >Utilisateurs</b-link
+            >
             <b-link
               class="mx-2"
               :class="{ active: $route.name === 'administrator.epidemie' }"
-              @click="selectMenu(2)"
-              :to="{name:'administrator.epidemie'}"
-              >Situation Epidémiologie</b-link>
+              :to="{ name: 'administrator.epidemie' }"
+              >Situation Epidémiologie</b-link
+            >
+            <b-link
+              class="mx-2"
+              :class="{ active: $route.name === 'administrator.changeLog' }"
+              :to="{ name: 'administrator.changeLog' }"
+              >Change log</b-link
+            >
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item>

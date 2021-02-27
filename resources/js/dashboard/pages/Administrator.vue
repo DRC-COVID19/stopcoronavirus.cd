@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="main">
+  <b-container fluid class="administrator">
     <MainHeader />
     <b-row>
       <router-view ></router-view>
@@ -18,8 +18,5 @@
 
 <style lang='scss' scoped >
   @import "@~/sass/_variables";
-  .main {
-    background-color: $dash-background;
-    height: 100vh;
-  }
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <b-container class="d-flex flex-start ml-0">
+  <b-container fluid>
     <b-row class="header_d">
       <h3 class="h3"><i :class="`${iconClass}`"></i>{{title}}</h3>
     </b-row>
@@ -23,8 +23,7 @@
 
 <style lang='scss' scoped>
   .header_d {
-    margin: 20px 2% 10px 2%;
-    padding: 10px;
+    padding: 10px 0;
     i {
       color: blue;
       font-size: 24px;
