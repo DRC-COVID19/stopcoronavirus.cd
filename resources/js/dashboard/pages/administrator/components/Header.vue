@@ -23,7 +23,7 @@
 
 <style lang='scss' scoped>
   .header_d {
-    padding: 10px 0;
+    padding: 20px 0;
     i {
       color: blue;
       font-size: 24px;

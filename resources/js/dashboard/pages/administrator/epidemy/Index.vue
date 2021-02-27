@@ -1,7 +1,7 @@
 <template>
-  <b-container fluid vertical-align="canter">
+  <b-container fluid>
     <b-row class="flex-md-row-reverse">
-      <b-col cols="12" md="4">
+      <b-col cols="12" md="4" class="mt-3">
         <b-alert
           variant="success"
           :show="showSuccess"
