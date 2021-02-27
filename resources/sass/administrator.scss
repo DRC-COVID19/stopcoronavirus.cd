@@ -1,0 +1,14 @@
+.administrator {
+  @include card-style;
+  background-color: $dash-background;
+  min-height: 100vh;
+  .header {
+    .nav-container {
+      a {
+        &.active {
+          color: $dash-blue !important;
+        }
+      }
+    }
+  }
+}
