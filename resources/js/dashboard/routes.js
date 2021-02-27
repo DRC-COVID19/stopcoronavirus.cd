@@ -17,6 +17,8 @@ import AdminUserIndex from './pages/administrator/users/Index';
 import AdminUserCreate from './pages/administrator/users/Create';
 import PageNotFound from './pages/NotFound';
 import ChangeLogIndex from './pages/administrator/changeLog/index';
+import ShowUser from './pages/administrator/users/ShowUser';
+import Epidemie from './pages/administrator/epidemy/Index';
 
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
@@ -135,7 +137,8 @@ export default [
     component: Administrator,
     children: [
       {
-        path: 'users',
+        path: 'users/',
+        name: 'administrator.users',
         component: AdminUserIndex
       },
       {
@@ -149,6 +152,14 @@ export default [
           requiresAuth: true,
           role: [administrator]
         },
+        path: 'show/',
+        name: 'administrator.user.show',
+        component: ShowUser,
+      },
+      {
+        path: 'epidemie/',
+        name: 'administrator.epidemie',
+        component: Epidemie,
       }
     ]
   },

@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminMenuTableSeeder::class);
         $this->call(CategoriesTableSeeder::class);
         $this->call(PostsTableSeeder::class);
-        $this->call(HealthZoneHealthZonesTableSeeder::class);
+        $this->call(HealthZonesTableSeeder::class);
         $this->call(CustomizedHospitalsTableSeeder::class);
         $this->call(HealthZonesTableSeeder::class);
         $this->call(ProvincesTableSeeder::class);

@@ -1,15 +1,25 @@
 <template>
-  <div>
-    <div>header</div>
-    <div>menu</div>
-    <router-view></router-view>
-    <notifications group="alert" />
-  </div>
+  <b-container fluid class="main">
+    <MainHeader />
+    <b-row>
+      <router-view ></router-view>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
-export default {};
+  import MainHeader from './administrator/components/MainHeader';
+  export default {
+    components: {
+      MainHeader,
+    }
+  };
 </script>
 
-<style>
+<style lang='scss' scoped >
+  @import "@~/sass/_variables";
+  .main {
+    background-color: $dash-background;
+    height: 100vh;
+  }
 </style>
