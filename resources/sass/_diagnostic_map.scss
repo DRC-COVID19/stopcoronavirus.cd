@@ -80,10 +80,17 @@
   color: $dash-text-100 !important;
 }
 .input-dash {
-  border: 1px solid #d2d5dc;
+  border: 1px solid $dash-input-border-color;
   background: $dash-background;
   transition: all 0.3s ease;
   border-radius: 5px;
+  &:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: $dash-blue-7d;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem $dash-blue-7d;
+  }
 }
 .dash-login-title {
   font-size: 1.8rem;
