@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <b-row class="flex-md-row-reverse">
+    <b-row class="flex-md-row-reverse" no-gutters>
       <b-col cols="12" md="4" class="mt-3">
         <b-alert
           variant="success"

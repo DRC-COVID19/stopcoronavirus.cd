@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <b-row class="flex-md-row-reverse">
+    <b-row class="flex-md-row-reverse" >
        <b-col cols="12" md="4" >
         <b-card class="mt-3">
           <h3>Nouveau log</h3>

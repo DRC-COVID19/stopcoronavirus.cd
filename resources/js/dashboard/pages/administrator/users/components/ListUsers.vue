@@ -1,6 +1,6 @@
 <template>
-  <b-container>
-    <b-row class="my-3 d-flex justif-content-start">
+  <b-container fluid>
+    <b-row no-gutters >
       <b-col cols="12" md="6">
         <b-form-input
           v-model="filter"
@@ -9,17 +9,15 @@
           placeholder='Filtrer'
         ></b-form-input>
       </b-col>
-      <b-col cols="12" md="6" class="ml-auto">
-      </b-col>
     </b-row>
-    <b-row>
-      <b-col>
-        <b-table 
+    <b-row no-gutters>
+      <b-col cols="12">
+        <b-table
           responsive
-          striped 
+          striped
           hover
           :fields="fields"
-          :items="users.data" 
+          :items="users.data"
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
@@ -38,7 +36,7 @@
             <i @click="deleteUser(data.item.name, data.item.id)" class="mx-2 fas fa-user-times"></i>
             <i @click="updateUser(data.item.name, data.item.id, data.item.usernmae, data.item.roles, data.item.email)" class="fas fa-user-edit"></i>
           </template>
-          <template 
+          <template
             v-slot:cell(role)="data"
           >
             <b-badge class="mx-1 my-1" v-for="(role, index) in data.item.roles" variant="secondary" :key="index">{{role.name}}</b-badge>
@@ -50,7 +48,7 @@
       Voulez-vous vraiment supprimer l'utilisateurs {{currentUser.name}} ?
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
-          Accepter 
+          Accepter
         </b-button>
         <b-button size="sm" variant="danger" @click="onCancelDelection()">
           Annuler
