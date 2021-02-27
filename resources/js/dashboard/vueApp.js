@@ -14,7 +14,7 @@ import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env';
 import "chartjs-plugin-crosshair";
 import fullscreen from 'vue-fullscreen';
 import VueEllipseProgress from "vue-ellipse-progress";
-import VueSkeletonLoading from 'vue-skeleton-loading';
+// import VueSkeletonLoading from 'vue-skeleton-loading';
 import VueGtag from "vue-gtag";
 import VueMq from 'vue-mq';
 import VueTimeline from "@growthbunker/vuetimeline";
@@ -32,7 +32,7 @@ Vue.use(GlobalComponents);
 Vue.use(onlyInt);
 Vue.use(fullscreen);
 Vue.use(VueEllipseProgress);
-Vue.use(VueSkeletonLoading);
+// Vue.use(VueSkeletonLoading);
 Vue.use(Notifications);
 
 Vue.use(VueTimeline, {

@@ -14,7 +14,6 @@ import NotAcces from './pages/NotAccess';
 import Landing from './pages/Landing';
 import Administrator from './pages/Administrator';
 import AdminUserIndex from './pages/administrator/users/Index';
-import AdminUserCreate from './pages/administrator/users/Create';
 import PageNotFound from './pages/NotFound';
 import ChangeLogIndex from './pages/administrator/changeLog/index';
 import ShowUser from './pages/administrator/users/ShowUser';
@@ -135,6 +134,10 @@ export default [
   {
     path: "/administrator",
     component: Administrator,
+    meta: {
+      requiresAuth: true,
+      role: [administrator]
+    },
     children: [
       {
         path: 'users/',
@@ -142,19 +145,9 @@ export default [
         component: AdminUserIndex
       },
       {
-        path: 'users/create',
-        component: AdminUserCreate,
-      },
-      {
         path: 'change-logs',
         component: ChangeLogIndex,
-        meta: {
-          requiresAuth: true,
-          role: [administrator]
-        },
-        path: 'show/',
-        name: 'administrator.user.show',
-        component: ShowUser,
+        name:'administrator.changeLog'
       },
       {
         path: 'epidemie/',
