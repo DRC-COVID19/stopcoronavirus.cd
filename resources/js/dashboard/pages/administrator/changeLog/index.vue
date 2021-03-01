@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
-    <b-row class="flex-md-row-reverse" >
-       <b-col cols="12" md="4" >
+    <b-row class="flex-md-row-reverse">
+      <b-col cols="12" md="4">
         <b-card class="mt-3">
           <h3>Nouveau log</h3>
           <b-form @submit.prevent="submit_form">
@@ -78,7 +78,7 @@
       </b-col>
       <b-col cols="12" md="8">
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
-         <Header title="Change log" iconClass="fa fa-history" />
+        <Header title="Change log" iconClass="fa fa-history" />
         <b-skeleton-table
           v-if="isLoading"
           :rows="15"
@@ -123,7 +123,6 @@
           </b-col>
         </b-row>
       </b-col>
-
     </b-row>
     <b-modal id="confirmation-box">
       Voulez-vous supprimer cette ligne ?
@@ -143,8 +142,8 @@
 import { mapActions, mapState } from "vuex";
 import Header from "../components/Header";
 export default {
-  components:{
-    Header
+  components: {
+    Header,
   },
   data() {
     return {
@@ -312,13 +311,5 @@ export default {
 .btn-action {
   cursor: pointer;
 }
-.hide-waiting {
-  position: absolute;
-  background: $waiting_background;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 20;
-}
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <b-row class="flex-md-row-reverse" no-gutters>
+    <b-row class="flex-md-row-reverse" no-gutterse>
       <b-col cols="12" md="4" class="mt-3">
         <b-alert
           variant="success"
@@ -48,7 +48,7 @@
         >
           Situation supprimee avec succes
         </b-alert>
-        <b-row v-if="isUpdating" class="mask"></b-row>
+        <div class="hide-waiting" v-if="isUpdating"></div>
         <ListSituation
           @onDeleteSituation="deleteSituation"
           :situations="situations"
@@ -58,8 +58,8 @@
         <b-col cols="12" class="d-flex justify-content-end">
           <b-pagination
             page-class="text-blue-dash"
-            v-model="situationMeta.currentPage"
-            :per-page="situationMeta.perPage"
+            v-model="situationMeta.current_page"
+            :per-page="situationMeta.per_page"
             :total-rows="situationMeta.total"
             @change="getSituationList"
             :disabled="isUpdating"

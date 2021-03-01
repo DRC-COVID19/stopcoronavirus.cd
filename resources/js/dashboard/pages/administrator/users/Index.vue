@@ -39,12 +39,13 @@
         >
           Utilisateur supprime avec success
         </b-alert>
-        <b-row v-if="updating" class="mask"></b-row>
+        <div class="hide-waiting" v-if="updating"></div>
         <ListUser
           :users="users"
           @onDeleteUser="deleteUser"
           @onUpdateUser="populateForm"
           :isLoading="isLoading"
+          :updating="updating"
         />
         <b-col cols="12" class="d-flex justify-content-end">
           <b-pagination

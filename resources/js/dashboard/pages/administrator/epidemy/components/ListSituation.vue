@@ -12,8 +12,17 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col>
+      <b-col cols="12">
+
+        <b-skeleton-table
+          v-if="isLoading"
+          :rows="15"
+          :columns="10"
+          :table-props="{ bordered: false, striped: true, responsive: true }"
+        ></b-skeleton-table>
+
         <b-table
+          v-else
           responsive
           striped
           hover
@@ -22,10 +31,11 @@
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
-          :busy="isLoading"
         >
           <template #table-busy>
-            <div class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height">
+            <div
+              class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height"
+            >
               <b-spinner class="align-middle"></b-spinner>
               <strong>Loading...</strong>
             </div>
@@ -59,7 +69,8 @@
       </b-col>
     </b-row>
     <b-modal v-model="isDeleteModalShown">
-      Voulez-vous supprimer la mise à jour du {{ currentSituation.last_update }} ?
+      Voulez-vous supprimer la mise à jour du
+      {{ currentSituation.last_update }} ?
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter
@@ -155,7 +166,7 @@ export default {
 </script>
 <style lang='scss' scoped>
 @import "@~/sass/_variables";
-.loading-height{
+.loading-height {
   height: 660px;
 }
 .fa-edit {

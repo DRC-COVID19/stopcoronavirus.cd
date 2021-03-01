@@ -12,7 +12,7 @@
           <b-navbar-nav class="nav-container">
             <b-link
               class="mx-2"
-              :class="{ active: $route.name === 'administrator.users' }"
+              :class="{ active: $route.name === 'administrator.users' || $route.name==='administrator.home' }"
               :to="{ name: 'administrator.users' }"
               >Utilisateurs</b-link
             >

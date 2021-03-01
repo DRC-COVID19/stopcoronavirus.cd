@@ -22,7 +22,7 @@ import Epidemie from './pages/administrator/epidemy/Index';
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
 const adminHospital = "admin-hospital";
-const administrator="Administrator";
+const administrator = "Administrator";
 
 export default [
   {
@@ -134,11 +134,17 @@ export default [
   {
     path: "/administrator",
     component: Administrator,
+    name: 'administrator',
     meta: {
       requiresAuth: true,
       role: [administrator]
     },
     children: [
+      {
+        path: '/',
+        name: 'administrator.home',
+        component: AdminUserIndex
+      },
       {
         path: 'users/',
         name: 'administrator.users',
@@ -147,7 +153,7 @@ export default [
       {
         path: 'change-logs',
         component: ChangeLogIndex,
-        name:'administrator.changeLog'
+        name: 'administrator.changeLog'
       },
       {
         path: 'epidemie/',

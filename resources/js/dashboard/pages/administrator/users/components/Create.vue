@@ -90,14 +90,14 @@
       ></b-form-input>
       <b-form-text id="password-help-block">{{ warningMissMatch }}</b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button type="submit" variant="primary" class="btn-dash-blue">{{
+        <b-button type="submit" variant="primary" class="btn-dash-sucess">{{
           btnTitle
         }}</b-button>
         <b-button
           type="reset"
           v-if="updating"
           variant="primary"
-          class="ml-4 btn-edit"
+          class="ml-4 btn-dash-danger"
           >Annuler</b-button
         >
       </b-row>
