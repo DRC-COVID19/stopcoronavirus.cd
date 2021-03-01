@@ -4,6 +4,7 @@
       <router-view></router-view>
     </transition>
     <Waiting v-if="isLoading" />
+
   </div>
 </template>
 <script>
@@ -28,8 +29,12 @@ export default {
       (response) => response,
       (error) => {
         // console.log("error.response", error);
-        if (error && error.response.status == 401 && this.$route.name != "login") {
-          console.log('login','login-true');
+        if (
+          error &&
+          error.response.status == 401 &&
+          this.$route.name != "login"
+        ) {
+          console.log("login", "login-true");
           this.$gtag.event("auto-logout", {
             event_category: "logout",
             event_label: "auto-logout",
@@ -50,6 +55,7 @@ export default {
         this.isLoading = value;
       }
     );
+    this.getListChangedLogs();
 
     this.$store.watch(
       (state) => state.auth.user,
@@ -71,7 +77,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["userMe"]),
+    ...mapActions(["userMe", "getListChangedLogs"]),
   },
 };
 </script>

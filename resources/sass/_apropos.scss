@@ -1,0 +1,58 @@
+.apropos {
+  height: 100vh;
+  .timeline {
+    max-width: none;
+  }
+  .nav-pills .nav-link {
+    text-decoration: none;
+    color: $dash-text-100;
+    &.active {
+      background-color: $dash-blue;
+      color: white;
+    }
+  }
+  .tab-content {
+    background-color: $dash-background;
+    > .tab-pane {
+      padding-top: 0.75rem;
+    }
+    .row {
+      justify-content: left;
+      > div {
+        margin-bottom: 30px;
+        display: flex;
+      }
+    }
+    .img-capture-wrapper {
+      overflow: hidden;
+      float: right;
+      margin-left: 20px;
+      margin-bottom: 10px;
+      .img-capture {
+        width: 150px;
+        cursor: zoom-in;
+        transition: 0.3s ease-in-out;
+        transform-origin: center;
+        &:hover {
+          opacity: 0.6;
+          transform: scale(1.1);
+        }
+      }
+    }
+  }
+}
+.wrapper-img-modal {
+  width: max-content;
+  margin: auto;
+  img {
+    max-width: 900px;
+  }
+}
+.modal-dialog {
+  max-width: 1000px !important;
+  width: max-content;
+  min-width: 500px;
+}
+.modal-header .close:focus {
+  outline: none;
+}

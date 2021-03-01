@@ -14,11 +14,15 @@ import NotAcces from './pages/NotAccess';
 import Landing from './pages/Landing';
 import Administrator from './pages/Administrator';
 import AdminUserIndex from './pages/administrator/users/Index';
-import AdminUserCreate from './pages/administrator/users/Create';
+import PageNotFound from './pages/NotFound';
+import ChangeLogIndex from './pages/administrator/changeLog/index';
+import ShowUser from './pages/administrator/users/ShowUser';
+import Epidemie from './pages/administrator/epidemy/Index';
 
 const adminDashboard = "admin-dashboard";
 const agentHospital = "agent-hospital";
 const adminHospital = "admin-hospital";
+const administrator = "Administrator";
 
 export default [
   {
@@ -130,14 +134,31 @@ export default [
   {
     path: "/administrator",
     component: Administrator,
+    name: 'administrator',
+    meta: {
+      requiresAuth: true,
+      role: [administrator]
+    },
     children: [
       {
-        path: 'users',
+        path: '/',
+        name: 'administrator.home',
         component: AdminUserIndex
       },
       {
-        path: 'users/create',
-        component: AdminUserCreate,
+        path: 'users/',
+        name: 'administrator.users',
+        component: AdminUserIndex
+      },
+      {
+        path: 'change-logs',
+        component: ChangeLogIndex,
+        name: 'administrator.changeLog'
+      },
+      {
+        path: 'epidemie/',
+        name: 'administrator.epidemie',
+        component: Epidemie,
       }
     ]
   },
@@ -148,5 +169,10 @@ export default [
     meta: {
       requiresAuth: true
     },
+  },
+  {
+    name: "not_found",
+    path: "*",
+    component: PageNotFound
   }
 ];

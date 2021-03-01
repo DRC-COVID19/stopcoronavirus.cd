@@ -233,7 +233,7 @@
           class="map-md"
           v-show="canShowMapMobile"
           :class="`${hasRightSide ? 'col-lg-6' : 'col-lg-12'}`"
-          :style="{ top:isSmOrMd? mapMdTop :0}"
+          :style="{ top: isSmOrMd ? mapMdTop : 0 }"
         >
           <div
             class="layer-set-contenair"
@@ -370,11 +370,13 @@
         </b-row>
       </transition>
       <Waiting v-if="isLoading" />
+      <ChangeLogModal id="change-log-modal" />
     </b-container>
   </div>
 </template>
 
 <script>
+import ChangeLogModal from "../components/ChangeLogModal";
 import Maps from "../components/Maps";
 import MapsLegend from "../components/MapsLegend";
 import MapsLegendEpidemic from "../components/MapsLegendEpidemic";
@@ -446,6 +448,7 @@ export default {
     About,
     ToggleButton,
     AfriFluxChart,
+    ChangeLogModal,
   },
   data() {
     return {
@@ -725,6 +728,20 @@ export default {
         this.resizeTopMap();
       }
     );
+
+    //Watch unread changelogs
+    this.$store.watch(
+      (state) => state.changeLog.listChangeLogs,
+      (value) => {
+        if (
+          value.data &&
+          value.data.filter((x) => x.notRead).length &&
+          this.activeMenu != 7
+        ) {
+          this.$bvModal.show("change-log-modal");
+        }
+      }
+    );
   },
   methods: {
     ...mapActions([
@@ -787,6 +804,10 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
+
+            data.sort((a, b) => {
+              return a.last_update < b.last_update ? 1 : -1;
+            });
             data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
@@ -820,6 +841,9 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
+            data.sort((a, b) => {
+              return a.last_update < b.last_update ? 1 : -1;
+            });
             data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
@@ -1517,9 +1541,9 @@ export default {
       }
 
       urlMaps += `/maps`;
-      if (values.observation_start==values.observation_end) {
+      if (values.observation_start == values.observation_end) {
         urlDaily += `/daily`;
-      }else{
+      } else {
         urlDaily += `/daily-date`;
       }
 
@@ -1995,7 +2019,7 @@ export default {
       if (this.$refs.tabs_right) {
         setTimeout(() => {
           this.mapMdTop = this.$refs.tabs_right.$refs.nav.clientHeight + 16.4;
-        },100);
+        }, 100);
       }
     },
   },

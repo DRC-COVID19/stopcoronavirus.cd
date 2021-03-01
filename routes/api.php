@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChangeLogController;
 use App\Http\Controllers\HospitalSituationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -66,6 +67,11 @@ Route::group([
     Route::post('reset-password/{user_id}', 'AuthController@resetPassword');
     Route::post('register', 'AuthController@store');
   });
+
+  Route::group(['prefix' => 'change-log'], function () {
+    Route::post('read', 'ChangeLogController@setChangeLogRead');
+  });
+  Route::apiResource('change-log', "ChangeLogController");
 
 
   Route::group(['prefix' => 'flux', 'middleware' => 'cache.headers:private;max_age=3600'], function () {

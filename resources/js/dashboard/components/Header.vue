@@ -32,9 +32,64 @@
               >Infrastructures</b-nav-item
             >
             <!-- <b-nav-item :class="{'active':activeMenu==6}" @click="selectMenu(6)">Orientation</b-nav-item> -->
-            <!-- <b-nav-item :class="{'active':activeMenu==7}" @click="selectMenu(7)">A propos</b-nav-item> -->
+            <b-nav-item
+              :class="{ active: activeMenu == 7 }"
+              @click="selectMenu(7)"
+              >A propos</b-nav-item
+            >
           </b-navbar-nav>
-          <b-navbar-nav class="ml-auto">
+          <b-navbar-nav class="ml-auto" align="center">
+            <li class="position-relative nav-item d-flex align-items-center">
+              <a
+                class="nav-link"
+                href="#"
+                @click.prevent="toggleHeaderNotification"
+                v-click-outside="clickOutsideNotification"
+              >
+                <div
+                  class="icon-hallo d-flex justify-content-center align-items-center"
+                >
+                  <i class="fas fa-bell"></i>
+                </div>
+
+                <span class="notification-count">{{
+                  getChangeLogNotRead.length
+                }}</span>
+              </a>
+              <div class="dropdown-nav" v-show="showHeaderNotification">
+                <div class="item-header">
+                  <h6 class="item-title">Change log</h6>
+                </div>
+                <div class="item-content" v-if="getChangeLogNotRead.length">
+                  <div
+                    class="media align-items-center d-flex"
+                    v-for="(item, index) in getChangeLogNotRead.slice(0, 5)"
+                    :key="index"
+                    @click="selectNotification(item)"
+                  >
+                    <div
+                      class="item-icon bg-skyblue d-flex align-items-center justify-content-center"
+                    >
+                      <i class="fas fa-history"></i>
+                    </div>
+                    <div class="media-body space-sm">
+                      <div class="post-title">{{ item.title }}</div>
+                      <span>{{ moment(item.from).format("DD.MM.YYYY") }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="item-content" v-else>
+                  <div class="media align-items-center d-flex">
+                    <div
+                      class="item-icon bg-skyblue d-flex align-items-center justify-content-center"
+                    ></div>
+                    <div class="media-body space-sm">
+                      <div class="post-title">Aucune notification</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
             <b-nav-item>
               <div
                 class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
@@ -101,22 +156,28 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 export default {
   data() {
     return {
       showUserCard: false,
+      showHeaderNotification: false,
     };
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       activeMenu: (state) => state.nav.activeMenu,
+      changeLogs: (state) => state.app.changeLogs,
     }),
+    ...mapGetters(["getChangeLogNotRead"]),
+    countReadChangeLogs() {
+      return getChangeLogNotRead.length;
+    },
   },
   methods: {
-    ...mapActions(["logout"]),
-    ...mapMutations(["setActiveMenu"]),
+    ...mapActions(["logout", "setChangeLogsRead"]),
+    ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
     userAvatarMouseEnter() {
       this.showUserCard = true;
     },
@@ -130,8 +191,21 @@ export default {
         });
       });
     },
+    selectNotification(item) {
+      this.setSelectedChangeLog(item);
+      this.setActiveMenu(7);
+    },
     selectMenu(value) {
       this.setActiveMenu(value);
+    },
+    toggleHeaderNotification() {
+      this.showHeaderNotification = !this.showHeaderNotification;
+    },
+    clickOutsideNotification() {
+      if (this.showHeaderNotification) {
+        this.showHeaderNotification = false;
+        this.setChangeLogsRead();
+      }
     },
   },
 };
@@ -141,8 +215,84 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .header {
+  a {
+    text-decoration: none;
+  }
   background: white;
   border-bottom: 1px solid $dash-shadow-color;
+  .icon-hallo {
+    width: 30px;
+    height: 30px;
+    background: $dash-background;
+    border-radius: 50px;
+  }
+  .notification-count {
+    position: absolute;
+    top: 0px;
+    right: -1px;
+    height: 20px;
+    width: 20px;
+    color: #ffffff;
+    font-size: 0.8rem;
+    background-color: #ff3131;
+    border-radius: 50%;
+    display: block;
+    text-align: center;
+  }
+  .dropdown-nav {
+    position: absolute;
+    top: 55px;
+    min-width: 300px;
+    padding: 0;
+    border-radius: 4px;
+    box-shadow: 0px 0px 10px 0px rgb(33 30 30 / 15%);
+    animation: dropdownanimate 200ms ease-in;
+    z-index: 20;
+    background-color: #fff;
+    :after {
+      content: "";
+      height: 0;
+      width: 0;
+      border-bottom: 10px solid $dash-blue;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      position: absolute;
+      top: -8px;
+      left: 14px;
+    }
+    .item-header {
+      text-align: center;
+      background-color: $dash-blue;
+      padding: 20px 25px;
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      .item-title {
+        margin-bottom: 0;
+        color: #fff;
+      }
+    }
+    .item-content {
+      .media {
+        border-bottom: 1px solid #eaeaea;
+        padding-bottom: 14px;
+        padding: 20px 25px;
+        cursor: pointer;
+        &:hover {
+          background: $waiting_background;
+        }
+        .item-icon {
+          height: 30px;
+          width: 30px;
+          border-radius: 50%;
+          line-height: 31px;
+          text-align: center;
+        }
+        .media-body.space-sm {
+          margin-left: 15px;
+        }
+      }
+    }
+  }
 
   .title {
     font-size: 20px;

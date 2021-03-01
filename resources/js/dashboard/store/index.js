@@ -7,6 +7,7 @@ import nav from './modules/nav';
 import epidemic from './modules/epidemic';
 import indicator from './modules/indicator';
 import app from './modules/app';
+import changeLog from "./modules/changeLog";
 
 Vue.use(Vuex);
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
         hospital,
         nav,
         epidemic,
-        indicator
+        indicator,
+        changeLog
     }
 });
