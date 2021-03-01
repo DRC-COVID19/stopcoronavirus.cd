@@ -3,7 +3,6 @@
     <b-row class="my-3" align-h="start">
       <b-col cols="12" md="6">
         <b-form-datepicker
-          id="datepicker"
           v-model="filter"
           placeholder="Choisir la date"
           class="mb-2"
