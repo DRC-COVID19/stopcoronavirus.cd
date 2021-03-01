@@ -146,7 +146,7 @@ export default [
         component: AdminUserIndex
       },
       {
-        path: 'users/',
+        path: 'users',
         name: 'administrator.users',
         component: AdminUserIndex
       },

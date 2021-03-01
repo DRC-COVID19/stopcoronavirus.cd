@@ -57,7 +57,7 @@ export default {
       if (this.user.roles === undefined) return routesAccess;
 
       if (this.user.roles.find((a) => a.name == ADMINISTRATOR)) {
-        routesAccess.push({ slug: "Administration", name: "administrator" });
+        routesAccess.push({ slug: "Administration", name: "administrator.home" });
       }
 
       if (this.user.roles.find((a) => a.name == ADMIN_DASHBOARD)) {

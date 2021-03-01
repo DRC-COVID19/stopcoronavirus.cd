@@ -407,6 +407,13 @@
   }
   .form-control {
     border-radius: 4px;
+    &:focus {
+      color: #495057;
+      background-color: #fff;
+      border-color: $dash-blue-7d;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem $dash-blue-7d;
+    }
   }
   .pandemics-stat-row {
     font-size: 0.8rem;
@@ -974,8 +981,6 @@
   }
 }
 
-
-
 .main-form {
   background-color: white;
   border-radius: 10px;
@@ -984,3 +989,21 @@
   }
 }
 
+.form-control {
+  border-radius: 4px;
+  &:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: $dash-blue-7d;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem $dash-blue-7d;
+  }
+}
+.btn-outline-primary:focus, .btn-outline-primary.focus {
+  box-shadow: 0 0 0 0.2rem $dash-blue-7d;
+}
+
+.btn-outline-primary {
+  color: $dash-blue;
+  border-color: $dash-blue;
+}
