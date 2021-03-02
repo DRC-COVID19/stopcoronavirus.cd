@@ -15,15 +15,9 @@ class CreateFlux24ZoneHotspotTable extends Migration
   {
     Schema::create('flux_24_zone_hotspot', function (Blueprint $table) {
       $table->id();
-      $table->date('Date')->nullable();
-      $table->string('Origin')->nullable();
-      $table->string('Destination')->nullable();
-      $table->string('Immobility')->nullable();
-      $table->string('Home_Category')->nullable();
-      $table->string('Activity_Category')->nullable();
+      $table->date('date')->nullable();
       $table->string('Observation_Zone')->nullable();
-      $table->string("Mode")->nullable();
-      $table->float('Volume')->default(0)->nullable();
+      $table->float('volume')->default(0)->nullable();
       $table->timestamps();
     });
   }
