@@ -85,7 +85,7 @@ class ChangeLogController extends Controller
           try {
             Mail::to('merkitoko@gmail.com')->queue(new changeLogEmail($user, $change_log));
           } catch (\Throwable $th) {
-            Log::error($th->message);
+            Log::error($th->getMessage());
           }
         }
       }
