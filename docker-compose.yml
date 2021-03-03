@@ -6,28 +6,30 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: digitalocean.com/php
+    # image: digitalocean.com/php
     container_name: app
     restart: unless-stopped
     tty: true
     environment:
       SERVICE_NAME: app
       SERVICE_TAGS: dev
-    working_dir: /var/www
+    ports:
+      - "8000:8000"
+    working_dir: /home/app
     networks:
       - app-network
 
   #Nginx Service
-  webserver:
-    image: nginx
-    container_name: webserver
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "80:80"
-      - "443:443"
-    networks:
-      - app-network
+  # webserver:
+  #   image: nginx
+  #   container_name: webserver
+  #   restart: unless-stopped
+  #   tty: true
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   networks:
+  #     - app-network
 
   #MySQL Service
   db:
