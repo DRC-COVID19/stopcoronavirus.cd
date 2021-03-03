@@ -417,6 +417,14 @@ class AddHotspotypeSeeder extends Seeder
         'type' => 'Hopitaux',
         'name' => 'Place Commercial de limete(7e rue)',
       ],
+      101 => [
+        'type' => 'Aéroport',
+        'name'=>'Aéroport Ndolo'
+      ],
+      102 => [
+        'type' => 'Aéroport',
+        'name'=>'Aéroport Ndjili'
+      ]
     ];
 
     foreach ($hotspots as $value) {

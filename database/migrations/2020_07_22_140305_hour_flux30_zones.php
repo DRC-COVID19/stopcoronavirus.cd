@@ -15,7 +15,7 @@ class HourFlux30Zones extends Migration
     {
         Schema::table('flux30_zones', function (Blueprint $table) {
             $table->time('Hour')->nullable();
-            $table->string('Day_type');
+            $table->string('Day_type')->nullable();
         });
     }
 
@@ -28,7 +28,9 @@ class HourFlux30Zones extends Migration
     {
         Schema::table('flux30_zones', function (Blueprint $table) {
             $table->dropColumn('Hour');
-            $table->dropColumn('Day_type');
         });
+        Schema::table('flux30_zones', function (Blueprint $table) {
+          $table->dropColumn('Day_type');
+      });
     }
 }

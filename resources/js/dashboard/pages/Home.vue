@@ -6,9 +6,26 @@
       ref="dash_home_page"
       id="dash_home_page"
     >
+      <div class="container-filter-btn d-lg-none" v-show="!canShowNavMobile">
+        <b-button @click="toggleNavMobile" class="btn-dash-blue">
+          <i class="fa fa-filter"></i>
+        </b-button>
+      </div>
+
       <Header />
-      <b-row class="mt-2 top-menu position-relative" style="z-index: 8">
-        <b-col class="pl-2">
+      <div
+        class="mt-lg-2 top-menu"
+        :class="{ 'mob-header-container': isSmOrMd, row: !isSmOrMd }"
+        style="z-index: 8"
+        v-show="!isSmOrMd || (isSmOrMd && canShowNavMobile)"
+      >
+        <b-col cols="12" class="pl-lg-2">
+          <div
+            @click="toggleNavMobile"
+            class="container-filter-btn-close d-lg-none"
+          >
+            <i class="fa fa-times"></i>
+          </div>
           <MenuFlux
             v-show="activeMenu == 1"
             @submitFluxForm="submitFluxForm"
@@ -43,24 +60,194 @@
             @medicalOrientationChanged="medicalOrientationChanged"
           />
         </b-col>
-      </b-row>
+      </div>
       <indicateur-chart v-if="activeMenu == 3"></indicateur-chart>
       <about v-if="activeMenu == 7"></about>
-      <b-row class="position-relative map-wrap" v-show="showMaps">
-        <b-col cols="12" :class="`${hasRightSide ? 'col-md-6' : 'col-md-12'}`">
+      <b-row
+        class="position-relative map-wrap flex-lg-row-reverse"
+        v-show="showMaps"
+      >
+        <b-col
+          cols="12"
+          lg="6"
+          class="side-right mt-2"
+          :class="{ 'side-right-100': !hasCovidCases }"
+          v-if="true"
+        >
+          <b-card no-body>
+            <transition name="fade">
+              <b-tabs
+                @input="rightTabActived"
+                v-model="activeRightSide"
+                pills
+                card
+                v-if="selectedSource == 2"
+              >
+                <b-tab title="Carte" :active="isSmOrMd" v-if="isSmOrMd"></b-tab>
+                <b-tab title="Mobilité africell" v-if="activeMenu == 1">
+                  <AfriFluxChart
+                    :fluxAfricellDaily="fluxAfricellDaily"
+                    :fluxAfricelPresence="fluxAfricelPresence"
+                    :fluxAfricelInOut="fluxAfricelInOut"
+                    :isLoading="isLoading"
+                  />
+                </b-tab>
+              </b-tabs>
+            </transition>
+            <transition name="fade">
+              <b-tabs
+                pills
+                card
+                v-if="selectedSource == 1 || activeMenu == 5"
+                @input="rightTabActived"
+                v-model="activeRightSide"
+                ref="tabs_right"
+              >
+                <b-tab title="Carte" :active="isSmOrMd" v-if="isSmOrMd"></b-tab>
+                <b-tab
+                  title="Données Covid-19"
+                  v-if="(!!covidCases || isLoading) && activeMenu == 2"
+                  :active="!isSmOrMd && !!covidCases"
+                >
+                  <SideCaseCovid
+                    :covidCases="covidCases"
+                    :isLoading="isLoading"
+                  />
+                </b-tab>
+                <b-tab
+                  title="Données Orientation médicale covid-19"
+                  v-if="
+                    (orientationCount != null || isLoading) && activeMenu == 6
+                  "
+                  :active="orientationCount != null"
+                >
+                  <SideOrientation
+                    :medicalOrientations="medicalOrientations"
+                    :isLoading="isLoading"
+                  />
+                </b-tab>
+                <b-tab title="Vue Globale des Provinces" v-if="activeMenu == 1">
+                  <b-row>
+                    <b-col cols="12" md="6" class="pr-2">
+                      <div v-if="isLoading">
+                        <b-skeleton-wrapper :loading="isLoading">
+                          <template #loading>
+                            <b-card no-body class="p-2 rounded-0 cardtype2">
+                              <b-skeleton
+                                class="m-auto"
+                                width="60%"
+                                height="20"
+                              ></b-skeleton>
+                              <b-skeleton
+                                class="mt-2"
+                                width="100%"
+                                height="820px"
+                              ></b-skeleton>
+                            </b-card>
+                          </template>
+                        </b-skeleton-wrapper>
+                      </div>
+                      <GlobalProvince
+                        v-else
+                        title="Mobilité entrante"
+                        :color="palette.flux_in_color"
+                        :globalData="fluxGlobalIn"
+                        reference="fluxglobalIn"
+                      />
+                    </b-col>
+                    <b-col cols="12" md="6" class="pl-2 pr-2">
+                      <div v-if="isLoading">
+                        <b-skeleton-wrapper :loading="isLoading">
+                          <template #loading>
+                            <b-card no-body class="p-2 rounded-0 cardtype2">
+                              <b-skeleton
+                                class="m-auto"
+                                width="60%"
+                                height="20"
+                              ></b-skeleton>
+                              <b-skeleton
+                                class="mt-2"
+                                width="100%"
+                                height="820px"
+                              ></b-skeleton>
+                            </b-card>
+                          </template>
+                        </b-skeleton-wrapper>
+                      </div>
+                      <GlobalProvince
+                        v-else
+                        title="Mobilité sortante"
+                        :color="palette.flux_out_color"
+                        :globalData="fluxGlobalOut"
+                        reference="fluxglobalOut"
+                      />
+                    </b-col>
+                  </b-row>
+                </b-tab>
+                <b-tab
+                  :title="titleMobility"
+                  v-if="
+                    (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
+                    !isFirstLoad &&
+                    this.activeMenu == 1
+                  "
+                  :active="
+                    !isSmOrMd &&
+                    (hasFlux24DailyIn || isLoading || hasFlux30Daily)
+                  "
+                >
+                  <FluxChart
+                    :flux24Daily="flux24Daily"
+                    :flux24DailyIn="flux24DailyIn"
+                    :flux24DailyOut="flux24DailyOut"
+                    :flux24DailyGenerale="flux24DailyGenerale"
+                    :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
+                    :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
+                    :fluxDataGroupedByDateGen="fluxDataGroupedByDateGen"
+                    :flux24Presence="flux24Presence"
+                    :flux24PresenceDailyIn="flux24PresenceDailyInFormat"
+                    :fluxZoneGlobalIn="fluxZoneGlobalIn"
+                    :fluxZoneGlobalOut="fluxZoneGlobalOut"
+                    :mobiliteGenerale="showMobiliteGenerale"
+                    :topHealthZoneConfirmed="topHealthZoneConfirmed"
+                    :globalProgress="globalProgress"
+                    :isLoading="isLoading"
+                    :flux30Daily="flux30Daily"
+                    :flux30General="flux30General"
+                    :flux30MapsData="flux30MapsData"
+                  />
+                </b-tab>
+                <b-tab
+                  title="Infrastructures"
+                  v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
+                  :active="!!selectedHospital || activeMenu == 5"
+                >
+                  <HospitalSituation :hospitalTotalData="hospitalTotalData" />
+                </b-tab>
+              </b-tabs>
+            </transition>
+          </b-card>
+        </b-col>
+        <b-col
+          cols="12"
+          class="map-md"
+          v-show="canShowMapMobile"
+          :class="`${hasRightSide ? 'col-lg-6' : 'col-lg-12'}`"
+          :style="{ top: isSmOrMd ? mapMdTop : 0 }"
+        >
           <div
             class="layer-set-contenair"
             v-if="hasFlux24DailyIn && activeMenu == 1 && selectedSource == 1"
           >
             <b-link
-              :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
-              @click="layerSetSyle(2)"
-              >Arcs</b-link
-            >
-            <b-link
               :class="{ active: fluxMapStyle == 1 }"
               @click="layerSetSyle(1)"
               >Hachurés</b-link
+            >
+            <b-link
+              :class="{ active: fluxMapStyle == 2, disabled: disabledArc }"
+              @click="layerSetSyle(2)"
+              >Arcs</b-link
             >
           </div>
           <b-row
@@ -103,6 +290,7 @@
                 :flux30MapsData="flux30MapsData"
                 :fluxAfricelInOut="fluxAfricelInOut"
                 :fluxAfricelPresence="fluxAfricelPresence"
+                :activeRightSide="activeRightSide"
               />
               <MapsLegend
                 v-if="
@@ -125,134 +313,6 @@
               ></Legend>
             </FullScreen>
           </b-row>
-        </b-col>
-        <b-col
-          cols="12"
-          md="6"
-          class="side-right mt-2 pl-2"
-          :class="{ 'side-right-100': !hasCovidCases }"
-          v-if="hasRightSide"
-        >
-          <b-card no-body>
-            <!-- <toggle-button
-              class="flux-data-toggle"
-              :labels="fluxDataProvider"
-              :value="selectedFluxDataProvider"
-              @input="fluxDataProvideChanged"
-            ></toggle-button> -->
-
-            <transition name="fade">
-              <b-tabs pills card v-if="selectedSource == 2">
-                <b-tab title="Mobilité africell" v-if="activeMenu == 1">
-                  <AfriFluxChart
-                    :fluxAfricellDaily="fluxAfricellDaily"
-                    :fluxAfricelPresence="fluxAfricelPresence"
-                    :fluxAfricelInOut="fluxAfricelInOut"
-                  />
-                </b-tab>
-              </b-tabs>
-            </transition>
-            <transition name="fade">
-              <b-tabs pills card v-if="selectedSource == 1">
-                <b-tab
-                  title="Données Covid-19"
-                  v-if="(!!covidCases || isLoading) && activeMenu == 2"
-                  :active="!!covidCases"
-                >
-                  <SideCaseCovid
-                    :covidCases="covidCases"
-                    :isLoading="isLoading"
-                  />
-                </b-tab>
-                <b-tab
-                  title="Données Orientation médicale covid-19"
-                  v-if="
-                    (orientationCount != null || isLoading) && activeMenu == 6
-                  "
-                  :active="orientationCount != null"
-                >
-                  <SideOrientation
-                    :medicalOrientations="medicalOrientations"
-                    :isLoading="isLoading"
-                  />
-                </b-tab>
-                <b-tab title="Province" v-if="activeMenu == 1">
-                  <b-row>
-                    <b-col cols="6" class="pr-2">
-                      <skeleton-loading v-if="isLoading">
-                        <square-skeleton
-                          :boxProperties="{
-                            width: '100%',
-                            height: '830px',
-                          }"
-                        ></square-skeleton>
-                      </skeleton-loading>
-                      <GlobalProvince
-                        v-else
-                        title="Mobilité entrante"
-                        :color="palette.flux_in_color"
-                        :globalData="fluxGlobalIn"
-                        reference="fluxglobalIn"
-                      />
-                    </b-col>
-                    <b-col cols="6" class="pl-2 pr-2">
-                      <skeleton-loading v-if="isLoading">
-                        <square-skeleton
-                          :boxProperties="{
-                            width: '100%',
-                            height: '830px',
-                          }"
-                        ></square-skeleton>
-                      </skeleton-loading>
-                      <GlobalProvince
-                        v-else
-                        title="Mobilité sortante"
-                        :color="palette.flux_out_color"
-                        :globalData="fluxGlobalOut"
-                        reference="fluxglobalOut"
-                      />
-                    </b-col>
-                  </b-row>
-                </b-tab>
-                <b-tab
-                  title="Mobilité"
-                  v-if="
-                    (hasFlux24DailyIn || isLoading || hasFlux30Daily) &&
-                    !isFirstLoad &&
-                    this.activeMenu == 1
-                  "
-                  :active="hasFlux24DailyIn || isLoading || hasFlux30Daily"
-                >
-                  <FluxChart
-                    :flux24Daily="flux24Daily"
-                    :flux24DailyIn="flux24DailyIn"
-                    :flux24DailyOut="flux24DailyOut"
-                    :flux24DailyGenerale="flux24DailyGenerale"
-                    :fluxDataGroupedByDateIn="fluxDataGroupedByDateIn"
-                    :fluxDataGroupedByDateOut="fluxDataGroupedByDateOut"
-                    :fluxDataGroupedByDateGen="fluxDataGroupedByDateGen"
-                    :flux24Presence="flux24Presence"
-                    :flux24PresenceDailyIn="flux24PresenceDailyInFormat"
-                    :fluxZoneGlobalIn="fluxZoneGlobalIn"
-                    :fluxZoneGlobalOut="fluxZoneGlobalOut"
-                    :mobiliteGenerale="showMobiliteGenerale"
-                    :topHealthZoneConfirmed="topHealthZoneConfirmed"
-                    :globalProgress="globalProgress"
-                    :isLoading="isLoading"
-                    :flux30Daily="flux30Daily"
-                    :flux30General="flux30General"
-                  />
-                </b-tab>
-                <b-tab
-                  title="Infrastructures"
-                  v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
-                  :active="!!selectedHospital || activeMenu == 5"
-                >
-                  <HospitalSituation :hospitalTotalData="hospitalTotalData" />
-                </b-tab>
-              </b-tabs>
-            </transition>
-          </b-card>
         </b-col>
       </b-row>
       <b-row v-if="hasBottom && selectedSource == 1">
@@ -310,11 +370,13 @@
         </b-row>
       </transition>
       <Waiting v-if="isLoading" />
+      <ChangeLogModal id="change-log-modal" />
     </b-container>
   </div>
 </template>
 
 <script>
+import ChangeLogModal from "../components/ChangeLogModal";
 import Maps from "../components/Maps";
 import MapsLegend from "../components/MapsLegend";
 import MapsLegendEpidemic from "../components/MapsLegendEpidemic";
@@ -348,6 +410,7 @@ import {
   PREFERENCE_START,
   PREFERENCE_END,
   HOTSPOT_TYPE,
+  INFRASTRUCTURE_FIRST_UPDATE,
 } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
@@ -385,6 +448,7 @@ export default {
     About,
     ToggleButton,
     AfriFluxChart,
+    ChangeLogModal,
   },
   data() {
     return {
@@ -461,6 +525,9 @@ export default {
       fluxAfricellDaily: [],
       fluxAfricelPresence: [],
       fluxAfricelInOut: [],
+      showMobileMaps: true,
+      activeRightSide: 0,
+      mapMdTop: 46.4,
     };
   },
   computed: {
@@ -477,7 +544,26 @@ export default {
       fluxGeoGranularity: (state) => state.flux.fluxGeoGranularityTemp,
       observationDate: (state) => state.flux.observationDate,
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
+      canShowNavMobile: (state) => state.app.canShowNavMobile,
     }),
+    canShowMapMobile() {
+      if (this.isSmOrMd) {
+        return this.showMobileMaps;
+      }
+      return true;
+    },
+    titleMobility() {
+      let name = "Provinces";
+      switch (this.fluxGeoGranularity) {
+        case 2:
+          name = "Zone de santé";
+          break;
+        case 3:
+          name = "Hotspot";
+          break;
+      }
+      return name;
+    },
     isStartEndDate() {
       return this.observationDate.start == this.observationDate.end;
     },
@@ -537,6 +623,10 @@ export default {
     },
     isLoading() {
       this.showBottom = false;
+      if (this.isSmOrMd) {
+        this.activeRightSide = 0;
+      }
+      this.resizeTopMap();
       return Object.values(this.loadings).find((val) => val === true)
         ? true
         : false;
@@ -607,14 +697,48 @@ export default {
     );
     this.loadFluxGLobalData();
     this.loadTownships();
+
     this.$store.watch(
       (state) => state.flux.fluxType,
       (value) => {
+        if (this.isSmOrMd) {
+          this.activeRightSide = 0;
+        }
         if (value == 3 || value == 4) {
           this.disabledArc = true;
           this.setMapStyle(1);
         } else {
           this.disabledArc = false;
+        }
+      }
+    );
+
+    // Prefetch infranstructure data
+    this.getHospitalsData({
+      observation_end: moment().format("YYYY-MM-DD"),
+      observation_start: INFRASTRUCTURE_FIRST_UPDATE,
+      township: 0,
+      isLoading: false,
+    });
+
+    //watch activeMenu store state
+    this.$store.watch(
+      (state) => state.nav.activeMenu,
+      (value) => {
+        this.resizeTopMap();
+      }
+    );
+
+    //Watch unread changelogs
+    this.$store.watch(
+      (state) => state.changeLog.listChangeLogs,
+      (value) => {
+        if (
+          value.data &&
+          value.data.filter((x) => x.notRead).length &&
+          this.activeMenu != 7
+        ) {
+          this.$bvModal.show("change-log-modal");
         }
       }
     );
@@ -625,8 +749,14 @@ export default {
       "getHospitalsData",
       "getHealthZone",
       "getFluxHotSpot",
+      "getSituationHospital",
     ]),
-    ...mapMutations(["setMapStyle", "setFluxType", "setObservationDate"]),
+    ...mapMutations([
+      "setMapStyle",
+      "setFluxType",
+      "setObservationDate",
+      "setCanShowNavMobile",
+    ]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
     },
@@ -656,6 +786,7 @@ export default {
       // this.getHospitalsData(checked);
     },
     getCovidCases(checked) {
+      this.setCanShowNavMobile(false);
       if (checked) {
         let confirmedCount = 0;
 
@@ -673,6 +804,10 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
+
+            data.sort((a, b) => {
+              return a.last_update < b.last_update ? 1 : -1;
+            });
             data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
@@ -706,6 +841,9 @@ export default {
               confirmed = [],
               dead = [],
               healed = [];
+            data.sort((a, b) => {
+              return a.last_update < b.last_update ? 1 : -1;
+            });
             data.map(function (d) {
               confirmed.push(d.confirmed);
               dead.push(d.dead);
@@ -926,6 +1064,7 @@ export default {
       });
     },
     submitFluxForm(values) {
+      this.setCanShowNavMobile(false);
       if (this.isLoading) {
         return;
       }
@@ -946,81 +1085,8 @@ export default {
 
       this.isFirstLoad = false;
       this.setFluxType(1);
-      /**
-       * formate les données flux
-       */
-
-      const computedFluxData = (dataObservations, dataReferences) => {
-        const dataOut = [];
-        return dataObservations.map((item) => {
-          const references = dataReferences.filter(
-            (x) =>
-              x.destination == item.destination &&
-              x.origin == item.origin &&
-              x.day == item.day
-          );
-          const count = references.length;
-          if (count > 0) {
-            let referenceVolume = null;
-            if (count % 2 == 0) {
-              let index = (count + 1) / 2;
-              index = parseInt(index);
-              const volume1 = references[index].volume;
-              const volume2 = references[index - 1].volume;
-              referenceVolume = (volume1 + volume2) / 2;
-            } else {
-              const index = (count + 1) / 2;
-              referenceVolume = references[index - 1].volume;
-            }
-            item.volume_reference = referenceVolume;
-            const difference = item.volume - referenceVolume;
-            item.difference = difference;
-            item.percent = (difference / referenceVolume) * 100;
-          } else {
-            item.volume_reference = 0;
-            item.difference = item.volume;
-            item.percent = 0;
-          }
-          return Object.assign({}, item);
-        });
-      };
 
       const computedFluxDataByDate = this.computedFluxDataByDate;
-
-      const computedFluxPresenceData = (dataObservations, dataReferences) => {
-        const dataOut = [];
-        return dataObservations.map((item) => {
-          const references = dataReferences.filter(
-            (x) => x.zone == item.zone && x.day == item.day
-          );
-          const count = references.length;
-          if (count > 0) {
-            let referenceVolume = null;
-            if (count % 2 == 0) {
-              let index = (count + 1) / 2;
-              index = parseInt(index);
-              const volume1 = references[index].volume;
-              const volume2 = references[index - 1].volume;
-              referenceVolume = (volume1 + volume2) / 2;
-            } else {
-              const index = (count + 1) / 2;
-              referenceVolume = references[index - 1].volume;
-            }
-            item.volume_reference = referenceVolume;
-            const difference = item.volume - referenceVolume;
-            item.difference = difference;
-            item.percent = (difference / referenceVolume) * 100;
-          } else {
-            item.volume_reference = 0;
-            item.difference = item.volume;
-            item.percent = 0;
-          }
-          return Object.assign({}, item);
-        });
-      };
-
-      const computedFluxPresenceDataByDate = this
-        .computedFluxPresenceDataByDate;
 
       this.flux24Errors = {};
 
@@ -1240,22 +1306,6 @@ export default {
         });
 
       this.flux24 = [];
-      // this.$set(this.loadings, "flux24", true);
-      // axios
-      //   .get(url, {
-      //     params: values,
-      //   })
-      //   .then(({ data }) => {
-      //     this.flux24 = computedFluxData(data.observations, data.references);
-      //     this.$set(this.loadings, "flux24", false);
-      //   })
-      //   .catch(({ response }) => {
-      //     this.flux24Errors = response.data.errors;
-      //     this.$set(this.loadings, "flux24", false);
-      //   });
-
-      //if geo granularity is health zone
-
       this.fluxZoneGlobalIn = [];
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
@@ -1491,7 +1541,12 @@ export default {
       }
 
       urlMaps += `/maps`;
-      urlDaily += `/daily`;
+      if (values.observation_start == values.observation_end) {
+        urlDaily += `/daily`;
+      } else {
+        urlDaily += `/daily-date`;
+      }
+
       urlTendance += `/tendance`;
       urlGeneral += `/general`;
 
@@ -1502,16 +1557,17 @@ export default {
         params: values,
       });
 
-      if (hotspot) {
-        values = { ...values };
-        values.fluxGeoOptions = ["Tout"];
-      }
       const generalRequest = axios.get(urlGeneral, {
         params: values,
       });
 
+      let mapsValues = values;
+      if (hotspot) {
+        mapsValues = { ...values };
+        mapsValues.fluxGeoOptions = ["Tout"];
+      }
       const mapsRequest = axios.get(urlMaps, {
-        params: values,
+        params: mapsValues,
       });
 
       this.isFirstLoad = false;
@@ -1533,7 +1589,15 @@ export default {
         event_label: "fetch_orange_flux_hotspot_req_send",
       });
 
-      Promise.all([mapsRequest, dailyRequest, tendanceRequest, generalRequest])
+      tendanceRequest
+        .then(({ data }) => {
+          this.flux24Daily = data.observations;
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
+        });
+
+      Promise.all([mapsRequest, dailyRequest, generalRequest])
         .then((response) => {
           if (response[0]) {
             const data = response[0].data;
@@ -1579,12 +1643,12 @@ export default {
           if (response[1]) {
             this.flux30Daily = this.flux30Daily = response[1].data.observations;
           }
+          // if (response[2]) {
+          //   this.flux24Daily = response[2].data.observations;
+          // }
           if (response[2]) {
-            this.flux24Daily = response[2].data.observations;
-          }
-          if (response[3]) {
-            const observation = response[3].data.observations;
-            const reference = response[3].data.references;
+            const observation = response[2].data.observations;
+            const reference = response[2].data.references;
             let difference = null;
             let percent = null;
 
@@ -1614,6 +1678,8 @@ export default {
         });
     },
     submitInfrastructureForm(values) {
+      this.setCanShowNavMobile(false);
+      values.isLoading = true;
       this.getHospitalsData(values);
     },
     seeSide() {
@@ -1940,6 +2006,22 @@ export default {
     fluxDataProvideChanged(value) {
       this.selectedFluxDataProvider = value;
     },
+    rightTabActived(newTabIndex) {
+      this.showMobileMaps = newTabIndex == 0 ? true : false;
+    },
+    toggleNavMobile() {
+      this.setCanShowNavMobile(!this.canShowNavMobile);
+    },
+    resizeTopMap() {
+      if (!this.isSmOrMd) {
+        return;
+      }
+      if (this.$refs.tabs_right) {
+        setTimeout(() => {
+          this.mapMdTop = this.$refs.tabs_right.$refs.nav.clientHeight + 16.4;
+        }, 100);
+      }
+    },
   },
 };
 </script>
@@ -2044,7 +2126,7 @@ export default {
     padding: 5px;
     text-align: center;
     text-decoration: unset;
-    background: rgba(46, 91, 255, 0.7);
+    background: rgba(46, 91, 255, 0.5);
     color: white !important;
     border-radius: 5px;
     &.active {
@@ -2061,5 +2143,51 @@ export default {
   bottom: 20px;
   left: 20px;
   z-index: 200;
+}
+
+.map-md {
+  @media screen and (max-width: 1023px) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 5%;
+  }
+  @media screen and (max-width: 576px) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 12%;
+  }
+}
+.container-filter-btn {
+  position: absolute;
+  right: 2%;
+  top: 40%;
+  z-index: 10;
+  button {
+    box-shadow: 0px 0px 8px 0px #2e5bffb8;
+  }
+}
+.container-filter-btn-close {
+  position: absolute;
+  right: 5%;
+  top: -30px;
+  z-index: 10;
+  i {
+    font-size: 1.5rem;
+    color: #eee;
+  }
+}
+.mob-header-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $waiting_background;
+  display: flex;
+  place-items: center;
 }
 </style>

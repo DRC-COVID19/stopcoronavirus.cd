@@ -44,7 +44,7 @@ class HospitalSituationController extends Controller
         try {
             $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
             $hospitalSituation = HospitalSituation::create($data);
-            return response()->json($hospitalSituation, 201);
+            return response()->json($hospitalSituation,201,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -93,7 +93,7 @@ class HospitalSituationController extends Controller
             INNER JOIN hospitals p2 ON p1.hospital_id=p2.id  GROUP BY hospital_id,p2.name
             ORDER BY last_update desc
             ');
-            return response()->json($lastUpdate);
+            return response()->json($lastUpdate,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

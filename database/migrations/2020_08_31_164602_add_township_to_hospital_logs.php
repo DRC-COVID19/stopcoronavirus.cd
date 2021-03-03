@@ -14,10 +14,10 @@ class AddTownshipToHospitalLogs extends Migration
   public function up()
   {
     Schema::table('hospital_logs', function (Blueprint $table) {
-      //
-      // $table->unsignedBigInteger('township_id')->nullable() ;
 
-      // $table->foreign('township_id')->references('id')->on('townships');
+      $table->unsignedBigInteger('township_id')->nullable() ;
+
+      $table->foreign('township_id')->references('id')->on('townships');
     });
   }
 
@@ -30,7 +30,9 @@ class AddTownshipToHospitalLogs extends Migration
   {
     Schema::table('hospital_logs', function (Blueprint $table) {
       //
-      $table->dropForeign('hospital_logs_township_id_foreign');
+      if (env('APP_ENV') != "testing") {
+        $table->dropForeign('hospital_logs_township_id_foreign');
+      }
       $table->dropColumn('township_id');
     });
   }

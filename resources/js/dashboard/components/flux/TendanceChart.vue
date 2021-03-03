@@ -92,36 +92,19 @@ export default {
       const labels = [];
       const localData = [];
       data.map((x) => {
-        if (this.fluxTimeGranularity == 1) {
-          // labels.push(new Date(x.date));
-          localData.push({ x: moment(x.date), y: x.volume, date: x.date });
-        } else {
-          let item = {};
-          if (x.length % 2 == 0) {
-            let indice = x.length / 2;
-            const volume1 = x[indice].volume;
-            const volume2 = x[indice - 1].volume;
-            item.date = x[indice].date;
-            item.volume = volume1 + volume2;
-          } else {
-            let indice = (x.length + 1) / 2;
-            item = x[indice];
-          }
-          localData.push({
-            date: item.date,
-            x: moment(item.date),
-            y: item.volume,
-          });
-        }
+        localData.push({ x: moment(x.date), y: x.volume, date: x.date });
       });
 
       const maxDate = moment.max(localData.map((item) => item.x));
       const minDate = moment.min(localData.map((item) => item.x));
 
-      const mainEvent = DRC_COVID_EVENT.filter(
+      const mainEvent = [];
+      DRC_COVID_EVENT.filter(
         (x) =>
           x.measures.some((z) =>
-            z.zones.some((y) => [...this.fluxGeoOptions, "ALL"].includes(y))
+            z.zones.some(
+              (y) => [...this.fluxGeoOptions].includes(y) || y == "ALL"
+            )
           ) &&
           new Date(x.date) >= minDate &&
           new Date(x.date) <= maxDate
@@ -135,12 +118,16 @@ export default {
             .filter((x) => x.date == item.date)
             .sort((a, b) => b.y - a.y)[0];
         }
+        if (!element) {
+          // console.log('item',item);
+          return;
+        }
 
-        return {
+        mainEvent.push({
           x: element.x,
           y: element.y,
           measures: item.measures,
-        };
+        });
       });
 
       this.configChar = {
@@ -181,17 +168,6 @@ export default {
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          // events: ["click"],
-          // onClick: (e, argument) => {
-          //   if (argument.length > 0) {
-          //     const firstPoint = argument[0];
-          //     const value =
-          //       myLineChart2.data.datasets[firstPoint._datasetIndex].data[
-          //         firstPoint._index
-          //       ];
-          //     this.setTendanceChartSelectedValue(value);
-          //   }
-          // },
           legend: {
             display: false,
           },
@@ -211,7 +187,7 @@ export default {
                 },
                 type: "time",
                 time: {
-                  unit: "day", // this.fluxTimeGranularity == 2 && this.isStartIsEnd() ? "hour" : "day",
+                  unit: "day",
                   unitStepSize: 1,
                   displayFormats: {
                     day: "DD.MM",
@@ -282,26 +258,6 @@ export default {
               },
             },
           },
-          // annotation: {
-          //   drawTime: "afterDraw",
-          //   annotations: [
-          //     {
-          //       id: "line 1",
-          //       type: "line",
-          //       mode: "vertical",
-          //       scaleID: "x-axis-0",
-          //       value: new Date(PREFERENCE_END),
-          //       borderColor: PALETTE.flux_presence,
-          //       borderWidth: 1,
-          //       label: {
-          //         fontSize: 9,
-          //         content:"Référence",
-          //         enabled: false,
-          //         position: "top",
-          //       },
-          //     }
-          //   ]
-          // },
           plugins: {
             crosshair: {
               sync: {

@@ -17,7 +17,7 @@ class FluxZoneController extends Controller
     {
         try {
             $zones = FluxZone::select('name as origin')->get();
-            return response()->json($zones);
+            return response()->json($zones,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

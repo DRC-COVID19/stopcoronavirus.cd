@@ -34,7 +34,7 @@ class PandemicController extends Controller
             ORDER BY confirmed DESC
             LIMIT 5
             ", [$data['fluxGeoOptions']]);
-            return response()->json($pandemics);
+            return response()->json($pandemics,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

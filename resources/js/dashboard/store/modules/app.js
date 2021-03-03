@@ -12,11 +12,14 @@ export default {
     hotspotGeojsonCentered: null,
     isLoading: false,
     hospotPointJson:null,
-
+    canShowNavMobile:true,
   },
   mutations: {
     setIsLoading(state, payload) {
       state.isLoading = payload;
+    },
+    setCanShowNavMobile(state,payload){
+      state.canShowNavMobile=payload;
     }
   },
   actions: {
@@ -140,7 +143,7 @@ export default {
             features: features,
           };
         });
-    
+
       axios
         .get(
           `${location.protocol}//${location.host}/storage/geojson/hotpostpoint.json`,

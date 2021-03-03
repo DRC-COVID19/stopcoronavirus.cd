@@ -23,7 +23,7 @@ class CreateFlux24PresenceProvincesTable extends Migration
             $table->string('Activity_Zone');
             $table->string('Home_Zone');
             $table->string('Zone');
-            $table->string('Volume');
+            $table->float('Volume');
         });
     }
 

@@ -15,9 +15,9 @@ class AddTownshipToHospitals extends Migration
   {
     Schema::table('hospitals', function (Blueprint $table) {
       //
-      // $table->unsignedBigInteger('township_id')->nullable() ;
+      $table->unsignedBigInteger('township_id')->nullable();
 
-      // $table->foreign('township_id')->references('id')->on('townships');
+      $table->foreign('township_id')->references('id')->on('townships');
     });
   }
 
@@ -30,7 +30,9 @@ class AddTownshipToHospitals extends Migration
   {
     Schema::table('hospitals', function (Blueprint $table) {
       //
-      $table->dropForeign('hospitals_township_id_foreign');
+      if (env('APP_ENV') != "testing") {
+        $table->dropForeign('hospitals_township_id_foreign');
+      }
       $table->dropColumn('township_id');
     });
   }

@@ -2,7 +2,7 @@
   <b-card no-body class="rounded-0 p-2 pb-3">
     <b-form class="flux-form" @submit.prevent="submitFluxForm">
       <b-form-row>
-        <b-col cols="12" md="2" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" md="6" lg="2" class="nav-zone pl-3 pr-3 mb-2 mb-lg-0">
           <b-form-group>
             <label for class="text-dash-color">Sources</label>
             <v-select
@@ -16,10 +16,10 @@
             />
           </b-form-group>
         </b-col>
-        <b-col cols="12" md="3" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" md="6" lg="3" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Géographiques</label>
           <b-row>
-            <b-col cols="12" md="6">
+            <b-col cols="12" md="6" class="mb-2 mb-lg-0">
               <b-form-group>
                 <v-select
                   :disabled="fluxForm.selectedFluxSource == 2"
@@ -33,7 +33,7 @@
                 />
               </b-form-group>
             </b-col>
-            <b-col cols="12" md="6">
+            <b-col cols="12" md="6" class="mb-2 mb-lg-0">
               <b-form-group
                 :invalid-feedback="
                   flux24Errors.fluxGeoOptions
@@ -55,6 +55,7 @@
                   :reduce="(item) => item.origin"
                   @input="fluxGeoOptionsChange"
                   class="style-chooser"
+                  :class="{ 'zone-has-error': IsGeoOptionEmpty }"
                 >
                   <template v-slot:option="option">
                     <div v-if="option.isTitle" class="v-select-group">
@@ -63,14 +64,17 @@
                     <div v-else>{{ option.origin }}</div>
                   </template>
                 </v-select>
+                <span v-if="IsGeoOptionEmpty" class="range-lbl text-danger"
+                  >{{ messaGeoOptionsNull }}
+                </span>
               </b-form-group>
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="5" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" md="12" lg="5" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
           <b-row>
-            <b-col cols="12" md="3">
+            <b-col cols="12" md="3" class="mb-2 mb-lg-0">
               <b-form-group>
                 <v-select
                   :disabled="true"
@@ -88,10 +92,11 @@
             <b-col cols="12" md="9">
               <b-form-group>
                 <div class="d-flex">
-                  <div class="mr-2">
+                  <div class="mr-2 picker-container">
                     <date-range-picker
                       :disabled="fluxForm.selectedFluxSource == 2"
                       ref="picker1"
+                      id="picker1"
                       :locale-data="rangeData"
                       v-model="dateRangePreference"
                       :appendToBody="true"
@@ -122,8 +127,9 @@
                       class="fa fa-info-circle text-danger text-right range-lbl"
                     ></span>
                   </div>
-                  <div>
+                  <div class="picker-container">
                     <date-range-picker
+                      id="picker2"
                       ref="picker2"
                       :locale-data="rangeData"
                       v-model="dateRangeObservation"
@@ -155,7 +161,7 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="2" class="row pl-3 pr-3">
+        <b-col cols="12" md="3" lg="2" class="pl-3 pr-3" :class="{'row':!isSmOrMd}">
           <b-button
             type="submit"
             :disabled="!isButtonEnabled"
@@ -189,7 +195,7 @@ import {
   AFRICELL_OBSERVATION_START,
   AFRICELL_OBSERVATION_END,
   HOTSPOT_TYPE,
-  OBSERVATION_END_PROVINCE
+  OBSERVATION_END_PROVINCE,
 } from "../../config/env";
 import { mapMutations, mapState, mapActions } from "vuex";
 import moment from "moment";
@@ -301,7 +307,6 @@ export default {
       (state) => state.flux.fluxHotspotClicked,
       (value) => {
         if (value) {
-
           this.fluxFormCached.fluxGeoOptions = [value];
           this.fluxForm = this.fluxFormCached;
           this.setFluxGeoOptions(this.fluxFormCached.fluxGeoOptions);
@@ -349,6 +354,25 @@ export default {
     },
     referenceHasError() {
       return this.referenceThrowError;
+    },
+    messaGeoOptionsNull() {
+      let geoGanularity = "une province";
+      switch (this.fluxForm.fluxGeoGranularity) {
+        case 2:
+          geoGanularity = "une zone";
+          break;
+        case 3:
+          geoGanularity = "un hotspot";
+          break;
+      }
+      return `Sélectionnez ${geoGanularity}`;
+    },
+    IsGeoOptionEmpty() {
+      return (
+        !this.fluxForm.fluxGeoOptions ||
+        (this.fluxForm.fluxGeoOptions &&
+          this.fluxForm.fluxGeoOptions.length == 0)
+      );
     },
   },
   watch: {
@@ -419,7 +443,12 @@ export default {
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
-      dropdownList.style.left = `${left}px`;
+      if (component.$attrs.id=='picker1') {
+        dropdownList.style.left = `${Number(left) + Number(this.isSmOrMd? 110: 0)}px`;
+      }
+      else{
+        dropdownList.style.left = `${left}px`;
+      }
     },
     clearPrefenceDate() {
       this.dateRangePreference = { startDate: null, endDate: null };
@@ -732,7 +761,12 @@ export default {
 .btn-submit {
   font-size: 14px;
 }
-
-.v-select-group {
+.picker-container {
+  width: 40%;
+}
+@media screen and (min-width: 1300px) {
+  .picker-container {
+    width: 100%;
+  }
 }
 </style>

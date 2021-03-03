@@ -2,7 +2,6 @@
   <b-card no-body class="rounded-0 p-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row>
-
         <b-col cols="12" md="4" class="nav-zone pl-3 pr-3">
           <b-form-group>
             <label for class="text-dash-color">Commune</label>
@@ -11,13 +10,13 @@
               :options="townshipList"
               label="name"
               placeholder="Commune"
-              :reduce="item=>item.id"
+              :reduce="(item) => item.id"
               class="style-chooser"
             />
           </b-form-group>
         </b-col>
 
-        <b-col cols="12" :md="6" class="nav-zone pl-3 pr-3">
+        <b-col cols="12" md="5" lg="4" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
           <b-form-group>
             <div class="d-flex">
@@ -26,7 +25,8 @@
                 :locale-data="{
                   firstDay: 1,
                   format: 'dd-mm-yyyy',
-                  drops: 'up' }"
+                  drops: 'up',
+                }"
                 v-model="dateRangeObservation"
                 :appendToBody="true"
                 opens="center"
@@ -37,59 +37,63 @@
                 class="style-picker"
               >
                 <template v-slot:input="picker">
-                  <span> {{ picker.startDate|date}} - {{picker.endDate|date }}</span>
+                  <span>
+                    {{ picker.startDate | date }} -
+                    {{ picker.endDate | date }}</span
+                  >
                 </template>
               </date-range-picker>
-              <b-button @click="clearObservationDate" class="btn-clear-observation btn-dash-blue">
+              <b-button
+                @click="clearObservationDate"
+                class="btn-clear-observation btn-dash-blue"
+              >
                 <span class="fa fa-times"></span>
               </b-button>
             </div>
           </b-form-group>
         </b-col>
 
-        <b-col cols="12" md="2" class="row pl-3 pr-3">
-          <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue">Filtrer les données</b-button>
+        <b-col cols="12" md="3" lg="2" class="pl-3 pr-3 d-flex" :class="{ row: !isSmOrMd }">
+          <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue"
+            >Filtrer les données</b-button
+          >
         </b-col>
-
-        </b-form-row>
+      </b-form-row>
     </b-form>
   </b-card>
 </template>
 
 <script>
 import DateRangePicker from "vue2-daterange-picker";
-import {
-  INFRASTRUCTURE_FIRST_UPDATE,
-  DATEFORMAT
-} from "../../config/env" ;
+import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env";
 export default {
   props: {
     hospitalCount: {
       type: Number,
-      default: null
-    } ,
-    townships : {
-      type : Array ,
-      default : () => []
-    }
+      default: null,
+    },
+    townships: {
+      type: Array,
+      default: () => [],
+    },
   },
   components: {
-    DateRangePicker
+    DateRangePicker,
   },
-  data(){
+  data() {
     return {
-      form : {
+      form: {
         observation_end: moment().format("YYYY-MM-DD"),
         observation_start: INFRASTRUCTURE_FIRST_UPDATE,
-        township : 0
+        township: 0,
       },
       dateRangeObservation: {
         startDate: new Date(INFRASTRUCTURE_FIRST_UPDATE),
         endDate: new Date(),
       },
       min_date: new Date(INFRASTRUCTURE_FIRST_UPDATE),
-      defaultTownship : [{ id : 0 , name : "Tous" }]
-    }
+      defaultTownship: [{ id: 0, name: "Tous" }],
+    };
   },
   filters: {
     date: (val) => {
@@ -100,7 +104,7 @@ export default {
     hospitalToggle(checked) {
       this.$emit("hopitalChecked", checked);
     },
-    UpdateObservationDate({startDate, endDate}) {
+    UpdateObservationDate({ startDate, endDate }) {
       this.form.observation_start = moment(startDate).format("YYYY-MM-DD");
       this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
     },
@@ -115,24 +119,24 @@ export default {
     },
     submit() {
       this.$emit("submitInfrastructureForm", this.form);
-    }
+    },
   },
   computed: {
-    townshipList(){
-      return [...this.defaultTownship, ...this.townships]
-    }
+    townshipList() {
+      return [...this.defaultTownship, ...this.townships];
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
- .btn-submit{
-    font-size: 14px ;
-  }
-  .btn-clear-observation{
-    height: 32px;
-    margin-left: 5px;
-    display: flex;
-    align-items: center;
-  }
+.btn-submit {
+  font-size: 14px;
+}
+.btn-clear-observation {
+  height: 32px;
+  margin-left: 5px;
+  display: flex;
+  align-items: center;
+}
 </style>

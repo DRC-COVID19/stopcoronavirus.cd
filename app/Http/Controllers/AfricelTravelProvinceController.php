@@ -25,7 +25,7 @@ class AfricelTravelProvinceController extends Controller
       $provinceData = AfricelTravelProvince::select(['province_name as name', 'date', 'volume'])
         ->where('province_name', $data['fluxGeoOptions'])
         ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])->get();
-      return response()->json($provinceData);
+      return response()->json($provinceData,200,[],JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
