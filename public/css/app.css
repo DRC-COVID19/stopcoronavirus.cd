@@ -18038,15 +18038,65 @@ h3 {
   opacity: 0.6;
 }
 
+.btn-dash-sucess {
+  background: #00b065;
+  border: 3px solid #00b065 !important;
+  border-radius: 5px;
+}
+
+.btn-dash-sucess:hover,
+.btn-dash-sucess:focus,
+.btn-dash-sucess:active,
+.btn-dash-sucess:disabled {
+  background: #00b065 !important;
+}
+
+.btn-dash-sucess:focus {
+  box-shadow: none;
+}
+
+.btn-dash-sucess:active {
+  opacity: 0.6;
+}
+
+.btn-dash-danger {
+  background: #e6222e;
+  border: 3px solid #e6222e !important;
+  border-radius: 5px;
+}
+
+.btn-dash-danger:hover,
+.btn-dash-danger:focus,
+.btn-dash-danger:active,
+.btn-dash-danger:disabled {
+  background: #e6222e !important;
+}
+
+.btn-dash-danger:focus {
+  box-shadow: none;
+}
+
+.btn-dash-danger:active {
+  opacity: 0.6;
+}
+
 .text-dash-color {
   color: #7b7f88 !important;
 }
 
 .input-dash {
-  border: 1px solid #d2d5dc;
+  border: 1px solid #E0E7FF;
   background: #f4f6fc;
   transition: all 0.3s ease;
   border-radius: 5px;
+}
+
+.input-dash:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #2e5bff7d;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #2e5bff7d;
 }
 
 .dash-login-title {
@@ -18418,6 +18468,15 @@ h3 {
 .column-left .form-control,
 .top-menu .form-control {
   border-radius: 4px;
+}
+
+.column-left .form-control:focus,
+.top-menu .form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #2e5bff7d;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #2e5bff7d;
 }
 
 .column-left .pandemics-stat-row,
@@ -19067,6 +19126,61 @@ h3 {
 
 .default-border span {
   color: #2e5bff !important;
+}
+
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #2e5bff;
+  border-color: #2e5bff;
+}
+
+.page-item .page-link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+  color: #2e5bff;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.page-item .page-link:focus {
+  z-index: 3;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #2e5bff40;
+}
+
+.main-form {
+  background-color: white;
+  border-radius: 10px;
+}
+
+.main-form h2 {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  border-radius: 4px;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #2e5bff7d;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #2e5bff7d;
+}
+
+.btn-outline-primary:focus,
+.btn-outline-primary.focus {
+  box-shadow: 0 0 0 0.2rem #2e5bff7d;
+}
+
+.btn-outline-primary {
+  color: #2e5bff;
+  border-color: #2e5bff;
 }
 
 .footer-partners {

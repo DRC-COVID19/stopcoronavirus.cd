@@ -290,4 +290,21 @@ class AdministratorController extends Controller
     }
     return null;
   }
+
+  public function filter (Request $request) {
+    try {
+      $key_words=$request->get('key_words');
+      $admins = Administrator::where('username', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE' , "%{$key_words}%")->paginate(15);
+      if (! $admins ) {
+        return response()->json(['message' => "No admin found"], 404);
+      }
+      return AdministratorResource::collection($admins);
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
+  }
+
 }

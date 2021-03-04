@@ -244,4 +244,23 @@ class PandemicStatController extends Controller
       'last_update' => "date|required|unique:pandemic_stats,last_update" . ($id ? ",{$id}" : ""),
     ])->validate();
   }
+
+
+
+  public function filter(Request $request) {
+    try {
+      $date=$request->get('date');
+      $situation = PandemicStat::query()->where('last_update', $date)->paginate(15);
+      if (! $situation) {
+        return response()->json(["message" => "Not situation found", "success" => false], 404);
+      }
+      return PandemicStatResource::collection($situation);
+    } catch (\Throwable $th) {
+     if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
+  }
+
 }
