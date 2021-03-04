@@ -125,6 +125,10 @@
             margin-left: auto;
         }
 
+        .mb-3{
+          margin-bottom: 15px;
+        }
+
     </style>
 </head>
 
@@ -145,8 +149,11 @@
         </tr>
 
         <tr>
-            <td class="text-center">
-                <img class="img-fluid" src="{{ asset('/img/partners_small.png') }}" />
+            <td class="text-center mb-3">
+              <img data-v-0d27807d="" src="{{ asset('/img/partners_top.png')}}" height="30" >
+              <img data-v-0d27807d="" src="{{ asset('/img/commite_riposte.jpg')}}" height="30" >
+              <img data-v-0d27807d="" src="{{ asset('/img/logo-control-room.png')}}" height="30"   >
+                {{-- <img class="img-fluid" src="{{ asset('/img/partners_small.png') }}" /> --}}
             </td>
         </tr>
     </table>

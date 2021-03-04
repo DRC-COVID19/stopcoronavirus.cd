@@ -1,5 +1,16 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
+<<<<<<< HEAD
     "/js/vueApp.js": "/js/vueApp.js"
+=======
+    "/css/vueApp.css": "/css/vueApp.css",
+    "/js/vueApp.js": "/js/vueApp.js",
+    "/js/vueApp.d7bb53c8f9b9974ff765.hot-update.js": "/js/vueApp.d7bb53c8f9b9974ff765.hot-update.js",
+    "/js/vueApp.9fc681cf9cae20230e87.hot-update.js": "/js/vueApp.9fc681cf9cae20230e87.hot-update.js",
+    "/js/app.cab37bfbdac0101547b2.hot-update.js": "/js/app.cab37bfbdac0101547b2.hot-update.js",
+    "/js/vueApp.cab37bfbdac0101547b2.hot-update.js": "/js/vueApp.cab37bfbdac0101547b2.hot-update.js",
+    "/js/app.797a47a13def207acd6d.hot-update.js": "/js/app.797a47a13def207acd6d.hot-update.js",
+    "/js/vueApp.797a47a13def207acd6d.hot-update.js": "/js/vueApp.797a47a13def207acd6d.hot-update.js"
+>>>>>>> dev
 }

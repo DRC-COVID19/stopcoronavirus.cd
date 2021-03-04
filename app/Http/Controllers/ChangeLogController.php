@@ -79,11 +79,11 @@ class ChangeLogController extends Controller
       if ($change_log) {
         $users = Administrator::whereHas('roles', function ($q) {
           $q->where('name', 'admin-dashboard');
-        })->limit(1)->get();
+        })->get();
 
         foreach ($users as $user) {
           try {
-            Mail::to('merkitoko@gmail.com')->queue(new changeLogEmail($user, $change_log));
+            Mail::to($user->email)->queue(new changeLogEmail($user, $change_log));
           } catch (\Throwable $th) {
             Log::error($th->getMessage());
           }

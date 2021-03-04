@@ -425,6 +425,9 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Top 10 par provenance
+                  </div>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -539,6 +542,9 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="p-2 cardtype2">
+                  <div class="general-top-title">
+                    Top 10 par destination
+                  </div>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -920,7 +926,6 @@ export default {
         this.setIsProvinceStatSeeing(false);
       }
     },
-
   },
   mounted() {
     if (this.mobiliteGenerale) {
@@ -988,7 +993,7 @@ export default {
     this.$store.watch(
       (state) => state.flux.hotspotTopVariation, //get hotspot top variation from the store
       (flux30MapsData) => {
-        this.$nextTick(async() => {
+        this.$nextTick(async () => {
           // await this.sleep(1000);
           if (flux30MapsData && flux30MapsData.length > 0) {
             this.drawTopFlux30BarChar(flux30MapsData, "hotspot_range");
