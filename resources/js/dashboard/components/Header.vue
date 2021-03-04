@@ -326,6 +326,7 @@ export default {
       right: 0;
       top: 110%;
       z-index: 99;
+      width: 250px;
     }
   }
   .img-fluid {
