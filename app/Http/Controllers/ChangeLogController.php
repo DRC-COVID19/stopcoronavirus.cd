@@ -156,4 +156,17 @@ class ChangeLogController extends Controller
       'publish_date' => 'date|required'
     ])->validate();
   }
+
+  public function filter (Request $request)
+  {
+    try {
+      $date = $request->get('date');
+      $change = ChangeLog::where('publish_date', $date)->paginate(15);
+      return ChangeLogResource::collection($change);
+    } catch (\Throwable $th) {
+      //throw $th;
+      return response($th->getMessage())->setStatusCode(500);
+    }
+  }
+
 }
