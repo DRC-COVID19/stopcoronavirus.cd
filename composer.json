@@ -18,7 +18,7 @@
         "hashids/hashids": "^4.0",
         "laravel-admin-ext/latlong": "^1.2",
         "laravel-admin-ext/summernote": "^1.0",
-        "laravel/framework": "^7.0",
+        "laravel/framework": "7.30.4",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "maatwebsite/excel": "^3.1",
