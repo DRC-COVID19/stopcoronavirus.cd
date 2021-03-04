@@ -67,7 +67,6 @@
       />
       <label class="text-dash-color" for="text-password">Mot de passe *</label>
       <b-form-input
-        :disabled="disablePassword"
         class="input-dash"
         type="password"
         id="text-password"
@@ -81,7 +80,6 @@
         >Confirmation de mot de passe *</label
       >
       <b-form-input
-        :disabled="disablePassword"
         class="input-dash"
         type="password"
         id="text-password-confirm"
@@ -216,7 +214,7 @@ export default {
       this.form.id = this.formToPopulate.id;
       this.form.username = this.formToPopulate.usernmae;
       this.form.email = this.formToPopulate.email;
-      this.form.roles = this.formToPopulate.roles;
+      this.form.roles = this.formToPopulate.roles.map(x=>x.id);
       this.form.name = this.formToPopulate.name;
       this.title = "Modification de l'utilisateur";
       this.btnTitle = "Modifier";
