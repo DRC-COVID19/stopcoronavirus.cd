@@ -78,7 +78,7 @@ class AdministratorController extends Controller
   public function index()
   {
     try {
-      $administrators = Administrator::paginate(15);
+      $administrators = Administrator::orderBy('username')->paginate(15);
       return AdministratorResource::collection($administrators);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
@@ -218,10 +218,17 @@ class AdministratorController extends Controller
       'remember_token' => 'nullable',
       'email' => 'required|email',
       'roles_id' => 'required|array',
+      'password' => 'sometimes|confirmed',
+
     ])->validate();
     try {
       DB::beginTransaction();
       $administrator = Administrator::find($admin_user_id);
+      if (isset($data['password'])) {
+        $data['password'] = Hash::make($data['password']);
+      } else {
+        unset($data['password']);
+      }
       $administrator->update($data);
       $administrator->roles()->sync($data['roles_id']);
       DB::commit();
@@ -292,8 +299,10 @@ class AdministratorController extends Controller
         return response()->json(['message' => "No admin found"], 404);
       }
       return AdministratorResource::collection($admins);
-      // return response()->json(["data" => $admins, "success" => true], 202);
     } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
       return response($th->getMessage())->setStatusCode(500);
     }
   }

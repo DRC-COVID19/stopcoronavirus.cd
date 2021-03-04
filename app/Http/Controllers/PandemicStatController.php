@@ -256,6 +256,9 @@ class PandemicStatController extends Controller
       }
       return PandemicStatResource::collection($situation);
     } catch (\Throwable $th) {
+     if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
       return response($th->getMessage())->setStatusCode(500);
     }
   }
