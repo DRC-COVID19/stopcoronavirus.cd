@@ -43,12 +43,17 @@ Route::apiResource('admin_users', 'AdministratorController');
 
 Route::apiResource('admin_roles', 'AdminRoleController');
 
+Route::group(['prefix' => 'admin_users'], function () {
+  Route::get('/filter/{filter_key_words}', 'AdministratorController@filter');
+});
+
 Route::group(['prefix' => 'pandemic-stats'], function () {
   Route::get('/', 'PandemicStatController@index');
   Route::post('/', 'PandemicStatController@store');
   Route::get('/{pandemic_stat_id}', 'PandemicStatController@show');
   Route::put('/{pandemic_stat_id}', 'PandemicStatController@update');
   Route::delete('/{pandemic_stat_id}', 'PandemicStatController@destroy');
+  Route::get('/filter/{pandemic_stat_date}', 'PandemicStatController@filter');
 });
 
 Route::group([
