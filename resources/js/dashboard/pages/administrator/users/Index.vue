@@ -134,13 +134,20 @@ export default {
     updateUser(currentUser) {
       this.isLoading = true;
       this.userUpdated = false;
+      const form = {
+        username: currentUser.username,
+        name: currentUser.name,
+        email: currentUser.email,
+        roles_id: currentUser.roles,
+      };
+
+      if (currentUser && currentUser.password) {
+        form.password = currentUser.password;
+        form.password_confirmation = currentUser.confirmPassword;
+      }
+
       axios
-        .put("/api/admin_users/" + currentUser.id, {
-          username: currentUser.username,
-          name: currentUser.name,
-          email: currentUser.email,
-          roles_id: currentUser.roles,
-        })
+        .put("/api/admin_users/" + currentUser.id, form)
         .then(() => {
           this.userUpdated = true;
           this.showSuccess = true;
