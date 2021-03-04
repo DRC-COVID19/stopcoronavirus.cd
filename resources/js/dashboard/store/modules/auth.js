@@ -1,6 +1,4 @@
 import moment from 'moment';
-import { data } from 'jquery';
-import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from '../../config/env';
 import { event } from 'vue-gtag';
 
 export default {
@@ -20,18 +18,11 @@ export default {
       state.user = payload.user;
       state.authElocalStoragerror = false;
       state.lastAuthCheck = moment(new Date()).toISOString();
-      let dashboardRole = payload.user.roles.find(x => x.name == ADMIN_DASHBOARD);
-      let hospitalRole = payload.user.roles.find(x => x.name == AGENT_HOSPITAL);
-      let adminHospitalRole = payload.user.roles.find(x => x.name == ADMIN_HOSPITAL);
-      if (dashboardRole) {
-        state.userRole.push(ADMIN_DASHBOARD);
-      }
-      if (hospitalRole) {
-        state.userRole.push(AGENT_HOSPITAL);
-      }
-      if (adminHospitalRole) {
-        state.userRole.push(ADMIN_HOSPITAL);
-      }
+
+      payload.user.roles.forEach(element => {
+        state.userRole.push(element.name);
+      });
+
       localStorage.setItem('dashboard_access_role', state.userRole);
       if (payload.token) {
         localStorage.setItem('dashboard_access_token', payload.token);
@@ -89,18 +80,9 @@ export default {
         axios.post('/api/dashboard/auth/me', {})
           .then(({ data }) => {
             state.user = data;
-            let dashboardRole = data.roles.find(x => x.name == ADMIN_DASHBOARD);
-            let hospitalRole = data.roles.find(x => x.name == AGENT_HOSPITAL);
-            let adminHospitalRole = data.roles.find(x => x.name == ADMIN_HOSPITAL);
-            if (dashboardRole) {
-              state.userRole.push(ADMIN_DASHBOARD);
-            }
-            if (hospitalRole) {
-              state.userRole.push(AGENT_HOSPITAL);
-            }
-            if (adminHospitalRole) {
-              state.userRole.push(ADMIN_HOSPITAL);
-            }
+            data.roles.forEach(element => {
+              state.userRole.push(element.name);
+            });
             localStorage.setItem('dashboard_access_role', state.userRole);
             resolve(data);
           })

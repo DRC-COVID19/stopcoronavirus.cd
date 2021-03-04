@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Storage;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Administrator.
@@ -23,6 +24,7 @@ class Administrator extends Model implements JWTSubject, AuthenticatableContract
     use HasPermissions;
     use DefaultDatetimeFormat;
     use Notifiable;
+    use SoftDeletes;
 
     protected $fillable = ['username', 'password', 'name', 'avatar', 'email'];
 
@@ -97,6 +99,11 @@ class Administrator extends Model implements JWTSubject, AuthenticatableContract
     public function hospitalManager()
     {
         return $this->hasOne(Hospital::class, 'agent_id');
+    }
+
+    public function changeLogsRead()
+    {
+        return $this->belongsToMany(ChangeLog::class,'administrator_read_change_logs','administrator_id','change_log_id');
     }
 
     /**

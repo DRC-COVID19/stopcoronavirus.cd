@@ -2,9 +2,9 @@
   <div>
     <b-container class="p-0 flux-chart">
       <b-row class="mb-2">
-        <div class="col-md col-12">
+        <div class="col-md-7 col-12 mb-2 mb-md-0">
           <h3 class="d-flex align-items-center mb-0">
-            <span class="ml-2 mr-2">{{ targetZone }}</span>
+            <span class="mr-2">{{ targetZone }}</span>
 
             <toggle-button
               v-if="fluxTimeGranularity == 1"
@@ -14,7 +14,7 @@
             ></toggle-button>
           </h3>
         </div>
-        <div class="col-md col-12 d-flex justify-content-end">
+        <div class="col-md-5 col-12 d-flex justify-content-end">
           <div>
             <b-skeleton-wrapper :loading="isLoading">
               <template #loading>
@@ -113,41 +113,86 @@
               </div>
             </b-card>
           </FullScreen>
-          <b-row>
-            <b-col cols="12">
-              <h4 class="mt-2 mb-3">Légende</h4>
-            </b-col>
-          </b-row>
-          <b-row align-h="start">
-            <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
-              <div
-                v-for="(item, index) in hotspotType.slice(0, 6)"
-                :key="index"
-                class="flux-chart-lenged-item"
-                @mouseenter="setFluxHotspotType(item)"
-                @click="setFluxHotspotClicked(item.pseudo)"
-              >
-                <span
-                  class="flux-chart-lenged-color"
-                  :style="{ background: item.color }"
-                ></span>
-                <span class="flux-chart-lenged-text">{{ item.pseudo }}</span>
+
+          <b-row align-h="start" class="flex-row-reverse">
+            <b-col md="7">
+              <div v-if="isLoading">
+                <b-skeleton-wrapper :loading="isLoading">
+                  <template #loading>
+                    <b-card no-body class="cardtype2 p-2">
+                      <b-skeleton
+                        class="m-auto"
+                        width="90%"
+                        height="20"
+                      ></b-skeleton>
+                      <b-skeleton
+                        class="mt-2"
+                        width="100%"
+                        height="190"
+                      ></b-skeleton>
+                    </b-card>
+                  </template>
+                </b-skeleton-wrapper>
               </div>
-            </b-col>
-            <b-col cols="12" md="3" @mouseleave="setFluxHotspotType(null)">
-              <div
-                v-for="(item, index) in hotspotType.slice(6, 11)"
-                :key="index"
-                class="flux-chart-lenged-item"
-                @mouseenter="setFluxHotspotType(item)"
-                @click="setFluxHotspotClicked(item.pseudo)"
+              <FullScreen
+                id="hotspot_range"
+                link="hotspot_range"
+                @change="fullscreenFluxInOut"
+                v-show="!isLoading"
               >
-                <span
-                  class="flux-chart-lenged-color"
-                  :style="{ background: item.color }"
-                ></span>
-                <span class="flux-chart-lenged-text">{{ item.pseudo }}</span>
-              </div>
+                <b-card no-body class="p-2 cardtype2">
+                  <div class="general-top-title">title</div>
+                  <div class="chart-container">
+                    <canvas
+                      height="400"
+                      width="100vh"
+                      ref="hotspot_range"
+                      id="hotspot_range"
+                    ></canvas>
+                  </div>
+                </b-card>
+              </FullScreen>
+            </b-col>
+            <b-col cols="12" md="5">
+              <b-row class="mb-2">
+                <b-col cols="12">
+                  <h4 class="mt-2 mb-3">Légende</h4>
+                </b-col>
+                <b-col cols="12" md="6" @mouseleave="setFluxHotspotType(null)">
+                  <div
+                    v-for="(item, index) in hotspotType.slice(0, 6)"
+                    :key="index"
+                    class="flux-chart-lenged-item"
+                    @mouseenter="setFluxHotspotType(item)"
+                    @click="setFluxHotspotClicked(item.pseudo)"
+                  >
+                    <span
+                      class="flux-chart-lenged-color"
+                      :style="{ background: item.color }"
+                    ></span>
+                    <span class="flux-chart-lenged-text">{{
+                      item.pseudo
+                    }}</span>
+                  </div>
+                </b-col>
+                <b-col cols="12" md="6" @mouseleave="setFluxHotspotType(null)">
+                  <div
+                    v-for="(item, index) in hotspotType.slice(6, 11)"
+                    :key="index"
+                    class="flux-chart-lenged-item"
+                    @mouseenter="setFluxHotspotType(item)"
+                    @click="setFluxHotspotClicked(item.pseudo)"
+                  >
+                    <span
+                      class="flux-chart-lenged-color"
+                      :style="{ background: item.color }"
+                    ></span>
+                    <span class="flux-chart-lenged-text">{{
+                      item.pseudo
+                    }}</span>
+                  </div>
+                </b-col>
+              </b-row>
             </b-col>
           </b-row>
         </b-col>
@@ -380,6 +425,9 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="cardtype2 p-2">
+                  <div class="general-top-title">
+                    Top 10 par provenance
+                  </div>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -402,32 +450,6 @@
         >
           <b-row class="mb-3">
             <b-col cols="12">
-              <!-- <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
-                    width: '100%',
-                    height: '175px',
-                  }"
-                ></square-skeleton>
-              </skeleton-loading>
-
-              <skeleton-loading class="mb-3" v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
-                    width: '100%',
-                    height: '200px',
-                  }"
-                ></square-skeleton>
-              </skeleton-loading>
-
-              <skeleton-loading v-if="isLoading">
-                <square-skeleton
-                  :boxProperties="{
-                    width: '100%',
-                    height: '400px',
-                  }"
-                ></square-skeleton>
-              </skeleton-loading> -->
               <b-skeleton-wrapper :loading="isLoading">
                 <template #loading>
                   <b-card class="mb-3 flux-mobility">
@@ -520,6 +542,9 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="p-2 cardtype2">
+                  <div class="general-top-title">
+                    Top 10 par destination
+                  </div>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -540,23 +565,6 @@
           class="pr-0 pl-2"
           v-show="this.typeMobilite == 1"
         >
-          <!-- <skeleton-loading class="mb-3" v-if="isLoading">
-            <square-skeleton
-              :boxProperties="{
-                width: '100%',
-                height: '175px',
-              }"
-            ></square-skeleton>
-          </skeleton-loading>
-
-          <skeleton-loading class="mb-3" v-if="isLoading">
-            <square-skeleton
-              :boxProperties="{
-                width: '100%',
-                height: '200px',
-              }"
-            ></square-skeleton>
-          </skeleton-loading> -->
           <b-skeleton-wrapper :loading="isLoading">
             <template #loading>
               <b-card class="mb-3 flux-mobility">
@@ -686,10 +694,6 @@
         </b-col>
       </b-row>
     </b-container>
-    <!-- <ChartToolTip
-      :item="toolTipItem"
-      :position="toolTipItem ? toolTipItem.position : null"
-    /> -->
   </div>
 </template>
 
@@ -781,6 +785,10 @@ export default {
     flux30General: {
       type: Object,
       default: () => {},
+    },
+    flux30MapsData: {
+      type: Array,
+      default: () => [],
     },
   },
   data() {
@@ -950,12 +958,6 @@ export default {
       "pandemic_top_desc"
     );
 
-    // this.topHealthZonePandemics(
-    //   this.topHealthZoneConfirmed,
-    //   "pandemic_top_desc",
-    //   "Impacte sur la mobilité pour les 5 zones de santé les plus affectées"
-    // );
-
     this.updateGeneralMobilityDaily();
     this.targetZone = this.fluxGeoOptions[0];
     this.$nextTick(() => {
@@ -964,6 +966,12 @@ export default {
         "flux_30_daily_chart",
         PALETTE.flux_presence
       );
+    });
+    this.$nextTick(() => {
+      const flux30MapsData = this.$store.state.flux.hotspotTopVariation;
+      if (flux30MapsData && flux30MapsData.length > 0) {
+        this.drawTopFlux30BarChar(flux30MapsData, "hotspot_range");
+      }
     });
 
     this.$store.watch(
@@ -980,6 +988,17 @@ export default {
         if (this.fluxGeoGranularity == 2) {
           this.typeMobilite = 1;
         }
+      }
+    );
+    this.$store.watch(
+      (state) => state.flux.hotspotTopVariation, //get hotspot top variation from the store
+      (flux30MapsData) => {
+        this.$nextTick(async () => {
+          // await this.sleep(1000);
+          if (flux30MapsData && flux30MapsData.length > 0) {
+            this.drawTopFlux30BarChar(flux30MapsData, "hotspot_range");
+          }
+        });
       }
     );
   },
@@ -1561,6 +1580,93 @@ export default {
       );
       reference.style.height = "200px";
       reference.style.maxHeight = "200px";
+    },
+    drawTopFlux30BarChar(data, ref, height = 200) {
+      let localData = [...data];
+      localData.sort((a, b) => {
+        return a.difference < b.difference ? 1 : -1;
+      });
+      localData = localData.slice(0, 5);
+      this.configBarChart[ref] = {
+        type: "horizontalBar",
+        data: {
+          labels: localData.map((x) => x.origin),
+          datasets: [
+            {
+              // label: "Observation",
+              backgroundColor: PALETTE.flux_presence,
+              borderColor: PALETTE.flux_presence,
+              barThickness: 12,
+              data: localData.map((x) => x.difference),
+            },
+          ],
+        },
+        options: {
+          elements: {
+            rectangle: {
+              borderWidth: 2,
+            },
+          },
+          responsive: true,
+          maintainAspectRatio: false,
+          legend: {
+            display: false,
+            position: "bottom",
+            labels: {
+              fontSize: 9,
+            },
+          },
+          title: {
+            display: false,
+            text: "",
+            fontSize: 15,
+          },
+          scales: {
+            xAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                  fontSize: 9,
+                  callback: (value, index, values) => {
+                    const sign = value < 0 ? "-" : "";
+                    return `${sign}${this.formatCash(value)}`;
+                  },
+                },
+              },
+            ],
+            yAxes: [
+              {
+                ticks: {
+                  fontSize: 9,
+                  callback: function (label, index, labels) {
+                    const value = data.find((x) => x.origin == label);
+                    if (value && value.percent) {
+                      return `${label} (${Math.round(value.percent)}%)`;
+                    } else {
+                      return label;
+                    }
+                  },
+                },
+              },
+            ],
+          },
+          plugins: {
+            crosshair: false,
+          },
+        },
+      };
+      const reference = this.$refs[ref];
+      if (!reference) {
+        return;
+      }
+      if (this.barChart[ref]) this.barChart[ref].destroy();
+      this.barChart[ref] = new Chart(
+        reference.getContext("2d"),
+        this.configBarChart[ref]
+      );
+      this.configBarChart[ref].height = height;
+      reference.style.height = `${height}px`;
+      reference.style.maxHeight = `${height}px`;
     },
     fluxMobilityFluxZone(InputData, ref, key, color) {
       if (!InputData) {

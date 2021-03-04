@@ -1,19 +1,35 @@
 <template>
   <b-row>
     <b-col cols="12" md="6">
-      <FullScreen id="CovidCaseChart_full" link="CovidCaseChart" class="container-full">
+      <FullScreen
+        id="CovidCaseChart_full"
+        link="CovidCaseChart"
+        class="container-full"
+      >
         <div class="cardtype1 container-back">
           <div class="chart-container">
-            <canvas width="100vh" ref="CovidCaseChart" id="CovidCaseChart"></canvas>
+            <canvas
+              width="100vh"
+              ref="CovidCaseChart"
+              id="CovidCaseChart"
+            ></canvas>
           </div>
         </div>
       </FullScreen>
     </b-col>
     <b-col cols="12" md="6">
-      <FullScreen id="covidCasesStatDaily_full" link="covidCasesStatDaily" class="container-full">
+      <FullScreen
+        id="covidCasesStatDaily_full"
+        link="covidCasesStatDaily"
+        class="container-full"
+      >
         <div class="cardtype1 container-back">
           <div class="chart-container">
-            <canvas width="100vh" ref="covidCasesStatDaily" id="covidCasesStatDaily"></canvas>
+            <canvas
+              width="100vh"
+              ref="covidCasesStatDaily"
+              id="covidCasesStatDaily"
+            ></canvas>
           </div>
         </div>
       </FullScreen>
@@ -75,6 +91,9 @@ export default {
       if (!data) {
         return;
       }
+
+      console.log('data',data.labels);
+
       let tempData = {
         type: "line",
         data: {
@@ -85,7 +104,7 @@ export default {
               fill: true,
               borderColor: "rgb(166,180,205)",
               backgroundColor: "rgb(166,180,205, 0.2)",
-              data: data.confirmed,
+              data: data.confirmed
             },
             {
               label: "Guéris",
