@@ -3,20 +3,6 @@
     <b-row class="flex-md-row-reverse" no-gutterse>
       <b-col cols="12" md="4" class="mt-3">
         <b-alert
-          variant="success"
-          :show="showSuccess"
-          dismissible
-          fade
-          @dismiss-count-down="countDownChangedS"
-          class="mx-3 mt-3 alert"
-        >
-          {{
-            isSituationAdded
-              ? "Situation ajoutee avec success"
-              : "Situation modifiee avec succes"
-          }}
-        </b-alert>
-        <b-alert
           :show="showWarning"
           dismissible
           fade
@@ -38,16 +24,7 @@
       </b-col>
       <b-col cols="12" md="8">
         <Header :title="title" :iconClass="iconClass" />
-        <b-alert
-          variant="success"
-          :show="isSituationDeleted"
-          dismissible
-          fade
-          @dismiss-count-down="timeOut"
-          class="mx-3"
-        >
-          Situation supprimee avec succes
-        </b-alert>
+
         <div class="hide-waiting" v-if="isUpdating"></div>
         <ListSituation
           @onDeleteSituation="deleteSituation"

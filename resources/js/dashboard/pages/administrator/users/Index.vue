@@ -2,20 +2,6 @@
   <b-container fluid>
     <b-row class="flex-md-row-reverse" no-gutters>
       <b-col cols="12" md="4" class="mt-3">
-        <b-alert
-          variant="success"
-          :show="showSuccess"
-          dismissible
-          fade
-          @dismiss-count-down="timeOut"
-          class="mx-3 alert"
-        >
-          {{
-            userAdded
-              ? "Utilisateur cree avec success"
-              : "Utilisateur modifie avec succes"
-          }}
-        </b-alert>
         <Create
           @onUpdate="updateUser"
           @onCreate="createUser"
@@ -29,16 +15,7 @@
       </b-col>
       <b-col cols="12" md="8">
         <Header :title="title" :iconClass="iconClass" />
-        <b-alert
-          variant="success"
-          :show="isUserDeleted"
-          dismissible
-          fade
-          @dismiss-count-down="timeOut"
-          class="mx-3"
-        >
-          Utilisateur supprime avec success
-        </b-alert>
+
         <div class="hide-waiting" v-if="updating"></div>
         <ListUser
           :users="users"
@@ -113,15 +90,25 @@ export default {
   methods: {
     deleteUser(currentUserId) {
       axios
-        .delete("/api/admin_users/" + currentUserId, {
-          params: {},
-        })
+        .delete("/api/admin_users/" + currentUserId)
         .then(() => {
           this.getUserList();
           this.isUserDeleted = true;
+          this.$notify({
+            group: "alert",
+            title: "Supprimer utilisateur",
+            text: "Supprimer avec succès",
+            type: "success",
+          });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
+          this.$notify({
+            group: "alert",
+            title: "Supprimer utilisateur",
+            text: "Une erreur est surveni",
+            type: "error",
+          });
         });
     },
     populateForm(currentUser) {
@@ -154,9 +141,21 @@ export default {
           this.isLoading = false;
           this.updating = false;
           this.getUserList(1);
+          this.$notify({
+            group: "alert",
+            title: "Modifer utilisateur",
+            text: "Modifier avec succès",
+            type: "success",
+          });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
+          this.$notify({
+            group: "alert",
+            title: "Modifer utilisateur",
+            text: "Une erreur est surveni",
+            type: "error",
+          });
         });
     },
     createUser(form) {
@@ -177,11 +176,23 @@ export default {
           this.showSuccess = true;
           this.isLoading = false;
           this.getUserList(1);
+          this.$notify({
+            group: "alert",
+            title: "Nouvel utilisateur",
+            text: "Ajouter avec succès",
+            type: "success",
+          });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
           this.isLoading = false;
           this.errors = response.data.errors;
+          this.$notify({
+            group: "alert",
+            title: "Nouvel utilisateur",
+            text: "Une erreur est surveni",
+            type: "error",
+          });
         });
     },
     getUserList(page = 1) {
