@@ -284,9 +284,10 @@ class AdministratorController extends Controller
     return null;
   }
 
-  public function filter ($key_words) {
+  public function filter (Request $request) {
     try {
-      $admins = Administrator::query()->where('username', 'LIKE', "%{$key_words}%")->orWhere('name', "%{$key_words}%")->paginate(15);
+      $key_words=$request->get('key_words');
+      $admins = Administrator::where('username', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE' , "%{$key_words}%")->paginate(15);
       if (! $admins ) {
         return response()->json(['message' => "No admin found"], 404);
       }

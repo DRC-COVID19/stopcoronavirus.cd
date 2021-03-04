@@ -247,13 +247,14 @@ class PandemicStatController extends Controller
 
 
 
-  public function filter($date) {
+  public function filter(Request $request) {
     try {
+      $date=$request->get('date');
       $situation = PandemicStat::query()->where('last_update', $date)->paginate(15);
       if (! $situation) {
         return response()->json(["message" => "Not situation found", "success" => false], 404);
       }
-      return response()->json(["data" => $situation, "success" => true], 202);
+      return PandemicStatResource::collection($situation);
     } catch (\Throwable $th) {
       return response($th->getMessage())->setStatusCode(500);
     }
