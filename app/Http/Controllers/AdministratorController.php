@@ -292,7 +292,6 @@ class AdministratorController extends Controller
         return response()->json(['message' => "No admin found"], 404);
       }
       return AdministratorResource::collection($admins);
-      // return response()->json(["data" => $admins, "success" => true], 202);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
