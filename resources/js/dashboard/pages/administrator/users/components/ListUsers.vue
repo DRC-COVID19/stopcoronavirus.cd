@@ -4,11 +4,11 @@
       <b-col cols="12" md="6">
         <b-form-input
           v-model="filter"
-          debounce="500"
+          debounce="1500"
           class="input-dash input-filter"
           type="search"
           placeholder="Filtrer"
-          @change="test"
+          :v-on:change="search()"
         ></b-form-input>
       </b-col>
     </b-row>
@@ -43,7 +43,7 @@
           <template v-slot:cell(actions)="data" class="action-btn-group">
             <i
               @click="deleteUser(data.item.name, data.item.id)"
-              class="mx-2 fas fa-user-times"
+              class="mx-2 my-1 fas fa-user-times"
             ></i>
             <i
               @click="
@@ -55,7 +55,7 @@
                   data.item.email
                 )
               "
-              class="fas fa-user-edit"
+              class="mx-2 my-1 fas fa-user-edit"
             ></i>
           </template>
           <template v-slot:cell(role)="data">
@@ -116,6 +116,9 @@ export default {
     },
   },
   methods: {
+    search () {
+      this.$emit('search', this.filter);
+    },
     deleteUser(name, userId) {
       this.isDeleteModalShown = true;
       this.currentUser.id = userId;
