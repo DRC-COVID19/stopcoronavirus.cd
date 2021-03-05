@@ -244,6 +244,7 @@ export default {
     },
     onReset() {
       this.toToCanceled = true;
+      this.isLoading = false;
       this.resetForm();
       this.form = {};
       this.title = "Nouvelle Situation";
