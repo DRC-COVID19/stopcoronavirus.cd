@@ -164,7 +164,9 @@ class ChangeLogController extends Controller
       $change = ChangeLog::where('publish_date', $date)->paginate(15);
       return ChangeLogResource::collection($change);
     } catch (\Throwable $th) {
-      //throw $th;
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
       return response($th->getMessage())->setStatusCode(500);
     }
   }
