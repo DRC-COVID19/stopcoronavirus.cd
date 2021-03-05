@@ -123,7 +123,15 @@ export default {
       return this.situations.length;
     },
   },
+  watch: {
+    filter () {
+      this.search();
+    }
+  },
   methods: {
+    search () {
+      this.$emit('onSearch', this.filter);
+    },
     deleteSituation(id) {
       this.isDeleteModalShown = true;
       this.currentSituation.id = id;

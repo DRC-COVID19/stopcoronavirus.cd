@@ -306,8 +306,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.btn-action-success {
-}
 .btn-action {
   cursor: pointer;
 }

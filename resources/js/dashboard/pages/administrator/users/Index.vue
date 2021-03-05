@@ -90,8 +90,6 @@ export default {
   },
   methods: {
     search (filter) {
-      console.log(filter);
-      // Call the API
       if (filter !== '') {
         axios
           .get('api/admin_users/filter?key_words='+filter)
