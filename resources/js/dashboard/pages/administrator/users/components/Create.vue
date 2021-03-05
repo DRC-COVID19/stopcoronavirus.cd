@@ -88,9 +88,15 @@
       ></b-form-input>
       <b-form-text id="password-help-block">{{ warningMissMatch }}</b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button type="submit" variant="primary" class="btn-dash-sucess">{{
-          btnTitle
-        }}</b-button>
+          <b-button type="submit" variant="primary" class="btn-dash-sucess">
+            <span v-if="isLoading"
+            ><b-spinner class="align-middle"></b-spinner>
+              <span>en cours ...</span>
+            </span>
+            <div v-else>
+              {{btnTitle }}
+            </div>
+          </b-button>
         <b-button
           type="reset"
           v-if="updating"
@@ -140,6 +146,7 @@ export default {
       btnTitle: "Enreigistrer",
       iconClass: "fas fa-plus-square",
       updating: false,
+      isLoading: false,
       validateMailMessage: "",
       disablePassword: false,
       form: {
@@ -171,6 +178,7 @@ export default {
   },
   methods: {
     onSubmit() {
+      this.isLoading = true;
       if (this.btnTitle === "Enreigistrer") {
         if (
           this.form.password === this.form.confirmPassword &&
@@ -199,6 +207,7 @@ export default {
     },
     resetForm() {
       this.updating = false;
+      this.isLoading = false;
       this.disablePassword = false;
       if (this.userAdded | this.userUpdated) {
         this.form = {};
