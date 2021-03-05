@@ -156,8 +156,6 @@ export default {
     };
   },
   mounted() {
-    // Fetch the user roles
-    // this.getUserRoles(),
     this.resetForm();
   },
   watch: {

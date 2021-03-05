@@ -19,6 +19,7 @@
         <div class="hide-waiting" v-if="updating"></div>
         <ListUser
           :users="users"
+          @onSearch="search"
           @onDeleteUser="deleteUser"
           @onUpdateUser="populateForm"
           :isLoading="isLoading"
@@ -88,6 +89,23 @@ export default {
     },
   },
   methods: {
+    search (filter) {
+      console.log(filter);
+      // Call the API
+      if (filter !== '') {
+        axios
+          .get('api/admin_users/filter?key_words='+filter)
+          .then(({ data }) => {
+            this.users = data;
+
+          })
+          .catch(({ response }) => {
+            this.$gtag.exception(response);
+          });
+      } else {
+        this.getUserList();
+      }
+    },
     deleteUser(currentUserId) {
       axios
         .delete("/api/admin_users/" + currentUserId)

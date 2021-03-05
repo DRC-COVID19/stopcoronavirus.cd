@@ -8,7 +8,6 @@
           class="input-dash input-filter"
           type="search"
           placeholder="Filtrer"
-          :v-on:change="search()"
         ></b-form-input>
       </b-col>
     </b-row>
@@ -115,9 +114,14 @@ export default {
       return this.users.length;
     },
   },
+  watch: {
+    filter () {
+      this.search();
+    }
+  },
   methods: {
     search () {
-      this.$emit('search', this.filter);
+      this.$emit('onSearch', this.filter.trim());
     },
     deleteUser(name, userId) {
       this.isDeleteModalShown = true;
