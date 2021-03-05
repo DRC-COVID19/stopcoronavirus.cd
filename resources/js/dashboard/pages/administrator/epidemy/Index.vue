@@ -100,7 +100,6 @@ export default {
   },
   methods: {
     search (filter) {
-      console.log(filter)
       if (filter !== '') {
         axios
           .get('api/pandemic-stats/filter?date='+filter)
