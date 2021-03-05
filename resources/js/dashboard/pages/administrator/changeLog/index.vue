@@ -293,11 +293,7 @@ export default {
       this.form = {};
     },
     search () {
-      console.log(this.filter);
       this.searchChangeLog(this.filter)
-        .then(() => {
-          console.log(this.filter);
-        })
         .catch(() => {
           this.$notify({
             group: "alert",

@@ -73,13 +73,11 @@ export default {
       });
     },
     searchChangeLog ({ state, commit }, payload = null) {
-      commit('setIsLoading', true);
       return new Promise((resolve, reject) => {
         axios
           .get('api/dashboard/change-log/filter?date='+payload)
             .then(({ data }) => {
               commit('setListChangeLogs', data);
-              commit('setIsloading', false);
               resolve(true);
             }) 
             .catch(({ response }) => {
