@@ -220,23 +220,13 @@ export default {
   },
   methods: {
     ...mapActions(["createChangeLog"]),
-    ...mapActions(["getListChangedLogs", "updateChangeLog", "removeChangeLog"]),
+    ...mapActions(["getListChangedLogs", "updateChangeLog", "removeChangeLog", "searchChangeLog"]),
     submit_form() {
       if (this.isEditingMode) {
         this.submitUpdatingChangeLog();
       } else {
         this.submitcreateChangeLog();
       }
-    },
-    search () {
-      axios
-        .get('api/dashboard/change-log/filter?date='+this.filter)
-        .then(({ data }) => {
-          this.listChangeLogs = data;
-        }) 
-        .catch(({ response }) => {
-          this.$gtag.exception(response);
-        });    
     },
     submitcreateChangeLog() {
       this.errors = {};
@@ -301,6 +291,21 @@ export default {
     cancelEditMode() {
       this.isEditingMode = false;
       this.form = {};
+    },
+    search () {
+      console.log(this.filter);
+      this.searchChangeLog(this.filter)
+        .then(() => {
+          console.log(this.filter);
+        })
+        .catch(() => {
+          this.$notify({
+            group: "alert",
+            title: "Supprimer log",
+            text: "Une erreur est surveni",
+            type: "error",
+          });
+        })
     },
     onValidate() {
       this.$bvModal.hide("confirmation-box");

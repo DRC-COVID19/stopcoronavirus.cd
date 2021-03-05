@@ -72,6 +72,23 @@ export default {
           });
       });
     },
+    searchChangeLog ({ state, commit }, payload = null) {
+      commit('setIsLoading', true);
+      return new Promise((resolve, reject) => {
+        axios
+          .get('api/dashboard/change-log/filter?date='+payload)
+            .then(({ data }) => {
+              commit('setListChangeLogs', data);
+              commit('setIsloading', false);
+              resolve(true);
+            }) 
+            .catch(({ response }) => {
+              console.log(response);
+              reject(response);
+              // this.$gtag.exception(response);
+            });
+      })
+    },
     getListChangedLogs({ state, commit }, payload = {}) {
 
       commit("setIsLoading", true);
@@ -82,7 +99,7 @@ export default {
           .then(({ data }) => {
             commit('setListChangeLogs', data);
             commit("setIsLoading", false);
-            resolve(true)
+            resolve(true);
           })
           .catch((response) => {
             console.log(response);
