@@ -5,10 +5,8 @@
         <b-form-datepicker
           label-today-button="Aujourd'hui"
           label-reset-button="Effacer"
-          label-close-button="Fermer"
           reset-button
           today-button
-          close-button
           v-model="filter"
           placeholder="Choisir la date"
           class="mb-2"
