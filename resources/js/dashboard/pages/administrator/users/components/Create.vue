@@ -192,6 +192,7 @@ export default {
         this.$emit("onUpdate", this.form);
       }
     },
+
     onReset() {
       this.toToCanceled = true;
       this.form = {};
@@ -199,12 +200,14 @@ export default {
       this.btnTitle = "Enreigistrer";
       this.$emit("onCancelUpdate", {});
     },
+
     validateMail() {
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!re.test(String(this.form.email).toLowerCase())) {
         this.validateMailMessage = "Adresse email incorrecte";
       }
     },
+
     resetForm() {
       this.updating = false;
       this.isLoading = false;
@@ -215,6 +218,7 @@ export default {
         this.title = "Creation d'un utilisateur";
       }
     },
+
     populateForm() {
       this.updating = true;
       this.disablePassword = true;
@@ -226,19 +230,23 @@ export default {
       this.title = "Modification de l'utilisateur";
       this.btnTitle = "Modifier";
     },
+
   },
+
   computed: {
     passwordIndicator() {
       return this.disablePassword === false
         ? "Votre mot de passe doit contenir 8 carateres au minimum"
         : "Votre mot de passe reste le meme";
     },
+
     warningMissMatch() {
       return this.form.password === this.form.confirmPassword
         ? ""
         : "Les mot de passes ne correspondent pas";
     },
   },
+  
 };
 </script>
 

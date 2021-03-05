@@ -15,7 +15,6 @@
       </b-col>
       <b-col cols="12" md="8">
         <Header :title="title" :iconClass="iconClass" />
-
         <div class="hide-waiting" v-if="updating"></div>
         <ListUser
           :users="users"
@@ -174,6 +173,7 @@ export default {
           });
         });
     },
+
     createUser(form) {
       this.userAdded = false;
       this.isLoading = true;
@@ -210,7 +210,9 @@ export default {
             type: "error",
           });
         });
+
     },
+
     getUserList(page = 1) {
       this.isLoading = true;
       axios
@@ -225,6 +227,7 @@ export default {
           this.$gtag.exception(response);
         });
     },
+
     getUserRoles() {
       axios
         .get("/api/admin_roles")
@@ -235,10 +238,13 @@ export default {
           this.$gtag.exception(response);
         });
     },
+
     switchPage(page) {
       this.getUserList(page);
     },
+
   },
+
 };
 </script>
 

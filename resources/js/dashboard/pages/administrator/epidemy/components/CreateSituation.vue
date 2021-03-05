@@ -159,6 +159,7 @@
 
 <script>
 export default {
+
   props: {
     isSituationAdded: {
       type: Boolean,
@@ -182,6 +183,7 @@ export default {
       default: () => ({}),
     },
   },
+
   data() {
     return {
       title: "Nouvelle Situation",
@@ -207,6 +209,7 @@ export default {
       roles: [],
     };
   },
+
   watch: {
     isSituationAdded() {
       this.resetForm();
@@ -229,6 +232,7 @@ export default {
       this.populateForm();
     },
   },
+
   methods: {
     onSubmit() {
       this.isLoading = true;
@@ -283,6 +287,7 @@ export default {
       this.btnTitle = "Valider";
     },
   },
+
   computed: {
     warningMissMatch() {
       return this.form.password === this.form.confirmPassword
@@ -290,6 +295,7 @@ export default {
         : "Les mot de passes ne correspondent pas";
     },
   },
+  
 };
 </script>
 
