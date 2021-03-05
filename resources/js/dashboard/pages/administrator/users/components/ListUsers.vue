@@ -4,9 +4,11 @@
       <b-col cols="12" md="6">
         <b-form-input
           v-model="filter"
+          debounce="500"
           class="input-dash input-filter"
           type="search"
           placeholder="Filtrer"
+          @change="test"
         ></b-form-input>
       </b-col>
     </b-row>
