@@ -79,6 +79,16 @@
       <b-col cols="12" md="8">
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
         <Header title="Change log" iconClass="fa fa-history" />
+        <b-row class="my-3" align-h="start">
+          <b-col cols="12" md="6">
+            <b-form-datepicker
+              v-model="filter"
+              placeholder="Choisir la date"
+              class="mb-2"
+            >
+            </b-form-datepicker>
+          </b-col>
+        </b-row>
         <b-skeleton-table
           v-if="isLoading"
           :rows="15"
@@ -147,6 +157,7 @@ export default {
   },
   data() {
     return {
+      filter: null,
       fields: [
         {
           key: "number",
@@ -177,6 +188,11 @@ export default {
   },
   mounted() {
     this.getListChangedLogs();
+  },
+  watch: {
+    filter () {
+      this.search()
+    }
   },
   computed: {
     ...mapState({
@@ -211,6 +227,16 @@ export default {
       } else {
         this.submitcreateChangeLog();
       }
+    },
+    search () {
+      axios
+        .get('api/dashboard/change-log/filter?date='+this.filter)
+        .then(({ data }) => {
+          this.listChangeLogs = data;
+        }) 
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
+        });    
     },
     submitcreateChangeLog() {
       this.errors = {};
