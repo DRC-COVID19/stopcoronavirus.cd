@@ -83,6 +83,9 @@ class ChangeLogController extends Controller
 
         foreach ($users as $user) {
           try {
+            if (!$user->email) {
+              return;
+            }
             Mail::to($user->email)->queue(new changeLogEmail($user, $change_log));
           } catch (\Throwable $th) {
             Log::error($th->getMessage());
