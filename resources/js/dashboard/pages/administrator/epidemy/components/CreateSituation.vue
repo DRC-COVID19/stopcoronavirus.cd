@@ -136,9 +136,15 @@
         </b-col>
       </b-row>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button type="submit" variant="primary" class="btn-dash-sucess">{{
-          btnTitle
-        }}</b-button>
+        <b-button type="submit" variant="primary" class="btn-dash-sucess">
+          <span v-if="isLoading"
+            ><b-spinner class="align-middle"></b-spinner>
+              <span>en cours ...</span>
+            </span>
+            <div v-else>
+              {{btnTitle }}
+            </div>
+        </b-button>
         <b-button
           type="reset"
           v-if="isUpdating"
@@ -184,6 +190,7 @@ export default {
       validateMailMessage: "",
       disableDate: false,
       isUpdating: false,
+      isLoading: false,
       warningMessage: "",
       form: {
         last_update: "",
@@ -224,6 +231,7 @@ export default {
   },
   methods: {
     onSubmit() {
+      this.isLoading = true;
       if (this.btnTitle === "Envoyer") {
         if (this.form.last_update.trim() !== "") {
           this.$emit("onCreateSituation", this.form);
@@ -250,6 +258,7 @@ export default {
     },
     resetForm() {
       this.isUpdating = false;
+      this.isLoading = false;
       this.disableDate = false;
       if (this.isSituationAdded | this.isSituationUpdated) {
         this.form = {};
