@@ -190,14 +190,17 @@ export default {
       itemToRemove: {},
     };
   },
+
   mounted() {
     this.getListChangedLogs();
   },
+
   watch: {
     filter () {
       this.search()
     }
   },
+
   computed: {
     ...mapState({
       listChangeLogs: (state) => state.changeLog.listChangeLogs,
@@ -222,6 +225,7 @@ export default {
           };
     },
   },
+  
   methods: {
     ...mapActions(["createChangeLog"]),
     ...mapActions(["getListChangedLogs", "updateChangeLog", "removeChangeLog", "searchChangeLog"]),
