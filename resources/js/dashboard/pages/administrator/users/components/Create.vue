@@ -73,9 +73,6 @@
         aria-describedby="password-help-block"
         v-model="form.password"
       ></b-form-input>
-      <b-form-text id="password-help-block">
-        {{ passwordIndicator }}
-      </b-form-text>
       <label class="text-dash-color" for="text-password-confirm"
         >Confirmation de mot de passe *</label
       >
@@ -234,12 +231,6 @@ export default {
   },
 
   computed: {
-    passwordIndicator() {
-      return this.disablePassword === false
-        ? "Votre mot de passe doit contenir 8 carateres au minimum"
-        : "Votre mot de passe reste le meme";
-    },
-
     warningMissMatch() {
       return this.form.password === this.form.confirmPassword
         ? ""

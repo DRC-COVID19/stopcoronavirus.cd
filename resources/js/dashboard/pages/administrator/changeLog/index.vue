@@ -302,13 +302,8 @@ export default {
     },
     search () {
       this.searchChangeLog(this.filter)
-        .catch(() => {
-          this.$notify({
-            group: "alert",
-            title: "Supprimer log",
-            text: "Une erreur est surveni",
-            type: "error",
-          });
+        .catch((error) => {
+          console.log(error);
         })
     },
     onValidate() {
