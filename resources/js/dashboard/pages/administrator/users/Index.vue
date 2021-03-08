@@ -89,18 +89,21 @@ export default {
   },
   methods: {
     search (filter) {
+      this.isLoading = true;
       if (filter !== '') {
         axios
           .get('api/admin_users/filter?key_words='+filter)
           .then(({ data }) => {
             this.users = data;
-
+            this.isLoading = false;
           })
           .catch(({ response }) => {
             this.$gtag.exception(response);
+            this.isLoading = false;
           });
       } else {
         this.getUserList();
+        this.isLoading = false;
       }
     },
     deleteUser(currentUserId) {
