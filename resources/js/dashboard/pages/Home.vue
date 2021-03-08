@@ -72,7 +72,7 @@
           lg="6"
           class="side-right mt-2"
           :class="{ 'side-right-100': !hasCovidCases }"
-          v-if="true"
+          v-if="hasRightSide"
         >
           <b-card no-body>
             <transition name="fade">
@@ -106,8 +106,8 @@
                 <b-tab title="Carte" :active="isSmOrMd" v-if="isSmOrMd"></b-tab>
                 <b-tab
                   title="Données Covid-19"
-                  v-if="(!!covidCases || isLoading) && activeMenu == 2"
-                  :active="!isSmOrMd && !!covidCases"
+                  v-if="(!!hasCovidCases || isLoading) && activeMenu == 2"
+                  :active="!isSmOrMd && !!hasCovidCases"
                 >
                   <SideCaseCovid
                     :covidCases="covidCases"
@@ -191,10 +191,7 @@
                     !isFirstLoad &&
                     this.activeMenu == 1
                   "
-                  :active="
-                    !isSmOrMd &&
-                    (hasFlux24DailyIn || isLoading || hasFlux30Daily)
-                  "
+                  :active="computeActiveRightSide"
                 >
                   <FluxChart
                     :flux24Daily="flux24Daily"
@@ -545,10 +542,25 @@ export default {
       observationDate: (state) => state.flux.observationDate,
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
       canShowNavMobile: (state) => state.app.canShowNavMobile,
+      fluxType: (state) => state.flux.fluxType,
     }),
     canShowMapMobile() {
       if (this.isSmOrMd) {
         return this.showMobileMaps;
+      }
+      return true;
+    },
+    computeActiveRightSide() {
+      if (
+        this.isSmOrMd &&
+        (this.isLoading || !this.isLoading || this.fluxType)
+      ) {
+        this.activeRightSide = 0;
+      } else if (
+        !this.isSmOrMd &&
+        (this.hasFlux24DailyIn || this.isLoading || this.hasFlux30Daily)
+      ) {
+        this.activeRightSide = 1;
       }
       return true;
     },
@@ -623,9 +635,9 @@ export default {
     },
     isLoading() {
       this.showBottom = false;
-      if (this.isSmOrMd) {
-        this.activeRightSide = 0;
-      }
+      // if (this.isSmOrMd) {
+      //   this.activeRightSide = 0;
+      // }
       this.resizeTopMap();
       return Object.values(this.loadings).find((val) => val === true)
         ? true
