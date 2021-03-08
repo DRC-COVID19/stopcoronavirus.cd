@@ -72,19 +72,23 @@ export default {
           });
       });
     },
-    searchChangeLog ({ state, commit }, payload = null) {
+    searchChangeLog ({ state, commit, dispatch }, payload = null) {
       return new Promise((resolve, reject) => {
-        axios
-          .get('api/dashboard/change-log/filter?date='+payload)
-            .then(({ data }) => {
-              commit('setListChangeLogs', data);
-              resolve(true);
-            }) 
-            .catch(({ response }) => {
-              console.log(response);
-              reject(response);
-              // this.$gtag.exception(response);
-            });
+        if (payload) {
+          axios
+            .get('api/dashboard/change-log/filter?date='+payload)
+              .then(({ data }) => {
+                commit('setListChangeLogs', data);
+                resolve(true);
+              }) 
+              .catch(({ response }) => {
+                console.log(response);
+                reject(response);
+              });
+        } else {
+          dispatch('getListChangedLogs');
+          resolve(true);
+        }
       })
     },
     getListChangedLogs({ state, commit }, payload = {}) {
@@ -103,8 +107,6 @@ export default {
             console.log(response);
             reject(response);
           })
-
-
       })
     },
     setChangeLogsRead({ state, dispatch }) {
