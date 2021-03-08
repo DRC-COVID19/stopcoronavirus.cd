@@ -155,6 +155,7 @@ export default {
         .then(() => {
           this.isSituationUpdated = true;
           this.showSuccess = this.timeOut;
+          this.isSituationUpdated = true;
           this.isLoading = false;
           this.isUpdating = false;
           this.getSituationList();

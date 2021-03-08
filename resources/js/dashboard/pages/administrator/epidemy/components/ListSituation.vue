@@ -161,7 +161,6 @@ export default {
         seriously,
         healed,
       };
-      console.log(this.currentSituation);
       this.$emit("onEditSituation", this.currentSituation);
     },
     onValidateDelection() {

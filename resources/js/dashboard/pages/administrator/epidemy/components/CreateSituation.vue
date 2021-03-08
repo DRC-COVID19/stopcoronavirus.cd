@@ -137,13 +137,13 @@
       </b-row>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
         <b-button type="submit" variant="primary" class="btn-dash-sucess">
-          <span v-if="isLoading"
-            ><b-spinner class="align-middle"></b-spinner>
+          <span v-if="isLoading">
+            <b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
-            </span>
-            <div v-else>
-              {{btnTitle }}
-            </div>
+          </span>
+          <div v-else>
+            {{btnTitle }}
+          </div>
         </b-button>
         <b-button
           type="reset"
@@ -228,6 +228,9 @@ export default {
     isSituationAdded() {
       this.resetForm();
     },
+    isSituationUpdated() {
+      this.resetForm();
+    },
     formToPopulate() {
       this.populateForm();
     },
@@ -248,7 +251,6 @@ export default {
     },
     onReset() {
       this.toToCanceled = true;
-      this.isLoading = false;
       this.resetForm();
       this.form = {};
       this.title = "Nouvelle Situation";
