@@ -100,17 +100,21 @@ export default {
   },
   methods: {
     search (filter) {
+      this.isLoading = true;
       if (filter !== '') {
         axios
           .get('api/pandemic-stats/filter?date='+filter)
           .then(({ data }) => {
             this.situations = data;
+            this.isLoading = false;
           })
           .catch(({ response }) => {
             this.$gtag.exception(response);
+            this.isLoading = false;
           });
       } else {
         this.getSituationList();
+        this.isLoading = false;
       }
     },
     countDownChangedS (showSuccess) {
