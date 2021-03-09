@@ -147,7 +147,7 @@ export default [
         }
       },
       {
-        path: '/pandemics',
+        path: 'pandemics',
         name: 'administrator.pandemics',
         component: Pandemics,
         meta: {
