@@ -17,6 +17,7 @@ import AdminUserIndex from './pages/administrator/users/Index';
 import PageNotFound from './pages/NotFound';
 import ChangeLogIndex from './pages/administrator/changeLog/index';
 import Epidemie from './pages/administrator/epidemy/Index';
+import Pandemics from './pages/administrator/pandemy/Index';
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL, ADMINISTRATOR, MANANGER_EPIDEMIC } from './config/env';
 
 
@@ -140,6 +141,15 @@ export default [
         path: '/',
         name: 'administrator.home',
         component: AdminUserIndex,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR]
+        }
+      },
+      {
+        path: '/pandemics',
+        name: 'administrator.pandemics',
+        component: Pandemics,
         meta: {
           requiresAuth: true,
           role: [ADMINISTRATOR]
