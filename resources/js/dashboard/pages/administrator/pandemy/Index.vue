@@ -4,8 +4,8 @@
       <b-col md="4">
         <b-card class="mt-3">
           <h3>Ajouter</h3>
-          <b-form @submit.prevent="submit_form">
-            <b-row>
+          <b-form @submit.prevent="submit_form" class="px-3">
+            <b-row class="mx-1">
               <b-form-group
                 label="Date"
                 label-class="text-dash-color"
@@ -30,7 +30,7 @@
                 />
               </b-form-group>
             </b-row>
-            <b-row class="d-flex justify-content-start">
+            <b-row class="d-flex justify-content-start px-o">
               <b-col md="4">
                 <b-form-group
                   label-class="text-dash-color"
@@ -112,7 +112,7 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row>
+            <b-row class="mx-1">
               <b-button
                 type="submit"
                 class="btn-dash-sucess"
