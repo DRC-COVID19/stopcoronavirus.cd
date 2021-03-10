@@ -1,4 +1,4 @@
-@import url(https://fonts.googleapis.com/css2?family=Rubik);@import url(https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css);@charset "UTF-8";/*!
+@import url(https://fonts.googleapis.com/css2?family=Rubik);@import url(https://api.mapbox.com/mapbox-gl-js/v1.10.1/mapbox-gl.css);.timeline-item .item[data-v-5c5ef65f]{border-left:5px solid #ccd5db;padding:20px 0 20px 15px;position:relative}.timeline-item .date-item[data-v-5c5ef65f]{margin:0;text-transform:uppercase;font-size:16px;letter-spacing:2px}.timeline-item .title-item[data-v-5c5ef65f]{margin:0;padding:5px 0;font-size:15px;font-weight:500}.timeline-item .description-item[data-v-5c5ef65f]{font-weight:100;margin:0}.timeline-item .dot[data-v-5c5ef65f]{display:block;position:absolute;width:15px;height:15px;border-radius:50%;left:-10px;top:26px}.timeline[data-v-30ba92e0]{text-align:left;width:100%;max-width:500px}.timeline .wrapper-timeline[data-v-30ba92e0]{position:relative}.timeline .wrapper-item[data-v-30ba92e0]{display:grid;grid-template-columns:100px 1fr;margin-bottom:20px}.timeline .wrapper-item .section-year[data-v-30ba92e0]{display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end;padding:15px;font-weight:700;font-size:18px}.timeline .wrapper-item .section-year .year[data-v-30ba92e0]{margin:0}.timeline .wrapper-item.unique-timeline[data-v-30ba92e0]{margin-bottom:0}@charset "UTF-8";/*!
  * animate.css - https://animate.style/
  * Version - 4.1.1
  * Licensed under the MIT license - http://opensource.org/licenses/MIT
@@ -4090,6 +4090,32 @@
 
 .flux-presence {
   color: #E31A1C;
+}
+
+@-webkit-keyframes dropdownanimate {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+    transform: translate3d(0, 0px, 0);
+  }
+}
+
+@keyframes dropdownanimate {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: none;
+    transform: translate3d(0, 0px, 0);
+  }
 }
 
 /*!
@@ -31532,15 +31558,65 @@ h3 {
   opacity: 0.6;
 }
 
+.btn-dash-sucess {
+  background: #00b065;
+  border: 3px solid #00b065 !important;
+  border-radius: 5px;
+}
+
+.btn-dash-sucess:hover,
+.btn-dash-sucess:focus,
+.btn-dash-sucess:active,
+.btn-dash-sucess:disabled {
+  background: #00b065 !important;
+}
+
+.btn-dash-sucess:focus {
+  box-shadow: none;
+}
+
+.btn-dash-sucess:active {
+  opacity: 0.6;
+}
+
+.btn-dash-danger {
+  background: #e6222e;
+  border: 3px solid #e6222e !important;
+  border-radius: 5px;
+}
+
+.btn-dash-danger:hover,
+.btn-dash-danger:focus,
+.btn-dash-danger:active,
+.btn-dash-danger:disabled {
+  background: #e6222e !important;
+}
+
+.btn-dash-danger:focus {
+  box-shadow: none;
+}
+
+.btn-dash-danger:active {
+  opacity: 0.6;
+}
+
 .text-dash-color {
   color: #7b7f88 !important;
 }
 
 .input-dash {
-  border: 1px solid #d2d5dc;
+  border: 1px solid #E0E7FF;
   background: #f4f6fc;
   transition: all 0.3s ease;
   border-radius: 5px;
+}
+
+.input-dash:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #2e5bff7d;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #2e5bff7d;
 }
 
 .dash-login-title {
@@ -31912,6 +31988,15 @@ h3 {
 .column-left .form-control,
 .top-menu .form-control {
   border-radius: 4px;
+}
+
+.column-left .form-control:focus,
+.top-menu .form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #2e5bff7d;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #2e5bff7d;
 }
 
 .column-left .pandemics-stat-row,
@@ -32563,6 +32648,61 @@ h3 {
   color: #2e5bff !important;
 }
 
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #2e5bff;
+  border-color: #2e5bff;
+}
+
+.page-item .page-link {
+  position: relative;
+  display: block;
+  padding: 0.5rem 0.75rem;
+  margin-left: -1px;
+  line-height: 1.25;
+  color: #2e5bff;
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.page-item .page-link:focus {
+  z-index: 3;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #2e5bff40;
+}
+
+.main-form {
+  background-color: white;
+  border-radius: 10px;
+}
+
+.main-form h2 {
+  margin-bottom: 20px;
+}
+
+.form-control {
+  border-radius: 4px;
+}
+
+.form-control:focus {
+  color: #495057;
+  background-color: #fff;
+  border-color: #2e5bff7d;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem #2e5bff7d;
+}
+
+.btn-outline-primary:focus,
+.btn-outline-primary.focus {
+  box-shadow: 0 0 0 0.2rem #2e5bff7d;
+}
+
+.btn-outline-primary {
+  color: #2e5bff;
+  border-color: #2e5bff;
+}
+
 .legend-container {
   position: relative;
   top: -50px;
@@ -32788,6 +32928,112 @@ h3 {
 .fullscreen-container:hover .fullscreen-btn {
   transform: scale(1);
   opacity: 1;
+}
+
+.apropos {
+  height: 100vh;
+}
+
+.apropos .timeline {
+  max-width: none;
+}
+
+.apropos .nav-pills .nav-link {
+  text-decoration: none;
+  color: #7b7f88;
+}
+
+.apropos .nav-pills .nav-link.active {
+  background-color: #2e5bff;
+  color: white;
+}
+
+.apropos .tab-content {
+  background-color: #f4f6fc;
+}
+
+.apropos .tab-content > .tab-pane {
+  padding-top: 0.75rem;
+}
+
+.apropos .tab-content .row {
+  justify-content: left;
+}
+
+.apropos .tab-content .row > div {
+  margin-bottom: 30px;
+  display: flex;
+}
+
+.apropos .tab-content .img-capture-wrapper {
+  overflow: hidden;
+  float: right;
+  margin-left: 20px;
+  margin-bottom: 10px;
+}
+
+.apropos .tab-content .img-capture-wrapper .img-capture {
+  width: 150px;
+  cursor: zoom-in;
+  transition: 0.3s ease-in-out;
+  transform-origin: center;
+}
+
+.apropos .tab-content .img-capture-wrapper .img-capture:hover {
+  opacity: 0.6;
+  transform: scale(1.1);
+}
+
+.wrapper-img-modal {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  margin: auto;
+}
+
+.wrapper-img-modal img {
+  max-width: 900px;
+}
+
+.modal-dialog {
+  max-width: 1000px !important;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  min-width: 500px;
+}
+
+.modal-header .close:focus {
+  outline: none;
+}
+
+.administrator {
+  background-color: #f4f6fc;
+  min-height: 100vh;
+}
+
+.administrator .card {
+  background: white;
+  border-radius: unset;
+  border-color: #2e5bff14;
+}
+
+.administrator .card .card-header {
+  background: white;
+}
+
+.administrator .header .nav-container a.active {
+  color: #2e5bff !important;
+}
+
+.administrator .hide-waiting {
+  position: absolute;
+  background: #00000052;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
 }
 
 body {
