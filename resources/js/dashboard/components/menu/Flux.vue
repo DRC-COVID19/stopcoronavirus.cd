@@ -101,7 +101,6 @@
                       v-model="dateRangePreference"
                       :appendToBody="true"
                       opens="center"
-                      :timePicker="isHotspot"
                       :timePicker24Hour="isHotspot"
                       :min-date="reference_min_date"
                       :max-date="Observation_max_date"
@@ -135,7 +134,7 @@
                       v-model="dateRangeObservation"
                       :appendToBody="true"
                       opens="center"
-                      :timePicker="isHotspot"
+
                       :singleDatePicker="singleDatePicker"
                       :timePicker24Hour="isHotspot"
                       :min-date="dateRangePreference.endDate"
@@ -452,8 +451,8 @@ export default {
     },
     UpdateObservationDate({ startDate, endDate }) {
 
-      this.fluxForm.observation_start = moment(startDate).format("YYYY/MM/DD");
-      this.fluxForm.observation_end = moment(endDate).format("YYYY/MM/DD");
+      this.fluxForm.observation_start = moment(startDate).format("YYYY-MM-DD");
+      this.fluxForm.observation_end = moment(endDate).format("YYYY-MM-DD");
 
       if ( this.fluxForm.fluxGeoGranularity ==
           GEO_GRANULARITIES.find((x) => x.id == 3).id && this.fluxForm.observation_start == this.fluxForm.observation_end) {
@@ -622,7 +621,6 @@ export default {
       let localPreferenceEnd = preferenceEnd;
       let localObservationEnd = observationEnd;
       if (isSingle) {
-        localPreferenceEnd = preferenceStart;
         localObservationEnd = observationStart;
       }
       this.dateRangePreference = {
