@@ -453,19 +453,21 @@ export default {
 
       this.fluxForm.observation_start = moment(startDate).format("YYYY-MM-DD");
       this.fluxForm.observation_end = moment(endDate).format("YYYY-MM-DD");
-
-      if ( this.fluxForm.fluxGeoGranularity ==
-          GEO_GRANULARITIES.find((x) => x.id == 3).id && this.fluxForm.observation_start == this.fluxForm.observation_end) {
-        this.$set(this.fluxForm, "fluxTimeGranularity", 2);
-      }
       this.fluxForm.time_start = moment(startDate).format("HH:mm");
       this.fluxForm.time_end = moment(endDate).format("HH:mm");
       this.resetFluxPredefinedControl();
     },
     submitFluxForm() {
+
+       if ( this.fluxForm.fluxGeoGranularity ==
+          GEO_GRANULARITIES.find((x) => x.id == 3).id && this.fluxForm.observation_start == this.fluxForm.observation_end) {
+        this.$set(this.fluxForm, "fluxTimeGranularity", 2);
+      }
+
       const fluxForm = { ...this.fluxForm };
       this.setSelectedSource(fluxForm.selectedFluxSource);
       this.fluxFormCached = fluxForm;
+
       this.$emit("submitFluxForm", fluxForm);
       this.setFluxGeoOptions(fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularityTemp(fluxForm.fluxGeoGranularity);
