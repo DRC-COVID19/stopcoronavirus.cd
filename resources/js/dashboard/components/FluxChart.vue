@@ -838,7 +838,7 @@ export default {
         this.globalProgress &&
         this.globalProgress == 100
       ) {
-        types.push({ val: 2, lbl: "Général" });
+        types.push({ val: 2, lbl: "Mobilité Totale (Entrée + sortie)" });
       }
       if (
         (this.fluxZoneGlobalIn.length > 0 ||
