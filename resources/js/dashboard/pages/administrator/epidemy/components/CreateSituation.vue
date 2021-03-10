@@ -14,6 +14,7 @@
           <b-form-datepicker
             :state="errors.last_update ? false : null"
             :disabled="disableDate"
+            :max="new Date()"
             id="datepicker"
             v-model="form.last_update"
             class="mb-2"
