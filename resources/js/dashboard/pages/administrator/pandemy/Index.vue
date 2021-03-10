@@ -188,27 +188,35 @@
         fields: [
           {
             key: "id",
-            label: "ID",
+            label: "ID"
           },
           {
             key: "confirmed",
-            label: "Confirmes",
+            label: "Confirmes"
           },
           {
             key: "sick",
-            lablel: "Actifs",
+            label: "Actifs"
+          },
+          {
+            key: "seriously",
+            label: "Grave"
           },
           {
             key: "healed",
-            lablel: "Gueris",
+            label: "Gueris"
           },
           {
             key: "dead",
-            label: "Deces",
+            label: "Deces"
+          },
+          {
+            key: "last_update",
+            label: "Date"
           },
           {
             key: "health_zone",
-            label: "Zone de sante",
+            label: "Zone de sante"
           },
         ],
         errors: {},
@@ -222,11 +230,11 @@
         isCreating: false,
         isLoading: false,
         listPandemics: [
-          {id: '1', confirmed: 12, sick: 13, healed: 23, dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, sick: 13, healed: 23, dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, sick: 13, healed: 23, dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, sick: 13, healed: 23, dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, sick: 13, healed: 23, dead: 34, health_zone: 'Afia'}
+          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
+          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
+          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
+          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
+          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'}
         ]
       }
     }
