@@ -77,14 +77,14 @@
             <b-col cols="12" md="3" class="mb-2 mb-lg-0">
               <b-form-group>
                 <v-select
-                  :disabled="true"
+                  :disabled="isDesibledFluxTimeGranularity"
                   required
                   v-model="fluxForm.fluxTimeGranularity"
                   :options="fluxTimeGranularities"
                   label="name"
                   placeholder="Granularité"
                   :reduce="(item) => item.id"
-                  @input="resetFluxPredefinedControl"
+                  @input="fluxTimeGranularityChange"
                   class="style-chooser"
                 />
               </b-form-group>
@@ -136,6 +136,7 @@
                       :appendToBody="true"
                       opens="center"
                       :timePicker="isHotspot"
+                      :singleDatePicker="singleDatePicker"
                       :timePicker24Hour="isHotspot"
                       :min-date="dateRangePreference.endDate"
                       :max-date="Observation_max_date"
@@ -143,10 +144,12 @@
                       :calculate-position="dateRangerPosition"
                       class="style-picker"
                     >
-                      <template v-slot:input="picker"
-                        >{{ picker.startDate | date }} -
-                        {{ picker.endDate | date }}</template
-                      >
+                      <template v-slot:input="picker">
+                        <span></span> {{ picker.startDate | date
+                        }}<span v-if="!singleDatePicker">
+                          - {{ picker.endDate | date }}</span
+                        >
+                      </template>
                     </date-range-picker>
                     <span class="range-lbl">Période d'observation</span>
                   </div>
@@ -161,7 +164,13 @@
             </b-col>
           </b-row>
         </b-col>
-        <b-col cols="12" md="3" lg="2" class="pl-3 pr-3" :class="{'row':!isSmOrMd}">
+        <b-col
+          cols="12"
+          md="3"
+          lg="2"
+          class="pl-3 pr-3"
+          :class="{ row: !isSmOrMd }"
+        >
           <b-button
             type="submit"
             :disabled="!isButtonEnabled"
@@ -335,6 +344,23 @@ export default {
     ...mapState({
       fluxHotSpot: (state) => state.app.fluxHotSpot,
     }),
+    isDesibledFluxTimeGranularity() {
+      return !(
+        this.fluxForm.fluxGeoGranularity ==
+        GEO_GRANULARITIES.find((x) => x.id == 3).id
+      );
+    },
+    singleDatePicker() {
+      let value = false;
+      if (
+        this.fluxForm.fluxGeoGranularity ==
+          GEO_GRANULARITIES.find((x) => x.id == 3).id &&
+        this.fluxForm.fluxTimeGranularity == 2
+      ) {
+        value = true;
+      }
+      return value;
+    },
     isButtonEnabled() {
       return (
         this.fluxForm.fluxGeoGranularity &&
@@ -443,10 +469,11 @@ export default {
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
-      if (component.$attrs.id=='picker1') {
-        dropdownList.style.left = `${Number(left) + Number(this.isSmOrMd? 110: 0)}px`;
-      }
-      else{
+      if (component.$attrs.id == "picker1") {
+        dropdownList.style.left = `${
+          Number(left) + Number(this.isSmOrMd ? 110 : 0)
+        }px`;
+      } else {
         dropdownList.style.left = `${left}px`;
       }
     },
@@ -546,7 +573,8 @@ export default {
             HOTSPOT_PREFERENCE_START,
             HOTSPOT_PREFERENCE_END,
             HOTSPOT_OBSERVATION_START,
-            HOTSPOT_OBSERVATION_END
+            HOTSPOT_OBSERVATION_END,
+            true
           );
           this.isHotspot = true;
           const geoOptions = [
@@ -570,27 +598,42 @@ export default {
           break;
       }
     },
+    fluxTimeGranularityChange(value) {
+      if (
+        this.fluxForm.fluxGeoGranularity ==
+        GEO_GRANULARITIES.find((x) => x.id == 3).id
+      ) {
+        this.fluxGeoOptionsChange(this.fluxForm.fluxGeoOptions[0]);
+      }
+    },
     fluxHostpotSwitchPeriode(
       preferenceStart,
       preferenceEnd,
       observationStart,
-      observationEnd
+      observationEnd,
+      isSingle = false
     ) {
+      let localPreferenceEnd = preferenceEnd;
+      let localObservationEnd = observationEnd;
+      if (isSingle) {
+        localPreferenceEnd = preferenceStart;
+        localObservationEnd = observationStart;
+      }
       this.dateRangePreference = {
         startDate: new Date(`${preferenceStart} 06:00`),
-        endDate: new Date(`${preferenceEnd} 23:30`),
+        endDate: new Date(`${localPreferenceEnd} 23:30`),
       };
       this.dateRangeObservation = {
         startDate: new Date(`${observationStart} 06:00`),
-        endDate: new Date(`${observationEnd} 23:30`),
+        endDate: new Date(`${localObservationEnd} 23:30`),
       };
       this.reference_min_date = moment(preferenceStart)
         .subtract(1, "days")
         .format("YYYY-MM-DD");
       this.fluxForm.preference_start = preferenceStart;
-      this.fluxForm.preference_end = preferenceEnd;
+      this.fluxForm.preference_end = localPreferenceEnd;
       this.fluxForm.observation_start = observationStart;
-      this.fluxForm.observation_end = observationEnd;
+      this.fluxForm.observation_end = localObservationEnd;
     },
     fluxGeoOptionsChange(value) {
       if (this.fluxForm.fluxGeoGranularity == 3) {
