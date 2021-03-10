@@ -29,6 +29,7 @@
         <ListSituation
           @onDeleteSituation="deleteSituation"
           :situations="situations"
+          @onSearch="search"
           :isLoading="isLoading"
           @onEditSituation="editSituation"
         />
@@ -98,6 +99,24 @@ export default {
     },
   },
   methods: {
+    search (filter) {
+      this.isLoading = true;
+      if (filter !== '') {
+        axios
+          .get('api/pandemic-stats/filter?date='+filter)
+          .then(({ data }) => {
+            this.situations = data;
+            this.isLoading = false;
+          })
+          .catch(({ response }) => {
+            this.$gtag.exception(response);
+            this.isLoading = false;
+          });
+      } else {
+        this.getSituationList();
+        this.isLoading = false;
+      }
+    },
     countDownChangedS (showSuccess) {
       this.showSuccess = showSuccess;
     },
@@ -136,6 +155,7 @@ export default {
         .then(() => {
           this.isSituationUpdated = true;
           this.showSuccess = this.timeOut;
+          this.isSituationUpdated = true;
           this.isLoading = false;
           this.isUpdating = false;
           this.getSituationList();

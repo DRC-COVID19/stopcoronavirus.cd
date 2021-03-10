@@ -136,9 +136,15 @@
         </b-col>
       </b-row>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button type="submit" variant="primary" class="btn-dash-sucess">{{
-          btnTitle
-        }}</b-button>
+        <b-button type="submit" variant="primary" class="btn-dash-sucess">
+          <span v-if="isLoading">
+            <b-spinner class="align-middle"></b-spinner>
+              <span>en cours ...</span>
+          </span>
+          <div v-else>
+            {{btnTitle }}
+          </div>
+        </b-button>
         <b-button
           type="reset"
           v-if="isUpdating"
@@ -153,6 +159,7 @@
 
 <script>
 export default {
+
   props: {
     isSituationAdded: {
       type: Boolean,
@@ -176,6 +183,7 @@ export default {
       default: () => ({}),
     },
   },
+
   data() {
     return {
       title: "Nouvelle Situation",
@@ -184,6 +192,7 @@ export default {
       validateMailMessage: "",
       disableDate: false,
       isUpdating: false,
+      isLoading: false,
       warningMessage: "",
       form: {
         last_update: "",
@@ -200,6 +209,7 @@ export default {
       roles: [],
     };
   },
+
   watch: {
     isSituationAdded() {
       this.resetForm();
@@ -218,12 +228,17 @@ export default {
     isSituationAdded() {
       this.resetForm();
     },
+    isSituationUpdated() {
+      this.resetForm();
+    },
     formToPopulate() {
       this.populateForm();
     },
   },
+
   methods: {
     onSubmit() {
+      this.isLoading = true;
       if (this.btnTitle === "Envoyer") {
         if (this.form.last_update.trim() !== "") {
           this.$emit("onCreateSituation", this.form);
@@ -250,6 +265,7 @@ export default {
     },
     resetForm() {
       this.isUpdating = false;
+      this.isLoading = false;
       this.disableDate = false;
       if (this.isSituationAdded | this.isSituationUpdated) {
         this.form = {};
@@ -273,6 +289,7 @@ export default {
       this.btnTitle = "Valider";
     },
   },
+
   computed: {
     warningMissMatch() {
       return this.form.password === this.form.confirmPassword
@@ -280,6 +297,7 @@ export default {
         : "Les mot de passes ne correspondent pas";
     },
   },
+  
 };
 </script>
 
