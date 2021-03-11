@@ -120,7 +120,7 @@ class PandemicController extends Controller
             if (! $check) {
                 return response()->json(['message' => 'Error, try later'], 500);
             }
-            return response()->json(['message' => 'Updated successfully'], $pandemy)->setStatusCode(202);
+            return response()->json($pandemy, 202);
         } catch (\Throwable $th) {
             DB::rollback();
             if (env('APP_DEBUG') == true) {
