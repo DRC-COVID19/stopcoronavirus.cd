@@ -6,6 +6,7 @@ use App\Pandemic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\Pandemic as PandemicRessources;
 
 class PandemicController extends Controller
 {
@@ -16,7 +17,15 @@ class PandemicController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $pandemics = Pandemic::orderBy('last_update', 'DESC')->paginate(15);
+            return PandemicRessources::collection($pandemics);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     public function getHealthZoneTopConfirmed(Request $request)
