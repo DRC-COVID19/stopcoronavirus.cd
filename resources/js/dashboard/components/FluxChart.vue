@@ -47,7 +47,7 @@
         </div>
       </b-row>
 
-      <b-row no-gutters v-show="fluxTimeGranularity == 2" class="mb-4">
+      <b-row no-gutters v-show="fluxGeoGranularity == 3" class="mb-4">
         <b-col cols="12" md="12" class="pl-0 col-mobilite-generale">
           <b-skeleton-wrapper :loading="isLoading">
             <template #loading>
@@ -200,7 +200,7 @@
 
       <b-row
         no-gutters
-        v-show="fluxTimeGranularity == 1 && this.typeMobilite != 3"
+        v-show="fluxGeoGranularity != 3 && this.typeMobilite != 3"
       >
         <b-col
           cols="12"
@@ -659,22 +659,9 @@
 
       <b-row
         class="no-gutters"
-        v-show="fluxTimeGranularity == 1 && this.typeMobilite == 3"
+        v-show="fluxGeoGranularity !=3  && this.typeMobilite == 3"
       >
-        <!--
-        <b-row>
-          <b-col cols="12" md="6">
-            <h5 @click="seeProvinceStat" class="return-global">
-              <span class="fa fa-chevron-left"></span>
-              {{fluxGeoOptions[0]}}
-            </h5>
-          </b-col>
-          <b-col cols="12" md="6" class="text-right">
-            <h5 class="m-0" style="font-size: 19px;">{{moment(last_update).format('Y-MM-DD')}}</h5>
-            <span class="small text-muted">Dernière mise à jour</span>
-          </b-col>
-        </b-row>
-        -->
+
 
         <b-col cols="12" md="6" class="pr-2">
           <GlobalProvice
@@ -829,6 +816,7 @@ export default {
       fluxGeoOptions: (state) => state.flux.fluxGeoOptions,
       typePresence: (state) => state.flux.typePresence,
       fluxTimeGranularity: (state) => state.flux.fluxTimeGranularity,
+      // fluxGeoGranularity: state=>state.flux.fluxGeoGranularity,
       observationDate: (state) => state.flux.observationDate,
     }),
     typesMobilite() {
