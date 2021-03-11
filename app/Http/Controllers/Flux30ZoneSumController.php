@@ -237,8 +237,8 @@ class Flux30ZoneSumController extends Controller
       if ($data['fluxGeoOptions'] != 'Tout') {
         $fluxObservations->where('Observation_Zone', $data['fluxGeoOptions']);
       }
-      $fluxObservations = $fluxObservations->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
-        ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
+      $fluxObservations = $fluxObservations->where('Date', $data['observation_start'])
+        // ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
         ->where('Observation_Zone', '!=', 'Inconnue')
         ->groupBy('Date', 'Hour', 'day',)
         ->orderBy('volume')
@@ -249,7 +249,7 @@ class Flux30ZoneSumController extends Controller
         $fluxReferences->where('Observation_Zone', $data['fluxGeoOptions']);
       }
       $fluxReferences = $fluxReferences->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
-        ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
+        // ->whereBetween('Hour', [$data['time_start'], $data['time_end']])
         ->where('Observation_Zone', '!=', 'Inconnue')
         ->groupBy('Date', 'Hour', 'day')
         ->orderBy('volume')

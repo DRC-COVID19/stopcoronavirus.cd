@@ -1090,7 +1090,7 @@ export default {
         end: values.observation_end,
       });
 
-      if (values.fluxTimeGranularity == 2) {
+      if (values.selectedFluxSource==1 && values.fluxGeoGranularity == 3) {
         this.submitFlux30Form(values);
         return;
       }

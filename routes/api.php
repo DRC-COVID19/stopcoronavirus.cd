@@ -75,6 +75,7 @@ Route::group([
 
   Route::group(['prefix' => 'change-log'], function () {
     Route::post('read', 'ChangeLogController@setChangeLogRead');
+    Route::get('/filter', 'ChangeLogController@filter');
   });
   Route::apiResource('change-log', "ChangeLogController");
 

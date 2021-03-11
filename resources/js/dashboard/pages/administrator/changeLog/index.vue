@@ -79,6 +79,20 @@
       <b-col cols="12" md="8">
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
         <Header title="Change log" iconClass="fa fa-history" />
+        <b-row class="my-3" align-h="start">
+          <b-col cols="12" md="6">
+            <b-form-datepicker
+              label-today-button="Aujourd'hui"
+              label-reset-button="Effacer"
+              reset-button
+              today-button
+              v-model="filter"
+              placeholder="Choisir la date"
+              class="mb-2"
+            >
+            </b-form-datepicker>
+          </b-col>
+        </b-row>
         <b-skeleton-table
           v-if="isLoading"
           :rows="15"
@@ -147,6 +161,7 @@ export default {
   },
   data() {
     return {
+      filter: null,
       fields: [
         {
           key: "number",
@@ -175,9 +190,17 @@ export default {
       itemToRemove: {},
     };
   },
+
   mounted() {
     this.getListChangedLogs();
   },
+
+  watch: {
+    filter () {
+      this.search()
+    }
+  },
+
   computed: {
     ...mapState({
       listChangeLogs: (state) => state.changeLog.listChangeLogs,
@@ -202,9 +225,10 @@ export default {
           };
     },
   },
+  
   methods: {
     ...mapActions(["createChangeLog"]),
-    ...mapActions(["getListChangedLogs", "updateChangeLog", "removeChangeLog"]),
+    ...mapActions(["getListChangedLogs", "updateChangeLog", "removeChangeLog", "searchChangeLog"]),
     submit_form() {
       if (this.isEditingMode) {
         this.submitUpdatingChangeLog();
@@ -276,6 +300,12 @@ export default {
       this.isEditingMode = false;
       this.form = {};
     },
+    search () {
+      this.searchChangeLog(this.filter)
+        .catch((error) => {
+          console.log(error);
+        })
+    },
     onValidate() {
       this.$bvModal.hide("confirmation-box");
       this.removeChangeLog(this.itemToRemove)
@@ -306,8 +336,6 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.btn-action-success {
-}
 .btn-action {
   cursor: pointer;
 }
