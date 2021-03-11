@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
 use App\Http\Resources\Pandemic as PandemicRessources;
 
 class PandemicController extends Controller
@@ -105,12 +106,28 @@ class PandemicController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Pandemic  $pandemic
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pandemic $pandemic)
+    public function update(Request $request, $pandemic_id)
     {
-        //
+        $data = $this->validate_form($request->all());
+        try {
+            $pandemy = Pandemic::find($pandemic_id);
+            if (! $pandemy) {
+                return response()->json(['message'=> "id de la situation invalide"], 404);
+            }
+            $check = $pandemy->update(Arr::except($data, 'last_update', 'health_zone_id'));
+            if (! $check) {
+                return response()->json(['message' => 'Error, try later'], 500);
+            }
+            return response()->json(['message' => 'Updated successfully'], $pandemy)->setStatusCode(202);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     /**
