@@ -83,6 +83,9 @@ class ChangeLogController extends Controller
 
         foreach ($users as $user) {
           try {
+            if (!$user->email) {
+              return;
+            }
             Mail::to($user->email)->queue(new changeLogEmail($user, $change_log));
           } catch (\Throwable $th) {
             Log::error($th->getMessage());
@@ -156,4 +159,19 @@ class ChangeLogController extends Controller
       'publish_date' => 'date|required'
     ])->validate();
   }
+
+  public function filter (Request $request)
+  {
+    try {
+      $date = $request->get('date');
+      $change = ChangeLog::where('publish_date', $date)->paginate(15);
+      return ChangeLogResource::collection($change);
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
+  }
+
 }

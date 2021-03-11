@@ -4,6 +4,7 @@
     <b-row>
       <router-view ></router-view>
     </b-row>
+    <notifications group="alert" />
   </b-container>
 </template>
 

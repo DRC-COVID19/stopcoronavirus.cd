@@ -3,20 +3,6 @@
     <b-row class="flex-md-row-reverse" no-gutterse>
       <b-col cols="12" md="4" class="mt-3">
         <b-alert
-          variant="success"
-          :show="showSuccess"
-          dismissible
-          fade
-          @dismiss-count-down="countDownChangedS"
-          class="mx-3 mt-3 alert"
-        >
-          {{
-            isSituationAdded
-              ? "Situation ajoutee avec success"
-              : "Situation modifiee avec succes"
-          }}
-        </b-alert>
-        <b-alert
           :show="showWarning"
           dismissible
           fade
@@ -38,20 +24,12 @@
       </b-col>
       <b-col cols="12" md="8">
         <Header :title="title" :iconClass="iconClass" />
-        <b-alert
-          variant="success"
-          :show="isSituationDeleted"
-          dismissible
-          fade
-          @dismiss-count-down="timeOut"
-          class="mx-3"
-        >
-          Situation supprimee avec succes
-        </b-alert>
+
         <div class="hide-waiting" v-if="isUpdating"></div>
         <ListSituation
           @onDeleteSituation="deleteSituation"
           :situations="situations"
+          @onSearch="search"
           :isLoading="isLoading"
           @onEditSituation="editSituation"
         />
@@ -121,6 +99,24 @@ export default {
     },
   },
   methods: {
+    search (filter) {
+      this.isLoading = true;
+      if (filter !== '') {
+        axios
+          .get('api/pandemic-stats/filter?date='+filter)
+          .then(({ data }) => {
+            this.situations = data;
+            this.isLoading = false;
+          })
+          .catch(({ response }) => {
+            this.$gtag.exception(response);
+            this.isLoading = false;
+          });
+      } else {
+        this.getSituationList();
+        this.isLoading = false;
+      }
+    },
     countDownChangedS (showSuccess) {
       this.showSuccess = showSuccess;
     },
@@ -159,6 +155,7 @@ export default {
         .then(() => {
           this.isSituationUpdated = true;
           this.showSuccess = this.timeOut;
+          this.isSituationUpdated = true;
           this.isLoading = false;
           this.isUpdating = false;
           this.getSituationList();

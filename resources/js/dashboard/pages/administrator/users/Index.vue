@@ -2,20 +2,6 @@
   <b-container fluid>
     <b-row class="flex-md-row-reverse" no-gutters>
       <b-col cols="12" md="4" class="mt-3">
-        <b-alert
-          variant="success"
-          :show="showSuccess"
-          dismissible
-          fade
-          @dismiss-count-down="timeOut"
-          class="mx-3 alert"
-        >
-          {{
-            userAdded
-              ? "Utilisateur cree avec success"
-              : "Utilisateur modifie avec succes"
-          }}
-        </b-alert>
         <Create
           @onUpdate="updateUser"
           @onCreate="createUser"
@@ -29,19 +15,10 @@
       </b-col>
       <b-col cols="12" md="8">
         <Header :title="title" :iconClass="iconClass" />
-        <b-alert
-          variant="success"
-          :show="isUserDeleted"
-          dismissible
-          fade
-          @dismiss-count-down="timeOut"
-          class="mx-3"
-        >
-          Utilisateur supprime avec success
-        </b-alert>
         <div class="hide-waiting" v-if="updating"></div>
         <ListUser
           :users="users"
+          @onSearch="search"
           @onDeleteUser="deleteUser"
           @onUpdateUser="populateForm"
           :isLoading="isLoading"
@@ -111,17 +88,45 @@ export default {
     },
   },
   methods: {
+    search (filter) {
+      this.isLoading = true;
+      if (filter !== '') {
+        axios
+          .get('api/admin_users/filter?key_words='+filter)
+          .then(({ data }) => {
+            this.users = data;
+            this.isLoading = false;
+          })
+          .catch(({ response }) => {
+            this.$gtag.exception(response);
+            this.isLoading = false;
+          });
+      } else {
+        this.getUserList();
+        this.isLoading = false;
+      }
+    },
     deleteUser(currentUserId) {
       axios
-        .delete("/api/admin_users/" + currentUserId, {
-          params: {},
-        })
+        .delete("/api/admin_users/" + currentUserId)
         .then(() => {
           this.getUserList();
           this.isUserDeleted = true;
+          this.$notify({
+            group: "alert",
+            title: "Supprimer utilisateur",
+            text: "Supprimer avec succès",
+            type: "success",
+          });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
+          this.$notify({
+            group: "alert",
+            title: "Supprimer utilisateur",
+            text: "Une erreur est surveni",
+            type: "error",
+          });
         });
     },
     populateForm(currentUser) {
@@ -134,24 +139,44 @@ export default {
     updateUser(currentUser) {
       this.isLoading = true;
       this.userUpdated = false;
+      const form = {
+        username: currentUser.username,
+        name: currentUser.name,
+        email: currentUser.email,
+        roles_id: currentUser.roles,
+      };
+
+      if (currentUser && currentUser.password) {
+        form.password = currentUser.password;
+        form.password_confirmation = currentUser.confirmPassword;
+      }
+
       axios
-        .put("/api/admin_users/" + currentUser.id, {
-          username: currentUser.username,
-          name: currentUser.name,
-          email: currentUser.email,
-          roles_id: currentUser.roles,
-        })
+        .put("/api/admin_users/" + currentUser.id, form)
         .then(() => {
           this.userUpdated = true;
           this.showSuccess = true;
           this.isLoading = false;
           this.updating = false;
           this.getUserList(1);
+          this.$notify({
+            group: "alert",
+            title: "Modifer utilisateur",
+            text: "Modifier avec succès",
+            type: "success",
+          });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
+          this.$notify({
+            group: "alert",
+            title: "Modifer utilisateur",
+            text: "Une erreur est surveni",
+            type: "error",
+          });
         });
     },
+
     createUser(form) {
       this.userAdded = false;
       this.isLoading = true;
@@ -170,13 +195,27 @@ export default {
           this.showSuccess = true;
           this.isLoading = false;
           this.getUserList(1);
+          this.$notify({
+            group: "alert",
+            title: "Nouvel utilisateur",
+            text: "Ajouter avec succès",
+            type: "success",
+          });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
           this.isLoading = false;
           this.errors = response.data.errors;
+          this.$notify({
+            group: "alert",
+            title: "Nouvel utilisateur",
+            text: "Une erreur est surveni",
+            type: "error",
+          });
         });
+
     },
+
     getUserList(page = 1) {
       this.isLoading = true;
       axios
@@ -191,6 +230,7 @@ export default {
           this.$gtag.exception(response);
         });
     },
+
     getUserRoles() {
       axios
         .get("/api/admin_roles")
@@ -201,10 +241,13 @@ export default {
           this.$gtag.exception(response);
         });
     },
+
     switchPage(page) {
       this.getUserList(page);
     },
+
   },
+
 };
 </script>
 

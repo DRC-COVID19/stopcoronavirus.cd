@@ -28,6 +28,12 @@
               :to="{ name: 'administrator.changeLog' }"
               >Change log</b-link
             >
+            <b-link
+              class="mx-2"
+              :class="{ active: $route.name === 'administrator.pandemics' }"
+              :to="{ name: 'administrator.pandemics' }"
+              >Pandemie</b-link
+            >
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
             <b-nav-item>

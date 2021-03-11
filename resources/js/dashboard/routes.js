@@ -16,13 +16,10 @@ import Administrator from './pages/Administrator';
 import AdminUserIndex from './pages/administrator/users/Index';
 import PageNotFound from './pages/NotFound';
 import ChangeLogIndex from './pages/administrator/changeLog/index';
-import ShowUser from './pages/administrator/users/ShowUser';
 import Epidemie from './pages/administrator/epidemy/Index';
+import Pandemics from './pages/administrator/pandemy/Index';
+import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL, ADMINISTRATOR, MANANGER_EPIDEMIC } from './config/env';
 
-const adminDashboard = "admin-dashboard";
-const agentHospital = "agent-hospital";
-const adminHospital = "admin-hospital";
-const administrator = "Administrator";
 
 export default [
   {
@@ -57,7 +54,7 @@ export default [
     name: "home",
     meta: {
       requiresAuth: true,
-      role: [adminDashboard]
+      role: [ADMIN_DASHBOARD]
     },
   },
   {
@@ -66,7 +63,7 @@ export default [
     component: HospitalsHome,
     meta: {
       requiresAuth: true,
-      role: [agentHospital]
+      role: [AGENT_HOSPITAL]
     },
   },
   {
@@ -75,7 +72,7 @@ export default [
     component: HospitalAdmin,
     meta: {
       requiresAuth: true,
-      role: [adminHospital]
+      role: [ADMIN_HOSPITAL]
     },
   },
   {
@@ -84,7 +81,7 @@ export default [
     component: HospitalAdminData,
     meta: {
       requiresAuth: true,
-      role: [adminHospital]
+      role: [ADMIN_HOSPITAL]
     },
   },
   {
@@ -93,7 +90,7 @@ export default [
     component: HospitalData,
     meta: {
       requiresAuth: true,
-      role: [agentHospital]
+      role: [AGENT_HOSPITAL]
     },
   },
   {
@@ -102,7 +99,7 @@ export default [
     component: HospitalsCreate,
     meta: {
       requiresAuth: true,
-      role: [agentHospital]
+      role: [AGENT_HOSPITAL]
     },
   },
   {
@@ -111,7 +108,7 @@ export default [
     component: HospitalsDetail,
     meta: {
       requiresAuth: true,
-      role: [agentHospital, adminHospital]
+      role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
     },
   },
   {
@@ -120,7 +117,7 @@ export default [
     component: HospitalsCreate,
     meta: {
       requiresAuth: true,
-      role: [agentHospital]
+      role: [AGENT_HOSPITAL]
     },
   },
   {
@@ -137,28 +134,53 @@ export default [
     name: 'administrator',
     meta: {
       requiresAuth: true,
-      role: [administrator]
+      role: [ADMINISTRATOR]
     },
     children: [
       {
         path: '/',
         name: 'administrator.home',
-        component: AdminUserIndex
+        component: AdminUserIndex,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR]
+        }
+      },
+      {
+        path: 'pandemics',
+        name: 'administrator.pandemics',
+        component: Pandemics,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR]
+        }
       },
       {
         path: 'users',
         name: 'administrator.users',
-        component: AdminUserIndex
+        component: AdminUserIndex,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR]
+        }
       },
       {
         path: 'change-logs',
         component: ChangeLogIndex,
-        name: 'administrator.changeLog'
+        name: 'administrator.changeLog',
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR]
+        }
       },
       {
         path: 'epidemie/',
         name: 'administrator.epidemie',
         component: Epidemie,
+        meta: {
+          requiresAuth: true,
+          role: [MANANGER_EPIDEMIC]
+        }
       }
     ]
   },

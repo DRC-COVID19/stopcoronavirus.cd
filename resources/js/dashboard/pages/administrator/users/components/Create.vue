@@ -67,21 +67,16 @@
       />
       <label class="text-dash-color" for="text-password">Mot de passe *</label>
       <b-form-input
-        :disabled="disablePassword"
         class="input-dash"
         type="password"
         id="text-password"
         aria-describedby="password-help-block"
         v-model="form.password"
       ></b-form-input>
-      <b-form-text id="password-help-block">
-        {{ passwordIndicator }}
-      </b-form-text>
       <label class="text-dash-color" for="text-password-confirm"
         >Confirmation de mot de passe *</label
       >
       <b-form-input
-        :disabled="disablePassword"
         class="input-dash"
         type="password"
         id="text-password-confirm"
@@ -90,9 +85,15 @@
       ></b-form-input>
       <b-form-text id="password-help-block">{{ warningMissMatch }}</b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button type="submit" variant="primary" class="btn-dash-sucess">{{
-          btnTitle
-        }}</b-button>
+          <b-button type="submit" variant="primary" class="btn-dash-sucess">
+            <span v-if="isLoading"
+            ><b-spinner class="align-middle"></b-spinner>
+              <span>en cours ...</span>
+            </span>
+            <div v-else>
+              {{btnTitle }}
+            </div>
+          </b-button>
         <b-button
           type="reset"
           v-if="updating"
@@ -142,6 +143,7 @@ export default {
       btnTitle: "Enreigistrer",
       iconClass: "fas fa-plus-square",
       updating: false,
+      isLoading: false,
       validateMailMessage: "",
       disablePassword: false,
       form: {
@@ -158,8 +160,6 @@ export default {
     };
   },
   mounted() {
-    // Fetch the user roles
-    // this.getUserRoles(),
     this.resetForm();
   },
   watch: {
@@ -175,6 +175,7 @@ export default {
   },
   methods: {
     onSubmit() {
+      this.isLoading = true;
       if (this.btnTitle === "Enreigistrer") {
         if (
           this.form.password === this.form.confirmPassword &&
@@ -188,6 +189,7 @@ export default {
         this.$emit("onUpdate", this.form);
       }
     },
+
     onReset() {
       this.toToCanceled = true;
       this.form = {};
@@ -195,14 +197,17 @@ export default {
       this.btnTitle = "Enreigistrer";
       this.$emit("onCancelUpdate", {});
     },
+
     validateMail() {
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!re.test(String(this.form.email).toLowerCase())) {
         this.validateMailMessage = "Adresse email incorrecte";
       }
     },
+
     resetForm() {
       this.updating = false;
+      this.isLoading = false;
       this.disablePassword = false;
       if (this.userAdded | this.userUpdated) {
         this.form = {};
@@ -210,30 +215,29 @@ export default {
         this.title = "Creation d'un utilisateur";
       }
     },
+
     populateForm() {
       this.updating = true;
       this.disablePassword = true;
       this.form.id = this.formToPopulate.id;
       this.form.username = this.formToPopulate.usernmae;
       this.form.email = this.formToPopulate.email;
-      this.form.roles = this.formToPopulate.roles;
+      this.form.roles = this.formToPopulate.roles.map(x=>x.id);
       this.form.name = this.formToPopulate.name;
       this.title = "Modification de l'utilisateur";
       this.btnTitle = "Modifier";
     },
+
   },
+
   computed: {
-    passwordIndicator() {
-      return this.disablePassword === false
-        ? "Votre mot de passe doit contenir 8 carateres au minimum"
-        : "Votre mot de passe reste le meme";
-    },
     warningMissMatch() {
       return this.form.password === this.form.confirmPassword
         ? ""
         : "Les mot de passes ne correspondent pas";
     },
   },
+  
 };
 </script>
 
