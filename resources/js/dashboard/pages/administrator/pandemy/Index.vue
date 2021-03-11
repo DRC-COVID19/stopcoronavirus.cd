@@ -23,6 +23,7 @@
                   />
                   <label class="mt-2 text-dash-color" for="check-group-1">Zone de sante *</label>
                   <v-select
+                    required
                     class="input-dash"
                     v-model="form.zone"
                     :options="zones"
