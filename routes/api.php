@@ -219,4 +219,18 @@ Route::group([
   });
 });
 
+// Pandemy group
+
+Route::group(['prefix' => 'pandemy', function () {
+  Route::get('/', 'PandemyController@index');
+  Route::get('/filter', 'PandemyController@filter');
+  Route::post('/', 'PandemyController@create');
+  Route::get('/{pandemy_id}', 'PandemyController@show');
+  Route::put('/{pandemy_id}', 'PandemyController@update');
+  Route::delete('/{pandemy_id}', 'PandemyController@destroy');
+  Route::get('/filter/health_zone', 'PandemyControler@filter_by_health_zone');
+}]);
+
+//
+
 Route::post('self-test', 'SelfTestController@apiCovidTest');
