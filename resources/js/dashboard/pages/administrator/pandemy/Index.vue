@@ -6,29 +6,31 @@
           <h3>Ajouter</h3>
           <b-form @submit.prevent="submit_form">
             <b-row>
-              <b-form-group
-                label="Date"
-                label-class="text-dash-color"
-                :invalid-feedback="errors.publish_date ? errors.publish_date[0] : null"
-                :state="errors.publish_date ? false : null"
-                :disabled="isCreating"
-              >
-                <b-form-datepicker
-                  v-model="form.publish_date"
+              <b-col>
+                <b-form-group
+                  label="Date"
+                  label-class="text-dash-color"
+                  :invalid-feedback="errors.publish_date ? errors.publish_date[0] : null"
                   :state="errors.publish_date ? false : null"
-                  class="input-dash"
-                  :max="new Date()"
-                  required
-                />
-                <label class="mt-2 text-dash-color" for="check-group-1">Zone de sante *</label>
-                <v-select
-                  class="input-dash"
-                  v-model="form.zone"
-                  :options="zones"
-                  label="name"
-                  :reduce="(item) => item.id"
-                />
-              </b-form-group>
+                  :disabled="isCreating"
+                >
+                  <b-form-datepicker
+                    v-model="form.publish_date"
+                    :state="errors.publish_date ? false : null"
+                    class="input-dash"
+                    :max="new Date()"
+                    required
+                  />
+                  <label class="mt-2 text-dash-color" for="check-group-1">Zone de sante *</label>
+                  <v-select
+                    class="input-dash"
+                    v-model="form.zone"
+                    :options="zones"
+                    label="name"
+                    :reduce="(item) => item.id"
+                  />
+                </b-form-group>
+              </b-col>
             </b-row>
             <b-row class="d-flex justify-content-start">
               <b-col md="4">
