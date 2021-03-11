@@ -32,7 +32,7 @@
                 </b-form-group>
               </b-col>
             </b-row>
-            <b-row class="d-flex justify-content-start">
+            <b-row>
               <b-col md="4">
                 <b-form-group
                   label-class="text-dash-color"
