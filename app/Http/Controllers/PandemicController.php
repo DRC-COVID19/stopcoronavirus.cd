@@ -10,6 +10,18 @@ use App\Http\Resources\Pandemic as PandemicRessources;
 
 class PandemicController extends Controller
 {
+    public function validate_form($data)
+    {
+        return Validator::make($data, [
+            'confirmed' => 'nullable|numeric',
+            'sick' => 'nullable|numeric',
+            'dead' => 'nullable|numeric',
+            'seriously' => 'nullable|numeric',
+            'healed' => 'nullable|numeric',
+            'health_zone_id' => 'required|numeric',
+            'last_update' => 'date'
+        ]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -26,6 +38,10 @@ class PandemicController extends Controller
             }
             return response($th->getMessage())->setStatusCode(500);
         }
+    }
+
+    public function create () {
+
     }
 
     public function getHealthZoneTopConfirmed(Request $request)
