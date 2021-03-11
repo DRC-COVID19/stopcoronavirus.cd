@@ -224,7 +224,7 @@ Route::group([
 Route::group(['prefix' => 'pandemy'], function () {
   Route::get('/', 'PandemicController@index');
   Route::get('/filter', 'PandemicController@filter');
-  Route::post('/', 'PandemicController@create');
+  Route::post('/', 'PandemicController@store');
   Route::get('/{pandemy_id}', 'PandemicController@show');
   Route::put('/{pandemy_id}', 'PandemicController@update');
   Route::delete('/{pandemy_id}', 'PandemicController@destroy');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Pandemic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\Pandemic as PandemicRessources;
 
@@ -20,7 +21,7 @@ class PandemicController extends Controller
             'healed' => 'nullable|numeric',
             'health_zone_id' => 'required|numeric',
             'last_update' => 'date'
-        ]);
+        ])->validate();
     }
     /**
      * Display a listing of the resource.
@@ -38,10 +39,6 @@ class PandemicController extends Controller
             }
             return response($th->getMessage())->setStatusCode(500);
         }
-    }
-
-    public function create () {
-
     }
 
     public function getHealthZoneTopConfirmed(Request $request)
@@ -76,7 +73,19 @@ class PandemicController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $this->validate_form($request->all());
+        try {
+            DB::beginTransaction();
+            $pandemy = Pandemic::create($data);
+            DB::commit();
+            return response()->json(['message' => 'Situation ajoutee avec success'], 201);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
 
