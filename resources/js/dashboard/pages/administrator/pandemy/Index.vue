@@ -115,27 +115,29 @@
               </b-col>
             </b-row>
             <b-row>
-              <b-button
-                type="submit"
-                class="btn-dash-sucess"
-                :disabled="isCreating"
-              >
-                <span v-if="isCreating"
-                  ><b-spinner class="align-middle"></b-spinner>
-                  <span>en cours ...</span>
-                </span>
-                <div v-else>
-                  <span v-if="isUpdating">Modifier</span>
-                  <span v-else>Enregistrer</span>
-                </div>
-              </b-button>
-              <b-button
-                :disabled="isCreating"
-                v-if="isUpdating"
-                class="btn-dash-danger"
-                @click="cancelEditMode"
-                >Annuler</b-button
-              >
+              <b-col>
+                <b-button
+                  type="submit"
+                  class="btn-dash-sucess"
+                  :disabled="isCreating"
+                >
+                  <span v-if="isCreating"
+                    ><b-spinner class="align-middle"></b-spinner>
+                    <span>en cours ...</span>
+                  </span>
+                  <div v-else>
+                    <span v-if="isUpdating">Modifier</span>
+                    <span v-else>Enregistrer</span>
+                  </div>
+                </b-button>
+                <b-button
+                  :disabled="isCreating"
+                  v-if="isUpdating"
+                  class="btn-dash-danger"
+                  @click="cancelEditMode"
+                  >Annuler</b-button
+                >
+              </b-col>
             </b-row>
           </b-form>
         </b-card>
