@@ -131,6 +131,29 @@ class PandemicController extends Controller
     }
 
     /**
+     * Sorts data with by specified last_update or health_zone_id or a combination of them both.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+    public function filter(Request $request)
+    {
+        try {
+            if ($request->get('health_zone_id')->any()) {
+                // $pandemy = Pandemic::where('last_update', '=', $request->get('date'))->andWhere()
+            }
+            $pandemy = Pandemic::where('last_update', $request->get('date'))->first();
+            return response()->json($pandemy, 202);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Pandemic  $pandemic
