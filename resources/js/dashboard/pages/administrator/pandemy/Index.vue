@@ -23,8 +23,8 @@
                   />
                   <label class="mt-2 text-dash-color" for="check-group-1">Zone de sante *</label>
                   <v-select
-                    class="input-dash"
                     v-model="form.zone"
+                    class="input-select"
                     :options="zones"
                     label="name"
                     :reduce="(item) => item.id"
@@ -183,7 +183,27 @@
           :items="listPandemics"
           :fields="fields"
         >
+          <template #cell(actions)="data">
+            <i
+              class="mx-2 fas fa-edit btn-action text-warning"
+              @click="toEdit(data.item)"
+            ></i>
+            <i
+              class="mx-2 fas fa-trash btn-action text-danger"
+              @click="remove(data.item)"
+            ></i>
+          </template>
         </b-table>
+        <b-row>
+          <b-col class="d-flex justify-content-end">
+            <b-pagination
+              :total-rows="totalRows"
+              :per-page="perPage"
+              :current-page="currenPage"
+              :disabled="isCreating"
+            ></b-pagination>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
   </b-container>
@@ -232,6 +252,9 @@
           },
           "actions"
         ],
+        totalRows: 10,
+        currenPage: 1,
+        perPage: 15,
         errors: {},
         filter: null,
         zones: [

@@ -181,7 +181,7 @@ export default {
         },
         {
           key: "action",
-          label: "Action",
+          label: "Actions",
         },
       ],
       form: {},
