@@ -8,8 +8,12 @@ class Pandemic extends Model
 {
     protected $fillable = [
         "last_update",
+        'sick',
         'confirmed',
         'health_zone_id',
+        'seriously',
+        'dead',
+        'healed'
     ];
 
     public function province()

@@ -183,7 +183,6 @@
           :items="listPandemics"
           :fields="fields"
         >
-
         </b-table>
       </b-col>
     </b-row>
@@ -231,6 +230,7 @@
             key: "health_zone",
             label: "Zone de sante"
           },
+          "actions"
         ],
         errors: {},
         filter: null,
