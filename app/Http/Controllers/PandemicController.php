@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Pandemic;
+use App\HealthZone;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -34,6 +35,19 @@ class PandemicController extends Controller
         try {
             $pandemics = Pandemic::orderBy('last_update', 'DESC')->paginate(15);
             return PandemicRessources::collection($pandemics);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function health_zone(Request $request)
+    {
+        try {
+            $health_zone = HealthZone::select('id', 'name')->where('id', $request->get('health_zone_id'))->paginate(15);
+            return response()->json($health_zone, 202);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

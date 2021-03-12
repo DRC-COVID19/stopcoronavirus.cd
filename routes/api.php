@@ -221,9 +221,10 @@ Route::group([
 
 // Pandemy group
 
-Route::group(['prefix' => 'pandemy'], function () {
+Route::group(['prefix' => 'pandemy', 'middleware' => 'auth:dashboard'], function () {
   Route::get('/', 'PandemicController@index');
   Route::get('/filter', 'PandemicController@filter');
+  Route::get('/health_zones', 'PandemicController@health_zone');
   Route::post('/', 'PandemicController@store');
   Route::get('/{pandemy_id}', 'PandemicController@show');
   Route::put('/{pandemy_id}', 'PandemicController@update');
