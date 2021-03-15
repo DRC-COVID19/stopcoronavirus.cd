@@ -22,7 +22,7 @@ class PandemicController extends Controller
             'seriously' => 'nullable|numeric',
             'healed' => 'nullable|numeric',
             'health_zone_id' => 'required|numeric',
-            'last_update' => 'date'
+            'last_update' => 'date|unique:health_zone_id'
         ])->validate();
     }
     /**

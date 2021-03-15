@@ -245,8 +245,6 @@ class PandemicStatController extends Controller
     ])->validate();
   }
 
-
-
   public function filter(Request $request) {
     try {
       $date=$request->get('date');
