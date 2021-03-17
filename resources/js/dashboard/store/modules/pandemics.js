@@ -59,8 +59,10 @@ export default {
       commit("isLoading", true);
       commit("isUpdating", true);
       return new Promise((resolve, reject) => {
-        axios.put('/api/dashboard/'+payload)
-          .then(({ data }) => {
+        axios.put('/api/dashboard/' + payload)
+          .then(({
+            data
+          }) => {
             dispatch("getListPandemics");
             resolve(true);
           })
