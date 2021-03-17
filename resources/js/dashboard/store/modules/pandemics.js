@@ -46,7 +46,7 @@ export default {
       })
     },
     getListPandemics ({state, commit}, payload = {}) {
-      commit("setIsloading", true);
+      commit("setIsLoading", true);
       return new Promise((resolve, reject) => {
         axios.get('/api/dashboard/pandemy', {
           params: { page: payload.page || 1 }
@@ -71,8 +71,14 @@ export default {
               commit("setListPandemics", data);
               resolve(true);
             })
-            .catch()
-            .finally()
+            .catch(response => {
+              reject(response);
+              commit("setIsLoading", false);
+              console.log(response);
+            })
+            .finally(() => {
+              commit("setIsLoading", false);
+            })
         }
       })
     }
