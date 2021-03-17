@@ -45,11 +45,36 @@ export default {
           })
       })
     },
-    getListPandemics () {
-      
+    getListPandemics ({state, commit}, payload = {}) {
+      commit("setIsloading", true);
+      return new Promise((resolve, reject) => {
+        axios.get('/api/dashboard/pandemy', {
+          params: { page: payload.page || 1 }
+        })
+          .then(({data}) => {
+            commit('setListPandemics', data);
+            commit('setIsLoading', false);
+            resolve(true);
+          })
+          .catch(response => {
+            console.log(response);
+            reject(response);
+          })
+      })
     },
-    searchPandemics () {
-      
+    searchPandemics ({state, commit}, payload = null) {
+      commit('setIsLoading', true)
+      return new Promise((resolve, reject) => {
+        if (payload) {
+          axios.get('api/dashboard/pandemy/filter/health_zone?date='+payload.last_update+'&health_zone_id'+payload.health_zone_id)
+            .then(({data}) => {
+              commit("setListPandemics", data);
+              resolve(true);
+            })
+            .catch()
+            .finally()
+        }
+      })
     }
   },
 
