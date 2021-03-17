@@ -58,7 +58,20 @@ export default {
     }, payload = {}) {
       commit("isLoading", true);
       commit("isUpdating", true);
-      return new Promise((resolve, reject))
+      return new Promise((resolve, reject) => {
+        axios.put('/api/dashboard/'+payload)
+          .then(({ data }) => {
+            dispatch("getListPandemics");
+            resolve(true);
+          })
+          .catch(response => {
+            console.log(response);
+            reject(response);
+          })
+          .finally(() => {
+            commit('setIsLoading', false);
+          })
+      })
     },
     getListPandemics({
       state,
