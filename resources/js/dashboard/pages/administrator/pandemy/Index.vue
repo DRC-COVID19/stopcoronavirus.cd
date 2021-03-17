@@ -10,7 +10,9 @@
                 <b-form-group
                   label="Date"
                   label-class="text-dash-color"
-                  :invalid-feedback="errors.publish_date ? errors.publish_date[0] : null"
+                  :invalid-feedback="
+                    errors.publish_date ? errors.publish_date[0] : null
+                  "
                   :state="errors.publish_date ? false : null"
                   :disabled="isCreating"
                 >
@@ -21,7 +23,9 @@
                     :max="new Date()"
                     required
                   />
-                  <label class="mt-2 text-dash-color" for="check-group-1">Zone de sante *</label>
+                  <label class="mt-2 text-dash-color" for="check-group-1"
+                    >Zone de sante *</label
+                  >
                   <v-select
                     v-model="form.zone"
                     class="input-select"
@@ -33,7 +37,6 @@
               </b-col>
             </b-row>
             <b-row class="d-flex justify-content-start px-o">
-
               <b-col md="4">
                 <b-form-group
                   label-class="text-dash-color"
@@ -210,73 +213,115 @@
 </template>
 
 <script>
-  import Header from '../components/Header';
-  export default {
-    components: {
-      Header
-    },
-    data () {
-      return {
-        fields: [
-          {
-            key: "id",
-            label: "ID"
-          },
-          {
-            key: "confirmed",
-            label: "Confirmes"
-          },
-          {
-            key: "sick",
-            label: "Actifs"
-          },
-          {
-            key: "seriously",
-            label: "Grave"
-          },
-          {
-            key: "healed",
-            label: "Gueris"
-          },
-          {
-            key: "dead",
-            label: "Deces"
-          },
-          {
-            key: "last_update",
-            label: "Date"
-          },
-          {
-            key: "health_zone",
-            label: "Zone de sante"
-          },
-          "actions"
-        ],
-        totalRows: 10,
-        currenPage: 1,
-        perPage: 15,
-        errors: {},
-        filter: null,
-        zones: [
-          "Nord-Kivu", "Kinshasa", "Sud-Kivu", "Katanga"
-        ],
-        form: {},
-        isUpdating: false,
-        currentItem: {},
-        isCreating: false,
-        isLoading: false,
-        listPandemics: [
-          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'}
-        ]
-      }
-    }
-  }
+import Header from "../components/Header";
+export default {
+  components: {
+    Header,
+  },
+  data() {
+    return {
+      fields: [
+        {
+          key: "id",
+          label: "ID",
+        },
+        {
+          key: "confirmed",
+          label: "Confirmes",
+        },
+        {
+          key: "sick",
+          label: "Actifs",
+        },
+        {
+          key: "seriously",
+          label: "Grave",
+        },
+        {
+          key: "healed",
+          label: "Gueris",
+        },
+        {
+          key: "dead",
+          label: "Deces",
+        },
+        {
+          key: "last_update",
+          label: "Date",
+        },
+        {
+          key: "health_zone",
+          label: "Zone de sante",
+        },
+        "actions",
+      ],
+      totalRows: 10,
+      currenPage: 1,
+      perPage: 15,
+      errors: {},
+      filter: null,
+      zones: ["Nord-Kivu", "Kinshasa", "Sud-Kivu", "Katanga"],
+      form: {},
+      isUpdating: false,
+      currentItem: {},
+      isCreating: false,
+      isLoading: false,
+      listPandemics: [
+        {
+          id: "1",
+          confirmed: 12,
+          seriously: 29,
+          sick: 13,
+          healed: 23,
+          last_update: "02-23-2021",
+          dead: 34,
+          health_zone: "Afia",
+        },
+        {
+          id: "1",
+          confirmed: 12,
+          seriously: 29,
+          sick: 13,
+          healed: 23,
+          last_update: "02-23-2021",
+          dead: 34,
+          health_zone: "Afia",
+        },
+        {
+          id: "1",
+          confirmed: 12,
+          seriously: 29,
+          sick: 13,
+          healed: 23,
+          last_update: "02-23-2021",
+          dead: 34,
+          health_zone: "Afia",
+        },
+        {
+          id: "1",
+          confirmed: 12,
+          seriously: 29,
+          sick: 13,
+          healed: 23,
+          last_update: "02-23-2021",
+          dead: 34,
+          health_zone: "Afia",
+        },
+        {
+          id: "1",
+          confirmed: 12,
+          seriously: 29,
+          sick: 13,
+          healed: 23,
+          last_update: "02-23-2021",
+          dead: 34,
+          health_zone: "Afia",
+        },
+      ],
+    };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  
 </style>
