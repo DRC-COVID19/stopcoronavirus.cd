@@ -103,8 +103,6 @@ class PandemicController extends Controller
         }
     }
 
-
-
     /**
      * Display the specified resource.
      *
@@ -173,8 +171,17 @@ class PandemicController extends Controller
      * @param  \App\Pandemic  $pandemic
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pandemic $pandemic)
+    public function destroy($pandemic_id)
     {
-        //
+        try {
+            $pandemy = Pandemic::find($pandemic_id);
+            if (! $pandemy) {
+                return response()->json(["message" => "Resource not found",], 404);
+            }
+            $pandemy->destroy();
+            return response()->json(null, 202);
+        } catch (\Throwable $th) {
+            
+        }
     }
 }
