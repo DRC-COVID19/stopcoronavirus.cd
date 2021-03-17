@@ -171,7 +171,7 @@
         <b-skeleton-table
           v-if="isLoading"
           :rows="15"
-          :columns="5"
+          :columns="9"
           :table-props="{ bordered: false, striped: true, responsive: true }"
         >
         </b-skeleton-table>
@@ -266,11 +266,11 @@
         isCreating: false,
         isLoading: false,
         listPandemics: [
-          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
-          {id: '1', confirmed: 12, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'}
+          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
+          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
+          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
+          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'},
+          {id: '1', confirmed: 12, seriously: 29, sick: 13, healed: 23, last_update: '02-23-2021', dead: 34, health_zone: 'Afia'}
         ]
       }
     }
