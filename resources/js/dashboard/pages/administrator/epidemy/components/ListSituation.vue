@@ -90,12 +90,12 @@ export default {
   props: {
     situations: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     isLoading: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
@@ -109,31 +109,31 @@ export default {
         { key: "dead", label: "Deces", sortable: true },
         { key: "imported", label: "Importes", sortable: true },
         { key: "local", label: "Local", sortable: true },
-        "actions",
+        "actions"
       ],
       filter: "",
       perPage: 15,
       currentPage: 1,
       isDeleteModalShown: false,
       currentSituation: {
-        last_update: "",
+        last_update: ""
       },
-      editModalShow: false,
+      editModalShow: false
     };
   },
   computed: {
     rows() {
       return this.situations.length;
-    },
+    }
   },
   watch: {
-    filter () {
+    filter() {
       this.search();
     }
   },
   methods: {
-    search () {
-      this.$emit('onSearch', this.filter);
+    search() {
+      this.$emit("onSearch", this.filter);
     },
     deleteSituation(id) {
       this.isDeleteModalShown = true;
@@ -159,7 +159,7 @@ export default {
         local,
         imported,
         seriously,
-        healed,
+        healed
       };
       this.$emit("onEditSituation", this.currentSituation);
     },
@@ -169,11 +169,11 @@ export default {
     },
     onCancelDelection() {
       this.isDeleteModalShown = false;
-    },
-  },
+    }
+  }
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .loading-height {
   height: 660px;

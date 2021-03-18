@@ -47,7 +47,7 @@ export default {
   components: {
     Header,
     Create,
-    ListUser,
+    ListUser
   },
   data() {
     return {
@@ -64,7 +64,7 @@ export default {
       updating: false,
       errors: {},
       currentPage: 1,
-      roles: [],
+      roles: []
     };
   },
   mounted() {
@@ -81,18 +81,18 @@ export default {
           path: "#",
           per_page: 1,
           to: 1,
-          total: 1,
+          total: 1
         };
       }
       return this.users.meta;
-    },
+    }
   },
   methods: {
-    search (filter) {
+    search(filter) {
       this.isLoading = true;
-      if (filter !== '') {
+      if (filter !== "") {
         axios
-          .get('api/admin_users/filter?key_words='+filter)
+          .get("api/admin_users/filter?key_words=" + filter)
           .then(({ data }) => {
             this.users = data;
             this.isLoading = false;
@@ -116,7 +116,7 @@ export default {
             group: "alert",
             title: "Supprimer utilisateur",
             text: "Supprimer avec succès",
-            type: "success",
+            type: "success"
           });
         })
         .catch(({ response }) => {
@@ -125,7 +125,7 @@ export default {
             group: "alert",
             title: "Supprimer utilisateur",
             text: "Une erreur est surveni",
-            type: "error",
+            type: "error"
           });
         });
     },
@@ -143,7 +143,7 @@ export default {
         username: currentUser.username,
         name: currentUser.name,
         email: currentUser.email,
-        roles_id: currentUser.roles,
+        roles_id: currentUser.roles
       };
 
       if (currentUser && currentUser.password) {
@@ -163,7 +163,7 @@ export default {
             group: "alert",
             title: "Modifer utilisateur",
             text: "Modifier avec succès",
-            type: "success",
+            type: "success"
           });
         })
         .catch(({ response }) => {
@@ -172,7 +172,7 @@ export default {
             group: "alert",
             title: "Modifer utilisateur",
             text: "Une erreur est surveni",
-            type: "error",
+            type: "error"
           });
         });
     },
@@ -188,7 +188,7 @@ export default {
           password: form.password,
           password_confirmation: form.confirmPassword,
           email: form.email,
-          roles_id: form.roles,
+          roles_id: form.roles
         })
         .then(() => {
           this.userAdded = true;
@@ -199,7 +199,7 @@ export default {
             group: "alert",
             title: "Nouvel utilisateur",
             text: "Ajouter avec succès",
-            type: "success",
+            type: "success"
           });
         })
         .catch(({ response }) => {
@@ -210,17 +210,16 @@ export default {
             group: "alert",
             title: "Nouvel utilisateur",
             text: "Une erreur est surveni",
-            type: "error",
+            type: "error"
           });
         });
-
     },
 
     getUserList(page = 1) {
       this.isLoading = true;
       axios
         .get("/api/admin_users", {
-          params: { page },
+          params: { page }
         })
         .then(({ data }) => {
           this.users = data;
@@ -244,14 +243,12 @@ export default {
 
     switchPage(page) {
       this.getUserList(page);
-    },
-
-  },
-
+    }
+  }
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .fa-plus {
   color: white;

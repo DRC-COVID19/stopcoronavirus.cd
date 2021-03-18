@@ -63,7 +63,7 @@
         multiple
         :options="roles"
         label="name"
-        :reduce="(item) => item.id"
+        :reduce="item => item.id"
       />
       <label class="text-dash-color" for="text-password">Mot de passe *</label>
       <b-form-input
@@ -85,15 +85,15 @@
       ></b-form-input>
       <b-form-text id="password-help-block">{{ warningMissMatch }}</b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" class="btn-dash-sucess">
-            <span v-if="isLoading"
+        <b-button type="submit" variant="primary" class="btn-dash-sucess">
+          <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>
-              <span>en cours ...</span>
-            </span>
-            <div v-else>
-              {{btnTitle }}
-            </div>
-          </b-button>
+            <span>en cours ...</span>
+          </span>
+          <div v-else>
+            {{ btnTitle }}
+          </div>
+        </b-button>
         <b-button
           type="reset"
           v-if="updating"
@@ -112,30 +112,30 @@ export default {
     userAdded: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     userUpdated: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
         return {};
-      },
+      }
     },
     roles: {
       type: Array,
       default: () => {
         return [];
-      },
+      }
     },
     errors: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
   data() {
     return {
@@ -152,11 +152,11 @@ export default {
         roles: [],
         email: "",
         password: "",
-        confirmPassword: "",
+        confirmPassword: ""
       },
       show: true,
       showWarning: false,
-      toBeCanceled: true,
+      toBeCanceled: true
     };
   },
   mounted() {
@@ -171,7 +171,7 @@ export default {
     },
     formToPopulate() {
       this.populateForm();
-    },
+    }
   },
   methods: {
     onSubmit() {
@@ -222,12 +222,11 @@ export default {
       this.form.id = this.formToPopulate.id;
       this.form.username = this.formToPopulate.usernmae;
       this.form.email = this.formToPopulate.email;
-      this.form.roles = this.formToPopulate.roles.map(x=>x.id);
+      this.form.roles = this.formToPopulate.roles.map(x => x.id);
       this.form.name = this.formToPopulate.name;
       this.title = "Modification de l'utilisateur";
       this.btnTitle = "Modifier";
-    },
-
+    }
   },
 
   computed: {
@@ -235,13 +234,12 @@ export default {
       return this.form.password === this.form.confirmPassword
         ? ""
         : "Les mot de passes ne correspondent pas";
-    },
-  },
-  
+    }
+  }
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .main {
   background-color: white;
