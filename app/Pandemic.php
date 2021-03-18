@@ -25,4 +25,9 @@ class Pandemic extends Model
     {
         return $this->belongsTo(Township::class);
     }
+
+    public function health_zone()
+    {
+        return $this->belongsTo(HealthZone::class);
+    }
 }

@@ -71,7 +71,7 @@ class PandemicController extends Controller
             ORDER BY confirmed DESC
             LIMIT 5
             ", [$data['fluxGeoOptions']]);
-            return response()->json($pandemics,200,[],JSON_NUMERIC_CHECK);
+            return response()->json($pandemics, 200, [], JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -124,14 +124,14 @@ class PandemicController extends Controller
     {
         $data = $this->validate_form($request->all());
         dd($data);
-            exit();
+        exit();
         try {
             $pandemy = Pandemic::find($pandemic_id);
-            if (! $pandemy) {
-                return response()->json(['message'=> "id de la situation invalide"], 404);
+            if (!$pandemy) {
+                return response()->json(['message' => "id de la situation invalide"], 404);
             }
             $check = $pandemy->update(Arr::except($data, 'last_update', 'health_zone_id'));
-            if (! $check) {
+            if (!$check) {
                 return response()->json(['message' => 'Error, try later'], 500);
             }
             return response()->json($pandemy, 202);
@@ -177,13 +177,12 @@ class PandemicController extends Controller
     {
         try {
             $pandemy = Pandemic::find($pandemic_id);
-            if (! $pandemy) {
+            if (!$pandemy) {
                 return response()->json(["message" => "Resource not found",], 404);
             }
             $pandemy->destroy();
             return response()->json(null, 202);
         } catch (\Throwable $th) {
-            
         }
     }
 }

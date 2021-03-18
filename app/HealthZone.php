@@ -18,4 +18,9 @@ class HealthZone extends Model
         return $this->belongsTo(Province::class);
     }
 
+    public function pandemic()
+    {
+        return $this->hasMany(Pandemic::class);
+    }
+
 }

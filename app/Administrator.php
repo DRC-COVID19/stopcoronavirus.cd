@@ -110,9 +110,7 @@ class Administrator extends Model implements JWTSubject, AuthenticatableContract
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
-     */,
-    "health_zone_name": "Afia Himbi",
-    "health_zone_id_name_province": "Test"
+     */
     public function getJWTIdentifier()
     {
         return $this->getKey();
