@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Pandemic;
 use App\HealthZone;
 use Illuminate\Support\Facades\DB;
@@ -48,5 +49,30 @@ class HealthZoneController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
-    
+
+    public function index()
+    {
+        //
+        try {
+            $health_zones = HealthZone::orderBy('id', 'DESC')->paginate(15);
+            
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
+
+    public function create()
+    {
+        //
+    }
+
+    public function filter()
+    {
+        //
+    }
+
+    public function destroy()
+    {
+        //
+    }
 }
