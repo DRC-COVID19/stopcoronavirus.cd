@@ -231,14 +231,16 @@ Route::group(['prefix' => 'pandemy', 'middleware' => 'auth:dashboard'], function
   Route::delete('/{pandemy_id}', 'PandemicController@destroy');
   Route::get('/filter/health_zone', 'PandemicController@filter_by_health_zone');
 
-  // Health zone sub-zone 
-  Route::group(['prefix' => 'health_zone'], function () {
+  // Health zone sub-zone
+
+  Route::group(['prefix' => 'health_zones'], function () {
     Route::post('/', 'HealthZoneController@create');
     Route::get('/', 'HealthZoneController@index');
     Route::put('/{health_zone_id}', 'HealthZoneController@update');
     Route::delete('/{health_zone_id}', 'HealthZoneController@destroy');
     Route::get('/filter', 'HealthZoneController@filter');
   });
+
   //
 
 });

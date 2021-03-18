@@ -18,7 +18,6 @@ class HealthZoneController extends Controller
     public function form_validate($data, $id = null)
     {
         return Validator::make($data, [
-            'username' => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
             "name" => 'required|string',
             'longitude' => 'nullable',
             'latitude' => 'nullable',
