@@ -39,7 +39,7 @@
 <script>
 import Logo from "../components/LogoComponent";
 import { mapState, mapActions } from "vuex";
-import { AGENT_HOSPITAL, ADMIN_DASHBOARD, ADMIN_HOSPITAL,ADMINISTRATOR } from "../config/env";
+import { AGENT_HOSPITAL, ADMIN_DASHBOARD, ADMIN_HOSPITAL,ADMINISTRATOR, MANANGER_EPIDEMIC } from "../config/env";
 export default {
   components: {
     Logo,
@@ -56,7 +56,7 @@ export default {
 
       if (this.user.roles === undefined) return routesAccess;
 
-      if (this.user.roles.find((a) => a.name == ADMINISTRATOR)) {
+      if (this.user.roles.find((a) => a.name == ADMINISTRATOR || a.name==MANANGER_EPIDEMIC )) {
         routesAccess.push({ slug: "Administration", name: "administrator.home" });
       }
 
