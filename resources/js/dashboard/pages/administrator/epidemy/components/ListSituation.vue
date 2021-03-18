@@ -3,6 +3,10 @@
     <b-row class="my-3" align-h="start">
       <b-col cols="12" md="6">
         <b-form-datepicker
+          label-today-button="Aujourd'hui"
+          label-reset-button="Effacer"
+          reset-button
+          today-button
           v-model="filter"
           placeholder="Choisir la date"
           class="mb-2"
@@ -12,7 +16,6 @@
     </b-row>
     <b-row>
       <b-col cols="12">
-
         <b-skeleton-table
           v-if="isLoading"
           :rows="15"
@@ -123,7 +126,15 @@ export default {
       return this.situations.length;
     },
   },
+  watch: {
+    filter () {
+      this.search();
+    }
+  },
   methods: {
+    search () {
+      this.$emit('onSearch', this.filter);
+    },
     deleteSituation(id) {
       this.isDeleteModalShown = true;
       this.currentSituation.id = id;
@@ -150,7 +161,6 @@ export default {
         seriously,
         healed,
       };
-      console.log(this.currentSituation);
       this.$emit("onEditSituation", this.currentSituation);
     },
     onValidateDelection() {

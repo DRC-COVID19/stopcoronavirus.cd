@@ -1,27 +1,32 @@
 <template>
-  <div v-if="labels.length > 0" class="d-flex align-items-center justify-content-center">
-    <div class="toggle-button" :style="{'backgorund-color' : bgColor}">
+  <div
+    v-if="labels.length > 0"
+    class="d-flex align-items-center justify-content-center"
+  >
+    <div class="toggle-button" :style="{ 'backgorund-color': bgColor }">
       <div class="labels">
         <div
           class="label"
           v-for="(data, i) in labels"
           :key="i"
-          :class="{'active' : dataValue == data.val}"
+          :class="{ active: dataValue == data.val }"
           @click="setValue(data.val)"
-        >{{data.lbl || data.val}}</div>
+        >
+          {{ data.lbl || data.val }}
+        </div>
       </div>
       <div class="slide" :style="positionSlide"></div>
     </div>
     <vue-ellipse-progress
-      v-if="globalProgress && globalProgress<100"
+      v-if="globalProgress && globalProgress < 100"
       :progress="Math.round(globalProgress)"
       :size="50"
       fontSize="0.8rem"
       class="ml-2"
       :dot="{
-       size:'10%',
-       backgroundColor:'#2e5bff'
-       }"
+        size: '10%',
+        backgroundColor: '#2e5bff',
+      }"
     >
       <span slot="legend-value">%</span>
     </vue-ellipse-progress>
@@ -83,21 +88,10 @@ export default {
   display: flex;
   border-radius: 5px;
   height: 30px;
-  padding: 0px 2px;
+  // padding: 0px 2px;
   line-height: 30px;
   position: relative;
   font-size: 11px;
-  .slide {
-    position: absolute;
-    height: 24px;
-    background-color: #2e5bff;
-    width: 62px;
-    top: 2px;
-    left: 0px;
-    transform: translateX(2px);
-    border-radius: 5px;
-    transition: left 0.2s ease-in-out, opacity 0.2s ease-in-out;
-  }
   .labels {
     display: flex;
     position: relative;
@@ -105,16 +99,23 @@ export default {
     .label {
       margin: 0px;
       cursor: pointer;
-      width: 62px;
+      // width: 62px;
+      padding: 0px 5px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       text-align: center;
+
       &:active {
         opacity: 0.4;
       }
       &.active {
         color: white;
+        // height: 24px;
+        background-color: #2e5bff;
+        // transform: translateX(2px);
+        border-radius: 5px;
+        transition: all 0.2s ease-in-out;
       }
     }
   }

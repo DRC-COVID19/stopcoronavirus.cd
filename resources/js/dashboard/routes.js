@@ -16,7 +16,6 @@ import Administrator from './pages/Administrator';
 import AdminUserIndex from './pages/administrator/users/Index';
 import PageNotFound from './pages/NotFound';
 import ChangeLogIndex from './pages/administrator/changeLog/index';
-import ShowUser from './pages/administrator/users/ShowUser';
 import Epidemie from './pages/administrator/epidemy/Index';
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL, ADMINISTRATOR, MANANGER_EPIDEMIC } from './config/env';
 
