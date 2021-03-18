@@ -17,7 +17,7 @@ class CheckRole
   public function handle($request, Closure $next, $roles)
   {
     $rolesSplit=explode(":",$roles);
-    if ( !Auth::user()->isAdministrator() && !Auth::user()->isRoles($rolesSplit)) {
+    if ( !Auth::user()->isAdministrator() && !Auth::user()->inRoles($rolesSplit)) {
       return response()->json(["message" => "Unauthenticated"])->setStatusCode(401);
     }
     return $next($request);

@@ -125,8 +125,8 @@
             margin-left: auto;
         }
 
-        .mb-3{
-          margin-bottom: 15px;
+        .mb-3 {
+            margin-bottom: 15px;
         }
 
     </style>
@@ -137,7 +137,7 @@
         style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; max-width: 600px !important;">
         <tr>
             <td class="text-center p-5">
-                <img class="img-fluid" src="{{ asset('/img/logo_stop_coronavirus_rdc.png') }}" />
+                <img class="img-fluid" src="{{ env('APP_URL') . '/img/logo_stop_coronavirus_rdc.png' }}" />
             </td>
         </tr>
         <tr>
@@ -150,9 +150,9 @@
 
         <tr>
             <td class="text-center mb-3">
-              <img data-v-0d27807d="" src="{{ asset('/img/partners_top.png', env('REDIRECT_HTTPS'))}}" height="30" >
-              <img data-v-0d27807d="" src="{{ asset('/img/commite_riposte.jpg', env('REDIRECT_HTTPS'))}}" height="30" >
-              <img data-v-0d27807d="" src="{{ asset('/img/logo-control-room.png', env('REDIRECT_HTTPS'))}}" height="30"   >
+                <img data-v-0d27807d="" src="{{ env('APP_URL') . '/img/partners_top.png' }}" height="30">
+                <img data-v-0d27807d="" src="{{ env('APP_URL') . '/img/commite_riposte.jpg' }}" height="30">
+                <img data-v-0d27807d="" src="{{ env('APP_URL') . '/img/logo-control-room.png' }}" height="30">
                 {{-- <img class="img-fluid" src="{{ asset('/img/partners_small.png') }}" /> --}}
             </td>
         </tr>
