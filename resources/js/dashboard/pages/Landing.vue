@@ -7,7 +7,9 @@
           <div class="card p-0">
             <h5 class="card-header text-center">ACCUEIL</h5>
             <div class="card-body">
-              <p class="card-text text-muted small text-center">A quel section voulez-vous accéder ?</p>
+              <p class="card-text text-muted small text-center">
+                A quel section voulez-vous accéder ?
+              </p>
               <ul class="list-group-flush list-group">
                 <router-link
                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
@@ -15,7 +17,7 @@
                   :key="route.name"
                   :to="{ name: route.name }"
                 >
-                  <span>{{route.slug}}</span>
+                  <span>{{ route.slug }}</span>
                   <i class="fa fa-chevron-right"></i>
                 </router-link>
               </ul>
@@ -23,9 +25,9 @@
           </div>
           <div class="userAccount" v-if="user">
             <p>
-              <span>Connecté en tant que {{user.name}}</span>
+              <span>Connecté en tant que {{ user.name }}</span>
               <br />
-              <span>{{user.email}}</span>
+              <span>{{ user.email }}</span>
               <br />
               <a href="#!" @click.prevent="userLogout">Se déconnecter</a>
             </p>
@@ -39,7 +41,13 @@
 <script>
 import Logo from "../components/LogoComponent";
 import { mapState, mapActions } from "vuex";
-import { AGENT_HOSPITAL, ADMIN_DASHBOARD, ADMIN_HOSPITAL,ADMINISTRATOR, MANANGER_EPIDEMIC } from "../config/env";
+import {
+  AGENT_HOSPITAL,
+  ADMIN_DASHBOARD,
+  ADMIN_HOSPITAL,
+  ADMINISTRATOR,
+  MANANGER_EPIDEMIC,
+} from "../config/env";
 export default {
   components: {
     Logo,
@@ -56,10 +64,21 @@ export default {
 
       if (this.user.roles === undefined) return routesAccess;
 
-      if (this.user.roles.find((a) => a.name == ADMINISTRATOR || a.name==MANANGER_EPIDEMIC )) {
-        routesAccess.push({ slug: "Administration", name: "administrator.home" });
+      if (this.user.roles.find((a) => a.name == ADMINISTRATOR)) {
+        routesAccess.push({
+          slug: "Administration",
+          name: "administrator.home",
+        });
+      } else if (
+        this.user.roles.find(
+          (a) => a.name == MANANGER_EPIDEMIC && a.name != ADMINISTRATOR
+        )
+      ) {
+        routesAccess.push({
+          slug: "Administration",
+          name: "administrator.epidemie",
+        });
       }
-
       if (this.user.roles.find((a) => a.name == ADMIN_DASHBOARD)) {
         routesAccess.push({ slug: "Dashboard", name: "home" });
       }
