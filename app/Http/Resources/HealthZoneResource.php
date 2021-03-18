@@ -14,15 +14,6 @@ class HealthZoneResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'confirmed' => $this->name,
-            'sick' => $this->email,
-            'dead' => $this->username,
-            'seriously' => $this->avatar,
-            'healed' => $this->roles,
-            'health_zone' => $this->health_zone(),
-            'last_update' => $this->roles()->where('name', 'Administrator')->exists()
-        ];
+        return parent::toArray($request);
     }
 }

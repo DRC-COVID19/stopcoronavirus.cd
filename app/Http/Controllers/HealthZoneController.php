@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Pandemic;
 use App\HealthZone;
+use App\Http\Resources\HealthZoneResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -52,12 +53,14 @@ class HealthZoneController extends Controller
 
     public function index()
     {
-        //
         try {
             $health_zones = HealthZone::orderBy('id', 'DESC')->paginate(15);
-            
+            return HealthZoneResource::collection($health_zones);
         } catch (\Throwable $th) {
-            //throw $th;
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
         }
     }
 
