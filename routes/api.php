@@ -215,7 +215,7 @@ Route::group([
   Route::get('/townships', 'DashBoardController@getTownships'); //ok
 
   Route::group(['prefix' => 'pandemics'], function () {
-    Route::get('top-confirmed', 'PandemicController@getHealthZoneTopConfirmed');
+    Route::get('top-confirmed', 'HealthZoneController@getHealthZoneTopConfirmed');
   });
 });
 
