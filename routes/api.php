@@ -39,8 +39,14 @@ Route::get('/pandemicstatsasc', function () {
 
 Route::post('/medicale-orientation', 'DiagnosticController@store');
 
-Route::group(['prefix' => 'admin_users'], function () {
+Route::group(['prefix' => 'admin_users', 'middleware' => 'auth:dashboard'], function () {
   Route::get('/filter', 'AdministratorController@filter');
+});
+
+Route::group(['prefix' => 'provinces', 'middleware' => 'auth:dashboard'], function () {
+  Route::get('/', 'ProvinceController@index');
+  Route::post('/', 'ProvinceController@store');
+  Route::put('/', 'ProvinceController@update'); // method to be added next time
 });
 
 Route::apiResource('admin_users', 'AdministratorController');

@@ -82,7 +82,7 @@ class HealthZoneController extends Controller
             DB::beginTransaction();
             $health_zone = HealthZone::create($data);
             DB::commit();
-            return response()->json(null, 201, []);
+            return response()->json($health_zone, 201, []);
         } catch (\Throwable $th) {
             DB::rollBack();
             if (env('APP_DEBUG') == true) {
