@@ -18,7 +18,9 @@ class ProvinceController extends Controller
     public function form_validator($data)
     {
         return Validator::make($data, [
-            "name" => "required|string"
+            "name" => "required|string",
+            "longitude" => "numeric|required",
+            "latitude" => "numeric|required"
         ])->validate();
     }
 
@@ -57,9 +59,21 @@ class ProvinceController extends Controller
         //
     }
 
-    public function destroy()
+    public function destroy($province_id)
     {
-        //
+        try {
+            $province = Province::find($province_id);
+            if (!$province) {
+                return response()->json(["message" => "Resource not found",], 404);
+            }
+            $province->destroy();
+            return response()->json(null, 202);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     public function update()

@@ -183,6 +183,10 @@ class PandemicController extends Controller
             $pandemy->destroy();
             return response()->json(null, 202);
         } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
         }
     }
 }

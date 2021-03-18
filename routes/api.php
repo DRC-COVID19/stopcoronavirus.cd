@@ -45,6 +45,7 @@ Route::group(['prefix' => 'admin_users', 'middleware' => 'auth:dashboard'], func
 
 Route::group(['prefix' => 'provinces', 'middleware' => 'auth:dashboard'], function () {
   Route::get('/', 'ProvinceController@index');
+  Route::delete('/{province_id}', 'ProvinceController@destroy');
   Route::post('/', 'ProvinceController@store');
   Route::put('/', 'ProvinceController@update'); // method to be added next time
 });
