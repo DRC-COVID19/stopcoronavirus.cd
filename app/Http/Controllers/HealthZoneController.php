@@ -14,6 +14,18 @@ use Illuminate\Http\Request;
 
 class HealthZoneController extends Controller
 {
+
+    public function form_validate($data, $id = null)
+    {
+        return Validator::make($data, [
+            'username' => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
+            "name" => 'required|string',
+            'longitude' => 'nullable',
+            'latitude' => 'nullable',
+            'province_id' => 'required|exists:provinces,id'
+        ])->validate();
+    }
+
     public function getHealthZoneTopConfirmed(Request $request)
     {
         $data = Validator::make($request->all(), [
@@ -64,9 +76,21 @@ class HealthZoneController extends Controller
         }
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $data = $this->form_validate($request->all());
+        try {
+            DB::beginTransaction();
+            $health_zone = HealthZone::create($data);
+            DB::commit();
+            return response()->json(null, 201, []);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     public function filter()
