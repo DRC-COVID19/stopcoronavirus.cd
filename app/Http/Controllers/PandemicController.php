@@ -180,7 +180,7 @@ class PandemicController extends Controller
             if (!$pandemy) {
                 return response()->json(["message" => "Resource not found",], 404);
             }
-            $pandemy->destroy();
+            $pandemy->delete();
             return response()->json(null, 202);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {

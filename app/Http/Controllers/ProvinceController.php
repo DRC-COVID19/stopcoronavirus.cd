@@ -66,7 +66,7 @@ class ProvinceController extends Controller
             if (!$province) {
                 return response()->json(["message" => "Resource not found",], 404);
             }
-            $province->destroy();
+            $province->delete();
             return response()->json(null, 202);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
