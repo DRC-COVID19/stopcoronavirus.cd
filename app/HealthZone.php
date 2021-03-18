@@ -17,4 +17,5 @@ class HealthZone extends Model
     {
         return $this->belongsTo(Province::class);
     }
+
 }

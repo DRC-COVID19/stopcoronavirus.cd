@@ -31,7 +31,7 @@
                     class="input-select"
                     :options="zones"
                     label="name"
-                    :reduce="(item) => item.id"
+                    :reduce="item => item.id"
                   />
                 </b-form-group>
               </b-col>
@@ -167,7 +167,7 @@
               v-model="form.zone"
               :options="zones"
               label="name"
-              :reduce="(item) => item.id"
+              :reduce="item => item.id"
             />
           </b-col>
         </b-row>
@@ -216,44 +216,44 @@
 import Header from "../components/Header";
 export default {
   components: {
-    Header,
+    Header
   },
   data() {
     return {
       fields: [
         {
           key: "id",
-          label: "ID",
+          label: "ID"
         },
         {
           key: "confirmed",
-          label: "Confirmes",
+          label: "Confirmes"
         },
         {
           key: "sick",
-          label: "Actifs",
+          label: "Actifs"
         },
         {
           key: "seriously",
-          label: "Grave",
+          label: "Grave"
         },
         {
           key: "healed",
-          label: "Gueris",
+          label: "Gueris"
         },
         {
           key: "dead",
-          label: "Deces",
+          label: "Deces"
         },
         {
           key: "last_update",
-          label: "Date",
+          label: "Date"
         },
         {
           key: "health_zone",
-          label: "Zone de sante",
+          label: "Zone de sante"
         },
-        "actions",
+        "actions"
       ],
       totalRows: 10,
       currenPage: 1,
@@ -275,7 +275,7 @@ export default {
           healed: 23,
           last_update: "02-23-2021",
           dead: 34,
-          health_zone: "Afia",
+          health_zone: "Afia"
         },
         {
           id: "1",
@@ -285,7 +285,7 @@ export default {
           healed: 23,
           last_update: "02-23-2021",
           dead: 34,
-          health_zone: "Afia",
+          health_zone: "Afia"
         },
         {
           id: "1",
@@ -295,7 +295,7 @@ export default {
           healed: 23,
           last_update: "02-23-2021",
           dead: 34,
-          health_zone: "Afia",
+          health_zone: "Afia"
         },
         {
           id: "1",
@@ -305,7 +305,7 @@ export default {
           healed: 23,
           last_update: "02-23-2021",
           dead: 34,
-          health_zone: "Afia",
+          health_zone: "Afia"
         },
         {
           id: "1",
@@ -315,13 +315,12 @@ export default {
           healed: 23,
           last_update: "02-23-2021",
           dead: 34,
-          health_zone: "Afia",
-        },
-      ],
+          health_zone: "Afia"
+        }
+      ]
     };
-  },
+  }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

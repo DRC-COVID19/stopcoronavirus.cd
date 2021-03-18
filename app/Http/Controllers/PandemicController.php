@@ -22,7 +22,7 @@ class PandemicController extends Controller
             'seriously' => 'nullable|numeric',
             'healed' => 'nullable|numeric',
             'health_zone_id' => 'required|numeric',
-            'last_update' => 'date|unique:health_zone_id'
+            'last_update' => 'date|required'
         ])->validate();
     }
     /**
@@ -123,6 +123,8 @@ class PandemicController extends Controller
     public function update(Request $request, $pandemic_id)
     {
         $data = $this->validate_form($request->all());
+        dd($data);
+            exit();
         try {
             $pandemy = Pandemic::find($pandemic_id);
             if (! $pandemy) {
