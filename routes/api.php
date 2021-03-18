@@ -224,12 +224,23 @@ Route::group([
 Route::group(['prefix' => 'pandemy', 'middleware' => 'auth:dashboard'], function () {
   Route::get('/', 'PandemicController@index');
   Route::get('/filter', 'PandemicController@filter');
-  Route::get('/health_zones', 'PandemicController@health_zone');
+  // Route::get('/health_zones', 'PandemicController@health_zone');
   Route::post('/', 'PandemicController@store');
   Route::get('/{pandemy_id}', 'PandemicController@show');
   Route::put('/{pandemy_id}', 'PandemicController@update');
   Route::delete('/{pandemy_id}', 'PandemicController@destroy');
   Route::get('/filter/health_zone', 'PandemicController@filter_by_health_zone');
+
+  // Health zone sub-zone 
+  Route::group(['prefix' => 'health_zone'], function () {
+    Route::post('/', 'HealthZoneController@create');
+    Route::get('/', 'HealthZoneController@index');
+    Route::put('/{health_zone_id}', 'HealthZoneController@update');
+    Route::delete('/{health_zone_id}', 'HealthZoneController@destroy');
+    Route::get('/filter', 'HealthZoneController@filter');
+  });
+  //
+
 });
 
 //
