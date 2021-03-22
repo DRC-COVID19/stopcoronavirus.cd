@@ -10,7 +10,9 @@
                 <b-form-group
                   label="Date"
                   label-class="text-dash-color"
-                  :invalid-feedback="errors.publish_date ? errors.publish_date[0] : null"
+                  :invalid-feedback="
+                    errors.publish_date ? errors.publish_date[0] : null
+                  "
                   :state="errors.publish_date ? false : null"
                   :disabled="isCreating"
                 >
@@ -21,14 +23,16 @@
                     :max="new Date()"
                     required
                   />
-                  <label class="mt-2 text-dash-color" for="check-group-1">Zone de sante *</label>
+                  <label class="mt-2 text-dash-color" for="check-group-1"
+                    >Zone de sante *</label
+                  >
                   <v-select
                     required
                     class="input-dash"
                     v-model="form.zone"
                     :options="zones"
                     label="name"
-                    :reduce="(item) => item.id"
+                    :reduce="item => item.id"
                   />
                 </b-form-group>
               </b-col>
@@ -330,6 +334,65 @@ export default {
     toEdit(item) {
       this.isUpdating = true;
       this.form = { ...item };
+    },
+    remove(item) {
+      this.isLoading = true;
+      this.$bvModal.show("confirmation-box");
+    },
+    submit_form() {
+      if (this.isUpdating) {
+        this.onUpdatePandemic();
+      } else {
+        this.onCreatePandemics();
+      }
+    },
+    onCreatePandemics () {
+      this.errors = {};
+      this.createPandemics (this.form)
+        .then(() => {
+          this.form = {};
+          this.isUpdating = false;
+          this.$notify({
+            group: "alert",
+            title: "Succès",
+            text: "Ajout reussi",
+            type: "success"
+          })
+        }).catch((err) => {
+          this.$notify({
+            group: "alert",
+            title: "Nouveau log",
+            text: "Une erreur est surveni",
+            type: "error"
+          });
+          if (response.status == 422) {
+            this.errors = response.data.errors;
+          }
+        });
+    },
+    onUpdatePandemic () {
+      this.errors = {};
+      this.updatePandemics(this.form)
+        .then(() => {
+          this.form = {};
+          this.isUpdating = false;
+          this.$notify({
+            group: "alert",
+            title: "Modification",
+            text: "Modifier avec succès",
+            type: "success"
+          });
+        }).catch((err) => {
+          this.$notify({
+            group: "alert",
+            title: "Modifer log",
+            text: "Une erreur est surveni",
+            type: "error"
+          });
+          if (response.status == 422) {
+            this.errors = response.data.errors;
+          }
+        });
     }
   }
 };
