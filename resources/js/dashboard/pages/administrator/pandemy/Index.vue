@@ -346,23 +346,24 @@ export default {
         this.onCreatePandemics();
       }
     },
-    onCreatePandemics () {
+    onCreatePandemics() {
       this.errors = {};
-      this.createPandemics (this.form)
+      this.createPandemics(this.form)
         .then(() => {
           this.form = {};
           this.isUpdating = false;
           this.$notify({
             group: "alert",
-            title: "Succès",
+            title: "Ajout",
             text: "Ajout reussi",
             type: "success"
-          })
-        }).catch((err) => {
+          });
+        })
+        .catch(err => {
           this.$notify({
             group: "alert",
-            title: "Nouveau log",
-            text: "Une erreur est surveni",
+            title: "Ajout",
+            text: "Une erreur est survenu lors de l'enregistrement",
             type: "error"
           });
           if (response.status == 422) {
@@ -370,7 +371,7 @@ export default {
           }
         });
     },
-    onUpdatePandemic () {
+    onUpdatePandemic() {
       this.errors = {};
       this.updatePandemics(this.form)
         .then(() => {
@@ -379,23 +380,29 @@ export default {
           this.$notify({
             group: "alert",
             title: "Modification",
-            text: "Modifier avec succès",
+            text: "Modifié avec succès",
             type: "success"
           });
-        }).catch((err) => {
+        })
+        .catch(err => {
           this.$notify({
             group: "alert",
-            title: "Modifer log",
-            text: "Une erreur est surveni",
+            title: "Modification",
+            text: "Une erreur est survenu lors de la modification",
             type: "error"
           });
           if (response.status == 422) {
             this.errors = response.data.errors;
           }
         });
-    }
+    },
+    // search () {
+
+    // }
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+</style>
