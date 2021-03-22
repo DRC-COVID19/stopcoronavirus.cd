@@ -16,13 +16,14 @@ class Pandemic extends JsonResource
     {
         return [
             'id' => $this->id,
-            'confirmed' => $this->name,
-            'sick' => $this->email,
-            'dead' => $this->username,
-            'seriously' => $this->avatar,
-            'healed' => $this->roles,
+            'confirmed' => $this->confirmed,
+            'sick' => $this->sick,
+            'dead' => $this->dead,
+            'seriously' => $this->seriously,
+            'health_zone_id' => $this->health_zone_id,
+            'healed' => $this->healed,
             'health_zone' => $this->health_zone(),
-            'last_update' => $this->roles()->where('name', 'Administrator')->exists()
+            'last_update' => $this->last_update
         ];
     }
 }
