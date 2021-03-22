@@ -10,13 +10,7 @@
                 <b-form-group
                   label="Date"
                   label-class="text-dash-color"
-<<<<<<< HEAD
-                  :invalid-feedback="
-                    errors.publish_date ? errors.publish_date[0] : null
-                  "
-=======
                   :invalid-feedback="errors.publish_date ? errors.publish_date[0] : null"
->>>>>>> pandemics
                   :state="errors.publish_date ? false : null"
                   :disabled="isCreating"
                 >
@@ -27,17 +21,6 @@
                     :max="new Date()"
                     required
                   />
-<<<<<<< HEAD
-                  <label class="mt-2 text-dash-color" for="check-group-1"
-                    >Zone de sante *</label
-                  >
-                  <v-select
-                    v-model="form.zone"
-                    class="input-select"
-                    :options="zones"
-                    label="name"
-                    :reduce="item => item.id"
-=======
                   <label class="mt-2 text-dash-color" for="check-group-1">Zone de sante *</label>
                   <v-select
                     required
@@ -46,16 +29,11 @@
                     :options="zones"
                     label="name"
                     :reduce="(item) => item.id"
->>>>>>> pandemics
                   />
                 </b-form-group>
               </b-col>
             </b-row>
-<<<<<<< HEAD
-            <b-row class="d-flex justify-content-start px-o">
-=======
             <b-row>
->>>>>>> pandemics
               <b-col md="4">
                 <b-form-group
                   label-class="text-dash-color"
@@ -137,30 +115,6 @@
                 </b-form-group>
               </b-col>
             </b-row>
-<<<<<<< HEAD
-            <b-row class="mx-1">
-              <b-button
-                type="submit"
-                class="btn-dash-sucess"
-                :disabled="isCreating"
-              >
-                <span v-if="isCreating"
-                  ><b-spinner class="align-middle"></b-spinner>
-                  <span>en cours ...</span>
-                </span>
-                <div v-else>
-                  <span v-if="isUpdating">Modifier</span>
-                  <span v-else>Enregistrer</span>
-                </div>
-              </b-button>
-              <b-button
-                :disabled="isCreating"
-                v-if="isUpdating"
-                class="btn-dash-danger"
-                @click="cancelEditMode"
-                >Annuler</b-button
-              >
-=======
             <b-row>
               <b-col>
                 <b-button
@@ -185,7 +139,6 @@
                   >Annuler</b-button
                 >
               </b-col>
->>>>>>> pandemics
             </b-row>
           </b-form>
         </b-card>
