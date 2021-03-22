@@ -123,8 +123,6 @@ class PandemicController extends Controller
     public function update(Request $request, $pandemic_id)
     {
         $data = $this->validate_form($request->all());
-        dd($data);
-        exit();
         try {
             $pandemy = Pandemic::find($pandemic_id);
             if (!$pandemy) {

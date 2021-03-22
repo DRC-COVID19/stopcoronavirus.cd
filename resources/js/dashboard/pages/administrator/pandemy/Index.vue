@@ -318,6 +318,19 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    ...mapAction(["createPandemics"]),
+    ...mapActions([
+      "getListPandemics",
+      "updatePandemics",
+      "getListPandemics",
+      "searchPandemics"
+    ]),
+    toEdit(item) {
+      this.isUpdating = true;
+      this.form = { ...item };
+    }
   }
 };
 </script>

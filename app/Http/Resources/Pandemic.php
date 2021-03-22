@@ -22,7 +22,7 @@ class Pandemic extends JsonResource
             'seriously' => $this->seriously,
             'health_zone_id' => $this->health_zone_id,
             'healed' => $this->healed,
-            'health_zone' => $this->health_zone(),
+            'health_zone' => $this->health_zone,
             'last_update' => $this->last_update
         ];
     }
