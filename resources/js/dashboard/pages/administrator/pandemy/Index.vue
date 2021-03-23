@@ -335,7 +335,8 @@ export default {
       "getListPandemics",
       "updatePandemics",
       "getListPandemics",
-      "searchPandemics"
+      "searchPandemics",
+      "removePandemics"
     ]),
     toEdit(item) {
       this.isUpdating = true;

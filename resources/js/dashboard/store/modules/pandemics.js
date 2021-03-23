@@ -139,7 +139,7 @@ export default {
             reject(response);
           })
           .finally(() => {
-            commit("setIsloading", false);
+            commit("setIsLoading", false);
           })
       })
     },
