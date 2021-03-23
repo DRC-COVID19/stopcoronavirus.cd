@@ -30,7 +30,7 @@
                     required
                     class="input-dash"
                     v-model="form.selectedZone"
-                    :options="listHealthZones"
+                    :options="healthZonesData"
                     label="name"
                     :reduce="item => item.id"
                   />
@@ -168,7 +168,7 @@
               placeholder="Zone de sante"
               class="input-dash"
               v-model="selectedHealthZoneFilter"
-              :options="listHealthZones"
+              :options="healthZonesData"
               label="name"
               :reduce="item => item.id"
             />
@@ -186,7 +186,7 @@
           hover
           striped
           responsive
-          :items="listPandemics"
+          :items="pandemicsData"
           :fields="fields"
         >
           <template #cell(actions)="data">
@@ -342,18 +342,23 @@ export default {
       return this.listPandemics.data;
     },
 
-    pandemicsMeta() {
-      return this.listPandemics.meta ? this.listPandemics.meta : {
-        currentPage: 1,
-        from: 1,
-        lastPage: 1,
-        path: "#",
-        perPage: 1,
-        to: 1,
-        total: 1
-      }
-    }
+    healthZonesData() {
+      return this.listHealthZones.data
+    },
 
+    pandemicsMeta() {
+      return this.listPandemics.meta
+        ? this.listPandemics.meta
+        : {
+            currentPage: 1,
+            from: 1,
+            lastPage: 1,
+            path: "#",
+            perPage: 1,
+            to: 1,
+            total: 1
+          };
+    }
   },
 
   methods: {
