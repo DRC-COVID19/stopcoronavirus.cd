@@ -199,6 +199,11 @@
               @click="remove(data.item)"
             ></i>
           </template>
+          <template
+            #cell(health_zone)="data"
+          >
+            {{data.item.health_zone ? data.item.health_zone.name : ""}}
+          </template>
         </b-table>
         <b-row>
           <b-col class="d-flex justify-content-end">
@@ -264,61 +269,9 @@ export default {
       perPage: 15,
       errors: {},
       filter: null,
-      // zones: ["Nord-Kivu", "Kinshasa", "Sud-Kivu", "Katanga"],
+      selectedHealthZoneFilter: null,
       form: {},
       currentItem: {}
-      // listPandemics: [
-      //   {
-      //     id: "1",
-      //     confirmed: 12,
-      //     seriously: 29,
-      //     sick: 13,
-      //     healed: 23,
-      //     last_update: "02-23-2021",
-      //     dead: 34,
-      //     health_zone: "Afia"
-      //   },
-      //   {
-      //     id: "1",
-      //     confirmed: 12,
-      //     seriously: 29,
-      //     sick: 13,
-      //     healed: 23,
-      //     last_update: "02-23-2021",
-      //     dead: 34,
-      //     health_zone: "Afia"
-      //   },
-      //   {
-      //     id: "1",
-      //     confirmed: 12,
-      //     seriously: 29,
-      //     sick: 13,
-      //     healed: 23,
-      //     last_update: "02-23-2021",
-      //     dead: 34,
-      //     health_zone: "Afia"
-      //   },
-      //   {
-      //     id: "1",
-      //     confirmed: 12,
-      //     seriously: 29,
-      //     sick: 13,
-      //     healed: 23,
-      //     last_update: "02-23-2021",
-      //     dead: 34,
-      //     health_zone: "Afia"
-      //   },
-      //   {
-      //     id: "1",
-      //     confirmed: 12,
-      //     seriously: 29,
-      //     sick: 13,
-      //     healed: 23,
-      //     last_update: "02-23-2021",
-      //     dead: 34,
-      //     health_zone: "Afia"
-      //   }
-      // ]
     };
   },
 
@@ -330,8 +283,6 @@ export default {
   computed: {
     ...mapState({
       listHealthZones: state => state.pandemics.listHealthZones,
-      selectedHealthZone: state => state.pandemics.selectedHealthZone,
-      selectedHealthZoneFilter: state => state.pandemics.selectedHealthZoneFilter,
       listPandemics: state => state.pandemics.listPandemics,
       isLoading: state => state.pandemics.isLoading,
       isCreating: state => state.pandemics.isCreating,

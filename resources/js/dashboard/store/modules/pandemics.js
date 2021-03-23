@@ -7,19 +7,11 @@ export default {
     isLoading: false,
     isUpdating: false,
     isCreating: false,
-    isDeleted: false,
-    selectedHealthZone: null,
-    selectedHealthZoneFilter: null
+    isDeleted: false
   },
   mutations: {
     setListPandemics(state, payload) {
       state.listPandemics = payload;
-    },
-    setSelectedHealthZone(state, payload) {
-      state.selectedHealthZone = payload;
-    },
-    setSelectedHealthZoneFilter(state, payload) {
-      state.selectedHealthZoneFilter = payload;
     },
     setListHealthZones(state, payload) {
       state.listHealthZones = payload;
