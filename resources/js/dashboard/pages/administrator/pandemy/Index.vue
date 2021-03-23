@@ -29,8 +29,8 @@
                   <v-select
                     required
                     class="input-dash"
-                    v-model="form.zone"
-                    :options="zones"
+                    v-model="form.selectedZone"
+                    :options="listHealthZones"
                     label="name"
                     :reduce="item => item.id"
                   />
@@ -167,8 +167,8 @@
             <v-select
               placeholder="Zone de sante"
               class="input-dash"
-              v-model="form.zone"
-              :options="zones"
+              v-model="selectedHealthZoneFilter"
+              :options="listHealthZones"
               label="name"
               :reduce="item => item.id"
             />
@@ -205,7 +205,7 @@
             <b-pagination
               :total-rows="totalRows"
               :per-page="perPage"
-              :current-page="currenPage"
+              :current-page="currentPage"
               :disabled="isCreating"
             ></b-pagination>
           </b-col>
@@ -260,7 +260,7 @@ export default {
         "actions"
       ],
       totalRows: 10,
-      currenPage: 1,
+      currentPage: 1,
       perPage: 15,
       errors: {},
       filter: null,
@@ -329,10 +329,31 @@ export default {
 
   computed: {
     ...mapState({
-      listPandemics: state => state.listPandemics,
-      isLoading: state => state.isLoading,
-      isUpdating: state => state.isUpdating
-    })
+      listHealthZones: state => state.pandemics.listHealthZones,
+      selectedHealthZone: state => state.pandemics.selectedHealthZone,
+      selectedHealthZoneFilter: state => state.pandemics.selectedHealthZoneFilter,
+      listPandemics: state => state.pandemics.listPandemics,
+      isLoading: state => state.pandemics.isLoading,
+      isCreating: state => state.pandemics.isCreating,
+      isUpdating: state => state.pandemics.isUpdating
+    }),
+
+    pandemicsData() {
+      return this.listPandemics.data;
+    },
+
+    pandemicsMeta() {
+      return this.listPandemics.meta ? this.listPandemics.meta : {
+        currentPage: 1,
+        from: 1,
+        lastPage: 1,
+        path: "#",
+        perPage: 1,
+        to: 1,
+        total: 1
+      }
+    }
+
   },
 
   methods: {
