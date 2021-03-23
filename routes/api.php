@@ -248,7 +248,7 @@ Route::group(['prefix' => 'pandemy', 'middleware' => 'auth:dashboard'], function
   Route::get('/{pandemy_id}', 'PandemicController@show');
   Route::put('/{pandemy_id}', 'PandemicController@update');
   Route::delete('/{pandemy_id}', 'PandemicController@destroy');
-  Route::get('/filter/health_zone', 'PandemicController@filter_by_health_zone');
+  Route::get('/filter', 'PandemicController@filter');
 });
 
 //

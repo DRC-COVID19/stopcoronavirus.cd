@@ -152,10 +152,11 @@ class PandemicController extends Controller
     public function filter(Request $request)
     {
         try {
-            if ($request->get('health_zone_id')->any()) {
-                // $pandemy = Pandemic::where('last_update', '=', $request->get('date'))->andWhere()
+            if ($request->get('health_zone_id') && $request->get('date')) {
+                $pandemy = Pandemic::where('last_update', $request->get('date'))->where('health_zone_id', $request->get('health_zone_id'));
+            } else {
+                $pandemy = $request->get('health_zone_id') ? Pandemic::where('health_zone_id', $request->get('health_zone_id'))->paginate(15) : Pandemic::where('last_update', $request->get('last_update'))->paginate(15);
             }
-            $pandemy = Pandemic::where('last_update', $request->get('date'))->first();
             return response()->json($pandemy, 202);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {

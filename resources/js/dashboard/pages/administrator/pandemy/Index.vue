@@ -326,6 +326,15 @@ export default {
     }
   },
 
+  watch: {
+    filter() {
+      this.search();
+    },
+    selectedHealthZoneFilter() {
+      this.search();
+    }
+  },
+
   methods: {
     ...mapActions(["createPandemics"]),
     ...mapActions([
@@ -336,6 +345,12 @@ export default {
       "searchPandemics",
       "removePandemics"
     ]),
+
+    search() {
+      this.searchPandemics(this.filter, this.selectedHealthZoneFilter).catch(error => {
+        console.log(error);
+      })
+    },
 
     toEdit(item) {
       this.isEditingMode = true;
