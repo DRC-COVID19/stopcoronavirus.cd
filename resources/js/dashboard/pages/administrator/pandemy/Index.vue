@@ -205,6 +205,7 @@
             {{data.item.health_zone ? data.item.health_zone.name : ""}}
           </template>
         </b-table>
+        <b-row>{{isLoading}}</b-row>
         <b-row>
           <b-col class="d-flex justify-content-end">
             <b-pagination
@@ -276,7 +277,6 @@ export default {
   },
 
   mounted() {
-    this.getListHealthZones();
     this.getListPandemics();
   },
 
@@ -326,7 +326,7 @@ export default {
       this.form = { ...item };
     },
     remove(item) {
-      this.isLoading = true;
+      this.currentItem = item;
       this.$bvModal.show("confirmation-box");
     },
     submit_form() {
