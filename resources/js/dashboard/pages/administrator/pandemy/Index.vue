@@ -14,7 +14,7 @@
                     errors.last_update ? errors.last_update[0] : null
                   "
                   :state="errors.last_update ? false : null"
-                  :disabled="isCreating"
+                  :disabled="isEditingMode"
                 >
                   <b-form-datepicker
                     v-model="form.last_update"
@@ -131,13 +131,13 @@
                     <span>en cours ...</span>
                   </span>
                   <div v-else>
-                    <span v-if="isUpdating">Modifier</span>
+                    <span v-if="isEditingMode">Modifier</span>
                     <span v-else>Enregistrer</span>
                   </div>
                 </b-button>
                 <b-button
                   :disabled="isCreating"
-                  v-if="isUpdating"
+                  v-if="isEditingMode"
                   class="btn-dash-danger"
                   @click="cancelEditMode"
                   >Annuler</b-button
@@ -148,6 +148,7 @@
         </b-card>
       </b-col>
       <b-col md="8">
+        <div class="hide-waiting" v-if="isEditingMode"></div>
         <Header title="Pandemie" iconClass="fas fa-procedures" />
         <b-row class="my-3" align-h="start">
           <b-col cols="12" md="6">
@@ -199,15 +200,11 @@
               @click="toRemove(data.item)"
             ></i>
           </template>
-          <template
-            #cell(last_update)="data"
-          >
-            {{moment(data.item.last_update).format("DD.MM.YYYY")}}
+          <template #cell(last_update)="data">
+            {{ moment(data.item.last_update).format("DD.MM.YYYY") }}
           </template>
-          <template
-            #cell(health_zone)="data"
-          >
-            {{data.item.health_zone ? data.item.health_zone.name : ""}}
+          <template #cell(health_zone)="data">
+            {{ data.item.health_zone ? data.item.health_zone.name : "" }}
           </template>
         </b-table>
         <b-row>
@@ -281,6 +278,7 @@ export default {
         "actions"
       ],
       totalRows: 10,
+      isEditingMode: false,
       currentPage: 1,
       perPage: 15,
       errors: {},
@@ -310,7 +308,7 @@ export default {
     },
 
     healthZonesData() {
-      return this.listHealthZones.data
+      return this.listHealthZones.data;
     },
 
     pandemicsMeta() {
@@ -338,28 +336,32 @@ export default {
       "searchPandemics",
       "removePandemics"
     ]),
+
     toEdit(item) {
-      this.isUpdating = true;
+      this.isEditingMode = true;
       this.form = { ...item };
     },
+
     toRemove(item) {
       this.currentItem = item;
       this.$bvModal.show("confirmation-box");
     },
+
     submit_form() {
       // console.log(this.form);
-      if (this.isUpdating) {
+      if (this.isEditingMode) {
         this.onUpdatePandemic();
       } else {
         this.onCreatePandemics();
       }
     },
+
     onCreatePandemics() {
       this.errors = {};
       this.createPandemics(this.form)
         .then(() => {
           this.form = {};
-          this.isUpdating = false;
+          this.isEditingMode = false;
           this.$notify({
             group: "alert",
             title: "Ajout",
@@ -379,17 +381,24 @@ export default {
           }
         });
     },
-    onDelete () {
+
+    cancelEditMode() {
+      this.isEditingMode = false;
+      this.form = {};
+    },
+
+    onDelete() {
       this.$bvModal.hide("confirmation-box");
       this.removePandemics(this.currentItem)
-        .then((result) => {
+        .then(result => {
           this.$notify({
             group: "alert",
             title: "Suppression",
             text: "Supprimee avec succès",
             type: "success"
           });
-        }).catch((err) => {
+        })
+        .catch(err => {
           this.$notify({
             group: "alert",
             title: "Supprimer log",
@@ -403,7 +412,7 @@ export default {
       this.updatePandemics(this.form)
         .then(() => {
           this.form = {};
-          this.isUpdating = false;
+          this.isEditingMode = false;
           this.$notify({
             group: "alert",
             title: "Modification",
@@ -430,4 +439,9 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import "@~/sass/_variables";
+.btn-action {
+  cursor: pointer;
+}
+</style>

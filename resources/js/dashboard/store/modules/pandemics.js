@@ -58,9 +58,9 @@ export default {
       commit,
       dispatch
     }, payload = {}) {
-      commit("isUpdating", true);
+      commit("setIsUpdating", true);
       return new Promise((resolve, reject) => {
-        axios.put('/api/dashboard/' + payload)
+        axios.put('/api/pandemy/' + payload.id)
           .then(({
             data
           }) => {
