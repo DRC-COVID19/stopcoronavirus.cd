@@ -2,6 +2,7 @@ export default {
   state: {
     listPandemics: {},
     currentPage: 1,
+    listHealthZones: {},
     selectedPandemics: null,
     isLoading: false,
     isUpdating: false,
@@ -11,6 +12,9 @@ export default {
   mutations: {
     setListPandemics(state, payload) {
       state.listPandemics = payload;
+    },
+    setListHealthZones(state, payload) {
+      state.listHealthZones = payload;
     },
     setSelectedPandemics(state, payload) {
       state.selectedPandemics = payload;
@@ -73,13 +77,35 @@ export default {
           })
       })
     },
+    getListHealthZones({
+      state,
+      commit
+    }, payload = {}) {
+      commit("setIsLoading", true);
+      return new Promise((resolve, reject) => {
+        axios.get("/api/health_zones", {
+          params: payload.page || 1
+        })
+          .then(({
+            data
+          }) => {
+            commit("setListHealthZones", data);
+            commit("isLoading", false);
+            resolve(true);
+          })
+          .catch(response => {
+            console.log(response);
+            reject(resolve);
+          })
+      })
+    },
     getListPandemics({
       state,
       commit
     }, payload = {}) {
       commit("setIsLoading", true);
       return new Promise((resolve, reject) => {
-        axios.get('/api/dashboard/pandemy', {
+        axios.get('/api/pandemy', {
             params: {
               page: payload.page || 1
             }

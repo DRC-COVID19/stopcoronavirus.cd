@@ -226,20 +226,21 @@ Route::group([
   });
 });
 
+// Health zone sub-zone
+
+Route::group(['prefix' => 'health_zones'], function () {
+  Route::post('/', 'HealthZoneController@create');
+  Route::get('/', 'HealthZoneController@index');
+  Route::put('/{health_zone_id}', 'HealthZoneController@update');
+  Route::delete('/{health_zone_id}', 'HealthZoneController@destroy');
+  Route::get('/filter', 'HealthZoneController@filter');
+});
+
+//
+
 // Pandemy group
 
 Route::group(['prefix' => 'pandemy', 'middleware' => 'auth:dashboard'], function () {
-  // Health zone sub-zone
-
-  Route::group(['prefix' => 'health_zones'], function () {
-    Route::post('/', 'HealthZoneController@create');
-    Route::get('/', 'HealthZoneController@index');
-    Route::put('/{health_zone_id}', 'HealthZoneController@update');
-    Route::delete('/{health_zone_id}', 'HealthZoneController@destroy');
-    Route::get('/filter', 'HealthZoneController@filter');
-  });
-
-  //
   Route::get('/', 'PandemicController@index');
   Route::get('/filter', 'PandemicController@filter');
   // Route::get('/health_zones', 'PandemicController@health_zone');

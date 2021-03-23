@@ -217,6 +217,7 @@
 
 <script>
 import Header from "../components/Header";
+import { mapActions, mapState } from "vuex";
 export default {
   components: {
     Header
@@ -263,69 +264,81 @@ export default {
       perPage: 15,
       errors: {},
       filter: null,
-      zones: ["Nord-Kivu", "Kinshasa", "Sud-Kivu", "Katanga"],
+      // zones: ["Nord-Kivu", "Kinshasa", "Sud-Kivu", "Katanga"],
       form: {},
-      isUpdating: false,
-      currentItem: {},
-      isCreating: false,
-      isLoading: false,
-      listPandemics: [
-        {
-          id: "1",
-          confirmed: 12,
-          seriously: 29,
-          sick: 13,
-          healed: 23,
-          last_update: "02-23-2021",
-          dead: 34,
-          health_zone: "Afia"
-        },
-        {
-          id: "1",
-          confirmed: 12,
-          seriously: 29,
-          sick: 13,
-          healed: 23,
-          last_update: "02-23-2021",
-          dead: 34,
-          health_zone: "Afia"
-        },
-        {
-          id: "1",
-          confirmed: 12,
-          seriously: 29,
-          sick: 13,
-          healed: 23,
-          last_update: "02-23-2021",
-          dead: 34,
-          health_zone: "Afia"
-        },
-        {
-          id: "1",
-          confirmed: 12,
-          seriously: 29,
-          sick: 13,
-          healed: 23,
-          last_update: "02-23-2021",
-          dead: 34,
-          health_zone: "Afia"
-        },
-        {
-          id: "1",
-          confirmed: 12,
-          seriously: 29,
-          sick: 13,
-          healed: 23,
-          last_update: "02-23-2021",
-          dead: 34,
-          health_zone: "Afia"
-        }
-      ]
+      currentItem: {}
+      // listPandemics: [
+      //   {
+      //     id: "1",
+      //     confirmed: 12,
+      //     seriously: 29,
+      //     sick: 13,
+      //     healed: 23,
+      //     last_update: "02-23-2021",
+      //     dead: 34,
+      //     health_zone: "Afia"
+      //   },
+      //   {
+      //     id: "1",
+      //     confirmed: 12,
+      //     seriously: 29,
+      //     sick: 13,
+      //     healed: 23,
+      //     last_update: "02-23-2021",
+      //     dead: 34,
+      //     health_zone: "Afia"
+      //   },
+      //   {
+      //     id: "1",
+      //     confirmed: 12,
+      //     seriously: 29,
+      //     sick: 13,
+      //     healed: 23,
+      //     last_update: "02-23-2021",
+      //     dead: 34,
+      //     health_zone: "Afia"
+      //   },
+      //   {
+      //     id: "1",
+      //     confirmed: 12,
+      //     seriously: 29,
+      //     sick: 13,
+      //     healed: 23,
+      //     last_update: "02-23-2021",
+      //     dead: 34,
+      //     health_zone: "Afia"
+      //   },
+      //   {
+      //     id: "1",
+      //     confirmed: 12,
+      //     seriously: 29,
+      //     sick: 13,
+      //     healed: 23,
+      //     last_update: "02-23-2021",
+      //     dead: 34,
+      //     health_zone: "Afia"
+      //   }
+      // ]
     };
   },
+
+  mounted() {
+    this.getListHealthZones();
+    this.getListPandemics();
+  },
+
+  computed: {
+    ...mapState({
+      listPandemics: state => state.listPandemics,
+      isLoading: state => state.isLoading,
+      isUpdating: state => state.isUpdating
+    })
+  },
+
   methods: {
-    ...mapAction(["createPandemics"]),
+    ...mapActions(["createPandemics"]),
     ...mapActions([
+      "getListHealthZones",
       "getListPandemics",
       "updatePandemics",
       "getListPandemics",
@@ -395,7 +408,7 @@ export default {
             this.errors = response.data.errors;
           }
         });
-    },
+    }
     // search () {
 
     // }
@@ -403,6 +416,4 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
