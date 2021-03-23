@@ -378,13 +378,23 @@ export default {
           }
         });
     },
-    onDeDelete () {
-      this.$$bvModal.hide("confirmation-box");
+    onDelete () {
+      this.$bvModal.hide("confirmation-box");
       this.removePandemics(this.currentItem)
         .then((result) => {
-          
+          this.$notify({
+            group: "alert",
+            title: "Suppression",
+            text: "Supprimee avec succès",
+            type: "success"
+          });
         }).catch((err) => {
-          
+          this.$notify({
+            group: "alert",
+            title: "Supprimer log",
+            text: "Une erreur est surveni",
+            type: "error"
+          });
         });
     },
     onUpdatePandemic() {

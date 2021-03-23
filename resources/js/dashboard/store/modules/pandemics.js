@@ -120,6 +120,29 @@ export default {
           })
       })
     },
+    removePandemics({
+      state,
+      commit,
+      dispatch
+    }, payload = {}) {
+      commit("setIsLoading", true);
+      return new Promise ((resolve, reject) => {
+        axios.delete(`/api/pandemy/${payload.id}`, payload)
+          .then(({
+            data
+          }) => {
+            dispatch("getListPandemics");
+            resolve(true);
+          })
+          .catch(response => {
+            console.log(response);
+            reject(response);
+          })
+          .finally(() => {
+            commit("setIsloading", false);
+          })
+      })
+    },
     searchPandemics({
       state,
       commit
