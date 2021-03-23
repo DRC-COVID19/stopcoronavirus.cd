@@ -11,14 +11,14 @@
                   label="Date"
                   label-class="text-dash-color"
                   :invalid-feedback="
-                    errors.publish_date ? errors.publish_date[0] : null
+                    errors.last_update ? errors.last_update[0] : null
                   "
-                  :state="errors.publish_date ? false : null"
+                  :state="errors.last_update ? false : null"
                   :disabled="isCreating"
                 >
                   <b-form-datepicker
-                    v-model="form.publish_date"
-                    :state="errors.publish_date ? false : null"
+                    v-model="form.last_update"
+                    :state="errors.last_update ? false : null"
                     class="input-dash"
                     :max="new Date()"
                     required
@@ -29,7 +29,7 @@
                   <v-select
                     required
                     class="input-dash"
-                    v-model="form.selectedZone"
+                    v-model="form.health_zone_id"
                     :options="healthZonesData"
                     label="name"
                     :reduce="item => item.id"
@@ -196,8 +196,13 @@
             ></i>
             <i
               class="mx-2 fas fa-trash btn-action text-danger"
-              @click="remove(data.item)"
+              @click="toRemove(data.item)"
             ></i>
+          </template>
+          <template
+            #cell(last_update)="data"
+          >
+            {{moment(data.item.last_update).format("DD.MM.YYYY")}}
           </template>
           <template
             #cell(health_zone)="data"
@@ -205,7 +210,6 @@
             {{data.item.health_zone ? data.item.health_zone.name : ""}}
           </template>
         </b-table>
-        <b-row>{{isLoading}}</b-row>
         <b-row>
           <b-col class="d-flex justify-content-end">
             <b-pagination
@@ -218,6 +222,17 @@
         </b-row>
       </b-col>
     </b-row>
+    <b-modal id="confirmation-box">
+      Voulez-vous supprimer cette ligne ?
+      <template #modal-footer="{ hide }">
+        <b-button size="sm" variant="success" @click="onDelete">
+          Accepter
+        </b-button>
+        <b-button size="sm" variant="danger" @click="hide('confirmation-box')">
+          Annuler
+        </b-button>
+      </template>
+    </b-modal>
   </b-container>
 </template>
 
@@ -277,6 +292,7 @@ export default {
   },
 
   mounted() {
+    this.getListHealthZones();
     this.getListPandemics();
   },
 
@@ -325,11 +341,12 @@ export default {
       this.isUpdating = true;
       this.form = { ...item };
     },
-    remove(item) {
+    toRemove(item) {
       this.currentItem = item;
       this.$bvModal.show("confirmation-box");
     },
     submit_form() {
+      // console.log(this.form);
       if (this.isUpdating) {
         this.onUpdatePandemic();
       } else {
@@ -359,6 +376,15 @@ export default {
           if (response.status == 422) {
             this.errors = response.data.errors;
           }
+        });
+    },
+    onDeDelete () {
+      this.$$bvModal.hide("confirmation-box");
+      this.removePandemics(this.currentItem)
+        .then((result) => {
+          
+        }).catch((err) => {
+          
         });
     },
     onUpdatePandemic() {

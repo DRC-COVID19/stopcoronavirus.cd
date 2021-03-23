@@ -37,7 +37,7 @@ export default {
     }, payload = {}) {
       commit("setIsLoading", true);
       return new Promise((resolve, reject) => {
-        axios.post('/api/dashboard/pandemy', payload)
+        axios.post('/api/pandemy', payload)
           .then(({
             data
           }) => {
@@ -58,7 +58,6 @@ export default {
       commit,
       dispatch
     }, payload = {}) {
-      commit("isLoading", true);
       commit("isUpdating", true);
       return new Promise((resolve, reject) => {
         axios.put('/api/dashboard/' + payload)
@@ -73,7 +72,7 @@ export default {
             reject(response);
           })
           .finally(() => {
-            commit('setIsLoading', false);
+            commit('setIsUpdating', false);
           })
       })
     },
@@ -81,7 +80,6 @@ export default {
       state,
       commit
     }, payload = {}) {
-      commit("setIsLoading", true);
       return new Promise((resolve, reject) => {
         axios.get("/api/health_zones", {
           params: payload.page || 1
@@ -90,7 +88,6 @@ export default {
             data
           }) => {
             commit("setListHealthZones", data);
-            commit("isLoading", false);
             resolve(true);
           })
           .catch(response => {
