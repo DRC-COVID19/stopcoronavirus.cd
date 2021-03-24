@@ -309,7 +309,7 @@ export default {
     },
 
     healthZonesData() {
-      return this.listHealthZones.data;
+      return this.listHealthZones.dataexplainful;
     },
 
     pandemicsMeta() {
