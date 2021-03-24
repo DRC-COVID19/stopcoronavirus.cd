@@ -309,7 +309,7 @@ export default {
     },
 
     healthZonesData() {
-      return this.listHealthZones.dataexplainful;
+      return this.listHealthZones.data;
     },
 
     pandemicsMeta() {
@@ -342,13 +342,12 @@ export default {
       "getListHealthZones",
       "getListPandemics",
       "updatePandemics",
-      "getListPandemics",
       "searchPandemics",
       "removePandemics"
     ]),
 
     search() {
-      this.searchPandemics(this.filter, this.selectedHealthZoneFilter).catch(error => {
+      this.searchPandemics({last_update: this.filter ? this.filter : "", health_zone: this.selectedHealthZoneFilter ? this.selectedHealthZoneFilter : ""}).catch(error => {
         console.log(error);
       })
     },
@@ -364,7 +363,6 @@ export default {
     },
 
     submit_form() {
-      // console.log(this.form);
       if (this.isEditingMode) {
         this.onUpdatePandemic();
       } else {
