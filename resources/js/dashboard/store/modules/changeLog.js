@@ -102,7 +102,7 @@ export default {
             .then(({
               data
             }) => {
-              commit('setListChangeLogs', data);
+              commit("setListChangeLogs", data);
               resolve(true);
             })
             .catch(({
@@ -112,7 +112,7 @@ export default {
               reject(response);
             });
         } else {
-          dispatch('getListChangedLogs');
+          dispatch("getListChangedLogs");
           resolve(true);
         }
       })

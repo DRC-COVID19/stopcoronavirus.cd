@@ -228,7 +228,7 @@ Route::group([
 
 // Health zone sub-zone
 
-Route::group(['prefix' => 'health_zones'], function () {
+Route::group(['prefix' => 'health_zones', 'middleware' => 'auth:dashboard'], function () {
   Route::post('/', 'HealthZoneController@create');
   Route::get('/', 'HealthZoneController@index');
   Route::put('/{health_zone_id}', 'HealthZoneController@update');

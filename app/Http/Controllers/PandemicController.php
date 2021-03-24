@@ -157,7 +157,7 @@ class PandemicController extends Controller
             } else {
                 $pandemy = $request->get('health_zone_id') ? Pandemic::where('health_zone_id', $request->get('health_zone_id'))->paginate(15) : Pandemic::where('last_update', $request->get('last_update'))->paginate(15);
             }
-            return response()->json($pandemy, 202);
+            return PandemicRessources::collection($pandemy);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

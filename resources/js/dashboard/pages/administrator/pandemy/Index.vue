@@ -210,6 +210,7 @@
         <b-row>
           <b-col class="d-flex justify-content-end">
             <b-pagination
+              v-model="pandemicsMeta.current_page"
               :total-rows="totalRows"
               :per-page="perPage"
               :current-page="currentPage"
@@ -315,11 +316,11 @@ export default {
       return this.listPandemics.meta
         ? this.listPandemics.meta
         : {
-            currentPage: 1,
+            current_page: 1,
             from: 1,
-            lastPage: 1,
+            last_page: 1,
             path: "#",
-            perPage: 1,
+            per_page: 1,
             to: 1,
             total: 1
           };
