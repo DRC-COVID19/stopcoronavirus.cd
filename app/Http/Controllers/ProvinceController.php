@@ -41,12 +41,9 @@ class ProvinceController extends Controller
     {
         $data = $this->form_validator($request->all());
         try {
-            DB::beginTransaction();
             $province = Province::create($data);
-            DB::commit();
             return response()->json($province, 201, []);
         } catch (\Throwable $th) {
-            DB::rollBack();
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
             }
