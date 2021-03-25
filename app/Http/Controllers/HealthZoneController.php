@@ -79,12 +79,9 @@ class HealthZoneController extends Controller
     {
         $data = $this->form_validate($request->all());
         try {
-            DB::beginTransaction();
             $health_zone = HealthZone::create($data);
-            DB::commit();
             return response()->json($health_zone, 201, []);
         } catch (\Throwable $th) {
-            DB::rollBack();
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
             }
