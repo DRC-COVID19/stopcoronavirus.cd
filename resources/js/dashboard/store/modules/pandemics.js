@@ -148,7 +148,6 @@ export default {
       commit,
       dispatch
     }, payload = null) {
-      console.log(payload.last_update);
       commit('setIsLoading', true)
       return new Promise((resolve, reject) => {
         if (payload.last_update !== "" || payload.health_zone_id !== "") {
@@ -162,7 +161,6 @@ export default {
             .catch(response => {
               reject(response);
               commit("setIsLoading", false);
-              console.log(response);
             })
             .finally(() => {
               commit("setIsLoading", false);
@@ -173,8 +171,5 @@ export default {
         }
       })
     }
-  },
-  getters: {
-    // TO be add logs
   }
 }
