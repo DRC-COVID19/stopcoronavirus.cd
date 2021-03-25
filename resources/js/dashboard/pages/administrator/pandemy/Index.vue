@@ -451,7 +451,7 @@ export default {
             type: "success"
           });
         })
-        .catch(err => {
+        .catch(({ response }) => {
           this.$notify({
             group: "alert",
             title: "Modification",
