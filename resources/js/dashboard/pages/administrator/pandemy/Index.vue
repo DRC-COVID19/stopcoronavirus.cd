@@ -211,9 +211,10 @@
           <b-col class="d-flex justify-content-end">
             <b-pagination
               v-model="pandemicsMeta.current_page"
-              :total-rows="totalRows"
-              :per-page="perPage"
-              :current-page="currentPage"
+              :total-rows="pandemicsMeta.total"
+              :per-page="pandemicsMeta.per_page"
+              @change="switchPage"
+              :current-page="pandemicsMeta.current_page"
               :disabled="isCreating"
             ></b-pagination>
           </b-col>
@@ -348,14 +349,17 @@ export default {
 
     search() {
       this.searchPandemics({
-        last_update: this.filter 
-          ? this.filter 
-          : "",
+        last_update: this.filter ? this.filter : "",
         health_zone_id: this.selectedHealthZoneFilter
           ? this.selectedHealthZoneFilter
           : ""
       }).catch(error => {
-        console.log(error);
+        this.$notify({
+            group: "alert",
+            title: "Erreur",
+            text: "Une erreur dans la recherche",
+            type: "error"
+          });
       });
     },
 
@@ -367,6 +371,12 @@ export default {
     toRemove(item) {
       this.currentItem = item;
       this.$bvModal.show("confirmation-box");
+    },
+
+    switchPage(page) {
+      this.getListPandemics({ page }).then(() => {
+        window.scrollTo(0, 0);
+      });
     },
 
     submit_form() {
