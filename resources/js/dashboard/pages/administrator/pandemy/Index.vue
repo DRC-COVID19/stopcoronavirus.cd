@@ -348,7 +348,7 @@ export default {
 
     search() {
       this.searchPandemics({
-        date: this.filter 
+        last_update: this.filter 
           ? this.filter 
           : "",
         health_zone_id: this.selectedHealthZoneFilter

@@ -145,12 +145,14 @@ export default {
     },
     searchPandemics({
       state,
-      commit
+      commit,
+      dispatch
     }, payload = null) {
+      console.log(payload.last_update);
       commit('setIsLoading', true)
       return new Promise((resolve, reject) => {
-        if (payload) {
-          axios.get('api/pandemy/filter?date=' + payload.date + '&health_zone_id=' + payload.health_zone_id)
+        if (payload.last_update !== "" || payload.health_zone_id !== "") {
+          axios.get('api/pandemy/filter?last_update=' + payload.last_update + '&health_zone_id=' + payload.health_zone_id)
             .then(({
               data
             }) => {
@@ -165,6 +167,9 @@ export default {
             .finally(() => {
               commit("setIsLoading", false);
             })
+        } else {
+          dispatch("getListPandemics");
+          resolve(true);
         }
       })
     }
