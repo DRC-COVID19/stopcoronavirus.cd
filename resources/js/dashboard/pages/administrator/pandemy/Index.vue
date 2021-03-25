@@ -347,9 +347,16 @@ export default {
     ]),
 
     search() {
-      this.searchPandemics({last_update: this.filter ? this.filter : "", health_zone: this.selectedHealthZoneFilter ? this.selectedHealthZoneFilter : ""}).catch(error => {
+      this.searchPandemics({
+        date: this.filter 
+          ? this.filter 
+          : "",
+        health_zone_id: this.selectedHealthZoneFilter
+          ? this.selectedHealthZoneFilter
+          : ""
+      }).catch(error => {
         console.log(error);
-      })
+      });
     },
 
     toEdit(item) {

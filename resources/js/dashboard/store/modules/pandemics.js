@@ -150,7 +150,7 @@ export default {
       commit('setIsLoading', true)
       return new Promise((resolve, reject) => {
         if (payload) {
-          axios.get('api/dashboard/pandemy/filter?date=' + payload.last_update + '&health_zone_id' + payload.health_zone_id)
+          axios.get('api/pandemy/filter?date=' + payload.date + '&health_zone_id=' + payload.health_zone_id)
             .then(({
               data
             }) => {
