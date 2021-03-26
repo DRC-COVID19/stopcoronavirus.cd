@@ -60,7 +60,7 @@ export default {
     }, payload = {}) {
       commit("setIsUpdating", true);
       return new Promise((resolve, reject) => {
-        axios.put('/api/pandemy/' + payload.id)
+        axios.put('/api/pandemy/' + payload.id, payload)
           .then(({
             data
           }) => {
