@@ -355,11 +355,11 @@ export default {
           : ""
       }).catch(error => {
         this.$notify({
-            group: "alert",
-            title: "Erreur",
-            text: "Une erreur dans la recherche",
-            type: "error"
-          });
+          group: "alert",
+          title: "Erreur",
+          text: "Une erreur dans la recherche",
+          type: "error"
+        });
       });
     },
 
@@ -463,9 +463,6 @@ export default {
           }
         });
     }
-    // search () {
-
-    // }
   }
 };
 </script>
