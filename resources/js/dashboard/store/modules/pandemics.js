@@ -45,7 +45,6 @@ export default {
             resolve(true);
           })
           .catch((response) => {
-            console.log(response);
             reject(response);
           })
           .finally(() => {
@@ -68,7 +67,6 @@ export default {
             resolve(true);
           })
           .catch(response => {
-            console.log(response);
             reject(response);
           })
           .finally(() => {
@@ -91,7 +89,6 @@ export default {
             resolve(true);
           })
           .catch(response => {
-            console.log(response);
             reject(resolve);
           })
       })
@@ -115,7 +112,6 @@ export default {
             resolve(true);
           })
           .catch(response => {
-            console.log(response);
             reject(response);
           })
       })
@@ -135,7 +131,6 @@ export default {
             resolve(true);
           })
           .catch(response => {
-            console.log(response);
             reject(response);
           })
           .finally(() => {
