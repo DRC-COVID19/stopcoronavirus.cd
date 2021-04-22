@@ -14,6 +14,7 @@
           <b-form-datepicker
             :state="errors.last_update ? false : null"
             :disabled="disableDate"
+            :max="new Date()"
             id="datepicker"
             v-model="form.last_update"
             class="mb-2"
@@ -139,10 +140,10 @@
         <b-button type="submit" variant="primary" class="btn-dash-sucess">
           <span v-if="isLoading">
             <b-spinner class="align-middle"></b-spinner>
-              <span>en cours ...</span>
+            <span>en cours ...</span>
           </span>
           <div v-else>
-            {{btnTitle }}
+            {{ btnTitle }}
           </div>
         </b-button>
         <b-button
@@ -159,29 +160,28 @@
 
 <script>
 export default {
-
   props: {
     isSituationAdded: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     isSituationUpdated: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
         return {};
-      },
+      }
     },
     errors: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
 
   data() {
@@ -202,11 +202,11 @@ export default {
         dead: "",
         imported: "",
         local: "",
-        healed: "",
+        healed: ""
       },
       showWarning: false,
       toBeCanceled: true,
-      roles: [],
+      roles: []
     };
   },
 
@@ -219,7 +219,7 @@ export default {
     },
     formToPopulate() {
       this.populateForm;
-    },
+    }
   },
   mounted() {
     this.resetForm();
@@ -233,7 +233,7 @@ export default {
     },
     formToPopulate() {
       this.populateForm();
-    },
+    }
   },
 
   methods: {
@@ -287,7 +287,7 @@ export default {
       this.form.healed = this.formToPopulate.healed;
       this.title = "Editer la situation";
       this.btnTitle = "Valider";
-    },
+    }
   },
 
   computed: {
@@ -295,13 +295,12 @@ export default {
       return this.form.password === this.form.confirmPassword
         ? ""
         : "Les mot de passes ne correspondent pas";
-    },
-  },
-  
+    }
+  }
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .main {
   background-color: white;

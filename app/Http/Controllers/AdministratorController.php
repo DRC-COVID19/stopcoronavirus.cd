@@ -159,7 +159,6 @@ class AdministratorController extends Controller
   public function show($admin_user_id)
   {
     try {
-
       $administrator = Administrator::find($admin_user_id);
       return response()->json(AdministratorResource::make($administrator), 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {

@@ -88,12 +88,12 @@ export default {
   props: {
     users: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     isLoading: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
   data() {
     return {
@@ -104,24 +104,24 @@ export default {
       isDeleteModalShown: false,
       currentUser: {
         id: -1,
-        name: "",
+        name: ""
       },
-      editModalShow: false,
+      editModalShow: false
     };
   },
   computed: {
     rows() {
       return this.users.length;
-    },
+    }
   },
   watch: {
-    filter () {
+    filter() {
       this.search();
     }
   },
   methods: {
-    search () {
-      this.$emit('onSearch', this.filter.trim());
+    search() {
+      this.$emit("onSearch", this.filter.trim());
     },
     deleteUser(name, userId) {
       this.isDeleteModalShown = true;
@@ -141,14 +141,14 @@ export default {
         name,
         usernmae,
         roles,
-        email,
+        email
       };
       this.$emit("onUpdateUser", this.currentUser);
-    },
-  },
+    }
+  }
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .input-filter {
   background: white;

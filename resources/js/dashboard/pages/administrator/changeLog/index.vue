@@ -157,7 +157,7 @@ import { mapActions, mapState } from "vuex";
 import Header from "../components/Header";
 export default {
   components: {
-    Header,
+    Header
   },
   data() {
     return {
@@ -165,29 +165,29 @@ export default {
       fields: [
         {
           key: "number",
-          label: "#",
+          label: "#"
         },
         {
           key: "from",
-          label: "Date",
+          label: "Date"
         },
         {
           key: "title",
-          lablel: "Titre",
+          lablel: "Titre"
         },
         {
           key: "owner",
-          lablel: "Par",
+          lablel: "Par"
         },
         {
           key: "action",
-          label: "Action",
-        },
+          label: "Actions"
+        }
       ],
       form: {},
       errors: {},
       isEditingMode: false,
-      itemToRemove: {},
+      itemToRemove: {}
     };
   },
 
@@ -196,16 +196,16 @@ export default {
   },
 
   watch: {
-    filter () {
-      this.search()
+    filter() {
+      this.search();
     }
   },
 
   computed: {
     ...mapState({
-      listChangeLogs: (state) => state.changeLog.listChangeLogs,
-      isCreating: (state) => state.changeLog.isCreating,
-      isLoading: (state) => state.changeLog.isLoading,
+      listChangeLogs: state => state.changeLog.listChangeLogs,
+      isCreating: state => state.changeLog.isCreating,
+      isLoading: state => state.changeLog.isLoading
     }),
     changeLogsData() {
       return this.listChangeLogs.data;
@@ -221,14 +221,19 @@ export default {
             path: "#",
             per_page: 1,
             to: 1,
-            total: 1,
+            total: 1
           };
-    },
+    }
   },
-  
+
   methods: {
     ...mapActions(["createChangeLog"]),
-    ...mapActions(["getListChangedLogs", "updateChangeLog", "removeChangeLog", "searchChangeLog"]),
+    ...mapActions([
+      "getListChangedLogs",
+      "updateChangeLog",
+      "removeChangeLog",
+      "searchChangeLog"
+    ]),
     submit_form() {
       if (this.isEditingMode) {
         this.submitUpdatingChangeLog();
@@ -246,7 +251,7 @@ export default {
             group: "alert",
             title: "Nouveau log",
             text: "Ajouter avec succès",
-            type: "success",
+            type: "success"
           });
         })
         .catch(({ response }) => {
@@ -254,7 +259,7 @@ export default {
             group: "alert",
             title: "Nouveau log",
             text: "Une erreur est surveni",
-            type: "error",
+            type: "error"
           });
           if (response.status == 422) {
             this.errors = response.data.errors;
@@ -271,7 +276,7 @@ export default {
             group: "alert",
             title: "Modifer log",
             text: "Modifier avec succès",
-            type: "success",
+            type: "success"
           });
         })
         .catch(({ response }) => {
@@ -279,7 +284,7 @@ export default {
             group: "alert",
             title: "Modifer log",
             text: "Une erreur est surveni",
-            type: "error",
+            type: "error"
           });
           if (response.status == 422) {
             this.errors = response.data.errors;
@@ -300,11 +305,10 @@ export default {
       this.isEditingMode = false;
       this.form = {};
     },
-    search () {
-      this.searchChangeLog(this.filter)
-        .catch((error) => {
-          console.log(error);
-        })
+    search() {
+      this.searchChangeLog(this.filter).catch(error => {
+        console.log(error);
+      });
     },
     onValidate() {
       this.$bvModal.hide("confirmation-box");
@@ -314,7 +318,7 @@ export default {
             group: "alert",
             title: "Supprimer log",
             text: "Supprimer avec succès",
-            type: "success",
+            type: "success"
           });
         })
         .catch(() => {
@@ -322,15 +326,15 @@ export default {
             group: "alert",
             title: "Supprimer log",
             text: "Une erreur est surveni",
-            type: "error",
+            type: "error"
           });
         });
     },
     remove(item) {
       this.itemToRemove = item;
       this.$bvModal.show("confirmation-box");
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -339,5 +343,4 @@ export default {
 .btn-action {
   cursor: pointer;
 }
-
 </style>

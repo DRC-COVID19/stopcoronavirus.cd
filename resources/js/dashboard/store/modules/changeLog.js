@@ -21,16 +21,21 @@ export default {
     }
   },
   actions: {
-    createChangeLog({ state, commit, dispatch }, payload = {}) {
+    createChangeLog({
+      state,
+      commit,
+      dispatch
+    }, payload = {}) {
       commit("setIsCreating", true);
       return new Promise((resolve, reject) => {
         axios.post('/api/dashboard/change-log', payload)
-          .then(({ data }) => {
+          .then(({
+            data
+          }) => {
             dispatch('getListChangedLogs');
             resolve(true)
           })
           .catch((response) => {
-            console.log(response);
             reject(response);
           })
           .finally(() => {
@@ -38,16 +43,21 @@ export default {
           });
       });
     },
-    updateChangeLog({ state, commit, dispatch }, payload = {}) {
+    updateChangeLog({
+      state,
+      commit,
+      dispatch
+    }, payload = {}) {
       commit("setIsCreating", true);
       return new Promise((resolve, reject) => {
         axios.put(`/api/dashboard/change-log/${payload.id}`, payload)
-          .then(({ data }) => {
+          .then(({
+            data
+          }) => {
             dispatch('getListChangedLogs');
             resolve(true)
           })
           .catch((response) => {
-            console.log(response);
             reject(response);
           })
           .finally(() => {
@@ -55,16 +65,21 @@ export default {
           });
       });
     },
-    removeChangeLog({ state, commit, dispatch }, payload = {}) {
+    removeChangeLog({
+      state,
+      commit,
+      dispatch
+    }, payload = {}) {
       commit("setIsCreating", true);
       return new Promise((resolve, reject) => {
         axios.delete(`/api/dashboard/change-log/${payload.id}`, payload)
-          .then(({ data }) => {
+          .then(({
+            data
+          }) => {
             dispatch('getListChangedLogs');
             resolve(true)
           })
           .catch((response) => {
-            console.log(response);
             reject(response);
           })
           .finally(() => {
@@ -72,54 +87,71 @@ export default {
           });
       });
     },
-    searchChangeLog ({ state, commit, dispatch }, payload = null) {
+    searchChangeLog({
+      state,
+      commit,
+      dispatch
+    }, payload = null) {
       return new Promise((resolve, reject) => {
         if (payload) {
           axios
-            .get('api/dashboard/change-log/filter?date='+payload)
-              .then(({ data }) => {
-                commit('setListChangeLogs', data);
-                resolve(true);
-              }) 
-              .catch(({ response }) => {
-                console.log(response);
-                reject(response);
-              });
+            .get('api/dashboard/change-log/filter?date=' + payload)
+            .then(({
+              data
+            }) => {
+              commit("setListChangeLogs", data);
+              resolve(true);
+            })
+            .catch(({
+              response
+            }) => {
+              reject(response);
+            });
         } else {
-          dispatch('getListChangedLogs');
+          dispatch("getListChangedLogs");
           resolve(true);
         }
       })
     },
-    getListChangedLogs({ state, commit }, payload = {}) {
+    getListChangedLogs({
+      state,
+      commit
+    }, payload = {}) {
 
       commit("setIsLoading", true);
       return new Promise((resolve, reject) => {
         axios.get('/api/dashboard/change-log', {
-          params: { page: payload.page || 1 }
-        })
-          .then(({ data }) => {
+            params: {
+              page: payload.page || 1
+            }
+          })
+          .then(({
+            data
+          }) => {
             commit('setListChangeLogs', data);
             commit("setIsLoading", false);
             resolve(true);
           })
           .catch((response) => {
-            console.log(response);
             reject(response);
           })
       })
     },
-    setChangeLogsRead({ state, dispatch }) {
+    setChangeLogsRead({
+      state,
+      dispatch
+    }) {
       return new Promise((resolve, reject) => {
         state.listChangeLogs.data.map(item => {
           item.notRead = false;
         });
-        axios.post('/api/dashboard/change-log/read').then(({ data }) => {
-          dispatch('getListChangedLogs');
-          resolve(true);
-        })
+        axios.post('/api/dashboard/change-log/read').then(({
+            data
+          }) => {
+            dispatch('getListChangedLogs');
+            resolve(true);
+          })
           .catch(response => {
-            console.log(response);
             reject(response);
           })
       })
@@ -131,9 +163,11 @@ export default {
       if (!state.listChangeLogs.data) {
         return []
       }
-      return state.listChangeLogs.data.filter((x) => x.notRead)/*.sort((a, b) => {
-        return new Date(a.from) < new Date(b.from) ? 1 : -1;
-      })*/;
+      return state.listChangeLogs.data.filter((x) => x.notRead)
+      /*.sort((a, b) => {
+              return new Date(a.from) < new Date(b.from) ? 1 : -1;
+            })*/
+      ;
     }
   }
 }

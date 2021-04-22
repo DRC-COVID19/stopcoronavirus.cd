@@ -12,7 +12,11 @@
           <b-navbar-nav class="nav-container">
             <b-link
               class="mx-2"
-              :class="{ active: $route.name === 'administrator.users' || $route.name==='administrator.home' }"
+              :class="{
+                active:
+                  $route.name === 'administrator.users' ||
+                  $route.name === 'administrator.home'
+              }"
               :to="{ name: 'administrator.users' }"
               >Utilisateurs</b-link
             >
@@ -27,6 +31,12 @@
               :class="{ active: $route.name === 'administrator.changeLog' }"
               :to="{ name: 'administrator.changeLog' }"
               >Change log</b-link
+            >
+            <b-link
+              class="mx-2"
+              :class="{ active: $route.name === 'administrator.pandemics' }"
+              :to="{ name: 'administrator.pandemics' }"
+              >Pandemie</b-link
             >
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
@@ -100,14 +110,14 @@ import { mapState, mapActions, mapMutations } from "vuex";
 export default {
   data() {
     return {
-      showUserCard: false,
+      showUserCard: false
     };
   },
   computed: {
     ...mapState({
-      user: (state) => state.auth.user,
-      activeMenu: (state) => state.nav.activeMenu,
-    }),
+      user: state => state.auth.user,
+      activeMenu: state => state.nav.activeMenu
+    })
   },
   methods: {
     ...mapActions(["logout"]),
@@ -121,17 +131,16 @@ export default {
     userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
+          name: "login"
         });
       });
     },
     selectMenu(value) {
       this.setActiveMenu(value);
-    },
-  },
+    }
+  }
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";

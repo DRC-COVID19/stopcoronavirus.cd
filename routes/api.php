@@ -39,8 +39,15 @@ Route::get('/pandemicstatsasc', function () {
 
 Route::post('/medicale-orientation', 'DiagnosticController@store');
 
-Route::group(['prefix' => 'admin_users'], function () {
+Route::group(['prefix' => 'admin_users', 'middleware' => 'auth:dashboard'], function () {
   Route::get('/filter', 'AdministratorController@filter');
+});
+
+Route::group(['prefix' => 'provinces', 'middleware' => 'auth:dashboard'], function () {
+  Route::get('/', 'ProvinceController@index');
+  Route::delete('/{province_id}', 'ProvinceController@destroy');
+  Route::post('/', 'ProvinceController@store');
+  Route::put('/', 'ProvinceController@update'); // method to be added next time
 });
 
 Route::apiResource('admin_users', 'AdministratorController');
@@ -215,8 +222,34 @@ Route::group([
   Route::get('/townships', 'DashBoardController@getTownships'); //ok
 
   Route::group(['prefix' => 'pandemics'], function () {
-    Route::get('top-confirmed', 'PandemicController@getHealthZoneTopConfirmed');
+    Route::get('top-confirmed', 'HealthZoneController@getHealthZoneTopConfirmed');
   });
 });
+
+// Health zone sub-zone
+
+Route::group(['prefix' => 'health_zones', 'middleware' => 'auth:dashboard'], function () {
+  Route::post('/', 'HealthZoneController@create');
+  Route::get('/', 'HealthZoneController@index');
+  Route::get('/filter', 'HealthZoneController@filter');
+  Route::put('/{health_zone_id}', 'HealthZoneController@update');
+  Route::delete('/{health_zone_id}', 'HealthZoneController@destroy');
+});
+
+//
+
+// Pandemy group
+
+Route::group(['prefix' => 'pandemy', 'middleware' => 'auth:dashboard'], function () {
+  Route::get('/', 'PandemicController@index');
+  Route::get('/filter', 'PandemicController@filter');
+  Route::get('/filter', 'PandemicController@filter');
+  Route::post('/', 'PandemicController@store');
+  Route::get('/{pandemy_id}', 'PandemicController@show');
+  Route::put('/{pandemy_id}', 'PandemicController@update');
+  Route::delete('/{pandemy_id}', 'PandemicController@destroy');
+});
+
+//
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');
