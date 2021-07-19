@@ -17,7 +17,7 @@ class Flux24PresenceZonesAddIndex extends Migration
     Schema::table('flux24_presence_zones', function (Blueprint $table) {
       $table->index('Date', 'flux24_presence_zones_index_date');
       $table->index('Zone', 'flux24_presence_zones_index_zone');
-      DB::statement('CREATE INDEX flux24_presence_zones_date_zone ON flux24_presence_zones("Date", "Zone")');
+      DB::statement('CREATE INDEX flux24_presence_zones_date_zone ON flux24_presence_zones(`Date`, `Zone`)');
     });
   }
 
