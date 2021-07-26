@@ -13,7 +13,7 @@ class HealthZonesTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        // DB::statement('SET FOREIGN_KEY_CHECKS=0');
         
         DB::table('health_zones')->truncate();
         DB::table('health_zones')->insert(array (
