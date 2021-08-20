@@ -13,7 +13,6 @@ class HospitalCovidSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
         DB::table('hospitals')->truncate();
         DB::table('hospitals')->insert([

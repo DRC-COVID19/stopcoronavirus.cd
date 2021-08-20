@@ -13,10 +13,6 @@ class FluxZonesTableSeeder extends Seeder
      */
     public function run()
     {
-
-
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-
         DB::table('flux_zones')->truncate();
         DB::table('flux_zones')->insert(array(
             0 =>
