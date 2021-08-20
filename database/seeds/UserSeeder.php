@@ -13,13 +13,13 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->truncate();
-        DB::table('users')->insert([
+        DB::table('admin_users')->truncate();
+        DB::table('admin_users')->insert([
             [
+                "username" => 'dash-admin',
+                'password' => Hash::make('l8ab4yiaupo0ndwf'),
                 "name" => 'admin',
-                'email' => 'accounts@kinshasadigital.com',
-                'email_verified_at' => '2021-08-20 00:00:00',
-                'password' => Hash::make('l8ab4yiaupo0ndwf')
+                'email' => 'accounts@kinshasadigital.com'
             ],
 
         ]);
