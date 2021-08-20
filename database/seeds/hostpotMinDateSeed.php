@@ -18,7 +18,7 @@ class hostpotMinDateSeed extends Seeder
       DB::beginTransaction();
       $hotspot = FluxHotSpot::all();
       foreach ($hotspot as $value) {
-        $fluxElement = Flux30ZoneSumByDate::select('date')->where('observation_zone', $value->name)->orderBy('date')->first();
+        $fluxElement = Flux30ZoneSumByDate::select('date')->where('Observation_Zone', $value->name)->orderBy('date')->first();
         $value->min_date = $fluxElement->date;
         $value->save();
       }

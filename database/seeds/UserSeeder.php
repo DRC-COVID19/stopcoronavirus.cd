@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
                 "name" => 'admin',
                 'email' => 'accounts@kinshasadigital.com',
                 'email_verified_at' => '2021-08-20 00:00:00',
-                'password' => ' l8ab4yiaupo0ndwf'
+                'password' => Hash::make('l8ab4yiaupo0ndwf')
             ],
 
         ]);
