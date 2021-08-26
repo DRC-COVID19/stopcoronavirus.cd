@@ -83,7 +83,7 @@ export default {
         routesAccess.push({ slug: "Dashboard", name: "home" });
       }
 
-      if (this.user.roles.find((a) => a.name == AGENT_HOSPITAL)) {
+      if (this.user.hospital && this.user.roles.find((a) => a.name == AGENT_HOSPITAL)) {
         routesAccess.push({
           slug: "Interface agent d'hopital",
           name: "hospital.home",

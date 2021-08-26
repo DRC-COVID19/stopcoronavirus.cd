@@ -22,8 +22,16 @@ class HospitalSituationController extends Controller
      */
     public function index()
     {
-        $hospitalSituation = HospitalSituation::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
-        return HospitalSituationSingleResource::collection($hospitalSituation);
+        try {
+            $hospitalSituation = HospitalSituation::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
+            return HospitalSituationSingleResource::collection($hospitalSituation);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+
     }
 
     public function indexByHospital($hospital_id)
