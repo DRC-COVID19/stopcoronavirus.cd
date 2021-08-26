@@ -12,6 +12,7 @@ class RolesSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('admin_roles')->truncate();
         DB::table('admin_roles')->insert([
             [
                 'name' => 'administrator',
@@ -52,6 +53,18 @@ class RolesSeeder extends Seeder
             [
                 'name' => 'manager_epidemic',
                 'slug' => 'manager_epidemic',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'name' => 'create_form',
+                'slug' => 'create_form',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'name' => 'edit_form',
+                'slug' => 'edit_form',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]

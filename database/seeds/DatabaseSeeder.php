@@ -23,7 +23,10 @@ class DatabaseSeeder extends Seeder
         $this->call(FluxZonesTableSeeder::class);
         $this->call(FluxHotSpotsTableSeeder::class);
         $this->call(AfricelHealthZonesTableSeeder::class);
+        $this->call(RolesSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(FormFieldTypeSeeder::class);
+        $this->call(FormReccurenceSeeder::class);
 
     }
 }
