@@ -15,7 +15,7 @@ class FormRecurrenceSeeder extends Seeder
         DB::table('form_recurrences')->truncate();
         DB::table('form_recurrences')->insert([
             [
-                'name'=>'tout les jours',
+                'name'=>'tous les jours',
                 'slug'=>'every_day'
             ],
             [

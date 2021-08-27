@@ -65,6 +65,14 @@
         label="name"
         :reduce="(item) => item.id"
       />
+      <label class="text-dash-color" for="check-group-1">Hopital *</label>
+      <v-select
+        v-model="form.hospitals"
+        multiple
+        :options="hospitals"
+        label="name"
+        :reduce="(item) => item.id"
+      />
       <label class="text-dash-color" for="text-password">Mot de passe *</label>
       <b-form-input
         class="input-dash"
@@ -132,6 +140,12 @@ export default {
         return [];
       },
     },
+    hospitals: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
     errors: {
       type: Object,
       default: () => ({}),
@@ -150,6 +164,7 @@ export default {
         username: "",
         name: "",
         roles: [],
+        hospitals: [],
         email: "",
         password: "",
         confirmPassword: "",
@@ -179,7 +194,7 @@ export default {
       if (this.btnTitle === "Enreigistrer") {
         if (
           this.form.password === this.form.confirmPassword &&
-          this.form.roles.length !== 0
+          this.form.roles.length !== 0 && this.form.hospitals.length !== 0
         ) {
           this.$emit("onCreate", this.form);
         } else {
@@ -223,6 +238,7 @@ export default {
       this.form.username = this.formToPopulate.usernmae;
       this.form.email = this.formToPopulate.email;
       this.form.roles = this.formToPopulate.roles.map(x=>x.id);
+      this.form.hospitals = this.formToPopulate.hospitals.map(x=>x.id);
       this.form.name = this.formToPopulate.name;
       this.title = "Modification de l'utilisateur";
       this.btnTitle = "Modifier";

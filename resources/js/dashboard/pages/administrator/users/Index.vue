@@ -10,6 +10,7 @@
           :userUpdated="userUpdated"
           :formToPopulate="formToPopulate"
           :roles="roles"
+          :hospitals="hospitals"
           :errors="errors"
         />
       </b-col>
@@ -65,11 +66,13 @@ export default {
       errors: {},
       currentPage: 1,
       roles: [],
+      hospitals: [],
     };
   },
   mounted() {
     this.getUserList();
     this.getUserRoles();
+    this.getHospitals();
   },
   computed: {
     userMeta() {
@@ -144,6 +147,7 @@ export default {
         name: currentUser.name,
         email: currentUser.email,
         roles_id: currentUser.roles,
+        hospital_id: currentUser.hospitals,
       };
 
       if (currentUser && currentUser.password) {
@@ -189,6 +193,7 @@ export default {
           password_confirmation: form.confirmPassword,
           email: form.email,
           roles_id: form.roles,
+          hospital_id: form.hospitals
         })
         .then(() => {
           this.userAdded = true;
@@ -235,7 +240,18 @@ export default {
       axios
         .get("/api/admin_roles")
         .then(({ data }) => {
+          console.log('le role-->',data);
           this.roles = data;
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response);
+        });
+    },
+    getHospitals() {
+      axios
+        .get("/api/dashboard/hospitals-data")
+        .then(({ data }) => {
+          this.hospitals = data;
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);

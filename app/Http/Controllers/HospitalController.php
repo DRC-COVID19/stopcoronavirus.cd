@@ -20,7 +20,8 @@ class HospitalController extends Controller
      */
     public function index()
     {
-        //
+      $hospitals = Hospital::with(['agent','township'])->get();
+      return response()->json($hospitals, 200);
     }
 
     /**
