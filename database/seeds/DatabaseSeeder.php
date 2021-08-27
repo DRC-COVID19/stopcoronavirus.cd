@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(FormFieldTypeSeeder::class);
-        $this->call(FormReccurenceSeeder::class);
+        $this->call(FormRecurrenceSeeder::class);
 
     }
 }

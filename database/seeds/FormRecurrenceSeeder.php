@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class FormReccurenceSeeder extends Seeder
+class FormRecurrenceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,8 +12,8 @@ class FormReccurenceSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('form_reccurences')->truncate();
-        DB::table('form_reccurences')->insert([
+        DB::table('form_recurrences')->truncate();
+        DB::table('form_recurrences')->insert([
             [
                 'name'=>'tout les jours',
                 'slug'=>'every_day'

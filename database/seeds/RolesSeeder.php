@@ -15,7 +15,7 @@ class RolesSeeder extends Seeder
         DB::table('admin_roles')->truncate();
         DB::table('admin_roles')->insert([
             [
-                'name' => 'administrator',
+                'name' => 'Administrator',
                 'slug' => 'administrator',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')

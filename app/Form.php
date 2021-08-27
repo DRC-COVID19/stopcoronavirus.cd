@@ -12,12 +12,12 @@ class Form extends Model
 
     protected $fillable = [
         'title',
-        'form_reccurence_value',
-        'form_reccurence_id'
+        'form_recurrence_value',
+        'form_recurrence_id'
     ];
 
-    public function formReccurence()
+    public function formRecurrence()
     {
-        return $this->belongsTo(FormReccurence::class);
+        return $this->belongsTo(FormRecurrence::class);
     }
 }
