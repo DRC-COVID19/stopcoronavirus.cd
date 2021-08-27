@@ -16,10 +16,10 @@ class CreateFormsTable extends Migration
         Schema::create('forms', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('form_reccurence_value')->nullable();
-            $table->unsignedBigInteger('form_reccurence_id');
+            $table->string('form_recurrence_value')->nullable();
+            $table->unsignedBigInteger('form_recurrence_id');
 
-            $table->foreign('form_reccurence_id')->references('id')->on('form_reccurences');
+            $table->foreign('form_recurrence_id')->references('id')->on('form_recurrences');
             $table->timestamps();
             $table->softDeletes();
         });

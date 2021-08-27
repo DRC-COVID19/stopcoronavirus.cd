@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFormReccurencesTable extends Migration
+class CreateFormRecurrencesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateFormReccurencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('form_reccurences', function (Blueprint $table) {
+        Schema::create('form_recurrences', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->index();
@@ -30,6 +30,6 @@ class CreateFormReccurencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('form_reccurences');
+        Schema::dropIfExists('form_recurrences');
     }
 }
