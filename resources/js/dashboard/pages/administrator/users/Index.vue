@@ -147,7 +147,7 @@ export default {
         name: currentUser.name,
         email: currentUser.email,
         roles_id: currentUser.roles,
-        hospital_id: currentUser.hospitals,
+        hospitals_id: currentUser.hospitals,
       };
 
       if (currentUser && currentUser.password) {
@@ -193,7 +193,7 @@ export default {
           password_confirmation: form.confirmPassword,
           email: form.email,
           roles_id: form.roles,
-          hospital_id: form.hospitals
+          hospitals_id: form.hospitals
         })
         .then(() => {
           this.userAdded = true;

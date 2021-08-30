@@ -115,7 +115,7 @@ class AdministratorController extends Controller
       $data['password'] = Hash::make($data['password']);
       $administrator = Administrator::create($data);
       $administrator->roles()->sync($data['roles_id']);
-      $administrator->hospitals()->sync($data['hospital_id']);
+      $administrator->hospitals()->sync($data['hospitals_id']);
       DB::commit();
       return response()->json(null, 201, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
@@ -219,7 +219,7 @@ class AdministratorController extends Controller
       'remember_token' => 'nullable',
       'email' => 'required|email',
       'roles_id' => 'required|array',
-      'hospital_id' => 'required|array',
+      'hospitals_id' => 'required|array',
       'password' => 'sometimes|confirmed',
 
     ])->validate();
@@ -233,7 +233,7 @@ class AdministratorController extends Controller
       }
       $administrator->update($data);
       $administrator->roles()->sync($data['roles_id']);
-      $administrator->hospitals()->sync($data['hospital_id']);
+      $administrator->hospitals()->sync($data['hospitals_id']);
       DB::commit();
       return response()->json(AdministratorResource::make($administrator), 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
@@ -283,7 +283,7 @@ class AdministratorController extends Controller
       'remember_token' => 'nullable',
       'email' => 'required|email',
       'roles_id' => 'required|array',
-      'hospital_id' => 'required|array',
+      'hospitals_id' => 'required|array',
     ])->validate();
   }
 

@@ -194,7 +194,7 @@ export default {
       if (this.btnTitle === "Enreigistrer") {
         if (
           this.form.password === this.form.confirmPassword &&
-          this.form.roles.length !== 0 && this.form.hospitals.length !== 0
+          this.form.roles.length !== 0 
         ) {
           this.$emit("onCreate", this.form);
         } else {
