@@ -91,6 +91,8 @@ export default {
         { key: "id", label: "Id" },
         { key: "form_recurrence_value", label: "Valeur de la Recurrence du formulaire" },
         { key: "form_recurrence.name", label: "Recurrence du formulaire" },
+        { key: "publish", label: "Publié" },
+        { key: "created_at", label: "Date de création" },
         "actions",
       ], 
       filter: "",

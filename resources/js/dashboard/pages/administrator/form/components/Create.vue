@@ -45,6 +45,10 @@
         label="name"
         :reduce="(item) => item.id"
       />
+      <b-form-group label-class="text-dash-color" class="mt-4"  id="input-group-1" label="Publier" v-slot="{ ariaDescribedby }">
+        <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="true">Publié</b-form-radio>
+        <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="false">Non Publié</b-form-radio>
+      </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
           <b-button type="submit" variant="primary" class="btn-dash-sucess">
             <span v-if="isLoading"
@@ -106,10 +110,12 @@ export default {
       updating: false,
       isLoading: false,
       validateMailMessage: "",
+      published:false,
       form: {
         title: "",
         form_recurrence_value: "",
-        form_recurrence_id: ""
+        form_recurrence_id: "",
+        publish:false
       },
       show: true,
       showWarning: false,
@@ -165,6 +171,7 @@ export default {
       this.form.title = this.formToPopulate.title;
       this.form.form_recurrence_value = this.formToPopulate.form_recurrence_value;
       this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id;
+      this.form.publish = this.formToPopulate.publish;
       this.title = "Modification du formulaire";
       this.btnTitle = "Modifier";
     },

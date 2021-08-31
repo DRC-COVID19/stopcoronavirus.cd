@@ -142,7 +142,8 @@ export default {
       const form = {
         title: currentForm.title,
         form_recurrence_value: currentForm.form_recurrence_value,
-        form_recurrence_id: currentForm.form_recurrence_id
+        form_recurrence_id: currentForm.form_recurrence_id,
+        publish:currentForm.publish
       };
 
       axios
@@ -179,7 +180,8 @@ export default {
         .post("/api/dashboard/forms/", {
           title: form.title,
           form_recurrence_value: form.form_recurrence_value,
-          form_recurrence_id: form.form_recurrence_id
+          form_recurrence_id: form.form_recurrence_id,
+          publish:form.publish
         })
         .then(() => {
           this.formAdded = true;
