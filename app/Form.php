@@ -12,6 +12,7 @@ class Form extends Model
 
     protected $fillable = [
         'title',
+        'publish',
         'form_recurrence_value',
         'form_recurrence_id'
     ];
