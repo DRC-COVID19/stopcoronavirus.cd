@@ -26,7 +26,7 @@
           striped
           hover
           :fields="fields"
-          :items="forms.data"
+          :items="forms"
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
@@ -59,7 +59,7 @@
             ></i>
           </template>
           <template v-slot:cell(index)="data">
-            {{ data.index + 1 }}
+            {{ ((currentPage - 1) * perPage) + data.index + 1 }}
           </template>
           <template v-slot:cell(publish)="data">
             <p>{{data.item.publish===true?'Oui':'Non'}}</p>
@@ -89,13 +89,21 @@ import { format } from 'date-fns'
 export default {
   props: {
     forms: {
-      type: Object,
-      default: () => ({}),
+      type: Array,
+      default: () => [],
     },
     isLoading: {
       type: Boolean,
       default: false,
     },
+    currentPage: {
+      type: Number,
+      default: 1
+    },
+    perPage: {
+      type: Number,
+      default: 15
+    }
   },
   data() {
     return {
@@ -108,8 +116,6 @@ export default {
         "actions",
       ], 
       filter: "",
-      perPage: 15,
-      currentPage: 1,
       isDeleteModalShown: false,
       currentForm: {
         id: -1,

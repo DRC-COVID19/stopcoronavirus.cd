@@ -18,20 +18,22 @@
         <div class="hide-waiting" v-if="updating"></div>
         <ListForms
           :forms="forms"
+          :isLoading="isLoading"
+          :updating="updating"
+          :current-page="currentPage"
+          :per-page="formMeta.perPage"
           @onSearch="search"
           @onDeleteForm="deleteForm"
           @onUpdateForm="populateForm"
-          :isLoading="isLoading"
-          :updating="updating"
         />
         <b-col cols="12" class="d-flex justify-content-end">
           <b-pagination
-            page-class="text-blue-dash"
             v-model="currentPage"
             :per-page="formMeta.perPage"
             :total-rows="formMeta.total"
-            @change="getFormList"
             :disabled="updating"
+            page-class="text-blue-dash"
+            @change="getFormList"
           ></b-pagination>
         </b-col>
       </b-col>
@@ -54,7 +56,7 @@ export default {
       title: "Formulaires",
       iconClass: "fa fa-address-card",
       isLoading: false,
-      forms: {},
+      forms: [],
       formUpdated: false,
       formAdded: false,
       showSuccess: false,
@@ -73,18 +75,11 @@ export default {
   },
   computed: {
     formMeta() {
-      if (!this.forms.meta) {
-        return {
-          current_page: 1,
-          from: 1,
-          last_page: 1,
-          path: "#",
-          per_page: 1,
-          to: 1,
-          total: 1,
-        };
-      }
-      return this.forms.meta;
+      return {
+        currentPage: 1,
+        perPage: 3,
+        total: this.forms.length,
+      };
     },
   },
   methods: {

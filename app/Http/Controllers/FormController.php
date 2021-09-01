@@ -14,7 +14,7 @@ class FormController extends Controller
      */
     public function index()
     {
-        $forms = Form::with('formRecurrence')->orderBy('title')->paginate(15);
+        $forms = Form::with('formRecurrence')->orderBy('title')->get();
         return response()->json($forms, 200);
     }
 
