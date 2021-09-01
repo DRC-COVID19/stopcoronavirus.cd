@@ -15,17 +15,23 @@ class FormFieldTypeSeeder extends Seeder
         DB::table('form_field_types')->truncate();
         DB::table('form_field_types')->insert([
             [
-                'name'=>'string'
+                'name'=>'text'
             ],
             [
                 'name'=>'integer'
             ],
             [
-                'name'=>'float'
+                'name'=>'decimal'
             ],
             [
                 'name'=>'boolean'
             ],
+            [
+                'name'=>'date'
+            ],
+            [
+                'name'=>'datetime'
+            ]
 
         ]);
     }
