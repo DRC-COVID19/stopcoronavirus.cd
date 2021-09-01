@@ -70,7 +70,7 @@
                 aria-hidden="true"
               ></i>
            </b-link>
-            
+
           </template>
           <template v-slot:cell(index)="data">
             {{ ((currentPage - 1) * perPage) + data.index + 1 }}
@@ -99,7 +99,6 @@
 </template>
 
 <script>
-import { format } from 'date-fns'
 export default {
   props: {
     forms: {
@@ -128,7 +127,7 @@ export default {
         { key: "publish", label: "Publier" },
         { key: "created_at", label: "Date création" },
         "actions",
-      ], 
+      ],
       filter: "",
       isDeleteModalShown: false,
       currentForm: {
@@ -172,10 +171,7 @@ export default {
         form_recurrence_id
       };
       this.$emit("onUpdateForm", this.currentForm);
-    },
-    formatDateFns (datefn) {
-      return format(new Date(datefn), 'dd/MM/yyyy à HH:mm:ss')
-    },
+    }
   },
 };
 </script>
