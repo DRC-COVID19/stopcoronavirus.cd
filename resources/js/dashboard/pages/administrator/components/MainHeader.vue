@@ -30,8 +30,8 @@
             >
             <b-link
               class="mx-2"
-              :class="{ active: $route.name === 'administrator.form' }"
-              :to="{ name: 'administrator.form' }"
+              :class="{ active: $route.name === 'administrator.forms' }"
+              :to="{ name: 'administrator.forms' }"
               >Formulaire</b-link
             >
           </b-navbar-nav>

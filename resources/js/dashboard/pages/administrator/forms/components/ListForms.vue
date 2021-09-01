@@ -57,6 +57,20 @@
                 )
               "
             ></i>
+           <b-link
+               :to="{
+                    name:'administrator.forms.show',
+                    params:{
+                      form_id:data.item.id,
+                    }
+                  }"
+           >
+            <i
+                class="mx-2 my-1 fas fa fa-eye color-blue"
+                aria-hidden="true"
+              ></i>
+           </b-link>
+            
           </template>
           <template v-slot:cell(index)="data">
             {{ ((currentPage - 1) * perPage) + data.index + 1 }}
