@@ -24,6 +24,15 @@
           required
         ></b-form-input>
       </b-form-group>
+      <b-form-group>
+        <label class="text-dash-color" for="check-group-1">Recurrence du formulaire *</label>
+        <v-select
+          v-model="form.form_recurrence_id"
+          :options="formRecurrences"
+          label="name"
+          :reduce="(item) => item.id"
+        />
+      </b-form-group>
       <b-form-group
         label-class="text-dash-color"
         id="input-group-1"
@@ -38,16 +47,9 @@
           placeholder="Entrer la valeur recurrente"
         ></b-form-input>
       </b-form-group>
-      <label class="text-dash-color" for="check-group-1">Recurrence du formulaire *</label>
-      <v-select
-        v-model="form.form_recurrence_id"
-        :options="formRecurrences"
-        label="name"
-        :reduce="(item) => item.id"
-      />
       <b-form-group label-class="text-dash-color" class="mt-4"  id="input-group-1" label="Publier" v-slot="{ ariaDescribedby }">
-        <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="true">Publié</b-form-radio>
-        <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="false">Non Publié</b-form-radio>
+        <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="true">Oui</b-form-radio>
+        <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="false">Non</b-form-radio>
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
           <b-button type="submit" variant="primary" class="btn-dash-sucess">

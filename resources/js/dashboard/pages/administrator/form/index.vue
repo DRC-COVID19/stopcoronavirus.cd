@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       title: "Formulaires",
-      iconClass: "fa fa-home",
+      iconClass: "fa fa-address-card",
       isLoading: false,
       forms: {},
       formUpdated: false,

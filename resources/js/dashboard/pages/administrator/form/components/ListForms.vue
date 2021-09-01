@@ -56,6 +56,15 @@
               class="mx-2 my-1 fas fa-user-edit"
             ></i>
           </template>
+          <template v-slot:cell(index)="data">
+            {{ data.index + 1 }}
+          </template>
+          <template v-slot:cell(publish)="data">
+            <p>{{data.item.publish===true?'Oui':'Non'}}</p>
+          </template>
+          <template v-slot:cell(created_at)="data">
+            <p>{{formatDateFns(data.item.created_at)}}</p>
+          </template>
         </b-table>
       </b-col>
     </b-row>
@@ -74,6 +83,7 @@
 </template>
 
 <script>
+import { format } from 'date-fns'
 export default {
   props: {
     forms: {
@@ -88,11 +98,11 @@ export default {
   data() {
     return {
       fields: [
-        { key: "id", label: "Id" },
-        { key: "form_recurrence_value", label: "Valeur de la Recurrence du formulaire" },
-        { key: "form_recurrence.name", label: "Recurrence du formulaire" },
-        { key: "publish", label: "Publié" },
-        { key: "created_at", label: "Date de création" },
+        { key: "index", label: "#" },
+        { key: "title", label: "Titre" },
+        { key: "form_recurrence.name", label: "Recurrence" },
+        { key: "publish", label: "Publier" },
+        { key: "created_at", label: "Date création" },
         "actions",
       ], 
       filter: "",
@@ -140,6 +150,9 @@ export default {
         form_recurrence_id
       };
       this.$emit("onUpdateForm", this.currentForm);
+    },
+    formatDateFns (datefn) {
+      return format(new Date(datefn), 'dd/MM/yyyy à HH:mm:ss')
     },
   },
 };
