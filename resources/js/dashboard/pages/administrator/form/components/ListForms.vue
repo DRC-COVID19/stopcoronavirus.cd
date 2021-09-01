@@ -43,8 +43,11 @@
             <i
               @click="deleteForm(data.item.id)"
               class="mx-2 my-1 fas fa-user-times"
+              aria-hidden="true"
             ></i>
             <i
+              class="mx-2 my-1 fas fa-user-edit"
+              aria-hidden="true"
               @click="
                 updateForm(
                   data.item.id,
@@ -53,7 +56,6 @@
                   data.item.form_recurrence_id
                 )
               "
-              class="mx-2 my-1 fas fa-user-edit"
             ></i>
           </template>
           <template v-slot:cell(index)="data">
