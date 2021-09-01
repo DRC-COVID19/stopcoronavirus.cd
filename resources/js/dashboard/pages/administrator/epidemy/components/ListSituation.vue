@@ -44,6 +44,8 @@
           </template>
           <template v-slot:cell(actions)="data" class="action-btn-group">
             <i
+              class="mx-2 fas fa-pencil-alt color-green"
+              aria-hidden="true"
               @click="
                 editSituation(
                   data.item.id,
@@ -57,11 +59,11 @@
                   data.item.seriously
                 )
               "
-              class="mx-2 fas fa-edit"
             ></i>
             <i
+              class="mx-2 fas fa-trash prim color-red"
+               aria-hidden="true"
               @click="deleteSituation(data.item.id)"
-              class="mx-2 fas fa-trash"
             ></i>
           </template>
           <template v-slot:cell(last_update)="data">

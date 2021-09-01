@@ -42,11 +42,11 @@
           <template v-slot:cell(actions)="data" class="action-btn-group">
             <i
               @click="deleteForm(data.item.id)"
-              class="mx-2 my-1 fas fa-user-times"
+              class="mx-2 my-1 fas fa-trash prim color-red"
               aria-hidden="true"
             ></i>
             <i
-              class="mx-2 my-1 fas fa-user-edit"
+              class="mx-2 my-1 fas fa-pencil-alt color-green"
               aria-hidden="true"
               @click="
                 updateForm(
