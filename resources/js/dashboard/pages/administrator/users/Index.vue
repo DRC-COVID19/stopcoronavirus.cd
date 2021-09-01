@@ -240,7 +240,6 @@ export default {
       axios
         .get("/api/admin_roles")
         .then(({ data }) => {
-          console.log('le role-->',data);
           this.roles = data;
         })
         .catch(({ response }) => {

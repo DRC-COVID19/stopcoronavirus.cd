@@ -60,6 +60,14 @@ body,
   pointer-events: none;
   opacity: 0.4;
 }
+
+.color-red {
+  color:$primary !important;
+}
+
+.color-green{
+  color:$dash-green !important;
+}
 .card.default-card {
   border-radius: unset;
   border-color: #2e5bff14;
