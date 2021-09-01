@@ -18,6 +18,7 @@ class CreateFormsTable extends Migration
             $table->string('title');
             $table->string('form_recurrence_value')->nullable();
             $table->unsignedBigInteger('form_recurrence_id');
+            $table->boolean('publish')->default(false);
 
             $table->foreign('form_recurrence_id')->references('id')->on('form_recurrences');
             $table->timestamps();
