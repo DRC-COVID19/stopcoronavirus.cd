@@ -17,7 +17,8 @@ import AdminUserIndex from './pages/administrator/users/Index';
 import PageNotFound from './pages/NotFound';
 import ChangeLogIndex from './pages/administrator/changeLog/index';
 import Epidemie from './pages/administrator/epidemy/Index';
-import Form from './pages/administrator/form/index';
+import FormIndex from './pages/administrator/forms/index';
+import FormShow from './pages/administrator/forms/form';
 import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL, ADMINISTRATOR, MANANGER_EPIDEMIC,EDIT_FORM,CREATE_FORM } from './config/env';
 
 
@@ -166,12 +167,21 @@ export default [
       },
       {
         path: 'forms',
-        component: Form,
-        name: 'administrator.form',
+        component: FormIndex,
+        name: 'administrator.forms',
         meta: {
           requiresAuth: true,
           role: [CREATE_FORM] || [EDIT_FORM] 
         }
+      },
+      {
+        path: "/administrator/forms/:form_id",
+        name: "administrator.forms.show",
+        component: FormShow,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR,CREATE_FORM,EDIT_FORM]
+        },
       },
       {
         path: 'epidemie/',

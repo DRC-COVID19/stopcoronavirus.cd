@@ -8,6 +8,7 @@ import epidemic from './modules/epidemic';
 import indicator from './modules/indicator';
 import app from './modules/app';
 import changeLog from "./modules/changeLog";
+import form from "./modules/form";
 
 Vue.use(Vuex);
 
@@ -26,6 +27,7 @@ export default new Vuex.Store({
         nav,
         epidemic,
         indicator,
-        changeLog
+        changeLog,
+        form
     }
 });
