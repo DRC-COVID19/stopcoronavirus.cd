@@ -31,12 +31,14 @@
           :options="formRecurrences"
           label="name"
           :reduce="(item) => item.id"
+          @input="onFormRecurrenceChange"
         />
       </b-form-group>
       <b-form-group
+        v-if="formRecurrenceSelected && formRecurrenceSelected.required_value"
         label-class="text-dash-color"
         id="input-group-1"
-        label="Valeur recurrente"
+        label="Valeur de la recurrence"
         label-for="input-1"
       >
         <b-form-input
@@ -44,7 +46,7 @@
           id="input-1"
           v-model="form.form_recurrence_value"
           type="text"
-          placeholder="Entrer la valeur recurrente"
+          placeholder="Entrer la valeur de la recurrence"
         ></b-form-input>
       </b-form-group>
       <b-form-group label-class="text-dash-color" class="mt-4"  id="input-group-1" label="Publier" v-slot="{ ariaDescribedby }">
@@ -115,13 +117,14 @@ export default {
       published:false,
       form: {
         title: "",
-        form_recurrence_value: "",
+        form_recurrence_value:  null,
         form_recurrence_id: "",
         publish:false
       },
       show: true,
       showWarning: false,
       toBeCanceled: true,
+      formRecurrenceSelected: null
     };
   },
   mounted() {
@@ -178,6 +181,10 @@ export default {
       this.btnTitle = "Modifier";
     },
 
+    onFormRecurrenceChange (formRecurrenceId) {
+      this.form.form_recurrence_value = null
+      this.formRecurrenceSelected = this.formRecurrences.find(formRecurrence => formRecurrence.id === formRecurrenceId)
+    }
   }
   
 };
