@@ -45,7 +45,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import FormFieldIndex from './components/formField/index.vue'
+import FormFieldIndex from './components/formField/Index.vue'
 export default {
   components: {
     FormFieldIndex
