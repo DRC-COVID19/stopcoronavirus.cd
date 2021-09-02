@@ -107,8 +107,10 @@ export default {
     onSubmit() {
       if (this.btnTitle === "Enreigistrer") {
         this.$emit("onCreate", this.form);
+        this.onReset()
       } else {
         this.$emit("onUpdate", this.form);
+        this.onReset()
       }
     },
 
