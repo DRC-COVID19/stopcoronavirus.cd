@@ -9,6 +9,7 @@ import indicator from './modules/indicator';
 import app from './modules/app';
 import changeLog from "./modules/changeLog";
 import form from "./modules/form";
+import formStep from "./modules/formStep";
 
 Vue.use(Vuex);
 
@@ -28,6 +29,7 @@ export default new Vuex.Store({
         epidemic,
         indicator,
         changeLog,
-        form
+        form,
+        formStep
     }
 });

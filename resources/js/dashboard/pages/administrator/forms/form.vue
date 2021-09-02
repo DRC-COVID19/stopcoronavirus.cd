@@ -12,11 +12,18 @@
             </b-col>
       </b-row>
   </b-container>
+  <FormStepIndex
+    :formId="$route.params.form_id"
+  />
   </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
+import FormStepIndex from "./components/formStep/index";
 export default {
+  components: {
+    FormStepIndex
+  },
   data(){
     return{
       form:{}

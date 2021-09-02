@@ -192,9 +192,13 @@ Route::group([
 
   Route::resource('hospitals-data', 'HospitalController');
   Route::apiResource('forms', 'FormController');
+  Route::apiResource('form-steps', 'FormStepController');
   Route::resource('form-recurrences', 'FormRecurrenceController');
   Route::group(['prefix' => 'forms'], function () {
     Route::get('/filter', 'FormController@filter');
+  });
+  Route::group(['prefix' => 'form-steps'], function () {
+    Route::get('/filter', 'FormStepController@filter');
   });
   Route::group(['prefix' => 'hospitals'], function () {
     Route::get('/', 'HospitalController@getHospials'); //ok
