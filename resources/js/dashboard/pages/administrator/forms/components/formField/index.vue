@@ -6,13 +6,11 @@
           <strong class="mb-0">
             CHAMPS
           </strong>
+          <i class="fab fa-wpforms" aria-hidden="true"></i>
         </div>
       </b-card-body>
     </b-card>
-    <b-card class="mt-4">
-      <b-card-body>
-        <Form />
-      </b-card-body>
+    <Form class="mt-4" />
     </b-card>
   </div>
 </template>
