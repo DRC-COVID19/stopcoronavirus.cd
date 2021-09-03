@@ -1,39 +1,34 @@
 <template>
-  <b-container fluid>
-    <b-row class="flex-md-row-reverse" no-gutters>
-      <b-col cols="12" class="mt-3">
-        <Create
-          :formId="formId"
-          :rowFormStep="rowformStep"
-          @updated="onUpdatedFormStep"
-          @created="onCreatedFormStep"
-          @onCancelUpdate="cancelEditMode"
-        />
-      </b-col>
-      <b-col cols="12">
-        <Header :title="title" :iconClass="iconClass" />
-        <div class="hide-waiting" v-if="isCreating"></div>
-        <ListFormStep
-          :isLoading="isLoading"
-          :updating="isCreating"
-          :formId="formId"
-          :current-page="formStepMeta.currentPage"
-          :per-page="formStepMeta.perPage"
-          @onUpdateStep="toEdit"
-        />
-        <b-col cols="12" class="d-flex justify-content-end">
-          <b-pagination
-            v-model="formStepMeta.currentPage"
-            :per-page="formStepMeta.perPage"
-            :total-rows="formStepMeta.total"
-            :disabled="isCreating"
-            page-class="text-blue-dash"
-            @change="getFormSteps"
-          ></b-pagination>
-        </b-col>
-      </b-col>
-    </b-row>
-  </b-container>
+  <div>
+    <b-card class="my-4">
+      <b-card-body class="py-0">
+        <div class="d-flex justify-content-between align-items-center">
+          <strong class="mb-0">
+            ETAPES
+          </strong>
+          <i class="fab fa-wpforms" aria-hidden="true"></i>
+        </div>
+      </b-card-body>
+    </b-card>
+    <Create
+      :formId="formId"
+      :rowFormStep="rowformStep"
+      @updated="onUpdatedFormStep"
+      @created="onCreatedFormStep"
+      @onCancelUpdate="cancelEditMode"
+    />
+    <div class="hide-waiting" v-if="isCreating"></div>
+    <ListFormStep
+      :isLoading="isLoading"
+      :updating="isCreating"
+      :formId="formId"
+      :current-page="formStepMeta.currentPage"
+      :per-page="formStepMeta.perPage"
+      :total-rows="formStepMeta.total"
+      class="mt-4"
+      @onUpdateStep="toEdit"
+    />
+  </div>
 </template>
 <script>
 import Header from '../../../components/Header'
