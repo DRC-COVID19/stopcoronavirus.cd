@@ -97,9 +97,7 @@ export default {
         show: true,
         showWarning: false,
         toBeCanceled: true,
-        formRecurrenceSelected: null,
-        formCreated:true,
-        formUpdated:true
+        formRecurrenceSelected: null
       }
     },
   watch: {
