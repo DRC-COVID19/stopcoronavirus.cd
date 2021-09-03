@@ -22,11 +22,12 @@
 
         <b-table
           v-else
-          responsive
+          small 
+          responsive="sm"
           striped
           hover
           :fields="fields"
-          :items="formSteps"
+          :items="formStepsSorted"
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
@@ -99,10 +100,8 @@ export default {
   data() {
     return {
       fields: [
-        { key: "index", label: "#" },
-        { key: "title", label: "Titre" },
         { key: "step", label: "Etape" },
-        { key: "form.title", label: "Formulaire" },
+        { key: "title", label: "Titre" },
         "actions",
       ], 
       filter: "",
@@ -123,6 +122,9 @@ export default {
     ...mapState({
       formSteps:(state)=>state.formStep.formSteps,
     }),
+    formStepsSorted () {
+        return this.formSteps.sort((a,b) => a.step - b.step ) 
+    },
     rows() {
       return this.formSteps.length;
     },
