@@ -63,6 +63,7 @@
   </b-card>
 </template>
 <script>
+import { mapActions, mapState } from 'vuex';
 export default {
     props: {
       rowFormStep: {
@@ -70,6 +71,10 @@ export default {
       default: () => {
         return {};
       },
+    },
+     formId: {
+      type: Number,
+      required: true
     },
     errors: {
       type: Object,
@@ -79,7 +84,7 @@ export default {
   data(){
      return{
         title: "Creation d'un formulaire",
-        btnTitle: "Enreigistrer",
+        btnTitle: "Enregistrer",
         iconClass: "fas fa-plus-square",
         updating: false,
         isLoading: false,
@@ -92,7 +97,9 @@ export default {
         show: true,
         showWarning: false,
         toBeCanceled: true,
-        formRecurrenceSelected: null
+        formRecurrenceSelected: null,
+        formCreated:true,
+        formUpdated:true
       }
     },
   watch: {
@@ -104,13 +111,65 @@ export default {
     },
   },
     methods: {
+      ...mapActions([
+        "createFormStep",
+        "updateFormStep",
+
+      ]),
     onSubmit() {
-      if (this.btnTitle === "Enreigistrer") {
-        this.$emit("onCreate", this.form);
-        this.onReset()
+      if (this.btnTitle === "Enregistrer") {
+      this.errors = {};
+      const formStape = {
+        ...this.form,
+        form_id:this.formId
+      }
+      this.createFormStep(formStape)
+        .then(() => {
+          this.$notify({
+            group: "alert",
+            title: "Nouvelle Etape du Formulaire",
+            text: "Ajouter avec succès",
+            type: "success",
+          });
+          this.$emit("created");
+          this.onReset()
+        })
+        .catch(({ response }) => {
+          this.$notify({
+            group: "alert",
+            title: "Nouvelle Etape du Formulaire",
+            text: "Une erreur est survenus",
+            type: "error",
+          });
+          if (response.status == 422) {
+            this.errors = response.data.errors;
+          }
+        });
       } else {
-        this.$emit("onUpdate", this.form);
-        this.onReset()
+       this.updateFormStep(this.form)
+        .then(() => {
+          this.formStepUpdated = true;
+          this.$notify({
+            group: "alert",
+            title: "Modication d'un Etape du Formulaire",
+            text: "Modifier avec succès",
+            type: "success",
+          });
+          this.$emit("updated");
+          this.onReset()
+        })
+        .catch(({ response }) => {
+          this.$notify({
+            group: "alert",
+            title: "Modifer log",
+            text: "Une erreur est surveni",
+            type: "error",
+          });
+          if (response.status == 422) {
+            this.errors = response.data.errors;
+          }
+        });
+
       }
     },
 

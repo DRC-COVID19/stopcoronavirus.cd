@@ -13,7 +13,7 @@ export default{
     SET_SELECTED_FORM_STEP(state, payload) {
       state.selectedFormStep = payload;
     },
-    setIsLoading(state, payload) {
+    SET_IS_LOADING(state, payload) {
       state.isLoading = payload;
     },
     setIsCreating(state, payload) {
@@ -86,20 +86,20 @@ export default{
                 reject(response);
               });
         } else {
-          dispatch('getFormSteps');
+          dispatch('getFormSteps',{id});
           resolve(true);
         }
       })
     },
     getFormSteps({ state, commit }, payload = {}) {
-      commit("setIsLoading", true);
+      commit("SET_IS_LOADING", true);
       return new Promise((resolve, reject) => {
-        axios.get('api/dashboard/form-steps', {
+        axios.get(`api/dashboard/form-steps/step-form/${payload.id}`, {
           params: { page: payload.page || 1 }
         })
           .then(({ data }) => {
             commit('SET_FORM_STEP', data);
-            commit("setIsLoading", false);
+            commit("SET_IS_LOADING", false);
             resolve(true);
           })
           .catch((response) => {

@@ -76,11 +76,12 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 export default {
   props: {
-    formSteps: {
-      type: Array,
-      default: () => [],
+    formId: {
+      type: Number,
+      required: true
     },
     isLoading: {
       type: Boolean,
@@ -115,7 +116,13 @@ export default {
     };
   },
 
+  mounted(){
+     this.getFormSteps({id:this.formId})
+  },
   computed: {
+    ...mapState({
+      formSteps:(state)=>state.formStep.formSteps,
+    }),
     rows() {
       return this.formSteps.length;
     },
@@ -126,16 +133,43 @@ export default {
     }
   },
   methods: {
+     ...mapActions([
+      "getFormSteps",
+      "removeFormStep",
+      "searchFormStep"
+      ]),
     search () {
-      this.$emit('onSearch', this.filter.trim());
+      this.searchFormStep(this.filter.trim())
+        .catch((error) => {
+          console.log(error);
+        })
     },
     deleteStep(formId) {
       this.isDeleteModalShown = true;
       this.formStepId = formId.id;
     },
     onValidateDelection() {
-      this.$emit("onDeleteStep", this.formStepId);
-      this.isDeleteModalShown = false;
+      this.$bvModal.show("confirmation-box");
+      this.removeFormStep(this.formStepId)
+        .then(() => {
+          this.$notify({
+            group: "alert",
+            title: "Supprimer l'étape",
+            text: "Supprimer avec succès",
+            type: "success",
+          });
+          this.isDeleteModalShown = false;
+          this.getFormSteps({id:this.formId})
+        })
+        .catch(() => {
+          this.$notify({
+            group: "alert",
+            title: "Supprimer  l'étape",
+            text: "Une erreur est survenus",
+            type: "error",
+          });
+        });
+
     },
     onCancelDelection() {
       this.isDeleteModalShown = false;

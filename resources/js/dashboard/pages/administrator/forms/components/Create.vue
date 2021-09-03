@@ -124,7 +124,9 @@ export default {
       show: true,
       showWarning: false,
       toBeCanceled: true,
-      formRecurrenceSelected: null
+      formRecurrenceSelected: null,
+      errors: {},
+
     };
   },
   mounted() {

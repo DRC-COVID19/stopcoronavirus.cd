@@ -85,10 +85,7 @@ class FormStepController extends Controller
     public function filter (Request $request) {
         try {
           $key_words=$request->get('key_words');
-          $formStep = FormStep::where('title', 'LIKE', "%{$key_words}%")->orWhere('title', 'LIKE' , "%{$key_words}%")->paginate(15);
-          if (! $formStep ) {
-            return response()->json(['message' => "No form found"], 404);
-          }
+          $formStep = FormStep::where('title', 'LIKE', "%{$key_words}%")->get();
           return response()->json( $formStep, 200);
         } catch (\Throwable $th) {
           if (env('APP_DEBUG') == true) {
@@ -97,4 +94,10 @@ class FormStepController extends Controller
           return response($th->getMessage())->setStatusCode(500);
         }
       }
+
+    public function getFormStepByForm($form){
+        $formSteps = FormStep::with('form')->where('form_id',$form)->get();
+        return response()->json($formSteps, 200);
+
+    }
 }

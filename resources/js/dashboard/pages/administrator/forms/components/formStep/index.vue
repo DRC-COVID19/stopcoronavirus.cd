@@ -3,24 +3,22 @@
     <b-row class="flex-md-row-reverse" no-gutters>
       <b-col cols="12" md="4" class="mt-3">
         <Create
-          @onUpdate="submitUpdatingFormStep"
-          @onCreate="submitCreateFormStep"
-          @onCancelUpdate="cancelEditMode"
+          :formId="formId"
           :rowFormStep="rowformStep"
-          :errors="errors"
+          @updated="onUpdatedFormStep"
+          @created="onCreatedFormStep"
+          @onCancelUpdate="cancelEditMode"
         />
       </b-col>
       <b-col cols="12" md="8">
         <Header :title="title" :iconClass="iconClass" />
         <div class="hide-waiting" v-if="isCreating"></div>
         <ListFormStep
-          :formSteps="formSteps"
           :isLoading="isLoading"
           :updating="isCreating"
+          :formId="formId"
           :current-page="formStepMeta.currentPage"
           :per-page="formStepMeta.perPage"
-          @onSearch="search"
-          @onDeleteStep="remove"
           @onUpdateStep="toEdit"
         />
         <b-col cols="12" class="d-flex justify-content-end">
@@ -57,35 +55,19 @@ export default {
   },
   data() {
     return {
-      filter:null,
-      errors: {},
       isEditingMode: false,
-      itemToRemove: {},
       title: "Les étapes du Formulaire",
       iconClass: "fa fa-sliders",
-      formStepUpdated: false,
-      formStepAdded: false,
-      showSuccess: false,
-      isFormDeleted: false,
-      timeOut: 3,
       rowformStep:{}
     };
   },
   mounted(){
-    this.getFormSteps()
-    this.getForms()
-  },
-
-   watch: {
-    filter () {
-      this.search()
-    }
+  this.getFormSteps({id:this.formId})
   },
 
   computed: {
     ...mapState({
       formSteps:(state)=>state.formStep.formSteps,
-      forms:(state)=>state.form.forms,
       isCreating: (state) => state.formStep.isCreating,
       isLoading: (state) => state.formStep.isLoading
     }),
@@ -104,73 +86,15 @@ export default {
   },
   methods:{
     ...mapActions([
-      "getFormSteps",
-      "createFormStep",
-      "updateFormStep",
-      "removeFormStep",
-      "searchFormStep",
-      "getForms"]),
-    submit_form() {
-      if (this.isEditingMode) {
-        this.submitUpdatingFormStep();
-      } else {
-        this.submitCreateFormStep();
-      }
+      "getFormSteps"
+      ]),
+
+    onCreatedFormStep() {
+         this.getFormSteps({id:this.formId})
     },
-    submitCreateFormStep(form) {
-      this.errors = {};
-      const formStape = {
-        ...form,
-        form_id:this.formId
-      }
-      this.createFormStep(formStape)
-        .then(() => {
-          this.isEditingMode = false;
-          this.$notify({
-            group: "alert",
-            title: "Nouvelle Etape du Formulaire",
-            text: "Ajouter avec succès",
-            type: "success",
-          });
-         this.getFormSteps()
-        })
-        .catch(({ response }) => {
-          this.$notify({
-            group: "alert",
-            title: "Nouvelle Etape du Formulaire",
-            text: "Une erreur est survenus",
-            type: "error",
-          });
-          if (response.status == 422) {
-            this.errors = response.data.errors;
-          }
-        });
-    },
-    submitUpdatingFormStep(form) {
-      this.errors = {};
-      this.formStepUpdated = false;
-      this.updateFormStep(form)
-        .then(() => {
-          this.formStepUpdated = true;
-          this.isEditingMode = false;
-          this.$notify({
-            group: "alert",
-            title: "Modication d'un Etape du Formulaire",
-            text: "Modifier avec succès",
-            type: "success",
-          });
-        })
-        .catch(({ response }) => {
-          this.$notify({
-            group: "alert",
-            title: "Modifer log",
-            text: "Une erreur est surveni",
-            type: "error",
-          });
-          if (response.status == 422) {
-            this.errors = response.data.errors;
-          }
-        });
+    onUpdatedFormStep() {
+         this.getFormSteps({id:this.formId})
+
     },
     toEdit(item) {
       this.isEditingMode = true;
@@ -179,35 +103,6 @@ export default {
     cancelEditMode() {
       this.isEditingMode = false;
     },
-     search () {
-      this.searchFormStep(this.filter)
-        .catch((error) => {
-          console.log(error);
-        })
-    },
-    remove(item) {
-      this.itemToRemove = item;
-      this.$bvModal.show("confirmation-box");
-           this.removeFormStep(this.itemToRemove)
-        .then(() => {
-          this.$notify({
-            group: "alert",
-            title: "Supprimer l'étape",
-            text: "Supprimer avec succès",
-            type: "success",
-          });
-          this.getFormSteps()
-        })
-        .catch(() => {
-          this.$notify({
-            group: "alert",
-            title: "Supprimer  l'étape",
-            text: "Une erreur est survenus",
-            type: "error",
-          });
-        });
-    }
-
   }
 
 }
