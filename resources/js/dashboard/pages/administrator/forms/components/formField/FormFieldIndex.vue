@@ -10,16 +10,18 @@
         </div>
       </b-card-body>
     </b-card>
-    <Form class="mt-4" />
-    </b-card>
-  </div>
+    <FormFieldForm class="mt-4" />
+    <FormFieldList class="mt-4" />
+</div>
 </template>
 
 <script>
-import Form from './Form'
+import FormFieldForm from './FormFieldForm'
+import FormFieldList from './FormFieldList'
 export default {
   components: {
-    Form
+    FormFieldForm,
+    FormFieldList
   }
 }
 </script>

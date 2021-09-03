@@ -8,7 +8,7 @@
         <i class="fas fa-chevron-down" aria-hidden="true"></i>
       </div>
     </b-card-header>
-    <b-collapse id="collapse-form" class="mt-2">
+    <b-collapse id="collapse-form" class="mt-2" visible>
       <b-card-body>
         <b-form @submit="onSubmit" @reset="onReset">
           <b-form-group
@@ -40,8 +40,9 @@
 
           <b-form-group
             id="order-field-group"
-            label="Numéro d'ordre du champ*"
+            label="Ordre du champ (inserer avant ?)"
             label-for="order-field"
+            description="Laiser vide pour insérer en dernier"
           >
             <b-form-select
               id="orderField"

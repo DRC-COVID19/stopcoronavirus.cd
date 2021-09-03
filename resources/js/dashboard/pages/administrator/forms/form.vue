@@ -1,7 +1,7 @@
 <template>
   <b-container>
       <b-row  class="mb-3 mt-4">
-        <b-col cols="12" md="5" lg="4">
+        <b-col cols="12" md="5">
           <b-col cols="12" class="p-0">
             <b-card>
               <b-list-group flush>
@@ -37,7 +37,7 @@
             </b-card>
           </b-col>
         </b-col>
-        <b-col cols="12" md="7" lg="8">
+        <b-col cols="12" md="7">
           <FormFieldIndex />
         </b-col>
       </b-row>
@@ -45,26 +45,25 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import FormFieldIndex from './components/formField/Index.vue'
+import FormFieldIndex from './components/formField/FormFieldIndex.vue'
 export default {
   components: {
     FormFieldIndex
   },
-  data(){
-    return{
-      form:{}
+  data () {
+    return {
+      form: {}
     }
   },
 
-  mounted(){
+  mounted () {
     this.init()
-
   },
 
-  methods:{
-     ...mapActions([
-       "showForm"
-     ]),
+  methods: {
+    ...mapActions([
+      'showForm'
+    ]),
 
     async init () {
       this.form = await this.showForm({ id: this.$route.params.form_id })
@@ -80,6 +79,11 @@ export default {
   border-top: none;
   a {
     text-decoration: none;
+  }
+}
+@media (min-width: 1200px){
+  .container-xl, .container-lg, .container-md, .container-sm, .container {
+      max-width: 1400px;
   }
 }
 </style>
