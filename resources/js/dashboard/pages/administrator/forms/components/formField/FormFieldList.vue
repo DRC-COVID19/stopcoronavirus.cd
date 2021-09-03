@@ -22,7 +22,8 @@
 export default {
   data() {
     return {
-      fields: ['Intitulé', 'Par défaut', 'O']
+      fields: ['Intitulé', 'Par défaut', 'O'],
+      items: []
     }
   }
 }

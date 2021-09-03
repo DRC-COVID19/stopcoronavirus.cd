@@ -225,3 +225,4 @@ Route::group([
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');
+Route::apiResource('form-field-types', 'FormFieldTypeController');

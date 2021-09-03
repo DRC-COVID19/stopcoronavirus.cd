@@ -10,7 +10,7 @@
     </b-card-header>
     <b-collapse id="collapse-form" class="mt-2" visible>
       <b-card-body>
-        <b-form @submit="onSubmit" @reset="onReset">
+        <b-form @submit.prevent="onSubmit" @reset="onReset">
           <b-form-group
             id="name-group"
             label="Nom*"
@@ -23,6 +23,21 @@
               placeholder="Entrer l'intitulé du champ"
               required
             ></b-form-input>
+          </b-form-group>
+
+           <b-form-group
+            id="form-field-type-group"
+            label="Type*"
+            label-for="form-field-type"
+          >
+            <b-form-select
+              id="form-field-type"
+              v-model="form.form_field_type_id"
+              :options="formFieldTypes"
+              text-field="name"
+              value-field="id"
+              required
+            ></b-form-select>
           </b-form-group>
 
           <b-form-group
@@ -52,16 +67,18 @@
             ></b-form-select>
           </b-form-group>
 
-
           <b-form-group
-            id="form-field-type-group"
-            label="Type*"
-            label-for="form-field-type"
+            id="step-group"
+            label="Etape"
+            label-for="step"
+            description="Laiser vide si le formulaire n'a pas d'étape"
           >
             <b-form-select
-              id="form-field-type"
-              v-model="form.form_field_type_id"
-              :options="formFieldTypes"
+              id="step"
+              v-model="form.form_step_id"
+              :options="formSteps"
+              text-field="title"
+              value-field="id"
               required
             ></b-form-select>
           </b-form-group>
@@ -89,29 +106,44 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+
 export default {
   data () {
     return {
       form: {},
-      formFieldTypes: [],
       requiredOptions: [
         { text: 'Oui', value: 1 },
         { text: 'Non', value: 0 }
-      ]
+      ],
+      formSteps: []
     }
   },
+  mounted() {
+    this.loadData()
+  },
   computed: {
+    ...mapState({
+      formFieldTypes: state => state.formFieldType.formFieldTypes,
+    }),
     orderFields () {
       return [1]
     }
   },
   methods: {
+    ...mapActions([
+      'formFielTypeIndex'
+    ]),
     onSubmit () {
       // to implement
+      console.log(this.form)
     },
     onReset () {
       // to implement
     },
+    loadData () {
+      this.formFielTypeIndex()
+    }
   }
 
 }

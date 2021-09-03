@@ -1,0 +1,21 @@
+export default {
+  state: {
+    formFieldTypes: []
+  },
+  mutations: {
+    SET_FORM_FIELD_TYPES: (state, payload) => {
+      state.formFieldTypes = payload;
+    },
+  },
+  actions: {
+    formFielTypeIndex ({ commit }) {
+      axios.get('/api/form-field-types')
+        .then(({ data }) => {
+          commit('SET_FORM_FIELD_TYPES', data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    }
+  }
+}
