@@ -175,7 +175,7 @@ export default {
       this.toToCanceled = true;
       this.form = {};
       this.title = "Creation d'un étape";
-      this.btnTitle = "Enreigistrer";
+      this.btnTitle = "Enregistrer";
       this.$emit("onCancelUpdate", {});
     },
   }
