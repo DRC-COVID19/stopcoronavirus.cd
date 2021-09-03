@@ -21,4 +21,9 @@ class Form extends Model
     {
         return $this->belongsTo(FormRecurrence::class);
     }
+
+    public function formSteps()
+    {
+        return $this->hasMany(FormStep::class);
+    }
 }

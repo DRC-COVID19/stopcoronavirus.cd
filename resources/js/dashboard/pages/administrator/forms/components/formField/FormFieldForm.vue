@@ -75,7 +75,7 @@
             <b-form-select
               id="step"
               v-model="form.form_step_id"
-              :options="formSteps"
+              :options="targetForm.form_steps"
               text-field="title"
               value-field="id"
             ></b-form-select>
@@ -121,7 +121,6 @@ export default {
         { text: 'Oui', value: 1 },
         { text: 'Non', value: 0 }
       ],
-      formSteps: [],
       fieldWillBeRequired: false
     }
   },

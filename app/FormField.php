@@ -13,6 +13,7 @@ class FormField extends Model
         'name',
         'order_field',
         'rules',
+        'default_value',
         'form_id',
         'form_field_type_id',
         'form_step_id'
