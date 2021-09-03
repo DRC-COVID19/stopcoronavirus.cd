@@ -16,13 +16,13 @@ export default{
     SET_IS_LOADING(state, payload) {
       state.isLoading = payload;
     },
-    setIsCreating(state, payload) {
+    SET_IS_CREATING(state, payload) {
       state.isCreating = payload;
     }
   },
   actions:{
     createFormStep({ state, commit, dispatch }, payload = {}) {
-      commit("setIsCreating", true);
+      commit("SET_IS_CREATING", true);
       return new Promise((resolve, reject) => {
         axios.post('api/dashboard/form-steps', payload)
           .then(({ data }) => {
@@ -34,12 +34,12 @@ export default{
             reject(response);
           })
           .finally(() => {
-            commit("setIsCreating", false);
+            commit("SET_IS_CREATING", false);
           });
       });
     },
     updateFormStep({ state, commit, dispatch }, payload = {}) {
-      commit("setIsCreating", true);
+      commit("SET_IS_CREATING", true);
       return new Promise((resolve, reject) => {
         axios.put(`api/dashboard/form-steps/${payload.id}`, payload)
           .then(({ data }) => {
@@ -51,12 +51,12 @@ export default{
             reject(response);
           })
           .finally(() => {
-            commit("setIsCreating", false);
+            commit("SET_IS_CREATING", false);
           });
       });
     },
     removeFormStep({ state, commit, dispatch }, payload = {}) {
-      commit("setIsCreating", true);
+      commit("SET_IS_CREATING", true);
       return new Promise((resolve, reject) => {
         axios.delete(`api/dashboard/form-steps/${payload}`)
           .then(({ data }) => {
@@ -68,7 +68,7 @@ export default{
             reject(response);
           })
           .finally(() => {
-            commit("setIsCreating", false);
+            commit("SET_IS_CREATING", false);
           });
       });
     },
