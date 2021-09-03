@@ -1,4 +1,6 @@
 import moment from 'moment'
+import { format } from 'date-fns'
+
 export default {
   computed: {
     isSmOrMd() {
@@ -191,6 +193,9 @@ export default {
         this.configBarChart2
       );
     },
+    formatDateFns (date) {
+      return format(new Date(date), 'dd/MM/yyyy à HH:mm:ss')
+    }
   }
 
 }

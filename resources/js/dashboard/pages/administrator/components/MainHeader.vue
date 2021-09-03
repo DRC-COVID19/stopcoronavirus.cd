@@ -29,6 +29,7 @@
               >Change log</b-link
             >
             <b-link
+              v-if="canViewFormsPage"
               class="mx-2"
               :class="{ active: $route.name === 'administrator.forms' }"
               :to="{ name: 'administrator.forms' }"
@@ -114,6 +115,9 @@ export default {
       user: (state) => state.auth.user,
       activeMenu: (state) => state.nav.activeMenu,
     }),
+    canViewFormsPage () {
+      return this.user.roles.find(role => ['create_form', 'edit_form'].includes(role.slug) )
+    }
   },
   methods: {
     ...mapActions(["logout"]),

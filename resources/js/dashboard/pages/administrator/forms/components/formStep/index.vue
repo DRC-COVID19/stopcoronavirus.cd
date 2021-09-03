@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
     <b-row class="flex-md-row-reverse" no-gutters>
-      <b-col cols="12" md="4" class="mt-3">
+      <b-col cols="12" class="mt-3">
         <Create
           :formId="formId"
           :rowFormStep="rowformStep"
@@ -10,7 +10,7 @@
           @onCancelUpdate="cancelEditMode"
         />
       </b-col>
-      <b-col cols="12" md="8">
+      <b-col cols="12">
         <Header :title="title" :iconClass="iconClass" />
         <div class="hide-waiting" v-if="isCreating"></div>
         <ListFormStep

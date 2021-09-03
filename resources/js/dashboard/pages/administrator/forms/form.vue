@@ -1,27 +1,60 @@
 <template>
-  <div>
   <b-container>
-      <b-row  class="mb-3">
-            <b-col cols="12" md="6" class="mt-4">
-              <ul>
-                <li>Title : {{form.title}}</li>
-                <li v-if="form.form_recurrence_value">Valeur de la recurrence : {{form.form_recurrence_value}}</li>
-                <li>Recurrence du formulaire : {{form.form_recurrence.name}}</li>
-                <li>Publier : {{form.publish}}</li>
-             </ul>
-            </b-col>
+      <b-row  class="mb-3 mt-4">
+        <b-col cols="12" md="5" lg="4">
+          <b-col cols="12" class="p-0">
+            <b-card>
+              <b-list-group flush>
+                <b-list-group-item>
+                  <small class="text-muted"> Nom du formulaire </small> <br>
+                  <span> {{form.title}} </span>
+                </b-list-group-item>
+                <b-list-group-item>
+                  <small class="text-muted"> Réccurence </small> <br>
+                  <span> {{form.form_recurrence.name}} </span>
+                </b-list-group-item>
+                <b-list-group-item
+                  v-if="form.form_recurrence_value"
+                >
+                  <small class="text-muted"> Valeur de la recurrence </small> <br>
+                  <span> {{form.form_recurrence_value}} </span>
+                </b-list-group-item>
+                <b-list-group-item>
+                  <small class="text-muted"> Statut de publication </small> <br>
+                  <span> {{ form.publish ? 'Publié' : 'Non publié' }} </span>
+                </b-list-group-item>
+                <b-list-group-item>
+                  <small class="text-muted"> Date de création </small> <br>
+                  <span> {{ formatDateFns(form.created_at) }} </span>
+                </b-list-group-item>
+              </b-list-group>
+              <b-card-footer>
+                <a href="#" class="card-link d-flex justify-content-between align-items-center">
+                  Aperçu
+                  <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>
+              </b-card-footer>
+            </b-card>
+          </b-col>
+          <b-col cols="12" class="p-0">
+            <FormStepIndex
+              :formId="$route.params.form_id"
+            />
+          </b-col>
+        </b-col>
+        <b-col cols="12" md="7" lg="8">
+          <FormFieldIndex />
+        </b-col>
       </b-row>
   </b-container>
-  <FormStepIndex
-    :formId="$route.params.form_id"
-  />
-  </div>
 </template>
 <script>
 import { mapActions } from 'vuex'
 import FormStepIndex from "./components/formStep/index";
+import FormFieldIndex from './components/formField/index.vue'
 export default {
   components: {
+    FormFieldIndex,
     FormStepIndex
   },
   data(){
@@ -32,7 +65,7 @@ export default {
 
   mounted(){
     this.init()
-    
+
   },
 
   methods:{
@@ -45,6 +78,15 @@ export default {
     }
 
   }
-  
+
 }
 </script>
+
+<style lang="scss" scoped>
+.card-footer{
+  border-top: none;
+  a {
+    text-decoration: none;
+  }
+}
+</style>
