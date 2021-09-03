@@ -10,6 +10,7 @@ import app from './modules/app'
 import changeLog from './modules/changeLog'
 import form from './modules/form'
 import formFieldType from './modules/formFieldType'
+import formField from './modules/formField'
 
 Vue.use(Vuex)
 
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     indicator,
     changeLog,
     form,
-    formFieldType
+    formFieldType,
+    formField
   }
 })

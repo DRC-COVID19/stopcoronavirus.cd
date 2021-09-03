@@ -1,8 +1,8 @@
-export default{
-  actions:{
-    formShow (_, payload) {
+export default {
+  actions: {
+    formFieldStore (_, payload) {
       return new Promise((resolve, reject) => {
-        axios.get(`/api/dashboard/forms/${payload.id}`)
+        axios.post('/api/dashboard/form-fields', payload)
           .then(({ data }) => {
             resolve(data)
           })
@@ -10,6 +10,6 @@ export default{
             reject(error)
           })
       })
-    },
+    }
   }
 }

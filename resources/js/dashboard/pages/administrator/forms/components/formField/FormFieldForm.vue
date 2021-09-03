@@ -63,7 +63,6 @@
               id="orderField"
               v-model="form.order_field"
               :options="orderFields"
-              required
             ></b-form-select>
           </b-form-group>
 
@@ -79,15 +78,15 @@
               :options="formSteps"
               text-field="title"
               value-field="id"
-              required
             ></b-form-select>
           </b-form-group>
 
           <b-form-group label="Obligatoire ?" v-slot="{ ariaDescribedby }">
             <b-form-radio-group
-              id="required"
+              v-model="fieldWillBeRequired"
               :options="requiredOptions"
               :aria-describedby="ariaDescribedby"
+              id="required"
             ></b-form-radio-group>
           </b-form-group>
 
@@ -109,6 +108,12 @@
 import { mapActions, mapState } from 'vuex'
 
 export default {
+  props: {
+    targetForm: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       form: {},
@@ -116,15 +121,17 @@ export default {
         { text: 'Oui', value: 1 },
         { text: 'Non', value: 0 }
       ],
-      formSteps: []
+      formSteps: [],
+      fieldWillBeRequired: false
     }
   },
-  mounted() {
-    this.loadData()
+  mounted () {
+    this.loadInitData()
+    this.initForm()
   },
   computed: {
     ...mapState({
-      formFieldTypes: state => state.formFieldType.formFieldTypes,
+      formFieldTypes: state => state.formFieldType.formFieldTypes
     }),
     orderFields () {
       return [1]
@@ -132,17 +139,40 @@ export default {
   },
   methods: {
     ...mapActions([
-      'formFielTypeIndex'
+      'formFieldTypeIndex',
+      'formFieldStore'
     ]),
     onSubmit () {
-      // to implement
+      this.form.rules = this.fieldWillBeRequired ? 'required' : ''
       console.log(this.form)
+      this.formFieldStore(this.form)
+        .then(() => {
+          this.initForm()
+          this.$notify({
+            group: 'alert',
+            title: 'Champ rajouté avec succès',
+            type: 'success'
+          })
+        })
+        .catch(() => {
+          this.$notify({
+            group: 'alert',
+            title: 'Une erreur est survenu',
+            type: 'error'
+          })
+        })
     },
     onReset () {
       // to implement
+      this.initForm()
     },
-    loadData () {
-      this.formFielTypeIndex()
+    initForm () {
+      this.form = {
+        form_id: this.targetForm.id
+      }
+    },
+    loadInitData () {
+      this.formFieldTypeIndex()
     }
   }
 

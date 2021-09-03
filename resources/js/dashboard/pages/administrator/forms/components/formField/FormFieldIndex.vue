@@ -10,7 +10,10 @@
         </div>
       </b-card-body>
     </b-card>
-    <FormFieldForm class="mt-4" />
+    <FormFieldForm
+      :target-form="form"
+      class="mt-4"
+    />
     <FormFieldList class="mt-4" />
 </div>
 </template>
@@ -19,6 +22,12 @@
 import FormFieldForm from './FormFieldForm'
 import FormFieldList from './FormFieldList'
 export default {
+  props: {
+    form: {
+      type: Object,
+      required: true
+    }
+  },
   components: {
     FormFieldForm,
     FormFieldList

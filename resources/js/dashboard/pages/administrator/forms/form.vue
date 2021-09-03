@@ -9,7 +9,7 @@
                   <small class="text-muted"> Nom du formulaire </small> <br>
                   <span> {{form.title}} </span>
                 </b-list-group-item>
-                <b-list-group-item>
+                <b-list-group-item v-if="form.form_recurrence">
                   <small class="text-muted"> Réccurence </small> <br>
                   <span> {{form.form_recurrence.name}} </span>
                 </b-list-group-item>
@@ -38,7 +38,9 @@
           </b-col>
         </b-col>
         <b-col cols="12" md="7">
-          <FormFieldIndex />
+          <FormFieldIndex
+            :form="form"
+          />
         </b-col>
       </b-row>
   </b-container>
@@ -62,11 +64,11 @@ export default {
 
   methods: {
     ...mapActions([
-      'showForm'
+      'formShow'
     ]),
 
     async init () {
-      this.form = await this.showForm({ id: this.$route.params.form_id })
+      this.form = await this.formShow({ id: this.$route.params.form_id })
     }
 
   }

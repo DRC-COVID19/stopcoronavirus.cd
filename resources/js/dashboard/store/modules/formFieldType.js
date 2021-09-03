@@ -8,8 +8,8 @@ export default {
     },
   },
   actions: {
-    formFielTypeIndex ({ commit }) {
-      axios.get('/api/form-field-types')
+    formFieldTypeIndex ({ commit }) {
+      axios.get('/api/dashboard/form-field-types')
         .then(({ data }) => {
           commit('SET_FORM_FIELD_TYPES', data)
         })
