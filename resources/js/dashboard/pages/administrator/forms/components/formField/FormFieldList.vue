@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card>
-    <b-card-header v-b-toggle.collapse-list>
+    <b-card-header v-b-toggle.collapse-form-field-list>
       <div class="d-flex justify-content-between align-items-center">
         <span class="text-muted">
           Liste des champs
@@ -9,7 +9,7 @@
         <i class="fas fa-chevron-down" aria-hidden="true"></i>
       </div>
     </b-card-header>
-    <b-collapse id="collapse-list" class="mt-2" visible>
+    <b-collapse id="collapse-form-field-list" class="mt-2" visible>
       <b-card-body>
         <b-table :fields="fields" :items="items" show-empty />
       </b-card-body>

@@ -1,6 +1,6 @@
 <template>
   <b-card>
-    <b-card-header v-b-toggle.collapse-form-step>
+    <b-card-header v-b-toggle.collapse-form-step-list>
       <div class="d-flex justify-content-between align-items-center">
         <span class="text-muted">
           Liste des étapes
@@ -8,7 +8,7 @@
         <i class="fas fa-chevron-down" aria-hidden="true"></i>
       </div>
     </b-card-header>
-    <b-collapse id="collapse-form-step" class="mt-2" visible>
+    <b-collapse id="collapse-form-step-list" class="mt-2" visible>
       <b-card-body>
         <b-row no-gutters class="mb-3">
           <b-col cols="12">

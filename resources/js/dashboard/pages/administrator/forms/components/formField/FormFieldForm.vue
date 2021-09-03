@@ -1,6 +1,6 @@
 <template>
   <b-card>
-    <b-card-header v-b-toggle.collapse-form>
+    <b-card-header v-b-toggle.collapse-form-field>
       <div class="d-flex justify-content-between align-items-center">
         <span class="text-muted">
           Ajouter un nouveau champ
@@ -8,7 +8,7 @@
         <i class="fas fa-chevron-down" aria-hidden="true"></i>
       </div>
     </b-card-header>
-    <b-collapse id="collapse-form" class="mt-2" visible>
+    <b-collapse id="collapse-form-field" class="mt-2" visible>
       <b-card-body>
         <b-form @submit.prevent="onSubmit" @reset="onReset">
           <b-form-group
