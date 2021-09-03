@@ -36,6 +36,11 @@
               </b-card-footer>
             </b-card>
           </b-col>
+          <b-col cols="12" class="p-0">
+            <FormStepIndex
+              :formId="$route.params.form_id"
+            />
+          </b-col>
         </b-col>
         <b-col cols="12" md="7">
           <FormFieldIndex
@@ -48,9 +53,11 @@
 <script>
 import { mapActions } from 'vuex'
 import FormFieldIndex from './components/formField/FormFieldIndex.vue'
+import FormStepIndex from './components/formStep/FormStepIndex'
 export default {
   components: {
-    FormFieldIndex
+    FormFieldIndex,
+    FormStepIndex
   },
   data () {
     return {

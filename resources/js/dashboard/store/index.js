@@ -11,6 +11,7 @@ import changeLog from './modules/changeLog'
 import form from './modules/form'
 import formFieldType from './modules/formFieldType'
 import formField from './modules/formField'
+import formStep from "./modules/formStep";
 
 Vue.use(Vuex)
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     changeLog,
     form,
     formFieldType,
-    formField
+    formField,
+    formStep
   }
 })
