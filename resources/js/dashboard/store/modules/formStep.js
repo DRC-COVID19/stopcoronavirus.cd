@@ -94,7 +94,7 @@ export default{
     getFormSteps({ state, commit }, payload = {}) {
       commit("SET_IS_LOADING", true);
       return new Promise((resolve, reject) => {
-        axios.get(`api/dashboard/form-steps/step-form/${payload.id}`, {
+        axios.get(`api/dashboard/form-steps/get-form/${payload.id}`, {
           params: { page: payload.page || 1 }
         })
           .then(({ data }) => {

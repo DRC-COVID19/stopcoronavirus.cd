@@ -199,7 +199,7 @@ Route::group([
   });
   Route::group(['prefix' => 'form-steps'], function () {
     Route::get('/filter', 'FormStepController@filter');
-    Route::get('step-form/{form}', 'FormStepController@getFormStepByForm');
+    Route::get('get-form/{form}', 'FormStepController@getFormStepByForm');
   });
   Route::group(['prefix' => 'hospitals'], function () {
     Route::get('/', 'HospitalController@getHospials'); //ok
