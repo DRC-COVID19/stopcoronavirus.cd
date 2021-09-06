@@ -36,9 +36,9 @@ class FormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Form $form)
+      public function show(Form $form)
     {
-        $form->load(['formRecurrence']);
+        $form->load(['formRecurrence', 'formSteps']);
         return response()->json($form, 200);
     }
 

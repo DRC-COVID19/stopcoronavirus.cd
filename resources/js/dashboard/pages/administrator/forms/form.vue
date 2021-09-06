@@ -1,7 +1,7 @@
 <template>
   <b-container>
       <b-row  class="mb-3 mt-4">
-        <b-col cols="12" md="5" lg="4">
+        <b-col cols="12" md="5">
           <b-col cols="12" class="p-0">
             <b-card>
               <b-list-group flush>
@@ -9,7 +9,7 @@
                   <small class="text-muted"> Nom du formulaire </small> <br>
                   <span> {{form.title}} </span>
                 </b-list-group-item>
-                <b-list-group-item>
+                <b-list-group-item v-if="form.form_recurrence">
                   <small class="text-muted"> Réccurence </small> <br>
                   <span> {{form.form_recurrence.name}} </span>
                 </b-list-group-item>
@@ -42,39 +42,40 @@
             />
           </b-col>
         </b-col>
-        <b-col cols="12" md="7" lg="8">
-          <FormFieldIndex />
+        <b-col cols="12" md="7">
+          <FormFieldIndex
+            :form="form"
+          />
         </b-col>
       </b-row>
   </b-container>
 </template>
 <script>
 import { mapActions } from 'vuex'
-import FormStepIndex from "./components/formStep/index";
-import FormFieldIndex from './components/formField/index.vue'
+import FormFieldIndex from './components/formField/FormFieldIndex.vue'
+import FormStepIndex from './components/formStep/FormStepIndex'
 export default {
   components: {
     FormFieldIndex,
     FormStepIndex
   },
-  data(){
-    return{
-      form:{}
+  data () {
+    return {
+      form: {}
     }
   },
 
-  mounted(){
+  mounted () {
     this.init()
-
   },
 
-  methods:{
-     ...mapActions([
-       "showForm"
-     ]),
+  methods: {
+    ...mapActions([
+      'formShow'
+    ]),
 
     async init () {
-      this.form = await this.showForm({ id: this.$route.params.form_id })
+      this.form = await this.formShow({ id: this.$route.params.form_id })
     }
 
   }
@@ -87,6 +88,11 @@ export default {
   border-top: none;
   a {
     text-decoration: none;
+  }
+}
+@media (min-width: 1200px){
+  .container-xl, .container-lg, .container-md, .container-sm, .container {
+      max-width: 1400px;
   }
 }
 </style>

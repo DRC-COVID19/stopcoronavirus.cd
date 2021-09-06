@@ -227,6 +227,9 @@ Route::group([
   Route::group(['prefix' => 'pandemics'], function () {
     Route::get('top-confirmed', 'PandemicController@getHealthZoneTopConfirmed');
   });
+
+  Route::apiResource('form-field-types', 'FormFieldTypeController');
+  Route::apiResource('form-fields', 'FormFieldController');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');

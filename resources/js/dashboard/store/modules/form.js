@@ -12,7 +12,7 @@ export default{
     }
   },
   actions:{
-    showForm (_, payload) {
+    formShow (_, payload) {
       return new Promise((resolve, reject) => {
         axios.get(`/api/dashboard/forms/${payload.id}`)
           .then(({ data }) => {
