@@ -143,7 +143,6 @@ export default {
     ]),
     onSubmit () {
       this.form.rules = this.fieldWillBeRequired ? 'required' : ''
-      console.log(this.form)
       this.formFieldStore(this.form)
         .then(() => {
           this.initForm()
@@ -152,6 +151,7 @@ export default {
             title: 'Champ rajouté avec succès',
             type: 'success'
           })
+          this.$emit('created')
         })
         .catch(() => {
           this.$notify({

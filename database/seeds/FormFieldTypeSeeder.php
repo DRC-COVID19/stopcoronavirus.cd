@@ -18,7 +18,7 @@ class FormFieldTypeSeeder extends Seeder
                 'name'=>'text'
             ],
             [
-                'name'=>'integer'
+                'name'=>'number'
             ],
             [
                 'name'=>'decimal'
