@@ -17,7 +17,15 @@
             :label="item.name"
             :label-for="item.name"
           >
+          <b-form-group  v-slot="{ ariaDescribedby }" v-if="item.form_field_type.name === 'boolean'">
+            <b-form-radio-group
+              :options="requiredOptions"
+              :aria-describedby="ariaDescribedby"
+              id="required"
+            ></b-form-radio-group>
+          </b-form-group>
             <b-form-input
+               v-else
               :type="item.form_field_type.name"
               :placeholder="`Entrer ${item.name}`"
             ></b-form-input>
@@ -36,13 +44,17 @@ export default {
       required: true
     }
   },
-  computed:{
-  formFieldSorted (){
-      return this.targetForm.form_fields.sort((a, b) => a.order_field - b.order_field)
+  computed: {
+    formFieldSorted () {
+      return this.targetForm.form_fields.slice().sort((a, b) => a.order_field - b.order_field)
     }
   },
   data () {
     return {
+      requiredOptions: [
+        { text: 'Oui', value: 1 },
+        { text: 'Non', value: 0 }
+      ]
     }
   }
 }

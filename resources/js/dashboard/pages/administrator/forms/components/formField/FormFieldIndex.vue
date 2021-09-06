@@ -15,7 +15,7 @@
       @created="onCreatedFormStep"
       class="mt-4"
     />
-    <FormFieldList 
+    <FormFieldList
       :target-form="form"
       class="mt-4"
     />
@@ -44,10 +44,11 @@ export default {
     ...mapActions([
       'formShow'
     ]),
-    onCreatedFormStep(){
-        this.init()
+    onCreatedFormStep () {
+      this.init()
     },
     async init () {
+      // eslint-disable-next-line vue/no-mutating-props
       this.form = await this.formShow({ id: this.form.id })
     }
 
