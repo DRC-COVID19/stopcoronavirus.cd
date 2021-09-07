@@ -103,45 +103,44 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
-      showUserCard: false,
-    };
+      showUserCard: false
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
-      activeMenu: (state) => state.nav.activeMenu,
+      activeMenu: (state) => state.nav.activeMenu
     }),
     canViewFormsPage () {
-      return this.user.roles.find(role => ['create_form', 'edit_form'].includes(role.slug) )
+      return this.user.roles.find(role => ['create_form', 'edit_form'].includes(role.slug))
     }
   },
   methods: {
-    ...mapActions(["logout"]),
-    ...mapMutations(["setActiveMenu"]),
-    userAvatarMouseEnter() {
-      this.showUserCard = true;
+    ...mapActions(['logout']),
+    ...mapMutations(['setActiveMenu']),
+    userAvatarMouseEnter () {
+      this.showUserCard = true
     },
-    userAvatarMouseLeave() {
-      this.showUserCard = false;
+    userAvatarMouseLeave () {
+      this.showUserCard = false
     },
-    userLogout() {
+    userLogout () {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
-        });
-      });
+          name: 'login'
+        })
+      })
     },
-    selectMenu(value) {
-      this.setActiveMenu(value);
-    },
-  },
-};
+    selectMenu (value) {
+      this.setActiveMenu(value)
+    }
+  }
+}
 </script>
-
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
