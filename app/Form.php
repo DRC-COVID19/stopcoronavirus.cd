@@ -26,4 +26,8 @@ class Form extends Model
     {
         return $this->hasMany(FormStep::class);
     }
+    public function formFields()
+    {
+        return $this->hasMany(FormField::class);
+    }
 }

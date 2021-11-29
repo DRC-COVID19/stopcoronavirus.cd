@@ -61,8 +61,10 @@
           >
             <b-form-select
               id="orderField"
-              v-model="form.order_field"
-              :options="orderFields"
+              v-model="form.form_field_order"
+              :options="targetForm.form_fields"
+              text-field="name"
+              value-field="id"
             ></b-form-select>
           </b-form-group>
 
@@ -143,7 +145,11 @@ export default {
     ]),
     onSubmit () {
       this.form.rules = this.fieldWillBeRequired ? 'required' : ''
-      console.log(this.form)
+      if (!this.form.form_field_order) {
+        const MaxValue = this.targetForm.form_fields.flatMap(x => x.order_field)
+        console.log(MaxValue)
+        this.form.order_field = MaxValue.length && MaxValue.length > 0 ? Math.max(...MaxValue) + 1 : 1
+      }
       this.formFieldStore(this.form)
         .then(() => {
           this.initForm()
@@ -152,6 +158,7 @@ export default {
             title: 'Champ rajouté avec succès',
             type: 'success'
           })
+          this.$emit('created')
         })
         .catch(() => {
           this.$notify({

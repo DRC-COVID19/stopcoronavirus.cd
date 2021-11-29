@@ -6,7 +6,7 @@
           <strong class="mb-0">
             ETAPES
           </strong>
-          <i class="fab fa-wpforms" aria-hidden="true"></i>
+          <i class="fas fa-list-ol" aria-hidden="true"></i>
         </div>
       </b-card-body>
     </b-card>
@@ -31,7 +31,6 @@
   </div>
 </template>
 <script>
-import Header from '../../../components/Header'
 import ListFormStep from '../formStep/FormStepList'
 import Create from '../formStep/FormStepCreate.vue'
 import { mapActions, mapState } from 'vuex'
@@ -44,7 +43,6 @@ export default {
   },
 
   components: {
-    Header,
     Create,
     ListFormStep
   },

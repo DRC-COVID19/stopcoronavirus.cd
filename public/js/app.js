@@ -48367,17 +48367,18 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mapBox__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./mapBox */ "./resources/js/mapBox.js");
 /* harmony import */ var _mapBox__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_mapBox__WEBPACK_IMPORTED_MODULE_0__);
+// require('./bootstrap');
+
+
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
-var Chart = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Chart.js"); //require('./bootstrap');
-
-
-
+var Chart = __webpack_require__(/*! chart.js */ "./node_modules/chart.js/dist/Chart.js");
 
 function drawChart() {
   // Add a helper to format timestamp data
+  // eslint-disable-next-line no-extend-native
   Date.prototype.formatD = function () {
-    return this.getDate() + '.' + ('0' + (this.getMonth() + 1)).slice(-2) + "." + this.getFullYear();
+    return this.getDate() + '.' + ('0' + (this.getMonth() + 1)).slice(-2) + '.' + this.getFullYear();
   };
 
   var jsonData = $.ajax({
@@ -48385,13 +48386,13 @@ function drawChart() {
     dataType: 'json'
   }).done(function (results) {
     // Split timestamp and data into separate arrays
-    var labels = [],
-        data = [],
-        sick = [],
-        confirmed = [],
-        dead = [],
-        healed = [];
-    results["data"].forEach(function (d) {
+    var labels = [];
+    var data = [];
+    var sick = [];
+    var confirmed = [];
+    var dead = [];
+    var healed = [];
+    results.data.forEach(function (d) {
       confirmed.push(d.confirmed);
       dead.push(d.dead);
       healed.push(d.healed);
@@ -48403,22 +48404,22 @@ function drawChart() {
       data: {
         labels: labels,
         datasets: [{
-          label: "Confirmés",
+          label: 'Confirmés',
           fill: true,
-          borderColor: "rgb(166,180,205)",
-          backgroundColor: "rgb(166,180,205, 0.2)",
+          borderColor: 'rgb(166,180,205)',
+          backgroundColor: 'rgb(166,180,205, 0.2)',
           data: confirmed
         }, {
-          label: "Guéris",
+          label: 'Guéris',
           fill: true,
-          borderColor: "rgba(0,176,101,1)",
-          backgroundColor: "rgba(0,176,101,0.8)",
+          borderColor: 'rgba(0,176,101,1)',
+          backgroundColor: 'rgba(0,176,101,0.8)',
           data: healed
         }, {
-          label: "Décès",
+          label: 'Décès',
           fill: true,
-          borderColor: "rgba(10,10,10,0.2)",
-          backgroundColor: "rgba(10,10,10,1)",
+          borderColor: 'rgba(10,10,10,0.2)',
+          backgroundColor: 'rgba(10,10,10,1)',
           data: dead
         }]
       },
@@ -48461,7 +48462,7 @@ function drawChart() {
               unit: 'day',
               unitStepSize: 2,
               displayFormats: {
-                'day': 'DD.MM'
+                day: 'DD.MM'
               }
             }
           }],
@@ -48479,14 +48480,17 @@ function drawChart() {
       }
     }; // Get the context of the canvas element we want to select
 
-    var ctx = document.getElementById("statsChart").getContext("2d"); // Instantiate a new chart
+    var ctx = document.getElementById('statsChart').getContext('2d'); // Instantiate a new chart
 
     var myLineChart = new Chart(ctx, tempData);
   });
 }
 
 $(document).ready(function () {
-  if ($('#statsChart').length) drawChart();
+  if ($('#statsChart').length) {
+    drawChart();
+  }
+
   $('#other-town').addClass('d-none');
   $('select[name=township]').attr('required', 'required');
   $(':radio[name=step_value]').change(function (params) {
@@ -48503,11 +48507,11 @@ $(document).ready(function () {
       $('input[name=other_town]').remove('required');
     }
 
-    if (value == "Kinshasa") {
+    if (value == 'Kinshasa') {
       $('#township').removeClass('d-none');
       $('select[name=township]').attr('required', 'required');
     } else {
-      $("#township").addClass('d-none');
+      $('#township').addClass('d-none');
       $('select[name=township]').removeAttr('required');
     }
   });
@@ -48517,13 +48521,13 @@ $(document).ready(function () {
     $('#question-form-validate-btn').addClass('d-none');
   } // get Localisation
 
-  /* if ("geolocation" in navigator) { 
-       navigator.geolocation.getCurrentPosition(function (position) {
-           console.log("Found your location <br />Lat : " + position.coords.latitude + " </br>Lang :" + position.coords.longitude);
-       });
-   } else {
-       console.log("Browser doesn't support geolocation!");
-   }*/
+  /* if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            console.log("Found your location <br />Lat : " + position.coords.latitude + " </br>Lang :" + position.coords.longitude);
+        });
+    } else {
+        console.log("Browser doesn't support geolocation!");
+    } */
 
 });
 $(function () {});
@@ -48548,7 +48552,7 @@ var AllCovidCasesMarkers = [];
 $(function () {
   var hoveredStateId = null;
   var hoveredStateIdKin = null;
-  var elementCheck = $("#map");
+  var elementCheck = $('#map');
 
   if (elementCheck.length == 0) {
     return;
@@ -48564,13 +48568,13 @@ $(function () {
   map.addControl(new mapboxgl.NavigationControl());
   map.on('load', function () {
     map.addSource('states', {
-      'type': 'geojson',
-      'generateId': true,
-      'data': "".concat(location.protocol, "//").concat(location.host, "/storage/geojson/rd_congo_admin_4_provinces.geojson")
+      type: 'geojson',
+      generateId: true,
+      data: "".concat(location.protocol, "//").concat(location.host, "/storage/geojson/rd_congo_admin_4_provinces.geojson")
     });
     map.addSource('statesKin', {
-      type: "vector",
-      url: "mapbox://merki230.4airwoxt"
+      type: 'vector',
+      url: 'mapbox://merki230.4airwoxt'
     }); // The feature-state dependent fill-opacity expression will render the hover effect
     // when a feature's hover state is set to true.
     // map.addLayer({
@@ -48607,22 +48611,22 @@ $(function () {
     // });
 
     map.addLayer({
-      'id': 'state-borders',
-      'type': 'line',
-      'source': 'states',
-      'layout': {},
-      'paint': {
+      id: 'state-borders',
+      type: 'line',
+      source: 'states',
+      layout: {},
+      paint: {
         'line-color': '#627BC1',
         'line-width': 1
       }
     });
     map.addLayer({
-      'id': 'state-borders-kin',
-      'type': 'line',
-      'source': 'statesKin',
-      "source-layer": "carte-administrative-de-la-vi-csh5cj",
-      'layout': {},
-      'paint': {
+      id: 'state-borders-kin',
+      type: 'line',
+      source: 'statesKin',
+      'source-layer': 'carte-administrative-de-la-vi-csh5cj',
+      layout: {},
+      paint: {
         'line-color': '#627BC1',
         'line-width': 1
       }
@@ -48718,7 +48722,7 @@ $(function () {
         item.remove();
       });
       $('#covid_case_group_item input[type=radio]').attr('disabled', 'disabled');
-      $('#covid_case_group_item input[type=radio]').prop("checked", false);
+      $('#covid_case_group_item input[type=radio]').prop('checked', false);
     }
   });
   $('#covid_case_group_item input[type=radio]').change(function (e) {
@@ -48740,13 +48744,13 @@ $(function () {
     if (item.is(':checked')) {
       getHospitals(map);
     } else {
-      map.off("mouseenter", "covid9_hospitals_layer");
-      map.off("mouseleave", "covid9_hospitals_layer");
-      map.off("click", "covid9_hospitals_layer");
-      map.removeLayer("covid9_hospitals_layer");
+      map.off('mouseenter', 'covid9_hospitals_layer');
+      map.off('mouseleave', 'covid9_hospitals_layer');
+      map.off('click', 'covid9_hospitals_layer');
+      map.removeLayer('covid9_hospitals_layer');
       map.removeSource('covid9_hospitals_source');
       $('#hospital-data').addClass('d-none');
-      $("#hospital_count").text('');
+      $('#hospital_count').text('');
     }
   });
   $('#medical_orientation').change(function (e) {
@@ -48758,10 +48762,10 @@ $(function () {
     } else {
       RemoveDianosticMakers();
       $('#orientation_result').attr('disabled', 'disabled');
-      $("#medical_orientation_count").text('');
-      $("#medical_orientation_fin_count").text('');
-      $("#medical_orientation_fin5_count").text('');
-      $("#medical_orientation_fin8_count").text('');
+      $('#medical_orientation_count').text('');
+      $('#medical_orientation_fin_count').text('');
+      $('#medical_orientation_fin5_count').text('');
+      $('#medical_orientation_fin8_count').text('');
     }
   });
   $('#orientation_result').change(function (e) {
@@ -48773,7 +48777,7 @@ $(function () {
       getAllDianostics(map);
     }
   });
-  $("#has_sondage").change(function (e) {
+  $('#has_sondage').change(function (e) {
     var item = $(this);
 
     if (item.is(':checked')) {
@@ -48785,10 +48789,10 @@ $(function () {
       AllSondagesMarkers.map(function (item) {
         item.remove();
       });
-      $("#sondage_count").text('');
+      $('#sondage_count').text('');
     }
   });
-  $("#sondage-item input").change(function (e) {
+  $('#sondage-item input').change(function (e) {
     var item = $(this);
 
     if (item.is(':checked')) {
@@ -48814,10 +48818,9 @@ function removeMapWaiting() {
 
 function getCovideCases() {
   addMapWaiting();
-  $.get("/api/dashboard/cavid-cases", function (data) {
+  $.get('/api/dashboard/cavid-cases', function (data) {
     AllCovideCases = data;
-    $("#confirmed").click();
-    ;
+    $('#confirmed').click();
     removeMapWaiting();
   });
 }
@@ -48833,25 +48836,25 @@ function setMarkerCovidCases(type, map) {
     el2.textContent = item[type];
 
     if (item[type] > 3840) {
-      el2.style = "width:100px;height:100px;";
+      el2.style = 'width:100px;height:100px;';
     } else if (item[type] > 1920) {
-      el2.style = "width:90px;height:90px;";
+      el2.style = 'width:90px;height:90px;';
     } else if (item[type] > 960) {
-      el2.style = "width:80px;height:80px;";
+      el2.style = 'width:80px;height:80px;';
     } else if (item[type] > 480) {
-      el2.style = "width:70px;height:70px;";
+      el2.style = 'width:70px;height:70px;';
     } else if (item[type] > 240) {
-      el2.style = "width:60px;height:60px;";
+      el2.style = 'width:60px;height:60px;';
     } else if (item[type] > 120) {
-      el2.style = "width:50px;height:50px;";
+      el2.style = 'width:50px;height:50px;';
     } else if (item[type] > 60) {
-      el2.style = "width:40px;height:40px;";
+      el2.style = 'width:40px;height:40px;';
     } else if (item[type] > 30) {
-      el2.style = "width:30px;height:30px;";
+      el2.style = 'width:30px;height:30px;';
     }
 
     el.append(el2);
-    var currentMarker = new mapboxgl.Marker(el).setLngLat([item.longitude, item.latitude]) //.setPopup(popup)
+    var currentMarker = new mapboxgl.Marker(el).setLngLat([item.longitude, item.latitude]) // .setPopup(popup)
     .addTo(map);
     currentMarker[type] = true;
     AllCovidCasesMarkers.push(currentMarker);
@@ -48860,16 +48863,16 @@ function setMarkerCovidCases(type, map) {
 
 function getHospitals(map) {
   addMapWaiting();
-  $.get("/api/dashboard/hospitals", function (data) {
+  $.get('/api/dashboard/hospitals', function (data) {
     var hospitalData = data.map(function (value, index) {
       return {
-        type: "Feature",
+        type: 'Feature',
         geometry: {
-          type: "Point",
+          type: 'Point',
           coordinates: [value.longitude, value.latitude]
         },
         properties: {
-          name: value.name ? value.name : "Hopital",
+          name: value.name ? value.name : 'Hopital',
           address: value.address,
           beds: value.beds,
           occupied_beds: value.occupied_beds,
@@ -48881,46 +48884,46 @@ function getHospitals(map) {
           sick: value.last_situation ? value.last_situation.sick : 0,
           healed: value.last_situation ? value.last_situation.healed : 0,
           last_update: value.last_situation ? value.last_situation.last_update : 0,
-          color: "#ED5F68"
+          color: '#ED5F68'
         }
       };
     });
-    $("#hospital_count").text("(".concat(hospitalData.length, ")"));
-    map.addSource("covid9_hospitals_source", {
-      type: "geojson",
+    $('#hospital_count').text("(".concat(hospitalData.length, ")"));
+    map.addSource('covid9_hospitals_source', {
+      type: 'geojson',
       data: {
-        type: "FeatureCollection",
+        type: 'FeatureCollection',
         features: hospitalData
       }
     });
     map.addLayer({
-      id: "covid9_hospitals_layer",
-      type: "symbol",
-      source: "covid9_hospitals_source",
+      id: 'covid9_hospitals_layer',
+      type: 'symbol',
+      source: 'covid9_hospitals_source',
       // minzoom: 10,
       layout: {
-        "text-line-height": 1,
-        "text-padding": 0,
-        "text-anchor": "center",
-        "text-allow-overlap": true,
-        "text-ignore-placement": true,
-        "text-field": String.fromCharCode("0xf47e"),
-        "icon-optional": true,
-        "text-font": ["Font Awesome 5 Free Solid"],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 5, 10, 10, 25]
+        'text-line-height': 1,
+        'text-padding': 0,
+        'text-anchor': 'center',
+        'text-allow-overlap': true,
+        'text-ignore-placement': true,
+        'text-field': String.fromCharCode('0xf47e'),
+        'icon-optional': true,
+        'text-font': ['Font Awesome 5 Free Solid'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 5, 10, 10, 25]
       },
       paint: {
-        "text-translate-anchor": "viewport",
-        "text-color": ["get", "color"]
+        'text-translate-anchor': 'viewport',
+        'text-color': ['get', 'color']
       }
     });
-    map.on("mouseenter", "covid9_hospitals_layer", function () {
-      map.getCanvas().style.cursor = "pointer";
+    map.on('mouseenter', 'covid9_hospitals_layer', function () {
+      map.getCanvas().style.cursor = 'pointer';
     });
-    map.on("mouseleave", "covid9_hospitals_layer", function () {
-      map.getCanvas().style.cursor = "";
+    map.on('mouseleave', 'covid9_hospitals_layer', function () {
+      map.getCanvas().style.cursor = '';
     });
-    map.on("click", "covid9_hospitals_layer", function (e) {
+    map.on('click', 'covid9_hospitals_layer', function (e) {
       var coordinates = e.features[0].geometry.coordinates.slice();
       var _e$features$0$propert = e.features[0].properties,
           name = _e$features$0$propert.name,
@@ -48953,8 +48956,8 @@ function getHospitals(map) {
       $('#hospital-data').removeClass('d-none');
     }); // Change the cursor to a pointer when the mouse is over the covid9 layer.
 
-    map.on("mouseenter", "covid9", function () {
-      map.getCanvas().style.cursor = "pointer";
+    map.on('mouseenter', 'covid9', function () {
+      map.getCanvas().style.cursor = 'pointer';
     });
     removeMapWaiting();
   });
@@ -48968,7 +48971,7 @@ function RemoveDianosticMakers() {
 
 function getAllDianostics(map) {
   addMapWaiting();
-  $.get("/api/dashboard/orientation-medical-result", function (data) {
+  $.get('/api/dashboard/orientation-medical-result', function (data) {
     RemoveDianosticMakers();
     AllDianosticData = [];
     var total_fin = 0;
@@ -48986,19 +48989,19 @@ function getAllDianostics(map) {
       var total = item.FIN + item.FIN8 + item.FIN5;
 
       if (total > 50) {
-        el.style = "width:60px;height:60px;";
+        el.style = 'width:60px;height:60px;';
       }
 
       if (total > 100) {
-        el.style = "width:75px;height:75px;";
+        el.style = 'width:75px;height:75px;';
       }
 
       var elSpan = document.createElement('span');
       var elSpan2 = document.createElement('span');
       var elSpan3 = document.createElement('span');
-      elSpan.className = "fin-5";
-      elSpan2.className = "fin-8";
-      elSpan3.className = "fin";
+      elSpan.className = 'fin-5';
+      elSpan2.className = 'fin-8';
+      elSpan3.className = 'fin';
       elSpan.textContent = (_data$marker$FIN = data[marker].FIN5) !== null && _data$marker$FIN !== void 0 ? _data$marker$FIN : 0;
       elSpan2.textContent = (_data$marker$FIN2 = data[marker].FIN8) !== null && _data$marker$FIN2 !== void 0 ? _data$marker$FIN2 : 0;
       elSpan3.textContent = (_data$marker$FIN3 = data[marker].FIN) !== null && _data$marker$FIN3 !== void 0 ? _data$marker$FIN3 : 0;
@@ -49008,10 +49011,10 @@ function getAllDianostics(map) {
       var longitude = data[marker].longitude;
       var latitude = data[marker].latitude;
 
-      if (data[marker].province.toUpperCase() != "KINSHASA") {
+      if (data[marker].province.toUpperCase() != 'KINSHASA') {
         longitude = (Number(longitude) + 500 / 100000).toFixed(5);
         latitude = (Number(latitude) - 300 / 100000).toFixed(5);
-      } // popup 
+      } // popup
 
 
       var popup = new mapboxgl.Popup({
@@ -49030,10 +49033,10 @@ function getAllDianostics(map) {
       total_fin8 += (_item$FIN3 = item.FIN8) !== null && _item$FIN3 !== void 0 ? _item$FIN3 : 0;
     }
 
-    $("#medical_orientation_count").text("(".concat(total_fin + total_fin5 + total_fin8, ")"));
-    $("#medical_orientation_fin_count").text("(".concat(total_fin, ")"));
-    $("#medical_orientation_fin5_count").text("(".concat(total_fin5, ")"));
-    $("#medical_orientation_fin8_count").text("(".concat(total_fin8, ")"));
+    $('#medical_orientation_count').text("(".concat(total_fin + total_fin5 + total_fin8, ")"));
+    $('#medical_orientation_fin_count').text("(".concat(total_fin, ")"));
+    $('#medical_orientation_fin5_count').text("(".concat(total_fin5, ")"));
+    $('#medical_orientation_fin8_count').text("(".concat(total_fin8, ")"));
     removeMapWaiting();
   });
 }
@@ -49048,15 +49051,15 @@ function getUniqueDiagnostics(orientation, map) {
         el.className = "default-makers ".concat(orientation);
 
         if (value[orientation] > 20) {
-          el.style = "width:30px;height:30px;";
+          el.style = 'width:30px;height:30px;';
         }
 
         if (value[orientation] > 50) {
-          el.style = "width:50px;height:50px;";
+          el.style = 'width:50px;height:50px;';
         }
 
         if (value[orientation] > 100) {
-          el.style = "width:70px;height:70px;";
+          el.style = 'width:70px;height:70px;';
         }
 
         el.style.zIndex = value[orientation];
@@ -49064,10 +49067,10 @@ function getUniqueDiagnostics(orientation, map) {
         var longitude = value.longitude;
         var latitude = value.latitude;
 
-        if (value.province.toUpperCase() != "KINSHASA") {
+        if (value.province.toUpperCase() != 'KINSHASA') {
           longitude = (Number(longitude) + 500 / 100000).toFixed(5);
           latitude = (Number(latitude) - 300 / 100000).toFixed(5);
-        } // popup 
+        } // popup
 
 
         var popup = new mapboxgl.Popup({
@@ -49089,13 +49092,13 @@ function getUniqueDiagnostics(orientation, map) {
 
 function getAllSondages() {
   addMapWaiting();
-  $.get("/api/dashboard/sondages", function (data) {
+  $.get('/api/dashboard/sondages', function (data) {
     AllSondagesData = data;
     var total_count = 0;
     data.map(function (item) {
       total_count += item.count;
     });
-    $("#sondage_count").text("(".concat(total_count, ")"));
+    $('#sondage_count').text("(".concat(total_count, ")"));
     removeMapWaiting();
   });
 }
@@ -49109,15 +49112,14 @@ function setMarkersSondage(sondage, map) {
     var el = document.createElement('div');
     var el2 = document.createElement('div');
     el.className = "default-makers ".concat(sondage);
-    var defaultSize = "width:30px;height:30px;";
+    var defaultSize = 'width:30px;height:30px;';
 
     if (item[sondage] > 50) {
       el.style = defaultSize;
     }
 
     if (item[sondage] > 100) {
-      defaultSize = "width:50px;height:50px;";
-      ;
+      defaultSize = 'width:50px;height:50px;';
       el.style = defaultSize;
     }
 
@@ -49204,7 +49206,7 @@ function setMarkersSondage(sondage, map) {
 
       default:
         break;
-    } // popup 
+    } // popup
 
 
     var popup = new mapboxgl.Popup({
