@@ -33150,6 +33150,18 @@ body::-webkit-scrollbar-thumb,
   opacity: 0.4;
 }
 
+.color-red {
+  color: #e6222e !important;
+}
+
+.color-green {
+  color: #33ac2e !important;
+}
+
+.color-blue {
+  color: #2e5bff !important;
+}
+
 .card.default-card {
   border-radius: unset;
   border-color: #2e5bff14;
