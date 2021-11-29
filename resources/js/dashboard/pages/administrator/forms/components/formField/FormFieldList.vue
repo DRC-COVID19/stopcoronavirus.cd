@@ -95,7 +95,7 @@ export default {
   methods: {
     ...mapActions([
       'removeFormFields',
-      'formShow'
+      'formFieldStore'
     ]),
     deleteField (formId) {
       this.isDeleteModalShown = true
@@ -113,7 +113,7 @@ export default {
             type: 'success'
           })
           this.isDeleteModalShown = false
-         this.formShow({ id: this.targetForm.id })
+          this.formFieldStore(this.targetForm)
         })
         .catch(() => {
           this.$notify({

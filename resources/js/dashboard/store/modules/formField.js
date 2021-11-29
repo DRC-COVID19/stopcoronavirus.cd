@@ -51,7 +51,7 @@ export default {
         axios
           .delete(`api/dashboard/form-fields/${payload}`)
           .then(({ data }) => {
-            dispatch('getFormFields')
+            dispatch('formFieldStore')
             resolve(true)
           })
           .catch(response => {
