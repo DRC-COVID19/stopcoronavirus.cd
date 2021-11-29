@@ -18,7 +18,7 @@
             :label-for="item.name"
           >
           <b-row>
-            <b-col class="col-sm-11 col-md-11">
+            <b-col class="col-sm-9 col-md-9">
                <b-form-group  v-slot="{ ariaDescribedby }" v-if="item.form_field_type.name === 'boolean'">
             <b-form-radio-group
               :options="requiredOptions"
@@ -32,15 +32,15 @@
               :placeholder="`Entrer ${item.name}`"
             ></b-form-input>
             </b-col>
-            <b-col class="col-sm-1 col-md-1">
+            <b-col class="col-sm-3 col-md-3">
                <template class="action-btn-group">
                 <i
                   @click="deleteField(item)"
-                  class="mx-2 fas fa-trash prim color-red"
+                  class="mx-2 my-1 fas fa-trash prim color-red"
                   aria-hidden="true"
                 ></i>
                 <i
-                  class="mx-2 my-2 fas fa-pencil-alt color-green"
+                  class="mx-2 my-1 fas fa-pencil-alt color-green"
                   aria-hidden="true"
 
                 ></i>
@@ -123,10 +123,8 @@ export default {
     onCancelDelection () {
       this.isDeleteModalShown = false
     }
-  },
- mounted() {
-    this.onValidateDelection ()
- }
+  }
+
 }
 </script>
 <style lang='scss' scoped>
@@ -134,8 +132,10 @@ export default {
 .fas {
   cursor: pointer;
   padding:.5rem;
+  transition: all 0.5 ease-out;
   &:hover{
     background: rgb(170, 175, 184);
+    border-radius: 5px;
   }
 }
 </style>
