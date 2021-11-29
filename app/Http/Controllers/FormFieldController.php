@@ -26,36 +26,22 @@ class FormFieldController extends Controller
      */
     public function store(Request $request)
     {
-     $data = $this->storeValidator();
-    if(request()->has('order_field')){
-        $formField = FormField::create([
-            'name'                => $data['name'],
-            'order_field'         => request('order_field'),
-            'rules'               => $data['rules'],
-            'default_value'       => $data['default_value'],
-            'form_id'             => $data['form_id'],
-            'form_field_type_id'  => $data['form_field_type_id'],
-            'form_step_id'        => $data['form_step_id'],
-        ]);
-      return response()->json($formField, 200);
-    }else{
-        $formFieldOrder = FormField::find($request->form_field_order);
-        $formField = FormField::create([
-            'name'                => $data['name'],
-            'order_field'         => $formFieldOrder->order_field,
-            'rules'               => $data['rules'],
-            'default_value'       => $data['default_value'],
-            'form_id'             => $data['form_id'],
-            'form_field_type_id'  => $data['form_field_type_id'],
-            'form_step_id'        => $data['form_step_id'],
-        ]);
-
-        FormField::where('order_field','>',$formFieldOrder->order_field)->increment('order_field',1);
-        $formFieldOrder->order_field++;
-        $formFieldOrder->save();
-  
+      $data = $this->storeValidator();
+      if(request()->has('order_field')){
+          $data['order_field'] = request('order_field');
+          $formField = FormField::create($data);
         return response()->json($formField, 200);
-    }
+      } else{
+          $formFieldOrder = FormField::find($request->form_field_order);
+          $data['order_field'] = $formFieldOrder->order_field;
+          $formField = FormField::create($data);
+
+          FormField::where('order_field', '>', $formFieldOrder->order_field)->increment('order_field', 1);
+          $formFieldOrder->order_field++;
+          $formFieldOrder->save();
+
+          return response()->json($formField, 200);
+      }
 
     }
 
