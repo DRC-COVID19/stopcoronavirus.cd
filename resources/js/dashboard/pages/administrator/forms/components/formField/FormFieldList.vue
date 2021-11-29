@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapActions} from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   props: {
 
@@ -76,9 +76,7 @@ export default {
     }
   },
   computed: {
-    formFieldSorted () {
-      return this.targetForm.form_fields.slice().sort((a, b) => a.order_field - b.order_field)
-    }
+    formFieldSorted () { return this.targetForm.form_fields.slice().sort((a, b) => a.order_field - b.order_field)}
   },
   data () {
     return {
@@ -89,22 +87,20 @@ export default {
       isDeleteModalShown: false,
       filter: '',
       formFieldId: null,
-      editModalShow: false,
+      editModalShow: false
     }
   },
   methods: {
     ...mapActions([
-      'removeFormFields',
-      'formFieldStore'
+      'removeFormFields'
     ]),
     deleteField (formId) {
       this.isDeleteModalShown = true
       this.formFieldId = formId
-
     },
     onValidateDelection () {
       this.$bvModal.show('confirmation-box')
-     this.removeFormFields(this.formFieldId.id)
+      this.removeFormFields(this.formFieldId.id)
         .then(() => {
           this.$notify({
             group: 'alert',
@@ -113,7 +109,7 @@ export default {
             type: 'success'
           })
           this.isDeleteModalShown = false
-          this.formFieldStore(this.targetForm)
+          this.$emit('created')
         })
         .catch(() => {
           this.$notify({
@@ -127,19 +123,19 @@ export default {
     onCancelDelection () {
       this.isDeleteModalShown = false
     }
-  }
-
+  },
+ mounted() {
+    this.onValidateDelection ()
+ }
 }
 </script>
 <style lang='scss' scoped>
 @import "@~/sass/_variables";
 .fas {
-  background: white;
   cursor: pointer;
-  padding:.2rem;
+  padding:.5rem;
   &:hover{
-    background: rgb(180, 175, 175);
+    background: rgb(170, 175, 184);
   }
 }
 </style>
-

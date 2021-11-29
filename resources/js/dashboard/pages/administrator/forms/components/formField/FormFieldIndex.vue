@@ -18,6 +18,7 @@
     <FormFieldList
       :target-form="form"
       class="mt-4"
+      @created="onCreatedFormStep"
     />
 </div>
 </template>
