@@ -11,7 +11,25 @@
     </b-card-header>
     <b-collapse id="collapse-form-field-list" class="mt-2" visible>
       <b-card-body>
-        <b-table :fields="fields" :items="items" show-empty />
+         <b-form-group
+            v-for="(item, index) in formFieldSorted"
+            :key="index"
+            :label="item.name"
+            :label-for="item.name"
+          >
+          <b-form-group  v-slot="{ ariaDescribedby }" v-if="item.form_field_type.name === 'boolean'">
+            <b-form-radio-group
+              :options="requiredOptions"
+              :aria-describedby="ariaDescribedby"
+              id="required"
+            ></b-form-radio-group>
+          </b-form-group>
+            <b-form-input
+               v-else
+              :type="item.form_field_type.name"
+              :placeholder="`Entrer ${item.name}`"
+            ></b-form-input>
+          </b-form-group>
       </b-card-body>
     </b-collapse>
   </b-card>
@@ -20,10 +38,23 @@
 
 <script>
 export default {
+  props: {
+    targetForm: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    formFieldSorted () {
+      return this.targetForm.form_fields.slice().sort((a, b) => a.order_field - b.order_field)
+    }
+  },
   data () {
     return {
-      fields: ['Intitulé', 'Par défaut', 'O'],
-      items: []
+      requiredOptions: [
+        { text: 'Oui', value: 1 },
+        { text: 'Non', value: 0 }
+      ]
     }
   }
 }

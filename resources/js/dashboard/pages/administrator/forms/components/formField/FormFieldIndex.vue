@@ -12,13 +12,18 @@
     </b-card>
     <FormFieldForm
       :target-form="form"
+      @created="onCreatedFormStep"
       class="mt-4"
     />
-    <FormFieldList class="mt-4" />
+    <FormFieldList
+      :target-form="form"
+      class="mt-4"
+    />
 </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import FormFieldForm from './FormFieldForm'
 import FormFieldList from './FormFieldList'
 export default {
@@ -31,6 +36,22 @@ export default {
   components: {
     FormFieldForm,
     FormFieldList
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    ...mapActions([
+      'formShow'
+    ]),
+    onCreatedFormStep () {
+      this.init()
+    },
+    async init () {
+      // eslint-disable-next-line vue/no-mutating-props
+      this.form = await this.formShow({ id: this.form.id })
+    }
+
   }
 }
 </script>

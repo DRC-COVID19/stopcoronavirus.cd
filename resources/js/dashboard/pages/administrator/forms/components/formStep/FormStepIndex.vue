@@ -31,7 +31,6 @@
   </div>
 </template>
 <script>
-import Header from '../../../components/Header'
 import ListFormStep from '../formStep/FormStepList'
 import Create from '../formStep/FormStepCreate.vue'
 import { mapActions, mapState } from 'vuex'
@@ -44,7 +43,6 @@ export default {
   },
 
   components: {
-    Header,
     Create,
     ListFormStep
   },
