@@ -145,6 +145,8 @@ export default {
     ]),
     onSubmit () {
       this.form.rules = this.fieldWillBeRequired ? 'required' : ''
+      this.form.form_id = this.targetForm.id
+
       if (!this.form.form_field_order) {
         const MaxValue = this.targetForm.form_fields.flatMap(x => x.order_field)
         console.log(MaxValue)

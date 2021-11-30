@@ -77,7 +77,6 @@
           v-model="currentPage"
           :per-page="perPage"
           :total-rows="totalRows"
-          :disabled="isCreating"
           page-class="text-blue-dash"
           class="justify-content-end"
           @change="getFormSteps"
