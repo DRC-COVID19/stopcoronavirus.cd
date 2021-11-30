@@ -163,6 +163,7 @@ export default {
     onCancelDelection () {
       this.isDeleteModalShown = false
     },
+    // eslint-disable-next-line camelcase
     updateForm (id, title, form_recurrence_value, form_recurrence_id) {
       this.currentForm = {
         id,
