@@ -18,7 +18,7 @@
     <FormFieldList
       :target-form="form"
       class="mt-4"
-      @created="onCreatedFormStep"
+      @deleted="onDeletedFormField"
     />
 </div>
 </template>
@@ -44,6 +44,9 @@ export default {
     ]),
     onCreatedFormField () {
       this.$emit('formFieldCreated')
+    },
+    onDeletedFormField () {
+      this.$emit('formFieldDeleted')
     }
   }
 }

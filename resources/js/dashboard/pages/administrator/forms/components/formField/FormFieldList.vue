@@ -114,7 +114,7 @@ export default {
             type: "success"
           });
           this.isDeleteModalShown = false;
-          this.$emit("created");
+          this.$emit("deleted");
         })
         .catch(() => {
           this.$notify({

@@ -46,6 +46,7 @@
           <FormFieldIndex
             :form="form"
             @formFieldCreated="onFormFieldCreated"
+            @formFieldDeleted="onFormFieldDeleted"
           />
         </b-col>
       </b-row>
@@ -78,6 +79,9 @@ export default {
       this.form = await this.formShow({ id: this.$route.params.form_id })
     },
     onFormFieldCreated () {
+      this.init()
+    },
+    onFormFieldDeleted () {
       this.init()
     }
   }
