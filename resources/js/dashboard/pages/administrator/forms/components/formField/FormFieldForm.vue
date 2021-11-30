@@ -139,7 +139,7 @@ export default {
       return [1]
     },
     formStepsSelect () {
-      return this.formSteps
+      return this.formSteps.slice().sort((a, b) => a.step - b.step)
     }
   },
   methods: {
