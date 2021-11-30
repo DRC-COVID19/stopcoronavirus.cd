@@ -45,27 +45,18 @@ export default {
       });
     },
     removeFormFields({ state, commit, dispatch }, payload = {}) {
-      commit("SET_IS_CREATING", true);
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
           .delete(`api/dashboard/form-fields/${payload}`)
           .then(({ data }) => {
-            dispatch("formFieldStore");
             resolve(true);
           })
           .catch(response => {
             console.log(response);
             reject(response);
-          })
-          .finally(() => {
-            commit("SET_IS_CREATING", false);
           });
       });
     }
-  },
-  getters: {
-    formFieldSorted: state =>
-      state.formFields.slice().sort((a, b) => a.order_field - b.order_field)
   }
 };

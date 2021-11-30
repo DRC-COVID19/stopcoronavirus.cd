@@ -56,10 +56,10 @@
     <b-modal v-model="isDeleteModalShown">
       Voulez-vous vraiment supprimer ce champ ?
       <template #modal-footer>
-        <b-button size="sm" variant="success" @click="onValidateDelection()">
+        <b-button size="sm" variant="success" @click="onValidateDeletion()">
           Accepter
         </b-button>
-        <b-button size="sm" variant="danger" @click="onCancelDelection()">
+        <b-button size="sm" variant="danger" @click="onCancelDeletion()">
           Annuler
         </b-button>
       </template>
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions} from "vuex";
 export default {
   props: {
     targetForm: {
@@ -92,20 +92,18 @@ export default {
         { text: "Non", value: 0 }
       ],
       isDeleteModalShown: false,
-      filter: "",
-      formFieldId: null,
-      editModalShow: false
+      formFieldToDelete: null,
     };
   },
   methods: {
     ...mapActions(["removeFormFields"]),
-    deleteField(formId) {
+    deleteField(formField) {
       this.isDeleteModalShown = true;
-      this.formFieldId = formId;
+      this.formFieldToDelete = formField;
     },
-    onValidateDelection() {
+    onValidateDeletion() {
       this.$bvModal.show("confirmation-box");
-      this.removeFormFields(this.formFieldId.id)
+      this.removeFormFields(this.formFieldToDelete.id)
         .then(() => {
           this.$notify({
             group: "alert",
@@ -125,7 +123,7 @@ export default {
           });
         });
     },
-    onCancelDelection() {
+    onCancelDeletion() {
       this.isDeleteModalShown = false;
     }
   }
