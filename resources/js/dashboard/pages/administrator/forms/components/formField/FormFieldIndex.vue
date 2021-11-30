@@ -12,7 +12,7 @@
     </b-card>
     <FormFieldForm
       :target-form="form"
-      @created="onCreatedFormStep"
+      @created="onCreatedFormField"
       class="mt-4"
     />
     <FormFieldList
@@ -38,21 +38,13 @@ export default {
     FormFieldForm,
     FormFieldList
   },
-  mounted () {
-    this.init()
-  },
   methods: {
     ...mapActions([
       'formShow'
     ]),
-    onCreatedFormStep () {
-      this.init()
-    },
-    async init () {
-      // eslint-disable-next-line vue/no-mutating-props
-      this.form = await this.formShow({ id: this.form.id })
+    onCreatedFormField () {
+      this.$emit('formFieldCreated')
     }
-
   }
 }
 </script>

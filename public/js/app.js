@@ -49254,9 +49254,15 @@ function setMarkersSondage(sondage, map) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 __webpack_require__(/*! /home/rkota/Documents/KDA/KD/covid/stopcoronavirus.cd/resources/js/app.js */"./resources/js/app.js");
 __webpack_require__(/*! /home/rkota/Documents/KDA/KD/covid/stopcoronavirus.cd/resources/sass/app.scss */"./resources/sass/app.scss");
 module.exports = __webpack_require__(/*! /home/rkota/Documents/KDA/KD/covid/stopcoronavirus.cd/resources/sass/vueApp.scss */"./resources/sass/vueApp.scss");
+=======
+__webpack_require__(/*! /home/user/Documents/stopcoronavirus.cd/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /home/user/Documents/stopcoronavirus.cd/resources/sass/app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! /home/user/Documents/stopcoronavirus.cd/resources/sass/vueApp.scss */"./resources/sass/vueApp.scss");
+>>>>>>> 7d7b4bffcd0046b12aa2794ece0466ac7de6fdfa
 
 
 /***/ })

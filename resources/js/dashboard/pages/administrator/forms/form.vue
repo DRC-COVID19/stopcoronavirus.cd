@@ -38,13 +38,14 @@
           </b-col>
           <b-col cols="12" class="p-0">
             <FormStepIndex
-              :formId="$route.params.form_id"
+              :formId="+($route.params.form_id)"
             />
           </b-col>
         </b-col>
         <b-col cols="12" md="7">
           <FormFieldIndex
             :form="form"
+            @formFieldCreated="onFormFieldCreated"
           />
         </b-col>
       </b-row>
@@ -73,11 +74,12 @@ export default {
     ...mapActions([
       'formShow'
     ]),
-
     async init () {
       this.form = await this.formShow({ id: this.$route.params.form_id })
+    },
+    onFormFieldCreated () {
+      this.init()
     }
-
   }
 
 }
