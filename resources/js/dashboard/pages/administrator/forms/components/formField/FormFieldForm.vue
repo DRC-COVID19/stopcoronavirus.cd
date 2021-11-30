@@ -57,7 +57,7 @@
             id="order-field-group"
             label="Ordre du champ (inserer avant ?)"
             label-for="order-field"
-            description="Laiser vide pour insérer en dernier"
+            description="Laisser vide pour insérer en dernier"
           >
             <b-form-select
               id="orderField"
@@ -72,7 +72,7 @@
             id="step-group"
             label="Etape"
             label-for="step"
-            description="Laiser vide si le formulaire n'a pas d'étape"
+            description="Laisser vide si le formulaire n'a pas d'étape"
           >
             <b-form-select
               id="step"
