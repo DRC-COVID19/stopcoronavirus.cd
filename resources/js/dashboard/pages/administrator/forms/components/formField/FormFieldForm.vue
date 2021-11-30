@@ -161,7 +161,7 @@ export default {
           this.initForm()
           this.$notify({
             group: 'alert',
-            title: 'Champ rajouté avec succès',
+            title: 'Champ rajouté avec succèss',
             type: 'success'
           })
           this.$emit('created')
