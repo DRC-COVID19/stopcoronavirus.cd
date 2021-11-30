@@ -57,7 +57,7 @@
             id="order-field-group"
             label="Ordre du champ (inserer avant ?)"
             label-for="order-field"
-            description="Laiser vide pour insérer en dernier"
+            description="Laisser vide pour insérer en dernier"
           >
             <b-form-select
               id="orderField"
@@ -72,12 +72,12 @@
             id="step-group"
             label="Etape"
             label-for="step"
-            description="Laiser vide si le formulaire n'a pas d'étape"
+            description="Laisser vide si le formulaire n'a pas d'étape"
           >
             <b-form-select
               id="step"
               v-model="form.form_step_id"
-              :options="targetForm.form_steps"
+              :options="formStepsSorted"
               text-field="title"
               value-field="id"
             ></b-form-select>
@@ -132,10 +132,14 @@ export default {
   },
   computed: {
     ...mapState({
-      formFieldTypes: state => state.formFieldType.formFieldTypes
+      formFieldTypes: state => state.formFieldType.formFieldTypes,
+      formSteps: (state) => state.formStep.formSteps
     }),
     orderFields () {
       return [1]
+    },
+    formStepsSorted () {
+      return this.formSteps.slice().sort((a, b) => a.step - b.step)
     }
   },
   methods: {
