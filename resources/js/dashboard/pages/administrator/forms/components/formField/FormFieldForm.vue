@@ -77,7 +77,7 @@
             <b-form-select
               id="step"
               v-model="form.form_step_id"
-              :options="targetForm.form_steps"
+              :options="formStepsSelect"
               text-field="title"
               value-field="id"
             ></b-form-select>
@@ -132,10 +132,14 @@ export default {
   },
   computed: {
     ...mapState({
-      formFieldTypes: state => state.formFieldType.formFieldTypes
+      formFieldTypes: state => state.formFieldType.formFieldTypes,
+      formSteps: (state) => state.formStep.formSteps
     }),
     orderFields () {
       return [1]
+    },
+    formStepsSelect () {
+      return this.formSteps
     }
   },
   methods: {

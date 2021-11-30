@@ -51,20 +51,20 @@
                 </div>
               </template>
               <template v-slot:cell(actions)="data" class="action-btn-group">
-                <i
+                <button
                   @click="deleteStep(data.item)"
-                  class="mx-2 my-1 fas fa-trash prim color-red"
+                  class="mx-2 my-1 fas fa-trash prim color-red btn"
                   aria-hidden="true"
-                ></i>
-                <i
-                  class="mx-2 my-1 fas fa-pencil-alt color-green"
+                ></button>
+                <button
+                  class="mx-2 my-1 fas fa-pencil-alt color-green btn"
                   aria-hidden="true"
                   @click="
                     updateStep(
                       data.item
                     )
                   "
-                ></i>
+                ></button>
               </template>
               <template v-slot:cell(index)="data">
                 {{ ((currentPage - 1) * perPage) + data.index + 1 }}
@@ -230,5 +230,12 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+    .btn{
+    border:none ;
+    background-color:transparent ;
+    &:focus{
+      border:none;
+          }
+  }
 }
 </style>
