@@ -77,7 +77,7 @@
             <b-form-select
               id="step"
               v-model="form.form_step_id"
-              :options="formStepsSelect"
+              :options="formStepsSorted"
               text-field="title"
               value-field="id"
             ></b-form-select>
@@ -138,7 +138,7 @@ export default {
     orderFields () {
       return [1]
     },
-    formStepsSelect () {
+    formStepsSorted () {
       return this.formSteps.slice().sort((a, b) => a.step - b.step)
     }
   },
