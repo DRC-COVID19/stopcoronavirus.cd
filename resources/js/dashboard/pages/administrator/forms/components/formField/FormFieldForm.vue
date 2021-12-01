@@ -97,7 +97,7 @@
           <b-button type="submit" variant="primary" size="sm" class="btn-dash-sucess">
             <small>{{ btnTitle }}</small>
           </b-button>
-          <b-button type="reset" variant="danger" size="sm" class="btn-dash-danger">
+          <b-button  variant="danger" size="sm" class="btn-dash-danger" @click="onReset">
             <small>Réinitialiser</small>
           </b-button>
         </b-form>
@@ -200,6 +200,7 @@ export default {
             })
             this.$emit('updated')
             this.updating = false
+            this.btnTitle = 'Enregistrer'
           })
           .catch(() => {
             this.$notify({
@@ -218,6 +219,8 @@ export default {
       this.form = {
         form_id: this.targetForm.id
       }
+      this.btnTitle = 'Enregistrer'
+      this.updating = false
     },
     loadInitData () {
       this.formFieldTypeIndex()
