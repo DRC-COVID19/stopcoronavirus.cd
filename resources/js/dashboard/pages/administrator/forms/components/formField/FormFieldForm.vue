@@ -114,7 +114,13 @@ export default {
     targetForm: {
       type: Object,
       required: true
-    }
+    },
+     rowFormField: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
   },
   data () {
     return {
@@ -140,6 +146,14 @@ export default {
     },
     formStepsSorted () {
       return this.formSteps.slice().sort((a, b) => a.step - b.step)
+    }
+  },
+   watch: {
+    rowFormField () {
+      this.form = { ...this.rowFormField }
+      this.updating = true
+      this.title = "Modification de l'étape"
+      this.btnTitle = 'Modifier'
     }
   },
   methods: {

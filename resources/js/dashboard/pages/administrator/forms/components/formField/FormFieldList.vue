@@ -128,7 +128,7 @@ export default {
       this.isDeleteModalShown = false;
     },
      updateField (formField) {
-      this.$emit('onUpdateField', formField)
+      this.$emit('onUpdateFormField', formField)
     }
   }
 }

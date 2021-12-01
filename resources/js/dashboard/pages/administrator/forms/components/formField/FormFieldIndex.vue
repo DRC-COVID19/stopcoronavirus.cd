@@ -12,13 +12,16 @@
     </b-card>
     <FormFieldForm
       :target-form="form"
+      :row-form-field="rowFormField"
       @created="onCreatedFormField"
+      @updated="onUpdateFormField"
       class="mt-4"
     />
     <FormFieldList
       :target-form="form"
       class="mt-4"
       @deleted="onDeletedFormField"
+      @onUpdateFormField="toUpdateFormField"
     />
 </div>
 </template>
@@ -34,6 +37,12 @@ export default {
       required: true
     }
   },
+   data () {
+    return {
+      isEditingMode: false,
+      rowFormField: {}
+    }
+  },
   components: {
     FormFieldForm,
     FormFieldList
@@ -47,7 +56,14 @@ export default {
     },
     onDeletedFormField () {
       this.$emit('formFieldDeleted')
-    }
+    },
+    onUpdateFormField () {
+      this.$emit('formFieldUpdated')
+    },
+    toUpdateFormField (item) {
+      this.isEditingMode = true
+      this.rowFormField = { ...item }
+    },
   }
 }
 </script>
