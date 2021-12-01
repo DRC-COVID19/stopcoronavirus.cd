@@ -95,7 +95,7 @@
           <br>
 
           <b-button type="submit" variant="primary" size="sm" class="btn-dash-sucess">
-            <small>Enregistrer</small>
+            <small>{{ btnTitle }}</small>
           </b-button>
           <b-button type="reset" variant="danger" size="sm" class="btn-dash-danger">
             <small>Réinitialiser</small>
@@ -115,12 +115,12 @@ export default {
       type: Object,
       required: true
     },
-     rowFormField: {
+    rowFormField: {
       type: Object,
       default: () => {
         return {}
       }
-    },
+    }
   },
   data () {
     return {
@@ -129,7 +129,9 @@ export default {
         { text: 'Oui', value: 1 },
         { text: 'Non', value: 0 }
       ],
-      fieldWillBeRequired: false
+      fieldWillBeRequired: false,
+      updating: false,
+      btnTitle: 'Enregistrer'
     }
   },
   mounted () {
@@ -148,18 +150,18 @@ export default {
       return this.formSteps.slice().sort((a, b) => a.step - b.step)
     }
   },
-   watch: {
+  watch: {
     rowFormField () {
       this.form = { ...this.rowFormField }
       this.updating = true
-      this.title = "Modification de l'étape"
       this.btnTitle = 'Modifier'
     }
   },
   methods: {
     ...mapActions([
       'formFieldTypeIndex',
-      'formFieldStore'
+      'formFieldStore',
+      'updateFormField'
     ]),
     onSubmit () {
       this.form.rules = this.fieldWillBeRequired ? 'required' : ''
@@ -167,26 +169,46 @@ export default {
 
       if (!this.form.form_field_order) {
         const MaxValue = this.targetForm.form_fields.flatMap(x => x.order_field)
-        console.log(MaxValue)
         this.form.order_field = MaxValue.length && MaxValue.length > 0 ? Math.max(...MaxValue) + 1 : 1
       }
-      this.formFieldStore(this.form)
-        .then(() => {
-          this.initForm()
-          this.$notify({
-            group: 'alert',
-            title: 'Champ rajouté avec succèss',
-            type: 'success'
+      if (this.btnTitle === 'Enregistrer') {
+        this.formFieldStore(this.form)
+          .then(() => {
+            this.initForm()
+            this.$notify({
+              group: 'alert',
+              title: 'Champ rajouté avec succèss',
+              type: 'success'
+            })
+            this.$emit('created')
           })
-          this.$emit('created')
-        })
-        .catch(() => {
-          this.$notify({
-            group: 'alert',
-            title: 'Une erreur est survenu',
-            type: 'error'
+          .catch(() => {
+            this.$notify({
+              group: 'alert',
+              title: 'Une erreur est survenu',
+              type: 'error'
+            })
           })
-        })
+      } else {
+        this.updateFormField(this.form)
+          .then(() => {
+            this.initForm()
+            this.$notify({
+              group: 'alert',
+              title: 'Champ modifié avec succès',
+              type: 'success'
+            })
+            this.$emit('updated')
+            this.updating = false
+          })
+          .catch(() => {
+            this.$notify({
+              group: 'alert',
+              title: 'Une erreur est survenu',
+              type: 'error'
+            })
+          })
+      }
     },
     onReset () {
       // to implement
