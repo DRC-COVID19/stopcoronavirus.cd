@@ -3,7 +3,7 @@
     <b-card-header v-b-toggle.collapse-form-step>
       <div class="d-flex justify-content-between align-items-center">
         <span class="text-muted">
-          Ajouter une étape
+          {{ title }}
         </span>
         <i class="fas fa-chevron-down" aria-hidden="true"></i>
       </div>

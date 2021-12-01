@@ -3,7 +3,7 @@
     <b-card-header v-b-toggle.collapse-form-field>
       <div class="d-flex justify-content-between align-items-center">
         <span class="text-muted">
-          Ajouter un nouveau champ
+          {{ title }}
         </span>
         <i class="fas fa-chevron-down" aria-hidden="true"></i>
       </div>
@@ -131,7 +131,8 @@ export default {
       ],
       fieldWillBeRequired: false,
       updating: false,
-      btnTitle: 'Enregistrer'
+      btnTitle : 'Enregistrer',
+      title: 'Ajouter un nouveau champ'
     }
   },
   mounted () {
@@ -148,14 +149,18 @@ export default {
     },
     formStepsSorted () {
       return this.formSteps.slice().sort((a, b) => a.step - b.step)
-    }
+    },
+
   },
   watch: {
+
     rowFormField () {
       this.form = { ...this.rowFormField }
       this.updating = true
       this.btnTitle = 'Modifier'
+      this.title = 'Modifier un champ'
     }
+
   },
   methods: {
     ...mapActions([
@@ -177,7 +182,7 @@ export default {
             this.initForm()
             this.$notify({
               group: 'alert',
-              title: 'Champ rajouté avec succèss',
+              title: 'Champ rajouté avec succès',
               type: 'success'
             })
             this.$emit('created')
@@ -199,8 +204,7 @@ export default {
               type: 'success'
             })
             this.$emit('updated')
-            this.updating = false
-            this.btnTitle = 'Enregistrer'
+            this.onReset()
           })
           .catch(() => {
             this.$notify({
@@ -212,20 +216,19 @@ export default {
       }
     },
     onReset () {
-      // to implement
       this.initForm()
     },
     initForm () {
       this.form = {
         form_id: this.targetForm.id
       }
-      this.btnTitle = 'Enregistrer'
       this.updating = false
+      this.btnTitle = 'Enregistrer'
+      this.title = 'Ajouter un champ'
     },
     loadInitData () {
       this.formFieldTypeIndex()
     }
   }
-
 }
 </script>
