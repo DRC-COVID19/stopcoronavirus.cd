@@ -43,6 +43,7 @@
                     aria-hidden="true"
                   ></i>
                   <i
+                  @click="updateField(item)"
                     class="mx-2 my-1 fas fa-pencil-alt color-green"
                     aria-hidden="true"
                   ></i>
@@ -125,9 +126,12 @@ export default {
     },
     onCancelDeletion() {
       this.isDeleteModalShown = false;
+    },
+     updateField (formField) {
+      this.$emit('onUpdateField', formField)
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
