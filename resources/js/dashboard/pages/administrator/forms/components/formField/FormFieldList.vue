@@ -97,14 +97,14 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["removeFormFields"]),
+    ...mapActions(["removeFormField"]),
     deleteField(formField) {
       this.isDeleteModalShown = true;
       this.formFieldToDelete = formField;
     },
     onValidateDeletion() {
       this.$bvModal.show("confirmation-box");
-      this.removeFormFields(this.formFieldToDelete.id)
+      this.removeFormField(this.formFieldToDelete.id)
         .then(() => {
           this.$notify({
             group: "alert",
