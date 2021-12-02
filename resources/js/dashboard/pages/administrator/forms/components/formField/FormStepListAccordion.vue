@@ -1,24 +1,38 @@
 <template>
-<div>
-  <b-card v-for="(step,index) in formListSteps" :key="index"  class="mb-1"  role="tab">
-    <b-card-header b-card-header v-b-toggle='"collapse-form-list-step"+step.id' @click="formStepFilter(step.id)">
-      <div class="d-flex justify-content-between align-items-center">
+  <div>
+    <b-card
+      v-for="(step, index) in formListSteps"
+      :key="index"
+      class="mb-1"
+      role="tab"
+    >
+      <b-card-header
+        b-card-header
+        v-b-toggle="'collapse-form-list-step' + step.id"
+        @click="formStepFilter(step.id)"
+      >
+        <div class="d-flex justify-content-between align-items-center">
           <span class="text-muted">
             {{ step.title }}
-            </span>
-          <i  class="fas fa-chevron-down " aria-hidden="true"></i>
-      </div>
-    </b-card-header>
-    <b-collapse :id='"collapse-form-list-step"+step.id' class="mt-2" accordion="my-accordion" role="tabpanel">
-      <b-card-body >
-        <b-form-group
-          v-for="(item, index) in formFieldSorted"
-          :key="index"
-          :label="item.name"
-          :label-for="item.name"
-        >
-       <b-row>
-          <b-col class="col-sm-9 col-md-9">
+          </span>
+          <i class="fas fa-chevron-down" aria-hidden="true"></i>
+        </div>
+      </b-card-header>
+      <b-collapse
+        :id="'collapse-form-list-step' + step.id"
+        class="mt-2"
+        accordion="my-accordion"
+        role="tabpanel"
+      >
+        <b-card-body>
+          <b-form-group
+            v-for="(item, index) in formFieldSorted"
+            :key="index"
+            :label="item.name"
+            :label-for="item.name"
+          >
+            <b-row>
+              <b-col class="col-sm-9 col-md-9">
                 <b-form-group
                   v-slot="{ ariaDescribedby }"
                   v-if="item.form_field_type.name === 'boolean'"
@@ -34,8 +48,8 @@
                   :type="item.form_field_type.name"
                   :placeholder="`Entrer ${item.name}`"
                 ></b-form-input>
-          </b-col>
-          <b-col class="col-sm-3 col-md-3">
+              </b-col>
+              <b-col class="col-sm-3 col-md-3">
                 <template class="action-btn-group">
                   <i
                     @click="deleteField(item)"
@@ -47,24 +61,24 @@
                     aria-hidden="true"
                   ></i>
                 </template>
-            </b-col>
-        </b-row>
-        </b-form-group>
-      </b-card-body>
-    </b-collapse>
-  </b-card>
-  <b-modal v-model="isDeleteModalShown">
-        Voulez-vous vraiment supprimer ce champ ?
-        <template #modal-footer>
-          <b-button size="sm" variant="success" @click="onValidateDeletion()">
-            Accepter
-          </b-button>
-          <b-button size="sm" variant="danger" @click="onCancelDeletion()">
-            Annuler
-          </b-button>
-        </template>
+              </b-col>
+            </b-row>
+          </b-form-group>
+        </b-card-body>
+      </b-collapse>
+    </b-card>
+    <b-modal v-model="isDeleteModalShown">
+      Voulez-vous vraiment supprimer ce champ ?
+      <template #modal-footer>
+        <b-button size="sm" variant="success" @click="onValidateDeletion()">
+          Accepter
+        </b-button>
+        <b-button size="sm" variant="danger" @click="onCancelDeletion()">
+          Annuler
+        </b-button>
+      </template>
     </b-modal>
-</div>
+  </div>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
@@ -92,29 +106,35 @@ export default {
   computed: {
     ...mapState({
       formSteps: (state) => state.formStep.formSteps
-
     }),
     formListSteps () {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.formStepsField = this.formSteps.slice()
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.formStepsField.push({ id: null, title: 'Champs affecté à aucune étape' })
+      this.formStepsField.push({
+        id: null,
+        title: 'Champs affecté à aucune étape'
+      })
       return this.formStepsField
     },
     formFieldSorted () {
-      return this.formFieldFilter ? this.formFieldFilter.slice().sort((a, b) => a.order_field - b.order_field) : []
+      return this.formFieldFilter
+        ? this.formFieldFilter
+          .slice()
+          .sort((a, b) => a.order_field - b.order_field)
+        : []
     }
   },
-  mounted () {
-  },
+  mounted () {},
   methods: {
     ...mapActions(['removeFormFields']),
     formStepFilter (id) {
       // eslint-disable-next-line camelcase
-      this.formFieldFilter = this.targetForm.form_fields.filter(({ form_step_id }) => {
-        // eslint-disable-next-line camelcase
-        return form_step_id === id
-      })
+      this.formFieldFilter = this.targetForm.form_fields.filter(
+        (formField) => {
+          return formField.form_step_id === id
+        }
+      )
     },
     deleteField (formField) {
       this.isDeleteModalShown = true
