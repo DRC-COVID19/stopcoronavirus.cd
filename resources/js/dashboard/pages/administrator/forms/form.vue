@@ -77,7 +77,6 @@ export default {
     ]),
     async init () {
       this.form = await this.formShow({ id: this.$route.params.form_id })
-      console.log('form', this.form)
     },
     onFormFieldCreated () {
       this.init()
