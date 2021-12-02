@@ -11,7 +11,7 @@
       </b-card-header>
       <b-collapse id="collapse-form-field-list" class="mt-2" visible>
         <b-card-body>
-            <FormStepListAccordion :targetForm='targetForm'/>
+            <FormStepListAccordion :targetForm="targetForm"/>
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -29,19 +29,6 @@ export default {
     targetForm: {
       type: Object,
       required: true
-    }
-  },
-  computed: {
-    formFieldSorted () {
-      return this.targetForm.form_fields ? this.targetForm.form_fields.slice().sort((a, b) => a.order_field - b.order_field) : []
-    }
-  },
-  data () {
-    return {
-      requiredOptions: [
-        { text: 'Oui', value: 1 },
-        { text: 'Non', value: 0 }
-      ]
     }
   }
 }
