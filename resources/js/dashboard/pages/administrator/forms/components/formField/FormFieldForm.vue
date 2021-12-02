@@ -98,7 +98,7 @@
             <small>{{ btnTitle }}</small>
           </b-button>
           <b-button  variant="danger" size="sm" class="btn-dash-danger" @click="onReset">
-            <small>Réinitialiser</small>
+            <small>Annuler</small>
           </b-button>
         </b-form>
       </b-card-body>
