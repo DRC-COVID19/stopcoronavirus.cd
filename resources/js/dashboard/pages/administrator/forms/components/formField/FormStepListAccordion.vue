@@ -53,11 +53,11 @@
                 <template class="action-btn-group">
                   <i
                     @click="deleteField(item)"
-                    class="mx-2 my-1 fas fa-trash prim color-red"
+                    class="mx-2 my-1 fas fa-trash prim color-red btn"
                     aria-hidden="true"
                   ></i>
                   <i
-                    class="mx-2 my-1 fas fa-pencil-alt color-green"
+                    class="mx-2 my-1 fas fa-pencil-alt color-green btn"
                     aria-hidden="true"
                   ></i>
                 </template>
@@ -170,11 +170,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.fas {
+.btn {
   cursor: pointer;
   padding: 0.5rem;
   transition: all 0.5 ease-out;
-  &:hover {
+    &:hover {
     background: rgb(170, 175, 184);
     border-radius: 5px;
   }
