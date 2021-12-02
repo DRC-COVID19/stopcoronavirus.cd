@@ -46,6 +46,7 @@
           <FormFieldIndex
             :form="form"
             @formFieldCreated="onFormFieldCreated"
+            @formFieldDeleted="onFormFieldDeleted"
           />
         </b-col>
       </b-row>
@@ -79,6 +80,9 @@ export default {
       console.log('form', this.form)
     },
     onFormFieldCreated () {
+      this.init()
+    },
+    onFormFieldDeleted () {
       this.init()
     }
   }

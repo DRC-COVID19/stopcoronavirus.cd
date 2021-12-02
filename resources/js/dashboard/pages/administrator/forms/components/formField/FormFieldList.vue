@@ -30,6 +30,13 @@ export default {
       type: Object,
       required: true
     }
+  },
+  computed: {
+  },
+  data () {
+    return {}
+  },
+  methods: {
   }
 }
 </script>
