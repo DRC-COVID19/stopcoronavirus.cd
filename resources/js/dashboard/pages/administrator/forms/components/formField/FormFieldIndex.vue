@@ -59,11 +59,12 @@ export default {
     },
     onUpdateFormField () {
       this.$emit('formFieldUpdated')
+      this.isEditingMode = false
     },
     toUpdateFormField (item) {
       this.isEditingMode = true
       this.rowFormField = { ...item }
-    },
+    }
   }
 }
 </script>

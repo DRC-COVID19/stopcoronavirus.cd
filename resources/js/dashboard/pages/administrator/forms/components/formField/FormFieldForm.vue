@@ -95,7 +95,7 @@
           <br>
 
           <b-button type="submit" variant="primary" size="sm" class="btn-dash-sucess">
-            <small>{{ btnTitle }}</small>
+            <small>{{ btnSubmitTitle }}</small>
           </b-button>
           <b-button  variant="danger" size="sm" class="btn-dash-danger" @click="onReset">
             <small>Annuler</small>
@@ -131,7 +131,7 @@ export default {
       ],
       fieldWillBeRequired: false,
       updating: false,
-      btnTitle : 'Enregistrer',
+      btnSubmitTitle : 'Enregistrer',
       title: 'Ajouter un nouveau champ'
     }
   },
@@ -157,7 +157,7 @@ export default {
     rowFormField () {
       this.form = { ...this.rowFormField }
       this.updating = true
-      this.btnTitle = 'Modifier'
+      this.btnSubmitTitle = 'Modifier'
       this.title = 'Modifier un champ'
     }
 
@@ -176,7 +176,7 @@ export default {
         const MaxValue = this.targetForm.form_fields.flatMap(x => x.order_field)
         this.form.order_field = MaxValue.length && MaxValue.length > 0 ? Math.max(...MaxValue) + 1 : 1
       }
-      if (this.btnTitle === 'Enregistrer') {
+      if (!this.updating) {
         this.formFieldStore(this.form)
           .then(() => {
             this.initForm()
@@ -223,7 +223,7 @@ export default {
         form_id: this.targetForm.id
       }
       this.updating = false
-      this.btnTitle = 'Enregistrer'
+      this.btnSubmitTitle = 'Enregistrer'
       this.title = 'Ajouter un champ'
     },
     loadInitData () {

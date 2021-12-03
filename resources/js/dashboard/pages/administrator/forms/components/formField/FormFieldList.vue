@@ -40,13 +40,13 @@
                   <i
                     @click="deleteField(item)"
                     class="mx-2 my-1 fas fa-trash prim color-red"
-                    aria-hidden="true"
-                  ></i>
+                    aria-hidden="true">
+                  </i>
                   <i
                   @click="updateField(item)"
                     class="mx-2 my-1 fas fa-pencil-alt color-green"
-                    aria-hidden="true"
-                  ></i>
+                    aria-hidden="true">
+                  </i>
                 </template>
               </b-col>
             </b-row>
