@@ -46,6 +46,7 @@
                 <b-form-input
                   v-else
                   :type="item.form_field_type.name"
+                  :value="item.default_value"
                   :placeholder="`Entrer ${item.name}`"
                 ></b-form-input>
               </b-col>
@@ -113,7 +114,7 @@ export default {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.formStepsField.push({
         id: null,
-        title: 'Champs affecté à aucune étape'
+        title: 'Champs affectés à aucune étape'
       })
       return this.formStepsField
     },
