@@ -43,12 +43,13 @@
                     id="required"
                   ></b-form-radio-group>
                 </b-form-group>
-                <b-form-input
+                <FormFieldInput
                   v-else
                   :type="item.form_field_type.name"
                   :value="item.default_value"
                   :placeholder="`Entrer ${item.name}`"
-                ></b-form-input>
+                  :id="item.name"
+                />
               </b-col>
               <b-col class="col-sm-3 col-md-3">
                 <template class="action-btn-group">
@@ -82,92 +83,94 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from "vuex";
+import FormFieldInput from "./FormFieldInput.vue";
 
 export default {
-  name: 'FormStepListAccordion',
+  name: "FormStepListAccordion",
   props: {
     targetForm: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  components: {
+    FormFieldInput,
+  },
+  data() {
     return {
       formFieldFilter: [],
       requiredOptions: [
-        { text: 'Oui', value: 1 },
-        { text: 'Non', value: 0 }
+        { text: "Oui", value: 1 },
+        { text: "Non", value: 0 },
       ],
       formStepsField: [],
       isDeleteModalShown: false,
-      formFieldToDelete: null
-    }
+      formFieldToDelete: null,
+    };
   },
   computed: {
     ...mapState({
-      formSteps: (state) => state.formStep.formSteps
+      formSteps: (state) => state.formStep.formSteps,
     }),
-    formListSteps () {
+    formListSteps() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.formStepsField = this.formSteps.slice()
+      this.formStepsField = this.formSteps.slice();
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.formStepsField.push({
         id: null,
-        title: 'Champs affectés à aucune étape'
-      })
-      return this.formStepsField
+        title: "Champs affectés à aucune étape",
+      });
+      return this.formStepsField;
     },
-    formFieldSorted () {
+    formFieldSorted() {
       return this.formFieldFilter
         ? this.formFieldFilter
-          .slice()
-          .sort((a, b) => a.order_field - b.order_field)
-        : []
-    }
+            .slice()
+            .sort((a, b) => a.order_field - b.order_field)
+        : [];
+    },
   },
-  mounted () {},
+  mounted() {},
   methods: {
-    ...mapActions(['removeFormFields']),
-    formStepFilter (id) {
+    ...mapActions(["removeFormFields"]),
+    formStepFilter(id) {
       // eslint-disable-next-line camelcase
-      this.formFieldFilter = this.targetForm.form_fields.filter(
-        (formField) => {
-          return formField.form_step_id === id
-        }
-      )
+      this.formFieldFilter = this.targetForm.form_fields.filter((formField) => {
+        return formField.form_step_id === id;
+      });
     },
-    deleteField (formField) {
-      this.isDeleteModalShown = true
-      this.formFieldToDelete = formField
+    deleteField(formField) {
+      this.isDeleteModalShown = true;
+      this.formFieldToDelete = formField;
     },
-    onValidateDeletion () {
-      this.$bvModal.show('confirmation-box')
+    onValidateDeletion() {
+      this.$bvModal.show("confirmation-box");
       this.removeFormFields(this.formFieldToDelete.id)
         .then(() => {
           this.$notify({
-            group: 'alert',
-            title: 'Supprimer ce champ',
-            text: 'Supprimer avec succès',
-            type: 'Supprimer avec succès'
-          })
-          this.isDeleteModalShown = false
-          this.$emit('deleted')
+            group: "alert",
+            title: "Supprimer ce champ",
+            text: "Supprimer avec succès",
+            type: "Supprimer avec succès",
+          });
+          this.isDeleteModalShown = false;
+          this.$emit("deleted");
         })
         .catch(() => {
           this.$notify({
-            group: 'alert',
-            title: 'Supprimer  l\'étape',
-            text: 'Une erreur est survenus',
-            type: 'error'
-          })
-        })
+            group: "alert",
+            title: "Supprimer  l'étape",
+            text: "Une erreur est survenus",
+            type: "error",
+          });
+        });
     },
-    onCancelDeletion () {
-      this.isDeleteModalShown = false
-    }
-  }
-}
+    onCancelDeletion() {
+      this.isDeleteModalShown = false;
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
@@ -175,7 +178,7 @@ export default {
   cursor: pointer;
   padding: 0.5rem;
   transition: all 0.5 ease-out;
-    &:hover {
+  &:hover {
     background: rgb(170, 175, 184);
     border-radius: 5px;
   }
