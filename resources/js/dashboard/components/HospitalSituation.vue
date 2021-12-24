@@ -61,7 +61,7 @@
             </div>
             <div>Oxygénérateur: {{ parseData(hospital.oxygenator) }}</div>
             <hr>
-             <h6 class="bold">Médicaments :</h6>
+             <h5 class="bold">Médicaments :</h5>
             
             <div>Chloroquine: {{ parseData(hospital.chloroquine) }}</div>
             <div>
