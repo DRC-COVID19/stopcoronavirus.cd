@@ -85,14 +85,14 @@ export default {
 
       if (this.user.roles.find((a) => a.name == AGENT_HOSPITAL)) {
         routesAccess.push({
-          slug: "Interface agent d'hopital",
+          slug: "Interface agent CTCO",
           name: "hospital.home",
         });
       }
 
       if (this.user.roles.find((a) => a.name == ADMIN_HOSPITAL)) {
         routesAccess.push({
-          slug: "Admininistration hopital",
+          slug: "Admininistration CTCO",
           name: "hospital.admin",
         });
       }

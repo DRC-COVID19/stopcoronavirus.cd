@@ -5,7 +5,7 @@
       <b-row>
         <b-col v-if="user && user.hospital">
           <h3>
-            Situations hospitalières
+            Situations CTCO
             <b-link :to="{name:'hospital.data'}">
               <span class="fa fa-edit"></span>
             </b-link>
