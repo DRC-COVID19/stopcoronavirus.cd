@@ -70,7 +70,7 @@ export default {
       fields: [
         { key: "statut", label: "Statut" },
         { key: "last_update", label: "Date" },
-        { key: "name", label: "Centre" },
+        { key: "name", label: "CTCO" },
         { key: "confirmed", label: "Confirmés" },
         { key: "actions", label: "Actions" },
       ],
