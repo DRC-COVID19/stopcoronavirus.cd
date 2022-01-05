@@ -15,17 +15,6 @@
         </b-card-body>
       </b-collapse>
     </b-card>
-    <b-modal v-model="isDeleteModalShown">
-      Voulez-vous vraiment supprimer ce champ ?
-      <template #modal-footer>
-        <b-button size="sm" variant="success" @click="onValidateDeletion()">
-          Accepter
-        </b-button>
-        <b-button size="sm" variant="danger" @click="onCancelDeletion()">
-          Annuler
-        </b-button>
-      </template>
-    </b-modal>
   </div>
 </template>
 
