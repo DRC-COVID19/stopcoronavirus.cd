@@ -11,46 +11,7 @@
       </b-card-header>
       <b-collapse id="collapse-form-field-list" class="mt-2" visible>
         <b-card-body>
-          <b-form-group
-            v-for="(item, index) in formFieldSorted"
-            :key="index"
-            :label="item.name"
-            :label-for="item.name"
-          >
-            <b-row>
-              <b-col class="col-sm-9 col-md-9">
-                <b-form-group
-                  v-slot="{ ariaDescribedby }"
-                  v-if="item.form_field_type.name === 'boolean'"
-                >
-                  <b-form-radio-group
-                    :options="requiredOptions"
-                    :aria-describedby="ariaDescribedby"
-                    id="required"
-                  ></b-form-radio-group>
-                </b-form-group>
-                <b-form-input
-                  v-else
-                  :type="item.form_field_type.name"
-                  :placeholder="`Entrer ${item.name}`"
-                ></b-form-input>
-              </b-col>
-              <b-col class="col-sm-3 col-md-3">
-                <template class="action-btn-group">
-                  <i
-                    @click="deleteField(item)"
-                    class="mx-2 my-1 fas fa-trash prim color-red"
-                    aria-hidden="true">
-                  </i>
-                  <i
-                  @click="updateField(item)"
-                    class="mx-2 my-1 fas fa-pencil-alt color-green"
-                    aria-hidden="true">
-                  </i>
-                </template>
-              </b-col>
-            </b-row>
-          </b-form-group>
+           <FormStepListAccordion :targetForm="targetForm"/>
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -70,7 +31,11 @@
 
 <script>
 import { mapActions} from "vuex";
+import FormStepListAccordion from "./FormStepListAccordion.vue";
 export default {
+  components: {
+    FormStepListAccordion,
+  },
   props: {
     targetForm: {
       type: Object,
