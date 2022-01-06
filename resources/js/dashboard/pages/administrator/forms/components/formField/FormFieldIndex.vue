@@ -20,7 +20,7 @@
     <FormFieldList
       :target-form="form"
       class="mt-4"
-      @deleted="onDeletedFormField"
+      @onDeletedForm="onDeletedFormField"
       @onUpdateFormField="toUpdateFormField"
     />
 </div>

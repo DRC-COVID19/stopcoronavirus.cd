@@ -43,14 +43,11 @@
                     id="required"
                   ></b-form-radio-group>
                 </b-form-group>
-                <b-form-input
+               <b-form-input
                   v-else
-                  :v-model="item.form_field_type.name"
                   :type="item.form_field_type.name"
-                  :value="item.default_value"
                   :placeholder="`Entrer ${item.name}`"
-                  :id="item.name">
-                </b-form-input>
+                ></b-form-input>
               </b-col>
               <b-col class="col-sm-3 col-md-3">
                 <template class="action-btn-group">
@@ -93,6 +90,9 @@ export default {
       type: Object,
       required: true,
     },
+    updateField: {
+      type: String,
+    }
   },
   components: {
   },
@@ -115,9 +115,10 @@ export default {
     formListSteps() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.formStepsField = this.formSteps.slice();
+      const length = this.formSteps.length;
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.formStepsField.push({
-        id: null,
+        id: length,
         title: "Champs affectés à aucune étape",
       });
       return this.formStepsField;
@@ -145,7 +146,7 @@ export default {
     },
     onValidateDeletion() {
       this.$bvModal.show("confirmation-box");
-      this.removeFormFields(this.formFieldToDelete.id)
+      this.removeFormField(this.formFieldToDelete.id)
         .then(() => {
           this.$notify({
             group: "alert",
