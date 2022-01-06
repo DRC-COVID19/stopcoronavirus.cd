@@ -40,7 +40,7 @@
                  <b-form-group
                   v-for="(item, index) in formFieldSorted(step.id)"
                   :key="index"
-                  :label="item.roules==null ? item.name:item.name + ' * '"
+                  :label="item.roules!==null ? item.name+ ' * ':item.name"
                   :label-for="item.name"
                  >
                   <b-row>
@@ -76,7 +76,7 @@
                  <b-form-group
                   v-for="(item, index) in formFieldNullStepSorted"
                   :key="index"
-                  :label="item.roules==null ? item.name:item.name + ' * '"
+                  :label="item.roules!==null ? item.name + ' * ':item.name"
                   :label-for="item.name"
                  >
                   <b-row>
