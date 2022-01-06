@@ -28,7 +28,7 @@
             backButtonText="Précédent"
             finishButtonText="Envoyer"
             @on-complete="onComplete"
-            :startIndex="targetForm.form_steps.length"
+            :startIndex="1"
           >
             <tab-content
                   v-for="(step, index) in targetForm.form_steps"
@@ -39,6 +39,42 @@
                 <b-col cols="12" md="8">
                  <b-form-group
                   v-for="(item, index) in formFieldSorted(step.id)"
+                  :key="index"
+                  :label="item.roules===null ? item.name:item.name + ' * '"
+                  :label-for="item.name"
+                 >
+                  <b-row>
+                    <b-col class="col-sm-12 col-md-12">
+                      <b-form-group
+                        v-slot="{ ariaDescribedby }"
+                        v-if="item.form_field_type.name === 'boolean'"
+                      >
+                        <b-form-radio-group
+                          :options="requiredOptions"
+                          :aria-describedby="ariaDescribedby"
+                          id="required"
+                        ></b-form-radio-group>
+                      </b-form-group>
+                      <b-form-input
+                        v-else
+                        :v-model="item.form_field_type.name"
+                        :type="item.form_field_type.name"
+                        :value="item.default_value"
+                        :placeholder="`Entrer ${item.name}`"
+                        :id="item.name">
+                      </b-form-input>
+                    </b-col>
+                  </b-row>
+              </b-form-group>
+                </b-col>
+              </b-row>
+            </tab-content>
+            <tab-content>
+                  <h3 class="mb-4 text-center">Champs affectés à aucune étape</h3>
+                <b-row align-h="center" >
+                <b-col cols="12" md="8">
+                 <b-form-group
+                  v-for="(item, index) in formFieldNullStepSorted"
                   :key="index"
                   :label="item.roules===null ? item.name:item.name + ' * '"
                   :label-for="item.name"
@@ -191,19 +227,30 @@ export default {
       nodata_Vitamince_c: false,
       max: now,
       errors: {},
-      isLoading: false
+      isLoading: false,
+      formStepsField: []
     }
   },
   computed: {
     ...mapState({
-      hospitalManagerName: (state) => state.hospital.hospitalManagerName
+      hospitalManagerName: (state) => state.hospital.hospitalManagerName,
+      formSteps: (state) => state.formStep.formSteps
     }),
-    formFieldSorted: (app) => (id = 1) => {
+
+    formFieldSorted: (app) => (id) => {
       return app.targetForm.form_fields
         ? app.targetForm.form_fields
           .slice()
           .sort((a, b) => a.order_field - b.order_field)
           .filter(item => item.form_step_id === +id)
+        : []
+    },
+    formFieldNullStepSorted () {
+      return this.targetForm.form_fields
+        ? this.targetForm.form_fields
+          .slice()
+          .sort((a, b) => a.order_field - b.order_field)
+          .filter(item => item.form_step_id === null)
         : []
     }
   },
