@@ -89,9 +89,6 @@ export default {
     targetForm: {
       type: Object,
       required: true,
-    },
-    updateField: {
-      type: String,
     }
   },
   components: {
@@ -114,11 +111,10 @@ export default {
     }),
     formListSteps() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.formStepsField = this.formSteps.slice();
-      const length = this.formSteps.length;
+      this.formStepsField = this.formSteps.slice().sort((a, b) => a.order_field - b.order_field);
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.formStepsField.push({
-        id: length,
+        id: "null",
         title: "Champs affectés à aucune étape",
       });
       return this.formStepsField;
@@ -131,7 +127,9 @@ export default {
         : [];
     },
   },
-  mounted() {},
+  mounted() {
+    this.init();
+  },
   methods: {
     ...mapActions(["removeFormField"]),
     formStepFilter(id) {
