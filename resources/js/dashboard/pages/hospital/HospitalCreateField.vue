@@ -1,10 +1,9 @@
 <template>
      <tab-content>
-              <b-row align-h="center">
-            <b-col cols="12" md="9">
-                  
-                  <b-form-group
-                  v-for="(item, index) in formFieldSorted"
+              <b-row align-h="center" >
+                <b-col cols="12" md="6">
+              <b-form-group
+                  v-for="(item, index) in formFied"
                   :key="index"
                   :label="item.name"
                   :label-for="item.name"
@@ -31,7 +30,7 @@
                       </b-form-input>
                     </b-col>
                   </b-row>
-                  </b-form-group>
+              </b-form-group>
                 </b-col>
               </b-row>
             </tab-content>
@@ -42,7 +41,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'HospitalCreateField',
   props: {
-    targetForm: {
+    formFied: {
       type: Object,
       required: true
     }

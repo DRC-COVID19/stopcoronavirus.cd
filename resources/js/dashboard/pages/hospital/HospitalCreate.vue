@@ -21,6 +21,7 @@
           <form-wizard
             :title="$route.params.hospital_id?'':targetForm.title"
             subtitle
+
             shape="tab"
             color="#2e5bff"
             nextButtonText="Suivant"
@@ -29,15 +30,19 @@
             @on-complete="onComplete"
             :startIndex="targetForm.form_steps.length"
           >
-            <tab-content>
-              <b-row align-h="center" >
-                <b-col cols="12" md="6">
-              <b-form-group
-                  v-for="(item, index) in formFieldSorted"
+            <tab-content
+                  v-for="(step, index) in targetForm.form_steps"
+                  :key="index"
+                  >
+                  <h3 class="mb-4 text-center">{{step.title}}</h3>
+                <b-row align-h="center" >
+                <b-col cols="12" md="8">
+                 <b-form-group
+                  v-for="(item, index) in formFieldSorted(step.id)"
                   :key="index"
                   :label="item.name"
                   :label-for="item.name"
-                >
+                 >
                   <b-row>
                     <b-col class="col-sm-12 col-md-12">
                       <b-form-group
@@ -114,7 +119,7 @@
                 </b-col>
               </b-row>
             </tab-content>
-            
+
           </form-wizard>
         </b-col>
       </b-row>
@@ -136,7 +141,7 @@ export default {
     TabContent,
     Header,
     ManagerUserName,
-    Loading,
+    Loading
   },
   data () {
     const now = new Date()
@@ -193,14 +198,15 @@ export default {
     ...mapState({
       hospitalManagerName: (state) => state.hospital.hospitalManagerName
     }),
-    formFieldSorted () {
-      return this.targetForm.form_fields
-        ? this.targetForm.form_fields
-            .slice()
-            .sort((a, b) => a.order_field - b.order_field)
-        : [];
+    formFieldSorted: (app) => (id = 4) => {
+      return app.targetForm.form_fields
+        ? app.targetForm.form_fields
+          .slice()
+          .sort((a, b) => a.order_field - b.order_field).filter(item => item.form_step_id === +id)
+        : []
     }
   },
+
   mounted () {
     this.getForm()
     if (this.$route.params.hospital_id) {
@@ -214,6 +220,7 @@ export default {
     ...mapActions([
       'formShow'
     ]),
+
     async getForm () {
       this.targetForm = await this.formShow({ id: this.$route.params.form_id })
     },
