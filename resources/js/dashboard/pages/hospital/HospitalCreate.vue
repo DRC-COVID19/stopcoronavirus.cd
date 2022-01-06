@@ -40,7 +40,7 @@
                  <b-form-group
                   v-for="(item, index) in formFieldSorted(step.id)"
                   :key="index"
-                  :label="item.name"
+                  :label="item.roules===null ? item.name:item.name + ' * '"
                   :label-for="item.name"
                  >
                   <b-row>
