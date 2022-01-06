@@ -84,95 +84,95 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: "FormStepListAccordion",
+  name: 'FormStepListAccordion',
   props: {
     targetForm: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   components: {
   },
-  data() {
+  data () {
     return {
       formFieldFilter: [],
       requiredOptions: [
-        { text: "Oui", value: 1 },
-        { text: "Non", value: 0 },
+        { text: 'Oui', value: 1 },
+        { text: 'Non', value: 0 }
       ],
       formStepsField: [],
       isDeleteModalShown: false,
-      formFieldToDelete: "",
-    };
+      formFieldToDelete: ''
+    }
   },
   computed: {
     ...mapState({
-      formSteps: (state) => state.formStep.formSteps,
+      formSteps: (state) => state.formStep.formSteps
     }),
-    formListSteps() {
+    formListSteps () {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.formStepsField = this.formSteps.slice();
+      this.formStepsField = this.formSteps.slice()
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.formStepsField.push({
         id: null,
-        title: "Champs affectés à aucune étape",
-      });
-      return this.formStepsField;
+        title: 'Champs affectés à aucune étape'
+      })
+      return this.formStepsField
     },
-    formFieldSorted() {
+    formFieldSorted () {
       return this.formFieldFilter
         ? this.formFieldFilter
-            .slice()
-            .sort((a, b) => a.order_field - b.order_field)
-        : [];
-    },
+          .slice()
+          .sort((a, b) => a.order_field - b.order_field)
+        : []
+    }
   },
-  mounted() {},
+  mounted () {},
   methods: {
-    ...mapActions(["removeFormField"]),
-    formStepFilter(id) {
+    ...mapActions(['removeFormField']),
+    formStepFilter (id) {
       // eslint-disable-next-line camelcase
       this.formFieldFilter = this.targetForm.form_fields.filter((formField) => {
-        return formField.form_step_id === id;
-      });
+        return formField.form_step_id === id
+      })
     },
-    deleteField(formField) {
-      this.isDeleteModalShown = true;
-      this.formFieldToDelete = formField;
+    deleteField (formField) {
+      this.isDeleteModalShown = true
+      this.formFieldToDelete = formField
     },
-    onValidateDeletion() {
-      this.$bvModal.show("confirmation-box");
+    onValidateDeletion () {
+      this.$bvModal.show('confirmation-box')
       this.removeFormFields(this.formFieldToDelete.id)
         .then(() => {
           this.$notify({
-            group: "alert",
-            title: "Supprimer ce champ",
-            text: "Supprimer avec succès",
-            type: "Supprimer avec succès",
-          });
-          this.isDeleteModalShown = false;
-          this.$emit("deleted");
+            group: 'alert',
+            title: 'Supprimer ce champ',
+            text: 'Supprimer avec succès',
+            type: 'Supprimer avec succès'
+          })
+          this.isDeleteModalShown = false
+          this.$emit('deleted')
         })
         .catch(() => {
           this.$notify({
-            group: "alert",
+            group: 'alert',
             title: "Supprimer  l'étape",
-            text: "Une erreur est survenus",
-            type: "error",
-          });
-        });
+            text: 'Une erreur est survenus',
+            type: 'error'
+          })
+        })
     },
-    onCancelDeletion() {
-      this.isDeleteModalShown = false;
+    onCancelDeletion () {
+      this.isDeleteModalShown = false
     },
-     updateField (formField) {
+    updateField (formField) {
       this.$emit('onUpdateFormField', formField)
     }
-  },
-};
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";

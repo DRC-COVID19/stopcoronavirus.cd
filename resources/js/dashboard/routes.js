@@ -1,33 +1,39 @@
 import Home from "./pages/Home";
-import Login from './pages/auth/Login';
-import LostPassword from './pages/auth/LostPassword';
-import ResetPasswordThank from './pages/auth/ResetPasswordThank';
-import ResetPasseword from './pages/auth/ResetPassword';
-import PasswordResetComplete from './pages/auth/PasswordResetComplete';
-import HospitalsHome from './pages/hospital/Home';
-import HospitalsCreate from './pages/hospital/HospitalCreate';
-import HospitalsDetail from './pages/hospital/HospitalDetail';
-import HospitalData from './pages/hospital/HospitalData';
-import HospitalAdmin from './pages/adminHospital/Home';
-import HospitalAdminData from './pages/adminHospital/HospitalData';
-import NotAcces from './pages/NotAccess';
-import Landing from './pages/Landing';
-import Administrator from './pages/Administrator';
-import AdminUserIndex from './pages/administrator/users/Index';
-import PageNotFound from './pages/NotFound';
-import ChangeLogIndex from './pages/administrator/changeLog/index';
-import Epidemie from './pages/administrator/epidemy/Index';
-import FormIndex from './pages/administrator/forms/index';
-import FormShow from './pages/administrator/forms/form';
-import { ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL, ADMINISTRATOR, MANANGER_EPIDEMIC,EDIT_FORM,CREATE_FORM } from './config/env';
-
+import Login from "./pages/auth/Login";
+import LostPassword from "./pages/auth/LostPassword";
+import ResetPasswordThank from "./pages/auth/ResetPasswordThank";
+import ResetPasseword from "./pages/auth/ResetPassword";
+import PasswordResetComplete from "./pages/auth/PasswordResetComplete";
+import HospitalsHome from "./pages/hospital/Home";
+import HospitalsCreate from "./pages/hospital/HospitalCreate";
+import HospitalsDetail from "./pages/hospital/HospitalDetail";
+import HospitalData from "./pages/hospital/HospitalData";
+import HospitalAdmin from "./pages/adminHospital/Home";
+import HospitalAdminData from "./pages/adminHospital/HospitalData";
+import NotAcces from "./pages/NotAccess";
+import Landing from "./pages/Landing";
+import Administrator from "./pages/Administrator";
+import AdminUserIndex from "./pages/administrator/users/Index";
+import PageNotFound from "./pages/NotFound";
+import ChangeLogIndex from "./pages/administrator/changeLog/index";
+import Epidemie from "./pages/administrator/epidemy/Index";
+import FormIndex from "./pages/administrator/forms/index";
+import FormShow from "./pages/administrator/forms/form";
+import {
+  ADMIN_DASHBOARD,
+  AGENT_HOSPITAL,
+  ADMIN_HOSPITAL,
+  ADMINISTRATOR,
+  MANANGER_EPIDEMIC,
+  EDIT_FORM,
+  CREATE_FORM
+} from "./config/env";
 
 export default [
   {
     name: "login",
     path: "/login",
-    component: Login,
-
+    component: Login
   },
   {
     name: "lostPassword",
@@ -56,7 +62,7 @@ export default [
     meta: {
       requiresAuth: true,
       role: [ADMIN_DASHBOARD]
-    },
+    }
   },
   {
     path: "/hospitals",
@@ -65,7 +71,7 @@ export default [
     meta: {
       requiresAuth: true,
       role: [AGENT_HOSPITAL]
-    },
+    }
   },
   {
     path: "/admin/hospitals",
@@ -74,7 +80,7 @@ export default [
     meta: {
       requiresAuth: true,
       role: [ADMIN_HOSPITAL]
-    },
+    }
   },
   {
     path: "/admin/hospitals/:hospital_id",
@@ -83,7 +89,7 @@ export default [
     meta: {
       requiresAuth: true,
       role: [ADMIN_HOSPITAL]
-    },
+    }
   },
   {
     path: "/hospitals/data",
@@ -92,16 +98,16 @@ export default [
     meta: {
       requiresAuth: true,
       role: [AGENT_HOSPITAL]
-    },
+    }
   },
   {
-    path: "/hospitals/new",
+    path: "/hospitals/new/form_id/:form_id",
     name: "hospital.create",
     component: HospitalsCreate,
     meta: {
       requiresAuth: true,
       role: [AGENT_HOSPITAL]
-    },
+    }
   },
   {
     path: "/hospitals/:hospital_id/show/:update_id",
@@ -110,7 +116,7 @@ export default [
     meta: {
       requiresAuth: true,
       role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
-    },
+    }
   },
   {
     path: "/hospitals/edit/:hospital_id",
@@ -119,28 +125,28 @@ export default [
     meta: {
       requiresAuth: true,
       role: [AGENT_HOSPITAL]
-    },
+    }
   },
   {
     path: "/acces-denied",
     name: "acces.denied",
     component: NotAcces,
     meta: {
-      requiresAuth: true,
-    },
+      requiresAuth: true
+    }
   },
   {
     path: "/administrator",
     component: Administrator,
-    name: 'administrator',
+    name: "administrator",
     meta: {
       requiresAuth: true,
       role: [ADMINISTRATOR]
     },
     children: [
       {
-        path: '/',
-        name: 'administrator.home',
+        path: "/",
+        name: "administrator.home",
         component: AdminUserIndex,
         meta: {
           requiresAuth: true,
@@ -148,8 +154,8 @@ export default [
         }
       },
       {
-        path: 'users',
-        name: 'administrator.users',
+        path: "users",
+        name: "administrator.users",
         component: AdminUserIndex,
         meta: {
           requiresAuth: true,
@@ -157,21 +163,21 @@ export default [
         }
       },
       {
-        path: 'change-logs',
+        path: "change-logs",
         component: ChangeLogIndex,
-        name: 'administrator.changeLog',
+        name: "administrator.changeLog",
         meta: {
           requiresAuth: true,
           role: [ADMINISTRATOR]
         }
       },
       {
-        path: 'forms',
+        path: "forms",
         component: FormIndex,
-        name: 'administrator.forms',
+        name: "administrator.forms",
         meta: {
           requiresAuth: true,
-          role: [CREATE_FORM] || [EDIT_FORM] 
+          role: [CREATE_FORM] || [EDIT_FORM]
         }
       },
       {
@@ -180,12 +186,12 @@ export default [
         component: FormShow,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR,CREATE_FORM,EDIT_FORM]
-        },
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+        }
       },
       {
-        path: 'epidemie/',
-        name: 'administrator.epidemie',
+        path: "epidemie/",
+        name: "administrator.epidemie",
         component: Epidemie,
         meta: {
           requiresAuth: true,
@@ -200,7 +206,7 @@ export default [
     component: Landing,
     meta: {
       requiresAuth: true
-    },
+    }
   },
   {
     name: "not_found",
