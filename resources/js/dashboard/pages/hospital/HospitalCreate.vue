@@ -202,7 +202,8 @@ export default {
       return app.targetForm.form_fields
         ? app.targetForm.form_fields
           .slice()
-          .sort((a, b) => a.order_field - b.order_field).filter(item => item.form_step_id === +id)
+          .sort((a, b) => a.order_field - b.order_field)
+          .filter(item => item.form_step_id === +id)
         : []
     }
   },
