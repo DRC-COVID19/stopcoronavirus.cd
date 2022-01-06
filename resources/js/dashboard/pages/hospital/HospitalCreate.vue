@@ -198,7 +198,7 @@ export default {
     ...mapState({
       hospitalManagerName: (state) => state.hospital.hospitalManagerName
     }),
-    formFieldSorted: (app) => (id = 4) => {
+    formFieldSorted: (app) => (id = 1) => {
       return app.targetForm.form_fields
         ? app.targetForm.form_fields
           .slice()
