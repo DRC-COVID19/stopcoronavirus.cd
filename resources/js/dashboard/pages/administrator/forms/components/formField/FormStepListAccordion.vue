@@ -100,7 +100,6 @@ export default {
         { text: "Oui", value: 1 },
         { text: "Non", value: 0 },
       ],
-      formStepsField: [],
       isDeleteModalShown: false,
       formFieldToDelete: "",
     };
@@ -111,13 +110,13 @@ export default {
     }),
     formListSteps() {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.formStepsField = this.formSteps.slice().sort((a, b) => a.order_field - b.order_field);
+      const formStepsField = this.formSteps.slice();
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.formStepsField.push({
-        id: "null",
+      formStepsField.push({
+        id: null,
         title: "Champs affectés à aucune étape",
       });
-      return this.formStepsField;
+      return formStepsField;
     },
     formFieldSorted() {
       return this.formFieldFilter
@@ -128,7 +127,6 @@ export default {
     },
   },
   mounted() {
-    this.init();
   },
   methods: {
     ...mapActions(["removeFormField"]),
