@@ -42,21 +42,7 @@
                 class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
               >
                 <img
-                  src="/img/partners_top.png"
-                  height="30"
-                  width="100"
-                  class="img-fluid"
-                  alt
-                />
-                <img
-                  src="/img/commite_riposte.jpg"
-                  height="30"
-                  width="100"
-                  class="img-fluid"
-                  alt
-                />
-                <img
-                  src="/img/logo-control-room.png"
+                  src="/img/partener2.png"
                   height="30"
                   width="100"
                   class="img-fluid"
