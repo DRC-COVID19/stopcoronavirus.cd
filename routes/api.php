@@ -191,6 +191,7 @@ Route::group([
 
   Route::resource('hospital-situations', "HospitalSituationController");
   Route::apiResource('hospital-situations-new',"HospitalSituationNewController");
+  
 
   Route::resource('hospitals-data', 'HospitalController');
   Route::apiResource('forms', 'FormController');
