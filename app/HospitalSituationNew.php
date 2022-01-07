@@ -14,6 +14,8 @@ class HospitalSituationNew extends Model
     use SoftDeletes;
     protected $fillable = ['hospital_id', 'value', 'form_fields_id'];
 
+    protected $table='hospital_situations_new';
+
     public function formField()
     {
         return $this->belongsTo(FormField::class);
