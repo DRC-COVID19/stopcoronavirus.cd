@@ -18,6 +18,7 @@ class CreateHospitalSituationNewsTable extends Migration
             $table->string('value');
             $table->foreign('form_fields_id')->references('id')->on('form_fields');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
