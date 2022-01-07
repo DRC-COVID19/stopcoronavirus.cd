@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\HospitalSituationNew;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\HospitalSituationNewResource;
 
 class HospitalSituationNewController extends Controller
 {
@@ -17,7 +18,18 @@ class HospitalSituationNewController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            
+            $hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
+            
+            return HospitalSituationNewResource::collection($hospitalSituation);
+            
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     /**
