@@ -13,8 +13,9 @@ class CreateHospitalSituationNewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('hospital_situation_news', function (Blueprint $table) {
+        Schema::create('hospital_situations_new', function (Blueprint $table) {
             $table->id();
+            $table->foreign('hospital_id')->references('id')->on('hospitals');
             $table->string('value');
             $table->foreign('form_fields_id')->references('id')->on('form_fields');
             $table->timestamps();
@@ -29,6 +30,6 @@ class CreateHospitalSituationNewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hospital_situation_news');
+        Schema::dropIfExists('hospital_situations_new');
     }
 }

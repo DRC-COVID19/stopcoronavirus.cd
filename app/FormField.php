@@ -35,7 +35,7 @@ class FormField extends Model
         return $this->belongsTo(FormStep::class);
     }
 
-    public function hospitalSituationNews(){
+    public function hospitalSituationsNew(){
         return $this->hasMany(HospitalSituationNew::class);
     }
 }
