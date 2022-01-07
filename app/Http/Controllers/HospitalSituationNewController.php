@@ -23,11 +23,13 @@ class HospitalSituationNewController extends Controller
             $hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
             
             return HospitalSituationNewResource::collection($hospitalSituation);
-            
+
         } catch (\Throwable $th) {
+
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
             }
+            
             return response($th->getMessage())->setStatusCode(500);
         }
     }
