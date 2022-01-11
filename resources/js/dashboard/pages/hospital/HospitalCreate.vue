@@ -61,7 +61,7 @@
                         :type="item.form_field_type.name"
                          v-model="form.fields[counter]"
                         :placeholder="`Entrer ${item.name}`"
-                        @change="handelChange(item.id,form.fields[counter])"
+                        @change="handelChange(item.id,form.fields[counter],item.name,step.id)"
                         :id="item.name">
                       </b-form-input>
                     </b-col>
@@ -97,7 +97,7 @@
                         :type="field.form_field_type.name"
                         v-model="form.fields[counter]"
                         :placeholder="`Entrer ${field.name}`"
-                        @change="handelChange(item.id,form.fields[counter])"
+                        @change="handelChange(field.id,form.fields[counter],field.name,step.id)"
                         :id="field.name">
                       </b-form-input>
                     </b-col>
@@ -111,13 +111,15 @@
                 <b-col
                   v-for="(step, index) in targetForm.form_steps"
                   :key="index"
+
                   cols="12" md="6" >
                   <h3 class="mb-4">{{step.title}}</h3>
 
-                  <div>
-                    <h4 class="mb-4">Données épidemologiques</h4>
-                  <ul>
-                    <li>Confirmés : {{form.confirmed}}</li>
+                  <div
+                    v-for="(resume, count) in formResume"
+                    :key="count">
+                  <ul v-if="step.id===resume.stepId">
+                    <li>{{resume.fieldName}} : {{resume.value}}</li>
                   </ul>
                   </div>
                 </b-col>
@@ -167,6 +169,7 @@ export default {
 
       },
       formData: new Map(),
+      formResume: [],
       formDataFormatted: [],
       form: {
         items: [],
@@ -259,11 +262,11 @@ export default {
         })
       }
     },
-    handelChange (key, value) {
+    handelChange (key, value, fieldName, stepId) {
       if (value) {
         if (!this.formData.has(key)) {
-          console.log('key:', key, 'value:', value)
           this.formData.set(key, value)
+          this.formResume.push({ value, fieldName, stepId })
         }
       }
     },
