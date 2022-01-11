@@ -12,7 +12,7 @@
         </b-col>
         <b-col v-if="hospital.id">
           <h3>
-            Situations hospitalières
+            Situations CTCOs
           </h3>
           <b-alert show variant="info">
             <div>{{`Structure: ${hospital.name}`}}</div>
