@@ -10,7 +10,7 @@
         </b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
-            <b-nav-item
+            <!-- <b-nav-item
               :class="{ active: activeMenu == 1 }"
               @click="selectMenu(1)"
               >Mobilité</b-nav-item
@@ -24,7 +24,7 @@
               :class="{ active: activeMenu == 3 }"
               @click="selectMenu(3)"
               >Indicateurs</b-nav-item
-            >
+            > -->
             <!-- <b-nav-item :class="{'active':activeMenu==4}" @click="selectMenu(4)">Sondages</b-nav-item> -->
             <b-nav-item
               :class="{ active: activeMenu == 5 }"
