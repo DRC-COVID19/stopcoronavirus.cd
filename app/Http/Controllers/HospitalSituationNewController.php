@@ -104,11 +104,11 @@ class HospitalSituationNewController extends Controller
     function validator($data, $id = null)
     {
         return Validator::make($data, [
-            "form_fields_id" => 'nullable',
+            "form_field_id" => 'nullable',
             "value" => 'nullable',
             'last_update' => [
                 'date',
-                'required',
+                'nullable',
                 function ($attribute, $value, $fail) use ($id) {
                     if ($id) {
                         return;
