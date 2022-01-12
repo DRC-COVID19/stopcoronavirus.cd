@@ -60,12 +60,12 @@ export default {
           });
       });
     },
-    getHospitalSituationsAll({ state, commit }, { payload }) {
+    getHospitalSituationsAll({ state, commit }) {
       commit("SET_IS_CREATING", true);
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get("api/dashboard/hospital-situations-new")
+          .get("api/dashboard/get-hospital-situations-all")
           .then(({ data }) => {
             commit("SET_ALL_HOSPITAL", data);
             commit("SET_IS_LOADING", false);

@@ -127,9 +127,8 @@ class HospitalSituationNewController extends Controller
         $hospitalSituation = DB::table('hospital_situations_new')
             ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
             ->where('form_fields.name', '<>', 'EPI en manque')
-            ->orWhere('form_fields.name', '<>', 'Nom du CTCO de référence')
-            ->select('form_fields.name', 'hospital_situations_new.value')
-            ->groupBy('form_fields.id', 'form_fields.name', 'hospital_situations_new.value')
+            ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
+            ->select('form_fields.name', 'hospital_situations_new.value', 'form_fields.form_step_id')
             ->get();
         return $hospitalSituation;
     }

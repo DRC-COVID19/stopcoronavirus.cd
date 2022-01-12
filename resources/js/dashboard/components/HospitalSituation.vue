@@ -11,13 +11,17 @@
               }"
             ></square-skeleton>
           </skeleton-loading>
-          <h4 class="col-12 col-md-6 mb-3 mb-md-0 m-0 d-flex align-items-baseline" v-if="!isLoading">
+          <h4
+            class="col-12 col-md-6 mb-3 mb-md-0 m-0 d-flex align-items-baseline"
+            v-if="!isLoading"
+          >
             <span>{{ hospital.name || "Rapport global" }}</span>
             <b-badge v-if="hospitalCount" style="font-size: 12px" class="ml-2">
               {{ hospitalCount }}
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
+          <p>{{ hospitalFilterField }}</p>
           <div
             class="text-right text-black-50 col-12 col-md-6"
             v-if="lastUpdate && !isLoading"
@@ -144,7 +148,7 @@
 
     <b-row no-gutters class="mb-2">
       <b-col cols="12" md="6" class="pr-1">
-        <div v-if="situationHospitalLoading|| isLoading">
+        <div v-if="situationHospitalLoading || isLoading">
           <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
             <template #loading>
               <b-card no-body class="default-card card-chart p-2 cardtype1">
@@ -154,18 +158,27 @@
             </template>
           </b-skeleton-wrapper>
         </div>
-        <FullScreen id="canvasStat1_full" link="canvasStat1" v-show="!situationHospitalLoading && !isLoading">
+        <FullScreen
+          id="canvasStat1_full"
+          link="canvasStat1"
+          v-show="!situationHospitalLoading && !isLoading"
+        >
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner
               label="Chargement..."
               v-if="situationHospitalLoading"
             ></b-spinner>
             <div class="legend-custom">
-              <div class="text-center title  general-top-title">
+              <div class="text-center title general-top-title">
                 Evolution d'occupation des respirateurs
               </div>
               <div
-                class="d-flex flex-wrap justify-content-center align-items-center"
+                class="
+                  d-flex
+                  flex-wrap
+                  justify-content-center
+                  align-items-center
+                "
               >
                 <div>
                   <span class="legend-color total"></span>
@@ -194,7 +207,7 @@
       </b-col>
 
       <b-col cols="12" md="6" class="pl-1">
-        <div v-if="situationHospitalLoading|| isLoading">
+        <div v-if="situationHospitalLoading || isLoading">
           <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
             <template #loading>
               <b-card no-body class="default-card card-chart p-2 cardtype1">
@@ -204,18 +217,27 @@
             </template>
           </b-skeleton-wrapper>
         </div>
-        <FullScreen id="canvasStat2_full" link="canvasStat2" v-show="!situationHospitalLoading && !isLoading">
+        <FullScreen
+          id="canvasStat2_full"
+          link="canvasStat2"
+          v-show="!situationHospitalLoading && !isLoading"
+        >
           <b-card no-body class="default-card card-chart p-2 cardtype1">
             <b-spinner
               label="Chargement..."
               v-if="situationHospitalLoading"
             ></b-spinner>
             <div class="legend-custom">
-              <div class="text-center title  general-top-title">
+              <div class="text-center title general-top-title">
                 Evolution d'occupation des lits de réanimation
               </div>
               <div
-                class="d-flex flex-wrap justify-content-center align-items-center"
+                class="
+                  d-flex
+                  flex-wrap
+                  justify-content-center
+                  align-items-center
+                "
               >
                 <div>
                   <span class="legend-color total"></span>
@@ -244,7 +266,7 @@
       </b-col>
 
       <b-col cols="12" class="mt-2">
-        <div v-if="situationHospitalLoading|| isLoading">
+        <div v-if="situationHospitalLoading || isLoading">
           <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
             <template #loading>
               <b-card no-body class="default-card card-chart p-2 cardtype1">
@@ -265,11 +287,16 @@
               v-if="situationHospitalLoading"
             ></b-spinner> -->
             <div class="legend-custom">
-              <div class="text-center title  general-top-title">
+              <div class="text-center title general-top-title">
                 Evolution global du taux d'occupation
               </div>
               <div
-                class="d-flex flex-wrap justify-content-center align-items-center"
+                class="
+                  d-flex
+                  flex-wrap
+                  justify-content-center
+                  align-items-center
+                "
               >
                 <div>
                   <span class="legend-color total"></span>
@@ -328,7 +355,10 @@ export default {
   mounted() {
     const id = this.selectedHospital ? this.selectedHospital.id : null;
     this.getSituationHospital(id);
-    console.log("hospitalSituationAll",this.hospitalSituationAll)
+    this.getHospitalSituationsAll();
+    this.getFormSteps({ id: 3,page:1});
+    console.log('step', this.formSteps)
+    console.log('hospital', this.hospitalFilterField)
   },
   computed: {
     ...mapState({
@@ -339,8 +369,9 @@ export default {
       situationHospital: (state) => state.hospital.situationHospital,
       hospitalCount: (state) => state.hospital.hospitalCount,
       isLoading: (state) => state.hospital.isLoading,
-      hospitalSituationAll: (state) => state.hospitalsituation.hospitalSituationAll
-
+      formSteps: (state) => state.formStep.formSteps,
+      hospitalSituationAll: (state) =>
+        state.hospitalSituation.hospitalSituationAll,
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;
@@ -360,6 +391,21 @@ export default {
         ];
       } else return null;
     },
+    hospitalFilterField () {
+      const hospitalFilterTab = []
+      let i = 0
+      for (let j = 0; j < this.hospitalSituationAll.length; j++) {
+        if (i === 0) {
+          hospitalFilterTab.push(this.hospitalSituationAll[j])
+          i += 1
+        }
+        else if (!hospitalFilterTab[i].name.includes(this.hospitalSituationAll[j].name)){
+          hospitalFilterTab.push(this.hospitalSituationAll[j])
+          i += 1
+        }
+      }
+      return hospitalFilterTab.length
+    },
   },
   watch: {
     hospitalData() {
@@ -376,7 +422,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getSituationHospital","getHospitalSituationsAll"]),
+    ...mapActions(["getSituationHospital", "getHospitalSituationsAll","getFormSteps"]),
     ...mapMutations(["selectHospital"]),
     paintStats(data) {
       const lastUpdates = data.last_update;
@@ -757,12 +803,9 @@ export default {
             },
           },
         };
-        const reference=this.$refs[`canvasStat${i + 1}`];
+        const reference = this.$refs[`canvasStat${i + 1}`];
         if (this.lineCharts[i]) this.lineCharts[i].destroy();
-        this.lineCharts[i] = new Chart(
-          reference.getContext("2d"),
-          config
-        );
+        this.lineCharts[i] = new Chart(reference.getContext("2d"), config);
         reference.style.height = "200px";
         reference.style.maxHeight = "200px";
         // this.lineCharts[i].generateLegend();
