@@ -328,6 +328,7 @@ export default {
   mounted() {
     const id = this.selectedHospital ? this.selectedHospital.id : null;
     this.getSituationHospital(id);
+    console.log("hospitalSituationAll",this.hospitalSituationAll)
   },
   computed: {
     ...mapState({
@@ -338,6 +339,8 @@ export default {
       situationHospital: (state) => state.hospital.situationHospital,
       hospitalCount: (state) => state.hospital.hospitalCount,
       isLoading: (state) => state.hospital.isLoading,
+      hospitalSituationAll: (state) => state.hospitalsituation.hospitalSituationAll
+
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;
@@ -373,7 +376,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getSituationHospital"]),
+    ...mapActions(["getSituationHospital","getHospitalSituationsAll"]),
     ...mapMutations(["selectHospital"]),
     paintStats(data) {
       const lastUpdates = data.last_update;

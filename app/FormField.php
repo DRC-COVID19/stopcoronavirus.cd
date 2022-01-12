@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\HospitalSituationNew;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -32,5 +33,9 @@ class FormField extends Model
     public function formStep()
     {
         return $this->belongsTo(FormStep::class);
+    }
+
+    public function hospitalSituationsNew(){
+        return $this->hasMany(HospitalSituationNew::class);
     }
 }

@@ -23,6 +23,10 @@ class HospitalLog extends Model
     {
         return $this->hasMany(HospitalSituation::class, 'hospital_id');
     }
+    public function hospitalSituationsNew()
+    {
+        return $this->hasMany(HospitalSituationNew::class, 'hospital_id');
+    }
     public function township()
     {
         return $this->belongsTo(Township::class);
