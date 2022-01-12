@@ -404,7 +404,7 @@ export default {
           i += 1
         }
       }
-      return hospitalFilterTab.length
+      return hospitalFilterTab
     },
   },
   watch: {
