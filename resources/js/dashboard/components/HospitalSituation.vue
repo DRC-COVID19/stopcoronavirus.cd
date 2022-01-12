@@ -399,10 +399,6 @@ export default {
           hospitalFilterTab.push(this.hospitalSituationAll[j])
           i += 1
         }
-        else if (!hospitalFilterTab[i].name.includes(this.hospitalSituationAll[j].name)){
-          hospitalFilterTab.push(this.hospitalSituationAll[j])
-          i += 1
-        }
       }
       return hospitalFilterTab
     },
