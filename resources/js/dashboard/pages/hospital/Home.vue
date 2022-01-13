@@ -23,7 +23,7 @@
       </b-row>
       <b-row class="mt-4 mb-4">
         <b-col>
-          <b-button :to="{name:'hospital.create',params:{form_id:4}}" class="btn-dash-blue">Nouveau</b-button>
+          <b-button :to="{name:'hospital.create',params:{form_id:3}}" class="btn-dash-blue">Nouveau</b-button>
         </b-col>
       </b-row>
       <b-row>

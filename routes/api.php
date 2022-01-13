@@ -190,8 +190,9 @@ Route::group([
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
 
   Route::resource('hospital-situations', "HospitalSituationController");
-  Route::apiResource('hospital-situations-new',"HospitalSituationNewController");
-  
+  Route::apiResource('hospital-situations-new', "HospitalSituationNewController");
+  Route::get('get-hospital-situations-all', "HospitalSituationNewController@getSituationHospitalsAll");
+  Route::post('get-by-hospital-situations', "HospitalSituationNewController@getSituationByHospitals");
 
   Route::resource('hospitals-data', 'HospitalController');
   Route::apiResource('forms', 'FormController');

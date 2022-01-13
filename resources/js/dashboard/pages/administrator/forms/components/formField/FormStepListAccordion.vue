@@ -43,14 +43,11 @@
                     id="required"
                   ></b-form-radio-group>
                 </b-form-group>
-                <b-form-input
+               <b-form-input
                   v-else
-                  :v-model="item.form_field_type.name"
                   :type="item.form_field_type.name"
-                  :value="item.default_value"
                   :placeholder="`Entrer ${item.name}`"
-                  :id="item.name">
-                </b-form-input>
+                ></b-form-input>
               </b-col>
               <b-col class="col-sm-3 col-md-3">
                 <template class="action-btn-group">
@@ -91,7 +88,7 @@ export default {
   props: {
     targetForm: {
       type: Object,
-      required: true
+      required: true,
     }
   },
   components: {
@@ -103,7 +100,6 @@ export default {
         { text: 'Oui', value: 1 },
         { text: 'Non', value: 0 }
       ],
-      formStepsField: [],
       isDeleteModalShown: false,
       formFieldToDelete: ''
     }
@@ -114,13 +110,13 @@ export default {
     }),
     formListSteps () {
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.formStepsField = this.formSteps.slice()
+      const formStepsField = this.formSteps.slice();
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.formStepsField.push({
+      formStepsField.push({
         id: null,
-        title: 'Champs affectés à aucune étape'
-      })
-      return this.formStepsField
+        title: "Champs affectés à aucune étape",
+      });
+      return formStepsField;
     },
     formFieldSorted () {
       return this.formFieldFilter
@@ -130,7 +126,8 @@ export default {
         : []
     }
   },
-  mounted () {},
+  mounted() {
+  },
   methods: {
     ...mapActions(['removeFormField']),
     formStepFilter (id) {
@@ -143,9 +140,9 @@ export default {
       this.isDeleteModalShown = true
       this.formFieldToDelete = formField
     },
-    onValidateDeletion () {
-      this.$bvModal.show('confirmation-box')
-      this.removeFormFields(this.formFieldToDelete.id)
+    onValidateDeletion() {
+      this.$bvModal.show("confirmation-box");
+      this.removeFormField(this.formFieldToDelete.id)
         .then(() => {
           this.$notify({
             group: 'alert',

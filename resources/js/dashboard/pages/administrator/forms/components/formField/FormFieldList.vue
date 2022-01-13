@@ -11,7 +11,9 @@
       </b-card-header>
       <b-collapse id="collapse-form-field-list" class="mt-2" visible>
         <b-card-body>
-           <FormStepListAccordion :targetForm="targetForm"/>
+           <FormStepListAccordion :targetForm="targetForm"
+                 @deleted="onDeleted"
+                 @updateField="updateField"/>
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -19,7 +21,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 import FormStepListAccordion from "./FormStepListAccordion.vue";
 export default {
   components: {
@@ -32,57 +33,16 @@ export default {
     }
   },
   computed: {
-    formFieldSorted() {
-      return this.targetForm.form_fields
-        ? this.targetForm.form_fields
-            .slice()
-            .sort((a, b) => a.order_field - b.order_field)
-        : [];
-    }
   },
-  data() {
-    return {
-      requiredOptions: [
-        { text: "Oui", value: 1 },
-        { text: "Non", value: 0 }
-      ],
-      isDeleteModalShown: false,
-      formFieldToDelete: null,
-    };
+  data () {
+    return {}
   },
   methods: {
-    ...mapActions(["removeFormField"]),
-    deleteField(formField) {
-      this.isDeleteModalShown = true;
-      this.formFieldToDelete = formField;
+    onDeleted () {
+      this.$emit('onDeletedForm')
     },
-    onValidateDeletion() {
-      this.$bvModal.show("confirmation-box");
-      this.removeFormField(this.formFieldToDelete.id)
-        .then(() => {
-          this.$notify({
-            group: "alert",
-            title: "Supprimer ce champ",
-            text: "Supprimer avec succès",
-            type: "success"
-          });
-          this.isDeleteModalShown = false;
-          this.$emit("deleted");
-        })
-        .catch(() => {
-          this.$notify({
-            group: "alert",
-            title: "Supprimer  l'étape",
-            text: "Une erreur est survenus",
-            type: "error"
-          });
-        });
-    },
-    onCancelDeletion() {
-      this.isDeleteModalShown = false;
-    },
-     updateField (formField) {
-      this.$emit('onUpdateFormField', formField)
+     updateField () {
+      this.$emit('onUpdateFormField')
     }
   }
 }

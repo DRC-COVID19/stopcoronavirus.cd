@@ -8,6 +8,7 @@ use App\HospitalSituationNew;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\HospitalSituationNewResource;
+use Illuminate\Support\Facades\DB;
 
 class HospitalSituationNewController extends Controller
 {
@@ -19,17 +20,16 @@ class HospitalSituationNewController extends Controller
     public function index()
     {
         try {
-            
-            $hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
-            
-            return HospitalSituationNewResource::collection($hospitalSituation);
 
+            $hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
+
+            return HospitalSituationNewResource::collection($hospitalSituation);
         } catch (\Throwable $th) {
 
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
             }
-            
+
             return response($th->getMessage())->setStatusCode(500);
         }
     }
@@ -48,8 +48,7 @@ class HospitalSituationNewController extends Controller
 
             $hospitalSituationNew = HospitalSituationNew::create($data);
 
-            return response()->json($hospitalSituationNew,201,[],JSON_NUMERIC_CHECK);
-        
+            return response()->json($hospitalSituationNew, 201, [], JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -123,8 +122,36 @@ class HospitalSituationNewController extends Controller
             ]
         ])->validate();
     }
+    public function getSituationHospitalsAll()
+    {
+        $hospitalSituation = DB::table('hospital_situations_new')
+            ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+            ->where('form_fields.name', '<>', 'EPI en manque')
+            ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
+            ->select('form_fields.name', 'hospital_situations_new.value', 'form_fields.form_step_id')
+            ->get();
+        return $hospitalSituation;
+    }
 
-     /**
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getSituationByHospitals(Request $request)
+    {
+
+        $hospitalSituation = DB::table('hospital_situations_new')
+            ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+            ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+            ->where('hospital_situations_new.hospital_id', '=', $request->hospital_id)
+            ->select('hospitals.*', 'form_fields.name', 'hospital_situations_new.value')
+            ->get();
+        return $hospitalSituation;
+    }
+
+    /**
      * Get the guard to be used during authentication.
      *
      * @return \Illuminate\Contracts\Auth\Guard
