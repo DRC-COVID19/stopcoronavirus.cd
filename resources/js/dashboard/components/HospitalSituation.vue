@@ -50,28 +50,25 @@
         <b-card class="col-12 default-card mb-2" v-else>
           <h5 class="bold">Capacité de prise en charge</h5>
           <div>
-            <div>Lits avec mousse: {{ parseData(hospital.foam_beds) }}</div>
+            <div>Lits avec mousse:  {{ parseData(hospital.occupied_foam_beds) }}/{{ parseData(hospital.foam_beds) }}</div>
             <div>
-              Lits avec mousse occupés:
-              {{ parseData(hospital.occupied_foam_beds) }}
+              Lits de réanimation:  {{ parseData(hospital.occupied_resuscitation_beds) }}/{{ parseData(hospital.resuscitation_beds) }}
             </div>
-            <div>
-              Lits de réanimation: {{ parseData(hospital.resuscitation_beds) }}
-            </div>
-            <div>
-              Lits de réanimation occupés:
-              {{ parseData(hospital.occupied_resuscitation_beds) }}
-            </div>
-            <div>Respirateurs: {{ parseData(hospital.respirators) }}</div>
-            <div>
-              Respirateurs occupés:
-              {{ parseData(hospital.occupied_respirators) }}
-            </div>
+            <div>Respirateurs:  {{ parseData(hospital.occupied_respirators) }}/{{ parseData(hospital.respirators) }}</div>
             <div>
               Ventilateur de réanimation :
               {{ parseData(hospital.resuscitation_ventilator) }}
             </div>
             <div>Oxygénérateur: {{ parseData(hospital.oxygenator) }}</div>
+            <hr>
+             <h6 class="bold">Médicaments :</h6>
+            
+            <div>Chloroquine: {{ parseData(hospital.chloroquine) }}</div>
+            <div>
+              Hydrochloroquine: {{ parseData(hospital.hydrochloroquine) }}
+            </div>
+          <div>Azytromicine: {{ parseData(hospital.azytromicine) }}</div>
+          <div>Vitamince C: {{ parseData(hospital.Vitamince_c) }}</div>
             <div v-if="!isGlobal">
               Equipement de protection individuelle:
               {{ parseData(hospital.individual_protection_equipment) }}

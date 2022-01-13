@@ -14,8 +14,8 @@
               :class="{ active: activeMenu == 1 }"
               @click="selectMenu(1)"
               >Mobilité</b-nav-item
-            >
-            <b-nav-item
+            > -->
+            <!-- <b-nav-item
               :class="{ active: activeMenu == 2 }"
               @click="selectMenu(2)"
               >Epidémiologie

@@ -68,11 +68,11 @@ export default {
     return {
       updateData: [],
       fields: [
-        { key: 'statut', label: 'Statut' },
-        { key: 'last_update', label: 'Date' },
-        { key: 'name', label: 'Centre' },
-        { key: 'confirmed', label: 'Confirmés' },
-        { key: 'actions', label: 'Actions' }
+        { key: "statut", label: "Statut" },
+        { key: "last_update", label: "Date" },
+        { key: "name", label: "CTCO" },
+        { key: "confirmed", label: "Confirmés" },
+        { key: "actions", label: "Actions" },
       ],
       isLoading: false
     }
