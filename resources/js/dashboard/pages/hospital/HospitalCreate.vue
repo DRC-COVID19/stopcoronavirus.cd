@@ -19,6 +19,7 @@
             <br />
             {{moment(form.last_update).format("DD.MM.Y")}}
           </h3>
+         
           <form-wizard
             :title="$route.params.hospital_id?'':targetForm.title"
             subtitle
@@ -31,9 +32,11 @@
             @on-complete="onComplete"
             :startIndex="1"
           >
+            <b-alert variant="success" v-if="!!isLoading" show>L'insertion reussi avec success</b-alert>
             <tab-content
                   v-for="(step, index) in targetForm.form_steps"
                   :key="index"
+                  v-else
                   >
                   <h3 class="mb-4 text-center">{{step.title}}</h3>
                 <b-row align-h="center" >
@@ -59,9 +62,9 @@
                       <b-form-input
                         v-else
                         :type="item.form_field_type.name"
-                         v-model="form.fields[counter]"
+                         v-model="item.default_value"
                         :placeholder="`Entrer ${item.name}`"
-                        @change="handelChange(item.id,form.fields[counter],item.name,step.id)"
+                        @change="handelChange(item.id,item.default_value,item.name,step.id)"
                         :id="item.name">
                       </b-form-input>
                     </b-col>
@@ -95,9 +98,9 @@
                       <b-form-input
                         v-else
                         :type="field.form_field_type.name"
-                        v-model="form.fields[counter]"
+                        v-model="field.default_value"
                         :placeholder="`Entrer ${field.name}`"
-                        @change="handelChange(field.id,form.fields[counter],field.name,step.id)"
+                        @change="handelChange(field.id,field.default_value,field.name,step.id)"
                         :id="field.name">
                       </b-form-input>
                     </b-col>
@@ -116,10 +119,10 @@
                   <h3 class="mb-4">{{step.title}}</h3>
 
                   <div
-                    v-for="(resume, count) in formResume"
+                    v-for="(summary, count) in fomSummary"
                     :key="count">
-                  <ul v-if="step.id===resume.stepId">
-                    <li>{{resume.fieldName}} : {{resume.value}}</li>
+                  <ul v-if="step.id===summary.stepId">
+                    <li>{{summary.fieldName}} : {{summary.value}}</li>
                   </ul>
                   </div>
                 </b-col>
@@ -138,7 +141,7 @@
                   </b-form-group>
               </b-row>
             </tab-content>
-
+           
           </form-wizard>
         </b-col>
       </b-row>
@@ -169,7 +172,7 @@ export default {
 
       },
       formData: new Map(),
-      formResume: [],
+      fomSummary: [],
       formDataFormatted: [],
       form: {
         items: [],
@@ -214,8 +217,6 @@ export default {
     formFieldSorted (id) {
       return this.targetForm.form_fields
         ? this.targetForm.form_fields
-          .slice()
-          .sort((a, b) => a.order_field - b.order_field)
           .filter(item => item.form_step_id === id)
         : []
     },
@@ -245,7 +246,11 @@ export default {
       } else {
         this.form.created_manager_name = this.hospitalManagerName
       }
-      this.createSituation(this.formData)
+      if (this.createSituation(this.formData)) {
+        this.isLoading = false
+        // this.$bvModal.show('nameModal')
+        this.$router.push(`/hospitals/new/form_id/${this.$route.params.form_id}`)
+      }
     },
 
     createSituation (formData) {
@@ -260,13 +265,15 @@ export default {
             last_update: this.form.last_update
           })
         })
+        return true
       }
+      return false
     },
     handelChange (key, value, fieldName, stepId) {
       if (value) {
         if (!this.formData.has(key)) {
           this.formData.set(key, value)
-          this.formResume.push({ value, fieldName, stepId })
+          this.fomSummary.push({ value, fieldName, stepId })
         }
       }
     },
@@ -274,6 +281,7 @@ export default {
     getHospital () {
       this.isLoading = true
       this.form.updated_manager_name = this.hospitalManagerName
+      // eslint-disable-next-line no-undef
       axios
         .get(
           `/api/dashboard/hospital-situations/${this.$route.params.hospital_id}`

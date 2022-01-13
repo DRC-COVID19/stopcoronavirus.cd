@@ -84,65 +84,65 @@
 </template>
 
 <script>
-import Header from "../../components/hospital/Header";
-import ManagerUserName from "../../components/hospital/ManagerUserName";
-import { mapState, mapMutations } from "vuex";
+import Header from '../../components/hospital/Header'
+import ManagerUserName from '../../components/hospital/ManagerUserName'
+import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
     Header,
-    ManagerUserName,
+    ManagerUserName
   },
-  data() {
+  data () {
     return {
       fields: [
-        { key: "last_update", label: "Date" },
-        { key: "confirmed", label: "Confirmés" },
-        { key: "actions", label: "Actions" },
+        { key: 'last_update', label: 'Date' },
+        { key: 'confirmed', label: 'Confirmés' },
+        { key: 'actions', label: 'Actions' }
       ],
       hospitalSituations: {},
       ishospitalSituationLoading: false,
-      currentPage: 1,
-    };
+      currentPage: 1
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
-      hospitalManagerName: (state) => state.hospital.hospitalManagerName,
+      hospitalManagerName: (state) => state.hospital.hospitalManagerName
     }),
-    totalRows() {
+    totalRows () {
       if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.total;
+        return this.hospitalSituations.meta.total
       }
-      return null;
+      return null
     },
-    perPage() {
+    perPage () {
       if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.per_page;
+        return this.hospitalSituations.meta.per_page
       }
-      return 15;
-    },
+      return 15
+    }
   },
-  mounted() {
-    this.getHospitalSituations();
+  mounted () {
+    this.getHospitalSituations()
     if (!this.hospitalManagerName) {
-      this.$bvModal.show("nameModal");
+      this.$bvModal.show('nameModal')
     }
   },
   methods: {
-    ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
-    getHospitalSituations(page=1) {
-      this.ishospitalSituationLoading = true;
-      axios.get("/api/dashboard/hospital-situations",
-      {params : {page} }).then(({ data }) => {
-        this.hospitalSituations = data;
-        this.ishospitalSituationLoading = false;
-      });
+    ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
+    getHospitalSituations (page = 1) {
+      this.ishospitalSituationLoading = true
+      axios.get('/api/dashboard/hospital-situations',
+        { params: { page } }).then(({ data }) => {
+        this.hospitalSituations = data
+        this.ishospitalSituationLoading = false
+      })
     },
-    onPageChange(page) {
+    onPageChange (page) {
       this.getHospitalSituations(page)
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>

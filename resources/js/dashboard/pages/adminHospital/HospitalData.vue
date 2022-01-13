@@ -72,79 +72,79 @@
 </template>
 
 <script>
-import Header from "../../components/hospital/Header";
-import ManagerUserName from "../../components/hospital/ManagerUserName";
-import { mapState, mapMutations } from "vuex";
+import Header from '../../components/hospital/Header'
+import ManagerUserName from '../../components/hospital/ManagerUserName'
+import { mapState, mapMutations } from 'vuex'
 export default {
   components: {
     Header,
-    ManagerUserName,
+    ManagerUserName
   },
-  data() {
+  data () {
     return {
       fields: [
-        { key: "last_update", label: "Date" },
-        { key: "confirmed", label: "Confirmés" },
-        { key: "actions", label: "Actions" },
+        { key: 'last_update', label: 'Date' },
+        { key: 'confirmed', label: 'Confirmés' },
+        { key: 'actions', label: 'Actions' }
       ],
       hospitalSituations: {},
       ishospitalSituationLoading: false,
       currentPage: 1,
-      hospital: {},
-    };
+      hospital: {}
+    }
   },
   computed: {
     ...mapState({
-      user: (state) => state.auth.user,
+      user: (state) => state.auth.user
     }),
-    totalRows() {
+    totalRows () {
       if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.total;
+        return this.hospitalSituations.meta.total
       }
-      return null;
+      return null
     },
-    perPage() {
+    perPage () {
       if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.per_page;
+        return this.hospitalSituations.meta.per_page
       }
-      return 15;
-    },
+      return 15
+    }
   },
-  mounted() {
-    this.getHospitalSituations();
-    this.getHospital();
+  mounted () {
+    this.getHospitalSituations()
+    this.getHospital()
   },
   methods: {
-    ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
-    getHospitalSituations(page) {
-      if(typeof page == "undefined") page = 1
-      this.ishospitalSituationLoading = true;
+    ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
+    getHospitalSituations (page) {
+      if (typeof page === 'undefined') page = 1
+      this.ishospitalSituationLoading = true
       axios
         .get(
           `/api/dashboard/hospital-situations/by-hospital/${this.$route.params.hospital_id}`,
           {
-            params : {page}
+            params: { page }
           }
         )
         .then(({ data }) => {
-          this.hospitalSituations = data;
+          this.hospitalSituations = data
         })
         .finally(() => {
-          this.ishospitalSituationLoading = false;
-        });
+          this.ishospitalSituationLoading = false
+        })
     },
-    getHospital() {
+    getHospital () {
       axios
         .get(`/api/dashboard/hospitals-data/${this.$route.params.hospital_id}`)
         .then(({ data }) => {
-          this.hospital = data;
-        });
+          this.hospital = data
+        })
     },
-    onPageChange(page) {
+    onPageChange (page) {
       this.getHospitalSituations(page)
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>
