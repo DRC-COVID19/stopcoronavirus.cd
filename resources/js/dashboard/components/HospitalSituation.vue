@@ -377,8 +377,6 @@ export default {
     this.getSituationHospital(id)
     this.getHospitalSituationsAll()
     this.getFormSteps({ id: 3, page: 1 })
-    console.log('step', this.formSteps)
-    console.log('hospital', this.hospitalFilterField)
   },
   computed: {
     ...mapState({
@@ -409,36 +407,27 @@ export default {
         ]
       } else return null
     },
-    hospitalFilterField () {
-      const hospitalFilterTab = []
-      let i = 0
-      for (let j = 0; j < this.hospitalSituationAll.length; j++) {
-        if (i === 0) {
-          hospitalFilterTab.push(this.hospitalSituationAll[j])
-          i += 1
-        }
-      }
-      return hospitalFilterTab
-    },
+
     hospitalSituationReduced () {
-      const ids = []
+      const formStedIds = []
       this.hospitalSituationAll
         .slice()
         .sort((a, b) => a.form_step_id - b.form_step_id)
-        .forEach((t) => {
-          if (ids.every((i) => i.form_step_id != t.form_step_id)) {
-            ids.push({ form_step_id: t.form_step_id, form_step_title: t.form_step_title })
+        .forEach((prevItem) => {
+          if (formStedIds.every((nextItem) => nextItem.form_step_id !== prevItem.form_step_id)) {
+            formStedIds.push({ form_step_id: prevItem.form_step_id, form_step_title: prevItem.form_step_title })
           }
         })
-      const tabFinal = ids.map((i) => {
-        const final = {
-          form_step_id: i.form_step_id,
-          form_step_title: i.form_step_title
+
+      const hospitalSituations = formStedIds.map((item) => {
+        const hospitalSituation = {
+          form_step_id: item.form_step_id,
+          form_step_title: item.form_step_title
         }
-        final.form_field_values = this.hospitalSituationAll.filter(arr => arr.form_step_id == final.form_step_id)
-        return final
+        hospitalSituation.form_field_values = this.hospitalSituationAll.filter(item => item.form_step_id === hospitalSituation.form_step_id)
+        return hospitalSituation
       })
-      return tabFinal
+      return hospitalSituations
     }
   },
   watch: {
