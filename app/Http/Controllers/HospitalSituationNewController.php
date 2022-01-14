@@ -129,10 +129,14 @@ class HospitalSituationNewController extends Controller
             ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
             ->where('form_fields.name', '<>', 'EPI en manque')
             ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
-            ->select('form_fields.name as form_field_name', 
-            DB::raw('sum(CAST(hospital_situations_new.value as INT)) as form_field_value'),
-             'form_fields.form_step_id as form_step_id','form_steps.title as form_step_title')
-             ->groupBy('form_step_id','form_field_name','form_step_title')
+            ->select(
+                'form_fields.name as form_field_name',
+                DB::raw('sum(CAST(hospital_situations_new.value as INT)) as form_field_value'),
+                'form_fields.capacity as form_field_capacity',
+                'form_fields.form_step_id as form_step_id',
+                'form_steps.title as form_step_title'
+            )
+            ->groupBy('form_step_id','form_step_title', 'form_field_name', 'form_field_capacity')
             ->get();
         return $hospitalSituation;
     }

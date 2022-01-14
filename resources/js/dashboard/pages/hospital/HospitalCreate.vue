@@ -19,7 +19,7 @@
             <br />
             {{moment(form.last_update).format("DD.MM.Y")}}
           </h3>
-         
+
           <form-wizard
             :title="$route.params.hospital_id?'':targetForm.title"
             subtitle
@@ -141,7 +141,7 @@
                   </b-form-group>
               </b-row>
             </tab-content>
-           
+
           </form-wizard>
         </b-col>
       </b-row>
@@ -248,8 +248,7 @@ export default {
       }
       if (this.createSituation(this.formData)) {
         this.isLoading = false
-        // this.$bvModal.show('nameModal')
-        this.$router.push(`/hospitals/new/form_id/${this.$route.params.form_id}`)
+        this.$router.push('/hospitals')
       }
     },
 

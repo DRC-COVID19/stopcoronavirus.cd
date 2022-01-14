@@ -1,4 +1,3 @@
-/* eslint-disable no-trailing-spaces */
 <template>
   <b-container class="p-0">
     <b-row>
