@@ -1,3 +1,4 @@
+/* eslint-disable no-trailing-spaces */
 <template>
   <b-container class="p-0">
     <b-row>
@@ -21,10 +22,7 @@
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
-          <div>
 
-          </div>
-          <p>{{ hospitalSituationSorted}}</p>
           <div
             class="text-right text-black-50 col-12 col-md-6"
             v-if="lastUpdate && !isLoading"
@@ -45,6 +43,29 @@
       </b-col>
     </b-row>
     <b-row no-gutters>
+      <b-col cols="12" md="12" class="row no-gutters pr-1">
+        <skeleton-loading v-if="isLoading" class="mb-2">
+          <square-skeleton
+            :boxProperties="{
+              width: '100%',
+              height: '340px',
+            }"
+          ></square-skeleton>
+        </skeleton-loading>
+        <b-card class="col-10 default-card mb-2 offset-1"
+        v-else
+        v-for="(step, index) in hospitalSituationReduced"
+        :key="index">
+          <h5 class="bold">{{ step.form_step_title}}</h5>
+         <div
+         v-for="(item, key) in step.form_field_values"
+        :key="key">
+          <p>{{ item.form_field_name }} : <strong>{{ item.form_field_value}}</strong></p>
+         </div>
+        </b-card>
+      </b-col>
+    </b-row>
+    <!-- <b-row no-gutters>
       <b-col cols="12" md="6" class="row no-gutters pr-1">
         <skeleton-loading v-if="isLoading" class="mb-2">
           <square-skeleton
@@ -144,7 +165,7 @@
           <div>Para Médicaux: {{ parseData(hospital.para_medicals) }}</div>
         </b-card>
       </b-col>
-    </b-row>
+    </b-row> -->
 
     <b-row no-gutters class="mb-2">
       <b-col cols="12" md="6" class="pr-1">
@@ -400,8 +421,25 @@ export default {
       }
       return hospitalFilterTab
     },
-    hospitalSituationSorted () {
-      return this.hospitalSituationAll
+    hospitalSituationReduced () {
+      const ids = []
+      this.hospitalSituationAll
+        .slice()
+        .sort((a, b) => a.form_step_id - b.form_step_id)
+        .forEach((t) => {
+          if (ids.every((i) => i.form_step_id != t.form_step_id)) {
+            ids.push({ form_step_id: t.form_step_id, form_step_title: t.form_step_title })
+          }
+        })
+      const tabFinal = ids.map((i) => {
+        const final = {
+          form_step_id: i.form_step_id,
+          form_step_title: i.form_step_title
+        }
+        final.form_field_values = this.hospitalSituationAll.filter(arr => arr.form_step_id == final.form_step_id)
+        return final
+      })
+      return tabFinal
     }
   },
   watch: {
