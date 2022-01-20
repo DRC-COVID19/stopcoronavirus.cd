@@ -21,7 +21,11 @@
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
-          <p>{{ hospitalFilterField }}</p>
+          <export-excel  :data="hospitalFilterField"  name=" Rapport global">
+            <span style="cursor:pointer;">Télécharger les données
+            <Icon style="font-size:30px;" icon="vscode-icons:file-type-excel2" />
+            </span>
+          </export-excel>
           <div
             class="text-right text-black-50 col-12 col-md-6"
             v-if="lastUpdate && !isLoading"
@@ -326,9 +330,13 @@
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import { PALETTE } from "../config/env";
+import { Icon } from '@iconify/vue2';
 
 export default {
   props: ["hospitalTotalData"],
+  components: {
+		Icon,
+	},
   data() {
     return {
       lineCharts: [],
@@ -356,9 +364,9 @@ export default {
     const id = this.selectedHospital ? this.selectedHospital.id : null;
     this.getSituationHospital(id);
     this.getHospitalSituationsAll();
-    this.getFormSteps({ id: 3,page:1});
-    console.log('step', this.formSteps)
-    console.log('hospital', this.hospitalFilterField)
+    this.getFormSteps({ id: 3, page: 1 });
+    console.log("step", this.formSteps);
+    console.log("hospital", this.hospitalFilterField);
   },
   computed: {
     ...mapState({
@@ -391,16 +399,16 @@ export default {
         ];
       } else return null;
     },
-    hospitalFilterField () {
-      const hospitalFilterTab = []
-      let i = 0
+    hospitalFilterField() {
+      const hospitalFilterTab = [];
+      let i = 0;
       for (let j = 0; j < this.hospitalSituationAll.length; j++) {
         if (i === 0) {
-          hospitalFilterTab.push(this.hospitalSituationAll[j])
-          i += 1
+          hospitalFilterTab.push(this.hospitalSituationAll[j]);
+          i += 1;
         }
       }
-      return hospitalFilterTab
+      return hospitalFilterTab;
     },
   },
   watch: {
@@ -418,7 +426,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["getSituationHospital", "getHospitalSituationsAll","getFormSteps"]),
+    ...mapActions([
+      "getSituationHospital",
+      "getHospitalSituationsAll",
+      "getFormSteps",
+    ]),
     ...mapMutations(["selectHospital"]),
     paintStats(data) {
       const lastUpdates = data.last_update;
