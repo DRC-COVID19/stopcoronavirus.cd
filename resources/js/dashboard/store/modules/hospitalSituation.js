@@ -1,9 +1,8 @@
 import axios from 'axios'
-import { reject } from 'lodash'
 
 export default {
   state: {
-    hospitals: [],
+    hospitalsList: [],
     hospitalSituation: [],
     isLoading: false,
     isCreating: false,
@@ -24,7 +23,7 @@ export default {
       state.hospitalSituationAll = payload
     },
     SET_HOSPITALS (state, payload) {
-      state.hospitals = payload
+      state.hospitalsList = payload
     }
   },
   actions: {
@@ -85,24 +84,24 @@ export default {
             commit('SET_IS_LOADING', false)
           })
       })
+    },
+    getHospitals ({ state, commit }) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios
+          .get('api/dashboard/hospitals-data')
+          .then(({ data }) => {
+            commit('SET_HOSPITALS', data)
+            commit('SET_IS_LOADING', false)
+            resolve(true)
+          })
+          .catch(response => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
     }
-  },
-  getHospitals ({ state, commit }) {
-    commit('SET_IS_LOADING', true)
-    return new Promise((resolve, reject) => {
-      axios
-        .get('api/dashboard/hospitals-data')
-        .then(({ data }) => {
-          commit('SET_HOSPITALS', data)
-          commit('SET_IS_LOADING', false)
-          resolve(true)
-        })
-        .catch(response => {
-          reject(response)
-        })
-        .finally(() => {
-          commit('SET_IS_LOADING', false)
-        })
-    })
   }
 }
