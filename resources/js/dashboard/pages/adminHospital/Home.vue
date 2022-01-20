@@ -59,51 +59,51 @@
   </div>
 </template>
 <script>
-import Header from "../../components/hospital/Header";
+import Header from '../../components/hospital/Header'
 export default {
   components: {
-    Header,
+    Header
   },
-  data() {
+  data () {
     return {
       updateData: [],
       fields: [
         { key: "statut", label: "Statut" },
         { key: "last_update", label: "Date" },
-        { key: "name", label: "Centre" },
+        { key: "name", label: "CTCO" },
         { key: "confirmed", label: "Confirmés" },
         { key: "actions", label: "Actions" },
       ],
-      isLoading: false,
-    };
+      isLoading: false
+    }
   },
-  mounted() {
-    this.getData();
+  mounted () {
+    this.getData()
   },
   methods: {
-    getData() {
-      this.isLoading = true;
+    getData () {
+      this.isLoading = true
       axios
-        .get("api/dashboard/hospital-situations/agent-last-update")
+        .get('api/dashboard/hospital-situations/agent-last-update')
         .then(({ data }) => {
-          this.updateData = data;
+          this.updateData = data
         })
         .finally(() => {
-          this.isLoading = false;
-        });
+          this.isLoading = false
+        })
     },
-    getColor(date){
+    getColor (date) {
       const dateFormat = this.moment(date)
       const curDate = this.moment(new Date())
 
       const diffDay = curDate.diff(dateFormat, 'days')
 
-      if(diffDay < 8) return '#8BC34A' //green
-      else if(diffDay < 10) return '#FFEB3B' //yellow
-      else return '#F44336' //red
+      if (diffDay < 8) return '#8BC34A' // green
+      else if (diffDay < 10) return '#FFEB3B' // yellow
+      else return '#F44336' // red
     }
-  },
-};
+  }
+}
 </script>
 
 <style>
