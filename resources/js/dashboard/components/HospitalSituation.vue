@@ -21,7 +21,7 @@
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
-          <export-excel  :data="hospitalSituationAll">
+          <export-excel  :data="hospitalSituationReduced">
             <span style="cursor:pointer;">Télécharger les données
             <Icon style="font-size:30px;" icon="vscode-icons:file-type-excel2" />
             </span>
@@ -362,6 +362,7 @@ export default {
       lineCharts: [],
       etatGlobal: true,
       dataGlobal: null,
+      hospitalSituationStringify: null,
       chartLabels: [
         {
           title: "Evolution du taux d'occupation des respirateurs",
@@ -416,17 +417,6 @@ export default {
           this.dataGlobal.last_update.length - 1
         ]
       } else return null
-    },
-    hospitalFilterField() {
-      const hospitalFilterTab = [];
-      let i = 0;
-      for (let j = 0; j < this.hospitalSituationAll.length; j++) {
-        if (i === 0) {
-          hospitalFilterTab.push(this.hospitalSituationAll[j]);
-          i += 1;
-        }
-      }
-      return hospitalFilterTab;
     },
     hospitalSituationReduced () {
       const ids = []
