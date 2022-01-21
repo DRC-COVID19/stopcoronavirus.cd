@@ -6,7 +6,9 @@ export default {
     hospitalSituation: [],
     isLoading: false,
     isCreating: false,
-    hospitalSituationAll: []
+    hospitalSituationAll: [],
+    observation_start: null,
+    observation_end: null
   },
 
   mutations: {
@@ -31,6 +33,7 @@ export default {
       commit('SET_IS_CREATING', true)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
+        console.log('store:', payload)
         axios
           .post('api/dashboard/hospital-situations-new', payload)
           .then(({ data }) => {
@@ -39,7 +42,6 @@ export default {
             resolve(true)
           })
           .catch(response => {
-            console.log(response)
             reject(response)
           })
           .finally(() => {
@@ -102,6 +104,39 @@ export default {
             commit('SET_IS_LOADING', false)
           })
       })
+    },
+    gethospitalsFiltered ({ state, commit }, payload) {
+      commit('SET_IS_LOADING', payload.isLoading)
+      if (payload) {
+        if (payload.observation_end) {
+          state.observation_end = payload.observation_end
+        }
+        if (payload.observation_start) {
+          state.observation_start = payload.observation_start
+        }
+        state.township = payload.township
+        return new Promise((resolve, reject) => {
+          axios
+            .get('api/dashboard/hospitalsFiltered', {
+              params: {
+                observation_end: payload.observation_end || null,
+                observation_start: payload.observation_start || null,
+                hospital: payload.hospital
+              }
+            })
+            .then(({ data }) => {
+              commit('SET_ALL_HOSPITAL_SITUATION', data)
+              commit('SET_IS_LOADING', false)
+              resolve(true)
+            })
+            .catch(response => {
+              reject(response)
+            })
+            .finally(() => {
+              commit('SET_IS_LOADING', false)
+            })
+        })
+      }
     }
   }
 }

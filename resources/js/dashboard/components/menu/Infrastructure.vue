@@ -4,12 +4,12 @@
       <b-form-row>
         <b-col cols="12" md="4" class="nav-zone pl-3 pr-3">
           <b-form-group>
-            <label for class="text-dash-color">Séléctionner un CTCO</label>
+            <label for class="text-dash-color">Commune</label>
             <v-select
-              v-model="form.hospital"
-              :options="hospitalList"
+              v-model="form.township"
+              :options="townshipList"
               label="name"
-              placeholder="CTO"
+              placeholder="Commune"
               :reduce="(item) => item.id"
               class="style-chooser"
             />
@@ -64,81 +64,71 @@
 </template>
 
 <script>
-import DateRangePicker from 'vue2-daterange-picker'
-import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from '../../config/env'
-import { mapState, mapActions } from 'vuex'
+import DateRangePicker from "vue2-daterange-picker";
+import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env";
+import {mapState,mapActions} from "vuex"
 export default {
   props: {
     hospitalCount: {
       type: Number,
-      default: null
+      default: null,
     },
     townships: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
-    hospitals: {
-      type: Array,
-      default: () => []
-    }
   },
   components: {
-    DateRangePicker
+    DateRangePicker,
   },
-  data () {
+  data() {
     return {
       form: {
-        observation_end: moment().format('YYYY-MM-DD'),
+        observation_end: moment().format("YYYY-MM-DD"),
         observation_start: INFRASTRUCTURE_FIRST_UPDATE,
         township: 0,
-        hospital: 0
       },
       dateRangeObservation: {
         startDate: new Date(INFRASTRUCTURE_FIRST_UPDATE),
-        endDate: new Date()
+        endDate: new Date(),
       },
       min_date: new Date(INFRASTRUCTURE_FIRST_UPDATE),
-      defaultTownship: [{ id: 0, name: 'Tous' }],
-      defaultHospitals: [{ id: 0, name: 'Tous' }]
-    }
+      defaultTownship: [{ id: 0, name: "Tous" }],
+      hospitals:[],
+    };
   },
   filters: {
     date: (val) => {
-      return val ? moment(val).format('DD.MM.YYYY') : ''
-    }
+      return val ? moment(val).format("DD.MM.YYYY") : "";
+    },
   },
   methods: {
-    hospitalToggle (checked) {
-      this.$emit('hopitalChecked', checked)
+    hospitalToggle(checked) {
+      this.$emit("hopitalChecked", checked);
     },
-    UpdateObservationDate ({ startDate, endDate }) {
-      this.form.observation_start = moment(startDate).format('YYYY-MM-DD')
-      this.form.observation_end = moment(endDate).format('YYYY-MM-DD')
+    UpdateObservationDate({ startDate, endDate }) {
+      this.form.observation_start = moment(startDate).format("YYYY-MM-DD");
+      this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
     },
-    dateRangerPosition (dropdownList, component, { width, top, left, right }) {
-      dropdownList.style.top = `${top}px`
-      dropdownList.style.left = `${left + 180}px`
+    dateRangerPosition(dropdownList, component, { width, top, left, right }) {
+      dropdownList.style.top = `${top}px`;
+      dropdownList.style.left = `${left + 180}px`;
     },
-    clearObservationDate () {
-      this.dateRangeObservation = { startDate: null, endDate: null }
-      this.form.observation_end = null
-      this.form.observation_start = null
+    clearObservationDate() {
+      this.dateRangeObservation = { startDate: null, endDate: null };
+      this.form.observation_end = null;
+      this.form.observation_start = null;
     },
-    submit () {
-      this.$emit('submitInfrastructureForm', this.form)
-    }
+    submit() {
+      this.$emit("submitInfrastructureForm", this.form);
+    },
   },
   computed: {
-    townshipList () {
-      return [...this.defaultTownship, ...this.townships]
+    townshipList() {
+      return [...this.defaultTownship, ...this.townships];
     },
-     hospitalList () {
-      return [...this.defaultHospitals, ...this.hospitals]
-    }
-
-  }
-
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>

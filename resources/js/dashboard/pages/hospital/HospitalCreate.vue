@@ -65,7 +65,9 @@
                          v-model="item.default_value"
                         :placeholder="`Entrer ${item.name}`"
                         @change="handelChange(item.id,item.default_value,item.name,step.id)"
-                        :id="item.name">
+                        :id="item.name"
+                        required
+                        >
                       </b-form-input>
                     </b-col>
                   </b-row>
@@ -74,7 +76,7 @@
               </b-row>
             </tab-content>
             <tab-content v-if="formFieldNullStepSorted.length > 0">
-                  <h3 class="mb-4 text-center">Champs affectés à aucune étape</h3>
+              <h3 class="mb-4 text-center">Champs affectés à aucune étape</h3>
                 <b-row align-h="center" >
                 <b-col cols="12" md="8">
                  <b-form-group
@@ -254,14 +256,15 @@ export default {
 
     createSituation (formData) {
       for (const [key, value] of formData) {
-        this.formDataFormatted.push({ form_field_id: key, value })
+        this.formDataFormatted.push({ form_field_id: key, value, last_update: this.form.last_update })
       }
+
       if (this.formDataFormatted.length > 0) {
         this.formDataFormatted.forEach(item => {
           this.createHospitalSituation({
             value: item.value,
             form_field_id: item.form_field_id,
-            last_update: this.form.last_update
+            last_update: item.last_update
           })
         })
         return true

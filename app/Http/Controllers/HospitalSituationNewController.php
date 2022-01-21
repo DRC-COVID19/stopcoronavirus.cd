@@ -19,10 +19,12 @@ class HospitalSituationNewController extends Controller
      */
     public function index()
     {
+      
         try {
 
             $hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
 
+       
             return HospitalSituationNewResource::collection($hospitalSituation);
         } catch (\Throwable $th) {
 
@@ -44,7 +46,7 @@ class HospitalSituationNewController extends Controller
     {
         $data = $this->validator($request->all());
         try {
-            $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
+            $data['hospital_id'] = $this->guard()->user()->hospitalManager->id();
 
             $hospitalSituationNew = HospitalSituationNew::create($data);
 
