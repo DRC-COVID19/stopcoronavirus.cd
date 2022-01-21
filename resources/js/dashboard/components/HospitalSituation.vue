@@ -21,7 +21,7 @@
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
-          <export-excel  :data="hospitalSituationReduced">
+          <export-excel  :data ="hospitalSituationData" >
             <span style="cursor:pointer;">Télécharger les données
             <Icon style="font-size:30px;" icon="vscode-icons:file-type-excel2" />
             </span>
@@ -437,7 +437,19 @@ export default {
         return final
       })
       return tabFinal
-    }
+    }, 
+    hospitalSituationData () {
+      const hospitalSituationAllSlice = this.hospitalSituationAll.slice()
+      const monObj = {}
+      const hospitalSituationFiltered=[];
+      for (const hospital of hospitalSituationAllSlice) {
+        monObj[hospital.form_field_name] = hospital.form_field_value;
+      }
+      hospitalSituationFiltered.push(monObj);
+      console.log("monObj",this.hospitalSituationAll);
+      return hospitalSituationFiltered;
+    },
+
   },
   watch: {
     hospitalData () {
