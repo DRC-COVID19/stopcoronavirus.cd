@@ -588,7 +588,6 @@ export default {
               backgroundColor: PALETTE.dash_green,
               borderColor: PALETTE.dash_green,
               data: Respirators.map((x) => (x == 0 ? null : x)),
-              fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
@@ -650,7 +649,7 @@ export default {
               label: 'Lits de réanimation occupés',
               backgroundColor: PALETTE.dash_green,
               borderColor: PALETTE.dash_green,
-              data: Resuscitation_beds.map((x) => (x == 0 ? null : x)),
+              data: Resuscitation_beds.map((x) => (x === 0 ? null : x)),
               fill: false,
               interpolate: true,
               showLine: true,
@@ -662,7 +661,7 @@ export default {
               backgroundColor: PALETTE.dash_red,
               borderColor: PALETTE.dash_red,
               data: data.occupied_resuscitation_beds.map((x, i) => {
-                if (x == 0) return null
+                if (x === 0) return null
                 if (
                   !+Resuscitation_beds[i] ||
                   (!+Resuscitation_beds[i - 1] &&
