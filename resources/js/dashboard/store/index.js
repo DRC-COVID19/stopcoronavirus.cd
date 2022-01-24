@@ -12,7 +12,7 @@ import form from './modules/form'
 import formFieldType from './modules/formFieldType'
 import formField from './modules/formField'
 import formStep from './modules/formStep'
-import hospitalSituation from './modules/hospitalsituation'
+import hospitalSituation from './modules/hospitalSituation'
 
 Vue.use(Vuex)
 

@@ -66,6 +66,7 @@
 <script>
 import DateRangePicker from "vue2-daterange-picker";
 import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env";
+import {mapState,mapActions} from "vuex"
 export default {
   props: {
     hospitalCount: {
@@ -93,6 +94,7 @@ export default {
       },
       min_date: new Date(INFRASTRUCTURE_FIRST_UPDATE),
       defaultTownship: [{ id: 0, name: "Tous" }],
+      hospitals:[],
     };
   },
   filters: {

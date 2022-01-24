@@ -1,9 +1,14 @@
+import axios from "axios";
+
 export default {
   state: {
+    hospitalsList: [],
     hospitalSituation: [],
     isLoading: false,
     isCreating: false,
     hospitalSituationAll: [],
+    observation_start: null,
+    observation_end: null,
   },
 
   mutations: {
@@ -16,8 +21,11 @@ export default {
     SET_IS_CREATING(state, payload) {
       state.isCreating = payload;
     },
-    SET_ALL_HOSPITAL(state, payload) {
+    SET_ALL_HOSPITAL_SITUATION(state, payload) {
       state.hospitalSituationAll = payload;
+    },
+    SET_HOSPITALS(state, payload) {
+      state.hospitalsList = payload;
     },
   },
   actions: {
@@ -25,6 +33,7 @@ export default {
       commit("SET_IS_CREATING", true);
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
+        console.log("store:", payload);
         axios
           .post("api/dashboard/hospital-situations-new", payload)
           .then(({ data }) => {
@@ -33,7 +42,6 @@ export default {
             resolve(true);
           })
           .catch((response) => {
-            console.log(response);
             reject(response);
           })
           .finally(() => {
@@ -67,7 +75,7 @@ export default {
         axios
           .get("api/dashboard/get-hospital-situations-all")
           .then(({ data }) => {
-            commit("SET_ALL_HOSPITAL", data);
+            commit("SET_ALL_HOSPITAL_SITUATION", data);
             commit("SET_IS_LOADING", false);
             resolve(true);
           })
@@ -75,7 +83,44 @@ export default {
             reject(response);
           })
           .finally(() => {
-            commit("SET_IS_CREATING", false);
+            commit("SET_IS_LOADING", false);
+          });
+      });
+    },
+    getHospitals({ state, commit }) {
+      commit("SET_IS_LOADING", true);
+      return new Promise((resolve, reject) => {
+        axios
+          .get("api/dashboard/hospitals-data")
+          .then(({ data }) => {
+            commit("SET_HOSPITALS", data);
+            commit("SET_IS_LOADING", false);
+            resolve(true);
+          })
+          .catch((response) => {
+            reject(response);
+          })
+          .finally(() => {
+            commit("SET_IS_LOADING", false);
+          });
+      });
+    },
+    gethospitalsFiltered({ state, commit }, payload) {
+      commit("SET_IS_LOADING", payload.isLoading);
+      return new Promise((resolve, reject) => {
+        axios
+          .post("http://127.0.0.1:8000/api/dashboard/get-situations", payload)
+          .then(({ data }) => {
+            commit("SET_ALL_HOSPITAL_SITUATION", data);
+            commit("SET_IS_LOADING", false);
+            resolve(true);
+            console.log("hospital filter", data);
+          })
+          .catch((response) => {
+            reject(response);
+          })
+          .finally(() => {
+            commit("SET_IS_LOADING", false);
           });
       });
     },
