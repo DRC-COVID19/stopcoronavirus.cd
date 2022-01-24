@@ -46,7 +46,7 @@ class HospitalSituationNewController extends Controller
     {
         $data = $this->validator($request->all());
         try {
-            $data['hospital_id'] = $this->guard()->user()->hospitalManager->id();
+            $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
 
             $hospitalSituationNew = HospitalSituationNew::create($data);
 
@@ -156,64 +156,22 @@ class HospitalSituationNewController extends Controller
               }
               return response($th->getMessage())->setStatusCode(500);
           }
+          
     }
-
        /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-
-    public function getSituationsByHospital(Request $request)
-    {
-        try{
-
-        $hospitalSituation = DB::table('hospital_situations_new')
-        ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-        ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-        ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-        ->where('hospital_situations_new.hospital_id', '=', $request->query('hospital_id'))
-        ->where('form_fields.name', '<>', 'EPI en manque')
-        ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
-        ->select(
-             'form_fields.name as form_field_name',
-            DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as form_field_value'),
-            'form_fields.capacity as form_field_capacity',
-            'form_fields.form_step_id as form_step_id',
-            'form_steps.title as form_step_title'
-        )
-        ->groupBy('form_step_id','form_step_title', 'form_field_name', 'form_field_capacity')
-        ->get();
-
-
-        return response()->json($hospitalSituation,200,[],JSON_NUMERIC_CHECK);
-    } catch (\Throwable $th) {
-        if (env('APP_DEBUG') == true) {
-            return response($th)->setStatusCode(500);
-        }
-        return response($th->getMessage())->setStatusCode(500);
-    }
-      
-    }
-
-       /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function getSituations($hospital = null, $request)
+    public function getSituations(Request $request)
     {
            
             $observation_end = $request->query('observation_end') ;
             $observation_start = $request->query('observation_start') ;
             $township = $request->query('township') ;
-            // $lastUpdate='2022-01-14';
-            // $observation_start='2022-01-10';
-            // $observation_end='2022-01-18';
-            // $hospital='2';
-            // $township='21';
+            $hospital=$request->query('hospital');
+    
             try{
             // On réccupère toutes les dates où une mise à jour a pu etre poster
             // Surtout utile pour l'evolution globale
@@ -247,8 +205,6 @@ class HospitalSituationNewController extends Controller
                 })
             ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
             ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-            ->where('form_fields.name', '=', 'Nombre des respirateurs réservés pour des cas COVID-19')
-            ->orWhere('form_fields.name', '=', 'Nombre des lits de réanimation occupés par des cas COVID-19')
             ->where('form_fields.name', '<>', 'EPI en manque')
             ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
             ->select(
