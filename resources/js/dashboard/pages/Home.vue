@@ -1696,7 +1696,7 @@ export default {
       this.setCanShowNavMobile(false)
       values.isLoading = true
       this.getHospitalsData(values)
-      this.gethospitalsFiltered(values)
+    
     },
     seeSide () {
       this.$bvModal.show('data-modal')

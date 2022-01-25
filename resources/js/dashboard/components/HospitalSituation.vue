@@ -15,7 +15,7 @@
             class="col-12 col-md-6 mb-3 mb-md-0 m-0 d-flex align-items-baseline"
             v-if="!isLoading"
           >
-            <span>{{ hospital.name || "Rapport global" }}</span>
+            <span>{{ hospital.name || "Rapport global"}}</span>
             <b-badge v-if="hospitalCount" style="font-size: 12px" class="ml-2">
               {{ hospitalCount }}
               <small>infrastructure(s)</small>
@@ -62,15 +62,19 @@
         <b-card
           class="col-10 default-card mb-2 offset-1"
           v-else
-          v-for="(step, index) in hospitalSituationReduced"
-          :key="index"
         >
-          <h5 class="bold">{{ step.form_step_title }}</h5>
-          <div v-for="(item, key) in step.form_field_values" :key="key">
-            <p>
-              {{ item.form_field_name }} :
-              <strong>{{ item.form_field_value }}</strong>
-            </p>
+          <div v-if="isGlobal" v-for="(step, index) in hospitalSituationReduced"
+            :key="index">
+            <h5 class="bold">{{ step.form_step_title }}</h5>
+            <div v-for="(item, key) in step.form_field_values" :key="key">
+              <p>
+                {{ item.form_field_name }} :
+                <strong>{{ item.form_field_value }}</strong>
+              </p>
+            </div>
+          </div>
+          <div v-else>
+
           </div>
         </b-card>
       </b-col>
@@ -463,6 +467,7 @@ export default {
     selectedHospital(val) {
       const id = val ? val.id : null;
       this.getSituationHospital(id);
+     this.gethospitalsFiltered(id);
     },
     situationHospital(val) {
       this.dataGlobal = val;
@@ -474,6 +479,7 @@ export default {
       "getSituationHospital",
       "getHospitalSituationsAll",
       "getFormSteps",
+      "gethospitalsFiltered"
     ]),
     ...mapMutations(["selectHospital"]),
     paintStats(data) {
@@ -863,6 +869,7 @@ export default {
       }
     },
     backToTotalData() {
+      console.log("select hospital",this.selectHospital(null))
       this.selectHospital(null);
     },
     parseData(data) {
