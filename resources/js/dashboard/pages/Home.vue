@@ -220,7 +220,7 @@
                   v-if="(hospitalCount != null || isLoading) && activeMenu == 5"
                   :active="!!selectedHospital || activeMenu == 5"
                 >
-                  <HospitalSituation :hospitalTotalData="hospitalTotalData" />
+                  <HospitalSituation  :hospitalSituationAll="hospitalSituationAll"/>
                 </b-tab>
               </b-tabs>
             </transition>
@@ -544,7 +544,10 @@ export default {
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
       canShowNavMobile: (state) => state.app.canShowNavMobile,
       fluxType: (state) => state.flux.fluxType,
-      hospitalsList: (state) => state.hospitalSituation.hospitalsList
+      hospitalsList: (state) => state.hospitalSituation.hospitalsList,
+      hospitalSituationAll: (state) =>
+        state.hospitalSituation.hospitalSituationAll,
+      isLoading:(state)=> state.hospitalSituation.isLoading,
     }),
     canShowMapMobile () {
       if (this.isSmOrMd) {
@@ -688,6 +691,8 @@ export default {
     this.$set(this.loadings, 'provinceGeo', true)
     this.$set(this.loadings, 'hotspotGeo', true)
     this.$set(this.loadings, 'hotspotPointGeo', true)
+    this.getHospitalSituationsAll()
+    this.initForm()
 
     this.getFluxZone()
     if (this.healthZones.length == 0) {
@@ -764,7 +769,8 @@ export default {
       'getFluxHotSpot',
       'getSituationHospital',
       'getHospitals',
-      'gethospitalsFiltered'
+      'gethospitalsFiltered',
+      'getHospitalSituationsAll'
     ]),
     ...mapMutations([
       'setMapStyle',
@@ -1692,11 +1698,16 @@ export default {
           this.$set(this.loadings, 'urlFluxTIme30', false)
         })
     },
+    initForm () {
+     this.setCanShowNavMobile(false)
+     this.isLoading = true
+    },
     submitInfrastructureForm (values) {
       this.setCanShowNavMobile(false)
       values.isLoading = true
-      this.getHospitalsData(values)
+      // this.getHospitalsData(values)
       this.gethospitalsFiltered(values)
+      this.initForm()
     },
     seeSide () {
       this.$bvModal.show('data-modal')

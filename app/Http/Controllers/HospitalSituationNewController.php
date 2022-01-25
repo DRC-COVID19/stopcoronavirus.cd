@@ -133,6 +133,8 @@ class HospitalSituationNewController extends Controller
     public function getSituationHospitalsAll()
     {
         try {
+            $results['formFieldsFiltered'] = [];
+            $results['allFormFields'] = [];
             $hospitalSituation = DB::table('hospital_situations_new')
                 ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
                 ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
@@ -148,8 +150,29 @@ class HospitalSituationNewController extends Controller
                 ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
                 ->get();
 
+                $formFieldsFiltered = DB::table('hospital_situations_new')
+                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+                ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
+                ->where('form_fields.name', '=', 'Nombre des cures de vitamine C disponible')
+                ->orWhere('form_fields.name', '=', 'Nombre des ventilateurs de réanimation occupés par des cas COVID-19')
+                ->where('form_fields.name', '<>', 'EPI en manque')
+                ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
+                ->select(
+                    'form_fields.name as form_field_name',
+                    'hospital_situations_new.value as form_field_value',
+                    'hospital_situations_new.last_update as last_update',
+                    'form_fields.capacity as form_field_capacity',
+                    'form_fields.form_step_id as form_step_id',
+                    'form_steps.title as form_step_title',
+                    'form_fields.id as form_field_id'
+                )
+                // ->groupBy('form_field_id','form_field_name','form_field_value','hospital_situations_new.last_update','form_field_capacity','form_step_id','form_step_title')
+                ->get();
 
-            return response()->json($hospitalSituation, 200, [], JSON_NUMERIC_CHECK);
+                $results['formFieldsFiltered'] = $formFieldsFiltered;
+                $results['allFormFields'] = $hospitalSituation;
+
+            return response()->json($results, 200, [], JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -205,15 +228,11 @@ class HospitalSituationNewController extends Controller
     public function getSituations(Request $request)
     {
 
-        $observation_end = $request->query('observation_end');
-        $observation_start = $request->query('observation_start');
-        $township = $request->query('township');
-        $hospital = $request->query('hospital');
-        // $lastUpdate='2022-01-14';
-        // $observation_start='2022-01-10';
-        // $observation_end='2022-01-18';
-        // $hospital='2';
-        // $township='21';
+        $observation_end = $request->input('observation_end');
+        $observation_start = $request->input('observation_start');
+        $township = $request->input('township');
+        $hospital = $request->input('hospital');
+       
         try {
             // On réccupère toutes les dates où une mise à jour a pu etre poster
             // Surtout utile pour l'evolution globale
