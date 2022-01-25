@@ -775,27 +775,27 @@ export default {
       }
     },
     createSituationsReduce (array = []) {
-      const formFieldIds = []
+      const formIds = []
       if (array.length > 0) {
         array?.slice()
-          .sort((a, b) => a.form_step_id - b.form_step_id)
-          .forEach((t) => {
-            if (formFieldIds.every((i) => i.form_step_id != t.form_step_id)) {
-              formFieldIds.push({
-                form_step_id: t.form_step_id,
-                form_step_title: t.form_step_title
+          .sort((prevFormItem, nextFormItem) => prevFormItem.form_step_id - nextFormItem.form_step_id)
+          .forEach((item) => {
+            if (formIds.every((form) => form.form_step_id !== item.form_step_id)) {
+              formIds.push({
+                form_step_id: item.form_step_id,
+                form_step_title: item.form_step_title
               })
             }
           })
-        const formStepsList = formFieldIds.map((i) => {
-          const formStep = {
-            form_step_id: i.form_step_id,
-            form_step_title: i.form_step_title
+        const formStepsList = formIds.map((form) => {
+          const form = {
+            form_step_id: form.form_step_id,
+            form_step_title: form.form_step_title
           }
-          formStep.form_field_values = array.filter(
-            (arr) => arr.form_step_id == formStep.form_step_id
+          form.form_field_values = array.filter(
+            (value) => value.form_step_id === form.form_step_id
           )
-          return formStep
+          return form
         })
         return formStepsList
       }
