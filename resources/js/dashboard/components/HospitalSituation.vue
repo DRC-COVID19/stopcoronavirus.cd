@@ -788,14 +788,14 @@ export default {
             }
           })
         const formStepsList = formIds.map((form) => {
-          const form = {
+          const formStep = {
             form_step_id: form.form_step_id,
             form_step_title: form.form_step_title
           }
-          form.form_field_values = array.filter(
-            (value) => value.form_step_id === form.form_step_id
+          formStep.form_field_values = array.filter(
+            (arr) => arr.form_step_id == formStep.form_step_id
           )
-          return form
+          return formStep
         })
         return formStepsList
       }
