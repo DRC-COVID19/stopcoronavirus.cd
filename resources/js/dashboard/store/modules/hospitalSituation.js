@@ -9,6 +9,7 @@ export default {
     hospitalSituationAll: [],
     observation_start: null,
     observation_end: null,
+    hospitalSituationSelected: [],
   },
 
   mutations: {
@@ -26,6 +27,9 @@ export default {
     },
     SET_HOSPITALS(state, payload) {
       state.hospitalsList = payload;
+    },
+    SET_SITUATION(state, payload) {
+      state.hospitalSituationSelected = payload;
     },
   },
   actions: {
@@ -111,7 +115,7 @@ export default {
         axios
           .post("http://127.0.0.1:8000/api/dashboard/get-situations", payload)
           .then(({ data }) => {
-            commit("SET_ALL_HOSPITAL_SITUATION", data);
+            commit("SET_SITUATION", data);
             commit("SET_IS_LOADING", false);
             resolve(true);
             console.log("hospital filter", data);

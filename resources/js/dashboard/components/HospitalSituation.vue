@@ -59,12 +59,13 @@
             }"
           ></square-skeleton>
         </skeleton-loading>
-        <b-card
+        <div  v-else>
+          <b-card
           class="col-10 default-card mb-2 offset-1"
-          v-else
-        >
-          <div v-if="isGlobal" v-for="(step, index) in hospitalSituationReduced"
+          v-if="isGlobal" 
+          v-for="(step, index) in hospitalSituationReduced"
             :key="index">
+
             <h5 class="bold">{{ step.form_step_title }}</h5>
             <div v-for="(item, key) in step.form_field_values" :key="key">
               <p>
@@ -72,11 +73,11 @@
                 <strong>{{ item.form_field_value }}</strong>
               </p>
             </div>
-          </div>
-          <div v-else>
-
-          </div>
         </b-card>
+          <b-card v-else  class="col-10 default-card mb-2 offset-1">
+
+          </b-card>
+        </div>
       </b-col>
     </b-row>
     <!-- <b-row no-gutters>
@@ -366,6 +367,7 @@ export default {
       etatGlobal: true,
       dataGlobal: null,
       objetChart: {},
+      hospital_id: 0,
       chartLabels: [
         {
           title: "Evolution du taux d'occupation des respirateurs",
@@ -389,6 +391,8 @@ export default {
     this.getSituationHospital(id);
     this.getHospitalSituationsAll();
     this.getFormSteps({ id: 3, page: 1 });
+     console.log("this.hospital_id = ", this.hospital_id);
+    // this.gethospitalsFiltered(this.hospital_id);
   },
   computed: {
     ...mapState({
@@ -402,6 +406,7 @@ export default {
       formSteps: (state) => state.formStep.formSteps,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,
+      hospitalSituationSelected: (state) => state.hospitalSituation.hospitalSituationSelected
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;
@@ -458,6 +463,9 @@ export default {
       console.log("monObj", this.hospitalSituationAll);
       return hospitalSituationFiltered;
     },
+    hospitalSituationFiltered(){
+      
+    }
   },
   watch: {
     hospitalData() {
@@ -467,12 +475,18 @@ export default {
     selectedHospital(val) {
       const id = val ? val.id : null;
       this.getSituationHospital(id);
-     this.gethospitalsFiltered(id);
+      this.hospital_id = id;
+      this.gethospitalsFiltered(val);
+      console.log("gethospitalsFiltered",this.gethospitalsFiltered(val));
     },
     situationHospital(val) {
       this.dataGlobal = val;
       this.paintStats(val);
+
     },
+    hospitalSituationAll(){
+      this.gethospitalsFiltered();
+    }
   },
   methods: {
     ...mapActions([
@@ -869,7 +883,7 @@ export default {
       }
     },
     backToTotalData() {
-      console.log("select hospital",this.selectHospital(null))
+      //console.log("select hospital",this.selectHospital(null))
       this.selectHospital(null);
     },
     parseData(data) {
