@@ -39,6 +39,17 @@
             >
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
+            <div v-b-modal.modal-center style="cursor: pointer" class="position-relative nav-item d-flex align-items-center">
+                 <span>
+                <Icon
+                  style="font-size: 30px"
+                  icon="vscode-icons:file-type-excel2"
+                />
+              </span>
+              </div>
+            <!-- <export-excel data="" name="filename.xls" class="position-relative nav-item d-flex align-items-center">
+              
+            </export-excel> -->
             <li class="position-relative nav-item d-flex align-items-center">
               <a
                 class="nav-link"
@@ -135,13 +146,21 @@
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
+      <b-modal id="modal-center" centered hide-footer hide-header title="BootstrapVue">
+        <p class="my-4">Vertically centered modal!</p>
+      </b-modal>
     </b-col>
   </b-row>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import { Icon } from '@iconify/vue2'
+
 export default {
+  components:{
+    Icon
+  },
   data () {
     return {
       showUserCard: false,
