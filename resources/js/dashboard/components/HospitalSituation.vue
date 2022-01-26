@@ -390,7 +390,6 @@ export default {
     this.getSituationHospital(id);
     this.getHospitalSituationsAll();
     this.getFormSteps({ id: 3, page: 1 });
-     console.log("this.hospital_id = ", this.hospital_id);
     // this.gethospitalsFiltered(this.hospital_id);
   },
   computed: {
