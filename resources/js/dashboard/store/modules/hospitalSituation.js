@@ -4,14 +4,13 @@ export default {
   state: {
     hospitalsList: [],
     hospitalSituation: [],
+    filterdHospitalSituation: [],
     isLoading: false,
     isCreating: false,
     hospitalSituationAll: [],
     observation_start: null,
     observation_end: null,
     hospitalSituationSelected: [],
-    observation_end: null,
-    observation_start: null,
   },
 
   mutations: {
@@ -27,8 +26,8 @@ export default {
     SET_ALL_HOSPITAL_SITUATION(state, payload) {
       state.hospitalSituationAll = payload;
     },
-    SET_HOSPITALS(state, payload) {
-      state.hospitalsList = payload;
+    SET_FILTERED_HOSPITAL_SITUATION(state, payload) {
+      state.filterdHospitalSituation = payload;
     },
     SET_SITUATION(state, payload) {
       state.hospitalSituationSelected = payload;
@@ -36,6 +35,9 @@ export default {
     SET_OBSERVATION(state, payload) {
       state.observation_start = payload.observation_start;
       state.observation_end = payload.observation_end;
+    },
+    SET_HOSPITALS(state, payload) {
+      state.hospitalsList = payload;
     },
   },
   actions: {
@@ -117,14 +119,15 @@ export default {
     },
     gethospitalsFiltered({ state, commit }, payload) {
       commit("SET_IS_LOADING", payload.isLoading);
+      console.log("Mon PAYLOAD: ", payload);
       return new Promise((resolve, reject) => {
         axios
-          .post("http://127.0.0.1:8000/api/dashboard/get-situations", payload)
+          .post("api/dashboard/get-situations", payload)
           .then(({ data }) => {
+            commit("SET_FILTERED_HOSPITAL_SITUATION", data);
             commit("SET_SITUATION", data);
             commit("SET_IS_LOADING", false);
             resolve(true);
-            console.log("hospital filter", data);
           })
           .catch((response) => {
             reject(response);
