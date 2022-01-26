@@ -22,7 +22,7 @@
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
-          <export-excel :data="hospitalSituationData" name="filename.xls">
+          <!-- <export-excel :data="hospitalSituationData" name="filename.xls">
             <span style="cursor: pointer"
               >Télécharger les données
               <Icon
@@ -30,7 +30,7 @@
                 icon="vscode-icons:file-type-excel2"
               />
             </span>
-          </export-excel>
+          </export-excel> -->
           <div
             class="text-right text-black-50 col-12 col-md-6"
             v-if="lastUpdate && !isLoading"
