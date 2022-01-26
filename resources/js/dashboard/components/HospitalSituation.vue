@@ -22,7 +22,7 @@
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
-          <!-- <export-excel :data="hospitalSituationData" name="filename.xls">
+          <export-excel :data="hospitalSituationData" name="filename.xls">
             <span style="cursor: pointer"
               >Télécharger les données
               <Icon
@@ -30,7 +30,7 @@
                 icon="vscode-icons:file-type-excel2"
               />
             </span>
-          </export-excel> -->
+          </export-excel>
           <div
             class="text-right text-black-50 col-12 col-md-6"
             v-if="lastUpdate && !isLoading"
@@ -62,9 +62,9 @@
         </skeleton-loading>
         <b-row  v-else>
           <b-card
-          class="col-10 default-card mb-2 offset-1"
-          v-if="isGlobal" 
-          v-for="(step, index) in hospitalSituationReduced"
+           class="col-10 default-card mb-2 offset-1"
+            v-show="isGlobal"
+            v-for="(step, index) in hospitalSituationReduced"
             :key="index">
 
             <h5 class="bold">{{ step.form_step_title }}</h5>
@@ -75,8 +75,8 @@
               </p>
             </div>
           </b-card>
-          <b-card v-else  class="col-10 default-card mb-2 offset-1"
-          v-for="(step, index) in hospitalSelectedFiltered"
+          <b-card  v-show="!isGlobal" class="col-12 default-card offset-1 mb-2"
+            v-for="(step, index) in hospitalSelectedFiltered"
             :key="index">
           <h5 class="bold">{{ step.form_step_title }}</h5>
             <div v-for="(item, key) in step.form_field_values" :key="key">

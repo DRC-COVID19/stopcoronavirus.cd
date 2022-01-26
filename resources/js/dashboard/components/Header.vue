@@ -39,17 +39,6 @@
             >
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
-            <div v-b-modal.modal-center style="cursor: pointer" class="position-relative nav-item d-flex align-items-center">
-                 <span>
-                <Icon
-                  style="font-size: 30px"
-                  icon="vscode-icons:file-type-excel2"
-                />
-              </span>
-              </div>
-            <!-- <export-excel data="" name="filename.xls" class="position-relative nav-item d-flex align-items-center">
-              
-            </export-excel> -->
             <li class="position-relative nav-item d-flex align-items-center">
               <a
                 class="nav-link"
