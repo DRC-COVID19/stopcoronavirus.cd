@@ -102,7 +102,14 @@ export default {
       return val ? moment(val).format("DD.MM.YYYY") : "";
     },
   },
+  computed:{
+    ...mapState({
+      observation_start: (state) => state.hospitalSituation.observation_start,
+      observation_end: (state) => state.hospitalSituation.observation_end,
+    })
+  },
   methods: {
+    ...mapActions(["getObservation"]),
     hospitalToggle(checked) {
       this.$emit("hopitalChecked", checked);
     },
@@ -120,6 +127,14 @@ export default {
       this.form.observation_start = null;
     },
     submit() {
+      const observations ={
+        observation_start:this.form.observation_start,
+        observation_end:this.form.observation_end}
+        this.getObservation(observations);
+      
+      console.log("observation_end",this.observation_end)
+      console.log("observation_start",this.observation_start)
+
       this.$emit("submitInfrastructureForm", this.form);
     },
   },

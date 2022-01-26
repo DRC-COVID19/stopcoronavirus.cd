@@ -367,7 +367,6 @@ export default {
       etatGlobal: true,
       dataGlobal: null,
       objetChart: {},
-      hospital_id: 0,
       chartLabels: [
         {
           title: "Evolution du taux d'occupation des respirateurs",
@@ -406,7 +405,9 @@ export default {
       formSteps: (state) => state.formStep.formSteps,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,
-      hospitalSituationSelected: (state) => state.hospitalSituation.hospitalSituationSelected
+      hospitalSituationSelected: (state) => state.hospitalSituation.hospitalSituationSelected,
+      observation_start: (state) => state.hospitalSituation.observation_start,
+      observation_end: (state) => state.hospitalSituation.observation_end
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;
@@ -473,11 +474,18 @@ export default {
       this.getSituationHospital();
     },
     selectedHospital(val) {
+      
       const id = val ? val.id : null;
-      this.getSituationHospital(id);
-      this.hospital_id = id;
-      this.gethospitalsFiltered(val);
-      console.log("gethospitalsFiltered",this.gethospitalsFiltered(val));
+      const form = {
+        hospital: id,
+        observation_start: this.observation_start,
+        observation_end: this.observation_end
+      };
+     this.gethospitalsFiltered(form);
+
+      console.log("this.observation_start",this.observation_start);
+      console.log("this.observation_end",this.observation_end);
+
     },
     situationHospital(val) {
       this.dataGlobal = val;

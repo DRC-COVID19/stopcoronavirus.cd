@@ -10,6 +10,8 @@ export default {
     observation_start: null,
     observation_end: null,
     hospitalSituationSelected: [],
+    observation_end: null,
+    observation_start: null,
   },
 
   mutations: {
@@ -30,6 +32,10 @@ export default {
     },
     SET_SITUATION(state, payload) {
       state.hospitalSituationSelected = payload;
+    },
+    SET_OBSERVATION(state, payload) {
+      state.observation_start = payload.observation_start;
+      state.observation_end = payload.observation_end;
     },
   },
   actions: {
@@ -127,6 +133,9 @@ export default {
             commit("SET_IS_LOADING", false);
           });
       });
+    },
+    async getObservation({ state, commit }, payload) {
+      await commit("SET_OBSERVATION", payload);
     },
   },
 };
