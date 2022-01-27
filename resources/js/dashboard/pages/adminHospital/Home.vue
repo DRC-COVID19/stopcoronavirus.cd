@@ -59,6 +59,7 @@
   </div>
 </template>
 <script>
+import { mapActions,mapState } from 'vuex'
 import Header from '../../components/hospital/Header'
 export default {
   components: {
@@ -78,20 +79,11 @@ export default {
     }
   },
   mounted () {
-    this.getData()
+    this.getAllHospitalSituationsByLastUpdate()
   },
   methods: {
-    getData () {
-      this.isLoading = true
-      axios
-        .get('api/dashboard/hospital-situations/agent-last-update')
-        .then(({ data }) => {
-          this.updateData = data
-        })
-        .finally(() => {
-          this.isLoading = false
-        })
-    },
+    ...mapActions(['getAllHospitalSituationsByLastUpdate']),
+   
     getColor (date) {
       const dateFormat = this.moment(date)
       const curDate = this.moment(new Date())

@@ -5,6 +5,7 @@ export default {
     hospitalsList: [],
     hospitalSituation: [],
     filterdHospitalSituation: [],
+    AllhospitalSituationByLastUpdate: [],
     isLoading: false,
     isCreating: false,
     hospitalSituationAll: [],
@@ -24,6 +25,9 @@ export default {
     },
     SET_ALL_HOSPITAL_SITUATION (state, payload) {
       state.hospitalSituationAll = payload
+    },
+    SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE (state, payload) {
+      state.AllhospitalSituationByLastUpdate = payload
     },
     SET_FILTERED_HOSPITAL_SITUATION (state, payload) {
       state.filterdHospitalSituation = payload
@@ -81,6 +85,25 @@ export default {
           .get('api/dashboard/get-hospital-situations-all')
           .then(({ data }) => {
             commit('SET_ALL_HOSPITAL_SITUATION', data)
+            commit('SET_IS_LOADING', false)
+            resolve(true)
+          })
+          .catch(response => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
+    },
+    getAllHospitalSituationsByLastUpdate ({ state, commit }) {
+      commit('SET_IS_CREATING', true)
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .get('api/dashboard/hospital-situations/agent-last-update')
+          .then(({ data }) => {
+            commit('SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })
