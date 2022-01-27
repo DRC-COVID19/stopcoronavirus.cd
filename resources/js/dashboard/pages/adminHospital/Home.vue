@@ -5,7 +5,6 @@
       <b-row class="mt-4">
         <b-col cols="12" md="10">
           <h3>Dernières mise à jour situation épidemiologique</h3>
-             {{ updateData }}k
         </b-col>
         <b-col cols="12" md="2">
           <b-button class="btn-dash-blue" @click="getData()">
