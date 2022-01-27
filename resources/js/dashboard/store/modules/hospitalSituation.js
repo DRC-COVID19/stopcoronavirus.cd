@@ -55,6 +55,7 @@ export default {
     },
     getHospitalSituations ({ state, commit }, { payload }) {
       commit('SET_IS_CREATING', true)
+      console.log('datacreated', payload)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios

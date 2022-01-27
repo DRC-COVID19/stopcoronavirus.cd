@@ -51,24 +51,7 @@
       </b-col>
     </b-row>
     <b-row no-gutters>
-      <b-col v-if="hospitalSituationFiltered.length>0" cols="12" md="12" class="row no-gutters pr-1">
-           <b-card
-          class="col-10 default-card mb-2 offset-1"
-          v-for="(step, index) in hospitalSituationFiltered"
-          :key="index"
-        >
-
-          <h5 class="bold">{{ step.form_step_title }}</h5>
-          <div v-for="(item, key) in step.form_field_values" :key="key">
-            <p>
-              {{ item.form_field_name }} :
-              <strong>{{ item.form_field_value }}</strong>
-            </p>
-          </div>
-        </b-card>
-        </b-card>
-      </b-col>
-      <b-col v-else cols="12" md="12" class="row no-gutters pr-1">
+      <b-col cols="12" md="12" class="row no-gutters pr-1">
         <skeleton-loading v-if="isLoading" class="mb-2">
           <square-skeleton
             :boxProperties="{
@@ -81,7 +64,7 @@
         <b-card
           class="col-10 default-card mb-2 offset-1"
           v-else
-          v-for="(step, index) in hospitalSituationReduced"
+          v-for="(step, index) in hospitalSituationFiltered.length > 0 ? hospitalSituationFiltered: hospitalSituationReduced"
           :key="index"
         >
 

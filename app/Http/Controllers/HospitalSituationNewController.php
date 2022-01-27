@@ -46,7 +46,7 @@ class HospitalSituationNewController extends Controller
     {
         $data = $this->validator($request->all());
         try {
-            $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
+           // $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
 
             $hospitalSituationNew = HospitalSituationNew::create($data);
 
@@ -232,6 +232,10 @@ class HospitalSituationNewController extends Controller
         $observation_start = $request->input('observation_start');
         $township = $request->input('township');
         $hospital = $request->input('hospital');
+        // $observation_end = '2022-01-18';
+        // $observation_start = '2022-01-14';
+        // $township = '1';
+        // $hospital = '2';
        
         try {
             // On réccupère toutes les dates où une mise à jour a pu etre poster
