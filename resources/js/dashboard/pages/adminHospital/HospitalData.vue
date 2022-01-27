@@ -74,7 +74,7 @@
 <script>
 import Header from '../../components/hospital/Header'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   components: {
     Header,
@@ -90,12 +90,12 @@ export default {
       hospitalSituations: {},
       ishospitalSituationLoading: false,
       currentPage: 1,
-      hospital: {}
     }
   },
   computed: {
     ...mapState({
-      user: (state) => state.auth.user
+      user: (state) => state.auth.user,
+      hospital: (state) => state.hospitalSituation.getHospital
     }),
     totalRows () {
       if (this.hospitalSituations.meta) {
@@ -112,9 +112,10 @@ export default {
   },
   mounted () {
     this.getHospitalSituations()
-    this.getHospital()
+    this.getHospital({ hospital_id: this.$route.params.hospital_id })
   },
   methods: {
+    ...mapActions(['getHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     getHospitalSituations (page) {
       if (typeof page === 'undefined') page = 1
@@ -133,13 +134,7 @@ export default {
           this.ishospitalSituationLoading = false
         })
     },
-    getHospital () {
-      axios
-        .get(`/api/dashboard/hospitals-data/${this.$route.params.hospital_id}`)
-        .then(({ data }) => {
-          this.hospital = data
-        })
-    },
+  
     onPageChange (page) {
       this.getHospitalSituations(page)
     }
