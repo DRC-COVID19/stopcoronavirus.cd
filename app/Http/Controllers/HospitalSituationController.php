@@ -93,15 +93,24 @@ class HospitalSituationController extends Controller
         }
     }
 
+   
     public function getAgentLastUpdate()
     {
+       
         try {
-            $lastUpdate = DB::select('SELECT p1.hospital_id, p2.name, MAX(p1.last_update) AS last_update, SUM(p1.confirmed) AS confirmed
-            FROM hospital_situations p1
-            INNER JOIN hospitals p2 ON p1.hospital_id=p2.id  GROUP BY hospital_id,p2.name
-            ORDER BY last_update desc
-            ');
-            return response()->json($lastUpdate,200,[],JSON_NUMERIC_CHECK);
+            $hospitalSituation = DB::table('hospital_situations_new')
+            ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+            ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
+            ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+            ->where('form_fields.name', '=', 'Nombre des cas confirmés')
+            ->select('hospitals.name',
+                DB::raw('MAX(CAST(hospital_situations_new.last_update as DATE)) as last_update'),
+                DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as confirmed'),
+            )
+            ->groupBy('hospitals.name')
+            ->orderBy('last_update','desc')
+            ->get();
+            return response()->json($hospitalSituation,200,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
