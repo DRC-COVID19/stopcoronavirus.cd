@@ -101,10 +101,12 @@ export default {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get('api/dashboard/hospital-situations/agent-last-update')
+          .get(
+            'http://localhost:8000/api/dashboard/hospital-situations/agent-last-update'
+          )
           .then(({ data }) => {
             commit('SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE', data)
-            console.log("esimbi:",data)
+            console.log('esimbi:', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })
