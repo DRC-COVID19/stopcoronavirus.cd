@@ -104,6 +104,7 @@ export default {
           .get('api/dashboard/hospital-situations/agent-last-update')
           .then(({ data }) => {
             commit('SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE', data)
+            console.log("esimbi:",data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })

@@ -5,6 +5,7 @@
       <b-row class="mt-4">
         <b-col cols="12" md="10">
           <h3>Dernières mise à jour situation épidemiologique</h3>
+             {{ updateData }}k
         </b-col>
         <b-col cols="12" md="2">
           <b-button class="btn-dash-blue" @click="getData()">
@@ -31,6 +32,7 @@
                 <strong>Loading...</strong>
               </div>
             </template>
+         
             <template v-slot:cell(statut)="data">
               <span class="badge badge-pill badge-statut"
                 :style="'background-color : ' + getColor(data.item.last_update)">
@@ -59,7 +61,7 @@
   </div>
 </template>
 <script>
-import { mapActions,mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import Header from '../../components/hospital/Header'
 export default {
   components: {
@@ -67,23 +69,25 @@ export default {
   },
   data () {
     return {
-      updateData: [],
       fields: [
-        { key: "statut", label: "Statut" },
-        { key: "last_update", label: "Date" },
-        { key: "name", label: "CTCO" },
-        { key: "confirmed", label: "Confirmés" },
-        { key: "actions", label: "Actions" },
+        { key: 'statut', label: 'Statut' },
+        { key: 'last_update', label: 'Date' },
+        { key: 'name', label: 'CTCO' },
+        { key: 'confirmed', label: 'Confirmés' },
+        { key: 'actions', label: 'Actions' }
       ],
       isLoading: false
     }
+  },
+  computed: {
+    ...mapState({ updateData: (state) => state.hospitalSituation.AllhospitalSituationByLastUpdate })
   },
   mounted () {
     this.getAllHospitalSituationsByLastUpdate()
   },
   methods: {
     ...mapActions(['getAllHospitalSituationsByLastUpdate']),
-   
+
     getColor (date) {
       const dateFormat = this.moment(date)
       const curDate = this.moment(new Date())
