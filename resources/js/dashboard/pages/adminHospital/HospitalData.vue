@@ -87,7 +87,6 @@ export default {
         { key: 'confirmed', label: 'Confirmés' },
         { key: 'actions', label: 'Actions' }
       ],
-      ishospitalSituationLoading: false,
       currentPage: 1,
     }
   },
@@ -95,7 +94,8 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       hospital: (state) => state.hospital.hospitalData,
-      hospitalSituations: (state) => state.hospital.hospitalSituations
+      hospitalSituations: (state) => state.hospital.hospitalSituations,
+      ishospitalSituationLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
       if (this.hospitalSituations.meta) {
@@ -120,7 +120,7 @@ export default {
     getSituations (page) {
       if (typeof page === 'undefined') page = 1
       this.ishospitalSituationLoading = true
-      this.getHospitalSituations({ page, hospital_id: this.$route.params.hospital_id })
+      this.getHospitalSituations({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.ishospitalSituationLoading })
     },
     onPageChange (page) {
       this.getHospitalSituations(page)

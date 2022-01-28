@@ -45,7 +45,7 @@ class HospitalSituationController extends Controller
             ->where('form_fields.name', '=', 'Nombre des cas confirmés')
             ->where('hospitals.id','=',intval($hospital_id))
             ->select(
-                'hospital_situations_new.last_update as last_update',
+                DB::raw('CAST(hospital_situations_new.last_update as DATE) as last_update'),
                 DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as confirmed'),
             )
             ->groupBy('last_update')
