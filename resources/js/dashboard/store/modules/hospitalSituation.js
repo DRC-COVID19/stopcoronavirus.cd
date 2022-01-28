@@ -41,7 +41,7 @@ export default {
       commit('SET_IS_CREATING', true)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
-        console.log('store:', payload)
+     
         axios
           .post('api/dashboard/hospital-situations-new', payload)
           .then(({ data }) => {
@@ -59,7 +59,6 @@ export default {
     },
     getHospitalSituations ({ state, commit }, { payload }) {
       commit('SET_IS_CREATING', true)
-      console.log('datacreated', payload)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
@@ -102,11 +101,10 @@ export default {
         // eslint-disable-next-line no-undef
         axios
           .get(
-            'http://localhost:8000/api/dashboard/hospital-situations/agent-last-update'
+            '/api/dashboard/hospital-situations/agent-last-update'
           )
           .then(({ data }) => {
             commit('SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE', data)
-            console.log('esimbi:', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })
@@ -138,7 +136,6 @@ export default {
     },
     gethospitalsFiltered ({ state, commit }, payload) {
       commit('SET_IS_LOADING', payload.isLoading)
-      console.log('Mon PAYLOAD: ', payload)
       return new Promise((resolve, reject) => {
         axios
           .post('api/dashboard/get-situations', payload)

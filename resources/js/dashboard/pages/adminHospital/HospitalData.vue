@@ -22,6 +22,7 @@
       </b-row>
       <b-row class="mt-4">
         <b-col>
+          {{ hospitalSituations.data }}
           <b-table
             :busy="ishospitalSituationLoading"
             :fields="fields"
@@ -87,7 +88,6 @@ export default {
         { key: 'confirmed', label: 'Confirmés' },
         { key: 'actions', label: 'Actions' }
       ],
-      hospitalSituations: {},
       ishospitalSituationLoading: false,
       currentPage: 1,
     }
@@ -95,7 +95,8 @@ export default {
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
-      hospital: (state) => state.hospitalSituation.getHospital
+      hospital: (state) => state.hospital.hospitalData,
+      hospitalSituations: (state) => state.hospital.hospitalSituations
     }),
     totalRows () {
       if (this.hospitalSituations.meta) {
@@ -111,30 +112,17 @@ export default {
     }
   },
   mounted () {
-    this.getHospitalSituations()
+    this.getSituations()
     this.getHospital({ hospital_id: this.$route.params.hospital_id })
   },
   methods: {
-    ...mapActions(['getHospital']),
+    ...mapActions(['getHospital', 'getHospitalSituations']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    getHospitalSituations (page) {
+    getSituations (page) {
       if (typeof page === 'undefined') page = 1
       this.ishospitalSituationLoading = true
-      axios
-        .get(
-          `/api/dashboard/hospital-situations/by-hospital/${this.$route.params.hospital_id}`,
-          {
-            params: { page }
-          }
-        )
-        .then(({ data }) => {
-          this.hospitalSituations = data
-        })
-        .finally(() => {
-          this.ishospitalSituationLoading = false
-        })
+      this.getHospitalSituations({ page, hospital_id: this.$route.params.hospital_id })
     },
-  
     onPageChange (page) {
       this.getHospitalSituations(page)
     }

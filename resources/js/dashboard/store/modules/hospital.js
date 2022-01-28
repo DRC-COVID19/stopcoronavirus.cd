@@ -1,3 +1,4 @@
+/* eslint-disable comma-spacing */
 import axios from 'axios'
 import { event } from 'vue-gtag'
 
@@ -9,6 +10,7 @@ export default {
     selectedHospital: null,
     detailHospital: null,
     situationHospital: [],
+    hospitalSituations: {},
     situationHospitalLoading: false,
     hospitalTotalData: null,
     hospitalManagerName: null,
@@ -28,18 +30,20 @@ export default {
     },
     SET_HOSPITAL (state, payload) {
       state.hospitalData = payload
-      console.log("payload:",state.hospitalData)
     },
     SET_IS_LOADING (state, payload) {
       state.isLoading = payload
     },
+    SET_HOSPITAL_SITUATIONS (state, payload) {
+      state.hospitalSituations = payload
+    }
   },
   actions: {
     getHospitalsData ({ state }, payload) {
       state.isLoading = payload.isLoading
       if (payload) {
-        if (payload.observation_end) state.observation_end = payload.observation_end
-        if (payload.observation_start) state.observation_start = payload.observation_start
+        if (payload.observation_end) { state.observation_end = payload.observation_end }
+        if (payload.observation_start) { state.observation_start = payload.observation_start }
         state.township = payload.township
 
         event('fetch_Infrastructures_data_request', {
@@ -56,7 +60,7 @@ export default {
             }
           })
           .then(({ data }) => {
-            const Features = data.map((value) => {
+            const Features = data.map(value => {
               return {
                 type: 'Feature',
                 geometry: {
@@ -81,16 +85,23 @@ export default {
                   healed: value.last_situation?.healed ?? 0,
                   dead: value.last_situation?.dead ?? 0,
                   occupied_Beds: value.last_situation?.occupied_Beds ?? 0,
-                  occupied_respirators: value.last_situation?.occupied_respirators ?? 0,
+                  occupied_respirators:
+                    value.last_situation?.occupied_respirators ?? 0,
                   masks: value.last_situation?.masks ?? 0,
-                  occupied_foam_beds: value.last_situation?.occupied_foam_beds ?? 0,
-                  occupied_resuscitation_beds: value.last_situation?.occupied_resuscitation_beds ?? 0,
-                  individual_protection_equipment: value.last_situation?.individual_protection_equipment ?? 0,
-                  gel_hydro_alcoolique: value.last_situation?.gel_hydro_alcoolique ?? 0,
-                  resuscitation_ventilator: value.last_situation?.resuscitation_ventilator ?? 0,
+                  occupied_foam_beds:
+                    value.last_situation?.occupied_foam_beds ?? 0,
+                  occupied_resuscitation_beds:
+                    value.last_situation?.occupied_resuscitation_beds ?? 0,
+                  individual_protection_equipment:
+                    value.last_situation?.individual_protection_equipment ?? 0,
+                  gel_hydro_alcoolique:
+                    value.last_situation?.gel_hydro_alcoolique ?? 0,
+                  resuscitation_ventilator:
+                    value.last_situation?.resuscitation_ventilator ?? 0,
                   oxygenator: value.last_situation?.oxygenator ?? 0,
                   rapid_screening: value.last_situation?.rapid_screening ?? 0,
-                  automate_genexpert: value.last_situation?.automate_genexpert ?? 0,
+                  automate_genexpert:
+                    value.last_situation?.automate_genexpert ?? 0,
                   x_ray: value.last_situation?.x_ray ?? 0,
                   check_point: value.last_situation?.check_point ?? 0,
                   chloroquine: value.last_situation?.chloroquine ?? 0,
@@ -164,12 +175,13 @@ export default {
         event_category: 'fetch_Infrastructures_data',
         event_label: 'fetch_Infrastructures_evolution_data_req_send'
       })
-      const url = `/api/dashboard/hospitals/evolution${selectedHospital ? `/${selectedHospital}` : ''}`
+      const url = `/api/dashboard/hospitals/evolution${
+        selectedHospital ? `/${selectedHospital}` : ''
+      }`
       axios
-        .get(url,
-          {
-            params
-          })
+        .get(url, {
+          params
+        })
         .then(({ data }) => {
           state.situationHospital = data
           state.situationHospitalLoading = false
@@ -183,20 +195,42 @@ export default {
           exception(response)
         })
     },
-    getHospital ({ state, commit }, payload={}) {
+    getHospital ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
-       
+
       return new Promise((resolve, reject) => {
-        axios.get(`/api/dashboard/hospitals-data/${payload.hospital_id}`)
+        axios
+          .get(`/api/dashboard/hospitals-data/${payload.hospital_id}`)
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
             resolve(true)
             commit('SET_IS_LOADING', false)
-          }).catch((response) => {
+          })
+          .catch(response => {
             reject(response)
           })
           .finally(() => {
             commit('SET_IS_LOADING', false)
+          })
+      })
+    },
+    getHospitalSituations ({ state, commit }, payload = {}) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get(
+            `/api/dashboard/hospital-situations/by-hospital/${payload.hospital_id}`,
+            {
+              params: { page: payload.page }
+            }
+          )
+          .then(({ data }) => {
+            commit('SET_HOSPITAL_SITUATIONS', data)
+            resolve(true)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
           })
       })
     }
