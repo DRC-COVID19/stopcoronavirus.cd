@@ -200,7 +200,7 @@ export default {
         });
     },
     getHospital({ state, commit }, payload = {}) {
-      commit("SET_IS_LOADING", payload.isLoading);
+      commit("SET_IS_LOADING", true);
 
       return new Promise((resolve, reject) => {
         axios
@@ -219,6 +219,7 @@ export default {
       });
     },
     getHospitalSituations({ state, commit }, payload = {}) {
+      commit("SET_IS_LOADING", payload.isLoading);
       return new Promise((resolve, reject) => {
         axios
           .get(
