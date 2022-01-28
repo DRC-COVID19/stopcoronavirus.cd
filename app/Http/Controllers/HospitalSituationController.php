@@ -44,11 +44,11 @@ class HospitalSituationController extends Controller
             ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
             ->where('form_fields.name', '=', 'Nombre des cas confirmés')
             ->where('hospitals.id','=',intval($hospital_id))
-            ->select('form_fields.name','hospitals.id as hospital_id',
+            ->select('hospitals.id as hospital_id',
                 'hospital_situations_new.last_update as last_update',
                 DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as confirmed'),
             )
-            ->groupBy('form_fields.name','hospitals.id','last_update')
+            ->groupBy('hospitals.id','last_update')
             ->orderBy('last_update','desc')->paginate($paginate);
 
             return response()->json($hospitalSituation,201,[],JSON_NUMERIC_CHECK);

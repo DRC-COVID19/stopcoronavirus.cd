@@ -22,7 +22,6 @@
       </b-row>
       <b-row class="mt-4">
         <b-col>
-          {{ hospitalSituations.data }}
           <b-table
             :busy="ishospitalSituationLoading"
             :fields="fields"
