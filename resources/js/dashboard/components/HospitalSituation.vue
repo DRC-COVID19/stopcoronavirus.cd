@@ -1,4 +1,4 @@
-/* eslint-disable vue/return-in-computed-property */
+/* eslint-disable no-empty */
 <template>
   <b-container class="p-0">
     <b-row>
@@ -75,7 +75,7 @@
               </p>
             </div>
           </b-card>
-          <b-card  v-show="!isGlobal" class="col-12 default-card offset-1 mb-2"
+          <b-card  v-show="!isGlobal" class="col-10 default-card offset-1 mb-2"
             v-for="(step, index) in hospitalSelectedFiltered"
             :key="index">
           <h5 class="bold">{{ step.form_step_title }}</h5>
@@ -88,17 +88,15 @@
           </b-card>
         </b-row>
       </b-col>
-      <!-- <b-col v-else cols="12" md="12" class="row no-gutters pr-1">
-        <skeleton-loading v-if="isLoading" class="mb-2">
+        <!-- <skeleton-loading v-if="isLoading" class="mb-2">
           <square-skeleton
             :boxProperties="{
               width: '100%',
               height: '340px',
             }"
           ></square-skeleton>
-        </skeleton-loading>
-
-        <b-card
+        </skeleton-loading> -->
+        <!-- <b-card
           class="col-10 default-card mb-2 offset-1"
           v-else
           v-for="(step, index) in hospitalSituationReduced"
@@ -112,11 +110,8 @@
               <strong>{{ item.form_field_value }}</strong>
             </p>
           </div>
-        </b-card>
-
-      </b-col> -->
+        </b-card> -->
     </b-row>
-
     <b-row no-gutters class="mb-2">
       <b-col cols="12" md="6" class="pr-1">
         <div v-if="situationHospitalLoading || isLoading">
@@ -286,12 +281,14 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
+/* eslint-disable vue/return-in-computed-property */
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { PALETTE } from '../config/env'
 import { Icon } from '@iconify/vue2'
-import GlobalSituationChart from './GlobalSituationChart.vue'
-import OccupedRespiratorChart from './OccupedRespiratorChart.vue'
-import OccupiedResuscitationBeds from './OccupiedResuscitationBedsChart.vue'
+import GlobalSituationChart from './graphic/GlobalSituationChart.vue'
+import OccupedRespiratorChart from './graphic/OccupedRespiratorChart.vue'
+import OccupiedResuscitationBeds from './graphic/OccupiedResuscitationBedsChart.vue'
 
 export default {
   props: ['hospitalSituationAll'],
@@ -347,9 +344,10 @@ export default {
       hospitalSituationSelected: (state) => state.hospitalSituation.hospitalSituationSelected,
       observation_start: (state) => state.hospitalSituation.observation_start,
       observation_end: (state) => state.hospitalSituation.observation_end,
-      filterdHospitalSituation: (state) => state.hospitalSituation.filterdHospitalSituation
+      filterdHospitalSituation: (state) => state.hospitalSituation.filterdHospitalSituation,
+      hospitalObservationSituation: (state) => state.hospitalSituation.hospitalObservationSituation
 
-}),
+    }),
     hospital () {
       if (this.selectedHospital != null) return this.selectedHospital
       else {
@@ -379,23 +377,31 @@ export default {
     },
 
     hospitalSituationData () {
-      const hospitalSituationAllSlice = this.hospitalSituationAll.allFormFields.slice()
-      const monObj = {}
-      const hospitalSituationFiltered = []
-      for (const hospital of hospitalSituationAllSlice) {
-        monObj[hospital.form_field_name] = hospital.form_field_value
-      }
-      this.objetChart = monObj
-      hospitalSituationFiltered.push(monObj)
+      const hospitalSituationAllSlice = this.hospitalObservationSituation.slice()
+      let hospitalSituationFiltered = []
+      hospitalSituationAllSlice.forEach((hospital) => {
+        if (hospitalSituationFiltered.find((observation) => hospital.date === observation.date && hospital.hospital_id === observation.numero_hopital)) {
+          const index = hospitalSituationFiltered.findIndex((observation) => hospital.date === observation.date && hospital.hospital_id === observation.numero_hopital)
+          hospitalSituationFiltered[index][hospital.form_field_name] = hospital.form_field_value
+        } else {
+          const monObj = {}
+          monObj.date = hospital.date
+          monObj.numero_hopital = hospital.hospital_id
+          monObj.nom_hopital = hospital.hospital_name
+          monObj[hospital.form_field_name] = hospital.form_field_value
+          hospitalSituationFiltered.push(monObj)
+        }
+      })
+      hospitalSituationFiltered = [...new Set(hospitalSituationFiltered)]
+      console.log('hospitalSituationFiltered', hospitalSituationFiltered)
       return hospitalSituationFiltered
     },
     prepareGraphicSituation () {
       return this.hospitalSituationAll.formFieldsFiltered
     },
     hospitalSelectedFiltered () {
-    const arrayFilterd = [].concat.apply([], this.hospitalSituationSelected.form_fields_names)
-    return this.createSituationsReduce(arrayFilterd)
-
+      const arrayFilterd = [].concat.apply([], this.hospitalSituationSelected.form_fields_names)
+      return this.createSituationsReduce(arrayFilterd)
     }
 
   },
@@ -404,36 +410,35 @@ export default {
       this.selectHospital(null)
       this.getSituationHospital()
     },
-    selectedHospital(val) {
-      
-      const id = val ? val.id : null;
+    selectedHospital (val) {
+      const id = val ? val.id : null
       const form = {
         hospital: id,
         observation_start: this.observation_start,
         observation_end: this.observation_end
-      };
-     this.gethospitalsFiltered(form);
-      console.log("this.observation_start",this.observation_start);
-      console.log("this.observation_end",this.observation_end);
-      console.log(" this.gethospitalsFiltered(form)", this.hospitalSituationSelected);
-
-
+      }
+      this.gethospitalsFiltered(form)
+      console.log('this.observation_start', this.observation_start)
+      console.log('this.observation_end', this.observation_end)
+      console.log(' this.gethospitalsFiltered(form)', this.hospitalSituationSelected)
     },
-    situationHospital(val) {
-      this.dataGlobal = val;
-      this.paintStats(val);
-
+    situationHospital (val) {
+      this.dataGlobal = val
+      this.paintStats(val)
     },
-    hospitalSituationAll(){
-      this.gethospitalsFiltered();
+    hospitalSituationAll () {
+      this.gethospitalsFiltered()
+    },
+    chartData () {
+      this.$data._chart.update()
     }
   },
   methods: {
     ...mapActions([
-      "getSituationHospital",
-      "getHospitalSituationsAll",
-      "getFormSteps",
-      "gethospitalsFiltered"
+      'getSituationHospital',
+      'getHospitalSituationsAll',
+      'getFormSteps',
+      'gethospitalsFiltered'
     ]),
     ...mapMutations(['selectHospital']),
     paintStats (data) {

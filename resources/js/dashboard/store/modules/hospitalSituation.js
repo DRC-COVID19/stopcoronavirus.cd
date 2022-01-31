@@ -11,6 +11,7 @@ export default {
     observation_start: null,
     observation_end: null,
     hospitalSituationSelected: [],
+    hospitalObservationSituation: [],
   },
 
   mutations: {
@@ -38,6 +39,9 @@ export default {
     },
     SET_HOSPITALS(state, payload) {
       state.hospitalsList = payload;
+    },
+    SET_OBSERVATION_SITUATION_HOSPITALS(state, payload) {
+      state.hospitalObservationSituation = payload;
     },
   },
   actions: {
@@ -126,6 +130,25 @@ export default {
           .then(({ data }) => {
             commit("SET_FILTERED_HOSPITAL_SITUATION", data);
             commit("SET_SITUATION", data);
+            commit("SET_IS_LOADING", false);
+            resolve(true);
+          })
+          .catch((response) => {
+            reject(response);
+          })
+          .finally(() => {
+            commit("SET_IS_LOADING", false);
+          });
+      });
+    },
+    getObservationSituationHospital({ state, commit }, payload) {
+      commit("SET_IS_LOADING", payload.isLoading);
+      console.log("Mon PAYLOAD: ", payload);
+      return new Promise((resolve, reject) => {
+        axios
+          .post("api/dashboard/get-observation-situation-hospital", payload)
+          .then(({ data }) => {
+            commit("SET_OBSERVATION_SITUATION_HOSPITALS", data);
             commit("SET_IS_LOADING", false);
             resolve(true);
           })

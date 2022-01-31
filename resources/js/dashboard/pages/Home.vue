@@ -770,7 +770,8 @@ export default {
       'getSituationHospital',
       'getHospitals',
       'gethospitalsFiltered',
-      'getHospitalSituationsAll'
+      'getHospitalSituationsAll',
+      'getObservationSituationHospital',
     ]),
     ...mapMutations([
       'setMapStyle',
@@ -1705,8 +1706,9 @@ export default {
     submitInfrastructureForm (values) {
       this.setCanShowNavMobile(false)
       values.isLoading = true
-       this.getHospitalsData(values)
+      this.getHospitalsData(values)
       this.gethospitalsFiltered(values)
+      this.getObservationSituationHospital(values)
       this.initForm()
     },
     seeSide () {

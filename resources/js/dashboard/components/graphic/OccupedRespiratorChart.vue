@@ -1,9 +1,11 @@
 <script>
 import { Line } from 'vue-chartjs'
-
+// const { reactiveProp } = mixins
 export default {
   props: ['data'],
   extends: Line,
+  // mixins: [reactiveProp],
+
   data () {
     return {
       options: { responsive: true },
@@ -13,7 +15,7 @@ export default {
         datasets: [
           {
             label: 'Data 1',
-            data: [2, 10, 5, 9, 0, 6, 20],
+            data: [],
             backgroundColor: 'transparent',
             borderColor: 'rgba(1, 116, 188, 0.50)',
             pointBackgroundColor: 'rgba(171, 71, 188, 1)'
@@ -28,11 +30,12 @@ export default {
   },
   methods: {
     renderData () {
-      for (const item of this.data) {
+      this.data.forEach((item, index) => {
         if (item.form_field_name === 'Nombre des cures de vitamine C disponible') {
-          this.chartdata.labels.push(item.last_update)
+          this.chartdata.datasets[0].data.push(item.form_field_value)
+          this.chartdata.labels.push(moment(item.last_update).format('Do MM YY'))
         }
-      }
+      })
     }
   }
 }
