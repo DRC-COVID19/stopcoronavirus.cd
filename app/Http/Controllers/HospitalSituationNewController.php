@@ -320,10 +320,13 @@ class HospitalSituationNewController extends Controller
     {
         $observation_end = $request->input('observation_end');
         $observation_start = $request->input('observation_start');
+        $township = $request->input('township');
+
         try {
             $observation = DB::table('hospital_situations_new')
                 ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
                 ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+                ->join('townships', 'townships.id', '=', 'hospitals.township_id')
                 ->select(
                     'form_fields.name as form_field_name',
                     'hospital_situations_new.value as form_field_value',
@@ -332,6 +335,11 @@ class HospitalSituationNewController extends Controller
                     'hospital_situations_new.last_update as date'
                 )
                 ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
+                ->where(function ($query) use ($township) {
+                    if ($township) $query->where('hospitals.township_id', '=', $township);
+                })
+                ->orderBy('date', 'asc')
+
                 // ->groupBy('form_fields.name', 'hospital_situations_new.value', 'hospitals.id', 'hospital_situations_new.name', '')
                 ->get();
 

@@ -22,7 +22,7 @@
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
-          <export-excel :data="hospitalSituationData" name="filename.xls">
+          <export-excel :data="hospitalSituationData" :name="fileName">
             <span style="cursor: pointer"
               >Télécharger les données
               <Icon
@@ -303,6 +303,7 @@ export default {
       etatGlobal: true,
       dataGlobal: null,
       objetChart: {},
+      fileName: '',
       chartLabels: [
         {
           title: "Evolution du taux d'occupation des respirateurs",
@@ -378,6 +379,8 @@ export default {
 
     hospitalSituationData () {
       const hospitalSituationAllSlice = this.hospitalObservationSituation.slice()
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.fileName = `Données_du_${this.observation_start}_au_${this.observation_end}.xls`
       let hospitalSituationFiltered = []
       hospitalSituationAllSlice.forEach((hospital) => {
         if (hospitalSituationFiltered.find((observation) => hospital.date === observation.date && hospital.hospital_id === observation.numero_hopital)) {
