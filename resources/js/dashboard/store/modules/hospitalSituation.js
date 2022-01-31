@@ -5,6 +5,7 @@ export default {
     hospitalsList: [],
     hospitalSituation: [],
     filterdHospitalSituation: [],
+    hospitalSituationDetail: {},
     AllhospitalSituationByLastUpdate: [],
     isLoading: false,
     isCreating: false,
@@ -32,6 +33,9 @@ export default {
     SET_FILTERED_HOSPITAL_SITUATION (state, payload) {
       state.filterdHospitalSituation = payload
     },
+    HOSPITAL_SITUATION_DETAIL (state, payload) {
+      state.hospitalSituationDetail = payload
+    },
     SET_HOSPITALS (state, payload) {
       state.hospitalsList = payload
     }
@@ -41,7 +45,7 @@ export default {
       commit('SET_IS_CREATING', true)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
-     
+
         axios
           .post('api/dashboard/hospital-situations-new', payload)
           .then(({ data }) => {
@@ -100,9 +104,7 @@ export default {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get(
-            '/api/dashboard/hospital-situations/agent-last-update'
-          )
+          .get('/api/dashboard/hospital-situations/agent-last-update')
           .then(({ data }) => {
             commit('SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE', data)
             commit('SET_IS_LOADING', false)
@@ -123,6 +125,25 @@ export default {
           .get('api/dashboard/hospitals-data')
           .then(({ data }) => {
             commit('SET_HOSPITALS', data)
+            commit('SET_IS_LOADING', false)
+            resolve(true)
+          })
+          .catch(response => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
+    },
+    getHospitalSituationsDetail ({ state, commit }, payload) {
+      console.log('mon payload de bon:', payload)
+      commit('SET_IS_LOADING', payload.isLoading)
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/api/dashboard/hospital-situations/${payload.update_id}`)
+          .then(({ data }) => {
+            commit('', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })

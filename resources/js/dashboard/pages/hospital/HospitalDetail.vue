@@ -8,6 +8,7 @@
           <b-link :to="backRoute">
             <span class="fa fa-chevron-left"> Retour</span>
           </b-link>
+          {{ this.$route.params.update_id }}
           <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form.last_update).format("DD.MM.Y")}}</h3>
 
           <h4 class="mb-4">Données épidemologiques</h4>
@@ -48,53 +49,40 @@
 </template>
 
 <script>
-import Header from "../../components/hospital/Header";
-import Loading from "../../components/Loading";
-import {mapState} from "vuex" ;
+import Header from '../../components/hospital/Header'
+import Loading from '../../components/Loading'
+import { mapActions, mapState } from 'vuex'
 export default {
   components: {
-    Loading,Header
+    Loading, Header
   },
-  data() {
-    return {
-      form: {},
-      isLoading: false
-    };
+  
+  mounted () {
+    this.getHospital()
   },
-  mounted(){
-    this.getHospital();
-  },
-  computed : {
+  computed: {
     ...mapState({
-      user: state => state.auth.user
-    }) ,
-    backRoute(){
-      if(this.user.isHospitalAdmin){
+      user: state => state.auth.user,
+      form: state => state.hospitalSituation.hospitalSituationDetail,
+      isLoading: state => state.hospitalSituation.isLoading ,
+    }),
+    backRoute () {
+      if (this.user.isHospitalAdmin) {
         return {
-          name: 'hospital.admin.data' ,
+          name: 'hospital.admin.data',
           params: { hospital_id: this.$route.params.hospital_id }
         }
-      }
-      else return { name: 'hospital.home' }
+      } else return { name: 'hospital.home' }
     }
   },
   methods: {
-    getHospital() {
-      this.isLoading = true;
-      axios
-        .get(
-          `/api/dashboard/hospital-situations/${this.$route.params.update_id}`
-        )
-        .then(({ data }) => {
-          this.form = data;
-        })
-        .catch(response => {})
-        .finally(() => {
-          this.isLoading = false;
-        });
+    ...mapActions(['getHospitalSituationsDetail']),
+    getHospital () {
+      this.isLoading = true
+      this.getHospitalSituationsDetail({ isLoading: this.isLoading, update_id: this.$route.params.update_id })
     }
   }
-};
+}
 </script>
 
 <style>
