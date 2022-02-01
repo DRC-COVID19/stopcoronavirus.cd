@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\HospitalSituation;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\HospitalSituationNew;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use App\Http\Resources\HospitalResources;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\HospitalSituationResource;
@@ -45,10 +47,10 @@ class HospitalSituationController extends Controller
             ->where('form_fields.name', '=', 'Nombre des cas confirmés')
             ->where('hospitals.id','=',intval($hospital_id))
             ->select(
-                DB::raw('CAST(hospital_situations_new.last_update as DATE) as last_update'),
-                DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as confirmed'),
+                'hospital_situations_new.id',
+                'hospital_situations_new.last_update as last_update',
+                'hospital_situations_new.value as confirmed',
             )
-            ->groupBy('last_update')
             ->orderBy('last_update','desc')->paginate($paginate);
 
             return response()->json($hospitalSituation,201,[],JSON_NUMERIC_CHECK);
@@ -88,9 +90,34 @@ class HospitalSituationController extends Controller
      * @param  \App\HospitalSituation  $hospitalSituation
      * @return \Illuminate\Http\Response
      */
-    public function show(HospitalSituation $hospitalSituation)
-    {
-        return response()->json(HospitalSituationSingleResource::make($hospitalSituation));
+    public function show($last_update)
+    {  
+        try {
+            $hospitalSituation =  DB::table('hospital_situations_new')
+            ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+            ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
+            ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+            ->where('hospital_situations_new.last_update','=',new DateTime($last_update))
+            ->select(
+                    'form_fields.name as form_field_name',
+                    'hospital_situations_new.value as form_field_value',
+                    'hospital_situations_new.last_update as last_update',
+                    'hospitals.agent_id',
+                    'form_fields.capacity as form_field_capacity',
+                    'form_fields.form_step_id as form_step_id',
+                    'form_steps.title as form_step_title',
+                    'form_fields.id as form_field_id'
+            )
+            ->orderBy('last_update','desc')->get();
+
+            return response()->json($hospitalSituation,201,[],JSON_NUMERIC_CHECK);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+        return response()->json($hospitalSituation);
     }
 
     /**

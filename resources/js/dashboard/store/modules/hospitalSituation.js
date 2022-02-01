@@ -143,7 +143,7 @@ export default {
         axios
           .get(`/api/dashboard/hospital-situations/${payload.update_id}`)
           .then(({ data }) => {
-            commit('', data)
+            commit('HOSPITAL_SITUATION_DETAIL', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })

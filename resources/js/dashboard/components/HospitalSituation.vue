@@ -255,7 +255,7 @@ import { Icon } from '@iconify/vue2'
 import GlobalSituationChart from './GlobalSituationChart.vue'
 import OccupedRespiratorChart from './OccupedRespiratorChart.vue'
 import OccupiedResuscitationBeds from './OccupiedResuscitationBedsChart.vue'
-
+import { createSituationsReduce } from '../plugins/functions'
 export default {
   props: ['hospitalSituationAll'],
   components: {
@@ -327,12 +327,12 @@ export default {
     },
 
     hospitalSituationReduced () {
-      return this.createSituationsReduce(this.hospitalSituationAll.allFormFields)
+      return createSituationsReduce(this.hospitalSituationAll.allFormFields)
     },
 
     hospitalSituationFiltered () {
       const arrayFilterd = [].concat.apply([], this.filterdHospitalSituation.form_fields_names)
-      return this.createSituationsReduce(arrayFilterd)
+      return createSituationsReduce(arrayFilterd)
     },
 
     hospitalSituationData () {
@@ -757,33 +757,7 @@ export default {
         // this.lineCharts[i].generateLegend();
       }
     },
-    createSituationsReduce (array = []) {
-      const formIds = []
-      if (array.length > 0) {
-        array?.slice()
-          .sort((prevFormItem, nextFormItem) => prevFormItem.form_step_id - nextFormItem.form_step_id)
-          .forEach((item) => {
-            if (formIds.every((form) => form.form_step_id !== item.form_step_id)) {
-              formIds.push({
-                form_step_id: item.form_step_id,
-                form_step_title: item.form_step_title
-              })
-            }
-          })
-        const formStepsList = formIds.map((form) => {
-          const formStep = {
-            form_step_id: form.form_step_id,
-            form_step_title: form.form_step_title
-          }
-          formStep.form_field_values = array.filter(
-            (arr) => arr.form_step_id == formStep.form_step_id
-          )
-          return formStep
-        })
-        return formStepsList
-      }
-      return []
-    },
+  
     backToTotalData () {
       this.selectHospital(null)
     },

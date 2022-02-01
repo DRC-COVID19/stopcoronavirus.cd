@@ -20,7 +20,7 @@
           </b-alert>
         </b-col>
       </b-row>
-      <b-row class="mt-4">
+      <b-row class="mt-4" >
         <b-col>
           <b-table
             :busy="ishospitalSituationLoading"
@@ -47,7 +47,7 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                    update_id:data.item.id,
+                    update_id:data.item.last_update,
                     hospital_id: $route.params.hospital_id
                   }
                 }"

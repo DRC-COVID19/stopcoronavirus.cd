@@ -5,9 +5,8 @@
       <b-row align-h="center">
         <b-col cols="12">
           <b-link :to="{
-            name:'hospital.home'
-          }">
-            <span class="fa fa-chevron-left">Retour</span>
+            name:'hospital.home'}">
+            <span class="fa fa-chevron-left">Retour </span>
           </b-link>
         </b-col>
         <b-col cols="12" md="6">
