@@ -33,7 +33,7 @@ export default {
       this.data.forEach((item) => {
         if (item.form_field_name === 'Nombre des ventilateurs de réanimation occupés par des cas COVID-19') {
           this.chartdata.datasets[0].data.push(item.form_field_value)
-          this.chartdata.labels.push(moment(item.last_update).format('Do MM YY'))
+          this.chartdata.labels.push(moment(item.last_update).format('DD/MM/YY'))
         }
       })
     }

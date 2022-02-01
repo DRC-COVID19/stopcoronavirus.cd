@@ -238,69 +238,53 @@ class HospitalSituationNewController extends Controller
             // On réccupère toutes les dates où une mise à jour a pu etre poster
             // Surtout utile pour l'evolution globale
 
-            $lastUpdates = HospitalSituationNew::where(function ($query) use ($hospital, $township) {
-                if ($hospital) {
-                    $query->where('hospital_id', intval($hospital));
-                } else if ($township) {
-                    $query->whereRaw(
-                        '(SELECT township_id FROM hospitals WHERE id = hospital_id) = ?',
-                        [$township]
-                    );
-                }
-            })
-                ->whereRaw('DATE(last_update) BETWEEN ? AND ? ', [$observation_start, $observation_end])
-                ->select('last_update')
+            $lastUpdates = DB::table('hospital_situations_new')
+                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+                ->join('townships', 'townships.id', '=', 'hospitals.township_id')
+                ->select(
+                    'hospital_situations_new.last_update as last_update'
+                )
+                ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
+                ->where(function ($query) use ($township, $hospital) {
+                    if ($hospital) {
+                        $query->where('hospital_situations_new.hospital_id', '=', $hospital);
+                    } else if ($township) {
+                        $query->where('hospitals.township_id', '=', $township);
+                    }
+                })
                 ->pluck('last_update')
                 ->unique()->sort()->values();
 
-            $results = [
-                'last_update' => [],
-                'form_fields_names' => [],
-            ];
-            foreach ($lastUpdates as  $lastUpdate) {
-                $hospitalSituation = HospitalSituationNew::where(function ($query) use ($hospital, $township) {
+            $hospitalSituation = DB::table('hospital_situations_new')
+                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+                ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
+                ->join('townships', 'townships.id', '=', 'hospitals.township_id')
+                ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
+                ->where(function ($query) use ($township, $hospital) {
                     if ($hospital) {
-                        $query->where('hospital_id', intval($hospital));
+                        $query->where('hospital_situations_new.hospital_id', '=', $hospital);
                     } else if ($township) {
-                        $query->whereRaw(
-                            '(SELECT township_id FROM hospitals WHERE id = hospital_id) = ?',
-                            [$township]
-                        );
+                        $query->where('hospitals.township_id', '=', $township);
                     }
                 })
-                    ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-                    ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-                    ->where('form_fields.name', '<>', 'EPI en manque')
-                    ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
-                    ->select(
-                        'form_fields.name as form_field_name',
-                        DB::raw('sum(CAST(hospital_situations_new.value as INT)) as form_field_value'),
-                        'form_fields.capacity as form_field_capacity',
-                        'form_fields.form_step_id as form_step_id',
-                        'form_steps.title as form_step_title'
-                    )
-                    ->where('last_update', '<=', $lastUpdate)
-                    ->whereRaw('DATE(last_update) BETWEEN ? AND ?', [$observation_start, $observation_end])
-                    ->whereNotExists(function ($query) use ($lastUpdate) {
-                        // C'est ici qu'on s'assure que la situation actuellemnent lu est la dernière connu
-                        // pour l'hopital x à la date $last_update sur laquelle on boucle
-                        $query->select(DB::raw(1))
-                            ->from(DB::raw('hospital_situations_new AS h'))
-                            ->whereRaw("h.hospital_id = hospital_situations_new.hospital_id
-                    AND h.last_update <='{$lastUpdate}'
-                    AND (
-                      h.last_update > hospital_situations_new.last_update OR
-                      (h.last_update = hospital_situations_new.last_update AND h.id > hospital_situations_new.id )
-                    )
-                  ");
-                    })
-                    ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
-                    ->get();
+                ->where('form_fields.name', '<>', 'EPI en manque')
+                ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
+                ->select(
+                    'form_fields.name as form_field_name',
+                    DB::raw('sum(CAST(hospital_situations_new.value as INT)) as form_field_value'),
+                    'form_fields.capacity as form_field_capacity',
+                    'form_fields.form_step_id as form_step_id',
+                    'form_steps.title as form_step_title'
+                )
+                ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
+                ->get();
 
-
-                $results['last_update'][] = $lastUpdate;
-                $results['form_fields_names'][] = $hospitalSituation;
-            }
+            $results = [
+                'last_update' => $lastUpdates,
+                'form_fields_names' => $hospitalSituation,
+            ];
 
             return response()->json($results, 200, [], JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
