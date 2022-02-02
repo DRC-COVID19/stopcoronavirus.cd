@@ -9,6 +9,7 @@
             <b-link :to="{name:'hospital.data'}">
               <span class="fa fa-edit"></span>
             </b-link>
+
           </h3>
           <b-alert show variant="info">
             <div>{{`Structure: ${user.hospital.name}`}}</div>
@@ -27,7 +28,7 @@
           <b-table
             :busy="ishospitalSituationLoading"
             :fields="fields"
-            :items="hospitalSituations.data"
+            :items="getSituations(user.hospital.id).data"
             show-empty
           >
             <template v-slot:empty="scope">
@@ -49,8 +50,8 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                      update_id:data.item.id,
-                    hospital_id: $route.params.hospital_id || 0
+                      update_id:data.item.last_update,
+                    hospital_id: user.hospital.id || 0
                     }
                     }"
               >Details</b-button>
@@ -86,7 +87,7 @@
 <script>
 import Header from '../../components/hospital/Header'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   components: {
     Header,
@@ -99,15 +100,16 @@ export default {
         { key: 'confirmed', label: 'Confirmés' },
         { key: 'actions', label: 'Actions' }
       ],
-      hospitalSituations: {},
-      ishospitalSituationLoading: false,
-      currentPage: 1
+      currentPage: 1,
+      hospitalId: null
     }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
-      hospitalManagerName: (state) => state.hospital.hospitalManagerName
+      hospitalManagerName: (state) => state.hospital.hospitalManagerName,
+      hospitalSituations: (state) => state.hospital.hospitalSituations,
+      ishospitalSituationLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
       if (this.hospitalSituations.meta) {
@@ -123,20 +125,20 @@ export default {
     }
   },
   mounted () {
-    this.getHospitalSituations()
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
     }
+    this.getSituations()
   },
   methods: {
+    ...mapActions(['getHospitalSituations']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    getHospitalSituations (page = 1) {
+    getSituations (hospitalId = 1) {
+      let page = 1 
+      if (typeof page === 'undefined') page = 1
       this.ishospitalSituationLoading = true
-      axios.get('/api/dashboard/hospital-situations',
-        { params: { page } }).then(({ data }) => {
-        this.hospitalSituations = data
-        this.ishospitalSituationLoading = false
-      })
+      this.getHospitalSituations({ page, hospital_id: hospitalId, isLoading: this.ishospitalSituationLoading })
+      return this.hospitalSituations
     },
     onPageChange (page) {
       this.getHospitalSituations(page)

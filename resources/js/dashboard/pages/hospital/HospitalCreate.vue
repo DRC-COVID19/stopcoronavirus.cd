@@ -250,7 +250,7 @@ export default {
       }
       if (this.createSituation(this.formData)) {
         this.isLoading = false
-        this.$router.push('/hospitals')
+        //this.$router.push('/hospitals')
       }
     },
 

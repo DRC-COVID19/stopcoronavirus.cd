@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ChangeLogController;
 use App\Http\Controllers\HospitalSituationController;
-use App\Http\Controllers\HospitalSituationNewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\PandemicStat;
@@ -190,10 +189,9 @@ Route::group([
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
 
   Route::resource('hospital-situations', "HospitalSituationController");
-  Route::resource('hospital-situations-new', "HospitalSituationNewController");
-  Route::get('get-hospital-situations-all', "HospitalSituationNewController@getSituationHospitalsAll");
-  Route::post('get-by-hospital-situations', "HospitalSituationNewController@getSituationByHospitals");
-  Route::post('get-situations', "HospitalSituationNewController@getSituations");
+  Route::get('get-hospital-situations-all', "HospitalSituationController@getSituationHospitalsAll");
+  Route::post('get-by-hospital-situations', "HospitalSituationController@getSituationByHospitals");
+  Route::post('get-situations', "HospitalSituationController@getSituations");
 
   Route::resource('hospitals-data', 'HospitalController');
   Route::apiResource('forms', 'FormController');
