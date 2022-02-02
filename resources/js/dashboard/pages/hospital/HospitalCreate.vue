@@ -257,7 +257,7 @@ export default {
     createSituation (formData) {
       console.log(this.$route.params.hospital_id );
       for (const [key, value] of formData) {
-        this.formDataFormatted.push({ form_field_id: key, value, last_update: this.form.last_update, hospital_id: this.$route.params.hospital_id })
+        this.formDataFormatted.push({ form_field_id: key, value, last_update: this.form.last_update, created_manager_name: this.form.created_manager_name, updated_manager_name: this.form.created_manager_name })
       }
 
       if (this.formDataFormatted.length > 0) {
@@ -266,7 +266,8 @@ export default {
             value: item.value,
             form_field_id: item.form_field_id,
             last_update: item.last_update,
-            hospital_id: item.hospital_id
+            created_manager_name: item.created_manager_name, 
+            updated_manager_name: item.created_manager_name
           })
         })
         return true

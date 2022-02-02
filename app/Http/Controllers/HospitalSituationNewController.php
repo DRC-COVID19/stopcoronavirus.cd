@@ -46,7 +46,7 @@ class HospitalSituationNewController extends Controller
     {
         $data = $this->validator($request->all());
         try {
-           // $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
+            $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
 
             $hospitalSituationNew = HospitalSituationNew::create($data);
 
@@ -107,6 +107,8 @@ class HospitalSituationNewController extends Controller
         return Validator::make($data, [
             "form_field_id" => 'nullable',
             "value" => 'nullable',
+            'created_manager_name'  =>'nullable', 
+            'updated_manager_name'  => 'nullable',
             'last_update' => [
                 'date',
                 'nullable',
