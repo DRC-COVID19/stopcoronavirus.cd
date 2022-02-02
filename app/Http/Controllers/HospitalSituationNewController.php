@@ -232,10 +232,7 @@ class HospitalSituationNewController extends Controller
         $observation_start = $request->input('observation_start');
         $township = $request->input('township');
         $hospital = $request->input('hospital');
-        // $observation_end = '2022-01-18';
-        // $observation_start = '2022-01-14';
-        // $township = '1';
-        // $hospital = '2';
+      
        
         try {
             // On réccupère toutes les dates où une mise à jour a pu etre poster
@@ -284,21 +281,8 @@ class HospitalSituationNewController extends Controller
             )
             ->where('last_update' , '<=' , $lastUpdate)
             ->whereRaw('DATE(last_update) BETWEEN ? AND ?', [$observation_start, $observation_end])
-            ->whereNotExists(function($query) use($lastUpdate){
-                // C'est ici qu'on s'assure que la situation actuellemnent lu est la dernière connu
-                // pour l'hopital x à la date $last_update sur laquelle on boucle
-                $query->select(DB::raw(1))
-                ->from(DB::raw('hospital_situations_new AS h'))
-                ->whereRaw("h.hospital_id = hospital_situations_new.hospital_id
-                    AND h.last_update <='{$lastUpdate}'
-                    AND (
-                      h.last_update > hospital_situations_new.last_update OR
-                      (h.last_update = hospital_situations_new.last_update AND h.id > hospital_situations_new.id )
-                    )
-                  ");
-                    })
-                    ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
-                    ->get();
+            ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
+            ->get();
 
 
                 $results['last_update'][] = $lastUpdate;
