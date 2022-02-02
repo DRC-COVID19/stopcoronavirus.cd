@@ -48,7 +48,7 @@ export default {
         // eslint-disable-next-line no-undef
 
         axios
-          .post('/api/dashboard/hospital-situations', payload)
+          .post('/api/dashboard/hospital-situations/create-situation', payload)
           .then(({ data }) => {
             commit('SET_HOSPITAL_SITUATION', data)
             commit('SET_IS_LOADING', false)

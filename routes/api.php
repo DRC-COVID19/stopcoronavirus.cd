@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\PandemicStat;
 use App\Http\Resources\PandemicStat as PandemicStatResource;
+use Encore\Admin\Form\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -183,12 +184,12 @@ Route::group([
   Route::group(['prefix' => 'hospital-situations'], function () {
     Route::get('/by-hospital/{hospital_id}', 'HospitalSituationController@indexByHospital');
 
-    Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate'); //ok
+    Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate'); 
   });
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
 
-  Route::resource('hospital-situations', "HospitalSituationController");
+  Route::apiResource('hospital-situations', "HospitalSituationController");
   Route::get('get-hospital-situations-all', "HospitalSituationController@getSituationHospitalsAll");
   Route::post('get-by-hospital-situations', "HospitalSituationController@getSituationByHospitals");
   Route::post('get-situations', "HospitalSituationController@getSituations");

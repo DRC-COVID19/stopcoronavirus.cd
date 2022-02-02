@@ -26,8 +26,8 @@ class HospitalSituationController extends Controller
     public function index()
     {
         try {
-            $hospitalSituation = HospitalSituation::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
-            return HospitalSituationSingleResource::collection($hospitalSituation);
+            $hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
+            return $hospitalSituation;
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -63,6 +63,7 @@ class HospitalSituationController extends Controller
 
         
     }
+
     public function store(Request $request)
     {
         $data = $this->validator($request->all());
@@ -80,10 +81,9 @@ class HospitalSituationController extends Controller
         }
     }
   
+  
     /**
      * Display the specified resource.
-     *
-     * @param  \App\HospitalSituation  $hospitalSituation
      * @return \Illuminate\Http\Response
      */
     public function show($last_update)
@@ -184,7 +184,6 @@ class HospitalSituationController extends Controller
             'created_manager_name'  =>'nullable', 
             'updated_manager_name'  => 'nullable',
             'last_update' => [
-                'date',
                 'nullable',
                 function ($attribute, $value, $fail) use ($id) {
                     if ($id) {
