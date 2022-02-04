@@ -50,7 +50,7 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                      update_id:data.item.last_update,
+                    update_id:data.item.last_update,
                     hospital_id: user.hospital.id || 0
                     }
                     }"
@@ -60,6 +60,7 @@
                 :to="{
                   name: 'hospital.edit',
                   params: {
+                    update_id:data.item.last_update,
                     hospital_id: data.item.id
                   }
                 }"
@@ -136,7 +137,6 @@ export default {
     getSituations (hospitalId = 1) {
       let page = 1 
       if (typeof page === 'undefined') page = 1
-      this.ishospitalSituationLoading = true
       this.getHospitalSituations({ page, hospital_id: hospitalId, isLoading: this.ishospitalSituationLoading })
       return this.hospitalSituations
     },

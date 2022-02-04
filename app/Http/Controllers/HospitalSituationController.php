@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use DateTime;
-use App\HospitalSituation;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use App\HospitalSituationNew;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\DB;
+use App\HospitalSituation;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Date;
 use App\Http\Resources\HospitalResources;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\HospitalSituationResource;
 use App\Http\Resources\HospitalSituationSingleResource;
 
@@ -66,10 +67,11 @@ class HospitalSituationController extends Controller
 
     public function store(Request $request)
     {
+        
         $data = $this->validator($request->all());
         try {
-            $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
-            
+           // $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
+            Log::info('hospitalData',[$request->all()]);
             $hospitalSituationNew = HospitalSituationNew::create($data);
 
             return response()->json($hospitalSituationNew, 201, [], JSON_NUMERIC_CHECK);
@@ -179,24 +181,12 @@ class HospitalSituationController extends Controller
     function validator($data, $id = null)
     {
         return Validator::make($data, [
-            "form_field_id" => 'nullable',
-            "value" => 'nullable',
-            'created_manager_name'  =>'nullable', 
+            "form_field_id" => 'required',
+            "value" => 'required',
+            'created_manager_name'  =>'required', 
             'updated_manager_name'  => 'nullable',
-            'last_update' => [
-                'nullable',
-                function ($attribute, $value, $fail) use ($id) {
-                    if ($id) {
-                        return;
-                    }
-                    $hospital_id = $this->guard()->user()->hospitalManager->id;
-                    $exists = HospitalSituationNew::where('hospital_id', $hospital_id)
-                        ->where('last_update', $value)->exists();
-                    if ($exists) {
-                        $fail("La {$value} a déjà une mise à jours");
-                    }
-                }
-            ]
+            'hospital_id'=>'nullable',
+            'last_update' => 'required|date'
         ])->validate();
     }
 
@@ -372,9 +362,6 @@ class HospitalSituationController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
-
-
-
     /**
      * Get the guard to be used during authentication.
      *

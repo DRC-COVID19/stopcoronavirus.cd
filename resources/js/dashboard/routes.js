@@ -119,7 +119,7 @@ export default [
     }
   },
   {
-    path: '/hospitals/edit/:hospital_id',
+    path: '/hospitals/:hospital_id/edit/:update_id',
     name: 'hospital.edit',
     component: HospitalsCreate,
     meta: {

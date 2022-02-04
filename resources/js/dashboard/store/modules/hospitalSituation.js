@@ -48,9 +48,9 @@ export default {
         // eslint-disable-next-line no-undef
 
         axios
-          .post('/api/dashboard/hospital-situations/create-situation', payload)
+          .post('/api/dashboard/hospital-situations', payload)
           .then(({ data }) => {
-            commit('SET_HOSPITAL_SITUATION', data)
+            commit('SET_ALL_HOSPITAL_SITUATION', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })
@@ -67,7 +67,7 @@ export default {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get('api/dashboard/hospital-situations-new')
+          .get('api/dashboard/hospital-situations')
           .then(({ data }) => {
             commit('SET_HOSPITAL_SITUATION', data)
             commit('SET_IS_LOADING', false)

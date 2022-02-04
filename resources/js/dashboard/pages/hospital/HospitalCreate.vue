@@ -39,6 +39,7 @@
                   v-else
                   >
                   <h3 class="mb-4 text-center">{{step.title}}</h3>
+                  {{ $route.params.hospital_id }}
                 <b-row align-h="center" >
                 <b-col cols="12" md="8">
                  <b-form-group
@@ -121,7 +122,7 @@
                   <h3 class="mb-4">{{step.title}}</h3>
 
                   <div
-                    v-for="(summary, count) in fomSummary"
+                    v-for="(summary, count) in formSummary"
                     :key="count">
                   <ul v-if="step.id===summary.stepId">
                     <li>{{summary.fieldName}} : {{summary.value}}</li>
@@ -174,7 +175,7 @@ export default {
 
       },
       formData: new Map(),
-      fomSummary: [],
+      formSummary: [],
       formDataFormatted: [],
       form: {
         items: [],
@@ -187,6 +188,7 @@ export default {
   },
   computed: {
     ...mapState({
+      user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
       formSteps: (state) => state.formStep.formSteps
     }),
@@ -250,14 +252,14 @@ export default {
       }
       if (this.createSituation(this.formData)) {
         this.isLoading = false
-        //this.$router.push('/hospitals')
+        this.$router.push('/hospitals')
       }
     },
 
     createSituation (formData) {
-      console.log(this.$route.params.hospital_id );
+      const counter = 1
       for (const [key, value] of formData) {
-        this.formDataFormatted.push({ form_field_id: key, value, last_update: this.form.last_update, created_manager_name: this.form.created_manager_name, updated_manager_name: this.form.created_manager_name })
+        this.formDataFormatted.push({ form_field_id: key, value, last_update: this.form.last_update, created_manager_name: this.form.created_manager_name, updated_manager_name: this.form.created_manager_name, hospital_id: this.user.hospital.id })
       }
 
       if (this.formDataFormatted.length > 0) {
@@ -266,19 +268,21 @@ export default {
             value: item.value,
             form_field_id: item.form_field_id,
             last_update: item.last_update,
-            created_manager_name: item.created_manager_name, 
-            updated_manager_name: item.created_manager_name
+            created_manager_name: item.created_manager_name,
+            updated_manager_name: item.created_manager_name,
+            hospital_id: item.hospital_id
           })
         })
         return true
       }
+
       return false
     },
     handelChange (key, value, fieldName, stepId) {
       if (value) {
         if (!this.formData.has(key)) {
           this.formData.set(key, value)
-          this.fomSummary.push({ value, fieldName, stepId })
+          this.formSummary.push({ value, fieldName, stepId })
         }
       }
     },
