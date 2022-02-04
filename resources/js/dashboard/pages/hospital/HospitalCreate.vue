@@ -302,67 +302,8 @@ export default {
         .finally(() => {
           this.isLoading = false
         })
-    },
-    confirmedChecked (checked) {
-      if (checked) this.$set(this.form, 'confirmed', '')
-    },
-    sickChecked (checked) {
-      if (checked) this.$set(this.form, 'sick', '')
-    },
-    healedChecked (checked) {
-      if (checked) this.$set(this.form, 'healed', '')
-    },
-    deadChecked (checked) {
-      if (checked) this.$set(this.form, 'dead', '')
-    },
-    occupied_foam_bedsChecked (checked) {
-      if (checked) this.$set(this.form, 'occupied_foam_beds', '')
-    },
-    occupied_resuscitation_bedsChecked (checked) {
-      if (checked) this.$set(this.form, 'occupied_resuscitation_beds', '')
-    },
-    occupied_respiratorsChecked (checked) {
-      if (checked) this.$set(this.form, 'occupied_respirators', '')
-    },
-    resuscitation_ventilatorChecked (checked) {
-      if (checked) this.$set(this.form, 'resuscitation_ventilator', '')
-    },
-    masksChecked (checked) {
-      if (checked) this.$set(this.form, 'masks', '')
-    },
-    individual_protection_equipmentChecked (checked) {
-      if (checked) this.$set(this.form, 'individual_protection_equipment', '')
-    },
-    oxygenatorChecked (checked) {
-      if (checked) this.$set(this.form, 'oxygenator', '')
-    },
-    rapid_screeningChecked (checked) {
-      if (checked) this.$set(this.form, 'rapid_screening', '')
-    },
-    x_rayChecked (checked) {
-      if (checked) this.$set(this.form, 'x_ray', '')
-    },
-    automate_genexpertChecked (checked) {
-      if (checked) this.$set(this.form, 'automate_genexpert', '')
-    },
-    gel_hydro_alcooliqueChecked (checked) {
-      if (checked) this.$set(this.form, 'gel_hydro_alcoolique', '')
-    },
-    check_pointChecked (checked) {
-      if (checked) this.$set(this.form, 'check_point', '')
-    },
-    chloroquineChecked (checked) {
-      if (checked) this.$set(this.form, 'chloroquine', '')
-    },
-    hydrochloroquineChecked (checked) {
-      if (checked) this.$set(this.form, 'hydrochloroquine', '')
-    },
-    azytromicineChecked (checked) {
-      if (checked) this.$set(this.form, 'azytromicine', '')
-    },
-    Vitamince_cChecked (checked) {
-      if (checked) this.$set(this.form, 'Vitamince_c', '')
     }
+   
   }
 }
 </script>

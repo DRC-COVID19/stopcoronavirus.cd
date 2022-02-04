@@ -61,7 +61,7 @@
                   name: 'hospital.edit',
                   params: {
                     update_id:data.item.last_update,
-                    hospital_id: data.item.id
+                    form_id: 4
                   }
                 }"
               >Edit</b-button>
