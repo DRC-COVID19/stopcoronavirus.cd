@@ -1,7 +1,7 @@
 <template>
   <div
     class="tooltip-map"
-    :style="{ left: position.left + 15, top: position.top }"
+    :style="{ left: position.left -50, top: position.top }"
   >
     <div v-if="item.type">{{`Type ${item.type}`}}</div>
     <div v-if="item.destination">

@@ -16,13 +16,13 @@
             class="col-12 col-md-6 mb-3 mb-md-0 m-0 d-flex align-items-baseline"
             v-if="!isLoading"
           >
-            <span>{{ hospital.name || "Rapport global"}}</span>
+            <span style="width:100%">{{ hospital.name || "Rapport global"}}</span>
             <b-badge v-if="hospitalCount" style="font-size: 12px" class="ml-2">
               {{ hospitalCount }}
               <small>infrastructure(s)</small>
             </b-badge>
           </h4>
-          <export-excel :data="hospitalSituationData" :name="fileName">
+          <export-excel :data="hospitalSituationData" :name="fileName" v-show="isUploadFile">
             <span style="cursor: pointer"
               >Télécharger les données
               <Icon
@@ -37,7 +37,7 @@
           >
             Mise à jour du {{ moment(lastUpdate).format("DD.MM.Y") }}
           </div>
-          <div class="col-12 text-right" v-if="!isLoading">
+          <div class="col-12 text-center" v-if="!isLoading">
             <button
               class="btn btn-sm btn-primary"
               style="font-size: 12px"
@@ -112,7 +112,7 @@
           </div>
         </b-card> -->
     </b-row>
-    <b-row no-gutters class="mb-2">
+    <!-- <b-row no-gutters class="mb-2">
       <b-col cols="12" md="6" class="pr-1">
         <div v-if="situationHospitalLoading || isLoading">
           <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
@@ -242,7 +242,7 @@
               label="Chargement..."
               v-if="situationHospitalLoading"
             ></b-spinner> -->
-            <div class="legend-custom">
+            <!-- <div class="legend-custom">
               <div class="text-center title general-top-title">
                 Evolution global du taux d'occupation
               </div>
@@ -272,11 +272,11 @@
                 ref="canvasStat3"
                 id="canvasStat3"
               ></canvas> -->
-            </div>
+            <!-- </div>
           </b-card>
         </FullScreen>
       </b-col>
-    </b-row>
+    </b-row> -->
   </b-container>
 </template>
 
@@ -286,17 +286,17 @@
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { PALETTE } from '../config/env'
 import { Icon } from '@iconify/vue2'
-import GlobalSituationChart from './graphic/GlobalSituationChart.vue'
-import OccupedRespiratorChart from './graphic/OccupedRespiratorChart.vue'
-import OccupiedResuscitationBeds from './graphic/OccupiedResuscitationBedsChart.vue'
+// import GlobalSituationChart from './graphic/GlobalSituationChart.vue'
+// import OccupedRespiratorChart from './graphic/OccupedRespiratorChart.vue'
+// import OccupiedResuscitationBeds from './graphic/OccupiedResuscitationBedsChart.vue'
 
 export default {
   props: ['hospitalSituationAll'],
   components: {
-    Icon,
-    GlobalSituationChart,
-    OccupedRespiratorChart,
-    OccupiedResuscitationBeds
+    Icon
+    // GlobalSituationChart,
+    // OccupedRespiratorChart,
+    // OccupiedResuscitationBeds
   },
   data () {
     return {
@@ -383,13 +383,13 @@ export default {
       this.fileName = `Données_du_${this.observation_start}_au_${this.observation_end}.xls`
       let hospitalSituationFiltered = []
       hospitalSituationAllSlice.forEach((hospital) => {
-        if (hospitalSituationFiltered.find((observation) => hospital.date === observation.date && hospital.hospital_id === observation.numero_hopital)) {
-          const index = hospitalSituationFiltered.findIndex((observation) => hospital.date === observation.date && hospital.hospital_id === observation.numero_hopital)
+        if (hospitalSituationFiltered.find((observation) => moment(hospital.date).format('DD/MM/YY') === observation.date && hospital.hospital_id === observation.numero_hopital)) {
+          const index = hospitalSituationFiltered.findIndex((observation) => moment(hospital.date).format('DD/MM/YY') === observation.date && hospital.hospital_id === observation.numero_hopital)
           hospitalSituationFiltered[index][hospital.form_field_name] = hospital.form_field_value
         } else {
           const monObj = {}
-          monObj.date = hospital.date
-          monObj.numero_hopital = hospital.hospital_id
+          monObj.date = moment(hospital.date).format('DD/MM/YY')
+          monObj.phone_number = hospital.phone_number
           monObj.nom_hopital = hospital.hospital_name
           monObj[hospital.form_field_name] = hospital.form_field_value
           hospitalSituationFiltered.push(monObj)
@@ -405,6 +405,9 @@ export default {
     hospitalSelectedFiltered () {
       const arrayFilterd = [].concat.apply([], this.hospitalSituationSelected.form_fields_names)
       return this.createSituationsReduce(arrayFilterd)
+    },
+    isUploadFile () {
+      return this.selectedHospital == null
     }
 
   },
@@ -500,7 +503,7 @@ export default {
 
       data.occupied_resuscitation_beds = occupiedResuscitation_beds.map(
         (item, index) => {
-          if (!item || Number(item) == 0) {
+          if (!item || Number(item) === 0) {
             const y1Array = []
             const y2Array = []
 

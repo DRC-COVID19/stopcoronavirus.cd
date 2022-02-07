@@ -310,13 +310,16 @@ class HospitalSituationNewController extends Controller
             $observation = DB::table('hospital_situations_new')
                 ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
                 ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+                ->join('admin_user_hospital', 'admin_user_hospital.hospital_id', '=', 'hospitals.id')
+                ->join('admin_users', 'admin_user_hospital.admin_user_id', '=', 'admin_users.id')
                 ->join('townships', 'townships.id', '=', 'hospitals.township_id')
                 ->select(
                     'form_fields.name as form_field_name',
                     'hospital_situations_new.value as form_field_value',
                     'hospitals.id as hospital_id',
                     'hospitals.name as hospital_name',
-                    'hospital_situations_new.last_update as date'
+                    'hospital_situations_new.last_update as date',
+                    'admin_users.username as phone_number'
                 )
                 ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
                 ->where(function ($query) use ($township) {
