@@ -14,14 +14,15 @@
           }">
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
-          <h3 v-if="$route.params.hospital_id" class="mb-4 mt-4">
+          <h3 v-if="$route.params.update_id" class="mb-4 mt-4">
             Modifier la mise à jour du
             <br />
-            {{moment(form.last_update).format("DD.MM.Y")}}
+            {{moment($route.params.update_id).format("DD/MM/Y")}}
+            {{ renderSituations }}
           </h3>
 
           <form-wizard
-            :title="$route.params.hospital_id?'':targetForm.title"
+            title="FORMULAIRE"
             subtitle
 
             shape="tab"
@@ -160,6 +161,7 @@ import Loading from '../../components/Loading'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import { mapState, mapActions } from 'vuex'
+import { createSituationsReduce } from '../../plugins/functions'
 export default {
   components: {
     FormWizard,
@@ -190,7 +192,9 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
-      formSteps: (state) => state.formStep.formSteps
+      formSteps: (state) => state.formStep.formSteps,
+      editionData: state => state.hospitalSituation.hospitalSituationDetail,
+      isHospitalSituationLoading: state => state.hospitalSituation.isLoading
     }),
     formFieldNullStepSorted () {
       return this.targetForm.form_fields
@@ -199,14 +203,17 @@ export default {
           .sort((a, b) => a.order_field - b.order_field)
           .filter(item => item.form_step_id === null)
         : []
+    },
+    renderSituations () {
+      return createSituationsReduce(this.form)
     }
 
   },
 
   mounted () {
     this.getForm()
-    if (this.$route.params.hospital_id) {
-      this.getHospital()
+    if (this.$route.params.update_id) {
+      this.getHospitalSituations()
     }
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
@@ -215,9 +222,12 @@ export default {
   methods: {
     ...mapActions([
       'formShow',
-      'createHospitalSituation'
+      'createHospitalSituation',
+      'getHospitalSituationsDetail'
     ]),
-
+    getHospitalSituations () {
+      this.getHospitalSituationsDetail({ isLoading: true, update_id: this.$route.params.update_id })
+    },
     formFieldSorted (id) {
       return this.targetForm.form_fields
         ? this.targetForm.form_fields
@@ -244,14 +254,14 @@ export default {
         ? `/api/dashboard/hospital-situations/${this.$route.params.hospital_id}`
         : '/api/dashboard/hospital-situations'
 
-      if (this.$route.params.hospital_id) {
+      if (this.$route.params.update_id) {
         this.form._method = 'PUT'
         this.form.updated_manager_name = this.hospitalManagerName
       } else {
         this.form.created_manager_name = this.hospitalManagerName
       }
       if (this.createSituation(this.formData)) {
-        this.isLoading = false
+        this.isLoading = true
         this.$router.push('/hospitals')
       }
     },
@@ -285,25 +295,8 @@ export default {
           this.formSummary.push({ value, fieldName, stepId })
         }
       }
-    },
-
-    getHospital () {
-      this.isLoading = true
-      this.form.updated_manager_name = this.hospitalManagerName
-      // eslint-disable-next-line no-undef
-      axios
-        .get(
-          `/api/dashboard/hospital-situations/${this.$route.params.hospital_id}`
-        )
-        .then(({ data }) => {
-          this.form = data
-        })
-        .catch((response) => {})
-        .finally(() => {
-          this.isLoading = false
-        })
     }
-   
+
   }
 }
 </script>

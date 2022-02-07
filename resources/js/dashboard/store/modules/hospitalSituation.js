@@ -50,7 +50,6 @@ export default {
         axios
           .post('/api/dashboard/hospital-situations', payload)
           .then(({ data }) => {
-            commit('SET_ALL_HOSPITAL_SITUATION', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })

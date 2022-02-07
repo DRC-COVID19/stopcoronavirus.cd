@@ -62,7 +62,6 @@ export default {
   methods: {
     ...mapActions(['getHospitalSituationsDetail']),
     getHospital () {
-      this.isLoading = true
       this.getHospitalSituationsDetail({ isLoading: this.isLoading, update_id: this.$route.params.update_id })
     }
   }
