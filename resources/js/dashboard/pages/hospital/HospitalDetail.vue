@@ -12,32 +12,21 @@
 
           <h4 class="mb-4">Données épidemologiques</h4>
           <ul>
-            <li>Confirmés : {{form.confirmed}}</li>
-            <li>Hospitalisés : {{form.sick}}</li>
-            <li>Guéris : {{form.healed}}</li>
-            <li>Décès : {{form.dead}}</li>
+            <li v-for="(question, i) in questions.epidemiologicalData" :key="i">
+              {{ question.text }} : {{ form[question.column] }}
+            </li>
           </ul>
           <h4 class="mb-4">Capacité de prise en charge des patiens</h4>
           <ul>
-            <li>Lits avec mousse occupés: {{form.occupied_foam_beds}}</li>
-            <li>Lits de réanimation occupés : {{form.occupied_resuscitation_beds}}</li>
-            <li>Respirateurs occupés : {{form.occupied_respirators}}</li>
-            <li>Ventilateur de réanimation occupés : {{form.resuscitation_ventilator}}</li>
-            <li>Masques : {{form.masks}}</li>
-            <li>Equipement de protection individuelle : {{form.individual_protection_equipment}}</li>
-            <li>Oxygénérateur : {{form.oxygenator}}</li>
-            <li>Dépistage rapide : {{form.rapid_screening}}</li>
-            <li>Radiographie : {{form.x_ray}}</li>
-            <li>Automate Genexpert : {{form.automate_genexpert}}</li>
-            <li>Gel hydro alcoolique : {{form.gel_hydro_alcoolique}}</li>
-            <li>Check point : {{form.check_point}}</li>
+            <li v-for="(question, i) in questions.patientCareCapacity" :key="i">
+              {{ question.text }} : {{ form[question.column] }}
+            </li>
           </ul>
           <h4 class="mb-4">Médicaments</h4>
           <ul>
-            <li>Chloroquine : {{form.chloroquine}}</li>
-            <li>Hydrochloroquine : {{form.hydrochloroquine}}</li>
-            <li>Azytromicine : {{form.azytromicine}}</li>
-            <li>Vitamince c : {{form.Vitamince_c}}</li>
+            <li v-for="(question, i) in questions.medications" :key="i">
+              {{ question.text }} : {{ form[question.column] }}
+            </li>
           </ul>
           <div>Données envoyées par <b> {{form.created_manager_name}}</b></div>
           <div v-if="form.updated_manager_name">Modifier par {{form.updated_manager_name}}</div>
@@ -51,6 +40,8 @@
 import Header from "../../components/hospital/Header";
 import Loading from "../../components/Loading";
 import {mapState} from "vuex" ;
+import Questions from "../../config/questions";
+
 export default {
   components: {
     Loading,Header
@@ -58,7 +49,8 @@ export default {
   data() {
     return {
       form: {},
-      isLoading: false
+      isLoading: false,
+      questions: Questions
     };
   },
   mounted(){

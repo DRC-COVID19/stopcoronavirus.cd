@@ -116,10 +116,16 @@ class HospitalSituationController extends Controller
     function validator($data, $id = null)
     {
         return Validator::make($data, [
+            // epidemiologicalData
             "confirmed" => 'nullable',
             "sick" => 'nullable',
             'healed' => 'nullable',
             'dead' => 'nullable',
+            'number_healed_discharged' => 'nullable',
+            'number_patients_referred' => 'nullable',
+            'reference_ctco_name' => 'nullable',
+
+            // patientCareCapacity
             'occupied_Beds' => 'nullable',
             'occupied_respirators' => 'nullable',
             'masks' => 'nullable',
@@ -133,10 +139,32 @@ class HospitalSituationController extends Controller
             "automate_genexpert" => 'nullable',
             "x_ray" => 'nullable',
             "check_point" => 'nullable',
+            "number_beds_reserved_covid_19" => 'nullable',
+            "number_beds_occupied_covid_19" => 'nullable',
+            "reserved_resuscitation_beds_covid_19" => 'nullable',
+            "occupied_resuscitation_beds_covid_19" => 'nullable',
+            "occupied_resuscitation_beds_covid_19" => 'nullable',
+            "reserved_respirators_covid_19" => 'nullable',
+            "reserved_resuscitation_ventilator_covid_19" => 'nullable',
+            "occupied_resuscitation_ventilator_covid_19" => 'nullable',
+            "reserved_oxygenator_covid_19" => 'nullable',
+            "occupied_oxygenator_covid_19" => 'nullable',
+            "lack_epi" => 'nullable',
+            "tdr_covid_19_required" => 'nullable',
+            "tdr_covid_19_available" => 'nullable',
+            "x_ray_required" => 'nullable',
+            "automate_genexpert_required" => 'nullable',
+
+            // medications
             "chloroquine" => 'nullable',
+            "chloroquine_required" => 'nullable',
             'hydrochloroquine' => 'nullable',
             'azytromicine' => 'nullable',
+            'azytromycine_required' => 'nullable',
             'Vitamince_c' => 'nullable',
+            'vitamine_c_required' => 'nullable',
+            'zinc_required' => 'nullable',
+            'zinc_available' => 'nullable',
             'created_manager_name' => 'nullable',
             'updated_manager_name' => 'nullable',
             'last_update' => [
