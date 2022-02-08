@@ -10,24 +10,22 @@
           </b-link>
           <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form.last_update).format("DD.MM.Y")}}</h3>
 
-          <h4 class="mb-4">Données épidemologiques</h4>
+          <h4 class="mb-4">Données epidemiologiques</h4>
           <ul>
             <li v-for="(question, i) in questions.epidemiologicalData" :key="i">
               {{ question.text }} : {{ form[question.column] }}
             </li>
           </ul>
-          <h4 class="mb-4">Capacité de prise en charge des patiens</h4>
+          <h4 class="mb-4">Capacité de prise en charge</h4>
           <ul>
             <li v-for="(question, i) in questions.patientCareCapacity" :key="i">
               {{ question.text }} : {{ form[question.column] }}
             </li>
-          </ul>
-          <h4 class="mb-4">Médicaments</h4>
-          <ul>
             <li v-for="(question, i) in questions.medications" :key="i">
               {{ question.text }} : {{ form[question.column] }}
             </li>
           </ul>
+
           <div>Données envoyées par <b> {{form.created_manager_name}}</b></div>
           <div v-if="form.updated_manager_name">Modifier par {{form.updated_manager_name}}</div>
         </b-col>

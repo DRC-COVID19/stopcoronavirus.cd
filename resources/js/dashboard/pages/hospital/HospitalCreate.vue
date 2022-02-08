@@ -58,7 +58,7 @@
             <tab-content>
               <b-row align-h="center">
                 <b-col cols="12" md="6">
-                  <h3 class="mb-4">Capacité de prise en charge des patients</h3>
+                  <h3 class="mb-4">Capacité de prise en charge</h3>
 
                   <b-form-group v-for="(question, i) in questions.patientCareCapacity" :key="i">
                     <label for class="text-dash-color"> {{ question.text }} </label>
@@ -76,15 +76,6 @@
                       Donnée non disponible
                     </b-form-checkbox>
                   </b-form-group>
-
-                </b-col>
-              </b-row>
-            </tab-content>
-
-            <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="6">
-                  <h3>Médicaments</h3>
 
                   <b-form-group v-for="(question, i) in questions.medications" :key="i">
                     <label for class="text-dash-color"> {{ question.text }} </label>
@@ -106,6 +97,7 @@
                 </b-col>
               </b-row>
             </tab-content>
+
             <tab-content>
               <b-row align-h="center">
                 <b-col cols="12" md="6">
@@ -117,18 +109,16 @@
                       {{ question.text }} : {{ form[question.column] }}
                     </li>
                   </ul>
-                  <h4 class="mb-4">Capacité de prise en charge des patients</h4>
+                  <h4 class="mb-4">Capacité de prise en charge</h4>
                   <ul>
                     <li v-for="(question, i) in questions.patientCareCapacity" :key="i">
                       {{ question.text }} : {{ form[question.column] }}
                     </li>
-                  </ul>
-                  <h4 class="mb-4">Médicaments</h4>
-                  <ul>
                     <li v-for="(question, i) in questions.medications" :key="i">
                       {{ question.text }} : {{ form[question.column] }}
                     </li>
                   </ul>
+
                   <b-form-group class="no-border">
                     <label for="last_update" class="text-dash-color">Sélectionnez la date</label>
                     <b-form-datepicker
