@@ -163,7 +163,7 @@ class HospitalSituationController extends Controller
               ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
               ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
               ->where('hospital_situations_new.hospital_id','=',intval($id))
-              ->select('hospital_situations_new.last_update','hospitals.name', 'hospital_situations_new.created_manager_name','hospitals.id as hospital_id')
+              ->select('hospital_situations_new.last_update','hospitals.id as hospital_id','hospitals.name', 'hospital_situations_new.created_manager_name')
               ->latest('last_update')
               ->first();
               array_push($situations,$hospitalSituation);

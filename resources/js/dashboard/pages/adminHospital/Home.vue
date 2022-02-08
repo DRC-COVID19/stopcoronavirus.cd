@@ -5,7 +5,6 @@
       <b-row class="mt-4">
         <b-col cols="12" md="10">
           <h3>Résumé mise à jour CTCOS</h3>
-          {{ updateData }}
         </b-col>
         <b-col cols="12" md="2">
           <b-button class="btn-dash-blue" @click="getData()">
@@ -87,7 +86,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import Header from '../../components/hospital/Header'
-import { renderDiffDate } from '../../plugins/functions'
+import { renderDiffDate as diffDate } from '../../plugins/functions'
 export default {
   components: {
     Header
@@ -113,13 +112,13 @@ export default {
   methods: {
     ...mapActions(['getAllHospitalSituationsByLastUpdate']),
 
-    getColor (date) {
-      const diffDay = renderDiffDate(this.moment, date)
+    renderDiffDate (moment, date) {
+      return diffDate(this.moment, date)
 
-      if (diffDay < 4) return '#8BC34A' // vert
-      else if (diffDay < 8) return '#f08c2e' // orange
-      else if (diffDay < 10) return '#F44336' // rouge
-      else return '#888888' // gris
+      // if (diffDay < 4) return '#8BC34A' // vert
+      // else if (diffDay < 8) return '#f08c2e' // orange
+      // else if (diffDay < 10) return '#F44336' // rouge
+      // else return '#888888' // gris
     }
   }
 }
