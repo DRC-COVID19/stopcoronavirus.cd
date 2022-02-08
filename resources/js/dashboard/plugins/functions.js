@@ -29,3 +29,10 @@ export const createSituationsReduce = (array = []) => {
   }
   return []
 }
+
+export const renderDiffDate = (moment, date) => {
+  const dateFormat = moment(date)
+  const curDate = moment(new Date())
+
+  return curDate.diff(dateFormat, 'days')
+}

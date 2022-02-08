@@ -56,6 +56,7 @@
                     }"
               >Details</b-button>
               <b-button
+                v-if="renderHour(data.item.last_update) <=24"
                 class="btn btn-warning mb-1"
                 :to="{
                   name: 'hospital.edit',
@@ -64,7 +65,7 @@
                     form_id: 4
                   }
                 }"
-              >Edit</b-button>
+              >Editer</b-button>
             </template>
           </b-table>
         </b-col>
@@ -89,6 +90,7 @@
 import Header from '../../components/hospital/Header'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import { mapState, mapActions, mapMutations } from 'vuex'
+import { renderDiffDate } from '../../plugins/functions'
 export default {
   components: {
     Header,
@@ -98,7 +100,7 @@ export default {
     return {
       fields: [
         { key: 'last_update', label: 'Date' },
-        { key: 'confirmed', label: 'Confirmés' },
+        { key: 'name', label: 'Nom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
@@ -135,13 +137,17 @@ export default {
     ...mapActions(['getHospitalSituations']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     getSituations (hospitalId = 1) {
-      let page = 1 
+      let page = 1
       if (typeof page === 'undefined') page = 1
       this.getHospitalSituations({ page, hospital_id: hospitalId, isLoading: this.ishospitalSituationLoading })
       return this.hospitalSituations
     },
     onPageChange (page) {
       this.getHospitalSituations(page)
+    },
+    renderHour (date) {
+      const diffDay = renderDiffDate(this.moment, date)
+      return diffDay * 24
     }
   }
 }

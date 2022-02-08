@@ -50,7 +50,7 @@ class HospitalSituationController extends Controller
             ->select(
                 'hospital_situations_new.id',
                 'hospital_situations_new.last_update as last_update',
-                'hospital_situations_new.value as confirmed',
+                'hospital_situations_new.created_manager_name as name',
             )
             ->orderBy('last_update','desc')->paginate($paginate);
 
@@ -146,19 +146,31 @@ class HospitalSituationController extends Controller
     {
        
         try {
-            $hospitalSituation = DB::table('hospital_situations_new')
+            $situations=[];
+            $hospitalIds = DB::table('hospital_situations_new')
             ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
             ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
             ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-            ->where('form_fields.name', '=', 'Nombre des cas confirmés')
-            ->select('hospitals.name','hospitals.id as hospital_id',
-                DB::raw('MAX(CAST(hospital_situations_new.last_update as DATE)) as last_update'),
-                DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as confirmed'),
-            )
-            ->groupBy('hospitals.name','hospitals.id')
-            ->orderBy('last_update','desc')
-            ->get();
-            return response()->json($hospitalSituation,200,[],JSON_NUMERIC_CHECK);
+            ->select('hospitals.id as hospitals_id')
+            ->pluck('hospitals_id')
+            ->unique()
+            ->sort()
+            ->values();
+
+            foreach ($hospitalIds as $id) {
+              $hospitalSituation=DB::table('hospital_situations_new')
+              ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+              ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
+              ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+              ->where('hospital_situations_new.hospital_id','=',intval($id))
+              ->select('hospital_situations_new.last_update','hospitals.name', 'hospital_situations_new.created_manager_name','hospitals.id as hospital_id')
+              ->latest('last_update')
+              ->first();
+              array_push($situations,$hospitalSituation);
+            }
+
+            return response()->json($situations,200,[],JSON_NUMERIC_CHECK);
+          
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

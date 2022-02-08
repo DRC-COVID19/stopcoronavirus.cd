@@ -4,7 +4,8 @@
     <b-container>
       <b-row class="mt-4">
         <b-col cols="12" md="10">
-          <h3>Dernières mise à jour situation épidemiologique</h3>
+          <h3>Résumé mise à jour CTCOS</h3>
+          {{ updateData }}
         </b-col>
         <b-col cols="12" md="2">
           <b-button class="btn-dash-blue" @click="getData()">
@@ -31,15 +32,40 @@
                 <strong>Loading...</strong>
               </div>
             </template>
-         
+
             <template v-slot:cell(statut)="data">
-              <span class="badge badge-pill badge-statut"
-                :style="'background-color : ' + getColor(data.item.last_update)">
+             <div v-if="renderDiffDate(moment, item.last_update) < 4" class="d-flex justify-content-start align-item-center">
+                <span class="badge badge-pill badge-statut"
+                :style="'background-color : ' + '#8BC34A'">
 
                 </span>
+                <span class="ml-4">mise à jour après 3 jours</span>
+             </div>
+             <div v-else-if="renderDiffDate(moment, data.item.last_update) < 8" class="d-flex justify-content-start align-item-center">
+                <span class="badge badge-pill badge-statut"
+                :style="'background-color : ' + '#8BC34A'">
+
+                </span>
+                <span class="ml-4">mise à jour après 3 jours</span>
+             </div>
+             <div v-else-if="renderDiffDate(moment,data.item.last_update) < 10" class="d-flex justify-content-start align-item-center">
+                <span class="badge badge-pill badge-statut"
+                :style="'background-color : ' + '#8BC34A'">
+
+                </span>
+                <span class="ml-4">mise à jour après 3 jours</span>
+             </div>
+             <div v-else  class="d-flex justify-content-start align-item-center">
+                <span class="badge badge-pill badge-statut"
+                :style="'background-color : ' + '#8BC34A'">
+
+                </span>
+                <span class="ml-4">mise à jour après 3 jours</span>
+             </div>
             </template>
             <template v-slot:cell(last_update)="data">
               <span>{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
+              {{ data[0] }}
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
@@ -62,6 +88,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import Header from '../../components/hospital/Header'
+import { renderDiffDate } from '../../plugins/functions'
 export default {
   components: {
     Header
@@ -71,8 +98,8 @@ export default {
       fields: [
         { key: 'statut', label: 'Statut' },
         { key: 'last_update', label: 'Date' },
-        { key: 'name', label: 'CTCO' },
-        { key: 'confirmed', label: 'Confirmés' },
+        { key: 'name', label: 'Nom CTCO' },
+        { key: 'created_manager_name', label: 'Soumis par' },
         { key: 'actions', label: 'Actions' }
       ],
       isLoading: false
@@ -88,14 +115,12 @@ export default {
     ...mapActions(['getAllHospitalSituationsByLastUpdate']),
 
     getColor (date) {
-      const dateFormat = this.moment(date)
-      const curDate = this.moment(new Date())
+      const diffDay = renderDiffDate(this.moment, date)
 
-      const diffDay = curDate.diff(dateFormat, 'days')
-
-      if (diffDay < 8) return '#8BC34A' // green
-      else if (diffDay < 10) return '#FFEB3B' // yellow
-      else return '#F44336' // red
+      if (diffDay < 4) return '#8BC34A' // vert
+      else if (diffDay < 8) return '#f08c2e' // orange
+      else if (diffDay < 10) return '#F44336' // rouge
+      else return '#888888' // gris
     }
   }
 }

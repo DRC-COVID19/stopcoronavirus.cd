@@ -21,7 +21,7 @@
                   </ul>
             </b-col>
           <div>Données envoyées par <b> {{form.slice(0,1)[0].created_manager_name}}</b></div>
-          <div v-if="form.slice(0,1)[0].created_manager_name">Modifier par {{form.slice(0,1)[0].updated_manager_name}}</div>
+          <!-- <div v-if="form.slice(0,1)[0].created_manager_name">Modifier par {{form.slice(0,1)[0].updated_manager_name}}</div> -->
         </b-col>
       </b-row>
     </b-container>

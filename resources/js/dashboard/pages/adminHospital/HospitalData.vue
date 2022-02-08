@@ -12,12 +12,11 @@
         </b-col>
         <b-col v-if="hospital.id">
           <h3>
-            Situations CTCOs
+             Historique mise à jour : {{ hospital.name }}
           </h3>
-          <b-alert show variant="info">
-            <div>{{`Structure: ${hospital.name}`}}</div>
+          <!-- <b-alert show variant="info">
             <p v-if="hospital.address">{{`Adresse: ${hospital.address}`}}</p>
-          </b-alert>
+          </b-alert> -->
         </b-col>
       </b-row>
       <b-row class="mt-4" >
@@ -84,7 +83,7 @@ export default {
     return {
       fields: [
         { key: 'last_update', label: 'Date' },
-        { key: 'confirmed', label: 'Confirmés' },
+        { key: 'name', label: 'Nom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
