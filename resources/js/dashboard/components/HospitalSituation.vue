@@ -1,9 +1,9 @@
 /* eslint-disable no-empty */
 <template>
   <b-container class="p-0">
-    <b-row>
-      <b-col cols="12 mb-2">
-        <div class="row align-items-center">
+    <b-row lg="12">
+      <b-col cols="12" fluid>
+        <div class="col-12 mb-2 row align-items-center" >
           <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
             <square-skeleton
               :boxProperties="{
@@ -12,32 +12,38 @@
               }"
             ></square-skeleton>
           </skeleton-loading>
-          <h4
-            class="col-12 col-md-6 mb-3 mb-md-0 m-0 d-flex align-items-baseline"
-            v-if="!isLoading"
-          >
-            <span style="width:100%">{{ hospital.name || "Rapport global"}}</span>
-            <b-badge v-if="hospitalCount" style="font-size: 12px" class="ml-2">
-              {{ hospitalCount }}
-              <small>infrastructure(s)</small>
-            </b-badge>
-          </h4>
-          <export-excel :data="hospitalSituationData" :name="fileName" v-show="isUploadFile">
-            <span style="cursor: pointer"
-              >Télécharger les données
-              <Icon
-                style="font-size: 30px"
-                icon="vscode-icons:file-type-excel2"
-              />
-            </span>
-          </export-excel>
-          <div
-            class="text-right text-black-50 col-12 col-md-6"
-            v-if="lastUpdate && !isLoading"
-          >
-            Mise à jour du {{ moment(lastUpdate).format("DD.MM.Y") }}
-          </div>
-          <div class="col-12 text-center" v-if="!isLoading">
+            <b-row v-if="!isLoading" class="mb-2">
+              <b-col lg="12">
+                  <h4 >{{
+                  hospital.name || "Rapport global"
+                }}</h4>
+              </b-col>
+              <b-col lg="4">
+                  <b-badge
+                  v-if="hospitalCount"
+                  style="font-size: 12px"
+                >
+                  {{ hospitalCount }}
+                  <small>infrastructure(s)</small>
+                </b-badge>
+              </b-col>
+              <b-col lg="8">
+              <export-excel
+                :data="hospitalSituationData"
+                :name="fileName"
+                v-show="isUploadFile"
+              >
+                <span style="cursor: pointer"
+                  >Télécharger les données
+                  <Icon
+                    style="font-size: 30px"
+                    icon="vscode-icons:file-type-excel2"
+                  />
+                </span>
+              </export-excel>
+          </b-col>
+              </b-row>
+          <div class="col-12 text-right" v-if="!isLoading">
             <button
               class="btn btn-sm btn-primary"
               style="font-size: 12px"
@@ -60,13 +66,13 @@
             }"
           ></square-skeleton>
         </skeleton-loading>
-        <b-row  v-else>
+        <b-row v-else>
           <b-card
-           class="col-10 default-card mb-2 offset-1"
+            class="col-10 default-card mb-2 offset-1"
             v-show="isGlobal"
             v-for="(step, index) in hospitalSituationReduced"
-            :key="index">
-
+            :key="index"
+          >
             <h5 class="bold">{{ step.form_step_title }}</h5>
             <div v-for="(item, key) in step.form_field_values" :key="key">
               <p>
@@ -75,10 +81,13 @@
               </p>
             </div>
           </b-card>
-          <b-card  v-show="!isGlobal" class="col-10 default-card offset-1 mb-2"
+          <b-card
+            v-show="!isGlobal"
+            class="col-10 default-card offset-1 mb-2"
             v-for="(step, index) in hospitalSelectedFiltered"
-            :key="index">
-          <h5 class="bold">{{ step.form_step_title }}</h5>
+            :key="index"
+          >
+            <h5 class="bold">{{ step.form_step_title }}</h5>
             <div v-for="(item, key) in step.form_field_values" :key="key">
               <p>
                 {{ item.form_field_name }} :
@@ -88,7 +97,7 @@
           </b-card>
         </b-row>
       </b-col>
-        <!-- <skeleton-loading v-if="isLoading" class="mb-2">
+      <!-- <skeleton-loading v-if="isLoading" class="mb-2">
           <square-skeleton
             :boxProperties="{
               width: '100%',
@@ -96,7 +105,7 @@
             }"
           ></square-skeleton>
         </skeleton-loading> -->
-        <!-- <b-card
+      <!-- <b-card
           class="col-10 default-card mb-2 offset-1"
           v-else
           v-for="(step, index) in hospitalSituationReduced"
@@ -242,7 +251,7 @@
               label="Chargement..."
               v-if="situationHospitalLoading"
             ></b-spinner> -->
-            <!-- <div class="legend-custom">
+    <!-- <div class="legend-custom">
               <div class="text-center title general-top-title">
                 Evolution global du taux d'occupation
               </div>
@@ -272,7 +281,7 @@
                 ref="canvasStat3"
                 id="canvasStat3"
               ></canvas> -->
-            <!-- </div>
+    <!-- </div>
           </b-card>
         </FullScreen>
       </b-col>
@@ -283,51 +292,51 @@
 <script>
 /* eslint-disable camelcase */
 /* eslint-disable vue/return-in-computed-property */
-import { mapState, mapActions, mapMutations } from 'vuex'
-import { PALETTE } from '../config/env'
-import { Icon } from '@iconify/vue2'
+import { mapState, mapActions, mapMutations } from "vuex";
+import { PALETTE } from "../config/env";
+import { Icon } from "@iconify/vue2";
 // import GlobalSituationChart from './graphic/GlobalSituationChart.vue'
 // import OccupedRespiratorChart from './graphic/OccupedRespiratorChart.vue'
 // import OccupiedResuscitationBeds from './graphic/OccupiedResuscitationBedsChart.vue'
 
 export default {
-  props: ['hospitalSituationAll'],
+  props: ["hospitalSituationAll"],
   components: {
-    Icon
+    Icon,
     // GlobalSituationChart,
     // OccupedRespiratorChart,
     // OccupiedResuscitationBeds
   },
-  data () {
+  data() {
     return {
       etatGlobal: true,
       dataGlobal: null,
       objetChart: {},
-      fileName: '',
+      fileName: "",
       chartLabels: [
         {
           title: "Evolution du taux d'occupation des respirateurs",
-          lableY: 'Nombre de respirateurs'
+          lableY: "Nombre de respirateurs",
         },
 
         {
           title: "Evolution du taux d'occupation des lits de réanimation",
-          lableY: 'Nombre de lits'
+          lableY: "Nombre de lits",
         },
 
         {
           title: "Evolution global du taux d'occupation",
-          lableY: "Taux d'occupation"
-        }
-      ]
-    }
+          lableY: "Taux d'occupation",
+        },
+      ],
+    };
   },
-  mounted () {
-    const id = this.selectedHospital ? this.selectedHospital.id : null
-    this.getSituationHospital(id)
-    this.getFormSteps({ id: 3, page: 1 })
+  mounted() {
+    const id = this.selectedHospital ? this.selectedHospital.id : null;
+    this.getSituationHospital(id);
+    this.getFormSteps({ id: 3, page: 1 });
     if (this.filterdHospitalSituation.last_update.length > 0) {
-      this.hospitalSituationFiltered()
+      this.hospitalSituationFiltered();
     }
   },
   computed: {
@@ -342,248 +351,274 @@ export default {
       formSteps: (state) => state.formStep.formSteps,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,
-      hospitalSituationSelected: (state) => state.hospitalSituation.hospitalSituationSelected,
+      hospitalSituationSelected: (state) =>
+        state.hospitalSituation.hospitalSituationSelected,
       observation_start: (state) => state.hospitalSituation.observation_start,
       observation_end: (state) => state.hospitalSituation.observation_end,
-      filterdHospitalSituation: (state) => state.hospitalSituation.filterdHospitalSituation,
-      hospitalObservationSituation: (state) => state.hospitalSituation.hospitalObservationSituation
-
+      filterdHospitalSituation: (state) =>
+        state.hospitalSituation.filterdHospitalSituation,
+      hospitalObservationSituation: (state) =>
+        state.hospitalSituation.hospitalObservationSituation,
     }),
-    hospital () {
-      if (this.selectedHospital != null) return this.selectedHospital
+    hospital() {
+      if (this.selectedHospital != null) return this.selectedHospital;
       else {
-        return this.hospitalTotalData ? this.hospitalTotalData : {}
+        return this.hospitalTotalData ? this.hospitalTotalData : {};
       }
     },
-    isGlobal () {
-      return this.selectedHospital == null
+    isGlobal() {
+      return this.selectedHospital == null;
     },
-    lastUpdate () {
+    lastUpdate() {
       if (this.selectedHospital != null) {
-        return this.selectedHospital.last_update
+        return this.selectedHospital.last_update;
       } else if (this.dataGlobal) {
         return this.dataGlobal.last_update[
           this.dataGlobal.last_update.length - 1
-        ]
-      } else return null
+        ];
+      } else return null;
     },
 
-    hospitalSituationReduced () {
-      return this.createSituationsReduce(this.hospitalSituationAll.allFormFields)
+    hospitalSituationReduced() {
+      return this.createSituationsReduce(
+        this.hospitalSituationAll.allFormFields
+      );
     },
 
-    hospitalSituationFiltered () {
-      const arrayFilterd = [].concat.apply([], this.filterdHospitalSituation.form_fields_names)
-      return this.createSituationsReduce(arrayFilterd)
+    hospitalSituationFiltered() {
+      const arrayFilterd = [].concat.apply(
+        [],
+        this.filterdHospitalSituation.form_fields_names
+      );
+      return this.createSituationsReduce(arrayFilterd);
     },
 
-    hospitalSituationData () {
-      const hospitalSituationAllSlice = this.hospitalObservationSituation.slice()
+    hospitalSituationData() {
+      const hospitalSituationAllSlice =
+        this.hospitalObservationSituation.slice();
       // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.fileName = `Données_du_${this.observation_start}_au_${this.observation_end}.xls`
-      let hospitalSituationFiltered = []
+      this.fileName = `Données_du_${this.observation_start}_au_${this.observation_end}.xls`;
+      let hospitalSituationFiltered = [];
       hospitalSituationAllSlice.forEach((hospital) => {
-        if (hospitalSituationFiltered.find((observation) => moment(hospital.date).format('DD/MM/YY') === observation.date && hospital.hospital_id === observation.numero_hopital)) {
-          const index = hospitalSituationFiltered.findIndex((observation) => moment(hospital.date).format('DD/MM/YY') === observation.date && hospital.hospital_id === observation.numero_hopital)
-          hospitalSituationFiltered[index][hospital.form_field_name] = hospital.form_field_value
+        if (
+          hospitalSituationFiltered.find(
+            (observation) =>
+              moment(hospital.date).format("DD/MM/YY") === observation.date &&
+              hospital.hospital_id === observation.numero_hopital
+          )
+        ) {
+          const index = hospitalSituationFiltered.findIndex(
+            (observation) =>
+              moment(hospital.date).format("DD/MM/YY") === observation.date &&
+              hospital.hospital_id === observation.numero_hopital
+          );
+          hospitalSituationFiltered[index][hospital.form_field_name] =
+            hospital.form_field_value;
         } else {
-          const monObj = {}
-          monObj.date = moment(hospital.date).format('DD/MM/YY')
-          monObj.phone_number = hospital.phone_number
-          monObj.nom_hopital = hospital.hospital_name
-          monObj[hospital.form_field_name] = hospital.form_field_value
-          hospitalSituationFiltered.push(monObj)
+          const monObj = {};
+          monObj.date = moment(hospital.date).format("DD/MM/YY");
+          monObj.numero_hopital = hospital.hospital_id;
+          monObj.numero_agent = hospital.phone_number;
+          monObj.nom_hopital = hospital.hospital_name;
+          monObj[hospital.form_field_name] = hospital.form_field_value;
+          hospitalSituationFiltered.push(monObj);
         }
-      })
-      hospitalSituationFiltered = [...new Set(hospitalSituationFiltered)]
-      console.log('hospitalSituationFiltered', hospitalSituationFiltered)
-      return hospitalSituationFiltered
-    },
-    prepareGraphicSituation () {
-      return this.hospitalSituationAll.formFieldsFiltered
-    },
-    hospitalSelectedFiltered () {
-      const arrayFilterd = [].concat.apply([], this.hospitalSituationSelected.form_fields_names)
-      return this.createSituationsReduce(arrayFilterd)
-    },
-    isUploadFile () {
-      return this.selectedHospital == null
-    }
+      });
+      hospitalSituationFiltered = [...new Set(hospitalSituationFiltered)];
 
+      console.log("hospitalSituationFiltered", hospitalSituationFiltered);
+      return hospitalSituationFiltered;
+    },
+    prepareGraphicSituation() {
+      return this.hospitalSituationAll.formFieldsFiltered;
+    },
+    hospitalSelectedFiltered() {
+      const arrayFilterd = [].concat.apply(
+        [],
+        this.hospitalSituationSelected.form_fields_names
+      );
+      return this.createSituationsReduce(arrayFilterd);
+    },
+    isUploadFile() {
+      return this.selectedHospital == null;
+    },
   },
   watch: {
-    hospitalData () {
-      this.selectHospital(null)
-      this.getSituationHospital()
+    hospitalData() {
+      this.selectHospital(null);
+      this.getSituationHospital();
     },
-    selectedHospital (val) {
-      const id = val ? val.id : null
+    selectedHospital(val) {
+      const id = val ? val.id : null;
       const form = {
         hospital: id,
         observation_start: this.observation_start,
-        observation_end: this.observation_end
-      }
-      this.gethospitalsFiltered(form)
-      console.log('this.observation_start', this.observation_start)
-      console.log('this.observation_end', this.observation_end)
-      console.log(' this.gethospitalsFiltered(form)', this.hospitalSituationSelected)
+        observation_end: this.observation_end,
+      };
+      this.gethospitalsFiltered(form);
+      console.log("this.observation_start", this.observation_start);
+      console.log("this.observation_end", this.observation_end);
+      console.log(
+        " this.gethospitalsFiltered(form)",
+        this.hospitalSituationSelected
+      );
     },
-    situationHospital (val) {
-      this.dataGlobal = val
-      this.paintStats(val)
+    situationHospital(val) {
+      this.dataGlobal = val;
+      this.paintStats(val);
     },
-    hospitalSituationAll () {
-      this.gethospitalsFiltered()
+    hospitalSituationAll() {
+      this.gethospitalsFiltered();
     },
-    chartData () {
-      this.$data._chart.update()
-    }
+    chartData() {
+      this.$data._chart.update();
+    },
   },
   methods: {
     ...mapActions([
-      'getSituationHospital',
-      'getHospitalSituationsAll',
-      'getFormSteps',
-      'gethospitalsFiltered'
+      "getSituationHospital",
+      "getHospitalSituationsAll",
+      "getFormSteps",
+      "gethospitalsFiltered",
     ]),
-    ...mapMutations(['selectHospital']),
-    paintStats (data) {
-      const lastUpdates = data.last_update
-      const occupiedRespirators = data.occupied_respirators
-      const occupiedResuscitation_beds = data.occupied_resuscitation_beds
-      const unknow = []
-      const Respirators = [...occupiedRespirators]
-      const Resuscitation_beds = [...occupiedResuscitation_beds]
+    ...mapMutations(["selectHospital"]),
+    paintStats(data) {
+      const lastUpdates = data.last_update;
+      const occupiedRespirators = data.occupied_respirators;
+      const occupiedResuscitation_beds = data.occupied_resuscitation_beds;
+      const unknow = [];
+      const Respirators = [...occupiedRespirators];
+      const Resuscitation_beds = [...occupiedResuscitation_beds];
 
-      const valideIndex = []
+      const valideIndex = [];
       data.occupied_respirators = occupiedRespirators.map((item, index) => {
         if (!item || Number(item) == 0) {
-          const y1Array = []
-          const y2Array = []
+          const y1Array = [];
+          const y2Array = [];
 
           occupiedRespirators.map((x, i) => {
             if (i < index && x && Number(x) > 0) {
               y1Array.push({
                 value: x,
-                i
-              })
+                i,
+              });
             }
             if (i > index && x && Number(x) > 0) {
               y2Array.push({
                 value: x,
-                i
-              })
+                i,
+              });
             }
-          })
-          let y1 = null
-          let y2 = null
-          let x1 = null
-          let x2 = null
+          });
+          let y1 = null;
+          let y2 = null;
+          let x1 = null;
+          let x2 = null;
           if (y1Array && y1Array.length > 0) {
-            y1 = y1Array[y1Array.length - 1]
-            x1 = lastUpdates[y1.i]
+            y1 = y1Array[y1Array.length - 1];
+            x1 = lastUpdates[y1.i];
           }
           if (y2Array && y2Array.length > 0) {
-            y2 = y2Array[0]
-            x2 = lastUpdates[y2.i]
+            y2 = y2Array[0];
+            x2 = lastUpdates[y2.i];
           }
-          const x = lastUpdates[index]
+          const x = lastUpdates[index];
 
           if (y1 && y2 && x1 && x2) {
-            const x_x1 = Math.abs(new Date(x) - new Date(x1))
-            const x2_x1 = Math.abs(new Date(x2) - new Date(x1))
-            const y2_y1 = Number(y2.value) - Number(y1.value)
-            const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1
+            const x_x1 = Math.abs(new Date(x) - new Date(x1));
+            const x2_x1 = Math.abs(new Date(x2) - new Date(x1));
+            const y2_y1 = Number(y2.value) - Number(y1.value);
+            const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
 
-            return y
+            return y;
           }
         }
-        return item
-      })
+        return item;
+      });
 
       data.occupied_resuscitation_beds = occupiedResuscitation_beds.map(
         (item, index) => {
           if (!item || Number(item) === 0) {
-            const y1Array = []
-            const y2Array = []
+            const y1Array = [];
+            const y2Array = [];
 
             occupiedResuscitation_beds.map((x, i) => {
               if (i < index && x && Number(x) > 0) {
                 y1Array.push({
                   value: x,
-                  i
-                })
+                  i,
+                });
               }
               if (i > index && x && Number(x) > 0) {
                 y2Array.push({
                   value: x,
-                  i
-                })
+                  i,
+                });
               }
-            })
-            let y1 = null
-            let y2 = null
-            let x1 = null
-            let x2 = null
+            });
+            let y1 = null;
+            let y2 = null;
+            let x1 = null;
+            let x2 = null;
             if (y1Array && y1Array.length > 0) {
-              y1 = y1Array[y1Array.length - 1]
-              x1 = lastUpdates[y1.i]
+              y1 = y1Array[y1Array.length - 1];
+              x1 = lastUpdates[y1.i];
             }
             if (y2Array && y2Array.length > 0) {
-              y2 = y2Array[0]
-              x2 = lastUpdates[y2.i]
+              y2 = y2Array[0];
+              x2 = lastUpdates[y2.i];
             }
-            const x = lastUpdates[index]
+            const x = lastUpdates[index];
 
             if (y1 && y2 && x1 && x2) {
-              const x_x1 = Math.abs(new Date(x) - new Date(x1))
-              const x2_x1 = Math.abs(new Date(x2) - new Date(x1))
-              const y2_y1 = Number(y2.value) - Number(y1.value)
-              const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1
+              const x_x1 = Math.abs(new Date(x) - new Date(x1));
+              const x2_x1 = Math.abs(new Date(x2) - new Date(x1));
+              const y2_y1 = Number(y2.value) - Number(y1.value);
+              const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
 
-              return y
+              return y;
             }
           }
-          return item
+          return item;
         }
-      )
+      );
 
       const totalRescitationBed = Number(
         data.resuscitation_beds[data.resuscitation_beds.length - 1]
-      )
+      );
       const totalRespirator = Number(
         data.respirators[data.respirators.length - 1]
-      )
+      );
 
       for (let i = 0; i < 3; i++) {
         const callbacks = {
           title: (a, d) => {
-            return this.moment(a[0].xLabel).format('DD.MM.Y')
-          }
-        }
-        let ticksY = {}
-        let datasets = []
-        let annotation = {}
+            return this.moment(a[0].xLabel).format("DD.MM.Y");
+          },
+        };
+        let ticksY = {};
+        let datasets = [];
+        let annotation = {};
         if (i == 0) {
           annotation = {
-            drawTime: 'afterDraw',
+            drawTime: "afterDraw",
             annotations: [
               {
-                id: 'line' + i,
-                type: 'line',
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
+                id: "line" + i,
+                type: "line",
+                mode: "horizontal",
+                scaleID: "y-axis-0",
                 value: totalRespirator,
-                borderColor: 'magenta',
-                label: { content: 'label' },
-                borderWidth: 3
-              }
-            ]
-          }
+                borderColor: "magenta",
+                label: { content: "label" },
+                borderWidth: 3,
+              },
+            ],
+          };
 
           datasets = [
             {
-              label: 'Respirateurs occupés',
+              label: "Respirateurs occupés",
               fill: false,
               backgroundColor: PALETTE.dash_green,
               borderColor: PALETTE.dash_green,
@@ -591,62 +626,62 @@ export default {
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
+              lineTension: 0.4,
             },
             {
-              label: 'Interpolation',
+              label: "Interpolation",
               fill: false,
               backgroundColor: PALETTE.dash_red,
               borderColor: PALETTE.dash_red,
               data: data.occupied_respirators.map((x, i) => {
-                if (x == 0) return null
+                if (x == 0) return null;
                 if (
                   !+Respirators[i] ||
                   (!+Respirators[i - 1] && +data.occupied_respirators[i - 1]) ||
                   (!+Respirators[i + 1] && +data.occupied_respirators[i + 1])
                 ) {
-                  return x
+                  return x;
                 }
 
-                return null
+                return null;
               }),
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
-            }
-          ]
-          const respiratorMax = Math.max(...Respirators.map((x) => Number(x)))
-          let tickMax = respiratorMax
+              lineTension: 0.4,
+            },
+          ];
+          const respiratorMax = Math.max(...Respirators.map((x) => Number(x)));
+          let tickMax = respiratorMax;
           if (totalRespirator > respiratorMax) {
-            tickMax = totalRespirator + 1
+            tickMax = totalRespirator + 1;
           }
           ticksY = {
             min: 0,
             max: tickMax,
-            precision: 0
-          }
+            precision: 0,
+          };
         } else if (i == 1) {
           annotation = {
-            drawTime: 'afterDraw',
+            drawTime: "afterDraw",
             annotations: [
               {
-                id: 'line' + i,
-                type: 'line',
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
+                id: "line" + i,
+                type: "line",
+                mode: "horizontal",
+                scaleID: "y-axis-0",
                 value: totalRescitationBed,
-                borderColor: 'magenta',
+                borderColor: "magenta",
                 borderWidth: 3,
-                label: 'label'
-              }
-            ]
-          }
+                label: "label",
+              },
+            ],
+          };
 
           datasets = [
             {
-              label: 'Lits de réanimation occupés',
+              label: "Lits de réanimation occupés",
               backgroundColor: PALETTE.dash_green,
               borderColor: PALETTE.dash_green,
               data: Resuscitation_beds.map((x) => (x === 0 ? null : x)),
@@ -654,14 +689,14 @@ export default {
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
+              lineTension: 0.4,
             },
             {
-              label: 'interpolation',
+              label: "interpolation",
               backgroundColor: PALETTE.dash_red,
               borderColor: PALETTE.dash_red,
               data: data.occupied_resuscitation_beds.map((x, i) => {
-                if (x == 0) return null
+                if (x == 0) return null;
                 if (
                   !+Resuscitation_beds[i] ||
                   (!+Resuscitation_beds[i - 1] &&
@@ -669,51 +704,51 @@ export default {
                   (!+Resuscitation_beds[i + 1] &&
                     +data.occupied_resuscitation_beds[i + 1])
                 ) {
-                  return x
+                  return x;
                 }
 
-                return null
+                return null;
               }),
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
-            }
-          ]
+              lineTension: 0.4,
+            },
+          ];
 
           const resuscitationBedsMax = Math.max(
             ...Resuscitation_beds.map((x) => Number(x))
-          )
-          let tickMax = resuscitationBedsMax
+          );
+          let tickMax = resuscitationBedsMax;
           if (totalRescitationBed > resuscitationBedsMax) {
-            tickMax = totalRescitationBed + 1
+            tickMax = totalRescitationBed + 1;
           }
 
           ticksY = {
             min: 0,
             precision: 0,
-            max: tickMax
-          }
+            max: tickMax,
+          };
         } else {
           const dataset1 = data.occupied_resuscitation_beds.map((a, i) => {
             // if (a == 0 || data.resuscitation_beds[i] == 0) return null;
             return Math.round(
               (a * 100) /
                 data.resuscitation_beds[data.resuscitation_beds.length - 1]
-            )
-          })
+            );
+          });
 
           const dataset2 = data.occupied_respirators.map((a, i) => {
             // if (a == 0 || data.respirators[i] == 0) return null;
             return Math.round(
               (a * 100) / data.respirators[data.respirators.length - 1]
-            )
-          })
+            );
+          });
 
           datasets = [
             {
-              label: 'Taux occupation des Réspirateurs',
+              label: "Taux occupation des Réspirateurs",
               backgroundColor: PALETTE.dash_green,
               borderColor: PALETTE.dash_green,
               data: dataset2,
@@ -721,154 +756,160 @@ export default {
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
+              lineTension: 0.4,
             },
             {
-              label: 'Taux occupation des lits de réanimation',
-              backgroundColor: 'magenta',
-              borderColor: 'magenta',
+              label: "Taux occupation des lits de réanimation",
+              backgroundColor: "magenta",
+              borderColor: "magenta",
               data: dataset1,
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
-            }
-          ]
+              lineTension: 0.4,
+            },
+          ];
 
           callbacks.label = function (tooltipItem, data) {
-            let label = data.datasets[tooltipItem.datasetIndex].label || ''
-            if (label) label += ': '
-            label += tooltipItem.yLabel + '%'
-            return label
-          }
+            let label = data.datasets[tooltipItem.datasetIndex].label || "";
+            if (label) label += ": ";
+            label += tooltipItem.yLabel + "%";
+            return label;
+          };
 
           ticksY = {
             min: 0,
             callback: function (value, index, values) {
-              return value + '%'
-            }
-          }
+              return value + "%";
+            },
+          };
         }
         const config = {
-          type: 'line',
+          type: "line",
           data: {
             labels: data.last_update.map((d) => new Date(d)),
-            datasets: datasets
+            datasets: datasets,
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
             legend: {
-              display: false
+              display: false,
             },
             title: {
               display: false,
               text: this.chartLabels[i].title,
-              fontSize: 11
+              fontSize: 11,
             },
             tooltips: {
-              mode: 'index',
+              mode: "index",
               intersect: false,
-              callbacks: callbacks
+              callbacks: callbacks,
             },
             annotation,
             plugins: {
               crosshair: {
                 sync: {
-                  enabled: false // enable trace line syncing with other charts
+                  enabled: false, // enable trace line syncing with other charts
                 },
                 zoom: {
-                  enabled: false
-                }
-              }
+                  enabled: false,
+                },
+              },
             },
             hover: {
-              mode: 'nearest',
-              intersect: true
+              mode: "nearest",
+              intersect: true,
             },
             scales: {
               xAxes: [
                 {
                   display: true,
-                  type: 'time',
-                  distribution: 'series',
+                  type: "time",
+                  distribution: "series",
                   time: {
-                    unit: 'day',
+                    unit: "day",
                     unitStepSize: 1,
                     displayFormats: {
-                      day: 'DD.MM'
-                    }
+                      day: "DD.MM",
+                    },
                   },
                   scaleLabel: {
                     display: true,
-                    labelString: 'Periode'
+                    labelString: "Periode",
                   },
                   ticks: {
                     fontSize: 9,
                     autoSkip: false,
                     maxRotation: 90,
-                    minRotation: 90
-                  }
-                }
+                    minRotation: 90,
+                  },
+                },
               ],
               yAxes: [
                 {
                   display: true,
                   scaleLabel: {
                     display: true,
-                    labelString: this.chartLabels[i].lableY
+                    labelString: this.chartLabels[i].lableY,
                   },
-                  ticks: ticksY
-                }
-              ]
-            }
-          }
-        }
-        const reference = this.$refs[`canvasStat${i + 1}`]
-        if (this.lineCharts[i]) this.lineCharts[i].destroy()
-        this.lineCharts[i] = new Chart(reference.getContext('2d'), config)
-        reference.style.height = '200px'
-        reference.style.maxHeight = '200px'
+                  ticks: ticksY,
+                },
+              ],
+            },
+          },
+        };
+        const reference = this.$refs[`canvasStat${i + 1}`];
+        if (this.lineCharts[i]) this.lineCharts[i].destroy();
+        this.lineCharts[i] = new Chart(reference.getContext("2d"), config);
+        reference.style.height = "200px";
+        reference.style.maxHeight = "200px";
         // this.lineCharts[i].generateLegend();
       }
     },
-    createSituationsReduce (array = []) {
-      const formIds = []
+    createSituationsReduce(array = []) {
+      const formIds = [];
       if (array.length > 0) {
-        array?.slice()
-          .sort((prevFormItem, nextFormItem) => prevFormItem.form_step_id - nextFormItem.form_step_id)
+        array
+          ?.slice()
+          .sort(
+            (prevFormItem, nextFormItem) =>
+              prevFormItem.form_step_id - nextFormItem.form_step_id
+          )
           .forEach((item) => {
-            if (formIds.every((form) => form.form_step_id !== item.form_step_id)) {
+            if (
+              formIds.every((form) => form.form_step_id !== item.form_step_id)
+            ) {
               formIds.push({
                 form_step_id: item.form_step_id,
-                form_step_title: item.form_step_title
-              })
+                form_step_title: item.form_step_title,
+              });
             }
-          })
+          });
         const formStepsList = formIds.map((form) => {
           const formStep = {
             form_step_id: form.form_step_id,
-            form_step_title: form.form_step_title
-          }
+            form_step_title: form.form_step_title,
+          };
           formStep.form_field_values = array.filter(
             (arr) => arr.form_step_id == formStep.form_step_id
-          )
-          return formStep
-        })
-        return formStepsList
+          );
+          return formStep;
+        });
+        return formStepsList;
       }
-      return []
+      return [];
     },
-    backToTotalData () {
-      this.selectHospital(null)
+    backToTotalData() {
+      this.selectHospital(null);
     },
-    parseData (data) {
-      if (data == null) return 'N/A'
-      else return data
-    }
-  }
-}
+    parseData(data) {
+      if (data == null) return "N/A";
+      else return data;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
