@@ -34,7 +34,7 @@
             </template>
 
             <template v-slot:cell(statut)="data">
-             <div v-if="renderDiffDate(moment, item.last_update) < 4" class="d-flex justify-content-start align-item-center">
+             <div v-if="renderDiffDate(moment, data.item.last_update) < 4" class="d-flex justify-content-start align-item-center">
                 <span class="badge badge-pill badge-statut"
                 :style="'background-color : ' + '#8BC34A'">
 
@@ -65,7 +65,6 @@
             </template>
             <template v-slot:cell(last_update)="data">
               <span>{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
-              {{ data[0] }}
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
