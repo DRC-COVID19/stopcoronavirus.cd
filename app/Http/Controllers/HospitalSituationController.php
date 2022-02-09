@@ -148,8 +148,7 @@ class HospitalSituationController extends Controller
        
         try {
             $situations=[];
-            $hospitalIds = Hospital::with(['hospital_situations_new','form_fields','form_steps','hospitals'])
-            ->select('id')
+            $hospitalIds = Hospital::all('id')
             ->pluck('id')
             ->unique()
             ->sort()
