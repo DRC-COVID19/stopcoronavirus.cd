@@ -33,33 +33,33 @@
             </template>
 
             <template v-slot:cell(statut)="data">
-             <div v-if="renderDiffDate(moment, data.item.last_update) < 4" class="d-flex justify-content-start align-item-center">
+             <div v-if="renderDiffDate(moment, data.item.last_update) < 2" class="d-flex justify-content-start align-item-center">
                 <span class="badge badge-pill badge-statut"
                 :style="'background-color : ' + '#8BC34A'">
 
                 </span>
-                <span class="ml-4">mise à jour après 3 jours</span>
+                <span class="ml-4">À jours</span>
              </div>
-             <div v-else-if="renderDiffDate(moment, data.item.last_update) < 8" class="d-flex justify-content-start align-item-center">
+             <div v-else-if="renderDiffDate(moment, data.item.last_update) >=2 && renderDiffDate(moment, data.item.last_update)" class="d-flex justify-content-start align-item-center">
                 <span class="badge badge-pill badge-statut"
-                :style="'background-color : ' + '#8BC34A'">
+                :style="'background-color : ' + '#f08c2e'">
 
                 </span>
-                <span class="ml-4">mise à jour après 3 jours</span>
+                <span class="ml-4">Retard de {{ renderDiffDate(moment, data.item.last_update) }} jours</span>
              </div>
-             <div v-else-if="renderDiffDate(moment,data.item.last_update) < 10" class="d-flex justify-content-start align-item-center">
+             <div v-else-if="renderDiffDate(moment,data.item.last_update) > 3" class="d-flex justify-content-start align-item-center">
                 <span class="badge badge-pill badge-statut"
-                :style="'background-color : ' + '#8BC34A'">
+                :style="'background-color : ' + '#F44336'">
 
                 </span>
-                <span class="ml-4">mise à jour après 3 jours</span>
+                <span class="ml-4">Retard de {{ renderDiffDate(moment, data.item.last_update) }} jours </span>
              </div>
              <div v-else  class="d-flex justify-content-start align-item-center">
                 <span class="badge badge-pill badge-statut"
-                :style="'background-color : ' + '#8BC34A'">
+                :style="'background-color : ' + '#888888'">
 
                 </span>
-                <span class="ml-4">mise à jour après 3 jours</span>
+                <span class="ml-4">jamais mis à jour</span>
              </div>
             </template>
             <template v-slot:cell(last_update)="data">

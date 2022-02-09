@@ -165,11 +165,11 @@ class HospitalSituationController extends Controller
               ->select('hospital_situations_new.last_update','hospitals.id as hospital_id','hospitals.name', 'hospital_situations_new.created_manager_name')
               ->latest('last_update')
               ->first();
-              if ($hospitalSituation===null) {
-                  $hospitalSituation=[
-                    'last_update' => '00-00-00',
+              if ($hospitalSituation === null) {
+                  $hospitalSituation = [
+                    'last_update' => null,
                     'hospital_id' =>$id,
-                    'name' =>DB::table('hospitals')->where('id',$id)->select('name')->first()->name,
+                    'name' =>Hospital::where('id',$id)->select('name')->first()->name,
                     "created_manager_name" => null,
                   ];
                   array_push($situations, $hospitalSituation);
