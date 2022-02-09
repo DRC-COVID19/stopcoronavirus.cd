@@ -157,6 +157,7 @@ class HospitalSituationController extends Controller
           
 
             foreach ($hospitalIds as $id) {
+
               $hospitalSituation=DB::table('hospital_situations_new')
               ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
               ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
@@ -165,7 +166,9 @@ class HospitalSituationController extends Controller
               ->select('hospital_situations_new.last_update','hospitals.id as hospital_id','hospitals.name', 'hospital_situations_new.created_manager_name')
               ->latest('last_update')
               ->first();
-              if ($hospitalSituation === null) {
+
+              if ($hospitalSituation === null) 
+              {
                   $hospitalSituation = [
                     'last_update' => null,
                     'hospital_id' =>$id,
@@ -174,7 +177,8 @@ class HospitalSituationController extends Controller
                   ];
                   array_push($situations, $hospitalSituation);
               }
-              else{
+              else
+              {
                 array_push($situations, $hospitalSituation);
               }
               
