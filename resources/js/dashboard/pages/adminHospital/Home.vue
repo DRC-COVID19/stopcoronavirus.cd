@@ -63,7 +63,8 @@
              </div>
             </template>
             <template v-slot:cell(last_update)="data">
-              <span>{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
+              <span v-if="data.item.last_update">{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
+              <span v-else> </span>
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
@@ -75,6 +76,7 @@
                     hospital_id:data.item.hospital_id
                   }
                 }"
+                v-if="data.item.last_update"
                 >Details</b-button>
             </template>
           </b-table>
