@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use DateTime;
-use App\HospitalSituationNew;
+use App\Hospital;
 use App\HospitalSituation;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+use App\HospitalSituationNew;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
 use App\Http\Resources\HospitalResources;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\HospitalSituationResource;
 use App\Http\Resources\HospitalSituationSingleResource;
 
@@ -147,26 +148,36 @@ class HospitalSituationController extends Controller
        
         try {
             $situations=[];
-            $hospitalIds = DB::table('hospital_situations_new')
-            ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-            ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-            ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-            ->select('hospitals.id as hospitals_id')
-            ->pluck('hospitals_id')
+            $hospitalIds = Hospital::with(['form_fields','form_steps','hospitals'])
+            ->select('id')
+            ->pluck('id')
             ->unique()
             ->sort()
             ->values();
+          
 
             foreach ($hospitalIds as $id) {
               $hospitalSituation=DB::table('hospital_situations_new')
               ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
               ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-              ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+              ->leftJoin('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
               ->where('hospital_situations_new.hospital_id','=',intval($id))
               ->select('hospital_situations_new.last_update','hospitals.id as hospital_id','hospitals.name', 'hospital_situations_new.created_manager_name')
               ->latest('last_update')
               ->first();
-              array_push($situations,$hospitalSituation);
+              if ($hospitalSituation===null) {
+                  $hospitalSituation=[
+                    'last_update' => '00-00-00',
+                    'hospital_id' =>$id,
+                    'name' =>DB::table('hospitals')->where('id',$id)->select('name')->first()->name,
+                    "created_manager_name" => null,
+                  ];
+                  array_push($situations, $hospitalSituation);
+              }
+              else{
+                array_push($situations, $hospitalSituation);
+              }
+              
             }
 
             return response()->json($situations,200,[],JSON_NUMERIC_CHECK);
