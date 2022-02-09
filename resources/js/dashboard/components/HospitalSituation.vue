@@ -12,13 +12,13 @@
               }"
             ></square-skeleton>
           </skeleton-loading>
-            <b-row v-if="!isLoading" class="mb-2">
-              <b-col lg="12">
+            <b-row v-if="!isLoading" class="mb-2 align-items-center">
+              <b-col lg="12" class="ml-2 align-items-center">
                   <h4 >{{
                   hospital.name || "Rapport global"
                 }}</h4>
               </b-col>
-              <b-col lg="4">
+              <b-col lg="4" class="ml-2 align-items-center">
                   <b-badge
                   v-if="hospitalCount"
                   style="font-size: 12px"
@@ -27,7 +27,7 @@
                   <small>infrastructure(s)</small>
                 </b-badge>
               </b-col>
-              <b-col lg="8">
+              <b-col lg="6" class="align-items-center text-right">
               <export-excel
                 :data="hospitalSituationData"
                 :name="fileName"
@@ -42,7 +42,7 @@
                 </span>
               </export-excel>
           </b-col>
-              </b-row>
+          </b-row>
           <div class="col-12 text-right" v-if="!isLoading">
             <button
               class="btn btn-sm btn-primary"
@@ -404,13 +404,13 @@ export default {
           hospitalSituationFiltered.find(
             (observation) =>
               moment(hospital.date).format("DD/MM/YY") === observation.date &&
-              hospital.hospital_id === observation.numero_hopital
+              hospital.hospital_id === observation.identifiant
           )
         ) {
           const index = hospitalSituationFiltered.findIndex(
             (observation) =>
               moment(hospital.date).format("DD/MM/YY") === observation.date &&
-              hospital.hospital_id === observation.numero_hopital
+              hospital.hospital_id === observation.identifiant
           );
           hospitalSituationFiltered[index][hospital.form_field_name] =
             hospital.form_field_value;
@@ -418,7 +418,7 @@ export default {
           const monObj = {};
           monObj.date = moment(hospital.date).format("DD/MM/YY");
           monObj.numero_hopital = hospital.hospital_id;
-          monObj.numero_agent = hospital.phone_number;
+          monObj.identifiant = hospital.phone_number;
           monObj.nom_hopital = hospital.hospital_name;
           monObj[hospital.form_field_name] = hospital.form_field_value;
           hospitalSituationFiltered.push(monObj);

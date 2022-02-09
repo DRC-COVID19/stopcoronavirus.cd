@@ -85,14 +85,14 @@ export default {
     return {
       form: {
         observation_end: moment().format("YYYY-MM-DD"),
-        observation_start: INFRASTRUCTURE_FIRST_UPDATE,
+        observation_start: moment().format("YYYY-MM-DD"),
         township: 0,
       },
       dateRangeObservation: {
-        startDate: new Date(INFRASTRUCTURE_FIRST_UPDATE),
+        startDate: new Date(),
         endDate: new Date(),
       },
-      min_date: new Date(INFRASTRUCTURE_FIRST_UPDATE),
+      min_date: new Date(),
       defaultTownship: [{ id: 0, name: "Tous" }],
       hospitals:[],
     };
