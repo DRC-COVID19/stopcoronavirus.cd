@@ -19,7 +19,7 @@
             {{moment(form.last_update).format("DD.MM.Y")}}
           </h3>
           <form-wizard
-            :title="$route.params.hospital_id?'':'FICHE DE COLLECTE DES DONNEES'"
+            :title="$route.params.hospital_id?'':'FICHE DE COLLECTE DE DONNEES'"
             subtitle
             shape="tab"
             color="#2e5bff"
@@ -32,7 +32,7 @@
             <tab-content>
               <b-row align-h="center">
                 <b-col cols="12" md="6">
-                  <h3 class="mb-4">Données epidemiologiques</h3>
+                  <h3 class="mb-4">Données épidémiologiques</h3>
 
                   <b-form-group v-for="(question, i) in questions.epidemiologicalData" :key="i">
                     <label for class="text-dash-color"> {{ question.text }} </label>
@@ -103,7 +103,7 @@
                 <b-col cols="12" md="6">
                   <h3 class="mb-4">Confirmation des données entrées</h3>
 
-                  <h4 class="mb-4">Données epidemiologiques</h4>
+                  <h4 class="mb-4">Données épidémiologiques</h4>
                   <ul>
                     <li v-for="(question, i) in questions.epidemiologicalData" :key="i">
                       {{ question.text }} : {{ form[question.column] }}

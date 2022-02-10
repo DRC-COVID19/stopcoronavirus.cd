@@ -10,7 +10,7 @@
           </b-link>
           <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form.last_update).format("DD.MM.Y")}}</h3>
 
-          <h4 class="mb-4">Données epidemiologiques</h4>
+          <h4 class="mb-4">Données épidémiologiques</h4>
           <ul>
             <li v-for="(question, i) in questions.epidemiologicalData" :key="i">
               {{ question.text }} : {{ form[question.column] }}

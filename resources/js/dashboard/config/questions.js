@@ -1,17 +1,17 @@
 export default {
   epidemiologicalData: [
     {
-      text: 'Nombre des cas confirmés',
+      text: 'Nombre de cas confirmés',
       column: 'confirmed',
       type: 'number'
     },
     {
-      text: 'Nombre des cas hospitalisés',
+      text: 'Nombre de cas hospitalisés',
       column: 'sick',
       type: 'number'
     },
     {
-      text: 'Nombre des patients ayant été Guéris',
+      text: 'Nombre de patients ayant été guéris',
       column: 'healed',
       type: 'number'
     },
@@ -21,12 +21,12 @@ export default {
       type: 'number'
     },
     {
-      text: 'Nombre des guéris déchargés',
+      text: 'Nombre de guéris déchargés',
       column: 'number_healed_discharged',
       type: 'number'
     },
     {
-      text: 'Nombre des patients ayant été référés',
+      text: 'Nombre de patients ayant été référés',
       column: 'number_patients_referred',
       type: 'number'
     },
@@ -43,12 +43,12 @@ export default {
       type: 'number'
     },
     {
-      text: 'Nombre des lits réservés pour des cas COVID-19',
+      text: 'Nombre de lits réservés pour des cas COVID-19',
       column: 'number_beds_reserved_covid_19',
       type: 'number'
     },
     {
-      text: 'Nombre des lits occupés par des patients COVID-19',
+      text: 'Nombre de lits occupés par des patients COVID-19',
       column: 'number_beds_occupied_covid_19',
       type: 'number'
     },
@@ -58,12 +58,12 @@ export default {
       type: 'number'
     },
     {
-      text: 'Nombre des lits de réanimation réservés pour des cas COVID-19',
+      text: 'Nombre de lits de réanimation réservés pour des cas COVID-19',
       column: 'reserved_resuscitation_beds_covid_19',
       type: 'number'
     },
     {
-      text: 'Nombre des lits de réanimation occupés par des cas COVID-19',
+      text: 'Nombre de lits de réanimation occupés par des cas COVID-19',
       column: 'occupied_resuscitation_beds_covid_19',
       type: 'number'
     },
@@ -73,7 +73,7 @@ export default {
       type: 'number'
     },
     {
-      text: 'Nombre des respirateurs réservés pour des cas COVID-19',
+      text: 'Nombre de respirateurs réservés pour des cas COVID-19',
       column: 'reserved_respirators_covid_19',
       type: 'number'
     },
@@ -83,12 +83,12 @@ export default {
       type: 'number'
     },
     {
-      text: 'Nombre des ventilateurs de réanimation réservés pour des cas COVID-19',
+      text: 'Nombre de ventilateurs de réanimation réservés pour des cas COVID-19',
       column: 'reserved_resuscitation_ventilator_covid_19',
       type: 'number'
     },
     {
-      text: 'Nombre des ventilateurs de réanimation occupés par des cas COVID-19',
+      text: 'Nombre de ventilateurs de réanimation occupés par des cas COVID-19',
       column: 'occupied_resuscitation_ventilator_covid_19',
       type: 'number'
     },
@@ -123,12 +123,12 @@ export default {
       type: 'text'
     },
     {
-      text: 'Nombre des TDR COVID-19 requis',
+      text: 'Nombre de TDR COVID-19 requis',
       column: 'tdr_covid_19_required',
       type: 'number'
     },
     {
-      text: 'Nombre des TDR COVID-19 disponible',
+      text: 'Nombre de TDR COVID-19 disponible',
       column: 'tdr_covid_19_available',
       type: 'number'
     },
@@ -170,12 +170,12 @@ export default {
   ],
   medications: [
     {
-      text: 'Nombre des cures de chloroquine requis',
+      text: 'Nombre de cures de chloroquine requis',
       column: 'chloroquine_required',
       type: 'number'
     },
     {
-      text: 'Nombre des cures de chloroquine disponible',
+      text: 'Nombre de cures de chloroquine disponible',
       column: 'chloroquine',
       type: 'number'
     },
@@ -185,32 +185,32 @@ export default {
       type: 'number'
     },
     {
-      text: 'Nombre des cures d’azytromycine requis',
+      text: 'Nombre de cures d’azytromycine requis',
       column: 'azytromycine_required',
       type: 'number'
     },
     {
-      text: 'Nombre des cures d’azytromycine disponible',
+      text: 'Nombre de cures d’azytromycine disponible',
       column: 'azytromicine',
       type: 'number'
     },
     {
-      text: 'Nombre des cures de vitamine C requis',
+      text: 'Nombre de cures de vitamine C requis',
       column: 'vitamine_c_required',
       type: 'number'
     },
     {
-      text: 'Nombre des cures de vitamine C disponible',
+      text: 'Nombre de cures de vitamine C disponible',
       column: 'Vitamince_c',
       type: 'number'
     },
     {
-      text: 'Nombre des cures de zinc requis',
+      text: 'Nombre de cures de zinc requis',
       column: 'zinc_required',
       type: 'number'
     },
     {
-      text: 'Nombre des cures de zinc disponible',
+      text: 'Nombre de cures de zinc disponible',
       column: 'zinc_available',
       type: 'number'
     },
