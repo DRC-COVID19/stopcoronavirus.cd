@@ -56,7 +56,7 @@
                     }"
               >Details</b-button>
               <b-button
-                v-if="renderHour(data.item.last_update) <=24"
+                v-if="(data.item.diff_date * 24) < 24"
                 class="btn btn-warning mb-1"
                 :to="{
                   name: 'hospital.edit',

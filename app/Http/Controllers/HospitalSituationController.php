@@ -50,6 +50,7 @@ class HospitalSituationController extends Controller
             ->where('hospitals.id','=',intval($hospital_id))
             ->select(
                 'hospital_situations_new.id',
+                DB::raw('CAST(NOW() as DATE) - CAST(hospital_situations_new.created_at as DATE) as diff_date'),
                 'hospital_situations_new.last_update as last_update',
                 'hospital_situations_new.created_manager_name as name',
             )
@@ -153,22 +154,23 @@ class HospitalSituationController extends Controller
             ->unique()
             ->sort()
             ->values();
-          
+          //CAST(NOW() as DATE) - CAST(hospital_situations_new.created_at as DATE))
 
             foreach ($hospitalIds as $id) {
 
-              $hospitalSituation=DB::table('hospital_situations_new')
-              ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-              ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-              ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-              ->where('hospital_situations_new.hospital_id','=',intval($id))
-              ->select('hospital_situations_new.last_update','hospitals.id as hospital_id','hospitals.name', 'hospital_situations_new.created_manager_name')
-              ->latest('last_update')
-              ->first();
+              $hospitalSituation = DB::table('hospital_situations_new')
+                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+                ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
+                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+                ->where('hospital_situations_new.hospital_id','=',intval($id))
+                ->select(DB::raw('CAST(NOW() as DATE) - CAST(hospital_situations_new.created_at as DATE) as diff_date'),'hospital_situations_new.last_update','hospitals.id as hospital_id','hospitals.name', 'hospital_situations_new.created_manager_name')
+                ->latest('last_update')
+                ->first();
 
               if ($hospitalSituation === null) 
               {
                   $hospitalSituation = [
+                    'diff_date' => -1,
                     'last_update' => null,
                     'hospital_id' =>$id,
                     'name' =>Hospital::where('id',$id)->select('name')->first()->name,
@@ -182,6 +184,7 @@ class HospitalSituationController extends Controller
               }
               
             }
+            $sortSituations =[];
 
             return response()->json($situations,200,[],JSON_NUMERIC_CHECK);
           
