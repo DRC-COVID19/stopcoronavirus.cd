@@ -417,9 +417,9 @@ export default {
         } else {
           const monObj = {};
           monObj.date = moment(hospital.date).format("DD/MM/YY");
-          monObj.numero_hopital = hospital.hospital_id;
-          monObj.identifiant = hospital.phone_number;
-          monObj.nom_hopital = hospital.hospital_name;
+          monObj.identifiant = hospital.hospital_id;
+          monObj['numero téléphone'] = hospital.phone_number;
+          monObj['nom hopital'] = hospital.hospital_name;
           monObj[hospital.form_field_name] = hospital.form_field_value;
           hospitalSituationFiltered.push(monObj);
         }

@@ -15,45 +15,61 @@
             />
           </b-form-group>
         </b-col>
-
         <b-col cols="12" md="5" lg="4" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
-          <b-form-group>
-            <div class="d-flex">
-              <date-range-picker
-                ref="picker2"
-                :locale-data="{
-                  firstDay: 1,
-                  format: 'dd-mm-yyyy',
-                  drops: 'up',
-                }"
-                v-model="dateRangeObservation"
-                :appendToBody="true"
-                opens="center"
-                :max-date="new Date()"
-                :singleDatePicker="false"
-                @update="UpdateObservationDate"
-                :calculate-position="dateRangerPosition"
-                class="style-picker"
+          <div class="d-flex">
+            <b-form-group class="col-auto" v-slot="{ ariaDescribedby }">
+              <b-form-checkbox
+                v-model="checked"
+                class="text-dash-color"
+                :aria-describedby="ariaDescribedby"
+                :value="stateCheckedButton"
+                >Plage de date</b-form-checkbox
               >
-                <template v-slot:input="picker">
-                  <span>
-                    {{ picker.startDate | date }} -
-                    {{ picker.endDate | date }}</span
-                  >
-                </template>
-              </date-range-picker>
-              <b-button
-                @click="clearObservationDate"
-                class="btn-clear-observation btn-dash-blue"
-              >
-                <span class="fa fa-times"></span>
-              </b-button>
-            </div>
-          </b-form-group>
+            </b-form-group>
+            <b-form-group class="col">
+              <div class="d-flex">
+                <date-range-picker
+                  ref="picker2"
+                  :locale-data="{
+                    firstDay: 1,
+                    format: 'dd-mm-yyyy',
+                    drops: 'up',
+                  }"
+                  v-model="dateRangeObservation"
+                  :appendToBody="true"
+                  opens="center"
+                  :max-date="new Date()"
+                  :singleDatePicker="checked? false:true "
+                  @update="UpdateObservationDate"
+                  :calculate-position="dateRangerPosition"
+                  class="style-picker"
+                >
+                  <template v-slot:input="picker">
+                    <span>
+                      {{ picker.startDate | date }} -
+                      {{ picker.endDate | date }}</span
+                    >
+                  </template>
+                </date-range-picker>
+                <b-button
+                  @click="clearObservationDate"
+                  class="btn-clear-observation btn-dash-blue"
+                >
+                  <span class="fa fa-times"></span>
+                </b-button>
+              </div>
+            </b-form-group>
+          </div>
         </b-col>
 
-        <b-col cols="12" md="3" lg="2" class="pl-3 pr-3 d-flex" :class="{ row: !isSmOrMd }">
+        <b-col
+          cols="12"
+          md="3"
+          lg="2"
+          class="pl-3 pr-3 d-flex"
+          :class="{ row: !isSmOrMd }"
+        >
           <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue"
             >Filtrer les données</b-button
           >
@@ -66,7 +82,7 @@
 <script>
 import DateRangePicker from "vue2-daterange-picker";
 import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env";
-import {mapState,mapActions} from "vuex"
+import { mapState, mapActions } from "vuex";
 export default {
   props: {
     hospitalCount: {
@@ -85,16 +101,18 @@ export default {
     return {
       form: {
         observation_end: moment().format("YYYY-MM-DD"),
-        observation_start: moment().format("YYYY-MM-DD"),
+        observation_start: null,
         township: 0,
       },
+      selected: false,
       dateRangeObservation: {
-        startDate: new Date(),
+        startDate: null,
         endDate: new Date(),
       },
-      min_date: new Date(),
+      min_date: null,
       defaultTownship: [{ id: 0, name: "Tous" }],
-      hospitals:[],
+      hospitals: [],
+      checked: false,
     };
   },
   filters: {
@@ -102,11 +120,17 @@ export default {
       return val ? moment(val).format("DD.MM.YYYY") : "";
     },
   },
-  computed:{
+  computed: {
     ...mapState({
       observation_start: (state) => state.hospitalSituation.observation_start,
       observation_end: (state) => state.hospitalSituation.observation_end,
-    })
+    }),
+    townshipList() {
+      return [...this.defaultTownship, ...this.townships];
+    },
+    stateCheckedButton() {
+      return this.checked ? false : true;;
+    },
   },
   methods: {
     ...mapActions(["getObservation"]),
@@ -114,8 +138,13 @@ export default {
       this.$emit("hopitalChecked", checked);
     },
     UpdateObservationDate({ startDate, endDate }) {
-      this.form.observation_start = moment(startDate).format("YYYY-MM-DD");
-      this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
+      if (!this.checked) {
+        this.form.observation_start = null;
+        this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
+      } else {
+        this.form.observation_start = moment(startDate).format("YYYY-MM-DD");
+        this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
+      }
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
@@ -127,20 +156,16 @@ export default {
       this.form.observation_start = null;
     },
     submit() {
-      const observations ={
-        observation_start:this.form.observation_start,
-        observation_end:this.form.observation_end}
-        this.getObservation(observations);
-      
-      console.log("observation_end",this.observation_end)
-      console.log("observation_start",this.observation_start)
+      const observations = {
+        observation_start: this.form.observation_start,
+        observation_end: this.form.observation_end,
+      };
+      this.getObservation(observations);
+
+      console.log("observation_end", this.observation_end);
+      console.log("observation_start", this.observation_start);
 
       this.$emit("submitInfrastructureForm", this.form);
-    },
-  },
-  computed: {
-    townshipList() {
-      return [...this.defaultTownship, ...this.townships];
     },
   },
 };
