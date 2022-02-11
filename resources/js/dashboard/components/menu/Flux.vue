@@ -403,7 +403,7 @@ export default {
   watch: {
     fluxProvinces() {
       if (this.fluxForm.fluxGeoGranularity === 1) {
-        this.fluxGeoGranularityChange(1);
+        this.fluxGeoGranularityChange(1, false);
       }
     },
     dateRangePreference() {
@@ -640,7 +640,7 @@ export default {
           ? OBSERVATION_END
           : AFRICELL_OBSERVATION_END;
     },
-    fluxGeoGranularityChange(value) {
+    fluxGeoGranularityChange(value, triggerChangeCalendarLimit = true) {
       this.resetFluxPredefinedControl();
       this.setFluxGeoGranularity(value);
       this.addParamToUrl('geo-granularity', value)
@@ -649,14 +649,14 @@ export default {
       this.isHotspot = false;
       this.referenceThrowError = false;
       this.referenceErrorMessage = null;
-      console.log('fluxGeoGranularityChange', value);
       switch (value) {
         case 1:
           this.fluxGeoOptions = this.fluxProvinces;
-          this.changeCalendarLimit(OBSERVATION_END);
+          if (triggerChangeCalendarLimit) {
+            this.changeCalendarLimit(OBSERVATION_END);
+          }
           break;
         case 2:
-          console.log('fluxZones', this.fluxZones);
           this.fluxGeoOptions = this.fluxZones;
           this.changeCalendarLimit(OBSERVATION_END);
           break;
