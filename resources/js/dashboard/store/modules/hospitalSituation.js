@@ -68,7 +68,10 @@ export default {
         // eslint-disable-next-line no-undef
 
         axios
-          .put(`/api/dashboard/hospital-situations/${payload.update_id}/hospital_id/${payload.hospital_id}`, payload)
+          .put(
+            `/api/dashboard/hospital-situations/hospital_id/${payload.hospital_id}`,
+            payload
+          )
           .then(({ data }) => {
             commit('SET_IS_LOADING', false)
             resolve(true)
