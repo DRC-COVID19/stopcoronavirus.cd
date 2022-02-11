@@ -174,7 +174,6 @@ class HospitalSituationNewController extends Controller
                     'form_fields.capacity as form_field_capacity',
                     'form_fields.form_step_id as form_step_id',
                     'form_steps.title as form_step_title',
-                    DB::raw('MAX(hospital_situations_new.last_update)')
                 )
                 ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
                 ->get()->toArray();
@@ -217,6 +216,7 @@ class HospitalSituationNewController extends Controller
         if ($is_not_exist) {
             $min_date = DB::table('hospital_situations_new')
                 ->min('hospital_situations_new.last_update');
+
             $observation_date =  DB::table('hospital_situations_new')
                 ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
                 ->whereBetween('hospital_situations_new.last_update', [$min_date, $observation_end])
@@ -354,8 +354,6 @@ class HospitalSituationNewController extends Controller
                     if ($township) $query->where('hospitals.township_id', '=', $township);
                 })
                 ->orderBy('date', 'desc')
-
-                // ->groupBy('form_fields.name', 'hospital_situations_new.value', 'hospitals.id', 'hospital_situations_new.name', '')
                 ->get();
 
             return response()->json($observation, 200, [], JSON_NUMERIC_CHECK);

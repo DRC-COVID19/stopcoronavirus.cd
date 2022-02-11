@@ -2,8 +2,8 @@
   <b-card no-body class="rounded-0 p-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row class="d-flex justify-content-between ml-1 mr-5">
-        <b-col cols="12" md="4" class="nav-zone pl-3 pr-3">
-          <b-form-group>
+        <b-col lg="5" cols="5" md="4" class=" col-5 nav-zone pl-3 pr-3">
+          <b-form-group cols="5">
             <label for class="text-dash-color">Commune</label>
             <v-select
               v-model="form.township"
@@ -15,7 +15,7 @@
             />
           </b-form-group>
         </b-col>
-        <b-col cols="12" md="5" lg="4" class="nav-zone pl-3 pr-3">
+        <b-col cols="12"  md="5" lg="5" class="col-5 nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
           <div class=" d-flex ">
             <b-form-group class="col-auto" v-slot="{ ariaDescribedby }">
