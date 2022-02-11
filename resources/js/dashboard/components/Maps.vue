@@ -2182,16 +2182,16 @@ export default {
       }
       if (geoGranularity == 1) {
         let newValue = this.fixedZone(value);
-        const feature = this.healthProvinceGeojsonCentered.features.find(
+        const feature = this.healthProvinceGeojsonCentered?.features.find(
           (x) => x.properties[dataKey] == newValue
-        );
+        ) || null;
         if (feature) {
           coordinates = feature.geometry.coordinates;
         }
       } else {
-        const feature = this.healthZoneGeojsonCentered.features.find(
+        const feature = this.healthZoneGeojsonCentered?.features.find(
           (x) => x.properties[dataKey] == value
-        );
+        ) || null;
 
         if (feature) {
           coordinates = feature.geometry.coordinates;
@@ -2217,16 +2217,16 @@ export default {
       }
       if (geoGranularity == 1) {
         let newValue = this.fixedZone(value);
-        const feature = this.healthProvinceGeojsonCentered.features.find(
+        const feature = this.healthProvinceGeojsonCentered?.features.find(
           (x) => x.properties[dataKey] == newValue
-        );
+        ) || null;
         if (feature) {
           area = feature.properties.area;
         }
       } else {
-        const feature = this.healthZoneGeojsonCentered.features.find(
+        const feature = this.healthZoneGeojsonCentered?.features.find(
           (x) => x.properties[dataKey] == value
-        );
+        ) || null;
 
         if (feature) {
           area = feature.properties.area;

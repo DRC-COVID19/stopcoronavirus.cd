@@ -109,9 +109,9 @@
                       class="style-picker"
                       :class="{ 'style-picker-has-error': referenceHasError }"
                     >
-                      <template v-slot:input="picker"
-                        >{{ picker.startDate | date }} -
-                        {{ picker.endDate | date }}</template
+                      <template v-slot:input="picker">
+                        {{ picker.startDate | date }} - {{ picker.endDate | date }}
+                      </template
                       >
                     </date-range-picker>
                     <span
@@ -298,6 +298,7 @@ export default {
     },
   },
   mounted() {
+    this.fillParametersFromUrlParams()
     this.$store.watch(
       (state) => state.flux.fluxGeoOptions,
       (value) => {
@@ -337,7 +338,6 @@ export default {
         this.submitFluxForm();
       }
     );
-    this.fluxGeoGranularityChange(1);
   },
   computed: {
     ...mapState({
@@ -402,8 +402,16 @@ export default {
   },
   watch: {
     fluxProvinces() {
-      this.fluxGeoGranularityChange(1);
+      if (this.fluxForm.fluxGeoGranularity === 1) {
+        this.fluxGeoGranularityChange(1);
+      }
     },
+    dateRangePreference() {
+      this.addDateRangeReferenceToUrl();
+    },
+    dateRangeObservation() {
+      this.addDateRangeObservationToUrl();
+    }
   },
   methods: {
     ...mapMutations([
@@ -418,6 +426,62 @@ export default {
       "setFluxHotspotClicked",
     ]),
     ...mapActions(["resetState"]),
+    fillParametersFromUrlParams () {
+      const url = new URL(window.location.href);
+      const fluxSource = url.searchParams.get('source');
+      if (fluxSource) {
+        this.$set(this.fluxForm, 'selectedFluxSource', +fluxSource)
+      }
+
+      const fluxGeoGranularity = url.searchParams.get('geo-granularity');
+      if (fluxGeoGranularity) {
+        this.$set(this.fluxForm, 'fluxGeoGranularity', +fluxGeoGranularity)
+        this.fluxGeoGranularityChange(+fluxGeoGranularity)
+      } else {
+        this.fluxGeoGranularityChange(1);
+      }
+
+      const fluxGeoOptions = url.searchParams.get('geo-options');
+      if (fluxGeoOptions) {
+        try {
+          this.$set(this.fluxForm, 'fluxGeoOptions', JSON.parse(fluxGeoOptions))
+        } catch (e) {
+          console.log( e)
+        }
+      }
+
+      const fluxTimeGranularity = url.searchParams.get('time-granularity');
+      if (fluxTimeGranularity) {
+        this.$set(this.fluxForm, 'fluxTimeGranularity', +fluxTimeGranularity)
+        this.addParamToUrl('time-granularity', this.fluxForm.fluxTimeGranularity)
+      }
+
+      const referenceStartDate = url.searchParams.get('reference-start-date');
+      const referenceEndDate = url.searchParams.get('reference-end-date');
+      try{
+        this.dateRangePreference = {
+          startDate: referenceStartDate ? new Date(`${referenceStartDate} 06:00`) : null,
+          endDate: referenceEndDate ? new Date(`${referenceEndDate} 23:30`) : null,
+        }
+        this.fluxForm.preference_start = referenceStartDate
+        this.fluxForm.preference_end = referenceEndDate
+      } catch (e) {
+        console.log(e)
+      }
+
+      const observationStartDate = url.searchParams.get('observation-start-date');
+      const observationEndDate = url.searchParams.get('observation-end-date');
+      try{
+        this.dateRangeObservation = {
+          startDate: observationStartDate ? new Date(`${observationStartDate} 06:00`) : null,
+          endDate: observationEndDate ? new Date(`${observationEndDate} 23:30`) : null,
+        }
+        this.fluxForm.observation_start = observationStartDate
+        this.fluxForm.observation_end = observationEndDate
+      } catch (e) {
+        console.log(e)
+      }
+    },
     populationFluxToggle(checked) {
       this.$root.$emit("bv::toggle::collapse", "populationFluxcollapse");
       this.$emit("populationFluxChecked", checked);
@@ -449,17 +513,36 @@ export default {
       this.fluxForm.observation_end = null;
       this.resetFluxPredefinedControl();
     },
+    addDateRangeReferenceToUrl() {
+      this.addParamToUrl(
+        'reference-start-date',
+        moment(this.dateRangePreference.startDate).format("YYYY/MM/DD")
+      )
+      this.addParamToUrl(
+        'reference-end-date',
+        moment(this.dateRangePreference.endDate).format("YYYY/MM/DD")
+      )
+    },
     UpdateObservationDate({ startDate, endDate }) {
-
       this.fluxForm.observation_start = moment(startDate).format("YYYY-MM-DD");
       this.fluxForm.observation_end = moment(endDate).format("YYYY-MM-DD");
       this.fluxForm.time_start = moment(startDate).format("HH:mm");
       this.fluxForm.time_end = moment(endDate).format("HH:mm");
       this.resetFluxPredefinedControl();
     },
+    addDateRangeObservationToUrl() {
+      this.addParamToUrl(
+        'observation-start-date',
+        moment(this.dateRangeObservation.startDate).format("YYYY/MM/DD")
+      )
+      this.addParamToUrl(
+        'observation-end-date',
+        moment(this.dateRangeObservation.endDate).format("YYYY/MM/DD")
+      )
+    },
     submitFluxForm() {
 
-       if ( this.fluxForm.fluxGeoGranularity ==
+      if ( this.fluxForm.fluxGeoGranularity ==
           GEO_GRANULARITIES.find((x) => x.id == 3).id && this.fluxForm.observation_start == this.fluxForm.observation_end) {
         this.$set(this.fluxForm, "fluxTimeGranularity", 2);
       }
@@ -560,17 +643,20 @@ export default {
     fluxGeoGranularityChange(value) {
       this.resetFluxPredefinedControl();
       this.setFluxGeoGranularity(value);
+      this.addParamToUrl('geo-granularity', value)
       this.$set(this.fluxForm, "fluxGeoOptions", []);
       this.$set(this.fluxForm, "fluxTimeGranularity", 1);
       this.isHotspot = false;
       this.referenceThrowError = false;
       this.referenceErrorMessage = null;
+      console.log('fluxGeoGranularityChange', value);
       switch (value) {
         case 1:
           this.fluxGeoOptions = this.fluxProvinces;
           this.changeCalendarLimit(OBSERVATION_END);
           break;
         case 2:
+          console.log('fluxZones', this.fluxZones);
           this.fluxGeoOptions = this.fluxZones;
           this.changeCalendarLimit(OBSERVATION_END);
           break;
@@ -604,8 +690,10 @@ export default {
         default:
           break;
       }
+      this.addParamToUrl('time-granularity', this.fluxForm.fluxTimeGranularity)
     },
     fluxTimeGranularityChange(value) {
+      this.addParamToUrl('time-granularity', value)
       if (
         this.fluxForm.fluxGeoGranularity ==
         GEO_GRANULARITIES.find((x) => x.id == 3).id
@@ -671,6 +759,7 @@ export default {
       }
       const newVal = value === null ? [] : [value];
       this.$set(this.fluxForm, "fluxGeoOptions", newVal);
+      this.addParamToUrl('geo-options', JSON.stringify(newVal))
       this.resetFluxPredefinedControl();
       this.setFluxGeoOptionsTmp(newVal);
     },
@@ -763,13 +852,12 @@ export default {
     },
     selectedFluxSourceChanged(value) {
       // this.setSelectedSource(value);
+      this.addParamToUrl('source', value)
       if (value == 2) {
+        // source africell only support geo-granularity "zone des santés"
         this.$set(this.fluxForm, "fluxGeoGranularity", 2);
-        this.fluxGeoGranularityChange(2);
-      } else {
-        this.$set(this.fluxForm, "fluxGeoGranularity", 1);
-        this.fluxGeoGranularityChange(1);
       }
+      this.fluxGeoGranularityChange(this.fluxForm.fluxGeoGranularity);
     },
   },
 };
