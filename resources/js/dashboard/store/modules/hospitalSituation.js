@@ -61,6 +61,26 @@ export default {
           })
       })
     },
+    updateHospitalSituation ({ state, commit, dispatch }, payload = {}) {
+      commit('SET_IS_CREATING', true)
+      console.log('payload hospital:', payload)
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+
+        axios
+          .put(`/api/dashboard/hospital-situations/${payload.update_id}/hospital_id/${payload.hospital_id}`, payload)
+          .then(({ data }) => {
+            commit('SET_IS_LOADING', false)
+            resolve(true)
+          })
+          .catch(response => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_CREATING', false)
+          })
+      })
+    },
     getHospitalSituations ({ state, commit }, { payload }) {
       commit('SET_IS_CREATING', true)
       return new Promise((resolve, reject) => {
