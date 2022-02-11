@@ -12,10 +12,11 @@ export default{
     }
   },
   actions:{
-    formShow (_, payload) {
+    formShow ({state, commit}, payload) {
       return new Promise((resolve, reject) => {
         axios.get(`/api/dashboard/forms/${payload.id}`)
           .then(({ data }) => {
+            commit('SET_FORM', data)
             resolve(data)
           })
           .catch((error) => {

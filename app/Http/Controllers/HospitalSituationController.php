@@ -90,16 +90,53 @@ class HospitalSituationController extends Controller
      * Display the specified resource.
      * @return \Illuminate\Http\Response
      */
-    public function show($last_update)
+    public function show(int $id)
+    {  
+        try {
+            $hospitalSituation =  DB::table('hospital_situations_new')
+            ->where('hospitals.id','=',intval($id))
+            ->select(
+                    'form_fields.name as form_field_name',
+                    'form_fields.order_field as order_field ',
+                    'form_field_types.name as form_field_type_name',
+                    'hospital_situations_new.value as form_field_value',
+                    'hospital_situations_new.last_update as last_update',
+                    'hospital_situations_new.created_manager_name',
+                    'hospital_situations_new.updated_manager_name',
+                    'form_fields.capacity as form_field_capacity',
+                    'form_fields.form_step_id as form_step_id',
+                    'form_steps.title as form_step_title',
+                    'form_fields.id as form_field_id'
+            )
+            ->orderBy('last_update','desc')->get();
+
+            return response()->json($hospitalSituation,201,[],JSON_NUMERIC_CHECK);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+        return response()->json($hospitalSituation);
+    }
+     /**
+     * Display the specified resource.
+     * @return \Illuminate\Http\Response
+     */
+    public function getSituationsByHospitalAndLastUpdate($last_update, int $hospital_id)
     {  
         try {
             $hospitalSituation =  DB::table('hospital_situations_new')
             ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+            ->join('form_field_types','form_fields.form_field_type_id','=','form_field_types.id')
             ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
             ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
             ->where('hospital_situations_new.last_update','=',new DateTime($last_update))
+            ->where('hospitals.id','=',intval($hospital_id))
             ->select(
                     'form_fields.name as form_field_name',
+                    'form_fields.order_field as order_field ',
+                    'form_field_types.name as form_field_type_name',
                     'hospital_situations_new.value as form_field_value',
                     'hospital_situations_new.last_update as last_update',
                     'hospital_situations_new.created_manager_name',

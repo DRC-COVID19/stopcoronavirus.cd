@@ -6,6 +6,7 @@ import ResetPasseword from './pages/auth/ResetPassword'
 import PasswordResetComplete from './pages/auth/PasswordResetComplete'
 import HospitalsHome from './pages/hospital/Home'
 import HospitalsCreate from './pages/hospital/HospitalCreate'
+import HospitalEdit from './pages/hospital/HospitalEdit'
 import HospitalsDetail from './pages/hospital/HospitalDetail'
 import HospitalData from './pages/hospital/HospitalData'
 import HospitalAdmin from './pages/adminHospital/Home'
@@ -119,9 +120,9 @@ export default [
     }
   },
   {
-    path: '/hospitals/:form_id/edit/:update_id',
+    path: '/hospital/:hospital_id/edit/:update_id/form/:form_id',
     name: 'hospital.edit',
-    component: HospitalsCreate,
+    component: HospitalEdit,
     meta: {
       requiresAuth: true,
       role: [AGENT_HOSPITAL]

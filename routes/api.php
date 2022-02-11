@@ -183,7 +183,7 @@ Route::group([
   });
   Route::group(['prefix' => 'hospital-situations'], function () {
     Route::get('/by-hospital/{hospital_id}', 'HospitalSituationController@indexByHospital');
-
+    Route::get('/{last_update}/hospital_id/{hospital_id}','HospitalSituationController@getSituationsByHospitalAndLastUpdate');
     Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate'); 
   });
 

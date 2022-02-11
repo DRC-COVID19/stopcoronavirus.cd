@@ -62,6 +62,7 @@
                   name: 'hospital.edit',
                   params: {
                     update_id:data.item.last_update,
+                    hospital_id:user.hospital.id,
                     form_id: 4
                   }
                 }"
@@ -127,11 +128,11 @@ export default {
       return 15
     }
   },
-  mounted () {
+  async mounted () {
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
     }
-    this.getSituations()
+    await this.getSituations()
   },
   methods: {
     ...mapActions(['getHospitalSituations']),

@@ -34,7 +34,7 @@
             backButtonText="Précédent"
             finishButtonText="Envoyer"
             @on-complete="onComplete"
-            :startIndex="1"
+            :startIndex="0"
           >
             <b-alert variant="success" v-if="!!isLoading" show
               >L'insertion reussi avec success</b-alert
@@ -200,7 +200,6 @@ export default {
   data () {
     const now = new Date()
     return {
-      targetForm: {},
       formData: new Map(),
       formSummary: [],
       formDataFormatted: [],
@@ -216,6 +215,7 @@ export default {
   computed: {
     ...mapState({
       user: state => state.auth.user,
+      targetForm: state => state.form.forms,
       hospitalManagerName: state => state.hospital.hospitalManagerName,
       formSteps: state => state.formStep.formSteps,
       editionData: state => state.hospitalSituation.hospitalSituationDetail,
@@ -269,16 +269,17 @@ export default {
     },
 
     async getForm () {
-      this.targetForm = await this.formShow({ id: this.$route.params.form_id })
+      await this.formShow({ id: this.$route.params.form_id })
     },
 
     onComplete () {
       this.isLoading = true
       this.errors = {}
 
-      const url = this.$route.params.hospital_id
-        ? `/api/dashboard/hospital-situations/${this.$route.params.hospital_id}`
-        : '/api/dashboard/hospital-situations'
+      // eslint-disable-next-line no-unused-vars
+      // const url = this.$route.params.hospital_id
+      //   ? `/api/dashboard/hospital-situations/${this.$route.params.hospital_id}`
+      //   : '/api/dashboard/hospital-situations'
 
       if (this.$route.params.update_id) {
         this.form._method = 'PUT'
@@ -293,7 +294,6 @@ export default {
     },
 
     createSituation (formData) {
-      const counter = 1
       for (const [key, value] of formData) {
         this.formDataFormatted.push({
           form_field_id: key,

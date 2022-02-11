@@ -141,7 +141,9 @@ export default {
       commit('SET_IS_LOADING', payload.isLoading)
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/dashboard/hospital-situations/${payload.update_id}`)
+          .get(
+            `/api/dashboard/hospital-situations/${payload.update_id}/hospital_id/${payload.hospital_id}`
+          )
           .then(({ data }) => {
             commit('HOSPITAL_SITUATION_DETAIL', data)
             commit('SET_IS_LOADING', false)

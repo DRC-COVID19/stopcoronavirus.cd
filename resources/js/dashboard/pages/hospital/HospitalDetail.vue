@@ -8,7 +8,7 @@
           <b-link :to="backRoute">
             <span class="fa fa-chevron-left"> Retour</span>
           </b-link>
-          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form.slice(0,1)[0].last_update).format("DD/MM/Y")}}</h3>
+          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form[0].last_update).format("DD/MM/Y")}}</h3>
             <b-col
                   v-for="(step, index) in renderSituations"
                   :key="index"
@@ -20,7 +20,7 @@
                     <li>{{step.form_field_name}} : {{step.form_field_value}}</li>
                   </ul>
             </b-col>
-          <div>Données envoyées par <b> {{form.slice(0,1)[0].created_manager_name}}</b></div>
+          <div>Données envoyées par <b> {{form[0].created_manager_name}}</b></div>
           <!-- <div v-if="form.slice(0,1)[0].created_manager_name">Modifier par {{form.slice(0,1)[0].updated_manager_name}}</div> -->
         </b-col>
       </b-row>
@@ -38,8 +38,8 @@ export default {
     Loading, Header
   },
 
-  mounted () {
-    this.getHospital()
+  async mounted () {
+    await this.getHospital()
   },
   computed: {
     ...mapState({
@@ -62,7 +62,7 @@ export default {
   methods: {
     ...mapActions(['getHospitalSituationsDetail']),
     getHospital () {
-      this.getHospitalSituationsDetail({ isLoading: this.isLoading, update_id: this.$route.params.update_id })
+      this.getHospitalSituationsDetail({ isLoading: this.isLoading, update_id: this.$route.params.update_id, hospital_id: this.$route.params.hospital_id })
     }
   }
 }

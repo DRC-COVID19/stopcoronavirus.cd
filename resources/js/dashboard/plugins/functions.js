@@ -11,7 +11,8 @@ export const createSituationsReduce = (array = []) => {
         if (formIds.every(form => form.form_step_id !== item.form_step_id)) {
           formIds.push({
             form_step_id: item.form_step_id,
-            form_step_title: item.form_step_title
+            form_step_title:
+              item.form_step_id === null ? 'Aucune etape' : item.form_step_title
           })
         }
       })
