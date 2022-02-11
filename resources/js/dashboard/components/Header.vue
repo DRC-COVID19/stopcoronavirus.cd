@@ -161,6 +161,9 @@ export default {
       return getChangeLogNotRead.length;
     },
   },
+  mounted() {
+    this.fillParametersFromUrlParams()
+  },
   methods: {
     ...mapActions(["logout", "setChangeLogsRead"]),
     ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
@@ -182,6 +185,10 @@ export default {
       this.setActiveMenu(7);
     },
     selectMenu(value) {
+      if (this.activeMenu !== null) {
+        this.removeAllParamsFromUrl();
+      }
+      this.addParamToUrl('menu', value);
       this.setActiveMenu(value);
     },
     toggleHeaderNotification() {
@@ -193,6 +200,15 @@ export default {
         this.setChangeLogsRead();
       }
     },
+    fillParametersFromUrlParams () {
+      const url = new URL(window.location.href);
+      const menu = url.searchParams.get('menu');
+      if (menu) {
+        this.selectMenu(+menu)
+      } else {
+        this.selectMenu(1)
+      }
+    }
   },
 };
 </script>

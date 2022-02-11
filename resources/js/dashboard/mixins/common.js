@@ -198,6 +198,11 @@ export default {
         url.searchParams.set(param, value);
       }
       window.history.replaceState(null, null, url);
+    },
+    removeAllParamsFromUrl() {
+      const url = new URL(window.location.href);
+      url.search = ''
+      window.history.replaceState(null, null, url);
     }
   }
 }
