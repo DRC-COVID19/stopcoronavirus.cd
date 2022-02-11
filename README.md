@@ -44,7 +44,7 @@ Storage link
 ```
 
 
-initialize seeds
+Initialize seeds
 
 ```bash
     php artisan db:seed
@@ -56,7 +56,14 @@ Compile SCSS
     yarn or npm watch
 ```
 
-start server
+Live reload
+```bash
+    yarn hot
+```
+
+Note to update `dashboard.blade` and use `mix` method instead of `asset`
+
+Start server
 
 ```bash
     php artisan serve

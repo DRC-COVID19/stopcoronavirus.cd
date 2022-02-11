@@ -19,7 +19,7 @@
             {{moment(form.last_update).format("DD.MM.Y")}}
           </h3>
           <form-wizard
-            :title="$route.params.hospital_id?'':'FICHE DE COLLECTE DES DONNEES'"
+            :title="$route.params.hospital_id?'':'FICHE DE COLLECTE DE DONNEES'"
             subtitle
             shape="tab"
             color="#2e5bff"
@@ -32,468 +32,25 @@
             <tab-content>
               <b-row align-h="center">
                 <b-col cols="12" md="6">
-                  <h3 class="mb-4">Données épidemologiques</h3>
+                  <h3 class="mb-4">Données épidémiologiques</h3>
 
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input v-model="form.confirmed" v-int type="text" class="input-dash"
-                      :disabled="nodata_confirmed"/>
+                  <b-form-group v-for="(question, i) in questions.epidemiologicalData" :key="i">
+                    <label for class="text-dash-color"> {{ question.text }} </label>
+                    <b-form-input
+                      v-model="form[question.column]"
+                      :disabled="noData[question.column]"
+                      :type="question.type"
+                      :v-int="question.type === 'number'"
+                      class="input-dash"
+                    />
                     <b-form-checkbox class="no-data"
-                      v-model="nodata_confirmed"
-                      @input="confirmedChecked"
+                      v-model="noData[question.column]"
+                      @input="noDataChecked($event, question)"
                     >
                       Donnée non disponible
                     </b-form-checkbox>
                   </b-form-group>
 
-                  <b-form-group>
-                    <label for class="text-dash-color">Hospitalisés</label>
-                    <b-form-input v-model="form.sick" v-int type="text" class="input-dash"
-                      :disabled="nodata_sick"/>
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_sick"
-                      @input="sickChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input v-model="form.healed" v-int type="text" class="input-dash"
-                      :disabled="nodata_healed"/>
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_healed"
-                      @input="healedChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead" v-int type="text" class="input-dash"
-                      :disabled="nodata_dead"/>
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_dead"
-                      @input="deadChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </tab-content>
-            <!--
-              <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Homme</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input
-                      v-model="form.confirmed_male"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                    />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input v-model="form.healed_male" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead_male" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-              <hr />
-              <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Femme</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input
-                      v-model="form.confirmed_female"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                    />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input
-                      v-model="form.healed_female"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                    />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead_female" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </tab-content>
-            <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Age de 0 à 19 ans</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input
-                      v-model="form.confirmed_0_19"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                    />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input v-model="form.healed_0_19" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead_0_19" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </tab-content>
-            <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Age de 20 à 40 ans</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input
-                      v-model="form.confirmed_20_40"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                    />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input v-model="form.healed_20_40" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead_20_40" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </tab-content>
-            <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Age de 45 à 50 ans</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input
-                      v-model="form.confirmed_45_50"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                    />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input v-model="form.healed_45_50" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead_45_50" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </tab-content>
-            <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Age de 55 à 64 ans</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input
-                      v-model="form.confirmed_55_64"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                    />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input v-model="form.healed_55_64" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead_55_64" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </tab-content>
-            <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Age de 65 à 74 ans</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input
-                      v-model="form.confirmed_65_74"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                    />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input v-model="form.healed_65_74" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead_65_74" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </tab-content>
-            <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Age de 75 à 84 ans</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input
-                      v-model="form.confirmed_75_84"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                    />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input v-model="form.healed_75_84" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead_75_84" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </tab-content>
-            <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="4">
-                  <h3>Age supérieur à 84 ans</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Confirmés</label>
-                    <b-form-input v-model="form.confirmed_85" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Guéris</label>
-                    <b-form-input v-model="form.healed_85" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                  <b-form-group>
-                    <label for class="text-dash-color">Décès</label>
-                    <b-form-input v-model="form.dead_85" v-int type="text" class="input-dash" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-            </tab-content>
-            -->
-            <tab-content>
-              <b-row align-h="center">
-                <b-col cols="12" md="6">
-                  <h3 class="mb-4">Capacité de prise en charge des patiens</h3>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Lits avec mousse occupés</label>
-                    <b-form-input
-                      v-model="form.occupied_foam_beds"
-                      v-int
-                      value="0"
-                      type="text"
-                      class="input-dash"
-                      :disabled="nodata_occupied_foam_beds"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_occupied_foam_beds"
-                      @input="occupied_foam_bedsChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Lits de réanimation occupés</label>
-                    <b-form-input
-                      v-model="form.occupied_resuscitation_beds"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                      :disabled="nodata_occupied_resuscitation_beds"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_occupied_resuscitation_beds"
-                      @input="occupied_resuscitation_bedsChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Respirateurs occupés</label>
-                    <b-form-input
-                      v-model="form.occupied_respirators"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                      :disabled="nodata_occupied_respirators"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_occupied_respirators"
-                      @input="occupied_respiratorsChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Ventilateur de réanimation occupés</label>
-                    <b-form-input
-                      v-model="form.resuscitation_ventilator"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                      :disabled="nodata_resuscitation_ventilator"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_resuscitation_ventilator"
-                      @input="resuscitation_ventilatorChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Masques</label>
-                    <b-form-input v-model="form.masks" v-int type="text" class="input-dash"
-                      :disabled="nodata_masks"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_masks"
-                      @input="masksChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Equipement de protection individuelle</label>
-                    <b-form-input
-                      v-model="form.individual_protection_equipment"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                      :disabled="nodata_individual_protection_equipment"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_individual_protection_equipment"
-                      @input="individual_protection_equipmentChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Oxygénérateur</label>
-                    <b-form-input v-model="form.oxygenator" v-int type="text" class="input-dash"
-                      :disabled="nodata_oxygenator"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_oxygenator"
-                      @input="oxygenatorChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Dépistage rapide</label>
-                    <b-form-input
-                      v-model="form.rapid_screening"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                      :disabled="nodata_rapid_screening"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_rapid_screening"
-                      @input="rapid_screeningChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Radiographie</label>
-                    <b-form-input v-model="form.x_ray" v-int type="text" class="input-dash"
-                      :disabled="nodata_x_ray"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_x_ray"
-                      @input="x_rayChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Automate Genexpert</label>
-                    <b-form-input
-                      v-model="form.automate_genexpert"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                      :disabled="nodata_automate_genexpert"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_automate_genexpert"
-                      @input="automate_genexpertChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Gel hydro alcoolique</label>
-                    <b-form-input
-                      v-model="form.gel_hydro_alcoolique"
-                      v-int
-                      type="text"
-                      class="input-dash"
-                      :disabled="nodata_gel_hydro_alcoolique"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_gel_hydro_alcoolique"
-                      @input="gel_hydro_alcooliqueChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
-
-                  <b-form-group>
-                    <label for class="text-dash-color">Check point</label>
-                    <b-form-input v-model="form.check_point" v-int type="text" class="input-dash"
-                      :disabled="nodata_check_point"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_check_point"
-                      @input="check_pointChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
                 </b-col>
               </b-row>
             </tab-content>
@@ -501,99 +58,67 @@
             <tab-content>
               <b-row align-h="center">
                 <b-col cols="12" md="6">
-                  <h3>Médicaments</h3>
-                  <b-form-group>
-                    <label for class="text-dash-color">Chloroquine</label>
-                    <b-form-input v-model="form.chloroquine" v-int type="text" class="input-dash"
-                      :disabled="nodata_chloroquine"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_chloroquine"
-                      @input="chloroquineChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
+                  <h3 class="mb-4">Capacité de prise en charge</h3>
 
-                  <b-form-group>
-                    <label for class="text-dash-color">Hydrochloroquine</label>
+                  <b-form-group v-for="(question, i) in questions.patientCareCapacity" :key="i">
+                    <label for class="text-dash-color"> {{ question.text }} </label>
                     <b-form-input
-                      v-model="form.hydrochloroquine"
-                      v-int
-                      type="text"
+                      v-model="form[question.column]"
+                      :disabled="noData[question.column]"
+                      :type="question.type"
+                      :v-int="question.type === 'number'"
                       class="input-dash"
-                      :disabled="nodata_hydrochloroquine"
                     />
                     <b-form-checkbox class="no-data"
-                      v-model="nodata_hydrochloroquine"
-                      @input="hydrochloroquineChecked"
+                      v-model="noData[question.column]"
+                      @input="noDataChecked($event, question)"
                     >
                       Donnée non disponible
                     </b-form-checkbox>
                   </b-form-group>
 
-                  <b-form-group>
-                    <label for class="text-dash-color">Azytromicine</label>
-                    <b-form-input v-model="form.azytromicine" v-int type="text" class="input-dash"
-                      :disabled="nodata_azytromicine"
+                  <b-form-group v-for="(question, i) in questions.medications" :key="i">
+                    <label for class="text-dash-color"> {{ question.text }} </label>
+                    <b-form-input
+                      v-model="form[question.column]"
+                      :disabled="noData[question.column]"
+                      :type="question.type"
+                      :v-int="question.type === 'number'"
+                      class="input-dash"
                     />
                     <b-form-checkbox class="no-data"
-                      v-model="nodata_azytromicine"
-                      @input="azytromicineChecked"
+                      v-model="noData[question.column]"
+                      @input="noDataChecked($event, question)"
                     >
                       Donnée non disponible
                     </b-form-checkbox>
                   </b-form-group>
 
-                  <b-form-group>
-                    <label for class="text-dash-color">Vitamince c</label>
-                    <b-form-input v-model="form.Vitamince_c" v-int type="text" class="input-dash"
-                      :disabled="nodata_Vitamince_c"
-                    />
-                    <b-form-checkbox class="no-data"
-                      v-model="nodata_Vitamince_c"
-                      @input="Vitamince_cChecked"
-                    >
-                      Donnée non disponible
-                    </b-form-checkbox>
-                  </b-form-group>
                 </b-col>
               </b-row>
             </tab-content>
+
             <tab-content>
               <b-row align-h="center">
                 <b-col cols="12" md="6">
-                  <h3 class="mb-4">Confirmations les données entrées</h3>
+                  <h3 class="mb-4">Confirmation des données entrées</h3>
 
-                  <h4 class="mb-4">Données épidemologiques</h4>
+                  <h4 class="mb-4">Données épidémiologiques</h4>
                   <ul>
-                    <li>Confirmés : {{form.confirmed}}</li>
-                    <li>Hospitalisés : {{form.sick}}</li>
-                    <li>Guéris : {{form.healed}}</li>
-                    <li>Décès : {{form.dead}}</li>
+                    <li v-for="(question, i) in questions.epidemiologicalData" :key="i">
+                      {{ question.text }} : {{ form[question.column] }}
+                    </li>
                   </ul>
-                  <h4 class="mb-4">Capacité de prise en charge des patiens</h4>
+                  <h4 class="mb-4">Capacité de prise en charge</h4>
                   <ul>
-                    <li>Lits avec mousse occupés: {{form.occupied_foam_beds}}</li>
-                    <li>Lits de réanimation occupés : {{form.occupied_resuscitation_beds}}</li>
-                    <li>Respirateurs occupés : {{form.occupied_respirators}}</li>
-                    <li>Ventilateur de réanimation occupés : {{form.resuscitation_ventilator}}</li>
-                    <li>Masques : {{form.masks}}</li>
-                    <li>Equipement de protection individuelle : {{form.individual_protection_equipment}}</li>
-                    <li>Oxygénérateur : {{form.oxygenator}}</li>
-                    <li>Dépistage rapide : {{form.rapid_screening}}</li>
-                    <li>Radiographie : {{form.x_ray}}</li>
-                    <li>Automate Genexpert : {{form.automate_genexpert}}</li>
-                    <li>Gel hydro alcoolique : {{form.gel_hydro_alcoolique}}</li>
-                    <li>Check point : {{form.check_point}}</li>
+                    <li v-for="(question, i) in questions.patientCareCapacity" :key="i">
+                      {{ question.text }} : {{ form[question.column] }}
+                    </li>
+                    <li v-for="(question, i) in questions.medications" :key="i">
+                      {{ question.text }} : {{ form[question.column] }}
+                    </li>
                   </ul>
-                  <h4 class="mb-4">Médicaments</h4>
-                  <ul>
-                    <li>Chloroquine : {{form.chloroquine}}</li>
-                    <li>Hydrochloroquine : {{form.hydrochloroquine}}</li>
-                    <li>Azytromicine : {{form.azytromicine}}</li>
-                    <li>Vitamince c : {{form.Vitamince_c}}</li>
-                  </ul>
+
                   <b-form-group class="no-border">
                     <label for="last_update" class="text-dash-color">Sélectionnez la date</label>
                     <b-form-datepicker
@@ -623,6 +148,7 @@ import { FormWizard, TabContent } from "vue-form-wizard";
 import Header from "../../components/hospital/Header";
 import Loading from "../../components/Loading";
 import ManagerUserName from "../../components/hospital/ManagerUserName";
+import Questions from "../../config/questions";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 import { mapState } from "vuex";
 export default {
@@ -658,6 +184,8 @@ export default {
         azytromicine: null,
         Vitamince_c: null
       },
+      questions: Questions,
+      noData: [],
       nodata_confirmed : false,
       nodata_sick: false,
       nodata_healed: false,
@@ -686,7 +214,7 @@ export default {
   computed: {
     ...mapState({
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
-    }),
+    })
   },
   mounted() {
     if (this.$route.params.hospital_id) {
@@ -740,65 +268,9 @@ export default {
           this.isLoading = false;
         });
     },
-    confirmedChecked(checked){
-      if(checked) this.$set(this.form, 'confirmed', '')
-    },
-    sickChecked(checked){
-      if(checked) this.$set(this.form, 'sick', '')
-    },
-    healedChecked(checked){
-      if(checked) this.$set(this.form, 'healed', '')
-    },
-    deadChecked(checked){
-      if(checked) this.$set(this.form, 'dead', '')
-    },
-    occupied_foam_bedsChecked(checked){
-      if(checked) this.$set(this.form, 'occupied_foam_beds', '')
-    },
-    occupied_resuscitation_bedsChecked(checked){
-      if(checked) this.$set(this.form, 'occupied_resuscitation_beds', '')
-    },
-    occupied_respiratorsChecked(checked){
-      if(checked) this.$set(this.form, 'occupied_respirators', '')
-    },
-    resuscitation_ventilatorChecked(checked){
-      if(checked) this.$set(this.form, 'resuscitation_ventilator', '')
-    },
-    masksChecked(checked){
-      if(checked) this.$set(this.form, 'masks', '')
-    },
-    individual_protection_equipmentChecked(checked){
-      if(checked) this.$set(this.form, 'individual_protection_equipment', '')
-    },
-    oxygenatorChecked(checked){
-      if(checked) this.$set(this.form, 'oxygenator', '')
-    },
-    rapid_screeningChecked(checked){
-      if(checked) this.$set(this.form, 'rapid_screening', '')
-    },
-    x_rayChecked(checked){
-      if(checked) this.$set(this.form, 'x_ray', '')
-    },
-    automate_genexpertChecked(checked){
-      if(checked) this.$set(this.form, 'automate_genexpert', '')
-    },
-    gel_hydro_alcooliqueChecked(checked){
-      if(checked) this.$set(this.form, 'gel_hydro_alcoolique', '')
-    },
-    check_pointChecked(checked){
-      if(checked) this.$set(this.form, 'check_point', '')
-    },
-    chloroquineChecked(checked){
-      if(checked) this.$set(this.form, 'chloroquine', '')
-    },
-    hydrochloroquineChecked(checked){
-      if(checked) this.$set(this.form, 'hydrochloroquine', '')
-    },
-    azytromicineChecked(checked){
-      if(checked) this.$set(this.form, 'azytromicine', '')
-    },
-    Vitamince_cChecked(checked){
-      if(checked) this.$set(this.form, 'Vitamince_c', '')
+    noDataChecked (checked, question) {
+      console.log(checked, question.column);
+      if(checked) this.$set(this.form, question.column, '')
     }
   },
 };
