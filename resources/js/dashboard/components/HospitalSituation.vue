@@ -27,13 +27,14 @@
                   <small>infrastructure(s)</small>
                 </b-badge>
               </b-col>
-              <b-col lg="6" class="align-items-center text-right">
+            </b-row>
+            <div class=" col-12 d-flex  text-right justify-content-end">
               <export-excel
                 :data="hospitalSituationData"
                 :name="fileName"
                 v-show="isUploadFile"
               >
-                <span style="cursor: pointer"
+              <span style="cursor: pointer"
                   >Télécharger les données
                   <Icon
                     style="font-size: 30px"
@@ -41,8 +42,7 @@
                   />
                 </span>
               </export-excel>
-          </b-col>
-          </b-row>
+            </div>
           <div class="col-12 text-right" v-if="!isLoading">
             <button
               class="btn btn-sm btn-primary"
@@ -418,7 +418,7 @@ export default {
           const monObj = {};
           monObj.date = moment(hospital.date).format("DD/MM/YY");
           monObj.identifiant = hospital.hospital_id;
-          monObj['numero téléphone'] = hospital.phone_number;
+          monObj['numero téléphone agent'] = hospital.phone_number;
           monObj['nom hopital'] = hospital.hospital_name;
           monObj[hospital.form_field_name] = hospital.form_field_value;
           hospitalSituationFiltered.push(monObj);

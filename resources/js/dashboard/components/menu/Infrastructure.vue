@@ -1,7 +1,7 @@
 <template>
   <b-card no-body class="rounded-0 p-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
-      <b-form-row>
+      <b-form-row class="d-flex justify-content-between ml-1 mr-5">
         <b-col cols="12" md="4" class="nav-zone pl-3 pr-3">
           <b-form-group>
             <label for class="text-dash-color">Commune</label>
@@ -17,7 +17,7 @@
         </b-col>
         <b-col cols="12" md="5" lg="4" class="nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
-          <div class="d-flex">
+          <div class=" d-flex ">
             <b-form-group class="col-auto" v-slot="{ ariaDescribedby }">
               <b-form-checkbox
                 v-model="checked"
@@ -40,7 +40,7 @@
                   :appendToBody="true"
                   opens="center"
                   :max-date="new Date()"
-                  :singleDatePicker="checked? false:true "
+                  :singleDatePicker="checked ? false : true"
                   @update="UpdateObservationDate"
                   :calculate-position="dateRangerPosition"
                   class="style-picker"
@@ -50,6 +50,9 @@
                       {{ picker.startDate | date }} -
                       {{ picker.endDate | date }}</span
                     >
+                  </template>
+                  <template #date="data">
+                    <span class="small">{{ data.date | dateCell }}</span>
                   </template>
                 </date-range-picker>
                 <b-button
@@ -67,7 +70,8 @@
           cols="12"
           md="3"
           lg="2"
-          class="pl-3 pr-3 d-flex"
+          class="pl-3 pr-3 d-flex text-right justify-content-end"
+          style="border"
           :class="{ row: !isSmOrMd }"
         >
           <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue"
@@ -129,7 +133,7 @@ export default {
       return [...this.defaultTownship, ...this.townships];
     },
     stateCheckedButton() {
-      return this.checked ? false : true;;
+      return this.checked ? false : true;
     },
   },
   methods: {
