@@ -1,18 +1,18 @@
-export default{
+export default {
   state: {
-    forms:[],
+    forms: [],
     isLoading: false
   },
-  mutations:{
-    SET_FORM(state,payload){
+  mutations: {
+    SET_FORM (state, payload) {
       state.forms = payload
-    },  
-    SET_IS_LOADING(state, payload) {
-      state.isLoading = payload;
+    },
+    SET_IS_LOADING (state, payload) {
+      state.isLoading = payload
     }
   },
-  actions:{
-    formShow ({state, commit}, payload) {
+  actions: {
+    formShow ({ state, commit }, payload) {
       return new Promise((resolve, reject) => {
         axios.get(`/api/dashboard/forms/${payload.id}`)
           .then(({ data }) => {
@@ -25,22 +25,22 @@ export default{
       })
     },
 
-    getForms({ state, commit }, payload = {}) {
-      commit("SET_IS_LOADING", true);
+    getForms ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios.get('api/dashboard/forms', {
           params: { page: payload.page || 1 }
         })
           .then(({ data }) => {
-            commit('SET_FORM', data);
-            commit("SET_IS_LOADING", false);
-            resolve(true);
+            commit('SET_FORM', data)
+            commit('SET_IS_LOADING', false)
+            resolve(true)
           })
           .catch((response) => {
-            console.log(response);
-            reject(response);
+            console.log(response)
+            reject(response)
           })
       })
-    },
+    }
   }
 }

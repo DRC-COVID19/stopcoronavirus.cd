@@ -51,6 +51,17 @@
                   }
                 }"
               >Details</b-button>
+                 <b-button
+                class="btn btn-warning mb-1"
+                :to="{
+                  name: 'hospital.edit',
+                  params: {
+                    update_id:data.item.last_update,
+                    hospital_id:$route.params.hospital_id,
+                    form_id: 4
+                  }
+                }"
+              >Editer</b-button>
             </template>
           </b-table>
         </b-col>

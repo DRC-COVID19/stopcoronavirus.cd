@@ -28,7 +28,8 @@ class HospitalSituationController extends Controller
     public function index()
     {
         try {
-            $hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
+            //$hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
+            $hospitalSituation = HospitalSituationNew::all();
             return $hospitalSituation;
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
@@ -70,10 +71,10 @@ class HospitalSituationController extends Controller
     public function store(Request $request)
     {
         
-        $data = $this->validator($request->all());
+        $data = $this->validator($request->all(), ['create' => 'required', 'update'=>'nullable']);
         try {
            // $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
-            Log::info('hospitalData',[$request->all()]);
+            // Log::info('hospitalData',[$request->all()]);
             $hospitalSituationNew = HospitalSituationNew::create($data);
 
             return response()->json($hospitalSituationNew, 201, [], JSON_NUMERIC_CHECK);
@@ -165,11 +166,16 @@ class HospitalSituationController extends Controller
      * @param  \App\HospitalSituationNew  $hospitalSituationNew
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, HospitalSituationNew $hospitalSituationNew)
+    public function update(Request $request, $hospital_id)
     {
-        $data = $this->validator($request->all(), $hospitalSituationNew->id);
+        $data = $this->validator($request->all(), ['create' => 'nullable', 'update'=>'required']);
         try {
-            $hospitalSituationNew->update(Arr::except($data, ['last_update', 'hospital_id']));
+            $hospitalSituationNew= HospitalSituationNew::where(['last_update' => $data['last_update'],'hospital_id' => $hospital_id, 'form_field_id' => $data['form_field_id']])
+                                            ->update($data);
+                                         
+             Log::info('hospitalData: ',[$request->all()]);
+         
+           // HospitalSituationNew::updated(Arr::except($data, ['last_update', 'hospital_id']));
             return $hospitalSituationNew;
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
@@ -244,14 +250,14 @@ class HospitalSituationController extends Controller
         //
     }
 
-    function validator($data, $id = null)
+    function validator($data, ?array $updateRules=[])
     {
         return Validator::make($data, [
             "form_field_id" => 'required',
             "value" => 'required',
-            'created_manager_name'  =>'required', 
-            'updated_manager_name'  => 'nullable',
-            'hospital_id'=>'nullable',
+            'created_manager_name'  => $updateRules['create'], 
+            'updated_manager_name'  => $updateRules['update'],
+            'hospital_id'=>'required',
             'last_update' => 'required|date'
         ])->validate();
     }

@@ -43,7 +43,6 @@ export default {
   actions: {
     createHospitalSituation ({ state, commit, dispatch }, payload = {}) {
       commit('SET_IS_CREATING', true)
-      console.log('payload hospital:', payload)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
 
@@ -69,7 +68,7 @@ export default {
 
         axios
           .put(
-            `/api/dashboard/hospital-situations/hospital_id/${payload.hospital_id}`,
+            `/api/dashboard/hospital-situations/${payload.hospital_id}`,
             payload
           )
           .then(({ data }) => {

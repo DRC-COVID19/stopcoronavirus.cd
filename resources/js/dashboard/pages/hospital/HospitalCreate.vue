@@ -73,6 +73,7 @@
                           :type="item.form_field_type.name"
                           v-model="item.default_value"
                           :placeholder="`Entrer ${item.name}`"
+                          required
                           @change="
                             handelChange(
                               item.id,
@@ -82,7 +83,6 @@
                             )
                           "
                           :id="item.name"
-                          required
                         >
                         </b-form-input>
                       </b-col>
@@ -147,9 +147,9 @@
                 >
                   <h3 class="mb-4">{{ step.title }}</h3>
 
-                  <div v-for="(summary, count) in formSummary" :key="count">
-                    <ul v-if="step.id === summary.stepId">
-                      <li>{{ summary.fieldName }} : {{ summary.value }}</li>
+                  <div v-for="(summary, count) in targetForm.form_fields" :key="count">
+                    <ul v-if="step.id === summary.form_step_id">
+                      <li>{{ summary.name }} : {{ summary.default_value }}</li>
                     </ul>
                   </div>
                 </b-col>
@@ -261,13 +261,6 @@ export default {
         : []
     },
 
-    valuesChanged (values) {
-      this.formData = {
-        ...this.formData,
-        ...values
-      }
-    },
-
     async getForm () {
       await this.formShow({ id: this.$route.params.form_id })
     },
@@ -323,10 +316,10 @@ export default {
     },
     handelChange (key, value, fieldName, stepId) {
       if (value) {
-        if (!this.formData.has(key)) {
+        this.targetForm.form_fields.forEach(item => {
+          if ((item.id === key) && (item.name === fieldName)) item.default_value = value
           this.formData.set(key, value)
-          this.formSummary.push({ value, fieldName, stepId })
-        }
+        })
       }
     }
   }

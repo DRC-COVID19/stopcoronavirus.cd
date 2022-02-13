@@ -8,9 +8,7 @@
 
         <b-col cols="12">
           <b-link
-            :to="{
-              name: 'hospital.home'
-            }"
+            :to="backRoute"
           >
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
@@ -69,16 +67,16 @@
                           :type="item.form_field_type_name"
                           v-model="item.form_field_value"
                           :placeholder="`Entrer ${item.form_field_name}`"
+                          required
                           @change="
                             handelChange(
-                              item.id,
+                              item.form_field_id,
                               item.form_field_value,
                               item.form_field_name,
                               step.id
                             )
                           "
                           :id="item.form_field_name"
-                          required
                         >
                         </b-form-input>
                       </b-col>
@@ -120,7 +118,7 @@
                           :placeholder="`Entrer ${field.form_field_name}`"
                           @change="
                             handelChange(
-                              field.id,
+                                field.form_field_id,
                               field.form_field_value,
                               field.form_field_name,
                               step.id
@@ -145,9 +143,9 @@
                 >
                   <h3 class="mb-4">{{ step.title }}</h3>
 
-                  <div v-for="(summary, count) in formSummary" :key="count">
-                    <ul v-if="step.id === summary.stepId">
-                      <li>{{ summary.fieldName }} : {{ summary.value }}</li>
+                  <div v-for="(summary, count) in editionData" :key="count">
+                    <ul v-if="step.id === summary.form_step_id">
+                      <li>{{ summary.form_field_name }} : {{ summary.form_field_value }}</li>
                     </ul>
                   </div>
                 </b-col>
@@ -189,7 +187,6 @@ import Loading from '../../components/Loading'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import { mapState, mapActions } from 'vuex'
-import { createSituationsReduce } from '../../plugins/functions'
 export default {
   components: {
     FormWizard,
@@ -230,9 +227,14 @@ export default {
           .filter(item => item.form_step_id === null)
         : []
     },
-    renderSituations () {
-      return createSituationsReduce(this.editionData)
-    }
+    backRoute () {
+      if (this.user.isHospitalAdmin) {
+        return {
+          name: 'hospital.admin.data',
+          params: { hospital_id: this.$route.params.hospital_id }
+        }
+      } else return { name: 'hospital.home' }
+    },
   },
 
   mounted () {
@@ -247,7 +249,7 @@ export default {
   methods: {
     ...mapActions([
       'formShow',
-      'createHospitalSituation',
+      'updateHospitalSituation',
       'getHospitalSituationsDetail'
     ]),
     getHospitalSituations () {
@@ -263,53 +265,48 @@ export default {
         : []
     },
 
-    valuesChanged (values) {
-      this.formData = {
-        ...this.formData,
-        ...values
-      }
-    },
-
     async getForm () {
       await this.formShow({ id: this.$route.params.form_id })
     },
 
     onComplete () {
-      this.isLoading = true
+      this.isLoading = false
       this.errors = {}
 
       if (this.$route.params.update_id) {
         this.form._method = 'PUT'
         this.form.updated_manager_name = this.hospitalManagerName
-      } else {
-        this.form.created_manager_name = this.hospitalManagerName
-      }
-      if (this.createSituation(this.formData)) {
-        this.isLoading = true
-        this.$router.push('/hospitals')
+        this.form.hospital_id = this.$route.params.hospital_id
+        this.form.last_update = this.$route.params.update_id
+        if (this.updateSituation(this.formData)) {
+          this.isLoading = true
+          if (this.user.isHospitalAdmin) {
+            this.$router.push(`/admin/hospitals/${this.$route.params.hospital_id}`)
+          } else {
+            this.$router.push('/hospitals')
+          }
+        }
       }
     },
 
-    createSituation (formData) {
+    updateSituation (formData) {
       for (const [key, value] of formData) {
         this.formDataFormatted.push({
           form_field_id: key,
           value,
           last_update: this.form.last_update,
-          created_manager_name: this.form.created_manager_name,
-          updated_manager_name: this.form.created_manager_name,
-          hospital_id: this.user.hospital.id
+          updated_manager_name: this.form.updated_manager_name,
+          hospital_id: this.form.hospital_id
         })
       }
 
       if (this.formDataFormatted.length > 0) {
         this.formDataFormatted.forEach(item => {
-          this.createHospitalSituation({
+          this.updateHospitalSituation({
             value: item.value,
             form_field_id: item.form_field_id,
             last_update: item.last_update,
-            created_manager_name: item.created_manager_name,
-            updated_manager_name: item.created_manager_name,
+            updated_manager_name: item.updated_manager_name,
             hospital_id: item.hospital_id
           })
         })
@@ -319,12 +316,12 @@ export default {
       return false
     },
     handelChange (key, value, fieldName, stepId) {
-      if (value) {
-        if (!this.formData.has(key)) {
+      this.editionData.forEach(item => {
+        if (item.form_field_id === key) {
+          item.form_field_value = value
           this.formData.set(key, value)
-          this.formSummary.push({ value, fieldName, stepId })
         }
-      }
+      })
     }
   }
 }
