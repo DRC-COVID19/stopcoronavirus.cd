@@ -234,7 +234,7 @@ export default {
           params: { hospital_id: this.$route.params.hospital_id }
         }
       } else return { name: 'hospital.home' }
-    },
+    }
   },
 
   mounted () {
@@ -261,6 +261,8 @@ export default {
     },
     formFieldSorted (id) {
       return this.editionData
+        .slice()
+        .sort((a, b) => b.order_field - a.order_field)
         ? this.editionData.filter(item => item.form_step_id === id)
         : []
     },
