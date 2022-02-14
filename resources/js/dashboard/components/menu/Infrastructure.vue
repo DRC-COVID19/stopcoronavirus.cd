@@ -2,7 +2,7 @@
   <b-card no-body class="rounded-0 p-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row class="d-flex justify-content-between ml-1 mr-5">
-        <b-col lg="5" cols="5" md="4" class=" col-5 nav-zone pl-3 pr-3">
+        <b-col lg="5" cols="5" md="4" class="col-5 nav-zone pl-3 pr-3">
           <b-form-group cols="5">
             <label for class="text-dash-color">Commune</label>
             <v-select
@@ -15,18 +15,10 @@
             />
           </b-form-group>
         </b-col>
-        <b-col cols="12"  md="5" lg="5" class="col-5 nav-zone pl-3 pr-3">
+        <b-col cols="12" md="5" lg="5" class="col-5 nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
-          <div class=" d-flex ">
-            <b-form-group class="col-auto" v-slot="{ ariaDescribedby }">
-              <b-form-checkbox
-                v-model="checked"
-                class="text-dash-color"
-                :aria-describedby="ariaDescribedby"
-                :value="stateCheckedButton"
-                >Plage de date</b-form-checkbox
-              >
-            </b-form-group>
+          <div class="d-flex">
+           
             <b-form-group class="col">
               <div class="d-flex">
                 <date-range-picker
@@ -45,15 +37,30 @@
                   :calculate-position="dateRangerPosition"
                   class="style-picker"
                 >
+                <div slot="header" slot-scope="data" class="slot p-2">
+                    <div  class="slot mb-2 mt-2">
+                      <b class="text-black">Date courant</b>
+                      {{ data.rangeText }}
+                    </div>
+                    <div style="" class="d-flex justify-content-between mb-2 mt-2">
+                      <button
+                      @click="activeStartDate()"
+                        class="btn btn-sm btn-daterange p-2"
+                        >Date debut <span><Icon :icon="iconStateDatePicker" /></span></button
+                      >
+                        <a
+                        class="btn btn-sm btn-daterange p-2"
+                        >{{form.observation_end}}</a
+                      >
+                    </div>
+                  </div>
                   <template v-slot:input="picker">
                     <span>
                       {{ picker.startDate | date }} -
                       {{ picker.endDate | date }}</span
                     >
                   </template>
-                  <template #date="data">
-                    <span class="small">{{ data.date | dateCell }}</span>
-                  </template>
+    
                 </date-range-picker>
                 <b-button
                   @click="clearObservationDate"
@@ -87,6 +94,8 @@
 import DateRangePicker from "vue2-daterange-picker";
 import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env";
 import { mapState, mapActions } from "vuex";
+import { Icon } from '@iconify/vue2';
+
 export default {
   props: {
     hospitalCount: {
@@ -100,28 +109,30 @@ export default {
   },
   components: {
     DateRangePicker,
+    Icon
   },
   data() {
     return {
       form: {
         observation_end: moment().format("YYYY-MM-DD"),
-        observation_start: null,
+        observation_start: new Date(),
         township: 0,
       },
       selected: false,
       dateRangeObservation: {
-        startDate: null,
         endDate: new Date(),
+        startDate: new Date(),
       },
-      min_date: null,
+      min_date: new Date(),
       defaultTownship: [{ id: 0, name: "Tous" }],
       hospitals: [],
       checked: false,
+      iconStateDatePicker: "fluent:add-12-filled"
     };
   },
   filters: {
     date: (val) => {
-      return val ? moment(val).format("DD.MM.YYYY") : "";
+      return val ? moment(val).format("DD.MM.YYYY") : "Null";
     },
   },
   computed: {
@@ -132,7 +143,7 @@ export default {
     townshipList() {
       return [...this.defaultTownship, ...this.townships];
     },
-    stateCheckedButton() {
+    stateStartDate() {
       return this.checked ? false : true;
     },
   },
@@ -140,6 +151,11 @@ export default {
     ...mapActions(["getObservation"]),
     hospitalToggle(checked) {
       this.$emit("hopitalChecked", checked);
+    },
+    activeStartDate(){
+     this.checked = this.checked ? false : true;
+     this.iconStateDatePicker = this.iconStateDatePicker =="fluent:add-12-filled" ? "majesticons:multiply" : "fluent:add-12-filled"
+      console.log(" this.stateStartDate();",this.checked)
     },
     UpdateObservationDate({ startDate, endDate }) {
       if (!this.checked) {
@@ -184,5 +200,9 @@ export default {
   margin-left: 5px;
   display: flex;
   align-items: center;
+}
+.btn-daterange{
+  background-color:#f4f5fc;
+  font-size: 16px;
 }
 </style>
