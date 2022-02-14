@@ -1,3 +1,5 @@
+
+
 <template>
   <b-card no-body class="rounded-0 p-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
@@ -34,23 +36,19 @@
                   :max-date="new Date()"
                   :singleDatePicker="checked ? false : true"
                   @update="UpdateObservationDate"
+                  @select="SelectObservation"
                   :calculate-position="dateRangerPosition"
                   class="style-picker"
                 >
-                <div slot="header" slot-scope="data" class="slot p-2">
-                    <div  class="slot mb-2 mt-2">
-                      <b class="text-black">Date courant</b>
-                      {{ data.rangeText }}
-                    </div>
+                <div slot="header" slot-scope="" class="slot p-2">
                     <div style="" class="d-flex justify-content-between mb-2 mt-2">
-                      <button
+                      <a
                       @click="activeStartDate()"
                         class="btn btn-sm btn-daterange p-2"
-                        >Date debut <span><Icon :icon="iconStateDatePicker" /></span></button
-                      >
+                        >{{ iconStateDatePicker =="majesticons:multiply" ? selectedDate.observation_start : "Date début"}} <span><Icon :icon="iconStateDatePicker" /></span></a> 
                         <a
                         class="btn btn-sm btn-daterange p-2"
-                        >{{form.observation_end}}</a
+                        >{{selectedDate.observation_end}}</a
                       >
                     </div>
                   </div>
@@ -91,10 +89,12 @@
 </template>
 
 <script>
-import DateRangePicker from "vue2-daterange-picker";
-import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env";
-import { mapState, mapActions } from "vuex";
-import { Icon } from '@iconify/vue2';
+/* eslint-disable space-before-blocks */
+/* eslint-disable no-unneeded-ternary */
+import DateRangePicker from "vue2-daterange-picker"
+import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env"
+import { mapState, mapActions } from "vuex"
+import { Icon } from '@iconify/vue2'
 
 export default {
   props: {
@@ -118,6 +118,10 @@ export default {
         observation_start: new Date(),
         township: 0,
       },
+      selectedDate:{
+        observation_end: moment().format("YYYY-MM-DD"),
+        observation_start: moment().format("YYYY-MM-DD"),
+      },
       selected: false,
       dateRangeObservation: {
         endDate: new Date(),
@@ -127,12 +131,12 @@ export default {
       defaultTownship: [{ id: 0, name: "Tous" }],
       hospitals: [],
       checked: false,
-      iconStateDatePicker: "fluent:add-12-filled"
-    };
+      iconStateDatePicker: "fluent:add-12-filled", 
+    }
   },
   filters: {
     date: (val) => {
-      return val ? moment(val).format("DD.MM.YYYY") : "Null";
+      return val ? moment(val).format("DD.MM.YYYY") : "Null"
     },
   },
   computed: {
@@ -141,54 +145,58 @@ export default {
       observation_end: (state) => state.hospitalSituation.observation_end,
     }),
     townshipList() {
-      return [...this.defaultTownship, ...this.townships];
+      return [...this.defaultTownship, ...this.townships]
     },
     stateStartDate() {
-      return this.checked ? false : true;
+      return this.checked ? false : true
     },
   },
   methods: {
     ...mapActions(["getObservation"]),
     hospitalToggle(checked) {
-      this.$emit("hopitalChecked", checked);
+      this.$emit("hopitalChecked", checked)
     },
     activeStartDate(){
-     this.checked = this.checked ? false : true;
-     this.iconStateDatePicker = this.iconStateDatePicker =="fluent:add-12-filled" ? "majesticons:multiply" : "fluent:add-12-filled"
-      console.log(" this.stateStartDate();",this.checked)
+      this.checked = this.checked ? false : true
+      this.iconStateDatePicker = this.iconStateDatePicker =="fluent:add-12-filled" ? "majesticons:multiply" : "fluent:add-12-filled"
+      console.log(" this.stateStartDate();",this.selectedDate.observation_start)
+    },
+    SelectObservation({ startDate, endDate}){
+      this.selectedDate.observation_start = moment(startDate).format("YYYY-MM-DD")
+      this.selectedDate.observation_end = moment(endDate).format("YYYY-MM-DD")
     },
     UpdateObservationDate({ startDate, endDate }) {
       if (!this.checked) {
-        this.form.observation_start = null;
-        this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
+        this.form.observation_start = null
+        this.form.observation_end = moment(endDate).format("YYYY-MM-DD")
       } else {
-        this.form.observation_start = moment(startDate).format("YYYY-MM-DD");
-        this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
+        this.form.observation_start = moment(startDate).format("YYYY-MM-DD")
+        this.form.observation_end = moment(endDate).format("YYYY-MM-DD")
       }
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
-      dropdownList.style.top = `${top}px`;
-      dropdownList.style.left = `${left + 180}px`;
+      dropdownList.style.top = `${top}px`
+      dropdownList.style.left = `${left + 180}px`
     },
     clearObservationDate() {
-      this.dateRangeObservation = { startDate: null, endDate: null };
-      this.form.observation_end = null;
-      this.form.observation_start = null;
+      this.dateRangeObservation = { startDate: null, endDate: null }
+      this.form.observation_end = null
+      this.form.observation_start = null
     },
     submit() {
       const observations = {
         observation_start: this.form.observation_start,
         observation_end: this.form.observation_end,
-      };
-      this.getObservation(observations);
+      }
+      this.getObservation(observations)
 
-      console.log("observation_end", this.observation_end);
-      console.log("observation_start", this.observation_start);
+      console.log("observation_end", this.observation_end)
+      console.log("observation_start", this.observation_start)
 
-      this.$emit("submitInfrastructureForm", this.form);
+      this.$emit("submitInfrastructureForm", this.form)
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
