@@ -520,12 +520,16 @@ export default {
           'reference-start-date',
           moment(this.dateRangePreference.startDate).format("YYYY/MM/DD")
         )
+      } else {
+        this.addParamToUrlWhenInThisMenu('reference-start-date', null)
       }
       if (this.dateRangePreference.endDate) {
         this.addParamToUrlWhenInThisMenu(
           'reference-end-date',
           moment(this.dateRangePreference.endDate).format("YYYY/MM/DD")
         )
+      } else {
+        this.addParamToUrlWhenInThisMenu('reference-end-date', null)
       }
     },
     UpdateObservationDate({ startDate, endDate }) {
@@ -541,12 +545,16 @@ export default {
           'observation-start-date',
           moment(this.dateRangeObservation.startDate).format("YYYY/MM/DD")
         )
+      } else {
+        this.addParamToUrlWhenInThisMenu('observation-start-date', null)
       }
       if (this.dateRangeObservation.endDate) {
         this.addParamToUrlWhenInThisMenu(
           'observation-end-date',
           moment(this.dateRangeObservation.endDate).format("YYYY/MM/DD")
         )
+      } else {
+        this.addParamToUrlWhenInThisMenu('observation-end-date', null)
       }
     },
     submitFluxForm() {

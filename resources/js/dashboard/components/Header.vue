@@ -3,7 +3,12 @@
     <b-col cols="12" class="map-form-header">
       <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
-          <h1 class="title m-0">Dashboard Covid-19</h1>
+          <h1
+            class="title m-0"
+            @click="selectMenu(1)"
+          >
+            Dashboard Covid-19
+          </h1>
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse" class="default-border">
           <span class="fa fa-bars"></span>
@@ -300,6 +305,9 @@ export default {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+    &:hover {
+      cursor: pointer;
+    }
   }
   .nav-container {
     a {
