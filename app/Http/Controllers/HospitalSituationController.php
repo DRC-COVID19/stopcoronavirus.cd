@@ -100,14 +100,14 @@ class HospitalSituationController extends Controller
                     'form_fields.name as form_field_name',
                     'form_fields.order_field as order_field ',
                     'form_field_types.name as form_field_type_name',
-                    'hospital_situations_new.value as form_field_value',
+                    'hospital_situations_new.value as value',
                     'hospital_situations_new.last_update as last_update',
                     'hospital_situations_new.created_manager_name',
                     'hospital_situations_new.updated_manager_name',
                     'form_fields.capacity as form_field_capacity',
                     'form_fields.form_step_id as form_step_id',
                     'form_steps.title as form_step_title',
-                    'form_fields.id as form_field_id'
+                    'form_fields.id as id'
             )
             ->orderBy('last_update','desc')->get();
 
@@ -138,14 +138,14 @@ class HospitalSituationController extends Controller
                     'form_fields.name as form_field_name',
                     'form_fields.order_field as order_field ',
                     'form_field_types.name as form_field_type_name',
-                    'hospital_situations_new.value as form_field_value',
+                    'hospital_situations_new.value as default_value',
                     'hospital_situations_new.last_update as last_update',
                     'hospital_situations_new.created_manager_name',
                     'hospital_situations_new.updated_manager_name',
                     'form_fields.capacity as form_field_capacity',
                     'form_fields.form_step_id as form_step_id',
                     'form_steps.title as form_step_title',
-                    'form_fields.id as form_field_id'
+                    'form_fields.id as id'
             )
             ->orderBy('last_update','desc')->get();
 

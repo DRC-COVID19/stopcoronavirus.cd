@@ -129,7 +129,6 @@ export default {
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     getSituations (page) {
       if (typeof page === 'undefined') page = 1
-      this.ishospitalSituationLoading = true
       this.getHospitalSituations({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.ishospitalSituationLoading })
     },
     onPageChange (page) {
