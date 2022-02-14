@@ -8,10 +8,11 @@
             <v-select
               v-model="form.township"
               :options="townshipList"
+              :reduce="(item) => item.id"
               label="name"
               placeholder="Commune"
-              :reduce="(item) => item.id"
               class="style-chooser"
+              @input="formTownshipChanged"
             />
           </b-form-group>
         </b-col>
@@ -66,6 +67,7 @@
 <script>
 import DateRangePicker from "vue2-daterange-picker";
 import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env";
+import { mapState } from 'vuex';
 export default {
   props: {
     hospitalCount: {
@@ -95,6 +97,9 @@ export default {
       defaultTownship: [{ id: 0, name: "Tous" }],
     };
   },
+  mounted() {
+    this.fillParametersFromUrlParams()
+  },
   filters: {
     date: (val) => {
       return val ? moment(val).format("DD.MM.YYYY") : "";
@@ -120,11 +125,65 @@ export default {
     submit() {
       this.$emit("submitInfrastructureForm", this.form);
     },
+    addParamToUrlWhenInThisMenu(param, value) {
+      if (this.activeMenu == 5) {
+        this.addParamToUrl(param, value)
+      }
+    },
+    formTownshipChanged(value) {
+      this.addParamToUrlWhenInThisMenu('township', value)
+    },
+    fillParametersFromUrlParams() {
+      const url = new URL(window.location.href);
+      const township = url.searchParams.get('township');
+      if (township) {
+        this.$set(this.form, 'township', +township)
+      }
+
+      const observationStartDate = url.searchParams.get('observation-start-date');
+      const observationEndDate = url.searchParams.get('observation-end-date');
+      try{
+        this.dateRangeObservation = {
+          startDate: observationStartDate ? new Date(observationStartDate) : null,
+          endDate: observationEndDate ? new Date(observationEndDate) : null,
+        }
+        this.form.observation_start = observationStartDate
+        this.form.observation_end = observationEndDate
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    addDateRangeObservationToUrl() {
+      if (this.dateRangeObservation.startDate) {
+        this.addParamToUrlWhenInThisMenu(
+          'observation-start-date',
+          moment(this.dateRangeObservation.startDate).format("YYYY/MM/DD")
+        )
+      } else {
+        this.addParamToUrlWhenInThisMenu('observation-start-date', null)
+      }
+      if (this.dateRangeObservation.endDate) {
+        this.addParamToUrlWhenInThisMenu(
+          'observation-end-date',
+          moment(this.dateRangeObservation.endDate).format("YYYY/MM/DD")
+        )
+      } else {
+        this.addParamToUrlWhenInThisMenu('observation-end-date', null)
+      }
+    }
   },
   computed: {
+    ...mapState({
+      activeMenu: (state) => state.nav.activeMenu,
+    }),
     townshipList() {
       return [...this.defaultTownship, ...this.townships];
-    },
+    }
+  },
+  watch: {
+    dateRangeObservation() {
+      this.addDateRangeObservationToUrl();
+    }
   },
 };
 </script>

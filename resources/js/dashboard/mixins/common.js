@@ -191,6 +191,18 @@ export default {
         this.configBarChart2
       );
     },
+    addParamToUrl(param, value) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete(param);
+      if (value !== undefined && value !== null) {
+        url.searchParams.set(param, value);
+      }
+      window.history.replaceState(null, null, url);
+    },
+    removeAllParamsFromUrl() {
+      const url = new URL(window.location.href);
+      url.search = ''
+      window.history.replaceState(null, null, url);
+    }
   }
-
 }
