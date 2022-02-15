@@ -9,7 +9,6 @@
       <b-card-header
         b-card-header
         v-b-toggle="'collapse-form-list-step' + step.id"
-        @click="formStepFilter(step.id)"
       >
         <div class="d-flex justify-content-between align-items-center">
           <span class="text-muted">
@@ -18,6 +17,7 @@
           <i class="fas fa-chevron-down" aria-hidden="true"></i>
         </div>
       </b-card-header>
+
       <b-collapse
         :id="'collapse-form-list-step' + step.id"
         class="mt-2"
@@ -26,7 +26,7 @@
       >
         <b-card-body>
           <b-form-group
-            v-for="(item, index) in formFieldSorted"
+            v-for="(item, index) in formFieldSorted(step)"
             :key="index"
             :label="item.name"
             :label-for="item.name"
@@ -95,7 +95,6 @@ export default {
   },
   data () {
     return {
-      formFieldFilter: [],
       requiredOptions: [
         { text: 'Oui', value: 1 },
         { text: 'Non', value: 0 }
@@ -117,22 +116,12 @@ export default {
         title: "Champs affectés à aucune étape",
       });
       return formStepsField;
-    },
-    formFieldSorted () {
-      return this.formFieldFilter
-        ? this.formFieldFilter
-          .slice()
-          .sort((a, b) => a.order_field - b.order_field)
-        : []
     }
-  },
-  mounted() {
   },
   methods: {
     ...mapActions(['removeFormField']),
     formStepFilter (id) {
-      // eslint-disable-next-line camelcase
-      this.formFieldFilter = this.targetForm.form_fields.filter((formField) => {
+      return this.targetForm.form_fields.filter((formField) => {
         return formField.form_step_id === id
       })
     },
@@ -167,6 +156,16 @@ export default {
     },
     updateField (formField) {
       this.$emit('onUpdateFormField', formField)
+    },
+    formFieldSorted (step) {
+      console.log('step', step)
+      const formFieldFilter = this.formStepFilter(step.id)
+      console.log(formFieldFilter)
+      return formFieldFilter
+        ? formFieldFilter
+          .slice()
+          .sort((a, b) => a.order_field - b.order_field)
+        : []
     }
   }
 }
