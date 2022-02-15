@@ -42,11 +42,13 @@
 import Logo from '../components/LogoComponent'
 import { mapState, mapActions } from 'vuex'
 import {
-  AGENT_HOSPITAL,
   ADMIN_DASHBOARD,
+  AGENT_HOSPITAL,
   ADMIN_HOSPITAL,
   ADMINISTRATOR,
-  MANANGER_EPIDEMIC
+  MANANGER_EPIDEMIC,
+  EDIT_FORM,
+  CREATE_FORM
 } from '../config/env'
 export default {
   components: {
@@ -79,6 +81,13 @@ export default {
           name: 'administrator.epidemie'
         })
       }
+      if (this.user.roles.find((a) => a.name == EDIT_FORM || a.name == CREATE_FORM && a.name != ADMINISTRATOR)) {
+        routesAccess.push({
+          slug: 'Administration',
+          name: "administrator.forms.show",
+        });
+      }
+
       if (this.user.roles.find((a) => a.name == ADMIN_DASHBOARD)) {
         routesAccess.push({ slug: 'Dashboard', name: 'home' })
       }
@@ -96,7 +105,7 @@ export default {
           name: "hospital.admin",
         });
       }
-
+      
       return routesAccess
     }
   },
