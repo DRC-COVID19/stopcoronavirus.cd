@@ -227,7 +227,7 @@ class HospitalSituationController extends Controller
               }
               
             }
-            $sortSituations =[];
+            //$sortSituations =usort($situations,fn($a,$b)=> $b['last_update'] -$a['last_update']);
 
             return response()->json($situations,200,[],JSON_NUMERIC_CHECK);
           

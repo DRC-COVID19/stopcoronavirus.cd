@@ -230,12 +230,15 @@ export default {
       isHospitalSituationLoading: state => state.hospitalSituation.isLoading
     }),
     formFieldNullStepSorted () {
-      return this.targetForm.form_fields
-        ? this.targetForm.form_fields
-          .slice()
-          .sort((a, b) => a.order_field - b.order_field)
-          .filter(item => item.form_step_id === null)
-        : []
+      if (this.$route.params.update_id) {
+        this.editionData.forEach(item => {
+          if (item.id === null) {
+            item.form_field_type = { name: item.form_field_type }
+          }
+        })
+        return this.arraySortAndFilter(this.editionData, null)
+      }
+      return this.arraySortAndFilter(this.targetForm.form_fields, null)
     },
     backRoute () {
       if (this.user.isHospitalAdmin) {
@@ -270,16 +273,18 @@ export default {
             item.form_field_type = { name: item.form_field_type }
           }
         })
-        return this.editionData
-          .slice()
-          .sort((a, b) => b.order_field - a.order_field)
-          ? this.editionData.filter(item => item.form_step_id === id)
-          : []
+        return this.arraySortAndFilter(this.editionData, id)
       }
-      return this.targetForm.form_fields
-        ? this.targetForm.form_fields.filter(item => item.form_step_id === id)
+      return this.arraySortAndFilter(this.targetForm.form_fields, id)
+    },
+    arraySortAndFilter (data, id = null) {
+      return data
+        .slice()
+        .sort((a, b) => b.order_field - a.order_field)
+        ? data.filter(item => item.form_step_id === id)
         : []
     },
+
     getHospitalSituations () {
       this.getHospitalSituationsDetail({
         isLoading: true,
