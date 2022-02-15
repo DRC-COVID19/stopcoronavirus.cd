@@ -43,7 +43,6 @@ export default {
   actions: {
     createHospitalSituation ({ state, commit, dispatch }, payload = {}) {
       commit('SET_IS_CREATING', true)
-      console.log('payload hospital:', payload)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
 

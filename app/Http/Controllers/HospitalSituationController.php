@@ -135,9 +135,9 @@ class HospitalSituationController extends Controller
             ->where('hospital_situations_new.last_update','=',new DateTime($last_update))
             ->where('hospitals.id','=',intval($hospital_id))
             ->select(
-                    'form_fields.name as form_field_name',
+                    'form_fields.name as name',
                     'form_fields.order_field as order_field ',
-                    'form_field_types.name as form_field_type_name',
+                    'form_field_types.name as form_field_type',
                     'hospital_situations_new.value as default_value',
                     'hospital_situations_new.last_update as last_update',
                     'hospital_situations_new.created_manager_name',

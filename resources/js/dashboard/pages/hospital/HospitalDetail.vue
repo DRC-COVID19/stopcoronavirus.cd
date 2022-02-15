@@ -17,7 +17,7 @@
                   <h3 class="mb-4">{{step.form_step_title}}</h3>
                   <ul   v-for="(field, count) in step.form_field_values"
                     :key="count">
-                    <li>{{field.form_field_name}} : {{field.default_value}}</li>
+                    <li>{{field.name}} : {{field.default_value}}</li>
                   </ul>
             </b-col>
           <div>Données envoyées par <b> {{form[0].created_manager_name}}</b></div>
