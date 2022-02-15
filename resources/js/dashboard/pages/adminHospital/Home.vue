@@ -108,7 +108,13 @@ export default {
   computed: {
     ...mapState({ updateData: (state) => state.hospitalSituation.AllhospitalSituationByLastUpdate }),
     hospitalSituationsSorted () {
-      return this.updateData.slice().sort((a, b) => new Date(b.last_update) - new Date(a.last_update))
+      return this.updateData.slice().sort((a, b) => {
+        const hospitalNameA = a.name.toLowerCase()
+        const hospitalNameB = b.name.toLowerCase()
+        if (hospitalNameA < hospitalNameB) return -1
+        if (hospitalNameA > hospitalNameB) return 1
+        return 0
+      }).sort((a, b) => new Date(b.last_update) - new Date(a.last_update))
     }
   },
   mounted () {
