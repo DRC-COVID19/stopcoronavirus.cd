@@ -68,8 +68,7 @@
                            handelChange(
                              item.id,
                              item.default_value,
-                             item.name,
-                             step.id
+                             item.name
                            )
                          "
                          :id="item.name"
@@ -114,8 +113,7 @@
                            handelChange(
                              field.id,
                              field.default_value,
-                             field.name,
-                             step.id
+                             field.name
                            )
                          "
                          :id="field.name"
@@ -317,7 +315,7 @@ export default {
         }
       }
     },
-    handelChange (key, value, fieldName, stepId) {
+    handelChange (key, value, fieldName) {
       if (this.editionData.length > 0) {
         this.editionData.forEach(item => {
           if (item.id === key) {
