@@ -19,7 +19,7 @@
             :fields="fields"
             responsive
             hover
-            :items="updateData"
+            :items="hospitalSituationsSorted"
             show-empty
           >
             <template v-slot:empty="scope">
@@ -106,22 +106,16 @@ export default {
     }
   },
   computed: {
-    ...mapState({ updateData: (state) => state.hospitalSituation.AllhospitalSituationByLastUpdate })
+    ...mapState({ updateData: (state) => state.hospitalSituation.AllhospitalSituationByLastUpdate }),
+    hospitalSituationsSorted () {
+      return this.updateData.slice().sort((a, b) => new Date(b.last_update) - new Date(a.last_update))
+    }
   },
   mounted () {
     this.getAllHospitalSituationsByLastUpdate()
   },
   methods: {
-    ...mapActions(['getAllHospitalSituationsByLastUpdate']),
-
-    // renderDiffDate (moment, date) {
-    //   return diffDate(this.moment, date)
-
-    //   // if (diffDay < 4) return '#8BC34A' // vert
-    //   // else if (diffDay < 8) return '#f08c2e' // orange
-    //   // else if (diffDay < 10) return '#F44336' // rouge
-    //   // else return '#888888' // gris
-    // }
+    ...mapActions(['getAllHospitalSituationsByLastUpdate'])
   }
 }
 </script>
