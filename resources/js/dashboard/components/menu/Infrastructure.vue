@@ -45,7 +45,8 @@
                       <a
                       @click="activeStartDate()"
                         class="btn btn-sm btn-daterange p-2"
-                        >{{ iconStateDatePicker =="majesticons:multiply" ? selectedDate.observation_start : "Date début"}} <span><Icon :icon="iconStateDatePicker" /></span></a> 
+                        >{{ iconStateDatePicker =="majesticons:multiply" ? selectedDate.observation_start : "Date début"}} 
+                        <span><Icon :icon="iconStateDatePicker" /></span></a>
                         <a
                         class="btn btn-sm btn-daterange p-2"
                         >{{selectedDate.observation_end}}</a

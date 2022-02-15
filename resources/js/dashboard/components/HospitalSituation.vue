@@ -396,8 +396,13 @@ export default {
     hospitalSituationData() {
       const hospitalSituationAllSlice =
         this.hospitalObservationSituation.slice();
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      this.fileName = `Données_du_${this.observation_start}_au_${this.observation_end}.xls`;
+      if (this.observation_start == null) {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.fileName = `Données_du_${this.observation_end}.xls`;
+      } else {
+        this.fileName = `Données_du_${this.observation_start}_au_${this.observation_end}.xls`;
+
+        }
       let hospitalSituationFiltered = [];
       hospitalSituationAllSlice.forEach((hospital) => {
         if (
