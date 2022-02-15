@@ -39,7 +39,7 @@
              <b-row align-h="center">
                <b-col cols="12" md="8">
                  <b-form-group
-                   v-for="(item, counter) in formFieldSorted(step.id) || formFieldSortedNull(step.id)"
+                   v-for="(item, counter) in formFieldSorted(step.id)"
                    :key="counter"
                    :label="
                      item.roules !== null ? item.name + ' * ' : item.name
