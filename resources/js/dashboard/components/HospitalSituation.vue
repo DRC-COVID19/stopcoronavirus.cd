@@ -285,8 +285,6 @@
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { PALETTE } from '../config/env'
 import { createSituationsReduce } from '../plugins/functions'
-import { mapState, mapActions, mapMutations } from "vuex";
-import { PALETTE } from "../config/env";
 
 export default {
   props: ["hospitalSituationAll"],
