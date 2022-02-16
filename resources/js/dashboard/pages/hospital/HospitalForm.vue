@@ -150,8 +150,8 @@
                 </div>
                </b-col>
             <b-col class="col-md-12">
-               <b-alert show variant="warning">
-               <p class="text-center">NB: Une soumission ne peut pas être modifiée.</p>
+               <b-alert show variant="warning" v-if="!user.isHospitalAdmin">
+               <p class="text-center">NB: Une soumission ne peut plus être modifiée après 24 heures!</p>
              </b-alert>
             </b-col>
                <b-form-group class="no-border">
