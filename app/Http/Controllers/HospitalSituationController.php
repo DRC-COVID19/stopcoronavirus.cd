@@ -250,17 +250,7 @@ class HospitalSituationController extends Controller
         //
     }
 
-    function validator($data, ?array $updateRules=[])
-    {
-        return Validator::make($data, [
-            "form_field_id" => 'required',
-            "value" => 'required',
-            'created_manager_name'  => $updateRules['create'], 
-            'updated_manager_name'  => $updateRules['update'],
-            'hospital_id'=>'required',
-            'last_update' => 'required|date'
-        ])->validate();
-    }
+  
 
     /**
      * Store a newly created resource in storage.
@@ -433,6 +423,17 @@ class HospitalSituationController extends Controller
             }
             return response($th->getMessage())->setStatusCode(500);
         }
+    }
+    function validator($data, ?array $updateRules=[])
+    {
+        return Validator::make($data, [
+            "form_field_id" => 'required',
+            "value" => 'required',
+            'created_manager_name'  => $updateRules['create'], 
+            'updated_manager_name'  => $updateRules['update'],
+            'hospital_id'=>'required',
+            'last_update' => 'required|date'
+        ])->validate();
     }
     /**
      * Get the guard to be used during authentication.
