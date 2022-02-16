@@ -53,7 +53,7 @@ class AuthController extends Controller
       return response()->json(['error' => "L'utilisateur n'est pas autorisé à se connecter"], 401);
     }
     $token = auth('dashboard')->login($user);
-    Log::info('user-->',[$this->guard()->user()->hospitalManager->id]);
+
     return $this->respondWithToken($token);
   }
 

@@ -65,7 +65,7 @@
                          :placeholder="`Entrer ${item.name}`"
                          required
                          @change="
-                           handelChange(
+                           handleChange(
                              item.id,
                              item.default_value,
                              item.name
@@ -110,7 +110,7 @@
                          v-model="field.default_value"
                          :placeholder="`Entrer ${field.name }`"
                          @change="
-                           handelChange(
+                           handleChange(
                              field.id,
                              field.default_value,
                              field.name
@@ -309,7 +309,7 @@ export default {
         }
       }
     },
-    handelChange (key, value, fieldName) {
+    handleChange (key, value, fieldName) {
       if (this.editionData.length > 0) {
         this.editionData.forEach(item => {
           if (item.id === key) {
