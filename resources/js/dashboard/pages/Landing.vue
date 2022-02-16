@@ -128,7 +128,6 @@ export default {
 }
 .userAccount {
   font-size: 12px;
-  color: aa;
   text-align: center;
   margin-top: 50px;
 }
