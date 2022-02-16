@@ -229,12 +229,7 @@ export default {
     }),
     formFieldNullStepSorted () {
       if (this.$route.params.update_id) {
-        this.editionData.forEach(item => {
-          if (item.id === null) {
-            item.form_field_type = { name: item.form_field_type }
-          }
-        })
-        return this.arraySortAndFilter(this.editionData, null)
+        return this.isEditionData(null)
       }
       return this.arraySortAndFilter(this.targetForm.form_fields, null)
     },
@@ -266,12 +261,7 @@ export default {
     ]),
     formFieldSorted (id) {
       if (this.$route.params.update_id) {
-        this.editionData.forEach(item => {
-          if (item.id === id) {
-            item.form_field_type = { name: item.form_field_type }
-          }
-        })
-        return this.arraySortAndFilter(this.editionData, id)
+        return this.isEditionData(id)
       }
       return this.arraySortAndFilter(this.targetForm.form_fields, id)
     },
@@ -282,7 +272,14 @@ export default {
         ? data.filter(item => item.form_step_id === id)
         : []
     },
-
+    isEditionData (id) {
+      this.editionData.forEach(item => {
+        if (item.id === id) {
+          item.form_field_type = { name: item.form_field_type }
+        }
+      })
+      return this.arraySortAndFilter(this.editionData, id)
+    },
     getHospitalSituations () {
       this.getHospitalSituationsDetail({
         isLoading: true,
