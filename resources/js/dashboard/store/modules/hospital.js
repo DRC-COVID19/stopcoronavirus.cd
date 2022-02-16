@@ -60,8 +60,8 @@ export default {
             params: {
               observation_end: payload.observation_end || null,
               observation_start: payload.observation_start || null,
-              township: payload.township
-            }
+              township: payload.township,
+            },
           })
           .then(({ data }) => {
             const Features = data.map(value => {
@@ -69,7 +69,7 @@ export default {
                 type: "Feature",
                 geometry: {
                   type: "Point",
-                  coordinates: [value.longitude, value.latitude]
+                  coordinates: [value.longitude, value.latitude],
                 },
                 properties: {
                   name: value.name ? value.name : "Hopital",
@@ -112,16 +112,16 @@ export default {
                   hydrochloroquine: value.last_situation?.hydrochloroquine ?? 0,
                   azytromicine: value.last_situation?.azytromicine ?? 0,
                   Vitamince_c: value.last_situation?.Vitamince_c ?? 0,
-                  color: "#ED5F68"
-                }
+                  color: "#ED5F68",
+                },
               };
             });
             state.hospitalData = {
               type: "geojson",
               data: {
                 type: "FeatureCollection",
-                features: Features
-              }
+                features: Features,
+              },
             };
             state.hospitalCount = data.length;
             state.isLoading = false;
@@ -145,8 +145,8 @@ export default {
             params: {
               observation_end: payload.observation_end || null,
               observation_start: payload.observation_start || null,
-              township: payload.township
-            }
+              township: payload.township,
+            },
           })
           .then(({ data }) => {
             state.hospitalTotalData = data;

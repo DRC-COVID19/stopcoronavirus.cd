@@ -26,97 +26,97 @@ import {
   ADMINISTRATOR,
   MANANGER_EPIDEMIC,
   EDIT_FORM,
-  CREATE_FORM
-} from './config/env'
+  CREATE_FORM,
+} from "./config/env";
 
 export default [
   {
-    name: 'login',
-    path: '/login',
-    component: Login
+    name: "login",
+    path: "/login",
+    component: Login,
   },
   {
-    name: 'lostPassword',
-    path: '/lost-password',
-    component: LostPassword
+    name: "lostPassword",
+    path: "/lost-password",
+    component: LostPassword,
   },
   {
-    name: 'password.reset.thanks',
-    path: '/lost-password-send',
-    component: ResetPasswordThank
+    name: "password.reset.thanks",
+    path: "/lost-password-send",
+    component: ResetPasswordThank,
   },
   {
-    name: 'password.reset.token',
-    path: '/password-reset/:token',
-    component: ResetPasseword
+    name: "password.reset.token",
+    path: "/password-reset/:token",
+    component: ResetPasseword,
   },
   {
-    name: 'password.reset.complete.thanks',
-    path: '/password-reset/complete',
-    component: PasswordResetComplete
+    name: "password.reset.complete.thanks",
+    path: "/password-reset/complete",
+    component: PasswordResetComplete,
   },
   {
-    path: '/',
+    path: "/",
     component: Home,
-    name: 'home',
+    name: "home",
     meta: {
       requiresAuth: true,
-      role: [ADMIN_DASHBOARD]
-    }
+      role: [ADMIN_DASHBOARD],
+    },
   },
   {
-    path: '/hospitals',
-    name: 'hospital.home',
+    path: "/hospitals",
+    name: "hospital.home",
     component: HospitalsHome,
     meta: {
       requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
+      role: [AGENT_HOSPITAL],
+    },
   },
   {
-    path: '/admin/hospitals',
-    name: 'hospital.admin',
+    path: "/admin/hospitals",
+    name: "hospital.admin",
     component: HospitalAdmin,
     meta: {
       requiresAuth: true,
-      role: [ADMIN_HOSPITAL]
-    }
+      role: [ADMIN_HOSPITAL],
+    },
   },
   {
-    path: '/admin/hospitals/:hospital_id',
-    name: 'hospital.admin.data',
+    path: "/admin/hospitals/:hospital_id",
+    name: "hospital.admin.data",
     component: HospitalAdminData,
     meta: {
       requiresAuth: true,
-      role: [ADMIN_HOSPITAL]
-    }
+      role: [ADMIN_HOSPITAL],
+    },
   },
   {
-    path: '/hospitals/data',
-    name: 'hospital.data',
+    path: "/hospitals/data",
+    name: "hospital.data",
     component: HospitalData,
     meta: {
       requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
+      role: [AGENT_HOSPITAL],
+    },
   },
   {
-    path: '/hospitals/new/form_id/:form_id',
+    path: '/hospitals/new/:form_id',
     name: 'hospital.create',
     component: HospitalForm,
     meta: {
       requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
+      role: [AGENT_HOSPITAL],
+    },
   },
   {
-    path: '/hospitals/:hospital_id/show/:update_id',
-    name: 'hospital.detail',
+    path: "/hospitals/:hospital_id/show/:update_id",
+    name: "hospital.detail",
     component: HospitalsDetail,
     meta: {
       requiresAuth: true,
-      role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
-    }
+      role: [AGENT_HOSPITAL, ADMIN_HOSPITAL],
+    },
   },
   {
     path: '/hospital/:hospital_id/edit/:update_id/form/:form_id',
@@ -124,93 +124,93 @@ export default [
     component: HospitalForm,
     meta: {
       requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
+      role: [AGENT_HOSPITAL],
+    },
   },
   {
-    path: '/acces-denied',
-    name: 'acces.denied',
+    path: "/acces-denied",
+    name: "acces.denied",
     component: NotAcces,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
-    path: '/administrator',
+    path: "/administrator",
     component: Administrator,
-    name: 'administrator',
+    name: "administrator",
     meta: {
       requiresAuth: true,
-      role: [ADMINISTRATOR]
+      role: [ADMINISTRATOR],
     },
     children: [
       {
-        path: '/',
-        name: 'administrator.home',
+        path: "/",
+        name: "administrator.home",
         component: AdminUserIndex,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR]
-        }
+          role: [ADMINISTRATOR],
+        },
       },
       {
-        path: 'users',
-        name: 'administrator.users',
+        path: "users",
+        name: "administrator.users",
         component: AdminUserIndex,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR]
-        }
+          role: [ADMINISTRATOR],
+        },
       },
       {
-        path: 'change-logs',
+        path: "change-logs",
         component: ChangeLogIndex,
-        name: 'administrator.changeLog',
+        name: "administrator.changeLog",
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR]
-        }
+          role: [ADMINISTRATOR],
+        },
       },
       {
-        path: 'forms',
+        path: "forms",
         component: FormIndex,
-        name: 'administrator.forms',
+        name: "administrator.forms",
         meta: {
           requiresAuth: true,
-          role: [CREATE_FORM] || [EDIT_FORM]
-        }
+          role: [CREATE_FORM] || [EDIT_FORM],
+        },
       },
       {
-        path: '/administrator/forms/:form_id',
-        name: 'administrator.forms.show',
+        path: "/administrator/forms/:form_id",
+        name: "administrator.forms.show",
         component: FormShow,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
-        }
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+        },
       },
       {
-        path: 'epidemie/',
-        name: 'administrator.epidemie',
+        path: "epidemie/",
+        name: "administrator.epidemie",
         component: Epidemie,
         meta: {
           requiresAuth: true,
-          role: [MANANGER_EPIDEMIC]
-        }
-      }
-    ]
+          role: [MANANGER_EPIDEMIC],
+        },
+      },
+    ],
   },
   {
-    path: '/landing',
-    name: 'landing',
+    path: "/landing",
+    name: "landing",
     component: Landing,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true,
+    },
   },
   {
-    name: 'not_found',
-    path: '*',
-    component: PageNotFound
-  }
-]
+    name: "not_found",
+    path: "*",
+    component: PageNotFound,
+  },
+];

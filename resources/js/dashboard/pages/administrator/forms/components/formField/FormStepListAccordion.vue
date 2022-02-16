@@ -109,9 +109,7 @@ export default {
       formSteps: (state) => state.formStep.formSteps
     }),
     formListSteps () {
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       const formStepsField = this.formSteps.slice();
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       formStepsField.push({
         id: null,
         title: "Champs affectés à aucune étape",

@@ -141,7 +141,10 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+
 export default {
+  components:{
+  },
   data () {
     return {
       showUserCard: false,
