@@ -200,10 +200,9 @@ class HospitalSituationNewController extends Controller
 
     function maxDate($observation_end, $township, $hospital)
     {
-        $observation_date = $observation_end;
-        $is_not_exist = DB::table('hospital_situations_new')
+        $observation_date_max  =  DB::table('hospital_situations_new')
             ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-            ->whereDate('last_update', $observation_end)
+            ->where('hospital_situations_new.last_update', '<=', $observation_end)
             ->where(function ($query) use ($township, $hospital) {
                 if ($hospital) {
                     $query->where('hospital_situations_new.hospital_id', '=', $hospital);
@@ -211,25 +210,8 @@ class HospitalSituationNewController extends Controller
                     $query->where('hospitals.township_id', '=', $township);
                 }
             })
-            ->doesntExist();
-
-        if ($is_not_exist) {
-            $min_date = DB::table('hospital_situations_new')
-                ->min('hospital_situations_new.last_update');
-
-            $observation_date =  DB::table('hospital_situations_new')
-                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-                ->whereBetween('hospital_situations_new.last_update', [$min_date, $observation_end])
-                ->where(function ($query) use ($township, $hospital) {
-                    if ($hospital) {
-                        $query->where('hospital_situations_new.hospital_id', '=', $hospital);
-                    } else if ($township) {
-                        $query->where('hospitals.township_id', '=', $township);
-                    }
-                })
-                ->max('hospital_situations_new.last_update');
-        }
-        return $observation_date;
+            ->max('hospital_situations_new.last_update');
+        return $observation_date_max;
     }
     /**
      * Store a newly created resource in storage.
