@@ -9,6 +9,7 @@
             <b-link :to="{name:'hospital.data'}">
               <span class="fa fa-edit"></span>
             </b-link>
+
           </h3>
           <b-alert show variant="info">
             <div>{{`Structure: ${user.hospital.name}`}}</div>
@@ -19,7 +20,7 @@
       </b-row>
       <b-row class="mt-4 mb-4">
         <b-col>
-          <b-button :to="{name:'hospital.create'}" class="btn-dash-blue">Nouveau</b-button>
+          <b-button :to="{name:'hospital.create',params:{ form_id: defaultFormId }}" class="btn-dash-blue">Nouveau</b-button>
         </b-col>
       </b-row>
       <b-row>
@@ -49,20 +50,23 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                      update_id:data.item.id,
-                    hospital_id: $route.params.hospital_id || 0
+                    update_id:data.item.last_update,
+                    hospital_id: user.hospital.id || 0
                     }
                     }"
               >Details</b-button>
               <b-button
+                v-if="(data.item.diff_date * 24) < 24"
                 class="btn btn-warning mb-1"
                 :to="{
                   name: 'hospital.edit',
                   params: {
-                    hospital_id: data.item.id
+                    update_id:data.item.last_update,
+                    hospital_id:user.hospital.id,
+                    form_id: defaultFormId
                   }
                 }"
-              >Edit</b-button>
+              >Editer</b-button>
             </template>
           </b-table>
         </b-col>
@@ -84,65 +88,73 @@
 </template>
 
 <script>
-import Header from "../../components/hospital/Header";
-import ManagerUserName from "../../components/hospital/ManagerUserName";
-import { mapState, mapMutations } from "vuex";
+import Header from '../../components/hospital/Header'
+import ManagerUserName from '../../components/hospital/ManagerUserName'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { renderDiffDate } from '../../plugins/functions'
+import { DEFAULT_FORM_ID } from '../../config/env'
 export default {
   components: {
     Header,
-    ManagerUserName,
+    ManagerUserName
   },
-  data() {
+  data () {
     return {
       fields: [
-        { key: "last_update", label: "Date" },
-        { key: "confirmed", label: "Confirmés" },
-        { key: "actions", label: "Actions" },
+        { key: 'last_update', label: 'Date' },
+        { key: 'name', label: 'Nom' },
+        { key: 'actions', label: 'Actions' }
       ],
-      hospitalSituations: {},
-      ishospitalSituationLoading: false,
       currentPage: 1,
-    };
+      hospitalId: null
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
+      hospitalSituations: (state) => state.hospital.hospitalSituations,
+      ishospitalSituationLoading: (state) => state.hospital.isLoading
     }),
-    totalRows() {
+    totalRows () {
       if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.total;
+        return this.hospitalSituations.meta.total
       }
-      return null;
+      return null
     },
-    perPage() {
+    perPage () {
       if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.per_page;
+        return this.hospitalSituations.meta.per_page
       }
-      return 15;
+      return 15
     },
-  },
-  mounted() {
-    this.getHospitalSituations();
-    if (!this.hospitalManagerName) {
-      this.$bvModal.show("nameModal");
+    defaultFormId() {
+      return DEFAULT_FORM_ID
     }
   },
+  async mounted () {
+    if (!this.hospitalManagerName) {
+      this.$bvModal.show('nameModal')
+    }
+    await this.getSituations()
+  },
   methods: {
-    ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
-    getHospitalSituations(page=1) {
-      this.ishospitalSituationLoading = true;
-      axios.get("/api/dashboard/hospital-situations",
-      {params : {page} }).then(({ data }) => {
-        this.hospitalSituations = data;
-        this.ishospitalSituationLoading = false;
-      });
+    ...mapActions(['getHospitalSituations']),
+    ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
+    getSituations () {
+      let page = 1
+      if (typeof page === 'undefined') page = 1
+      this.getHospitalSituations({ page, hospital_id: this.user.hospital.id, isLoading: this.ishospitalSituationLoading })
     },
-    onPageChange(page) {
+    onPageChange (page) {
       this.getHospitalSituations(page)
     },
-  },
-};
+    renderHour (date) {
+      const diffDay = renderDiffDate(this.moment, date)
+      return diffDay * 24
+    }
+  }
+}
 </script>
 
 <style>

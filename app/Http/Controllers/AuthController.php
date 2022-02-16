@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Hashids\Hashids;
 use App\Administrator;
-use App\Http\Resources\AdministratorResource;
+use Illuminate\Http\Request;
 use App\Mail\AskResetPassword;
 use Encore\Admin\Facades\Admin;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Hashids\Hashids;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\AdministratorResource;
 
 /**
  * @group  Auth management
@@ -52,6 +53,7 @@ class AuthController extends Controller
       return response()->json(['error' => "L'utilisateur n'est pas autorisé à se connecter"], 401);
     }
     $token = auth('dashboard')->login($user);
+
     return $this->respondWithToken($token);
   }
 

@@ -8,26 +8,20 @@
           <b-link :to="backRoute">
             <span class="fa fa-chevron-left"> Retour</span>
           </b-link>
-          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form.last_update).format("DD.MM.Y")}}</h3>
-
-          <h4 class="mb-4">Données épidémiologiques</h4>
-          <ul>
-            <li v-for="(question, i) in questions.epidemiologicalData" :key="i">
-              {{ question.text }} : {{ form[question.column] }}
-            </li>
-          </ul>
-          <h4 class="mb-4">Capacité de prise en charge</h4>
-          <ul>
-            <li v-for="(question, i) in questions.patientCareCapacity" :key="i">
-              {{ question.text }} : {{ form[question.column] }}
-            </li>
-            <li v-for="(question, i) in questions.medications" :key="i">
-              {{ question.text }} : {{ form[question.column] }}
-            </li>
-          </ul>
-
-          <div>Données envoyées par <b> {{form.created_manager_name}}</b></div>
-          <div v-if="form.updated_manager_name">Modifier par {{form.updated_manager_name}}</div>
+          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form[0].last_update).format("DD/MM/Y")}}</h3>
+            <b-col
+              v-for="(step, index) in renderSituations"
+              :key="index"
+              cols="12" md="12"
+            >
+                  <h3 class="mb-4">{{step.form_step_title}}</h3>
+                  <ul   v-for="(field, count) in step.form_field_values"
+                    :key="count">
+                    <li>{{field.name}} : {{field.default_value}}</li>
+                  </ul>
+            </b-col>
+          <div>Données envoyées par <b> {{form[0].created_manager_name}}</b></div>
+          <!-- <div v-if="form.slice(0,1)[0].created_manager_name">Modifier par {{form.slice(0,1)[0].updated_manager_name}}</div> -->
         </b-col>
       </b-row>
     </b-container>
@@ -35,56 +29,42 @@
 </template>
 
 <script>
-import Header from "../../components/hospital/Header";
-import Loading from "../../components/Loading";
-import {mapState} from "vuex" ;
-import Questions from "../../config/questions";
-
+import Header from '../../components/hospital/Header'
+import Loading from '../../components/Loading'
+import { createSituationsReduce } from '../../plugins/functions'
+import { mapActions, mapState } from 'vuex'
 export default {
   components: {
-    Loading,Header
+    Loading, Header
   },
-  data() {
-    return {
-      form: {},
-      isLoading: false,
-      questions: Questions
-    };
+  async mounted () {
+    await this.getHospital()
   },
-  mounted(){
-    this.getHospital();
-  },
-  computed : {
+  computed: {
     ...mapState({
-      user: state => state.auth.user
-    }) ,
-    backRoute(){
-      if(this.user.isHospitalAdmin){
+      user: state => state.auth.user,
+      form: state => state.hospitalSituation.hospitalSituationDetail,
+      isLoading: state => state.hospitalSituation.isLoading
+    }),
+    backRoute () {
+      if (this.user.isHospitalAdmin) {
         return {
-          name: 'hospital.admin.data' ,
+          name: 'hospital.admin.data',
           params: { hospital_id: this.$route.params.hospital_id }
         }
-      }
-      else return { name: 'hospital.home' }
+      } else return { name: 'hospital.home' }
+    },
+    renderSituations () {
+      return createSituationsReduce(this.form)
     }
   },
   methods: {
-    getHospital() {
-      this.isLoading = true;
-      axios
-        .get(
-          `/api/dashboard/hospital-situations/${this.$route.params.update_id}`
-        )
-        .then(({ data }) => {
-          this.form = data;
-        })
-        .catch(response => {})
-        .finally(() => {
-          this.isLoading = false;
-        });
+    ...mapActions(['getHospitalSituationsDetail']),
+    getHospital () {
+      this.getHospitalSituationsDetail({ isLoading: this.isLoading, update_id: this.$route.params.update_id, hospital_id: this.$route.params.hospital_id })
     }
   }
-};
+}
 </script>
 
 <style>

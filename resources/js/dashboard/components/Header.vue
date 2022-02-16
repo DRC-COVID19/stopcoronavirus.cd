@@ -147,47 +147,50 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+
 export default {
-  data() {
+  components:{
+  },
+  data () {
     return {
       showUserCard: false,
-      showHeaderNotification: false,
-    };
+      showHeaderNotification: false
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       activeMenu: (state) => state.nav.activeMenu,
-      changeLogs: (state) => state.app.changeLogs,
+      changeLogs: (state) => state.app.changeLogs
     }),
-    ...mapGetters(["getChangeLogNotRead"]),
-    countReadChangeLogs() {
-      return getChangeLogNotRead.length;
-    },
+    ...mapGetters(['getChangeLogNotRead']),
+    countReadChangeLogs () {
+      return getChangeLogNotRead.length
+    }
   },
   mounted() {
     this.fillParametersFromUrlParams()
   },
   methods: {
-    ...mapActions(["logout", "setChangeLogsRead"]),
-    ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
-    userAvatarMouseEnter() {
-      this.showUserCard = true;
+    ...mapActions(['logout', 'setChangeLogsRead']),
+    ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
+    userAvatarMouseEnter () {
+      this.showUserCard = true
     },
-    userAvatarMouseLeave() {
-      this.showUserCard = false;
+    userAvatarMouseLeave () {
+      this.showUserCard = false
     },
-    userLogout() {
+    userLogout () {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
-        });
-      });
+          name: 'login'
+        })
+      })
     },
-    selectNotification(item) {
-      this.setSelectedChangeLog(item);
-      this.setActiveMenu(7);
+    selectNotification (item) {
+      this.setSelectedChangeLog(item)
+      this.setActiveMenu(7)
     },
     selectMenu(value) {
       if (this.activeMenu !== null) {
@@ -196,13 +199,13 @@ export default {
       this.addParamToUrl('menu', value);
       this.setActiveMenu(value);
     },
-    toggleHeaderNotification() {
-      this.showHeaderNotification = !this.showHeaderNotification;
+    toggleHeaderNotification () {
+      this.showHeaderNotification = !this.showHeaderNotification
     },
-    clickOutsideNotification() {
+    clickOutsideNotification () {
       if (this.showHeaderNotification) {
-        this.showHeaderNotification = false;
-        this.setChangeLogsRead();
+        this.showHeaderNotification = false
+        this.setChangeLogsRead()
       }
     },
     fillParametersFromUrlParams () {
@@ -217,7 +220,6 @@ export default {
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";

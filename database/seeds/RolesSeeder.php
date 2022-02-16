@@ -12,16 +12,59 @@ class RolesSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('admin_roles')->truncate();
         DB::table('admin_roles')->insert([
             [
-                "name" => "admin-dashboard",
-                "slug" => 'admin-dashboard',
+                'name' => 'Administrator',
+                'slug' => 'administrator',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
-                "name" => "agent-hospital",
-                "slug" => 'agent-hospital',
+                'name' => 'telecom',
+                'slug' => 'telecom',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'name' => 'sms',
+                'slug' => 'sms',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'name' => 'admin-dashboard',
+                'slug' => 'admin-dashboard',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'name' => 'agent-hospital',
+                'slug' => 'agent-hospital',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'name' => 'admin-hospital',
+                'slug' => 'admin-hospital',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'name' => 'manager_epidemic',
+                'slug' => 'manager_epidemic',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'name' => 'create_form',
+                'slug' => 'create_form',
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s')
+            ],
+            [
+                'name' => 'edit_form',
+                'slug' => 'edit_form',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]

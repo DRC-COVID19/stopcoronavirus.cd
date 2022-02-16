@@ -8,6 +8,12 @@ export const
   ADMIN_HOSPITAL = "admin-hospital",
   ADMINISTRATOR="Administrator",
   MANANGER_EPIDEMIC='manager_epidemic',
+  EDIT_FORM = 'edit_form',
+  CREATE_FORM = 'create_form',
+
+  DEFAULT_FORM_ID = 1,
+
+
   PALETTE = {
     inflow: ["#2166ac", "#4393c3", "#92c5de", "#d1e5f0", "#fddbc7", "#f4a582", "#d6604d", "#b2182b"],
     inflow_positif: ["rgb(253, 219, 199)", "rgb(244, 165, 130)", "rgb(214, 96, 77)", "rgb(178, 24, 43)", "rgb(103, 0, 31)"],

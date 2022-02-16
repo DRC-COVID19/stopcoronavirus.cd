@@ -5,9 +5,8 @@
       <b-row align-h="center">
         <b-col cols="12">
           <b-link :to="{
-            name:'hospital.home'
-          }">
-            <span class="fa fa-chevron-left">Retour</span>
+            name:'hospital.home'}">
+            <span class="fa fa-chevron-left">Retour </span>
           </b-link>
         </b-col>
         <b-col cols="12" md="6">
@@ -135,62 +134,62 @@
 </template>
 
 <script>
-import Header from "../../components/hospital/Header";
-import Loading from "../../components/Loading";
-import { mapState, mapActions } from "vuex";
+import Header from '../../components/hospital/Header'
+import Loading from '../../components/Loading'
+import { mapState, mapActions } from 'vuex'
 export default {
   components: {
     Header,
-    Loading,
+    Loading
   },
-  data() {
+  data () {
     return {
       form: {},
       isSubmitting: false,
-      errors: {},
-    };
+      errors: {}
+    }
   },
-  mounted() {
+  mounted () {
     if (this.user) {
-      this.form = Object.assign({}, this.user.hospital);
+      this.form = Object.assign({}, this.user.hospital)
     }
     this.$store.watch(
       (state) => state.auth.user,
       (value) => {
-        this.form = Object.assign({}, this.user.hospital);
+        this.form = Object.assign({}, this.user.hospital)
       }
-    );
+    )
   },
   computed: {
     ...mapState({
-      user: (state) => state.auth.user,
-    }),
+      user: (state) => state.auth.user
+    })
   },
   methods: {
-    ...mapActions(["userMe"]),
-    submitForm() {
-      this.isSubmitting = true;
-      this.form._method = "PUT" ;
+    ...mapActions(['userMe']),
+    submitForm () {
+      this.isSubmitting = true
+      this.form._method = 'PUT'
       axios
         .post(
           `/api/dashboard/hospitals-data/${this.user.hospital.id}`,
           this.form
         )
         .then(({ data }) => {
-          this.userMe();
+          this.userMe()
           this.$router.push({
-            name: "hospital.home",
-          });
+            name: 'hospital.home'
+          })
         })
         .catch(({ response }) => {
-          this.errors = response.data.errors;
+          this.errors = response.data.errors
         })
         .finally(() => {
-          this.isSubmitting = false;
-        });
-    },
-  },
-};
+          this.isSubmitting = false
+        })
+    }
+  }
+}
 </script>
 
 <style>

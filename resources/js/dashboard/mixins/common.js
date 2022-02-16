@@ -1,4 +1,6 @@
 import moment from 'moment'
+import { format } from 'date-fns'
+
 export default {
   computed: {
     isSmOrMd() {
@@ -190,6 +192,9 @@ export default {
         this.$refs[ref].getContext("2d"),
         this.configBarChart2
       );
+    },
+    formatDateFns (date) {
+      return format(new Date(date), 'dd/MM/yyyy à HH:mm:ss')
     },
     addParamToUrl(param, value) {
       const url = new URL(window.location.href);
