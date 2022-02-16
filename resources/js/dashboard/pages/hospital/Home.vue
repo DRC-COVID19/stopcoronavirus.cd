@@ -28,7 +28,7 @@
           <b-table
             :busy="ishospitalSituationLoading"
             :fields="fields"
-            :items="getSituations(user.hospital.id).data"
+            :items="hospitalSituations.data"
             show-empty
           >
             <template v-slot:empty="scope">
@@ -137,11 +137,10 @@ export default {
   methods: {
     ...mapActions(['getHospitalSituations']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    getSituations (hospitalId = 1) {
+    getSituations () {
       let page = 1
       if (typeof page === 'undefined') page = 1
-      this.getHospitalSituations({ page, hospital_id: hospitalId, isLoading: this.ishospitalSituationLoading })
-      return this.hospitalSituations
+      this.getHospitalSituations({ page, hospital_id: this.user.hospital.id, isLoading: this.ishospitalSituationLoading })
     },
     onPageChange (page) {
       this.getHospitalSituations(page)
