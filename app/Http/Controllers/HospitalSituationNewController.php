@@ -138,44 +138,30 @@ class HospitalSituationNewController extends Controller
             $max_date = DB::table('hospital_situations_new')
                 ->max('hospital_situations_new.last_update');
 
-            $situationAgregged = DB::table('hospital_situations_new')
-                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-                ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-                ->join('townships', 'townships.id', '=', 'hospitals.township_id')
-                ->where('form_fields.name', '<>', 'EPI en manque')
-                ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
+            $situationAgregged =  $this->getJoinTableSituation()
                 ->where('form_fields.agreggation', true)
                 ->whereDate('hospital_situations_new.last_update', $max_date)
                 ->select(
                     'form_fields.name as form_field_name',
                     DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as form_field_value'),
-                    'form_fields.capacity as form_field_capacity',
                     'form_fields.form_step_id as form_step_id',
                     'form_steps.title as form_step_title',
 
 
                 )
-                ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
+                ->groupBy('form_step_id', 'form_step_title', 'form_field_name')
                 ->get()->toArray();
 
-            $situationNotAgregged = DB::table('hospital_situations_new')
-                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-                ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-                ->join('townships', 'townships.id', '=', 'hospitals.township_id')
-                ->where('form_fields.name', '<>', 'EPI en manque')
-                ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
+            $situationNotAgregged =  $this->getJoinTableSituation()
                 ->where('form_fields.agreggation', false)
                 ->whereDate('hospital_situations_new.last_update', $max_date)
                 ->select(
                     'form_fields.name as form_field_name',
                     DB::raw('AVG(CAST(hospital_situations_new.value as INT)) as form_field_value'),
-                    'form_fields.capacity as form_field_capacity',
                     'form_fields.form_step_id as form_step_id',
                     'form_steps.title as form_step_title',
                 )
-                ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
+                ->groupBy('form_step_id', 'form_step_title', 'form_field_name')
                 ->get()->toArray();
 
             $hospitalSituation = [...$situationAgregged, ...$situationNotAgregged];
@@ -213,6 +199,19 @@ class HospitalSituationNewController extends Controller
             ->max('hospital_situations_new.last_update');
         return $observation_date_max;
     }
+    function getJoinTableSituation()
+    {
+        $joinTableSituation = DB::table('hospital_situations_new')
+            ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+            ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+            ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
+            ->join('townships', 'townships.id', '=', 'hospitals.township_id')
+            ->where('form_fields.form_field_type_id', '=', 2)
+            ->orWhere('form_fields.form_field_type_id', '=', 3);
+
+        return $joinTableSituation;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -233,11 +232,7 @@ class HospitalSituationNewController extends Controller
         try {
             // On réccupère toutes les dates où une mise à jour a pu etre poster
             // Surtout utile pour l'evolution globale
-            $situationAgregged = DB::table('hospital_situations_new')
-                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-                ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-                ->join('townships', 'townships.id', '=', 'hospitals.township_id')
+            $situationAgregged = $this->getJoinTableSituation()
                 ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
                 ->where(function ($query) use ($township, $hospital) {
                     if ($hospital) {
@@ -246,26 +241,17 @@ class HospitalSituationNewController extends Controller
                         $query->where('townships.id', '=', $township);
                     }
                 })
-                ->where('form_fields.name', '<>', 'EPI en manque')
-                ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
                 ->where('form_fields.agreggation', true)
                 ->select(
                     'form_fields.name as form_field_name',
                     DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as form_field_value'),
-                    'form_fields.capacity as form_field_capacity',
                     'form_fields.form_step_id as form_step_id',
                     'form_steps.title as form_step_title'
                 )
-                ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
+                ->groupBy('form_step_id', 'form_step_title', 'form_field_name')
                 ->get()->toArray();
 
-            $situationNotAgregged = DB::table('hospital_situations_new')
-                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-                ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
-                ->join('townships', 'townships.id', '=', 'hospitals.township_id')
-                ->where('form_fields.name', '<>', 'EPI en manque')
-                ->where('form_fields.name', '<>', 'Nom du CTCO de référence')
+            $situationNotAgregged = $this->getJoinTableSituation()
                 ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
                 ->where(function ($query) use ($township, $hospital) {
                     if ($hospital) {
@@ -278,11 +264,10 @@ class HospitalSituationNewController extends Controller
                 ->select(
                     'form_fields.name as form_field_name',
                     DB::raw('AVG(CAST(hospital_situations_new.value as INT)) as form_field_value'),
-                    'form_fields.capacity as form_field_capacity',
                     'form_fields.form_step_id as form_step_id',
                     'form_steps.title as form_step_title'
                 )
-                ->groupBy('form_step_id', 'form_step_title', 'form_field_name', 'form_field_capacity')
+                ->groupBy('form_step_id', 'form_step_title', 'form_field_name')
                 ->get()->toArray();
 
             $hospitalSituation = [...$situationAgregged, ...$situationNotAgregged];
