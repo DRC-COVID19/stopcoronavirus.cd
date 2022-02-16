@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use DateTime;
 use App\Hospital;
 use App\HospitalSituation;
 use Illuminate\Support\Arr;
