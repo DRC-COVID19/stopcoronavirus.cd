@@ -36,10 +36,6 @@
               >
               <span style="cursor: pointer"
                   >Télécharger les données
-                  <Icon
-                    style="font-size: 30px"
-                    icon="vscode-icons:file-type-excel2"
-                  />
                 </span>
               </export-excel>
             </div>
@@ -294,19 +290,10 @@
 /* eslint-disable vue/return-in-computed-property */
 import { mapState, mapActions, mapMutations } from "vuex";
 import { PALETTE } from "../config/env";
-import { Icon } from "@iconify/vue2";
-// import GlobalSituationChart from './graphic/GlobalSituationChart.vue'
-// import OccupedRespiratorChart from './graphic/OccupedRespiratorChart.vue'
-// import OccupiedResuscitationBeds from './graphic/OccupiedResuscitationBedsChart.vue'
 
 export default {
   props: ["hospitalSituationAll"],
-  components: {
-    Icon,
-    // GlobalSituationChart,
-    // OccupedRespiratorChart,
-    // OccupiedResuscitationBeds
-  },
+  components: {},
   data() {
     return {
       etatGlobal: true,
