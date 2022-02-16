@@ -50,7 +50,8 @@
                             ? selectedDate.observation_start
                             : "Date début"
                         }}
-                       <i :class="iconStateDatePicker"></i></a>
+                        <i :class="iconStateDatePicker"></i
+                      ></a>
                       <a class="btn btn-sm btn-daterange p-2">{{
                         selectedDate.observation_end
                       }}</a>
@@ -62,7 +63,7 @@
                       {{ selectedDate.observation_end | date }}</span
                     >
                     <span v-else>
-                      {{ selectedDate.observation_end | date}}
+                      {{ selectedDate.observation_end | date }}
                     </span>
                   </template>
                 </date-range-picker>
@@ -153,8 +154,13 @@ export default {
       return [...this.defaultTownship, ...this.townships];
     },
     setDate() {
-      console.log("this.dateRangeObservation.observation_end", this.dateRangeObservation.observation_end)
-      return !this.dateRangeObservation.observation_end == "null" ? this.selectedDate.observation_end : this.dateRangeObservation.observation_end;
+      console.log(
+        "this.dateRangeObservation.observation_end",
+        this.dateRangeObservation.observation_end
+      );
+      return !this.dateRangeObservation.observation_end == "null"
+        ? this.selectedDate.observation_end
+        : this.dateRangeObservation.observation_end;
     },
   },
   methods: {
@@ -173,7 +179,6 @@ export default {
       this.selectedDate.observation_start =
         moment(startDate).format("YYYY-MM-DD");
       this.selectedDate.observation_end = moment(endDate).format("YYYY-MM-DD");
-      
     },
     updateObservationDate({ startDate, endDate }) {
       if (!this.checked) {
