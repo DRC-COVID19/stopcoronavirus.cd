@@ -143,7 +143,6 @@ export default {
     },
     getObservationSituationHospital({ state, commit }, payload) {
       commit("SET_IS_LOADING", payload.isLoading);
-      console.log("Mon PAYLOAD: ", payload);
       return new Promise((resolve, reject) => {
         axios
           .post("api/dashboard/get-observation-situation-hospital", payload)

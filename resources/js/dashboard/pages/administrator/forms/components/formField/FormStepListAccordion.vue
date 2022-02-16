@@ -129,6 +129,7 @@ export default {
   methods: {
     ...mapActions(['removeFormField']),
     formStepFilter (id) {
+      // eslint-disable-next-line camelcase
       this.formFieldFilter = this.targetForm.form_fields.filter((formField) => {
         return formField.form_step_id === id
       })
