@@ -209,10 +209,7 @@ export default {
       formData: new Map(),
       formSummary: [],
       formDataFormatted: [],
-      form: {
-        items: [],
-        fields: []
-      },
+      form: {},
       max: now,
       errors: {},
       isLoading: false
