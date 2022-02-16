@@ -3,9 +3,7 @@
     <b-card>
       <b-card-body class="py-0">
         <div class="d-flex justify-content-between align-items-center">
-          <strong class="mb-0">
-            CHAMPS
-          </strong>
+          <strong class="mb-0"> CHAMPS </strong>
           <i class="fab fa-wpforms" aria-hidden="true"></i>
         </div>
       </b-card-body>
@@ -23,48 +21,46 @@
       @onDeletedForm="onDeletedFormField"
       @onUpdateFormField="toUpdateFormField"
     />
-</div>
+  </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import FormFieldForm from './FormFieldForm'
-import FormFieldList from './FormFieldList'
+import { mapActions } from "vuex";
+import FormFieldForm from "./FormFieldForm";
+import FormFieldList from "./FormFieldList";
 export default {
   props: {
     form: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-   data () {
+  data() {
     return {
       isEditingMode: false,
-      rowFormField: {}
-    }
+      rowFormField: {},
+    };
   },
   components: {
     FormFieldForm,
-    FormFieldList
+    FormFieldList,
   },
   methods: {
-    ...mapActions([
-      'formShow'
-    ]),
-    onCreatedFormField () {
-      this.$emit('formFieldCreated')
+    ...mapActions(["formShow"]),
+    onCreatedFormField() {
+      this.$emit("formFieldCreated");
     },
-    onDeletedFormField () {
-      this.$emit('formFieldDeleted')
+    onDeletedFormField() {
+      this.$emit("formFieldDeleted");
     },
-    onUpdateFormField () {
-      this.$emit('formFieldUpdated')
-      this.isEditingMode = false
+    onUpdateFormField() {
+      this.$emit("formFieldUpdated");
+      this.isEditingMode = false;
     },
-    toUpdateFormField (item) {
-      this.isEditingMode = true
-      this.rowFormField = { ...item }
-    }
-  }
-}
+    toUpdateFormField(item) {
+      this.isEditingMode = true;
+      this.rowFormField = { ...item };
+    },
+  },
+};
 </script>

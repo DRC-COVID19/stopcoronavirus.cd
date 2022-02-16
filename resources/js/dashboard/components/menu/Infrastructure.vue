@@ -181,7 +181,7 @@ export default {
       this.selectedDate.observation_end = moment(endDate).format("YYYY-MM-DD");
     },
     updateObservationDate({ startDate, endDate }) {
-      if (!this.checked) {
+      if (!this.checkedRangeDatePicker) {
         this.form.observation_start = null;
         this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
       } else {
