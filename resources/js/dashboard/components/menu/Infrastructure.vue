@@ -32,8 +32,8 @@
                   opens="center"
                   :max-date="new Date()"
                   :singleDatePicker="checked ? false : true"
-                  @update="UpdateObservationDate"
-                  @select="SelectObservation"
+                  @update="updateObservationDate"
+                  @select="selectObservation"
                   :calculate-position="dateRangerPosition"
                   class="style-picker"
                 >
@@ -169,13 +169,13 @@ export default {
           ? "fa fa-times"
           : "fas fa-thin fa-plus";
     },
-    SelectObservation({ startDate, endDate }) {
+    selectObservation({ startDate, endDate }) {
       this.selectedDate.observation_start =
         moment(startDate).format("YYYY-MM-DD");
       this.selectedDate.observation_end = moment(endDate).format("YYYY-MM-DD");
       
     },
-    UpdateObservationDate({ startDate, endDate }) {
+    updateObservationDate({ startDate, endDate }) {
       if (!this.checked) {
         this.form.observation_start = null;
         this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
