@@ -135,20 +135,15 @@
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
-      <b-modal id="modal-center" centered hide-footer hide-header title="BootstrapVue">
-        <p class="my-4">Vertically centered modal!</p>
-      </b-modal>
     </b-col>
   </b-row>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
-import { Icon } from '@iconify/vue2'
 
 export default {
   components:{
-    Icon
   },
   data () {
     return {

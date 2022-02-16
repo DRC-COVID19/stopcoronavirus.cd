@@ -1,11 +1,9 @@
-
-
 <template>
   <b-card no-body class="rounded-0 p-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row class="d-flex justify-content-between ml-1 mr-5">
         <b-col lg="5" cols="5" md="4" class="col-5 nav-zone pl-3 pr-3">
-          <b-form-group cols="5">
+          <b-form-group>
             <label for class="text-dash-color">Commune</label>
             <v-select
               v-model="form.township"
@@ -20,7 +18,6 @@
         <b-col cols="12" md="5" lg="5" class="col-5 nav-zone pl-3 pr-3">
           <label for class="text-dash-color">Paramètres Temporels</label>
           <div class="d-flex">
-           
             <b-form-group class="col">
               <div class="d-flex">
                 <date-range-picker
@@ -34,32 +31,41 @@
                   :appendToBody="true"
                   opens="center"
                   :max-date="new Date()"
-                  :singleDatePicker="checked ? false : true"
-                  @update="UpdateObservationDate"
-                  @select="SelectObservation"
+                  :singleDatePicker="checkedRangeDatePicker ? false : true"
+                  @update="updateObservationDate"
+                  @select="selectObservation"
                   :calculate-position="dateRangerPosition"
                   class="style-picker"
                 >
-                <div slot="header" slot-scope="" class="slot p-2">
-                    <div style="" class="d-flex justify-content-between mb-2 mt-2">
+                  <div slot="header" slot-scope="" class="slot p-2">
+                    <div
+                      style=""
+                      class="d-flex justify-content-between mb-2 mt-2"
+                    >
                       <a
-                      @click="activeStartDate()"
+                        @click="activeStartDate()"
                         class="btn btn-sm btn-daterange p-2"
-                        >{{ iconStateDatePicker =="majesticons:multiply" ? selectedDate.observation_start : "Date début"}} 
-                        <span><Icon :icon="iconStateDatePicker" /></span></a>
-                        <a
-                        class="btn btn-sm btn-daterange p-2"
-                        >{{selectedDate.observation_end}}</a
-                      >
+                        >{{
+                          iconStateDatePicker == "fa fa-times"
+                            ? selectedDate.observation_start
+                            : "Date début"
+                        }}
+                        <i :class="iconStateDatePicker"></i
+                      ></a>
+                      <a class="btn btn-sm btn-daterange p-2">{{
+                        selectedDate.observation_end
+                      }}</a>
                     </div>
                   </div>
-                  <template v-slot:input="picker">
-                    <span>
-                      {{ picker.startDate | date }} -
-                      {{ picker.endDate | date }}</span
+                  <template v-slot:input>
+                    <span v-if="checkedRangeDatePicker">
+                      {{ selectedDate.observation_start | date }} -
+                      {{ selectedDate.observation_end | date }}</span
                     >
+                    <span v-else>
+                      {{ selectedDate.observation_end | date }}
+                    </span>
                   </template>
-    
                 </date-range-picker>
                 <b-button
                   @click="clearObservationDate"
@@ -92,10 +98,9 @@
 <script>
 /* eslint-disable space-before-blocks */
 /* eslint-disable no-unneeded-ternary */
-import DateRangePicker from "vue2-daterange-picker"
-import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env"
-import { mapState, mapActions } from "vuex"
-import { Icon } from '@iconify/vue2'
+import DateRangePicker from "vue2-daterange-picker";
+import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env";
+import { mapState, mapActions } from "vuex";
 
 export default {
   props: {
@@ -110,7 +115,6 @@ export default {
   },
   components: {
     DateRangePicker,
-    Icon
   },
   data() {
     return {
@@ -119,25 +123,26 @@ export default {
         observation_start: new Date(),
         township: 0,
       },
-      selectedDate:{
+      selectedDate: {
         observation_end: moment().format("YYYY-MM-DD"),
         observation_start: moment().format("YYYY-MM-DD"),
       },
       selected: false,
       dateRangeObservation: {
-        endDate: new Date(),
-        startDate: new Date(),
+        endDate: moment().format("YYYY-MM-DD"),
+        startDate: moment().format("YYYY-MM-DD"),
       },
       min_date: new Date(),
       defaultTownship: [{ id: 0, name: "Tous" }],
       hospitals: [],
-      checked: false,
-      iconStateDatePicker: "fluent:add-12-filled", 
-    }
+      checkedRangeDatePicker: false,
+      iconStateDatePicker: "fas fa-thin fa-plus",
+      isUpdate: false,
+    };
   },
   filters: {
     date: (val) => {
-      return val ? moment(val).format("DD.MM.YYYY") : "Null"
+      return val ? moment(val).format("DD.MM.YYYY") : "";
     },
   },
   computed: {
@@ -146,58 +151,67 @@ export default {
       observation_end: (state) => state.hospitalSituation.observation_end,
     }),
     townshipList() {
-      return [...this.defaultTownship, ...this.townships]
+      return [...this.defaultTownship, ...this.townships];
     },
-    stateStartDate() {
-      return this.checked ? false : true
+    setDate() {
+      console.log(
+        "this.dateRangeObservation.observation_end",
+        this.dateRangeObservation.observation_end
+      );
+      return !this.dateRangeObservation.observation_end == "null"
+        ? this.selectedDate.observation_end
+        : this.dateRangeObservation.observation_end;
     },
   },
   methods: {
     ...mapActions(["getObservation"]),
     hospitalToggle(checked) {
-      this.$emit("hopitalChecked", checked)
+      this.$emit("hopitalChecked", checked);
     },
-    activeStartDate(){
-      this.checked = this.checked ? false : true
-      this.iconStateDatePicker = this.iconStateDatePicker =="fluent:add-12-filled" ? "majesticons:multiply" : "fluent:add-12-filled"
-      console.log(" this.stateStartDate();",this.selectedDate.observation_start)
+    activeStartDate() {
+      this.checkedRangeDatePicker = !this.checkedRangeDatePicker
+      this.iconStateDatePicker =
+        this.iconStateDatePicker == "fas fa-thin fa-plus"
+          ? "fa fa-times"
+          : "fas fa-thin fa-plus";
     },
-    SelectObservation({ startDate, endDate}){
-      this.selectedDate.observation_start = moment(startDate).format("YYYY-MM-DD")
-      this.selectedDate.observation_end = moment(endDate).format("YYYY-MM-DD")
+    selectObservation({ startDate, endDate }) {
+      this.selectedDate.observation_start =
+        moment(startDate).format("YYYY-MM-DD");
+      this.selectedDate.observation_end = moment(endDate).format("YYYY-MM-DD");
     },
-    UpdateObservationDate({ startDate, endDate }) {
+    updateObservationDate({ startDate, endDate }) {
       if (!this.checked) {
-        this.form.observation_start = null
-        this.form.observation_end = moment(endDate).format("YYYY-MM-DD")
+        this.form.observation_start = null;
+        this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
       } else {
-        this.form.observation_start = moment(startDate).format("YYYY-MM-DD")
-        this.form.observation_end = moment(endDate).format("YYYY-MM-DD")
+        this.form.observation_start = moment(startDate).format("YYYY-MM-DD");
+        this.form.observation_end = moment(endDate).format("YYYY-MM-DD");
       }
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
-      dropdownList.style.top = `${top}px`
-      dropdownList.style.left = `${left + 180}px`
+      dropdownList.style.top = `${top}px`;
+      dropdownList.style.left = `${left + 180}px`;
     },
     clearObservationDate() {
-      this.dateRangeObservation = { startDate: null, endDate: null }
-      this.form.observation_end = null
-      this.form.observation_start = null
+      this.dateRangeObservation = { startDate: null, endDate: null };
+      this.form.observation_end = null;
+      this.form.observation_start = null;
     },
     submit() {
       const observations = {
         observation_start: this.form.observation_start,
         observation_end: this.form.observation_end,
-      }
-      this.getObservation(observations)
+      };
+      this.getObservation(observations);
 
-      console.log("observation_end", this.observation_end)
-      console.log("observation_start", this.observation_start)
+      console.log("observation_end", this.observation_end);
+      console.log("observation_start", this.observation_start);
 
-      this.$emit("submitInfrastructureForm", this.form)
+      this.$emit("submitInfrastructureForm", this.form);
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -210,8 +224,8 @@ export default {
   display: flex;
   align-items: center;
 }
-.btn-daterange{
-  background-color:#f4f5fc;
+.btn-daterange {
+  background-color: #f4f5fc;
   font-size: 16px;
 }
 </style>
