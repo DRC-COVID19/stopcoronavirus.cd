@@ -10,10 +10,10 @@
           </b-link>
           <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form[0].last_update).format("DD/MM/Y")}}</h3>
             <b-col
-                  v-for="(step, index) in renderSituations"
-                  :key="index"
-
-                  cols="12" md="12" >
+              v-for="(step, index) in renderSituations"
+              :key="index"
+              cols="12" md="12"
+            >
                   <h3 class="mb-4">{{step.form_step_title}}</h3>
                   <ul   v-for="(field, count) in step.form_field_values"
                     :key="count">
@@ -37,7 +37,6 @@ export default {
   components: {
     Loading, Header
   },
-
   async mounted () {
     await this.getHospital()
   },

@@ -3,7 +3,12 @@
     <b-col cols="12" class="map-form-header">
       <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
-          <h1 class="title m-0">Dashboard Covid-19</h1>
+          <h1
+            class="title m-0"
+            @click="selectMenu(1)"
+          >
+            Dashboard Covid-19
+          </h1>
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse" class="default-border">
           <span class="fa fa-bars"></span>
@@ -96,6 +101,8 @@
               >
                 <img
                   src="/img/partener2.png"
+                  height="30"
+                  width="100"
                   class="img-fluid"
                   alt
                 />
@@ -162,6 +169,9 @@ export default {
       return getChangeLogNotRead.length
     }
   },
+  mounted() {
+    this.fillParametersFromUrlParams()
+  },
   methods: {
     ...mapActions(['logout', 'setChangeLogsRead']),
     ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
@@ -182,8 +192,12 @@ export default {
       this.setSelectedChangeLog(item)
       this.setActiveMenu(7)
     },
-    selectMenu (value) {
-      this.setActiveMenu(value)
+    selectMenu(value) {
+      if (this.activeMenu !== null) {
+        this.removeAllParamsFromUrl();
+      }
+      this.addParamToUrl('menu', value);
+      this.setActiveMenu(value);
     },
     toggleHeaderNotification () {
       this.showHeaderNotification = !this.showHeaderNotification
@@ -193,9 +207,18 @@ export default {
         this.showHeaderNotification = false
         this.setChangeLogsRead()
       }
+    },
+    fillParametersFromUrlParams () {
+      const url = new URL(window.location.href);
+      const menu = url.searchParams.get('menu');
+      if (menu) {
+        this.selectMenu(+menu)
+      } else {
+        this.selectMenu(1)
+      }
     }
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -284,6 +307,9 @@ export default {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+    &:hover {
+      cursor: pointer;
+    }
   }
   .nav-container {
     a {

@@ -1,6 +1,6 @@
 export default {
     state: {
-        activeMenu: 1
+        activeMenu: null
     },
     mutations: {
         setActiveMenu(state, payload) {

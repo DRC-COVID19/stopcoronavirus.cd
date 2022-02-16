@@ -195,7 +195,19 @@ export default {
     },
     formatDateFns (date) {
       return format(new Date(date), 'dd/MM/yyyy à HH:mm:ss')
+    },
+    addParamToUrl(param, value) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete(param);
+      if (value !== undefined && value !== null) {
+        url.searchParams.set(param, value);
+      }
+      window.history.replaceState(null, null, url);
+    },
+    removeAllParamsFromUrl() {
+      const url = new URL(window.location.href);
+      url.search = ''
+      window.history.replaceState(null, null, url);
     }
   }
-
 }

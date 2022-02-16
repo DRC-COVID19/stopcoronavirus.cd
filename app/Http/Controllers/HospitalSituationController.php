@@ -64,12 +64,12 @@ class HospitalSituationController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
 
-        
+
     }
 
     public function store(Request $request)
     {
-        
+
         $data = $this->validator($request->all(), ['create' => 'required', 'update'=>'nullable']);
         try {
            // $data['hospital_id'] = $this->guard()->user()->hospitalManager->id;
@@ -84,14 +84,14 @@ class HospitalSituationController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
-  
-  
+
+
     /**
      * Display the specified resource.
      * @return \Illuminate\Http\Response
      */
     public function show(int $id)
-    {  
+    {
         try {
             $hospitalSituation =  DB::table('hospital_situations_new')
             ->where('hospitals.id','=',intval($id))
@@ -124,7 +124,7 @@ class HospitalSituationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getSituationsByHospitalAndLastUpdate($last_update, int $hospital_id)
-    {  
+    {
         try {
             $hospitalSituation =  DB::table('hospital_situations_new')
             ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
@@ -171,9 +171,9 @@ class HospitalSituationController extends Controller
         try {
             $hospitalSituationNew= HospitalSituationNew::where(['last_update' => $data['last_update'],'hospital_id' => $hospital_id, 'form_field_id' => $data['form_field_id']])
                                             ->update($data);
-                                         
+
              Log::info('hospitalData: ',[$request->all()]);
-         
+
            // HospitalSituationNew::updated(Arr::except($data, ['last_update', 'hospital_id']));
             return $hospitalSituationNew;
         } catch (\Throwable $th) {
@@ -185,10 +185,10 @@ class HospitalSituationController extends Controller
     }
 
 
-   
+
     public function getAgentLastUpdate()
     {
-       
+
         try {
             $situations=[];
             $hospitalIds = Hospital::all('id')
@@ -209,7 +209,7 @@ class HospitalSituationController extends Controller
                 ->latest('last_update')
                 ->first();
 
-              if ($hospitalSituation === null) 
+              if ($hospitalSituation === null)
               {
                   $hospitalSituation = [
                     'diff_date' => -1,
@@ -224,12 +224,12 @@ class HospitalSituationController extends Controller
               {
                 array_push($situations, $hospitalSituation);
               }
-              
+
             }
             //$sortSituations =usort($situations,fn($a,$b)=> $b['last_update'] -$a['last_update']);
 
             return response()->json($situations,200,[],JSON_NUMERIC_CHECK);
-          
+
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -249,7 +249,7 @@ class HospitalSituationController extends Controller
         //
     }
 
-  
+
 
     /**
      * Store a newly created resource in storage.
@@ -358,8 +358,8 @@ class HospitalSituationController extends Controller
         $observation_start = $request->input('observation_start');
         $township = $request->input('township');
         $hospital = $request->input('hospital');
-      
-       
+
+
         try {
             // On réccupère toutes les dates où une mise à jour a pu etre poster
             // Surtout utile pour l'evolution globale
@@ -428,7 +428,7 @@ class HospitalSituationController extends Controller
         return Validator::make($data, [
             "form_field_id" => 'required',
             "value" => 'required',
-            'created_manager_name'  => $updateRules['create'], 
+            'created_manager_name'  => $updateRules['create'],
             'updated_manager_name'  => $updateRules['update'],
             'hospital_id'=>'required',
             'last_update' => 'required|date'
