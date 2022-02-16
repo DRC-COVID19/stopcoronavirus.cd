@@ -22,10 +22,11 @@ class HospitalSituationNewController extends Controller
 
         try {
 
-            $hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
+            // $hospitalSituation = HospitalSituationNew::where('hospital_id', $this->guard()->user()->hospitalManager->id)->orderBy('last_update', 'desc')->paginate(15);
 
 
-            return HospitalSituationNewResource::collection($hospitalSituation);
+            // return HospitalSituationNewResource::collection($hospitalSituation);
+            $hospitalSituation = HospitalSituationNew::all();
         } catch (\Throwable $th) {
 
             if (env('APP_DEBUG') == true) {
