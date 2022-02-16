@@ -270,7 +270,7 @@ class HospitalSituationNewController extends Controller
             $hospitalSituation = [...$situationAgregged, ...$situationNotAgregged];
 
             $results = [
-                'form_fields_names' => $situationAgregged,
+                'form_fields_names' => $hospitalSituation,
             ];
 
             return response()->json($results, 200, [], JSON_NUMERIC_CHECK);
