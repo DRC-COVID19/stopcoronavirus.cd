@@ -131,7 +131,7 @@ class HospitalSituationController extends Controller
             ->join('form_field_types','form_fields.form_field_type_id','=','form_field_types.id')
             ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
             ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-            ->where('hospital_situations_new.last_update','=',new Date($last_update))
+            ->where('hospital_situations_new.last_update','=',$last_update)
             ->where('hospitals.id','=',intval($hospital_id))
             ->select(
                     'form_fields.name as name',
