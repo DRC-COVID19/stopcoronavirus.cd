@@ -20,7 +20,7 @@
       </b-row>
       <b-row class="mt-4 mb-4">
         <b-col>
-          <b-button :to="{name:'hospital.create',params:{form_id:4}}" class="btn-dash-blue">Nouveau</b-button>
+          <b-button :to="{name:'hospital.create',params:{ form_id: defaultFormId }}" class="btn-dash-blue">Nouveau</b-button>
         </b-col>
       </b-row>
       <b-row>
@@ -63,7 +63,7 @@
                   params: {
                     update_id:data.item.last_update,
                     hospital_id:user.hospital.id,
-                    form_id: 4
+                    form_id: defaultFormId
                   }
                 }"
               >Editer</b-button>
@@ -92,6 +92,7 @@ import Header from '../../components/hospital/Header'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { renderDiffDate } from '../../plugins/functions'
+import { DEFAULT_FORM_ID } from '../../config/env'
 export default {
   components: {
     Header,
@@ -126,6 +127,9 @@ export default {
         return this.hospitalSituations.meta.per_page
       }
       return 15
+    },
+    defaultFormId() {
+      return DEFAULT_FORM_ID
     }
   },
   async mounted () {
