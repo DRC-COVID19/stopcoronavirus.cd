@@ -138,8 +138,7 @@ class HospitalSituationNewController extends Controller
             $max_date = DB::table('hospital_situations_new')
                 ->max('hospital_situations_new.last_update');
 
-            $situationAgregged =  $this->getJoinTableSituation()
-                ->where('form_fields.agreggation', true)
+            $situationAgregged =  $this->getJoinTableSituation(true)
                 ->whereDate('hospital_situations_new.last_update', $max_date)
                 ->select(
                     'form_fields.name as form_field_name',
@@ -152,8 +151,7 @@ class HospitalSituationNewController extends Controller
                 ->groupBy('form_step_id', 'form_step_title', 'form_field_name')
                 ->get()->toArray();
 
-            $situationNotAgregged =  $this->getJoinTableSituation()
-                ->where('form_fields.agreggation', false)
+            $situationNotAgregged =  $this->getJoinTableSituation(false)
                 ->whereDate('hospital_situations_new.last_update', $max_date)
                 ->select(
                     'form_fields.name as form_field_name',
@@ -199,7 +197,7 @@ class HospitalSituationNewController extends Controller
             ->max('hospital_situations_new.last_update');
         return $observation_date_max;
     }
-    function getJoinTableSituation()
+    function getJoinTableSituation($state)
     {
         $joinTableSituation = DB::table('hospital_situations_new')
             ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
@@ -207,7 +205,8 @@ class HospitalSituationNewController extends Controller
             ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
             ->join('townships', 'townships.id', '=', 'hospitals.township_id')
             ->where('form_fields.form_field_type_id', '=', 2)
-            ->orWhere('form_fields.form_field_type_id', '=', 3);
+            ->orWhere('form_fields.form_field_type_id', '=', 3)
+            ->where('form_fields.agreggation', $state);
 
         return $joinTableSituation;
     }
@@ -232,7 +231,7 @@ class HospitalSituationNewController extends Controller
         try {
             // On réccupère toutes les dates où une mise à jour a pu etre poster
             // Surtout utile pour l'evolution globale
-            $situationAgregged = $this->getJoinTableSituation()
+            $situationAgregged = $this->getJoinTableSituation(true)
                 ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
                 ->where(function ($query) use ($township, $hospital) {
                     if ($hospital) {
@@ -241,7 +240,6 @@ class HospitalSituationNewController extends Controller
                         $query->where('townships.id', '=', $township);
                     }
                 })
-                ->where('form_fields.agreggation', true)
                 ->select(
                     'form_fields.name as form_field_name',
                     DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as form_field_value'),
@@ -251,7 +249,7 @@ class HospitalSituationNewController extends Controller
                 ->groupBy('form_step_id', 'form_step_title', 'form_field_name')
                 ->get()->toArray();
 
-            $situationNotAgregged = $this->getJoinTableSituation()
+            $situationNotAgregged = $this->getJoinTableSituation(false)
                 ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
                 ->where(function ($query) use ($township, $hospital) {
                     if ($hospital) {
@@ -260,7 +258,6 @@ class HospitalSituationNewController extends Controller
                         $query->where('townships.id', '=', $township);
                     }
                 })
-                ->where('form_fields.agreggation', false)
                 ->select(
                     'form_fields.name as form_field_name',
                     DB::raw('AVG(CAST(hospital_situations_new.value as INT)) as form_field_value'),
