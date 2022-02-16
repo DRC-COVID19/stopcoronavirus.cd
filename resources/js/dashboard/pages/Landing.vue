@@ -81,7 +81,7 @@ export default {
           name: 'administrator.epidemie'
         })
       }
-      if (this.user.roles.find((a) => a.name == EDIT_FORM || a.name == CREATE_FORM && a.name != ADMINISTRATOR)) {
+      if (this.user.roles.find((a) => (a.name == EDIT_FORM || a.name == CREATE_FORM) && a.name != ADMINISTRATOR)) {
         routesAccess.push({
           slug: 'Administration',
           name: 'administrator.forms',
