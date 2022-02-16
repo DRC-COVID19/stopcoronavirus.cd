@@ -384,9 +384,9 @@ export default {
       } else {
         this.fileName = `Données_du_${this.observation_start}_au_${this.observation_end}.xls`;
       }
-      let hospitalSituationFiltered = [];
+      const hospitalSituationFiltered = [];
       hospitalSituationAllSlice.forEach((hospital) => {
-        
+
         const index = hospitalSituationFiltered.findIndex(
           (observation) =>
             moment(hospital.date).format("DD/MM/YY") === observation.date &&
@@ -405,8 +405,6 @@ export default {
           hospitalSituationFiltered.push(monObj);
         }
       });
-      hospitalSituationFiltered = [...new Set(hospitalSituationFiltered)];
-
       return hospitalSituationFiltered;
     },
     prepareGraphicSituation() {
