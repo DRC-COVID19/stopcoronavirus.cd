@@ -3,7 +3,7 @@
   <b-container class="p-0">
     <b-row lg="12">
       <b-col cols="12" fluid>
-        <div class="col-12 mb-2 row align-items-center" >
+        <div class="col-12 mb-2 row align-items-center">
           <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
             <square-skeleton
               :boxProperties="{
@@ -12,33 +12,29 @@
               }"
             ></square-skeleton>
           </skeleton-loading>
-            <b-row v-if="!isLoading" class="mb-2 align-items-center">
-              <b-col lg="12" class="ml-2 align-items-center">
-                  <h4 >{{
-                  hospital.name || "Rapport global"
-                }}</h4>
-              </b-col>
-              <b-col lg="4" class="ml-2 align-items-center">
-                  <b-badge
-                  v-if="hospitalCount"
-                  style="font-size: 12px"
-                >
-                  {{ hospitalCount }}
-                  <small>infrastructure(s)</small>
-                </b-badge>
-              </b-col>
-            </b-row>
-            <div class=" col-12 d-flex  text-right justify-content-end">
-              <export-excel
-                :data="hospitalSituationData"
-                :name="fileName"
-                v-show="isUploadFile"
-              >
+          <b-row v-if="!isLoading" class="mb-2 align-items-center">
+            <b-col lg="12" class="ml-2 align-items-center">
+              <h4>{{ hospital.name || "Rapport global" }}</h4>
+            </b-col>
+            <b-col lg="4" class="ml-2 align-items-center">
+              <b-badge v-if="hospitalCount" style="font-size: 12px">
+                {{ hospitalCount }}
+                <small>infrastructure(s)</small>
+              </b-badge>
+            </b-col>
+          </b-row>
+          <div class="col-12 d-flex text-right justify-content-end">
+            <export-excel
+              :data="hospitalSituationData"
+              :name="fileName"
+              v-show="isUploadFile"
+            >
               <span style="cursor: pointer"
-                  >Télécharger les données
-                </span>
-              </export-excel>
-            </div>
+                >Télécharger les données
+                <i class="fas fa-file-excel ml-2" style="font-size: 20px"></i>
+              </span>
+            </export-excel>
+          </div>
           <div class="col-12 text-right" v-if="!isLoading">
             <button
               class="btn btn-sm btn-primary"
@@ -321,7 +317,6 @@ export default {
   mounted() {
     const id = this.selectedHospital ? this.selectedHospital.id : null;
     this.getSituationHospital(id);
-    this.getFormSteps({ id: 3, page: 1 });
     if (this.filterdHospitalSituation.last_update.length > 0) {
       this.hospitalSituationFiltered();
     }
@@ -388,37 +383,29 @@ export default {
         this.fileName = `Données_du_${this.observation_end}.xls`;
       } else {
         this.fileName = `Données_du_${this.observation_start}_au_${this.observation_end}.xls`;
-
-        }
+      }
       let hospitalSituationFiltered = [];
       hospitalSituationAllSlice.forEach((hospital) => {
-        if (
-          hospitalSituationFiltered.find(
-            (observation) =>
-              moment(hospital.date).format("DD/MM/YY") === observation.date &&
-              hospital.hospital_id === observation.identifiant
-          )
-        ) {
-          const index = hospitalSituationFiltered.findIndex(
-            (observation) =>
-              moment(hospital.date).format("DD/MM/YY") === observation.date &&
-              hospital.hospital_id === observation.identifiant
-          );
+        const index = hospitalSituationFiltered.findIndex(
+          (observation) =>
+            moment(hospital.date).format("DD/MM/YY") === observation.date &&
+            hospital.hospital_id === observation.identifiant
+        );
+        if (index) {
           hospitalSituationFiltered[index][hospital.form_field_name] =
             hospital.form_field_value;
         } else {
           const monObj = {};
           monObj.date = moment(hospital.date).format("DD/MM/YY");
           monObj.identifiant = hospital.hospital_id;
-          monObj['numero téléphone agent'] = hospital.phone_number;
-          monObj['nom hopital'] = hospital.hospital_name;
+          monObj["numero téléphone agent"] = hospital.phone_number;
+          monObj["nom hopital"] = hospital.hospital_name;
           monObj[hospital.form_field_name] = hospital.form_field_value;
           hospitalSituationFiltered.push(monObj);
         }
       });
       hospitalSituationFiltered = [...new Set(hospitalSituationFiltered)];
 
-      console.log("hospitalSituationFiltered", hospitalSituationFiltered);
       return hospitalSituationFiltered;
     },
     prepareGraphicSituation() {
@@ -448,12 +435,6 @@ export default {
         observation_end: this.observation_end,
       };
       this.gethospitalsFiltered(form);
-      console.log("this.observation_start", this.observation_start);
-      console.log("this.observation_end", this.observation_end);
-      console.log(
-        " this.gethospitalsFiltered(form)",
-        this.hospitalSituationSelected
-      );
     },
     situationHospital(val) {
       this.dataGlobal = val;
