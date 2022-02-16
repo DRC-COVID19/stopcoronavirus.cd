@@ -135,9 +135,6 @@
           </b-navbar-nav>
         </b-collapse>
       </b-navbar>
-      <b-modal id="modal-center" centered hide-footer hide-header title="BootstrapVue">
-        <p class="my-4">Vertically centered modal!</p>
-      </b-modal>
     </b-col>
   </b-row>
 </template>
