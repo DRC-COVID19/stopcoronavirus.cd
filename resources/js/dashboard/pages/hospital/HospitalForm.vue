@@ -265,13 +265,6 @@ export default {
       }
       return this.arraySortAndFilter(this.targetForm.form_fields, id)
     },
-    arraySortAndFilter (data, id = null) {
-      return data
-        .slice()
-        .sort((a, b) => b.order_field - a.order_field)
-        ? data.filter(item => item.form_step_id === id)
-        : []
-    },
     isEditionData (id) {
       this.editionData.forEach(item => {
         if (item.id === id) {
@@ -279,6 +272,13 @@ export default {
         }
       })
       return this.arraySortAndFilter(this.editionData, id)
+    },
+    arraySortAndFilter (data, id = null) {
+      return data
+        .slice()
+        .sort((a, b) => b.order_field - a.order_field)
+        ? data.filter(item => item.form_step_id === id)
+        : []
     },
     getHospitalSituations () {
       this.getHospitalSituationsDetail({
