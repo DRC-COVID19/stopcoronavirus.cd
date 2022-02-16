@@ -82,8 +82,8 @@
             <h5 class="bold">{{ step.form_step_title }}</h5>
             <div v-for="(item, key) in step.form_field_values" :key="key">
               <p>
-                {{ item.form_field_name }} :
-                <strong>{{ item.form_field_value }}</strong>
+                {{ item.form_field_name || null }} :
+                <strong>{{ item.form_field_value || null }}</strong>
               </p>
             </div>
           </b-card>
@@ -284,10 +284,8 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { PALETTE } from '../config/env'
-import { createSituationsReduce } from '../plugins/functions'
 
 export default {
-  props: ["hospitalSituationAll"],
   components: {},
   data() {
     return {
@@ -360,7 +358,7 @@ export default {
       } else return null;
     },
     hospitalSituationReduced () {
-      return createSituationsReduce(this.hospitalSituationAll.allFormFields)
+      return this.createSituationsReduce(this.hospitalSituationAll.allFormFields)
     },
     hospitalSituationFiltered() {
       const arrayFilterd = [].concat.apply(
@@ -378,7 +376,7 @@ export default {
       } else {
         this.fileName = `Données_du_${this.observation_start}_au_${this.observation_end}.xls`;
       }
-      const hospitalSituationFiltered = [];
+      let hospitalSituationFiltered = [];
       hospitalSituationAllSlice.forEach((hospital) => {
 
         const index = hospitalSituationFiltered.findIndex(
@@ -386,7 +384,7 @@ export default {
             moment(hospital.date).format("DD/MM/YY") === observation.date &&
             hospital.hospital_id === observation.identifiant
         );
-        if (index) {
+        if (index !== -1) {
           hospitalSituationFiltered[index][hospital.form_field_name] =
             hospital.form_field_value;
         } else {
@@ -399,6 +397,7 @@ export default {
           hospitalSituationFiltered.push(monObj);
         }
       });
+      hospitalSituationFiltered = [...new Set(hospitalSituationFiltered)];
       return hospitalSituationFiltered;
     },
     prepareGraphicSituation() {

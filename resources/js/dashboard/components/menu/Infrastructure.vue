@@ -120,7 +120,7 @@ export default {
     return {
       form: {
         observation_end: moment().format("YYYY-MM-DD"),
-        observation_start: new Date(),
+        observation_start: moment().format("YYYY-MM-DD"),
         township: 0,
       },
       selectedDate: {
@@ -154,10 +154,6 @@ export default {
       return [...this.defaultTownship, ...this.townships];
     },
     setDate() {
-      console.log(
-        "this.dateRangeObservation.observation_end",
-        this.dateRangeObservation.observation_end
-      );
       return !this.dateRangeObservation.observation_end == "null"
         ? this.selectedDate.observation_end
         : this.dateRangeObservation.observation_end;
@@ -204,9 +200,6 @@ export default {
         observation_end: this.form.observation_end,
       };
       this.getObservation(observations);
-
-      console.log("observation_end", this.observation_end);
-      console.log("observation_start", this.observation_start);
 
       this.$emit("submitInfrastructureForm", this.form);
     },

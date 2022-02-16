@@ -205,8 +205,7 @@ class HospitalSituationNewController extends Controller
             ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
             ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
             ->join('townships', 'townships.id', '=', 'hospitals.township_id')
-            ->where('form_fields.form_field_type_id', '=', 2)
-            ->orWhere('form_fields.form_field_type_id', '=', 3)
+            ->whereIn('form_fields.form_field_type_id',   [2, 3])
             ->where('form_fields.agreggation', $state);
 
         return $joinTableSituation;
@@ -241,6 +240,7 @@ class HospitalSituationNewController extends Controller
                         $query->where('townships.id', '=', $township);
                     }
                 })
+
                 ->select(
                     'form_fields.name as form_field_name',
                     DB::raw('SUM(CAST(hospital_situations_new.value as INT)) as form_field_value'),
