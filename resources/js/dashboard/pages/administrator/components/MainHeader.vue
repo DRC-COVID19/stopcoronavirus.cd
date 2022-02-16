@@ -11,18 +11,21 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
             <b-link
+             v-if="canViewUsersPage"
               class="mx-2"
               :class="{ active: $route.name === 'administrator.users' || $route.name==='administrator.home' }"
               :to="{ name: 'administrator.users' }"
               >Utilisateurs</b-link
             >
             <b-link
+             v-if="canViewEpidemicPage"
               class="mx-2"
               :class="{ active: $route.name === 'administrator.epidemie' }"
               :to="{ name: 'administrator.epidemie' }"
               >Situation Epidémiologie</b-link
             >
             <b-link
+            v-if="canViewChangeLogPage"
               class="mx-2"
               :class="{ active: $route.name === 'administrator.changeLog' }"
               :to="{ name: 'administrator.changeLog' }"
@@ -103,6 +106,15 @@ export default {
     }),
     canViewFormsPage () {
       return this.user.roles.find(role => ['create_form', 'edit_form'].includes(role.slug))
+    },
+    canViewUsersPage () {
+      return this.user.roles.find(role => ['administrator'].includes(role.slug))
+    },
+    canViewChangeLogPage () {
+      return this.user.roles.find(role => ['administrator'].includes(role.slug))
+    },
+    canViewEpidemicPage () {
+      return this.user.roles.find(role => ['manager_epidemic'].includes(role.slug))
     }
   },
   methods: {
