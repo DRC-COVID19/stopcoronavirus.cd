@@ -10,12 +10,12 @@
         </b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
-            <b-nav-item
+            <!-- <b-nav-item
               :class="{ active: activeMenu == 1 }"
               @click="selectMenu(1)"
               >Mobilité</b-nav-item
-            >
-            <b-nav-item
+            > -->
+            <!-- <b-nav-item
               :class="{ active: activeMenu == 2 }"
               @click="selectMenu(2)"
               >Epidémiologie
@@ -24,7 +24,7 @@
               :class="{ active: activeMenu == 3 }"
               @click="selectMenu(3)"
               >Indicateurs</b-nav-item
-            >
+            > -->
             <!-- <b-nav-item :class="{'active':activeMenu==4}" @click="selectMenu(4)">Sondages</b-nav-item> -->
             <b-nav-item
               :class="{ active: activeMenu == 5 }"
@@ -95,23 +95,7 @@
                 class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
               >
                 <img
-                  src="/img/partners_top.png"
-                  height="30"
-                  width="100"
-                  class="img-fluid"
-                  alt
-                />
-                <img
-                  src="/img/commite_riposte.jpg"
-                  height="30"
-                  width="100"
-                  class="img-fluid"
-                  alt
-                />
-                <img
-                  src="/img/logo-control-room.png"
-                  height="30"
-                  width="100"
+                  src="/img/partener2.png"
                   class="img-fluid"
                   alt
                 />
@@ -156,61 +140,63 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+
 export default {
-  data() {
+  components:{
+  },
+  data () {
     return {
       showUserCard: false,
-      showHeaderNotification: false,
-    };
+      showHeaderNotification: false
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       activeMenu: (state) => state.nav.activeMenu,
-      changeLogs: (state) => state.app.changeLogs,
+      changeLogs: (state) => state.app.changeLogs
     }),
-    ...mapGetters(["getChangeLogNotRead"]),
-    countReadChangeLogs() {
-      return getChangeLogNotRead.length;
-    },
+    ...mapGetters(['getChangeLogNotRead']),
+    countReadChangeLogs () {
+      return getChangeLogNotRead.length
+    }
   },
   methods: {
-    ...mapActions(["logout", "setChangeLogsRead"]),
-    ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
-    userAvatarMouseEnter() {
-      this.showUserCard = true;
+    ...mapActions(['logout', 'setChangeLogsRead']),
+    ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
+    userAvatarMouseEnter () {
+      this.showUserCard = true
     },
-    userAvatarMouseLeave() {
-      this.showUserCard = false;
+    userAvatarMouseLeave () {
+      this.showUserCard = false
     },
-    userLogout() {
+    userLogout () {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
-        });
-      });
+          name: 'login'
+        })
+      })
     },
-    selectNotification(item) {
-      this.setSelectedChangeLog(item);
-      this.setActiveMenu(7);
+    selectNotification (item) {
+      this.setSelectedChangeLog(item)
+      this.setActiveMenu(7)
     },
-    selectMenu(value) {
-      this.setActiveMenu(value);
+    selectMenu (value) {
+      this.setActiveMenu(value)
     },
-    toggleHeaderNotification() {
-      this.showHeaderNotification = !this.showHeaderNotification;
+    toggleHeaderNotification () {
+      this.showHeaderNotification = !this.showHeaderNotification
     },
-    clickOutsideNotification() {
+    clickOutsideNotification () {
       if (this.showHeaderNotification) {
-        this.showHeaderNotification = false;
-        this.setChangeLogsRead();
+        this.showHeaderNotification = false
+        this.setChangeLogsRead()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
-
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";

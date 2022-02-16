@@ -2,7 +2,8 @@ export default {
   state: {
     formFields: [],
     currentPage: 1,
-    isLoading: false
+    isLoading: false,
+    isUpdating: false
   },
 
   mutations: {
@@ -11,6 +12,9 @@ export default {
     },
     SET_IS_LOADING(state, payload) {
       state.isLoading = payload;
+    },
+    SET_IS_UPDATING(state, payload) {
+      state.isUpdating = payload;
     }
   },
   actions: {
@@ -44,7 +48,7 @@ export default {
           });
       });
     },
-    removeFormFields({ state, commit, dispatch }, payload = {}) {
+    removeFormField ({ state, commit, dispatch }, payload = {}) {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
@@ -53,8 +57,24 @@ export default {
             resolve(true);
           })
           .catch(response => {
-            console.log(response);
             reject(response);
+          });
+      });
+    },
+    updateFormField ({ state, commit, dispatch }, payload = {}) {
+      commit("SET_IS_UPDATING", true);
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .put(`api/dashboard/form-fields/${payload.id}`, payload)
+          .then(({ data }) => {
+            resolve(true);
+          })
+          .catch(response => {
+            reject(response);
+          })
+          .finally(() => {
+            commit("SET_IS_UPDATING", false);
           });
       });
     }

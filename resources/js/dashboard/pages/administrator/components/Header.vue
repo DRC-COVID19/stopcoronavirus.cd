@@ -7,18 +7,18 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      title: {
-        type: String,
-        required: true
-      },
-      iconClass: {
-        type: String,
-        required: true
-      }
+export default {
+  props: {
+    title: {
+      type: String,
+      required: true
+    },
+    iconClass: {
+      type: String,
+      required: true
     }
   }
+}
 </script>
 
 <style lang='scss' scoped>

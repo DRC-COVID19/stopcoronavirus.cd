@@ -11,65 +11,21 @@
       </b-card-header>
       <b-collapse id="collapse-form-field-list" class="mt-2" visible>
         <b-card-body>
-          <b-form-group
-            v-for="(item, index) in formFieldSorted"
-            :key="index"
-            :label="item.name"
-            :label-for="item.name"
-          >
-            <b-row>
-              <b-col class="col-sm-9 col-md-9">
-                <b-form-group
-                  v-slot="{ ariaDescribedby }"
-                  v-if="item.form_field_type.name === 'boolean'"
-                >
-                  <b-form-radio-group
-                    :options="requiredOptions"
-                    :aria-describedby="ariaDescribedby"
-                    id="required"
-                  ></b-form-radio-group>
-                </b-form-group>
-                <b-form-input
-                  v-else
-                  :type="item.form_field_type.name"
-                  :placeholder="`Entrer ${item.name}`"
-                ></b-form-input>
-              </b-col>
-              <b-col class="col-sm-3 col-md-3">
-                <template class="action-btn-group">
-                  <i
-                    @click="deleteField(item)"
-                    class="mx-2 my-1 fas fa-trash prim color-red"
-                    aria-hidden="true"
-                  ></i>
-                  <i
-                    class="mx-2 my-1 fas fa-pencil-alt color-green"
-                    aria-hidden="true"
-                  ></i>
-                </template>
-              </b-col>
-            </b-row>
-          </b-form-group>
+           <FormStepListAccordion :targetForm="targetForm"
+                 @deleted="onDeleted"
+                 @updateField="updateField"/>
         </b-card-body>
       </b-collapse>
     </b-card>
-    <b-modal v-model="isDeleteModalShown">
-      Voulez-vous vraiment supprimer ce champ ?
-      <template #modal-footer>
-        <b-button size="sm" variant="success" @click="onValidateDeletion()">
-          Accepter
-        </b-button>
-        <b-button size="sm" variant="danger" @click="onCancelDeletion()">
-          Annuler
-        </b-button>
-      </template>
-    </b-modal>
   </div>
 </template>
 
 <script>
-import { mapActions} from "vuex";
+import FormStepListAccordion from "./FormStepListAccordion.vue";
 export default {
+  components: {
+    FormStepListAccordion,
+  },
   props: {
     targetForm: {
       type: Object,
@@ -77,57 +33,19 @@ export default {
     }
   },
   computed: {
-    formFieldSorted() {
-      return this.targetForm.form_fields
-        ? this.targetForm.form_fields
-            .slice()
-            .sort((a, b) => a.order_field - b.order_field)
-        : [];
-    }
   },
-  data() {
-    return {
-      requiredOptions: [
-        { text: "Oui", value: 1 },
-        { text: "Non", value: 0 }
-      ],
-      isDeleteModalShown: false,
-      formFieldToDelete: null,
-    };
+  data () {
+    return {}
   },
   methods: {
-    ...mapActions(["removeFormFields"]),
-    deleteField(formField) {
-      this.isDeleteModalShown = true;
-      this.formFieldToDelete = formField;
+    onDeleted () {
+      this.$emit('onDeletedForm')
     },
-    onValidateDeletion() {
-      this.$bvModal.show("confirmation-box");
-      this.removeFormFields(this.formFieldToDelete.id)
-        .then(() => {
-          this.$notify({
-            group: "alert",
-            title: "Supprimer ce champ",
-            text: "Supprimer avec succès",
-            type: "success"
-          });
-          this.isDeleteModalShown = false;
-          this.$emit("deleted");
-        })
-        .catch(() => {
-          this.$notify({
-            group: "alert",
-            title: "Supprimer  l'étape",
-            text: "Une erreur est survenus",
-            type: "error"
-          });
-        });
-    },
-    onCancelDeletion() {
-      this.isDeleteModalShown = false;
+     updateField () {
+      this.$emit('onUpdateFormField')
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";

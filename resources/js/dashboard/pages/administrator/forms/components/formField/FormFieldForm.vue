@@ -3,7 +3,7 @@
     <b-card-header v-b-toggle.collapse-form-field>
       <div class="d-flex justify-content-between align-items-center">
         <span class="text-muted">
-          Ajouter un nouveau champ
+          {{ title }}
         </span>
         <i class="fas fa-chevron-down" aria-hidden="true"></i>
       </div>
@@ -95,10 +95,10 @@
           <br>
 
           <b-button type="submit" variant="primary" size="sm" class="btn-dash-sucess">
-            <small>Enregistrer</small>
+            <small>{{ btnSubmitTitle }}</small>
           </b-button>
-          <b-button type="reset" variant="danger" size="sm" class="btn-dash-danger">
-            <small>Réinitialiser</small>
+          <b-button  variant="danger" size="sm" class="btn-dash-danger" @click="onReset">
+            <small>Annuler</small>
           </b-button>
         </b-form>
       </b-card-body>
@@ -114,6 +114,12 @@ export default {
     targetForm: {
       type: Object,
       required: true
+    },
+    rowFormField: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   data () {
@@ -123,7 +129,10 @@ export default {
         { text: 'Oui', value: 1 },
         { text: 'Non', value: 0 }
       ],
-      fieldWillBeRequired: false
+      fieldWillBeRequired: false,
+      updating: false,
+      btnSubmitTitle : 'Enregistrer',
+      title: 'Ajouter un nouveau champ'
     }
   },
   mounted () {
@@ -140,12 +149,24 @@ export default {
     },
     formStepsSorted () {
       return this.formSteps.slice().sort((a, b) => a.step - b.step)
+    },
+
+  },
+  watch: {
+
+    rowFormField () {
+      this.form = { ...this.rowFormField }
+      this.updating = true
+      this.btnSubmitTitle = 'Modifier'
+      this.title = 'Modifier un champ'
     }
+
   },
   methods: {
     ...mapActions([
       'formFieldTypeIndex',
-      'formFieldStore'
+      'formFieldStore',
+      'updateFormField'
     ]),
     onSubmit () {
       this.form.rules = this.fieldWillBeRequired ? 'required' : ''
@@ -153,40 +174,61 @@ export default {
 
       if (!this.form.form_field_order) {
         const MaxValue = this.targetForm.form_fields.flatMap(x => x.order_field)
-        console.log(MaxValue)
         this.form.order_field = MaxValue.length && MaxValue.length > 0 ? Math.max(...MaxValue) + 1 : 1
       }
-      this.formFieldStore(this.form)
-        .then(() => {
-          this.initForm()
-          this.$notify({
-            group: 'alert',
-            title: 'Champ rajouté avec succèss',
-            type: 'success'
+      if (!this.updating) {
+        this.formFieldStore(this.form)
+          .then(() => {
+            this.initForm()
+            this.$notify({
+              group: 'alert',
+              title: 'Champ rajouté avec succès',
+              type: 'success'
+            })
+            this.$emit('created')
           })
-          this.$emit('created')
-        })
-        .catch(() => {
-          this.$notify({
-            group: 'alert',
-            title: 'Une erreur est survenu',
-            type: 'error'
+          .catch(() => {
+            this.$notify({
+              group: 'alert',
+              title: 'Une erreur est survenu',
+              type: 'error'
+            })
           })
-        })
+      } else {
+        this.updateFormField(this.form)
+          .then(() => {
+            this.initForm()
+            this.$notify({
+              group: 'alert',
+              title: 'Champ modifié avec succès',
+              type: 'success'
+            })
+            this.$emit('updated')
+            this.onReset()
+          })
+          .catch(() => {
+            this.$notify({
+              group: 'alert',
+              title: 'Une erreur est survenu',
+              type: 'error'
+            })
+          })
+      }
     },
     onReset () {
-      // to implement
       this.initForm()
     },
     initForm () {
       this.form = {
         form_id: this.targetForm.id
       }
+      this.updating = false
+      this.btnSubmitTitle = 'Enregistrer'
+      this.title = 'Ajouter un champ'
     },
     loadInitData () {
       this.formFieldTypeIndex()
     }
   }
-
 }
 </script>
