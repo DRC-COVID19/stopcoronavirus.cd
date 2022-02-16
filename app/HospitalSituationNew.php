@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class HospitalSituationNew extends Model
 {
     use SoftDeletes;
-    protected $fillable = ['hospital_id', 'value', 'form_field_id'];
+    protected $fillable = ['hospital_id', 'value', 'form_field_id','created_manager_name', 'updated_manager_name','hospital_id','last_update'];
 
     protected $table='hospital_situations_new';
 

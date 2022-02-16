@@ -12,15 +12,14 @@
         </b-col>
         <b-col v-if="hospital.id">
           <h3>
-            Situations CTCOs
+             Historique mise à jour : {{ hospital.name }}
           </h3>
-          <b-alert show variant="info">
-            <div>{{`Structure: ${hospital.name}`}}</div>
+          <!-- <b-alert show variant="info">
             <p v-if="hospital.address">{{`Adresse: ${hospital.address}`}}</p>
-          </b-alert>
+          </b-alert> -->
         </b-col>
       </b-row>
-      <b-row class="mt-4">
+      <b-row class="mt-4" >
         <b-col>
           <b-table
             :busy="ishospitalSituationLoading"
@@ -47,11 +46,22 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                    update_id:data.item.id,
+                    update_id:data.item.last_update,
                     hospital_id: $route.params.hospital_id
                   }
                 }"
               >Details</b-button>
+                 <b-button
+                class="btn btn-warning mb-1"
+                :to="{
+                  name: 'hospital.edit',
+                  params: {
+                    update_id:data.item.last_update,
+                    hospital_id:$route.params.hospital_id,
+                    form_id: 4
+                  }
+                }"
+              >Editer</b-button>
             </template>
           </b-table>
         </b-col>
@@ -74,7 +84,7 @@
 <script>
 import Header from '../../components/hospital/Header'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   components: {
     Header,
@@ -84,18 +94,18 @@ export default {
     return {
       fields: [
         { key: 'last_update', label: 'Date' },
-        { key: 'confirmed', label: 'Confirmés' },
+        { key: 'name', label: 'Nom' },
         { key: 'actions', label: 'Actions' }
       ],
-      hospitalSituations: {},
-      ishospitalSituationLoading: false,
       currentPage: 1,
-      hospital: {}
     }
   },
   computed: {
     ...mapState({
-      user: (state) => state.auth.user
+      user: (state) => state.auth.user,
+      hospital: (state) => state.hospital.hospitalData,
+      hospitalSituations: (state) => state.hospital.hospitalSituations,
+      ishospitalSituationLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
       if (this.hospitalSituations.meta) {
@@ -111,34 +121,15 @@ export default {
     }
   },
   mounted () {
-    this.getHospitalSituations()
-    this.getHospital()
+    this.getSituations()
+    this.getHospital({ hospital_id: this.$route.params.hospital_id })
   },
   methods: {
+    ...mapActions(['getHospital', 'getHospitalSituations']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    getHospitalSituations (page) {
+    getSituations (page) {
       if (typeof page === 'undefined') page = 1
-      this.ishospitalSituationLoading = true
-      axios
-        .get(
-          `/api/dashboard/hospital-situations/by-hospital/${this.$route.params.hospital_id}`,
-          {
-            params: { page }
-          }
-        )
-        .then(({ data }) => {
-          this.hospitalSituations = data
-        })
-        .finally(() => {
-          this.ishospitalSituationLoading = false
-        })
-    },
-    getHospital () {
-      axios
-        .get(`/api/dashboard/hospitals-data/${this.$route.params.hospital_id}`)
-        .then(({ data }) => {
-          this.hospital = data
-        })
+      this.getHospitalSituations({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.ishospitalSituationLoading })
     },
     onPageChange (page) {
       this.getHospitalSituations(page)

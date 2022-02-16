@@ -2,11 +2,11 @@
 
 use App\Http\Controllers\ChangeLogController;
 use App\Http\Controllers\HospitalSituationController;
-use App\Http\Controllers\HospitalSituationNewController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\PandemicStat;
 use App\Http\Resources\PandemicStat as PandemicStatResource;
+use Encore\Admin\Form\Row;
 
 /*
 |--------------------------------------------------------------------------
@@ -183,17 +183,19 @@ Route::group([
   });
   Route::group(['prefix' => 'hospital-situations'], function () {
     Route::get('/by-hospital/{hospital_id}', 'HospitalSituationController@indexByHospital');
-
-    Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate'); //ok
+    Route::get('/{last_update}/hospital_id/{hospital_id}','HospitalSituationController@getSituationsByHospitalAndLastUpdate');
+    Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate');
   });
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
 
-  Route::resource('hospital-situations', "HospitalSituationController");
+  Route::apiResource('hospital-situations', "HospitalSituationController");
   Route::resource('hospital-situations-new', "HospitalSituationNewController");
   Route::get('get-hospital-situations-all', "HospitalSituationNewController@getSituationHospitalsAll");
-  Route::post('get-by-hospital-situations', "HospitalSituationNewController@getSituationByHospitals");
+  Route::post('get-by-hospital-situations', "HospitalSituationController@getSituationByHospitals");
+  // Route::post('get-by-hospital-situations', "HospitalSituationNewController@getSituationByHospitals");
   Route::post('get-situations', "HospitalSituationNewController@getSituations");
+  Route::resource('hospital-situations', "HospitalSituationController");
   Route::post('get-observation-situation-hospital', "HospitalSituationNewController@getObservationSituationHospital");
 
   Route::resource('hospitals-data', 'HospitalController');

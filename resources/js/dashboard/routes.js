@@ -1,24 +1,24 @@
-import Home from "./pages/Home";
-import Login from "./pages/auth/Login";
-import LostPassword from "./pages/auth/LostPassword";
-import ResetPasswordThank from "./pages/auth/ResetPasswordThank";
-import ResetPasseword from "./pages/auth/ResetPassword";
-import PasswordResetComplete from "./pages/auth/PasswordResetComplete";
-import HospitalsHome from "./pages/hospital/Home";
-import HospitalsCreate from "./pages/hospital/HospitalCreate";
-import HospitalsDetail from "./pages/hospital/HospitalDetail";
-import HospitalData from "./pages/hospital/HospitalData";
-import HospitalAdmin from "./pages/adminHospital/Home";
-import HospitalAdminData from "./pages/adminHospital/HospitalData";
-import NotAcces from "./pages/NotAccess";
-import Landing from "./pages/Landing";
-import Administrator from "./pages/Administrator";
-import AdminUserIndex from "./pages/administrator/users/Index";
-import PageNotFound from "./pages/NotFound";
-import ChangeLogIndex from "./pages/administrator/changeLog/index";
-import Epidemie from "./pages/administrator/epidemy/Index";
-import FormIndex from "./pages/administrator/forms/index";
-import FormShow from "./pages/administrator/forms/form";
+import Home from './pages/Home'
+import Login from './pages/auth/Login'
+import LostPassword from './pages/auth/LostPassword'
+import ResetPasswordThank from './pages/auth/ResetPasswordThank'
+import ResetPasseword from './pages/auth/ResetPassword'
+import PasswordResetComplete from './pages/auth/PasswordResetComplete'
+import HospitalsHome from './pages/hospital/Home'
+import HospitalForm from './pages/hospital/HospitalForm'
+import HospitalsDetail from './pages/hospital/HospitalDetail'
+import HospitalData from './pages/hospital/HospitalData'
+import HospitalAdmin from './pages/adminHospital/Home'
+import HospitalAdminData from './pages/adminHospital/HospitalData'
+import NotAcces from './pages/NotAccess'
+import Landing from './pages/Landing'
+import Administrator from './pages/Administrator'
+import AdminUserIndex from './pages/administrator/users/Index'
+import PageNotFound from './pages/NotFound'
+import ChangeLogIndex from './pages/administrator/changeLog/index'
+import Epidemie from './pages/administrator/epidemy/Index'
+import FormIndex from './pages/administrator/forms/index'
+import FormShow from './pages/administrator/forms/form'
 import {
   ADMIN_DASHBOARD,
   AGENT_HOSPITAL,
@@ -101,9 +101,9 @@ export default [
     },
   },
   {
-    path: "/hospitals/new/:form_id",
-    name: "hospital.create",
-    component: HospitalsCreate,
+    path: '/hospitals/new/:form_id',
+    name: 'hospital.create',
+    component: HospitalForm,
     meta: {
       requiresAuth: true,
       role: [AGENT_HOSPITAL],
@@ -119,9 +119,9 @@ export default [
     },
   },
   {
-    path: "/hospitals/edit/:hospital_id",
-    name: "hospital.edit",
-    component: HospitalsCreate,
+    path: '/hospital/:hospital_id/edit/:update_id/form/:form_id',
+    name: 'hospital.edit',
+    component: HospitalForm,
     meta: {
       requiresAuth: true,
       role: [AGENT_HOSPITAL],

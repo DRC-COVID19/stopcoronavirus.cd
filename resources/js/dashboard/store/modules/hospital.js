@@ -1,3 +1,5 @@
+/* eslint-disable comma-spacing */
+import axios from "axios";
 import { event } from "vue-gtag";
 
 export default {
@@ -8,12 +10,13 @@ export default {
     selectedHospital: null,
     detailHospital: null,
     situationHospital: [],
+    hospitalSituations: {},
     situationHospitalLoading: false,
     hospitalTotalData: null,
     hospitalManagerName: null,
     observation_end: null,
     observation_start: null,
-    township: null,
+    township: null
   },
   mutations: {
     selectHospital(state, payload) {
@@ -25,24 +28,35 @@ export default {
     setHospitalManagerName(state, payload) {
       state.hospitalManagerName = payload;
     },
+    SET_HOSPITAL(state, payload) {
+      state.hospitalData = payload;
+    },
+    SET_IS_LOADING(state, payload) {
+      state.isLoading = payload;
+    },
+    SET_HOSPITAL_SITUATIONS(state, payload) {
+      state.hospitalSituations = payload;
+    }
   },
   actions: {
     getHospitalsData({ state }, payload) {
       state.isLoading = payload.isLoading;
       if (payload) {
-        if (payload.observation_end)
+        if (payload.observation_end) {
           state.observation_end = payload.observation_end;
-        if (payload.observation_start)
+        }
+        if (payload.observation_start) {
           state.observation_start = payload.observation_start;
+        }
         state.township = payload.township;
 
         event("fetch_Infrastructures_data_request", {
           event_category: "fetch_Infrastructures_data",
-          event_label: "hospitals_data_req_send",
+          event_label: "hospitals_data_req_send"
         });
 
         axios
-          .get(`/api/dashboard/hospitals`, {
+          .get("/api/dashboard/hospitals", {
             params: {
               observation_end: payload.observation_end || null,
               observation_start: payload.observation_start || null,
@@ -50,7 +64,7 @@ export default {
             },
           })
           .then(({ data }) => {
-            let Features = data.map((value) => {
+            const Features = data.map(value => {
               return {
                 type: "Feature",
                 geometry: {
@@ -114,7 +128,7 @@ export default {
 
             event("fetch_Infrastructures_data_request", {
               event_category: "fetch_Infrastructures_data",
-              event_label: "hospitals",
+              event_label: "hospitals"
             });
           })
           .catch(({ response }) => {
@@ -124,10 +138,10 @@ export default {
 
         event("fetch_Infrastructures_data_response", {
           event_category: "fetch_Infrastructures_data",
-          event_label: "hospital_totaux_req_send",
+          event_label: "hospital_totaux_req_send"
         });
         axios
-          .get(`/api/dashboard/hospitals/totaux`, {
+          .get("/api/dashboard/hospitals/totaux", {
             params: {
               observation_end: payload.observation_end || null,
               observation_start: payload.observation_start || null,
@@ -138,7 +152,7 @@ export default {
             state.hospitalTotalData = data;
             event("fetch_Infrastructures_data_response", {
               event_category: "fetch_Infrastructures_data",
-              event_label: "hospital_totaux",
+              event_label: "hospital_totaux"
             });
           })
           .catch(({ response }) => {
@@ -153,24 +167,24 @@ export default {
       }
     },
     getSituationHospital({ state }, payload) {
-      const selectedHospital = payload ? payload : "";
+      const selectedHospital = payload || "";
       state.situationHospitalLoading = true;
       const params = {
         observation_end: state.observation_end,
         observation_start: state.observation_start,
-        township: state.township,
+        township: state.township
       };
 
       event("fetch_Infrastructures_data_request", {
         event_category: "fetch_Infrastructures_data",
-        event_label: "fetch_Infrastructures_evolution_data_req_send",
+        event_label: "fetch_Infrastructures_evolution_data_req_send"
       });
       const url = `/api/dashboard/hospitals/evolution${
         selectedHospital ? `/${selectedHospital}` : ""
       }`;
       axios
         .get(url, {
-          params,
+          params
         })
         .then(({ data }) => {
           state.situationHospital = data;
@@ -178,12 +192,52 @@ export default {
 
           event("fetch_Infrastructures_data_response", {
             event_category: "fetch_Infrastructures_data",
-            event_label: "Infrastructures_evolution",
+            event_label: "Infrastructures_evolution"
           });
         })
         .catch(({ response }) => {
           exception(response);
         });
     },
-  },
+    getHospital({ state, commit }, payload = {}) {
+      commit("SET_IS_LOADING", true);
+
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/api/dashboard/hospitals-data/${payload.hospital_id}`)
+          .then(({ data }) => {
+            commit("SET_HOSPITAL", data);
+            resolve(true);
+            commit("SET_IS_LOADING", false);
+          })
+          .catch(response => {
+            reject(response);
+          })
+          .finally(() => {
+            commit("SET_IS_LOADING", false);
+          });
+      });
+    },
+    getHospitalSituations({ state, commit }, payload = {}) {
+      commit("SET_IS_LOADING", payload.isLoading);
+      return new Promise((resolve, reject) => {
+        axios
+          .get(
+            `/api/dashboard/hospital-situations/by-hospital/${payload.hospital_id}`,
+            {
+              params: { page: payload.page }
+            }
+          )
+          .then(({ data }) => {
+            commit("SET_HOSPITAL_SITUATIONS", data);
+            resolve(true);
+            commit("SET_IS_LOADING", false);
+          })
+          .catch(response => {
+            console.log(response);
+            reject(response);
+          });
+      });
+    }
+  }
 };

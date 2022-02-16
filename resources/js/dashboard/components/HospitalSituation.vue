@@ -100,7 +100,7 @@
       <!-- <b-card
           class="col-10 default-card mb-2 offset-1"
           v-else
-          v-for="(step, index) in hospitalSituationReduced"
+          v-for="(step, index) in hospitalSituationFiltered.length > 0 ? hospitalSituationFiltered: hospitalSituationReduced"
           :key="index"
         >
 
@@ -282,8 +282,9 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-/* eslint-disable vue/return-in-computed-property */
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { PALETTE } from '../config/env'
+import { createSituationsReduce } from '../plugins/functions'
 import { mapState, mapActions, mapMutations } from "vuex";
 import { PALETTE } from "../config/env";
 
@@ -360,13 +361,9 @@ export default {
         ];
       } else return null;
     },
-
-    hospitalSituationReduced() {
-      return this.createSituationsReduce(
-        this.hospitalSituationAll.allFormFields
-      );
+    hospitalSituationReduced () {
+      return createSituationsReduce(this.hospitalSituationAll.allFormFields)
     },
-
     hospitalSituationFiltered() {
       const arrayFilterd = [].concat.apply(
         [],
@@ -374,7 +371,6 @@ export default {
       );
       return this.createSituationsReduce(arrayFilterd);
     },
-
     hospitalSituationData() {
       const hospitalSituationAllSlice =
         this.hospitalObservationSituation.slice();
@@ -840,6 +836,9 @@ export default {
         // this.lineCharts[i].generateLegend();
       }
     },
+    backToTotalData () {
+      this.selectHospital(null)
+    },
     createSituationsReduce(array = []) {
       const formIds = [];
       if (array.length > 0) {
@@ -872,9 +871,6 @@ export default {
         return formStepsList;
       }
       return [];
-    },
-    backToTotalData() {
-      this.selectHospital(null);
     },
     parseData(data) {
       if (data == null) return "N/A";
