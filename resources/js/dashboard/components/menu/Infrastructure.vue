@@ -31,7 +31,7 @@
                   :appendToBody="true"
                   opens="center"
                   :max-date="new Date()"
-                  :singleDatePicker="checked ? false : true"
+                  :singleDatePicker="checkedRangeDatePicker ? false : true"
                   @update="updateObservationDate"
                   @select="selectObservation"
                   :calculate-position="dateRangerPosition"
@@ -58,7 +58,7 @@
                     </div>
                   </div>
                   <template v-slot:input>
-                    <span v-if="checked">
+                    <span v-if="checkedRangeDatePicker">
                       {{ selectedDate.observation_start | date }} -
                       {{ selectedDate.observation_end | date }}</span
                     >
@@ -135,14 +135,14 @@ export default {
       min_date: new Date(),
       defaultTownship: [{ id: 0, name: "Tous" }],
       hospitals: [],
-      checked: false,
+      checkedRangeDatePicker: false,
       iconStateDatePicker: "fas fa-thin fa-plus",
       isUpdate: false,
     };
   },
   filters: {
     date: (val) => {
-      return val ? moment(val).format("DD.MM.YYYY") : "null";
+      return val ? moment(val).format("DD.MM.YYYY") : "";
     },
   },
   computed: {
@@ -169,7 +169,7 @@ export default {
       this.$emit("hopitalChecked", checked);
     },
     activeStartDate() {
-      this.checked = this.checked ? false : true;
+      this.checkedRangeDatePicker = !this.checkedRangeDatePicker
       this.iconStateDatePicker =
         this.iconStateDatePicker == "fas fa-thin fa-plus"
           ? "fa fa-times"
