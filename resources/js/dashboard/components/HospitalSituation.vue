@@ -386,6 +386,7 @@ export default {
       }
       let hospitalSituationFiltered = [];
       hospitalSituationAllSlice.forEach((hospital) => {
+        
         const index = hospitalSituationFiltered.findIndex(
           (observation) =>
             moment(hospital.date).format("DD/MM/YY") === observation.date &&
