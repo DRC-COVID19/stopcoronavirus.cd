@@ -80,8 +80,7 @@ export default {
           slug: 'Administration',
           name: 'administrator.epidemie'
         })
-      }
-      if (this.user.roles.find((a) => (a.name == EDIT_FORM || a.name == CREATE_FORM) && a.name != ADMINISTRATOR)) {
+      } else if (this.user.roles.find((a) => (a.name == EDIT_FORM || a.name == CREATE_FORM) && a.name != ADMINISTRATOR)) {
         routesAccess.push({
           slug: 'Administration',
           name: 'administrator.forms',
