@@ -232,10 +232,26 @@ export default {
           startDate: observationStartDate ? new Date(observationStartDate) : null,
           endDate: observationEndDate ? new Date(observationEndDate) : null,
         }
+
+        if (this.dateRangeObservation.startDate) {
+          this.selectedDate.observation_start = moment(this.dateRangeObservation.startDate).format("YYYY-MM-DD");
+        }
+        if (this.dateRangeObservation.endDate) {
+          this.selectedDate.observation_end = moment(this.dateRangeObservation.endDate).format("YYYY-MM-DD");
+        }
+
         this.form.observation_start = observationStartDate
         this.form.observation_end = observationEndDate
       } catch (e) {
         console.log(e)
+      }
+
+      const checkedRangeDatePicker = url.searchParams.get('range');
+      if (checkedRangeDatePicker) {
+        this.checkedRangeDatePicker = checkedRangeDatePicker != 1 ? false : true
+        if (this.checkedRangeDatePicker) {
+          this.iconStateDatePicker = 'fa fa-times'
+        }
       }
     },
     addDateRangeObservationToUrl() {
@@ -260,6 +276,9 @@ export default {
   watch: {
     dateRangeObservation() {
       this.addDateRangeObservationToUrl();
+    },
+    checkedRangeDatePicker(value) {
+      this.addParamToUrlWhenInThisMenu('range', value ? 1 : 0)
     }
   },
 };
