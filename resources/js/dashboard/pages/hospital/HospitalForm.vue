@@ -221,12 +221,6 @@ export default {
       isHospitalSituationLoading: state => state.hospitalSituation.isLoading,
       isCreating: state => state.hospitalSituation.isCreating
     }),
-    formFieldNullStepSorted () {
-      if (this.$route.params.update_id) {
-        return this.isEditionData(null)
-      }
-      return this.arraySortAndFilter(this.targetForm.form_fields, null)
-    },
     backRoute () {
       if (this.user.isHospitalAdmin) {
         return {
@@ -253,6 +247,12 @@ export default {
       'updateHospitalSituation',
       'getHospitalSituationsDetail'
     ]),
+    formFieldNullStepSorted () {
+      if (this.$route.params.update_id) {
+        return this.isEditionData(null)
+      }
+      return this.arraySortAndFilter(this.targetForm.form_fields, null)
+    },
     formFieldSorted (id) {
       if (this.$route.params.update_id) {
         return this.isEditionData(id)
