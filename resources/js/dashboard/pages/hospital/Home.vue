@@ -128,7 +128,7 @@ export default {
       }
       return 15
     },
-    defaultFormId() {
+    defaultFormId () {
       return DEFAULT_FORM_ID
     }
   },

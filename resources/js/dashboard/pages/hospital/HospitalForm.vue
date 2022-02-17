@@ -27,13 +27,9 @@
            @on-complete="onComplete"
            :startIndex="0"
          >
-           <b-alert variant="success" v-if="!!isLoading" show
-             >L'insertion reussi avec success</b-alert
-           >
            <tab-content
              v-for="(step, index) in targetForm.form_steps"
              :key="index"
-             v-else
            >
              <h3 class="mb-4 text-center">{{ step.title }}</h3>
              <b-row align-h="center">
@@ -222,7 +218,8 @@ export default {
       hospitalManagerName: state => state.hospital.hospitalManagerName,
       formSteps: state => state.formStep.formSteps,
       editionData: state => state.hospitalSituation.hospitalSituationDetail,
-      isHospitalSituationLoading: state => state.hospitalSituation.isLoading
+      isHospitalSituationLoading: state => state.hospitalSituation.isLoading,
+      isCreating: state => state.hospitalSituation.isCreating
     }),
     formFieldNullStepSorted () {
       if (this.$route.params.update_id) {
@@ -304,7 +301,6 @@ export default {
         }
       } else {
         if (this.submitSituation(this.createHospitalSituation, this.hospitalManagerName)) {
-          this.isLoading = true
           this.$router.push('/hospitals')
         }
       }
@@ -345,10 +341,9 @@ export default {
             hospital_id: item.hospital_id
           })
         })
-        return true
-      }
 
-      return false
+        return this.isCreating
+      }
     }
 
   }
