@@ -804,7 +804,7 @@ de revenus pour Kinshasa`,
       pseudo: "Arrêt Transport"
     },
     { id: -8, name: "Restaurants", color: "#99cc00", pseudo: "Restaurants" },
-    { id: -9, name: "Hopitaux", color: "#E31A1C", pseudo: 'Hôpitaux' },
+    { id: -9, name: "Hopitaux", color: '#E31A1C', pseudo: 'Hôpitaux' },
     { id: -10, name: 'Cimetiere', color: '#F7D116', pseudo: 'Cimetière' },
     { id: -11, name: 'Aéroport', color: '#0C46E8', pseudo: 'Aéroport' }
   ];

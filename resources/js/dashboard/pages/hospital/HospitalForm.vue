@@ -339,7 +339,21 @@ export default {
             created_manager_name: createdManagerName,
             updated_manager_name: updatedManagerName,
             hospital_id: item.hospital_id
+          }).then(() => {
+            this.$notify({
+              group: 'alert',
+              title: 'Champ rajouté avec succès',
+              type: 'success'
+            })
+            this.$emit('created')
           })
+            .catch(() => {
+              this.$notify({
+                group: 'alert',
+                title: 'Une erreur est survenu',
+                type: 'error'
+              })
+            })
         })
 
         return this.isCreating
