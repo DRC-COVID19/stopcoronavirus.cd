@@ -295,17 +295,18 @@ class HospitalSituationNewController extends Controller
         $township = $request->input('township');
         $hospital = $request->input('hospital');
 
+
         if ($observation_start == null) {
-            $observation_start = $this->maxDate($observation_end, $township, $hospital);
+          $observation_start = $this->maxDate($observation_end, $township, $hospital);
         }
 
         try {
             $observation = DB::table('hospital_situations_new')
-                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-                ->join('admin_user_hospital', 'admin_user_hospital.hospital_id', '=', 'hospitals.id')
-                ->join('admin_users', 'admin_user_hospital.admin_user_id', '=', 'admin_users.id')
-                ->join('townships', 'townships.id', '=', 'hospitals.township_id')
+                ->leftJoin('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
+                ->leftJoin('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
+                ->leftJoin('admin_user_hospital', 'admin_user_hospital.hospital_id', '=', 'hospitals.id')
+                ->leftJoin('admin_users', 'admin_user_hospital.admin_user_id', '=', 'admin_users.id')
+                ->leftJoin('townships', 'townships.id', '=', 'hospitals.township_id')
                 ->select(
                     'form_fields.name as form_field_name',
                     'hospital_situations_new.value as form_field_value',
@@ -316,7 +317,9 @@ class HospitalSituationNewController extends Controller
                 )
                 ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
                 ->where(function ($query) use ($township) {
-                    if ($township) $query->where('hospitals.township_id', '=', $township);
+                    if ($township) {
+                      $query->where('hospitals.township_id', '=', $township);
+                    }
                 })
                 ->orderBy('date', 'desc')
                 ->get();
