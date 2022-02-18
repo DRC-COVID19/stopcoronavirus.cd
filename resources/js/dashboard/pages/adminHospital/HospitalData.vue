@@ -10,9 +10,9 @@
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
         </b-col>
-        <b-col v-if="user.hospital.id">
+        <b-col v-if="hospital.id">
           <h3>
-             Historique mise à jour : {{ user.hospital.name }}
+             Historique mise à jour : {{ hospital.name }}
           </h3>
           <!-- <b-alert show variant="info">
             <p v-if="hospital.address">{{`Adresse: ${hospital.address}`}}</p>
@@ -33,7 +33,7 @@
             <template v-slot:table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle" />
-                <strong>Loading...</strong>
+                <strong>Chargement des données...</strong>
               </div>
             </template>
             <template v-slot:cell(last_update)="data">

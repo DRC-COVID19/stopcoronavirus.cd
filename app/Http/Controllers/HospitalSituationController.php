@@ -47,13 +47,13 @@ class HospitalSituationController extends Controller
             ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
             ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
             ->where('hospitals.id','=',intval($hospital_id))
-            ->distinct('last_update')
             ->select(
                 'hospital_situations_new.id',
                 DB::raw('CAST(NOW() as DATE) - CAST(hospital_situations_new.created_at as DATE) as diff_date'),
                 'hospital_situations_new.last_update as last_update',
                 'hospital_situations_new.created_manager_name as name',
             )
+            ->distinct('last_update')
             ->orderBy('last_update','desc')
             ->paginate($paginate);
 

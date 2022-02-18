@@ -294,14 +294,18 @@ export default {
         if (this.submitSituation(this.updateHospitalSituation, null, this.hospitalManagerName)) {
           this.isLoading = true
           if (this.user.isHospitalAdmin) {
-            this.$router.push(`/admin/hospitals/${this.$route.params.hospital_id}`)
+            this.$router.push(`/admin/hospitals/${this.$route.params.hospital_id}`) || this.$router.push('/admin/hospitals')
           } else {
             this.$router.push('/hospitals')
           }
         }
       } else {
         if (this.submitSituation(this.createHospitalSituation, this.hospitalManagerName)) {
-          this.$router.push('/hospitals')
+          if (this.user.isHospitalAdmin) {
+            this.$router.push('/admin/hospitals')
+          } else {
+            this.$router.push('/hospitals')
+          }
         }
       }
     },
@@ -314,7 +318,7 @@ export default {
           }
         })
       }
-    
+
       this.targetForm.form_fields.forEach(item => {
         if ((item.id === key) && (item.name === fieldName)) item.default_value = value
         this.formData.set(key, value)

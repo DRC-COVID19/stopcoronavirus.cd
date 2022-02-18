@@ -37,7 +37,7 @@
             <template v-slot:table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle" />
-                <strong>Loading...</strong>
+                <strong>Chargement des données...</strong>
               </div>
             </template>
             <template v-slot:cell(last_update)="data">
