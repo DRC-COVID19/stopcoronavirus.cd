@@ -179,7 +179,19 @@ export default {
             `/api/dashboard/hospital-situations/${payload.update_id}/hospital_id/${payload.hospital_id}`
           )
           .then(({ data }) => {
-            commit('HOSPITAL_SITUATION_DETAIL', data)
+            const hospitalSituations = data.map(item => ({
+              name: item.name,
+              order_field: item.order_field,
+              default_value: item.default_value,
+              last_update: item.last_update,
+              created_manager_name: item.created_manager_name,
+              updated_manager_name: item.updated_manager_name,
+              form_step_id: item.form_step_id,
+              form_step_title: item.form_step_title,
+              id: item.id,
+              form_field_type: { name: item.form_field_type }
+            }))
+            commit('HOSPITAL_SITUATION_DETAIL', hospitalSituations)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })

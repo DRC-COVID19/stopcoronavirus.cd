@@ -249,13 +249,13 @@ export default {
     ]),
     formFieldNullStepSorted () {
       if (this.$route.params.update_id) {
-        return this.isEditionData(null)
+        return this.arraySortAndFilter(this.editionData, null)
       }
       return this.arraySortAndFilter(this.targetForm.form_fields, null)
     },
     formFieldSorted (id) {
       if (this.$route.params.update_id) {
-        return this.isEditionData(id)
+        return this.arraySortAndFilter(this.editionData, id)
       }
       return this.arraySortAndFilter(this.targetForm.form_fields, id)
     },
@@ -294,7 +294,7 @@ export default {
         if (this.submitSituation(this.updateHospitalSituation, null, this.hospitalManagerName)) {
           this.isLoading = true
           if (this.user.isHospitalAdmin) {
-            this.$router.push(`/admin/hospitals/${this.$route.params.hospital_id}`) || this.$router.push('/admin/hospitals')
+            this.$router.push(`/admin/hospitals/${this.$route.params.hospital_id}`)
           } else {
             this.$router.push('/hospitals')
           }
