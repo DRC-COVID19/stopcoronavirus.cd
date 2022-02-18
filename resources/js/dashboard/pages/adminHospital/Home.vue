@@ -28,7 +28,7 @@
             <template v-slot:table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle" />
-                <strong>Loading...</strong>
+                <strong>Chargement des données...</strong>
               </div>
             </template>
 
@@ -101,12 +101,14 @@ export default {
         { key: 'name', label: 'Nom CTCO' },
         { key: 'created_manager_name', label: 'Soumis par' },
         { key: 'actions', label: 'Actions' }
-      ],
-      isLoading: false
+      ]
     }
   },
   computed: {
-    ...mapState({ updateData: (state) => state.hospitalSituation.AllhospitalSituationByLastUpdate }),
+    ...mapState({
+      updateData: (state) => state.hospitalSituation.AllhospitalSituationByLastUpdate,
+      isLoading: (state) => state.hospitalSituation.isLoading
+    }),
     hospitalSituationsSorted () {
       return this.updateData.slice().sort((a, b) => {
         const hospitalNameA = a.name.toLowerCase()
