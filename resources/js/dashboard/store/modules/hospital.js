@@ -133,6 +133,7 @@ export default {
           })
           .catch(({ response }) => {
             state.isLoading = false
+            // eslint-disable-next-line no-undef
             exception(response)
           })
 
@@ -156,6 +157,7 @@ export default {
             })
           })
           .catch(({ response }) => {
+            // eslint-disable-next-line no-undef
             exception(response)
           })
       } else {
@@ -196,6 +198,7 @@ export default {
           })
         })
         .catch(({ response }) => {
+          // eslint-disable-next-line no-undef
           exception(response)
         })
     },

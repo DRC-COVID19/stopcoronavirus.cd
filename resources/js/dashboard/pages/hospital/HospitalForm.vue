@@ -27,13 +27,9 @@
            @on-complete="onComplete"
            :startIndex="0"
          >
-           <b-alert variant="success" v-if="!!isLoading" show
-             >L'insertion reussi avec success</b-alert
-           >
            <tab-content
              v-for="(step, index) in targetForm.form_steps"
              :key="index"
-             v-else
            >
              <h3 class="mb-4 text-center">{{ step.title }}</h3>
              <b-row align-h="center">
@@ -222,14 +218,9 @@ export default {
       hospitalManagerName: state => state.hospital.hospitalManagerName,
       formSteps: state => state.formStep.formSteps,
       editionData: state => state.hospitalSituation.hospitalSituationDetail,
-      isHospitalSituationLoading: state => state.hospitalSituation.isLoading
+      isHospitalSituationLoading: state => state.hospitalSituation.isLoading,
+      isCreating: state => state.hospitalSituation.isCreating
     }),
-    formFieldNullStepSorted () {
-      if (this.$route.params.update_id) {
-        return this.isEditionData(null)
-      }
-      return this.arraySortAndFilter(this.targetForm.form_fields, null)
-    },
     backRoute () {
       if (this.user.isHospitalAdmin) {
         return {
@@ -256,9 +247,15 @@ export default {
       'updateHospitalSituation',
       'getHospitalSituationsDetail'
     ]),
+    formFieldNullStepSorted () {
+      if (this.$route.params.update_id) {
+        return this.arraySortAndFilter(this.editionData, null)
+      }
+      return this.arraySortAndFilter(this.targetForm.form_fields, null)
+    },
     formFieldSorted (id) {
       if (this.$route.params.update_id) {
-        return this.isEditionData(id)
+        return this.arraySortAndFilter(this.editionData, id)
       }
       return this.arraySortAndFilter(this.targetForm.form_fields, id)
     },
@@ -304,8 +301,11 @@ export default {
         }
       } else {
         if (this.submitSituation(this.createHospitalSituation, this.hospitalManagerName)) {
-          this.isLoading = true
-          this.$router.push('/hospitals')
+          if (this.user.isHospitalAdmin) {
+            this.$router.push('/admin/hospitals')
+          } else {
+            this.$router.push('/hospitals')
+          }
         }
       }
     },
@@ -318,6 +318,7 @@ export default {
           }
         })
       }
+
       this.targetForm.form_fields.forEach(item => {
         if ((item.id === key) && (item.name === fieldName)) item.default_value = value
         this.formData.set(key, value)
@@ -343,12 +344,25 @@ export default {
             created_manager_name: createdManagerName,
             updated_manager_name: updatedManagerName,
             hospital_id: item.hospital_id
+          }).then(() => {
+            this.$notify({
+              group: 'alert',
+              title: 'Champ rajouté avec succès',
+              type: 'success'
+            })
+            this.$emit('created')
           })
+            .catch(() => {
+              this.$notify({
+                group: 'alert',
+                title: 'Une erreur est survenu',
+                type: 'error'
+              })
+            })
         })
-        return true
-      }
 
-      return false
+        return this.isCreating
+      }
     }
 
   }
