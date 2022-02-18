@@ -10,9 +10,9 @@
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
         </b-col>
-        <b-col v-if="hospital.id">
+        <b-col v-if="user.hospital.id">
           <h3>
-             Historique mise à jour : {{ hospital.name }}
+             Historique mise à jour : {{ user.hospital.name }}
           </h3>
           <!-- <b-alert show variant="info">
             <p v-if="hospital.address">{{`Adresse: ${hospital.address}`}}</p>

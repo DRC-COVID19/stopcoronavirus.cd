@@ -46,15 +46,16 @@ class HospitalSituationController extends Controller
             ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
             ->join('form_steps', 'form_fields.form_step_id', '=', 'form_steps.id')
             ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-            ->where('form_fields.name', '=', 'Nombre des cas confirmés')
             ->where('hospitals.id','=',intval($hospital_id))
+            ->distinct('last_update')
             ->select(
                 'hospital_situations_new.id',
                 DB::raw('CAST(NOW() as DATE) - CAST(hospital_situations_new.created_at as DATE) as diff_date'),
                 'hospital_situations_new.last_update as last_update',
                 'hospital_situations_new.created_manager_name as name',
             )
-            ->orderBy('last_update','desc')->paginate($paginate);
+            ->orderBy('last_update','desc')
+            ->paginate($paginate);
 
             return response()->json($hospitalSituation,201,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
@@ -147,7 +148,6 @@ class HospitalSituationController extends Controller
                     'form_fields.id as id'
             )
             ->orderBy('last_update','desc')->get();
-
             return response()->json($hospitalSituation,201,[],JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
@@ -422,6 +422,15 @@ class HospitalSituationController extends Controller
             }
             return response($th->getMessage())->setStatusCode(500);
         }
+    }
+
+    private function getUniquesLastUpdates(){
+        $uniquesLastUpdates = HospitalSituationNew::all('last_update')
+        ->pluck('last_update')
+        ->unique()
+        ->sort()
+        ->values();
+        return $uniquesLastUpdates;
     }
     function validator($data, ?array $updateRules=[])
     {

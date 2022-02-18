@@ -314,6 +314,7 @@ export default {
           }
         })
       }
+    
       this.targetForm.form_fields.forEach(item => {
         if ((item.id === key) && (item.name === fieldName)) item.default_value = value
         this.formData.set(key, value)
