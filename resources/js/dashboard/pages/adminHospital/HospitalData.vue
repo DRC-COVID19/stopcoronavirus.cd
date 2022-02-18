@@ -99,7 +99,7 @@ export default {
         { key: 'name', label: 'Nom' },
         { key: 'actions', label: 'Actions' }
       ],
-      currentPage: 1,
+      currentPage: 1
     }
   },
   computed: {
