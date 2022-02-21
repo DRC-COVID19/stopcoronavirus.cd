@@ -21,7 +21,7 @@
           <div class="d-flex">
             <b-form-group class="col">
               <div class="d-flex">
-                <date-range-picker
+                <!-- <date-range-picker
                   ref="picker2"
                   :locale-data="{
                     firstDay: 1,
@@ -67,7 +67,8 @@
                       {{ selectedDate.observation_end | date }}
                     </span>
                   </template>
-                </date-range-picker>
+                </date-range-picker> -->
+                <v-date-picker :value="null" color="red" is-dark is-range />
                 <b-button
                   @click="clearObservationDate"
                   class="btn-clear-observation btn-dash-blue"
@@ -142,7 +143,7 @@ export default {
     };
   },
   mounted() {
-    this.fillParametersFromUrlParams()
+    this.fillParametersFromUrlParams();
   },
   filters: {
     date: (val) => {
@@ -153,7 +154,7 @@ export default {
     ...mapState({
       observation_start: (state) => state.hospitalSituation.observation_start,
       observation_end: (state) => state.hospitalSituation.observation_end,
-      activeMenu: (state) => state.nav.activeMenu
+      activeMenu: (state) => state.nav.activeMenu,
     }),
     townshipList() {
       return [...this.defaultTownship, ...this.townships];
@@ -163,8 +164,7 @@ export default {
         ? this.selectedDate.observation_end
         : this.dateRangeObservation.observation_end;
     },
-    ...mapState({
-    })
+    ...mapState({}),
   },
   methods: {
     ...mapActions(["getObservation"]),
@@ -172,7 +172,7 @@ export default {
       this.$emit("hopitalChecked", checked);
     },
     activeStartDate() {
-      this.checkedRangeDatePicker = !this.checkedRangeDatePicker
+      this.checkedRangeDatePicker = !this.checkedRangeDatePicker;
       this.iconStateDatePicker =
         this.iconStateDatePicker == "fas fa-thin fa-plus"
           ? "fa fa-times"
@@ -212,74 +212,83 @@ export default {
     },
     addParamToUrlWhenInThisMenu(param, value) {
       if (this.activeMenu == 5) {
-        this.addParamToUrl(param, value)
+        this.addParamToUrl(param, value);
       }
     },
     formTownshipChanged(value) {
-      this.addParamToUrlWhenInThisMenu('township', value)
+      this.addParamToUrlWhenInThisMenu("township", value);
     },
     fillParametersFromUrlParams() {
       const url = new URL(window.location.href);
-      const township = url.searchParams.get('township');
+      const township = url.searchParams.get("township");
       if (township) {
-        this.$set(this.form, 'township', +township)
+        this.$set(this.form, "township", +township);
       }
 
-      const observationStartDate = url.searchParams.get('observation-start-date');
-      const observationEndDate = url.searchParams.get('observation-end-date');
-      try{
+      const observationStartDate = url.searchParams.get(
+        "observation-start-date"
+      );
+      const observationEndDate = url.searchParams.get("observation-end-date");
+      try {
         this.dateRangeObservation = {
-          startDate: observationStartDate ? new Date(observationStartDate) : null,
+          startDate: observationStartDate
+            ? new Date(observationStartDate)
+            : null,
           endDate: observationEndDate ? new Date(observationEndDate) : null,
-        }
+        };
 
         if (this.dateRangeObservation.startDate) {
-          this.selectedDate.observation_start = moment(this.dateRangeObservation.startDate).format("YYYY-MM-DD");
+          this.selectedDate.observation_start = moment(
+            this.dateRangeObservation.startDate
+          ).format("YYYY-MM-DD");
         }
         if (this.dateRangeObservation.endDate) {
-          this.selectedDate.observation_end = moment(this.dateRangeObservation.endDate).format("YYYY-MM-DD");
+          this.selectedDate.observation_end = moment(
+            this.dateRangeObservation.endDate
+          ).format("YYYY-MM-DD");
         }
 
-        this.form.observation_start = observationStartDate
-        this.form.observation_end = observationEndDate
+        this.form.observation_start = observationStartDate;
+        this.form.observation_end = observationEndDate;
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
 
-      const checkedRangeDatePicker = url.searchParams.get('range');
+      const checkedRangeDatePicker = url.searchParams.get("range");
       if (checkedRangeDatePicker) {
-        this.checkedRangeDatePicker = checkedRangeDatePicker != 1 ? false : true
+        this.checkedRangeDatePicker =
+          checkedRangeDatePicker != 1 ? false : true;
         if (this.checkedRangeDatePicker) {
-          this.iconStateDatePicker = 'fa fa-times'
+          this.iconStateDatePicker = "fa fa-times";
         }
       }
     },
     addDateRangeObservationToUrl() {
       if (this.dateRangeObservation.startDate) {
         this.addParamToUrlWhenInThisMenu(
-          'observation-start-date',
+          "observation-start-date",
           moment(this.dateRangeObservation.startDate).format("YYYY/MM/DD")
-        )
+        );
       } else {
-        this.addParamToUrlWhenInThisMenu('observation-start-date', null)
+        this.addParamToUrlWhenInThisMenu("observation-start-date", null);
       }
       if (this.dateRangeObservation.endDate) {
         this.addParamToUrlWhenInThisMenu(
-          'observation-end-date',
+          "observation-end-date",
           moment(this.dateRangeObservation.endDate).format("YYYY/MM/DD")
-        )
+        );
       } else {
-        this.addParamToUrlWhenInThisMenu('observation-end-date', null)
+        this.addParamToUrlWhenInThisMenu("observation-end-date", null);
       }
-    }
+    },
   },
   watch: {
     dateRangeObservation() {
       this.addDateRangeObservationToUrl();
     },
     checkedRangeDatePicker(value) {
-      this.addParamToUrlWhenInThisMenu('range', value ? 1 : 0)
-    }
+      this.addParamToUrlWhenInThisMenu("range", value ? 1 : 0);
+    },
   },
 };
 </script>
