@@ -43,7 +43,7 @@
                     <b-row>
                       <b-col class="col-sm-12 col-md-12">
                         <FormFieldInput
-                          v-model="completedForm.completedFormFields[formField.id]"
+                          v-model="completedForm.completed_form_fields[formField.id]"
                           :type="formField.form_field_type.name"
                           :placeholder="`Entrer ${formField.name}`"
                           :id="formField.name"
@@ -67,7 +67,7 @@
                   <div>
                     <div v-for="(formField, count) in formStep.form_fields" :key="count">
                     <ul>
-                      <li>{{ formField.name }} : {{ completedForm.completedFormFields[formField.id] }}</li>
+                      <li>{{ formField.name }} : {{ completedForm.completed_form_fields[formField.id] }}</li>
                     </ul>
                   </div>
                   </div>
@@ -126,7 +126,7 @@ export default {
       formSummary: [],
       formDataFormatted: [],
       completedForm: {
-        completedFormFields: {}
+        completed_form_fields: {}
       },
       max: now,
       errors: {},
@@ -216,7 +216,7 @@ export default {
         this.completedForm._method = 'PUT'
         this.completedForm.updated_manager_name = this.hospitalManagerName
       } else {
-        this.completedForm.createdManagerName = this.hospitalManagerName
+        this.completedForm.created_manager_name = this.hospitalManagerName
       }
 
       this.submitCompletedForm(this.isUpdateMode ? this.completedFormUpdate : this.completedFormStore)
