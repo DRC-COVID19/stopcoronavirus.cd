@@ -101,7 +101,7 @@ export default [
     }
   },
   {
-    path: '/hospitals/new/:form_id',
+    path: '/hospitals/forms/:form_id',
     name: 'hospital.create',
     component: HospitalForm,
     meta: {

@@ -19,5 +19,11 @@ class FormStep extends Model
     {
         return $this->belongsTo(Form::class);
     }
-    
+
+    public function formFields()
+    {
+        return $this->hasMany(FormField::class)
+          ->orderBy('order_field');
+    }
+
 }
