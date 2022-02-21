@@ -42,25 +42,13 @@
                   >
                     <b-row>
                       <b-col class="col-sm-12 col-md-12">
-                        <b-form-group
-                          v-slot="{ ariaDescribedby }"
-                          v-if="formField.form_field_type.name === 'boolean'"
-                        >
-                          <b-form-radio-group
-                            :options="requiredOptions"
-                            :aria-describedby="ariaDescribedby"
-                            id="required"
-                          ></b-form-radio-group>
-                        </b-form-group>
-                        <b-form-input
-                          v-else
-                          :type="formField.form_field_type.name"
+                        <FormFieldInput
                           v-model="completedForm.completedFormFields[formField.id]"
+                          :type="formField.form_field_type.name"
                           :placeholder="`Entrer ${formField.name}`"
                           :id="formField.name"
-                          required
-                        >
-                        </b-form-input>
+                          :rules="formField.rules"
+                        />
                       </b-col>
                     </b-row>
                   </b-form-group>
@@ -117,6 +105,7 @@
 import Header from '../../components/hospital/Header'
 import Loading from '../../components/Loading'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
+import FormFieldInput from '../../components/forms/FormFieldInput'
 import { FormWizard, TabContent } from 'vue-form-wizard'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import { mapState, mapActions } from 'vuex'
@@ -127,7 +116,8 @@ export default {
     ManagerUserName,
     Loading,
     FormWizard,
-    TabContent
+    TabContent,
+    FormFieldInput
   },
   data () {
     const now = new Date()
