@@ -202,6 +202,7 @@ Route::group([
   Route::apiResource('forms', 'FormController');
   Route::apiResource('form-steps', 'FormStepController');
   Route::resource('form-recurrences', 'FormRecurrenceController');
+  Route::apiResource('completed_forms','CompletedFormController');
   Route::group(['prefix' => 'forms'], function () {
     Route::get('/filter', 'FormController@filter');
   });
