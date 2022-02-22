@@ -14,7 +14,9 @@ class CompletedForm extends Model
         'synchronized',
         'form_id',
         'admin_user_id',
-        'hospital_id'
+        'hospital_id',
+        'create_manager_name',
+        'last_update',
     ];
 
     public function form()
