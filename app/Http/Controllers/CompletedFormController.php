@@ -40,7 +40,7 @@ class CompletedFormController extends Controller
             ->orderBy('last_update','desc')
             ->paginate($paginate);
 
-            return response()->json($hospitalSituation,201,[],JSON_NUMERIC_CHECK);
+            return response()->json($hospitalSituation,206);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
