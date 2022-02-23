@@ -1,26 +1,61 @@
 export default {
-  state: {},
-  mutations: {},
+  state: {
+    completedForms: {} || [],
+    isLoading: false
+  },
+  mutations: {
+    SET_IS_LOADING (state, payload) {
+      state.isLoading = payload
+    },
+    SET_COMPLETED_FORMS (state, payload) {
+      state.completedForms = payload
+    }
+  },
   actions: {
-    completedFormStore (_, payload) {
+    completedForm__store (_, payload) {
       return new Promise((resolve, reject) => {
-        axios.post(`/api/dashboard/completed_forms`, payload)
+        // eslint-disable-next-line no-undef
+        axios
+          .post('/api/dashboard/completed_forms', payload)
           .then(({ data }) => {
             resolve(data)
           })
-          .catch((error) => {
+          .catch(error => {
             reject(error)
           })
       })
     },
-    completedFormUpdate (_, payload) {
+    completedForm__update (_, payload) {
       return new Promise((resolve, reject) => {
-        axios.put(`/api/dashboard/completed_forms/${payload.id}`, payload)
+        // eslint-disable-next-line no-undef
+        axios
+          .put(`/api/dashboard/completed_forms/${payload.id}`, payload)
           .then(({ data }) => {
             resolve(data)
           })
-          .catch((error) => {
+          .catch(error => {
             reject(error)
+          })
+      })
+    },
+    completedForm__getByHospital ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', payload.isLoading)
+      return new Promise((resolve, reject) => {
+        axios
+          .get(
+            `/api/dashboard/completed_forms/by-hospital/${payload.hospital_id}`,
+            {
+              params: { page: payload.page }
+            }
+          )
+          .then(({ data }) => {
+            commit('SET_COMPLETED_FORMS', data)
+            resolve(true)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
           })
       })
     }

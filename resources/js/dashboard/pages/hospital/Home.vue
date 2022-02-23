@@ -26,9 +26,9 @@
       <b-row>
         <b-col>
           <b-table
-            :busy="ishospitalSituationLoading"
+            :busy="isLoading"
             :fields="fields"
-            :items="hospitalSituations.data"
+            :items="completedForms.data"
             show-empty
           >
             <template v-slot:empty="scope">
@@ -50,8 +50,8 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                    update_id:data.item.last_update,
-                    hospital_id: user.hospital.id || 0
+                    completed_id:data.item.id,
+                    hospital_id: data.item.hospital_id || 0
                     }
                     }"
               >Details</b-button>
@@ -61,7 +61,7 @@
                 :to="{
                   name: 'hospital.edit',
                   params: {
-                    update_id:data.item.last_update,
+                    completed_id:data.item.id,
                     hospital_id:user.hospital.id,
                     form_id: defaultFormId
                   }
@@ -91,7 +91,6 @@
 import Header from '../../components/hospital/Header'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { renderDiffDate } from '../../plugins/functions'
 import { DEFAULT_FORM_ID } from '../../config/env'
 export default {
   components: {
@@ -113,18 +112,18 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
-      hospitalSituations: (state) => state.hospital.hospitalSituations,
-      ishospitalSituationLoading: (state) => state.hospital.isLoading
+      completedForms: (state) => state.completedForm.completedForms,
+      isLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.total
+      if (this.completedForms.meta) {
+        return this.completedForms.meta.total
       }
       return null
     },
     perPage () {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.per_page
+      if (this.completedForms.meta) {
+        return this.completedForms.meta.per_page
       }
       return 15
     },
@@ -136,23 +135,19 @@ export default {
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
     }
-    await this.getSituations()
+    await this.getCompletedForms()
   },
   methods: {
-    ...mapActions(['getHospitalSituations']),
+    ...mapActions(['completedForm__getByHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    getSituations () {
-      let page = 1
+    getCompletedForms (page) {
       if (typeof page === 'undefined') page = 1
-      this.getHospitalSituations({ page, hospital_id: this.user.hospital.id, isLoading: this.ishospitalSituationLoading })
+      this.completedForm__getByHospital({ page, hospital_id: this.user.hospital.id, isLoading: this.isLoading })
     },
     onPageChange (page) {
-      this.getHospitalSituations(page)
-    },
-    renderHour (date) {
-      const diffDay = renderDiffDate(this.moment, date)
-      return diffDay * 24
+      this.getCompletedForms(page)
     }
+
   }
 }
 </script>

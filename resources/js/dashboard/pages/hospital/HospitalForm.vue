@@ -174,8 +174,8 @@ export default {
       'createHospitalSituation',
       'updateHospitalSituation',
       'getHospitalSituationsDetail',
-      'completedFormStore',
-      'completedFormUpdate'
+      'completedForm__store',
+      'completedForm__update'
     ]),
     editiondataMethod () {
       this.targetForm.form_fields.forEach(item => {
