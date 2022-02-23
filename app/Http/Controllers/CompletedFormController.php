@@ -6,6 +6,7 @@ use App\User;
 use App\CompletedForm;
 use App\CompletedFormField;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCompletedFormRequest;
@@ -14,7 +15,7 @@ class CompletedFormController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:dashboard')->except([]);
+        $this->middleware('auth:dashboard')->except(['indexByHospital']);
     }
     /**
      * Display a listing of the resource.
@@ -25,7 +26,30 @@ class CompletedFormController extends Controller
     {
         //
     }
+    
+    public function indexByHospital(int $hospital_id, int $paginate = 15)
+    {
+        try {
+            $hospitalSituation =CompletedForm::where('hospital_id','=', intval($hospital_id))
+            ->select(
+                'id', 'created_manager_name as name',
+                'last_update', 'form_id', 'hospital_id',
+                )
+            ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date')
+            ->distinct('last_update')
+            ->orderBy('last_update','desc')
+            ->paginate($paginate);
 
+            return response()->json($hospitalSituation,201,[],JSON_NUMERIC_CHECK);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+
+
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -53,7 +77,7 @@ class CompletedFormController extends Controller
                 ]);
             }
             return response()->json($completedForm,200, []);
-            
+
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
