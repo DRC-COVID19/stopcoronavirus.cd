@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\CompletedFormField;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -15,7 +16,7 @@ class CompletedForm extends Model
         'form_id',
         'admin_user_id',
         'hospital_id',
-        'create_manager_name',
+        'created_manager_name',
         'last_update',
     ];
 
@@ -27,5 +28,10 @@ class CompletedForm extends Model
     public function hospital()
     {
         return $this->belongsTo(Hospital::class);
+    }
+    
+    public function completedFormFields()
+    {
+        return $this->hasMany(CompletedFormField::class);
     }
 }

@@ -27,19 +27,22 @@
             backButtonText="Précédent"
             @on-complete="onComplete"
           >
+
             <tab-content
               v-for="(formStep, index) in targetForm.form_steps"
               :key="index"
             >
               <h3 class="mb-4 text-center">{{ formStep.title }}</h3>
+
               <b-row align-h="center">
                 <b-col cols="12" md="8">
                   <b-form-group
                     v-for="(formField, counter) in formStep.form_fields"
                     :key="counter"
-                    :label="formField.rules !== null ? formField.name + ' * ' : formField.name"
+                    :label="!!formField.rules.match(/required/i)? formField.name + ' * ' : formField.name"
                     :label-for="formField.name"
                   >
+
                     <b-row>
                       <b-col class="col-sm-12 col-md-12">
                         <FormFieldInput
@@ -122,9 +125,7 @@ export default {
   data () {
     const now = new Date()
     return {
-      formData: new Map(),
       formSummary: [],
-      formDataFormatted: [],
       completedForm: {
         completed_form_fields: {}
       },
@@ -145,8 +146,9 @@ export default {
         return !!this.$route.params.update_id
       }
     }),
+
     backRoute () {
-      // [TODO] fix backRoute
+      // [TODO] fix backRou te
       if (this.user.isHospitalAdmin) {
         return {
           name: 'hospital.admin.data',
@@ -160,6 +162,7 @@ export default {
     this.targetForm = await this.formShow({ id: this.$route.params.form_id })
     if (this.isUpdateMode) {
       this.getHospitalSituations()
+      console.log('completedForm:', this.editiondataMethod())
     }
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
@@ -174,32 +177,14 @@ export default {
       'completedFormStore',
       'completedFormUpdate'
     ]),
-    formFieldNullStepSorted () {
-      if (this.$route.params.update_id) {
-        return this.arraySortAndFilter(this.editionData, null)
-      }
-      return this.arraySortAndFilter(this.targetForm.form_fields, null)
-    },
-    formFieldSorted (id) {
-      if (this.$route.params.update_id) {
-        return this.arraySortAndFilter(this.editionData, id)
-      }
-      return this.arraySortAndFilter(this.targetForm.form_fields, id)
-    },
-    isEditionData (id) {
-      this.editionData.forEach(item => {
-        if (item.id === id) {
-          item.form_field_type = { name: item.form_field_type }
-        }
+    editiondataMethod () {
+      this.targetForm.form_fields.forEach(item => {
+        this.editionData.forEach(edit => {
+          if (item.id === edit.id) {
+            item.default_value = edit.default_value
+          }
+        })
       })
-      return this.arraySortAndFilter(this.editionData, id)
-    },
-    arraySortAndFilter (data, id = null) {
-      return data
-        .slice()
-        .sort((a, b) => b.order_field - a.order_field)
-        ? data.filter(item => item.form_step_id === id)
-        : []
     },
     getHospitalSituations () {
       this.getHospitalSituationsDetail({
@@ -235,7 +220,7 @@ export default {
 
     submitCompletedForm (method) {
       return new Promise((resolve, reject) => {
-        this.completedForm.hospital_id = this.$route.params.hospital_id
+        this.completedForm.hospital_id = this.$route.params.hospital_id ? this.$route.params.hospital_id : this.user.hospital.id
         this.completedForm.form_id = this.targetForm.id
         method(this.completedForm)
           .then(() => {
