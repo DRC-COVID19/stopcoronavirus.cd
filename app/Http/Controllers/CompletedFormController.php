@@ -34,25 +34,32 @@ class CompletedFormController extends Controller
      */
     public function store(StoreCompletedFormRequest $request)
     {
-       
-
-        $admin_user =  $this->guard()->user();
-        $completedForm = CompletedForm::create(array_merge(
-          $request->validated(),
-          ['admin_user_id' => $admin_user->id ]
-        ));
-
- 
-        $completedFormFields = $request['completed_form_fields'];
-
-        foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
-            CompletedFormField::create([
-                'form_field_id'     => $formFieldKey,
-                'value'             => $formFieldValue,
-                'completed_form_id' => $completedForm->id
-            ]);
+        try {
+           
+            $admin_user =  $this->guard()->user();
+            $completedForm = CompletedForm::create(array_merge(
+              $request->validated(),
+              ['admin_user_id' => $admin_user->id ]
+            ));
+    
+     
+            $completedFormFields = $request['completed_form_fields'];
+    
+            foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+                CompletedFormField::create([
+                    'form_field_id'     => $formFieldKey,
+                    'value'             => $formFieldValue,
+                    'completed_form_id' => $completedForm->id
+                ]);
+            }
+            return response()->json($completedForm,200, []);
+            
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
         }
-        return response()->json($completedForm,200);
     }
 
     /**
