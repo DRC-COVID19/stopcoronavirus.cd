@@ -13,6 +13,15 @@ use function PHPSTORM_META\map;
 
 class CompletedFormController extends Controller
 {
+      /**
+   * Create a new AuthController instance.
+   *
+   * @return void
+   */
+  public function __construct()
+  {
+    $this->middleware('auth:dashboard')->except(['show']);
+  }
     /**
      * Display a listing of the resource.
      *
@@ -45,7 +54,7 @@ class CompletedFormController extends Controller
     {
 
         try {
-            $completedForms=[];
+            $completedForms= collect();
             $hospitalIds = Hospital::all('id')
             ->pluck('id')
             ->unique()
@@ -68,17 +77,14 @@ class CompletedFormController extends Controller
                     'name' =>Hospital::where('id',$id)->select('name')->first()->name,
                     "created_manager_name" => null,
                   ];
-                  array_push($completedForms, $completedForm);
+                  $completedForms->push($completedForm);
               }
               else
               {
-                         
-                array_push($completedForms, $completedForm);
+                  $completedForms->push($completedForm);
               }
 
             }
-            //$sortSituations =usort($completedForms,fn($a,$b)=> $b['last_update'] -$a['last_update']);
-
             return response()->json($completedForms,200,[],JSON_NUMERIC_CHECK);
 
         } catch (\Throwable $th) {
@@ -132,12 +138,16 @@ class CompletedFormController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
+    {    
         try {
+         
            $completedForm = CompletedForm::find($id);
            $completedForm = $this->selectCompletedForms($completedForm)
             ->orderBy('last_update')
             ->get();
+
+            //$completedFormFields =$completedForm->take('completed_form_fields')->merge($this->arrayMapAndSort($completedForm));
+          
             
             return response()->json($completedForm,206);
         } catch (\Throwable $th) {
@@ -192,16 +202,44 @@ class CompletedFormController extends Controller
         ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
   }
 
-  private function formatCompletedForms($completedForm){
-   return function() use ($completedForm){
-    [
-        'diff_date'     => $completedForm['diff_date'],
-        'last_update'   => $completedForm['last_update'],
-        'hospital_id'   => $completedForm['hospital_id'],
-        'name'          => $completedForm['hospital']['name'],
-        "created_manager_name" => $completedForm['created_manager_name'],
-      ];
-   };
-  }
-}
 
+  private function arrayMapAndSort($completedForm)
+  {
+    return $completedForm
+    ->map(function($form){
+        return 
+        $form->completedFormFields
+             ->sort(function($a, $b){
+                     return $a->order_field-$b->order_field;
+                });
+    })[0];
+
+  }
+//   private function createReduce($arrayMapAndSort)
+//   {
+//     $formIds = collect();
+//     $formStepsList = collect();
+   
+//     // $arrayMapAndSort ?$arrayMapAndSort:collect()
+//     // ->sort(fn($prevFormItem, $nextFormItem) =>$prevFormItem->formStepId - $nextFormItem->formStepId);
+//     // $arrayMapAndSort->each(function($item, $key) use($formIds){
+//     //     if ($formIds->every(fn($form)=> $form->formStepId !== $item->formStepId)) {
+//     //         $formIds->push([
+//     //           'formStepId'    => $item->formStepId,
+//     //           'form_step_title' => $item->form_step_title
+//     //         ]);
+//     //       }
+//     // });
+//     // $formStepsList = $formIds
+//     // ->map(function($form) use ($arrayMapAndSort){
+//     //     $formStep = [
+//     //       'formStepId'      => $form->formStepId,
+//     //       'form_step_title'   =>$form->form_step_title
+//     //     ];
+//     //     $formStep['form_field_values'] = $arrayMapAndSort->filter(fn($arr) => $arr->formStepId == $formStep->formStepId);
+//     //     return $formStep;
+//     //   });
+//     return $arrayMapAndSort[0];
+//     }
+
+}

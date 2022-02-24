@@ -46,8 +46,8 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                    completed_form_id:data.item.id,
-                    hospital_id: data.item.hospital_id || 0
+                    hospital_id: data.item.hospital_id || 0,
+                    completed_form_id:data.item.id
                     }
                     }"
               >Details</b-button>
