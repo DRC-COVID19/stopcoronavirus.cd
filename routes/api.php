@@ -191,6 +191,7 @@ Route::group([
     Route::get('/by-hospital/{hospital_id}', 'CompletedFormController@indexByHospital');
     Route::get('/{last_update}/hospital_id/{hospital_id}','CompletedFormController@getSituationsByHospitalAndLastUpdate');
     Route::get('/agent-last-update', 'CompletedFormController@getAgentLastUpdate');
+    Route::get('/agent-last-update', 'CompletedFormController@getAgentLastUpdate');
   });
 
 

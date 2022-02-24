@@ -2,7 +2,6 @@
 
 namespace App;
 
-use App\CompletedFormField;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 

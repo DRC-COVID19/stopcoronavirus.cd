@@ -11,7 +11,7 @@
             </b-link>
 
           </h3>
-          <b-alert show variant="info">
+          <b-alert show variant="default" class="alert">
             <div>{{`Structure: ${user.hospital.name}`}}</div>
             <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
             <p v-if="hospitalManagerName">Connecté en tant que {{hospitalManagerName}}</p>
@@ -50,7 +50,7 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                    completed_id:data.item.id,
+                    completed_form_id:data.item.id,
                     hospital_id: data.item.hospital_id || 0
                     }
                     }"
@@ -61,7 +61,7 @@
                 :to="{
                   name: 'hospital.edit',
                   params: {
-                    completed_id:data.item.id,
+                    completed_form_id:data.item.id,
                     hospital_id:user.hospital.id,
                     form_id: defaultFormId
                   }
@@ -152,5 +152,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+$bg_primary:#F4F6FC;
+ .hopita_mome{
+  background-color: $bg_primary;
+  .alert{
+    background-color: #ffff;
+  }
+}
 </style>
