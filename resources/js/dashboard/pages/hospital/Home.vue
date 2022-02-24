@@ -29,6 +29,8 @@
             :busy="isLoading"
             :fields="fields"
             :items="completedForms.data"
+            responsive
+            hover
             show-empty
           >
             <template v-slot:empty="scope">
