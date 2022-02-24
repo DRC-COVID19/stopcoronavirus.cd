@@ -7,7 +7,7 @@
           <h3>Résumé mise à jour CTCOS</h3>
         </b-col>
         <b-col cols="12" md="2">
-          <b-button class="btn-dash-blue" @click="getData()">
+          <b-button class="btn-dash-blue" @click="completedForm__getAllByLastUpdate()">
             <i class="fa fa-sync"></i>
           </b-button>
         </b-col>
@@ -123,7 +123,9 @@ export default {
     await this.completedForm__getAllByLastUpdate()
   },
   methods: {
+
     ...mapActions(['completedForm__getAllByLastUpdate'])
+
   }
 }
 </script>

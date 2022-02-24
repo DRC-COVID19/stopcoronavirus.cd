@@ -188,8 +188,7 @@ class CompletedFormController extends Controller
                'completedFormFields','completedFormFields.formField.formStep',
                'completedFormFields.formField.formFieldType','hospital'
                ])
-        ->select('*'
-        )
+        ->select('*')
         ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
   }
 
