@@ -90,6 +90,25 @@ export default {
             commit('SET_IS_LOADING', false)
           })
       })
+    },
+    completedForm__getAllByLastUpdate ({ state, commit }) {
+      commit('SET_IS_CREATING', true)
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .get('/api/dashboard/completed_forms/agent-last-update')
+          .then(({ data }) => {
+            commit('SET_COMPLETED_FORMS', data)
+            commit('SET_IS_LOADING', false)
+            resolve(true)
+          })
+          .catch(response => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
     }
   }
 }
