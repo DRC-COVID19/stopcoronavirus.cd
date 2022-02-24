@@ -205,7 +205,6 @@
                   is-range
                   @input="UpdateObservationDate"
                   show-weeknumbers
-                  :attributes="attributes"
                 >
                   <template v-slot="{inputEvents }">
                     <div
