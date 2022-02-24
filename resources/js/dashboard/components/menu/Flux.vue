@@ -93,7 +93,7 @@
               <b-form-group>
                 <div class="d-flex">
                   <div class="mr-2 picker-container">
-                    <date-range-picker
+                    <!-- <date-range-picker
                       :disabled="fluxForm.selectedFluxSource == 2"
                       ref="picker1"
                       id="picker1"
@@ -113,7 +113,52 @@
                         {{ picker.startDate | date }} - {{ picker.endDate | date }}
                       </template
                       >
-                    </date-range-picker>
+                    </date-range-picker> -->
+                    <v-date-picker
+                  v-model="dateRangePreference"
+                  opens="center"
+                  :min-date="reference_min_date"
+                  :max-date="Observation_max_date"
+                  class="d-flex style-picker"
+                  mode="range"
+                  is-range
+                  @input="UpdatePreferenceDate"
+                  show-weeknumbers
+                  :is-expanded="true"
+                  :select-attributes="attributes"
+                >
+                  <template v-slot="{inputEvents }">
+                    <div
+                      class="
+                        d-flex flex-col sm:flex-row justify-content-center text-center item-center
+                        btn-container-calendar
+                      "
+                    >
+                      <input
+                      id="range"
+                        class="p-1 w-full"
+                        :value="`${moment(dateRangePreference.startDate).format('YYYY/MM/DD')}- ${moment(dateRangePreference.endDate).format('YYYY/MM/DD')}`"
+                        v-on="inputEvents.end"
+                        readonly
+                      />
+                    </div>
+                  </template>
+                  <div
+                    slot="footer"
+                    slot-scope=""
+                    class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
+                    style="width: 330px"
+                  >
+                    <span
+                      class="btn-range-date"
+                      >{{
+                           moment(dateRangePreference.startDate).format("YYYY/MM/DD")}}
+                         </span>
+                    <span class="btn-range-date">{{
+                       moment(dateRangePreference.endDate).format("YYYY/MM/DD")
+                    }}</span>
+                  </div>
+                </v-date-picker>
                     <span
                       class="range-lbl"
                       :class="{ 'text-danger': referenceHasError }"
@@ -127,7 +172,7 @@
                     ></span>
                   </div>
                   <div class="picker-container">
-                    <date-range-picker
+                    <!-- <date-range-picker
                       id="picker2"
                       ref="picker2"
                       :locale-data="rangeData"
@@ -148,8 +193,52 @@
                         }}<span v-if="!singleDatePicker">
                           - {{ picker.endDate | date }}</span
                         >
-                      </template>
-                    </date-range-picker>
+                      </template> -->
+                    <!-- </date-range-picker> -->
+                    <v-date-picker
+                  v-model="dateRangeObservation"
+                  opens="center"
+                  :min-date="dateRangePreference.endDate"
+                  :max-date="Observation_max_date"
+                  class="d-flex style-picker"
+                  mode="range"
+                  is-range
+                  @input="UpdateObservationDate"
+                  show-weeknumbers
+                  :attributes="attributes"
+                >
+                  <template v-slot="{inputEvents }">
+                    <div
+                      class="
+                        d-flex flex-col sm:flex-row justify-content-center text-center item-center
+                        btn-container-calendar
+                      "
+                    >
+                      <input
+                      id="range"
+                        class="p-1 w-full"
+                        :value="`${moment(dateRangeObservation.startDate).format('YYYY/MM/DD')}- ${moment(dateRangeObservation.endDate).format('YYYY/MM/DD')}`"
+                        v-on="inputEvents.end"
+                        readonly
+                      />
+                    </div>
+                  </template>
+                  <div
+                    slot="footer"
+                    slot-scope=""
+                    class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
+                    style="width: 330px"
+                  >
+                    <span
+                      class="btn-range-date"
+                      >{{
+                           moment(dateRangeObservation.startDate).format("YYYY/MM/DD")}}
+                         </span>
+                    <span class="btn-range-date">{{
+                       moment(dateRangeObservation.endDate).format("YYYY/MM/DD")
+                    }}</span>
+                  </div>
+                </v-date-picker>
                     <span class="range-lbl">Période d'observation</span>
                   </div>
                   <b-button
@@ -497,9 +586,9 @@ export default {
         this.setFluxEnabled(checked);
       }
     },
-    UpdatePreferenceDate({ startDate, endDate }) {
-      const localStartDate = moment(startDate);
-      const localEndDate = moment(endDate);
+    UpdatePreferenceDate() {
+      const localStartDate = moment(this.dateRangePreference.startDate);
+      const localEndDate = moment(this.dateRangePreference.endDate);
       const dateDiff = localEndDate.diff(localStartDate, "days");
       this.referenceThrowError = false;
       this.referenceErrorMessage = null;
@@ -532,11 +621,11 @@ export default {
         this.addParamToUrlWhenInThisMenu('reference-end-date', null)
       }
     },
-    UpdateObservationDate({ startDate, endDate }) {
-      this.fluxForm.observation_start = moment(startDate).format("YYYY-MM-DD");
-      this.fluxForm.observation_end = moment(endDate).format("YYYY-MM-DD");
-      this.fluxForm.time_start = moment(startDate).format("HH:mm");
-      this.fluxForm.time_end = moment(endDate).format("HH:mm");
+    UpdateObservationDate () {
+      this.fluxForm.observation_start = moment(this.dateRangeObservation.startDate).format("YYYY-MM-DD");
+      this.fluxForm.observation_end = moment(this.dateRangeObservation.endDate).format("YYYY-MM-DD");
+      this.fluxForm.time_start = moment(this.dateRangeObservation.startDate).format("HH:mm");
+      this.fluxForm.time_end = moment(this.dateRangeObservation.endDate).format("HH:mm");
       this.resetFluxPredefinedControl();
     },
     addDateRangeObservationToUrl() {
@@ -901,6 +990,48 @@ export default {
 </style>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+.btn-range-date {
+  font-size: 16px;
+  padding: 5px;
+  text-align: center;
+  width: 45%;
+  border-radius: 5px;
+  border: 1px solid #c3c8ced2;
+}
+.btn-calendar {
+  font-size: 16px;
+  padding-right: 10px;
+}
+.btn-container-calendar {
+  border-radius: 5px;
+  border: 1px solid #c3c8ced2;
+  width:100%;
+  align-items: center;
+  background-color: #f4f5fc;
+
+  input{
+      border:none !important;
+      width:100%;
+      height:100%;
+      font-size: 12px;
+      &:focus{
+         border:none !important;
+         outline: none !important;
+
+      }
+  }
+  label{
+    width:10%;
+          font-size: 12px;
+
+    align-self: center;
+    align-items: center;
+    text-align: center;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
 .flux-form {
   margin: 0;
   .nav-zone {
