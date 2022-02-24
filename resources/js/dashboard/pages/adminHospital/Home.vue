@@ -101,12 +101,12 @@ export default {
         { key: 'name', label: 'Nom CTCO' },
         { key: 'created_manager_name', label: 'Soumis par' },
         { key: 'actions', label: 'Actions' }
-      ]
+      ],
+      completedForms: []
     }
   },
   computed: {
     ...mapState({
-      completedForms: (state) => state.completedForm.completedFormsByLastUpdate,
       isLoading: (state) => state.completedForm.isLoading
     }),
     completedFormsSorted () {
@@ -120,7 +120,7 @@ export default {
     }
   },
   async mounted () {
-    await this.completedForm__getAllByLastUpdate()
+    this.completedForms = await this.completedForm__getAllByLastUpdate()
   },
   methods: {
 

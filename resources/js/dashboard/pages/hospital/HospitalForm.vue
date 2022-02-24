@@ -204,7 +204,7 @@ export default {
         this.completedForm.created_manager_name = this.hospitalManagerName
       }
 
-      this.submitCompletedForm(this.isUpdateMode ? this.completedFormUpdate : this.completedFormStore)
+      this.submitCompletedForm(this.isUpdateMode ? this.completedForm__update : this.completedForm__store)
         .then(() => {
           if (this.user.isHospitalAdmin) {
             const additionalRoute = this.isUpdateMode ? `/${this.$route.params.hospital_id}` : ''

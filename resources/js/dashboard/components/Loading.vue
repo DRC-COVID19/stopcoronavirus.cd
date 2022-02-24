@@ -15,12 +15,12 @@
 </template>
 <script>
 export default {
-    props:{
-        message:{
-            type:String,
-            default:'Loading...'
-        }
+  props: {
+    message: {
+      type: String,
+      default: 'Loading...'
     }
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -36,7 +36,7 @@ export default {
   }
   .text{
       font-size: 2rem;
-      
+
   }
 }
 
