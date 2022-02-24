@@ -2,6 +2,7 @@ export default {
   state: {
     completedForms: {} || [],
     completedFormsDetail: [],
+    completedFormsByLastUpdate: [],
     isLoading: false
   },
   mutations: {
@@ -10,6 +11,9 @@ export default {
     },
     SET_COMPLETED_FORMS (state, payload) {
       state.completedForms = payload
+    },
+    SET_COMPLETED_FORMS_BY_LAST_UPDATE (state, payload) {
+      state.completedFormsByLastUpdate = payload
     },
     SET_COMPLETED_FORMS_DETAIL (state, payload) {
       state.completedFormsDetail = payload
@@ -98,7 +102,13 @@ export default {
         axios
           .get('/api/dashboard/completed_forms/agent-last-update')
           .then(({ data }) => {
-            commit('SET_COMPLETED_FORMS', data)
+            commit('SET_COMPLETED_FORMS_BY_LAST_UPDATE', data.map(completedForm => ({
+              diff_date: completedForm.diff_date,
+              last_update: completedForm.last_update,
+              name: completedForm.form_id ? completedForm.hospital.name : completedForm.name,
+              created_manager_name: completedForm.created_manager_name,
+              hospital_id: completedForm.hospital_id
+            })))
             commit('SET_IS_LOADING', false)
             resolve(true)
           })

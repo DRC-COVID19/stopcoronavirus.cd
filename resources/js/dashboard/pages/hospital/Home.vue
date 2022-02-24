@@ -11,7 +11,7 @@
             </b-link>
 
           </h3>
-          <b-alert show variant="default" class="alert">
+          <b-alert show variant="success">
             <div>{{`Structure: ${user.hospital.name}`}}</div>
             <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
             <p v-if="hospitalManagerName">Connecté en tant que {{hospitalManagerName}}</p>
@@ -101,7 +101,7 @@ export default {
     return {
       fields: [
         { key: 'last_update', label: 'Date' },
-        { key: 'name', label: 'Nom' },
+        { key: 'created_manager_name', label: 'Nom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,

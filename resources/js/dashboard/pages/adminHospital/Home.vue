@@ -19,7 +19,7 @@
             :fields="fields"
             responsive
             hover
-            :items="hospitalSituationsSorted"
+            :items="completedFormsSorted"
             show-empty
           >
             <template v-slot:empty="scope">
@@ -106,11 +106,11 @@ export default {
   },
   computed: {
     ...mapState({
-      updateData: (state) => state.hospitalSituation.AllhospitalSituationByLastUpdate,
-      isLoading: (state) => state.hospitalSituation.isLoading
+      completedForms: (state) => state.completedForm.completedFormsByLastUpdate,
+      isLoading: (state) => state.completedForm.isLoading
     }),
-    hospitalSituationsSorted () {
-      return this.updateData.slice().sort((a, b) => {
+    completedFormsSorted () {
+      return this.completedForms.slice().sort((a, b) => {
         const hospitalNameA = a.name.toLowerCase()
         const hospitalNameB = b.name.toLowerCase()
         if (hospitalNameA < hospitalNameB) return -1
@@ -119,11 +119,11 @@ export default {
       }).sort((a, b) => new Date(b.last_update) - new Date(a.last_update))
     }
   },
-  mounted () {
-    this.getAllHospitalSituationsByLastUpdate()
+  async mounted () {
+    await this.completedForm__getAllByLastUpdate()
   },
   methods: {
-    ...mapActions(['getAllHospitalSituationsByLastUpdate'])
+    ...mapActions(['completedForm__getAllByLastUpdate'])
   }
 }
 </script>

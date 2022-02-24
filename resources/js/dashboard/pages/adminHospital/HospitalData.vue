@@ -22,9 +22,9 @@
       <b-row class="mt-4" >
         <b-col>
           <b-table
-            :busy="ishospitalSituationLoading"
+            :busy="isLoading"
             :fields="fields"
-            :items="hospitalSituations.data"
+            :items="completedForms.data"
             show-empty
           >
             <template v-slot:empty="scope">
@@ -46,18 +46,18 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                    update_id:data.item.last_update,
-                    hospital_id: $route.params.hospital_id
-                  }
-                }"
+                    completed_form_id:data.item.id,
+                    hospital_id: data.item.hospital_id || 0
+                    }
+                    }"
               >Details</b-button>
-                 <b-button
+              <b-button
                 class="btn btn-warning mb-1"
                 :to="{
                   name: 'hospital.edit',
                   params: {
-                    update_id:data.item.last_update,
-                    hospital_id:$route.params.hospital_id,
+                    completed_form_id:data.item.id,
+                    hospital_id:user.hospital.id,
                     form_id: defaultFormId
                   }
                 }"
@@ -96,7 +96,7 @@ export default {
     return {
       fields: [
         { key: 'last_update', label: 'Date' },
-        { key: 'name', label: 'Nom' },
+        { key: 'created_manager_name', label: 'Nom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1
@@ -106,18 +106,18 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       hospital: (state) => state.hospital.hospitalData,
-      hospitalSituations: (state) => state.hospital.hospitalSituations,
-      ishospitalSituationLoading: (state) => state.hospital.isLoading
+      completedForms: (state) => state.completedForm.completedForms,
+      isLoading: (state) => state.completedForm.isLoading
     }),
     totalRows () {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.total
+      if (this.completedForms.meta) {
+        return this.completedForms.meta.total
       }
       return null
     },
     perPage () {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.per_page
+      if (this.completedForms.meta) {
+        return this.completedForms.meta.per_page
       }
       return 15
     },
@@ -125,21 +125,23 @@ export default {
       return DEFAULT_FORM_ID
     }
   },
-  mounted () {
-    this.getSituations()
-    this.getHospital({ hospital_id: this.$route.params.hospital_id })
+  async mounted () {
+    await this.getHospital({ hospital_id: this.$route.params.hospital_id })
+    await this.getCompletedForms()
   },
   methods: {
-    ...mapActions(['getHospital', 'getHospitalSituations']),
+    ...mapActions(['getHospital', 'completedForm__getByHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    getSituations (page) {
+    getCompletedForms (page) {
       if (typeof page === 'undefined') page = 1
-      this.getHospitalSituations({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.ishospitalSituationLoading })
+      this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.isLoading })
     },
     onPageChange (page) {
-      this.getHospitalSituations(page)
+      this.getCompletedForms(page)
     }
+
   }
+
 }
 </script>
 
