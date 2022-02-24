@@ -226,7 +226,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios
           .get(
-            `/api/dashboard/hospital-situations/by-hospital/${payload.hospital_id}`,
+            `/api/dashboard/completed_forms/by-hospital/${payload.hospital_id}`,
             {
               params: { page: payload.page }
             }

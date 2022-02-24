@@ -21,18 +21,11 @@ class FormFieldTypeSeeder extends Seeder
                 'name'=>'number'
             ],
             [
-                'name'=>'decimal'
-            ],
-            [
                 'name'=>'boolean'
             ],
             [
                 'name'=>'date'
-            ],
-            [
-                'name'=>'datetime'
             ]
-
         ]);
     }
 }

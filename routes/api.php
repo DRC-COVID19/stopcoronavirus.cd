@@ -187,6 +187,15 @@ Route::group([
     Route::get('/agent-last-update', 'HospitalSituationController@getAgentLastUpdate');
   });
 
+  Route::group(['prefix' => 'completed_forms'], function () {
+    Route::get('/by-hospital/{hospital_id}', 'CompletedFormController@indexByHospital');
+    Route::get('/{last_update}/hospital_id/{hospital_id}','CompletedFormController@getSituationsByHospitalAndLastUpdate');
+    Route::get('/agent-last-update', 'CompletedFormController@getAgentLastUpdate');
+    Route::get('/agent-last-update', 'CompletedFormController@getAgentLastUpdate');
+  });
+
+
+  
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
 
   Route::apiResource('hospital-situations', "HospitalSituationController");
@@ -202,6 +211,7 @@ Route::group([
   Route::apiResource('forms', 'FormController');
   Route::apiResource('form-steps', 'FormStepController');
   Route::resource('form-recurrences', 'FormRecurrenceController');
+  Route::apiResource('completed_forms','CompletedFormController');
   Route::group(['prefix' => 'forms'], function () {
     Route::get('/filter', 'FormController@filter');
   });

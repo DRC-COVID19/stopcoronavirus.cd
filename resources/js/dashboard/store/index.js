@@ -13,6 +13,7 @@ import formFieldType from './modules/formFieldType'
 import formField from './modules/formField'
 import formStep from './modules/formStep'
 import hospitalSituation from './modules/hospitalSituation'
+import completedForm from './modules/completedForm'
 
 Vue.use(Vuex)
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     formFieldType,
     formField,
     formStep,
-    hospitalSituation
+    hospitalSituation,
+    completedForm,
   }
 })

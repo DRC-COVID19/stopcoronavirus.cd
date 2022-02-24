@@ -8,8 +8,9 @@
           <b-link :to="backRoute">
             <span class="fa fa-chevron-left"> Retour</span>
           </b-link>
-          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(form[0].last_update).format("DD/MM/Y")}}</h3>
-            <b-col
+          {{completedForms}}
+          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(completedForms[0].last_update).format("DD/MM/Y")}}</h3>
+            <!-- <b-col
               v-for="(step, index) in renderSituations"
               :key="index"
               cols="12" md="12"
@@ -19,9 +20,9 @@
                     :key="count">
                     <li>{{field.name}} : {{field.default_value}}</li>
                   </ul>
-            </b-col>
-          <div>Données envoyées par <b> {{form[0].created_manager_name}}</b></div>
-          <!-- <div v-if="form.slice(0,1)[0].created_manager_name">Modifier par {{form.slice(0,1)[0].updated_manager_name}}</div> -->
+            </b-col> -->
+          <div>Données envoyées par <b> {{completedForms[0].created_manager_name}}</b></div>
+          <!-- <div v-if="completedForms.slice(0,1)[0].created_manager_name">Modifier par {{completedForms.slice(0,1)[0].updated_manager_name}}</div> -->
         </b-col>
       </b-row>
     </b-container>
@@ -38,13 +39,13 @@ export default {
     Loading, Header
   },
   async mounted () {
-    await this.getHospital()
+    await this.getCompletedForm()
   },
   computed: {
     ...mapState({
       user: state => state.auth.user,
-      form: state => state.hospitalSituation.hospitalSituationDetail,
-      isLoading: state => state.hospitalSituation.isLoading
+      completedForms: state => state.completedForm.completedFormsDetail,
+      isLoading: state => state.completedForm.isLoading
     }),
     backRoute () {
       if (this.user.isHospitalAdmin) {
@@ -55,13 +56,13 @@ export default {
       } else return { name: 'hospital.home' }
     },
     renderSituations () {
-      return createSituationsReduce(this.form)
+      return createSituationsReduce(this.completedForms)
     }
   },
   methods: {
-    ...mapActions(['getHospitalSituationsDetail']),
-    getHospital () {
-      this.getHospitalSituationsDetail({ isLoading: this.isLoading, update_id: this.$route.params.update_id, hospital_id: this.$route.params.hospital_id })
+    ...mapActions(['completedForm__getByHospitalDetail']),
+    getCompletedForm () {
+      this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
     }
   }
 }
