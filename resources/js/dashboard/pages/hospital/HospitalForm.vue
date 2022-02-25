@@ -12,10 +12,11 @@
           >
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
-          <h3 v-if="$route.params.update_id" class="mb-4 mt-4">
+          <h3 v-if="isUpdateMode" class="mb-4 mt-4">
             Modifier la mise à jour du
-            {{ moment($route.params.update_id).format("DD/MM/Y") }}
+            {{ moment(completedForm.last_update).format("DD/MM/Y") }}
           </h3>
+          <p>{{ formFormatted }}</p>
           <form-wizard
             :finishButtonText="isUpdateMode ? 'Modifier' : 'Envoyer'"
             :startIndex="0"
@@ -125,14 +126,15 @@ export default {
   data () {
     const now = new Date()
     return {
-      formSummary: [],
+      formFormatted: [],
       completedForm: {
         completed_form_fields: {}
       },
       max: now,
       errors: {},
       isLoading: false,
-      targetForm: {}
+      targetForm: {},
+      completedFormFields: {}
     }
   },
   computed: {
@@ -140,14 +142,11 @@ export default {
       user: state => state.auth.user,
       hospitalManagerName: state => state.hospital.hospitalManagerName,
       formSteps: state => state.formStep.formSteps,
-      editionData: state => state.hospitalSituation.hospitalSituationDetail,
-      completedForms: state => state.completedForm.completedForm__getByHospitalDetail,
       isHospitalSituationLoading: state => state.hospitalSituation.isLoading,
       isUpdateMode () {
-        return !!this.$route.params.update_id
+        return !!this.$route.params.completed_form_id
       }
     }),
-
     backRoute () {
       // [TODO] fix backRou te
       if (this.user.isHospitalAdmin) {
@@ -162,8 +161,7 @@ export default {
   async mounted () {
     this.targetForm = await this.formShow({ id: this.$route.params.form_id })
     if (this.isUpdateMode) {
-      this.getHospitalSituations()
-      console.log('completedForm:', this.editiondataMethod())
+      this.getCompletedFormFields()
     }
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
@@ -174,21 +172,24 @@ export default {
       'formShow',
       'createHospitalSituation',
       'updateHospitalSituation',
-      'getHospitalSituationsDetail',
+      'completedForm__getByHospitalDetail',
       'completedForm__store',
       'completedForm__update'
     ]),
-    async editiondataMethod () {
-      this.completedForms = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
-    },
-    getHospitalSituations () {
-      this.getHospitalSituationsDetail({
-        isLoading: true,
-        update_id: this.$route.params.update_id,
-        hospital_id: this.$route.params.hospital_id
-      })
-    },
 
+    async getCompletedFormFields () {
+      this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
+      if (this.completedFormFields.lenght > 0) {
+        this.formFormatted = this.completedFormFields.map(item => ({
+          formField: { id: item.form_field.id, value: item.value }
+
+        }))
+        this.getLastUpdate()
+      }
+    },
+    getLastUpdate () {
+      this.completedForm.last_update = this.completedFormFields[0].completed_form.last_update
+    },
     onComplete () {
       this.isLoading = true
       this.errors = {}

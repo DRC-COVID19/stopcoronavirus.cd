@@ -10,7 +10,7 @@
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
         </b-col>
-        <b-col v-if="hospital.id">
+        <b-col v-if="hospital">
           <h3>
              Historique mise à jour : {{ hospital.name }}
           </h3>
