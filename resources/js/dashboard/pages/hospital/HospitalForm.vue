@@ -141,6 +141,7 @@ export default {
       hospitalManagerName: state => state.hospital.hospitalManagerName,
       formSteps: state => state.formStep.formSteps,
       editionData: state => state.hospitalSituation.hospitalSituationDetail,
+      completedForms: state => state.completedForm.completedForm__getByHospitalDetail,
       isHospitalSituationLoading: state => state.hospitalSituation.isLoading,
       isUpdateMode () {
         return !!this.$route.params.update_id
@@ -177,14 +178,8 @@ export default {
       'completedForm__store',
       'completedForm__update'
     ]),
-    editiondataMethod () {
-      this.targetForm.form_fields.forEach(item => {
-        this.editionData.forEach(edit => {
-          if (item.id === edit.id) {
-            item.default_value = edit.default_value
-          }
-        })
-      })
+    async editiondataMethod () {
+      this.completedForms = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
     },
     getHospitalSituations () {
       this.getHospitalSituationsDetail({

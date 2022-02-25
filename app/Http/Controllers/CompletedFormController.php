@@ -141,9 +141,10 @@ class CompletedFormController extends Controller
     {    
         try {
          
-           $completedForm = CompletedForm::find($id);
-           $completedForm = $this->selectCompletedForms($completedForm)
-            ->orderBy('last_update')
+           $completedForm = CompletedFormField::with('completedForm','formField.formStep')
+            ->where('completed_form_id',$id)
+           //$completedForm = $this->selectCompletedForms($completedForm)
+            ->orderBy('created_at')
             ->get();
 
             //$completedFormFields =$completedForm->take('completed_form_fields')->merge($this->arrayMapAndSort($completedForm));
