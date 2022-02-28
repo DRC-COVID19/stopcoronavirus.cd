@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Hospital;
 use App\CompletedForm;
 use App\CompletedFormField;
+use App\FormFieldType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCompletedFormRequest;
@@ -244,38 +245,50 @@ class CompletedFormController extends Controller
 
     public function getSituationHospitalsAll(Request  $request)
     {
-        return $this->getHospitalIdsLastUpdated();
-    }
-    public function getHospitalIdsLastUpdated()
-    {
+      $hospitalsLastUpdate = DB::table('completed_forms')
+          ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
+          ->groupBy('completed_forms.hospital_id')
+          ->get();
 
-        return DB::table('completed_forms')
-            ->selectRaw('completed_forms.hospital_id,MAX(last_update)')
-            ->groupBy('completed_forms.hospital_id')
-            ->get();
-    }
-    function getTableSituation($state)
-    {
-        $TableSituation = CompletedForm::with(
-            [
-                'completedFormFields' => function ($query) use ($state) {
-                    $query->where(function ($query) use ($state) {
-                        if ($state == true) {
-                            $query->selectRaw('SUM(CAST(value as INT)) as form_field_value')
-                                ->groupBy('form_field_id');
-                        } else {
-                            $query->selectRaw('AVG(CAST(value as INT)) as form_field_value')
-                                ->groupBy('form_field_id');
-                        }
-                    });
-                },
-                'completedFormFields.formField.formStep:name'
-            ]
-        )
-            ->whereHas('completedFormFields.formField', function ($query) {
-                $query->whereIn('form_field_type_id', [2, 3]);
-            });
+      $hospitalsData = [];
+      foreach ($hospitalsLastUpdate as $hospitalLastUpdate) {
+        $hospitalsData[] = Hospital::with([ 'completedForms' => function($query) use ($hospitalLastUpdate) {
+          $query->where('last_update', $hospitalLastUpdate->max_last_update);
+        } , 'completedForms.completedFormFields.formField.formStep'])
+        ->find($hospitalLastUpdate->hospital_id);
+      }
 
-        return $TableSituation;
+      return response()->json([
+        'aggregated'  => $this->getAggregatedHospitalsDatas($hospitalsData),
+        'data'        => $hospitalsData,
+        'last_update' => $hospitalsLastUpdate->max('max_last_update')
+      ], 200);
+    }
+
+    public function getAggregatedHospitalsDatas ($hospitalsData) {
+      $completedFormFields = collect($hospitalsData)
+        ->flatMap(function ($hospitalData) {
+            return $hospitalData->completedForms;
+        })
+        ->flatMap(function ($completedForm) {
+            return $completedForm->completedFormFields;
+        })
+        ->filter(function ($completedFormField) {
+            return $completedFormField->formField->form_field_type_id === FormFieldType::TYPE_NUMBER ;
+        });
+
+        $completedFormFieldsGroup = $completedFormFields->groupBy('form_field_id');
+        return $completedFormFieldsGroup
+          ->map(function ($completedFormFieldGroup) {
+              $targetFormField = $completedFormFieldGroup[0]->formField ?? null;
+              $aggregated = $completedFormFieldGroup->sum('value');
+              if ($targetFormField && !$targetFormField->agreggation) {
+                $aggregated /= $completedFormFieldGroup->count();
+              }
+              return [
+                'value'       => $aggregated,
+                'form_field'  => $targetFormField
+              ];
+          });
     }
 }
