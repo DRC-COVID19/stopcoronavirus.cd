@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 
 export default {
   state: {
@@ -11,7 +12,7 @@ export default {
     isCreating: false,
     hospitalSituationAll: [],
     observation_start: null,
-    observation_end: null,
+    observation_end: moment().format('YYYY-MM-DD'),
     hospitalSituationSelected: [],
     hospitalObservationSituation: []
   },

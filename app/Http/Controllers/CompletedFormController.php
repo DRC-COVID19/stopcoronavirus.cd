@@ -254,7 +254,9 @@ class CompletedFormController extends Controller
       foreach ($hospitalsLastUpdate as $hospitalLastUpdate) {
         $hospitalsData[] = Hospital::with([ 'completedForms' => function($query) use ($hospitalLastUpdate) {
           $query->where('last_update', $hospitalLastUpdate->max_last_update);
-        } , 'completedForms.completedFormFields.formField.formStep'])
+        } ,
+          'completedForms.completedFormFields.formField.formStep',
+          'completedForms.adminUser'])
         ->find($hospitalLastUpdate->hospital_id);
       }
 
