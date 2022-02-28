@@ -16,7 +16,6 @@
             Modifier la mise à jour du
             {{ moment(completedForm.last_update).format("DD/MM/Y") }}
           </h3>
-          <p>{{ formFormatted }}</p>
           <form-wizard
             :finishButtonText="isUpdateMode ? 'Modifier' : 'Envoyer'"
             :startIndex="0"
@@ -92,6 +91,7 @@
                     id="last_update"
                     class="mb-2"
                     :disabled="isUpdateMode"
+                    locale="fr"
                   >
                   </b-form-datepicker>
                 </b-form-group>
@@ -126,7 +126,7 @@ export default {
   data () {
     const now = new Date()
     return {
-      formFormatted: [],
+      dateFormatted: { day: 'numeric', year: 'numeric', month: 'numeric' },
       completedForm: {
         completed_form_fields: {}
       },
@@ -179,27 +179,31 @@ export default {
 
     async getCompletedFormFields () {
       this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
-      if (this.completedFormFields.lenght > 0) {
-        this.formFormatted = this.completedFormFields.map(item => ({
-          formField: { id: item.form_field.id, value: item.value }
-
-        }))
-        this.getLastUpdate()
-      }
+      this.getLastUpdate()
+      this.laodFormData()
     },
+
     getLastUpdate () {
       this.completedForm.last_update = this.completedFormFields[0].completed_form.last_update
     },
+
+    laodFormData () {
+      this.completedFormFields.forEach(item => {
+        this.$set(this.completedForm.completed_form_fields, item.form_field.id, item.value)
+      })
+      console.log('load formData:', this.completedForm.completed_form_fields)
+    },
+
     onComplete () {
       this.isLoading = true
       this.errors = {}
       if (this.isUpdateMode) {
         this.completedForm._method = 'PUT'
         this.completedForm.updated_manager_name = this.hospitalManagerName
+        this.completedForm.id = this.$route.params.completed_form_id
       } else {
         this.completedForm.created_manager_name = this.hospitalManagerName
       }
-
       this.submitCompletedForm(this.isUpdateMode ? this.completedForm__update : this.completedForm__store)
         .then(() => {
           if (this.user.isHospitalAdmin) {

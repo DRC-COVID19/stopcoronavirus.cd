@@ -57,13 +57,16 @@ export default {
     }
   },
   computed: {
-    isRequired() {
+    isRequired () {
       return !!this.rules.match(/required/i)
     }
   },
   watch: {
-    formFieldValue(value) {
+    formFieldValue (value) {
       this.$emit('input', value)
+    },
+    value (value) {
+      this.formFieldValue = value
     }
   }
 }

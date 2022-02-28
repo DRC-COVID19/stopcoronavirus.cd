@@ -8,6 +8,8 @@ use App\CompletedFormField;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCompletedFormRequest;
+use App\Http\Requests\UpdateCompletedFormRequest;
+use Illuminate\Support\Facades\Log;
 
 use function PHPSTORM_META\map;
 
@@ -143,13 +145,9 @@ class CompletedFormController extends Controller
          
            $completedForm = CompletedFormField::with('completedForm','formField.formStep')
             ->where('completed_form_id',$id)
-           //$completedForm = $this->selectCompletedForms($completedForm)
             ->orderBy('created_at')
             ->get();
-
-            //$completedFormFields =$completedForm->take('completed_form_fields')->merge($this->arrayMapAndSort($completedForm));
           
-            
             return response()->json($completedForm,206);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
@@ -166,9 +164,34 @@ class CompletedFormController extends Controller
      * @param  \App\CompletedForm  $completedForm
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CompletedForm $completedForm)
+    public function update(UpdateCompletedFormRequest $request, CompletedForm $completedForm)
     {
-        //
+        try {
+            $data = $request->validated();
+            $updatedManagerName = $data['updated_manager_name'];
+            $completedFormFields = $data['completed_form_fields'];
+    
+            foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+
+                $completedFormField = CompletedFormField::where(['completed_form_id' =>$completedForm->id, 'form_field_id' => $formFieldKey])->first();
+                if ($completedFormField->value !==$formFieldValue) {
+                    $completedFormField->update([
+                        'value'                 => $formFieldValue,
+                        'updated_manager_name'  => $updatedManagerName
+                    ]);
+                    $completedFormField = null;
+                    Log::info('esimbi');
+                }
+                Log::info('esimbi te');
+            }
+            return response()->json($completedForm,200, []);
+
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     /**
@@ -216,31 +239,33 @@ class CompletedFormController extends Controller
     })[0];
 
   }
-//   private function createReduce($arrayMapAndSort)
-//   {
-//     $formIds = collect();
-//     $formStepsList = collect();
-   
-//     // $arrayMapAndSort ?$arrayMapAndSort:collect()
-//     // ->sort(fn($prevFormItem, $nextFormItem) =>$prevFormItem->formStepId - $nextFormItem->formStepId);
-//     // $arrayMapAndSort->each(function($item, $key) use($formIds){
-//     //     if ($formIds->every(fn($form)=> $form->formStepId !== $item->formStepId)) {
-//     //         $formIds->push([
-//     //           'formStepId'    => $item->formStepId,
-//     //           'form_step_title' => $item->form_step_title
-//     //         ]);
-//     //       }
-//     // });
-//     // $formStepsList = $formIds
-//     // ->map(function($form) use ($arrayMapAndSort){
-//     //     $formStep = [
-//     //       'formStepId'      => $form->formStepId,
-//     //       'form_step_title'   =>$form->form_step_title
-//     //     ];
-//     //     $formStep['form_field_values'] = $arrayMapAndSort->filter(fn($arr) => $arr->formStepId == $formStep->formStepId);
-//     //     return $formStep;
-//     //   });
-//     return $arrayMapAndSort[0];
+//   private function executeAction(array $data =[], $action = null ,$completedForm = null){
+
+//     $updatedManagerName = $data['updated_manager_name'];
+//     $completedFormFields = $data['completed_form_fields'];
+//     foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+//         if ($action ==='create') {
+//             CompletedFormField::create([
+//                 'form_field_id'     => $formFieldKey,
+//                 'value'             => $formFieldValue,
+//                 'completed_form_id' => $completedForm->id
+//             ]);
+//         }
+//         else{
+//             $completedFormField = CompletedFormField::where(['completed_form_id' =>$completedForm->id, 'form_field_id' => $formFieldKey])->first();
+//                 if ($completedFormField->value !==$formFieldValue) {
+//                     $completedFormField->update([
+//                         'value'                 => $formFieldValue,
+//                         'updated_manager_name'  => $updatedManagerName
+//                     ]);
+//                     $completedFormField = null;
+//                     Log::info('esimbi');
+//                 }
+//                 Log::info('esimbi te');
+
+//             return $completedFormField;
+//         }
 //     }
+//  }
 
 }
