@@ -180,9 +180,8 @@ class CompletedFormController extends Controller
                         'updated_manager_name'  => $updatedManagerName
                     ]);
                     $completedFormField = null;
-                    Log::info('esimbi');
                 }
-                Log::info('esimbi te');
+                
             }
             return response()->json($completedForm,200, []);
 
