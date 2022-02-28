@@ -245,52 +245,74 @@ class CompletedFormController extends Controller
 
     public function getAggregatedByHospitals(Request  $request)
     {
-      $hospitalsLastUpdate = DB::table('completed_forms')
-          ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
-          ->groupBy('completed_forms.hospital_id')
-          ->get();
+        $observation_end = $request->input('observation_end');
+        $observation_start = $request->input('observation_start');
+        $township = $request->input('township');
+        $hospital = $request->input('hospital');
 
-      $hospitalsData = [];
-      foreach ($hospitalsLastUpdate as $hospitalLastUpdate) {
-        $hospitalsData[] = Hospital::with([ 'completedForms' => function($query) use ($hospitalLastUpdate) {
-          $query->where('last_update', $hospitalLastUpdate->max_last_update);
-        } ,
-          'completedForms.completedFormFields.formField.formStep',
-          'completedForms.adminUser'])
-        ->find($hospitalLastUpdate->hospital_id);
-      }
+        $hospitalsLastUpdate = DB::table('completed_forms')
+            ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
+            ->groupBy('completed_forms.hospital_id')
+            ->get();
+        if ($observation_start === null) {
+            $hospitalsLastUpdate = DB::table('completed_forms')
+                ->join('hospitals', 'hospitals.id', '=', 'completed_forms.hospital_id')
+                ->where(function ($query) use ($township, $hospital) {
+                    if ($hospital) {
+                        $query->where('completed_forms.hospital_id', '=', $hospital);
+                    } else if ($township) {
+                        $query->where('hospitals.township_id', '=', $township);
+                    }
+                })
+                ->where('completed_forms.last_update',)
+                ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
+                ->groupBy('completed_forms.hospital_id')
+                ->get();
+        }
+        $hospitalsData = [];
+        foreach ($hospitalsLastUpdate as $hospitalLastUpdate) {
+            $hospitalsData[] = Hospital::with([
+                'completedForms' => function ($query) use ($hospitalLastUpdate) {
+                    $query->where('last_update', $hospitalLastUpdate->max_last_update);
+                },
+                'completedForms.completedFormFields.formField.formStep',
+                'completedForms.adminUser'
+            ])
+                ->find($hospitalLastUpdate->hospital_id);
+        }
 
-      return response()->json([
-        'aggregated'  => $this->getAggregatedHospitalsDatas($hospitalsData),
-        'data'        => $hospitalsData,
-        'last_update' => $hospitalsLastUpdate->max('max_last_update')
-      ], 200);
+        return response()->json([
+            'aggregated'  => $this->getAggregatedHospitalsDatas($hospitalsData),
+            'data'        => $hospitalsData,
+            'last_update' => $hospitalsLastUpdate->max('max_last_update')
+        ], 200);
     }
 
-    public function getAggregatedHospitalsDatas ($hospitalsData) {
-      $completedFormFields = collect($hospitalsData)
-        ->flatMap(function ($hospitalData) {
-            return $hospitalData->completedForms;
-        })
-        ->flatMap(function ($completedForm) {
-            return $completedForm->completedFormFields;
-        })
-        ->filter(function ($completedFormField) {
-            return $completedFormField->formField->form_field_type_id === FormFieldType::TYPE_NUMBER ;
-        });
+    public function getAggregatedHospitalsDatas($hospitalsData)
+    {
+        $completedFormFields = collect($hospitalsData)
+            ->flatMap(function ($hospitalData) {
+                return $hospitalData->completedForms;
+            })
+            ->flatMap(function ($completedForm) {
+                return $completedForm->completedFormFields;
+            })
+            ->filter(function ($completedFormField) {
+                return $completedFormField->formField->form_field_type_id === FormFieldType::TYPE_NUMBER;
+            });
 
         $completedFormFieldsGroup = $completedFormFields->groupBy('form_field_id')->values();
         return $completedFormFieldsGroup
-          ->map(function ($completedFormFieldGroup) {
-              $targetFormField = $completedFormFieldGroup[0]->formField ?? null;
-              $aggregated = $completedFormFieldGroup->sum('value');
-              if ($targetFormField && !$targetFormField->agreggation) {
-                $aggregated /= $completedFormFieldGroup->count();
-              }
-              return [
-                'value'       => $aggregated,
-                'form_field'  => $targetFormField
-              ];
-          });
+            ->map(function ($completedFormFieldGroup) {
+                $targetFormField = $completedFormFieldGroup[0]->formField ?? null;
+                $aggregated = $completedFormFieldGroup->sum('value');
+                if ($targetFormField && !$targetFormField->agreggation) {
+                    $aggregated /= $completedFormFieldGroup->count();
+                }
+                return [
+                    'value'       => $aggregated,
+                    'form_field'  => $targetFormField
+                ];
+            });
     }
 }
