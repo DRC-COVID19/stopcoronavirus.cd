@@ -23,7 +23,7 @@ class CompletedFormController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:dashboard')->except(['show', 'getSituationHospitalsAll']);
+        $this->middleware('auth:dashboard')->except(['show', 'getAggregatedByHospitals']);
     }
     /**
      * Display a listing of the resource.
@@ -243,7 +243,7 @@ class CompletedFormController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getSituationHospitalsAll(Request  $request)
+    public function getAggregatedByHospitals(Request  $request)
     {
       $hospitalsLastUpdate = DB::table('completed_forms')
           ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
@@ -277,7 +277,7 @@ class CompletedFormController extends Controller
             return $completedFormField->formField->form_field_type_id === FormFieldType::TYPE_NUMBER ;
         });
 
-        $completedFormFieldsGroup = $completedFormFields->groupBy('form_field_id');
+        $completedFormFieldsGroup = $completedFormFields->groupBy('form_field_id')->values();
         return $completedFormFieldsGroup
           ->map(function ($completedFormFieldGroup) {
               $targetFormField = $completedFormFieldGroup[0]->formField ?? null;

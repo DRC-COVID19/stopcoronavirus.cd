@@ -119,6 +119,19 @@ export default {
             commit('SET_IS_LOADING', false)
           })
       })
+    },
+
+    completedForm__getAggregatedByHospitals(_, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post('/api/dashboard/completed_forms/get-aggregated-by-hospitals', payload)
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch(response => {
+            reject(response)
+          })
+      })
     }
   }
 }

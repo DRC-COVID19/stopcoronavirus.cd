@@ -61,229 +61,27 @@
         <b-row v-else>
           <b-card
             class="col-10 default-card mb-2 offset-1"
-            v-show="isGlobal"
-            v-for="(step, index) in hospitalSituationReduced"
+            v-for="(step, index) in hospitalsDataGroupedByStep"
             :key="index"
           >
-            <h5 class="bold">{{ step.form_step_title }}</h5>
-            <div v-for="(item, key) in step.form_field_values" :key="key">
+            <h5 class="bold">{{ step.title }}</h5>
+            <div v-for="(aggregatedFormField, key) in step.aggregated_form_fields" :key="key">
               <p>
-                {{ item.form_field_name }} :
-                <strong>{{ item.form_field_value }}</strong>
-              </p>
-            </div>
-          </b-card>
-          <b-card
-            v-show="!isGlobal"
-            class="col-10 default-card offset-1 mb-2"
-            v-for="(step, index) in hospitalSelectedFiltered"
-            :key="index"
-          >
-            <h5 class="bold">{{ step.form_step_title }}</h5>
-            <div v-for="(item, key) in step.form_field_values" :key="key">
-              <p>
-                {{ item.form_field_name || null }} :
-                <strong>{{ item.form_field_value || null }}</strong>
+                {{ aggregatedFormField.form_field.name }} :
+                <strong>{{ aggregatedFormField.value }}</strong>
               </p>
             </div>
           </b-card>
         </b-row>
       </b-col>
-      <!-- <skeleton-loading v-if="isLoading" class="mb-2">
-          <square-skeleton
-            :boxProperties="{
-              width: '100%',
-              height: '340px',
-            }"
-          ></square-skeleton>
-        </skeleton-loading> -->
-      <!-- <b-card
-          class="col-10 default-card mb-2 offset-1"
-          v-else
-          v-for="(step, index) in hospitalSituationFiltered.length > 0 ? hospitalSituationFiltered: hospitalSituationReduced"
-          :key="index"
-        >
-
-          <h5 class="bold">{{ step.form_step_title }}</h5>
-          <div v-for="(item, key) in step.form_field_values" :key="key">
-            <p>
-              {{ item.form_field_name }} :
-              <strong>{{ item.form_field_value }}</strong>
-            </p>
-          </div>
-        </b-card> -->
     </b-row>
-    <!-- <b-row no-gutters class="mb-2">
-      <b-col cols="12" md="6" class="pr-1">
-        <div v-if="situationHospitalLoading || isLoading">
-          <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
-            <template #loading>
-              <b-card no-body class="default-card card-chart p-2 cardtype1">
-                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
-                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
-              </b-card>
-            </template>
-          </b-skeleton-wrapper>
-        </div>
-        <FullScreen
-          id="canvasStat1_full"
-          link="canvasStat1"
-          v-show="!situationHospitalLoading && !isLoading"
-        >
-          <b-card no-body class="default-card card-chart p-2 cardtype1">
-            <b-spinner
-              label="Chargement..."
-              v-if="situationHospitalLoading"
-            ></b-spinner>
-            <div class="legend-custom">
-              <div class="text-center title general-top-title">
-                Evolution d'occupation des respirateurs
-              </div>
-              <div
-                class="
-                  d-flex
-                  flex-wrap
-                  justify-content-center
-                  align-items-center
-                "
-              >
-                <div>
-                  <span class="legend-color total"></span>
-                  <Span>Ligne Totale</Span>
-                </div>
-                <div>
-                  <span class="legend-color respirator"></span>
-                  <Span>Respirateurs</Span>
-                </div>
-                <div>
-                  <span class="legend-color interpolation"></span>
-                  <Span>Interpolation</Span>
-                </div>
-              </div>
-            </div>
-            <div class="chart-container">
-              <OccupedRespiratorChart :data='prepareGraphicSituation'/>
-            </div>
-          </b-card>
-        </FullScreen>
-      </b-col>
-
-      <b-col cols="12" md="6" class="pl-1">
-        <div v-if="situationHospitalLoading || isLoading">
-          <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
-            <template #loading>
-              <b-card no-body class="default-card card-chart p-2 cardtype1">
-                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
-                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
-              </b-card>
-            </template>
-          </b-skeleton-wrapper>
-        </div>
-        <FullScreen
-          id="canvasStat2_full"
-          link="canvasStat2"
-          v-show="!situationHospitalLoading && !isLoading"
-        >
-          <b-card no-body class="default-card card-chart p-2 cardtype1">
-            <b-spinner
-              label="Chargement..."
-              v-if="situationHospitalLoading"
-            ></b-spinner>
-            <div class="legend-custom">
-              <div class="text-center title general-top-title">
-                Evolution d'occupation des lits de réanimation
-              </div>
-              <div
-                class="
-                  d-flex
-                  flex-wrap
-                  justify-content-center
-                  align-items-center
-                "
-              >
-                <div>
-                  <span class="legend-color total"></span>
-                  <Span>Ligne Totale</Span>
-                </div>
-                <div>
-                  <span class="legend-color respirator"></span>
-                  <Span>Respirateurs</Span>
-                </div>
-                <div>
-                  <span class="legend-color interpolation"></span>
-                  <Span>Interpolation</Span>
-                </div>
-              </div>
-            </div>
-            <div class="chart-container">
-              <OccupiedResuscitationBeds :data='prepareGraphicSituation'/>
-            </div>
-          </b-card>
-        </FullScreen>
-      </b-col>
-
-      <b-col cols="12" class="mt-2">
-        <div v-if="situationHospitalLoading || isLoading">
-          <b-skeleton-wrapper :loading="situationHospitalLoading || isLoading">
-            <template #loading>
-              <b-card no-body class="default-card card-chart p-2 cardtype1">
-                <b-skeleton class="m-auto" width="60%" height="20"></b-skeleton>
-                <b-skeleton class="mt-2" width="100%" height="180"></b-skeleton>
-              </b-card>
-            </template>
-          </b-skeleton-wrapper>
-        </div>
-        <FullScreen
-          id="canvasStat3_full"
-          link="canvasStat3"
-          v-show="!situationHospitalLoading && !isLoading"
-        >
-          <b-card no-body class="default-card card-chart p-2 cardtype1">
-            <!-- <b-spinner
-              label="Chargement..."
-              v-if="situationHospitalLoading"
-            ></b-spinner> -->
-    <!-- <div class="legend-custom">
-              <div class="text-center title general-top-title">
-                Evolution global du taux d'occupation
-              </div>
-              <div
-                class="
-                  d-flex
-                  flex-wrap
-                  justify-content-center
-                  align-items-center
-                "
-              >
-                <div>
-                  <span class="legend-color total"></span>
-                  <Span>Taux de Lits de réanimation</Span>
-                </div>
-                <div>
-                  <span class="legend-color respirator"></span>
-                  <Span>Taux de Respirateurs</Span>
-                </div>
-              </div>
-            </div>
-            <div class="chart-container">
-              <GlobalSituationChart/>
-              <!-- <canvas
-                height="400"
-                width="100vh"
-                ref="canvasStat3"
-                id="canvasStat3"
-              ></canvas> -->
-    <!-- </div>
-          </b-card>
-        </FullScreen>
-      </b-col>
-    </b-row> -->
   </b-container>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { PALETTE } from '../config/env'
+import { groupAggregatedDataByFormStepField } from '../functions/customFormFieldFunction'
 
 export default {
   components: {},
@@ -309,11 +107,14 @@ export default {
           lableY: "Taux d'occupation",
         },
       ],
+      hospitalsData: []
     };
   },
-  mounted() {
+  async mounted() {
     const id = this.selectedHospital ? this.selectedHospital.id : null;
-    this.getSituationHospital(id);
+    this.hospitalsData = await this.completedForm__getAggregatedByHospitals({
+      hospital_id: id
+    });
     if (this.filterdHospitalSituation.last_update.length > 0) {
       this.hospitalSituationFiltered();
     }
@@ -413,6 +214,9 @@ export default {
     isUploadFile() {
       return this.selectedHospital == null;
     },
+    hospitalsDataGroupedByStep() {
+      return groupAggregatedDataByFormStepField(this.hospitalsData.aggregated || []);
+    }
   },
   watch: {
     hospitalData() {
@@ -442,9 +246,7 @@ export default {
   methods: {
     ...mapActions([
       "getSituationHospital",
-      "getHospitalSituationsAll",
-      "getFormSteps",
-      "gethospitalsFiltered",
+      'completedForm__getAggregatedByHospitals'
     ]),
     ...mapMutations(["selectHospital"]),
     paintStats(data) {

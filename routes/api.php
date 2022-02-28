@@ -192,7 +192,7 @@ Route::group([
     Route::get('/{last_update}/hospital_id/{hospital_id}', 'CompletedFormController@getSituationsByHospitalAndLastUpdate');
     Route::get('/agent-last-update', 'CompletedFormController@getAgentLastUpdate');
     Route::get('/agent-last-update', 'CompletedFormController@getAgentLastUpdate');
-    Route::get('get-hospital-situations-all', "CompletedFormController@getSituationHospitalsAll");
+    Route::post('/get-aggregated-by-hospitals', "CompletedFormController@getAggregatedByHospitals");
   });
 
 
