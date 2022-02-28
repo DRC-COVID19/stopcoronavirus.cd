@@ -23,11 +23,11 @@
               </b-badge>
             </b-col>
           </b-row>
-          <div class="col-12 d-flex text-right justify-content-end">
+          <div v-if="isGlobal" class="col-12 d-flex flex-wrap text-right justify-content-end">
+            <div class="col-12" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </div>
             <export-excel
               :data="hospitalSituationData"
               :name="fileName"
-              v-show="isUploadFile"
             >
               <button
                 :disabled="hospitalSituationData.length === 0"
@@ -38,12 +38,12 @@
               </button>
             </export-excel>
           </div>
-          <div class="col-12 text-right" v-if="!isLoading">
+          <div class="col-12 text-right" v-if="!isLoading && !isGlobal">
+            <p v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </p>
             <button
               class="btn btn-sm btn-primary"
               style="font-size: 12px"
               @click="backToTotalData()"
-              v-if="!isGlobal"
             >
               Retour aux données globales
             </button>
@@ -198,6 +198,13 @@ export default {
         })
         .filter((a,b) => a.date.localeCompare(b.date))
     },
+    hospitalSituationLastUpdate () {
+      if (this.hospitalsData.last_update) {
+        return moment(this.hospitalsData.last_update).format('DD.MM.YYYY')
+      } else {
+        return null
+      }
+    },
     prepareGraphicSituation () {
       return this.hospitalSituationAll.formFieldsFiltered
     },
@@ -207,9 +214,6 @@ export default {
         this.hospitalSituationSelected.form_fields_names
       )
       return this.createSituationsReduce(arrayFilterd)
-    },
-    isUploadFile () {
-      return this.selectedHospital == null
     },
     hospitalsDataGroupedByStep () {
       return groupAggregatedDataByFormStepField(this.hospitalsData.aggregated || [])
