@@ -269,14 +269,25 @@ class CompletedFormController extends Controller
               $query->where('id', $hospital);
             }
           })
+          ->where(function ($query) use ($observation_end, $observation_start) {
+            if ($observation_end && $observation_start) {
+              $query->whereBetween('last_update', [$observation_start, $observation_end]);
+            } else if ($observation_end) {
+              $query->where('last_update', '<=', $observation_end);
+            }
+          })
           ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
           ->groupBy('completed_forms.hospital_id')
           ->get();
 
       $hospitalsData = [];
       foreach ($hospitalsLastUpdate as $hospitalLastUpdate) {
-        $hospitalsData[] = Hospital::with([ 'completedForms' => function($query) use ($hospitalLastUpdate) {
-          $query->where('last_update', $hospitalLastUpdate->max_last_update);
+        $hospitalsData[] = Hospital::with([ 'completedForms' => function($query) use ($hospitalLastUpdate, $observation_end, $observation_start) {
+          if ($observation_end && $observation_start) {
+            $query->whereBetween('last_update', [$observation_start, $observation_end]);
+          } else {
+            $query->where('last_update', $hospitalLastUpdate->max_last_update);
+          }
         } ,
           'completedForms.completedFormFields.formField.formStep',
           'completedForms.adminUser'])
