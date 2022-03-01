@@ -254,21 +254,7 @@ class CompletedFormController extends Controller
             ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
             ->groupBy('completed_forms.hospital_id')
             ->get();
-        if ($observation_start === null) {
-            $hospitalsLastUpdate = DB::table('completed_forms')
-                ->join('hospitals', 'hospitals.id', '=', 'completed_forms.hospital_id')
-                ->where(function ($query) use ($township, $hospital) {
-                    if ($hospital) {
-                        $query->where('completed_forms.hospital_id', '=', $hospital);
-                    } else if ($township) {
-                        $query->where('hospitals.township_id', '=', $township);
-                    }
-                })
-                ->where('completed_forms.last_update',)
-                ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
-                ->groupBy('completed_forms.hospital_id')
-                ->get();
-        }
+
         $hospitalsData = [];
         foreach ($hospitalsLastUpdate as $hospitalLastUpdate) {
             $hospitalsData[] = Hospital::with([
