@@ -40,7 +40,7 @@
               @change="onChange"
             ></b-form-select>
           </b-form-group>
-          <b-form-group label="Champ à agréger ?" v-slot="{ ariaDescribedby }" v-if="isAgreggated">
+          <b-form-group label="Mode d'agréggation ?" v-slot="{ ariaDescribedby }" v-if="isAgreggated">
             <b-form-radio-group
               v-model="isAgreggated"
               :options="requireAgreggationOptions"
@@ -137,8 +137,8 @@ export default {
       form: {},
       isAgreggated: false,
       requireAgreggationOptions: [
-        { text: 'Oui ( l\'addition sera prise en compte )', value: 1 },
-        { text: 'Non ( la moyenne sera prise en compte)', value: 0 }
+        { text: 'Faire l\'addition', value: 1 },
+        { text: 'Faire la moyenne', value: 0 }
       ],
 
       requiredOptions: [
