@@ -103,7 +103,7 @@ class FormFieldController extends Controller
           'default_value'         => 'nullable|string|max:255',
           'form_id'               => 'required|integer|exists:forms,id',
           'form_field_type_id'    => 'required|integer|exists:form_field_types,id',
-          'form_step_id'          => 'nullable|integer|exists:form_steps,id'
+          'form_step_id'          => 'required|integer|exists:form_steps,id'
       ]);
   }
     public function updateValidator(){

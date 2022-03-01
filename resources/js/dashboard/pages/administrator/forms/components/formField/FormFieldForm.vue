@@ -37,9 +37,18 @@
               text-field="name"
               value-field="id"
               required
+              @change="onChange"
             ></b-form-select>
           </b-form-group>
-
+          <b-form-group label="Champ à agréger ?" v-slot="{ ariaDescribedby }" v-if="isAgreggated">
+            <b-form-radio-group
+              v-model="isAgreggated"
+              :options="requireAgreggationOptions"
+              :aria-describedby="ariaDescribedby"
+              id="require"
+            ></b-form-radio-group>
+          </b-form-group>
+          <br>
           <b-form-group
             id="default-value-group"
             label="Valeur par défaut"
@@ -80,6 +89,7 @@
               :options="formStepsSorted"
               text-field="title"
               value-field="id"
+              required
             ></b-form-select>
           </b-form-group>
 
@@ -125,13 +135,19 @@ export default {
   data () {
     return {
       form: {},
+      isAgreggated: false,
+      requireAgreggationOptions: [
+        { text: 'Oui ( l\'addition sera prise en compte )', value: 1 },
+        { text: 'Non ( la moyenne sera prise en compte)', value: 0 }
+      ],
+
       requiredOptions: [
         { text: 'Oui', value: 1 },
         { text: 'Non', value: 0 }
       ],
       fieldWillBeRequired: false,
       updating: false,
-      btnSubmitTitle : 'Enregistrer',
+      btnSubmitTitle: 'Enregistrer',
       title: 'Ajouter un nouveau champ'
     }
   },
@@ -149,7 +165,7 @@ export default {
     },
     formStepsSorted () {
       return this.formSteps.slice().sort((a, b) => a.step - b.step)
-    },
+    }
 
   },
   watch: {
@@ -171,7 +187,7 @@ export default {
     onSubmit () {
       this.form.rules = this.fieldWillBeRequired ? 'required' : ''
       this.form.form_id = this.targetForm.id
-
+      this.form.agreggation = this.isAgreggated
       if (!this.form.form_field_order) {
         const MaxValue = this.targetForm.form_fields.flatMap(x => x.order_field)
         this.form.order_field = MaxValue.length && MaxValue.length > 0 ? Math.max(...MaxValue) + 1 : 1
@@ -213,6 +229,12 @@ export default {
               type: 'error'
             })
           })
+      }
+    },
+    onChange (value) {
+      this.isAgreggated = false
+      if (value === 2) {
+        this.isAgreggated = true
       }
     },
     onReset () {
