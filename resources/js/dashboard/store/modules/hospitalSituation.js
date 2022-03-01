@@ -13,7 +13,7 @@ export default {
     hospitalSituationAll: [],
     observation_start: null,
     observation_end: moment().format('YYYY-MM-DD'),
-    hospitalSituationSelected: [],
+    hospitalSituationSelected: {},
     hospitalObservationSituation: []
   },
 

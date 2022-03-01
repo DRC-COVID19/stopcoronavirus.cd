@@ -243,8 +243,18 @@ class CompletedFormController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getAggregatedByHospitals(Request  $request)
+    public function getAggregatedByHospitals(Request $request)
     {
+     
+      $hospitalsCompletedFormsData = self::getHospitalsCompletedFormsData($request);
+      return response()->json([
+        'aggregated'  => self::getAggregatedHospitalsDatas($hospitalsCompletedFormsData['hospitalsData']),
+        'data'        => $hospitalsCompletedFormsData['hospitalsData'],
+        'last_update' => $hospitalsCompletedFormsData['lastUpdate']
+      ], 200);
+    }
+
+    static public function getHospitalsCompletedFormsData(Request $request) {
       $observation_end = $request->input('observation_end');
       $observation_start = $request->input('observation_start');
       $township = $request->input('township');
@@ -272,15 +282,13 @@ class CompletedFormController extends Controller
           'completedForms.adminUser'])
         ->find($hospitalLastUpdate->hospital_id);
       }
-
-      return response()->json([
-        'aggregated'  => $this->getAggregatedHospitalsDatas($hospitalsData),
-        'data'        => $hospitalsData,
-        'last_update' => $hospitalsLastUpdate->max('max_last_update')
-      ], 200);
+      return [
+        'hospitalsData' => $hospitalsData,
+        'lastUpdate'    => $hospitalsLastUpdate->max('max_last_update')
+      ];
     }
 
-    public function getAggregatedHospitalsDatas($hospitalsData)
+    static public function getAggregatedHospitalsDatas($hospitalsData)
     {
         $completedFormFields = collect($hospitalsData)
             ->flatMap(function ($hospitalData) {

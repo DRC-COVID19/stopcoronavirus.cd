@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection ;
+use Illuminate\Support\Facades\Log;
 
 class HospitalController extends Controller
 {
@@ -84,18 +85,24 @@ class HospitalController extends Controller
         //
     }
 
-    public function getHospials(Request $request)
+    public function getHospitals(Request $request)
     {
         try {
-            $observation_end = $request->query('observation_end') ;
-            $observation_start = $request->query('observation_start') ;
-            $township = $request->query('township') ;
-
-
-            $hospitalsFiltred = $this->getHospitalsFromFiltre($observation_start, $observation_end, $township) ;
-            $dataHospitals = HospitalResources::collection($hospitalsFiltred);
-            return response()->json($dataHospitals,200,[],JSON_NUMERIC_CHECK);
-
+            $hospitalsCompletedFormsData = collect(CompletedFormController::getHospitalsCompletedFormsData($request)['hospitalsData']);
+            $hospitals = Hospital::all();
+            foreach ($hospitals as $hospital) {
+              $index = $hospitalsCompletedFormsData->search(function ($item) use ($hospital) {
+                  return $item->id === $hospital->id ;
+              });
+              if ($index === false) {
+                $hospital->completed_forms = [];
+                $hospital->aggregated = [];
+                $hospitalsCompletedFormsData->push($hospital);
+              } else {
+                $hospitalsCompletedFormsData[$index]->aggregated = CompletedFormController::getAggregatedHospitalsDatas([$hospital]);
+              }
+            }
+            return response()->json($hospitalsCompletedFormsData, 200);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

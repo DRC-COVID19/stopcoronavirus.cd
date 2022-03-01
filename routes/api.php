@@ -219,7 +219,7 @@ Route::group([
     Route::get('get-form/{form}', 'FormStepController@getFormStepByForm');
   });
   Route::group(['prefix' => 'hospitals'], function () {
-    Route::get('/', 'HospitalController@getHospials'); //ok
+    Route::get('/', 'HospitalController@getHospitals'); //ok
     Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution'); //ok
     Route::get('/totaux', 'HospitalController@getHospitalsTotaux'); //ok
   });
