@@ -769,9 +769,8 @@ export default {
       'getFluxHotSpot',
       'getSituationHospital',
       'getHospitals',
-      'gethospitalsFiltered',
-      'getHospitalSituationsAll',
-      'getObservationSituationHospital',
+      'completedForm__getAggregatedByHospitals',
+      'getHospitalSituationsAll'
     ]),
     ...mapMutations([
       'setMapStyle',
@@ -1707,8 +1706,7 @@ export default {
       this.setCanShowNavMobile(false)
       values.isLoading = true
       this.getHospitalsData(values)
-      this.gethospitalsFiltered(values)
-      this.getObservationSituationHospital(values)
+      this.completedForm__getAggregatedByHospitals(values)
       this.initForm()
     },
     seeSide () {

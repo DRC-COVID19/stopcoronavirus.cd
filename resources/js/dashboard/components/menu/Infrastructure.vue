@@ -1,7 +1,7 @@
 <template>
   <b-card no-body class="rounded-0 p-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
-      <b-form-row class="d-flex justify-content-between ml-1 mr-5">
+      <b-form-row class="d-flex justify-content-between ml-0 mr-0">
         <b-col lg="5" cols="5" md="4" class="col-5 nav-zone pl-3 pr-3">
           <b-form-group>
             <label for class="text-dash-color">Commune</label>

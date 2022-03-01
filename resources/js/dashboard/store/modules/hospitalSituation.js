@@ -224,24 +224,6 @@ export default {
           })
       })
     },
-    getObservationSituationHospital ({ state, commit }, payload) {
-      commit('SET_IS_LOADING', payload.isLoading)
-      return new Promise((resolve, reject) => {
-        axios
-          .post('api/dashboard/get-observation-situation-hospital', payload)
-          .then(({ data }) => {
-            commit('SET_OBSERVATION_SITUATION_HOSPITALS', data)
-            commit('SET_IS_LOADING', false)
-            resolve(true)
-          })
-          .catch(response => {
-            reject(response)
-          })
-          .finally(() => {
-            commit('SET_IS_LOADING', false)
-          })
-      })
-    },
     async getObservation ({ state, commit }, payload) {
       await commit('SET_OBSERVATION', payload)
     }

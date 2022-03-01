@@ -205,7 +205,6 @@ Route::group([
   // Route::post('get-by-hospital-situations', "HospitalSituationNewController@getSituationByHospitals");
   Route::post('get-situations', "HospitalSituationNewController@getSituations");
   Route::resource('hospital-situations', "HospitalSituationController");
-  Route::post('get-observation-situation-hospital', "HospitalSituationNewController@getObservationSituationHospital");
 
   Route::resource('hospitals-data', 'HospitalController');
   Route::apiResource('forms', 'FormController');

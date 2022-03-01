@@ -3,6 +3,7 @@ export default {
     completedForms: {} || [],
     completedFormsDetail: {} || [],
     completedFormsByLastUpdate: [],
+    completedFormsAggregated: {},
     isLoading: false
   },
   mutations: {
@@ -11,6 +12,9 @@ export default {
     },
     SET_COMPLETED_FORMS (state, payload) {
       state.completedForms = payload
+    },
+    SET_COMPLETED_FORMS_AGGREGATED (state, payload) {
+      state.completedFormsAggregated = payload
     },
     SET_COMPLETED_FORMS_BY_LAST_UPDATE (state, payload) {
       state.completedFormsByLastUpdate = payload
@@ -121,12 +125,12 @@ export default {
       })
     },
 
-    completedForm__getAggregatedByHospitals(_, payload) {
+    completedForm__getAggregatedByHospitals({commit}, payload) {
       return new Promise((resolve, reject) => {
         axios
           .post('/api/dashboard/completed_forms/get-aggregated-by-hospitals', payload)
           .then(({ data }) => {
-            resolve(data)
+            commit('SET_COMPLETED_FORMS_AGGREGATED', data)
           })
           .catch(response => {
             reject(response)

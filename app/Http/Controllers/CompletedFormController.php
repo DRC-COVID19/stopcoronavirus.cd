@@ -245,7 +245,12 @@ class CompletedFormController extends Controller
 
     public function getAggregatedByHospitals(Request  $request)
     {
-      $hospitalsLastUpdate = DB::table('completed_forms')
+      $hospitalsLastUpdate = CompletedForm
+          ::whereHas('hospital', function($query) use ($request) {
+            if ($request->get('township')) {
+              $query->where('township_id', $request->get('township'));
+            }
+          })
           ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
           ->groupBy('completed_forms.hospital_id')
           ->get();
