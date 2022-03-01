@@ -82,6 +82,7 @@ export default {
                   nurses: value.nurses ?? 0,
                   para_medicals: value.para_medicals ?? 0,
 
+                  last_update: value.last_update ?? '',
                   completed_forms: JSON.stringify(value.completed_forms ?? []),
                   aggregated: JSON.stringify(value.aggregated ?? []),
                   color: '#ED5F68'

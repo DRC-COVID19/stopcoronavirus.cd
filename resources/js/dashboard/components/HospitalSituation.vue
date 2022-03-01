@@ -24,7 +24,7 @@
             </b-col>
           </b-row>
           <div v-if="isGlobal" class="col-12 d-flex flex-wrap text-right justify-content-end">
-            <div class="col-12 px-0" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </div>
+            <div class="col-12 px-0 mb-1" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </div>
             <export-excel
               :data="hospitalSituationData"
               :name="fileName"
@@ -39,13 +39,14 @@
             </export-excel>
           </div>
           <div class="col-12 text-right" v-if="!isLoading && !isGlobal">
-            <p v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </p>
+            <p class="mb-0" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </p>
             <button
-              class="btn btn-sm btn-primary"
-              style="font-size: 12px"
+              class="btn btn-primary"
               @click="backToTotalData()"
             >
-              Retour aux données globales
+              <small>
+                Retour aux données globales
+              </small>
             </button>
           </div>
         </div>
@@ -208,7 +209,9 @@ export default {
         .filter((a,b) => a.date.localeCompare(b.date))
     },
     hospitalSituationLastUpdate () {
-      if (this.completedFormsAggregated.last_update) {
+      if (this.selectedHospital && this.selectedHospital.id) {
+        return this.selectedHospital.last_update ? moment(this.selectedHospital.last_update).format('DD.MM.YYYY') : null
+      } else if (this.completedFormsAggregated.last_update) {
         return moment(this.completedFormsAggregated.last_update).format('DD.MM.YYYY')
       } else {
         return null
@@ -225,7 +228,12 @@ export default {
       return this.createSituationsReduce(arrayFilterd)
     },
     hospitalsDataGroupedByStep () {
-      return groupAggregatedDataByFormStepField(this.completedFormsAggregated.aggregated || [])
+      if (this.selectedHospital && this.selectedHospital.id) {
+        const aggregatedData = JSON.parse(this.selectedHospital.aggregated)
+        return groupAggregatedDataByFormStepField(aggregatedData || [])
+      } else {
+        return groupAggregatedDataByFormStepField(this.completedFormsAggregated.aggregated || [])
+      }
     }
   },
   watch: {
@@ -235,19 +243,17 @@ export default {
     },
     selectedHospital (val) {
       const id = val ? val.id : null
+      console.log(val)
       const form = {
         hospital: id,
         observation_start: this.observation_start,
         observation_end: this.observation_end
       }
-      this.gethospitalsFiltered(form)
+      // this.gethospitalsFiltered(form)
     },
     situationHospital (val) {
       this.dataGlobal = val
       this.paintStats(val)
-    },
-    hospitalSituationAll () {
-      this.gethospitalsFiltered()
     },
     chartData () {
       this.$data._chart.update()

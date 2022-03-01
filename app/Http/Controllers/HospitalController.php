@@ -102,9 +102,11 @@ class HospitalController extends Controller
               if ($index === false) {
                 $hospital->completed_forms = [];
                 $hospital->aggregated = [];
+                $hospital->last_update = null;
                 $hospitalsCompletedFormsData->push($hospital);
               } else {
-                $hospitalsCompletedFormsData[$index]->aggregated = CompletedFormController::getAggregatedHospitalsDatas([$hospital]);
+                $hospitalsCompletedFormsData[$index]->aggregated = CompletedFormController::getAggregatedHospitalsDatas([$hospitalsCompletedFormsData[$index]]);
+                $hospitalsCompletedFormsData[$index]->last_update = $hospitalsCompletedFormsData[$index]->completedForms->max('last_update');
               }
             }
             return response()->json($hospitalsCompletedFormsData, 200);
