@@ -422,6 +422,9 @@ export default {
     hospitals() {
       this.infrastructure();
     },
+    healthZoneGeojsonCentered() {
+      this.infrastructure();
+    },
     medicalOrientations() {
       this.getMedicalOrientations();
     },
@@ -2601,14 +2604,16 @@ export default {
         map.U.removeSource(COVID_HOSPITAL_SOURCE);
         // this.mapResize();
         map.resize();
-        map.flyTo({
-          center: this.getHealthZoneCoordonate("Kinshasa", 2),
-          easing: function (t) {
-            return t;
-          },
-          pitch: 10,
-          zoom: 9,
-        });
+        if (this.getHealthZoneCoordonate("Kinshasa", 2).length > 0) {
+          map.flyTo({
+            center: this.getHealthZoneCoordonate("Kinshasa", 2),
+            easing: function (t) {
+              return t;
+            },
+            pitch: 10,
+            zoom: 9,
+          });
+        }
         map.addSource(COVID_HOSPITAL_SOURCE, this.hospitals);
 
         map.addLayer({
