@@ -89,7 +89,12 @@ class HospitalController extends Controller
     {
         try {
             $hospitalsCompletedFormsData = collect(CompletedFormController::getHospitalsCompletedFormsData($request)['hospitalsData']);
-            $hospitals = Hospital::all();
+            $township = $request->input('township');
+            $hospitals = Hospital::where(function ($query) use ($township) {
+              if ($township) {
+                $query->where('township_id', $township);
+              }
+            })->get();
             foreach ($hospitals as $hospital) {
               $index = $hospitalsCompletedFormsData->search(function ($item) use ($hospital) {
                   return $item->id === $hospital->id ;
