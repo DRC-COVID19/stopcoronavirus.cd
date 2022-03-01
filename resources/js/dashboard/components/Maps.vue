@@ -2650,48 +2650,24 @@ export default {
       const coordinates = e.features[0].geometry.coordinates.slice();
       const {
         name,
-        address,
-        beds,
-        occupied_beds,
-        masks,
-        respirators,
-        occupied_respirators,
-        confirmed,
-        dead,
-        sick,
-        healed,
-        last_update,
-        resuscitation_beds,
-        occupied_resuscitation_beds,
+        aggregated
       } = e.features[0].properties;
+
+      let questions = ''
+      JSON.parse(aggregated)
+        .filter(formFieldAggregated => formFieldAggregated.form_field.show_in_summary_report)
+        .forEach(formFieldAggregated => {
+          questions += 
+            `<hr class="col-12 m-0 p-0">
+              <div class="col-9 small">${formFieldAggregated.form_field.name}</div>
+              <div class="col-3 bold">${formFieldAggregated.value}</div>`
+        });
 
       const HTML = `<div class="row">
                 <div class="col-12 bold text-center hospital-name">${name}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Confirmés</div>
-                <div class="col-3 bold">${confirmed}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Hospitalisés</div>
-                <div class="col-3 bold">${sick}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Lits de réanimation</div>
-                <div class="col-3 bold">${resuscitation_beds}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Lits de réanimation occupés</div>
-                <div class="col-3 bold">${occupied_resuscitation_beds}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Respirateurs</div>
-                <div class="col-3 bold">${respirators}</div>
-                <hr class="col-12 m-0 p-0">
-
-                <div class="col-9 small">Respirateurs occupés</div>
-                <div class="col-3 bold">${occupied_respirators}</div>
+                ${questions}
             </div>`;
+
       popup.setLngLat(e.lngLat).setHTML(HTML).addTo(map);
     },
     infranstructureMouseClick(e) {
