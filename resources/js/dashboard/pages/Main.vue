@@ -1,11 +1,9 @@
 <template>
   <div>
-    <MainHeader />
-    <b-row>
-      <b-col cols="12" >
-        Main page
-      </b-col>
-    </b-row>
+    <div class="main-header">
+      <MainHeader />
+    </div>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -18,3 +16,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  @import "@~/sass/_variables";
+  .main-header{
+    border-bottom: 8px solid $dash-background;
+  }
+  body {
+    overflow-x: hidden;
+  }
+</style>

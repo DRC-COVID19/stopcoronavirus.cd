@@ -20,6 +20,7 @@ import Epidemie from './pages/administrator/epidemy/Index'
 import FormIndex from './pages/administrator/forms/index'
 import FormShow from './pages/administrator/forms/form'
 import Main from './pages/Main'
+import Dashboard from './pages/dashboard/Dashboard'
 import {
   ADMIN_DASHBOARD,
   AGENT_HOSPITAL,
@@ -62,7 +63,18 @@ export default [
     component: Main,
     meta: {
       requiresAuth: true
-    }
+    },
+    children: [
+      {
+        path: 'dashboard',
+        name: 'main.dashboard',
+        component: Dashboard
+      },
+      {
+        path: '*',
+        redirect: { name: 'main.dashboard' }
+      },
+    ]
   },
   {
     path: '/dashboard/home',

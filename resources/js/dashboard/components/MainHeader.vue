@@ -25,9 +25,9 @@
             </b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
-            <li class="position-relative nav-item d-flex align-items-center">
+            <b-nav-item class="position-relative nav-item d-flex align-items-center">
               <a
-                class="nav-link"
+                class="nav-link position-relative"
                 href="#"
                 @click.prevent="toggleHeaderNotification"
                 v-click-outside="clickOutsideNotification"
@@ -35,12 +35,9 @@
                 <div
                   class="icon-hallo d-flex justify-content-center align-items-center"
                 >
-                  <i class="fas fa-bell"></i>
+                  <i class="fas fa-bell" aria-hidden="true"></i>
                 </div>
-
-                <span class="notification-count">{{
-                  getChangeLogNotRead.length
-                }}</span>
+                <span class="notification-count"> {{ getChangeLogNotRead.length }} </span>
               </a>
               <div class="dropdown-nav" v-show="showHeaderNotification">
                 <div class="item-header">
@@ -75,8 +72,8 @@
                   </div>
                 </div>
               </div>
-            </li>
-            <b-nav-item>
+            </b-nav-item>
+            <b-nav-item class="d-flex align-content-center">
               <div
                 class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
               >
@@ -192,9 +189,9 @@ export default {
     border-radius: 50px;
   }
   .notification-count {
-    position: relative;
-    top: -35px;
-    right: -13px;
+    position: absolute;
+    top: 4px;
+    right: -2px;
     height: 20px;
     width: 20px;
     color: #ffffff;
