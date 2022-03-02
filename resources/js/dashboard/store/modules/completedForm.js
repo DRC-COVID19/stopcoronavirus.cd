@@ -36,7 +36,6 @@ export default {
     completedForm__update (_, payload) {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
-        console.log('update data:', payload)
         axios
           .put(`/api/dashboard/completed_forms/${payload.id}`, payload)
           .then(({ data }) => {

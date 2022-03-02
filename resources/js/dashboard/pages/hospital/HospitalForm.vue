@@ -191,7 +191,6 @@ export default {
       this.completedFormFields.forEach(item => {
         this.$set(this.completedForm.completed_form_fields, item.form_field.id, item.value)
       })
-      console.log('load formData:', this.completedForm.completed_form_fields)
     },
 
     onComplete () {
