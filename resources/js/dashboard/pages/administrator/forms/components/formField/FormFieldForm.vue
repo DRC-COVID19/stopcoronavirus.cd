@@ -40,15 +40,17 @@
               @change="onChange"
             ></b-form-select>
           </b-form-group>
-          <b-form-group label="Mode d'agréggation ?" v-slot="{ ariaDescribedby }" v-if="isAgreggated">
+          <b-form-group
+          label="Mode d'agréggation ?"
+           v-slot="{ ariaDescribedby }"
+           v-show="getTypeCustomField.NUMBER === form.form_field_type_id">
             <b-form-radio-group
               v-model="isAgreggated"
               :options="requireAgreggationOptions"
               :aria-describedby="ariaDescribedby"
-              id="require"
+              id="requiredAgreggation"
             ></b-form-radio-group>
           </b-form-group>
-          <br>
           <b-form-group
             id="default-value-group"
             label="Valeur par défaut"
@@ -118,6 +120,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import { TYPE_CUSTOM_FIELD } from '../../../../../config/env'
 
 export default {
   props: {
@@ -165,6 +168,9 @@ export default {
     },
     formStepsSorted () {
       return this.formSteps.slice().sort((a, b) => a.step - b.step)
+    },
+    getTypeCustomField () {
+      return TYPE_CUSTOM_FIELD
     }
 
   },
@@ -232,9 +238,10 @@ export default {
       }
     },
     onChange (value) {
-      this.isAgreggated = false
-      if (value === 2) {
+      if (value === TYPE_CUSTOM_FIELD.NUMBER) {
         this.isAgreggated = true
+      } else {
+        this.isAgreggated = null
       }
     },
     onReset () {

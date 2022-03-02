@@ -174,14 +174,20 @@ class CompletedFormController extends Controller
             foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
 
                 $completedFormField = CompletedFormField::where(['completed_form_id' =>$completedForm->id, 'form_field_id' => $formFieldKey])->first();
-                if ($completedFormField->value !==$formFieldValue) {
+                if ($completedFormField && $completedFormField->value !==$formFieldValue) {
                     $completedFormField->update([
                         'value'                 => $formFieldValue,
                         'updated_manager_name'  => $updatedManagerName
                     ]);
-                    $completedFormField = null;
                 }
-                
+                else if(!$completedFormField) {
+                    CompletedFormField::create([
+                          'form_field_id'          => $formFieldKey,
+                           'value'                 => $formFieldValue,
+                           'completed_form_id'     => $completedForm->id,
+                           'updated_manager_name'  => $updatedManagerName
+                    ]);
+                } 
             }
             return response()->json($completedForm,200, []);
 
@@ -218,9 +224,10 @@ class CompletedFormController extends Controller
       return  
       $completedForm
            ->with([
-               'completedFormFields','completedFormFields.formField.formStep',
-               'completedFormFields.formField.formFieldType','hospital'
-               ])
+            'completedFormFields.formField.formStep',
+            'completedFormFields.formField.formFieldType',
+            'hospital'
+])
         ->select('*')
         ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
   }
@@ -233,7 +240,7 @@ class CompletedFormController extends Controller
         return 
         $form->completedFormFields
              ->sort(function($a, $b){
-                     return $a->order_field-$b->order_field;
+                     return $a->order_field - $b->order_field;
                 });
     })[0];
 

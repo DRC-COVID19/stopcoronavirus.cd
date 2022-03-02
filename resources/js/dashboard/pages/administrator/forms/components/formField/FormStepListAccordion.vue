@@ -57,6 +57,7 @@
                     aria-hidden="true"
                   ></i>
                   <i
+                  @click="updateField(item)"
                     class="mx-2 my-1 fas fa-pencil-alt color-green btn"
                     aria-hidden="true"
                   ></i>

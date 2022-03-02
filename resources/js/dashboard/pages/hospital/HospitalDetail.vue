@@ -57,12 +57,6 @@ export default {
         }
       } else return { name: 'hospital.home' }
     },
-    lastUpdate () {
-      return this.completedFormFields[0].completed_form.last_update
-    },
-    createdManagerName () {
-      return this.completedFormFields[0].completed_form.created_manager_name
-    },
     completedFormFieldFiltered () {
       return this.completedFormFieldFilter()
     }
@@ -74,15 +68,15 @@ export default {
       this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
       if (this.completedFormFields.length > 0) {
         this.isLoading = false
-        this.getLastUpdate()
-        this.getCreatedManagerName()
+        this.setLastUpdate(this.completedFormFields[0].completed_form.last_update)
+        this.setCreatedManagerName(this.completedFormFields[0].completed_form.created_manager_name)
       }
     },
-    getLastUpdate () {
-      this.completedForm.last_update = this.completedFormFields[0].completed_form.last_update
+    setLastUpdate (lastUpdate) {
+      this.completedForm.last_update = lastUpdate
     },
-    getCreatedManagerName () {
-      this.completedForm.created_manager_name = this.completedFormFields[0].completed_form.created_manager_name
+    setCreatedManagerName (createdManagerName) {
+      this.completedForm.created_manager_name = createdManagerName
     },
     completedFormFieldEvery () {
       const completedFormFieldsId = []
