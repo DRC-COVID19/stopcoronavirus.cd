@@ -130,6 +130,7 @@ export default {
           })
           .finally(() => {
             commit('SET_IS_LOADING', false)
+            commit('SET_IS_CREATING', false)
           })
       })
     },
@@ -149,6 +150,7 @@ export default {
           })
           .finally(() => {
             commit('SET_IS_LOADING', false)
+            commit('SET_IS_CREATING', false)
           })
       })
     },

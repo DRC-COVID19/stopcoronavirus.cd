@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="step-form">
     <b-card class="my-4">
       <b-card-body class="py-0">
         <div class="d-flex justify-content-between align-items-center">
