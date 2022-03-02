@@ -14,7 +14,10 @@
         </b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
-            <b-nav-item>
+            <b-nav-item
+              :to="{name: 'main.dashboard'}"
+              :active="this.$route.name.startsWith('main.dashboard')"
+            >
               Dashboard
             </b-nav-item>
             <b-nav-item>

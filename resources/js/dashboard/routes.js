@@ -68,40 +68,46 @@ export default [
       {
         path: 'dashboard',
         name: 'main.dashboard',
-        component: Dashboard
+        component: Dashboard,
+        children: [
+          {
+            path: 'mobility',
+            component: Home,
+            name: 'main.dashboard.mobility',
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_DASHBOARD]
+            }
+          },
+          {
+            path: 'infrastructure',
+            component: Home,
+            name: 'main.dashboard.infrastructure',
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_DASHBOARD]
+            }
+          },
+          {
+            path: 'a-propos',
+            component: Home,
+            name: 'main.dashboard.aPropos',
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_DASHBOARD]
+            }
+          },
+          {
+            path: '*',
+            redirect: { name: 'main.dashboard.mobility' }
+          }
+        ]
       },
       {
         path: '*',
-        redirect: { name: 'main.dashboard' }
+        redirect: { name: 'main.dashboard.mobility' }
       },
     ]
-  },
-  {
-    path: '/dashboard/home',
-    component: Home,
-    name: 'home',
-    meta: {
-      requiresAuth: true,
-      role: [ADMIN_DASHBOARD]
-    }
-  },
-  {
-    path: '/dashboard/infrastructure',
-    component: Home,
-    name: 'dashboard.infrastructure',
-    meta: {
-      requiresAuth: true,
-      role: [ADMIN_DASHBOARD]
-    }
-  },
-  {
-    path: '/dashboard/a-propos',
-    component: Home,
-    name: 'dashboard.aPropos',
-    meta: {
-      requiresAuth: true,
-      role: [ADMIN_DASHBOARD]
-    }
   },
   {
     path: '/hospitals',
