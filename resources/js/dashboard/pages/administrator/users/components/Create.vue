@@ -65,6 +65,7 @@
         label="name"
         :reduce="(item) => item.id"
         :filterable="true"
+        :searchable ="false"
       />
       <label class="text-dash-color" for="check-group-1">Hopital *</label>
       <v-select
@@ -92,7 +93,7 @@
         type="password"
         id="text-password-confirm"
         aria-describedby="password-help-block"
-        v-model="form.confirmPassword"prevent
+        v-model="form.confirmPassword"
       ></b-form-input>
       <b-form-text id="password-help-block">{{ warningMissMatch }}</b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
