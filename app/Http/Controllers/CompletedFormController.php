@@ -52,7 +52,7 @@ class CompletedFormController extends Controller
 
 
     }
-    public function getAgentLastUpdate()
+    public function getLatestHospitalUpdate()
     {
 
         try {
@@ -245,5 +245,6 @@ class CompletedFormController extends Controller
     })[0];
 
   }
+
 
 }

@@ -90,12 +90,14 @@ export default {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get('/api/dashboard/completed_forms/agent-last-update')
+          .get('/api/dashboard/completed_forms/get-latest-hospital-update')
           .then(({ data }) => {
             const completedForms = data.map(completedForm => ({
               diff_date: completedForm.diff_date,
               last_update: completedForm.last_update,
-              name: completedForm.form_id ? completedForm.hospital.name : completedForm.name,
+              name: completedForm.form_id
+                ? completedForm.hospital.name
+                : completedForm.name,
               created_manager_name: completedForm.created_manager_name,
               hospital_id: completedForm.hospital_id
             }))
