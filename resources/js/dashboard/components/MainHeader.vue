@@ -26,8 +26,11 @@
             >
               Administration
             </b-nav-item>
-            <b-nav-item>
-              CTCO
+            <b-nav-item
+              :to="{name: 'hospitals'}"
+              :active="this.$route.name.startsWith('hospital')"
+            >
+              CTCOS
             </b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">

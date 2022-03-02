@@ -20,6 +20,7 @@ import FormIndex from './pages/administrator/forms/index'
 import FormShow from './pages/administrator/forms/form'
 import Main from './pages/Main'
 import Dashboard from './pages/dashboard/Dashboard'
+import CTCO from './pages/ctco/CTCO'
 import {
   ADMIN_DASHBOARD,
   AGENT_HOSPITAL,
@@ -173,71 +174,86 @@ export default [
             }
           }
         ]
+      },
+
+      /**
+       * CTCO routes
+       */
+      {
+        path: '/hospitals',
+        name: 'hospitals',
+        component: CTCO,
+        meta: {
+          requiresAuth: true,
+          role: [AGENT_HOSPITAL] || [ADMIN_HOSPITAL]
+        },
+        children: [
+          {
+            path: '/hospitals',
+            name: 'hospital.home',
+            component: HospitalsHome,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+          {
+            path: '/admin/hospitals',
+            name: 'hospital.admin',
+            component: HospitalAdmin,
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_HOSPITAL]
+            }
+          },
+          {
+            path: '/admin/hospitals/:hospital_id',
+            name: 'hospital.admin.data',
+            component: HospitalAdminData,
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_HOSPITAL]
+            }
+          },
+          {
+            path: '/hospitals/data',
+            name: 'hospital.data',
+            component: HospitalData,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+          {
+            path: '/hospitals/forms/:form_id',
+            name: 'hospital.create',
+            component: HospitalForm,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+          {
+            path: '/hospitals/:hospital_id/show/:completed_form_id',
+            name: 'hospital.detail',
+            component: HospitalsDetail,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
+            }
+          },
+          {
+            path: '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
+            name: 'hospital.edit',
+            component: HospitalForm,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+        ]
       }
     ]
-  },
-  {
-    path: '/hospitals',
-    name: 'hospital.home',
-    component: HospitalsHome,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
-  },
-  {
-    path: '/admin/hospitals',
-    name: 'hospital.admin',
-    component: HospitalAdmin,
-    meta: {
-      requiresAuth: true,
-      role: [ADMIN_HOSPITAL]
-    }
-  },
-  {
-    path: '/admin/hospitals/:hospital_id',
-    name: 'hospital.admin.data',
-    component: HospitalAdminData,
-    meta: {
-      requiresAuth: true,
-      role: [ADMIN_HOSPITAL]
-    }
-  },
-  {
-    path: '/hospitals/data',
-    name: 'hospital.data',
-    component: HospitalData,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
-  },
-  {
-    path: '/hospitals/forms/:form_id',
-    name: 'hospital.create',
-    component: HospitalForm,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
-  },
-  {
-    path: '/hospitals/:hospital_id/show/:completed_form_id',
-    name: 'hospital.detail',
-    component: HospitalsDetail,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
-    }
-  },
-  {
-    path: '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
-    name: 'hospital.edit',
-    component: HospitalForm,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
   },
   {
     path: '/acces-denied',
