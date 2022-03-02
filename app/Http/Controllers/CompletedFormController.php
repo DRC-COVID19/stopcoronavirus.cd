@@ -245,33 +245,5 @@ class CompletedFormController extends Controller
     })[0];
 
   }
-//   private function executeAction(array $data =[], $action = null ,$completedForm = null){
-
-//     $updatedManagerName = $data['updated_manager_name'];
-//     $completedFormFields = $data['completed_form_fields'];
-//     foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
-//         if ($action ==='create') {
-//             CompletedFormField::create([
-//                 'form_field_id'     => $formFieldKey,
-//                 'value'             => $formFieldValue,
-//                 'completed_form_id' => $completedForm->id
-//             ]);
-//         }
-//         else{
-//             $completedFormField = CompletedFormField::where(['completed_form_id' =>$completedForm->id, 'form_field_id' => $formFieldKey])->first();
-//                 if ($completedFormField->value !==$formFieldValue) {
-//                     $completedFormField->update([
-//                         'value'                 => $formFieldValue,
-//                         'updated_manager_name'  => $updatedManagerName
-//                     ]);
-//                     $completedFormField = null;
-//                     Log::info('esimbi');
-//                 }
-//                 Log::info('esimbi te');
-
-//             return $completedFormField;
-//         }
-//     }
-//  }
 
 }
