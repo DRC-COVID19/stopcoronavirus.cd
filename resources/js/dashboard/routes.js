@@ -19,6 +19,7 @@ import ChangeLogIndex from './pages/administrator/changeLog/index'
 import Epidemie from './pages/administrator/epidemy/Index'
 import FormIndex from './pages/administrator/forms/index'
 import FormShow from './pages/administrator/forms/form'
+import Main from './pages/Main'
 import {
   ADMIN_DASHBOARD,
   AGENT_HOSPITAL,
@@ -57,6 +58,14 @@ export default [
   },
   {
     path: '/',
+    name: 'main',
+    component: Main,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/dashboard/home',
     component: Home,
     name: 'home',
     meta: {
