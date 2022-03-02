@@ -64,7 +64,6 @@
         :options="roles"
         label="name"
         :reduce="(item) => item.id"
-        :filterable="true"
         :searchable ="false"
       />
       <label class="text-dash-color" for="check-group-1">Hopital *</label>
@@ -74,7 +73,6 @@
         :options="hospitals"
         label="name"
         :reduce="(item) => item.id"
-        :filterable="true"
         :searchable ="false"
       />
       <label class="text-dash-color" for="text-password">Mot de passe *</label>
