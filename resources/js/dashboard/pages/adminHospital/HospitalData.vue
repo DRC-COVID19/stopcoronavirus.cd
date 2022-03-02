@@ -10,7 +10,7 @@
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
         </b-col>
-        <b-col v-if="hospital.id">
+        <b-col v-if="hospital">
           <h3>
              Historique mise à jour : {{ hospital.name }}
           </h3>
@@ -25,6 +25,7 @@
             :busy="isLoading"
             :fields="fields"
             :items="completedForms.data"
+            hover
             show-empty
           >
             <template v-slot:empty="scope">
@@ -52,7 +53,7 @@
                     }"
               >Details</b-button>
               <b-button
-                class="btn btn-warning mb-1"
+               variant="outline-success mb-1"
                 :to="{
                   name: 'hospital.edit',
                   params: {

@@ -60,7 +60,7 @@ return [
     */
     'route' => [
 
-        'prefix' => env('ADMIN_ROUTE_PREFIX', 'admin'),
+        'prefix' => env('ADMIN_ROUTE_PREFIX', 'admin-dashboard'),
 
         'namespace' => 'App\\Admin\\Controllers',
 
@@ -134,7 +134,7 @@ return [
         'remember' => true,
 
         // Redirect to the specified URI when user is not authorized.
-        'redirect_to' => 'auth/login',
+        'redirect_to' => 'not-found',
 
         // The URIs that should be excluded from authorization.
         'excepts' => [

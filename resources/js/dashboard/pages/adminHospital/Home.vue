@@ -7,7 +7,7 @@
           <h3>Résumé mise à jour CTCOS</h3>
         </b-col>
         <b-col cols="12" md="2">
-          <b-button class="btn-dash-blue" @click="completedForm__getAllByLastUpdate()">
+          <b-button class="btn-dash-blue" @click.prevent="refreshData()">
             <i class="fa fa-sync"></i>
           </b-button>
         </b-col>
@@ -102,13 +102,11 @@ export default {
         { key: 'created_manager_name', label: 'Soumis par' },
         { key: 'actions', label: 'Actions' }
       ],
-      completedForms: []
+      completedForms: [],
+      isLoading: false
     }
   },
   computed: {
-    ...mapState({
-      isLoading: (state) => state.completedForm.isLoading
-    }),
     completedFormsSorted () {
       return this.completedForms.slice().sort((a, b) => {
         const hospitalNameA = a.name.toLowerCase()
@@ -119,12 +117,18 @@ export default {
       }).sort((a, b) => new Date(b.last_update) - new Date(a.last_update))
     }
   },
-  async mounted () {
-    this.completedForms = await this.completedForm__getAllByLastUpdate()
+  mounted () {
+    this.refreshData()
   },
   methods: {
-
-    ...mapActions(['completedForm__getAllByLastUpdate'])
+    ...mapActions(['completedForm__getAllByLastUpdate']),
+    async refreshData () {
+      this.isLoading = true
+      this.completedForms = await this.completedForm__getAllByLastUpdate()
+      if (this.completedForms.length > 0) {
+        this.isLoading = false
+      }
+    }
 
   }
 }

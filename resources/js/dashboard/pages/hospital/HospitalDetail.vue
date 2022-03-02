@@ -8,10 +8,9 @@
           <b-link :to="backRoute">
             <span class="fa fa-chevron-left"> Retour</span>
           </b-link>
-            <!-- {{ renderSituations }} -->
-          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(completedForms[0].last_update).format("DD/MM/Y")}}</h3>
+          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(completedForm.last_update).format("DD/MM/Y")}}</h3>
             <b-col
-              v-for="(step, index) in completedForms"
+              v-for="(step, index) in completedFormFieldFiltered"
               :key="index"
               cols="12" md="12"
             >
@@ -21,8 +20,7 @@
                     <li>{{field.form_field.name}} : {{field.value}}</li>
                   </ul>
             </b-col>
-          <div>Données envoyées par <b> {{completedForms[0].created_manager_name}}</b></div>
-          <!-- <div v-if="completedForms.slice(0,1)[0].created_manager_name">Modifier par {{completedForms.slice(0,1)[0].updated_manager_name}}</div> -->
+          <div>Données envoyées par <b> {{completedForm.created_manager_name}}</b></div>
         </b-col>
       </b-row>
     </b-container>
@@ -32,7 +30,6 @@
 <script>
 import Header from '../../components/hospital/Header'
 import Loading from '../../components/Loading'
-import { createSituationsReduce } from '../../plugins/functions'
 import { mapActions, mapState } from 'vuex'
 export default {
   components: {
@@ -40,7 +37,8 @@ export default {
   },
   data () {
     return {
-      completedForms: [],
+      completedFormFields: [],
+      completedForm: {},
       isLoading: false
     }
   },
@@ -59,55 +57,61 @@ export default {
         }
       } else return { name: 'hospital.home' }
     },
-    renderSituations () {
-      return this.createCompletedFormsReduce()
+    completedFormFieldFiltered () {
+      return this.completedFormFieldFilter()
     }
   },
   methods: {
     ...mapActions(['completedForm__getByHospitalDetail']),
     async getCompletedForm () {
       this.isLoading = true
-      this.completedForms = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
-      if (this.completedForms.length > 0) {
+      this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
+      if (this.completedFormFields.length > 0) {
         this.isLoading = false
+        this.setLastUpdate(this.completedFormFields[0].completed_form.last_update)
+        this.setCreatedManagerName(this.completedFormFields[0].completed_form.created_manager_name)
       }
     },
-    createCompletedFormsReduce () {
-      const formIds = []
-      const formStepsList = this.completedForms.flatMap(r => r)
-      
-      if (formStepsList.length > 0) {
-        //   // .sort(
-        //   //   (prevFormItem, nextFormItem) =>
-        //   //     prevFormItem.form_field.form_step_id - nextFormItem.form_field.form_step_id
-        //   // )
-        //   // .forEach(item => {
-        //   //   if (formIds.every(form => form.form_field.form_step_id !== item.form_field.form_step_id)) {
-        //   //     formIds.push({
-        //   //       form_step_id: item.form_field.form_step_id,
-        //   //       form_step_title: item.form_field.form_step_title
-        //   //     })
-        //   //   }
-        //   // })
-        // })
-
-        // const formStepsList = formIds.map(form => {
-        //   const formStep = {
-        //     form_step_id: form.form_step_id,
-        //     form_step_title: form.form_step_title
-        //   }
-
-        //   formStep.form_field_values = this.completedForms.slice().forEach(formCompleted => {
-        //     return formCompleted.filter(
-        //       arr => arr.form_field.form_step_id == formStep.form_step_id
-        //     )
-        //   })
-        //   return formStep
-
-        return formStepsList
+    setLastUpdate (lastUpdate) {
+      this.completedForm.last_update = lastUpdate
+    },
+    setCreatedManagerName (createdManagerName) {
+      this.completedForm.created_manager_name = createdManagerName
+    },
+    completedFormFieldEvery () {
+      const completedFormFieldsId = []
+      if (this.completedFormFields.length > 0) {
+        this.completedFormFields
+          .slice()
+          .sort(
+            (prevFormItem, nextFormItem) =>
+              prevFormItem.form_field.form_step.id - nextFormItem.form_field.form_step.id
+          )
+          .forEach(item => {
+            if (completedFormFieldsId.every(form => form.form_step_id !== item.form_field.form_step.id)) {
+              completedFormFieldsId.push({
+                form_step_id: item.form_field.form_step.id,
+                form_step_title: item.form_field.form_step.title
+              })
+            }
+          })
+        return completedFormFieldsId
       }
-      return []
+    },
+    completedFormFieldFilter () {
+      const formStepsList = this.completedFormFieldEvery()?.map(form => {
+        const formStep = {
+          form_step_id: form.form_step_id,
+          form_step_title: form.form_step_title
+        }
+        formStep.completed_form_fields = this.completedFormFields.filter(
+          arr => arr.form_field.form_step.id == formStep.form_step_id
+        )
+        return formStep
+      })
+      return formStepsList
     }
+
   }
 }
 </script>
