@@ -101,7 +101,7 @@ export default [
     }
   },
   {
-    path: '/hospitals/new/:form_id',
+    path: '/hospitals/forms/:form_id',
     name: 'hospital.create',
     component: HospitalForm,
     meta: {
@@ -110,7 +110,7 @@ export default [
     }
   },
   {
-    path: '/hospitals/:hospital_id/show/:update_id',
+    path: '/hospitals/:hospital_id/show/:completed_form_id',
     name: 'hospital.detail',
     component: HospitalsDetail,
     meta: {
@@ -119,7 +119,7 @@ export default [
     }
   },
   {
-    path: '/hospital/:hospital_id/edit/:update_id/form/:form_id',
+    path: '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
     name: 'hospital.edit',
     component: HospitalForm,
     meta: {

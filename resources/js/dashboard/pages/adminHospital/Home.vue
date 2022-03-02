@@ -7,7 +7,7 @@
           <h3>Résumé mise à jour CTCOS</h3>
         </b-col>
         <b-col cols="12" md="2">
-          <b-button class="btn-dash-blue" @click="getData()">
+          <b-button class="btn-dash-blue" @click="completedForm__getAllByLastUpdate()">
             <i class="fa fa-sync"></i>
           </b-button>
         </b-col>
@@ -19,7 +19,7 @@
             :fields="fields"
             responsive
             hover
-            :items="hospitalSituationsSorted"
+            :items="completedFormsSorted"
             show-empty
           >
             <template v-slot:empty="scope">
@@ -101,16 +101,16 @@ export default {
         { key: 'name', label: 'Nom CTCO' },
         { key: 'created_manager_name', label: 'Soumis par' },
         { key: 'actions', label: 'Actions' }
-      ]
+      ],
+      completedForms: []
     }
   },
   computed: {
     ...mapState({
-      updateData: (state) => state.hospitalSituation.AllhospitalSituationByLastUpdate,
-      isLoading: (state) => state.hospitalSituation.isLoading
+      isLoading: (state) => state.completedForm.isLoading
     }),
-    hospitalSituationsSorted () {
-      return this.updateData.slice().sort((a, b) => {
+    completedFormsSorted () {
+      return this.completedForms.slice().sort((a, b) => {
         const hospitalNameA = a.name.toLowerCase()
         const hospitalNameB = b.name.toLowerCase()
         if (hospitalNameA < hospitalNameB) return -1
@@ -119,11 +119,13 @@ export default {
       }).sort((a, b) => new Date(b.last_update) - new Date(a.last_update))
     }
   },
-  mounted () {
-    this.getAllHospitalSituationsByLastUpdate()
+  async mounted () {
+    this.completedForms = await this.completedForm__getAllByLastUpdate()
   },
   methods: {
-    ...mapActions(['getAllHospitalSituationsByLastUpdate'])
+
+    ...mapActions(['completedForm__getAllByLastUpdate'])
+
   }
 }
 </script>

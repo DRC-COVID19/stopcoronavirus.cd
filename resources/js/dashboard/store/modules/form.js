@@ -4,7 +4,7 @@ export default {
     isLoading: false
   },
   mutations: {
-    SET_FORM (state, payload) {
+    SET_FORMS (state, payload) {
       state.forms = payload
     },
     SET_IS_LOADING (state, payload) {
@@ -12,11 +12,10 @@ export default {
     }
   },
   actions: {
-    formShow ({ state, commit }, payload) {
+    formShow (_, payload) {
       return new Promise((resolve, reject) => {
         axios.get(`/api/dashboard/forms/${payload.id}`)
           .then(({ data }) => {
-            commit('SET_FORM', data)
             resolve(data)
           })
           .catch((error) => {
@@ -32,7 +31,7 @@ export default {
           params: { page: payload.page || 1 }
         })
           .then(({ data }) => {
-            commit('SET_FORM', data)
+            commit('SET_FORMS', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })
