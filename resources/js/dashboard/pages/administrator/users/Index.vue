@@ -211,10 +211,11 @@ export default {
           this.$gtag.exception(response)
           this.isLoading = false
           this.errors = response.data.errors
+          const messages = this.renderErrorsMessages(this.errors).join(',')
           this.$notify({
             group: 'alert',
             title: 'Nouvel utilisateur',
-            text: 'Une erreur est surveni',
+            text: 'Oups! Une erreur est survenue :\r\n' + messages,
             type: 'error'
           })
         })
@@ -258,6 +259,22 @@ export default {
 
     switchPage (page) {
       this.getUserList(page)
+    },
+    renderErrorsMessages (errors) {
+      const errorsMessage = []
+      if (errors.hospitals_id) {
+        errorsMessage.push("La selection d'un hospital est obligatoire.")
+      } else if (errors.roles_id) {
+        errorsMessage.push("Le Role d'un utilisateur est obligatoire.")
+      } else if (errors.username) {
+        errorsMessage.push("Ce nom d'utilisateur est déjà utilisé.")
+      } else if (errors.email) {
+        errorsMessage.push("L'adresse email doit être unique et obligatoire ")
+      } else if (errors.password) {
+        errorsMessage.push('Le Mot de passe de passe est obligatoire ')
+      }
+
+      return errorsMessage
     }
 
   }
