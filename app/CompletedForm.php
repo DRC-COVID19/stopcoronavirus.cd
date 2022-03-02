@@ -28,9 +28,14 @@ class CompletedForm extends Model
     {
         return $this->belongsTo(Hospital::class);
     }
-    
+
     public function completedFormFields()
     {
         return $this->hasMany(CompletedFormField::class);
+    }
+
+    public function adminUser()
+    {
+        return $this->belongsTo(AdminUser::class);
     }
 }

@@ -18,6 +18,7 @@ class FormField extends Model
         'default_value',
         'form_id',
         'form_field_type_id',
+        'show_in_summary_report',
         'form_step_id'
     ];
 

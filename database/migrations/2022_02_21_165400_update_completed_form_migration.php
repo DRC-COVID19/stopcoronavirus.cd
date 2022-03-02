@@ -6,14 +6,14 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateCompletedFormMigration extends Migration
 {
-   /**
+    /**
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('completed_forms', function (Blueprint $table) {
+        Schema::table('completed_forms', function (Blueprint $table) {
             $table->string('reference')->nullable()->change();
         });
     }
@@ -28,6 +28,5 @@ class UpdateCompletedFormMigration extends Migration
         Schema::create('completed_forms', function (Blueprint $table) {
             $table->dropColumn('reference')->nullable()->change();
         });
-      
     }
 }
