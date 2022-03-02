@@ -262,9 +262,7 @@ export default {
     },
     renderErrorsMessages (errors) {
       const errorsMessage = []
-      if (errors.hospitals_id) {
-        errorsMessage.push("La selection d'un hospital est obligatoire.")
-      } else if (errors.roles_id) {
+      if (errors.roles_id) {
         errorsMessage.push("Le Role d'un utilisateur est obligatoire.")
       } else if (errors.username) {
         errorsMessage.push("Ce nom d'utilisateur est déjà utilisé.")

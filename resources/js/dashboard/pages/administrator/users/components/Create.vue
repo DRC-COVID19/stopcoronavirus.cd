@@ -64,8 +64,6 @@
         :options="roles"
         label="name"
         :reduce="(item) => item.id"
-        :invalid-feedback="errors.roles_id ? errors.roles_id : null"
-        :state="!errors.roles_id"
       />
       <label class="text-dash-color" for="check-group-1">Hopital *</label>
       <v-select
@@ -74,8 +72,6 @@
         :options="hospitals"
         label="name"
         :reduce="(item) => item.id"
-        :invalid-feedback="errors.hospitals_id ? errors.hospitals_id : null"
-        :state="!errors.hospitals_id"
       />
       <label class="text-dash-color" for="text-password">Mot de passe *</label>
       <b-form-input

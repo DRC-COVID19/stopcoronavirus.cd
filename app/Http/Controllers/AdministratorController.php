@@ -219,7 +219,7 @@ class AdministratorController extends Controller
       'remember_token' => 'nullable',
       'email' => 'required|email',
       'roles_id' => 'required|array',
-      'hospitals_id' => 'required|array',
+      'hospitals_id' => 'nullable|array',
       'password' => 'sometimes|confirmed',
 
     ])->validate();
@@ -283,7 +283,7 @@ class AdministratorController extends Controller
       'remember_token' => 'nullable',
       'email' => 'required|email',
       'roles_id' => 'required|array',
-      'hospitals_id' => 'required|array',
+      'hospitals_id' => 'nullable|array',
     ])->validate();
   }
 
