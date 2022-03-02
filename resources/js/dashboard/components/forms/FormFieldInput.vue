@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     isRequired () {
-      return !!this.rules.match(/required/i)
+      return !!this.rules?.match(/required/i) || false
     }
   },
   watch: {
