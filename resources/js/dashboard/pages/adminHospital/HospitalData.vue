@@ -25,6 +25,7 @@
             :busy="isLoading"
             :fields="fields"
             :items="completedForms.data"
+            hover
             show-empty
           >
             <template v-slot:empty="scope">
@@ -52,7 +53,7 @@
                     }"
               >Details</b-button>
               <b-button
-                class="btn btn-warning mb-1"
+               variant="outline-success"
                 :to="{
                   name: 'hospital.edit',
                   params: {

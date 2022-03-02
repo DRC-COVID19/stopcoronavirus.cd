@@ -11,7 +11,7 @@
             </b-link>
 
           </h3>
-          <b-alert show variant="success">
+          <b-alert show class="light">
             <div>{{`Structure: ${user.hospital.name}`}}</div>
             <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
             <p v-if="hospitalManagerName">Connecté en tant que {{hospitalManagerName}}</p>
@@ -59,7 +59,7 @@
               >Details</b-button>
               <b-button
                 v-if="(data.item.diff_date * 24) < 24"
-                class="btn btn-warning mb-1"
+                  variant="outline-success mb-1"
                 :to="{
                   name: 'hospital.edit',
                   params: {
@@ -159,7 +159,7 @@ $bg_primary:#F4F6FC;
  .hopita_mome{
   background-color: $bg_primary;
   .alert{
-    background-color: #ffff;
+    background-color: $bg_primary;
   }
 }
 </style>
