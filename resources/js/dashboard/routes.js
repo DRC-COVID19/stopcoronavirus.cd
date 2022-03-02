@@ -65,6 +65,24 @@ export default [
     }
   },
   {
+    path: '/dashboard/infrastructure',
+    component: Home,
+    name: 'dashboard.infrastructure',
+    meta: {
+      requiresAuth: true,
+      role: [ADMIN_DASHBOARD]
+    }
+  },
+  {
+    path: '/dashboard/a-propos',
+    component: Home,
+    name: 'dashboard.aPropos',
+    meta: {
+      requiresAuth: true,
+      role: [ADMIN_DASHBOARD]
+    }
+  },
+  {
     path: '/hospitals',
     name: 'hospital.home',
     component: HospitalsHome,
