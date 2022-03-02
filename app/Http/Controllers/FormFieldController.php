@@ -60,13 +60,23 @@ class FormFieldController extends Controller
     /**
      * Update the specified resource in storage.
      *
+     * @param  FormField  $formField
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(FormField $formField)
+    public function update(FormField $formField, Request $request)
     {
         $result = $formField->update($this->updateValidator());
+        if($request->form_field_order) {
+          $formFieldOrder = FormField::find($request->form_field_order);
+          if ($formFieldOrder->id !== $formField->id) {
+            $formField->order_field = $formFieldOrder->order_field;
+            $formField->save();
+            FormField::where('order_field', '>', $formFieldOrder->order_field)->increment('order_field', 1);
+            $formFieldOrder->order_field++;
+            $formFieldOrder->save();
+          }
+        }
         return response()->json( $result, 200);
     }
 
@@ -100,10 +110,11 @@ class FormFieldController extends Controller
           'name'                  => 'required|string|max:255',
           'order_field'           => 'nullable|integer',
           'rules'                 => 'nullable|string',
+          'agreggation'           => 'nullable|boolean',
           'default_value'         => 'nullable|string|max:255',
           'form_id'               => 'required|integer|exists:forms,id',
           'form_field_type_id'    => 'required|integer|exists:form_field_types,id',
-          'form_step_id'          => 'nullable|integer|exists:form_steps,id'
+          'form_step_id'          => 'required|integer|exists:form_steps,id'
       ]);
   }
     public function updateValidator(){
@@ -111,6 +122,7 @@ class FormFieldController extends Controller
           'name'                  => 'sometimes|string|max:255',
           'order_field'           => 'nullable|integer',
           'rules'                 => 'nullable|string',
+          'agreggation'           => 'nullable|boolean',
           'default_value'         => 'nullable|string|max:255',
           'form_id'               => 'sometimes|integer|exists:forms,id',
           'form_field_type_id'    => 'sometimes|integer|exists:form_field_types,id',

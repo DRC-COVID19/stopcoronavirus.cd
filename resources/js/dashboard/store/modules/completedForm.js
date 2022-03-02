@@ -77,16 +77,6 @@ export default {
         axios
           .get(`/api/dashboard/completed_forms/${payload.completed_form_id}`)
           .then(({ data }) => {
-            // const data = data.map(item => ({
-            //   id: item.id,
-            //   name: item.form_field.name,
-            //   default_value: item.value,
-            //   last_update: item.completed_form.last_update,
-            //   created_manager_name: item.completed_form.created_manager_name,
-            //   form_step_id: item.form_field.form_step_id,
-            //   form_step_title: item.form_field.form_step_title,
-            //   form_field_type: { name: item.form_field_type }
-            // }))
             commit('SET_COMPLETED_FORMS_DETAIL', data)
             commit('SET_IS_LOADING', false)
             resolve(data)
@@ -104,12 +94,14 @@ export default {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get('/api/dashboard/completed_forms/agent-last-update')
+          .get('/api/dashboard/completed_forms/get-latest-hospital-update')
           .then(({ data }) => {
             const completedForms = data.map(completedForm => ({
               diff_date: completedForm.diff_date,
               last_update: completedForm.last_update,
-              name: completedForm.form_id ? completedForm.hospital.name : completedForm.name,
+              name: completedForm.form_id
+                ? completedForm.hospital.name
+                : completedForm.name,
               created_manager_name: completedForm.created_manager_name,
               hospital_id: completedForm.hospital_id
             }))

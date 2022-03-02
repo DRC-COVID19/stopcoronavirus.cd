@@ -15,20 +15,18 @@ class FormFieldTypeSeeder extends Seeder
         DB::table('form_field_types')->truncate();
         DB::table('form_field_types')->insert([
             [
-                'id'      => 1,
-                'name'    =>'text'
+                'id'  => 1,
+                'name'=>'text'
+            ],
+            [   'id'  => 2,
+                'name'=>'number'
             ],
             [
-                'id'      => 2,
-                'name'    =>'number'
+                'id'  => 3,
+                'name'=>'boolean'
             ],
-            [
-                'id'      => 3,
-                'name'    =>'boolean'
-            ],
-            [
-                'id'      => 4,
-                'name'    =>'date'
+            [   'id'  => 4,
+                'name'=>'date'
             ]
         ]);
     }
