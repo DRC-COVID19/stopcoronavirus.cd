@@ -37,9 +37,21 @@
               text-field="name"
               value-field="id"
               required
+              @change="onChange"
             ></b-form-select>
           </b-form-group>
-
+          <b-form-group
+            label="Mode d'agrégation*"
+            v-slot="{ ariaDescribedby }"
+            v-show="getTypeCustomField.NUMBER === form.form_field_type_id"
+          >
+            <b-form-radio-group
+              v-model="form.agreggation"
+              :options="requireAggregationOptions"
+              :aria-describedby="ariaDescribedby"
+              id="requiredAggregation"
+            ></b-form-radio-group>
+          </b-form-group>
           <b-form-group
             id="default-value-group"
             label="Valeur par défaut"
@@ -54,6 +66,21 @@
           </b-form-group>
 
           <b-form-group
+            id="step-group"
+            label="Etape*"
+            label-for="step"
+          >
+            <b-form-select
+              id="step"
+              v-model="form.form_step_id"
+              :options="formStepsSorted"
+              text-field="title"
+              value-field="id"
+              required
+            ></b-form-select>
+          </b-form-group>
+
+          <b-form-group
             id="order-field-group"
             label="Ordre du champ (inserer avant ?)"
             label-for="order-field"
@@ -62,23 +89,8 @@
             <b-form-select
               id="orderField"
               v-model="form.form_field_order"
-              :options="targetForm.form_fields"
+              :options="formFieldsSorted"
               text-field="name"
-              value-field="id"
-            ></b-form-select>
-          </b-form-group>
-
-          <b-form-group
-            id="step-group"
-            label="Etape"
-            label-for="step"
-            description="Laisser vide si le formulaire n'a pas d'étape"
-          >
-            <b-form-select
-              id="step"
-              v-model="form.form_step_id"
-              :options="formStepsSorted"
-              text-field="title"
               value-field="id"
             ></b-form-select>
           </b-form-group>
@@ -108,6 +120,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import { TYPE_CUSTOM_FIELD } from '../../../../../config/env'
 
 export default {
   props: {
@@ -125,13 +138,18 @@ export default {
   data () {
     return {
       form: {},
+      requireAggregationOptions: [
+        { text: 'Faire l\'addition', value: true },
+        { text: 'Faire la moyenne', value: false }
+      ],
+
       requiredOptions: [
         { text: 'Oui', value: 1 },
         { text: 'Non', value: 0 }
       ],
       fieldWillBeRequired: false,
       updating: false,
-      btnSubmitTitle : 'Enregistrer',
+      btnSubmitTitle: 'Enregistrer',
       title: 'Ajouter un nouveau champ'
     }
   },
@@ -150,12 +168,25 @@ export default {
     formStepsSorted () {
       return this.formSteps.slice().sort((a, b) => a.step - b.step)
     },
-
+    getTypeCustomField () {
+      return TYPE_CUSTOM_FIELD
+    },
+    formFieldsSorted () {
+      return this.targetForm.form_fields
+        .slice()
+        .sort((a, b) => a.order_field - b.order_field)
+        .filter(formField => {
+          return (!this.rowFormField || !this.rowFormField.id || this.rowFormField.id !== formField.id)
+        })
+    }
   },
   watch: {
-
     rowFormField () {
-      this.form = { ...this.rowFormField }
+      const formFieldOrder = this.formFieldsSorted.find(formField => formField.order_field > this.rowFormField.order_field)?.id || null
+      this.form = {
+        ...this.rowFormField,
+        form_field_order: formFieldOrder
+      }
       this.updating = true
       this.btnSubmitTitle = 'Modifier'
       this.title = 'Modifier un champ'
@@ -171,7 +202,6 @@ export default {
     onSubmit () {
       this.form.rules = this.fieldWillBeRequired ? 'required' : ''
       this.form.form_id = this.targetForm.id
-
       if (!this.form.form_field_order) {
         const MaxValue = this.targetForm.form_fields.flatMap(x => x.order_field)
         this.form.order_field = MaxValue.length && MaxValue.length > 0 ? Math.max(...MaxValue) + 1 : 1
@@ -213,6 +243,13 @@ export default {
               type: 'error'
             })
           })
+      }
+    },
+    onChange (value) {
+      if (value === TYPE_CUSTOM_FIELD.NUMBER) {
+        this.form.agreggation = true
+      } else {
+        this.form.agreggation = null
       }
     },
     onReset () {

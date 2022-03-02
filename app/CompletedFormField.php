@@ -12,7 +12,8 @@ class CompletedFormField extends Model
     protected $fillable = [
         'value',
         'completed_form_id',
-        'form_field_id'
+        'form_field_id',
+        'updated_manager_name'
     ];
 
 

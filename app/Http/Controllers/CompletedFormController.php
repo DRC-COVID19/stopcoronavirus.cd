@@ -9,6 +9,8 @@ use App\FormFieldType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCompletedFormRequest;
+use App\Http\Requests\UpdateCompletedFormRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
 
@@ -51,7 +53,7 @@ class CompletedFormController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
-    public function getAgentLastUpdate()
+    public function getLatestHospitalUpdate()
     {
 
         try {
@@ -135,16 +137,13 @@ class CompletedFormController extends Controller
     public function show($id)
     {
         try {
-
-            $completedForm = CompletedForm::find($id);
-            $completedForm = $this->selectCompletedForms($completedForm)
-                ->orderBy('last_update')
-                ->get();
-
-            //$completedFormFields =$completedForm->take('completed_form_fields')->merge($this->arrayMapAndSort($completedForm));
-
-
-            return response()->json($completedForm, 206);
+         
+           $completedForm = CompletedFormField::with('completedForm','formField.formStep')
+            ->where('completed_form_id',$id)
+            ->orderBy('created_at')
+            ->get();
+          
+            return response()->json($completedForm,206);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -160,9 +159,39 @@ class CompletedFormController extends Controller
      * @param  \App\CompletedForm  $completedForm
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CompletedForm $completedForm)
+    public function update(UpdateCompletedFormRequest $request, CompletedForm $completedForm)
     {
-        //
+        try {
+            $data = $request->validated();
+            $updatedManagerName = $data['updated_manager_name'];
+            $completedFormFields = $data['completed_form_fields'];
+    
+            foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+
+                $completedFormField = CompletedFormField::where(['completed_form_id' =>$completedForm->id, 'form_field_id' => $formFieldKey])->first();
+                if ($completedFormField && $completedFormField->value !==$formFieldValue) {
+                    $completedFormField->update([
+                        'value'                 => $formFieldValue,
+                        'updated_manager_name'  => $updatedManagerName
+                    ]);
+                }
+                else if(!$completedFormField) {
+                    CompletedFormField::create([
+                          'form_field_id'          => $formFieldKey,
+                           'value'                 => $formFieldValue,
+                           'completed_form_id'     => $completedForm->id,
+                           'updated_manager_name'  => $updatedManagerName
+                    ]);
+                } 
+            }
+            return response()->json($completedForm,200, []);
+
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     /**
@@ -185,56 +214,32 @@ class CompletedFormController extends Controller
         return Auth::guard('dashboard');
     }
 
-    private function selectCompletedForms($completedForm)
-    {
-        return
-            $completedForm
+  private function selectCompletedForms($completedForm)
+  {
+      return $completedForm
             ->with([
-                'completedFormFields', 'completedFormFields.formField.formStep',
-                'completedFormFields.formField.formFieldType', 'hospital'
+                'completedFormFields.formField.formStep',
+                'completedFormFields.formField.formFieldType',
+                'hospital'
             ])
             ->select('*')
             ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
-    }
+  }
 
 
-    private function arrayMapAndSort($completedForm)
-    {
-        return $completedForm
-            ->map(function ($form) {
-                return
-                    $form->completedFormFields
-                    ->sort(function ($a, $b) {
-                        return $a->order_field - $b->order_field;
-                    });
-            })[0];
-    }
-    //   private function createReduce($arrayMapAndSort)
-    //   {
-    //     $formIds = collect();
-    //     $formStepsList = collect();
+  private function arrayMapAndSort($completedForm)
+  {
+    return $completedForm
+    ->map(function($form){
+        return 
+        $form->completedFormFields
+             ->sort(function($a, $b){
+                     return $a->order_field - $b->order_field;
+                });
+    })[0];
 
-    //     // $arrayMapAndSort ?$arrayMapAndSort:collect()
-    //     // ->sort(fn($prevFormItem, $nextFormItem) =>$prevFormItem->formStepId - $nextFormItem->formStepId);
-    //     // $arrayMapAndSort->each(function($item, $key) use($formIds){
-    //     //     if ($formIds->every(fn($form)=> $form->formStepId !== $item->formStepId)) {
-    //     //         $formIds->push([
-    //     //           'formStepId'    => $item->formStepId,
-    //     //           'form_step_title' => $item->form_step_title
-    //     //         ]);
-    //     //       }
-    //     // });
-    //     // $formStepsList = $formIds
-    //     // ->map(function($form) use ($arrayMapAndSort){
-    //     //     $formStep = [
-    //     //       'formStepId'      => $form->formStepId,
-    //     //       'form_step_title'   =>$form->form_step_title
-    //     //     ];
-    //     //     $formStep['form_field_values'] = $arrayMapAndSort->filter(fn($arr) => $arr->formStepId == $formStep->formStepId);
-    //     //     return $formStep;
-    //     //   });
-    //     return $arrayMapAndSort[0];
-    //     }
+  }
+
 
     /**
      *
