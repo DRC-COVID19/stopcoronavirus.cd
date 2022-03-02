@@ -17,13 +17,13 @@ export default {
     DashboardMenu
   },
   mounted () {
-    console.log(this.$route.name)
     if (this.$route.name === 'main.dashboard') {
       this.$router.push({ name: 'main.dashboard.mobility' })
     }
   },
   watch: {
     '$route' (to, from) {
+      console.log(to.name);
       if (to.name === 'main.dashboard') {
         this.$router.push({ name: 'main.dashboard.mobility' })
       }

@@ -11,8 +11,7 @@ import HospitalData from './pages/hospital/HospitalData'
 import HospitalAdmin from './pages/adminHospital/Home'
 import HospitalAdminData from './pages/adminHospital/HospitalData'
 import NotAcces from './pages/NotAccess'
-import Landing from './pages/Landing'
-import Administrator from './pages/Administrator'
+import Administrator from './pages/administrator/Administrator'
 import AdminUserIndex from './pages/administrator/users/Index'
 import PageNotFound from './pages/NotFound'
 import ChangeLogIndex from './pages/administrator/changeLog/index'
@@ -65,6 +64,9 @@ export default [
       requiresAuth: true
     },
     children: [
+      /**
+       * Dashboard routes
+       */
       {
         path: 'dashboard',
         name: 'main.dashboard',
@@ -103,10 +105,75 @@ export default [
           }
         ]
       },
+
+      /**
+       * Administration routes
+       */
       {
-        path: '*',
-        redirect: { name: 'main.dashboard.mobility' }
-      },
+        path: '/administration',
+        component: Administrator,
+        name: 'administrator',
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR]
+        },
+        children: [
+          {
+            path: '/',
+            name: 'administrator.home',
+            component: AdminUserIndex,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR]
+            }
+          },
+          {
+            path: 'users',
+            name: 'administrator.users',
+            component: AdminUserIndex,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR]
+            }
+          },
+          {
+            path: 'change-logs',
+            component: ChangeLogIndex,
+            name: 'administrator.changeLog',
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR]
+            }
+          },
+          {
+            path: 'forms',
+            component: FormIndex,
+            name: 'administrator.forms',
+            meta: {
+              requiresAuth: true,
+              role: [CREATE_FORM] || [EDIT_FORM]
+            }
+          },
+          {
+            path: '/administrator/forms/:form_id',
+            name: 'administrator.forms.show',
+            component: FormShow,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+            }
+          },
+          {
+            path: 'epidemie/',
+            name: 'administrator.epidemie',
+            component: Epidemie,
+            meta: {
+              requiresAuth: true,
+              role: [MANANGER_EPIDEMIC]
+            }
+          }
+        ]
+      }
     ]
   },
   {
@@ -176,79 +243,6 @@ export default [
     path: '/acces-denied',
     name: 'acces.denied',
     component: NotAcces,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/administrator',
-    component: Administrator,
-    name: 'administrator',
-    meta: {
-      requiresAuth: true,
-      role: [ADMINISTRATOR]
-    },
-    children: [
-      {
-        path: '/',
-        name: 'administrator.home',
-        component: AdminUserIndex,
-        meta: {
-          requiresAuth: true,
-          role: [ADMINISTRATOR]
-        }
-      },
-      {
-        path: 'users',
-        name: 'administrator.users',
-        component: AdminUserIndex,
-        meta: {
-          requiresAuth: true,
-          role: [ADMINISTRATOR]
-        }
-      },
-      {
-        path: 'change-logs',
-        component: ChangeLogIndex,
-        name: 'administrator.changeLog',
-        meta: {
-          requiresAuth: true,
-          role: [ADMINISTRATOR]
-        }
-      },
-      {
-        path: 'forms',
-        component: FormIndex,
-        name: 'administrator.forms',
-        meta: {
-          requiresAuth: true,
-          role: [CREATE_FORM] || [EDIT_FORM]
-        }
-      },
-      {
-        path: '/administrator/forms/:form_id',
-        name: 'administrator.forms.show',
-        component: FormShow,
-        meta: {
-          requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
-        }
-      },
-      {
-        path: 'epidemie/',
-        name: 'administrator.epidemie',
-        component: Epidemie,
-        meta: {
-          requiresAuth: true,
-          role: [MANANGER_EPIDEMIC]
-        }
-      }
-    ]
-  },
-  {
-    path: '/landing',
-    name: 'landing',
-    component: Landing,
     meta: {
       requiresAuth: true
     }

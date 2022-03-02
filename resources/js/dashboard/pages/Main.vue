@@ -13,6 +13,13 @@ import MainHeader from '../components/MainHeader'
 export default {
   components: {
     MainHeader
+  },
+  watch: {
+    '$route' (to, from) {
+      if (to.name === 'main') {
+        this.$router.push({ name: 'main.dashboard.mobility' })
+      }
+    }
   }
 }
 </script>

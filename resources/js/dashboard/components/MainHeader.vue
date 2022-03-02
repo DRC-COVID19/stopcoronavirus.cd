@@ -20,7 +20,10 @@
             >
               Dashboard
             </b-nav-item>
-            <b-nav-item>
+            <b-nav-item
+              :to="{name: 'administrator'}"
+              :active="this.$route.name.startsWith('administrator')"
+            >
               Administration
             </b-nav-item>
             <b-nav-item>
@@ -310,6 +313,11 @@ export default {
     .title {
       font-size: 18px;
     }
+  }
+}
+.nav-item{
+  a.active {
+    color: $dash-blue !important;
   }
 }
 </style>
