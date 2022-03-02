@@ -11,9 +11,11 @@
       </b-card-header>
       <b-collapse id="collapse-form-field-list" class="mt-2" visible>
         <b-card-body>
-           <FormStepListAccordion :targetForm="targetForm"
-                 @deleted="onDeleted"
-                 @updateField="updateField"/>
+           <FormStepListAccordion
+            :targetForm="targetForm"
+            @deleted="onDeleted"
+            @updateField="updateField"
+          />
         </b-card-body>
       </b-collapse>
     </b-card>

@@ -38,7 +38,7 @@ class FormController extends Controller
      */
       public function show(Form $form)
     {
-        $form->load(['formRecurrence', 'formSteps','formFields.formFieldType']);
+        $form->load(['formRecurrence', 'formSteps.formFields.formFieldType', 'formFields.formFieldType']);
         return response()->json($form, 200);
     }
 

@@ -31,6 +31,10 @@ class Hospital extends Model
     {
         return $this->hasMany(HospitalLog::class);
     }
+    public function completedForms()
+    {
+        return $this->hasMany(CompletedForm::class);
+    }
 
     public function agent()
     {
