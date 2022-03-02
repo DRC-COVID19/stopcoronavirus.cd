@@ -53,7 +53,7 @@
                     }"
               >Details</b-button>
               <b-button
-               variant="outline-success"
+               variant="outline-success mb-1"
                 :to="{
                   name: 'hospital.edit',
                   params: {
