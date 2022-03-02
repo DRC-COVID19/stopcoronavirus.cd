@@ -64,6 +64,7 @@
         :options="roles"
         label="name"
         :reduce="(item) => item.id"
+        :filterable="true"
       />
       <label class="text-dash-color" for="check-group-1">Hopital *</label>
       <v-select
@@ -72,6 +73,8 @@
         :options="hospitals"
         label="name"
         :reduce="(item) => item.id"
+        :filterable="true"
+        :searchable ="false"
       />
       <label class="text-dash-color" for="text-password">Mot de passe *</label>
       <b-form-input
@@ -89,7 +92,7 @@
         type="password"
         id="text-password-confirm"
         aria-describedby="password-help-block"
-        v-model="form.confirmPassword"
+        v-model="form.confirmPassword"prevent
       ></b-form-input>
       <b-form-text id="password-help-block">{{ warningMissMatch }}</b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
