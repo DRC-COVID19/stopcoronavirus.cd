@@ -243,14 +243,40 @@ class CompletedFormController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getAggregatedByHospitals(Request  $request)
+    public function getAggregatedByHospitals(Request $request)
+    {
+
+        $hospitalsCompletedFormsData = self::getHospitalsCompletedFormsData($request);
+        return response()->json([
+            'aggregated'  => self::getAggregatedHospitalsDatas($hospitalsCompletedFormsData['hospitalsData']),
+            'data'        => $hospitalsCompletedFormsData['hospitalsData'],
+            'last_update' => $hospitalsCompletedFormsData['lastUpdate']
+        ], 200);
+    }
+
+    static public function getHospitalsCompletedFormsData(Request $request)
     {
         $observation_end = $request->input('observation_end');
         $observation_start = $request->input('observation_start');
         $township = $request->input('township');
         $hospital = $request->input('hospital');
 
-        $hospitalsLastUpdate = DB::table('completed_forms')
+        $hospitalsLastUpdate = CompletedForm
+            ::whereHas('hospital', function ($query) use ($hospital, $township) {
+                if ($township) {
+                    $query->where('township_id', $township);
+                }
+                if ($hospital) {
+                    $query->where('id', $hospital);
+                }
+            })
+            ->where(function ($query) use ($observation_end, $observation_start) {
+                if ($observation_end && $observation_start) {
+                    $query->whereBetween('last_update', [$observation_start, $observation_end]);
+                } else if ($observation_end) {
+                    $query->where('last_update', '<=', $observation_end);
+                }
+            })
             ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
             ->groupBy('completed_forms.hospital_id')
             ->get();
@@ -258,23 +284,25 @@ class CompletedFormController extends Controller
         $hospitalsData = [];
         foreach ($hospitalsLastUpdate as $hospitalLastUpdate) {
             $hospitalsData[] = Hospital::with([
-                'completedForms' => function ($query) use ($hospitalLastUpdate) {
-                    $query->where('last_update', $hospitalLastUpdate->max_last_update);
+                'completedForms' => function ($query) use ($hospitalLastUpdate, $observation_end, $observation_start) {
+                    if ($observation_end && $observation_start) {
+                        $query->whereBetween('last_update', [$observation_start, $observation_end]);
+                    } else {
+                        $query->where('last_update', $hospitalLastUpdate->max_last_update);
+                    }
                 },
                 'completedForms.completedFormFields.formField.formStep',
                 'completedForms.adminUser'
             ])
                 ->find($hospitalLastUpdate->hospital_id);
         }
-
-        return response()->json([
-            'aggregated'  => $this->getAggregatedHospitalsDatas($hospitalsData),
-            'data'        => $hospitalsData,
-            'last_update' => $hospitalsLastUpdate->max('max_last_update')
-        ], 200);
+        return [
+            'hospitalsData' => $hospitalsData,
+            'lastUpdate'    => $hospitalsLastUpdate->max('max_last_update')
+        ];
     }
 
-    public function getAggregatedHospitalsDatas($hospitalsData)
+    static public function getAggregatedHospitalsDatas($hospitalsData)
     {
         $completedFormFields = collect($hospitalsData)
             ->flatMap(function ($hospitalData) {

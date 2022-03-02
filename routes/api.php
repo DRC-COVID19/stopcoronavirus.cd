@@ -205,7 +205,6 @@ Route::group([
   // Route::post('get-by-hospital-situations', "HospitalSituationNewController@getSituationByHospitals");
   Route::post('get-situations', "HospitalSituationNewController@getSituations");
   Route::resource('hospital-situations', "HospitalSituationController");
-  Route::post('get-observation-situation-hospital', "HospitalSituationNewController@getObservationSituationHospital");
 
   Route::resource('hospitals-data', 'HospitalController');
   Route::apiResource('forms', 'FormController');
@@ -220,7 +219,7 @@ Route::group([
     Route::get('get-form/{form}', 'FormStepController@getFormStepByForm');
   });
   Route::group(['prefix' => 'hospitals'], function () {
-    Route::get('/', 'HospitalController@getHospials'); //ok
+    Route::get('/', 'HospitalController@getHospitals'); //ok
     Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution'); //ok
     Route::get('/totaux', 'HospitalController@getHospitalsTotaux'); //ok
   });

@@ -1,9 +1,9 @@
 /* eslint-disable no-empty */
 <template>
   <b-container class="p-0">
-    <b-row lg="12">
+    <b-row lg="12" class="no-gutters">
       <b-col cols="12" fluid>
-        <div class="col-12 mb-2 row align-items-center">
+        <div class="col-12 mb-2 row align-items-center px-2 no-gutters">
           <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
             <square-skeleton
               :boxProperties="{
@@ -13,10 +13,10 @@
             ></square-skeleton>
           </skeleton-loading>
           <b-row v-if="!isLoading" class="mb-2 align-items-center">
-            <b-col lg="12" class="ml-2 align-items-center">
+            <b-col lg="12" class="align-items-center">
               <h4>{{ hospital.name || "Rapport global" }}</h4>
             </b-col>
-            <b-col lg="4" class="ml-2 align-items-center">
+            <b-col lg="4" class="align-items-center">
               <b-badge v-if="hospitalCount" style="font-size: 12px">
                 {{ hospitalCount }}
                 <small>infrastructure(s)</small>
@@ -24,7 +24,7 @@
             </b-col>
           </b-row>
           <div v-if="isGlobal" class="col-12 d-flex flex-wrap text-right justify-content-end">
-            <div class="col-12" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </div>
+            <div class="col-12 px-0 mb-1" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </div>
             <export-excel
               :data="hospitalSituationData"
               :name="fileName"
@@ -39,20 +39,21 @@
             </export-excel>
           </div>
           <div class="col-12 text-right" v-if="!isLoading && !isGlobal">
-            <p v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </p>
+            <p class="mb-0" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </p>
             <button
-              class="btn btn-sm btn-primary"
-              style="font-size: 12px"
+              class="btn btn-primary"
               @click="backToTotalData()"
             >
-              Retour aux données globales
+              <small>
+                Retour aux données globales
+              </small>
             </button>
           </div>
         </div>
       </b-col>
     </b-row>
     <b-row no-gutters>
-      <b-col cols="12" md="12" class="row no-gutters pr-1">
+      <b-col cols="12" md="12" class="row no-gutters">
         <skeleton-loading v-if="isLoading" class="mb-2">
           <square-skeleton
             :boxProperties="{
@@ -61,9 +62,17 @@
             }"
           ></square-skeleton>
         </skeleton-loading>
-        <b-row v-else>
+        <b-row class="col-12 no-gutters px-2" v-else>
           <b-card
-            class="col-10 default-card mb-2 offset-1"
+            v-if="hospitalsDataGroupedByStep.length === 0"
+            class="default-card col-12"
+          >
+            <p class="text-center">
+              Aucunes données disponibles
+            </p>
+          </b-card>
+          <b-card
+            class="col-12 default-card mb-2"
             v-for="(step, index) in hospitalsDataGroupedByStep"
             :key="index"
           >
@@ -108,13 +117,12 @@ export default {
           title: "Evolution global du taux d'occupation",
           lableY: "Taux d'occupation"
         }
-      ],
-      hospitalsData: []
+      ]
     }
   },
   async mounted () {
     const id = this.selectedHospital ? this.selectedHospital.id : null
-    this.hospitalsData = await this.completedForm__getAggregatedByHospitals({
+    this.completedForm__getAggregatedByHospitals({
       hospital_id: id
     })
     if (this.filterdHospitalSituation.last_update.length > 0) {
@@ -140,7 +148,9 @@ export default {
       filterdHospitalSituation: (state) =>
         state.hospitalSituation.filterdHospitalSituation,
       hospitalObservationSituation: (state) =>
-        state.hospitalSituation.hospitalObservationSituation
+        state.hospitalSituation.hospitalObservationSituation,
+      completedFormsAggregated: (state) =>
+        state.completedForm.completedFormsAggregated
     }),
     hospital () {
       if (this.selectedHospital != null) return this.selectedHospital
@@ -179,7 +189,7 @@ export default {
       }
     },
     hospitalSituationData () {
-      const hospitalsSituationsData = this.hospitalsData.data || []
+      const hospitalsSituationsData = this.completedFormsAggregated.data || []
       return hospitalsSituationsData
         .flatMap(hospital => {
           return hospital.completed_forms
@@ -199,8 +209,10 @@ export default {
         .filter((a,b) => a.date.localeCompare(b.date))
     },
     hospitalSituationLastUpdate () {
-      if (this.hospitalsData.last_update) {
-        return moment(this.hospitalsData.last_update).format('DD.MM.YYYY')
+      if (this.selectedHospital && this.selectedHospital.id) {
+        return this.selectedHospital.last_update ? moment(this.selectedHospital.last_update).format('DD.MM.YYYY') : null
+      } else if (this.completedFormsAggregated.last_update) {
+        return moment(this.completedFormsAggregated.last_update).format('DD.MM.YYYY')
       } else {
         return null
       }
@@ -216,7 +228,12 @@ export default {
       return this.createSituationsReduce(arrayFilterd)
     },
     hospitalsDataGroupedByStep () {
-      return groupAggregatedDataByFormStepField(this.hospitalsData.aggregated || [])
+      if (this.selectedHospital && this.selectedHospital.id) {
+        const aggregatedData = JSON.parse(this.selectedHospital.aggregated)
+        return groupAggregatedDataByFormStepField(aggregatedData || [])
+      } else {
+        return groupAggregatedDataByFormStepField(this.completedFormsAggregated.aggregated || [])
+      }
     }
   },
   watch: {
@@ -226,19 +243,17 @@ export default {
     },
     selectedHospital (val) {
       const id = val ? val.id : null
+      console.log(val)
       const form = {
         hospital: id,
         observation_start: this.observation_start,
         observation_end: this.observation_end
       }
-      this.gethospitalsFiltered(form)
+      // this.gethospitalsFiltered(form)
     },
     situationHospital (val) {
       this.dataGlobal = val
       this.paintStats(val)
-    },
-    hospitalSituationAll () {
-      this.gethospitalsFiltered()
     },
     chartData () {
       this.$data._chart.update()
