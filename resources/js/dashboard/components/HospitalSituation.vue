@@ -198,9 +198,9 @@ export default {
           return hospital.completed_forms
             .map(completedForm => {
               const datas = {
-                date: moment(completedForm.last_update).format('DD/MM/YY'),
+                'Date de soumission': moment(completedForm.last_update).format('DD/MM/YY'),
                 'Identifiant hopital': hospital.id,
-                'Numero téléphone agent': completedForm.admin_user?.username || '-',
+                'Identifiant agent': completedForm.admin_user?.username || '-',
                 'Nom hopital': hospital.name
               }
               completedForm.completed_form_fields.forEach(completedFormField => {
@@ -209,7 +209,7 @@ export default {
               return datas
             })
         })
-        .filter((a,b) => a.date.localeCompare(b.date))
+        .filter((a,b) => a['Date de soumission'].localeCompare(b['Date de soumission']))
     },
     hospitalSituationLastUpdate () {
       if (this.selectedHospital && this.selectedHospital.id) {
