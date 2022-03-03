@@ -39,11 +39,11 @@ export default {
   @import "@~/sass/_variables";
   .nav {
     border-right: 8px solid $dash-background;
-    border-top: 9px solid $dash-background;
     .nav-link {
       border-bottom: 2px solid $dash-background;
       text-decoration: none;
       font-size: 14px;
+      color: black;
       &:hover {
         background-color: $dash-background;
       }

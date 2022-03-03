@@ -131,7 +131,7 @@
                         user.email
                       }}</span>
 
-                      <router-link class="small" :to="{ name: 'landing' }"
+                      <router-link class="small" :to="{ name: 'main' }"
                         >Revenir à l'accueil</router-link
                       >
                     </p>

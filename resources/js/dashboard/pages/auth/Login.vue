@@ -110,7 +110,7 @@ export default {
           ) {
             this.$router
               .push({
-                name: "landing",
+                name: "main",
               })
               .catch((e) => {
                 console.log(e);

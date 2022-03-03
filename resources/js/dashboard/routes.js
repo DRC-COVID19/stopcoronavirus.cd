@@ -116,7 +116,7 @@ export default [
         name: 'administrator',
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR]
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC]
         },
         children: [
           {
@@ -152,7 +152,7 @@ export default [
             name: 'administrator.forms',
             meta: {
               requiresAuth: true,
-              role: [CREATE_FORM] || [EDIT_FORM]
+              role: [CREATE_FORM, EDIT_FORM]
             }
           },
           {
@@ -185,7 +185,7 @@ export default [
         component: CTCO,
         meta: {
           requiresAuth: true,
-          role: [AGENT_HOSPITAL] || [ADMIN_HOSPITAL]
+          role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
         },
         children: [
           {
