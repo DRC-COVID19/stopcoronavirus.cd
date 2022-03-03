@@ -18,7 +18,7 @@
           <form-wizard
             :finishButtonText="isUpdateMode ? 'Modifier' : 'Envoyer'"
             :startIndex="0"
-            title="FORMULAIRE"
+            :title="targetForm.title"
             subtitle
             shape="tab"
             color="#2e5bff"
