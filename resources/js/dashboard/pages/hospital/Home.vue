@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <b-container class="mt-4">
       <b-row>
         <b-col v-if="user && user.hospital">
@@ -90,13 +89,11 @@
 </template>
 
 <script>
-import Header from '../../components/hospital/Header'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { DEFAULT_FORM_ID } from '../../config/env'
 export default {
   components: {
-    Header,
     ManagerUserName
   },
   data () {
