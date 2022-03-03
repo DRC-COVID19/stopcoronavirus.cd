@@ -28,6 +28,9 @@ export default {
   watch: {
     '$route' (to, from) {
       this.redirect(to)
+    },
+    user () {
+      this.redirect(this.$route)
     }
   },
   methods: {
@@ -35,7 +38,6 @@ export default {
       if (route.name !== 'hospitals') {
         return null
       }
-      console.log(this.user) 
       if (!this.user || this.user.roles === undefined) {
         return null
       }

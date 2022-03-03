@@ -147,9 +147,7 @@ export default {
     }),
     ...mapGetters(['getChangeLogNotRead']),
   },
-  mounted() {
-    this.fillParametersFromUrlParams()
-  },
+  mounted() {},
   methods: {
     ...mapActions(['logout', 'setChangeLogsRead']),
     ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
