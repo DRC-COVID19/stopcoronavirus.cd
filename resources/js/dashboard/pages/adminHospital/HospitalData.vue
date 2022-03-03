@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <b-container class="mt-4">
       <b-row>
         <b-col cols="12" class="mb-3">
@@ -83,13 +82,11 @@
 </template>
 
 <script>
-import Header from '../../components/hospital/Header'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import { mapState, mapMutations, mapActions } from 'vuex'
 import { DEFAULT_FORM_ID } from '../../config/env'
 export default {
   components: {
-    Header,
     // eslint-disable-next-line vue/no-unused-components
     ManagerUserName
   },

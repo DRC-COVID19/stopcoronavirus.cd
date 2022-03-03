@@ -1,7 +1,6 @@
 /* eslint-disable space-before-blocks */
 <template>
   <div>
-    <Header />
     <b-container class="mt-4">
       <Loading v-if="isLoading" class="h-100"  message="Chargement du formulaire"/>
       <b-row v-else align-h="center">
@@ -39,7 +38,7 @@
                   <b-form-group
                     v-for="(formField, counter) in formStep.form_fields"
                     :key="counter"
-                    :label="!!formField.rules.match(/required/i)? formField.name + ' * ' : formField.name"
+                    :label="formField.rules && !!formField.rules.match(/required/i) ? formField.name + ' * ' : formField.name"
                     :label-for="formField.name"
                   >
 
@@ -106,7 +105,6 @@
 </template>
 
 <script>
-import Header from '../../components/hospital/Header'
 import Loading from '../../components/Loading'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import FormFieldInput from '../../components/forms/FormFieldInput'
@@ -116,7 +114,6 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
-    Header,
     ManagerUserName,
     Loading,
     FormWizard,

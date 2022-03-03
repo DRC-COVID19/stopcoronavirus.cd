@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <b-container>
       <Loading v-if="isLoading" class="h-100" message="Chargement des données ..."/>
       <b-row v-else align-h="center" class="mb-3">
@@ -28,12 +27,11 @@
 </template>
 
 <script>
-import Header from '../../components/hospital/Header'
 import Loading from '../../components/Loading'
 import { mapActions, mapState } from 'vuex'
 export default {
   components: {
-    Loading, Header
+    Loading
   },
   data () {
     return {
