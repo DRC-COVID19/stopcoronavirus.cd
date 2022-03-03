@@ -81,6 +81,9 @@
               <p>
                 {{ aggregatedFormField.form_field.name }} :
                 <strong>{{ aggregatedFormField.value }}</strong>
+                <span v-if="aggregatedFormField.form_field.agreggation" style="color:aaa">(somme)</span>
+                <span v-else style="color:aaa">(moyenne)</span>
+
               </p>
             </div>
           </b-card>
