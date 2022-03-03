@@ -208,6 +208,9 @@ export default {
       const url = new URL(window.location.href);
       url.search = ''
       window.history.replaceState(null, null, url);
+    },
+    userHaveRole(role) {
+      return this.user && this.user.roles && this.user.roles.find((a) => a.name == role)
     }
   }
 }

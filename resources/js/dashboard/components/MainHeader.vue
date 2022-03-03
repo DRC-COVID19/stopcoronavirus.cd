@@ -5,7 +5,6 @@
         <b-navbar-brand class="mr-5">
           <h1
             class="title m-0"
-            @click="changeActiveMenuTo('home', 1)"
           >
             Dashboard Covid-19
           </h1>
@@ -15,41 +14,32 @@
         </b-navbar-toggle>
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
-            <!-- <b-nav-item
-              :class="{ active: activeMenu == 1 }"
-              @click="selectMenu(1)"
-              >Mobilité</b-nav-item
-            > -->
-            <!-- <b-nav-item
-              :class="{ active: activeMenu == 2 }"
-              @click="selectMenu(2)"
-              >Epidémiologie
+            <b-nav-item
+              v-if="canViewDashBoard"
+              :to="{name: 'main.dashboard'}"
+              :active="this.$route.name.startsWith('main.dashboard')"
+            >
+              Dashboard
             </b-nav-item>
             <b-nav-item
-              :class="{ active: activeMenu == 3 }"
-              @click="selectMenu(3)"
-              >Indicateurs</b-nav-item
-            > -->
-            <!-- <b-nav-item :class="{'active':activeMenu==4}" @click="selectMenu(4)">Sondages</b-nav-item> -->
-            <b-nav-item
-              :class="{ active: activeMenu == 5 }"
-              @click="changeActiveMenuTo('dashboard.infrastructure', 5)"
+              v-if="canViewAdministration"
+              :to="{name: 'administrator'}"
+              :active="this.$route.name.startsWith('administrator')"
             >
-              Infrastructures
+              Administration
             </b-nav-item>
-            <!-- <b-nav-item :class="{'active':activeMenu==6}" @click="selectMenu(6)">Orientation</b-nav-item> -->
             <b-nav-item
-              :class="{ active: activeMenu == 7 }"
-              @click="changeActiveMenuTo('dashboard.aPropos', 7)"
+              v-if="canViewCTCOS"
+              :to="{name: 'hospitals'}"
+              :active="this.$route.name.startsWith('hospital')"
             >
-              A propos
-            </b-nav-item
-            >
+              CTCOS
+            </b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
-            <li class="position-relative nav-item d-flex align-items-center">
+            <b-nav-item class="position-relative nav-item d-flex align-items-center">
               <a
-                class="nav-link"
+                class="nav-link position-relative"
                 href="#"
                 @click.prevent="toggleHeaderNotification"
                 v-click-outside="clickOutsideNotification"
@@ -57,12 +47,9 @@
                 <div
                   class="icon-hallo d-flex justify-content-center align-items-center"
                 >
-                  <i class="fas fa-bell"></i>
+                  <i class="fas fa-bell" aria-hidden="true"></i>
                 </div>
-
-                <span class="notification-count">{{
-                  getChangeLogNotRead.length
-                }}</span>
+                <span class="notification-count"> {{ getChangeLogNotRead.length }} </span>
               </a>
               <div class="dropdown-nav" v-show="showHeaderNotification">
                 <div class="item-header">
@@ -97,8 +84,8 @@
                   </div>
                 </div>
               </div>
-            </li>
-            <b-nav-item>
+            </b-nav-item>
+            <b-nav-item class="d-flex align-content-center">
               <div
                 class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
               >
@@ -127,17 +114,11 @@
                     <p>
                       <span class="d-block">{{ user.username }}</span>
                       <span class="d-block">{{ user.name }}</span>
-                      <span class="d-block" v-if="user.email">{{
-                        user.email
-                      }}</span>
-
-                      <router-link class="small" :to="{ name: 'landing' }"
-                        >Revenir à l'accueil</router-link
-                      >
+                      <span class="d-block" v-if="user.email">{{ user.email }}</span>
                     </p>
-                    <b-button @click="userLogout" variant="danger" block
-                      >Deconnexion</b-button
-                    >
+                    <b-button @click="userLogout" variant="danger" block>
+                      Deconnexion
+                    </b-button>
                   </b-card>
                 </div>
               </div>
@@ -151,6 +132,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import { ADMINISTRATOR, ADMIN_DASHBOARD, ADMIN_HOSPITAL, AGENT_HOSPITAL, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC } from '../config/env';
 
 export default {
   components:{
@@ -168,13 +150,17 @@ export default {
       changeLogs: (state) => state.app.changeLogs
     }),
     ...mapGetters(['getChangeLogNotRead']),
-    countReadChangeLogs () {
-      return getChangeLogNotRead.length
+    canViewDashBoard() {
+      return this.userHaveRole(ADMIN_DASHBOARD)
+    },
+    canViewAdministration() {
+      return this.userHaveRole(ADMINISTRATOR) || this.userHaveRole(MANANGER_EPIDEMIC) || this.userHaveRole(EDIT_FORM) || this.userHaveRole(CREATE_FORM)
+    },
+    canViewCTCOS () {
+      return this.userHaveRole(ADMIN_HOSPITAL) || this.userHaveRole(AGENT_HOSPITAL)
     }
   },
-  mounted() {
-    this.fillParametersFromUrlParams()
-  },
+  mounted() {},
   methods: {
     ...mapActions(['logout', 'setChangeLogsRead']),
     ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
@@ -195,13 +181,6 @@ export default {
       this.setSelectedChangeLog(item)
       this.setActiveMenu(7)
     },
-    selectMenu(value) {
-      if (this.activeMenu !== null) {
-        this.removeAllParamsFromUrl();
-      }
-      // this.addParamToUrl('menu', value);
-      this.setActiveMenu(value);
-    },
     toggleHeaderNotification () {
       this.showHeaderNotification = !this.showHeaderNotification
     },
@@ -210,19 +189,6 @@ export default {
         this.showHeaderNotification = false
         this.setChangeLogsRead()
       }
-    },
-    fillParametersFromUrlParams () {
-      if (this.$route.path === '/dashboard/infrastructure') {
-        this.selectMenu(5)
-      } else if (this.$route.path === '/dashboard/a-propos') {
-        this.selectMenu(7)
-      } else {
-        this.selectMenu(1)
-      }
-    },
-    changeActiveMenuTo (pathname, menu) {
-      this.selectMenu(menu)
-      this.$router.push({name: pathname})
     }
   },
 };
@@ -244,8 +210,8 @@ export default {
   }
   .notification-count {
     position: absolute;
-    top: 0px;
-    right: -1px;
+    top: 4px;
+    right: -2px;
     height: 20px;
     width: 20px;
     color: #ffffff;
@@ -361,6 +327,11 @@ export default {
     .title {
       font-size: 18px;
     }
+  }
+}
+.nav-item{
+  a.active {
+    color: $dash-blue !important;
   }
 }
 </style>

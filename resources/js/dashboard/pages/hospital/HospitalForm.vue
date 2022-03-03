@@ -3,7 +3,7 @@
   <div>
     <Header />
     <b-container class="mt-4">
-      <Loading v-if="isLoading" class="h-100" />
+      <Loading v-if="isLoading" class="h-100"  message="Chargement du formulaire"/>
       <b-row v-else align-h="center">
 
         <b-col cols="12">
@@ -159,7 +159,11 @@ export default {
   },
 
   async mounted () {
+    this.isLoading = true
     this.targetForm = await this.formShow({ id: this.$route.params.form_id })
+    if (this.targetForm) {
+      this.isLoading = false
+    }
     if (this.isUpdateMode) {
       this.getCompletedFormFields()
     }

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <b-container>
       <b-row class="mt-4">
         <b-col cols="12" md="10">
@@ -87,12 +86,9 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import Header from '../../components/hospital/Header'
 
 export default {
-  components: {
-    Header
-  },
+  components: {},
   data () {
     return {
       fields: [

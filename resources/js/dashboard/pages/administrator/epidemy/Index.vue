@@ -49,24 +49,24 @@
 </template>
 
 <script>
-import Header from "../components/Header";
-import Waiting from "../../../components/Waiting";
-import ListSituation from "./components/ListSituation";
-import CreateSituation from "./components/CreateSituation";
+import Header from '../components/Header'
+import Waiting from '../../../components/Waiting'
+import ListSituation from './components/ListSituation'
+import CreateSituation from './components/CreateSituation'
 export default {
   components: {
     Header,
     ListSituation,
     CreateSituation,
-    Waiting,
+    Waiting
   },
-  mounted() {
-    this.getSituationList();
+  mounted () {
+    this.getSituationList()
   },
-  data() {
+  data () {
     return {
-      title: "Epidemie",
-      iconClass: "fas fa-file-medical",
+      title: 'Situation épidémiologique',
+      iconClass: 'fas fa-file-medical',
       isSituationAdded: false,
       isSituationUpdated: false,
       isSituationDeleted: false,
@@ -79,97 +79,70 @@ export default {
       situations: {},
       isUpdating: false,
       formToPopulate: {},
-      currentPage: 1,
-    };
+      currentPage: 1
+    }
   },
   computed: {
-    situationMeta() {
+    situationMeta () {
       if (!this.situations.meta) {
         return {
           current_page: 1,
           from: 1,
           last_page: 1,
-          path: "#",
+          path: '#',
           per_page: 1,
           to: 1,
-          total: 1,
-        };
+          total: 1
+        }
       }
-      return this.situations.meta;
-    },
+      return this.situations.meta
+    }
   },
   methods: {
     search (filter) {
-      this.isLoading = true;
+      this.isLoading = true
       if (filter !== '') {
         axios
-          .get('api/pandemic-stats/filter?date='+filter)
+          .get('api/pandemic-stats/filter?date=' + filter)
           .then(({ data }) => {
-            this.situations = data;
-            this.isLoading = false;
+            this.situations = data
+            this.isLoading = false
           })
           .catch(({ response }) => {
-            this.$gtag.exception(response);
-            this.isLoading = false;
-          });
+            this.$gtag.exception(response)
+            this.isLoading = false
+          })
       } else {
-        this.getSituationList();
-        this.isLoading = false;
+        this.getSituationList()
+        this.isLoading = false
       }
     },
     countDownChangedS (showSuccess) {
-      this.showSuccess = showSuccess;
+      this.showSuccess = showSuccess
     },
     countDownChanged (showWarning) {
-      this.showWarning = showWarning;
+      this.showWarning = showWarning
     },
-    showAlert() {
-      this.showWarning = this.timeOut;
+    showAlert () {
+      this.showWarning = this.timeOut
     },
-    deleteSituation(currentSituationId) {
-      this.errors = {};
-      axios
-        .delete("/api/pandemic-stats/" + currentSituationId)
-        .then(() => {
-          this.getSituationList;
-          this.isSituationDeleted = true;
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response);
-        });
-    },
-    updateSit(form) {
-      this.isLoading = true;
-      this.isSituationUpdated = false;
-      axios
-        .put("/api/pandemic-stats/" + form.id, {
-          confirmed: form.confirmed,
-          local: form.local,
-          imported: form.imported,
-          sick: form.sick,
-          seriously: form.seriously,
-          healed: form.healed,
-          dead: form.dead,
-          last_update: form.last_update,
-        })
-        .then(() => {
-          this.isSituationUpdated = true;
-          this.showSuccess = this.timeOut;
-          this.isSituationUpdated = true;
-          this.isLoading = false;
-          this.isUpdating = false;
-          this.getSituationList();
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response);
-        });
-    },
-    createSituation(form) {
-      this.isSituationAdded = false;
-      this.isLoading = true;
+    deleteSituation (currentSituationId) {
       this.errors = {}
       axios
-        .post("/api/pandemic-stats", {
+        .delete('/api/pandemic-stats/' + currentSituationId)
+        .then(() => {
+          this.getSituationList
+          this.isSituationDeleted = true
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+        })
+    },
+    updateSit (form) {
+      this.isLoading = true
+      this.isSituationUpdated = false
+      axios
+        .put('/api/pandemic-stats/' + form.id, {
           confirmed: form.confirmed,
           local: form.local,
           imported: form.imported,
@@ -177,49 +150,76 @@ export default {
           seriously: form.seriously,
           healed: form.healed,
           dead: form.dead,
-          last_update: form.last_update,
+          last_update: form.last_update
         })
         .then(() => {
-          this.isSituationAdded = true;
-          this.isUpdating = false;
-          this.isLoading = false;
-          this.showSuccess = this.timeOut;
-          this.getSituationList();
+          this.isSituationUpdated = true
+          this.showSuccess = this.timeOut
+          this.isSituationUpdated = true
+          this.isLoading = false
+          this.isUpdating = false
+          this.getSituationList()
         })
         .catch(({ response }) => {
-          this.errors = response.data.errors;
-          this.$gtag.exception(response);
-          this.showAlert();
-          this.isLoading = false;
-          this.WarningMessageCreate = response.data.message;
-        });
+          this.$gtag.exception(response)
+        })
     },
-    editSituation(form) {
-      this.isUpdating = true;
-      this.errors = {};
-      this.formToPopulate = form;
-    },
-    getSituationList(page = 1) {
-      this.isLoading = true;
+    createSituation (form) {
+      this.isSituationAdded = false
+      this.isLoading = true
+      this.errors = {}
       axios
-        .get("/api/pandemic-stats", {
-          params: { page },
+        .post('/api/pandemic-stats', {
+          confirmed: form.confirmed,
+          local: form.local,
+          imported: form.imported,
+          sick: form.sick,
+          seriously: form.seriously,
+          healed: form.healed,
+          dead: form.dead,
+          last_update: form.last_update
+        })
+        .then(() => {
+          this.isSituationAdded = true
+          this.isUpdating = false
+          this.isLoading = false
+          this.showSuccess = this.timeOut
+          this.getSituationList()
+        })
+        .catch(({ response }) => {
+          this.errors = response.data.errors
+          this.$gtag.exception(response)
+          this.showAlert()
+          this.isLoading = false
+          this.WarningMessageCreate = response.data.message
+        })
+    },
+    editSituation (form) {
+      this.isUpdating = true
+      this.errors = {}
+      this.formToPopulate = form
+    },
+    getSituationList (page = 1) {
+      this.isLoading = true
+      axios
+        .get('/api/pandemic-stats', {
+          params: { page }
         })
         .then(({ data }) => {
-          this.situations = data;
-          this.isLoading = false;
+          this.situations = data
+          this.isLoading = false
         })
-        .catch((e) => console.log(e));
+        .catch((e) => console.log(e))
     },
-    cancelUpdate() {
-      this.errors = {};
-      this.isUpdating = false;
+    cancelUpdate () {
+      this.errors = {}
+      this.isUpdating = false
     },
-    switchPage(page) {
-      this.getSituationList(page);
-    },
-  },
-};
+    switchPage (page) {
+      this.getSituationList(page)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
