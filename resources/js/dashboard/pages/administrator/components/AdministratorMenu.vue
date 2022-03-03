@@ -1,24 +1,28 @@
 <template>
   <b-nav vertical>
     <b-nav-item
+      v-if="canViewUsers"
       :to="{name: 'administrator.users'}"
       :active="$route.name.startsWith('administrator.users') || $route.name.startsWith('administrator.home')"
     >
       <i class="fas fa-users" aria-hidden="true" ></i> &nbsp; Utilisateurs
     </b-nav-item>
     <b-nav-item
+      v-if="canViewEpidemic"
       :to="{name: 'administrator.epidemie'}"
       :active="$route.name.startsWith('administrator.epidemie')"
     >
       <i class="fas fa-virus" aria-hidden="true" ></i> &nbsp; Situation Épidémiologique
     </b-nav-item>
     <b-nav-item
+      v-if="canViewChangeLog"
       :to="{name: 'administrator.changeLog'}"
       :active="$route.name.startsWith('administrator.changeLog')"
     >
       <i class="fas fa-info-circle" aria-hidden="true" ></i> &nbsp; Change log
     </b-nav-item>
     <b-nav-item
+      v-if="canViewForms"
       :to="{name: 'administrator.forms'}"
       :active="$route.name.startsWith('administrator.forms')"
     >
@@ -28,7 +32,27 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { ADMINISTRATOR, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC } from '../../../config/env'
+
 export default {
+  computed: {
+    ...mapState({
+      user: (state) => state.auth.user
+    }),
+    canViewUsers () {
+      return this.userHaveRole(ADMINISTRATOR)
+    },
+    canViewEpidemic () {
+      return this.userHaveRole(MANANGER_EPIDEMIC)
+    },
+    canViewChangeLog () {
+      return this.userHaveRole(ADMINISTRATOR)
+    },
+    canViewForms () {
+      return this.userHaveRole(EDIT_FORM) || this.userHaveRole(CREATE_FORM)
+    }
+  }
 }
 </script>
 

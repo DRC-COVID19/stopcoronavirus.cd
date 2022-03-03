@@ -15,18 +15,21 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
             <b-nav-item
+              v-if="canViewDashBoard"
               :to="{name: 'main.dashboard'}"
               :active="this.$route.name.startsWith('main.dashboard')"
             >
               Dashboard
             </b-nav-item>
             <b-nav-item
+              v-if="canViewAdministration"
               :to="{name: 'administrator'}"
               :active="this.$route.name.startsWith('administrator')"
             >
               Administration
             </b-nav-item>
             <b-nav-item
+              v-if="canViewCTCOS"
               :to="{name: 'hospitals'}"
               :active="this.$route.name.startsWith('hospital')"
             >
@@ -129,6 +132,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import { ADMINISTRATOR, ADMIN_DASHBOARD, ADMIN_HOSPITAL, AGENT_HOSPITAL, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC } from '../config/env';
 
 export default {
   components:{
@@ -146,6 +150,15 @@ export default {
       changeLogs: (state) => state.app.changeLogs
     }),
     ...mapGetters(['getChangeLogNotRead']),
+    canViewDashBoard() {
+      return this.userHaveRole(ADMIN_DASHBOARD)
+    },
+    canViewAdministration() {
+      return this.userHaveRole(ADMINISTRATOR) || this.userHaveRole(MANANGER_EPIDEMIC) || this.userHaveRole(EDIT_FORM) || this.userHaveRole(CREATE_FORM)
+    },
+    canViewCTCOS () {
+      return this.userHaveRole(ADMIN_HOSPITAL) || this.userHaveRole(AGENT_HOSPITAL)
+    }
   },
   mounted() {},
   methods: {

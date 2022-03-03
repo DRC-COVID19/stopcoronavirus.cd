@@ -41,8 +41,6 @@ export default {
         return null
       }
 
-      console.log(this.user)
-
       if (this.user.roles.find((a) => a.name == ADMINISTRATOR || a.name == MANANGER_EPIDEMIC || a.name == EDIT_FORM || a.name == CREATE_FORM)) {
         this.$router.push({
           name: 'administrator'

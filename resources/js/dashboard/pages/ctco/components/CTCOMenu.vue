@@ -1,12 +1,14 @@
 <template>
   <b-nav vertical>
     <b-nav-item
+      v-if="canViewAdmin"
       :to="{name: 'hospital.admin'}"
       :active="$route.name.startsWith('hospital.admin') || $route.name.startsWith('administrator.home')"
     >
       <i class="fas fa-list-alt" aria-hidden="true" ></i> &nbsp; Résumé mise à jour
     </b-nav-item>
     <b-nav-item
+      v-if="canViewAgent"
       :to="{name: 'hospital.home'}"
       :active="$route.name.startsWith('hospital.home')"
     >
@@ -16,7 +18,20 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { ADMIN_HOSPITAL, AGENT_HOSPITAL } from '../../../config/env'
 export default {
+  computed: {
+    ...mapState({
+      user: (state) => state.auth.user
+    }),
+    canViewAdmin () {
+      return this.userHaveRole(ADMIN_HOSPITAL)
+    },
+    canViewAgent () {
+      return this.userHaveRole(AGENT_HOSPITAL)
+    }
+  }
 }
 </script>
 
