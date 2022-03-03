@@ -37,7 +37,7 @@
                 :style="'background-color : ' + '#8BC34A'">
 
                 </span>
-                <span class="ml-4">À jours</span>
+                <span class="ml-4">À jour</span>
              </div>
              <div v-else-if="data.item.diff_date >=2 && data.item.diff_date <= 3" class="d-flex justify-content-start align-item-center">
                 <span class="badge badge-pill badge-statut"

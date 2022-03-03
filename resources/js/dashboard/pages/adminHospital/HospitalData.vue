@@ -57,7 +57,7 @@
                   name: 'hospital.edit',
                   params: {
                     completed_form_id:data.item.id,
-                    hospital_id:user.hospital.id,
+                    hospital_id: data.item.hospital_id,
                     form_id: defaultFormId
                   }
                 }"

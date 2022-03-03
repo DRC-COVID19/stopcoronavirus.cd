@@ -2,25 +2,41 @@
   <div>
     <b-container>
       <Loading v-if="isLoading" class="h-100" message="Chargement des données ..."/>
-      <b-row v-else align-h="center" class="mb-3">
-        <b-col cols="12" md="6" class="mt-4">
+
+      <b-row   v-else align-h="center" class="mb-2">
+        <b-col cols="12" md="8" class="mt-4">
           <b-link :to="backRoute">
             <span class="fa fa-chevron-left"> Retour</span>
           </b-link>
-          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du <br> {{moment(completedForm.last_update).format("DD/MM/Y")}}</h3>
+          <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du {{moment(completedForm.last_update).format("DD/MM/Y")}}</h3>
+
             <b-col
               v-for="(step, index) in completedFormFieldFiltered"
               :key="index"
               cols="12" md="12"
             >
-                  <h3 class="mb-4">{{step.form_step_title}}</h3>
+            <b-card class="mt-3">
+                  <h4 class="mb-4">{{step.form_step_title}}</h4>
                   <ul   v-for="(field, count) in step.completed_form_fields"
                     :key="count">
                     <li>{{field.form_field.name}} : {{field.value}}</li>
                   </ul>
+              </b-card>
             </b-col>
-          <div>Données envoyées par <b> {{completedForm.created_manager_name}}</b></div>
+
+          <div class="ml-3 mt-2">Données envoyées par <b> {{completedForm.created_manager_name}}</b></div>
+
+          <b-row class="mt-4">
+            <b-col cols="12" md="10" class="ml-3">
+            <p class="mb-4 mt-2"><strong>Liste des personnes ayant modifié les réponses : </strong></p>
+            <ul   v-for="(item, count) in updatedManageNamesListSorted"
+                    :key="count">
+                    <li> {{item.updatedManagerName}},  le {{moment(item.updatedAt).format("DD/MM/Y à H: m")}} </li>
+            </ul>
+          </b-col>
+          </b-row>
         </b-col>
+
       </b-row>
     </b-container>
   </div>
@@ -57,6 +73,18 @@ export default {
     },
     completedFormFieldFiltered () {
       return this.completedFormFieldFilter()
+    },
+    updatedManageNamesListSorted () {
+      if (this.completedFormFields.length > 0) {
+        return this.completedFormFields
+          .map((completedFormField) => ({
+            updatedManagerName: completedFormField.updated_manager_name,
+            updatedAt: completedFormField.updated_at
+          }))
+          .sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
+         .filter((item, i, self) => item.updatedManagerName && self.findIndex(x => x.updatedManagerName === item.updatedManagerName) === i)
+      }
+      return []
     }
   },
   methods: {
