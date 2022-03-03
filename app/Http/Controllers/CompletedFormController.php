@@ -324,6 +324,9 @@ class CompletedFormController extends Controller
                 $aggregated = $completedFormFieldGroup->sum('value');
                 if ($targetFormField && !$targetFormField->agreggation) {
                     $aggregated /= $completedFormFieldGroup->count();
+                    if (is_float($aggregated)) {
+                        $aggregated = number_format($aggregated, 2);
+                    }
                 }
                 return [
                     'value'       => $aggregated,
