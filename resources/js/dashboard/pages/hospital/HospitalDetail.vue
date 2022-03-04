@@ -24,12 +24,14 @@
 
           <div class="ml-3 mt-2">Données envoyées par <b> {{completedForm.created_manager_name}}</b></div>
 
-          <b-row class="mt-4">
+          <b-row class="mt-4" v-if="updatedManageNamesListSorted.length">
             <b-col cols="12" md="10" class="ml-3">
-            <p class="mb-4 mt-2"><strong>Liste des personnes ayant modifié les réponses : </strong></p>
-            <ul   v-for="(item, count) in updatedManageNamesListSorted"
-                    :key="count">
-                    <li> {{item.updatedManagerName}},  le {{moment(item.updatedAt).format("DD/MM/Y à H: m")}} </li>
+            <p class="mb-4 mt-2">Liste des personnes ayant modifié les données : </p>
+            <ul
+              v-for="(item, count) in updatedManageNamesListSorted"
+              :key="count"
+            >
+              <li> <strong> {{item.updatedManagerName}}</strong>,  le {{moment(item.updatedAt).format("DD/MM/Y à H:m")}} </li>
             </ul>
           </b-col>
           </b-row>

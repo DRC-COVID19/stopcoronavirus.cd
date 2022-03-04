@@ -66,5 +66,13 @@ export default {
 
 <style lang='scss' scoped >
   @import "@~/sass/_variables";
-
+  @import "@~/sass/_variables";
+  .administrator-container {
+    @media (min-width: 1024px)  {
+      height: calc(100vh - 87px);
+      > div {
+        height: 100%;
+      }
+    }
+  }
 </style>
