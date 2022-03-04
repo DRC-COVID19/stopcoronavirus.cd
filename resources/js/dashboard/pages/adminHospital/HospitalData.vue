@@ -125,14 +125,14 @@ export default {
   },
   async mounted () {
     await this.getHospital({ hospital_id: this.$route.params.hospital_id })
-    await this.getCompletedForms()
+    this.getCompletedForms()
   },
   methods: {
     ...mapActions(['getHospital', 'completedForm__getByHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    getCompletedForms (page) {
+    async getCompletedForms (page) {
       if (typeof page === 'undefined') page = 1
-      this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.isLoading })
+      await this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.isLoading })
     },
     onPageChange (page) {
       this.getCompletedForms(page)
