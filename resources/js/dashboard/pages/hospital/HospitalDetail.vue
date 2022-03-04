@@ -82,7 +82,7 @@ export default {
             updatedAt: completedFormField.updated_at
           }))
           .sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
-         .filter((item, i, self) => item.updatedManagerName && self.findIndex(x => x.updatedManagerName === item.updatedManagerName) === i)
+          .filter((item, i, self) => item.updatedManagerName && self.findIndex(x => x.updatedManagerName === item.updatedManagerName) === i)
       }
       return []
     }

@@ -10,16 +10,18 @@
             </b-link>
 
           </h3>
-          <b-alert show class="light">
-            <div>{{`Structure: ${user.hospital.name}`}}</div>
-            <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
-            <p v-if="hospitalManagerName">Connecté en tant que {{hospitalManagerName}}</p>
-          </b-alert>
+          <b-card class="mb-4">
+            <b-card-header><h5>{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
+           <b-card-body>
+              <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
+            <p v-if="hospitalManagerName">Connecté en tant que <strong>{{hospitalManagerName}}</strong></p>
+           </b-card-body>
+          </b-card>
         </b-col>
       </b-row>
       <b-row class="mt-4 mb-4">
         <b-col>
-          <b-button :to="{name:'hospital.create',params:{ form_id: defaultFormId }}" class="btn-dash-blue">Nouveau</b-button>
+          <b-button :to="{name:'hospital.create',params:{ form_id: defaultFormId }}" class="btn-dash-blue">+ Nouveau</b-button>
         </b-col>
       </b-row>
       <b-row>
@@ -104,7 +106,8 @@ export default {
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
-      hospitalId: null
+      hospitalId: null,
+      alertVariant: 'secondary'
     }
   },
   computed: {
@@ -167,8 +170,8 @@ export default {
 $bg_primary:#F4F6FC;
  .hopita_mome{
   background-color: $bg_primary;
-  .alert{
+}
+  .light{
     background-color: $bg_primary;
   }
-}
 </style>
