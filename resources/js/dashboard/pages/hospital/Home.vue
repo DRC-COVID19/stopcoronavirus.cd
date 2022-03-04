@@ -11,7 +11,7 @@
 
           </h3>
           <b-card class="mb-4">
-            <b-card-header><h5>{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
+            <b-card-header><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
            <b-card-body>
               <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
             <p v-if="hospitalManagerName">Connecté en tant que <strong>{{hospitalManagerName}}</strong></p>
