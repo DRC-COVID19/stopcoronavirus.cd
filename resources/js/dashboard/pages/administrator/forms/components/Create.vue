@@ -50,7 +50,7 @@
         ></b-form-input>
       </b-form-group>
       <b-form-group label-class="text-dash-color" class="mt-4"  id="input-group-1" label="Publié" v-slot="{ ariaDescribedby }">
-        <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="0">Oui</b-form-radio>
+        <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="true">Oui</b-form-radio>
         <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="false">Non</b-form-radio>
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
