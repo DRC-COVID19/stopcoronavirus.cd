@@ -1,5 +1,5 @@
 <template>
-  <b-row class="no-gutters flex-lg-nowrap">
+  <b-row class="ctco-container no-gutters flex-lg-nowrap">
     <b-col cols="12" lg="auto">
       <CTCOMenu />
     </b-col>
@@ -59,4 +59,12 @@ export default {
 
 <style lang='scss' scoped >
   @import "@~/sass/_variables";
+  .ctco-container {
+    @media (min-width: 1024px)  {
+      height: calc(100vh - 87px);
+      > div {
+        height: 100%;
+      }
+    }
+  }
 </style>
