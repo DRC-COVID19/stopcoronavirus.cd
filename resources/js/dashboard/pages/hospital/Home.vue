@@ -134,15 +134,27 @@ export default {
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
     }
-    await this.getCompletedForms()
+    this.getCompletedForms()
+  },
+  watch: {
+    user () {
+      this.getCompletedForms()
+    }
   },
   methods: {
     ...mapActions(['completedForm__getByHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    getCompletedForms (page) {
+    async getCompletedForms (page) {
       if (typeof page === 'undefined') page = 1
-      this.completedForm__getByHospital({ page, hospital_id: this.user.hospital.id, isLoading: this.isLoading })
+      if (this.user && this.user.hospital) {
+        await this.completedForm__getByHospital({
+          page,
+          hospital_id: this.user.hospital.id,
+          isLoading: this.isLoading
+        })
+      }
     },
+
     onPageChange (page) {
       this.getCompletedForms(page)
     }
