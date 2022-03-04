@@ -139,8 +139,8 @@ export default {
     return {
       form: {},
       requireAggregationOptions: [
-        { text: 'Faire l\'addition', value: true },
-        { text: 'Faire la moyenne', value: false }
+        { text: 'Addition', value: true },
+        { text: 'Moyenne', value: false }
       ],
 
       requiredOptions: [
