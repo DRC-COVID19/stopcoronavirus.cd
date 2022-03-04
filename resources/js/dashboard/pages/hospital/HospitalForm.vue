@@ -153,6 +153,7 @@ export default {
         }
       } else return { name: 'hospital.home' }
     }
+
   },
 
   async mounted () {
@@ -183,7 +184,9 @@ export default {
       this.getLastUpdate()
       this.laodFormData()
     },
-
+    completedFormSorted (completedForm) {
+      return completedForm.sort((a, b) => a.name.localeCompare(b.name))
+    },
     getLastUpdate () {
       this.completedForm.last_update = this.completedFormFields[0].completed_form.last_update
     },

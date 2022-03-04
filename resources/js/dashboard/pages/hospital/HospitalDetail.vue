@@ -9,17 +9,15 @@
             <span class="fa fa-chevron-left"> Retour</span>
           </b-link>
           <h3 class="mb-4 mt-2 ">Situation hospitalière de la mise à jour du {{moment(completedForm.last_update).format("DD/MM/Y")}}</h3>
-
             <b-col
-              v-for="(step, index) in completedFormFieldFiltered"
-              :key="index"
+            v-for="(formStep, index) in formStepsSorted"
+                  :key="index"
               cols="12" md="12"
             >
             <b-card class="mt-3">
-                  <h4 class="mb-4">{{step.form_step_title}}</h4>
-                  <ul   v-for="(field, count) in step.completed_form_fields"
-                    :key="count">
-                    <li>{{field.form_field.name}} : {{field.value}}</li>
+                   <h4 class="mb-4">{{ formStep.title }}</h4>
+                <ul v-for="(formField, count) in formStep.form_fields" :key="count">
+                   <li>{{ formField.name }} : {{ completedForm.completed_form_fields[formField.id] }}</li>
                   </ul>
               </b-card>
             </b-col>
@@ -52,16 +50,19 @@ export default {
   data () {
     return {
       completedFormFields: [],
-      completedForm: {},
+      completedForm: {
+        completed_form_fields: {}
+      },
       isLoading: false
     }
   },
-  mounted () {
+  async mounted () {
     this.getCompletedForm()
   },
   computed: {
     ...mapState({
-      user: state => state.auth.user
+      user: state => state.auth.user,
+      formSteps: state => state.formStep.formSteps
     }),
     backRoute () {
       if (this.user.isHospitalAdmin) {
@@ -70,9 +71,6 @@ export default {
           params: { hospital_id: this.$route.params.hospital_id }
         }
       } else return { name: 'hospital.home' }
-    },
-    completedFormFieldFiltered () {
-      return this.completedFormFieldFilter()
     },
     updatedManageNamesListSorted () {
       if (this.completedFormFields.length > 0) {
@@ -85,17 +83,33 @@ export default {
           .filter((item, i, self) => item.updatedManagerName && self.findIndex(x => x.updatedManagerName === item.updatedManagerName) === i)
       }
       return []
+    },
+    formStepsSorted () {
+      return this.formSteps.slice().sort((a, b) => a.step - b.step)
+    }
+  },
+  watch: {
+    completedForm () {
+      this.getCompletedForm()
     }
   },
   methods: {
-    ...mapActions(['completedForm__getByHospitalDetail']),
+    ...mapActions([
+      'completedForm__getByHospitalDetail',
+      'getFormSteps'
+    ]),
     async getCompletedForm () {
       this.isLoading = true
       this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
       if (this.completedFormFields.length > 0) {
         this.isLoading = false
+        await this.getFormSteps({ id: this.completedFormFields[0].completed_form.form_id })
+
         this.setLastUpdate(this.completedFormFields[0].completed_form.last_update)
+
         this.setCreatedManagerName(this.completedFormFields[0].completed_form.created_manager_name)
+
+        this.setcompletedForm()
       }
     },
     setLastUpdate (lastUpdate) {
@@ -104,38 +118,10 @@ export default {
     setCreatedManagerName (createdManagerName) {
       this.completedForm.created_manager_name = createdManagerName
     },
-    completedFormFieldEvery () {
-      const completedFormFieldsId = []
-      if (this.completedFormFields.length > 0) {
-        this.completedFormFields
-          .slice()
-          .sort(
-            (prevFormItem, nextFormItem) =>
-              prevFormItem.form_field.form_step.id - nextFormItem.form_field.form_step.id
-          )
-          .forEach(item => {
-            if (completedFormFieldsId.every(form => form.form_step_id !== item.form_field.form_step.id)) {
-              completedFormFieldsId.push({
-                form_step_id: item.form_field.form_step.id,
-                form_step_title: item.form_field.form_step.title
-              })
-            }
-          })
-        return completedFormFieldsId
-      }
-    },
-    completedFormFieldFilter () {
-      const formStepsList = this.completedFormFieldEvery()?.map(form => {
-        const formStep = {
-          form_step_id: form.form_step_id,
-          form_step_title: form.form_step_title
-        }
-        formStep.completed_form_fields = this.completedFormFields.filter(
-          arr => arr.form_field.form_step.id == formStep.form_step_id
-        )
-        return formStep
+    setcompletedForm () {
+      this.completedFormFields.forEach(item => {
+        this.$set(this.completedForm.completed_form_fields, item.form_field.id, item.value)
       })
-      return formStepsList
     }
 
   }
