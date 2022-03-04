@@ -223,6 +223,7 @@ export default {
         .get('/api/dashboard/form-recurrences')
         .then(({ data }) => {
           this.formRecurrences = data
+          console.log(this.formRecurrences)
         })
         .catch(({ response }) => {
           this.$gtag.exception(response)

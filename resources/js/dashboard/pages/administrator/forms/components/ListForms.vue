@@ -53,7 +53,8 @@
                   data.item.id,
                   data.item.title,
                   data.item.form_recurrence_value,
-                  data.item.form_recurrence_id
+                  data.item.form_recurrence_id,
+                  data.item.publish
                 )
               "
             ></i>
@@ -163,12 +164,13 @@ export default {
     onCancelDelection () {
       this.isDeleteModalShown = false
     },
-    updateForm (id, title, form_recurrence_value, form_recurrence_id) {
+    updateForm (id, title, form_recurrence_value, form_recurrence_id,publish) {
       this.currentForm = {
         id,
         title,
         form_recurrence_value,
-        form_recurrence_id
+        form_recurrence_id,
+        publish
       }
       this.$emit('onUpdateForm', this.currentForm)
     }
