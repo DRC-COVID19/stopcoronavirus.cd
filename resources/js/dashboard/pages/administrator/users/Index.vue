@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       title: 'Utilisateurs',
-      iconClass: 'fa fa-home',
+      iconClass: 'fas fa-users',
       isLoading: false,
       users: {},
       userUpdated: false,

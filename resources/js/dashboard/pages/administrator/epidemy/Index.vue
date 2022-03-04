@@ -66,7 +66,7 @@ export default {
   data () {
     return {
       title: 'Situation épidémiologique',
-      iconClass: 'fas fa-file-medical',
+      iconClass: 'fas fa-virus',
       isSituationAdded: false,
       isSituationUpdated: false,
       isSituationDeleted: false,

@@ -19,14 +19,14 @@
       :to="{name: 'administrator.changeLog'}"
       :active="$route.name.startsWith('administrator.changeLog')"
     >
-      <i class="fas fa-info-circle" aria-hidden="true" ></i> &nbsp; Change log
+      <i class="fa fa-history" aria-hidden="true" ></i> &nbsp; Change log
     </b-nav-item>
     <b-nav-item
       v-if="canViewForms"
       :to="{name: 'administrator.forms'}"
       :active="$route.name.startsWith('administrator.forms')"
     >
-      <i class="fas fa-list" aria-hidden="true" ></i> &nbsp; Formulaires
+      <i class="fa fa-address-card" aria-hidden="true" ></i> &nbsp; Formulaires
     </b-nav-item>
   </b-nav>
 </template>
