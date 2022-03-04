@@ -137,13 +137,13 @@ class CompletedFormController extends Controller
     public function show($id)
     {
         try {
-         
-           $completedForm = CompletedFormField::with('completedForm','formField.formStep')
-            ->where('completed_form_id',$id)
-            ->orderBy('created_at')
-            ->get();
-          
-            return response()->json($completedForm,206);
+
+            $completedForm = CompletedFormField::with('completedForm', 'formField.formStep')
+                ->where('completed_form_id', $id)
+                ->orderBy('created_at')
+                ->get();
+
+            return response()->json($completedForm, 206);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -165,27 +165,25 @@ class CompletedFormController extends Controller
             $data = $request->validated();
             $updatedManagerName = $data['updated_manager_name'];
             $completedFormFields = $data['completed_form_fields'];
-    
+
             foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
 
-                $completedFormField = CompletedFormField::where(['completed_form_id' =>$completedForm->id, 'form_field_id' => $formFieldKey])->first();
-                if ($completedFormField && $completedFormField->value !==$formFieldValue) {
+                $completedFormField = CompletedFormField::where(['completed_form_id' => $completedForm->id, 'form_field_id' => $formFieldKey])->first();
+                if ($completedFormField && $completedFormField->value !== $formFieldValue) {
                     $completedFormField->update([
                         'value'                 => $formFieldValue,
                         'updated_manager_name'  => $updatedManagerName
                     ]);
-                }
-                else if(!$completedFormField) {
+                } else if (!$completedFormField) {
                     CompletedFormField::create([
-                          'form_field_id'          => $formFieldKey,
-                           'value'                 => $formFieldValue,
-                           'completed_form_id'     => $completedForm->id,
-                           'updated_manager_name'  => $updatedManagerName
+                        'form_field_id'          => $formFieldKey,
+                        'value'                 => $formFieldValue,
+                        'completed_form_id'     => $completedForm->id,
+                        'updated_manager_name'  => $updatedManagerName
                     ]);
-                } 
+                }
             }
-            return response()->json($completedForm,200, []);
-
+            return response()->json($completedForm, 200, []);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -214,9 +212,9 @@ class CompletedFormController extends Controller
         return Auth::guard('dashboard');
     }
 
-  private function selectCompletedForms($completedForm)
-  {
-      return $completedForm
+    private function selectCompletedForms($completedForm)
+    {
+        return $completedForm
             ->with([
                 'completedFormFields.formField.formStep',
                 'completedFormFields.formField.formFieldType',
@@ -224,21 +222,20 @@ class CompletedFormController extends Controller
             ])
             ->select('*')
             ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
-  }
+    }
 
 
-  private function arrayMapAndSort($completedForm)
-  {
-    return $completedForm
-    ->map(function($form){
-        return 
-        $form->completedFormFields
-             ->sort(function($a, $b){
-                     return $a->order_field - $b->order_field;
-                });
-    })[0];
-
-  }
+    private function arrayMapAndSort($completedForm)
+    {
+        return $completedForm
+            ->map(function ($form) {
+                return
+                    $form->completedFormFields
+                    ->sort(function ($a, $b) {
+                        return $a->order_field - $b->order_field;
+                    });
+            })[0];
+    }
 
 
     /**
@@ -327,6 +324,9 @@ class CompletedFormController extends Controller
                 $aggregated = $completedFormFieldGroup->sum('value');
                 if ($targetFormField && !$targetFormField->agreggation) {
                     $aggregated /= $completedFormFieldGroup->count();
+                    if (is_float($aggregated)) {
+                        $aggregated = number_format($aggregated, 2);
+                    }
                 }
                 return [
                     'value'       => $aggregated,
