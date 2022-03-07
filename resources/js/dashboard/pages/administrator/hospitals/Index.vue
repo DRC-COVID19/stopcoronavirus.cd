@@ -52,8 +52,8 @@ export default {
   },
   data () {
     return {
-      title: 'Utilisateurs',
-      iconClass: 'fas fa-users',
+      title: 'Hopitaux',
+      iconClass: 'fas fa-hospital',
       isLoading: false,
       users: {},
       userUpdated: false,
@@ -94,6 +94,7 @@ export default {
     search (filter) {
       this.isLoading = true
       if (filter !== '') {
+        // eslint-disable-next-line no-undef
         axios
           .get('api/admin_users/filter?key_words=' + filter)
           .then(({ data }) => {
@@ -110,6 +111,7 @@ export default {
       }
     },
     deleteUser (currentUserId) {
+      // eslint-disable-next-line no-undef
       axios
         .delete('/api/admin_users/' + currentUserId)
         .then(() => {
@@ -186,6 +188,7 @@ export default {
       this.userAdded = false
       this.isLoading = true
       this.errors = {}
+      // eslint-disable-next-line no-undef
       axios
         .post('/api/admin_users', {
           username: form.username,
@@ -224,6 +227,7 @@ export default {
 
     getUserList (page = 1) {
       this.isLoading = true
+      // eslint-disable-next-line no-undef
       axios
         .get('/api/admin_users', {
           params: { page }
@@ -238,6 +242,7 @@ export default {
     },
 
     getUserRoles () {
+      // eslint-disable-next-line no-undef
       axios
         .get('/api/admin_roles')
         .then(({ data }) => {
@@ -248,6 +253,7 @@ export default {
         })
     },
     getHospitals () {
+      // eslint-disable-next-line no-undef
       axios
         .get('/api/dashboard/hospitals-data')
         .then(({ data }) => {

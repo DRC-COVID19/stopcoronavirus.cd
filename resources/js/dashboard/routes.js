@@ -13,6 +13,7 @@ import HospitalAdminData from './pages/adminHospital/HospitalData'
 import NotAcces from './pages/NotAccess'
 import Administrator from './pages/administrator/Administrator'
 import AdminUserIndex from './pages/administrator/users/Index'
+import AdminHospitalIndex from './pages/administrator/hospitals/Index'
 import PageNotFound from './pages/NotFound'
 import ChangeLogIndex from './pages/administrator/changeLog/index'
 import Epidemie from './pages/administrator/epidemy/Index'
@@ -138,6 +139,15 @@ export default [
             }
           },
           {
+            path: 'hospitals',
+            name: 'administrator.hospitals',
+            component: AdminHospitalIndex,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR]
+            }
+          },
+          {
             path: 'change-logs',
             component: ChangeLogIndex,
             name: 'administrator.changeLog',
@@ -243,14 +253,15 @@ export default [
             }
           },
           {
-            path: '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
+            path:
+              '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
             name: 'hospital.edit',
             component: HospitalForm,
             meta: {
               requiresAuth: true,
               role: [AGENT_HOSPITAL]
             }
-          },
+          }
         ]
       }
     ]
