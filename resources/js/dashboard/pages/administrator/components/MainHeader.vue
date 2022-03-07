@@ -11,22 +11,32 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
             <b-link
+             v-if="canViewUsersPage"
               class="mx-2"
               :class="{ active: $route.name === 'administrator.users' || $route.name==='administrator.home' }"
               :to="{ name: 'administrator.users' }"
               >Utilisateurs</b-link
             >
             <b-link
+             v-if="canViewEpidemicPage"
               class="mx-2"
               :class="{ active: $route.name === 'administrator.epidemie' }"
               :to="{ name: 'administrator.epidemie' }"
               >Situation Epidémiologie</b-link
             >
             <b-link
+            v-if="canViewChangeLogPage"
               class="mx-2"
               :class="{ active: $route.name === 'administrator.changeLog' }"
               :to="{ name: 'administrator.changeLog' }"
               >Change log</b-link
+            >
+            <b-link
+              v-if="canViewFormsPage"
+              class="mx-2"
+              :class="{ active: $route.name === 'administrator.forms' }"
+              :to="{ name: 'administrator.forms' }"
+              >Formulaire</b-link
             >
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto">
@@ -63,7 +73,7 @@
                         user.email
                       }}</span>
 
-                      <router-link class="small" :to="{ name: 'landing' }"
+                      <router-link class="small" :to="{ name: 'main' }"
                         >Revenir à l'accueil</router-link
                       >
                     </p>
@@ -82,42 +92,53 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
-  data() {
+  data () {
     return {
-      showUserCard: false,
-    };
+      showUserCard: false
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
-      activeMenu: (state) => state.nav.activeMenu,
+      activeMenu: (state) => state.nav.activeMenu
     }),
+    canViewFormsPage () {
+      return this.user.roles.find(role => ['create_form', 'edit_form'].includes(role.slug))
+    },
+    canViewUsersPage () {
+      return this.user.roles.find(role => ['administrator'].includes(role.slug))
+    },
+    canViewChangeLogPage () {
+      return this.user.roles.find(role => ['administrator'].includes(role.slug))
+    },
+    canViewEpidemicPage () {
+      return this.user.roles.find(role => ['manager_epidemic'].includes(role.slug))
+    }
   },
   methods: {
-    ...mapActions(["logout"]),
-    ...mapMutations(["setActiveMenu"]),
-    userAvatarMouseEnter() {
-      this.showUserCard = true;
+    ...mapActions(['logout']),
+    ...mapMutations(['setActiveMenu']),
+    userAvatarMouseEnter () {
+      this.showUserCard = true
     },
-    userAvatarMouseLeave() {
-      this.showUserCard = false;
+    userAvatarMouseLeave () {
+      this.showUserCard = false
     },
-    userLogout() {
+    userLogout () {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
-        });
-      });
+          name: 'login'
+        })
+      })
     },
-    selectMenu(value) {
-      this.setActiveMenu(value);
-    },
-  },
-};
+    selectMenu (value) {
+      this.setActiveMenu(value)
+    }
+  }
+}
 </script>
-
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";

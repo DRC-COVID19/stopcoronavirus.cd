@@ -3,7 +3,12 @@
     <b-col cols="12" class="map-form-header">
       <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
-          <h1 class="title m-0">Dashboard Covid-19</h1>
+          <h1
+            class="title m-0"
+            @click="changeActiveMenuTo('home', 1)"
+          >
+            Dashboard Covid-19
+          </h1>
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse" class="default-border">
           <span class="fa fa-bars"></span>
@@ -28,14 +33,17 @@
             <!-- <b-nav-item :class="{'active':activeMenu==4}" @click="selectMenu(4)">Sondages</b-nav-item> -->
             <b-nav-item
               :class="{ active: activeMenu == 5 }"
-              @click="selectMenu(5)"
-              >Infrastructures</b-nav-item
+              @click="changeActiveMenuTo('dashboard.infrastructure', 5)"
             >
+              Infrastructures
+            </b-nav-item>
             <!-- <b-nav-item :class="{'active':activeMenu==6}" @click="selectMenu(6)">Orientation</b-nav-item> -->
             <b-nav-item
               :class="{ active: activeMenu == 7 }"
-              @click="selectMenu(7)"
-              >A propos</b-nav-item
+              @click="changeActiveMenuTo('dashboard.aPropos', 7)"
+            >
+              A propos
+            </b-nav-item
             >
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
@@ -123,7 +131,7 @@
                         user.email
                       }}</span>
 
-                      <router-link class="small" :to="{ name: 'landing' }"
+                      <router-link class="small" :to="{ name: 'main' }"
                         >Revenir à l'accueil</router-link
                       >
                     </p>
@@ -142,61 +150,83 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+
 export default {
-  data() {
+  components:{
+  },
+  data () {
     return {
       showUserCard: false,
-      showHeaderNotification: false,
-    };
+      showHeaderNotification: false
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       activeMenu: (state) => state.nav.activeMenu,
-      changeLogs: (state) => state.app.changeLogs,
+      changeLogs: (state) => state.app.changeLogs
     }),
-    ...mapGetters(["getChangeLogNotRead"]),
-    countReadChangeLogs() {
-      return getChangeLogNotRead.length;
-    },
+    ...mapGetters(['getChangeLogNotRead']),
+    countReadChangeLogs () {
+      return getChangeLogNotRead.length
+    }
+  },
+  mounted() {
+    this.fillParametersFromUrlParams()
   },
   methods: {
-    ...mapActions(["logout", "setChangeLogsRead"]),
-    ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
-    userAvatarMouseEnter() {
-      this.showUserCard = true;
+    ...mapActions(['logout', 'setChangeLogsRead']),
+    ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
+    userAvatarMouseEnter () {
+      this.showUserCard = true
     },
-    userAvatarMouseLeave() {
-      this.showUserCard = false;
+    userAvatarMouseLeave () {
+      this.showUserCard = false
     },
-    userLogout() {
+    userLogout () {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
-        });
-      });
+          name: 'login'
+        })
+      })
     },
-    selectNotification(item) {
-      this.setSelectedChangeLog(item);
-      this.setActiveMenu(7);
+    selectNotification (item) {
+      this.setSelectedChangeLog(item)
+      this.setActiveMenu(7)
     },
     selectMenu(value) {
+      if (this.activeMenu !== null) {
+        this.removeAllParamsFromUrl();
+      }
+      // this.addParamToUrl('menu', value);
       this.setActiveMenu(value);
     },
-    toggleHeaderNotification() {
-      this.showHeaderNotification = !this.showHeaderNotification;
+    toggleHeaderNotification () {
+      this.showHeaderNotification = !this.showHeaderNotification
     },
-    clickOutsideNotification() {
+    clickOutsideNotification () {
       if (this.showHeaderNotification) {
-        this.showHeaderNotification = false;
-        this.setChangeLogsRead();
+        this.showHeaderNotification = false
+        this.setChangeLogsRead()
       }
     },
+    fillParametersFromUrlParams () {
+      if (this.$route.path === '/dashboard/infrastructure') {
+        this.selectMenu(5)
+      } else if (this.$route.path === '/dashboard/a-propos') {
+        this.selectMenu(7)
+      } else {
+        this.selectMenu(1)
+      }
+    },
+    changeActiveMenuTo (pathname, menu) {
+      this.selectMenu(menu)
+      this.$router.push({name: pathname})
+    }
   },
 };
 </script>
-
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
@@ -284,6 +314,9 @@ export default {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+    &:hover {
+      cursor: pointer;
+    }
   }
   .nav-container {
     a {

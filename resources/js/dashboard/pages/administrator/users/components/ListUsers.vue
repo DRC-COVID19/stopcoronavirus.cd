@@ -51,6 +51,7 @@
                   data.item.id,
                   data.item.usernmae,
                   data.item.roles,
+                  data.item.hospitals,
                   data.item.email
                 )
               "
@@ -64,6 +65,15 @@
               variant="secondary"
               :key="index"
               >{{ role.name }}</b-badge
+            >
+          </template>
+          <template v-slot:cell(hopital)="data">
+            <b-badge
+              class="mx-1 my-1"
+              v-for="(hopital, index) in data.item.hospitals"
+              variant="secondary"
+              :key="index"
+              >{{ hopital.name }}</b-badge
             >
           </template>
         </b-table>
@@ -97,7 +107,7 @@ export default {
   },
   data() {
     return {
-      fields: ["id", "usernmae", "name", "role", "actions"], // usernmae instead of username (see backend response)
+      fields: ["id", "username", "name", "role","hopital", "actions"], // usernmae instead of username (see backend response)
       filter: "",
       perPage: 15,
       currentPage: 1,
@@ -135,12 +145,13 @@ export default {
     onCancelDelection() {
       this.isDeleteModalShown = false;
     },
-    updateUser(name, id, usernmae, roles, email) {
+    updateUser(name, id, usernmae, roles,hospitals, email) {
       this.currentUser = {
         id,
         name,
         usernmae,
         roles,
+        hospitals,
         email,
       };
       this.$emit("onUpdateUser", this.currentUser);

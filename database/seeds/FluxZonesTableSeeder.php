@@ -13,6 +13,7 @@ class FluxZonesTableSeeder extends Seeder
      */
     public function run()
     {
+        
         DB::table('flux_zones')->truncate();
         DB::table('flux_zones')->insert(array(
             0 =>

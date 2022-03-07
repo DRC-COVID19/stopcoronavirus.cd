@@ -1,24 +1,74 @@
-
-export const
-  GOOGLE_ANALYTICS_ID = "UA-113285849-15",
-  MAPBOX_TOKEN = "pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw",
+export const GOOGLE_ANALYTICS_ID = "UA-113285849-15",
+  MAPBOX_TOKEN =
+    "pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw",
   MAPBOX_DEFAULT_STYLE = "mapbox://styles/merki230/ckas344r30gmj1ips9gar4uxw",
   ADMIN_DASHBOARD = "admin-dashboard",
   AGENT_HOSPITAL = "agent-hospital",
   ADMIN_HOSPITAL = "admin-hospital",
-  ADMINISTRATOR="Administrator",
-  MANANGER_EPIDEMIC='manager_epidemic',
+  ADMINISTRATOR = "Administrator",
+  MANANGER_EPIDEMIC = "manager_epidemic",
+  EDIT_FORM = "edit_form",
+  CREATE_FORM = "create_form",
+  DEFAULT_FORM_ID = 1,
+  TYPE_CUSTOM_FIELD = {
+    TEXT: 1,
+    NUMBER: 2,
+    BOOLEAN: 3,
+    DATE: 4
+  },
   PALETTE = {
-    inflow: ["#2166ac", "#4393c3", "#92c5de", "#d1e5f0", "#fddbc7", "#f4a582", "#d6604d", "#b2182b"],
-    inflow_positif: ["rgb(253, 219, 199)", "rgb(244, 165, 130)", "rgb(214, 96, 77)", "rgb(178, 24, 43)", "rgb(103, 0, 31)"],
-    inflow_negatif: ["rgb(5, 48, 97)", "rgb(33, 102, 172)", "rgb(67, 147, 195)", "rgb(146, 197, 222)", "rgb(209, 229, 240)"],
-    outflow: ["#2d004b", "#542788", "#8073ac", "#b2abd2", "#fdb863", "#e08214", "#b35806", "#7f3b08"],
-    outflow_positif: ["rgb(254, 224, 182)", "rgb(253, 184, 99)", "rgb(224, 130, 20)", "rgb(179, 88, 6)", "rgb(127, 59, 8)"],
-    outflow_negatif: ["rgb(45, 0, 75)", "rgb(84, 39, 136)", "rgb(128, 115, 172)", "rgb(178, 171, 210)", "rgb(216, 218, 235)"],
-    general_positif: ['#d3f9ce', '#93d691', '#47c357', '#108337', '#035d21'],
-    general_negatif: ['#2c012f', '#7d0088', '#a048af', '#c790d2', '#e9cbea'],
-    presence_positif: ['#fdbb84', '#fc8d59', '#ef6548', '#d7301f', '#990000'],
-    presence_negatif: ['#182f4d', '#3b4c61', '#5875a6', '#7d9cd1', '#b4c3dc'],
+    inflow: [
+      "#2166ac",
+      "#4393c3",
+      "#92c5de",
+      "#d1e5f0",
+      "#fddbc7",
+      "#f4a582",
+      "#d6604d",
+      "#b2182b"
+    ],
+    inflow_positif: [
+      "rgb(253, 219, 199)",
+      "rgb(244, 165, 130)",
+      "rgb(214, 96, 77)",
+      "rgb(178, 24, 43)",
+      "rgb(103, 0, 31)"
+    ],
+    inflow_negatif: [
+      "rgb(5, 48, 97)",
+      "rgb(33, 102, 172)",
+      "rgb(67, 147, 195)",
+      "rgb(146, 197, 222)",
+      "rgb(209, 229, 240)"
+    ],
+    outflow: [
+      "#2d004b",
+      "#542788",
+      "#8073ac",
+      "#b2abd2",
+      "#fdb863",
+      "#e08214",
+      "#b35806",
+      "#7f3b08"
+    ],
+    outflow_positif: [
+      "rgb(254, 224, 182)",
+      "rgb(253, 184, 99)",
+      "rgb(224, 130, 20)",
+      "rgb(179, 88, 6)",
+      "rgb(127, 59, 8)"
+    ],
+    outflow_negatif: [
+      "rgb(45, 0, 75)",
+      "rgb(84, 39, 136)",
+      "rgb(128, 115, 172)",
+      "rgb(178, 171, 210)",
+      "rgb(216, 218, 235)"
+    ],
+    general_positif: ["#d3f9ce", "#93d691", "#47c357", "#108337", "#035d21"],
+    general_negatif: ["#2c012f", "#7d0088", "#a048af", "#c790d2", "#e9cbea"],
+    presence_positif: ["#fdbb84", "#fc8d59", "#ef6548", "#d7301f", "#990000"],
+    presence_negatif: ["#182f4d", "#3b4c61", "#5875a6", "#7d9cd1", "#b4c3dc"],
     present: ["#E31A1C"],
     nodata: "#eeeeee",
     bordure_shape_file: " #BFC5D2",
@@ -104,56 +154,59 @@ export const
   INDICATEUR_X = [
     {
       id: 1,
-      name: 'Mobilité entrante'
+      name: "Mobilité entrante"
     },
     {
       id: 2,
-      name: 'Mobilité sortante'
+      name: "Mobilité sortante"
     }
   ],
   INDICATEUR_Y = [
     {
       id: 1,
-      name: 'Cas Confirmés'
+      name: "Cas Confirmés"
     },
     {
       id: 2,
-      name: 'Cas Guéris'
+      name: "Cas Guéris"
     },
     {
       id: 3,
-      name: 'Décès'
-    },
+      name: "Décès"
+    }
   ],
   INDICATEUR_PREDEFINED_INPUT = [
     {
       id: 1,
-      name: 'Mobilité vs Epidémiologie à la Gombe, une semaine après le debut du confinement'
+      name:
+        "Mobilité vs Epidémiologie à la Gombe, une semaine après le debut du confinement"
     },
     {
       id: 2,
-      name: 'Mobilité vs Nombre de cas, depuis le debut du confinement'
+      name: "Mobilité vs Nombre de cas, depuis le debut du confinement"
     }
   ],
   DRC_COVID_EVENT = [
     {
       id: 1,
-      name: 'Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)',
-      date: '2020-03-10',
+      name:
+        "Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)",
+      date: "2020-03-10",
       measures: [
         {
-          item: 'Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)',
-          zones: ['Kinshasa']
+          item:
+            "Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)",
+          zones: ["Kinshasa"]
         }
       ],
-      zone: ['Kinshasa'],
+      zone: ["Kinshasa"]
     },
     {
       id: 2,
       name: `Premières mesures de restriction mises en place pour les voyages / vols internationaux et nationaux
 (fiches d'information sanitaire et contrôles de température / symptômes à l'arrivée dans les aéroports
 et les ports)`,
-      date: '2020-03-13',
+      date: "2020-03-13",
       measures: [
         {
           item: `Premières mesures de restriction mises en place pour les voyages / vols internationaux et nationaux
@@ -162,53 +215,54 @@ et les ports)`,
           zones: ["Kinshasa"]
         }
       ],
-      zone: ['Kinshasa']
+      zone: ["Kinshasa"]
     },
     {
       id: 3,
-      name: 'Vols en provenance de pays à risque suspendus (sauf certaines cargaisons)',
+      name:
+        "Vols en provenance de pays à risque suspendus (sauf certaines cargaisons)",
       measures: [
         {
           item: `Vols en provenance de pays à risque suspendus (sauf certaines cargaisons);`,
-          zones: ['Kinshasa']
+          zones: ["Kinshasa"]
         },
         {
           item: `Bars, restaurants fermés; écoles fermées; les rassemblements de plus de 20 personnes interdits;`,
-          zones: ['Kinshasa']
+          zones: ["Kinshasa"]
         },
         {
           item: `les rassemblements religieux et les événements sportifs suspendus jusqu'à nouvel ordre; passagers limités dans les transports publics à Kinshasa;`,
-          zones: ['Kinshasa']
+          zones: ["Kinshasa"]
         }
-
       ],
-      zone: ['Kinshasa'],
+      zone: ["Kinshasa"],
       isImportant: true,
-      date: '2020-03-18'
+      date: "2020-03-18"
     },
     {
       id: 4,
-      name: 'Tous les voyages à destination ou en provenance de Kinshasa sont interdits (sauf le fret)',
+      name:
+        "Tous les voyages à destination ou en provenance de Kinshasa sont interdits (sauf le fret)",
       measures: [
         {
           item: `Tous les voyages à destination ou en provenance de Kinshasa sont interdits (sauf le fret)`,
           zones: ["Kinshasa"]
         }
       ],
-      zone: ['Kinshasa'],
-      date: '2020-03-19'
+      zone: ["Kinshasa"],
+      date: "2020-03-19"
     },
     {
       id: 5,
-      name: 'Premier décès lié au COVID-19 enregistré en RDC',
+      name: "Premier décès lié au COVID-19 enregistré en RDC",
       measures: [
         {
-          item: 'Premier décès lié au COVID-19 enregistré en RDC',
-          zones: ['Kinshasa']
+          item: "Premier décès lié au COVID-19 enregistré en RDC",
+          zones: ["Kinshasa"]
         }
       ],
-      zone: ['Kinshasa'],
-      date: '2020-03-21'
+      zone: ["Kinshasa"],
+      date: "2020-03-21"
     },
     {
       id: 6,
@@ -216,11 +270,11 @@ et les ports)`,
       measures: [
         {
           item: `Confinement de 48 heures (deux cas suspects sortant d'un avion de Kinshasa)`,
-          zones: ['Lubumbashi']
+          zones: ["Lubumbashi"]
         }
       ],
-      zone: ['Lubumbashi'],
-      date: '2020-03-23'
+      zone: ["Lubumbashi"],
+      date: "2020-03-23"
     },
     {
       id: 7,
@@ -228,11 +282,11 @@ et les ports)`,
       measures: [
         {
           item: `État d'urgence déclaré par le gouvernement congolais`,
-          zones: ['Lubumbashi']
+          zones: ["Lubumbashi"]
         }
       ],
-      zone: ['Lubumbashi'],
-      date: '2020-03-24'
+      zone: ["Lubumbashi"],
+      date: "2020-03-24"
     },
     {
       id: 8,
@@ -240,11 +294,11 @@ et les ports)`,
       measures: [
         {
           item: `Les voyages intérieurs entre Kinshasa et le reste du pays sont suspendus; toutes les frontières sont fermées sauf pour le commerce`,
-          zones: ['ALL']
+          zones: ["ALL"]
         }
       ],
-      zone: ['ALL'],
-      date: '2020-03-25'
+      zone: ["ALL"],
+      date: "2020-03-25"
     },
     {
       id: 9,
@@ -252,11 +306,11 @@ et les ports)`,
       measures: [
         {
           item: `Interdiction de tout rassemblement de personnes dans les espaces publics`,
-          zones: ['ALL']
+          zones: ["ALL"]
         }
       ],
-      zone: ['ALL'],
-      date: '2020-03-26'
+      zone: ["ALL"],
+      date: "2020-03-26"
     },
     {
       id: 10,
@@ -276,44 +330,44 @@ et les ports)`,
         },
         {
           item: `Le confinement à Kinshasa reporté dans un contexte d'insécurité et de spéculation sur les prix des produits de base`,
-          zones: ['Kinshasa']
+          zones: ["Kinshasa"]
         }
       ],
-      zone: ['ALL'],
-      date: '2020-03-27'
+      zone: ["ALL"],
+      date: "2020-03-27"
     },
     {
       id: 11,
-      name: 'Premier cas COVID-19 (Bunia)',
+      name: "Premier cas COVID-19 (Bunia)",
       measures: [
         {
-          item: 'Premier cas COVID-19 (Bunia)',
+          item: "Premier cas COVID-19 (Bunia)",
           zones: ["Bunia", "Ituri"]
         }
       ],
-      date: '2020-04-01'
+      date: "2020-04-01"
     },
     {
       id: 12,
-      name: 'Premier cas COVID-19 (Beni)',
+      name: "Premier cas COVID-19 (Beni)",
       measures: [
         {
-          item: 'Premier cas COVID-19 (Beni)',
+          item: "Premier cas COVID-19 (Beni)",
           zones: ["Beni", "Nord-kivu"]
         }
       ],
-      date: '2020-04-03'
+      date: "2020-04-03"
     },
     {
       id: 13,
-      name: 'Premier cas COVID-19 (Idiofa)',
+      name: "Premier cas COVID-19 (Idiofa)",
       measures: [
         {
-          item: 'Premier cas COVID-19 (Idiofa)',
+          item: "Premier cas COVID-19 (Idiofa)",
           zones: ["Idiofa", "Kwilu"]
         }
       ],
-      date: '2020-04-04'
+      date: "2020-04-04"
     },
     {
       id: 14,
@@ -324,7 +378,7 @@ et les ports)`,
           zones: ["Goma", "Nord-kivu"]
         }
       ],
-      date: '2020-04-05'
+      date: "2020-04-05"
     },
     {
       id: 15,
@@ -337,7 +391,7 @@ et les ports)`,
           zones: ["Nord-kivu"]
         },
         {
-          item: 'Voyage entre Goma et Bukavu suspendu',
+          item: "Voyage entre Goma et Bukavu suspendu",
           zones: ["Nord-kivu", "Sud-kivu"]
         },
         {
@@ -346,7 +400,7 @@ et les ports)`,
           zones: ["Gombe", "Kinshasa"]
         }
       ],
-      date: '2020-04-06'
+      date: "2020-04-06"
     },
     {
       id: 16,
@@ -357,7 +411,7 @@ et les ports)`,
           zones: ["Nord-kivu"]
         }
       ],
-      date: '2020-04-13'
+      date: "2020-04-13"
     },
     {
       id: 17,
@@ -376,11 +430,11 @@ et les ports)`,
           zones: ["Nord-kivu"]
         },
         {
-          item: 'Couvre-feu à Lualaba et Lubumbashi à partir de 22h à 5 h',
+          item: "Couvre-feu à Lualaba et Lubumbashi à partir de 22h à 5 h",
           zones: ["Lualaba", "Lubumbashi"]
         }
       ],
-      date: '2020-04-20'
+      date: "2020-04-20"
     },
     {
       id: 17,
@@ -389,9 +443,9 @@ et les ports)`,
         {
           item: `État d'urgence prorogé par le gouvernement congolais - 20 jours (21/4 - 10/5)`,
           zones: ["ALL"]
-        },
+        }
       ],
-      date: '2020-04-21'
+      date: "2020-04-21"
     },
     {
       id: 18,
@@ -402,9 +456,9 @@ magasins vendant de la nourriture)`,
           item: `Les restrictions de confinement de Gombe assouplies (réouverture des banques et de certains
 magasins vendant de la nourriture)`,
           zones: ["Gombe", "Kinshasa"]
-        },
+        }
       ],
-      date: '2020-04-22'
+      date: "2020-04-22"
     },
     {
       id: 19,
@@ -413,20 +467,20 @@ magasins vendant de la nourriture)`,
         {
           item: `L'état d'urgence sanitaire a été prolongé par le Parlement pour deux semaines.`,
           zones: ["ALL"]
-        },
+        }
       ],
-      date: '2020-04-23'
+      date: "2020-04-23"
     },
     {
       id: 20,
-      name: 'Premier cas de COVID-19 confirmé à Lubumbashi',
+      name: "Premier cas de COVID-19 confirmé à Lubumbashi",
       measures: [
         {
-          item: 'Premier cas de COVID-19 confirmé à Lubumbashi',
+          item: "Premier cas de COVID-19 confirmé à Lubumbashi",
           zones: ["Lubumbashi"]
-        },
+        }
       ],
-      date: '2020-04-24'
+      date: "2020-04-24"
     },
     {
       id: 21,
@@ -435,9 +489,9 @@ magasins vendant de la nourriture)`,
         {
           item: `Lubumbashi et Kasumbalesa sous un confinement de 24 heures pour la recherche des contacts`,
           zones: ["Lubumbashi", "Kasumbalesa"]
-        },
+        }
       ],
-      date: '2020-04-29'
+      date: "2020-04-29"
     },
     {
       id: 22,
@@ -448,13 +502,13 @@ les non-conformes`,
           item: `Masques faciaux obligatoires dans les espaces publics (Lubumbashi) Amende de 5000 CF pour
 les non-conformes`,
           zones: ["Lubumbashi"]
-        },
+        }
       ],
-      date: '2020-05-04'
+      date: "2020-05-04"
     },
     {
       id: 23,
-      name: 'Communication from the governor of Ituri',
+      name: "Communication from the governor of Ituri",
       measures: [
         {
           item: `Communication du gouverneur de l'Ituri:
@@ -462,9 +516,9 @@ les non-conformes`,
                 - Les passagers en provenance de Kinshasa sont également autorisés, à condition qu'ils respectent
                 les mesures IPC à bord et à leur arrivée en Ituri`,
           zones: ["Ituri"]
-        },
+        }
       ],
-      date: '2020-05-05'
+      date: "2020-05-05"
     },
     {
       id: 24,
@@ -473,20 +527,21 @@ les non-conformes`,
         {
           item: `Réouverture partielle de la frontière entre la RDC et la Zambie aux piétons suite aux affrontements entre civils et forces de sécurité`,
           zones: ["Kasumbalesa"]
-        },
+        }
       ],
-      date: '2020-05-08'
+      date: "2020-05-08"
     },
     {
       id: 25,
-      name: 'Masques faciaux obligatoires dans les espaces publics de Matadi (province du Kongo Central)',
+      name:
+        "Masques faciaux obligatoires dans les espaces publics de Matadi (province du Kongo Central)",
       measures: [
         {
           item: `Masques faciaux obligatoires dans les espaces publics de Matadi (province du Kongo Central)`,
           zones: ["Matadi", "Kongo-central"]
-        },
+        }
       ],
-      date: '2020-05-11'
+      date: "2020-05-11"
     },
     {
       id: 26,
@@ -502,10 +557,10 @@ de revenus pour Kinshasa`,
         {
           isSuite: true,
           item: `(le ministre des Finances justifie cette décision en accusant les fermetures de mines et de frontières de perte de revenus pour Kinshasa`,
-          zones: ['Kinshasa']
+          zones: ["Kinshasa"]
         }
       ],
-      date: '2020-05-14'
+      date: "2020-05-14"
     },
     {
       id: 27,
@@ -516,9 +571,9 @@ de revenus pour Kinshasa`,
           item: `Couvre-feu (à partir de 20h00) et isolement de Goma des autres territoires de la province pendant 14 jours
                 - La police est chargée d’appliquer les mesures de couvre-feu`,
           zones: ["Goma"]
-        },
+        }
       ],
-      date: '2020-05-17'
+      date: "2020-05-17"
     },
     {
       id: 28,
@@ -527,9 +582,9 @@ de revenus pour Kinshasa`,
         {
           item: `Activités de la mairie de Goma suspendues jusqu'à nouvel ordre (membre testé positif au COVID)`,
           zones: ["Goma"]
-        },
+        }
       ],
-      date: '2020-05-18'
+      date: "2020-05-18"
     },
     {
       id: 29,
@@ -552,9 +607,9 @@ de revenus pour Kinshasa`,
           isSuite: true,
           item: `- Plus récent enregistré dans la zone de santé de Kimbanseke (concernant des violences contre trois agents de la riposte qui étaient détenus dans un ménage du district de Maviokele)`,
           zones: ["Kinshasa"]
-        },
+        }
       ],
-      date: '2020-05-19'
+      date: "2020-05-19"
     },
     {
       id: 30,
@@ -563,9 +618,9 @@ de revenus pour Kinshasa`,
         {
           item: `Le trafic entre Goma et Bukavu suspendu`,
           zones: ["Goma"]
-        },
+        }
       ],
-      date: '2020-05-20'
+      date: "2020-05-20"
     },
     {
       id: 31,
@@ -574,9 +629,9 @@ de revenus pour Kinshasa`,
         {
           item: `Le Parlement vote pour prolonger la période d'urgence sanitaire de 15 jours`,
           zones: ["ALL"]
-        },
+        }
       ],
-      date: '2020-05-22'
+      date: "2020-05-22"
     },
     {
       id: 32,
@@ -585,9 +640,9 @@ de revenus pour Kinshasa`,
         {
           item: `Ouverture du centre de dépistage COVID au stade des Martyrs`,
           zones: ["Kinshasa"]
-        },
+        }
       ],
-      date: '2020-05-26'
+      date: "2020-05-26"
     },
     {
       id: 33,
@@ -596,9 +651,9 @@ de revenus pour Kinshasa`,
         {
           item: `Confinement de la commune d'Ibanda, Bukavu et couvre-feu à l'échelle de la ville (20h-17h)`,
           zones: ["Bukavu"]
-        },
+        }
       ],
-      date: '2020-06-01'
+      date: "2020-06-01"
     },
     {
       id: 34,
@@ -612,9 +667,9 @@ de revenus pour Kinshasa`,
           item: `Suspension de l'isolement de Goma et de ses environs (sauf voyage entre Goma et Bukavu et
                     voyage en avion)`,
           zones: ["Goma"]
-        },
+        }
       ],
-      date: '2020-06-03'
+      date: "2020-06-03"
     },
     {
       id: 35,
@@ -623,9 +678,9 @@ de revenus pour Kinshasa`,
         {
           item: `État d'urgence prolongé de 15 jours (à partir du 06/08/20)`,
           zones: ["ALL"]
-        },
+        }
       ],
-      date: '2020-06-08'
+      date: "2020-06-08"
     },
     {
       id: 36,
@@ -640,9 +695,9 @@ de revenus pour Kinshasa`,
           isSuite: true,
           item: `(les commerçants faisaient du commerce malgré la fermeture obligatoire)`,
           zones: ["Kinshasa"]
-        },
+        }
       ],
-      date: '2020-06-09'
+      date: "2020-06-09"
     },
     {
       id: 37,
@@ -659,9 +714,9 @@ de revenus pour Kinshasa`,
         {
           item: `prolongé jusqu'au 5 juillet`,
           zones: ["ALL"]
-        },
+        }
       ],
-      date: '2020-06-20'
+      date: "2020-06-20"
     },
     {
       id: 38,
@@ -670,9 +725,9 @@ de revenus pour Kinshasa`,
         {
           item: `COVID-19 déclaré dans la province du Sud-Ubangi (14e province en RDC à confirmer les cas)`,
           zones: ["Sud-Ubangi"]
-        },
+        }
       ],
-      date: '2020-06-28'
+      date: "2020-06-28"
     },
     {
       id: 39,
@@ -681,9 +736,9 @@ de revenus pour Kinshasa`,
         {
           item: `(À l'exception du marché central) Ouverture de clubs, bars, écoles, universités / restrictions levées`,
           zones: ["Kinshasa", "Gombe"]
-        },
+        }
       ],
-      date: '2020-06-29'
+      date: "2020-06-29"
     },
     {
       id: 40,
@@ -692,9 +747,9 @@ de revenus pour Kinshasa`,
         {
           item: `3e cas confirmé dans la province d'Ituri (ville de Mahagi)`,
           zones: ["Ituri", "Mahagi"]
-        },
+        }
       ],
-      date: '2020-07-01'
+      date: "2020-07-01"
     },
     {
       id: 41,
@@ -703,9 +758,9 @@ de revenus pour Kinshasa`,
         {
           item: `État d'urgence du COVID-19 levé (ouverture des banques, des magasins, des restaurants et des bars)`,
           zones: ["ALL"]
-        },
+        }
       ],
-      date: '2020-07-22'
+      date: "2020-07-22"
     },
     {
       id: 42,
@@ -714,9 +769,9 @@ de revenus pour Kinshasa`,
         {
           item: `Les écoles, les universités, les institutions académiques peuvent ouvrir`,
           zones: ["ALL"]
-        },
+        }
       ],
-      date: '2020-08-03'
+      date: "2020-08-03"
     },
     {
       id: 43,
@@ -725,9 +780,9 @@ de revenus pour Kinshasa`,
         {
           item: `Lieux de culte, stades, aéroports, frontières internationales ouvertes`,
           zones: ["ALL"]
-        },
+        }
       ],
-      date: '2020-08-15'
+      date: "2020-08-15"
     },
     {
       id: 44,
@@ -736,21 +791,26 @@ de revenus pour Kinshasa`,
         {
           item: `Couvre feu déclaré sur toutes l'étendu du territoire national`,
           zones: ["ALL"]
-        },
+        }
       ],
-      date: '2020-12-18'
-    },
+      date: "2020-12-18"
+    }
   ],
   HOTSPOT_TYPE = [
-    { id: -1, name: "BureauAdmin", color: '#1A3322', pseudo: 'Bureau Admin' },
-    { id: -2, name: "Eglises", color: "#339966", pseudo: 'Eglises' },
-    { id: -3, name: "Commerces", color: '#EBDDA7', pseudo: 'Commerces' },
-    { id: -4, name: "Supermarche", color: '#AB5D32', pseudo: 'Supermarché' },
-    { id: -5, name: "Marché", color: '#F6C2FF', pseudo: 'Marché' },
-    { id: -6, name: "Hotels", color: '#669900', pseudo: 'Hôtels' },
-    { id: -7, name: "ArretTransport", color: '#cc0099', pseudo: 'Arrêt Transport' },
-    { id: -8, name: "Restaurants", color: '#99cc00', pseudo: 'Restaurants' },
+    { id: -1, name: "BureauAdmin", color: "#1A3322", pseudo: "Bureau Admin" },
+    { id: -2, name: "Eglises", color: "#339966", pseudo: "Eglises" },
+    { id: -3, name: "Commerces", color: "#EBDDA7", pseudo: "Commerces" },
+    { id: -4, name: "Supermarche", color: "#AB5D32", pseudo: "Supermarché" },
+    { id: -5, name: "Marché", color: "#F6C2FF", pseudo: "Marché" },
+    { id: -6, name: "Hotels", color: "#669900", pseudo: "Hôtels" },
+    {
+      id: -7,
+      name: "ArretTransport",
+      color: "#cc0099",
+      pseudo: "Arrêt Transport"
+    },
+    { id: -8, name: "Restaurants", color: "#99cc00", pseudo: "Restaurants" },
     { id: -9, name: "Hopitaux", color: '#E31A1C', pseudo: 'Hôpitaux' },
-    { id: -10, name: "Cimetiere", color: '#F7D116', pseudo: "Cimetière" },
-    { id: -11, name: 'Aéroport', color: '#0C46E8', pseudo: "Aéroport" }
+    { id: -10, name: 'Cimetiere', color: '#F7D116', pseudo: 'Cimetière' },
+    { id: -11, name: 'Aéroport', color: '#0C46E8', pseudo: 'Aéroport' }
   ];

@@ -16,7 +16,7 @@ class Flux30ZoneSumsAddNewIndex extends Migration
   {
     Schema::table('flux30_zone_sums', function (Blueprint $table) {
       DB::statement('CREATE INDEX flux30_zone_sums_date_hour ON flux30_zone_sums("Date", "Hour")');
-      DB::statement('CREATE INDEX flux30_zone_sums_date_hour_Observation_Zone ON flux30_zone_sums("Date", "Hour","Observation_Zone")');
+      DB::statement('CREATE INDEX flux30_zone_sums_date_hour_Observation_Zone ON flux30_zone_sums("Date", "Hour", "Observation_Zone")');
     });
   }
 

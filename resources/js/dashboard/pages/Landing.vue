@@ -39,51 +39,59 @@
 </template>
 
 <script>
-import Logo from "../components/LogoComponent";
-import { mapState, mapActions } from "vuex";
+import Logo from '../components/LogoComponent'
+import { mapState, mapActions } from 'vuex'
 import {
-  AGENT_HOSPITAL,
   ADMIN_DASHBOARD,
+  AGENT_HOSPITAL,
   ADMIN_HOSPITAL,
   ADMINISTRATOR,
   MANANGER_EPIDEMIC,
-} from "../config/env";
+  EDIT_FORM,
+  CREATE_FORM
+} from '../config/env'
 export default {
   components: {
-    Logo,
+    Logo
   },
   computed: {
     ...mapState({
-      user: (state) => state.auth.user,
+      user: (state) => state.auth.user
     }),
-    routes() {
+    routes () {
       if (!this.user) {
-        return [];
+        return []
       }
-      let routesAccess = [];
+      const routesAccess = []
 
-      if (this.user.roles === undefined) return routesAccess;
+      if (this.user.roles === undefined) return routesAccess
 
       if (this.user.roles.find((a) => a.name == ADMINISTRATOR)) {
         routesAccess.push({
-          slug: "Administration",
-          name: "administrator.home",
-        });
+          slug: 'Administration',
+          name: 'administrator.home'
+        })
       } else if (
         this.user.roles.find(
           (a) => a.name == MANANGER_EPIDEMIC && a.name != ADMINISTRATOR
         )
       ) {
         routesAccess.push({
-          slug: "Administration",
-          name: "administrator.epidemie",
+          slug: 'Administration',
+          name: 'administrator.epidemie'
+        })
+      } else if (this.user.roles.find((a) => (a.name == EDIT_FORM || a.name == CREATE_FORM) && a.name != ADMINISTRATOR)) {
+        routesAccess.push({
+          slug: 'Administration',
+          name: 'administrator.forms',
         });
       }
+
       if (this.user.roles.find((a) => a.name == ADMIN_DASHBOARD)) {
-        routesAccess.push({ slug: "Dashboard", name: "home" });
+        routesAccess.push({ slug: 'Dashboard', name: 'home' })
       }
 
-      if (this.user.roles.find((a) => a.name == AGENT_HOSPITAL)) {
+      if (this.user.hospital && this.user.roles.find((a) => a.name == AGENT_HOSPITAL)) {
         routesAccess.push({
           slug: "Interface agent CTCO",
           name: "hospital.home",
@@ -96,23 +104,22 @@ export default {
           name: "hospital.admin",
         });
       }
-
-      return routesAccess;
-    },
+      
+      return routesAccess
+    }
   },
   methods: {
-    ...mapActions(["logout"]),
-    userLogout() {
+    ...mapActions(['logout']),
+    userLogout () {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
-        });
-      });
-    },
-  },
-};
+          name: 'login'
+        })
+      })
+    }
+  }
+}
 </script>
-
 
 <style lang="scss" scoped>
 .list-group-item-action {
@@ -121,7 +128,6 @@ export default {
 }
 .userAccount {
   font-size: 12px;
-  color: aa;
   text-align: center;
   margin-top: 50px;
 }

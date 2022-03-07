@@ -2,8 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use App\HospitalSituationNew;
 use App\Events\HospitalUpdatedEvent;
+use Illuminate\Database\Eloquent\Model;
 
 class Hospital extends Model
 {
@@ -22,9 +23,17 @@ class Hospital extends Model
     {
         return $this->hasMany(HospitalSituation::class);
     }
+
+    public function hospitalSituationsNew(){
+        return $this->hasMany(HospitalSituationNew::class);
+    }
     public function hospitalLogs()
     {
         return $this->hasMany(HospitalLog::class);
+    }
+    public function completedForms()
+    {
+        return $this->hasMany(CompletedForm::class);
     }
 
     public function agent()

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <b-container class="mt-4">
       <b-row>
         <b-col cols="12" class="mb-3">
@@ -10,22 +9,22 @@
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
         </b-col>
-        <b-col v-if="hospital.id">
+        <b-col v-if="hospital">
           <h3>
-            Situations hospitalières
+             Historique mise à jour : {{ hospital.name }}
           </h3>
-          <b-alert show variant="info">
-            <div>{{`Structure: ${hospital.name}`}}</div>
+          <!-- <b-alert show variant="info">
             <p v-if="hospital.address">{{`Adresse: ${hospital.address}`}}</p>
-          </b-alert>
+          </b-alert> -->
         </b-col>
       </b-row>
-      <b-row class="mt-4">
+      <b-row class="mt-4" >
         <b-col>
           <b-table
-            :busy="ishospitalSituationLoading"
+            :busy="isLoading"
             :fields="fields"
-            :items="hospitalSituations.data"
+            :items="completedForms.data"
+            hover
             show-empty
           >
             <template v-slot:empty="scope">
@@ -34,7 +33,7 @@
             <template v-slot:table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle" />
-                <strong>Loading...</strong>
+                <strong>Chargement des données...</strong>
               </div>
             </template>
             <template v-slot:cell(last_update)="data">
@@ -47,11 +46,22 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                    update_id:data.item.id,
-                    hospital_id: $route.params.hospital_id
+                    hospital_id: data.item.hospital_id || 0,
+                    completed_form_id:data.item.id
+                    }
+                    }"
+              >Details</b-button>
+              <b-button
+               variant="outline-success mb-1"
+                :to="{
+                  name: 'hospital.edit',
+                  params: {
+                    completed_form_id:data.item.id,
+                    hospital_id: data.item.hospital_id,
+                    form_id: defaultFormId
                   }
                 }"
-              >Details</b-button>
+              >Editer</b-button>
             </template>
           </b-table>
         </b-col>
@@ -72,79 +82,65 @@
 </template>
 
 <script>
-import Header from "../../components/hospital/Header";
-import ManagerUserName from "../../components/hospital/ManagerUserName";
-import { mapState, mapMutations } from "vuex";
+import ManagerUserName from '../../components/hospital/ManagerUserName'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import { DEFAULT_FORM_ID } from '../../config/env'
 export default {
   components: {
-    Header,
-    ManagerUserName,
+    // eslint-disable-next-line vue/no-unused-components
+    ManagerUserName
   },
-  data() {
+  data () {
     return {
       fields: [
-        { key: "last_update", label: "Date" },
-        { key: "confirmed", label: "Confirmés" },
-        { key: "actions", label: "Actions" },
+        { key: 'last_update', label: 'Date' },
+        { key: 'created_manager_name', label: 'Nom' },
+        { key: 'actions', label: 'Actions' }
       ],
-      hospitalSituations: {},
-      ishospitalSituationLoading: false,
-      currentPage: 1,
-      hospital: {},
-    };
+      currentPage: 1
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
+      hospital: (state) => state.hospital.hospitalData,
+      completedForms: (state) => state.completedForm.completedForms,
+      isLoading: (state) => state.completedForm.isLoading
     }),
-    totalRows() {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.total;
+    totalRows () {
+      if (this.completedForms.meta) {
+        return this.completedForms.meta.total
       }
-      return null;
+      return null
     },
-    perPage() {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.per_page;
+    perPage () {
+      if (this.completedForms.meta) {
+        return this.completedForms.meta.per_page
       }
-      return 15;
+      return 15
     },
+    defaultFormId () {
+      return DEFAULT_FORM_ID
+    }
   },
-  mounted() {
-    this.getHospitalSituations();
-    this.getHospital();
+  async mounted () {
+    await this.getHospital({ hospital_id: this.$route.params.hospital_id })
+    this.getCompletedForms()
   },
   methods: {
-    ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
-    getHospitalSituations(page) {
-      if(typeof page == "undefined") page = 1
-      this.ishospitalSituationLoading = true;
-      axios
-        .get(
-          `/api/dashboard/hospital-situations/by-hospital/${this.$route.params.hospital_id}`,
-          {
-            params : {page}
-          }
-        )
-        .then(({ data }) => {
-          this.hospitalSituations = data;
-        })
-        .finally(() => {
-          this.ishospitalSituationLoading = false;
-        });
+    ...mapActions(['getHospital', 'completedForm__getByHospital']),
+    ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
+    async getCompletedForms (page) {
+      if (typeof page === 'undefined') page = 1
+      await this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.isLoading })
     },
-    getHospital() {
-      axios
-        .get(`/api/dashboard/hospitals-data/${this.$route.params.hospital_id}`)
-        .then(({ data }) => {
-          this.hospital = data;
-        });
-    },
-    onPageChange(page) {
-      this.getHospitalSituations(page)
-    },
-  },
-};
+    onPageChange (page) {
+      this.getCompletedForms(page)
+    }
+
+  }
+
+}
 </script>
 
 <style>

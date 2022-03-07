@@ -13,6 +13,7 @@ class ProvincesTableSeeder extends Seeder
      */
     public function run()
     {
+
         DB::table('provinces')->truncate();
         
         DB::table('provinces')->insert(array (

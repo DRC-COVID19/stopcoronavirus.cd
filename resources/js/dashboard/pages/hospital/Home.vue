@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <b-container class="mt-4">
       <b-row>
         <b-col v-if="user && user.hospital">
@@ -9,25 +8,30 @@
             <b-link :to="{name:'hospital.data'}">
               <span class="fa fa-edit"></span>
             </b-link>
+
           </h3>
-          <b-alert show variant="info">
-            <div>{{`Structure: ${user.hospital.name}`}}</div>
-            <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
-            <p v-if="hospitalManagerName">Connecté en tant que {{hospitalManagerName}}</p>
-          </b-alert>
+          <b-card class="mb-4">
+            <b-card-header><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
+           <b-card-body>
+              <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
+            <p v-if="hospitalManagerName">Connecté en tant que <strong>{{hospitalManagerName}}</strong></p>
+           </b-card-body>
+          </b-card>
         </b-col>
       </b-row>
       <b-row class="mt-4 mb-4">
         <b-col>
-          <b-button :to="{name:'hospital.create'}" class="btn-dash-blue">Nouveau</b-button>
+          <b-button :to="{name:'hospital.create',params:{ form_id: defaultFormId }}" class="btn-dash-blue">+ Nouveau</b-button>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
           <b-table
-            :busy="ishospitalSituationLoading"
+            :busy="isLoading"
             :fields="fields"
-            :items="hospitalSituations.data"
+            :items="completedForms.data"
+            responsive
+            hover
             show-empty
           >
             <template v-slot:empty="scope">
@@ -36,7 +40,7 @@
             <template v-slot:table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle" />
-                <strong>Loading...</strong>
+                <strong>Chargement des données...</strong>
               </div>
             </template>
             <template v-slot:cell(last_update)="data">
@@ -49,20 +53,23 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                      update_id:data.item.id,
-                    hospital_id: $route.params.hospital_id || 0
+                    completed_form_id:data.item.id,
+                    hospital_id: data.item.hospital_id || 0
                     }
                     }"
               >Details</b-button>
               <b-button
-                class="btn btn-warning mb-1"
+                v-if="(data.item.diff_date * 24) < 24"
+                  variant="outline-success mb-1"
                 :to="{
                   name: 'hospital.edit',
                   params: {
-                    hospital_id: data.item.id
+                    completed_form_id:data.item.id,
+                    hospital_id:user.hospital.id,
+                    form_id: defaultFormId
                   }
                 }"
-              >Edit</b-button>
+              >Editer</b-button>
             </template>
           </b-table>
         </b-col>
@@ -84,66 +91,87 @@
 </template>
 
 <script>
-import Header from "../../components/hospital/Header";
-import ManagerUserName from "../../components/hospital/ManagerUserName";
-import { mapState, mapMutations } from "vuex";
+import ManagerUserName from '../../components/hospital/ManagerUserName'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import { DEFAULT_FORM_ID } from '../../config/env'
 export default {
   components: {
-    Header,
-    ManagerUserName,
+    ManagerUserName
   },
-  data() {
+  data () {
     return {
       fields: [
-        { key: "last_update", label: "Date" },
-        { key: "confirmed", label: "Confirmés" },
-        { key: "actions", label: "Actions" },
+        { key: 'last_update', label: 'Date' },
+        { key: 'created_manager_name', label: 'Nom' },
+        { key: 'actions', label: 'Actions' }
       ],
-      hospitalSituations: {},
-      ishospitalSituationLoading: false,
       currentPage: 1,
-    };
+      hospitalId: null,
+      alertVariant: 'secondary'
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
+      completedForms: (state) => state.completedForm.completedForms,
+      isLoading: (state) => state.hospital.isLoading
     }),
-    totalRows() {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.total;
+    totalRows () {
+      if (this.completedForms.meta) {
+        return this.completedForms.meta.total
       }
-      return null;
+      return null
     },
-    perPage() {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.per_page;
+    perPage () {
+      if (this.completedForms.meta) {
+        return this.completedForms.meta.per_page
       }
-      return 15;
+      return 15
     },
+    defaultFormId () {
+      return DEFAULT_FORM_ID
+    }
   },
-  mounted() {
-    this.getHospitalSituations();
+  async mounted () {
     if (!this.hospitalManagerName) {
-      this.$bvModal.show("nameModal");
+      this.$bvModal.show('nameModal')
+    }
+    this.getCompletedForms()
+  },
+  watch: {
+    user () {
+      this.getCompletedForms()
     }
   },
   methods: {
-    ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
-    getHospitalSituations(page=1) {
-      this.ishospitalSituationLoading = true;
-      axios.get("/api/dashboard/hospital-situations",
-      {params : {page} }).then(({ data }) => {
-        this.hospitalSituations = data;
-        this.ishospitalSituationLoading = false;
-      });
+    ...mapActions(['completedForm__getByHospital']),
+    ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
+    async getCompletedForms (page) {
+      if (typeof page === 'undefined') page = 1
+      if (this.user && this.user.hospital) {
+        await this.completedForm__getByHospital({
+          page,
+          hospital_id: this.user.hospital.id,
+          isLoading: this.isLoading
+        })
+      }
     },
-    onPageChange(page) {
-      this.getHospitalSituations(page)
-    },
-  },
-};
+
+    onPageChange (page) {
+      this.getCompletedForms(page)
+    }
+
+  }
+}
 </script>
 
-<style>
+<style lang="scss">
+$bg_primary:#F4F6FC;
+ .hopita_mome{
+  background-color: $bg_primary;
+}
+  .light{
+    background-color: $bg_primary;
+  }
 </style>

@@ -17,13 +17,16 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriesTableSeeder::class);
         $this->call(PostsTableSeeder::class);
         $this->call(HealthZonesTableSeeder::class);
-        $this->call(CustomizedHospitalsTableSeeder::class);
+        // $this->call(CustomizedHospitalsTableSeeder::class);
         $this->call(HealthZonesTableSeeder::class);
         $this->call(ProvincesTableSeeder::class);
         $this->call(FluxZonesTableSeeder::class);
         $this->call(FluxHotSpotsTableSeeder::class);
         $this->call(AfricelHealthZonesTableSeeder::class);
+        $this->call(RolesSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(FormFieldTypeSeeder::class);
+        $this->call(FormRecurrenceSeeder::class);
 
     }
 }
