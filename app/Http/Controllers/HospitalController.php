@@ -25,6 +25,12 @@ class HospitalController extends Controller
       return response()->json($hospitals, 200);
     }
 
+    public function indexByPaginate()
+    {
+      $hospitals = Hospital::with(['agent','township'])->paginate(15);
+      return response()->json($hospitals, 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -82,7 +88,13 @@ class HospitalController extends Controller
      */
     public function destroy(Hospital $hospital)
     {
-        //
+        try {
+              Log::info('hopital_id',$hospital);
+             return $hospital->delete();
+             
+        } catch (\Throwable $th) {
+          //throw $th;
+        }
     }
 
     public function getHospitals(Request $request)

@@ -194,6 +194,9 @@ Route::group([
     Route::post('/get-aggregated-by-hospitals', "CompletedFormController@getAggregatedByHospitals");
   });
 
+  Route::group(['prefix' => 'hospitals-data'], function () {
+    Route::get('/by-paginate', 'HospitalController@indexByPaginate');
+  });
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
 

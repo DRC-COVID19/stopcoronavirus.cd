@@ -19,14 +19,13 @@
           :columns="5"
           :table-props="{ bordered: false, striped: true, responsive: true }"
         ></b-skeleton-table>
-
         <b-table
           v-else
           responsive
           striped
           hover
           :fields="fields"
-          :items="users.data"
+          :items="hospitals.data"
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
@@ -41,46 +40,42 @@
           </template>
           <template v-slot:cell(actions)="data" class="action-btn-group">
             <i
-              @click="deleteUser(data.item.name, data.item.id)"
+              @click="deleteHospital(data.item.name, data.item.id)"
               class="mx-2 my-1 fas fa-user-times"
             ></i>
             <i
               @click="
-                updateUser(
+                updateHospital(
                   data.item.name,
                   data.item.id,
-                  data.item.usernmae,
-                  data.item.roles,
+                  data.item.townships,
+                  data.item.agens,
                   data.item.hospitals,
-                  data.item.email
                 )
               "
               class="mx-2 my-1 fas fa-user-edit"
             ></i>
           </template>
-          <template v-slot:cell(role)="data">
-            <b-badge
+          <template #cell(name)="data">
+          <b>{{ data.value.toUpperCase() }}</b>
+          </template>
+          <template #cell(township)="data">
+            <span
               class="mx-1 my-1"
-              v-for="(role, index) in data.item.roles"
-              variant="secondary"
-              :key="index"
-              >{{ role.name }}</b-badge
+              >{{ data.value.name}}</span
             >
           </template>
-          <template v-slot:cell(hopital)="data">
-            <b-badge
+          <template #cell(agent)="data">
+            <span
               class="mx-1 my-1"
-              v-for="(hopital, index) in data.item.hospitals"
-              variant="secondary"
-              :key="index"
-              >{{ hopital.name }}</b-badge
+              >{{ data.value.name}}</span
             >
           </template>
         </b-table>
       </b-col>
     </b-row>
     <b-modal v-model="isDeleteModalShown">
-      Voulez-vous vraiment supprimer l'utilisateurs {{ currentUser.name }} ?
+      Voulez-vous vraiment supprimer l'utilisateurs {{ currentHospital.name }} ?
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter
@@ -96,68 +91,74 @@
 <script>
 export default {
   props: {
-    users: {
+    hospitals: {
       type: Object,
       default: () => ({}),
+      required: false
     },
     isLoading: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
-      fields: ["id", "username", "name", "role","hopital", "actions"], // usernmae instead of username (see backend response)
-      filter: "",
+      fields: [
+        { key: 'name', label: 'Nom' },
+        { key: 'township', label: 'Commune' },
+        { key: 'agent', label: 'Agents' },
+        { key: 'actions', label: 'Actions' }
+      ],
+      filter: '',
       perPage: 15,
       currentPage: 1,
       isDeleteModalShown: false,
-      currentUser: {
+      currentHospital: {
         id: -1,
-        name: "",
+        name: ''
       },
-      editModalShow: false,
-    };
+      editModalShow: false
+    }
   },
   computed: {
-    rows() {
-      return this.users.length;
-    },
+    rows () {
+      return this.hospitals.length
+    }
   },
   watch: {
     filter () {
-      this.search();
+      this.search()
     }
   },
   methods: {
     search () {
-      this.$emit('onSearch', this.filter.trim());
+      this.$emit('onSearch', this.filter.trim())
     },
-    deleteUser(name, userId) {
-      this.isDeleteModalShown = true;
-      this.currentUser.id = userId;
-      this.currentUser.name = name;
+    deleteHospital (name, HospitalId) {
+      this.isDeleteModalShown = true
+      this.currentHospital.id = HospitalId
+      this.currentHospital.name = name
     },
-    onValidateDelection() {
-      this.$emit("onDeleteUser", this.currentUser.id);
-      this.isDeleteModalShown = false;
+    onValidateDelection () {
+      this.$emit('onDeleteHospital', this.currentHospital.id)
+      this.isDeleteModalShown = false
     },
-    onCancelDelection() {
-      this.isDeleteModalShown = false;
+    onCancelDelection () {
+      this.isDeleteModalShown = false
     },
-    updateUser(name, id, usernmae, roles,hospitals, email) {
-      this.currentUser = {
+    updateHospital (name, id, usernmae, roles, hospitals, email) {
+      this.currentHospital = {
         id,
         name,
         usernmae,
         roles,
         hospitals,
-        email,
-      };
-      this.$emit("onUpdateUser", this.currentUser);
-    },
-  },
-};
+        email
+      }
+      this.$emit('onUpdateHospital', this.currentHospital)
+    }
+  }
+}
 </script>
 <style lang='scss' scoped>
 @import "@~/sass/_variables";

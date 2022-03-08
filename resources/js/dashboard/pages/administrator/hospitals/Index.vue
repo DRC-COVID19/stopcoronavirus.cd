@@ -3,11 +3,11 @@
     <b-row class="flex-md-row-reverse" no-gutters>
       <b-col cols="12" md="4" class="mt-3">
         <Create
-          @onUpdate="updateUser"
-          @onCreate="createUser"
+          @onUpdate="updateHospital"
+          @onCreate="createHospital"
           @onCancelUpdate="cancelUpdate"
-          :userAdded="userAdded"
-          :userUpdated="userUpdated"
+          :hospitalAdded="hospitalAdded"
+          :hospitalUpdated="hospitalUpdated"
           :formToPopulate="formToPopulate"
           :roles="roles"
           :hospitals="hospitals"
@@ -17,11 +17,11 @@
       <b-col cols="12" md="8">
         <Header :title="title" :iconClass="iconClass" />
         <div class="hide-waiting" v-if="updating"></div>
-        <ListUser
-          :users="users"
+         <HospitalList
+          :hospitals="hospitals"
           @onSearch="search"
-          @onDeleteUser="deleteUser"
-          @onUpdateUser="populateForm"
+          @onDeleteHospital="deleteHospital"
+          @onUpdateHospital="populateForm"
           :isLoading="isLoading"
           :updating="updating"
         />
@@ -29,9 +29,9 @@
           <b-pagination
             page-class="text-blue-dash"
             v-model="currentPage"
-            :per-page="userMeta.perPage"
-            :total-rows="userMeta.total"
-            @change="getUserList"
+            :per-page="hospitalMeta.per_page"
+            :total-rows="hospitalMeta.total"
+            @change="getHospitalList"
             :disabled="updating"
           ></b-pagination>
         </b-col>
@@ -42,41 +42,44 @@
 
 <script>
 import Header from '../components/Header'
-import ListUser from './components/ListUsers'
+import HospitalList from './components/HospitalLists'
 import Create from './components/Create'
+import { mapActions, mapState } from 'vuex'
+
 export default {
   components: {
     Header,
     Create,
-    ListUser
+    HospitalList
   },
   data () {
     return {
       title: 'Hopitaux',
       iconClass: 'fas fa-hospital',
       isLoading: false,
-      users: {},
-      userUpdated: false,
-      userAdded: false,
+      hospitals: {},
+      HospitalUpdated: false,
+      HospitalAdded: false,
       showSuccess: false,
-      isUserDeleted: false,
+      isHospitalDeleted: false,
       timeOut: 3,
       formToPopulate: {},
       updating: false,
       errors: {},
       currentPage: 1,
-      roles: [],
-      hospitals: []
+      roles: []
     }
   },
-  mounted () {
-    this.getUserList()
-    this.getUserRoles()
-    this.getHospitals()
+  async mounted () {
+    // this.getHospitalList()
+    // this.getHospitalRoles()
+    this.findHospitals()
   },
   computed: {
-    userMeta () {
-      if (!this.users.meta) {
+    ...mapState({
+    }),
+    hospitalMeta () {
+      if (!this.hospitals) {
         return {
           current_page: 1,
           from: 1,
@@ -87,40 +90,32 @@ export default {
           total: 1
         }
       }
-      return this.users.meta
+      return this.hospitals
     }
   },
   methods: {
+    ...mapActions(['getHospitals', 'removeHospital']),
+
     search (filter) {
       this.isLoading = true
       if (filter !== '') {
         // eslint-disable-next-line no-undef
-        axios
-          .get('api/admin_users/filter?key_words=' + filter)
-          .then(({ data }) => {
-            this.users = data
-            this.isLoading = false
-          })
-          .catch(({ response }) => {
-            this.$gtag.exception(response)
-            this.isLoading = false
-          })
+        this.hospitals.data.filter((item) => item.name.includes(filter))
       } else {
-        this.getUserList()
+        this.getHospitalList()
         this.isLoading = false
       }
     },
-    deleteUser (currentUserId) {
+    deleteHospital (currentHospitalId) {
       // eslint-disable-next-line no-undef
-      axios
-        .delete('/api/admin_users/' + currentUserId)
+      this.removeHospital({ hospital_id: currentHospitalId })
         .then(() => {
-          this.getUserList()
-          this.isUserDeleted = true
+          this.getHospitalList()
+          this.isHospitalDeleted = true
           this.$notify({
             group: 'alert',
-            title: 'Supprimer utilisateur',
-            text: 'Supprimer avec succès',
+            title: 'Supprimer Hopital',
+            text: 'Supprimer avec succès !',
             type: 'success'
           })
         })
@@ -128,44 +123,34 @@ export default {
           this.$gtag.exception(response)
           this.$notify({
             group: 'alert',
-            title: 'Supprimer utilisateur',
-            text: 'Une erreur est surveni',
+            title: 'Supprimer Hopital',
+            text: 'Une erreur est survenue!',
             type: 'error'
           })
         })
     },
-    populateForm (currentUser) {
+    populateForm (currentHospital) {
       this.updating = true
-      this.formToPopulate = currentUser
+      this.formToPopulate = currentHospital
     },
     cancelUpdate () {
       this.updating = false
     },
-    updateUser (currentUser) {
+    updateHospital (currentHospital) {
       this.isLoading = true
-      this.userUpdated = false
+      this.HospitalUpdated = false
       const form = {
-        username: currentUser.username,
-        name: currentUser.name,
-        email: currentUser.email,
-        roles_id: currentUser.roles,
-        hospitals_id: currentUser.hospitals
-      }
-
-      if (currentUser && currentUser.password) {
-        form.password = currentUser.password
-        form.password_confirmation = currentUser.confirmPassword
       }
 
       // eslint-disable-next-line no-undef
       axios
-        .put('/api/admin_users/' + currentUser.id, form)
+        .put('/api/hospitals/' + currentHospital.id, form)
         .then(() => {
-          this.userUpdated = true
+          this.HospitalUpdated = true
           this.showSuccess = true
           this.isLoading = false
           this.updating = false
-          this.getUserList(1)
+          this.getHospitalList(1)
           this.$notify({
             group: 'alert',
             title: 'Modifer utilisateur',
@@ -184,13 +169,13 @@ export default {
         })
     },
 
-    createUser (form) {
-      this.userAdded = false
+    createHospital (form) {
+      this.HospitalAdded = false
       this.isLoading = true
       this.errors = {}
       // eslint-disable-next-line no-undef
       axios
-        .post('/api/admin_users', {
+        .post('/api/admin_hospitals', {
           username: form.username,
           name: form.name,
           password: form.password,
@@ -203,7 +188,7 @@ export default {
           this.userAdded = true
           this.showSuccess = true
           this.isLoading = false
-          this.getUserList(1)
+          this.getHospitalList(1)
           this.$notify({
             group: 'alert',
             title: 'Nouvel utilisateur',
@@ -225,15 +210,15 @@ export default {
         })
     },
 
-    getUserList (page = 1) {
+    getHospitalList (page = 1) {
       this.isLoading = true
       // eslint-disable-next-line no-undef
       axios
-        .get('/api/admin_users', {
+        .get('/api/admin_hospitals', {
           params: { page }
         })
         .then(({ data }) => {
-          this.users = data
+          this.hospitals = data
           this.isLoading = false
         })
         .catch(({ response }) => {
@@ -241,7 +226,7 @@ export default {
         })
     },
 
-    getUserRoles () {
+    getHospitalRoles () {
       // eslint-disable-next-line no-undef
       axios
         .get('/api/admin_roles')
@@ -252,20 +237,16 @@ export default {
           this.$gtag.exception(response)
         })
     },
-    getHospitals () {
-      // eslint-disable-next-line no-undef
-      axios
-        .get('/api/dashboard/hospitals-data')
-        .then(({ data }) => {
-          this.hospitals = data
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
+    async findHospitals () {
+      this.isLoading = true
+      this.hospitals = Object.assign({}, await this.getHospitals())['0']
+      if (this.hospitals.length !== 0) {
+        this.isLoading = false
+      }
     },
 
     switchPage (page) {
-      this.getUserList(page)
+      this.getHospitalList(page)
     },
     renderErrorsMessages (errors) {
       const errorsMessage = []

@@ -5,9 +5,11 @@ namespace App;
 use App\HospitalSituationNew;
 use App\Events\HospitalUpdatedEvent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Hospital extends Model
 {
+    // use SoftDeletes;
     protected $fillable=[
         'name',
         'address',

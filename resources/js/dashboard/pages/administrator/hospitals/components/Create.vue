@@ -10,7 +10,7 @@
       <b-form-group
         label-class="text-dash-color"
         id="input-group-1"
-        label="Nom d'utilisateur *"
+        label="Nom de l'hopital *"
         label-for="input-1"
         :invalid-feedback="errors.username ? errors.username[0] : null"
         :state="!errors.username"
@@ -20,44 +20,42 @@
           id="input-1"
           v-model="form.username"
           type="text"
-          placeholder="Entrer le username"
+          placeholder="Entrer le Nom de l'hopital"
           required
         ></b-form-input>
       </b-form-group>
-      <b-form-group
-        id="input-group-2"
-        label="Email address *"
-        label-class="text-dash-color"
-        label-for="input-2"
-      >
-        <b-form-input
-          class="input-dash"
-          id="input-2"
-          v-model="form.email"
-          type="email"
-          placeholder="Entre email"
-          required
-          @blur="validateMail()"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-text id="password-help-block">{{
-        validateMailMessage
-      }}</b-form-text>
+
       <b-form-group
         label-class="text-dash-color"
         id="input-group-3"
-        label="Nom *"
+        label="Latitude *"
         label-for="input-3"
       >
         <b-form-input
           id="input-3"
           class="input-dash"
           v-model="form.name"
-          placeholder="Entrer le nom"
+          placeholder="Entrer la Latitude"
+          type="number"
           required
         ></b-form-input>
       </b-form-group>
-      <label class="text-dash-color" for="check-group-1">Roles *</label>
+        <b-form-group
+        label-class="text-dash-color"
+        id="input-group-3"
+        label="Longitude *"
+        label-for="input-3"
+      >
+        <b-form-input
+          id="input-3"
+          class="input-dash"
+          v-model="form.name"
+          placeholder="Entrer la Longitude"
+          type="number"
+          required
+        ></b-form-input>
+      </b-form-group>
+      <label class="text-dash-color" for="check-group-1">Communes *</label>
       <v-select
         v-model="form.roles"
         multiple
@@ -66,34 +64,17 @@
         :reduce="(item) => item.id"
         :searchable ="false"
       />
-      <label class="text-dash-color" for="check-group-1">Hopital *</label>
+      <b-form-group class="mt-3">
+        <label class="text-dash-color" for="check-group-1">Selectioner un Agent *</label>
       <v-select
-        v-model="form.hospitals"
+        v-model="form.roles"
         multiple
-        :options="hospitals"
+        :options="roles"
         label="name"
         :reduce="(item) => item.id"
         :searchable ="false"
       />
-      <label class="text-dash-color" for="text-password">Mot de passe *</label>
-      <b-form-input
-        class="input-dash"
-        type="password"
-        id="text-password"
-        aria-describedby="password-help-block"
-        v-model="form.password"
-      ></b-form-input>
-      <label class="text-dash-color" for="text-password-confirm"
-        >Confirmation de mot de passe *</label
-      >
-      <b-form-input
-        class="input-dash"
-        type="password"
-        id="text-password-confirm"
-        aria-describedby="password-help-block"
-        v-model="form.confirmPassword"
-      ></b-form-input>
-      <b-form-text id="password-help-block">{{ warningMissMatch }}</b-form-text>
+      </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
           <b-button type="submit" variant="primary" class="btn-dash-sucess">
             <span v-if="isLoading"
@@ -119,12 +100,12 @@
 <script>
 export default {
   props: {
-    userAdded: {
+    hospitalAdded: {
       type: Boolean,
       required: false,
       default: false
     },
-    userUpdated: {
+    hospitalUpdated: {
       type: Boolean,
       required: false,
       default: false
@@ -155,9 +136,9 @@ export default {
   },
   data () {
     return {
-      title: "Creation d'un utilisateur",
+      title: "Creation d'un hopital",
       btnTitle: 'Enreigistrer',
-      iconClass: 'fas fa-plus-square',
+      iconClass: 'fas fa-hospital-alt',
       updating: false,
       isLoading: false,
       validateMailMessage: '',
@@ -241,7 +222,7 @@ export default {
       this.form.roles = this.formToPopulate.roles.map(role => role.id)
       this.form.hospitals = this.formToPopulate.hospitals.map(hospital => hospital.id)
       this.form.name = this.formToPopulate.name
-      this.title = "Modification de l'utilisateur"
+      this.title = "Modification de l'hopital"
       this.btnTitle = 'Modifier'
     }
 

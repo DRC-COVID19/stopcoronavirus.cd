@@ -98,66 +98,66 @@ export default {
   props: {
     users: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     isLoading: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
-      fields: ["id", "username", "name", "role","hopital", "actions"], // usernmae instead of username (see backend response)
-      filter: "",
+      fields: ['id', 'username', 'name', 'role', 'hopital', 'actions'], // usernmae instead of username (see backend response)
+      filter: '',
       perPage: 15,
       currentPage: 1,
       isDeleteModalShown: false,
       currentUser: {
         id: -1,
-        name: "",
+        name: ''
       },
-      editModalShow: false,
-    };
+      editModalShow: false
+    }
   },
   computed: {
-    rows() {
-      return this.users.length;
-    },
+    rows () {
+      return this.users.length
+    }
   },
   watch: {
     filter () {
-      this.search();
+      this.search()
     }
   },
   methods: {
     search () {
-      this.$emit('onSearch', this.filter.trim());
+      this.$emit('onSearch', this.filter.trim())
     },
-    deleteUser(name, userId) {
-      this.isDeleteModalShown = true;
-      this.currentUser.id = userId;
-      this.currentUser.name = name;
+    deleteUser (name, userId) {
+      this.isDeleteModalShown = true
+      this.currentUser.id = userId
+      this.currentUser.name = name
     },
-    onValidateDelection() {
-      this.$emit("onDeleteUser", this.currentUser.id);
-      this.isDeleteModalShown = false;
+    onValidateDelection () {
+      this.$emit('onDeleteUser', this.currentUser.id)
+      this.isDeleteModalShown = false
     },
-    onCancelDelection() {
-      this.isDeleteModalShown = false;
+    onCancelDelection () {
+      this.isDeleteModalShown = false
     },
-    updateUser(name, id, usernmae, roles,hospitals, email) {
+    updateUser (name, id, usernmae, roles, hospitals, email) {
       this.currentUser = {
         id,
         name,
         usernmae,
         roles,
         hospitals,
-        email,
-      };
-      this.$emit("onUpdateUser", this.currentUser);
-    },
-  },
-};
+        email
+      }
+      this.$emit('onUpdateUser', this.currentUser)
+    }
+  }
+}
 </script>
 <style lang='scss' scoped>
 @import "@~/sass/_variables";
