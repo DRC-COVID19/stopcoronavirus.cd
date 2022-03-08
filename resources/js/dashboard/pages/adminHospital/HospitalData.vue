@@ -132,7 +132,7 @@ export default {
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     async getCompletedForms (page) {
       if (typeof page === 'undefined') page = 1
-      await this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.isLoading })
+      await this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id })
     },
     onPageChange (page) {
       this.getCompletedForms(page)

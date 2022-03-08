@@ -29,7 +29,10 @@ export default {
       return this.userHaveRole(ADMIN_HOSPITAL)
     },
     canViewAgent () {
-      return this.userHaveRole(AGENT_HOSPITAL)
+      if (this.user.hospital) {
+        return this.userHaveRole(AGENT_HOSPITAL)
+      }
+      return ''
     }
   }
 }
