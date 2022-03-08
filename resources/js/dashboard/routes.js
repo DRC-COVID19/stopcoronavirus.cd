@@ -11,14 +11,16 @@ import HospitalData from './pages/hospital/HospitalData'
 import HospitalAdmin from './pages/adminHospital/Home'
 import HospitalAdminData from './pages/adminHospital/HospitalData'
 import NotAcces from './pages/NotAccess'
-import Landing from './pages/Landing'
-import Administrator from './pages/Administrator'
+import Administrator from './pages/administrator/Administrator'
 import AdminUserIndex from './pages/administrator/users/Index'
 import PageNotFound from './pages/NotFound'
 import ChangeLogIndex from './pages/administrator/changeLog/index'
 import Epidemie from './pages/administrator/epidemy/Index'
 import FormIndex from './pages/administrator/forms/index'
 import FormShow from './pages/administrator/forms/form'
+import Main from './pages/Main'
+import Dashboard from './pages/dashboard/Dashboard'
+import CTCO from './pages/ctco/CTCO'
 import {
   ADMIN_DASHBOARD,
   AGENT_HOSPITAL,
@@ -57,153 +59,206 @@ export default [
   },
   {
     path: '/',
-    component: Home,
-    name: 'home',
+    name: 'main',
+    component: Main,
     meta: {
-      requiresAuth: true,
-      role: [ADMIN_DASHBOARD]
-    }
-  },
-  {
-    path: '/hospitals',
-    name: 'hospital.home',
-    component: HospitalsHome,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
-  },
-  {
-    path: '/admin/hospitals',
-    name: 'hospital.admin',
-    component: HospitalAdmin,
-    meta: {
-      requiresAuth: true,
-      role: [ADMIN_HOSPITAL]
-    }
-  },
-  {
-    path: '/admin/hospitals/:hospital_id',
-    name: 'hospital.admin.data',
-    component: HospitalAdminData,
-    meta: {
-      requiresAuth: true,
-      role: [ADMIN_HOSPITAL]
-    }
-  },
-  {
-    path: '/hospitals/data',
-    name: 'hospital.data',
-    component: HospitalData,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
-  },
-  {
-    path: '/hospitals/new/:form_id',
-    name: 'hospital.create',
-    component: HospitalForm,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
-  },
-  {
-    path: '/hospitals/:hospital_id/show/:update_id',
-    name: 'hospital.detail',
-    component: HospitalsDetail,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
-    }
-  },
-  {
-    path: '/hospital/:hospital_id/edit/:update_id/form/:form_id',
-    name: 'hospital.edit',
-    component: HospitalForm,
-    meta: {
-      requiresAuth: true,
-      role: [AGENT_HOSPITAL]
-    }
+      requiresAuth: true
+    },
+    children: [
+      /**
+       * Dashboard routes
+       */
+      {
+        path: 'dashboard',
+        name: 'main.dashboard',
+        component: Dashboard,
+        children: [
+          {
+            path: 'mobility',
+            component: Home,
+            name: 'main.dashboard.mobility',
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_DASHBOARD]
+            }
+          },
+          {
+            path: 'infrastructure',
+            component: Home,
+            name: 'main.dashboard.infrastructure',
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_DASHBOARD]
+            }
+          },
+          {
+            path: 'a-propos',
+            component: Home,
+            name: 'main.dashboard.aPropos',
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_DASHBOARD]
+            }
+          },
+          {
+            path: '*',
+            redirect: { name: 'main.dashboard.mobility' }
+          }
+        ]
+      },
+
+      /**
+       * Administration routes
+       */
+      {
+        path: '/administration',
+        component: Administrator,
+        name: 'administrator',
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC]
+        },
+        children: [
+          {
+            path: '/',
+            name: 'administrator.home',
+            component: AdminUserIndex,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR]
+            }
+          },
+          {
+            path: 'users',
+            name: 'administrator.users',
+            component: AdminUserIndex,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR]
+            }
+          },
+          {
+            path: 'change-logs',
+            component: ChangeLogIndex,
+            name: 'administrator.changeLog',
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR]
+            }
+          },
+          {
+            path: 'forms',
+            component: FormIndex,
+            name: 'administrator.forms',
+            meta: {
+              requiresAuth: true,
+              role: [CREATE_FORM, EDIT_FORM]
+            }
+          },
+          {
+            path: '/administrator/forms/:form_id',
+            name: 'administrator.forms.show',
+            component: FormShow,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+            }
+          },
+          {
+            path: 'epidemie/',
+            name: 'administrator.epidemie',
+            component: Epidemie,
+            meta: {
+              requiresAuth: true,
+              role: [MANANGER_EPIDEMIC]
+            }
+          }
+        ]
+      },
+
+      /**
+       * CTCO routes
+       */
+      {
+        path: '/hospitals',
+        name: 'hospitals',
+        component: CTCO,
+        meta: {
+          requiresAuth: true,
+          role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
+        },
+        children: [
+          {
+            path: '/hospitals',
+            name: 'hospital.home',
+            component: HospitalsHome,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+          {
+            path: '/admin/hospitals',
+            name: 'hospital.admin',
+            component: HospitalAdmin,
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_HOSPITAL]
+            }
+          },
+          {
+            path: '/admin/hospitals/:hospital_id',
+            name: 'hospital.admin.data',
+            component: HospitalAdminData,
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_HOSPITAL]
+            }
+          },
+          {
+            path: '/hospitals/data',
+            name: 'hospital.data',
+            component: HospitalData,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+          {
+            path: '/hospitals/forms/:form_id',
+            name: 'hospital.create',
+            component: HospitalForm,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+          {
+            path: '/hospitals/:hospital_id/show/:completed_form_id',
+            name: 'hospital.detail',
+            component: HospitalsDetail,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
+            }
+          },
+          {
+            path: '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
+            name: 'hospital.edit',
+            component: HospitalForm,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+        ]
+      }
+    ]
   },
   {
     path: '/acces-denied',
     name: 'acces.denied',
     component: NotAcces,
-    meta: {
-      requiresAuth: true
-    }
-  },
-  {
-    path: '/administrator',
-    component: Administrator,
-    name: 'administrator',
-    meta: {
-      requiresAuth: true,
-      role: [ADMINISTRATOR]
-    },
-    children: [
-      {
-        path: '/',
-        name: 'administrator.home',
-        component: AdminUserIndex,
-        meta: {
-          requiresAuth: true,
-          role: [ADMINISTRATOR]
-        }
-      },
-      {
-        path: 'users',
-        name: 'administrator.users',
-        component: AdminUserIndex,
-        meta: {
-          requiresAuth: true,
-          role: [ADMINISTRATOR]
-        }
-      },
-      {
-        path: 'change-logs',
-        component: ChangeLogIndex,
-        name: 'administrator.changeLog',
-        meta: {
-          requiresAuth: true,
-          role: [ADMINISTRATOR]
-        }
-      },
-      {
-        path: 'forms',
-        component: FormIndex,
-        name: 'administrator.forms',
-        meta: {
-          requiresAuth: true,
-          role: [CREATE_FORM] || [EDIT_FORM]
-        }
-      },
-      {
-        path: '/administrator/forms/:form_id',
-        name: 'administrator.forms.show',
-        component: FormShow,
-        meta: {
-          requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
-        }
-      },
-      {
-        path: 'epidemie/',
-        name: 'administrator.epidemie',
-        component: Epidemie,
-        meta: {
-          requiresAuth: true,
-          role: [MANANGER_EPIDEMIC]
-        }
-      }
-    ]
-  },
-  {
-    path: '/landing',
-    name: 'landing',
-    component: Landing,
     meta: {
       requiresAuth: true
     }

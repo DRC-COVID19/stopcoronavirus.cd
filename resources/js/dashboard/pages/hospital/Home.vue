@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Header />
     <b-container class="mt-4">
       <b-row>
         <b-col v-if="user && user.hospital">
@@ -11,24 +10,28 @@
             </b-link>
 
           </h3>
-          <b-alert show variant="info">
-            <div>{{`Structure: ${user.hospital.name}`}}</div>
-            <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
-            <p v-if="hospitalManagerName">Connecté en tant que {{hospitalManagerName}}</p>
-          </b-alert>
+          <b-card class="mb-4">
+            <b-card-header><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
+           <b-card-body>
+              <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
+            <p v-if="hospitalManagerName">Connecté en tant que <strong>{{hospitalManagerName}}</strong></p>
+           </b-card-body>
+          </b-card>
         </b-col>
       </b-row>
       <b-row class="mt-4 mb-4">
         <b-col>
-          <b-button :to="{name:'hospital.create',params:{ form_id: defaultFormId }}" class="btn-dash-blue">Nouveau</b-button>
+          <b-button :to="{name:'hospital.create',params:{ form_id: defaultFormId }}" class="btn-dash-blue">+ Nouveau</b-button>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
           <b-table
-            :busy="ishospitalSituationLoading"
+            :busy="iscompletedFormsLoading"
             :fields="fields"
-            :items="hospitalSituations.data"
+            :items="completedForms.data"
+            responsive
+            hover
             show-empty
           >
             <template v-slot:empty="scope">
@@ -37,7 +40,7 @@
             <template v-slot:table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle" />
-                <strong>Loading...</strong>
+                <strong>Chargement des données...</strong>
               </div>
             </template>
             <template v-slot:cell(last_update)="data">
@@ -50,18 +53,18 @@
                 :to="{
                   name:'hospital.detail',
                   params:{
-                    update_id:data.item.last_update,
-                    hospital_id: user.hospital.id || 0
+                    completed_form_id:data.item.id,
+                    hospital_id: data.item.hospital_id || 0
                     }
                     }"
               >Details</b-button>
               <b-button
                 v-if="(data.item.diff_date * 24) < 24"
-                class="btn btn-warning mb-1"
+                  variant="outline-success mb-1"
                 :to="{
                   name: 'hospital.edit',
                   params: {
-                    update_id:data.item.last_update,
+                    completed_form_id:data.item.id,
                     hospital_id:user.hospital.id,
                     form_id: defaultFormId
                   }
@@ -88,47 +91,46 @@
 </template>
 
 <script>
-import Header from '../../components/hospital/Header'
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { renderDiffDate } from '../../plugins/functions'
 import { DEFAULT_FORM_ID } from '../../config/env'
 export default {
   components: {
-    Header,
     ManagerUserName
   },
   data () {
     return {
       fields: [
         { key: 'last_update', label: 'Date' },
-        { key: 'name', label: 'Nom' },
+        { key: 'created_manager_name', label: 'Nom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
-      hospitalId: null
+      hospitalId: null,
+      alertVariant: 'secondary',
+      iscompletedFormsLoading: false,
+      completedForms: {}
     }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
-      hospitalSituations: (state) => state.hospital.hospitalSituations,
-      ishospitalSituationLoading: (state) => state.hospital.isLoading
+      isLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.total
+      if (this.completedForms) {
+        return this.completedForms.total
       }
       return null
     },
     perPage () {
-      if (this.hospitalSituations.meta) {
-        return this.hospitalSituations.meta.per_page
+      if (this.completedForms) {
+        return this.completedForms.per_page
       }
       return 15
     },
-    defaultFormId() {
+    defaultFormId () {
       return DEFAULT_FORM_ID
     }
   },
@@ -136,26 +138,45 @@ export default {
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
     }
-    await this.getSituations()
+    this.$store.commit('SET_COMPLETED_FORMS', { isLoading: true })
+    this.getCompletedForms()
+  },
+  watch: {
+    user () {
+      this.getCompletedForms()
+    }
   },
   methods: {
-    ...mapActions(['getHospitalSituations']),
+    ...mapActions(['completedForm__getByHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    getSituations () {
-      let page = 1
+    async getCompletedForms (page) {
+      this.iscompletedFormsLoading = true
       if (typeof page === 'undefined') page = 1
-      this.getHospitalSituations({ page, hospital_id: this.user.hospital.id, isLoading: this.ishospitalSituationLoading })
+      if (this.user && this.user.hospital) {
+        this.completedForms = await this.completedForm__getByHospital({
+          page,
+          hospital_id: this.user.hospital.id
+        })
+        if (this.completedForms.length !== 0) {
+          this.iscompletedFormsLoading = false
+        }
+      }
     },
+
     onPageChange (page) {
-      this.getHospitalSituations(page)
-    },
-    renderHour (date) {
-      const diffDay = renderDiffDate(this.moment, date)
-      return diffDay * 24
+      this.getCompletedForms(page)
     }
+
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+$bg_primary:#F4F6FC;
+ .hopita_mome{
+  background-color: $bg_primary;
+}
+  .light{
+    background-color: $bg_primary;
+  }
 </style>

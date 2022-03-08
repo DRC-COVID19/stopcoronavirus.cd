@@ -12,7 +12,6 @@
         </b-button>
       </div>
 
-      <Header />
       <div
         class="mt-lg-2 top-menu"
         :class="{ 'mob-header-container': isSmOrMd, row: !isSmOrMd }"
@@ -388,7 +387,6 @@ import SideOrientation from '../components/SideOrientation'
 import DataModal from '../components/DataModal'
 import SideFluxChart from '../components/SideFlux'
 import FluxChart from '../components/FluxChart'
-import Header from '../components/Header'
 import HospitalSituation from '../components/HospitalSituation'
 import FluxTendanceChart from '../components/flux/TendanceChart'
 import FluxComparisonChart from '../components/flux/ComparisonChart'
@@ -433,7 +431,6 @@ export default {
     DataModal,
     SideFluxChart,
     FluxChart,
-    Header,
     HospitalSituation,
     FluxTendanceChart,
     FluxComparisonChart,
@@ -525,7 +522,7 @@ export default {
       fluxAfricelInOut: [],
       showMobileMaps: true,
       activeRightSide: 0,
-      mapMdTop: 46.4
+      mapMdTop: 46.4,
     }
   },
   computed: {
@@ -769,9 +766,8 @@ export default {
       'getFluxHotSpot',
       'getSituationHospital',
       'getHospitals',
-      'gethospitalsFiltered',
-      'getHospitalSituationsAll',
-      'getObservationSituationHospital',
+      'completedForm__getAggregatedByHospitals',
+      'getHospitalSituationsAll'
     ]),
     ...mapMutations([
       'setMapStyle',
@@ -1707,8 +1703,7 @@ export default {
       this.setCanShowNavMobile(false)
       values.isLoading = true
       this.getHospitalsData(values)
-      this.gethospitalsFiltered(values)
-      this.getObservationSituationHospital(values)
+      this.completedForm__getAggregatedByHospitals(values)
       this.initForm()
     },
     seeSide () {

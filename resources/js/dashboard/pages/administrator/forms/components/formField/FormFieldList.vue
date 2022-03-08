@@ -11,9 +11,11 @@
       </b-card-header>
       <b-collapse id="collapse-form-field-list" class="mt-2" visible>
         <b-card-body>
-           <FormStepListAccordion :targetForm="targetForm"
-                 @deleted="onDeleted"
-                 @updateField="updateField"/>
+           <FormStepListAccordion
+            :targetForm="targetForm"
+            @deleted="onDeleted"
+            @updateField="onUpdateFormField"
+          />
         </b-card-body>
       </b-collapse>
     </b-card>
@@ -21,10 +23,10 @@
 </template>
 
 <script>
-import FormStepListAccordion from "./FormStepListAccordion.vue";
+import FormStepListAccordion from './FormStepListAccordion.vue'
 export default {
   components: {
-    FormStepListAccordion,
+    FormStepListAccordion
   },
   props: {
     targetForm: {
@@ -41,8 +43,8 @@ export default {
     onDeleted () {
       this.$emit('onDeletedForm')
     },
-     updateField () {
-      this.$emit('onUpdateFormField')
+    onUpdateFormField (value) {
+      this.$emit('onUpdateFormField', value)
     }
   }
 }

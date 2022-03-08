@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 
 export default {
   state: {
@@ -11,8 +12,8 @@ export default {
     isCreating: false,
     hospitalSituationAll: [],
     observation_start: null,
-    observation_end: null,
-    hospitalSituationSelected: [],
+    observation_end: moment().format('YYYY-MM-DD'),
+    hospitalSituationSelected: {},
     hospitalObservationSituation: []
   },
 
@@ -29,17 +30,17 @@ export default {
     SET_ALL_HOSPITAL_SITUATION (state, payload) {
       state.hospitalSituationAll = payload
     },
-    SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE(state, payload) {
-      state.AllhospitalSituationByLastUpdate = payload;
+    SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE (state, payload) {
+      state.AllhospitalSituationByLastUpdate = payload
     },
-    SET_FILTERED_HOSPITAL_SITUATION(state, payload) {
-      state.filterdHospitalSituation = payload;
+    SET_FILTERED_HOSPITAL_SITUATION (state, payload) {
+      state.filterdHospitalSituation = payload
     },
-    HOSPITAL_SITUATION_DETAIL(state, payload) {
-      state.hospitalSituationDetail = payload;
+    HOSPITAL_SITUATION_DETAIL (state, payload) {
+      state.hospitalSituationDetail = payload
     },
-    SET_HOSPITALS(state, payload) {
-      state.hospitalsList = payload;
+    SET_HOSPITALS (state, payload) {
+      state.hospitalsList = payload
     },
     SET_SITUATION (state, payload) {
       state.hospitalSituationSelected = payload
@@ -65,16 +66,16 @@ export default {
             commit('SET_IS_LOADING', false)
             resolve(true)
           })
-          .catch((response) => {
-            reject(response);
+          .catch(response => {
+            reject(response)
           })
           .finally(() => {
-            commit("SET_IS_CREATING", false);
-          });
-      });
+            commit('SET_IS_CREATING', false)
+          })
+      })
     },
-    updateHospitalSituation({ state, commit, dispatch }, payload = {}) {
-      commit("SET_IS_CREATING", true);
+    updateHospitalSituation ({ state, commit, dispatch }, payload = {}) {
+      commit('SET_IS_CREATING', true)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
 
@@ -84,25 +85,6 @@ export default {
             payload
           )
           .then(({ data }) => {
-            commit("SET_IS_LOADING", false);
-            resolve(true);
-          })
-          .catch(response => {
-            reject(response)
-          })
-          .finally(() => {
-            commit('SET_IS_CREATING', false)
-          })
-      })
-    },
-    getHospitalSituations ({ state, commit }, { payload }) {
-      commit('SET_IS_CREATING', true)
-      return new Promise((resolve, reject) => {
-        // eslint-disable-next-line no-undef
-        axios
-          .get('api/dashboard/hospital-situations-new')
-          .then(({ data }) => {
-            commit('SET_HOSPITAL_SITUATION', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })
@@ -114,6 +96,25 @@ export default {
           })
       })
     },
+    // getHospitalSituations ({ state, commit }, { payload }) {
+    //   commit('SET_IS_CREATING', true)
+    //   return new Promise((resolve, reject) => {
+    //     // eslint-disable-next-line no-undef
+    //     axios
+    //       .get('api/dashboard/hospital-situations-new')
+    //       .then(({ data }) => {
+    //         commit('SET_HOSPITAL_SITUATION', data)
+    //         commit('SET_IS_LOADING', false)
+    //         resolve(true)
+    //       })
+    //       .catch(response => {
+    //         reject(response)
+    //       })
+    //       .finally(() => {
+    //         commit('SET_IS_CREATING', false)
+    //       })
+    //   })
+    // },
     getHospitalSituationsAll ({ state, commit }) {
       commit('SET_IS_CREATING', true)
       return new Promise((resolve, reject) => {
@@ -130,30 +131,32 @@ export default {
           })
           .finally(() => {
             commit('SET_IS_LOADING', false)
+            commit('SET_IS_CREATING', false)
           })
       })
     },
-    getAllHospitalSituationsByLastUpdate({ state, commit }) {
-      commit("SET_IS_CREATING", true);
+    getAllHospitalSituationsByLastUpdate ({ state, commit }) {
+      commit('SET_IS_CREATING', true)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get("/api/dashboard/hospital-situations/agent-last-update")
+          .get('/api/dashboard/hospital-situations/agent-last-update')
           .then(({ data }) => {
-            commit("SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE", data);
-            commit("SET_IS_LOADING", false);
-            resolve(true);
+            commit('SET_ALL_HOSPITAL_SITUATION_BY_LAST_UPDATE', data)
+            commit('SET_IS_LOADING', false)
+            resolve(true)
           })
-          .catch((response) => {
-            reject(response);
+          .catch(response => {
+            reject(response)
           })
           .finally(() => {
-            commit("SET_IS_LOADING", false);
-          });
-      });
+            commit('SET_IS_LOADING', false)
+            commit('SET_IS_CREATING', false)
+          })
+      })
     },
-    getHospitals({ state, commit }) {
-      commit("SET_IS_LOADING", true);
+    getHospitals ({ state, commit }) {
+      commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
           .get('api/dashboard/hospitals-data')
@@ -170,36 +173,28 @@ export default {
           })
       })
     },
-    getHospitalSituationsDetail({ state, commit }, payload) {
-      console.log("mon payload de bon:", payload);
-      commit("SET_IS_LOADING", payload.isLoading);
+    getHospitalSituationsDetail ({ state, commit }, payload) {
+      console.log('mon payload de bon:', payload)
+      commit('SET_IS_LOADING', payload.isLoading)
       return new Promise((resolve, reject) => {
         axios
           .get(
             `/api/dashboard/hospital-situations/${payload.update_id}/hospital_id/${payload.hospital_id}`
           )
           .then(({ data }) => {
-            commit("HOSPITAL_SITUATION_DETAIL", data);
-            commit("SET_IS_LOADING", false);
-            resolve(true);
-          })
-          .catch((response) => {
-            reject(response);
-          })
-          .finally(() => {
-            commit("SET_IS_LOADING", false);
-          });
-      });
-    },
-    gethospitalsFiltered({ state, commit }, payload) {
-      commit("SET_IS_LOADING", payload.isLoading);
-
-      return new Promise((resolve, reject) => {
-        axios
-          .post('api/dashboard/get-situations', payload)
-          .then(({ data }) => {
-            commit('SET_FILTERED_HOSPITAL_SITUATION', data)
-            commit('SET_SITUATION', data)
+            const hospitalSituations = data.map(item => ({
+              name: item.name,
+              order_field: item.order_field,
+              default_value: item.default_value,
+              last_update: item.last_update,
+              created_manager_name: item.created_manager_name,
+              updated_manager_name: item.updated_manager_name,
+              form_step_id: item.form_step_id,
+              form_step_title: item.form_step_title,
+              id: item.id,
+              form_field_type: { name: item.form_field_type }
+            }))
+            commit('HOSPITAL_SITUATION_DETAIL', hospitalSituations)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })
@@ -211,13 +206,15 @@ export default {
           })
       })
     },
-    getObservationSituationHospital ({ state, commit }, payload) {
+    gethospitalsFiltered ({ state, commit }, payload) {
       commit('SET_IS_LOADING', payload.isLoading)
+
       return new Promise((resolve, reject) => {
         axios
-          .post('api/dashboard/get-observation-situation-hospital', payload)
+          .post('api/dashboard/get-situations', payload)
           .then(({ data }) => {
-            commit('SET_OBSERVATION_SITUATION_HOSPITALS', data)
+            commit('SET_FILTERED_HOSPITAL_SITUATION', data)
+            commit('SET_SITUATION', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })

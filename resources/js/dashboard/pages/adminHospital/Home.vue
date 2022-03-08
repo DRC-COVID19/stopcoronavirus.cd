@@ -1,13 +1,12 @@
 <template>
   <div>
-    <Header />
     <b-container>
       <b-row class="mt-4">
         <b-col cols="12" md="10">
           <h3>Résumé mise à jour CTCOS</h3>
         </b-col>
         <b-col cols="12" md="2">
-          <b-button class="btn-dash-blue" @click="getData()">
+          <b-button class="btn-dash-blue" @click.prevent="refreshData()">
             <i class="fa fa-sync"></i>
           </b-button>
         </b-col>
@@ -19,7 +18,7 @@
             :fields="fields"
             responsive
             hover
-            :items="hospitalSituationsSorted"
+            :items="completedFormsSorted"
             show-empty
           >
             <template v-slot:empty="scope">
@@ -28,7 +27,7 @@
             <template v-slot:table-busy>
               <div class="text-center text-danger my-2">
                 <b-spinner class="align-middle" />
-                <strong>Loading...</strong>
+                <strong>Chargement des données...</strong>
               </div>
             </template>
 
@@ -38,7 +37,7 @@
                 :style="'background-color : ' + '#8BC34A'">
 
                 </span>
-                <span class="ml-4">À jours</span>
+                <span class="ml-4">À jour</span>
              </div>
              <div v-else-if="data.item.diff_date >=2 && data.item.diff_date <= 3" class="d-flex justify-content-start align-item-center">
                 <span class="badge badge-pill badge-statut"
@@ -87,12 +86,9 @@
 </template>
 <script>
 import { mapActions, mapState } from 'vuex'
-import Header from '../../components/hospital/Header'
 
 export default {
-  components: {
-    Header
-  },
+  components: {},
   data () {
     return {
       fields: [
@@ -102,13 +98,13 @@ export default {
         { key: 'created_manager_name', label: 'Soumis par' },
         { key: 'actions', label: 'Actions' }
       ],
+      completedForms: [],
       isLoading: false
     }
   },
   computed: {
-    ...mapState({ updateData: (state) => state.hospitalSituation.AllhospitalSituationByLastUpdate }),
-    hospitalSituationsSorted () {
-      return this.updateData.slice().sort((a, b) => {
+    completedFormsSorted () {
+      return this.completedForms.slice().sort((a, b) => {
         const hospitalNameA = a.name.toLowerCase()
         const hospitalNameB = b.name.toLowerCase()
         if (hospitalNameA < hospitalNameB) return -1
@@ -118,10 +114,18 @@ export default {
     }
   },
   mounted () {
-    this.getAllHospitalSituationsByLastUpdate()
+    this.refreshData()
   },
   methods: {
-    ...mapActions(['getAllHospitalSituationsByLastUpdate'])
+    ...mapActions(['completedForm__getAllByLastUpdate']),
+    async refreshData () {
+      this.isLoading = true
+      this.completedForms = await this.completedForm__getAllByLastUpdate()
+      if (this.completedForms.length > 0) {
+        this.isLoading = false
+      }
+    }
+
   }
 }
 </script>

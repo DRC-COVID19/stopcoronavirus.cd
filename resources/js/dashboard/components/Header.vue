@@ -5,7 +5,7 @@
         <b-navbar-brand class="mr-5">
           <h1
             class="title m-0"
-            @click="selectMenu(1)"
+            @click="changeActiveMenuTo('home', 1)"
           >
             Dashboard Covid-19
           </h1>
@@ -33,14 +33,17 @@
             <!-- <b-nav-item :class="{'active':activeMenu==4}" @click="selectMenu(4)">Sondages</b-nav-item> -->
             <b-nav-item
               :class="{ active: activeMenu == 5 }"
-              @click="selectMenu(5)"
-              >Infrastructures</b-nav-item
+              @click="changeActiveMenuTo('dashboard.infrastructure', 5)"
             >
+              Infrastructures
+            </b-nav-item>
             <!-- <b-nav-item :class="{'active':activeMenu==6}" @click="selectMenu(6)">Orientation</b-nav-item> -->
             <b-nav-item
               :class="{ active: activeMenu == 7 }"
-              @click="selectMenu(7)"
-              >A propos</b-nav-item
+              @click="changeActiveMenuTo('dashboard.aPropos', 7)"
+            >
+              A propos
+            </b-nav-item
             >
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
@@ -128,7 +131,7 @@
                         user.email
                       }}</span>
 
-                      <router-link class="small" :to="{ name: 'landing' }"
+                      <router-link class="small" :to="{ name: 'main' }"
                         >Revenir à l'accueil</router-link
                       >
                     </p>
@@ -196,7 +199,7 @@ export default {
       if (this.activeMenu !== null) {
         this.removeAllParamsFromUrl();
       }
-      this.addParamToUrl('menu', value);
+      // this.addParamToUrl('menu', value);
       this.setActiveMenu(value);
     },
     toggleHeaderNotification () {
@@ -209,13 +212,17 @@ export default {
       }
     },
     fillParametersFromUrlParams () {
-      const url = new URL(window.location.href);
-      const menu = url.searchParams.get('menu');
-      if (menu) {
-        this.selectMenu(+menu)
+      if (this.$route.path === '/dashboard/infrastructure') {
+        this.selectMenu(5)
+      } else if (this.$route.path === '/dashboard/a-propos') {
+        this.selectMenu(7)
       } else {
         this.selectMenu(1)
       }
+    },
+    changeActiveMenuTo (pathname, menu) {
+      this.selectMenu(menu)
+      this.$router.push({name: pathname})
     }
   },
 };

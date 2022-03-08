@@ -282,54 +282,6 @@ class HospitalSituationNewController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function getObservationSituationHospital(Request $request)
-    {
-        $observation_end = $request->input('observation_end');
-        $observation_start = $request->input('observation_start');
-        $township = $request->input('township');
-        $hospital = $request->input('hospital');
-
-        if ($observation_start == null) {
-            $observation_start = $this->maxDate($observation_end, $township, $hospital);
-        }
-
-        try {
-            $observation = DB::table('hospital_situations_new')
-                ->join('form_fields', 'hospital_situations_new.form_field_id', '=', 'form_fields.id')
-                ->join('hospitals', 'hospital_situations_new.hospital_id', '=', 'hospitals.id')
-                ->join('admin_user_hospital', 'admin_user_hospital.hospital_id', '=', 'hospitals.id')
-                ->join('admin_users', 'admin_user_hospital.admin_user_id', '=', 'admin_users.id')
-                ->join('townships', 'townships.id', '=', 'hospitals.township_id')
-                ->select(
-                    'form_fields.name as form_field_name',
-                    'hospital_situations_new.value as form_field_value',
-                    'hospitals.id as hospital_id',
-                    'hospitals.name as hospital_name',
-                    'hospital_situations_new.last_update as date',
-                    'admin_users.username as phone_number'
-                )
-                ->whereBetween('hospital_situations_new.last_update', [$observation_start, $observation_end])
-                ->where(function ($query) use ($township) {
-                    if ($township) $query->where('hospitals.township_id', '=', $township);
-                })
-                ->orderBy('date', 'desc')
-                ->get();
-
-            return response()->json($observation, 200, [], JSON_NUMERIC_CHECK);
-        } catch (\Throwable $th) {
-            if (env('APP_DEBUG') == true) {
-                return response($th)->setStatusCode(500);
-            }
-            return response($th->getMessage())->setStatusCode(500);
-        }
-    }
-
 
     /**
      * Get the guard to be used during authentication.

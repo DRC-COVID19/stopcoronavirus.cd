@@ -33,7 +33,8 @@
   &:focus,
   &:active,
   &:disabled {
-    background: $dash-blue !important;
+    background: rgb(97, 94, 247) !important;
+    border: 3px solid rgb(97, 94, 247) !important;
   }
   &:focus {
     box-shadow: none;

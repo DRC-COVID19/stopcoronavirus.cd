@@ -20,6 +20,7 @@ import VueGtag from "vue-gtag";
 import VueMq from "vue-mq";
 import VueTimeline from "@growthbunker/vuetimeline";
 import Notifications from "vue-notification";
+import VCalendar from "v-calendar";
 
 import "./directive";
 require("./helper");
@@ -36,6 +37,7 @@ Vue.use(VueEllipseProgress);
 // Vue.use(VueSkeletonLoading);
 Vue.use(Notifications);
 Vue.use(excel);
+Vue.use(VCalendar);
 
 Vue.use(VueTimeline, {
   theme: "light",
