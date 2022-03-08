@@ -51,7 +51,7 @@ export default {
       })
     },
     completedForm__getByHospital ({ state, commit }, payload = {}) {
-      commit('SET_IS_LOADING', payload.isLoading)
+      commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
           .get(
@@ -62,7 +62,7 @@ export default {
           )
           .then(({ data }) => {
             commit('SET_COMPLETED_FORMS', data)
-            resolve(true)
+            resolve(data)
             commit('SET_IS_LOADING', false)
           })
           .catch(response => {
