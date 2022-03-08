@@ -12,13 +12,13 @@
         id="input-group-1"
         label="Nom de l'hopital *"
         label-for="input-1"
-        :invalid-feedback="errors.username ? errors.username[0] : null"
-        :state="!errors.username"
+        :invalid-feedback="errors.name ? errors.name[0] : null"
+        :state="!errors.name"
       >
         <b-form-input
           class="input-dash"
           id="input-1"
-          v-model="form.username"
+          v-model="form.name"
           type="text"
           placeholder="Entrer le Nom de l'hopital"
           required
@@ -34,7 +34,7 @@
         <b-form-input
           id="input-3"
           class="input-dash"
-          v-model="form.name"
+          v-model="form.latitude"
           placeholder="Entrer la Latitude"
           type="number"
           required
@@ -49,7 +49,7 @@
         <b-form-input
           id="input-3"
           class="input-dash"
-          v-model="form.name"
+          v-model="form.longitude"
           placeholder="Entrer la Longitude"
           type="number"
           required
@@ -57,9 +57,8 @@
       </b-form-group>
       <label class="text-dash-color" for="check-group-1">Communes *</label>
       <v-select
-        v-model="form.roles"
-        multiple
-        :options="roles"
+        v-model="form.township"
+        :options="townships"
         label="name"
         :reduce="(item) => item.id"
         :searchable ="false"
@@ -67,9 +66,8 @@
       <b-form-group class="mt-3">
         <label class="text-dash-color" for="check-group-1">Selectioner un Agent *</label>
       <v-select
-        v-model="form.roles"
-        multiple
-        :options="roles"
+        v-model="form.agent"
+        :options="users.data"
         label="name"
         :reduce="(item) => item.id"
         :searchable ="false"
@@ -117,13 +115,13 @@ export default {
         return {}
       }
     },
-    roles: {
+    townships: {
       type: Array,
       default: () => {
         return []
       }
     },
-    hospitals: {
+    users: {
       type: Array,
       default: () => {
         return []
@@ -141,16 +139,13 @@ export default {
       iconClass: 'fas fa-hospital-alt',
       updating: false,
       isLoading: false,
-      validateMailMessage: '',
       disablePassword: false,
       form: {
-        username: '',
         name: '',
-        roles: [],
-        hospitals: [],
-        email: '',
-        password: '',
-        confirmPassword: ''
+        agent: {},
+        township: {},
+        longitude: 0.0,
+        latitude: 0.0
       },
       show: true,
       showWarning: false,
@@ -175,13 +170,7 @@ export default {
     onSubmit () {
       this.isLoading = true
       if (this.btnTitle === 'Enreigistrer') {
-        if (
-          this.form.password === this.form.confirmPassword
-        ) {
-          this.$emit('onCreate', this.form)
-        } else {
-          this.showWarning = true
-        }
+        this.$emit('onCreate', this.form)
       } else {
         this.$emit('onUpdate', this.form)
       }
@@ -195,33 +184,24 @@ export default {
       this.$emit('onCancelUpdate', {})
     },
 
-    validateMail () {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      if (!re.test(String(this.form.email).toLowerCase())) {
-        this.validateMailMessage = 'Adresse email incorrecte'
-      }
-    },
-
     resetForm () {
       this.updating = false
       this.isLoading = false
-      this.disablePassword = false
-      if (this.userAdded | this.userUpdated) {
+      if (this.hospitalAdded | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enreigistrer'
-        this.title = "Creation d'un utilisateur"
+        this.title = "Creation d'un hopital"
       }
     },
 
     populateForm () {
       this.updating = true
-      this.disablePassword = true
       this.form.id = this.formToPopulate.id
-      this.form.username = this.formToPopulate.usernmae
-      this.form.email = this.formToPopulate.email
-      this.form.roles = this.formToPopulate.roles.map(role => role.id)
-      this.form.hospitals = this.formToPopulate.hospitals.map(hospital => hospital.id)
       this.form.name = this.formToPopulate.name
+      this.form.longitude = this.formToPopulate.longitude
+      this.form.longitude = this.formToPopulate.latitude
+      this.form.agent = this.formToPopulate.agent.d
+      this.form.township = this.formToPopulate.township.id
       this.title = "Modification de l'hopital"
       this.btnTitle = 'Modifier'
     }
@@ -229,11 +209,6 @@ export default {
   },
 
   computed: {
-    warningMissMatch () {
-      return this.form.password === this.form.confirmPassword
-        ? ''
-        : 'Les mot de passes ne correspondent pas'
-    }
   }
 
 }

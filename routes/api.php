@@ -203,7 +203,7 @@ Route::group([
   });
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
-
+  // Route::apiResource('townships','TownshipController');
   Route::apiResource('hospital-situations', "HospitalSituationController");
   Route::resource('hospital-situations-new', "HospitalSituationNewController");
   Route::post('get-by-hospital-situations', "HospitalSituationController@getSituationByHospitals");

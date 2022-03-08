@@ -48,16 +48,17 @@
                 updateHospital(
                   data.item.name,
                   data.item.id,
-                  data.item.townships,
-                  data.item.agens,
-                  data.item.hospitals,
+                  data.item.longitude,
+                  data.item.latitude,
+                  data.item.township,
+                  data.item.agent,
                 )
               "
               class="mx-2 my-1 fas fa-user-edit"
             ></i>
           </template>
           <template #cell(name)="data">
-          <b>{{ data.value.toUpperCase() }}</b>
+          <span>{{ data.value.toUpperCase() }}</span>
           </template>
           <template #cell(township)="data">
             <span
@@ -146,14 +147,14 @@ export default {
     onCancelDelection () {
       this.isDeleteModalShown = false
     },
-    updateHospital (name, id, usernmae, roles, hospitals, email) {
+    updateHospital (name, id, longitude, latitude, township, agent) {
       this.currentHospital = {
         id,
         name,
-        usernmae,
-        roles,
-        hospitals,
-        email
+        longitude,
+        latitude,
+        township,
+        agent
       }
       this.$emit('onUpdateHospital', this.currentHospital)
     }

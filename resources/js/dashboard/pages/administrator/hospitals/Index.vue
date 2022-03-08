@@ -9,8 +9,9 @@
           :hospitalAdded="hospitalAdded"
           :hospitalUpdated="hospitalUpdated"
           :formToPopulate="formToPopulate"
-          :roles="roles"
+          :townships="townships"
           :hospitals="hospitals"
+          :users ="users"
           :errors="errors"
         />
       </b-col>
@@ -67,16 +68,17 @@ export default {
       updating: false,
       errors: {},
       currentPage: 1,
-      roles: []
+      users: []
     }
   },
   async mounted () {
-    // this.getHospitalList()
-    // this.getHospitalRoles()
-    this.findHospitals()
+    this.getUsers()
+    this.getHospitalList()
+    this.getTownShips()
   },
   computed: {
     ...mapState({
+      townships: (state) => state.township.townships
     }),
     hospitalMeta () {
       if (!this.hospitals) {
@@ -94,7 +96,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getHospitals', 'removeHospital']),
+    ...mapActions(['getHospitals', 'removeHospital', 'townships__getAll']),
 
     search (filter) {
       this.isLoading = true
@@ -209,37 +211,25 @@ export default {
           })
         })
     },
-
-    getHospitalList (page = 1) {
+    getUsers () {
       this.isLoading = true
       // eslint-disable-next-line no-undef
       axios
-        .get('/api/admin_hospitals', {
-          params: { page }
-        })
+        .get('/api/admin_users')
         .then(({ data }) => {
-          this.hospitals = data
+          this.users = data
           this.isLoading = false
         })
         .catch(({ response }) => {
           this.$gtag.exception(response)
         })
     },
-
-    getHospitalRoles () {
-      // eslint-disable-next-line no-undef
-      axios
-        .get('/api/admin_roles')
-        .then(({ data }) => {
-          this.roles = data
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
+    async getTownShips () {
+      await this.townships__getAll()
     },
-    async findHospitals () {
+    async getHospitalList (page = 1) {
       this.isLoading = true
-      this.hospitals = Object.assign({}, await this.getHospitals())['0']
+      this.hospitals = Object.assign({}, await this.getHospitals({ page }))['0']
       if (this.hospitals.length !== 0) {
         this.isLoading = false
       }
@@ -250,14 +240,12 @@ export default {
     },
     renderErrorsMessages (errors) {
       const errorsMessage = []
-      if (errors.roles_id) {
-        errorsMessage.push("Le Role d'un utilisateur est obligatoire.")
-      } else if (errors.username) {
-        errorsMessage.push("Ce nom d'utilisateur est déjà utilisé.")
-      } else if (errors.email) {
-        errorsMessage.push("L'adresse email doit être unique et obligatoire ")
-      } else if (errors.password) {
-        errorsMessage.push('Le Mot de passe de passe est obligatoire ')
+      if (errors.name) {
+        errorsMessage.push('Cette hopital existe déjà.')
+      } else if (errors.township_id) {
+        errorsMessage.push('La commune doit être unique et obligatoire ')
+      } else if (errors.agent_id) {
+        errorsMessage.push('Vous devez selectionner au plus un agent ')
       }
 
       return errorsMessage
