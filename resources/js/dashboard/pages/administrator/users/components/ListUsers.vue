@@ -52,7 +52,9 @@
                   data.item.usernmae,
                   data.item.roles,
                   data.item.hospitals,
-                  data.item.email
+                  data.item.email,
+                  data.item.phone_number
+
                 )
               "
               class="mx-2 my-1 fas fa-user-edit"
@@ -107,7 +109,7 @@ export default {
   },
   data() {
     return {
-      fields: ["id", "username", "name", "role","hopital", "actions"], // usernmae instead of username (see backend response)
+      fields: [{ key: "id", sortable: true }, "username", "name","phone_number", "role","hopital", "actions"], // usernmae instead of username (see backend response)
       filter: "",
       perPage: 15,
       currentPage: 1,
@@ -145,7 +147,7 @@ export default {
     onCancelDelection() {
       this.isDeleteModalShown = false;
     },
-    updateUser(name, id, usernmae, roles,hospitals, email) {
+    updateUser(name, id, usernmae, roles,hospitals, email, phone_number) {
       this.currentUser = {
         id,
         name,
@@ -153,6 +155,7 @@ export default {
         roles,
         hospitals,
         email,
+        phone_number,
       };
       this.$emit("onUpdateUser", this.currentUser);
     },

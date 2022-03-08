@@ -221,6 +221,7 @@ class AdministratorController extends Controller
       'roles_id' => 'required|array',
       'hospitals_id' => 'nullable|array',
       'password' => 'sometimes|confirmed',
+      'phone_number' => 'required|string|unique:admin_users,phone_number' . ($admin_user_id ? ",$admin_user_id" : "")
 
     ])->validate();
     try {
@@ -284,6 +285,7 @@ class AdministratorController extends Controller
       'email' => 'required|email',
       'roles_id' => 'required|array',
       'hospitals_id' => 'nullable|array',
+      'phone_number' => 'required|string|unique:admin_users,phone_number'
     ])->validate();
   }
 
@@ -295,11 +297,12 @@ class AdministratorController extends Controller
     return null;
   }
 
-  public function filter (Request $request) {
+  public function filter(Request $request)
+  {
     try {
-      $key_words=$request->get('key_words');
-      $admins = Administrator::where('username', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE' , "%{$key_words}%")->paginate(15);
-      if (! $admins ) {
+      $key_words = $request->get('key_words');
+      $admins = Administrator::where('username', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE', "%{$key_words}%")->paginate(15);
+      if (!$admins) {
         return response()->json(['message' => "No admin found"], 404);
       }
       return AdministratorResource::collection($admins);
@@ -310,5 +313,4 @@ class AdministratorController extends Controller
       return response($th->getMessage())->setStatusCode(500);
     }
   }
-
 }

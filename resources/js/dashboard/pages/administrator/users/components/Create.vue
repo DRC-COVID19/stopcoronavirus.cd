@@ -57,6 +57,24 @@
           required
         ></b-form-input>
       </b-form-group>
+         <b-form-group
+        label-class="text-dash-color"
+        id="input-group-4"
+        label="Numéro Téléphone*"
+        label-for="input-4"
+      >
+        <b-form-input
+          id="input-4"
+          class="input-dash"
+          v-model="form.phoneNumber"
+          placeholder="Ex: 0823493378"
+          @blur="validatePhoneNumber()"
+          required
+        ></b-form-input>
+      </b-form-group>
+         <b-form-text id="password-help-block">{{
+        validatePhoneNumberMessage
+      }}</b-form-text>
       <label class="text-dash-color" for="check-group-1">Roles *</label>
       <v-select
         v-model="form.roles"
@@ -161,6 +179,7 @@ export default {
       updating: false,
       isLoading: false,
       validateMailMessage: '',
+      validatePhoneNumberMessage: '',
       disablePassword: false,
       form: {
         username: '',
@@ -169,7 +188,8 @@ export default {
         hospitals: [],
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        phoneNumber: '',
       },
       show: true,
       showWarning: false,
@@ -220,6 +240,15 @@ export default {
         this.validateMailMessage = 'Adresse email incorrecte'
       }
     },
+    validatePhoneNumber () {
+      const regexPhoneNumber = /^0+[8,9]+[0-9]{8}$/im
+
+      if (!regexPhoneNumber.test(this.form.phoneNumber)) {
+        this.validatePhoneNumberMessage = 'Numéro de téléphone incorrect'
+      } else {
+        this.validatePhoneNumberMessage = ''
+      }
+    },
 
     resetForm () {
       this.updating = false
@@ -238,6 +267,7 @@ export default {
       this.form.id = this.formToPopulate.id
       this.form.username = this.formToPopulate.usernmae
       this.form.email = this.formToPopulate.email
+      this.form.phoneNumber = this.formToPopulate.phone_number
       this.form.roles = this.formToPopulate.roles.map(role => role.id)
       this.form.hospitals = this.formToPopulate.hospitals.map(hospital => hospital.id)
       this.form.name = this.formToPopulate.name

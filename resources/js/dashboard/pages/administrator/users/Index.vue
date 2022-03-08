@@ -147,7 +147,8 @@ export default {
         name: currentUser.name,
         email: currentUser.email,
         roles_id: currentUser.roles,
-        hospitals_id: currentUser.hospitals
+        hospitals_id: currentUser.hospitals,
+        phone_number: currentUser.phoneNumber,
       }
 
       if (currentUser && currentUser.password) {
@@ -171,11 +172,12 @@ export default {
           })
         })
         .catch(({ response }) => {
+          console.log(response)
           this.$gtag.exception(response)
           this.$notify({
             group: 'alert',
             title: 'Modifer utilisateur',
-            text: 'Une erreur est surveni',
+            text: 'Une erreur est survenu',
             type: 'error'
           })
         })
@@ -193,7 +195,9 @@ export default {
           password_confirmation: form.confirmPassword,
           email: form.email,
           roles_id: form.roles,
-          hospitals_id: form.hospitals
+          hospitals_id: form.hospitals,
+          phone_number: form.phoneNumber,
+
         })
         .then(() => {
           this.userAdded = true
@@ -270,6 +274,8 @@ export default {
         errorsMessage.push("L'adresse email doit être unique et obligatoire ")
       } else if (errors.password) {
         errorsMessage.push('Le Mot de passe de passe est obligatoire ')
+      } else if (errors.phone_number) {
+        errorsMessage.push('Ce numéro de téléphone est déjà utilisé ')
       }
 
       return errorsMessage
