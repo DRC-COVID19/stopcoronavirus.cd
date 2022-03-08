@@ -108,14 +108,14 @@ export default {
       isLoading: (state) => state.completedForm.isLoading
     }),
     totalRows () {
-      if (this.completedForms.meta) {
-        return this.completedForms.meta.total
+      if (this.completedForms) {
+        return this.completedForms.total
       }
       return null
     },
     perPage () {
-      if (this.completedForms.meta) {
-        return this.completedForms.meta.per_page
+      if (this.completedForms) {
+        return this.completedForms.per_page
       }
       return 15
     },
