@@ -23,6 +23,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
 
+
+// Route::post('/migrate-hospital-situation-controller', 'MigrateHospitalSituationController@migrateToCompletedForm');
+
+
 Route::get('/lastpandemicstat', function () {
   return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->first());
 });

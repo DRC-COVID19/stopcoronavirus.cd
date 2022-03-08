@@ -108,14 +108,14 @@ export default {
       isLoading: (state) => state.completedForm.isLoading
     }),
     totalRows () {
-      if (this.completedForms.meta) {
-        return this.completedForms.meta.total
+      if (this.completedForms) {
+        return this.completedForms.total
       }
       return null
     },
     perPage () {
-      if (this.completedForms.meta) {
-        return this.completedForms.meta.per_page
+      if (this.completedForms) {
+        return this.completedForms.per_page
       }
       return 15
     },
@@ -132,7 +132,7 @@ export default {
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     async getCompletedForms (page) {
       if (typeof page === 'undefined') page = 1
-      await this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id, isLoading: this.isLoading })
+      await this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id })
     },
     onPageChange (page) {
       this.getCompletedForms(page)

@@ -27,7 +27,7 @@
       <b-row>
         <b-col>
           <b-table
-            :busy="isLoading"
+            :busy="iscompletedFormsLoading"
             :fields="fields"
             :items="completedForms.data"
             responsive
@@ -107,25 +107,26 @@ export default {
       ],
       currentPage: 1,
       hospitalId: null,
-      alertVariant: 'secondary'
+      alertVariant: 'secondary',
+      iscompletedFormsLoading: false,
+      completedForms: {}
     }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
-      completedForms: (state) => state.completedForm.completedForms,
       isLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
-      if (this.completedForms.meta) {
-        return this.completedForms.meta.total
+      if (this.completedForms) {
+        return this.completedForms.total
       }
       return null
     },
     perPage () {
-      if (this.completedForms.meta) {
-        return this.completedForms.meta.per_page
+      if (this.completedForms) {
+        return this.completedForms.per_page
       }
       return 15
     },
@@ -137,6 +138,7 @@ export default {
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
     }
+    this.$store.commit('SET_COMPLETED_FORMS', { isLoading: true })
     this.getCompletedForms()
   },
   watch: {
@@ -148,13 +150,16 @@ export default {
     ...mapActions(['completedForm__getByHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     async getCompletedForms (page) {
+      this.iscompletedFormsLoading = true
       if (typeof page === 'undefined') page = 1
       if (this.user && this.user.hospital) {
-        await this.completedForm__getByHospital({
+        this.completedForms = await this.completedForm__getByHospital({
           page,
-          hospital_id: this.user.hospital.id,
-          isLoading: this.isLoading
+          hospital_id: this.user.hospital.id
         })
+        if (this.completedForms.length !== 0) {
+          this.iscompletedFormsLoading = false
+        }
       }
     },
 
