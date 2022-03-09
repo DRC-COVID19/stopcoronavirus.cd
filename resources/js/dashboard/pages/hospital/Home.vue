@@ -103,7 +103,7 @@ export default {
       fields: [
         { key: 'last_update', label: 'Date' },
         { key: 'name_manager', label: 'Nom' },
-        { key: 'last_name_manager', label: 'Prénom' },
+        { key: 'first_name_manager', label: 'Prénom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
@@ -135,13 +135,13 @@ export default {
     },
     completedFormsData () {
       return this.completedForms.data.slice().map((completedForm) => {
-        completedForm.name_manager = completedForm.created_manager_name.split(' ')[0]
-        completedForm.last_name_manager = completedForm.created_manager_name.split(' ')[1]
+        completedForm.name_manager = completedForm.created_manager_name.split('-')[0]
+        completedForm.first_name_manager = completedForm.created_manager_name.split('-')[1]
         return completedForm
       })
     }
   },
-  async mounted () {
+   mounted () {
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
     }

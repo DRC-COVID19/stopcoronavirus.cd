@@ -40,9 +40,11 @@
           @blur="validateMail()"
         ></b-form-input>
       </b-form-group>
-      <b-form-text id="password-help-block">{{
+      <b-form-text id="password-help-block">
+        <span class="text-danger"> {{
         validateMailMessage
-      }}</b-form-text>
+      }}</span>
+      </b-form-text>
       <b-form-group
         label-class="text-dash-color"
         id="input-group-3"
@@ -72,9 +74,10 @@
           required
         ></b-form-input>
       </b-form-group>
-         <b-form-text id="password-help-block">{{
+         <b-form-text id="password-help-block"><span class="text-danger">
+           {{
         validatePhoneNumberMessage
-      }}</b-form-text>
+      }}</span></b-form-text>
       <label class="text-dash-color" for="check-group-1">Roles *</label>
       <v-select
         v-model="form.roles"
@@ -178,8 +181,8 @@ export default {
       iconClass: 'fas fa-plus-square',
       updating: false,
       isLoading: false,
-      validateMailMessage: '',
-      validatePhoneNumberMessage: '',
+      validateMailMessage: null,
+      validatePhoneNumberMessage: null,
       disablePassword: false,
       form: {
         username: '',
@@ -189,7 +192,7 @@ export default {
         email: '',
         password: '',
         confirmPassword: '',
-        phoneNumber: '',
+        phoneNumber: ''
       },
       show: true,
       showWarning: false,
@@ -212,17 +215,19 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.isLoading = true
-      if (this.btnTitle === 'Enreigistrer') {
-        if (
-          this.form.password === this.form.confirmPassword
-        ) {
-          this.$emit('onCreate', this.form)
+      if (this.validatePhoneNumberMessage && this.validateEmailMessage) {
+        this.isLoading = true
+        if (this.btnTitle === 'Enreigistrer') {
+          if (
+            this.form.password === this.form.confirmPassword
+          ) {
+            this.$emit('onCreate', this.form)
+          } else {
+            this.showWarning = true
+          }
         } else {
-          this.showWarning = true
+          this.$emit('onUpdate', this.form)
         }
-      } else {
-        this.$emit('onUpdate', this.form)
       }
     },
 

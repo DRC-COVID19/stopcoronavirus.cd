@@ -6,12 +6,22 @@
           <b-form @submit.prevent="hospitalManagerNameSubmit">
             <b-form-group>
               <label class="text-dash-color">Veuillez entrer votre nom pour continuer</label>
-              <b-form-input v-model="identity.name" required class="input-dash" />
+              <b-form-input v-model="identity.name"  @blur="validateName()" required class="input-dash" />
             </b-form-group>
+                <b-form-text id="name-help-block">
+                  <span class="text-danger mb-3"> {{
+                  validateNameMessage
+                }}</span>
+                  </b-form-text>
             <b-form-group>
               <label class="text-dash-color">Veuillez entrer votre prénom complet pour continuer</label>
-              <b-form-input  v-model="identity.lastName" required class="input-dash" />
+              <b-form-input  v-model="identity.firstName" @blur="validateFirstName()" required class="input-dash" />
             </b-form-group>
+            <b-form-text id="first-name-help-block">
+                  <span class="text-danger"> {{
+                  validateFirstNameMessage
+                }}</span>
+                  </b-form-text>
             <b-button type="submit" class="btn-dash-blue">Continuer</b-button>
           </b-form>
         </b-col>
@@ -33,14 +43,17 @@ export default {
     return {
       identity: {
         name: null,
-        lastName: null
-      }
+        firstName: null
+      },
+      validateNameMessage: '',
+      validateFirstNameMessage: ''
+
     }
   },
   computed: {
     localhospitalManagerName () {
-      if (this.identity.name && this.identity.lastName) {
-        return this.identity.name + ' ' + this.identity.lastName
+      if (this.validateNameMessage.length === 0 && this.validateNameMessage.length === 0) {
+        return this.identity.name.trim().toUpperCase() + '-' + this.identity.firstName.trim().toUpperCase()
       } else {
         return null
       }
@@ -52,6 +65,24 @@ export default {
       if (this.localhospitalManagerName) {
         this.setHospitalManagerName(this.localhospitalManagerName)
         this.$bvModal.hide(this.id)
+      }
+    },
+    validateFirstName () {
+      const regex = / +/gi
+      console.log(regex.test(this.identity.firstName))
+      if (regex.test(this.identity.firstName)) {
+        this.validateFirstNameMessage = 'Votre prénom ne doit pas contenir des espaces vides'
+      } else {
+        this.validateFirstNameMessage = ''
+      }
+    },
+    validateName () {
+      const regex = / +/gi
+
+      if (regex.test(this.identity.name)) {
+        this.validateNameMessage = 'Votre nom ne doit pas contenir des espaces vides'
+      } else {
+        this.validateNameMessage = ''
       }
     }
   }

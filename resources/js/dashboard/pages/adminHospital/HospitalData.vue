@@ -23,7 +23,7 @@
           <b-table
             :busy="isLoading"
             :fields="fields"
-            :items="completedForms.data"
+            :items="completedFormsData"
             hover
             show-empty
           >
@@ -94,7 +94,8 @@ export default {
     return {
       fields: [
         { key: 'last_update', label: 'Date' },
-        { key: 'created_manager_name', label: 'Nom' },
+        { key: 'name_manager', label: 'Nom' },
+        { key: 'first_name_manager', label: 'Prénom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1
@@ -121,6 +122,13 @@ export default {
     },
     defaultFormId () {
       return DEFAULT_FORM_ID
+    },
+    completedFormsData () {
+      return this.completedForms.data.slice().map((completedForm) => {
+        completedForm.name_manager = completedForm.created_manager_name.split('-')[0]
+        completedForm.first_name_manager = completedForm.created_manager_name.split('-')[1]
+        return completedForm
+      })
     }
   },
   async mounted () {

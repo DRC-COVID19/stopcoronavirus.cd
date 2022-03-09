@@ -100,57 +100,63 @@ export default {
   props: {
     users: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     isLoading: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
-      fields: [{ key: "id", sortable: true }, "username", "name","phone_number", "role","hopital", "actions"], // usernmae instead of username (see backend response)
-      filter: "",
+      fields: [{ key: 'id', sortable: false, label: 'Id' },
+        { key: 'username', sortable: false, label: 'Nom utilisateur' },
+        { key: 'name', sortable: false, label: 'Nom' },
+        { key: 'phone_number', sortable: false, label: 'N°Téléphone' },
+        { key: 'role', sortable: false, label: 'Rôle' },
+        { key: 'hopital', sortable: false, label: 'Hôpital' },
+        { key: 'actions', sortable: false, label: 'Actions' }], // usernmae instead of username (see backend response)
+      filter: '',
       perPage: 15,
       currentPage: 1,
       isDeleteModalShown: false,
       currentUser: {
         id: -1,
-        name: "",
+        name: ''
       },
-      editModalShow: false,
-    };
+      editModalShow: false
+    }
   },
   computed: {
-    rows() {
-      return this.users.length;
+    rows () {
+      return this.users.length
     },
-    userFilter() {
-      return this.users.data.slice().sort((a,b) => a.id.toString().localeCompare(b.id.toString()))
+    userFilter () {
+      return this.users.data.slice().sort((a, b) => a.id.toString().localeCompare(b.id.toString()))
     }
   },
   watch: {
     filter () {
-      this.search();
+      this.search()
     }
   },
   methods: {
     search () {
-      this.$emit('onSearch', this.filter.trim());
+      this.$emit('onSearch', this.filter.trim())
     },
-    deleteUser(name, userId) {
-      this.isDeleteModalShown = true;
-      this.currentUser.id = userId;
-      this.currentUser.name = name;
+    deleteUser (name, userId) {
+      this.isDeleteModalShown = true
+      this.currentUser.id = userId
+      this.currentUser.name = name
     },
-    onValidateDelection() {
-      this.$emit("onDeleteUser", this.currentUser.id);
-      this.isDeleteModalShown = false;
+    onValidateDelection () {
+      this.$emit('onDeleteUser', this.currentUser.id)
+      this.isDeleteModalShown = false
     },
-    onCancelDelection() {
-      this.isDeleteModalShown = false;
+    onCancelDelection () {
+      this.isDeleteModalShown = false
     },
-    updateUser(name, id, usernmae, roles,hospitals, email, phone_number) {
+    updateUser (name, id, usernmae, roles, hospitals, email, phone_number) {
       this.currentUser = {
         id,
         name,
@@ -158,12 +164,12 @@ export default {
         roles,
         hospitals,
         email,
-        phone_number,
-      };
-      this.$emit("onUpdateUser", this.currentUser);
-    },
-  },
-};
+        phone_number
+      }
+      this.$emit('onUpdateUser', this.currentUser)
+    }
+  }
+}
 </script>
 <style lang='scss' scoped>
 @import "@~/sass/_variables";
