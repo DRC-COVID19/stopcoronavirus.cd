@@ -200,6 +200,7 @@ Route::group([
 
   Route::group(['prefix' => 'hospitals-data'], function () {
     Route::get('/by-paginate', 'HospitalController@indexByPaginate');
+    Route::get('/filter', 'HospitalController@filter');
   });
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
