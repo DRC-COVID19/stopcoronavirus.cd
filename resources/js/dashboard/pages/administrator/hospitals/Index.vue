@@ -104,7 +104,6 @@ export default {
     filterHospitals (filter) {
       this.isLoading = true
       if (filter !== '') {
-        // eslint-disable-next-line no-undef
         return new Promise((resolve, reject) => {
           this.hospital__filter(filter)
             .then(({ data }) => {
