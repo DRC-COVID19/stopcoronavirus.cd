@@ -144,6 +144,21 @@ class HospitalController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
+    public function filter (Request $request) {
+      try {
+        $key_words=$request->get('key_words');
+        $forms = Hospital::where('name', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE' , "%{$key_words}%")->paginate(15);
+        if (! $forms ) {
+          return response()->json(['message' => "Au hopital trouvé!"], 404);
+        }
+        return response()->json( $forms, 200);
+      } catch (\Throwable $th) {
+        if (env('APP_DEBUG') == true) {
+          return response($th)->setStatusCode(500);
+        }
+        return response($th->getMessage())->setStatusCode(500);
+      }
+    }
 
     private function getHospitalsFromFiltre($date_start, $date_end, $township){
       $hospitalLogs = HospitalLog::
