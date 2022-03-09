@@ -96,7 +96,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getHospitals', 'removeHospital', 'townships__getAll']),
+    ...mapActions(['getHospitals', 'removeHospital', 'townships__getAll', 'storeHospital']),
 
     search (filter) {
       this.isLoading = true
@@ -178,41 +178,41 @@ export default {
       this.HospitalAdded = false
       this.isLoading = true
       this.errors = {}
-      // eslint-disable-next-line no-undef
-      axios
-        .post('/api/admin_hospitals', {
-          username: form.username,
+      return new Promise((resolve, reject) => {
+        this.storeHospital({
           name: form.name,
-          password: form.password,
-          password_confirmation: form.confirmPassword,
-          email: form.email,
-          roles_id: form.roles,
-          hospitals_id: form.hospitals
+          latitude: form.latitude,
+          longitude: form.longitude,
+          agent_id: form.agent,
+          township_id: form.township
         })
-        .then(() => {
-          this.userAdded = true
-          this.showSuccess = true
-          this.isLoading = false
-          this.getHospitalList(1)
-          this.$notify({
-            group: 'alert',
-            title: 'Nouvel utilisateur',
-            text: 'Ajouter avec succès',
-            type: 'success'
+          .then(() => {
+            this.userAdded = true
+            this.showSuccess = true
+            this.isLoading = false
+            this.getHospitalList(1)
+            this.$notify({
+              group: 'alert',
+              title: 'Nouvel hopital',
+              text: 'Ajouter avec succès',
+              type: 'success'
+            })
+            resolve(true)
           })
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-          this.isLoading = false
-          this.errors = response.data.errors
-          const messages = this.renderErrorsMessages(this.errors).join(',')
-          this.$notify({
-            group: 'alert',
-            title: 'Nouvel utilisateur',
-            text: 'Oups! Une erreur est survenue :\r\n' + messages,
-            type: 'error'
+          .catch(({ response }) => {
+            this.$gtag.exception(response)
+            this.isLoading = false
+            this.errors = response.data.errors
+            const messages = this.renderErrorsMessages(this.errors).join(',')
+            this.$notify({
+              group: 'alert',
+              title: 'Nouvel hopital',
+              text: 'Oups! Une erreur est survenue :\r\n' + messages,
+              type: 'error'
+            })
+            reject(response)
           })
-        })
+      })
     },
     getUsers () {
       this.isLoading = true

@@ -252,6 +252,24 @@ export default {
             reject(response)
           })
       })
+    },
+    storeHospital ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', payload.isLoading)
+      return new Promise((resolve, reject) => {
+        alert(JSON.stringify(payload))
+        axios
+          .post('/api/dashboard/hospitals-data',payload)
+          .then(({ data }) => {
+            commit('SET_HOSPITAL', data)
+            resolve(true)
+            alert('esimbi')
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
+          })
+      })
     }
   }
 }
