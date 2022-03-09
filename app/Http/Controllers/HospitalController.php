@@ -5,13 +5,13 @@ namespace App\Http\Controllers;
 use App\Hospital;
 use App\HospitalLog;
 use App\HospitalSituation;
-use App\Http\Requests\storeHospitalRequest;
-use App\Http\Resources\HospitalResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection ;
 use Illuminate\Support\Facades\Log;
+use App\Http\Resources\HospitalResources;
+use App\Http\Requests\StoreHospitalRequest;
+use App\Http\Requests\UpdateHospitalRequest;
 
 class HospitalController extends Controller
 {
@@ -38,7 +38,7 @@ class HospitalController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(storeHospitalRequest $request)
+    public function store(StoreHospitalRequest $request)
     {
 
         try {
@@ -72,9 +72,9 @@ class HospitalController extends Controller
      * @param  \App\Hospital  $hospital
      * @return \Illuminate\Http\Respo(nse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateHospitalRequest $request, $id)
     {
-        $data = $this->validator($request->all());
+        $data = $request->validated();
 
         try {
             $hospital = Hospital::find($id);
@@ -374,17 +374,4 @@ class HospitalController extends Controller
         }
     }
 
-    public function validator($data, $id = null)
-    {
-        return Validator::make($data, [
-            'name' => 'required',
-            'address' => 'required',
-            'foam_beds' => 'numeric|required',
-            'resuscitation_beds' => 'numeric|required',
-            'respirators' => 'numeric|required',
-            'doctors' => 'numeric|required',
-            'nurses' => 'numeric|required',
-            'para_medicals' => 'numeric|required'
-        ])->validate();
-    }
 }

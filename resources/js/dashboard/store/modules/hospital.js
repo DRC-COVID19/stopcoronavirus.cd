@@ -256,9 +256,25 @@ export default {
     storeHospital ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', payload.isLoading)
       return new Promise((resolve, reject) => {
-        alert(JSON.stringify(payload))
         axios
           .post('/api/dashboard/hospitals-data',payload)
+          .then(({ data }) => {
+            commit('SET_HOSPITAL', data)
+            resolve(true)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
+          })
+      })
+    },
+    updateHospital ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', payload.isLoading)
+      return new Promise((resolve, reject) => {
+        alert(JSON.stringify(payload))
+        axios
+          .put(`/api/dashboard/hospitals-data/${payload.hospital_id}`,payload)
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
             resolve(true)

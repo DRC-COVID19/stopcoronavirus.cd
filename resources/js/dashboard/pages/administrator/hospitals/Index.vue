@@ -96,7 +96,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getHospitals', 'removeHospital', 'townships__getAll', 'storeHospital']),
+    ...mapActions([
+      'getHospitals', 'removeHospital',
+      'townships__getAll', 'storeHospital',
+      'updateHospital']),
 
     search (filter) {
       this.isLoading = true
@@ -146,34 +149,32 @@ export default {
       this.HospitalUpdated = false
       const form = {
       }
-
-      // eslint-disable-next-line no-undef
-      axios
-        .put('/api/hospitals/' + currentHospital.id, form)
-        .then(() => {
-          this.HospitalUpdated = true
-          this.showSuccess = true
-          this.isLoading = false
-          this.updating = false
-          this.getHospitalList(1)
-          this.$notify({
-            group: 'alert',
-            title: 'Modifer utilisateur',
-            text: 'Modifier avec succès',
-            type: 'success'
+      return new Promise((resolve, reject) => {
+        this.updateHospital(currentHospital.id, form)
+          .then(() => {
+            this.HospitalUpdated = true
+            this.showSuccess = true
+            this.isLoading = false
+            this.updating = false
+            this.getHospitalList(1)
+            this.$notify({
+              group: 'alert',
+              title: 'Modifer Hopital',
+              text: 'Modifier avec succès',
+              type: 'success'
+            })
           })
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-          this.$notify({
-            group: 'alert',
-            title: 'Modifer utilisateur',
-            text: 'Une erreur est surveni',
-            type: 'error'
+          .catch(({ response }) => {
+            this.$gtag.exception(response)
+            this.$notify({
+              group: 'alert',
+              title: 'Modifer Hopital',
+              text: 'Une erreur est survenue !',
+              type: 'error'
+            })
           })
-        })
+      })
     },
-
     createHospital (form) {
       this.HospitalAdded = false
       this.isLoading = true
