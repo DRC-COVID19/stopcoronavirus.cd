@@ -20,7 +20,7 @@
         <div class="hide-waiting" v-if="updating"></div>
          <HospitalList
           :hospitals="hospitals"
-          @onSearch="search"
+          @onSearch="filterHospitals"
           @onDeleteHospital="deleteHospital"
           @onUpdateHospital="populateForm"
           :isLoading="isLoading"
@@ -99,13 +99,25 @@ export default {
     ...mapActions([
       'getHospitals', 'hospital__remove',
       'townships__getAll', 'hospital__store',
-      'hospital__update']),
+      'hospital__update', 'hospital__filter']),
 
-    search (filter) {
+    filterHospitals (filter) {
       this.isLoading = true
       if (filter !== '') {
         // eslint-disable-next-line no-undef
-        this.hospitals.data.filter((item) => item.name.includes(filter))
+        return new Promise((resolve, reject) => {
+          this.hospital__filter(filter)
+            .then(({ data }) => {
+              this.hospitals = data
+              this.isLoading = false
+              resolve(true)
+            })
+            .catch(({ response }) => {
+              this.$gtag.exception(response)
+              this.isLoading = false
+              reject(response)
+            })
+        })
       } else {
         this.getHospitalList()
         this.isLoading = false

@@ -237,7 +237,7 @@ export default {
       })
     },
     hospital__remove ({ state, commit }, payload = {}) {
-      commit('SET_IS_LOADING', payload.isLoading)
+      commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
           .delete(`/api/dashboard/hospitals-data/${payload.hospital_id}`)
@@ -253,7 +253,7 @@ export default {
       })
     },
     hospital__store ({ state, commit }, payload = {}) {
-      commit('SET_IS_LOADING', payload.isLoading)
+      commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
           .post('/api/dashboard/hospitals-data', payload)
@@ -269,14 +269,29 @@ export default {
       })
     },
     hospital__update ({ state, commit }, payload = {}) {
-      commit('SET_IS_LOADING', payload.isLoading)
+      commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
           .put(`/api/dashboard/hospitals-data/${payload.id}`, payload)
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
             resolve(true)
-            alert(JSON.stringify(data))
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
+          })
+      })
+    },
+    hospital__filter ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/api/dashboard/hospitals-data/filter/key_words=${payload}`)
+          .then(({ data }) => {
+            commit('SET_HOSPITAL', data)
+            resolve(data)
             commit('SET_IS_LOADING', false)
           })
           .catch(response => {
