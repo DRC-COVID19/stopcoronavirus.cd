@@ -53,7 +53,7 @@ export default {
   computed: {
     localhospitalManagerName () {
       if (this.validateNameMessage.length === 0 && this.validateNameMessage.length === 0) {
-        return this.identity.name.trim().toUpperCase() + '-' + this.identity.firstName.trim().toUpperCase()
+        return this.identity.name.trim().toUpperCase() + ' ' + this.identity.firstName.trim().toUpperCase()
       } else {
         return null
       }
@@ -69,21 +69,22 @@ export default {
     },
     validateFirstName () {
       const regex = / +/gi
-      console.log(regex.test(this.identity.firstName))
-      if (regex.test(this.identity.firstName)) {
+      if (regex.test(this.identity.firstName.trim()) || this.identity.firstName.trim().length === 0) {
         this.validateFirstNameMessage = 'Votre prénom ne doit pas contenir des espaces vides'
       } else {
         this.validateFirstNameMessage = ''
       }
+      console.log(this.validateFirstNameMessage)
     },
     validateName () {
       const regex = / +/gi
 
-      if (regex.test(this.identity.name)) {
+      if (regex.test(this.identity.name.trim()) || this.identity.name.trim().length === 0) {
         this.validateNameMessage = 'Votre nom ne doit pas contenir des espaces vides'
       } else {
         this.validateNameMessage = ''
       }
+      console.log(this.validateNameMessage)
     }
   }
 }

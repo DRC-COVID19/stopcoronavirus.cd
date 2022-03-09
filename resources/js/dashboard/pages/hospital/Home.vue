@@ -135,8 +135,8 @@ export default {
     },
     completedFormsData () {
       return this.completedForms.data.slice().map((completedForm) => {
-        completedForm.name_manager = completedForm.created_manager_name.split('-')[0]
-        completedForm.first_name_manager = completedForm.created_manager_name.split('-')[1]
+        completedForm.name_manager = completedForm.created_manager_name.split(' ')[0]
+        completedForm.first_name_manager = completedForm.created_manager_name.split(' ')[1]
         return completedForm
       })
     }
