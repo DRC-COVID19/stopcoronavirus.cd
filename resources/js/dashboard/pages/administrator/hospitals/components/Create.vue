@@ -179,7 +179,7 @@ export default {
     onReset () {
       this.toToCanceled = true
       this.form = {}
-      this.title = "Creation d'un utilisateur"
+      this.title = "Creation d'un hopital"
       this.btnTitle = 'Enreigistrer'
       this.$emit('onCancelUpdate', {})
     },

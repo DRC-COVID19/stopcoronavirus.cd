@@ -76,7 +76,7 @@
       </b-col>
     </b-row>
     <b-modal v-model="isDeleteModalShown">
-      Voulez-vous vraiment supprimer l'utilisateurs {{ currentHospital.name }} ?
+      Voulez-vous vraiment supprimer {{ currentHospital.name }} ?
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Hospital;
 use App\HospitalLog;
 use App\HospitalSituation;
+use App\Http\Requests\storeHospitalRequest;
 use App\Http\Resources\HospitalResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -37,9 +38,19 @@ class HospitalController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(storeHospitalRequest $request)
     {
-        //
+
+        try {
+            $hospital = Hospital::create($request->validated());
+           
+            return response()->json($hospital, 201);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     /**
@@ -49,7 +60,7 @@ class HospitalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($hospital_id)
-    {
+    { 
         $hospital = Hospital::find($hospital_id);
         return response()->json($hospital);
     }
@@ -59,7 +70,7 @@ class HospitalController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Hospital  $hospital
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Respo(nse
      */
     public function update(Request $request, $id)
     {
@@ -86,14 +97,17 @@ class HospitalController extends Controller
      * @param  \App\Hospital  $hospital
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Hospital $hospital)
+    public function destroy($hospital_id)
     {
-        try {
-              Log::info('hopital_id',$hospital);
-             return $hospital->delete();
+      try {
+             $hospitalDeleted = Hospital::destroy($hospital_id);
              
+             return response()->json( $hospitalDeleted, 200);
         } catch (\Throwable $th) {
-          //throw $th;
+          if (env('APP_DEBUG') == true) {
+            return response($th)->setStatusCode(500);
+        }
+            return response($th->getMessage())->setStatusCode(500);
         }
     }
 

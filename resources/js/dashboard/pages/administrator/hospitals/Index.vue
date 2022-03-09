@@ -109,27 +109,30 @@ export default {
       }
     },
     deleteHospital (currentHospitalId) {
-      // eslint-disable-next-line no-undef
-      this.removeHospital({ hospital_id: currentHospitalId })
-        .then(() => {
-          this.getHospitalList()
-          this.isHospitalDeleted = true
-          this.$notify({
-            group: 'alert',
-            title: 'Supprimer Hopital',
-            text: 'Supprimer avec succès !',
-            type: 'success'
+      return new Promise((resolve, reject) => {
+        this.removeHospital({ hospital_id: currentHospitalId })
+          .then(() => {
+            this.getHospitalList()
+            this.isHospitalDeleted = true
+            this.$notify({
+              group: 'alert',
+              title: 'Supprimer Hopital',
+              text: 'Supprimer avec succès !',
+              type: 'success'
+            })
+            resolve()
           })
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-          this.$notify({
-            group: 'alert',
-            title: 'Supprimer Hopital',
-            text: 'Une erreur est survenue!',
-            type: 'error'
+          .catch(({ response }) => {
+            reject(response)
+            this.$gtag.exception(response)
+            this.$notify({
+              group: 'alert',
+              title: 'Supprimer Hopital',
+              text: 'Une erreur est survenue!',
+              type: 'error'
+            })
           })
-        })
+      })
     },
     populateForm (currentHospital) {
       this.updating = true
