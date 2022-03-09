@@ -26,7 +26,7 @@
           striped
           hover
           :fields="fields"
-          :items="users.data"
+          :items="userFilter"
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
@@ -125,6 +125,9 @@ export default {
     rows() {
       return this.users.length;
     },
+    userFilter() {
+      return this.users.data.slice().sort((a,b) => a.id.toString().localeCompare(b.id.toString()))
+    }
   },
   watch: {
     filter () {
