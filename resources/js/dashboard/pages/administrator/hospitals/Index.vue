@@ -6,7 +6,7 @@
           @onUpdate="updateHospital"
           @onCreate="createHospital"
           @onCancelUpdate="cancelUpdate"
-          :hospitalAdded="hospitalAdded"
+          :hospitalCreated="hospitalCreated"
           :hospitalUpdated="hospitalUpdated"
           :formToPopulate="formToPopulate"
           :townships="townships"
@@ -59,8 +59,8 @@ export default {
       iconClass: 'fas fa-hospital',
       isLoading: false,
       hospitals: {},
-      HospitalUpdated: false,
-      HospitalAdded: false,
+      hospitalUpdated: false,
+      hospitalCreated: false,
       showSuccess: false,
       isHospitalDeleted: false,
       timeOut: 3,
@@ -68,7 +68,7 @@ export default {
       updating: false,
       errors: {},
       currentPage: 1,
-      users: []
+      users: {}
     }
   },
   async mounted () {
@@ -97,9 +97,9 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getHospitals', 'removeHospital',
-      'townships__getAll', 'storeHospital',
-      'updateHospital']),
+      'getHospitals', 'hospital__remove',
+      'townships__getAll', 'hospital__store',
+      'hospital__update']),
 
     search (filter) {
       this.isLoading = true
@@ -113,7 +113,7 @@ export default {
     },
     deleteHospital (currentHospitalId) {
       return new Promise((resolve, reject) => {
-        this.removeHospital({ hospital_id: currentHospitalId })
+        this.hospital__remove({ hospital_id: currentHospitalId })
           .then(() => {
             this.getHospitalList()
             this.isHospitalDeleted = true
@@ -146,13 +146,11 @@ export default {
     },
     updateHospital (currentHospital) {
       this.isLoading = true
-      this.HospitalUpdated = false
-      const form = {
-      }
+      this.hospitalUpdated = false
       return new Promise((resolve, reject) => {
-        this.updateHospital(currentHospital.id, form)
+        this.hospital__update(currentHospital)
           .then(() => {
-            this.HospitalUpdated = true
+            this.hospitalUpdated = true
             this.showSuccess = true
             this.isLoading = false
             this.updating = false
@@ -176,11 +174,11 @@ export default {
       })
     },
     createHospital (form) {
-      this.HospitalAdded = false
+      this.hospitalCreated = false
       this.isLoading = true
       this.errors = {}
       return new Promise((resolve, reject) => {
-        this.storeHospital({
+        this.hospital__store({
           name: form.name,
           latitude: form.latitude,
           longitude: form.longitude,

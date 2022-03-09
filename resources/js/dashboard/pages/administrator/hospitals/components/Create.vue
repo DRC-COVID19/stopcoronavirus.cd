@@ -37,7 +37,7 @@
           v-model="form.latitude"
           placeholder="Entrer la Latitude"
           type="number"
-          required
+          step="any"
         ></b-form-input>
       </b-form-group>
         <b-form-group
@@ -52,7 +52,7 @@
           v-model="form.longitude"
           placeholder="Entrer la Longitude"
           type="number"
-          required
+          step="any"
         ></b-form-input>
       </b-form-group>
       <label class="text-dash-color" for="check-group-1">Communes *</label>
@@ -98,7 +98,7 @@
 <script>
 export default {
   props: {
-    hospitalAdded: {
+    hospitalCreated: {
       type: Boolean,
       required: false,
       default: false
@@ -122,9 +122,9 @@ export default {
       }
     },
     users: {
-      type: Array,
+      type: Object,
       default: () => {
-        return []
+        return ({})
       }
     },
     errors: {
@@ -135,7 +135,7 @@ export default {
   data () {
     return {
       title: "Creation d'un hopital",
-      btnTitle: 'Enreigistrer',
+      btnTitle: 'Enregistrer',
       iconClass: 'fas fa-hospital-alt',
       updating: false,
       isLoading: false,
@@ -169,7 +169,7 @@ export default {
   methods: {
     onSubmit () {
       this.isLoading = true
-      if (this.btnTitle === 'Enreigistrer') {
+      if (this.btnTitle === 'Enregistrer') {
         this.$emit('onCreate', this.form)
       } else {
         this.$emit('onUpdate', this.form)
@@ -180,30 +180,31 @@ export default {
       this.toToCanceled = true
       this.form = {}
       this.title = "Creation d'un hopital"
-      this.btnTitle = 'Enreigistrer'
+      this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
     },
 
     resetForm () {
       this.updating = false
       this.isLoading = false
-      if (this.hospitalAdded | this.hospitalUpdated) {
+      if (this.hospitalCreated | this.hospitalUpdated) {
         this.form = {}
-        this.btnTitle = 'Enreigistrer'
+        this.btnTitle = 'Enregistrer'
         this.title = "Creation d'un hopital"
       }
     },
 
     populateForm () {
       this.updating = true
+      this.form = {}
+      this.title = `Modifié ${this.formToPopulate.name}`
+      this.btnTitle = 'Modifier'
       this.form.id = this.formToPopulate.id
       this.form.name = this.formToPopulate.name
       this.form.longitude = this.formToPopulate.longitude
-      this.form.longitude = this.formToPopulate.latitude
-      this.form.agent = this.formToPopulate.agent.d
-      this.form.township = this.formToPopulate.township.id
-      this.title = "Modification de l'hopital"
-      this.btnTitle = 'Modifier'
+      this.form.latitude = this.formToPopulate.latitude
+      this.form.agent = this.formToPopulate.agent
+      this.form.township = this.formToPopulate.township
     }
 
   },

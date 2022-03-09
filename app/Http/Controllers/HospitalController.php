@@ -28,7 +28,7 @@ class HospitalController extends Controller
 
     public function indexByPaginate()
     {
-      $hospitals = Hospital::with(['agent','township'])->paginate(15);
+      $hospitals = Hospital::with(['agent','township'])->orderBy('name')->paginate(15);
       return response()->json($hospitals, 200);
     }
 
@@ -74,14 +74,15 @@ class HospitalController extends Controller
      */
     public function update(UpdateHospitalRequest $request, $id)
     {
-        $data = $request->validated();
 
         try {
             $hospital = Hospital::find($id);
             if (!$hospital) {
                 return response()->json([], 404);
+                
             }
-            $hospital->update($data);
+            $hospital->update($request->validated());
+            Log::info(['hopital'=>$hospital->name]);
             return response()->json($hospital, 201);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
