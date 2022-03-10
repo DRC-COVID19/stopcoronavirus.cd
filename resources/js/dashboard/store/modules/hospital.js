@@ -256,7 +256,13 @@ export default {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
-          .post('/api/dashboard/hospitals-data', payload)
+          .post('/api/dashboard/hospitals-data', {
+            name: payload.name,
+            latitude: payload.latitude,
+            longitude: payload.longitude,
+            agent_id: payload.agent,
+            township_id: payload.township
+          })
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
             resolve(true)
@@ -272,7 +278,13 @@ export default {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
-          .put(`/api/dashboard/hospitals-data/${payload.id}`, payload)
+          .put(`/api/dashboard/hospitals-data/${payload.id}`, {
+            name: payload.name,
+            latitude: payload.latitude,
+            longitude: payload.longitude,
+            agent_id: payload.agent,
+            township_id: payload.township
+          })
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
             resolve(true)

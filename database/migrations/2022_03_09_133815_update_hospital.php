@@ -14,7 +14,7 @@ class UpdateHospital extends Migration
     public function up()
     {
         Schema::table('hospitals', function (Blueprint $table) {
-            $table->string('address')->change()->nullable();
+            $table->string('address')->after('name')->nullable();
         });
     }
 
@@ -26,7 +26,7 @@ class UpdateHospital extends Migration
     public function down()
     {
         Schema::table('hospitals', function (Blueprint $table) {
-            //
+            $table->dropColumn('address');
         });
     }
 }

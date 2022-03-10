@@ -13,6 +13,8 @@
           :hospitals="hospitals"
           :users ="users"
           :errors="errors"
+          :isLoading="isLoading"
+          :updating="updating"
         />
       </b-col>
       <b-col cols="12" md="8">
@@ -68,7 +70,7 @@ export default {
       updating: false,
       errors: {},
       currentPage: 1,
-      users: {}
+      users: []
     }
   },
   async mounted () {
@@ -189,17 +191,12 @@ export default {
       this.isLoading = true
       this.errors = {}
       return new Promise((resolve, reject) => {
-        this.hospital__store({
-          name: form.name,
-          latitude: form.latitude,
-          longitude: form.longitude,
-          agent_id: form.agent,
-          township_id: form.township
-        })
+        this.hospital__store(form)
           .then(() => {
-            this.userAdded = true
+            this.hospitalCreated = true
             this.showSuccess = true
             this.isLoading = false
+            form = {}
             this.getHospitalList(1)
             this.$notify({
               group: 'alert',
@@ -230,7 +227,7 @@ export default {
       axios
         .get('/api/admin_users')
         .then(({ data }) => {
-          this.users = data
+          this.users = data.data.filter(item => item.isAgentHospital === true)
           this.isLoading = false
         })
         .catch(({ response }) => {
@@ -258,7 +255,7 @@ export default {
       } else if (errors.township_id) {
         errorsMessage.push('La commune doit être unique et obligatoire ')
       } else if (errors.agent_id) {
-        errorsMessage.push('Vous devez selectionner au plus un agent ')
+        errorsMessage.push(errors.agent_id.join(','))
       }
 
       return errorsMessage

@@ -24,18 +24,18 @@ class UpdateHospitalRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'nullable',
-            'address' => 'nullable',
-            'longitude' => 'numeric|nullable',
-            'latitude' => 'numeric|nullable',
-            'township_id' => 'integer|nullable|exists:townships,id',
-            'agent_id' => 'numeric|nullable|exists:admin_users,id',
-            'foam_beds' => 'numeric|nullable',
-            'resuscitation_beds' => 'numeric|nullable',
-            'respirators' => 'numeric|nullable',
-            'doctors' => 'numeric|nullable',
-            'nurses' => 'numeric|nullable',
-            'para_medicals' => 'numeric|nullable'
+            'name'                  => 'sometimes',
+            'address'               => 'sometimes',
+            'longitude'             => 'numeric|sometimes',
+            'latitude'              => 'numeric|sometimes',
+            'township_id'           => 'integer|sometimes|exists:townships,id',
+            'agent_id'              => 'sometimes|numeric|required|exists:admin_users,id',
+            'foam_beds'             => 'numeric|sometimes',
+            'resuscitation_beds'    => 'numeric|sometimes',
+            'respirators'           => 'numeric|sometimes',
+            'doctors'               => 'numeric|sometimes',
+            'nurses'                => 'numeric|sometimes',
+            'para_medicals'         => 'numeric|sometimes'
         ];
     }
 }

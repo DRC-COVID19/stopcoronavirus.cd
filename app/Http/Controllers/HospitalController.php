@@ -74,7 +74,6 @@ class HospitalController extends Controller
      */
     public function update(UpdateHospitalRequest $request, $id)
     {
-
         try {
             $hospital = Hospital::find($id);
             if (!$hospital) {
@@ -82,7 +81,6 @@ class HospitalController extends Controller
                 
             }
             $hospital->update($request->validated());
-            Log::info(['hopital'=>$hospital->name]);
             return response()->json($hospital, 201);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {

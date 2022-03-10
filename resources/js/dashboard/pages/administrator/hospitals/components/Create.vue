@@ -1,6 +1,8 @@
 <template>
-  <b-card>
+  <b-card class="bg-custom">
     <h2 class="h2">{{ title }}</h2>
+     userCreated: {{ hospitalCreated }}
+      userUpdated: {{ hospitalUpdated }}
     <b-form
       @submit.prevent="onSubmit"
       @reset.prevent="onReset"
@@ -67,7 +69,7 @@
         <label class="text-dash-color" for="check-group-1">Selectioner un Agent *</label>
       <v-select
         v-model="form.agent"
-        :options="users.data"
+        :options="users"
         label="name"
         :reduce="(item) => item.id"
         :searchable ="false"
@@ -122,14 +124,24 @@ export default {
       }
     },
     users: {
-      type: Object,
+      type: Array,
       default: () => {
-        return ({})
+        return []
       }
     },
     errors: {
       type: Object,
       default: () => ({})
+    },
+    isLoading: {
+      type: Boolean,
+      default: false,
+      required: false
+    },
+    updating: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   data () {
@@ -137,8 +149,6 @@ export default {
       title: "Creation d'un hopital",
       btnTitle: 'Enregistrer',
       iconClass: 'fas fa-hospital-alt',
-      updating: false,
-      isLoading: false,
       disablePassword: false,
       form: {
         name: '',
@@ -156,10 +166,10 @@ export default {
     this.resetForm()
   },
   watch: {
-    userAdded () {
+    hospitalAdded () {
       this.resetForm()
     },
-    userUpdated () {
+    hospitalUpdated () {
       this.resetForm()
     },
     formToPopulate () {
@@ -168,7 +178,6 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.isLoading = true
       if (this.btnTitle === 'Enregistrer') {
         this.$emit('onCreate', this.form)
       } else {
@@ -185,26 +194,23 @@ export default {
     },
 
     resetForm () {
-      this.updating = false
-      this.isLoading = false
       if (this.hospitalCreated | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
         this.title = "Creation d'un hopital"
+        alert('c bon')
       }
     },
 
     populateForm () {
-      this.updating = true
-      this.form = {}
       this.title = `Modifié ${this.formToPopulate.name}`
       this.btnTitle = 'Modifier'
       this.form.id = this.formToPopulate.id
       this.form.name = this.formToPopulate.name
       this.form.longitude = this.formToPopulate.longitude
       this.form.latitude = this.formToPopulate.latitude
-      this.form.agent = this.formToPopulate.agent
-      this.form.township = this.formToPopulate.township
+      this.form.agent = this.formToPopulate.agent ? this.formToPopulate.agent.id : this.formToPopulate.agent
+      this.form.township = this.formToPopulate.township ? this.formToPopulate.township.id : this.formToPopulate.township
     }
 
   },
@@ -222,6 +228,9 @@ export default {
   border-radius: 10px;
   h2 {
     margin-bottom: 20px;
+  }
+  .bg-custom{
+     background-color: rgb(165, 167, 180);
   }
 }
 </style>

@@ -50,6 +50,10 @@ Route::group(['prefix' => 'admin_users'], function () {
 
 Route::apiResource('admin_users', 'AdministratorController');
 
+Route::group(['prefix' => 'admin_users'], function () {
+  Route::get('/agents-hospital', 'AdministratorController@getAgentHospitals');
+});
+
 Route::apiResource('admin_roles', 'AdminRoleController');
 
 Route::group(['prefix' => 'pandemic-stats'], function () {

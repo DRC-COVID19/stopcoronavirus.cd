@@ -24,12 +24,12 @@ class StoreHospitalRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'address' => 'nullable',
-            'longitude' => 'numeric|required',
-            'latitude' => 'numeric|required',
-            'township_id' => 'integer|required|exists:townships,id',
-            'agent_id' => 'numeric|required|exists:admin_users,id',
+            'name'          => 'required',
+            'address'       => 'nullable',
+            'longitude'     => 'numeric|required',
+            'latitude'      => 'numeric|required',
+            'township_id'   => 'integer|required|exists:townships,id',
+            'agent_id'      => 'unique:hospitals|numeric|required|exists:admin_users,id',
         ];
     }
 }
