@@ -87,6 +87,8 @@
               </p>
             </div>
           </b-card>
+                  <p>{{completedFormsAggregated.data}}</p>
+
         </b-row>
       </b-col>
     </b-row>
@@ -200,8 +202,10 @@ export default {
               const datas = {
                 'Date de soumission': moment(completedForm.last_update).format('DD/MM/YY'),
                 'Identifiant hopital': hospital.id,
+                'Nom hopital': hospital.name,
                 'Identifiant agent': completedForm.admin_user?.username || '-',
-                'Nom hopital': hospital.name
+                'Nom Agent': completedForm.created_manager_name,
+                'Prénom Agent': completedForm.created_manager_first_name
               }
               completedForm.completed_form_fields.forEach(completedFormField => {
                 datas[completedFormField.form_field.name] = completedFormField.value
@@ -209,7 +213,7 @@ export default {
               return datas
             })
         })
-        .filter((a,b) => a['Date de soumission'].localeCompare(b['Date de soumission']))
+        .filter((a, b) => a['Date de soumission'].localeCompare(b['Date de soumission']))
     },
     hospitalSituationLastUpdate () {
       if (this.selectedHospital && this.selectedHospital.id) {
