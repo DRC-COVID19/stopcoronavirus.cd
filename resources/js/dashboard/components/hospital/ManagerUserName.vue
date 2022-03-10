@@ -51,9 +51,9 @@ export default {
     }
   },
   computed: {
-    localhospitalManagerName () {
+    localhospitalManager () {
       if (this.validateNameMessage.length === 0 && this.validateNameMessage.length === 0) {
-        return this.identity.name.trim().toUpperCase() + ' ' + this.identity.firstName.trim().toUpperCase()
+        return this.identity
       } else {
         return null
       }
@@ -62,25 +62,22 @@ export default {
   methods: {
     ...mapMutations(['setHospitalManagerName']),
     hospitalManagerNameSubmit () {
-      if (this.localhospitalManagerName) {
-        this.setHospitalManagerName(this.localhospitalManagerName)
+      if (this.localhospitalManager) {
+        this.setHospitalManagerName(this.localhospitalManager)
         this.$bvModal.hide(this.id)
       }
     },
     validateFirstName () {
-      const regex = / +/gi
-      if (regex.test(this.identity.firstName.trim()) || this.identity.firstName.trim().length === 0) {
-        this.validateFirstNameMessage = 'Votre prénom ne doit pas contenir des espaces vides'
+      if (this.identity.firstName.trim().length === 0) {
+        this.validateFirstNameMessage = 'Votre prénom ne doit pas être vides'
       } else {
         this.validateFirstNameMessage = ''
       }
       console.log(this.validateFirstNameMessage)
     },
     validateName () {
-      const regex = / +/gi
-
-      if (regex.test(this.identity.name.trim()) || this.identity.name.trim().length === 0) {
-        this.validateNameMessage = 'Votre nom ne doit pas contenir des espaces vides'
+      if (this.identity.name.trim().length === 0) {
+        this.validateNameMessage = 'Votre nom ne doit pas être vides'
       } else {
         this.validateNameMessage = ''
       }

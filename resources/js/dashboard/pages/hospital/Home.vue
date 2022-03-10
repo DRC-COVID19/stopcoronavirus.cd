@@ -14,7 +14,7 @@
             <b-card-header><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
            <b-card-body>
               <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
-            <p v-if="hospitalManagerName">Connecté en tant que <strong>{{hospitalManagerName}}</strong></p>
+            <p v-if="hospitalManagerName && hospitalManagerFirstName">Connecté en tant que <strong>{{hospitalManagerName }} - </strong><span><strong>{{ hospitalManagerFirstName}}</strong></span></p>
            </b-card-body>
           </b-card>
         </b-col>
@@ -29,7 +29,7 @@
           <b-table
             :busy="isLoading"
             :fields="fields"
-            :items="completedFormsData"
+            :items="completedForms.data"
             responsive
             hover
             show-empty
@@ -102,8 +102,8 @@ export default {
     return {
       fields: [
         { key: 'last_update', label: 'Date' },
-        { key: 'name_manager', label: 'Nom' },
-        { key: 'first_name_manager', label: 'Prénom' },
+        { key: 'created_manager_name', label: 'Nom' },
+        { key: 'created_manager_first_name', label: 'Prénom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
@@ -115,6 +115,7 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
+      hospitalManagerFirstName: (state) => state.hospital.hospitalManagerFirstName,
       completedForms: (state) => state.completedForm.completedForms,
       isLoading: (state) => state.hospital.isLoading
     }),
