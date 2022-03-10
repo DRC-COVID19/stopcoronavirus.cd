@@ -203,9 +203,11 @@ export default {
       if (this.isUpdateMode) {
         this.completedForm._method = 'PUT'
         this.completedForm.updated_manager_name = this.hospitalManagerName
+        this.completedForm.updated_manager_first_name = this.hospitalManagerFirstName
         this.completedForm.id = this.$route.params.completed_form_id
       } else {
         this.completedForm.created_manager_name = this.hospitalManagerName
+        this.completedForm.created_manager_first_name = this.hospitalManagerFirstName
       }
       this.submitCompletedForm(this.isUpdateMode ? this.completedForm__update : this.completedForm__store)
         .then(() => {
