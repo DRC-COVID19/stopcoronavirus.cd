@@ -172,7 +172,7 @@ export default {
       this.isLoading = true
       this.errors = {}
       axios
-        .post('/api/dashboard/forms/', {
+        .post('/api/dashboard/forms', {
           title: form.title,
           form_recurrence_value: form.form_recurrence_value,
           form_recurrence_id: form.form_recurrence_id,
