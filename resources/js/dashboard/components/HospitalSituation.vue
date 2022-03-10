@@ -87,8 +87,6 @@
               </p>
             </div>
           </b-card>
-                  <p>{{completedFormsAggregated.data}}</p>
-
         </b-row>
       </b-col>
     </b-row>
@@ -205,7 +203,9 @@ export default {
                 'Nom hopital': hospital.name,
                 'Identifiant agent': completedForm.admin_user?.username || '-',
                 'Nom Agent': completedForm.created_manager_name,
-                'Prénom Agent': completedForm.created_manager_first_name
+                'Prénom Agent': completedForm.created_manager_first_name,
+                'N° Téléphone Agent': completedForm.admin_user.phone_number
+
               }
               completedForm.completed_form_fields.forEach(completedFormField => {
                 datas[completedFormField.form_field.name] = completedFormField.value
