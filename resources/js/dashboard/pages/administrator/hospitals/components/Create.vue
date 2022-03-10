@@ -198,7 +198,6 @@ export default {
         this.form = {}
         this.btnTitle = 'Enregistrer'
         this.title = "Creation d'un hopital"
-        alert('c bon')
       }
     },
 
