@@ -138,6 +138,7 @@ export default {
     ...mapState({
       user: state => state.auth.user,
       hospitalManagerName: state => state.hospital.hospitalManagerName,
+      hospitalManagerFirstName: state => state.hospital.hospitalManagerFirstName,
       formSteps: state => state.formStep.formSteps,
       isHospitalSituationLoading: state => state.hospitalSituation.isLoading,
       isUpdateMode () {
