@@ -56,22 +56,24 @@
         ></b-form-input>
       </b-form-group>
       <label class="text-dash-color" for="check-group-1">Communes *</label>
-      <v-select
-        v-model="form.township_id"
-        :options="townships"
-        label="name"
-        :reduce="(item) => item.id"
-        :searchable ="false"
-      />
+      <b-form-select
+          v-model="form.township_id"
+          :options="townships"
+          class="mb-3"
+          value-field="id"
+          text-field="name"
+          disabled-field="notEnabled"
+        />
       <b-form-group class="mt-3">
         <label class="text-dash-color" for="check-group-1">Selectioner un Agent *</label>
-      <v-select
-        v-model="form.agent_id"
-        :options="users"
-        label="name"
-        :reduce="(item) => item.id"
-        :searchable ="false"
-      />
+        <b-form-select
+          v-model="form.agent_id"
+          :options="users"
+          class="mb-3"
+          value-field="id"
+          text-field="name"
+          disabled-field="notEnabled"
+        />
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
           <b-button type="submit" variant="primary" class="btn-dash-sucess">
@@ -162,6 +164,8 @@ export default {
   },
   mounted () {
     this.resetForm()
+    this.populateForm()
+
   },
   watch: {
     hospitalAdded () {
