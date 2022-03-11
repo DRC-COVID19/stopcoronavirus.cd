@@ -3,7 +3,8 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class townshipSeefer extends Seeder
+
+class TownshipSeeder extends Seeder
 {
     /**
      * Run the database seeds.

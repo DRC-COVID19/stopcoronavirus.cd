@@ -81,106 +81,105 @@ export default {
     formAdded: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     formUpdated: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
-        return {};
-      },
+        return {}
+      }
     },
     formRecurrences: {
       type: Array,
       default: () => {
-        return [];
-      },
+        return []
+      }
     },
     errors: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
-  data() {
+  data () {
     return {
       title: "Creation d'un formulaire",
-      btnTitle: "Enreigistrer",
-      iconClass: "fas fa-plus-square",
+      btnTitle: 'Enreigistrer',
+      iconClass: 'fas fa-plus-square',
       updating: false,
       isLoading: false,
-      validateMailMessage: "",
-      published:false,
+      validateMailMessage: '',
+      published: false,
       form: {
-        title: "",
-        form_recurrence_value:  null,
-        form_recurrence_id: "",
-        publish:false
+        title: '',
+        form_recurrence_value: null,
+        form_recurrence_id: '',
+        publish: false
       },
       show: true,
       showWarning: false,
       toBeCanceled: true,
       formRecurrenceSelected: null,
-      errors: {},
+      errors: {}
 
-    };
+    }
   },
-  mounted() {
-    this.resetForm();
+  mounted () {
+    this.resetForm()
   },
   watch: {
-    formAdded() {
-      this.resetForm();
+    formAdded () {
+      this.resetForm()
     },
-    formUpdated() {
-      this.resetForm();
+    formUpdated () {
+      this.resetForm()
     },
-    formToPopulate() {
-      this.populateForm();
-    },
+    formToPopulate () {
+      this.populateForm()
+    }
   },
   methods: {
-    onSubmit() {
-      this.isLoading = true;
-      if (this.btnTitle === "Enreigistrer") {
-        this.$emit("onCreate", this.form);
+    onSubmit () {
+      this.isLoading = true
+      if (this.btnTitle === 'Enreigistrer') {
+        this.$emit('onCreate', this.form)
       } else {
-        this.$emit("onUpdate", this.form);
+        this.$emit('onUpdate', this.form)
       }
     },
 
-    onReset() {
-      this.toToCanceled = true;
-      this.form = {};
-      this.title = "Creation d'un formulaire";
-      this.btnTitle = "Enreigistrer";
-      this.$emit("onCancelUpdate", {});
+    onReset () {
+      this.toToCanceled = true
+      this.form = {}
+      this.title = "Creation d'un formulaire"
+      this.btnTitle = 'Enreigistrer'
+      this.$emit('onCancelUpdate', {})
     },
 
-
-    resetForm() {
-      this.updating = false;
-      this.isLoading = false;
+    resetForm () {
+      this.updating = false
+      this.isLoading = false
       if (this.formAdded || this.formUpdated) {
-        this.form = {};
-        this.btnTitle = "Enreigistrer";
-        this.title = "Creation d'un formulaire";
+        this.form = {}
+        this.btnTitle = 'Enreigistrer'
+        this.title = "Creation d'un formulaire"
       }
     },
 
-    populateForm() {
-      this.updating = true;
-      this.form.id = this.formToPopulate.id;
-      this.form.title = this.formToPopulate.title;
-      this.form.form_recurrence_value = this.formToPopulate.form_recurrence_value;
-      this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id;
-      this.form.publish = this.formToPopulate.publish;
-      this.title = "Modification du formulaire";
-      this.btnTitle = "Modifier";
+    populateForm () {
+      this.updating = true
+      this.form.id = this.formToPopulate.id
+      this.form.title = this.formToPopulate.title
+      this.form.form_recurrence_value = this.formToPopulate.form_recurrence_value
+      this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id
+      this.form.publish = this.formToPopulate.publish
+      this.title = 'Modification du formulaire'
+      this.btnTitle = 'Modifier'
     },
 
     onFormRecurrenceChange (formRecurrenceId) {
@@ -188,8 +187,8 @@ export default {
       this.formRecurrenceSelected = this.formRecurrences.find(formRecurrence => formRecurrence.id === formRecurrenceId)
     }
   }
-  
-};
+
+}
 </script>
 
 <style lang='scss' scoped>

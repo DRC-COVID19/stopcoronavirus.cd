@@ -175,6 +175,27 @@ export default {
           exception(response)
         })
     },
+    getHospitals ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/hospitals-data/by-paginate', {
+            params: payload.page
+          })
+          .then(({ data }) => {
+            commit('SET_HOSPITAL', data)
+            resolve(data)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
+    },
     getHospital ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
 
@@ -207,6 +228,85 @@ export default {
           .then(({ data }) => {
             commit('SET_HOSPITAL_SITUATIONS', data)
             resolve(true)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
+          })
+      })
+    },
+    hospital__remove ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios
+          .delete(`/api/dashboard/hospitals-data/${payload.hospital_id}`)
+          .then(({ data }) => {
+            commit('SET_HOSPITAL', data)
+            resolve(true)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
+          })
+      })
+    },
+    hospital__store ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios
+          .post('/api/dashboard/hospitals-data', {
+            name: payload.name,
+            latitude: payload.latitude,
+            longitude: payload.longitude,
+            agent_id: payload.agent_id,
+            township_id: payload.township_id
+          })
+          .then(({ data }) => {
+            commit('SET_HOSPITAL', data)
+            resolve(true)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
+          })
+      })
+    },
+    hospital__update ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios
+          .patch(
+            `/api/dashboard/hospitals-data/update-by-admin/${payload.id}`,
+            {
+              name: payload.name,
+              latitude: payload.latitude,
+              longitude: payload.longitude,
+              agent_id: payload.agent_id,
+              township_id: payload.township_id
+            }
+          )
+          .then(({ data }) => {
+            commit('SET_HOSPITAL', data)
+            resolve(true)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
+          })
+      })
+    },
+    hospital__filter ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/api/dashboard/hospitals-data/filter/key_words=${payload}`)
+          .then(({ data }) => {
+            commit('SET_HOSPITAL', data)
+            resolve(data)
             commit('SET_IS_LOADING', false)
           })
           .catch(response => {

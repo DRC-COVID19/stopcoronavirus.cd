@@ -15,17 +15,18 @@ class AdministratorResource extends JsonResource
   public function toArray($request)
   {
     return [
-      'id' => $this->id,
-      'name' => $this->name,
-      'email' => $this->email,
-      'usernmae' => $this->username,
-      'avatar' => $this->avatar,
-      'roles' => $this->roles,
-      'isAdmin' => $this->roles()->where('name', 'Administrator')->exists(),
+      'id'                => $this->id,
+      'name'              => $this->name,
+      'email'             => $this->email,
+      'usernmae'          => $this->username,
+      'avatar'            => $this->avatar,
+      'roles'             => $this->roles,
+      'isAdmin'           => $this->roles()->where('name', 'Administrator')->exists(),
+      'isAgentHospital'   => $this->roles()->where('name', 'agent-hospital')->exists(),
       'isHospitalManager' => $this->hospitalManager()->exists(),
-      'hospital' => $this->hospitalManager,
-      'hospitals' => $this->hospitals,
-      'isHospitalAdmin' => $this->roles()->where('name', 'admin-hospital')->exists()
+      'hospital'          => $this->hospitalManager,
+      'hospitals'         => $this->hospitals,
+      'isHospitalAdmin'   => $this->roles()->where('name', 'admin-hospital')->exists()
     ];
   }
 }
