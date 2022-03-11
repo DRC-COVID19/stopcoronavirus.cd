@@ -15,6 +15,7 @@
           :errors="errors"
           :isLoading="isLoading"
           :updating="updating"
+          :resetForm ="onResetForm"
         />
       </b-col>
       <b-col cols="12" md="8">
@@ -157,9 +158,14 @@ export default {
     cancelUpdate () {
       this.updating = false
     },
+    onResetForm (value) {
+      this.updating = false
+      this.isLoading = false
+      this.hospitalCreated = value
+      this.hospitalUpdated = value
+    },
     updateHospital (currentHospital) {
       this.isLoading = true
-      this.hospitalUpdated = false
       return new Promise((resolve, reject) => {
         this.hospital__update(currentHospital)
           .then(() => {
@@ -187,17 +193,15 @@ export default {
       })
     },
     createHospital (form) {
-      this.hospitalCreated = false
+      this.onResetForm(false)
       this.isLoading = true
       this.errors = {}
       return new Promise((resolve, reject) => {
         this.hospital__store(form)
           .then(() => {
-            this.hospitalCreated = true
             this.showSuccess = true
-            this.isLoading = false
-            form = {}
             this.getHospitalList(1)
+            this.onResetForm(true)
             this.$notify({
               group: 'alert',
               title: 'Nouvel hopital',

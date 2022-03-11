@@ -30,12 +30,7 @@ class UpdateHospitalRequest extends FormRequest
             'latitude'              => 'numeric|sometimes',
             'township_id'           => 'integer|sometimes|exists:townships,id',
             'agent_id'              => 'unique:hospitals|sometimes|numeric|required|exists:admin_users,id',
-            'foam_beds'             => 'numeric|sometimes',
-            'resuscitation_beds'    => 'numeric|sometimes',
-            'respirators'           => 'numeric|sometimes',
-            'doctors'               => 'numeric|sometimes',
-            'nurses'                => 'numeric|sometimes',
-            'para_medicals'         => 'numeric|sometimes'
+    
         ];
     }
 }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection ;
 use Illuminate\Support\Facades\Log;
 use App\Http\Resources\HospitalResources;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreHospitalRequest;
 use App\Http\Requests\UpdateHospitalRequest;
 
@@ -64,6 +65,31 @@ class HospitalController extends Controller
         $hospital = Hospital::find($hospital_id);
         return response()->json($hospital);
     }
+        /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Hospital  $hospital
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        $data = $this->validator($request->all());
+
+        try {
+            $hospital = Hospital::find($id);
+            if (!$hospital) {
+                return response()->json([], 404);
+            }
+            $hospital->update($data);
+            return response()->json($hospital, 201);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
 
     /**
      * Update the specified resource in storage.
@@ -72,7 +98,7 @@ class HospitalController extends Controller
      * @param  \App\Hospital  $hospital
      * @return \Illuminate\Http\Respo(nse
      */
-    public function update(UpdateHospitalRequest $request, $id)
+    public function updateByAdmin(UpdateHospitalRequest $request, $id)
     {
         try {
             $hospital = Hospital::find($id);
@@ -386,6 +412,20 @@ class HospitalController extends Controller
             }
             return response($th->getMessage())->setStatusCode(500);
         }
+    }
+
+    public function validator($data, $id = null)
+    {
+        return Validator::make($data, [
+            'name' => 'required',
+            'address' => 'required',
+            'foam_beds' => 'numeric|required',
+            'resuscitation_beds' => 'numeric|required',
+            'respirators' => 'numeric|required',
+            'doctors' => 'numeric|required',
+            'nurses' => 'numeric|required',
+            'para_medicals' => 'numeric|required'
+        ])->validate();
     }
 
 }

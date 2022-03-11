@@ -1,8 +1,6 @@
 <template>
   <b-card class="bg-custom">
     <h2 class="h2">{{ title }}</h2>
-     userCreated: {{ hospitalCreated }}
-      userUpdated: {{ hospitalUpdated }}
     <b-form
       @submit.prevent="onSubmit"
       @reset.prevent="onReset"
@@ -59,7 +57,7 @@
       </b-form-group>
       <label class="text-dash-color" for="check-group-1">Communes *</label>
       <v-select
-        v-model="form.township"
+        v-model="form.township_id"
         :options="townships"
         label="name"
         :reduce="(item) => item.id"
@@ -68,7 +66,7 @@
       <b-form-group class="mt-3">
         <label class="text-dash-color" for="check-group-1">Selectioner un Agent *</label>
       <v-select
-        v-model="form.agent"
+        v-model="form.agent_id"
         :options="users"
         label="name"
         :reduce="(item) => item.id"
@@ -152,8 +150,8 @@ export default {
       disablePassword: false,
       form: {
         name: '',
-        agent: {},
-        township: {},
+        agent_id: null,
+        township_id: null,
         longitude: 0.0,
         latitude: 0.0
       },
@@ -208,8 +206,8 @@ export default {
       this.form.name = this.formToPopulate.name
       this.form.longitude = this.formToPopulate.longitude
       this.form.latitude = this.formToPopulate.latitude
-      this.form.agent = this.formToPopulate.agent ? this.formToPopulate.agent.id : this.formToPopulate.agent
-      this.form.township = this.formToPopulate.township ? this.formToPopulate.township.id : this.formToPopulate.township
+      this.form.agent_id = this.formToPopulate.agent && this.formToPopulate.agent.id ? this.formToPopulate.agent.id : 0
+      this.form.township_id = this.formToPopulate.township && this.formToPopulate.township.id ? this.formToPopulate.township.id : 0
     }
 
   },

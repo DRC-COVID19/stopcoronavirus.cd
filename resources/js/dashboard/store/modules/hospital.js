@@ -260,8 +260,8 @@ export default {
             name: payload.name,
             latitude: payload.latitude,
             longitude: payload.longitude,
-            agent_id: payload.agent,
-            township_id: payload.township
+            agent_id: payload.agent_id,
+            township_id: payload.township_id
           })
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
@@ -278,13 +278,16 @@ export default {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
-          .put(`/api/dashboard/hospitals-data/${payload.id}`, {
-            name: payload.name,
-            latitude: payload.latitude,
-            longitude: payload.longitude,
-            agent_id: payload.agent,
-            township_id: payload.township
-          })
+          .patch(
+            `/api/dashboard/hospitals-data/update-by-admin/${payload.id}`,
+            {
+              name: payload.name,
+              latitude: payload.latitude,
+              longitude: payload.longitude,
+              agent_id: payload.agent_id,
+              township_id: payload.township_id
+            }
+          )
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
             resolve(true)
