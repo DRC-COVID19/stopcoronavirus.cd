@@ -1,20 +1,6 @@
 <template>
   <b-nav vertical>
-    <b-nav-item
-      v-if="canViewUsers"
-      :to="{name: 'administrator.users'}"
-      :active="$route.name.startsWith('administrator.users') || $route.name.startsWith('administrator.home')"
-    >
-      <i class="fas fa-users" aria-hidden="true" ></i> &nbsp; Utilisateurs
-    </b-nav-item>
-    <b-nav-item
-      v-if="canViewEpidemic"
-      :to="{name: 'administrator.epidemie'}"
-      :active="$route.name.startsWith('administrator.epidemie')"
-    >
-      <i class="fas fa-virus" aria-hidden="true" ></i> &nbsp; Situation Épidémiologique
-    </b-nav-item>
-    <b-nav-item
+     <b-nav-item
       v-if="canViewChangeLog"
       :to="{name: 'administrator.changeLog'}"
       :active="$route.name.startsWith('administrator.changeLog')"
@@ -28,6 +14,28 @@
     >
       <i class="fa fa-address-card" aria-hidden="true" ></i> &nbsp; Formulaires
     </b-nav-item>
+      <b-nav-item
+      v-if="canViewUsers"
+      :to="{name: 'administrator.hospitals'}"
+      :active="$route.name.startsWith('administrator.hospitals') || $route.name.startsWith('administrator.home')"
+    >
+      <i class="fas fa-hospital-alt" aria-hidden="true" ></i> &nbsp; Hopitaux
+    </b-nav-item>
+    <b-nav-item
+      v-if="canViewEpidemic"
+      :to="{name: 'administrator.epidemie'}"
+      :active="$route.name.startsWith('administrator.epidemie')"
+    >
+      <i class="fas fa-virus" aria-hidden="true" ></i> &nbsp; Situation Épidémiologique
+    </b-nav-item>
+     <b-nav-item
+      v-if="canViewUsers"
+      :to="{name: 'administrator.users'}"
+      :active="$route.name.startsWith('administrator.users') || $route.name.startsWith('administrator.home')"
+    >
+      <i class="fas fa-users" aria-hidden="true" ></i> &nbsp; Utilisateurs
+    </b-nav-item>
+
   </b-nav>
 </template>
 
