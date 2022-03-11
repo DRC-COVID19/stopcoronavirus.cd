@@ -202,8 +202,6 @@ export default {
                 'Identifiant hopital': hospital.id,
                 'Nom hopital': hospital.name,
                 'Identifiant agent': completedForm.admin_user?.username || '-',
-                'Nom Agent': completedForm.created_manager_name,
-                'Prénom Agent': completedForm.created_manager_first_name,
                 'N° Téléphone Agent': completedForm.admin_user.phone_number
 
               }
