@@ -11,7 +11,7 @@
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
            <b-col cols="12" v-if="errors && errors.last_update">
-                    <b-alert variant="danger" dismissible show>La date de mise à jour est déjà utilisée !</b-alert>
+                    <b-alert variant="danger" dismissible show>Vous ne pouvez plus soumettre pour le  {{ moment(completedForm.last_update).format("DD/MM/Y") }}! car, les données ont déjà été soumis.</b-alert>
                   </b-col>
           <h3 v-if="isUpdateMode" class="mb-4 mt-4">
             Modifier la mise à jour du
@@ -87,8 +87,8 @@
                   <strong>Verification de la date de Mise a jour...</strong>
                 </div>
                  <div>
-                    <b-alert variant="danger" show v-show="!!completedForm.checkLastUpdate">Cette date est déjà utilisée !</b-alert>
-                      <b-alert variant="success" show v-show="completedForm.checkLastUpdate === 0">Date de mise à jour valide.</b-alert>
+                    <b-alert variant="danger" show v-show="!!completedForm.checkLastUpdate">Le {{ moment(completedForm.last_update).format('DD/MM/Y')}} a déjà soumission. <br/>Veuillez choisir une autre date!</b-alert>
+                    <b-alert variant="success" show v-show="completedForm.checkLastUpdate === 0">Aucune soumission constatée en cette date. Veuillez soumettre les données.</b-alert>
                   </div>
                   <label for="last_update" class="text-dash-color"
                     >Sélectionnez la date</label
