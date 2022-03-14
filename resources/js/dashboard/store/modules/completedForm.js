@@ -76,7 +76,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios
           .get(
-            `/api/dashboard/completed_forms/check-last_update/${payload.hospital_id}`
+            `/api/dashboard/completed_forms/check-last_update/${payload.hospital_id}/${payload.last_update}`
           )
           .then(({ data }) => {
             commit('SET_COMPLETED_FORMS', data)

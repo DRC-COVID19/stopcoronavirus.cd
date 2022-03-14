@@ -336,10 +336,8 @@ class CompletedFormController extends Controller
             });
     }
 
-    public function checkLastUpdate($hospitalId){
-        return ['last_update' => Rule::unique('completed_forms')->where( function ($query) use ($hospitalId) {
-            return $query->where('hospital_id', $hospitalId);
-    })];
+    public function checkLastUpdate($hospitalId, $lastUpdate){
+        return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id',$hospitalId)->count();
         
     }
 

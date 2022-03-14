@@ -2,7 +2,7 @@
 <template>
   <div>
     <b-container class="mt-4">
-      <Loading v-if="isLoading" class="h-100"  message="Chargement du formulaire"/>
+      <Loading v-if="isLoading" class="h-100"  completedForm="Chargement du formulaire"/>
       <b-row v-else align-h="center">
         <b-col cols="12">
           <b-link
@@ -82,8 +82,13 @@
               </b-alert>
               </b-col>
                 <b-form-group class="no-border">
-                  <div v-if="message">
-                    {{message}}
+                <div class="text-center text-danger my-2" v-if="isLastUpdateChecking">
+                  <b-spinner class="align-middle" />
+                  <strong>Verification de la date de Mise a jour...</strong>
+                </div>
+                 <div>
+                    <b-alert variant="danger" show v-show="!!completedForm.checkLastUpdate">Cette date est déjà utilisée !</b-alert>
+                      <b-alert variant="success" show v-show="completedForm.checkLastUpdate === 0">Date de mise à jour valide.</b-alert>
                   </div>
                   <label for="last_update" class="text-dash-color"
                     >Sélectionnez la date</label
@@ -131,11 +136,13 @@ export default {
     return {
       dateFormatted: { day: 'numeric', year: 'numeric', month: 'numeric' },
       completedForm: {
-        completed_form_fields: {}
+        completed_form_fields: {},
+        checkLastUpdate: null
       },
       max: now,
       errors: {},
       isLoading: false,
+      isLastUpdateChecking: false,
       targetForm: {},
       completedFormFields: {}
     }
@@ -148,6 +155,9 @@ export default {
       isHospitalSituationLoading: state => state.hospitalSituation.isLoading,
       isUpdateMode () {
         return !!this.$route.params.completed_form_id
+      },
+      getHospitalId () {
+        return this.$route.params.hospital_id ? this.$route.params.hospital_id : this.user.hospital.id
       }
     }),
     backRoute () {
@@ -182,10 +192,13 @@ export default {
       'updateHospitalSituation',
       'completedForm__getByHospitalDetail',
       'completedForm__store',
-      'completedForm__update'
+      'completedForm__update',
+      'completedForm__checkLastUpdate'
     ]),
-    getData () {
-      this.message = ' esimbi'
+    async getData () {
+      this.isLastUpdateChecking = true
+      this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.completedForm.last_update })
+      this.isLastUpdateChecking = false
     },
     async getCompletedFormFields () {
       this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
@@ -231,7 +244,7 @@ export default {
 
     submitCompletedForm (method) {
       return new Promise((resolve, reject) => {
-        this.completedForm.hospital_id = this.$route.params.hospital_id ? this.$route.params.hospital_id : this.user.hospital.id
+        this.completedForm.hospital_id = this.getHospitalId
         this.completedForm.form_id = this.targetForm.id
         method(this.completedForm)
           .then(() => {
