@@ -101,7 +101,7 @@
                     class="mb-2"
                     :disabled="isUpdateMode"
                     locale="fr"
-                    @input="getData()"
+                    @input="selectLastUpdate()"
                   >
                   </b-form-datepicker>
                 </b-form-group>
@@ -195,7 +195,7 @@ export default {
       'completedForm__update',
       'completedForm__checkLastUpdate'
     ]),
-    async getData () {
+    async selectLastUpdate () {
       this.isLastUpdateChecking = true
       this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.completedForm.last_update })
       this.isLastUpdateChecking = false
