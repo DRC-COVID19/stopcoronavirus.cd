@@ -48,7 +48,7 @@ export default {
           .catch(error => {
             reject(error)
           })
-      })
+      }) 
     },
     completedForm__getByHospital ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
@@ -59,6 +59,24 @@ export default {
             {
               params: { page: payload.page }
             }
+          )
+          .then(({ data }) => {
+            commit('SET_COMPLETED_FORMS', data)
+            resolve(data)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch(response => {
+            console.log(response)
+            reject(response)
+          })
+      })
+    },
+    completedForm__checkLastUpdate ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios
+          .get(
+            `/api/dashboard/completed_forms/check-last_update/${payload.hospital_id}`
           )
           .then(({ data }) => {
             commit('SET_COMPLETED_FORMS', data)
