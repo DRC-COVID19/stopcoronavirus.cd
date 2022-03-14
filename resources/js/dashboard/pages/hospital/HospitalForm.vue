@@ -4,13 +4,15 @@
     <b-container class="mt-4">
       <Loading v-if="isLoading" class="h-100"  message="Chargement du formulaire"/>
       <b-row v-else align-h="center">
-
         <b-col cols="12">
           <b-link
             :to="backRoute"
           >
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
+           <b-col cols="12" v-if="errors && errors.last_update">
+                    <b-alert variant="danger" dismissible show>La date de mise à jour est déjà utilisée !</b-alert>
+                  </b-col>
           <h3 v-if="isUpdateMode" class="mb-4 mt-4">
             Modifier la mise à jour du
             {{ moment(completedForm.last_update).format("DD/MM/Y") }}
@@ -80,6 +82,9 @@
               </b-alert>
               </b-col>
                 <b-form-group class="no-border">
+                  <div v-if="message">
+                    {{message}}
+                  </div>
                   <label for="last_update" class="text-dash-color"
                     >Sélectionnez la date</label
                   >
@@ -91,6 +96,7 @@
                     class="mb-2"
                     :disabled="isUpdateMode"
                     locale="fr"
+                    @input="getData()"
                   >
                   </b-form-datepicker>
                 </b-form-group>
@@ -178,7 +184,9 @@ export default {
       'completedForm__store',
       'completedForm__update'
     ]),
-
+    getData () {
+      this.message = ' esimbi'
+    },
     async getCompletedFormFields () {
       this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
       this.getLastUpdate()
@@ -229,16 +237,19 @@ export default {
           .then(() => {
             this.$notify({
               group: 'alert',
-              title: 'Formulaire soumis avec succès',
+              title: 'Formulaire de soumission',
+              text: 'Formulaire soumis avec succès',
               type: 'success'
             })
-            resolve()
+            resolve(true)
           })
-          .catch((err) => {
-            reject(err)
+          .catch(({ response }) => {
+            this.errors = response.data.errors
+            reject(response)
             this.$notify({
               group: 'alert',
-              title: 'Une erreur est survenu',
+              title: 'Formulaire de soumission',
+              text: 'Une erreur est survenu',
               type: 'error'
             })
           })
