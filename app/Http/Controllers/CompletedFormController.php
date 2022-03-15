@@ -297,11 +297,18 @@ class CompletedFormController extends Controller
                         $query->where('last_update', $hospitalLastUpdate->max_last_update);
                     }
                 },
+                'completedForms.completedFormFields' => function ($query) {
+                    $query->whereHas('formField');
+                },
                 'completedForms.completedFormFields.formField.formStep',
                 'completedForms.adminUser'
             ])
+
+
                 ->find($hospitalLastUpdate->hospital_id);
         }
+
+
         return [
             'hospitalsData' => $hospitalsData,
             'lastUpdate'    => $hospitalsLastUpdate->max('max_last_update')
