@@ -348,7 +348,7 @@ class CompletedFormController extends Controller
     }
 
     public function checkLastUpdate($hospitalId, $lastUpdate){
-        return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id',$hospitalId)->count();
+        return CompletedForm::whereDate('last_update', $lastUpdate)->where('hospital_id',$hospitalId)->count();
         
     }
 
