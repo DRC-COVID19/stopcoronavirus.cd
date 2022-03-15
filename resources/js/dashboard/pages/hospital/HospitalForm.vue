@@ -98,6 +98,8 @@
                   opens="center"
                   :max-date="max"
                   class="d-flex style-picker"
+                  @input="selectLastUpdate()"
+                  :disabled-dates='isUpdateMode'
                   show-weeknumbers
                 >
                   <template v-slot="{ inputEvents,inputValue }">
