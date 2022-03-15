@@ -83,7 +83,39 @@
                   <label for="last_update" class="text-dash-color"
                     >Sélectionnez la date</label
                   >
-                  <b-form-datepicker
+                  <v-date-picker
+                  v-model="completedForm.last_update"
+                  opens="center"
+                  :max-date="max"
+                  class="d-flex style-picker"
+                  show-weeknumbers
+                >
+                  <template v-slot="{ inputEvents,inputValue }">
+                    <div
+                      class="
+                        d-flex
+                        flex-col
+                        sm:flex-row
+                        justify-content-center
+                        text-center
+                        item-center
+                        btn-container-calendar
+                      "
+                    >
+                      <i for="last_update" class="fas fa-light fa-calendar p-2"></i>
+                      <input
+                        id="last_update"
+                        class="p-1 w-full"
+                        :value="inputValue ? moment(inputValue).format(
+                                'DD.MM.YYYY'
+                              ):'Choisir la date'"
+                        v-on="inputEvents"
+                        readonly
+                      />
+                    </div>
+                  </template>
+                </v-date-picker>
+                  <!-- <b-form-datepicker
                     v-model="completedForm.last_update"
                     :max="max"
                     required
@@ -92,7 +124,7 @@
                     :disabled="isUpdateMode"
                     locale="fr"
                   >
-                  </b-form-datepicker>
+                  </b-form-datepicker> -->
                 </b-form-group>
               </b-row>
             </tab-content>
@@ -196,6 +228,10 @@ export default {
         this.$set(this.completedForm.completed_form_fields, item.form_field.id, item.value)
       })
     },
+    onRangeDateObservation (inputValueDate) {
+      // this.completedForm.last_update = moment(inputValueDate).format(
+      //   'YYYY-MM-DD')
+    },
 
     onComplete () {
       this.isLoading = true
@@ -260,5 +296,35 @@ fieldset {
 }
 fieldset.no-border {
   border-bottom: none;
+}
+.btn-container-calendar {
+  border-radius: 5px;
+  border: 1px solid #c3c8ced2;
+  width: 100%;
+  align-items: center;
+  background-color: #f4f5fc;
+
+  input {
+    border: none !important;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    &:focus {
+      border: none !important;
+      outline: none !important;
+    }
+  }
+  label {
+    width: 15%;
+    align-self: center;
+    align-items: center;
+    text-align: center;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+.style-picker {
+  width: 80%;
 }
 </style>

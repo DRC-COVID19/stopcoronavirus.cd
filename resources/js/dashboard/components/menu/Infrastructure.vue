@@ -26,53 +26,6 @@
           <div class="d-flex" md="4" lg="4">
             <b-form-group class="col" lg="4">
               <div class="d-flex justify-content-around">
-                <!-- <date-range-picker
-                  ref="picker2"
-                  :locale-data="{
-                    firstDay: 1,
-                    format: 'dd-mm-yyyy',
-                    drops: 'up',
-                  }"
-                  v-model="dateRangeObservation"
-                  :appendToBody="true"
-                  opens="center"
-                  :max-date="new Date()"
-                  :singleDatePicker="checkedRangeDatePicker ? false : true"
-                  @update="updateObservationDate"
-                  @select="selectObservation"
-                  :calculate-position="dateRangerPosition"
-                  class="style-picker"
-                >
-                  <div slot="header" slot-scope="" class="slot p-2">
-                    <div
-                      style=""
-                      class="d-flex justify-content-between mb-2 mt-2"
-                    >
-                      <a
-                        @click="activeStartDate()"
-                        class="btn btn-sm btn-daterange p-2"
-                        >{{
-                          iconStateDatePicker == "fa fa-times"
-                            ? selectedDate.observation_start
-                            : "Date début"
-                        }}
-                        <i :class="iconStateDatePicker"></i
-                      ></a>
-                      <a class="btn btn-sm btn-daterange p-2">{{
-                        selectedDate.observation_end
-                      }}</a>
-                    </div>
-                  </div>
-                  <template v-slot:input>
-                    <span v-if="checkedRangeDatePicker">
-                      {{ selectedDate.observation_start | date }} -
-                      {{ selectedDate.observation_end | date }}</span
-                    >
-                    <span v-else>
-                      {{ selectedDate.observation_end | date }}
-                    </span>
-                  </template>
-                </date-range-picker> -->
                 <v-date-picker
                   v-model="dateRange"
                   opens="center"
