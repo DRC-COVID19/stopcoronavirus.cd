@@ -13,7 +13,8 @@ class CompletedFormField extends Model
         'value',
         'completed_form_id',
         'form_field_id',
-        'updated_manager_name'
+        'updated_manager_name',
+        'updated_manager_first_name'
     ];
 
 

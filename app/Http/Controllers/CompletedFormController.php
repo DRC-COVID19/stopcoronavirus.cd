@@ -164,6 +164,7 @@ class CompletedFormController extends Controller
         try {
             $data = $request->validated();
             $updatedManagerName = $data['updated_manager_name'];
+            $updatedManagerFirstName = $data['updated_manager_first_name'];
             $completedFormFields = $data['completed_form_fields'];
 
             foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
@@ -172,14 +173,17 @@ class CompletedFormController extends Controller
                 if ($completedFormField && $completedFormField->value !== $formFieldValue) {
                     $completedFormField->update([
                         'value'                 => $formFieldValue,
-                        'updated_manager_name'  => $updatedManagerName
+                        'updated_manager_name'  => $updatedManagerName,
+                        'updated_manager_first_name'  => $updatedManagerFirstName
                     ]);
                 } else if (!$completedFormField) {
                     CompletedFormField::create([
                         'form_field_id'          => $formFieldKey,
                         'value'                 => $formFieldValue,
                         'completed_form_id'     => $completedForm->id,
-                        'updated_manager_name'  => $updatedManagerName
+                        'updated_manager_name'  => $updatedManagerName,
+                        'updated_manager_first_name'  => $updatedManagerFirstName
+
                     ]);
                 }
             }

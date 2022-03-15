@@ -14,6 +14,7 @@ import formField from './modules/formField'
 import formStep from './modules/formStep'
 import hospitalSituation from './modules/hospitalSituation'
 import completedForm from './modules/completedForm'
+import township from './modules/township'
 
 Vue.use(Vuex)
 
@@ -35,5 +36,6 @@ export default new Vuex.Store({
     formStep,
     hospitalSituation,
     completedForm,
+    township
   }
 })

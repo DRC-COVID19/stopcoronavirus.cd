@@ -26,7 +26,7 @@
           striped
           hover
           :fields="fields"
-          :items="users.data"
+          :items="userFilter"
           :filter="filter"
           :per-page="perPage"
           :current-page="currentPage"
@@ -52,7 +52,9 @@
                   data.item.usernmae,
                   data.item.roles,
                   data.item.hospitals,
-                  data.item.email
+                  data.item.email,
+                  data.item.phone_number
+
                 )
               "
               class="mx-2 my-1 fas fa-user-edit"
@@ -98,54 +100,64 @@ export default {
   props: {
     users: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     isLoading: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
-      fields: ["id", "username", "name", "role","hopital", "actions"], // usernmae instead of username (see backend response)
-      filter: "",
+      fields: [{ key: 'id', sortable: false, label: 'Id' },
+        { key: 'username', sortable: false, label: 'Nom utilisateur' },
+        { key: 'name', sortable: false, label: 'Nom' },
+        { key: 'phone_number', sortable: false, label: 'N°Téléphone' },
+        { key: 'role', sortable: false, label: 'Rôle' },
+        { key: 'hopital', sortable: false, label: 'Hôpital' },
+        { key: 'actions', sortable: false, label: 'Actions' }], // usernmae instead of username (see backend response)
+      filter: '',
       perPage: 15,
       currentPage: 1,
       isDeleteModalShown: false,
       currentUser: {
         id: -1,
-        name: "",
+        name: ''
       },
-      editModalShow: false,
-    };
+      editModalShow: false
+    }
   },
   computed: {
-    rows() {
-      return this.users.length;
+    rows () {
+      return this.users.length
     },
+
+    userFilter () {
+      return this.users.data.slice().sort((a, b) => a.id - b.id)
+    }
   },
   watch: {
     filter () {
-      this.search();
+      this.search()
     }
   },
   methods: {
     search () {
-      this.$emit('onSearch', this.filter.trim());
+      this.$emit('onSearch', this.filter.trim())
     },
-    deleteUser(name, userId) {
-      this.isDeleteModalShown = true;
-      this.currentUser.id = userId;
-      this.currentUser.name = name;
+    deleteUser (name, userId) {
+      this.isDeleteModalShown = true
+      this.currentUser.id = userId
+      this.currentUser.name = name
     },
-    onValidateDelection() {
-      this.$emit("onDeleteUser", this.currentUser.id);
-      this.isDeleteModalShown = false;
+    onValidateDelection () {
+      this.$emit('onDeleteUser', this.currentUser.id)
+      this.isDeleteModalShown = false
     },
-    onCancelDelection() {
-      this.isDeleteModalShown = false;
+    onCancelDelection () {
+      this.isDeleteModalShown = false
     },
-    updateUser(name, id, usernmae, roles,hospitals, email) {
+    updateUser (name, id, usernmae, roles, hospitals, email, phone_number) {
       this.currentUser = {
         id,
         name,
@@ -153,11 +165,12 @@ export default {
         roles,
         hospitals,
         email,
-      };
-      this.$emit("onUpdateUser", this.currentUser);
-    },
-  },
-};
+        phone_number
+      }
+      this.$emit('onUpdateUser', this.currentUser)
+    }
+  }
+}
 </script>
 <style lang='scss' scoped>
 @import "@~/sass/_variables";

@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Hospital;
 use App\HospitalLog;
 use App\HospitalSituation;
-use App\Http\Resources\HospitalResources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Collection ;
 use Illuminate\Support\Facades\Log;
+use App\Http\Resources\HospitalResources;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests\StoreHospitalRequest;
+use App\Http\Requests\UpdateHospitalRequest;
 
 class HospitalController extends Controller
 {
@@ -25,15 +27,31 @@ class HospitalController extends Controller
       return response()->json($hospitals, 200);
     }
 
+    public function indexByPaginate()
+    {
+      $hospitals = Hospital::with(['agent','township'])->orderBy('name')->paginate(15);
+      return response()->json($hospitals, 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreHospitalRequest $request)
     {
-        //
+
+        try {
+            $hospital = Hospital::create($request->validated());
+           
+            return response()->json($hospital, 201);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     /**
@@ -43,12 +61,11 @@ class HospitalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($hospital_id)
-    {
+    { 
         $hospital = Hospital::find($hospital_id);
         return response()->json($hospital);
     }
-
-    /**
+        /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -75,14 +92,48 @@ class HospitalController extends Controller
     }
 
     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Hospital  $hospital
+     * @return \Illuminate\Http\Respo(nse
+     */
+    public function updateByAdmin(UpdateHospitalRequest $request, $id)
+    {
+        try {
+            $hospital = Hospital::find($id);
+            if (!$hospital) {
+                return response()->json([], 404);
+                
+            }
+            $hospital->update($request->validated());
+            return response()->json($hospital, 201);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Hospital  $hospital
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Hospital $hospital)
+    public function destroy($hospital_id)
     {
-        //
+      try {
+             $hospitalDeleted = Hospital::destroy($hospital_id);
+             
+             return response()->json( $hospitalDeleted, 200);
+        } catch (\Throwable $th) {
+          if (env('APP_DEBUG') == true) {
+            return response($th)->setStatusCode(500);
+        }
+            return response($th->getMessage())->setStatusCode(500);
+        }
     }
 
     public function getHospitals(Request $request)
@@ -116,6 +167,21 @@ class HospitalController extends Controller
             }
             return response($th->getMessage())->setStatusCode(500);
         }
+    }
+    public function filter (Request $request) {
+      try {
+        $key_words=$request->get('key_words');
+        $forms = Hospital::where('name', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE' , "%{$key_words}%")->paginate(15);
+        if (! $forms ) {
+          return response()->json(['message' => "Au hopital trouvé!"], 404);
+        }
+        return response()->json( $forms, 200);
+      } catch (\Throwable $th) {
+        if (env('APP_DEBUG') == true) {
+          return response($th)->setStatusCode(500);
+        }
+        return response($th->getMessage())->setStatusCode(500);
+      }
     }
 
     private function getHospitalsFromFiltre($date_start, $date_end, $township){
@@ -361,4 +427,5 @@ class HospitalController extends Controller
             'para_medicals' => 'numeric|required'
         ])->validate();
     }
+
 }

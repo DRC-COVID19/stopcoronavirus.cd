@@ -5,18 +5,23 @@ namespace App;
 use App\HospitalSituationNew;
 use App\Events\HospitalUpdatedEvent;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Hospital extends Model
 {
+    // use SoftDeletes;
     protected $fillable=[
         'name',
         'address',
+        'latitude',
+        'longitude',
         'foam_beds',
         'resuscitation_beds',
         'respirators',
         'doctors',
         'nurses',
         'para_medicals',
+        'agent_id',
         'township_id',
     ];
     public function hospitalSituations()
