@@ -95,6 +95,7 @@ export default {
       fields: [
         { key: 'last_update', label: 'Date' },
         { key: 'created_manager_name', label: 'Nom' },
+        { key: 'created_manager_first_name', label: 'Prénom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1

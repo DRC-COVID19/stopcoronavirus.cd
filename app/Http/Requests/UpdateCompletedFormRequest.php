@@ -25,8 +25,9 @@ class UpdateCompletedFormRequest extends FormRequest
     {
         return [
             'updated_manager_name'  => 'required|string',
-            'hospital_id'           =>'required|integer|exists:hospitals,id',
-            'completed_form_fields' =>'required|array'
+            'updated_manager_first_name' => 'required|string',
+            'hospital_id'           => 'required|integer|exists:hospitals,id',
+            'completed_form_fields' => 'required|array'
         ];
     }
 }

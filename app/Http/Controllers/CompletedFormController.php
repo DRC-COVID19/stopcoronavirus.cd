@@ -165,6 +165,7 @@ class CompletedFormController extends Controller
         try {
             $data = $request->validated();
             $updatedManagerName = $data['updated_manager_name'];
+            $updatedManagerFirstName = $data['updated_manager_first_name'];
             $completedFormFields = $data['completed_form_fields'];
 
             foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
@@ -173,14 +174,17 @@ class CompletedFormController extends Controller
                 if ($completedFormField && $completedFormField->value !== $formFieldValue) {
                     $completedFormField->update([
                         'value'                 => $formFieldValue,
-                        'updated_manager_name'  => $updatedManagerName
+                        'updated_manager_name'  => $updatedManagerName,
+                        'updated_manager_first_name'  => $updatedManagerFirstName
                     ]);
                 } else if (!$completedFormField) {
                     CompletedFormField::create([
                         'form_field_id'          => $formFieldKey,
                         'value'                 => $formFieldValue,
                         'completed_form_id'     => $completedForm->id,
-                        'updated_manager_name'  => $updatedManagerName
+                        'updated_manager_name'  => $updatedManagerName,
+                        'updated_manager_first_name'  => $updatedManagerFirstName
+
                     ]);
                 }
             }
@@ -294,11 +298,18 @@ class CompletedFormController extends Controller
                         $query->where('last_update', $hospitalLastUpdate->max_last_update);
                     }
                 },
+                'completedForms.completedFormFields' => function ($query) {
+                    $query->whereHas('formField');
+                },
                 'completedForms.completedFormFields.formField.formStep',
                 'completedForms.adminUser'
             ])
+
+
                 ->find($hospitalLastUpdate->hospital_id);
         }
+
+
         return [
             'hospitalsData' => $hospitalsData,
             'lastUpdate'    => $hospitalsLastUpdate->max('max_last_update')

@@ -14,7 +14,7 @@
             <b-card-header><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
            <b-card-body>
               <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
-            <p v-if="hospitalManagerName">Connecté en tant que <strong>{{hospitalManagerName}}</strong></p>
+            <p v-if="hospitalManagerName && hospitalManagerFirstName">Connecté en tant que <strong>{{hospitalManagerName }} - </strong><span><strong>{{ hospitalManagerFirstName}}</strong></span></p>
            </b-card-body>
           </b-card>
         </b-col>
@@ -103,6 +103,7 @@ export default {
       fields: [
         { key: 'last_update', label: 'Date' },
         { key: 'created_manager_name', label: 'Nom' },
+        { key: 'created_manager_first_name', label: 'Prénom' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
@@ -116,6 +117,8 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
+      hospitalManagerFirstName: (state) => state.hospital.hospitalManagerFirstName,
+      completedForms: (state) => state.completedForm.completedForms,
       isLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
@@ -132,9 +135,16 @@ export default {
     },
     defaultFormId () {
       return DEFAULT_FORM_ID
+    },
+    completedFormsData () {
+      return this.completedForms.data.map((completedForm) => {
+        completedForm.name_manager = completedForm.created_manager_name.split(' ')[0]
+        completedForm.first_name_manager = completedForm.created_manager_name.split(' ')[1]
+        return completedForm
+      })
     }
   },
-  async mounted () {
+  mounted () {
     if (!this.hospitalManagerName) {
       this.$bvModal.show('nameModal')
     }

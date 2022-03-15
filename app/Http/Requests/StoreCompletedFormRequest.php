@@ -26,16 +26,18 @@ class StoreCompletedFormRequest extends FormRequest
     {
         $hospitalId = $this->input('hospital_id');
         return [
-            'form_id'               =>'required|integer|exists:forms,id',
+            'form_id'               => 'required|integer|exists:forms,id',
             'created_manager_name'  => 'required|string',
-            'hospital_id'           =>'required|integer|exists:hospitals,id',
+            'created_manager_first_name'  => 'required|string',
+            'hospital_id'           => 'required|integer|exists:hospitals,id',
             'last_update'           => [
                 'required',
                 'date',
-                Rule::unique('completed_forms')->where( function ($query) use ($hospitalId) {
+                Rule::unique('completed_forms')->where(function ($query) use ($hospitalId) {
                     return $query->where('hospital_id', $hospitalId);
-            })],
-            'completed_form_fields' =>'required|array'
+                })
+            ],
+            'completed_form_fields' => 'required|array'
         ];
     }
 }
