@@ -36,11 +36,11 @@
                       btn-container-calendar
                     "
                   >
-                    <label
+                    <i
                       for="publish_date"
                       class="
                      fas fa-light fa-calendar p-2"
-                    ></label>
+                    ></i>
                     <input
                       id="publish_date"
                       class="p-1 w-full"
@@ -120,28 +120,29 @@
               v-model="filter"
               opens="center"
               :max-date="new Date()"
+              @input="onRangeDateObservation"
               class="d-flex style-picker mb-2"
               show-weeknumbers
               ref="datepicker"
               :attributes='attrs'
             >
-              <template v-slot="{ inputEvents, inputValue }">
+              <template v-slot="{ inputEvents }">
                 <div
                   class="
                     d-flex
                     btn-container-calendar
                   "
                 >
-                  <label
+                  <i
                     for="filter"
                     class="fas fa-light fa-calendar p-2"
-                  ></label>
+                  ></i>
                   <input
                     id="filter"
                     class="p-1 w-full"
                     style="font-size: 16px"
                     :value="
-                      inputValue
+                      filter
                         ? moment(filter).format('DD.MM.YYYY')
                         : 'Choisir la date'
                     "
@@ -419,6 +420,11 @@ export default {
       this.itemToRemove = item
       this.$bvModal.show('confirmation-box')
     },
+    onRangeDateObservation (inputValueDate) {
+      // this.filter = inputValueDate
+      this.attrs = []
+
+    },
     btnReset () {
       this.attrs = []
       this.filter = null
@@ -456,12 +462,6 @@ export default {
       border: none !important;
       outline: none !important;
     }
-  }
-  label {
-
-    width: 15%;
-    text-align: center;
-    font-size: 16px;
   }
 }
 .style-picker {

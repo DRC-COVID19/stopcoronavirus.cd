@@ -32,6 +32,7 @@
           @onSearch="search"
           :isLoading="isLoading"
           @onEditSituation="editSituation"
+          @onGetSituations="getSituations"
         />
         <b-col cols="12" class="d-flex justify-content-end">
           <b-pagination
@@ -53,6 +54,7 @@ import Header from '../components/Header'
 import Waiting from '../../../components/Waiting'
 import ListSituation from './components/ListSituation'
 import CreateSituation from './components/CreateSituation'
+import moment from 'moment'
 export default {
   components: {
     Header,
@@ -99,14 +101,19 @@ export default {
     }
   },
   methods: {
+    getSituations () {
+      this.getSituationList()
+    },
     search (filter) {
       this.isLoading = true
-      if (filter !== '') {
+      const filterDate = moment(filter).format('YYYY-MM-DD')
+      if (filter !== "") {
         axios
-          .get('api/pandemic-stats/filter?date=' + filter)
+          .get('api/pandemic-stats/filter?date=' + filterDate)
           .then(({ data }) => {
             this.situations = data
             this.isLoading = false
+            console.log("this.situations",this.situations)
           })
           .catch(({ response }) => {
             this.$gtag.exception(response)

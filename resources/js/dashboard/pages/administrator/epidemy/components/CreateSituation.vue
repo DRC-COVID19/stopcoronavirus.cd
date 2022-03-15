@@ -11,14 +11,40 @@
           :invalid-feedback="errors.last_update ? errors.last_update[0] : null"
           :state="!errors.last_update"
         >
-          <b-form-datepicker
+          <v-date-picker
+            v-model="form.last_update"
+            opens="center"
+            :max-date="new Date()"
+            class="d-flex input-dash mb-2"
+            show-weeknumbers
+            is-required
+          >
+            <template v-slot="{ inputEvents, inputValue }">
+              <div class="d-flex btn-container-calendar">
+                <i for="publish_date" class="fas fa-light fa-calendar p-2"></i>
+                <input
+                  id="publish_date"
+                  class="p-1 w-full"
+                  style="font-size: 16px"
+                  :value="
+                    inputValue
+                      ? moment(inputValue).format('DD.MM.YYYY')
+                      : 'Choisir la date'
+                  "
+                  v-on="inputEvents"
+                  readonly
+                />
+              </div>
+            </template>
+          </v-date-picker>
+          <!-- <b-form-datepicker
             :state="errors.last_update ? false : null"
             :disabled="disableDate"
             id="datepicker"
             v-model="form.last_update"
             class="mb-2"
           >
-          </b-form-datepicker>
+          </b-form-datepicker> -->
         </b-form-group>
       </b-row>
       <b-row class="d-flex justify-content-start">
@@ -139,10 +165,10 @@
         <b-button type="submit" variant="primary" class="btn-dash-sucess">
           <span v-if="isLoading">
             <b-spinner class="align-middle"></b-spinner>
-              <span>en cours ...</span>
+            <span>en cours ...</span>
           </span>
           <div v-else>
-            {{btnTitle }}
+            {{ btnTitle }}
           </div>
         </b-button>
         <b-button
@@ -159,7 +185,6 @@
 
 <script>
 export default {
-
   props: {
     isSituationAdded: {
       type: Boolean,
@@ -195,7 +220,7 @@ export default {
       isLoading: false,
       warningMessage: "",
       form: {
-        last_update: "",
+        last_update: null,
         confirmed: "",
         sick: "",
         seriously: "",
@@ -240,7 +265,7 @@ export default {
     onSubmit() {
       this.isLoading = true;
       if (this.btnTitle === "Envoyer") {
-        if (this.form.last_update.trim() !== "") {
+        if (this.form.last_update !== null) {
           this.$emit("onCreateSituation", this.form);
         } else {
           this.showWarning = true;
@@ -258,7 +283,8 @@ export default {
       this.$emit("onCancelUpdate", {});
     },
     validateMail() {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const re =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       if (!re.test(String(this.form.email).toLowerCase())) {
         this.validateMailMessage = "Adresse email incorrecte";
       }
@@ -297,11 +323,10 @@ export default {
         : "Les mot de passes ne correspondent pas";
     },
   },
-  
 };
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .main {
   background-color: white;
@@ -310,4 +335,33 @@ export default {
     margin-bottom: 20px;
   }
 }
+.btn-container-calendar {
+  border-radius: 5px;
+  border: 1px solid #c3c8ced2;
+  width: 100%;
+  align-items: center;
+  background-color: #f4f5fc;
+
+  input {
+    border: none !important;
+    width: 100%;
+    height: 100%;
+    &:focus {
+      border: none !important;
+      outline: none !important;
+    }
+  }
+}
+.style-picker {
+  padding: 5px;
+  width: 100%;
+}
+.btn-date-picker{
+  cursor: pointer;
+  border: 1px solid #c3c8ced2;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size:16px;
+}
+
 </style>
