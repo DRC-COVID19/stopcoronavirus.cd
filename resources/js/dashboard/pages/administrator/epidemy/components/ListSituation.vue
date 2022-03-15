@@ -295,7 +295,5 @@ export default {
   border-radius: 5px;
   font-size: 16px;
 }
-.reset {
-  color: red;
-}
+
 </style>
