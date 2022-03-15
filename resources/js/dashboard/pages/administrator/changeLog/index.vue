@@ -425,13 +425,12 @@ export default {
       this.getListChangedLogs()
     },
     btnToday () {
+      this.filter = new Date()
       this.attrs.push({
         key: 'today',
         dates: new Date(),
         highlight: true
       })
-
-      // datepicker.focusDate(new Date())
     }
   }
 }

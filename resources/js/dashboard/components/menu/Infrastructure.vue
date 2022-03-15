@@ -36,7 +36,7 @@
                   @input="onRangeDateObservation"
                   show-weeknumbers
                   :is-expanded="true"
-                  :select-attributes="attributes"
+                  :attributes="attributes"
                   popover.keepVisibleOnInput
                 >
                   <template v-slot="{ inputEvents }">
@@ -151,10 +151,6 @@ export default {
           }
         : new Date(),
       attributes: [
-        {
-          highlight: true,
-          dates: {}
-        }
       ],
       defaultTownship: [{ id: 0, name: 'Tous' }],
       hospitals: [],
@@ -211,7 +207,11 @@ export default {
             : (this.form.observation_end)
         this.form.observation_start = null
       }
-      this.attributes.dates = this.dateRange
+      this.attributes[0] = {
+        key: 'today',
+        dates: this.isRanged ? { start: this.dateRange.start, end: this.dateRange.end } : this.dateRange,
+        highlight: true
+      }
     },
     onRangeDateObservation (inputValueDate) {
       if (this.isRanged) {
@@ -229,7 +229,11 @@ export default {
         this.form.observation_end = moment(inputValueDate).format('YYYY-MM-DD')
         console.log('dateRange', this.dateRange)
       }
-      this.attributes.dates = this.dateRange
+      this.attributes[0] = {
+        key: 'today',
+        dates: this.dateRange,
+        highlight: true
+      }
     },
     // dateRangerPosition(dropdownList, component, { width, top, left, right }) {
     //   dropdownList.style.top = `${top}px`;
