@@ -23,6 +23,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
 
+
+// Route::post('/migrate-hospital-situation-controller', 'MigrateHospitalSituationController@migrateToCompletedForm');
+
+
 Route::get('/lastpandemicstat', function () {
   return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->first());
 });
@@ -45,6 +49,10 @@ Route::group(['prefix' => 'admin_users'], function () {
 });
 
 Route::apiResource('admin_users', 'AdministratorController');
+
+Route::group(['prefix' => 'admin_users'], function () {
+  Route::get('/agents-hospital', 'AdministratorController@getAgentHospitals');
+});
 
 Route::apiResource('admin_roles', 'AdminRoleController');
 
@@ -194,9 +202,14 @@ Route::group([
     Route::post('/get-aggregated-by-hospitals', "CompletedFormController@getAggregatedByHospitals");
   });
 
+  Route::group(['prefix' => 'hospitals-data'], function () {
+    Route::get('/by-paginate', 'HospitalController@indexByPaginate');
+    Route::get('/filter', 'HospitalController@filter');
+    Route::patch('/update-by-admin/{hospital_id}','HospitalController@updateByAdmin');
+  });
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
-
+  // Route::apiResource('townships','TownshipController');
   Route::apiResource('hospital-situations', "HospitalSituationController");
   Route::resource('hospital-situations-new', "HospitalSituationNewController");
   Route::post('get-by-hospital-situations', "HospitalSituationController@getSituationByHospitals");

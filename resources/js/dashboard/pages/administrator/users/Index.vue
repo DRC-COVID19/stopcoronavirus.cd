@@ -156,6 +156,7 @@ export default {
         form.password_confirmation = currentUser.confirmPassword
       }
 
+      // eslint-disable-next-line no-undef
       axios
         .put('/api/admin_users/' + currentUser.id, form)
         .then(() => {

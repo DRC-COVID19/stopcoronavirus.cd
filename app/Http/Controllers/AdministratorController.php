@@ -88,6 +88,20 @@ class AdministratorController extends Controller
     }
   }
 
+  public function getAgentHospitals(){
+    try {
+      $administrators = Administrator::with(['roles'])
+                                        ->where('roles.name','=','agent-hospital')
+                                        ->orderBy('username')->get();
+      return response()->json($administrators, 200);
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
+  }
+
   /**
    * Store a newly created admin_users in storage.
    *
