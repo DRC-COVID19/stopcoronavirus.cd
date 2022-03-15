@@ -164,8 +164,6 @@ export default {
   },
   mounted () {
     this.resetForm()
-    this.populateForm()
-
   },
   watch: {
     hospitalAdded () {

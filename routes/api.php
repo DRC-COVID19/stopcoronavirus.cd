@@ -200,6 +200,7 @@ Route::group([
     Route::get('/get-latest-hospital-update', 'CompletedFormController@getLatestHospitalUpdate');
     Route::get('/{last_update}/hospital_id/{hospital_id}', 'CompletedFormController@getSituationsByHospitalAndLastUpdate');
     Route::post('/get-aggregated-by-hospitals', "CompletedFormController@getAggregatedByHospitals");
+    Route::get('/check-last_update/{hospital_id}/{last_update}', 'CompletedFormController@checkLastUpdate');
   });
 
   Route::group(['prefix' => 'hospitals-data'], function () {

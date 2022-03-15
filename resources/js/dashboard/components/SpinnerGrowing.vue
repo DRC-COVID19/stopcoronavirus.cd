@@ -9,11 +9,11 @@
 </template>
 <script>
 export default {
-    props:{
-        message:{
-            type:String,
-            default:'Loading...'
-        }
+  props: {
+    message: {
+      type: String,
+      default: 'Loading...'
     }
+  }
 }
 </script>

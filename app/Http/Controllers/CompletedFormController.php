@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Hospital;
 use App\CompletedForm;
-use App\CompletedFormField;
 use App\FormFieldType;
+use App\CompletedFormField;
 use Illuminate\Http\Request;
+use function PHPSTORM_META\map;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+
+
 use App\Http\Requests\StoreCompletedFormRequest;
 use App\Http\Requests\UpdateCompletedFormRequest;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-
-
-use function PHPSTORM_META\map;
 
 class CompletedFormController extends Controller
 {
@@ -345,4 +346,10 @@ class CompletedFormController extends Controller
                 ];
             });
     }
+
+    public function checkLastUpdate($hospitalId, $lastUpdate){
+        return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id',$hospitalId)->count();
+        
+    }
+
 }
