@@ -44,7 +44,7 @@
                     :label-for="formField.name"
                   >
 
-                    <b-row>Creation d'un hopital
+                    <b-row>
                       <b-col class="col-sm-12 col-md-12">
                         <FormFieldInput
                           v-model="completedForm.completed_form_fields[formField.id]"
@@ -63,7 +63,7 @@
               <b-row align-h="center">
                 <b-col
                   v-for="(formStep, index) in targetForm.form_steps"
-                  :key="index"Creation d'un hopital
+                  :key="index"
                   cols="12"
                   md="6"
                 >
