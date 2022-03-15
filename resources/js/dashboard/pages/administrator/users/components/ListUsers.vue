@@ -17,8 +17,7 @@
           v-if="isLoading"
           :rows="15"
           :columns="5"
-          :table-props="{ bordered: false, striped: true, responsive: true }"
-        ></b-skeleton-table>
+          :table-props="{ bordered: false, Creation d'un hopital
 
         <b-table
           v-else
