@@ -295,5 +295,20 @@ export default {
   border-radius: 5px;
   font-size: 16px;
 }
+.today {
+  &:hover{
+      color: #00c163;
+    border: 1px solid #00c163;
 
+  }
+
+}
+.reset{
+  &:hover{
+    color:red;
+    border: 1px solid red;
+
+  }
+
+  }
 </style>
