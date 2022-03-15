@@ -233,6 +233,7 @@ export default {
           params: { page }
         })
         .then(({ data }) => {
+          console.log('all data --->', data)
           this.users = data
           this.isLoading = false
         })

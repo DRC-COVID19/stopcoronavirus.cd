@@ -131,8 +131,9 @@ export default {
     rows () {
       return this.users.length
     },
+
     userFilter () {
-      return this.users.data.slice().sort((a, b) => a.id.toString().localeCompare(b.id.toString()))
+      return this.users.data.slice().sort((a, b) => a.id - b.id)
     }
   },
   watch: {

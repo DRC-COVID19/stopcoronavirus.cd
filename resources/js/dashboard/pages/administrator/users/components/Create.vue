@@ -215,7 +215,7 @@ export default {
   },
   methods: {
     onSubmit () {
-      if (this.validatePhoneNumberMessage && this.validateEmailMessage) {
+      if (!this.validatePhoneNumberMessage && !this.validateMailMessage) {
         this.isLoading = true
         if (this.btnTitle === 'Enreigistrer') {
           if (
