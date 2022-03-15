@@ -14,6 +14,7 @@ export default {
     situationHospitalLoading: false,
     hospitalTotalData: null,
     hospitalManagerName: null,
+    hospitalManagerFirstName: null,
     observation_end: null,
     observation_start: null,
     township: null
@@ -26,7 +27,8 @@ export default {
       state.detailHospital = payload
     },
     setHospitalManagerName (state, payload) {
-      state.hospitalManagerName = payload
+      state.hospitalManagerName = payload.name
+      state.hospitalManagerFirstName = payload.firstName
     },
     SET_HOSPITAL (state, payload) {
       state.hospitalData = payload
@@ -64,7 +66,7 @@ export default {
             }
           })
           .then(({ data }) => {
-            const Features = data.map(value => {
+            const Features = data.map((value) => {
               return {
                 type: 'Feature',
                 geometry: {
@@ -207,7 +209,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             reject(response)
           })
           .finally(() => {
@@ -230,12 +232,13 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response)
             reject(response)
           })
       })
     },
+
     hospital__remove ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {

@@ -2058,6 +2058,7 @@ export default {
 .dash-home-page {
   // height: 100vh;
   background: $dash-background;
+  overflow-y: scroll;
   // .side-bottom {
   // height: calc(20vh - 72.5px);
   // }
