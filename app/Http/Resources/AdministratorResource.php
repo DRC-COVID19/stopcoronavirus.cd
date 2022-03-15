@@ -19,6 +19,7 @@ class AdministratorResource extends JsonResource
       'name'              => $this->name,
       'email'             => $this->email,
       'usernmae'          => $this->username,
+      'phone_number'      => $this->phone_number, 
       'avatar'            => $this->avatar,
       'roles'             => $this->roles,
       'isAdmin'           => $this->roles()->where('name', 'Administrator')->exists(),

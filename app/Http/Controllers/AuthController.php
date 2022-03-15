@@ -45,11 +45,12 @@ class AuthController extends Controller
     $credentials = $request->only('email', 'password');
     $user = Administrator::where('email', $credentials['email'])
       ->orWhere('username', $credentials['email'])
+      ->orWhere('phone_number', $credentials['email'])
       ->first();
     if (!$user || !Hash::check($credentials['password'], $user->password)) {
       return response()->json(['error' => 'Mot de passe incorrecte ou login ne correspondent à aucun utilisateur enregistré'], 401);
     }
-    if (!$user->inRoles(['agent-hospital', 'admin-dashboard', 'admin-hospital','manager_epidemic'])) {
+    if (!$user->inRoles(['agent-hospital', 'admin-dashboard', 'admin-hospital', 'manager_epidemic'])) {
       return response()->json(['error' => "L'utilisateur n'est pas autorisé à se connecter"], 401);
     }
     $token = auth('dashboard')->login($user);

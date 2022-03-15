@@ -2,15 +2,17 @@
 <template>
   <div>
     <b-container class="mt-4">
-      <Loading v-if="isLoading" class="h-100"  message="Chargement du formulaire"/>
+      <Loading v-if="isLoading" class="h-100"  completedForm="Chargement du formulaire"/>
       <b-row v-else align-h="center">
-
         <b-col cols="12">
           <b-link
             :to="backRoute"
           >
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
+           <b-col cols="12" v-if="errors && errors.last_update">
+                    <b-alert variant="danger" dismissible show>Vous ne pouvez plus soumettre pour le  {{ moment(completedForm.last_update).format("DD/MM/Y") }}! car, les données ont déjà été soumis.</b-alert>
+                  </b-col>
           <h3 v-if="isUpdateMode" class="mb-4 mt-4">
             Modifier la mise à jour du
             {{ moment(completedForm.last_update).format("DD/MM/Y") }}
@@ -80,6 +82,14 @@
               </b-alert>
               </b-col>
                 <b-form-group class="no-border">
+                <div class="text-center text-danger my-2" v-if="isLastUpdateChecking">
+                  <b-spinner class="align-middle" />
+                  <strong>Verification de la date de Mise a jour...</strong>
+                </div>
+                 <div>
+                    <b-alert variant="danger" show v-show="!!completedForm.checkLastUpdate">Le {{ moment(completedForm.last_update).format('DD/MM/Y')}} a déjà soumission. <br/>Veuillez choisir une autre date!</b-alert>
+                    <b-alert variant="success" show v-show="completedForm.checkLastUpdate === 0">Aucune soumission constatée en cette date. Veuillez soumettre les données.</b-alert>
+                  </div>
                   <label for="last_update" class="text-dash-color"
                     >Sélectionnez la date</label
                   >
@@ -123,6 +133,7 @@
                     class="mb-2"
                     :disabled="isUpdateMode"
                     locale="fr"
+                    @input="selectLastUpdate()"
                   >
                   </b-form-datepicker> -->
                 </b-form-group>
@@ -157,11 +168,13 @@ export default {
     return {
       dateFormatted: { day: 'numeric', year: 'numeric', month: 'numeric' },
       completedForm: {
-        completed_form_fields: {}
+        completed_form_fields: {},
+        checkLastUpdate: null
       },
       max: now,
       errors: {},
       isLoading: false,
+      isLastUpdateChecking: false,
       targetForm: {},
       completedFormFields: {}
     }
@@ -170,10 +183,14 @@ export default {
     ...mapState({
       user: state => state.auth.user,
       hospitalManagerName: state => state.hospital.hospitalManagerName,
+      hospitalManagerFirstName: state => state.hospital.hospitalManagerFirstName,
       formSteps: state => state.formStep.formSteps,
       isHospitalSituationLoading: state => state.hospitalSituation.isLoading,
       isUpdateMode () {
         return !!this.$route.params.completed_form_id
+      },
+      getHospitalId () {
+        return this.$route.params.hospital_id ? this.$route.params.hospital_id : this.user.hospital.id
       }
     }),
     backRoute () {
@@ -208,9 +225,14 @@ export default {
       'updateHospitalSituation',
       'completedForm__getByHospitalDetail',
       'completedForm__store',
-      'completedForm__update'
+      'completedForm__update',
+      'completedForm__checkLastUpdate'
     ]),
-
+    async selectLastUpdate () {
+      this.isLastUpdateChecking = true
+      this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.completedForm.last_update })
+      this.isLastUpdateChecking = false
+    },
     async getCompletedFormFields () {
       this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
       this.getLastUpdate()
@@ -239,9 +261,11 @@ export default {
       if (this.isUpdateMode) {
         this.completedForm._method = 'PUT'
         this.completedForm.updated_manager_name = this.hospitalManagerName
+        this.completedForm.updated_manager_first_name = this.hospitalManagerFirstName
         this.completedForm.id = this.$route.params.completed_form_id
       } else {
         this.completedForm.created_manager_name = this.hospitalManagerName
+        this.completedForm.created_manager_first_name = this.hospitalManagerFirstName
       }
       this.submitCompletedForm(this.isUpdateMode ? this.completedForm__update : this.completedForm__store)
         .then(() => {
@@ -259,22 +283,25 @@ export default {
 
     submitCompletedForm (method) {
       return new Promise((resolve, reject) => {
-        this.completedForm.hospital_id = this.$route.params.hospital_id ? this.$route.params.hospital_id : this.user.hospital.id
+        this.completedForm.hospital_id = this.getHospitalId
         this.completedForm.form_id = this.targetForm.id
         method(this.completedForm)
           .then(() => {
             this.$notify({
               group: 'alert',
-              title: 'Formulaire soumis avec succès',
+              title: 'Formulaire de soumission',
+              text: 'Formulaire soumis avec succès',
               type: 'success'
             })
-            resolve()
+            resolve(true)
           })
-          .catch((err) => {
-            reject(err)
+          .catch(({ response }) => {
+            this.errors = response.data.errors
+            reject(response)
             this.$notify({
               group: 'alert',
-              title: 'Une erreur est survenu',
+              title: 'Formulaire de soumission',
+              text: 'Une erreur est survenu',
               type: 'error'
             })
           })

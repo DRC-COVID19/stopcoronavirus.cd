@@ -40,9 +40,11 @@
           @blur="validateMail()"
         ></b-form-input>
       </b-form-group>
-      <b-form-text id="password-help-block">{{
+      <b-form-text id="password-help-block">
+        <span class="text-danger"> {{
         validateMailMessage
-      }}</b-form-text>
+      }}</span>
+      </b-form-text>
       <b-form-group
         label-class="text-dash-color"
         id="input-group-3"
@@ -57,6 +59,25 @@
           required
         ></b-form-input>
       </b-form-group>
+         <b-form-group
+        label-class="text-dash-color"
+        id="input-group-4"
+        label="Numéro Téléphone*"
+        label-for="input-4"
+      >
+        <b-form-input
+          id="input-4"
+          class="input-dash"
+          v-model="form.phoneNumber"
+          placeholder="Ex: 0823493378"
+          @blur="validatePhoneNumber()"
+          required
+        ></b-form-input>
+      </b-form-group>
+         <b-form-text id="password-help-block"><span class="text-danger">
+           {{
+        validatePhoneNumberMessage
+      }}</span></b-form-text>
       <label class="text-dash-color" for="check-group-1">Roles *</label>
       <v-select
         v-model="form.roles"
@@ -160,7 +181,8 @@ export default {
       iconClass: 'fas fa-plus-square',
       updating: false,
       isLoading: false,
-      validateMailMessage: '',
+      validateMailMessage: null,
+      validatePhoneNumberMessage: null,
       disablePassword: false,
       form: {
         username: '',
@@ -169,7 +191,8 @@ export default {
         hospitals: [],
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        phoneNumber: ''
       },
       show: true,
       showWarning: false,
@@ -192,17 +215,19 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.isLoading = true
-      if (this.btnTitle === 'Enreigistrer') {
-        if (
-          this.form.password === this.form.confirmPassword
-        ) {
-          this.$emit('onCreate', this.form)
+      if (!this.validatePhoneNumberMessage && !this.validateMailMessage) {
+        this.isLoading = true
+        if (this.btnTitle === 'Enreigistrer') {
+          if (
+            this.form.password === this.form.confirmPassword
+          ) {
+            this.$emit('onCreate', this.form)
+          } else {
+            this.showWarning = true
+          }
         } else {
-          this.showWarning = true
+          this.$emit('onUpdate', this.form)
         }
-      } else {
-        this.$emit('onUpdate', this.form)
       }
     },
 
@@ -218,6 +243,15 @@ export default {
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       if (!re.test(String(this.form.email).toLowerCase())) {
         this.validateMailMessage = 'Adresse email incorrecte'
+      }
+    },
+    validatePhoneNumber () {
+      const regexPhoneNumber = /^0+[8,9]+[0-9]{8}$/im
+
+      if (!regexPhoneNumber.test(this.form.phoneNumber)) {
+        this.validatePhoneNumberMessage = 'Numéro de téléphone incorrect'
+      } else {
+        this.validatePhoneNumberMessage = ''
       }
     },
 
@@ -238,6 +272,7 @@ export default {
       this.form.id = this.formToPopulate.id
       this.form.username = this.formToPopulate.usernmae
       this.form.email = this.formToPopulate.email
+      this.form.phoneNumber = this.formToPopulate.phone_number
       this.form.roles = this.formToPopulate.roles.map(role => role.id)
       this.form.hospitals = this.formToPopulate.hospitals.map(hospital => hospital.id)
       this.form.name = this.formToPopulate.name

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container-dash">
     <transition name="slideLeft">
       <router-view></router-view>
     </transition>
@@ -81,3 +81,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.container-dash{
+  overflow: hidden;
+}
+</style>

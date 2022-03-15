@@ -16,6 +16,7 @@ class CompletedForm extends Model
         'admin_user_id',
         'hospital_id',
         'created_manager_name',
+        'created_manager_first_name',
         'last_update',
     ];
 
