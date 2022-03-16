@@ -58,7 +58,7 @@ export default {
   },
   data () {
     return {
-      title: 'Hopitaux',
+      title: 'Hopitaux( CTCOS  )',
       iconClass: 'fas fa-hospital',
       isLoading: false,
       hospitals: {},
@@ -133,7 +133,7 @@ export default {
             this.isHospitalDeleted = true
             this.$notify({
               group: 'alert',
-              title: 'Supprimer Hopital',
+              title: 'Supprimer CTCO',
               text: 'Supprimer avec succès !',
               type: 'success'
             })
@@ -144,7 +144,7 @@ export default {
             this.$gtag.exception(response)
             this.$notify({
               group: 'alert',
-              title: 'Supprimer Hopital',
+              title: 'Supprimer CTCO',
               text: 'Une erreur est survenue!',
               type: 'error'
             })
@@ -176,7 +176,7 @@ export default {
             this.getHospitalList(1)
             this.$notify({
               group: 'alert',
-              title: 'Modifer Hopital',
+              title: 'Modifer CTCO',
               text: 'Modifier avec succès',
               type: 'success'
             })
@@ -185,7 +185,7 @@ export default {
             this.$gtag.exception(response)
             this.$notify({
               group: 'alert',
-              title: 'Modifer Hopital',
+              title: 'Modifer CTCO',
               text: 'Une erreur est survenue !',
               type: 'error'
             })
@@ -204,7 +204,7 @@ export default {
             this.onResetForm(true)
             this.$notify({
               group: 'alert',
-              title: 'Nouvel hopital',
+              title: 'Nouvel CTCO',
               text: 'Ajouter avec succès',
               type: 'success'
             })
@@ -217,7 +217,7 @@ export default {
             const messages = this.renderErrorsMessages(this.errors).join(',')
             this.$notify({
               group: 'alert',
-              title: 'Nouvel hopital',
+              title: 'Nouvel CTCO',
               text: 'Oups! Une erreur est survenue :\r\n' + messages,
               type: 'error'
             })
@@ -255,7 +255,7 @@ export default {
     renderErrorsMessages (errors) {
       const errorsMessage = []
       if (errors.name) {
-        errorsMessage.push('Cette hopital existe déjà.')
+        errorsMessage.push('Cette CTCO existe déjà.')
       } else if (errors.township_id) {
         errorsMessage.push('La commune doit être unique et obligatoire ')
       } else if (errors.agent_id) {

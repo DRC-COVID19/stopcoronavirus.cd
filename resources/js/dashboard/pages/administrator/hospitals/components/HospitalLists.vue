@@ -40,7 +40,7 @@
           </template>
           <template v-slot:cell(actions)="data" class="action-btn-group">
             <i
-              @click="deleteHospital(data.item.name, data.item.id)"
+              @click="deleteHospital(data.item.name, data.item.id, data.item.agent)"
               class="mx-2 my-1 fas fa-user-times"
             ></i>
             <i
@@ -76,7 +76,16 @@
       </b-col>
     </b-row>
     <b-modal v-model="isDeleteModalShown">
-      Voulez-vous vraiment supprimer {{ currentHospital.name }} ?
+       <template #modal-header>
+         <div class="mx-auto">
+          <h5 class="lead text-secondary">DESAFFECTATION D'UN AGENT A UN CTCO</h5>
+         </div>
+        </template>
+         <div class="col-12">
+            <div class="mx-5 my-2">
+           Voulez-vous rétirer <strong>{{ currentAgent.name.toUpperCase() }}</strong> au CTCO <strong>{{ currentHospital.name }}</strong> ?
+            </div>
+        </div>
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter
@@ -118,6 +127,10 @@ export default {
         id: -1,
         name: ''
       },
+      currentAgent: {
+        id: -1,
+        name: ''
+      },
       editModalShow: false
     }
   },
@@ -135,10 +148,11 @@ export default {
     search () {
       this.$emit('onSearch', this.filter.trim())
     },
-    deleteHospital (name, HospitalId) {
+    deleteHospital (name, HospitalId, agent) {
       this.isDeleteModalShown = true
       this.currentHospital.id = HospitalId
       this.currentHospital.name = name
+      this.currentAgent.name = agent.name
     },
     onValidateDelection () {
       this.$emit('onDeleteHospital', this.currentHospital.id)

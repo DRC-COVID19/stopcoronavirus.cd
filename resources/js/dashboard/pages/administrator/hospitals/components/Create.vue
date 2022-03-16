@@ -10,7 +10,7 @@
       <b-form-group
         label-class="text-dash-color"
         id="input-group-1"
-        label="Nom de l'hopital *"
+        label="Nom du CTCO *"
         label-for="input-1"
         :invalid-feedback="errors.name ? errors.name[0] : null"
         :state="!errors.name"
@@ -20,7 +20,7 @@
           id="input-1"
           v-model="form.name"
           type="text"
-          placeholder="Entrer le Nom de l'hopital"
+          placeholder="Entrer le Nom du CTCO"
           required
         ></b-form-input>
       </b-form-group>
@@ -147,7 +147,7 @@ export default {
   },
   data () {
     return {
-      title: "Creation d'un hopital",
+      title: "Creation d'un CTCO",
       btnTitle: 'Enregistrer',
       iconClass: 'fas fa-hospital-alt',
       disablePassword: false,
@@ -189,7 +189,7 @@ export default {
     onReset () {
       this.toToCanceled = true
       this.form = {}
-      this.title = "Creation d'un hopital"
+      this.title = "Creation d'un CTCO"
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
     },
@@ -198,7 +198,7 @@ export default {
       if (this.hospitalCreated | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
-        this.title = "Creation d'un hopital"
+        this.title = "Creation d'un CTCO"
       }
     },
 
