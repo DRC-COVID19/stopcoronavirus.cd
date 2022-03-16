@@ -73,6 +73,7 @@
           value-field="id"
           text-field="name"
           disabled-field="notEnabled"
+          :searchable ="true"
         />
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
