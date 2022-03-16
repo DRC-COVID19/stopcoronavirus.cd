@@ -11,14 +11,40 @@
           :invalid-feedback="errors.last_update ? errors.last_update[0] : null"
           :state="!errors.last_update"
         >
-          <b-form-datepicker
+          <v-date-picker
+            v-model="form.last_update"
+            opens="center"
+            :max-date="new Date()"
+            class="d-flex input-dash mb-2"
+            show-weeknumbers
+            is-required
+          >
+            <template v-slot="{ inputEvents, inputValue }">
+              <div class="d-flex btn-container-calendar">
+                <i for="publish_date" class="fas fa-light fa-calendar p-2"></i>
+                <input
+                  id="publish_date"
+                  class="p-1 w-full"
+                  style="font-size: 16px"
+                  :value="
+                    inputValue
+                      ? moment(inputValue).format('DD.MM.YYYY')
+                      : 'Choisir la date'
+                  "
+                  v-on="inputEvents"
+                  readonly
+                />
+              </div>
+            </template>
+          </v-date-picker>
+          <!-- <b-form-datepicker
             :state="errors.last_update ? false : null"
             :disabled="disableDate"
             id="datepicker"
             v-model="form.last_update"
             class="mb-2"
           >
-          </b-form-datepicker>
+          </b-form-datepicker> -->
         </b-form-group>
       </b-row>
       <b-row class="d-flex justify-content-start">
@@ -139,10 +165,10 @@
         <b-button type="submit" variant="primary" class="btn-dash-sucess">
           <span v-if="isLoading">
             <b-spinner class="align-middle"></b-spinner>
-              <span>en cours ...</span>
+            <span>en cours ...</span>
           </span>
           <div v-else>
-            {{btnTitle }}
+            {{ btnTitle }}
           </div>
         </b-button>
         <b-button
@@ -159,149 +185,136 @@
 
 <script>
 export default {
-
   props: {
     isSituationAdded: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     isSituationUpdated: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
-        return {};
-      },
+        return {}
+      }
     },
     errors: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
 
-  data() {
+  data () {
     return {
-      title: "Nouvelle Situation",
-      btnTitle: "Envoyer",
-      iconClass: "fas fa-plus-square",
-      validateMailMessage: "",
+      title: 'Nouvelle Situation',
+      btnTitle: 'Envoyer',
+      iconClass: 'fas fa-plus-square',
+      validateMailMessage: '',
       disableDate: false,
       isUpdating: false,
       isLoading: false,
-      warningMessage: "",
+      warningMessage: '',
       form: {
-        last_update: "",
-        confirmed: "",
-        sick: "",
-        seriously: "",
-        dead: "",
-        imported: "",
-        local: "",
-        healed: "",
+        last_update: null,
+        confirmed: '',
+        sick: '',
+        seriously: '',
+        dead: '',
+        imported: '',
+        local: '',
+        healed: ''
       },
       showWarning: false,
       toBeCanceled: true,
-      roles: [],
-    };
+      roles: []
+    }
   },
-
-  watch: {
-    isSituationAdded() {
-      this.resetForm();
-    },
-    isSituationUpdated() {
-      this.resetForm();
-    },
-    formToPopulate() {
-      this.populateForm;
-    },
-  },
-  mounted() {
-    this.resetForm();
+  mounted () {
+    this.resetForm()
   },
   watch: {
-    isSituationAdded() {
-      this.resetForm();
+    isSituationAdded () {
+      this.resetForm()
     },
-    isSituationUpdated() {
-      this.resetForm();
+    isSituationUpdated () {
+      this.resetForm()
     },
-    formToPopulate() {
-      this.populateForm();
-    },
+    formToPopulate () {
+      this.populateForm()
+    }
   },
 
   methods: {
-    onSubmit() {
-      this.isLoading = true;
-      if (this.btnTitle === "Envoyer") {
-        if (this.form.last_update.trim() !== "") {
-          this.$emit("onCreateSituation", this.form);
+    onSubmit () {
+      this.isLoading = true
+      if (this.btnTitle === 'Envoyer') {
+        if (this.form.last_update !== null) {
+          this.$emit('onCreateSituation', this.form)
         } else {
-          this.showWarning = true;
+          this.showWarning = true
         }
       } else {
-        this.$emit("onUpdateSituation", this.form);
+        this.$emit('onUpdateSituation', this.form)
       }
     },
-    onReset() {
-      this.toToCanceled = true;
-      this.resetForm();
-      this.form = {};
-      this.title = "Nouvelle Situation";
-      this.btnTitle = "Envoyer";
-      this.$emit("onCancelUpdate", {});
+    onReset () {
+      this.toToCanceled = true
+      this.resetForm()
+      this.form = {}
+      this.title = 'Nouvelle Situation'
+      this.btnTitle = 'Envoyer'
+      this.$emit('onCancelUpdate', {})
     },
-    validateMail() {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    validateMail () {
+      const re =
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       if (!re.test(String(this.form.email).toLowerCase())) {
-        this.validateMailMessage = "Adresse email incorrecte";
+        this.validateMailMessage = 'Adresse email incorrecte'
       }
     },
-    resetForm() {
-      this.isUpdating = false;
-      this.isLoading = false;
-      this.disableDate = false;
+    resetForm () {
+      this.isUpdating = false
+      this.isLoading = false
+      this.disableDate = false
       if (this.isSituationAdded | this.isSituationUpdated) {
-        this.form = {};
-        this.btnTitle = "Envoyer";
-        this.title = "Nouvelle Situation";
+        this.form = {}
+        this.btnTitle = 'Envoyer'
+        this.title = 'Nouvelle Situation'
       }
     },
-    populateForm() {
-      this.disableDate = true;
+    populateForm () {
+      this.disableDate = true
       this.isUpdating = true;
       (this.form.id = this.formToPopulate.id),
-        (this.form.last_update = this.formToPopulate.last_update);
-      this.form.confirmed = this.formToPopulate.confirmed;
-      this.form.sick = this.formToPopulate.sick;
-      this.form.seriously = this.formToPopulate.seriously;
-      this.form.dead = this.formToPopulate.dead;
-      this.form.imported = this.formToPopulate.imported;
-      this.form.local = this.formToPopulate.local;
-      this.form.healed = this.formToPopulate.healed;
-      this.title = "Editer la situation";
-      this.btnTitle = "Valider";
-    },
+      (this.form.last_update = this.formToPopulate.last_update)
+      this.form.confirmed = this.formToPopulate.confirmed
+      this.form.sick = this.formToPopulate.sick
+      this.form.seriously = this.formToPopulate.seriously
+      this.form.dead = this.formToPopulate.dead
+      this.form.imported = this.formToPopulate.imported
+      this.form.local = this.formToPopulate.local
+      this.form.healed = this.formToPopulate.healed
+      this.title = 'Editer la situation'
+      this.btnTitle = 'Valider'
+    }
   },
 
   computed: {
-    warningMissMatch() {
+    warningMissMatch () {
       return this.form.password === this.form.confirmPassword
-        ? ""
-        : "Les mot de passes ne correspondent pas";
-    },
-  },
-  
-};
+        ? ''
+        : 'Les mot de passes ne correspondent pas'
+    }
+  }
+}
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .main {
   background-color: white;
@@ -310,4 +323,33 @@ export default {
     margin-bottom: 20px;
   }
 }
+.btn-container-calendar {
+  border-radius: 5px;
+  border: 1px solid #c3c8ced2;
+  width: 100%;
+  align-items: center;
+  background-color: #f4f5fc;
+
+  input {
+    border: none !important;
+    width: 100%;
+    height: 100%;
+    &:focus {
+      border: none !important;
+      outline: none !important;
+    }
+  }
+}
+.style-picker {
+  padding: 5px;
+  width: 100%;
+}
+.btn-date-picker{
+  cursor: pointer;
+  border: 1px solid #c3c8ced2;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size:16px;
+}
+
 </style>

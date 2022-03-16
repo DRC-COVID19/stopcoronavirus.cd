@@ -22,7 +22,7 @@ class PandemicStatController extends Controller
    */
   public function __construct()
   {
-    $this->middleware(['auth:dashboard','check.roles:manager_epidemic']);
+    $this->middleware(['auth:dashboard', 'check.roles:manager_epidemic']);
   }
 
   /**
@@ -247,20 +247,20 @@ class PandemicStatController extends Controller
 
 
 
-  public function filter(Request $request) {
+  public function filter(Request $request)
+  {
     try {
-      $date=$request->get('date');
-      $situation = PandemicStat::where('last_update', $date)->paginate(15);
-      if (! $situation) {
+      $date = $request->get('date');
+      $situation = PandemicStat::whereDate('last_update', $date)->paginate(15);
+      if (!$situation) {
         return response()->json(["message" => "Not situation found", "success" => false], 404);
       }
       return PandemicStatResource::collection($situation);
     } catch (\Throwable $th) {
-     if (env('APP_DEBUG') == true) {
+      if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
       }
       return response($th->getMessage())->setStatusCode(500);
     }
   }
-
 }

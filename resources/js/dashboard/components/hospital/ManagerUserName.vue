@@ -1,11 +1,14 @@
 <template>
-  <b-modal :id="id" centered no-close-on-backdrop hide-footer hide-header>
+  <b-modal :id="id" centered no-close-on-backdrop hide-footer hide-header >
     <b-container>
       <b-row>
         <b-col>
+          <div class="mb-4 p-2">
+            <h2 class="lead text-center text-uppercase text-bold">Formulaire d'identification</h2>
+          </div>
           <b-form @submit.prevent="hospitalManagerNameSubmit">
             <b-form-group>
-              <label class="text-dash-color">Veuillez entrer votre nom pour continuer</label>
+              <label class="text-dash-color">Veuillez entrer votre Nom:</label>
               <b-form-input v-model="identity.name"  @blur="validateName()" required class="input-dash" />
             </b-form-group>
                 <b-form-text id="name-help-block">
@@ -14,7 +17,7 @@
                 }}</span>
                   </b-form-text>
             <b-form-group>
-              <label class="text-dash-color">Veuillez entrer votre prénom complet pour continuer</label>
+              <label class="text-dash-color">Veuillez entrer votre Prénom :</label>
               <b-form-input  v-model="identity.firstName" @blur="validateFirstName()" required class="input-dash" />
             </b-form-group>
             <b-form-text id="first-name-help-block">
@@ -22,7 +25,9 @@
                   validateFirstNameMessage
                 }}</span>
                   </b-form-text>
-            <b-button type="submit" class="btn-dash-blue">Continuer</b-button>
+            <div class="mt-4 text-center">
+              <b-button type="submit" class="btn-dash-blue">Continuer</b-button>
+            </div>
           </b-form>
         </b-col>
       </b-row>
@@ -73,7 +78,6 @@ export default {
       } else {
         this.validateFirstNameMessage = ''
       }
-      console.log(this.validateFirstNameMessage)
     },
     validateName () {
       if (this.identity.name.trim().length === 0) {
@@ -81,7 +85,6 @@ export default {
       } else {
         this.validateNameMessage = ''
       }
-      console.log(this.validateNameMessage)
     }
   }
 }

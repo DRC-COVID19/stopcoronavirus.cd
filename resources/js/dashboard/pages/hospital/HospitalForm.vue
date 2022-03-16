@@ -86,14 +86,45 @@
                   <b-spinner class="align-middle" />
                   <strong>Verification de la date de Mise a jour...</strong>
                 </div>
-                 <div>
-                    <b-alert variant="danger" show v-show="!!completedForm.checkLastUpdate">Le {{ moment(completedForm.last_update).format('DD/MM/Y')}} a déjà soumission. <br/>Veuillez choisir une autre date!</b-alert>
-                    <b-alert variant="success" show v-show="completedForm.checkLastUpdate === 0">Aucune soumission constatée en cette date. Veuillez soumettre les données.</b-alert>
-                  </div>
                   <label for="last_update" class="text-dash-color"
                     >Sélectionnez la date</label
                   >
-                  <b-form-datepicker
+                  <v-date-picker
+                  v-model="completedForm.last_update"
+                  opens="center"
+                  :max-date="max"
+                  class="d-flex style-picker"
+                  @input="selectLastUpdate()"
+                  show-weeknumbers
+                >
+                  <template v-slot="{ inputEvents,inputValue }">
+                    <div
+                      class="
+                        d-flex
+                        flex-col
+                        sm:flex-row
+                        justify-content-center
+                        text-center
+                        item-center
+                        btn-container-calendar
+                      "
+                    >
+                      <i for="last_update" class="fas fa-light fa-calendar p-2"></i>
+                      <input
+                        id="last_update"
+                        class="p-1 w-full"
+                        :value="inputValue ? moment(inputValue).format(
+                                'DD.MM.YYYY'
+                              ):'Choisir la date'"
+                        v-on="inputEvents"
+                        :disabled="isUpdateMode"
+                        hidePopover
+                        readonly
+                      />
+                    </div>
+                  </template>
+                </v-date-picker>
+                  <!-- <b-form-datepicker
                     v-model="completedForm.last_update"
                     :max="max"
                     required
@@ -103,7 +134,7 @@
                     locale="fr"
                     @input="selectLastUpdate()"
                   >
-                  </b-form-datepicker>
+                  </b-form-datepicker> -->
                 </b-form-group>
               </b-row>
             </tab-content>
@@ -198,8 +229,26 @@ export default {
     ]),
     async selectLastUpdate () {
       this.isLastUpdateChecking = true
-      this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.completedForm.last_update })
+      this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.moment(this.completedForm.last_update).format('DD-MM-Y') })
       this.isLastUpdateChecking = false
+      if (this.completedForm.checkLastUpdate) {
+        this.$bvToast.toast(`Le ${this.moment(this.completedForm.last_update).format('DD/MM/Y')} a déjà soumission.Veuillez choisir une autre date!`, {
+          title: 'Erreur',
+          autoHideDelay: 4000,
+          appendToast: true,
+          variant: 'danger',
+          solid: true
+        })
+      }
+      if (this.completedForm.checkLastUpdate === 0) {
+        this.$bvToast.toast('Aucune soumission constatée en cette date.  Veuillez soumettre les données.', {
+          title: 'Success',
+          autoHideDelay: 4000,
+          appendToast: true,
+          variant: 'success',
+          solid: true
+        })
+      }
     },
     async getCompletedFormFields () {
       this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
@@ -217,6 +266,10 @@ export default {
       this.completedFormFields.forEach(item => {
         this.$set(this.completedForm.completed_form_fields, item.form_field.id, item.value)
       })
+    },
+    onRangeDateObservation (inputValueDate) {
+      // this.completedForm.last_update = moment(inputValueDate).format(
+      //   'YYYY-MM-DD')
     },
 
     onComplete () {
@@ -251,22 +304,22 @@ export default {
         this.completedForm.form_id = this.targetForm.id
         method(this.completedForm)
           .then(() => {
-            this.$notify({
-              group: 'alert',
+            this.$bvToast.toast('Formulaire soumis avec succès', {
               title: 'Formulaire de soumission',
-              text: 'Formulaire soumis avec succès',
-              type: 'success'
+              appendToast: true,
+              variant: 'success',
+              solid: true
             })
             resolve(true)
           })
           .catch(({ response }) => {
             this.errors = response.data.errors
             reject(response)
-            this.$notify({
-              group: 'alert',
-              title: 'Formulaire de soumission',
-              text: 'Une erreur est survenu',
-              type: 'error'
+            this.$bvToast.toast('Une erreur est survenue!', {
+              title: 'Erreur de soumission de reponses',
+              appendToast: true,
+              variant: 'danger',
+              solid: true
             })
           })
       })
@@ -287,5 +340,35 @@ fieldset {
 }
 fieldset.no-border {
   border-bottom: none;
+}
+.btn-container-calendar {
+  border-radius: 5px;
+  border: 1px solid #c3c8ced2;
+  width: 100%;
+  align-items: center;
+  background-color: #f4f5fc;
+
+  input {
+    border: none !important;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    &:focus {
+      border: none !important;
+      outline: none !important;
+    }
+  }
+  label {
+    width: 15%;
+    align-self: center;
+    align-items: center;
+    text-align: center;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+.style-picker {
+  width: 80%;
 }
 </style>
