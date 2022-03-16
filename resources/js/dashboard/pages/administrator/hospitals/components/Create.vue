@@ -203,7 +203,7 @@ export default {
     },
 
     populateForm () {
-      this.title = 'Affecté un Agent au CTCO '
+      this.title = 'Modification du CTCO '
       this.btnTitle = 'Modifier'
       this.form.id = this.formToPopulate.id
       this.form.name = this.formToPopulate.name

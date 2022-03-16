@@ -125,16 +125,16 @@ export default {
         this.isLoading = false
       }
     },
-    deleteHospital (currentHospitalId) {
+    deleteHospital ({ id, agentId }) {
       return new Promise((resolve, reject) => {
-        this.hospital__remove({ hospital_id: currentHospitalId })
+        this.hospital__remove({ hospital_id: id, agent_id: agentId })
           .then(() => {
             this.getHospitalList()
             this.isHospitalDeleted = true
             this.$notify({
               group: 'alert',
-              title: 'Supprimer CTCO',
-              text: 'Supprimer avec succès !',
+              title: 'Rétirer un Agent dans un CTCO',
+              text: "L'Agent a été rétiréavec succès !",
               type: 'success'
             })
             resolve()
@@ -144,7 +144,7 @@ export default {
             this.$gtag.exception(response)
             this.$notify({
               group: 'alert',
-              title: 'Supprimer CTCO',
+              title: 'Rétirer un Agent dans un CTCO',
               text: 'Une erreur est survenue!',
               type: 'error'
             })
@@ -176,8 +176,8 @@ export default {
             this.getHospitalList(1)
             this.$notify({
               group: 'alert',
-              title: 'Modifer CTCO',
-              text: 'Modifier avec succès',
+              title: 'Modification du CTCO',
+              text: 'Modifié avec succès',
               type: 'success'
             })
           })
@@ -185,7 +185,7 @@ export default {
             this.$gtag.exception(response)
             this.$notify({
               group: 'alert',
-              title: 'Modifer CTCO',
+              title: 'Modification du CTCO',
               text: 'Une erreur est survenue !',
               type: 'error'
             })
