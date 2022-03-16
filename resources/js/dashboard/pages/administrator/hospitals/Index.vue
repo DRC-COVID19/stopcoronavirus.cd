@@ -125,9 +125,9 @@ export default {
         this.isLoading = false
       }
     },
-    deleteHospital ({ id, agentId }) {
+    deleteHospital (currentHospitalId) {
       return new Promise((resolve, reject) => {
-        this.hospital__remove({ hospital_id: id, agent_id: agentId })
+        this.hospital__remove({ id: currentHospitalId })
           .then(() => {
             this.getHospitalList()
             this.isHospitalDeleted = true

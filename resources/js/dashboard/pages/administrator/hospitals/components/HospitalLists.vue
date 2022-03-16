@@ -155,7 +155,7 @@ export default {
       this.currentAgent.name = agent.name
     },
     onValidateDelection () {
-      this.$emit('onDeleteHospital', { id: this.currentHospital.id, agentId: this.currentAgent.id })
+      this.$emit('onDeleteHospital', this.currentHospital.id)
       this.isDeleteModalShown = false
     },
     onCancelDelection () {

@@ -243,9 +243,7 @@ export default {
       commit("SET_IS_LOADING", true);
       return new Promise((resolve, reject) => {
         axios
-          .patch(
-            `/api/dashboard/hospitals-data/${payload.id}/reject-agent/${payload.agent_id}`
-          )
+          .patch(`/api/dashboard/hospitals-data/${payload.id}/reject-agent`)
           .then(({ data }) => {
             commit("SET_HOSPITAL", data);
             resolve(true);
