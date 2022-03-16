@@ -2,15 +2,17 @@
 <template>
   <div>
     <b-container class="mt-4">
-      <Loading v-if="isLoading" class="h-100"  message="Chargement du formulaire"/>
+      <Loading v-if="isLoading" class="h-100"  completedForm="Chargement du formulaire"/>
       <b-row v-else align-h="center">
-
         <b-col cols="12">
           <b-link
             :to="backRoute"
           >
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
+           <b-col cols="12" v-if="errors && errors.last_update">
+                    <b-alert variant="danger" dismissible show>Vous ne pouvez plus soumettre pour le  {{ moment(completedForm.last_update).format("DD/MM/Y") }}! car, les données ont déjà été soumis.</b-alert>
+                  </b-col>
           <h3 v-if="isUpdateMode" class="mb-4 mt-4">
             Modifier la mise à jour du
             {{ moment(completedForm.last_update).format("DD/MM/Y") }}
@@ -18,7 +20,7 @@
           <form-wizard
             :finishButtonText="isUpdateMode ? 'Modifier' : 'Envoyer'"
             :startIndex="0"
-            :title="targetForm.title"
+            :title="targetForm.title.toUpperCase()"
             subtitle
             shape="tab"
             color="#2e5bff"
@@ -80,10 +82,49 @@
               </b-alert>
               </b-col>
                 <b-form-group class="no-border">
+                <div class="text-center text-danger my-2" v-if="isLastUpdateChecking">
+                  <b-spinner class="align-middle" />
+                  <strong>Verification de la date de Mise a jour...</strong>
+                </div>
                   <label for="last_update" class="text-dash-color"
                     >Sélectionnez la date</label
                   >
-                  <b-form-datepicker
+                  <v-date-picker
+                  v-model="completedForm.last_update"
+                  opens="center"
+                  :max-date="max"
+                  class="d-flex style-picker"
+                  @input="selectLastUpdate()"
+                  show-weeknumbers
+                >
+                  <template v-slot="{ inputEvents,inputValue }">
+                    <div
+                      class="
+                        d-flex
+                        flex-col
+                        sm:flex-row
+                        justify-content-center
+                        text-center
+                        item-center
+                        btn-container-calendar
+                      "
+                    >
+                      <i for="last_update" class="fas fa-light fa-calendar p-2"></i>
+                      <input
+                        id="last_update"
+                        class="p-1 w-full"
+                        :value="inputValue ? moment(inputValue).format(
+                                'DD.MM.YYYY'
+                              ):'Choisir la date'"
+                        v-on="inputEvents"
+                        :disabled="isUpdateMode"
+                        hidePopover
+                        readonly
+                      />
+                    </div>
+                  </template>
+                </v-date-picker>
+                  <!-- <b-form-datepicker
                     v-model="completedForm.last_update"
                     :max="max"
                     required
@@ -91,8 +132,9 @@
                     class="mb-2"
                     :disabled="isUpdateMode"
                     locale="fr"
+                    @input="selectLastUpdate()"
                   >
-                  </b-form-datepicker>
+                  </b-form-datepicker> -->
                 </b-form-group>
               </b-row>
             </tab-content>
@@ -125,11 +167,13 @@ export default {
     return {
       dateFormatted: { day: 'numeric', year: 'numeric', month: 'numeric' },
       completedForm: {
-        completed_form_fields: {}
+        completed_form_fields: {},
+        checkLastUpdate: null
       },
       max: now,
       errors: {},
       isLoading: false,
+      isLastUpdateChecking: false,
       targetForm: {},
       completedFormFields: {}
     }
@@ -138,10 +182,14 @@ export default {
     ...mapState({
       user: state => state.auth.user,
       hospitalManagerName: state => state.hospital.hospitalManagerName,
+      hospitalManagerFirstName: state => state.hospital.hospitalManagerFirstName,
       formSteps: state => state.formStep.formSteps,
       isHospitalSituationLoading: state => state.hospitalSituation.isLoading,
       isUpdateMode () {
         return !!this.$route.params.completed_form_id
+      },
+      getHospitalId () {
+        return this.$route.params.hospital_id ? this.$route.params.hospital_id : this.user.hospital.id
       }
     }),
     backRoute () {
@@ -176,9 +224,32 @@ export default {
       'updateHospitalSituation',
       'completedForm__getByHospitalDetail',
       'completedForm__store',
-      'completedForm__update'
+      'completedForm__update',
+      'completedForm__checkLastUpdate'
     ]),
-
+    async selectLastUpdate () {
+      this.isLastUpdateChecking = true
+      this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.moment(this.completedForm.last_update).format('DD-MM-Y') })
+      this.isLastUpdateChecking = false
+      if (this.completedForm.checkLastUpdate && !this.isUpdateMode) {
+        this.$bvToast.toast(`Le ${this.moment(this.completedForm.last_update).format('DD/MM/Y')} a déjà soumission.Veuillez choisir une autre date!`, {
+          title: 'Erreur',
+          autoHideDelay: 4000,
+          appendToast: true,
+          variant: 'danger',
+          solid: true
+        })
+      }
+      if (this.completedForm.checkLastUpdate === 0 && !this.isUpdateMode) {
+        this.$bvToast.toast('Aucune soumission constatée en cette date.  Veuillez soumettre les données.', {
+          title: 'Success',
+          autoHideDelay: 4000,
+          appendToast: true,
+          variant: 'success',
+          solid: true
+        })
+      }
+    },
     async getCompletedFormFields () {
       this.completedFormFields = await this.completedForm__getByHospitalDetail({ isLoading: this.isLoading, completed_form_id: this.$route.params.completed_form_id })
       this.getLastUpdate()
@@ -196,6 +267,10 @@ export default {
         this.$set(this.completedForm.completed_form_fields, item.form_field.id, item.value)
       })
     },
+    onRangeDateObservation (inputValueDate) {
+      // this.completedForm.last_update = moment(inputValueDate).format(
+      //   'YYYY-MM-DD')
+    },
 
     onComplete () {
       this.isLoading = true
@@ -203,9 +278,11 @@ export default {
       if (this.isUpdateMode) {
         this.completedForm._method = 'PUT'
         this.completedForm.updated_manager_name = this.hospitalManagerName
+        this.completedForm.updated_manager_first_name = this.hospitalManagerFirstName
         this.completedForm.id = this.$route.params.completed_form_id
       } else {
         this.completedForm.created_manager_name = this.hospitalManagerName
+        this.completedForm.created_manager_first_name = this.hospitalManagerFirstName
       }
       this.submitCompletedForm(this.isUpdateMode ? this.completedForm__update : this.completedForm__store)
         .then(() => {
@@ -223,23 +300,26 @@ export default {
 
     submitCompletedForm (method) {
       return new Promise((resolve, reject) => {
-        this.completedForm.hospital_id = this.$route.params.hospital_id ? this.$route.params.hospital_id : this.user.hospital.id
+        this.completedForm.hospital_id = this.getHospitalId
         this.completedForm.form_id = this.targetForm.id
         method(this.completedForm)
           .then(() => {
-            this.$notify({
-              group: 'alert',
-              title: 'Formulaire soumis avec succès',
-              type: 'success'
+            this.$bvToast.toast('Formulaire soumis avec succès', {
+              title: 'Formulaire de soumission',
+              appendToast: true,
+              variant: 'success',
+              solid: true
             })
-            resolve()
+            resolve(true)
           })
-          .catch((err) => {
-            reject(err)
-            this.$notify({
-              group: 'alert',
-              title: 'Une erreur est survenu',
-              type: 'error'
+          .catch(({ response }) => {
+            this.errors = response.data.errors
+            reject(response)
+            this.$bvToast.toast('Une erreur est survenue!', {
+              title: 'Erreur de soumission de reponses',
+              appendToast: true,
+              variant: 'danger',
+              solid: true
             })
           })
       })
@@ -260,5 +340,35 @@ fieldset {
 }
 fieldset.no-border {
   border-bottom: none;
+}
+.btn-container-calendar {
+  border-radius: 5px;
+  border: 1px solid #c3c8ced2;
+  width: 100%;
+  align-items: center;
+  background-color: #f4f5fc;
+
+  input {
+    border: none !important;
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    &:focus {
+      border: none !important;
+      outline: none !important;
+    }
+  }
+  label {
+    width: 15%;
+    align-self: center;
+    align-items: center;
+    text-align: center;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+}
+.style-picker {
+  width: 80%;
 }
 </style>

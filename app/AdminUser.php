@@ -19,5 +19,6 @@ class AdminUser extends Model
         'reset_password_token',
         'reset_password_token_date',
         'remember_token',
+        'phone_number'
     ];
 }

@@ -3,7 +3,7 @@
     <b-col cols="12" lg="auto">
       <CTCOMenu />
     </b-col>
-    <b-col class="col-router-view">
+    <b-col class="col-router-view ctco-container-body">
       <router-view></router-view>
     </b-col>
   </b-row>
@@ -60,6 +60,10 @@ export default {
 <style lang='scss' scoped >
   @import "@~/sass/_variables";
   .ctco-container {
+    &-body{
+    overflow-y:scroll;
+
+    }
     @media (min-width: 1024px)  {
       height: calc(100vh - 87px);
       > div {

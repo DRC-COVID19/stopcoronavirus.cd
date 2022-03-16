@@ -3,7 +3,7 @@
     <b-col cols="12" lg="auto">
       <AdministratorMenu />
     </b-col>
-    <b-col class="col-router-view">
+    <b-col class="col-router-view administrator-container-body">
       <notifications group="alert" />
       <router-view></router-view>
     </b-col>
@@ -67,7 +67,11 @@ export default {
 <style lang='scss' scoped >
   @import "@~/sass/_variables";
   @import "@~/sass/_variables";
+
   .administrator-container {
+    &-body{
+      overflow-y:scroll;
+    }
     @media (min-width: 1024px)  {
       height: calc(100vh - 87px);
       > div {
