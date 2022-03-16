@@ -32,6 +32,7 @@
                       : 'Choisir la date'
                   "
                   v-on="inputEvents"
+                  :disabled="isUpdating"
                   readonly
                 />
               </div>
