@@ -207,6 +207,7 @@ Route::group([
     Route::get('/by-paginate', 'HospitalController@indexByPaginate');
     Route::get('/filter', 'HospitalController@filter');
     Route::patch('/update-by-admin/{hospital_id}','HospitalController@updateByAdmin');
+    Route::patch('/{id}/reject-agent/{agent_id}', 'HospitalController@rejectAgent');
   });
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
