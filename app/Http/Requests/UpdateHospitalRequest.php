@@ -23,14 +23,15 @@ class UpdateHospitalRequest extends FormRequest
      */
     public function rules()
     {
+        $hospital_id = $this->input('id');
         return [
             'name'                  => 'sometimes',
             'address'               => 'sometimes',
             'longitude'             => 'numeric|sometimes',
             'latitude'              => 'numeric|sometimes',
             'township_id'           => 'integer|sometimes|exists:townships,id',
-            'agent_id'              => 'unique:hospitals|sometimes|numeric|required|exists:admin_users,id',
-    
+            'agent_id'              => 'numeric|required|unique:admin_users,id' . ($hospital_id ? ",$hospital_id" : ""),
+
         ];
     }
 }
