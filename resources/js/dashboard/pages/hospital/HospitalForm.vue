@@ -20,7 +20,7 @@
           <form-wizard
             :finishButtonText="isUpdateMode ? 'Modifier' : 'Envoyer'"
             :startIndex="0"
-            :title="targetForm.title"
+            :title="targetForm.title.toUpperCase()"
             subtitle
             shape="tab"
             color="#2e5bff"
@@ -231,7 +231,7 @@ export default {
       this.isLastUpdateChecking = true
       this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.moment(this.completedForm.last_update).format('DD-MM-Y') })
       this.isLastUpdateChecking = false
-      if (this.completedForm.checkLastUpdate) {
+      if (this.completedForm.checkLastUpdate && !this.isUpdateMode) {
         this.$bvToast.toast(`Le ${this.moment(this.completedForm.last_update).format('DD/MM/Y')} a déjà soumission.Veuillez choisir une autre date!`, {
           title: 'Erreur',
           autoHideDelay: 4000,
@@ -240,7 +240,7 @@ export default {
           solid: true
         })
       }
-      if (this.completedForm.checkLastUpdate === 0) {
+      if (this.completedForm.checkLastUpdate === 0 && !this.isUpdateMode) {
         this.$bvToast.toast('Aucune soumission constatée en cette date.  Veuillez soumettre les données.', {
           title: 'Success',
           autoHideDelay: 4000,
