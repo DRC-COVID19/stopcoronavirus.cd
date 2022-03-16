@@ -10,9 +10,9 @@
           >
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
-           <b-col cols="12" v-if="errors && errors.last_update">
+           <!-- <b-col cols="12" v-if="errors && errors.last_update">
                     <b-alert variant="danger" dismissible show>Vous ne pouvez plus soumettre pour le  {{ moment(completedForm.last_update).format("DD/MM/Y") }}! car, les données ont déjà été soumis.</b-alert>
-                  </b-col>
+                  </b-col> -->
           <h3 v-if="isUpdateMode" class="mb-4 mt-4">
             Modifier la mise à jour du
             {{ moment(completedForm.last_update).format("DD/MM/Y") }}
@@ -229,7 +229,7 @@ export default {
     ]),
     async selectLastUpdate () {
       this.isLastUpdateChecking = true
-      this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.moment(this.completedForm.last_update).format('DD-MM-Y') })
+      this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.moment(this.completedForm.last_update).format('YYYY-MM-DD') })
       this.isLastUpdateChecking = false
       if (this.completedForm.checkLastUpdate && !this.isUpdateMode) {
         this.$bvToast.toast(`Le ${this.moment(this.completedForm.last_update).format('DD/MM/Y')} a déjà soumission.Veuillez choisir une autre date!`, {

@@ -66,7 +66,7 @@ export default {
             }
           })
           .then(({ data }) => {
-            const Features = data.map((value) => {
+            const Features = data.map(value => {
               return {
                 type: 'Feature',
                 geometry: {
@@ -209,7 +209,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             reject(response)
           })
           .finally(() => {
@@ -232,7 +232,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             console.log(response)
             reject(response)
           })
@@ -243,7 +243,7 @@ export default {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
-          .delete(`/api/dashboard/hospitals-data/${payload.hospital_id}`)
+          .patch(`/api/dashboard/hospitals-data/${payload.id}/reject-agent`)
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
             resolve(true)

@@ -90,8 +90,7 @@ class HospitalController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
-
-    /**
+ /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -99,7 +98,7 @@ class HospitalController extends Controller
      * @return \Illuminate\Http\Respo(nse
      */
     public function updateByAdmin(UpdateHospitalRequest $request, $id)
-    {
+    { 
         try {
             $hospital = Hospital::find($id);
             if (!$hospital) {
@@ -107,6 +106,30 @@ class HospitalController extends Controller
                 
             }
             $hospital->update($request->validated());
+            return response()->json($hospital, 201);
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Hospital  $hospital
+     * @return \Illuminate\Http\Respo(nse
+     */
+    public function rejectAgent($id)
+    { 
+        try {
+            $hospital = Hospital::find($id);
+            if (!$hospital) {
+                return response()->json([], 404);
+                
+            }
+            $hospital->update(['agent_id' => null]);
             return response()->json($hospital, 201);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
