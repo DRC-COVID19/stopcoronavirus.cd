@@ -58,7 +58,7 @@ export default {
   },
   data () {
     return {
-      title: 'Hopitaux',
+      title: 'Hopitaux( CTCOS  )',
       iconClass: 'fas fa-hospital',
       isLoading: false,
       hospitals: {},
@@ -127,14 +127,14 @@ export default {
     },
     deleteHospital (currentHospitalId) {
       return new Promise((resolve, reject) => {
-        this.hospital__remove({ hospital_id: currentHospitalId })
+        this.hospital__remove({ id: currentHospitalId })
           .then(() => {
             this.getHospitalList()
             this.isHospitalDeleted = true
             this.$notify({
               group: 'alert',
-              title: 'Supprimer Hopital',
-              text: 'Supprimer avec succès !',
+              title: 'Rétirer un Agent dans un CTCO',
+              text: "L'Agent a été rétiréavec succès !",
               type: 'success'
             })
             resolve()
@@ -144,7 +144,7 @@ export default {
             this.$gtag.exception(response)
             this.$notify({
               group: 'alert',
-              title: 'Supprimer Hopital',
+              title: 'Rétirer un Agent dans un CTCO',
               text: 'Une erreur est survenue!',
               type: 'error'
             })
@@ -176,8 +176,8 @@ export default {
             this.getHospitalList(1)
             this.$notify({
               group: 'alert',
-              title: 'Modifer Hopital',
-              text: 'Modifier avec succès',
+              title: 'Modification du CTCO',
+              text: 'Modifié avec succès',
               type: 'success'
             })
           })
@@ -185,7 +185,7 @@ export default {
             this.$gtag.exception(response)
             this.$notify({
               group: 'alert',
-              title: 'Modifer Hopital',
+              title: 'Modification du CTCO',
               text: 'Une erreur est survenue !',
               type: 'error'
             })
@@ -204,7 +204,7 @@ export default {
             this.onResetForm(true)
             this.$notify({
               group: 'alert',
-              title: 'Nouvel hopital',
+              title: 'Nouvel CTCO',
               text: 'Ajouter avec succès',
               type: 'success'
             })
@@ -217,7 +217,7 @@ export default {
             const messages = this.renderErrorsMessages(this.errors).join(',')
             this.$notify({
               group: 'alert',
-              title: 'Nouvel hopital',
+              title: 'Nouvel CTCO',
               text: 'Oups! Une erreur est survenue :\r\n' + messages,
               type: 'error'
             })
@@ -255,7 +255,7 @@ export default {
     renderErrorsMessages (errors) {
       const errorsMessage = []
       if (errors.name) {
-        errorsMessage.push('Cette hopital existe déjà.')
+        errorsMessage.push('Cette CTCO existe déjà.')
       } else if (errors.township_id) {
         errorsMessage.push('La commune doit être unique et obligatoire ')
       } else if (errors.agent_id) {
