@@ -233,6 +233,7 @@ export default {
 
     onReset () {
       this.toToCanceled = true
+      this.validatePhoneNumberMessage = ''
       this.form = {}
       this.title = "Creation d'un utilisateur"
       this.btnTitle = 'Enreigistrer'

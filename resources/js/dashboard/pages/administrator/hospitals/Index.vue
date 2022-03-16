@@ -166,13 +166,14 @@ export default {
     },
     updateHospital (currentHospital) {
       this.isLoading = true
+      this.onResetForm(false)
       return new Promise((resolve, reject) => {
         this.hospital__update(currentHospital)
           .then(() => {
             this.hospitalUpdated = true
             this.showSuccess = true
-            this.isLoading = false
             this.updating = false
+            this.onResetForm(true)
             this.getHospitalList(1)
             this.$notify({
               group: 'alert',
@@ -182,13 +183,17 @@ export default {
             })
           })
           .catch(({ response }) => {
+            this.getHospitalList(1)
             this.$gtag.exception(response)
             this.$notify({
               group: 'alert',
               title: 'Modification du CTCO',
-              text: 'Une erreur est survenue !',
+              text: 'Une erreur est survenue ! ' + this.renderErrorsMessages(response.data.errors).join(','),
               type: 'error'
             })
+          })
+          .finally(() => {
+            this.isLoading = false
           })
       })
     },
