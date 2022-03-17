@@ -116,7 +116,7 @@ export default {
       fields: [
         { key: 'name', label: 'Nom' },
         { key: 'township', label: 'Commune' },
-        { key: 'agent', label: 'Agents' },
+        { key: 'agent', label: ' Agent Attitré' },
         { key: 'actions', label: 'Actions' }
       ],
       filter: '',
