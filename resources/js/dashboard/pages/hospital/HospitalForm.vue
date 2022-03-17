@@ -232,7 +232,7 @@ export default {
       this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({ hospital_id: this.getHospitalId, last_update: this.moment(this.completedForm.last_update).format('YYYY-MM-DD') })
       this.isLastUpdateChecking = false
       if (this.completedForm.checkLastUpdate && !this.isUpdateMode) {
-        this.$bvToast.toast(`Le ${this.moment(this.completedForm.last_update).format('DD/MM/Y')} a déjà soumission.Veuillez choisir une autre date!`, {
+        this.$bvToast.toast(`Le ${this.moment(this.completedForm.last_update).format('DD/MM/Y')} a déjà une soumission. Veuillez choisir une autre date SVP!`, {
           title: 'Erreur',
           autoHideDelay: 4000,
           appendToast: true,
@@ -241,7 +241,7 @@ export default {
         })
       }
       if (this.completedForm.checkLastUpdate === 0 && !this.isUpdateMode) {
-        this.$bvToast.toast('Aucune soumission constatée en cette date.  Veuillez soumettre les données.', {
+        this.$bvToast.toast('Aucune soumission constatée en cette date.', {
           title: 'Success',
           autoHideDelay: 4000,
           appendToast: true,
