@@ -201,6 +201,7 @@ export default {
   }
 }
  .bg-dash{
-    box-shadow: -8px 10px 45px -3px rgba(0,0,0,0.1);
+    box-shadow: -5px 10px 75px -1px rgba(0,0,0,0.1);
+    border: 0 !important;
   }
 </style>
