@@ -1,6 +1,7 @@
+/* eslint-disable no-sequences */
 <template>
-  <b-card>
-    <h2 class="h2">{{ title }}</h2>
+  <b-card class="bg-dash">
+    <h2 class="h2 mb-4">{{ title }}</h2>
     <b-form @submit.prevent="onSubmit" @reset.prevent="onReset">
       <b-row class="mx-1 d-flex justify-content-start">
         <b-form-group
@@ -163,7 +164,7 @@
         </b-col>
       </b-row>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button type="submit" variant="primary" class="btn-dash-sucess">
+        <b-button type="submit" variant="primary" class="btn-dash-blue">
           <span v-if="isLoading">
             <b-spinner class="align-middle"></b-spinner>
             <span>en cours ...</span>
@@ -352,5 +353,9 @@ export default {
   border-radius: 5px;
   font-size:16px;
 }
+.bg-dash{
+    box-shadow: -5px 10px 75px -1px rgba(0,0,0,0.1);
+    border: 0 !important;
+  }
 
 </style>

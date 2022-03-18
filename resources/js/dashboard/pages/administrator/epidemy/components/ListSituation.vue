@@ -43,17 +43,6 @@
             >
           </div>
         </v-date-picker>
-
-        <!-- <b-form-datepicker
-          label-today-button="Aujourd'hui"
-          label-reset-button="Effacer"
-          reset-button
-          today-button
-          v-model="filter"
-          placeholder="Choisir la date"
-          class="mb-2"
-        >
-        </b-form-datepicker> -->
       </b-col>
     </b-row>
     <b-row>
@@ -92,10 +81,9 @@
             </div>
           </template>
           <template v-slot:cell(actions)="data" class="action-btn-group">
-            <i
-              class="mx-2 fas fa-pencil-alt color-green"
-              aria-hidden="true"
-              @click="
+              <b-button
+               variant="outline-success mb-1"
+               @click="
                 editSituation(
                   data.item.id,
                   data.item.last_update,
@@ -108,12 +96,10 @@
                   data.item.seriously
                 )
               "
-            ></i>
-            <i
-              class="mx-2 fas fa-trash prim color-red"
-              aria-hidden="true"
-              @click="deleteSituation(data.item.id)"
-            ></i>
+              >Editer</b-button>
+              <b-button variant="outline-danger mb-1"  @click="deleteSituation(data.item.id)">
+             Supprimer
+            </b-button>
           </template>
           <template v-slot:cell(last_update)="data">
             {{ moment(data.item.last_update).format("DD.MM.YYYY") }}

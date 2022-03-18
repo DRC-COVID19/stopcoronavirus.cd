@@ -1,6 +1,6 @@
 <template>
   <b-card class="bg-dash">
-    <h2 class="h2">{{ title }}</h2>
+    <h2 class="h2 mb-4">{{ title }}</h2>
     <b-form
       @submit.prevent="onSubmit"
       @reset.prevent="onReset"
@@ -108,7 +108,7 @@ export default {
   },
   data () {
     return {
-      title: "Creation d'un formulaire",
+      title: 'Nouveau Formulaire',
       btnTitle: 'Enreigistrer',
       iconClass: 'fas fa-plus-square',
       updating: false,
@@ -156,7 +156,7 @@ export default {
     onReset () {
       this.toToCanceled = true
       this.form = {}
-      this.title = "Creation d'un formulaire"
+      this.title = 'Nouveau Formulaire'
       this.btnTitle = 'Enreigistrer'
       this.$emit('onCancelUpdate', {})
     },
@@ -167,7 +167,7 @@ export default {
       if (this.formAdded || this.formUpdated) {
         this.form = {}
         this.btnTitle = 'Enreigistrer'
-        this.title = "Creation d'un formulaire"
+        this.title = 'Nouveau Formulaire'
       }
     },
 

@@ -3,7 +3,7 @@
     <b-row class="flex-md-row-reverse">
       <b-col cols="12" md="4">
         <b-card class="mt-3 bg-dash">
-          <h3>Nouveau log</h3>
+          <h3 class="h2 mb-4">Nouveau log</h3>
           <b-form @submit.prevent="submit_form">
             <b-form-group
               label="Date"
