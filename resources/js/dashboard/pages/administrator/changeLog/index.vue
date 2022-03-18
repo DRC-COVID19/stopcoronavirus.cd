@@ -202,9 +202,13 @@
           <template #cell(action)="data">
               <b-button
                variant="outline-success mb-1"
+               class="btn-dash"
                  @click="toEdit(data.item)"
               >Editer</b-button>
-              <b-button variant="outline-danger mb-1" @click="remove(data.item)">
+              <b-button 
+              variant="outline-danger mb-1" 
+              class="btn-dash"
+              @click="remove(data.item)">
              Supprimer
             </b-button>
           </template>

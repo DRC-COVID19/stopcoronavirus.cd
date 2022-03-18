@@ -41,8 +41,7 @@
           </template>
           <template v-slot:cell(actions)="data">
              <b-button
-                size="sm"
-                class="btn-dash-blue mb-1"
+                class="btn-dash-blue mb-1 btn-dash"
                 :to="{
                     name:'administrator.forms.show',
                     params:{
@@ -52,6 +51,7 @@
               >Details</b-button>
                <b-button
                variant="outline-success mb-1"
+               class="btn-dash"
                @click="
                 updateForm(
                   data.item.id,
@@ -62,7 +62,10 @@
                 )
               "
               >Editer</b-button>
-              <b-button variant="outline-danger mb-1"  @click="deleteForm(data.item.id)">
+              <b-button 
+              variant="outline-danger mb-1"
+              class="btn-dash"
+              @click="deleteForm(data.item.id)">
              Supprimer
             </b-button>
 

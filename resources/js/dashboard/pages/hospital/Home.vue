@@ -48,8 +48,7 @@
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
-                size="sm"
-                class="btn-dash-blue mb-1"
+                class="btn-dash-blue mb-1 btn-dash"
                 :to="{
                   name:'hospital.detail',
                   params:{
@@ -60,7 +59,8 @@
               >Details</b-button>
               <b-button
                 v-if="(data.item.diff_date * 24) < 24"
-                  variant="outline-success mb-1"
+                variant="outline-success mb-1"
+                class="btn-dash"
                 :to="{
                   name: 'hospital.edit',
                   params: {

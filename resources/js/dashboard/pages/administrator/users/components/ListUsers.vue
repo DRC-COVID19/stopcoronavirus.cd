@@ -40,12 +40,10 @@
             </div>
           </template>
           <template v-slot:cell(actions)="data" class="action-btn-group">
-            <i
-              @click="deleteUser(data.item.name, data.item.id)"
-              class="mx-2 my-1 fas fa-user-times"
-            ></i>
-            <i
-              @click="
+             <b-button
+               variant="outline-success mb-1"
+               class="btn-dash"
+               @click="
                 updateUser(
                   data.item.name,
                   data.item.id,
@@ -57,8 +55,10 @@
 
                 )
               "
-              class="mx-2 my-1 fas fa-user-edit"
-            ></i>
+              >Editer</b-button>
+              <b-button variant="outline-danger mb-1" class="btn-dash" @click="deleteUser(data.item.name, data.item.id)">
+             Supprimer
+            </b-button>
           </template>
           <template v-slot:cell(role)="data">
             <b-badge
@@ -109,9 +109,8 @@ export default {
   },
   data () {
     return {
-      fields: [{ key: 'id', sortable: false, label: 'Id' },
+      fields: [
         { key: 'username', sortable: false, label: 'Nom utilisateur' },
-        { key: 'name', sortable: false, label: 'Nom' },
         { key: 'phone_number', sortable: false, label: 'N°Téléphone' },
         { key: 'role', sortable: false, label: 'Rôle' },
         { key: 'hopital', sortable: false, label: 'Hôpital' },
@@ -199,4 +198,5 @@ export default {
   flex-direction: row;
   justify-content: space-around;
 }
+
 </style>

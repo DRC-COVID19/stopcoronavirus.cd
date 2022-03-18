@@ -83,6 +83,7 @@
           <template v-slot:cell(actions)="data" class="action-btn-group">
               <b-button
                variant="outline-success mb-1"
+               class="btn-dash"
                @click="
                 editSituation(
                   data.item.id,
@@ -97,7 +98,9 @@
                 )
               "
               >Editer</b-button>
-              <b-button variant="outline-danger mb-1"  @click="deleteSituation(data.item.id)">
+              <b-button variant="outline-danger mb-1"
+              class="btn-dash"
+              @click="deleteSituation(data.item.id)">
              Supprimer
             </b-button>
           </template>

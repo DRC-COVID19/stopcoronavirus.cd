@@ -41,7 +41,7 @@
           <template v-slot:cell(actions)="data" class="action-btn-group">
              <b-button
                variant="outline-success mb-1"
-               class="mx-2 my-1"
+               class="mx-2 my-1 btn-dash"
                @click="
                 updateHospital(
                   data.item.name,
