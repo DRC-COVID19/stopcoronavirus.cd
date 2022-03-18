@@ -53,14 +53,14 @@
               <template v-slot:cell(actions)="data" class="action-btn-group">
                 <b-button
                variant="outline-success mb-1"
-               class="btn-dash"
+               class="btn-dash btn-btn-dash-form-step"
                  @click="
                     updateStep(
                       data.item
                     )
                   "
               >Editer</b-button>
-              <b-button variant="outline-danger mb-1" class="btn-dash"  @click="deleteStep(data.item)">
+              <b-button variant="outline-danger mb-1" class="btn-dash btn-dash-form-step"  @click="deleteStep(data.item)">
              Supprimer
             </b-button>
 

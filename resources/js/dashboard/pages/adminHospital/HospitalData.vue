@@ -41,7 +41,7 @@
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
-                class="btn-dash-blue mb-1 btn-dash"
+                class="btn-dash-blue btn-dash"
                 :to="{
                   name:'hospital.detail',
                   params:{
@@ -51,7 +51,7 @@
                     }"
               >Details</b-button>
               <b-button
-               variant="outline-success mb-1 btn-dash"
+               variant="outline-success btn-dash"
                 :to="{
                   name: 'hospital.edit',
                   params: {
