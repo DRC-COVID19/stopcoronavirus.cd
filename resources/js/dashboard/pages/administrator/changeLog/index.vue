@@ -2,7 +2,7 @@
   <b-container fluid>
     <b-row class="flex-md-row-reverse">
       <b-col cols="12" md="4">
-        <b-card class="mt-3">
+        <b-card class="mt-3 bg-dash">
           <h3>Nouveau log</h3>
           <b-form @submit.prevent="submit_form">
             <b-form-group
@@ -89,7 +89,7 @@
             </b-form-group>
             <b-button
               type="submit"
-              class="btn-dash-sucess"
+              class="btn-dash-blue"
               :disabled="isCreating"
             >
               <span v-if="isCreating"
@@ -113,7 +113,7 @@
       </b-col>
       <b-col cols="12" md="8">
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
-        <Header title="Change log" iconClass="fa fa-history" />
+          <Header title="Change log" iconClass="fa fa-history" />
         <b-row class="my-3" align-h="start">
           <b-col cols="12" md="6">
             <v-date-picker
@@ -190,8 +190,8 @@
           hover
           striped
           responsive
-          :items="changeLogsData"
           :fields="fields"
+          :items="changeLogsData"
         >
           <template #cell(number)="data">
             {{ data.index + 1 }}
@@ -200,14 +200,13 @@
             {{ moment(data.item.from).format("DD.MM.YYYY") }}
           </template>
           <template #cell(action)="data">
-            <i
-              class="mx-2 fas fa-edit btn-action text-warning"
-              @click="toEdit(data.item)"
-            ></i>
-            <i
-              class="mx-2 fas fa-trash btn-action text-danger"
-              @click="remove(data.item)"
-            ></i>
+              <b-button
+               variant="outline-success mb-1"
+                 @click="toEdit(data.item)"
+              >Editer</b-button>
+              <b-button variant="outline-danger mb-1" @click="remove(data.item)">
+             Supprimer
+            </b-button>
           </template>
         </b-table>
         <b-row>
@@ -248,10 +247,6 @@ export default {
     return {
       filter: null,
       fields: [
-        {
-          key: 'number',
-          label: '#'
-        },
         {
           key: 'from',
           label: 'Date'
@@ -474,14 +469,14 @@ export default {
   padding: 10px 15px;
   border-radius: 5px;
   font-size:16px;
+   transition: .3s ease-in-out;
 }
 .today {
   &:hover{
-      color: #00c163;
-    border: 1px solid #00c163;
+    color: #0013c1;
+    border: 1px solid #0013c1;
 
   }
-
 }
 .reset{
   &:hover{
@@ -490,5 +485,9 @@ export default {
 
   }
 
+  }
+   .bg-dash{
+    box-shadow: -5px 10px 75px -1px rgba(0,0,0,0.1);
+    border: 0 !important;
   }
 </style>
