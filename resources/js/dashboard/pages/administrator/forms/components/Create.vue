@@ -1,5 +1,5 @@
 <template>
-  <b-card>
+  <b-card class="bg-dash">
     <h2 class="h2">{{ title }}</h2>
     <b-form
       @submit.prevent="onSubmit"
@@ -54,7 +54,7 @@
         <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="false">Non</b-form-radio>
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" class="btn-dash-sucess">
+          <b-button type="submit" variant="primary" class="btn-dash-blue">
             <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
@@ -200,4 +200,7 @@ export default {
     margin-bottom: 20px;
   }
 }
+ .bg-dash{
+    box-shadow: -8px 10px 45px -3px rgba(0,0,0,0.1);
+  }
 </style>
