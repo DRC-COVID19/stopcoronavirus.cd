@@ -1,6 +1,7 @@
 <template>
   <b-container>
-      <b-row  class="mb-3 mt-4">
+     <loading v-if="isLoading" class="h-100"  message="Chargement du Formulaire ..."/>
+      <b-row  v-else class="mb-3 mt-4">
         <b-col cols="12" md="5">
           <b-col cols="12" class="p-0">
             <b-card>
@@ -55,15 +56,18 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import Loading from '../../../components/Loading.vue'
 import FormFieldIndex from './components/formField/FormFieldIndex.vue'
 import FormStepIndex from './components/formStep/FormStepIndex'
 export default {
   components: {
     FormFieldIndex,
-    FormStepIndex
+    FormStepIndex,
+    Loading
   },
   data () {
     return {
+      isLoading: false,
       form: {}
     }
   },
@@ -77,7 +81,11 @@ export default {
       'formShow'
     ]),
     async init () {
+      this.isLoading = true
       this.form = await this.formShow({ id: this.$route.params.form_id })
+      if (this.form.length !== 0) {
+        this.isLoading = false
+      }
     },
     onFormFieldCreated () {
       this.init()

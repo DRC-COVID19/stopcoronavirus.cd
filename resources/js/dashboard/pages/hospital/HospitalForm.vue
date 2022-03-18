@@ -2,7 +2,7 @@
 <template>
   <div>
     <b-container class="mt-4">
-      <Loading v-if="isLoading" class="h-100"  completedForm="Chargement du formulaire"/>
+      <Loading v-if="isLoading" class="h-100"  message="Chargement du formulaire ..."/>
       <b-row v-else align-h="center">
         <b-col cols="12">
           <b-link
