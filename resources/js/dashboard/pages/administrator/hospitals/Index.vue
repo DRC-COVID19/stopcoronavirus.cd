@@ -19,7 +19,9 @@
         />
       </b-col>
       <b-col cols="12" md="8">
-        <Header :title="title" :iconClass="iconClass" />
+        <div class="ml-2">
+          <Header :title="title" :iconClass="iconClass" />
+        </div>
         <div class="hide-waiting" v-if="updating"></div>
          <HospitalList
           :hospitals="hospitals"
