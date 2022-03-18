@@ -1,5 +1,5 @@
 <template>
-  <b-card class="bg-dash">
+  <b-card>
     <h2 class="h2 mb-4">{{ title }}</h2>
     <b-form
       @submit.prevent="onSubmit"
@@ -109,7 +109,7 @@ export default {
   data () {
     return {
       title: 'Nouveau Formulaire',
-      btnTitle: 'Enreigistrer',
+      btnTitle: 'Enregistrer',
       iconClass: 'fas fa-plus-square',
       updating: false,
       isLoading: false,
@@ -146,7 +146,7 @@ export default {
   methods: {
     onSubmit () {
       this.isLoading = true
-      if (this.btnTitle === 'Enreigistrer') {
+      if (this.btnTitle === 'Enregistrer') {
         this.$emit('onCreate', this.form)
       } else {
         this.$emit('onUpdate', this.form)
@@ -157,7 +157,7 @@ export default {
       this.toToCanceled = true
       this.form = {}
       this.title = 'Nouveau Formulaire'
-      this.btnTitle = 'Enreigistrer'
+      this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
     },
 
@@ -200,8 +200,4 @@ export default {
     margin-bottom: 20px;
   }
 }
- .bg-dash{
-    box-shadow: -5px 10px 75px -1px rgba(0,0,0,0.1);
-    border: 0 !important;
-  }
 </style>

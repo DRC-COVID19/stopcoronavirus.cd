@@ -1,5 +1,5 @@
 <template>
-  <b-card class="bg-dash">
+  <b-card>
     <h2 class="h2 mb-4">{{ title }}</h2>
     <b-form
       @submit.prevent="onSubmit"
@@ -233,8 +233,4 @@ export default {
      background-color: rgb(165, 167, 180);
   }
 }
-.bg-dash{
-    box-shadow: -5px 10px 75px -1px rgba(0,0,0,0.1);
-    border: 0 !important;
-  }
 </style>
