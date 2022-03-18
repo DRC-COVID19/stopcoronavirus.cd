@@ -1,6 +1,6 @@
 <template>
   <b-card class="bg-dash">
-    <h2 class="h2">{{ title }}</h2>
+    <h2 class="h2 mb-4">{{ title }}</h2>
     <b-form
       @submit.prevent="onSubmit"
       @reset.prevent="onReset"
@@ -147,7 +147,7 @@ export default {
   },
   data () {
     return {
-      title: "Creation d'un CTCO",
+      title: 'Nouveau CTCO',
       btnTitle: 'Enregistrer',
       iconClass: 'fas fa-hospital-alt',
       disablePassword: false,
@@ -189,7 +189,7 @@ export default {
     onReset () {
       this.toToCanceled = true
       this.form = {}
-      this.title = "Creation d'un CTCO"
+      this.title = 'Nouveau CTCO'
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
     },
@@ -198,7 +198,7 @@ export default {
       if (this.hospitalCreated | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
-        this.title = "Creation d'un CTCO"
+        this.title = 'Nouveau CTCO'
       }
     },
 
