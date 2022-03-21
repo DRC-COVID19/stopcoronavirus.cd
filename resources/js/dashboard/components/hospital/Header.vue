@@ -9,7 +9,7 @@
         md="6"
         class="map-form-logo d-flex justify-content-center justify-content-md-end"
       >
-        <img src="/img/partener2.png" width="100" class="img-fluid" alt />
+        <img src="/img/partener2.png" height="30" width="100" class="img-fluid" alt />
         <div
           @mouseleave="userAvatarMouseLeave"
           @mouseenter="userAvatarMouseEnter"
