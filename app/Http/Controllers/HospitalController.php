@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Administrator;
 use App\Hospital;
 use App\HospitalLog;
 use App\HospitalSituation;
@@ -159,6 +160,33 @@ class HospitalController extends Controller
         }
     }
 
+    public function getAgents(){
+      $agents=collect();
+      try {
+        $agentIds = Administrator::all();
+        $agentIds->pluck('id')
+               ->unique()
+               ->sort()
+               ->values();
+               foreach ($agentIds as $id) {
+                 $agent =Hospital::where('agent_id',$id)->first();
+                 if ($agent === null) {
+                      $agent = [
+                        'id'    => $id,
+                        'name'  => Administrator::where('id',$id)->select('name')->first()->name
+                      ];
+                   $agents->push($agent);
+                 }
+               }
+        
+        return response()->json($agents, 200);
+   } catch (\Throwable $th) {
+     if (env('APP_DEBUG') == true) {
+       return response($th)->setStatusCode(500);
+   }
+       return response($th->getMessage())->setStatusCode(500);
+   }
+    }
     public function getHospitals(Request $request)
     {
         try {

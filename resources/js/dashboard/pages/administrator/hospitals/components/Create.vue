@@ -69,7 +69,7 @@
         <b-form-select
           v-model="form.agent_id"
           :options="users"
-          class="mb-3"
+          class="mb-3 form-select"
           value-field="id"
           text-field="name"
           disabled-field="notEnabled"
@@ -231,6 +231,9 @@ export default {
   }
   .bg-custom{
      background-color: rgb(165, 167, 180);
+  }
+  .form-select{
+    outline: none !important;
   }
 }
 </style>

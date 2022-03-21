@@ -41,7 +41,7 @@
           </template>
           <template v-slot:cell(actions)="data">
              <b-button
-                class="btn-dash-blue mb-1 btn-dash"
+                class="btn-dash-blue btn-dash"
                 :to="{
                     name:'administrator.forms.show',
                     params:{
