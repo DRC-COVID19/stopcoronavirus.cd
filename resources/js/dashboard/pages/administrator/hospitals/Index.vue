@@ -104,7 +104,9 @@ export default {
     ...mapActions([
       'getHospitals', 'hospital__remove',
       'townships__getAll', 'hospital__store',
-      'hospital__update', 'hospital__filter']),
+      'hospital__update', 'hospital__filter',
+      'hospital__getAgents'
+    ]),
 
     filterHospitals (filter) {
       this.isLoading = true
@@ -232,18 +234,10 @@ export default {
           })
       })
     },
-    getUsers () {
+    async getUsers () {
       this.isLoading = true
-      // eslint-disable-next-line no-undef
-      axios
-        .get('/api/admin_users')
-        .then(({ data }) => {
-          this.users = data.data.filter(item => item.isAgentHospital === true)
-          this.isLoading = false
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
+      this.users = await this.hospital__getAgents()
+      this.isLoading = false
     },
     async getTownShips () {
       await this.townships__getAll()

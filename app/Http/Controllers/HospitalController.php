@@ -18,10 +18,6 @@ use Illuminate\Support\Facades\Auth;
 
 class HospitalController extends Controller
 {
-  public function __construct()
-  {
-    $this->middleware('dashboard')->except(['getAgents']);
-  }
     /**
      * Display a listing of the resource.
      *
@@ -485,10 +481,5 @@ class HospitalController extends Controller
             'nurses' => 'numeric|required',
             'para_medicals' => 'numeric|required'
         ])->validate();
-    }
-
-    public function guard()
-    {
-       return Auth::guard('dashboard');
     }
 }
