@@ -168,8 +168,8 @@ class HospitalController extends Controller
     public function getAgents(){
       $agents=collect();
       try {
-        $agentIds = Administrator::all();
-        $agentIds->pluck('id')
+        $agentIds = Administrator::all('id')
+               ->pluck('id')
                ->unique()
                ->sort()
                ->values();
@@ -178,9 +178,12 @@ class HospitalController extends Controller
                  if ($agent === null) {
                       $agent = [
                         'id'    => $id,
-                        'name'  => Administrator::where('id',$id)->select('name')->first()->name
+                        'name'  => Administrator::where('id',$id)->select('name')->first()->name,
+                        'isAgentHospital'  => Administrator::where('id',$id)->with('roles')->first()->roles()->where('name', 'agent-hospital')->exists(),
                       ];
-                   $agents->push($agent);
+                   if ($agent['isAgentHospital']) {
+                        $agents->push($agent);
+                   }
                  }
                }
         
