@@ -148,7 +148,7 @@ export default {
         email: currentUser.email,
         roles_id: currentUser.roles,
         hospitals_id: currentUser.hospitals,
-        phone_number: currentUser.phoneNumber,
+        phone_number: currentUser.phoneNumber
       }
 
       if (currentUser && currentUser.password) {
@@ -233,7 +233,6 @@ export default {
           params: { page }
         })
         .then(({ data }) => {
-          console.log('all data --->', data)
           this.users = data
           this.isLoading = false
         })
