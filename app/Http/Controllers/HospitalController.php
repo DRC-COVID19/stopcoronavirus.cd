@@ -14,9 +14,14 @@ use App\Http\Resources\HospitalResources;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreHospitalRequest;
 use App\Http\Requests\UpdateHospitalRequest;
+use Illuminate\Support\Facades\Auth;
 
 class HospitalController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('dashboard')->except(['getAgents']);
+  }
     /**
      * Display a listing of the resource.
      *
@@ -479,4 +484,8 @@ class HospitalController extends Controller
         ])->validate();
     }
 
+    public function guard()
+    {
+       return Auth::guard('dashboard');
+    }
 }
