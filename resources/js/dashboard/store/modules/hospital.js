@@ -319,5 +319,20 @@ export default {
           });
       });
     },
+    hospital__getAgents({ state, commit }, payload = {}) {
+      commit("SET_IS_LOADING", true);
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/api/dashboard/hospitals-data/get-agents`)
+          .then(({ data }) => {
+            resolve(data);
+            commit("SET_IS_LOADING", false);
+          })
+          .catch((response) => {
+            console.log(response);
+            reject(response);
+          });
+      });
+    },
   },
 };
