@@ -291,15 +291,16 @@ class AdministratorController extends Controller
   public function form_validate($data, $id = null)
   {
     return Validator::make($data, [
-      'username' => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
-      'password' => 'required|confirmed',
-      'name' => 'required|string',
-      'avatar' => 'nullable',
-      'remember_token' => 'nullable',
-      'email' => 'required|email',
-      'roles_id' => 'required|array',
-      'hospitals_id' => 'nullable|array',
-      'phone_number' => 'required|string|unique:admin_users,phone_number'
+      'username'        => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
+      'password'        => 'required|confirmed',
+      'name'            => 'required|string',
+      'avatar'          => 'nullable',
+      'remember_token'  => 'nullable',
+      'email'           => 'required|email',
+      'roles_id'        => 'required|array',
+      'hospitals_id'    => 'nullable|array',
+      'phone_number'    => 'required|string|unique:admin_users,phone_number',
+      'affected'        => 'nullable|boolean'
     ])->validate();
   }
 
