@@ -10,11 +10,11 @@
       <b-form-group
         label-class="text-dash-color"
         id="input-group-1"
-        label="Nom du CTCO *"
         label-for="input-1"
         :invalid-feedback="errors.name ? errors.name[0] : null"
         :state="!errors.name"
       >
+      <label for="input-1" class="text-dash-color">Nom du CTCO <span class="text-danger">*</span></label>
         <b-form-input
           class="input-dash"
           id="input-1"
@@ -28,9 +28,9 @@
       <b-form-group
         label-class="text-dash-color"
         id="input-group-3"
-        label="Latitude *"
         label-for="input-3"
       >
+       <label for="input-3" class="text-dash-color">Latitude <span class="text-danger">*</span></label>
         <b-form-input
           id="input-3"
           class="input-dash"
@@ -42,12 +42,12 @@
       </b-form-group>
         <b-form-group
         label-class="text-dash-color"
-        id="input-group-3"
-        label="Longitude *"
-        label-for="input-3"
+        id="input-group-4"
+        label-for="input-4"
       >
+      <label for="input-3" class="text-dash-color">Longitude <span class="text-danger">*</span></label>
         <b-form-input
-          id="input-3"
+          id="input-4"
           class="input-dash"
           v-model="form.longitude"
           placeholder="Entrer la Longitude"
@@ -55,7 +55,7 @@
           step="any"
         ></b-form-input>
       </b-form-group>
-      <label class="text-dash-color" for="check-group-1">Communes *</label>
+      <label class="text-dash-color" for="check-group-1">Communes <span class="text-danger">*</span></label>
       <b-form-select
           v-model="form.township_id"
           :options="townships"
@@ -65,15 +65,15 @@
           disabled-field="notEnabled"
         />
       <b-form-group class="mt-3">
-        <label class="text-dash-color" for="check-group-1">Selectioner un Agent *</label>
-        <b-form-select
-          v-model="form.agent_id"
+      <label class="text-secondary" for="check-group-1">Agent Attitré <span class="text-danger">*</span></label>
+        <v-select
+        v-model="form.agent_id"
+          multiple
           :options="users"
-          class="mb-3 form-select"
-          value-field="id"
-          text-field="name"
-          disabled-field="notEnabled"
-          :searchable ="true"
+          label="name"
+          :reduce="(item) => item.id"
+          :searchable ="false"
+          @input="handleSelect"
         />
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
@@ -211,6 +211,18 @@ export default {
       this.form.latitude = this.formToPopulate.latitude
       this.form.agent_id = this.formToPopulate.agent && this.formToPopulate.agent.id ? this.formToPopulate.agent.id : 0
       this.form.township_id = this.formToPopulate.township && this.formToPopulate.township.id ? this.formToPopulate.township.id : 0
+    },
+    handleSelect (e) {
+      if (e.length > 1) {
+        const agent = e.shift()
+        this.$bvToast.toast('Vous ne pouvez pas selectionner 2 agents en même temps' + agent, {
+          title: 'Erreur',
+          autoHideDelay: 2000,
+          appendToast: true,
+          variant: 'danger',
+          solid: true
+        })
+      }
     }
 
   },

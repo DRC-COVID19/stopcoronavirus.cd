@@ -41,7 +41,8 @@
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
-                class="btn-dash-blue btn-dash"
+               variant="outline-primary"
+                class="btn-dash "
                 :to="{
                   name:'hospital.detail',
                   params:{

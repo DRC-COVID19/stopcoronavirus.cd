@@ -421,7 +421,7 @@ class HospitalController extends Controller
                       ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
                       LIMIT 1
                     )
-                  ) AS respirators,
+                  ) AS respirators,agent
                   SUM(
                     (SELECT resuscitation_beds FROM
                       (SELECT id, updated_at, resuscitation_beds from hospitals

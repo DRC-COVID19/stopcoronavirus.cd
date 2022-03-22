@@ -67,7 +67,8 @@
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
-                class="btn-dash-blue mb-1 btn-dash"
+               variant="outline-primary"
+                class="mb-1 btn-dash"
                 :to="{
                   name:'hospital.admin.data',
                   params:{
