@@ -15,15 +15,14 @@
         labelClass="text-dash-color"
         :errors="!errors.username"
       />
-      <Input
+      <FormFieldInput
         v-model="form.username"
-        placeholder="Entrer le nom d'utilisateur"
         type="text"
+        :placeholder="`Entrer le nom d'utilisateur`"
+        id="input-1"
         :required="true"
-        inputId="input-1"
         class="input-dash"
-        :state="null"
-      />
+        />
       <InputGroup
         inputGroupId="input-group-2"
         label="Adresse mail *"
@@ -39,63 +38,46 @@
         id="input-2"
         :required="true"
         class="input-dash"
-        @input="validateMail"
+        @input="validateMail()"
+        :state="stateValideMail"
       />
       <b-form-text id="password-help-block">
         <span class="text-danger"> {{ validateMailMessage }}</span>
       </b-form-text>
-      <b-form-group
-        label-class="text-dash-color"
-        id="input-group-3"
+       <InputGroup
+        inputGroupId="input-group-3"
         label="Nom *"
-        label-for="input-3"
-      >
-        <b-form-input
-          id="input-3"
-          class="input-dash"
-          v-model="form.name"
-          placeholder="Entrer le nom"
-          required
-        ></b-form-input>
-      </b-form-group>
+        labelFor="input-3"
+        :invalidFeedback="errors.name ? errors.name[0] : null"
+        labelClass="text-dash-color"
+        :errors="!errors.name"
+      />
+         <FormFieldInput
+        v-model="form.name"
+        type="text"
+        :placeholder="`Entrer le nom`"
+        id="input-3"
+        :required="true"
+        class="input-dash"
+      />
       <InputGroup
         inputGroupId="input-group-4"
         label="Numéro Téléphone*"
         labelFor="input-4"
-        :invalidFeedback="errors.mail ? errors.email[0] : null"
+        :invalidFeedback="errors.phoneNumber ? errors.phoneNumber[0] : null"
         labelClass="text-dash-color"
-        :errors="!errors.email"
+        :errors="!errors.phoneNumber"
       />
-      <Input
+         <FormFieldInput
         v-model="form.phoneNumber"
-        placeholder="Ex: 0820000000 "
+        type="text"
+        :placeholder="`Ex: 0820000000`"
+        id="input-4"
         :required="true"
-        inputId="input-4"
         class="input-dash"
-        :state="
-          !errors.mail
-            ? null
-            : errors.mail || validateMailMessage
-            ? true
-            : false
-        "
-        @blur="validatePhoneNumber()"
+        @input="validatePhoneNumber()"
+        :state="stateValideNumber"
       />
-      <!-- <b-form-group
-        label-class="text-dash-color"
-        id="input-group-4"
-        label="Numéro Téléphone*"
-        label-for="input-4"
-      >
-        <b-form-input
-          id="input-4"
-          class="input-dash"
-          v-model="form.phoneNumber"
-          placeholder="Ex: 0823493378"
-          @blur="validatePhoneNumber()"
-          required
-        ></b-form-input>
-      </b-form-group> -->
       <b-form-text id="password-help-block"
         ><span class="text-danger">
           {{ validatePhoneNumberMessage }}</span
@@ -110,7 +92,7 @@
         :reduce="(item) => item.id"
         :searchable="false"
       />
-      <label class="text-dash-color" for="check-group-1">Hopital *</label>
+      <label class="text-dash-color" for="check-group-1">Hopital</label>
       <v-select
         v-model="form.hospitals"
         multiple
@@ -162,13 +144,11 @@
 </template>
 
 <script>
-import Input from '../../../../components/input/Input.vue'
 import InputGroup from '../../../../components/inputGroup/InputGroup.vue'
 import FormFieldInput from '../../../../components/forms/FormFieldInput'
 
 export default {
   components: {
-    Input,
     InputGroup,
     FormFieldInput
   },
@@ -217,6 +197,18 @@ export default {
       validateMailMessage: null,
       validatePhoneNumberMessage: null,
       disablePassword: false,
+      stateValideMail: null,
+      stateValideNumber: null,
+      stateForm: {
+        username: null,
+        name: null,
+        roles: null,
+        hospitals: null,
+        email: null,
+        password: null,
+        confirmPassword: null,
+        phoneNumber: null
+      },
       form: {
         username: '',
         name: '',
@@ -264,8 +256,11 @@ export default {
 
     onReset () {
       this.toToCanceled = true
+      this.validateMailMessage = ''
       this.validatePhoneNumberMessage = ''
       this.form = {}
+      this.stateValideMail = null
+      this.stateValideNumber = null
       this.title = "Creation d'un utilisateur"
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
@@ -274,12 +269,13 @@ export default {
     validateMail (value) {
       const re =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      this.validateMailMessage = ''
       console.log(' this.validateMailMessage', this.form.email)
 
       if (!re.test(String(this.form.email).toLowerCase())) {
+        this.stateValideMail = false
         this.validateMailMessage = 'Adresse email incorrecte'
       } else {
+        this.stateValideMail = true
         this.validateMailMessage = ''
       }
     },
@@ -289,8 +285,10 @@ export default {
 
       if (!regexPhoneNumber.test(this.form.phoneNumber)) {
         this.validatePhoneNumberMessage = 'Numéro de téléphone incorrect'
+        this.stateValideNumber = false
       } else {
         this.validatePhoneNumberMessage = ''
+        this.stateValideNumber = true
       }
     },
 
@@ -298,6 +296,11 @@ export default {
       this.updating = false
       this.isLoading = false
       this.disablePassword = false
+      this.validateMailMessage = ''
+      this.validatePhoneNumberMessage = ''
+      this.stateValideMail = null
+      this.stateValideNumber = null
+      this.form = {}
       if (this.userAdded | this.userUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
@@ -319,6 +322,9 @@ export default {
       this.form.name = this.formToPopulate.name
       this.title = "Modification de l'utilisateur"
       this.btnTitle = 'Modifier'
+    },
+    errorForm () {
+
     }
   },
 

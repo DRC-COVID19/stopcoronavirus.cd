@@ -18,6 +18,7 @@
     :placeholder="placeholder"
     :id="id"
     :required="isRequired || required"
+    :state="state"
   >
   </b-form-input>
 </div>
@@ -49,6 +50,11 @@ export default {
     required: {
       type: Boolean,
       required: false
+    },
+    state: {
+      type: Boolean,
+      required: false,
+      default: null
     }
   },
   data () {
