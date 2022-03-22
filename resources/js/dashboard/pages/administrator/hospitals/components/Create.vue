@@ -65,7 +65,7 @@
           disabled-field="notEnabled"
         />
       <b-form-group class="mt-3">
-      <label class="text-secondary" for="check-group-1">Agent Attitré <span class="text-danger">*</span></label>
+      <label class="text-secondary" for="check-group-1">Agent Attitré</label>
         <v-select
         v-model="form.agent_id"
           multiple

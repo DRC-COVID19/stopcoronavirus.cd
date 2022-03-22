@@ -40,18 +40,19 @@
                   <b-form-group
                     v-for="(formField, counter) in formStep.form_fields"
                     :key="counter"
-                    :label="formField.rules && !!formField.rules.match(/required/i) ? formField.name + ' * ' : formField.name"
                     :label-for="formField.name"
                   >
 
                     <b-row>
                       <b-col class="col-sm-12 col-md-12">
+                        <label :for="formField.name">{{formField.name}} <span class="text-danger">*</span> </label>
                         <FormFieldInput
                           v-model="completedForm.completed_form_fields[formField.id]"
                           :type="formField.form_field_type.name"
                           :placeholder="`Entrer ${formField.name}`"
                           :id="formField.name"
                           :rules="formField.rules"
+                          class="mb-2"
                         />
                       </b-col>
                     </b-row>
