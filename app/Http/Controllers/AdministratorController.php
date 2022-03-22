@@ -227,15 +227,16 @@ class AdministratorController extends Controller
   public function update(Request $request, $admin_user_id)
   {
     $data = Validator::make($request->all(), [
-      'username' => 'required|string|unique:admin_users,username' . ($admin_user_id ? ",$admin_user_id" : ""),
-      'name' => 'required|string',
-      'avatar' => 'nullable',
-      'remember_token' => 'nullable',
-      'email' => 'required|email',
-      'roles_id' => 'required|array',
-      'hospitals_id' => 'nullable|array',
-      'password' => 'sometimes|confirmed',
-      'phone_number' => 'required|string|unique:admin_users,phone_number' . ($admin_user_id ? ",$admin_user_id" : "")
+      'username'        => 'required|string|unique:admin_users,username' . ($admin_user_id ? ",$admin_user_id" : ""),
+      'name'            => 'required|string',
+      'avatar'          => 'nullable',
+      'remember_token'  => 'nullable',
+      'email'           => 'required|email',
+      'roles_id'        => 'required|array',
+      'hospitals_id'    => 'nullable|array',
+      'password'        => 'sometimes|confirmed',
+      'phone_number'    => 'required|string|unique:admin_users,phone_number' . ($admin_user_id ? ",$admin_user_id" : ""),
+      'affected'        => 'sometimes|boolean'
 
     ])->validate();
     try {
