@@ -129,7 +129,9 @@ class AdministratorController extends Controller
       $data['password'] = Hash::make($data['password']);
       $administrator = Administrator::create($data);
       $administrator->roles()->sync($data['roles_id']);
-      $administrator->hospitals()->sync($data['hospitals_id']);
+      if ($data['hospitals_id']) {
+        $administrator->hospitals()->sync($data['hospitals_id']);
+      }
       DB::commit();
       return response()->json(null, 201, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
@@ -249,7 +251,9 @@ class AdministratorController extends Controller
       }
       $administrator->update($data);
       $administrator->roles()->sync($data['roles_id']);
-      $administrator->hospitals()->sync($data['hospitals_id']);
+      if ($data['hospitals_id']) {
+        $administrator->hospitals()->sync($data['hospitals_id']);
+      }
       DB::commit();
       return response()->json(AdministratorResource::make($administrator), 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
