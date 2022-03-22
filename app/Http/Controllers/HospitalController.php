@@ -164,26 +164,23 @@ class HospitalController extends Controller
     public function getAgents(){
       $agents=collect();
       try {
-        $agentIds = Administrator::all('id')
-               ->pluck('id')
-               ->unique()
-               ->sort()
-               ->values();
-               foreach ($agentIds as $id) {
-                 $agent =Hospital::where('agent_id',$id)->first();
-                 if ($agent === null) {
-                      $agent = [
-                        'id'    => $id,
-                        'name'  => Administrator::where('id',$id)->select('name')->first()->name,
-                        'isAgentHospital'  => Administrator::where('id',$id)->with('roles')->first()->roles()->where('name', 'agent-hospital')->exists(),
-                      ];
-                   if ($agent['isAgentHospital']) {
-                        $agents->push($agent);
-                   }
-                 }
-               }
+        $agentIds = Administrator::where('affected','=', false)
+               ->get();
+              //  foreach ($agentIds as $id) {
+              //    $agent =Hospital::where('agent_id',$id)->first();
+              //    if ($agent === null) {
+              //         $agent = [
+              //           'id'    => $id,
+              //           'name'  => Administrator::where('id',$id)->select('name')->first()->name,
+              //           'isAgentHospital'  => Administrator::where('id',$id)->with('roles')->first()->roles()->where('name', 'agent-hospital')->exists(),
+              //         ];
+              //      if ($agent['isAgentHospital']) {
+              //           $agents->push($agent);
+              //      }
+              //    }
+              //  }
         
-        return response()->json($agents, 200);
+        return response()->json($agentIds, 200);
    } catch (\Throwable $th) {
      if (env('APP_DEBUG') == true) {
        return response($th)->setStatusCode(500);

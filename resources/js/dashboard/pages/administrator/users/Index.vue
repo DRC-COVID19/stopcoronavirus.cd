@@ -44,6 +44,7 @@
 import Header from '../components/Header'
 import ListUser from './components/ListUsers'
 import Create from './components/Create'
+import { AGENT_HOSPITAL } from '../../../config/env'
 export default {
   components: {
     Header,
@@ -66,7 +67,8 @@ export default {
       errors: {},
       currentPage: 1,
       roles: [],
-      hospitals: []
+      hospitals: [],
+      AGENT_HOSPITAL_ID: 5
     }
   },
   mounted () {
@@ -148,7 +150,7 @@ export default {
         email: currentUser.email,
         roles_id: currentUser.roles,
         hospitals_id: currentUser.hospitals,
-        phone_number: currentUser.phoneNumber,
+        phone_number: currentUser.phoneNumber
       }
 
       if (currentUser && currentUser.password) {
@@ -188,6 +190,10 @@ export default {
       this.userAdded = false
       this.isLoading = true
       this.errors = {}
+
+      if (form.roles.includes(this.AGENT_HOSPITAL_ID)) {
+        this.form.affected = false
+      }
       axios
         .post('/api/admin_users', {
           username: form.username,
@@ -198,6 +204,7 @@ export default {
           roles_id: form.roles,
           hospitals_id: form.hospitals,
           phone_number: form.phoneNumber,
+          affected: this.affected || null
 
         })
         .then(() => {
