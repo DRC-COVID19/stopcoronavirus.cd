@@ -150,14 +150,15 @@ export default {
         email: currentUser.email,
         roles_id: currentUser.roles,
         hospitals_id: currentUser.hospitals,
-        phone_number: currentUser.phoneNumber
+        phone_number: currentUser.phoneNumber,
+        affected: currentUser.affected
       }
 
       if (currentUser && currentUser.password) {
         form.password = currentUser.password
         form.password_confirmation = currentUser.confirmPassword
       }
-
+      this.isAgentHospital(form)
       // eslint-disable-next-line no-undef
       axios
         .put('/api/admin_users/' + currentUser.id, form)
