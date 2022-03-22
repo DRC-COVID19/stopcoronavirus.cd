@@ -191,9 +191,7 @@ export default {
       this.isLoading = true
       this.errors = {}
 
-      if (form.roles.includes(this.AGENT_HOSPITAL_ID)) {
-        form.affected = false
-      }
+      this.isAgentHospital(form)
       axios
         .post('/api/admin_users', {
           username: form.username,
@@ -271,9 +269,7 @@ export default {
     isAgentHospital (form) {
       if (form.roles.includes(this.AGENT_HOSPITAL_ID)) {
         form.affected = false
-        return true
       }
-      return false
     },
     switchPage (page) {
       this.getUserList(page)
