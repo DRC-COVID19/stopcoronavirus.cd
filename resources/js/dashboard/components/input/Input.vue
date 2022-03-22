@@ -1,13 +1,12 @@
 <template>
     <b-form-input
-      :v-model="vModel"
       :type="type"
       :placeholder="placeholder"
       :id="inputId"
       :required="required"
       :state="state"
-      :description="description"
       @blur="blur()"
+      :value="value"
     >
     </b-form-input>
 </template>
@@ -15,10 +14,6 @@
 export default {
   name: 'Input',
   props: {
-    vModel: {
-      type: String,
-      required: true
-    },
     placeholder: {
       type: String,
       required: true
@@ -33,15 +28,23 @@ export default {
     },
     state: {
       type: Boolean,
-      required: true
-    },
-    description: {
-      type: Boolean,
       required: false
+    },
+    type: {
+      type: String,
+      required: false
+    },
+    value: {
+      required: false
+    }
+  },
+  data () {
+    return {
     }
   },
   methods: {
     blur () {
+      console.log('bonjour')
       this.$emit('blur')
     }
   }
