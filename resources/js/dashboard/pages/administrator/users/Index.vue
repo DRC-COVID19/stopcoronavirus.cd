@@ -192,7 +192,7 @@ export default {
       this.errors = {}
 
       if (form.roles.includes(this.AGENT_HOSPITAL_ID)) {
-        this.form.affected = false
+        form.affected = false
       }
       axios
         .post('/api/admin_users', {
@@ -204,7 +204,7 @@ export default {
           roles_id: form.roles,
           hospitals_id: form.hospitals,
           phone_number: form.phoneNumber,
-          affected: this.affected || null
+          affected: form.affected
 
         })
         .then(() => {
@@ -240,7 +240,6 @@ export default {
           params: { page }
         })
         .then(({ data }) => {
-          console.log('all data --->', data)
           this.users = data
           this.isLoading = false
         })
@@ -269,7 +268,13 @@ export default {
           this.$gtag.exception(response)
         })
     },
-
+    isAgentHospital (form) {
+      if (form.roles.includes(this.AGENT_HOSPITAL_ID)) {
+        form.affected = false
+        return true
+      }
+      return false
+    },
     switchPage (page) {
       this.getUserList(page)
     },
