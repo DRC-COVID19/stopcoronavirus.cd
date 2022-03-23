@@ -68,7 +68,7 @@ export default {
       currentPage: 1,
       roles: [],
       hospitals: [],
-      assigned: null
+      affected: null
     }
   },
   mounted () {
@@ -268,10 +268,8 @@ export default {
     isAgentHospital (form) {
       if (form.roles.includes(ADMIN_ROLE_ID) && form.hospitals.length !== 0) {
         this.assigned = true
-        return form.affected
-      } else if (form.roles.includes(ADMIN_ROLE_ID)) {
-        form.affected = false
-        return form.affected
+      } else if (this.roles.includes(ADMIN_ROLE_ID)) {
+        this.affected = false
       }
     },
     switchPage (page) {
