@@ -44,7 +44,7 @@
 import Header from '../components/Header'
 import ListUser from './components/ListUsers'
 import Create from './components/Create'
-import { AGENT_HOSPITAL_ID } from '../../../config/env'
+import { ADMIN_ROLE_ID } from '../../../config/env'
 export default {
   components: {
     Header,
@@ -267,7 +267,7 @@ export default {
         })
     },
     isAgentHospital (form) {
-      if (form.roles.includes(AGENT_HOSPITAL_ID)) {
+      if (form.roles.includes(ADMIN_ROLE_ID)) {
         form.affected = false
         if (form.hospitals.length !== 0) {
           form.affected = true
