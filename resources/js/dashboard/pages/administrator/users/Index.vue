@@ -157,7 +157,7 @@ export default {
         form.password = currentUser.password
         form.password_confirmation = currentUser.confirmPassword
       }
-      this.isAgentHospital(form)
+      this.isAgentHospital(currentUser)
       // eslint-disable-next-line no-undef
       axios
         .put('/api/admin_users/' + currentUser.id, form)
@@ -267,10 +267,12 @@ export default {
         })
     },
     isAgentHospital (form) {
+      alert(JSON.stringify(form))
       if (form.roles.includes(AGENT_HOSPITAL_ID)) {
         form.affected = false
+        alert(JSON.stringify(form))
 
-        if (form.hospitals.length > 0) {
+        if (form.hospitals.length !== 0) {
           form.affected = true
         }
       }
