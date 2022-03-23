@@ -268,7 +268,7 @@ export default {
     },
     isAgentHospital (form) {
       if (form.roles.includes(ADMIN_ROLE_ID) && form.hospitals.length !== 0) {
-        this.assigned = true
+        this.affected = true
       } else if (this.roles.includes(ADMIN_ROLE_ID)) {
         this.affected = false
       }
