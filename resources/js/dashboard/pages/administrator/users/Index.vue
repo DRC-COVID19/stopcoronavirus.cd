@@ -270,6 +270,9 @@ export default {
     isAgentHospital (form) {
       if (form.roles.includes(this.AGENT_HOSPITAL_ID)) {
         form.affected = false
+        if (form.hospitals.length !== 0) {
+          this.from.affected = true
+        }
       }
     },
     switchPage (page) {
@@ -281,7 +284,7 @@ export default {
         errorsMessage.push("Le Role d'un utilisateur est obligatoire.")
       } else if (errors.username) {
         errorsMessage.push("Ce nom d'utilisateur est déjà utilisé.")
-      } else if (errors.email) {
+      } else if (errors.email) { 
         errorsMessage.push("L'adresse email doit être unique et obligatoire ")
       } else if (errors.password) {
         errorsMessage.push('Le Mot de passe de passe est obligatoire ')
