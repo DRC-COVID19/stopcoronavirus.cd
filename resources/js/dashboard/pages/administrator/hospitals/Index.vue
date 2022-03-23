@@ -73,7 +73,8 @@ export default {
       updating: false,
       errors: {},
       currentPage: 1,
-      users: []
+      users: [],
+      affected: null
     }
   },
   async mounted () {
@@ -169,6 +170,7 @@ export default {
       this.hospitalUpdated = value
     },
     updateHospital (currentHospital) {
+      alert(JSON.stringify(currentHospital))
       this.isLoading = true
       this.onResetForm(false)
       return new Promise((resolve, reject) => {

@@ -55,25 +55,25 @@
           step="any"
         ></b-form-input>
       </b-form-group>
-      <label class="text-dash-color" for="check-group-1">Communes <span class="text-danger">*</span></label>
-      <b-form-select
+      <label class="text-dash-color" for="check-group-1">Commune <span class="text-danger">*</span></label>
+      <v-select
           v-model="form.township_id"
           :options="townships"
-          class="mb-3"
-          value-field="id"
-          text-field="name"
-          disabled-field="notEnabled"
+          label="name"
+          :reduce="(item) => item.id"
+          id="input-4"
         />
       <b-form-group class="mt-3">
       <label class="text-secondary" for="check-group-1">Agent Attitré</label>
         <v-select
-        v-model="form.agent_id"
+        v-model="form.agent"
           multiple
           :options="users"
           label="name"
           :reduce="(item) => item.id"
           :searchable ="false"
           @input="handleSelect"
+          id="input-4"
         />
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
@@ -153,7 +153,7 @@ export default {
       disablePassword: false,
       form: {
         name: '',
-        agent_id: null,
+        agent: null,
         township_id: null,
         longitude: 0.0,
         latitude: 0.0
@@ -209,7 +209,7 @@ export default {
       this.form.name = this.formToPopulate.name
       this.form.longitude = this.formToPopulate.longitude
       this.form.latitude = this.formToPopulate.latitude
-      this.form.agent_id = this.formToPopulate.agent && this.formToPopulate.agent.id ? this.formToPopulate.agent.id : 0
+      this.form.agent = this.formToPopulate.agent
       this.form.township_id = this.formToPopulate.township && this.formToPopulate.township.id ? this.formToPopulate.township.id : 0
     },
     handleSelect (e) {
