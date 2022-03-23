@@ -154,7 +154,6 @@ export default {
         phone_number: currentUser.phoneNumber,
         affected: this.affected
       }
-
       if (currentUser && currentUser.password) {
         form.password = currentUser.password
         form.password_confirmation = currentUser.confirmPassword
@@ -269,7 +268,7 @@ export default {
     isAgentHospital (form) {
       if (form.roles.includes(ADMIN_ROLE_ID) && form.hospitals.length !== 0) {
         this.affected = true
-      } else if (this.roles.includes(ADMIN_ROLE_ID)) {
+      } else if (form.roles.includes(ADMIN_ROLE_ID)) {
         this.affected = false
       }
     },

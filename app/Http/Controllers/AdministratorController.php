@@ -251,6 +251,7 @@ class AdministratorController extends Controller
         unset($data['password']);
       }
       $administrator->update($data);
+      $administrator->roles()->sync($data['roles_id']);
       $administrator->hospitals()->sync($data['hospitals_id']);
       DB::commit();
       return response()->json(AdministratorResource::make($administrator), 200, [], JSON_NUMERIC_CHECK);
