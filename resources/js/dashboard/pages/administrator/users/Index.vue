@@ -267,11 +267,8 @@ export default {
         })
     },
     isAgentHospital (form) {
-      alert(JSON.stringify(form))
       if (form.roles.includes(AGENT_HOSPITAL_ID)) {
         form.affected = false
-        alert(JSON.stringify(form))
-
         if (form.hospitals.length !== 0) {
           form.affected = true
         }

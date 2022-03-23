@@ -131,8 +131,7 @@ class AdministratorController extends Controller
       $administrator = Administrator::create($data);
       $administrator->roles()->sync($data['roles_id']);
       if ($data['hospitals_id']) {
-        $administrator->hospitals()->sync($data['hospitals_id']);
-        $administrator->hospitalManager()->sync(['agent_id'=> $data['hospitals_id']]);
+          $administrator->hospitals()->sync($data['hospitals_id']);
       }
       DB::commit();
       return response()->json(null, 201, [], JSON_NUMERIC_CHECK);
