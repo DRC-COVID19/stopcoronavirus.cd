@@ -144,6 +144,7 @@ export default {
     updateUser (currentUser) {
       this.isLoading = true
       this.userUpdated = false
+      this.isAgentHospital(currentUser)
       const form = {
         username: currentUser.username,
         name: currentUser.name,
@@ -151,14 +152,13 @@ export default {
         roles_id: currentUser.roles,
         hospitals_id: currentUser.hospitals,
         phone_number: currentUser.phoneNumber,
-        affected: currentUser.affected
+        affected: this.affected
       }
 
       if (currentUser && currentUser.password) {
         form.password = currentUser.password
         form.password_confirmation = currentUser.confirmPassword
       }
-      this.isAgentHospital(currentUser)
       // eslint-disable-next-line no-undef
       axios
         .put('/api/admin_users/' + currentUser.id, form)
