@@ -192,8 +192,7 @@ export default {
         email: '',
         password: '',
         confirmPassword: '',
-        phoneNumber: '',
-        affected: null
+        phoneNumber: ''
       },
       show: true,
       showWarning: false,

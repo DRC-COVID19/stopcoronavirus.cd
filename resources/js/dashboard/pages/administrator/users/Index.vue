@@ -68,6 +68,7 @@ export default {
       currentPage: 1,
       roles: [],
       hospitals: [],
+      assigned: null
     }
   },
   mounted () {
@@ -190,8 +191,6 @@ export default {
       this.userAdded = false
       this.isLoading = true
       this.errors = {}
-
-      this.isAgentHospital(form)
       axios
         .post('/api/admin_users', {
           username: form.username,
@@ -202,7 +201,7 @@ export default {
           roles_id: form.roles,
           hospitals_id: form.hospitals,
           phone_number: form.phoneNumber,
-          affected: form.affected
+          affected: this.isAgentHospital(form)
 
         })
         .then(() => {
@@ -267,11 +266,12 @@ export default {
         })
     },
     isAgentHospital (form) {
-      if (form.roles.includes(ADMIN_ROLE_ID)) {
+      if (form.roles.includes(ADMIN_ROLE_ID) && form.hospitals.length !== 0) {
+        this.assigned = true
+        return form.affected
+      } else if (form.roles.includes(ADMIN_ROLE_ID)) {
         form.affected = false
-        if (form.hospitals.length !== 0) {
-          form.affected = true
-        }
+        return form.affected
       }
     },
     switchPage (page) {
@@ -283,7 +283,7 @@ export default {
         errorsMessage.push("Le Role d'un utilisateur est obligatoire.")
       } else if (errors.username) {
         errorsMessage.push("Ce nom d'utilisateur est déjà utilisé.")
-      } else if (errors.email) { 
+      } else if (errors.email) {
         errorsMessage.push("L'adresse email doit être unique et obligatoire ")
       } else if (errors.password) {
         errorsMessage.push('Le Mot de passe de passe est obligatoire ')
