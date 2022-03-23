@@ -9,6 +9,7 @@ export const GOOGLE_ANALYTICS_ID = "UA-113285849-15",
   MANANGER_EPIDEMIC = "manager_epidemic",
   EDIT_FORM = "edit_form",
   CREATE_FORM = "create_form",
+  AGENT_HOSPITAL_ID =1 ,
   DEFAULT_FORM_ID = 1,
   TYPE_CUSTOM_FIELD = {
     TEXT: 1,

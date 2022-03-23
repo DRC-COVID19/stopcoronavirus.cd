@@ -44,7 +44,7 @@
 import Header from '../components/Header'
 import ListUser from './components/ListUsers'
 import Create from './components/Create'
-import { AGENT_HOSPITAL } from '../../../config/env'
+import { AGENT_HOSPITAL_ID } from '../../../config/env'
 export default {
   components: {
     Header,
@@ -68,7 +68,6 @@ export default {
       currentPage: 1,
       roles: [],
       hospitals: [],
-      AGENT_HOSPITAL_ID: 5
     }
   },
   mounted () {
@@ -268,10 +267,11 @@ export default {
         })
     },
     isAgentHospital (form) {
-      if (form.roles.includes(this.AGENT_HOSPITAL_ID)) {
+      if (form.roles.includes(AGENT_HOSPITAL_ID)) {
         form.affected = false
-        if (form.hospitals.length !== 0) {
-          this.from.affected = true
+
+        if (form.hospitals.length > 0) {
+          form.affected = true
         }
       }
     },
