@@ -191,6 +191,7 @@ export default {
       this.userAdded = false
       this.isLoading = true
       this.errors = {}
+      this.isAgentHospital(form)
       axios
         .post('/api/admin_users', {
           username: form.username,
@@ -201,7 +202,7 @@ export default {
           roles_id: form.roles,
           hospitals_id: form.hospitals,
           phone_number: form.phoneNumber,
-          affected: this.isAgentHospital(form)
+          affected: this.affected
 
         })
         .then(() => {
