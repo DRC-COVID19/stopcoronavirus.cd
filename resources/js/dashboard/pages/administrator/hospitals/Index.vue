@@ -172,7 +172,6 @@ export default {
     updateHospital (currentHospital) {
       this.isLoading = true
       this.onResetForm(false)
-      alert(JSON.stringify(currentHospital))
       return new Promise((resolve, reject) => {
         this.hospital__update(currentHospital)
           .then(() => {
