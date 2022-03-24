@@ -264,7 +264,8 @@ export default {
             latitude: payload.latitude,
             longitude: payload.longitude,
             agent_id: payload.agent[0],
-            township_id: payload.township_id
+            township_id: payload.township_id,
+            affected: payload.affected
           })
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
