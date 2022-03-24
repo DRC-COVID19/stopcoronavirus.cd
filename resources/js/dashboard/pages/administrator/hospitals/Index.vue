@@ -172,6 +172,7 @@ export default {
     updateHospital (currentHospital) {
       this.isLoading = true
       this.onResetForm(false)
+      alert(JSON.stringify(currentHospital))
       return new Promise((resolve, reject) => {
         this.hospital__update(currentHospital)
           .then(() => {
@@ -180,6 +181,8 @@ export default {
             this.updating = false
             this.onResetForm(true)
             this.getHospitalList(1)
+            this.getUsers()
+            this.getTownShips()
             this.$notify({
               group: 'alert',
               title: 'Modification du CTCO',

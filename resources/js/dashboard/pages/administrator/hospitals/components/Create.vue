@@ -143,6 +143,11 @@ export default {
       type: Boolean,
       default: false,
       required: false
+    },
+    affected: {
+      type: Boolean,
+      default: null,
+      required: false
     }
   },
   data () {
@@ -154,6 +159,8 @@ export default {
       form: {
         name: '',
         agent: null,
+        deAssignedAgent: null,
+        affected: this.affected,
         township_id: null,
         longitude: 0.0,
         latitude: 0.0
@@ -182,6 +189,12 @@ export default {
       if (this.btnTitle === 'Enregistrer') {
         this.$emit('onCreate', this.form)
       } else {
+        if (this.form.agent.length === 0) {
+          this.form.affected = false
+        } else {
+          this.form.affected = true
+        }
+        this.form.deAssignedAgent = this.formToPopulate.agent.id
         this.$emit('onUpdate', this.form)
       }
     },
@@ -216,12 +229,12 @@ export default {
       let agentId = null
       if (value.length > 1) {
         agentId = value.shift()
-       // alert(JSON.stringify(this.users.find(item => item.id === agentId)))
+        // alert(JSON.stringify(this.users.find(item => item.id === agentId)))
       } else if (value.length === 1) {
         agentId = value
-         //alert(JSON.stringify(this.users.find(item => item.id === agentId)))
+        // alert(JSON.stringify(this.users.find(item => item.id === agentId)))
       }
-      //this.agent = this.users.find(item => item.id === agentId)
+      // this.agent = this.users.find(item => item.id === agentId)
     }
   },
 
