@@ -257,7 +257,6 @@ export default {
     },
     hospital__store ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
-      alert(JSON.stringify(payload))
       return new Promise((resolve, reject) => {
         axios
           .post('/api/dashboard/hospitals-data', {
