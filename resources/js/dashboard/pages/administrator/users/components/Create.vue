@@ -280,14 +280,14 @@ export default {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       console.log(' this.validatedMessage.mail', this.form.email)
 
-      if (!re.test(String(this.form.email).toLowerCase())) {
+      if (!this.form.email) {
+        this.stateForm.email = null
+        this.validatedMessage.mail = ''
+      } else if (!re.test(String(this.form.email).toLowerCase())) {
         this.stateForm.email = false
         this.validatedMessage.mail = 'Adresse email incorrecte'
       } else if (re.test(String(this.form.email).toLowerCase())) {
         this.stateForm.email = true
-        this.validatedMessage.mail = ''
-      } if (!this.form.email) {
-        this.stateForm.email = null
         this.validatedMessage.mail = ''
       }
     },
@@ -295,15 +295,15 @@ export default {
       const regexPhoneNumber = /^0[8-9][0-9]{8}$/
       console.log(' this.regexPhoneNumber', regexPhoneNumber.test(this.form.phoneNumber))
 
-      if (!regexPhoneNumber.test(this.form.phoneNumber)) {
+      if (!this.form.phoneNumber) {
+        this.stateForm.phoneNumber = null
+        this.validatedMessage.phoneNumber = ''
+      } else if (!regexPhoneNumber.test(this.form.phoneNumber)) {
         this.validatedMessage.phoneNumber = 'Numéro de téléphone incorrect'
         this.stateForm.phoneNumber = false
       } else if (regexPhoneNumber.test(this.form.phoneNumber)) {
         this.validatedMessage.phoneNumber = ''
         this.stateForm.phoneNumber = true
-      } if (!this.form.phoneNumber) {
-        this.stateForm.phoneNumber = null
-        this.validatedMessage.phoneNumber = ''
       }
     },
 
@@ -369,12 +369,12 @@ export default {
       }
     },
     warningMissMatch () {
-      if (this.form.password !== this.form.confirmPassword) {
-        this.stateForm.confirmPassword = false
-        this.validatedMessage.password = 'Le mot de passes ne correspond pas'
-      } else if (!this.form.confirmPassword) {
+      if (!this.form.confirmPassword && !this.form.password) {
         this.validatedMessage.password = ''
         this.stateForm.confirmPassword = null
+      } else if (this.form.password !== this.form.confirmPassword) {
+        this.stateForm.confirmPassword = false
+        this.validatedMessage.password = 'Le mot de passes ne correspond pas'
       } else if (this.form.password === this.form.confirmPassword) {
         this.validatedMessage.password = ''
         this.stateForm.confirmPassword = true
