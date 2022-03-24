@@ -288,8 +288,10 @@ export default {
               name: payload.name,
               latitude: payload.latitude,
               longitude: payload.longitude,
-              agent_id: payload.agent_id,
-              township_id: payload.township_id
+              agent_id: payload.agent[0],
+              township_id: payload.township_id,
+              deAssignedAgent: payload.deAssignedAgent,
+              affected: payload.affected
             }
           )
           .then(({ data }) => {
