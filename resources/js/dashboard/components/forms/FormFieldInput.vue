@@ -19,6 +19,9 @@
     :id="id"
     :required="isRequired || required"
     :state="state"
+    @blur="blur()"
+    trim
+    :disabled="disabled"
   >
   </b-form-input>
 </div>
@@ -37,7 +40,7 @@ export default {
     },
     placeholder: {
       type: String,
-      required: true
+      required: false
     },
     rules: {
       type: String,
@@ -55,6 +58,10 @@ export default {
       type: Boolean,
       required: false,
       default: null
+    },
+    disabled: {
+      type: Boolean,
+      required: false
     }
   },
   data () {
@@ -77,6 +84,11 @@ export default {
     },
     value (value) {
       this.formFieldValue = value
+    }
+  },
+  methods: {
+    blur () {
+      this.$emit('blur')
     }
   }
 }

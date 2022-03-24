@@ -7,14 +7,7 @@
       v-if="show"
       label-class="text-dash-color"
     >
-      <InputGroup
-        inputGroupId="input-group-1"
-        label="Nom d'utilisateur *"
-        labelFor="input-1"
-        :invalidFeedback="errors.username ? errors.username[0] : null"
-        labelClass="text-dash-color"
-        :errors="!errors.username"
-      />
+      <label id="input-group-1" class="text-dash-color" for="input-1">Nom d'utilisateur  <span class="text-danger">*</span></label>
       <FormFieldInput
         v-model="form.username"
         type="text"
@@ -22,15 +15,16 @@
         id="input-1"
         :required="true"
         class="input-dash"
+
+        :state="stateForm.username"
         />
-      <InputGroup
-        inputGroupId="input-group-2"
-        label="Adresse mail *"
-        labelFor="input-2"
-        :invalidFeedback="errors.mail ? errors.email[0] : null"
-        labelClass="text-dash-color"
-        :errors="!errors.email"
-      />
+           <b-form-text id="password-help-block"
+        ><span class="text-danger">
+          {{ errors.username ? errors.username[0] : null }}</span
+        ></b-form-text
+      >
+      <label id="input-group-2" class="text-dash-color" for="input-2">
+       Adresse mail  <span class="text-danger">*</span></label>
       <FormFieldInput
         v-model="form.email"
         type="email"
@@ -38,20 +32,14 @@
         id="input-2"
         :required="true"
         class="input-dash"
-        @input="validateMail()"
-        :state="stateValideMail"
+        :state="stateForm.email"
+        @input="validateMail() "
       />
-      <b-form-text id="password-help-block">
-        <span class="text-danger"> {{ validateMailMessage }}</span>
+      <b-form-text id="email-help-block">
+        <span class="text-danger"> {{ errors.mail ? errors.email[0] : null || validatedMessage.mail }}</span>
       </b-form-text>
-       <InputGroup
-        inputGroupId="input-group-3"
-        label="Nom *"
-        labelFor="input-3"
-        :invalidFeedback="errors.name ? errors.name[0] : null"
-        labelClass="text-dash-color"
-        :errors="!errors.name"
-      />
+       <label id="input-group-3" class="text-dash-color" for="input-3">
+      Nom <span class="text-danger">*</span></label>
          <FormFieldInput
         v-model="form.name"
         type="text"
@@ -59,15 +47,16 @@
         id="input-3"
         :required="true"
         class="input-dash"
+
+        :state="stateForm.name"
       />
-      <InputGroup
-        inputGroupId="input-group-4"
-        label="Numéro Téléphone*"
-        labelFor="input-4"
-        :invalidFeedback="errors.phoneNumber ? errors.phoneNumber[0] : null"
-        labelClass="text-dash-color"
-        :errors="!errors.phoneNumber"
-      />
+         <b-form-text id="password-help-block"
+        ><span class="text-danger">
+          {{ errors.name ? errors.name[0] : null}}</span
+        ></b-form-text
+      >
+      <label id="input-group-4" class="text-dash-color" for="input-4">
+      Numéro Téléphone <span class="text-danger">*</span></label>
          <FormFieldInput
         v-model="form.phoneNumber"
         type="text"
@@ -75,15 +64,15 @@
         id="input-4"
         :required="true"
         class="input-dash"
-        @input="validatePhoneNumber()"
-        :state="stateValideNumber"
+        @input="validatePhoneNumber() "
+        :state="stateForm.phoneNumber"
       />
-      <b-form-text id="password-help-block"
+      <b-form-text id="phonenumber-help-block"
         ><span class="text-danger">
-          {{ validatePhoneNumberMessage }}</span
+          {{ errors.phoneNumber ? errors.phoneNumber[0] : null || validatedMessage.phoneNumber }}</span
         ></b-form-text
       >
-      <label class="text-dash-color" for="check-group-1">Roles *</label>
+      <label class="text-dash-color" for="check-group-1">Roles <span class="text-danger">*</span></label>
       <v-select
         v-model="form.roles"
         multiple
@@ -101,25 +90,31 @@
         :reduce="(item) => item.id"
         :searchable="false"
       />
-      <label class="text-dash-color" for="text-password">Mot de passe *</label>
-      <b-form-input
-        class="input-dash"
+      <label class="text-dash-color" for="text-password">Mot de passe <span class="text-danger">*</span></label>
+      <FormFieldInput
+        v-model="form.password"
         type="password"
         id="text-password"
-        aria-describedby="password-help-block"
-        v-model="form.password"
-      ></b-form-input>
-      <label class="text-dash-color" for="text-password-confirm"
-        >Confirmation de mot de passe *</label
-      >
-      <b-form-input
+        :required="true"
         class="input-dash"
+        :disabled="disablePassword"
+        :state="stateForm.password"
+      />
+      <label class="text-dash-color" for="text-password-confirm"
+        >Confirmation de mot de passe <span class="text-danger">*</span></label
+      > <FormFieldInput
+        v-model="form.confirmPassword"
         type="password"
         id="text-password-confirm"
-        aria-describedby="password-help-block"
-        v-model="form.confirmPassword"
-      ></b-form-input>
-      <b-form-text id="password-help-block">{{ warningMissMatch }}</b-form-text>
+        :required="true"
+        class="input-dash"
+        :disabled="disablePassword"
+        :state="stateForm.confirmPassword"
+        :@input="warningMissMatch()"
+      />
+      <b-form-text id="password-help-block" ><span class="text-danger">
+          {{ validatedMessage.password }}</span
+        ></b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
         <b-button type="submit" variant="primary" class="btn-dash-sucess">
           <span v-if="isLoading"
@@ -144,12 +139,10 @@
 </template>
 
 <script>
-import InputGroup from '../../../../components/inputGroup/InputGroup.vue'
 import FormFieldInput from '../../../../components/forms/FormFieldInput'
 
 export default {
   components: {
-    InputGroup,
     FormFieldInput
   },
   props: {
@@ -189,20 +182,20 @@ export default {
   },
   data () {
     return {
-      title: "Creation d'un utilisateur",
+      title: 'Nouveau utilisateur',
       btnTitle: 'Enregistrer',
       iconClass: 'fas fa-plus-square',
       updating: false,
       isLoading: false,
-      validateMailMessage: null,
-      validatePhoneNumberMessage: null,
+      validatedMessage: {
+        mail: null,
+        phoneNumber: null,
+        password: null
+      },
       disablePassword: false,
-      stateValideMail: null,
-      stateValideNumber: null,
       stateForm: {
         username: null,
         name: null,
-        roles: null,
         hospitals: null,
         email: null,
         password: null,
@@ -236,19 +229,28 @@ export default {
     },
     formToPopulate () {
       this.populateForm()
+    },
+    errors () {
+      this.errorForm()
     }
   },
   methods: {
     onSubmit () {
-      if (!this.validatePhoneNumberMessage && !this.validateMailMessage) {
+      console.log('form', this.form)
+      if (!this.validatedMessage.phoneNumber && !this.validatedMessage.mail) {
         this.isLoading = true
+        this.errorFormValidation()
         if (this.btnTitle === 'Enregistrer') {
+          this.validatedMessage = {}
+          this.stateForm = {}
           if (this.form.password === this.form.confirmPassword) {
             this.$emit('onCreate', this.form)
           } else {
             this.showWarning = true
           }
         } else {
+          this.validatedMessage = {}
+          this.stateForm = {}
           this.$emit('onUpdate', this.form)
         }
       }
@@ -256,39 +258,39 @@ export default {
 
     onReset () {
       this.toToCanceled = true
-      this.validateMailMessage = ''
-      this.validatePhoneNumberMessage = ''
+      this.validatedMessage.mail = ''
       this.form = {}
-      this.stateValideMail = null
-      this.stateValideNumber = null
-      this.title = "Creation d'un utilisateur"
+      this.stateForm = {}
+      this.validatedMessage = {}
+      this.title = 'Nouveau utilisateur'
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
     },
 
-    validateMail (value) {
+    validateMail () {
       const re =
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      console.log(' this.validateMailMessage', this.form.email)
+      console.log(' this.validatedMessage.mail', this.form.email)
 
       if (!re.test(String(this.form.email).toLowerCase())) {
-        this.stateValideMail = false
-        this.validateMailMessage = 'Adresse email incorrecte'
+        this.stateForm.email = false
+        this.validatedMessage.mail = 'Adresse email incorrecte'
       } else {
-        this.stateValideMail = true
-        this.validateMailMessage = ''
+        this.stateForm.email = true
+        this.validatedMessage.mail = ''
       }
     },
     validatePhoneNumber () {
       const regexPhoneNumber = /^0+[8,9]+[0-9]{8}$/im
       console.log(' this.regexPhoneNumber', this.form.phoneNumber)
+      this.stateForm.phoneNumber = null
 
       if (!regexPhoneNumber.test(this.form.phoneNumber)) {
-        this.validatePhoneNumberMessage = 'Numéro de téléphone incorrect'
-        this.stateValideNumber = false
+        this.validatedMessage.phoneNumber = 'Numéro de téléphone incorrect'
+        this.stateForm.phoneNumber = false
       } else {
-        this.validatePhoneNumberMessage = ''
-        this.stateValideNumber = true
+        this.validatedMessage.phoneNumber = ''
+        this.stateForm.phoneNumber = true
       }
     },
 
@@ -296,21 +298,22 @@ export default {
       this.updating = false
       this.isLoading = false
       this.disablePassword = false
-      this.validateMailMessage = ''
-      this.validatePhoneNumberMessage = ''
-      this.stateValideMail = null
-      this.stateValideNumber = null
+      this.validatedMessage = {}
+      this.stateForm = {}
       this.form = {}
       if (this.userAdded | this.userUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
-        this.title = "Creation d'un utilisateur"
+        this.title = 'Nouveau utilisateur'
+        this.stateForm = {}
       }
+      this.$emit('onReset')
     },
 
     populateForm () {
       this.updating = true
       this.disablePassword = true
+      this.stateForm.confirmPassword = null
       this.form.id = this.formToPopulate.id
       this.form.username = this.formToPopulate.usernmae
       this.form.email = this.formToPopulate.email
@@ -324,16 +327,57 @@ export default {
       this.btnTitle = 'Modifier'
     },
     errorForm () {
-
+      if (this.errors.username) {
+        this.stateForm.username = false
+      } if (this.errors.phoneNumber) {
+        this.stateForm.phoneNumber = false
+      }
+      if (this.errors.name) {
+        this.stateForm.name = false
+      }
+      if (!this.errors.username) {
+        this.stateForm.username = null
+      } if (!this.errors.phoneNumber) {
+        this.stateForm.phoneNumber = null
+      }
+      if (!this.errors.name) {
+        this.stateForm.name = null
+      }
+    },
+    errorFormValidation () {
+      if (!this.form.username) {
+        this.stateForm.username = false
+      } if (!this.form.phoneNumber) {
+        this.stateForm.phoneNumber = false
+      }
+      if (!this.form.name) {
+        this.stateForm.name = false
+      }
+      if (!this.form.roles) {
+        this.stateForm.name = false
+      }
+      if (this.errors.username) {
+        this.stateForm.username = true
+      } if (this.errors.phoneNumber) {
+        this.stateForm.phoneNumber = true
+      }
+      if (this.errors.name) {
+        this.stateForm.name = true
+      }
+    },
+    warningMissMatch () {
+      if (this.form.password !== this.form.confirmPassword) {
+        this.stateForm.confirmPassword = false
+        this.validatedMessage.password = 'Le mot de passes ne correspond pas'
+      } else {
+        this.validatedMessage.password = ''
+        this.stateForm.confirmPassword = true
+      }
     }
   },
 
   computed: {
-    warningMissMatch () {
-      return this.form.password === this.form.confirmPassword
-        ? ''
-        : 'Les mot de passes ne correspondent pas'
-    }
+
   }
 }
 </script>

@@ -6,6 +6,7 @@
           @onUpdate="updateUser"
           @onCreate="createUser"
           @onCancelUpdate="cancelUpdate"
+          @onReset="reset"
           :userAdded="userAdded"
           :userUpdated="userUpdated"
           :formToPopulate="formToPopulate"
@@ -135,20 +136,26 @@ export default {
     populateForm (currentUser) {
       this.updating = true
       this.formToPopulate = currentUser
+      this.errors = {}
     },
     cancelUpdate () {
+      this.errors = {}
       this.updating = false
+    },
+    reset () {
+      this.errors = {}
     },
     updateUser (currentUser) {
       this.isLoading = true
       this.userUpdated = false
+      this.errors = {}
       const form = {
         username: currentUser.username,
         name: currentUser.name,
         email: currentUser.email,
         roles_id: currentUser.roles,
         hospitals_id: currentUser.hospitals,
-        phone_number: currentUser.phoneNumber,
+        phone_number: currentUser.phoneNumber
       }
 
       if (currentUser && currentUser.password) {
@@ -197,7 +204,7 @@ export default {
           email: form.email,
           roles_id: form.roles,
           hospitals_id: form.hospitals,
-          phone_number: form.phoneNumber,
+          phone_number: form.phoneNumber
 
         })
         .then(() => {
