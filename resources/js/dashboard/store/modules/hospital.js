@@ -66,7 +66,7 @@ export default {
             }
           })
           .then(({ data }) => {
-            const Features = data.map((value) => {
+            const Features = data.map(value => {
               return {
                 type: 'Feature',
                 geometry: {
@@ -190,7 +190,7 @@ export default {
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             reject(response)
           })
           .finally(() => {
@@ -209,7 +209,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             reject(response)
           })
           .finally(() => {
@@ -232,7 +232,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             console.log(response)
             reject(response)
           })
@@ -249,7 +249,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             console.log(response)
             reject(response)
           })
@@ -257,13 +257,14 @@ export default {
     },
     hospital__store ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
+      alert(JSON.stringify(payload))
       return new Promise((resolve, reject) => {
         axios
           .post('/api/dashboard/hospitals-data', {
             name: payload.name,
             latitude: payload.latitude,
             longitude: payload.longitude,
-            agent_id: payload.agent_id,
+            agent_id: payload.agent[0],
             township_id: payload.township_id
           })
           .then(({ data }) => {
@@ -271,7 +272,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             console.log(response)
             reject(response)
           })
@@ -297,7 +298,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             console.log(response)
             reject(response)
           })
@@ -313,7 +314,7 @@ export default {
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             console.log(response)
             reject(response)
           })
@@ -328,7 +329,7 @@ export default {
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
-          .catch((response) => {
+          .catch(response => {
             console.log(response)
             reject(response)
           })

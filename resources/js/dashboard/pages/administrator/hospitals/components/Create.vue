@@ -212,19 +212,17 @@ export default {
       this.form.agent = this.formToPopulate.agent
       this.form.township_id = this.formToPopulate.township && this.formToPopulate.township.id ? this.formToPopulate.township.id : 0
     },
-    handleSelect (e) {
-      if (e.length > 1) {
-        const agent = e.shift()
-        this.$bvToast.toast('Vous ne pouvez pas selectionner 2 agents en même temps' + agent, {
-          title: 'Erreur',
-          autoHideDelay: 2000,
-          appendToast: true,
-          variant: 'danger',
-          solid: true
-        })
+    handleSelect (value) {
+      let agentId = null
+      if (value.length > 1) {
+        agentId = value.shift()
+       // alert(JSON.stringify(this.users.find(item => item.id === agentId)))
+      } else if (value.length === 1) {
+        agentId = value
+         //alert(JSON.stringify(this.users.find(item => item.id === agentId)))
       }
+      //this.agent = this.users.find(item => item.id === agentId)
     }
-
   },
 
   computed: {
