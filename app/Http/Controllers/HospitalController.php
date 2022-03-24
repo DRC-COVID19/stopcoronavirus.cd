@@ -42,13 +42,18 @@ class HospitalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StoreHospitalRequest $request)
-    {
-
+    {   $data = $request->validated();
         try {
-            $hospital = Hospital::create($request->validated());
-           
+          DB::beginTransaction();
+            
+            $adminUser = Administrator::where('id',$data['agent_id'])->first();
+            $hospital = Hospital::create($data);
+            $adminUser->update(['affected' => true ]);
+
+          DB::commit();
             return response()->json($hospital, 201);
         } catch (\Throwable $th) {
+            DB::rollBack();
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
             }
