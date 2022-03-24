@@ -15,10 +15,9 @@
         id="input-1"
         :required="true"
         class="input-dash"
-
         :state="stateForm.username"
         />
-           <b-form-text id="password-help-block"
+           <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
           {{ errors.username ? errors.username[0] : null }}</span
         ></b-form-text
@@ -35,7 +34,7 @@
         :state="stateForm.email"
         @input="validateMail() "
       />
-      <b-form-text id="email-help-block">
+      <b-form-text id="email-help-block" class="mb-4">
         <span class="text-danger"> {{ errors.mail ? errors.email[0] : null || validatedMessage.mail }}</span>
       </b-form-text>
        <label id="input-group-3" class="text-dash-color" for="input-3">
@@ -50,7 +49,7 @@
 
         :state="stateForm.name"
       />
-         <b-form-text id="password-help-block"
+         <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
           {{ errors.name ? errors.name[0] : null}}</span
         ></b-form-text
@@ -67,7 +66,7 @@
         @input="validatePhoneNumber() "
         :state="stateForm.phoneNumber"
       />
-      <b-form-text id="phonenumber-help-block"
+      <b-form-text id="phonenumber-help-block" class="mb-4"
         ><span class="text-danger">
           {{ errors.phoneNumber ? errors.phoneNumber[0] : null || validatedMessage.phoneNumber }}</span
         ></b-form-text
@@ -81,6 +80,9 @@
         :reduce="(item) => item.id"
         :searchable="false"
       />
+        <b-form-text id="password-help-block"  class="mb-4"><span class="text-danger">
+          </span
+        ></b-form-text>
       <label class="text-dash-color" for="check-group-1">Hopital</label>
       <v-select
         v-model="form.hospitals"
@@ -90,6 +92,9 @@
         :reduce="(item) => item.id"
         :searchable="false"
       />
+        <b-form-text id="password-help-block"  class="mb-4"><span class="text-danger">
+          </span
+        ></b-form-text>
       <label class="text-dash-color" for="text-password">Mot de passe <span class="text-danger">*</span></label>
       <FormFieldInput
         v-model="form.password"
@@ -100,6 +105,8 @@
         :disabled="disablePassword"
         :state="stateForm.password"
       />
+        <b-form-text id="password-help-block"  class="mb-4"><span class="text-danger"></span
+        ></b-form-text>
       <label class="text-dash-color" for="text-password-confirm"
         >Confirmation de mot de passe <span class="text-danger">*</span></label
       > <FormFieldInput
@@ -112,7 +119,7 @@
         :state="stateForm.confirmPassword"
         :@input="warningMissMatch()"
       />
-      <b-form-text id="password-help-block" ><span class="text-danger">
+      <b-form-text id="password-help-block"  class="mb-4"><span class="text-danger">
           {{ validatedMessage.password }}</span
         ></b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
@@ -228,6 +235,7 @@ export default {
       this.resetForm()
     },
     formToPopulate () {
+      this.resetForm()
       this.populateForm()
     },
     errors () {
@@ -239,18 +247,13 @@ export default {
       console.log('form', this.form)
       if (!this.validatedMessage.phoneNumber && !this.validatedMessage.mail) {
         this.isLoading = true
-        this.errorFormValidation()
         if (this.btnTitle === 'Enregistrer') {
-          this.validatedMessage = {}
-          this.stateForm = {}
           if (this.form.password === this.form.confirmPassword) {
             this.$emit('onCreate', this.form)
           } else {
             this.showWarning = true
           }
         } else {
-          this.validatedMessage = {}
-          this.stateForm = {}
           this.$emit('onUpdate', this.form)
         }
       }
@@ -258,10 +261,15 @@ export default {
 
     onReset () {
       this.toToCanceled = true
-      this.validatedMessage.mail = ''
-      this.form = {}
-      this.stateForm = {}
       this.validatedMessage = {}
+      this.form = {}
+
+      this.stateForm.email = null
+      this.stateForm.confirmPassword = null
+      this.stateForm.username = null
+      this.stateForm.name = null
+      this.stateForm.phoneNumber = null
+
       this.title = 'Nouveau utilisateur'
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
@@ -275,22 +283,27 @@ export default {
       if (!re.test(String(this.form.email).toLowerCase())) {
         this.stateForm.email = false
         this.validatedMessage.mail = 'Adresse email incorrecte'
-      } else {
+      } else if (re.test(String(this.form.email).toLowerCase())) {
         this.stateForm.email = true
+        this.validatedMessage.mail = ''
+      } if (!this.form.email) {
+        this.stateForm.email = null
         this.validatedMessage.mail = ''
       }
     },
     validatePhoneNumber () {
-      const regexPhoneNumber = /^0+[8,9]+[0-9]{8}$/im
-      console.log(' this.regexPhoneNumber', this.form.phoneNumber)
-      this.stateForm.phoneNumber = null
+      const regexPhoneNumber = /^0[8-9][0-9]{8}$/
+      console.log(' this.regexPhoneNumber', regexPhoneNumber.test(this.form.phoneNumber))
 
       if (!regexPhoneNumber.test(this.form.phoneNumber)) {
         this.validatedMessage.phoneNumber = 'Numéro de téléphone incorrect'
         this.stateForm.phoneNumber = false
-      } else {
+      } else if (regexPhoneNumber.test(this.form.phoneNumber)) {
         this.validatedMessage.phoneNumber = ''
         this.stateForm.phoneNumber = true
+      } if (!this.form.phoneNumber) {
+        this.stateForm.phoneNumber = null
+        this.validatedMessage.phoneNumber = ''
       }
     },
 
@@ -298,14 +311,18 @@ export default {
       this.updating = false
       this.isLoading = false
       this.disablePassword = false
+
       this.validatedMessage = {}
-      this.stateForm = {}
+
+      this.stateForm.email = null
+      this.stateForm.confirmPassword = null
+      this.stateForm.phoneNumber = null
+      this.stateForm.username = null
+      this.stateForm.name = null
       this.form = {}
       if (this.userAdded | this.userUpdated) {
-        this.form = {}
         this.btnTitle = 'Enregistrer'
         this.title = 'Nouveau utilisateur'
-        this.stateForm = {}
       }
       this.$emit('onReset')
     },
@@ -313,7 +330,6 @@ export default {
     populateForm () {
       this.updating = true
       this.disablePassword = true
-      this.stateForm.confirmPassword = null
       this.form.id = this.formToPopulate.id
       this.form.username = this.formToPopulate.usernmae
       this.form.email = this.formToPopulate.email
@@ -335,41 +351,31 @@ export default {
       if (this.errors.name) {
         this.stateForm.name = false
       }
-      if (!this.errors.username) {
-        this.stateForm.username = null
-      } if (!this.errors.phoneNumber) {
-        this.stateForm.phoneNumber = null
-      }
-      if (!this.errors.name) {
-        this.stateForm.name = null
-      }
-    },
-    errorFormValidation () {
-      if (!this.form.username) {
-        this.stateForm.username = false
-      } if (!this.form.phoneNumber) {
-        this.stateForm.phoneNumber = false
-      }
-      if (!this.form.name) {
-        this.stateForm.name = false
-      }
-      if (!this.form.roles) {
-        this.stateForm.name = false
-      }
-      if (this.errors.username) {
+      if (!this.errors.username && this.form.username) {
         this.stateForm.username = true
-      } if (this.errors.phoneNumber) {
+      } if (!this.errors.phoneNumber && this.form.phoneNumber) {
         this.stateForm.phoneNumber = true
       }
-      if (this.errors.name) {
+      if (!this.errors.name && this.form.name) {
         this.stateForm.name = true
+      }
+      if (!this.errors.username && !this.form.username) {
+        this.stateForm.username = null
+      } if (!this.errors.phoneNumber && !this.form.phoneNumber) {
+        this.stateForm.phoneNumber = null
+      }
+      if (!this.errors.name && !this.form.name) {
+        this.stateForm.name = null
       }
     },
     warningMissMatch () {
       if (this.form.password !== this.form.confirmPassword) {
         this.stateForm.confirmPassword = false
         this.validatedMessage.password = 'Le mot de passes ne correspond pas'
-      } else {
+      } else if (!this.form.confirmPassword) {
+        this.validatedMessage.password = ''
+        this.stateForm.confirmPassword = null
+      } else if (this.form.password === this.form.confirmPassword) {
         this.validatedMessage.password = ''
         this.stateForm.confirmPassword = true
       }

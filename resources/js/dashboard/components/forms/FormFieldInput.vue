@@ -57,7 +57,9 @@ export default {
     state: {
       type: Boolean,
       required: false,
-      default: null
+      default: () => {
+        return null
+      }
     },
     disabled: {
       type: Boolean,
