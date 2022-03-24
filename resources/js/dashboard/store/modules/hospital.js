@@ -183,7 +183,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios
           .get('/api/dashboard/hospitals-data/by-paginate', {
-            params: payload.page
+            params: { page: payload.page }
           })
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
