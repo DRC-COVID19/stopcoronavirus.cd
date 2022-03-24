@@ -210,8 +210,10 @@ export default {
         this.hospital__store(form)
           .then(() => {
             this.showSuccess = true
-            this.getHospitalList(1)
             this.onResetForm(true)
+            this.getHospitalList(1)
+            this.getUsers()
+            this.getTownShips()
             this.$notify({
               group: 'alert',
               title: 'Nouvel CTCO',
