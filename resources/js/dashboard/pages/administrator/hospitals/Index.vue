@@ -239,9 +239,7 @@ export default {
       })
     },
     async getUsers () {
-      this.isLoading = true
       this.users = await this.hospital__getAgents()
-      this.isLoading = false
     },
     async getTownShips () {
       await this.townships__getAll()
@@ -260,7 +258,7 @@ export default {
     renderErrorsMessages (errors) {
       const errorsMessage = []
       if (errors.name) {
-        errorsMessage.push('Cette CTCO existe déjà.')
+        errorsMessage.push('Ce CTCO existe déjà.')
       } else if (errors.township_id) {
         errorsMessage.push('La commune doit être unique et obligatoire ')
       } else if (errors.agent_id) {
