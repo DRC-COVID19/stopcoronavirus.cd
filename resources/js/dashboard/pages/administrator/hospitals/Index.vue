@@ -6,7 +6,7 @@
           @onUpdate="updateHospital"
           @onCreate="createHospital"
           @onCancelUpdate="cancelUpdate"
-          :hospitalCreated="hospitalCreated"
+          :hospitalAdded="hospitalAdded"
           :hospitalUpdated="hospitalUpdated"
           :formToPopulate="formToPopulate"
           :townships="townships"
@@ -64,7 +64,7 @@ export default {
       isLoading: false,
       hospitals: {},
       hospitalUpdated: false,
-      hospitalCreated: false,
+      hospitalAdded: false,
       showSuccess: false,
       isHospitalDeleted: false,
       timeOut: 3,
@@ -203,7 +203,7 @@ export default {
       })
     },
     createHospital (form) {
-      this.hospitalCreated = false
+      this.hospitalAdded = false
       this.isLoading = true
       this.errors = {}
       return new Promise((resolve, reject) => {
@@ -211,7 +211,7 @@ export default {
           .then(() => {
             this.showSuccess = true
             this.isLoading = false
-            this.hospitalCreated = true
+            this.hospitalAdded = true
             this.getHospitalList(1)
             this.getUsers()
             this.getTownShips()

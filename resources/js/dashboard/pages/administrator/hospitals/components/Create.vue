@@ -8,7 +8,7 @@
       label-class="text-dash-color"
     >
       <b-form-group
-        label-class="text-dash-color"
+        label-class="text-dash-color mt-3"
         id="input-group-1"
         label-for="input-1"
         :invalid-feedback="errors.name ? errors.name[0] : null"
@@ -27,13 +27,13 @@
 
       <b-form-group
         label-class="text-dash-color"
-        id="input-group-3"
+        id="input-group-3 mt-3"
         label-for="input-3"
       >
        <label for="input-3" class="text-dash-color">Latitude <span class="text-danger">*</span></label>
         <b-form-input
           id="input-3"
-          class="input-dash"
+          class="input-das"
           v-model="form.latitude"
           placeholder="Entrer la Latitude"
           type="number"
@@ -41,7 +41,7 @@
         ></b-form-input>
       </b-form-group>
         <b-form-group
-        label-class="text-dash-color"
+        label-class="text-dash-color mt-3"
         id="input-group-4"
         label-for="input-4"
       >
@@ -56,6 +56,7 @@
           required
         ></b-form-input>
       </b-form-group>
+      <b-form-group class="mt-3">
       <label class="text-dash-color" for="check-group-1">Commune <span class="text-danger">*</span></label>
       <v-select
           v-model="form.township_id"
@@ -64,6 +65,7 @@
           :reduce="(item) => item.id"
           id="input-4"
         />
+      </b-form-group>
       <b-form-group class="mt-3">
       <label class="text-secondary" for="check-group-1">Agent Attitré</label>
         <v-select
@@ -82,7 +84,6 @@
             <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
-              {{ errors }}
             </span>
             <div v-else>
               {{btnTitle }}
@@ -95,10 +96,6 @@
           @click="resetForm()"
           > {{ updating ?'Annuler' :'Rénitialiser'}}</b-button
         >
-        creation: {{ hospitalCreated }}
-        updation: {{ hospitalUpdated }}
-        isLoading: {{ isLoading }}
-        updating: {{ updating }}
       </b-row>
     </b-form>
   </b-card>
@@ -108,7 +105,7 @@
 
 export default {
   props: {
-    hospitalCreated: {
+    hospitalAdded: {
       type: Boolean,
       required: false,
       default: false
@@ -210,7 +207,7 @@ export default {
     resetForm () {
       this.updating = false
       this.isLoading = false
-      if (this.hospitalCreated | this.hospitalUpdated) {
+      if (this.hospitalAdded | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
         this.title = 'Nouveau CTCO'
