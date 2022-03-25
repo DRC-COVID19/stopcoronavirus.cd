@@ -15,7 +15,6 @@
           :errors="errors"
           :isLoading="isLoading"
           :updating="updating"
-          :resetForm ="onResetForm"
         />
       </b-col>
       <b-col cols="12" md="8">
