@@ -13,7 +13,7 @@
           :hospitals="hospitals"
           :users ="users"
           :errors="errors"
-          :isLoading="isLoading"
+          :loading="loading"
           :updating="updating"
           :resetForm ="onResetForm"
         />
@@ -28,7 +28,7 @@
           @onSearch="filterHospitals"
           @onDeleteHospital="deleteHospital"
           @onUpdateHospital="populateForm"
-          :isLoading="isLoading"
+          :loading="loading"
           :updating="updating"
         />
         <b-col cols="12" class="d-flex justify-content-end">
@@ -62,7 +62,7 @@ export default {
     return {
       title: 'Hopitaux( CTCOS  )',
       iconClass: 'fas fa-hospital',
-      isLoading: false,
+      loading: false,
       hospitals: {},
       hospitalUpdated: false,
       hospitalCreated: false,
@@ -110,24 +110,24 @@ export default {
     ]),
 
     filterHospitals (filter) {
-      this.isLoading = true
+      this.loading = true
       if (filter !== '') {
         return new Promise((resolve, reject) => {
           this.hospital__filter(filter)
             .then(({ data }) => {
               this.hospitals = data
-              this.isLoading = false
+              this.loading = false
               resolve(true)
             })
             .catch(({ response }) => {
               this.$gtag.exception(response)
-              this.isLoading = false
+              this.loading = false
               reject(response)
             })
         })
       } else {
         this.getHospitalList()
-        this.isLoading = false
+        this.loading = false
       }
     },
     deleteHospital (currentHospitalId) {
@@ -162,23 +162,31 @@ export default {
     },
     cancelUpdate () {
       this.updating = false
+      this.loading = false
     },
-    onResetForm (value) {
-      this.updating = false
-      this.isLoading = false
-      this.hospitalCreated = value
-      this.hospitalUpdated = value
+    onResetForm (props) {
+      this.updating = props.updating
+      this.loading = props.loading
+      this.hospitalCreated = props.hospitalCreated
+      this.hospitalUpdated = props.hospitalUpdated
     },
     updateHospital (currentHospital) {
-      this.isLoading = true
-      this.onResetForm(false)
+      this.onResetForm({
+        updating: true,
+        loading: true,
+        hospitalCreated: false,
+        hospitalUpdated: false
+      })
       return new Promise((resolve, reject) => {
         this.hospital__update(currentHospital)
           .then(() => {
-            this.hospitalUpdated = true
             this.showSuccess = true
-            this.updating = false
-            this.onResetForm(true)
+            this.onResetForm({
+              updating: true,
+              loading: false,
+              hospitalCreated: false,
+              hospitalUpdated: true
+            })
             this.getHospitalList(1)
             this.getUsers()
             this.getTownShips()
@@ -188,6 +196,7 @@ export default {
               text: 'Modifié avec succès',
               type: 'success'
             })
+            resolve(true)
           })
           .catch(({ response }) => {
             this.getHospitalList(1)
@@ -198,21 +207,31 @@ export default {
               text: 'Une erreur est survenue ! ' + this.renderErrorsMessages(response.data.errors).join(','),
               type: 'error'
             })
+            reject(response)
           })
           .finally(() => {
-            this.isLoading = false
+            this.loading = false
           })
       })
     },
     createHospital (form) {
-      this.onResetForm(false)
-      this.isLoading = true
       this.errors = {}
+      this.onResetForm({
+        updating: false,
+        loading: true,
+        hospitalCreated: false,
+        hospitalUpdated: false
+      })
       return new Promise((resolve, reject) => {
         this.hospital__store(form)
           .then(() => {
             this.showSuccess = true
-            this.onResetForm(true)
+            this.onResetForm({
+              updating: false,
+              loading: false,
+              hospitalCreated: true,
+              hospitalUpdated: false
+            })
             this.getHospitalList(1)
             this.getUsers()
             this.getTownShips()
@@ -226,7 +245,7 @@ export default {
           })
           .catch(({ response }) => {
             this.$gtag.exception(response)
-            this.isLoading = false
+            this.loading = false
             this.errors = response.data.errors
             const messages = this.renderErrorsMessages(this.errors).join(',')
             this.$notify({
@@ -240,18 +259,18 @@ export default {
       })
     },
     async getUsers () {
-      this.isLoading = true
+      this.loading = true
       this.users = await this.hospital__getAgents()
-      this.isLoading = false
+      this.loading = false
     },
     async getTownShips () {
       await this.townships__getAll()
     },
     async getHospitalList (page = 1) {
-      this.isLoading = true
+      this.loading = true
       this.hospitals = Object.assign({}, await this.getHospitals({ page }))['0']
       if (this.hospitals.length !== 0) {
-        this.isLoading = false
+        this.loading = false
       }
     },
 

@@ -77,10 +77,11 @@
         />
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" class="btn-dash-blue">
+          <b-button type="submit" variant="primary" class="btn-dash-blue" :disabled="isLoading">
             <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
+              {{ errors }}
             </span>
             <div v-else>
               {{btnTitle }}
@@ -99,6 +100,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     hospitalCreated: {
@@ -134,7 +136,7 @@ export default {
       type: Object,
       default: () => ({})
     },
-    isLoading: {
+    loading: {
       type: Boolean,
       default: false,
       required: false
@@ -165,6 +167,7 @@ export default {
         longitude: 0.0,
         latitude: 0.0
       },
+      isLoading: this.loading,
       show: true,
       showWarning: false,
       toBeCanceled: true
@@ -186,6 +189,7 @@ export default {
   },
   methods: {
     onSubmit () {
+      this.isLoading = true
       if (this.btnTitle === 'Enregistrer') {
         this.$emit('onCreate', this.form)
       } else {
@@ -194,7 +198,7 @@ export default {
         } else {
           this.form.affected = true
         }
-        this.form.deAssignedAgent = this.formToPopulate.agent.id
+        this.form.deAssignedAgent = (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)
       }
     },
@@ -208,6 +212,7 @@ export default {
     },
 
     resetForm () {
+      this.isLoading = false
       if (this.hospitalCreated | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
@@ -226,15 +231,9 @@ export default {
       this.form.township_id = this.formToPopulate.township && this.formToPopulate.township.id ? this.formToPopulate.township.id : 0
     },
     handleSelect (value) {
-      let agentId = null
       if (value.length > 1) {
-        agentId = value.shift()
-        // alert(JSON.stringify(this.users.find(item => item.id === agentId)))
-      } else if (value.length === 1) {
-        agentId = value
-        // alert(JSON.stringify(this.users.find(item => item.id === agentId)))
+        value.shift()
       }
-      // this.agent = this.users.find(item => item.id === agentId)
     }
   },
 

@@ -288,7 +288,7 @@ export default {
               name: payload.name,
               latitude: payload.latitude,
               longitude: payload.longitude,
-              agent_id: payload.agent[0],
+              agent_id: payload.agent[0]??0,
               township_id: payload.township_id,
               deAssignedAgent: payload.deAssignedAgent,
               affected: payload.affected
