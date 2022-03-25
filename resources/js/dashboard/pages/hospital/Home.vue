@@ -119,7 +119,6 @@ export default {
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
       hospitalManagerFirstName: (state) => state.hospital.hospitalManagerFirstName,
-      completedForms: (state) => state.completedForm.completedForms,
       isLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
