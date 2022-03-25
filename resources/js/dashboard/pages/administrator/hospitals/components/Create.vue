@@ -53,6 +53,7 @@
           placeholder="Entrer la Longitude"
           type="number"
           step="any"
+          required
         ></b-form-input>
       </b-form-group>
       <label class="text-dash-color" for="check-group-1">Commune <span class="text-danger">*</span></label>
@@ -96,6 +97,8 @@
         >
         creation: {{ hospitalCreated }}
         updation: {{ hospitalUpdated }}
+        isLoading: {{ isLoading }}
+        updating: {{ updating }}
       </b-row>
     </b-form>
   </b-card>
@@ -138,16 +141,6 @@ export default {
       type: Object,
       default: () => ({})
     },
-    isLoading: {
-      type: Boolean,
-      default: false,
-      required: false
-    },
-    updating: {
-      type: Boolean,
-      default: false,
-      required: false
-    },
     affected: {
       type: Boolean,
       default: null,
@@ -160,6 +153,8 @@ export default {
       btnTitle: 'Enregistrer',
       iconClass: 'fas fa-hospital-alt',
       disablePassword: false,
+      updating: false,
+      isLoading: false,
       form: {
         name: '',
         agent: null,
@@ -190,6 +185,7 @@ export default {
   },
   methods: {
     onSubmit () {
+      this.isLoading = true
       if (this.btnTitle === 'Enregistrer') {
         this.$emit('onCreate', this.form)
       } else {
@@ -212,6 +208,8 @@ export default {
     },
 
     resetForm () {
+      this.updating = false
+      this.isLoading = false
       if (this.hospitalCreated | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
@@ -220,6 +218,7 @@ export default {
     },
 
     populateForm () {
+      this.updating = true
       this.title = 'Modification du CTCO '
       this.btnTitle = 'Modifier'
       this.form.id = this.formToPopulate.id
