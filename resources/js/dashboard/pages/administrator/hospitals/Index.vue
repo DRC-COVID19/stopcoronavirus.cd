@@ -164,29 +164,18 @@ export default {
       this.updating = false
       this.isLoading = false
     },
-    onResetForm (props) {
-      this.updating = props.updating
-      this.isLoading = props.isLoading
-      this.hospitalCreated = props.hospitalCreated
-      this.hospitalUpdated = props.hospitalUpdated
-    },
+
     updateHospital (currentHospital) {
-      this.onResetForm({
-        updating: true,
-        isLoading: true,
-        hospitalCreated: false,
-        hospitalUpdated: false
-      })
+      this.isLoading = true
+      this.hospitalUpdated = false
       return new Promise((resolve, reject) => {
         this.hospital__update(currentHospital)
           .then(() => {
+            this.hospitalUpdated = true
             this.showSuccess = true
-            this.onResetForm({
-              updating: true,
-              isLoading: false,
-              hospitalCreated: false,
-              hospitalUpdated: true
-            })
+            this.isLoading = false
+            this.updating = false
+
             this.getHospitalList(1)
             this.getUsers()
             this.getTownShips()
@@ -215,23 +204,15 @@ export default {
       })
     },
     createHospital (form) {
+      this.hospitalCreated = false
+      this.isLoading = true
       this.errors = {}
-      this.onResetForm({
-        updating: false,
-        isLoading: true,
-        hospitalCreated: false,
-        hospitalUpdated: false
-      })
       return new Promise((resolve, reject) => {
         this.hospital__store(form)
           .then(() => {
             this.showSuccess = true
-            this.onResetForm({
-              updating: false,
-              isLoading: false,
-              hospitalCreated: true,
-              hospitalUpdated: false
-            })
+            this.isLoading = false
+            this.hospitalCreated = true
             this.getHospitalList(1)
             this.getUsers()
             this.getTownShips()
