@@ -99,14 +99,14 @@ export default {
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
-      completedForms: {}
+      completedForms: {},
+      isLoading: false
     }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       hospital: (state) => state.hospital.hospitalData,
-      isLoading: (state) => state.completedForm.isLoading
     }),
     totalRows () {
       if (this.completedForms) {
