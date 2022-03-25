@@ -167,6 +167,7 @@ export default {
     updateHospital (currentHospital) {
       this.isLoading = true
       this.hospitalUpdated = false
+
       return new Promise((resolve, reject) => {
         this.hospital__update(currentHospital)
           .then(() => {
@@ -174,7 +175,6 @@ export default {
             this.showSuccess = true
             this.isLoading = false
             this.updating = false
-
             this.getHospitalList(1)
             this.getUsers()
             this.getTownShips()
@@ -217,7 +217,7 @@ export default {
             this.getTownShips()
             this.$notify({
               group: 'alert',
-              title: 'Nouvel CTCO',
+              title: 'Nouveau CTCO',
               text: 'Ajouter avec succès',
               type: 'success'
             })
@@ -230,7 +230,7 @@ export default {
             const messages = this.renderErrorsMessages(this.errors).join(',')
             this.$notify({
               group: 'alert',
-              title: 'Nouvel CTCO',
+              title: 'Nouveau CTCO',
               text: 'Oups! Une erreur est survenue :\r\n' + messages,
               type: 'error'
             })

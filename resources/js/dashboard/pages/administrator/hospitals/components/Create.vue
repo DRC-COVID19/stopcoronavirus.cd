@@ -214,6 +214,7 @@ export default {
     resetForm () {
       this.updating = false
       this.isLoading = false
+      this.toToCanceled = true
       if (this.hospitalAdded | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
