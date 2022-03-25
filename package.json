@@ -49,6 +49,7 @@
         "moment": "^2.26.0",
         "timeline-vuejs": "^1.1.7",
         "v-calendar": "^2.4.1",
+        "vee-validate": "3",
         "vue": "^2.6.11",
         "vue-airbnb-style-datepicker": "^2.7.1",
         "vue-analytics": "^5.22.1",

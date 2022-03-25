@@ -123,12 +123,12 @@
           {{ validatedMessage.password }}</span
         ></b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button type="submit" variant="primary" class="btn-dash-sucess">
+        <b-button type="submit" variant="primary"  class="btn-dash-sucess">
           <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>
             <span>en cours ...</span>
           </span>
-          <div v-else>
+          <div v-else disabled class="btn-submit">
             {{ btnTitle }}
           </div>
         </b-button>
@@ -396,5 +396,9 @@ export default {
   h2 {
     margin-bottom: 20px;
   }
+}
+.btn-submit[disabled='disabled'] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 </style>

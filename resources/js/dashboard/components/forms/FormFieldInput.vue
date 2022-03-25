@@ -11,24 +11,30 @@
       :id="id"
     ></b-form-radio-group>
   </b-form-group>
-  <b-form-input
-    v-else
+  <ValidationProvider v-slot="v"  v-else>
+    <b-form-input
     v-model="formFieldValue"
     :type="type"
     :placeholder="placeholder"
     :id="id"
     :required="isRequired || required"
     :state="state"
-    @blur="blur()"
     trim
     :disabled="disabled"
   >
   </b-form-input>
+  <span>{{ v.errors[0] }}</span>
+</ValidationProvider>
 </div>
 </template>
 <script>
+import { ValidationProvider } from 'vee-validate'
+
 export default {
   name: 'FormFieldInput',
+  components: {
+    ValidationProvider
+  },
   props: {
     type: {
       type: String,
@@ -89,9 +95,6 @@ export default {
     }
   },
   methods: {
-    blur () {
-      this.$emit('blur')
-    }
   }
 }
 </script>
