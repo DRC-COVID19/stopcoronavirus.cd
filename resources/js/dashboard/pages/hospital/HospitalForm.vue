@@ -20,7 +20,7 @@
           <form-wizard
             :finishButtonText="isUpdateMode ? 'Modifier' : 'Envoyer'"
             :startIndex="0"
-            :title="targetForm.title.toUpperCase()"
+            :title="formTitle"
             subtitle
             shape="tab"
             color="#2e5bff"
@@ -171,6 +171,7 @@ export default {
         completed_form_fields: {},
         checkLastUpdate: null
       },
+      formTitle: 'Formulaire COVID-19',
       max: now,
       errors: {},
       isLoading: false,
@@ -208,6 +209,7 @@ export default {
   async mounted () {
     this.isLoading = true
     this.targetForm = await this.formShow({ id: this.$route.params.form_id })
+    this.formTitle = this.targetForm.title.toUpperCase()
     if (this.targetForm) {
       this.isLoading = false
     }
