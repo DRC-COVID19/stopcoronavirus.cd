@@ -94,6 +94,8 @@
           @click="resetForm()"
           > {{ updating ?'Annuler' :'Rénitialiser'}}</b-button
         >
+        creation: {{ hospitalCreated }}
+        updation: {{ hospitalUpdated }}
       </b-row>
     </b-form>
   </b-card>
@@ -136,7 +138,7 @@ export default {
       type: Object,
       default: () => ({})
     },
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
       required: false
@@ -167,7 +169,6 @@ export default {
         longitude: 0.0,
         latitude: 0.0
       },
-      isLoading: this.loading,
       show: true,
       showWarning: false,
       toBeCanceled: true
@@ -189,7 +190,6 @@ export default {
   },
   methods: {
     onSubmit () {
-      this.isLoading = true
       if (this.btnTitle === 'Enregistrer') {
         this.$emit('onCreate', this.form)
       } else {
@@ -212,7 +212,6 @@ export default {
     },
 
     resetForm () {
-      this.isLoading = false
       if (this.hospitalCreated | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
