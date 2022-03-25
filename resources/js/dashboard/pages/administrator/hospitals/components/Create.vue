@@ -77,7 +77,7 @@
           :searchable ="false"
           @input="handleSelect"
           id="input-4"
-        />
+        ><span slot="no-options">Aucun agent attitré disponible</span></v-select>
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
           <b-button type="submit" variant="primary" class="btn-dash-blue" :disabled="isLoading">
@@ -97,10 +97,6 @@
           > {{ updating ?'Annuler' :'Rénitialiser'}}</b-button
         >
           <div class="alert alert-info">
-          creation: {{ hospitalAdded }}
-          updation: {{ hospitalUpdated }}
-          isLoading: {{ isLoading }}
-          updating: {{ updating }}
           errors: {{ errors }}
         </div>
       </b-row>
