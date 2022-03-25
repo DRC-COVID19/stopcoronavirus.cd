@@ -106,7 +106,7 @@ export default {
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
-      hospital: (state) => state.hospital.hospitalData,
+      hospital: (state) => state.hospital.hospitalData
     }),
     totalRows () {
       if (this.completedForms) {
