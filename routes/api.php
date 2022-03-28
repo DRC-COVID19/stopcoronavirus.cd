@@ -35,6 +35,10 @@ Route::get('/pandemicstats', function () {
   return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->get());
 });
 
+Route::get('/debug-sentry', function () {
+  throw new Exception('My first Sentry error!');
+});
+
 Route::get('/pandemicstatsasc', function () {
   /**
    * Récupère la situation epidémiologique
@@ -170,6 +174,8 @@ Route::group([
         });
       });
     });
+
+    
 
     Route::group(['prefix' => 'hotspots'], function () {
       Route::get('list', 'FluxHotSpotController@index'); //ok
