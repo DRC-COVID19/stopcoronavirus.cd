@@ -67,7 +67,7 @@
         />
       </b-form-group>
       <b-form-group class="mt-3">
-      <label class="text-dash-color" for="check-group-1">Agent Attitré</label>
+      <label class="text-secondary" for="check-group-1">Agent Attitré</label>
         <v-select
         v-model="form.agent"
           multiple
@@ -94,7 +94,7 @@
           variant="outline-danger"
           class="ml-4"
           @click="resetForm()"
-          > {{ updating ?'Annuler' :'Réinitialiser'}}</b-button
+          > {{ updating ?'Annuler' :'Rénitialiser'}}</b-button
         >
       </b-row>
     </b-form>
