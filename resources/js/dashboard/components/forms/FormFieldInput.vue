@@ -11,25 +11,26 @@
       :id="id"
     ></b-form-radio-group>
   </b-form-group>
-  <ValidationProvider v-slot="v"  v-else>
+  <ValidationProvider v-slot="{ errors }" :mode="mode" :rules="rules" tag="div" :vid="vid" :name="name" class="bg-transparent">
+
     <b-form-input
     v-model="formFieldValue"
     :type="type"
     :placeholder="placeholder"
     :id="id"
     :required="isRequired || required"
-    :state="state"
+    :state="errors[0]? !true : null || state"
+     class="input-dash"
     trim
     :disabled="disabled"
   >
   </b-form-input>
-  <span>{{ v.errors[0] }}</span>
-</ValidationProvider>
+   <span class="text-danger input-error" >{{ errors[0] }}</span>
+  </ValidationProvider>
 </div>
 </template>
 <script>
 import { ValidationProvider } from 'vee-validate'
-
 export default {
   name: 'FormFieldInput',
   components: {
@@ -58,7 +59,8 @@ export default {
     },
     required: {
       type: Boolean,
-      required: false
+      required: false,
+      default: false
     },
     state: {
       type: Boolean,
@@ -70,6 +72,20 @@ export default {
     disabled: {
       type: Boolean,
       required: false
+    },
+    name: {
+      type: String,
+      required: false
+    },
+    vid: {
+      type: String,
+      required: false
+
+    },
+    mode: {
+      type: String,
+      required: false
+
     }
   },
   data () {
@@ -84,6 +100,13 @@ export default {
   computed: {
     isRequired () {
       return !!this.rules?.match(/required/i) || false
+    },
+    stateFormFields () {
+      return true
+
+      // if(){
+      //   return true
+      // }
     }
   },
   watch: {
@@ -98,3 +121,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.input-error{
+font-family: "Rubik", sans-serif;
+font-size:12px
+
+}
+</style>

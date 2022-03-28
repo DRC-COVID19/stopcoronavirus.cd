@@ -1,61 +1,71 @@
 <template>
   <b-card>
     <h2 class="h2 mb-4">{{ title }}</h2>
-    <b-form
+    <ValidationObserver
+     v-slot="{ invalid }"
+      ref="form"
+      tag="form"
+      novalidate
       @submit.prevent="onSubmit"
       @reset.prevent="onReset"
       v-if="show"
       label-class="text-dash-color"
     >
-      <b-form-group
-        label-class="text-dash-color"
-        id="input-group-1"
-        label="Nom du CTCO *"
-        label-for="input-1"
-        :invalid-feedback="errors.name ? errors.name[0] : null"
-        :state="!errors.name"
+     <label id="input-group-1" class="text-dash-color" for="input-1">
+        Nom du CTCO <span class="text-danger">*</span></label
       >
-        <b-form-input
-          class="input-dash"
-          id="input-1"
-          v-model="form.name"
-          type="text"
-          placeholder="Entrer le Nom du CTCO"
-          required
-        ></b-form-input>
-      </b-form-group>
+    <FormFieldInput
+        v-model="form.name"
+        type="text"
+        :placeholder="`Entrer le nom`"
+        id="input-1"
+        rules="required"
+        name="nom"
+        mode="aggressive"
 
-      <b-form-group
-        label-class="text-dash-color"
-        id="input-group-3"
-        label="Latitude *"
-        label-for="input-3"
+      />
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger">
+          {{ errors.name ? errors.name[0] : null }}</span
+        ></b-form-text
       >
-        <b-form-input
-          id="input-3"
-          class="input-dash"
-          v-model="form.latitude"
-          placeholder="Entrer la Latitude"
-          type="number"
-          step="any"
-        ></b-form-input>
-      </b-form-group>
-        <b-form-group
-        label-class="text-dash-color"
-        id="input-group-3"
-        label="Longitude *"
-        label-for="input-3"
+      <label id="input-group-2" class="text-dash-color" for="input-2">
+        Latitude <span class="text-danger">*</span></label
       >
-        <b-form-input
-          id="input-3"
-          class="input-dash"
-          v-model="form.longitude"
-          placeholder="Entrer la Longitude"
-          type="number"
-          step="any"
-        ></b-form-input>
-      </b-form-group>
-      <label class="text-dash-color" for="check-group-1">Communes *</label>
+    <FormFieldInput
+        v-model="form.latitude"
+         type="number"
+        :placeholder="`Entrer la Latitude`"
+        id="input-2"
+        rules="required"
+        name="latitude"
+        mode="aggressive"
+
+      />
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger">
+          {{ errors.name ? errors.name[0] : null }}</span
+        ></b-form-text
+      >
+         <label id="input-group-3" class="text-dash-color" for="input-3">
+        Longitude <span class="text-danger">*</span></label
+      >
+    <FormFieldInput
+        v-model="form.longitude"
+         type="number"
+        :placeholder="`Entrer la longitude`"
+        id="input-3"
+        rules="required"
+        name="longitude"
+        mode="aggressive"
+
+      />
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger">
+          {{ errors.name ? errors.name[0] : null }}</span
+        ></b-form-text
+      >
+      <label class="text-dash-color" for="check-group-1">Communes <span class="text-danger">*</span></label>
       <b-form-select
           v-model="form.township_id"
           :options="townships"
@@ -65,7 +75,7 @@
           disabled-field="notEnabled"
         />
       <b-form-group class="mt-3">
-        <label class="text-dash-color" for="check-group-1">Selectioner un Agent *</label>
+        <label class="text-dash-color" for="check-group-1">Agent titré <span class="text-danger">*</span></label>
         <b-form-select
           v-model="form.agent_id"
           :options="users"
@@ -82,24 +92,31 @@
             ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
             </span>
-            <div v-else>
+            <div v-else :disabled="btnTitle === 'Enregistrer' ?invalid:false" class="btn-submit">
               {{btnTitle }}
             </div>
           </b-button>
         <b-button
           type="reset"
-          variant="outline-danger"
-          class="ml-4"
+          variant="primary"
+          class="btn-dash-danger ml-4"
           @click="resetForm()"
           > {{ updating ?'Annuler' :'Rénitialiser'}}</b-button
         >
       </b-row>
-    </b-form>
+        </ValidationObserver>
   </b-card>
 </template>
 
 <script>
+import FormFieldInput from '../../../../components/forms/FormFieldInput'
+import { ValidationObserver } from 'vee-validate'
+
 export default {
+  components: {
+    FormFieldInput,
+    ValidationObserver
+  },
   props: {
     hospitalCreated: {
       type: Boolean,
@@ -232,5 +249,9 @@ export default {
   .bg-custom{
      background-color: rgb(165, 167, 180);
   }
+}
+.btn-submit[disabled="disabled"] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 </style>

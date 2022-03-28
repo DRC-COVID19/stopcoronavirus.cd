@@ -21,7 +21,7 @@ import VueMq from "vue-mq";
 import VueTimeline from "@growthbunker/vuetimeline";
 import Notifications from "vue-notification";
 import VCalendar from "v-calendar";
-
+import "./validation";
 import "./directive";
 require("./helper");
 
