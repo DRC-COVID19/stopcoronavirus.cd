@@ -96,7 +96,7 @@ export default {
         { key: 'last_update', label: 'Date' },
         { key: 'name', label: 'Nom CTCO' },
         { key: 'created_manager_name', label: 'Soumis par' },
-        { key: 'actions', label: 'Actions' }
+        { key: 'actions', label: 'Action' }
       ],
       completedForms: [],
       isLoading: false
