@@ -1,31 +1,40 @@
 <template>
   <b-card>
     <h2 class="h2 mb-4">{{ title }}</h2>
+      <ValidationObserver
+     v-slot="{ invalid }"
+      ref="form"
+      tag="form"
+      novalidate
+      @submit.prevent="onSubmit"
+      @reset.prevent="onReset"
+      v-if="show"
+      label-class="text-dash-color"
+    >
     <b-form
       @submit.prevent="onSubmit"
       @reset.prevent="onReset"
       v-if="show"
       label-class="text-dash-color"
     >
-      <b-form-group
-        label-class="text-dash-color"
-        id="input-group-1"
-        label="Titre du Formulaire *"
-        label-for="input-1"
-        :invalid-feedback="errors.title ? errors.title[0] : null"
-        :state="!errors.title"
+          <label id="input-group-1"  for="input-1" class="text-dash-color"
+        >Titre du Formulaire  <span class="text-danger">*</span></label
       >
-        <b-form-input
-          class="input-dash"
-          id="input-1"
-          v-model="form.title"
-          type="text"
-          placeholder="Entrer le titre"
-          required
-        ></b-form-input>
-      </b-form-group>
+      <FormFieldInput
+        v-model="form.title"
+        type="text"
+        id="input-1"
+        :placeholder="`Entrer le titre du formulaire`"
+        rules="required"
+        name="titre du formulaire"
+        mode="aggressive"
+
+      />
+       <b-form-text id="title-help-block" class="mb-4"
+        ><span class="text-danger"></span
+      ></b-form-text>
       <b-form-group>
-        <label class="text-dash-color" for="check-group-1">Recurrence du formulaire *</label>
+        <label class="text-dash-color" for="check-group-1">Recurrence du formulaire  <span class="text-danger">*</span></label>
         <v-select
           v-model="form.form_recurrence_id"
           :options="formRecurrences"
@@ -54,7 +63,7 @@
         <b-form-radio v-model="form.publish" :aria-describedby="ariaDescribedby" name="some-radios" :value="false">Non</b-form-radio>
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" class="btn-dash-blue">
+          <b-button type="submit" variant="primary" class="btn-dash-blue" :disabled="btnTitle === 'Enregistrer' ?invalid:false">
             <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
@@ -72,11 +81,20 @@
         >
       </b-row>
     </b-form>
+  </ValidationObserver>
+
   </b-card>
 </template>
 
 <script>
+import FormFieldInput from '../../../../components/forms/FormFieldInput'
+import { ValidationObserver } from 'vee-validate'
+
 export default {
+  components: {
+    FormFieldInput,
+    ValidationObserver
+  },
   props: {
     formAdded: {
       type: Boolean,
@@ -154,6 +172,8 @@ export default {
     },
 
     onReset () {
+      this.$refs.form.reset()
+
       this.toToCanceled = true
       this.form = {}
       this.title = 'Nouveau Formulaire'
@@ -162,6 +182,8 @@ export default {
     },
 
     resetForm () {
+      this.$refs.form.reset()
+
       this.updating = false
       this.isLoading = false
       if (this.formAdded || this.formUpdated) {

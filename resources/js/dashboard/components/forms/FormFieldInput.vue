@@ -21,7 +21,6 @@
     :required="isRequired || required"
     :state="errors[0]? !true : null || state"
      class="input-dash"
-    trim
     :disabled="disabled"
   >
   </b-form-input>

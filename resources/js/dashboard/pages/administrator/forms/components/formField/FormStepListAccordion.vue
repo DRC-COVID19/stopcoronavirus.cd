@@ -37,6 +37,7 @@
                   :placeholder="`Entrer ${formField.name}`"
                   :id="formField.name"
                   :rules="formField.rules"
+                  :name="formField.name"
                 />
               </b-col>
               <b-col class="col-sm-3 col-md-3">

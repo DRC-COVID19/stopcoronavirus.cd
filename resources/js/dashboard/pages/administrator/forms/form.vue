@@ -59,8 +59,7 @@ import { mapActions } from 'vuex'
 import Loading from '../../../components/Loading.vue'
 import FormFieldIndex from './components/formField/FormFieldIndex.vue'
 import FormStepIndex from './components/formStep/FormStepIndex'
-import FormFieldInput from '../../../../components/forms/FormFieldInput'
-import { ValidationObserver } from 'vee-validate'
+
 export default {
   components: {
     FormFieldIndex,
