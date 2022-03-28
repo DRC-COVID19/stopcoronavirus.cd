@@ -96,9 +96,6 @@
           @click="resetForm()"
           > {{ updating ?'Annuler' :'Rénitialiser'}}</b-button
         >
-          <div class="alert alert-info">
-          errors: {{ errors }}
-        </div>
       </b-row>
     </b-form>
   </b-card>
