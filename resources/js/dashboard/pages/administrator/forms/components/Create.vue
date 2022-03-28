@@ -143,7 +143,6 @@ export default {
       showWarning: false,
       toBeCanceled: true,
       formRecurrenceSelected: null,
-      errors: {}
 
     }
   },
