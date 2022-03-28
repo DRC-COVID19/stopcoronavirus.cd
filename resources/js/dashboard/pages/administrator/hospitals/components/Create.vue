@@ -17,16 +17,16 @@
     <FormFieldInput
         v-model="form.name"
         type="text"
-        :placeholder="`Entrer le nom`"
+        :placeholder="`Entrer le nom du CTCO`"
         id="input-1"
         rules="required"
-        name="nom"
+        name="nom ctco"
         mode="aggressive"
-
+      :state="state.name"
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
-          {{ errors.name ? errors.name[0] : null }}</span
+          {{errors.name ? errors.name[0] : null }}</span
         ></b-form-text
       >
       <label id="input-group-2" class="text-dash-color" for="input-2">
@@ -40,11 +40,12 @@
         rules="required"
         name="latitude"
         mode="aggressive"
+        :state="state.latitude"
 
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
-          {{ errors.name ? errors.name[0] : null }}</span
+          {{  errors.latitude ? errors.latitude[0] : null}}</span
         ></b-form-text
       >
          <label id="input-group-3" class="text-dash-color" for="input-3">
@@ -52,17 +53,17 @@
       >
     <FormFieldInput
         v-model="form.longitude"
-         type="number"
+        type="number"
         :placeholder="`Entrer la longitude`"
         id="input-3"
         rules="required"
         name="longitude"
         mode="aggressive"
-
+        :state="state.longitude"
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
-          {{ errors.name ? errors.name[0] : null }}</span
+          {{errors.longitude ? errors.longitude[0] : null }}</span
         ></b-form-text
       >
       <label class="text-dash-color" for="check-group-1">Communes <span class="text-danger">*</span></label>
@@ -75,7 +76,7 @@
           disabled-field="notEnabled"
         />
       <b-form-group class="mt-3">
-        <label class="text-dash-color" for="check-group-1">Agent titré <span class="text-danger">*</span></label>
+        <label class="text-dash-color" for="check-group-1">Agent attitré <span class="text-danger">*</span></label>
         <b-form-select
           v-model="form.agent_id"
           :options="users"
@@ -87,12 +88,12 @@
         />
       </b-form-group>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" class="btn-dash-blue">
+          <b-button type="submit" variant="primary" :disabled="btnTitle === 'Enregistrer' ?invalid:false" class="btn-dash-blue btn-submit ">
             <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
             </span>
-            <div v-else :disabled="btnTitle === 'Enregistrer' ?invalid:false" class="btn-submit">
+            <div v-else>
               {{btnTitle }}
             </div>
           </b-button>
@@ -168,12 +169,17 @@ export default {
       btnTitle: 'Enregistrer',
       iconClass: 'fas fa-hospital-alt',
       disablePassword: false,
+      state: {
+        name: null,
+        longitude: null,
+        latitude: null
+      },
       form: {
         name: '',
         agent_id: null,
         township_id: null,
-        longitude: 0.0,
-        latitude: 0.0
+        longitude: null,
+        latitude: null
       },
       show: true,
       showWarning: false,
@@ -192,18 +198,25 @@ export default {
     },
     formToPopulate () {
       this.populateForm()
+    },
+    errors () {
+      this.errorForm()
     }
   },
   methods: {
-    onSubmit () {
-      if (this.btnTitle === 'Enregistrer') {
-        this.$emit('onCreate', this.form)
-      } else {
-        this.$emit('onUpdate', this.form)
+    async onSubmit () {
+      const valid = await this.$refs.form.validate()
+      if (valid) {
+        if (this.btnTitle === 'Enregistrer') {
+          this.$emit('onCreate', this.form)
+        } else {
+          this.$emit('onUpdate', this.form)
+        }
       }
     },
 
     onReset () {
+      this.$refs.form.reset()
       this.toToCanceled = true
       this.form = {}
       this.title = 'Nouveau CTCO'
@@ -228,6 +241,26 @@ export default {
       this.form.latitude = this.formToPopulate.latitude
       this.form.agent_id = this.formToPopulate.agent && this.formToPopulate.agent.id ? this.formToPopulate.agent.id : 0
       this.form.township_id = this.formToPopulate.township && this.formToPopulate.township.id ? this.formToPopulate.township.id : 0
+    },
+    errorForm () {
+      if (this.errors.name) {
+        this.state.name = false
+      }
+      if (this.errors.longitude) {
+        this.state.longitude = false
+      }
+      if (this.errors.latitude) {
+        this.state.latitude = false
+      }
+      if (!this.errors.name && this.form.name) {
+        this.state.name = null
+      }
+      if (!this.errors.longitude && this.form.longitude) {
+        this.state.longitude = null
+      }
+      if (!this.errors.latitude && this.form.latitude) {
+        this.state.latitude = null
+      }
     }
 
   },
@@ -252,6 +285,6 @@ export default {
 }
 .btn-submit[disabled="disabled"] {
   opacity: 0.6;
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 </style>
