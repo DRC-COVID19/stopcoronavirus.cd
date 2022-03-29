@@ -66,27 +66,29 @@
           {{errors.longitude ? errors.longitude[0] : null }}</span
         ></b-form-text
       >
-      <label class="text-dash-color" for="check-group-1">Communes <span class="text-danger">*</span></label>
-      <b-form-select
+         <FomFieldSelect
           v-model="form.township_id"
-          :options="townships"
-          class="mb-3"
-          value-field="id"
-          text-field="name"
-          disabled-field="notEnabled"
-        />
-      <b-form-group class="mt-3">
-        <label class="text-dash-color" for="check-group-1">Agent attitré <span class="text-danger">*</span></label>
-        <b-form-select
+            :options="townships"
+            label="name"
+            :reduce="(item) => item.id"
+            id="form.township_id"
+            labelText="Communes"
+             name="communes"
+            mode="aggressive"
+            :isObligated="true"
+            rules="required"
+            />
+           <FomFieldSelect
           v-model="form.agent_id"
-          :options="users"
-          class="mb-3"
-          value-field="id"
-          text-field="name"
-          disabled-field="notEnabled"
-          :searchable ="true"
-        />
-      </b-form-group>
+            :options="users"
+            label="name"
+            :reduce="(item) => item.id"
+            id="form.agent_id"
+            labelText="Agent attitré"
+             name="agent attitré"
+            mode="aggressive"
+            :isMultiple="true"
+            />
       <b-row class="px-3 pt-4 d-flex justify-content-start">
           <b-button type="submit" variant="primary" :disabled="btnTitle === 'Enregistrer' ?invalid:false" class="btn-dash-blue btn-submit ">
             <span v-if="isLoading"
@@ -112,11 +114,13 @@
 <script>
 import FormFieldInput from '../../../../components/forms/FormFieldInput'
 import { ValidationObserver } from 'vee-validate'
+import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue'
 
 export default {
   components: {
     FormFieldInput,
-    ValidationObserver
+    ValidationObserver,
+    FomFieldSelect
   },
   props: {
     hospitalCreated: {
