@@ -50,7 +50,7 @@ class HospitalController extends Controller
         $adminUser = Administrator::where('id', $data['agent_id'])->first();
         $adminUser->update(['affected' => true]);
       }
-      $hospital = Hospital::create($data);
+        $hospital = Hospital::create($data);
 
       DB::commit();
       return response()->json($hospital, 201);
