@@ -4,7 +4,7 @@ import { required, email, confirmed, regex } from "vee-validate/dist/rules";
 extend("email", { ...email, message: "Adresse mail incorrecte" });
 extend("required", {
   ...required,
-  message: "Le champs {_field_} est requis",
+  message: "Le champ {_field_} est requis",
 });
 extend("confirmed", {
   ...confirmed,
