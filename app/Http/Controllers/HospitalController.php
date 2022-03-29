@@ -45,7 +45,7 @@ class HospitalController extends Controller
     {   $data = $request->validated();
         try {
           DB::beginTransaction();
-            if ($data['agent_id']) {
+            if (isset($data['agent_id'])) {
               $adminUser = Administrator::where('id',$data['agent_id'])->first();
               $adminUser->update(['affected' => true ]);
             }
