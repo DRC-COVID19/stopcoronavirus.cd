@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Administrator;
 use App\Hospital;
 use App\HospitalLog;
 use App\HospitalSituation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection ;
-use Illuminate\Support\Facades\Log;
 use App\Http\Resources\HospitalResources;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreHospitalRequest;
 use App\Http\Requests\UpdateHospitalRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class HospitalController extends Controller
 {
@@ -40,13 +42,18 @@ class HospitalController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StoreHospitalRequest $request)
-    {
-
+    {   $data = $request->validated();
         try {
-            $hospital = Hospital::create($request->validated());
-           
+          DB::beginTransaction();
+            
+            $adminUser = Administrator::where('id',$data['agent_id'])->first();
+            $hospital = Hospital::create($data);
+            $adminUser->update(['affected' => true ]);
+
+          DB::commit();
             return response()->json($hospital, 201);
         } catch (\Throwable $th) {
+            DB::rollBack();
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
             }
@@ -99,15 +106,60 @@ class HospitalController extends Controller
      */
     public function updateByAdmin(UpdateHospitalRequest $request, $id)
     { 
+        $data = $request->validated();
+          
         try {
+            DB::beginTransaction();
+
             $hospital = Hospital::find($id);
+
             if (!$hospital) {
                 return response()->json([], 404);
                 
             }
-            $hospital->update($request->validated());
+            $deAssignedAgent = null;
+            $assignedAgent = null;
+            Log::info("Mon truc 0:",[
+              'dassignedAgent:'=>$data['deAssignedAgent'],
+              'assignedAgent' => $data['agent_id']
+            ]);
+            if ($data['agent_id'] !== 0 ) {
+              
+              if ($data['deAssignedAgent'] !== 0 ) {
+                    $deAssignedAgent = Administrator::where('id',$data['deAssignedAgent'])->first();
+                if ($deAssignedAgent->affected) {
+                    $deAssignedAgent->update(['affected' => false]);
+  
+                    $assignedAgent = Administrator::where('id',$data['agent_id'])->first();
+                    $assignedAgent->update(['affected' => $data['affected']]);
+                    $data['agent_id'] = $data['agent_id'];
+  
+                    Log::info("Mon truc 1:",['$assignedAgent:'=>$assignedAgent,'$deAssignedAgent:'=> $deAssignedAgent]);
+                }
+              }
+              else{
+                    $assignedAgent = Administrator::where('id',$data['agent_id'])->first();
+                    $assignedAgent->update(['affected' => $data['affected']]);
+                    $data['agent_id'] = $data['agent_id'];
+                    Log::info("Mon truc 2:",['$deAssignedAgent:'=> $assignedAgent]);
+              }
+             
+            }
+            else {
+                    $deAssignedAgent = Administrator::where('id',$data['deAssignedAgent'])->first();
+                    $deAssignedAgent->update(['affected' => $data['affected']]);
+                    $data['agent_id'] = null;
+                    Log::info("Mon truc 3:",['$deAssignedAgent:'=> $deAssignedAgent]);
+            }   
+    
+            $hospital->update($data);
+
+            DB::commit();
+
             return response()->json($hospital, 201);
         } catch (\Throwable $th) {
+            
+            DB::rollBack();
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
             }
@@ -159,6 +211,20 @@ class HospitalController extends Controller
         }
     }
 
+    public function getAgents(){
+      $agents=collect();
+      try {
+        $agentIds = Administrator::where('affected','=', false)
+               ->get();
+        
+        return response()->json($agentIds, 200);
+   } catch (\Throwable $th) {
+     if (env('APP_DEBUG') == true) {
+       return response($th)->setStatusCode(500);
+   }
+       return response($th->getMessage())->setStatusCode(500);
+   }
+    }
     public function getHospitals(Request $request)
     {
         try {
@@ -389,7 +455,7 @@ class HospitalController extends Controller
                       ORDER BY(a.updated_at <= last_update) DESC , a.updated_at DESC
                       LIMIT 1
                     )
-                  ) AS respirators,
+                  ) AS respirators,agent
                   SUM(
                     (SELECT resuscitation_beds FROM
                       (SELECT id, updated_at, resuscitation_beds from hospitals
@@ -451,4 +517,12 @@ class HospitalController extends Controller
         ])->validate();
     }
 
+    private function deAssignAgent(array $data = [], $agentId){
+      $deAssignedAgent = Administrator::where('id',$agentId)->first();
+      $deAssignedAgent->update(['affected' => $agentId]);
+
+      $data['agent_id'] = $agentId;
+
+      return $deAssignedAgent;
+    }
 }

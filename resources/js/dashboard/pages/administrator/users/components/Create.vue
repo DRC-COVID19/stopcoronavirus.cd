@@ -95,7 +95,7 @@
         v-model="form.roles"
         multiple
         :options="roles"
-        label="name"
+        label="label"
         :reduce="(item) => item.id"
         :searchable="false"
       />

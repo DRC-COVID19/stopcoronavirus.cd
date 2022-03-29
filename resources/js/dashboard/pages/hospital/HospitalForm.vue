@@ -20,7 +20,7 @@
             {{ moment(completedForm.last_update).format("DD/MM/Y") }}
           </h3>
           <ValidationObserver
-            v-slot="{ invalid }"
+            v-slot="{}"
             ref="form"
             tag="form"
             novalidate
@@ -28,7 +28,7 @@
             <form-wizard
               :finishButtonText="isUpdateMode ? 'Modifier' : 'Envoyer'"
               :startIndex="0"
-              :title="targetForm.title.toUpperCase()"
+              :title="formTitle"
               subtitle
               shape="tab"
               color="#2e5bff"
@@ -183,14 +183,13 @@
 </template>
 
 <script>
-import Loading from "../../components/Loading";
-import ManagerUserName from "../../components/hospital/ManagerUserName";
-import FormFieldInput from "../../components/forms/FormFieldInput";
-import { FormWizard, TabContent } from "vue-form-wizard";
-import "vue-form-wizard/dist/vue-form-wizard.min.css";
-import { mapState, mapActions } from "vuex";
-import { ValidationObserver } from "vee-validate";
-
+import Loading from '../../components/Loading'
+import ManagerUserName from '../../components/hospital/ManagerUserName'
+import FormFieldInput from '../../components/forms/FormFieldInput'
+import { FormWizard, TabContent } from 'vue-form-wizard'
+import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+import { mapState, mapActions } from 'vuex'
+import { ValidationObserver } from 'vee-validate'
 export default {
   components: {
     ManagerUserName,
@@ -198,15 +197,15 @@ export default {
     FormWizard,
     TabContent,
     FormFieldInput,
-    ValidationObserver,
+    ValidationObserver
   },
-  data() {
-    const now = new Date();
+  data () {
+    const now = new Date()
     return {
-      dateFormatted: { day: "numeric", year: "numeric", month: "numeric" },
+      dateFormatted: { day: 'numeric', year: 'numeric', month: 'numeric' },
       completedForm: {
         completed_form_fields: {},
-        checkLastUpdate: null,
+        checkLastUpdate: null
       },
       max: now,
       errors: {},
@@ -214,7 +213,8 @@ export default {
       isLastUpdateChecking: false,
       targetForm: {},
       completedFormFields: {},
-    };
+      formTitle: 'Formulaire'
+    }
   },
   computed: {
     ...mapState({
@@ -224,126 +224,124 @@ export default {
         state.hospital.hospitalManagerFirstName,
       formSteps: (state) => state.formStep.formSteps,
       isHospitalSituationLoading: (state) => state.hospitalSituation.isLoading,
-      isUpdateMode() {
-        return !!this.$route.params.completed_form_id;
+      isUpdateMode () {
+        return !!this.$route.params.completed_form_id
       },
-      getHospitalId() {
+      getHospitalId () {
         return this.$route.params.hospital_id
           ? this.$route.params.hospital_id
-          : this.user.hospital.id;
-      },
+          : this.user.hospital.id
+      }
     }),
-    backRoute() {
+    backRoute () {
       // [TODO] fix backRou te
       if (this.user.isHospitalAdmin) {
         return {
-          name: "hospital.admin.data",
-          params: { hospital_id: this.$route.params.hospital_id },
-        };
-      } else return { name: "hospital.home" };
-    },
+          name: 'hospital.admin.data',
+          params: { hospital_id: this.$route.params.hospital_id }
+        }
+      } else return { name: 'hospital.home' }
+    }
   },
-
-  async mounted() {
-    this.isLoading = true;
-    this.targetForm = await this.formShow({ id: this.$route.params.form_id });
+  async mounted () {
+    this.isLoading = true
+    this.targetForm = await this.formShow({ id: this.$route.params.form_id })
+    this.formTitle = this.targetForm.title.toUpperCase()
     if (this.targetForm) {
-      this.isLoading = false;
+      this.isLoading = false
     }
     if (this.isUpdateMode) {
-      this.getCompletedFormFields();
+      this.getCompletedFormFields()
     }
     if (!this.hospitalManagerName) {
-      this.$bvModal.show("nameModal");
+      this.$bvModal.show('nameModal')
     }
   },
   methods: {
     ...mapActions([
-      "formShow",
-      "createHospitalSituation",
-      "updateHospitalSituation",
-      "completedForm__getByHospitalDetail",
-      "completedForm__store",
-      "completedForm__update",
-      "completedForm__checkLastUpdate",
+      'formShow',
+      'createHospitalSituation',
+      'updateHospitalSituation',
+      'completedForm__getByHospitalDetail',
+      'completedForm__store',
+      'completedForm__update',
+      'completedForm__checkLastUpdate'
     ]),
-    async selectLastUpdate() {
-      this.isLastUpdateChecking = true;
+    async selectLastUpdate () {
+      this.isLastUpdateChecking = true
       this.completedForm.checkLastUpdate =
         await this.completedForm__checkLastUpdate({
           hospital_id: this.getHospitalId,
           last_update: this.moment(this.completedForm.last_update).format(
-            "YYYY-MM-DD"
-          ),
-        });
-      this.isLastUpdateChecking = false;
+            'YYYY-MM-DD'
+          )
+        })
+      this.isLastUpdateChecking = false
       if (this.completedForm.checkLastUpdate && !this.isUpdateMode) {
         this.$bvToast.toast(
           `Le ${this.moment(this.completedForm.last_update).format(
-            "DD/MM/Y"
+            'DD/MM/Y'
           )} a déjà une soumission. Veuillez choisir une autre date SVP!`,
           {
-            title: "Erreur",
+            title: 'Erreur',
             autoHideDelay: 4000,
             appendToast: true,
-            variant: "danger",
-            solid: true,
+            variant: 'danger',
+            solid: true
           }
-        );
+        )
       }
       if (this.completedForm.checkLastUpdate === 0 && !this.isUpdateMode) {
-        this.$bvToast.toast("Aucune soumission constatée en cette date.", {
-          title: "Success",
+        this.$bvToast.toast('Aucune soumission constatée en cette date.', {
+          title: 'Success',
           autoHideDelay: 4000,
           appendToast: true,
-          variant: "success",
-          solid: true,
-        });
+          variant: 'success',
+          solid: true
+        })
       }
     },
-    async getCompletedFormFields() {
+    async getCompletedFormFields () {
       this.completedFormFields = await this.completedForm__getByHospitalDetail({
         isLoading: this.isLoading,
-        completed_form_id: this.$route.params.completed_form_id,
-      });
-      this.getLastUpdate();
-      this.laodFormData();
+        completed_form_id: this.$route.params.completed_form_id
+      })
+      this.getLastUpdate()
+      this.laodFormData()
     },
-    completedFormSorted(completedForm) {
-      return completedForm.sort((a, b) => a.name.localeCompare(b.name));
+    completedFormSorted (completedForm) {
+      return completedForm.sort((a, b) => a.name.localeCompare(b.name))
     },
-    getLastUpdate() {
+    getLastUpdate () {
       this.completedForm.last_update =
-        this.completedFormFields[0].completed_form.last_update;
+        this.completedFormFields[0].completed_form.last_update
     },
-
-    laodFormData() {
+    laodFormData () {
       this.completedFormFields.forEach((item) => {
         this.$set(
           this.completedForm.completed_form_fields,
           item.form_field.id,
           item.value
-        );
-      });
+        )
+      })
     },
-    onRangeDateObservation(inputValueDate) {
+    onRangeDateObservation (inputValueDate) {
       // this.completedForm.last_update = moment(inputValueDate).format(
       //   'YYYY-MM-DD')
     },
-
-    onComplete() {
-      this.isLoading = true;
-      this.errors = {};
+    onComplete () {
+      this.isLoading = true
+      this.errors = {}
       if (this.isUpdateMode) {
-        this.completedForm._method = "PUT";
-        this.completedForm.updated_manager_name = this.hospitalManagerName;
+        this.completedForm._method = 'PUT'
+        this.completedForm.updated_manager_name = this.hospitalManagerName
         this.completedForm.updated_manager_first_name =
-          this.hospitalManagerFirstName;
-        this.completedForm.id = this.$route.params.completed_form_id;
+          this.hospitalManagerFirstName
+        this.completedForm.id = this.$route.params.completed_form_id
       } else {
-        this.completedForm.created_manager_name = this.hospitalManagerName;
+        this.completedForm.created_manager_name = this.hospitalManagerName
         this.completedForm.created_manager_first_name =
-          this.hospitalManagerFirstName;
+          this.hospitalManagerFirstName
       }
       this.submitCompletedForm(
         this.isUpdateMode
@@ -354,45 +352,44 @@ export default {
           if (this.user.isHospitalAdmin) {
             const additionalRoute = this.isUpdateMode
               ? `/${this.$route.params.hospital_id}`
-              : "";
-            this.$router.push(`/admin/hospitals${additionalRoute}`);
+              : ''
+            this.$router.push(`/admin/hospitals${additionalRoute}`)
           } else {
-            this.$router.push("/hospitals");
+            this.$router.push('/hospitals')
           }
         })
         .finally(() => {
-          this.isLoading = false;
-        });
+          this.isLoading = false
+        })
     },
-
-    submitCompletedForm(method) {
+    submitCompletedForm (method) {
       return new Promise((resolve, reject) => {
-        this.completedForm.hospital_id = this.getHospitalId;
-        this.completedForm.form_id = this.targetForm.id;
+        this.completedForm.hospital_id = this.getHospitalId
+        this.completedForm.form_id = this.targetForm.id
         method(this.completedForm)
           .then(() => {
-            this.$bvToast.toast("Formulaire soumis avec succès", {
-              title: "Formulaire de soumission",
+            this.$bvToast.toast('Formulaire soumis avec succès', {
+              title: 'Formulaire de soumission',
               appendToast: true,
-              variant: "success",
-              solid: true,
-            });
-            resolve(true);
+              variant: 'success',
+              solid: true
+            })
+            resolve(true)
           })
           .catch(({ response }) => {
-            this.errors = response.data.errors;
-            reject(response);
-            this.$bvToast.toast("Une erreur est survenue!", {
-              title: "Erreur de soumission de reponses",
+            this.errors = response.data.errors
+            reject(response)
+            this.$bvToast.toast('Une erreur est survenue!', {
+              title: 'Erreur de soumission de reponses',
               appendToast: true,
-              variant: "danger",
-              solid: true,
-            });
-          });
-      });
-    },
-  },
-};
+              variant: 'danger',
+              solid: true
+            })
+          })
+      })
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -414,7 +411,6 @@ fieldset.no-border {
   width: 100%;
   align-items: center;
   background-color: #f4f5fc;
-
   input {
     border: none !important;
     width: 100%;

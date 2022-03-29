@@ -35,6 +35,10 @@ Route::get('/pandemicstats', function () {
   return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->get());
 });
 
+Route::get('/debug-sentry', function () {
+  throw new Exception('My first Sentry error!');
+});
+
 Route::get('/pandemicstatsasc', function () {
   /**
    * Récupère la situation epidémiologique
@@ -171,6 +175,8 @@ Route::group([
       });
     });
 
+    
+
     Route::group(['prefix' => 'hotspots'], function () {
       Route::get('list', 'FluxHotSpotController@index'); //ok
       Route::get('maps', 'Flux30ZoneSumController@getHotspotMaps'); //ok
@@ -206,6 +212,7 @@ Route::group([
   Route::group(['prefix' => 'hospitals-data'], function () {
     Route::get('/by-paginate', 'HospitalController@indexByPaginate');
     Route::get('/filter', 'HospitalController@filter');
+    Route::get('/get-agents','HospitalController@getAgents');
     Route::patch('/update-by-admin/{hospital_id}','HospitalController@updateByAdmin');
     Route::patch('/{id}/reject-agent', 'HospitalController@rejectAgent');
   });

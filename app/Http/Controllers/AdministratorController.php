@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Hospital;
 use App\Administrator;
-use App\Http\Resources\AdministratorResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\AdministratorResource;
 
 /**
  * @group  Administrator management
@@ -129,7 +130,9 @@ class AdministratorController extends Controller
       $data['password'] = Hash::make($data['password']);
       $administrator = Administrator::create($data);
       $administrator->roles()->sync($data['roles_id']);
-      $administrator->hospitals()->sync($data['hospitals_id']);
+      if ($data['hospitals_id']) {
+          $administrator->hospitals()->sync($data['hospitals_id']);
+      }
       DB::commit();
       return response()->json(null, 201, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
@@ -227,15 +230,16 @@ class AdministratorController extends Controller
   public function update(Request $request, $admin_user_id)
   {
     $data = Validator::make($request->all(), [
-      'username' => 'required|string|unique:admin_users,username' . ($admin_user_id ? ",$admin_user_id" : ""),
-      'name' => 'required|string',
-      'avatar' => 'nullable',
-      'remember_token' => 'nullable',
-      'email' => 'required|email',
-      'roles_id' => 'required|array',
-      'hospitals_id' => 'nullable|array',
-      'password' => 'sometimes|confirmed',
-      'phone_number' => 'required|string|unique:admin_users,phone_number' . ($admin_user_id ? ",$admin_user_id" : "")
+      'username'        => 'sometimes|string|unique:admin_users,username' . ($admin_user_id ? ",$admin_user_id" : ""),
+      'name'            => 'sometimes|string',
+      'avatar'          => 'nullable',
+      'remember_token'  => 'nullable',
+      'email'           => 'required|email',
+      'roles_id'        => 'required|array',
+      'hospitals_id'    => 'nullable|array',
+      'password'        => 'sometimes|confirmed',
+      'phone_number'    => 'sometimes|string|unique:admin_users,phone_number' . ($admin_user_id ? ",$admin_user_id" : ""),
+      'affected'        => 'nullable|boolean'
 
     ])->validate();
     try {
@@ -291,15 +295,16 @@ class AdministratorController extends Controller
   public function form_validate($data, $id = null)
   {
     return Validator::make($data, [
-      'username' => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
-      'password' => 'required|confirmed',
-      'name' => 'required|string',
-      'avatar' => 'nullable',
-      'remember_token' => 'nullable',
-      'email' => 'required|email',
-      'roles_id' => 'required|array',
-      'hospitals_id' => 'nullable|array',
-      'phone_number' => 'required|string|unique:admin_users,phone_number'
+      'username'        => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
+      'password'        => 'required|confirmed',
+      'name'            => 'required|string',
+      'avatar'          => 'nullable',
+      'remember_token'  => 'nullable',
+      'email'           => 'required|email',
+      'roles_id'        => 'required|array',
+      'hospitals_id'    => 'nullable|array',
+      'phone_number'    => 'required|string|unique:admin_users,phone_number',
+      'affected'        => 'nullable|boolean'
     ])->validate();
   }
 

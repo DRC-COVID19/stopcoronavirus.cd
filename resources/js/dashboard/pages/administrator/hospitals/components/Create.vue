@@ -88,6 +88,7 @@
              name="agent attitré"
             mode="aggressive"
             :isMultiple="true"
+            @input="handleSelect()"
             />
       <b-row class="px-3 pt-4 d-flex justify-content-start">
           <b-button type="submit" variant="primary" :disabled="btnTitle === 'Enregistrer' ?invalid:false" class="btn-dash-blue btn-submit ">
@@ -104,7 +105,7 @@
           variant="primary"
           class="btn-dash-danger ml-4"
           @click="resetForm()"
-          > {{ updating ?'Annuler' :'Rénitialiser'}}</b-button
+          > {{ updating ?'Annuler' :'Réinitialiser'}}</b-button
         >
       </b-row>
         </ValidationObserver>
@@ -123,7 +124,7 @@ export default {
     FomFieldSelect
   },
   props: {
-    hospitalCreated: {
+    hospitalAdded: {
       type: Boolean,
       required: false,
       default: false
@@ -156,14 +157,9 @@ export default {
       type: Object,
       default: () => ({})
     },
-    isLoading: {
+    affected: {
       type: Boolean,
-      default: false,
-      required: false
-    },
-    updating: {
-      type: Boolean,
-      default: false,
+      default: null,
       required: false
     }
   },
@@ -178,9 +174,13 @@ export default {
         longitude: null,
         latitude: null
       },
+      updating: false,
+      isLoading: false,
       form: {
         name: '',
-        agent_id: null,
+        agent: null,
+        deAssignedAgent: null,
+        affected: this.affected,
         township_id: null,
         longitude: null,
         latitude: null
@@ -208,14 +208,18 @@ export default {
     }
   },
   methods: {
-    async onSubmit () {
-      const valid = await this.$refs.form.validate()
-      if (valid) {
-        if (this.btnTitle === 'Enregistrer') {
-          this.$emit('onCreate', this.form)
+    onSubmit () {
+      this.isLoading = true
+      if (this.btnTitle === 'Enregistrer') {
+        this.$emit('onCreate', this.form)
+      } else {
+        if (this.form.agent.length === 0) {
+          this.form.affected = false
         } else {
-          this.$emit('onUpdate', this.form)
+          this.form.affected = true
         }
+        this.form.deAssignedAgent = (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
+        this.$emit('onUpdate', this.form)
       }
     },
 
@@ -229,7 +233,10 @@ export default {
     },
 
     resetForm () {
-      if (this.hospitalCreated | this.hospitalUpdated) {
+      this.updating = false
+      this.isLoading = false
+      this.toToCanceled = true
+      if (this.hospitalAdded | this.hospitalUpdated) {
         this.form = {}
         this.btnTitle = 'Enregistrer'
         this.title = 'Nouveau CTCO'
@@ -237,13 +244,14 @@ export default {
     },
 
     populateForm () {
+      this.updating = true
       this.title = 'Modification du CTCO '
       this.btnTitle = 'Modifier'
       this.form.id = this.formToPopulate.id
       this.form.name = this.formToPopulate.name
       this.form.longitude = this.formToPopulate.longitude
       this.form.latitude = this.formToPopulate.latitude
-      this.form.agent_id = this.formToPopulate.agent && this.formToPopulate.agent.id ? this.formToPopulate.agent.id : 0
+      this.form.agent = this.formToPopulate.agent
       this.form.township_id = this.formToPopulate.township && this.formToPopulate.township.id ? this.formToPopulate.township.id : 0
     },
     errorForm () {
@@ -265,10 +273,13 @@ export default {
       if (!this.errors.latitude && this.form.latitude) {
         this.state.latitude = null
       }
+    },
+    handleSelect (value) {
+      if (value.length > 1) {
+        value.shift()
+      }
     }
-
   },
-
   computed: {
   }
 
@@ -285,6 +296,9 @@ export default {
   }
   .bg-custom{
      background-color: rgb(165, 167, 180);
+  }
+  .form-select{
+    outline: none !important;
   }
 }
 .btn-submit[disabled="disabled"] {

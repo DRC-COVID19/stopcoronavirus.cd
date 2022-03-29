@@ -66,7 +66,7 @@
               v-for="(role, index) in data.item.roles"
               variant="secondary"
               :key="index"
-              >{{ role.name }}</b-badge
+              >{{ role.label }}</b-badge
             >
           </template>
           <template v-slot:cell(hopital)="data">
@@ -94,7 +94,6 @@
     </b-modal>
   </b-container>
 </template>
-
 <script>
 export default {
   props: {
@@ -110,11 +109,11 @@ export default {
   data () {
     return {
       fields: [
-        { key: 'username', sortable: false, label: 'Nom utilisateur' },
+        { key: 'usernmae', sortable: false, label: 'Nom utilisateur' },// usernmae instead of username (see backend response)
         { key: 'phone_number', sortable: false, label: 'N°Téléphone' },
         { key: 'role', sortable: false, label: 'Rôle' },
         { key: 'hopital', sortable: false, label: 'Hôpital' },
-        { key: 'actions', sortable: false, label: 'Actions' }], // usernmae instead of username (see backend response)
+        { key: 'actions', sortable: false, label: 'Actions' }], 
       filter: '',
       perPage: 15,
       currentPage: 1,

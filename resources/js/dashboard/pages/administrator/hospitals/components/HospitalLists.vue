@@ -41,7 +41,7 @@
           <template v-slot:cell(actions)="data" class="action-btn-group">
              <b-button
                variant="outline-success mb-1"
-               class="mx-2 my-1 btn-dash"
+               class="my-1 btn-dash"
                @click="
                 updateHospital(
                   data.item.name,
@@ -114,7 +114,7 @@ export default {
         { key: 'name', label: 'Nom' },
         { key: 'township', label: 'Commune' },
         { key: 'agent', label: ' Agent Attitré' },
-        { key: 'actions', label: 'Actions' }
+        { key: 'actions', label: 'Action' }
       ],
       filter: '',
       perPage: 15,
