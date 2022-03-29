@@ -66,7 +66,7 @@
               v-for="(role, index) in data.item.roles"
               variant="secondary"
               :key="index"
-              >{{ role.name }}</b-badge
+              >{{ role.label }}</b-badge
             >
           </template>
           <template v-slot:cell(hopital)="data">
