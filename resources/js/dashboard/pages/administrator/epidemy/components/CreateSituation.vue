@@ -2,16 +2,18 @@
 <template>
   <b-card>
     <h2 class="h2 mb-4">{{ title }}</h2>
-    <b-form @submit.prevent="onSubmit" @reset.prevent="onReset">
-      <b-row class="mx-1 d-flex justify-content-start">
-        <b-form-group
+    <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" class="mt-2">
+      <b-row class="d-flex justify-content-start">
+       <b-col class="md-12 mb-2">
+          <b-form-group
           label-class="text-dash-color"
           id="input-group-1"
-          label="Date *"
           label-for="datepicker"
+          class="md-12"
           :invalid-feedback="errors.last_update ? errors.last_update[0] : null"
           :state="!errors.last_update"
         >
+        <label for="input-group-1" class="text-dash-color">Date <span class="text-danger">*</span></label>
           <v-date-picker
             v-model="form.last_update"
             opens="center"
@@ -48,9 +50,10 @@
           >
           </b-form-datepicker> -->
         </b-form-group>
+       </b-col>
       </b-row>
       <b-row class="d-flex justify-content-start">
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -62,11 +65,12 @@
               class="input-dash"
               v-int
               v-model="form.confirmed"
+              type="number"
               placeholder=""
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -78,11 +82,12 @@
               class="input-dash"
               v-model="form.sick"
               v-int
+              type="number"
               placeholder=""
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -95,10 +100,11 @@
               v-int
               v-model="form.seriously"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -111,10 +117,11 @@
               class="input-dash"
               v-model="form.dead"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -127,10 +134,11 @@
               v-int
               v-model="form.imported"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -143,10 +151,11 @@
               v-int
               v-model="form.local"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -159,6 +168,7 @@
               v-int
               v-model="form.healed"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
@@ -176,8 +186,8 @@
         <b-button
           type="reset"
           v-if="isUpdating"
-          variant="primary"
-          class="ml-4 btn-dash-danger"
+          variant="outline-danger"
+          class="ml-4"
           >Annuler</b-button
         >
       </b-row>
