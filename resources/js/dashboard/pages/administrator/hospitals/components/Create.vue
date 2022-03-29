@@ -100,8 +100,8 @@
           </b-button>
         <b-button
           type="reset"
-          variant="primary"
-          class="btn-dash-danger ml-4"
+          variant="outline-danger"
+          class="ml-4"
           @click="resetForm()"
           > {{ updating ?'Annuler' :'Réinitialiser'}}</b-button
         >

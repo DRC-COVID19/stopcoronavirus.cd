@@ -160,11 +160,11 @@
         </b-button>
         <b-button
           type="reset"
-          variant="danger"
+          variant="outline-danger"
           class="ml-4"
           @click="resetForm()"
         >
-          {{ updating ? "Annuler" : "Rénitialiser" }}</b-button
+          {{ updating ? "Annuler" : "Réinitialiser" }}</b-button
         >
       </b-row>
     </ValidationObserver>
@@ -217,7 +217,7 @@ export default {
   },
   data () {
     return {
-      title: 'Nouveau utilisateur',
+      title: 'Nouveau Utilisateur',
       btnTitle: 'Enregistrer',
       iconClass: 'fas fa-plus-square',
       updating: false,
@@ -295,7 +295,7 @@ export default {
       this.stateForm.name = null
       this.stateForm.phoneNumber = null
 
-      this.title = 'Nouveau utilisateur'
+      this.title = 'Nouveau Utilisateur'
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
     },
@@ -316,7 +316,7 @@ export default {
       this.form = {}
       if (this.userAdded | this.userUpdated) {
         this.btnTitle = 'Enregistrer'
-        this.title = 'Nouveau utilisateur'
+        this.title = 'Nouveau Utilisateur'
       }
       this.$emit('onReset')
     },

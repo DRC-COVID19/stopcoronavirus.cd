@@ -99,7 +99,7 @@
           <b-button
             type="reset"
             v-if="updating"
-            variant="primary"
+            variant="outline-danger"
             class="ml-4 btn-dash-danger"
             >Annuler</b-button
           >
