@@ -45,10 +45,11 @@ class HospitalController extends Controller
     {   $data = $request->validated();
         try {
           DB::beginTransaction();
-            
-            $adminUser = Administrator::where('id',$data['agent_id'])->first();
+            if ($data['agent_id']) {
+              $adminUser = Administrator::where('id',$data['agent_id'])->first();
+              $adminUser->update(['affected' => true ]);
+            }
             $hospital = Hospital::create($data);
-            $adminUser->update(['affected' => true ]);
 
           DB::commit();
             return response()->json($hospital, 201);
