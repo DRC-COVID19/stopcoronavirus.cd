@@ -211,6 +211,7 @@ export default {
       this.isLoading = true
       if (this.btnTitle === 'Enregistrer') {
         this.$emit('onCreate', this.form)
+        this.$refs.form.reset()
       } else {
         if (this.form.agent.length === 0) {
           this.form.affected = false
@@ -220,6 +221,7 @@ export default {
         this.form.deAssignedAgent = (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)
       }
+      this.$refs.form.reset()
     },
 
     onReset () {

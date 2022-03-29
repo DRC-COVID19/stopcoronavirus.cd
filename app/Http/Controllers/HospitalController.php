@@ -46,7 +46,7 @@ class HospitalController extends Controller
     $data = $request->validated();
     try {
       DB::beginTransaction();
-      if ($data['agent_id']) {
+      if (isset($data['agent_id'])) {
         $adminUser = Administrator::where('id', $data['agent_id'])->first();
         $adminUser->update(['affected' => true]);
       }
@@ -268,10 +268,10 @@ class HospitalController extends Controller
   private function getHospitalsFromFiltre($date_start, $date_end, $township)
   {
     $hospitalLogs = HospitalLog::where(function ($query) use ($date_start, $date_end) {
-        $query
-          ->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$date_start, $date_end])
-          ->orWhereNull('updated_at');
-      })
+      $query
+        ->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$date_start, $date_end])
+        ->orWhereNull('updated_at');
+    })
       ->where(function ($query) use ($township) {
         if ($township) $query->where('township_id', $township);
       })
@@ -323,8 +323,8 @@ class HospitalController extends Controller
       ]);
 
       $hospitalsSituation1 = Hospital::where(function ($query) use ($township) {
-          if ($township) $query->whereRaw('township_id = :township ', ['township' => $township]);
-        })
+        if ($township) $query->whereRaw('township_id = :township ', ['township' => $township]);
+      })
         ->selectRaw(
           '
                 SUM(
