@@ -279,10 +279,14 @@ export default {
         })
     },
     isAgentHospital (form) {
-      if (form.roles.includes(ADMIN_ROLE_ID) && form.hospitals.length !== 0) {
-        this.affected = true
-      } else if (form.roles.includes(ADMIN_ROLE_ID)) {
+      if (!form.hospitals) {
+        form.hospitals = []
+      }
+      if (form.roles.includes(ADMIN_ROLE_ID)) {
         this.affected = false
+        if (form.hospitals && form.hospitals.length !== 0) {
+          this.affected = true
+        }
       }
     },
     switchPage (page) {
