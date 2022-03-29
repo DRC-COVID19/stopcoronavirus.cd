@@ -1,34 +1,56 @@
 <template>
-  <b-modal :id="id" centered no-close-on-backdrop hide-footer hide-header >
+  <b-modal :id="id" centered no-close-on-backdrop hide-footer hide-header>
     <b-container>
       <b-row>
         <b-col>
           <div class="mb-4 p-2">
-            <h2 class="lead text-center text-uppercase text-bold">Formulaire d'identification</h2>
+            <h2 class="lead text-center text-uppercase text-bold">
+              Formulaire d'identification
+            </h2>
           </div>
-          <b-form @submit.prevent="hospitalManagerNameSubmit">
-            <b-form-group>
-              <label class="text-dash-color">Veuillez entrer votre Nom:</label>
-              <b-form-input v-model="identity.name"  @blur="validateName()" required class="input-dash" />
-            </b-form-group>
-                <b-form-text id="name-help-block">
-                  <span class="text-danger mb-3"> {{
-                  validateNameMessage
-                }}</span>
-                  </b-form-text>
-            <b-form-group>
-              <label class="text-dash-color">Veuillez entrer votre Prénom :</label>
-              <b-form-input  v-model="identity.firstName" @blur="validateFirstName()" required class="input-dash" />
-            </b-form-group>
-            <b-form-text id="first-name-help-block">
-                  <span class="text-danger"> {{
-                  validateFirstNameMessage
-                }}</span>
-                  </b-form-text>
-            <div class="mt-4 text-center">
-              <b-button type="submit" class="btn-dash-blue">Continuer</b-button>
-            </div>
-          </b-form>
+          <ValidationObserver
+            v-slot="{ invalid }"
+            ref="form"
+            tag="form"
+            novalidate
+            @submit.prevent="onSubmit"
+            @reset.prevent="onReset"
+            label-class="text-dash-color"
+          >
+            <b-form @submit.prevent="hospitalManagerNameSubmit">
+              <b-form-group>
+                <label class="text-dash-color" for="text-name"
+                  > Nom:</label
+                >
+                <FormFieldInput
+                  v-model="identity.name"
+                  type="text"
+                  id="text-name"
+                  rules="required"
+                  name="nom"
+                  mode="aggressive"
+                />
+              </b-form-group>
+              <b-form-group>
+                <label class="text-dash-color" for="text-firstName"
+                  >Prénom :</label
+                >
+                <FormFieldInput
+                  v-model="identity.firstName"
+                  type="text"
+                  id="text-firstName"
+                  rules="required"
+                  name="prénom"
+                  mode="aggressive"
+                />
+              </b-form-group>
+              <div class="mt-4 text-center">
+                <b-button type="submit" class="btn-dash-blue" :disabled="invalid"
+                  >Continuer</b-button
+                >
+              </div>
+            </b-form>
+          </ValidationObserver>
         </b-col>
       </b-row>
     </b-container>
@@ -37,7 +59,14 @@
 
 <script>
 import { mapMutations } from 'vuex'
+import FormFieldInput from '../forms/FormFieldInput'
+import { ValidationObserver } from 'vee-validate'
+
 export default {
+  components: {
+    FormFieldInput,
+    ValidationObserver
+  },
   props: {
     id: {
       type: String,
@@ -52,12 +81,14 @@ export default {
       },
       validateNameMessage: '',
       validateFirstNameMessage: ''
-
     }
   },
   computed: {
     localhospitalManager () {
-      if (this.validateNameMessage.length === 0 && this.validateNameMessage.length === 0) {
+      if (
+        this.validateNameMessage.length === 0 &&
+        this.validateNameMessage.length === 0
+      ) {
         return this.identity
       } else {
         return null
@@ -67,28 +98,11 @@ export default {
   methods: {
     ...mapMutations(['setHospitalManagerName']),
     hospitalManagerNameSubmit () {
-      if (this.localhospitalManager) {
-        this.setHospitalManagerName(this.localhospitalManager)
-        this.$bvModal.hide(this.id)
-      }
-    },
-    validateFirstName () {
-      if (this.identity.firstName.trim().length === 0) {
-        this.validateFirstNameMessage = 'Votre prénom ne doit pas être vides'
-      } else {
-        this.validateFirstNameMessage = ''
-      }
-    },
-    validateName () {
-      if (this.identity.name.trim().length === 0) {
-        this.validateNameMessage = 'Votre nom ne doit pas être vides'
-      } else {
-        this.validateNameMessage = ''
-      }
+      this.setHospitalManagerName(this.localhospitalManager)
+      this.$bvModal.hide(this.id)
     }
   }
 }
 </script>
 
-<style>
-</style>
+<style></style>
