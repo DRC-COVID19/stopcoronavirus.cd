@@ -79,16 +79,14 @@
             rules="required"
             />
            <FomFieldSelect
-          v-model="form.agent_id"
-            :options="users"
+          v-model="form.agent"
+            :options="updating ?usersUpdating :users"
             label="name"
             :reduce="(item) => item.id"
             id="form.agent_id"
             labelText="Agent attitré"
              name="agent attitré"
             mode="aggressive"
-            :isMultiple="true"
-            @input="handleSelect()"
             />
       <b-row class="px-3 pt-4 d-flex justify-content-start">
           <b-button type="submit" variant="primary" :disabled="btnTitle === 'Enregistrer' ?invalid:false" class="btn-dash-blue btn-submit ">
@@ -185,6 +183,7 @@ export default {
         longitude: null,
         latitude: null
       },
+      usersUpdating: [],
       show: true,
       showWarning: false,
       toBeCanceled: true
@@ -253,6 +252,8 @@ export default {
       this.form.latitude = this.formToPopulate.latitude
       this.form.agent = this.formToPopulate.agent
       this.form.township_id = this.formToPopulate.township && this.formToPopulate.township.id ? this.formToPopulate.township.id : 0
+      this.usersUpdating = [...this.users]
+      this.usersUpdating.push({ ...this.form.agent })
     },
     errorForm () {
       if (this.errors.name) {

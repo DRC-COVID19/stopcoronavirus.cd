@@ -119,10 +119,7 @@ class HospitalController extends Controller
             }
             $deAssignedAgent = null;
             $assignedAgent = null;
-            Log::info("Mon truc 0:",[
-              'dassignedAgent:'=>$data['deAssignedAgent'],
-              'assignedAgent' => $data['agent_id']
-            ]);
+          
             if ($data['agent_id'] !== 0 ) {
               
               if ($data['deAssignedAgent'] !== 0 ) {
@@ -134,14 +131,14 @@ class HospitalController extends Controller
                     $assignedAgent->update(['affected' => $data['affected']]);
                     $data['agent_id'] = $data['agent_id'];
   
-                    Log::info("Mon truc 1:",['$assignedAgent:'=>$assignedAgent,'$deAssignedAgent:'=> $deAssignedAgent]);
+                    
                 }
               }
               else{
                     $assignedAgent = Administrator::where('id',$data['agent_id'])->first();
                     $assignedAgent->update(['affected' => $data['affected']]);
                     $data['agent_id'] = $data['agent_id'];
-                    Log::info("Mon truc 2:",['$deAssignedAgent:'=> $assignedAgent]);
+                   
               }
              
             }
@@ -149,7 +146,7 @@ class HospitalController extends Controller
                     $deAssignedAgent = Administrator::where('id',$data['deAssignedAgent'])->first();
                     $deAssignedAgent->update(['affected' => $data['affected']]);
                     $data['agent_id'] = null;
-                    Log::info("Mon truc 3:",['$deAssignedAgent:'=> $deAssignedAgent]);
+                    
             }   
     
             $hospital->update($data);

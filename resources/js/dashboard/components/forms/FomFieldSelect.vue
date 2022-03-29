@@ -23,15 +23,8 @@
             :id="id"
             class="border-0"
             :multiple="isMultiple"
+            @input="handleSelect"
           >
-            <template #search="{ attribute, events }">
-              <input
-                class="vs__search"
-                :required="required"
-                v-bind="attribute"
-                v-on="events"
-              />
-            </template>
           </v-select>
         </div>
         <span class="text-danger label-error mb-2">{{ errors[0] }}</span>
@@ -40,99 +33,103 @@
   </div>
 </template>
 <script>
-import { ValidationProvider } from "vee-validate";
+import { ValidationProvider } from 'vee-validate'
 export default {
-  name: "FomFieldSelect",
+  name: 'FomFieldSelect',
   components: {
-    ValidationProvider,
+    ValidationProvider
   },
   props: {
     reduce: {
       type: [Function, String, Number],
-      required: false,
+      required: false
     },
     isMultiple: {
       type: Boolean,
-      required: false,
+      required: false
     },
     rules: {
       type: String,
-      required: false,
+      required: false
     },
     id: {
       type: [String],
-      required: true,
+      required: true
     },
     forId: {
       type: String,
-      required: false,
+      required: false
     },
     state: {
       type: Boolean,
       required: false,
-      default: () => null,
+      default: () => null
     },
     disabled: {
       type: Boolean,
-      required: false,
+      required: false
     },
     label: {
       type: String,
-      required: false,
+      required: false
     },
     vid: {
       type: String,
-      required: false,
+      required: false
     },
     mode: {
       type: String,
-      required: false,
+      required: false
     },
     value: {
-      type: [String, Number],
-      default: "",
+      type: [String, Number, Array, Object],
+      default: ''
     },
     labelText: {
       type: String,
-      default: "",
+      default: ''
     },
     options: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     isObligated: {
       type: Boolean,
-      default: false,
+      default: false
     },
     required: {
       type: Boolean,
-      default: false,
+      default: false
     },
     name: {
       type: String,
-      required: false,
-    },
+      required: false
+    }
   },
-  data() {
+  data () {
     return {
-      formFieldValue: this.value,
-    };
+      formFieldValue: this.value
+    }
   },
   computed: {
-    isRequired() {
-      return !!this.rules?.match(/required/i) || false;
-    },
+    isRequired () {
+      return !!this.rules?.match(/required/i) || false
+    }
   },
   watch: {
-    formFieldValue(value) {
-      this.$emit("input", value);
+    formFieldValue (value) {
+      this.$emit('input', value)
     },
-    value() {
-      this.formFieldValue = this.value;
-    },
+    value () {
+      this.formFieldValue = this.value
+    }
   },
-  methods: {},
-};
+  methods: {
+    handleSelect () {
+      this.$emit('handleSelect')
+    }
+  }
+}
 </script>
 <style scoped>
 .select-error {
