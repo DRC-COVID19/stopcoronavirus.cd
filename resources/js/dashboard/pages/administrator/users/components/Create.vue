@@ -115,16 +115,15 @@
         ><span class="text-danger"> </span
       ></b-form-text>
       <label class="text-dash-color" for="text-password"
-        >Mot de passe <span class="text-danger">*</span></label
+        >Mot de passe <span class="text-danger" v-if="!updating">*</span></label
       >
       <FormFieldInput
         v-model="form.password"
         type="password"
         id="text-password"
         vid="pass"
-        rules="required"
+        :rules="`${!updating? 'required' : ''}`"
         name="mot de passe"
-        :disabled="disablePassword"
         :state="stateForm.password"
         mode="aggressive"
       />
@@ -132,14 +131,13 @@
         ><span class="text-danger"></span
       ></b-form-text>
       <label class="text-dash-color" for="text-password-confirm"
-        >Confirmation de mot de passe <span class="text-danger">*</span></label
+        >Confirmation de mot de passe <span class="text-danger" v-if="!updating">*</span></label
       >
       <FormFieldInput
         v-model="form.confirmPassword"
-        :disabled="disablePassword"
         type="password"
         id="text-password-confirm"
-        rules="required|confirmed:pass"
+        :rules="`${!updating? 'required|confirmed:pass:null' : ''}`"
         name="mot de passe confirmé"
         mode="aggressive"
       />
