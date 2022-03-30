@@ -39,16 +39,21 @@
               <strong>Loading...</strong>
             </div>
           </template>
-          <template v-slot:cell(actions)="data" class="action-btn-group">
-            <i
-              @click="deleteForm(data.item.id)"
-              class="mx-2 my-1 fas fa-trash prim color-red"
-              aria-hidden="true"
-            ></i>
-            <i
-              class="mx-2 my-1 fas fa-pencil-alt color-green"
-              aria-hidden="true"
-              @click="
+          <template v-slot:cell(actions)="data">
+             <b-button
+             variant="outline-primary"
+                class="btn-dash mb-1"
+                :to="{
+                    name:'administrator.forms.show',
+                    params:{
+                      form_id:data.item.id,
+                    }
+                  }"
+              >Details</b-button>
+               <b-button
+               variant="outline-success mb-1"
+               class="btn-dash"
+               @click="
                 updateForm(
                   data.item.id,
                   data.item.title,
@@ -57,20 +62,13 @@
                   data.item.publish
                 )
               "
-            ></i>
-           <b-link
-               :to="{
-                    name:'administrator.forms.show',
-                    params:{
-                      form_id:data.item.id,
-                    }
-                  }"
-           >
-            <i
-                class="mx-2 my-1 fas fa fa-eye color-blue"
-                aria-hidden="true"
-              ></i>
-           </b-link>
+              >Editer</b-button>
+              <b-button 
+              variant="outline-danger mb-1"
+              class="btn-dash"
+              @click="deleteForm(data.item.id)">
+             Supprimer
+            </b-button>
 
           </template>
           <template v-slot:cell(index)="data">
@@ -122,10 +120,7 @@ export default {
   data () {
     return {
       fields: [
-        { key: 'index', label: '#' },
         { key: 'title', label: 'Titre' },
-        { key: 'form_recurrence.name', label: 'Recurrence' },
-        { key: 'publish', label: 'Publier' },
         { key: 'created_at', label: 'Date création' },
         'actions'
       ],

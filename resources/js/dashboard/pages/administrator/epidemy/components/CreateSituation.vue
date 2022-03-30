@@ -1,16 +1,19 @@
+/* eslint-disable no-sequences */
 <template>
   <b-card>
-    <h2 class="h2">{{ title }}</h2>
-    <b-form @submit.prevent="onSubmit" @reset.prevent="onReset">
-      <b-row class="mx-1 d-flex justify-content-start">
-        <b-form-group
+    <h2 class="h2 mb-4">{{ title }}</h2>
+    <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" class="mt-2">
+      <b-row class="d-flex justify-content-start">
+       <b-col class="md-12 mb-2">
+          <b-form-group
           label-class="text-dash-color"
           id="input-group-1"
-          label="Date *"
           label-for="datepicker"
+          class="md-12"
           :invalid-feedback="errors.last_update ? errors.last_update[0] : null"
           :state="!errors.last_update"
         >
+        <label for="input-group-1" class="text-dash-color">Date <span class="text-danger">*</span></label>
           <v-date-picker
             v-model="form.last_update"
             opens="center"
@@ -47,9 +50,10 @@
           >
           </b-form-datepicker> -->
         </b-form-group>
+       </b-col>
       </b-row>
       <b-row class="d-flex justify-content-start">
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -61,11 +65,12 @@
               class="input-dash"
               v-int
               v-model="form.confirmed"
+              type="number"
               placeholder=""
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -77,11 +82,12 @@
               class="input-dash"
               v-model="form.sick"
               v-int
+              type="number"
               placeholder=""
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -94,10 +100,11 @@
               v-int
               v-model="form.seriously"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -110,10 +117,11 @@
               class="input-dash"
               v-model="form.dead"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -126,10 +134,11 @@
               v-int
               v-model="form.imported"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -142,10 +151,11 @@
               v-int
               v-model="form.local"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
-        <b-col md="4">
+        <b-col md="12">
           <b-form-group
             label-class="text-dash-color"
             id="input-group-3"
@@ -158,12 +168,13 @@
               v-int
               v-model="form.healed"
               placeholder=""
+               type="number"
             ></b-form-input>
           </b-form-group>
         </b-col>
       </b-row>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button type="submit" variant="primary" class="btn-dash-sucess">
+        <b-button type="submit" variant="primary">
           <span v-if="isLoading">
             <b-spinner class="align-middle"></b-spinner>
             <span>en cours ...</span>
@@ -174,10 +185,9 @@
         </b-button>
         <b-button
           type="reset"
-          v-if="isUpdating"
-          variant="primary"
-          class="ml-4 btn-dash-danger"
-          >Annuler</b-button
+          variant="outline-danger"
+          class="ml-4"
+          >{{ isUpdating ?'Annuler' :'Réinitialiser'}}</b-button
         >
       </b-row>
     </b-form>
@@ -213,7 +223,7 @@ export default {
   data () {
     return {
       title: 'Nouvelle Situation',
-      btnTitle: 'Envoyer',
+      btnTitle: 'Enregistrer',
       iconClass: 'fas fa-plus-square',
       validateMailMessage: '',
       disableDate: false,
@@ -253,7 +263,7 @@ export default {
   methods: {
     onSubmit () {
       this.isLoading = true
-      if (this.btnTitle === 'Envoyer') {
+      if (this.btnTitle === 'Enregistrer') {
         if (this.form.last_update !== null) {
           this.$emit('onCreateSituation', this.form)
         } else {
@@ -268,7 +278,7 @@ export default {
       this.resetForm()
       this.form = {}
       this.title = 'Nouvelle Situation'
-      this.btnTitle = 'Envoyer'
+      this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
     },
     validateMail () {
@@ -284,13 +294,14 @@ export default {
       this.disableDate = false
       if (this.isSituationAdded | this.isSituationUpdated) {
         this.form = {}
-        this.btnTitle = 'Envoyer'
+        this.btnTitle = 'Enregistrer'
         this.title = 'Nouvelle Situation'
       }
     },
     populateForm () {
       this.disableDate = true
       this.isUpdating = true;
+      // eslint-disable-next-line no-unused-expressions
       (this.form.id = this.formToPopulate.id),
       (this.form.last_update = this.formToPopulate.last_update)
       this.form.confirmed = this.formToPopulate.confirmed
@@ -352,5 +363,4 @@ export default {
   border-radius: 5px;
   font-size:16px;
 }
-
 </style>

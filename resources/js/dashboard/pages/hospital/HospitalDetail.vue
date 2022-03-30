@@ -14,7 +14,7 @@
                   :key="index"
               cols="12" md="12"
             >
-            <b-card class="mt-3">
+            <b-card class="mt-4 bg-dash">
                    <h4 class="mb-4">{{ formStep.title }}</h4>
                 <ul v-for="(formField, count) in formStep.form_fields" :key="count">
                    <li>{{ formField.name }} : {{ completedForm.completed_form_fields[formField.id] }}</li>
@@ -129,6 +129,9 @@ export default {
   }
 }
 </script>
-
-<style>
+<style lang="scss">
+.bg-dash{
+    box-shadow: -5px 10px 25px -1px rgba(0,0,0,0.1);
+    border: 0 !important;
+  }
 </style>

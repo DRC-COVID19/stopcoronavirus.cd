@@ -40,12 +40,10 @@
             </div>
           </template>
           <template v-slot:cell(actions)="data" class="action-btn-group">
-            <i
-              @click="deleteUser(data.item.name, data.item.id)"
-              class="mx-2 my-1 fas fa-user-times"
-            ></i>
-            <i
-              @click="
+             <b-button
+               variant="outline-success mb-1"
+               class="btn-dash"
+               @click="
                 updateUser(
                   data.item.name,
                   data.item.id,
@@ -57,8 +55,10 @@
 
                 )
               "
-              class="mx-2 my-1 fas fa-user-edit"
-            ></i>
+              >Editer</b-button>
+              <b-button variant="outline-danger mb-1" class="btn-dash" @click="deleteUser(data.item.name, data.item.id)">
+             Supprimer
+            </b-button>
           </template>
           <template v-slot:cell(role)="data">
             <b-badge
@@ -66,7 +66,7 @@
               v-for="(role, index) in data.item.roles"
               variant="secondary"
               :key="index"
-              >{{ role.name }}</b-badge
+              >{{ role.label }}</b-badge
             >
           </template>
           <template v-slot:cell(hopital)="data">
@@ -94,7 +94,6 @@
     </b-modal>
   </b-container>
 </template>
-
 <script>
 export default {
   props: {
@@ -109,13 +108,12 @@ export default {
   },
   data () {
     return {
-      fields: [{ key: 'id', sortable: false, label: 'Id' },
-        { key: 'username', sortable: false, label: 'Nom utilisateur' },
-        { key: 'name', sortable: false, label: 'Nom' },
+      fields: [
+        { key: 'usernmae', sortable: false, label: 'Nom utilisateur' },// usernmae instead of username (see backend response)
         { key: 'phone_number', sortable: false, label: 'N°Téléphone' },
         { key: 'role', sortable: false, label: 'Rôle' },
         { key: 'hopital', sortable: false, label: 'Hôpital' },
-        { key: 'actions', sortable: false, label: 'Actions' }], // usernmae instead of username (see backend response)
+        { key: 'actions', sortable: false, label: 'Actions' }], 
       filter: '',
       perPage: 15,
       currentPage: 1,
@@ -133,7 +131,7 @@ export default {
     },
 
     userFilter () {
-      return this.users.data.slice().sort((a, b) => a.id - b.id)
+      return (this.users.data && this.users.data.slice().sort((a, b) => a.id - b.id)) ?? []
     }
   },
   watch: {
@@ -199,4 +197,5 @@ export default {
   flex-direction: row;
   justify-content: space-around;
 }
+
 </style>

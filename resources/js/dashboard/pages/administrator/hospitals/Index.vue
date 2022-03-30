@@ -6,7 +6,7 @@
           @onUpdate="updateHospital"
           @onCreate="createHospital"
           @onCancelUpdate="cancelUpdate"
-          :hospitalCreated="hospitalCreated"
+          :hospitalAdded="hospitalAdded"
           :hospitalUpdated="hospitalUpdated"
           :formToPopulate="formToPopulate"
           :townships="townships"
@@ -15,11 +15,12 @@
           :errors="errors"
           :isLoading="isLoading"
           :updating="updating"
-          :resetForm ="onResetForm"
         />
       </b-col>
       <b-col cols="12" md="8">
-        <Header :title="title" :iconClass="iconClass" />
+        <div class="ml-2">
+          <Header :title="title" :iconClass="iconClass" />
+        </div>
         <div class="hide-waiting" v-if="updating"></div>
          <HospitalList
           :hospitals="hospitals"
@@ -63,7 +64,7 @@ export default {
       isLoading: false,
       hospitals: {},
       hospitalUpdated: false,
-      hospitalCreated: false,
+      hospitalAdded: false,
       showSuccess: false,
       isHospitalDeleted: false,
       timeOut: 3,
@@ -71,7 +72,8 @@ export default {
       updating: false,
       errors: {},
       currentPage: 1,
-      users: []
+      users: [],
+      affected: null
     }
   },
   async mounted () {
@@ -102,7 +104,9 @@ export default {
     ...mapActions([
       'getHospitals', 'hospital__remove',
       'townships__getAll', 'hospital__store',
-      'hospital__update', 'hospital__filter']),
+      'hospital__update', 'hospital__filter',
+      'hospital__getAgents'
+    ]),
 
     filterHospitals (filter) {
       this.isLoading = true
@@ -157,30 +161,33 @@ export default {
     },
     cancelUpdate () {
       this.updating = false
-    },
-    onResetForm (value) {
-      this.updating = false
       this.isLoading = false
-      this.hospitalCreated = value
-      this.hospitalUpdated = value
     },
+
     updateHospital (currentHospital) {
       this.isLoading = true
-      this.onResetForm(false)
+      this.hospitalUpdated = false
+      if (typeof (currentHospital.agent) === 'object' && currentHospital.agent !== null) {
+        currentHospital.agent = currentHospital.agent.id
+      }
+
       return new Promise((resolve, reject) => {
         this.hospital__update(currentHospital)
           .then(() => {
             this.hospitalUpdated = true
             this.showSuccess = true
+            this.isLoading = false
             this.updating = false
-            this.onResetForm(true)
             this.getHospitalList(1)
+            this.getUsers()
+            this.getTownShips()
             this.$notify({
               group: 'alert',
               title: 'Modification du CTCO',
               text: 'Modifié avec succès',
               type: 'success'
             })
+            resolve(true)
           })
           .catch(({ response }) => {
             this.getHospitalList(1)
@@ -191,6 +198,7 @@ export default {
               text: 'Une erreur est survenue ! ' + this.renderErrorsMessages(response.data.errors).join(','),
               type: 'error'
             })
+            reject(response)
           })
           .finally(() => {
             this.isLoading = false
@@ -198,18 +206,21 @@ export default {
       })
     },
     createHospital (form) {
-      this.onResetForm(false)
+      this.hospitalAdded = false
       this.isLoading = true
       this.errors = {}
       return new Promise((resolve, reject) => {
         this.hospital__store(form)
           .then(() => {
             this.showSuccess = true
+            this.isLoading = false
+            this.hospitalAdded = true
             this.getHospitalList(1)
-            this.onResetForm(true)
+            this.getUsers()
+            this.getTownShips()
             this.$notify({
               group: 'alert',
-              title: 'Nouvel CTCO',
+              title: 'Nouveau CTCO',
               text: 'Ajouter avec succès',
               type: 'success'
             })
@@ -222,7 +233,7 @@ export default {
             const messages = this.renderErrorsMessages(this.errors).join(',')
             this.$notify({
               group: 'alert',
-              title: 'Nouvel CTCO',
+              title: 'Nouveau CTCO',
               text: 'Oups! Une erreur est survenue :\r\n' + messages,
               type: 'error'
             })
@@ -230,18 +241,8 @@ export default {
           })
       })
     },
-    getUsers () {
-      this.isLoading = true
-      // eslint-disable-next-line no-undef
-      axios
-        .get('/api/admin_users')
-        .then(({ data }) => {
-          this.users = data.data.filter(item => item.isAgentHospital === true)
-          this.isLoading = false
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
+    async getUsers () {
+      this.users = await this.hospital__getAgents()
     },
     async getTownShips () {
       await this.townships__getAll()
@@ -260,7 +261,7 @@ export default {
     renderErrorsMessages (errors) {
       const errorsMessage = []
       if (errors.name) {
-        errorsMessage.push('Cette CTCO existe déjà.')
+        errorsMessage.push('Ce CTCO existe déjà.')
       } else if (errors.township_id) {
         errorsMessage.push('La commune doit être unique et obligatoire ')
       } else if (errors.agent_id) {

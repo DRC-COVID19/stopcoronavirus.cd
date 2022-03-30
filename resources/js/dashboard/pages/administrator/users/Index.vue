@@ -6,6 +6,7 @@
           @onUpdate="updateUser"
           @onCreate="createUser"
           @onCancelUpdate="cancelUpdate"
+          @onReset="reset"
           :userAdded="userAdded"
           :userUpdated="userUpdated"
           :formToPopulate="formToPopulate"
@@ -29,7 +30,7 @@
           <b-pagination
             page-class="text-blue-dash"
             v-model="currentPage"
-            :per-page="userMeta.perPage"
+            :per-page="userMeta.per_page"
             :total-rows="userMeta.total"
             @change="getUserList"
             :disabled="updating"
@@ -44,6 +45,7 @@
 import Header from '../components/Header'
 import ListUser from './components/ListUsers'
 import Create from './components/Create'
+import { ADMIN_ROLE_ID } from '../../../config/env'
 export default {
   components: {
     Header,
@@ -66,7 +68,8 @@ export default {
       errors: {},
       currentPage: 1,
       roles: [],
-      hospitals: []
+      hospitals: [],
+      affected: null
     }
   },
   mounted () {
@@ -94,6 +97,7 @@ export default {
     search (filter) {
       this.isLoading = true
       if (filter !== '') {
+        // eslint-disable-next-line no-undef
         axios
           .get('api/admin_users/filter?key_words=' + filter)
           .then(({ data }) => {
@@ -110,6 +114,7 @@ export default {
       }
     },
     deleteUser (currentUserId) {
+      // eslint-disable-next-line no-undef
       axios
         .delete('/api/admin_users/' + currentUserId)
         .then(() => {
@@ -135,27 +140,33 @@ export default {
     populateForm (currentUser) {
       this.updating = true
       this.formToPopulate = currentUser
+      this.errors = {}
     },
     cancelUpdate () {
+      this.errors = {}
       this.updating = false
+    },
+    reset () {
+      this.errors = {}
     },
     updateUser (currentUser) {
       this.isLoading = true
       this.userUpdated = false
+      this.errors = {}
+      this.isAgentHospital(currentUser)
       const form = {
         username: currentUser.username,
         name: currentUser.name,
         email: currentUser.email,
         roles_id: currentUser.roles,
         hospitals_id: currentUser.hospitals,
-        phone_number: currentUser.phoneNumber
+        phone_number: currentUser.phoneNumber,
+        affected: this.affected
       }
-
       if (currentUser && currentUser.password) {
         form.password = currentUser.password
         form.password_confirmation = currentUser.confirmPassword
       }
-
       // eslint-disable-next-line no-undef
       axios
         .put('/api/admin_users/' + currentUser.id, form)
@@ -188,6 +199,8 @@ export default {
       this.userAdded = false
       this.isLoading = true
       this.errors = {}
+      this.isAgentHospital(form)
+      // eslint-disable-next-line no-undef
       axios
         .post('/api/admin_users', {
           username: form.username,
@@ -198,6 +211,7 @@ export default {
           roles_id: form.roles,
           hospitals_id: form.hospitals,
           phone_number: form.phoneNumber,
+          affected: this.affected
 
         })
         .then(() => {
@@ -228,6 +242,7 @@ export default {
 
     getUserList (page = 1) {
       this.isLoading = true
+      // eslint-disable-next-line no-undef
       axios
         .get('/api/admin_users', {
           params: { page }
@@ -242,6 +257,7 @@ export default {
     },
 
     getUserRoles () {
+      // eslint-disable-next-line no-undef
       axios
         .get('/api/admin_roles')
         .then(({ data }) => {
@@ -252,6 +268,7 @@ export default {
         })
     },
     getHospitals () {
+      // eslint-disable-next-line no-undef
       axios
         .get('/api/dashboard/hospitals-data')
         .then(({ data }) => {
@@ -261,7 +278,17 @@ export default {
           this.$gtag.exception(response)
         })
     },
-
+    isAgentHospital (form) {
+      if (!form.hospitals) {
+        form.hospitals = []
+      }
+      if (form.roles.includes(ADMIN_ROLE_ID)) {
+        this.affected = false
+        if (form.hospitals && form.hospitals.length !== 0) {
+          this.affected = true
+        }
+      }
+    },
     switchPage (page) {
       this.getUserList(page)
     },

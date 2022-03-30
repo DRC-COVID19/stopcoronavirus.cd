@@ -26,11 +26,12 @@ class UpdateHospitalRequest extends FormRequest
         $hospital_id = $this->input('id');
         return [
             'name'                  => 'sometimes',
-            'address'               => 'sometimes',
             'longitude'             => 'numeric|sometimes',
             'latitude'              => 'numeric|sometimes',
             'township_id'           => 'integer|sometimes|exists:townships,id',
-            'agent_id'              => 'numeric|required|unique:hospitals,agent_id' . ($hospital_id ? ",$hospital_id" : ""),
+            'agent_id'              => 'nullable|sometimes|unique:hospitals,agent_id' . ($hospital_id ? ",$hospital_id" : ""),
+            'deAssignedAgent'       => 'required|numeric',
+            'affected'              => 'required|boolean'
 
         ];
     }

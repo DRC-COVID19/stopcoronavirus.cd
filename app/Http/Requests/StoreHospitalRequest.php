@@ -25,11 +25,10 @@ class StoreHospitalRequest extends FormRequest
     {
         return [
             'name'          => 'required',
-            'address'       => 'nullable',
             'longitude'     => 'numeric|required',
             'latitude'      => 'numeric|required',
             'township_id'   => 'integer|required|exists:townships,id',
-            'agent_id'      => 'unique:hospitals|numeric|required|exists:admin_users,id',
+            'agent_id'      => 'unique:hospitals|numeric|nullable|exists:admin_users,id',
         ];
     }
 }

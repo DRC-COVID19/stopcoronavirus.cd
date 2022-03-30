@@ -39,12 +39,10 @@
             </div>
           </template>
           <template v-slot:cell(actions)="data" class="action-btn-group">
-            <i
-              @click="deleteHospital(data.item.name, data.item.id, data.item.agent)"
-              class="mx-2 my-1 fas fa-user-times"
-            ></i>
-            <i
-              @click="
+             <b-button
+               variant="outline-success mb-1"
+               class="my-1 btn-dash"
+               @click="
                 updateHospital(
                   data.item.name,
                   data.item.id,
@@ -54,8 +52,7 @@
                   data.item.agent,
                 )
               "
-              class="mx-2 my-1 fas fa-user-edit"
-            ></i>
+              >Editer</b-button>
           </template>
           <template #cell(name)="data">
           <span>{{ data.value.toUpperCase() }}</span>
@@ -116,8 +113,8 @@ export default {
       fields: [
         { key: 'name', label: 'Nom' },
         { key: 'township', label: 'Commune' },
-        { key: 'agent', label: 'Agents' },
-        { key: 'actions', label: 'Actions' }
+        { key: 'agent', label: ' Agent Attitré' },
+        { key: 'actions', label: 'Action' }
       ],
       filter: '',
       perPage: 15,
