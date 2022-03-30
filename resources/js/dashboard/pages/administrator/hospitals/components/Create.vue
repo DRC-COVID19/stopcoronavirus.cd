@@ -89,7 +89,7 @@
             mode="aggressive"
             />
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" :disabled="btnTitle === 'Enregistrer' ?invalid:false" class="btn-dash-blue btn-submit ">
+          <b-button type="submit" variant="primary" :disabled="btnTitle === 'Enregistrer' ?invalid:false" class="btn-submit">
             <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>

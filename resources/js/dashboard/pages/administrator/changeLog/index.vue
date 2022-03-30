@@ -84,7 +84,7 @@
               >
               <b-button
                 type="submit"
-                class="btn-dash-blue"
+                variant="primary"
                 :disabled="isCreating || invalid"
               >
                 <span v-if="isCreating"
@@ -102,7 +102,7 @@
                 :disabled="isCreating"
                 class="ml-4"
                 @click="resetForm"
-                >Annuler</b-button
+                >{{ isEditingMode ?'Annuler' :'Réinitialiser'}}</b-button
               >
             </b-form>
           </ValidationObserver>

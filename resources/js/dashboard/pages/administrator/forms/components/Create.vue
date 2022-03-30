@@ -85,7 +85,6 @@
           <b-button
             type="submit"
             variant="primary"
-            class="btn-dash-blue"
             :disabled="btnTitle === 'Enregistrer' ? invalid : false"
           >
             <span v-if="isLoading"

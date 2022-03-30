@@ -174,7 +174,7 @@
         </b-col>
       </b-row>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button type="submit" variant="primary" class="btn-dash-blue">
+        <b-button type="submit" variant="primary">
           <span v-if="isLoading">
             <b-spinner class="align-middle"></b-spinner>
             <span>en cours ...</span>
@@ -185,10 +185,9 @@
         </b-button>
         <b-button
           type="reset"
-          v-if="isUpdating"
           variant="outline-danger"
           class="ml-4"
-          >Annuler</b-button
+          >{{ isUpdating ?'Annuler' :'Réinitialiser'}}</b-button
         >
       </b-row>
     </b-form>
@@ -224,7 +223,7 @@ export default {
   data () {
     return {
       title: 'Nouvelle Situation',
-      btnTitle: 'Envoyer',
+      btnTitle: 'Enregistrer',
       iconClass: 'fas fa-plus-square',
       validateMailMessage: '',
       disableDate: false,
@@ -264,7 +263,7 @@ export default {
   methods: {
     onSubmit () {
       this.isLoading = true
-      if (this.btnTitle === 'Envoyer') {
+      if (this.btnTitle === 'Enregistrer') {
         if (this.form.last_update !== null) {
           this.$emit('onCreateSituation', this.form)
         } else {
@@ -279,7 +278,7 @@ export default {
       this.resetForm()
       this.form = {}
       this.title = 'Nouvelle Situation'
-      this.btnTitle = 'Envoyer'
+      this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
     },
     validateMail () {
@@ -295,13 +294,14 @@ export default {
       this.disableDate = false
       if (this.isSituationAdded | this.isSituationUpdated) {
         this.form = {}
-        this.btnTitle = 'Envoyer'
+        this.btnTitle = 'Enregistrer'
         this.title = 'Nouvelle Situation'
       }
     },
     populateForm () {
       this.disableDate = true
       this.isUpdating = true;
+      // eslint-disable-next-line no-unused-expressions
       (this.form.id = this.formToPopulate.id),
       (this.form.last_update = this.formToPopulate.last_update)
       this.form.confirmed = this.formToPopulate.confirmed
