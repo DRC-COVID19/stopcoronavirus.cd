@@ -21,7 +21,7 @@ import VueMq from "vue-mq";
 import VueTimeline from "@growthbunker/vuetimeline";
 import Notifications from "vue-notification";
 import VCalendar from "v-calendar";
-
+import "./validation";
 import "./directive";
 require("./helper");
 
@@ -40,26 +40,26 @@ Vue.use(excel);
 Vue.use(VCalendar);
 
 Vue.use(VueTimeline, {
-  theme: "light",
+  theme: "light"
 });
 
 Vue.use(VueMq, {
   breakpoints: {
     sm: 768,
     md: 1024,
-    lg: Infinity,
-  },
+    lg: Infinity
+  }
 });
 
 if (store.state.auth.isAuthenticated) {
-  store.dispatch("userMe").catch((error) => {});
+  store.dispatch("userMe").catch(error => {});
 }
 
 store.dispatch("loadSource");
 
 router.beforeEach((to, from, next) => {
   if (
-    to.matched.some((route) => route.meta.requiresAuth) &&
+    to.matched.some(route => route.meta.requiresAuth) &&
     (!store.state.auth.isAuthenticated || !store.state.auth.userRole)
   ) {
     next({ name: "login" });
@@ -77,7 +77,7 @@ router.beforeEach((to, from, next) => {
   }
   if (
     to.meta.role &&
-    !to.meta.role.some((x) => store.state.auth.userRole.includes(x)) &&
+    !to.meta.role.some(x => store.state.auth.userRole.includes(x)) &&
     to.name != "acces.denied"
   ) {
     next({ name: "acces.denied" });
@@ -92,16 +92,16 @@ Vue.use(
   {
     config: {
       id: GOOGLE_ANALYTICS_ID,
-      pageTrackerScreenviewEnabled: true,
-    },
+      pageTrackerScreenviewEnabled: true
+    }
   },
   router
 );
 
 const app = new Vue({
   el: "#app",
-  render: (h) => h(App),
+  render: h => h(App),
   store,
-  router,
+  router
 });
 export default app;

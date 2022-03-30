@@ -5,13 +5,13 @@
         <b-col v-if="user && user.hospital">
           <h3>
             Situations CTCO
-            <b-link :to="{name:'hospital.data'}">
+            <b-link :to="{name:'hospital.data'}" v-b-tooltip.hover title="Editer le CTCO">
               <span class="fa fa-edit"></span>
             </b-link>
 
           </h3>
-          <b-card class="mb-4">
-            <b-card-header><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
+          <b-card class="mb-4 bg-dash">
+            <b-card-header class="border-0 p-2 bg-default text-dark"><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
            <b-card-body>
               <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
             <p v-if="hospitalManagerName && hospitalManagerFirstName">Connecté en tant que <strong>{{hospitalManagerName }} - </strong><span><strong>{{ hospitalManagerFirstName}}</strong></span></p>
@@ -48,8 +48,8 @@
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
-                size="sm"
-                class="btn-dash-blue mb-1"
+              variant="outline-primary"
+                class="mb-1 btn-dash"
                 :to="{
                   name:'hospital.detail',
                   params:{
@@ -60,7 +60,8 @@
               >Details</b-button>
               <b-button
                 v-if="(data.item.diff_date * 24) < 24"
-                  variant="outline-success mb-1"
+                variant="outline-success mb-1"
+                class="btn-dash"
                 :to="{
                   name: 'hospital.edit',
                   params: {
@@ -118,7 +119,6 @@ export default {
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
       hospitalManagerFirstName: (state) => state.hospital.hospitalManagerFirstName,
-      completedForms: (state) => state.completedForm.completedForms,
       isLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
@@ -188,5 +188,9 @@ $bg_primary:#F4F6FC;
 }
   .light{
     background-color: $bg_primary;
+  }
+  .bg-dash{
+    box-shadow: -5px 10px 25px -1px rgba(0,0,0,0.1);
+    border: 0 !important;
   }
 </style>

@@ -1,300 +1,370 @@
 <template>
   <b-card>
     <h2 class="h2">{{ title }}</h2>
-    <b-form
+    <ValidationObserver
+      v-slot="{ invalid }"
+      ref="form"
+      tag="form"
+      novalidate
       @submit.prevent="onSubmit"
       @reset.prevent="onReset"
       v-if="show"
       label-class="text-dash-color"
     >
-      <b-form-group
-        label-class="text-dash-color"
-        id="input-group-1"
-        label="Nom d'utilisateur *"
-        label-for="input-1"
-        :invalid-feedback="errors.username ? errors.username[0] : null"
-        :state="!errors.username"
+      <label id="input-group-1" class="text-dash-color" for="input-1"
+        >Nom d'utilisateur <span class="text-danger">*</span></label
       >
-        <b-form-input
-          class="input-dash"
-          id="input-1"
-          v-model="form.username"
-          type="text"
-          placeholder="Entrer le username"
-          required
-        ></b-form-input>
-      </b-form-group>
-      <b-form-group
-        id="input-group-2"
-        label="Email address *"
-        label-class="text-dash-color"
-        label-for="input-2"
+      <FormFieldInput
+        v-model="form.username"
+        type="text"
+        :placeholder="`Entrer le nom d'utilisateur`"
+        id="input-1"
+        rules="required"
+        name="nom d'utilisateur"
+        :state="stateForm.username"
+        mode="aggressive"
+      />
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger">
+          {{ errors.username ? errors.username[0] : null }}</span
+        ></b-form-text
       >
-        <b-form-input
-          class="input-dash"
-          id="input-2"
-          v-model="form.email"
-          type="email"
-          placeholder="Entre email"
-          required
-          @blur="validateMail()"
-        ></b-form-input>
-      </b-form-group>
-      <b-form-text id="password-help-block">
-        <span class="text-danger"> {{
-        validateMailMessage
-      }}</span>
+      <label id="input-group-2" class="text-dash-color" for="input-2">
+        Adresse mail <span class="text-danger">*</span></label
+      >
+      <FormFieldInput
+        v-model="form.email"
+        type="email"
+        :placeholder="`Entrer l'adresse mail`"
+        id="input-2"
+        rules="required|email"
+        name="adresse mail"
+        :state="stateForm.email"
+        mode="aggressive"
+      />
+      <b-form-text id="email-help-block" class="mb-4">
+        <span class="text-danger">
+          {{
+            errors.mail ? errors.email[0] : null || validatedMessage.mail
+          }}</span
+        >
       </b-form-text>
-      <b-form-group
-        label-class="text-dash-color"
-        id="input-group-3"
-        label="Nom *"
-        label-for="input-3"
+      <label id="input-group-3" class="text-dash-color" for="input-3">
+        Nom <span class="text-danger">*</span></label
       >
-        <b-form-input
-          id="input-3"
-          class="input-dash"
-          v-model="form.name"
-          placeholder="Entrer le nom"
-          required
-        ></b-form-input>
-      </b-form-group>
-         <b-form-group
-        label-class="text-dash-color"
-        id="input-group-4"
-        label="Numéro Téléphone*"
-        label-for="input-4"
+      <FormFieldInput
+        v-model="form.name"
+        type="text"
+        :placeholder="`Entrer le nom`"
+        id="input-3"
+        rules="required"
+        name="nom"
+        :state="stateForm.name"
+        mode="aggressive"
+      />
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger">
+          {{ errors.name ? errors.name[0] : null }}</span
+        ></b-form-text
       >
-        <b-form-input
-          id="input-4"
-          class="input-dash"
-          v-model="form.phoneNumber"
-          placeholder="Ex: 0823493378"
-          @blur="validatePhoneNumber()"
-          required
-        ></b-form-input>
-      </b-form-group>
-         <b-form-text id="password-help-block"><span class="text-danger">
-           {{
-        validatePhoneNumberMessage
-      }}</span></b-form-text>
-      <label class="text-dash-color" for="check-group-1">Roles *</label>
-      <v-select
+      <label id="input-group-4" class="text-dash-color" for="input-4">
+        Numéro Téléphone <span class="text-danger">*</span></label
+      >
+      <FormFieldInput
+        v-model="form.phoneNumber"
+        type="text"
+        :placeholder="`Ex: 0820000000`"
+        id="input-4"
+        name="numero"
+        rules="required|regex"
+        :state="stateForm.phoneNumber"
+        mode="aggressive"
+      />
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger">
+          {{ errors.phone_number ? errors.phone_number[0] : null }}</span
+        ></b-form-text
+      >
+      <FomFieldSelect
         v-model="form.roles"
-        multiple
         :options="roles"
         label="name"
         :reduce="(item) => item.id"
-        :searchable ="false"
+        id="roleId"
+        labelText="Rôles"
+        name="rôle"
+        mode="aggressive"
+        :isMultiple="true"
+        :isObligated="true"
+        rules="required"
       />
-      <label class="text-dash-color" for="check-group-1">Hopital *</label>
-      <v-select
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger"> </span
+      ></b-form-text>
+      <FomFieldSelect
         v-model="form.hospitals"
-        multiple
         :options="hospitals"
         label="name"
         :reduce="(item) => item.id"
-        :searchable ="false"
+        id="hopitalId"
+        labelText="Hopital(CTCO)"
+        name="Hopital(CTCO)"
+        mode="aggressive"
       />
-      <label class="text-dash-color" for="text-password">Mot de passe *</label>
-      <b-form-input
-        class="input-dash"
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger"> </span
+      ></b-form-text>
+      <label class="text-dash-color" for="text-password"
+        >Mot de passe <span class="text-danger" v-if="!updating">*</span></label
+      >
+      <FormFieldInput
+        v-model="form.password"
         type="password"
         id="text-password"
-        aria-describedby="password-help-block"
-        v-model="form.password"
-      ></b-form-input>
+        vid="pass"
+        :rules="`${!updating? 'required' : ''}`"
+        name="mot de passe"
+        :state="stateForm.password"
+        mode="aggressive"
+      />
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger"></span
+      ></b-form-text>
       <label class="text-dash-color" for="text-password-confirm"
-        >Confirmation de mot de passe *</label
+        >Confirmation de mot de passe <span class="text-danger" v-if="!updating">*</span></label
       >
-      <b-form-input
-        class="input-dash"
+      <FormFieldInput
+        v-model="form.confirmPassword"
         type="password"
         id="text-password-confirm"
-        aria-describedby="password-help-block"
-        v-model="form.confirmPassword"
-      ></b-form-input>
-      <b-form-text id="password-help-block">{{ warningMissMatch }}</b-form-text>
+        :rules="`${!updating? 'required|confirmed:pass:null' : ''}`"
+        name="mot de passe confirmé"
+        mode="aggressive"
+      />
+      <b-form-text id="password-help-block" class="mb-4"
+        ><span class="text-danger"></span
+      ></b-form-text>
       <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" class="btn-dash-sucess">
-            <span v-if="isLoading"
+        <b-button
+          type="submit"
+          variant="primary"
+          :disabled="btnTitle === 'Enregistrer' ? invalid : false"
+        >
+          <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>
-              <span>en cours ...</span>
-            </span>
-            <div v-else>
-              {{btnTitle }}
-            </div>
-          </b-button>
+            <span>en cours ...</span>
+          </span>
+          <div v-else class="btn-submit">
+            {{ btnTitle }}
+          </div>
+        </b-button>
         <b-button
           type="reset"
-          variant="primary"
-          class="ml-4 btn-dash-danger"
+          variant="outline-danger"
+          class="ml-4"
           @click="resetForm()"
-          > {{ updating ?'Annuler' :'Rénitialiser'}}</b-button
+        >
+          {{ updating ? "Annuler" : "Réinitialiser" }}</b-button
         >
       </b-row>
-    </b-form>
+    </ValidationObserver>
   </b-card>
 </template>
 
 <script>
+import FormFieldInput from "../../../../components/forms/FormFieldInput";
+import FomFieldSelect from "../../../../components/forms/FomFieldSelect";
+import { ValidationObserver } from "vee-validate";
+
 export default {
+  components: {
+    FormFieldInput,
+    FomFieldSelect,
+    ValidationObserver,
+  },
   props: {
     userAdded: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     userUpdated: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     roles: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     hospitals: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     errors: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
-  data () {
+  data() {
     return {
-      title: "Creation d'un utilisateur",
-      btnTitle: 'Enreigistrer',
-      iconClass: 'fas fa-plus-square',
+      title: "Nouveau Utilisateur",
+      btnTitle: "Enregistrer",
+      iconClass: "fas fa-plus-square",
       updating: false,
       isLoading: false,
-      validateMailMessage: null,
-      validatePhoneNumberMessage: null,
+      validatedMessage: {
+        mail: null,
+        phoneNumber: null,
+        password: null,
+      },
       disablePassword: false,
+      stateForm: {
+        username: null,
+        name: null,
+        hospitals: null,
+        email: null,
+        password: null,
+        confirmPassword: null,
+        phoneNumber: null,
+      },
       form: {
-        username: '',
-        name: '',
+        username: "",
+        name: "",
         roles: [],
         hospitals: [],
-        email: '',
-        password: '',
-        confirmPassword: '',
-        phoneNumber: ''
+        email: "",
+        password: "",
+        confirmPassword: "",
+        phoneNumber: "",
       },
       show: true,
       showWarning: false,
-      toBeCanceled: true
-    }
+      toBeCanceled: true,
+    };
   },
-  mounted () {
-    this.resetForm()
+  mounted() {
+    this.resetForm();
   },
   watch: {
-    userAdded () {
-      this.resetForm()
+    userAdded() {
+      this.resetForm();
     },
-    userUpdated () {
-      this.resetForm()
+    userUpdated() {
+      this.resetForm();
     },
-    formToPopulate () {
-      this.populateForm()
-    }
+    formToPopulate() {
+      this.resetForm();
+      this.populateForm();
+    },
+    errors() {
+      this.errorForm();
+    },
   },
   methods: {
-    onSubmit () {
-      if (!this.validatePhoneNumberMessage && !this.validateMailMessage) {
-        this.isLoading = true
-        if (this.btnTitle === 'Enreigistrer') {
-          if (
-            this.form.password === this.form.confirmPassword
-          ) {
-            this.$emit('onCreate', this.form)
-          } else {
-            this.showWarning = true
-          }
+    async onSubmit() {
+      const valid = await this.$refs.form.validate();
+      if (valid) {
+        this.isLoading = true;
+        if (this.btnTitle === "Enregistrer") {
+          this.$emit("onCreate", this.form);
         } else {
-          this.$emit('onUpdate', this.form)
+          this.$emit("onUpdate", this.form);
         }
       }
     },
 
-    onReset () {
-      this.toToCanceled = true
-      this.validatePhoneNumberMessage = ''
-      this.form = {}
-      this.title = "Creation d'un utilisateur"
-      this.btnTitle = 'Enreigistrer'
-      this.$emit('onCancelUpdate', {})
+    onReset() {
+      this.$refs.form.reset();
+      this.toToCanceled = true;
+      this.validatedMessage = {};
+      this.form = {};
+
+      this.stateForm.email = null;
+      this.stateForm.confirmPassword = null;
+      this.stateForm.username = null;
+      this.stateForm.name = null;
+      this.stateForm.phoneNumber = null;
+
+      this.title = "Nouveau Utilisateur";
+      this.btnTitle = "Enregistrer";
+      this.$emit("onCancelUpdate", {});
     },
 
-    validateMail () {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      if (!re.test(String(this.form.email).toLowerCase())) {
-        this.validateMailMessage = 'Adresse email incorrecte'
-      }
-    },
-    validatePhoneNumber () {
-      const regexPhoneNumber = /^0+[8,9]+[0-9]{8}$/im
+    resetForm() {
+      this.$refs.form.reset();
+      this.updating = false;
+      this.isLoading = false;
+      this.disablePassword = false;
 
-      if (!regexPhoneNumber.test(this.form.phoneNumber)) {
-        this.validatePhoneNumberMessage = 'Numéro de téléphone incorrect'
-      } else {
-        this.validatePhoneNumberMessage = ''
-      }
-    },
+      this.validatedMessage = {};
 
-    resetForm () {
-      this.updating = false
-      this.isLoading = false
-      this.disablePassword = false
+      this.stateForm.email = null;
+      this.stateForm.confirmPassword = null;
+      this.stateForm.phoneNumber = null;
+      this.stateForm.username = null;
+      this.stateForm.name = null;
+      this.form = {};
       if (this.userAdded | this.userUpdated) {
-        this.form = {}
-        this.btnTitle = 'Enreigistrer'
-        this.title = "Creation d'un utilisateur"
+        this.btnTitle = "Enregistrer";
+        this.title = "Nouveau Utilisateur";
       }
+      this.$emit("onReset");
     },
 
-    populateForm () {
-      this.updating = true
-      this.disablePassword = true
-      this.form.id = this.formToPopulate.id
-      this.form.username = this.formToPopulate.usernmae
-      this.form.email = this.formToPopulate.email
-      this.form.phoneNumber = this.formToPopulate.phone_number
-      this.form.roles = this.formToPopulate.roles.map(role => role.id)
-      this.form.hospitals = this.formToPopulate.hospitals.map(hospital => hospital.id)
-      this.form.name = this.formToPopulate.name
-      this.title = "Modification de l'utilisateur"
-      this.btnTitle = 'Modifier'
-    }
-
+    populateForm() {
+      this.updating = true;
+      this.disablePassword = true;
+      this.form.id = this.formToPopulate.id;
+      this.form.username = this.formToPopulate.usernmae;
+      this.form.email = this.formToPopulate.email;
+      this.form.phoneNumber = this.formToPopulate.phone_number;
+      this.form.roles = this.formToPopulate.roles.map((role) => role.id);
+      this.form.hospitals = this.formToPopulate.hospitals.map(
+        (hospital) => hospital.id
+      );
+      this.form.name = this.formToPopulate.name;
+      this.title = "Modification de l'utilisateur";
+      this.btnTitle = "Modifier";
+    },
+    errorForm() {
+      if (this.errors.username) {
+        this.stateForm.username = false;
+      }
+      if (this.errors.phone_number) {
+        this.stateForm.phoneNumber = false;
+      }
+      if (this.errors.name) {
+        this.stateForm.name = false;
+      }
+      if (!this.errors.username && this.form.username) {
+        this.stateForm.username = null;
+      }
+      if (!this.errors.phone_number && this.form.phoneNumber) {
+        this.stateForm.phoneNumber = null;
+      }
+      if (!this.errors.name && this.form.name) {
+        this.stateForm.name = null;
+      }
+    },
   },
 
-  computed: {
-    warningMissMatch () {
-      return this.form.password === this.form.confirmPassword
-        ? ''
-        : 'Les mot de passes ne correspondent pas'
-    }
-  }
-
-}
+  computed: {},
+};
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .main {
   background-color: white;
@@ -302,5 +372,9 @@ export default {
   h2 {
     margin-bottom: 20px;
   }
+}
+.btn-submit[disabled="disabled"] {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 </style>

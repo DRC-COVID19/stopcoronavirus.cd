@@ -183,7 +183,7 @@ export default {
       return new Promise((resolve, reject) => {
         axios
           .get("/api/dashboard/hospitals-data/by-paginate", {
-            params: payload.page,
+            params: { page: payload.page },
           })
           .then(({ data }) => {
             commit("SET_HOSPITAL", data);
@@ -263,7 +263,7 @@ export default {
             name: payload.name,
             latitude: payload.latitude,
             longitude: payload.longitude,
-            agent_id: payload.agent_id,
+            agent_id: payload.agent ?? null,
             township_id: payload.township_id,
           })
           .then(({ data }) => {
@@ -288,8 +288,10 @@ export default {
               name: payload.name,
               latitude: payload.latitude,
               longitude: payload.longitude,
-              agent_id: payload.agent_id,
+              agent_id: payload.agent ?? null,
               township_id: payload.township_id,
+              deAssignedAgent: payload.deAssignedAgent,
+              affected: payload.affected,
             }
           )
           .then(({ data }) => {
@@ -310,6 +312,21 @@ export default {
           .get(`/api/dashboard/hospitals-data/filter/key_words=${payload}`)
           .then(({ data }) => {
             commit("SET_HOSPITAL", data);
+            resolve(data);
+            commit("SET_IS_LOADING", false);
+          })
+          .catch((response) => {
+            console.log(response);
+            reject(response);
+          });
+      });
+    },
+    hospital__getAgents({ state, commit }, payload = {}) {
+      commit("SET_IS_LOADING", true);
+      return new Promise((resolve, reject) => {
+        axios
+          .get("/api/dashboard/hospitals-data/get-agents")
+          .then(({ data }) => {
             resolve(data);
             commit("SET_IS_LOADING", false);
           })
