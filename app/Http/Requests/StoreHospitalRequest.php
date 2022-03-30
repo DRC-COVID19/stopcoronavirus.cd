@@ -25,7 +25,6 @@ class StoreHospitalRequest extends FormRequest
     {
         return [
             'name'          => 'required',
-            'address'       => 'nullable',
             'longitude'     => 'numeric|required',
             'latitude'      => 'numeric|required',
             'township_id'   => 'integer|required|exists:townships,id',
