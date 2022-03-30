@@ -167,7 +167,6 @@ export default {
     updateHospital (currentHospital) {
       this.isLoading = true
       this.hospitalUpdated = false
-      console.log(typeof (currentHospital.agent), currentHospital.agent)
       if (typeof (currentHospital.agent) === 'object' && currentHospital.agent !== null) {
         currentHospital.agent = currentHospital.agent.id
       }
