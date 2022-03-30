@@ -101,7 +101,7 @@
             variant="outline-danger"
             class="ml-4"
             @click="resetForm()"
-            >Annuler</b-button
+            >{{ updating ?'Annuler' :'Réinitialiser'}}</b-button
           >
         </b-row>
       </b-form>
