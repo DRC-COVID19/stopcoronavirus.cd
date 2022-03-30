@@ -131,7 +131,7 @@ export default {
     },
 
     userFilter () {
-      return this.users.data.slice().sort((a, b) => a.id - b.id)
+      return (this.users.data && this.users.data.slice().sort((a, b) => a.id - b.id)) ?? []
     }
   },
   watch: {
