@@ -24,6 +24,7 @@
             class="border-0"
             :multiple="isMultiple"
             @input="handleSelect"
+            :searchable ='false'
           >
           </v-select>
         </div>

@@ -34,16 +34,16 @@
         ></b-form-text>
         <FomFieldSelect
           v-model="form.form_recurrence_id"
-            :options="formRecurrences"
-            label="name"
-            :reduce="(item) => item.id"
-            :isObligated="true"
-            rules="required"
-            id="form.form_recurrence_id"
-            labelText="Recurrence du formulaire "
-             name="recurrence du formulaire"
-            mode="aggressive"
-            />
+          :options="formRecurrences"
+          label="name"
+          :reduce="(item) => item.id"
+          :isObligated="true"
+          rules="required"
+          id="form.form_recurrence_id"
+          labelText="Recurrence du formulaire "
+          name="recurrence du formulaire"
+          mode="aggressive"
+        />
         <b-form-group
           v-if="formRecurrenceSelected && formRecurrenceSelected.required_value"
           label-class="text-dash-color"
@@ -98,9 +98,9 @@
           </b-button>
           <b-button
             type="reset"
-            v-if="updating"
             variant="outline-danger"
-            class="ml-4 btn-dash-danger"
+            class="ml-4"
+            @click="resetForm()"
             >Annuler</b-button
           >
         </b-row>
@@ -110,138 +110,138 @@
 </template>
 
 <script>
-import FormFieldInput from '../../../../components/forms/FormFieldInput'
-import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue'
-import { ValidationObserver } from 'vee-validate'
+import FormFieldInput from "../../../../components/forms/FormFieldInput";
+import FomFieldSelect from "../../../../components/forms/FomFieldSelect.vue";
+import { ValidationObserver } from "vee-validate";
 
 export default {
   components: {
     FormFieldInput,
     ValidationObserver,
-    FomFieldSelect
+    FomFieldSelect,
   },
   props: {
     formAdded: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     formUpdated: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     formRecurrences: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     errors: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
-  data () {
+  data() {
     return {
-      title: 'Nouveau Formulaire',
-      btnTitle: 'Enregistrer',
-      iconClass: 'fas fa-plus-square',
+      title: "Nouveau Formulaire",
+      btnTitle: "Enregistrer",
+      iconClass: "fas fa-plus-square",
       updating: false,
       isLoading: false,
-      validateMailMessage: '',
+      validateMailMessage: "",
       published: false,
       form: {
-        title: '',
+        title: "",
         form_recurrence_value: null,
-        form_recurrence_id: '',
-        publish: false
+        form_recurrence_id: "",
+        publish: false,
       },
       show: true,
       showWarning: false,
       toBeCanceled: true,
-      formRecurrenceSelected: null
-    }
+      formRecurrenceSelected: null,
+    };
   },
-  mounted () {
-    this.resetForm()
+  mounted() {
+    this.resetForm();
   },
   watch: {
-    formAdded () {
-      this.resetForm()
+    formAdded() {
+      this.resetForm();
     },
-    formUpdated () {
-      this.resetForm()
+    formUpdated() {
+      this.resetForm();
     },
-    formToPopulate () {
-      this.populateForm()
-    }
+    formToPopulate() {
+      this.populateForm();
+    },
   },
   methods: {
-    onSubmit () {
-      this.isLoading = true
-      if (this.btnTitle === 'Enregistrer') {
-        this.$emit('onCreate', this.form)
+    onSubmit() {
+      this.isLoading = true;
+      if (this.btnTitle === "Enregistrer") {
+        this.$emit("onCreate", this.form);
       } else {
-        this.$emit('onUpdate', this.form)
+        this.$emit("onUpdate", this.form);
       }
     },
 
-    onReset () {
-      this.$refs.form.reset()
+    onReset() {
+      this.$refs.form.reset();
 
-      this.toToCanceled = true
-      this.form = {}
-      this.title = 'Nouveau Formulaire'
-      this.btnTitle = 'Enregistrer'
-      this.$emit('onCancelUpdate', {})
+      this.toToCanceled = true;
+      this.form = {};
+      this.title = "Nouveau Formulaire";
+      this.btnTitle = "Enregistrer";
+      this.$emit("onCancelUpdate", {});
     },
 
-    resetForm () {
-      this.$refs.form.reset()
+    resetForm() {
+      this.$refs.form.reset();
 
-      this.updating = false
-      this.isLoading = false
+      this.updating = false;
+      this.isLoading = false;
       if (this.formAdded || this.formUpdated) {
         this.form = {
-          title: '',
+          title: "",
           form_recurrence_value: null,
-          form_recurrence_id: '',
-          publish: false
-        }
-        this.btnTitle = 'Enregistrer'
-        this.title = 'Nouveau Formulaire'
+          form_recurrence_id: "",
+          publish: false,
+        };
+        this.btnTitle = "Enregistrer";
+        this.title = "Nouveau Formulaire";
       }
     },
 
-    populateForm () {
-      this.updating = true
-      this.form.id = this.formToPopulate.id
-      this.form.title = this.formToPopulate.title
+    populateForm() {
+      this.updating = true;
+      this.form.id = this.formToPopulate.id;
+      this.form.title = this.formToPopulate.title;
       this.form.form_recurrence_value =
-        this.formToPopulate.form_recurrence_value
-      this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id
-      this.form.publish = this.formToPopulate.publish
-      this.title = 'Modification du formulaire'
-      this.btnTitle = 'Modifier'
+        this.formToPopulate.form_recurrence_value;
+      this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id;
+      this.form.publish = this.formToPopulate.publish;
+      this.title = "Modification du formulaire";
+      this.btnTitle = "Modifier";
     },
 
-    onFormRecurrenceChange (formRecurrenceId) {
-      this.form.form_recurrence_value = null
+    onFormRecurrenceChange(formRecurrenceId) {
+      this.form.form_recurrence_value = null;
       this.formRecurrenceSelected = this.formRecurrences.find(
         (formRecurrence) => formRecurrence.id === formRecurrenceId
-      )
-      console.log(this.formRecurrenceSelected.name)
-    }
-  }
-}
+      );
+      console.log(this.formRecurrenceSelected.name);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>

@@ -213,12 +213,10 @@ export default {
         this.$emit('onCreate', this.form)
         this.$refs.form.reset()
       } else {
-        console.log("agent 1:",this.form.agent)
         if (this.form.agent) {
           this.form.affected = true
         } else {
           this.form.affected = false
-          console.log("agent 2:",this.form.agent)
         }
         this.form.deAssignedAgent = (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)

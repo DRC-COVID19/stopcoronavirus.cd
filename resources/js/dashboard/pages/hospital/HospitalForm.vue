@@ -63,7 +63,6 @@
                             :type="formField.form_field_type.name"
                             :placeholder="`Entrer ${formField.name}`"
                             :id="formField.name"
-                            :rules="formField.rules"
                           />
                         </b-col>
                       </b-row>
