@@ -30,7 +30,7 @@
           <b-pagination
             page-class="text-blue-dash"
             v-model="currentPage"
-            :per-page="userMeta.perPage"
+            :per-page="userMeta.per_page"
             :total-rows="userMeta.total"
             @change="getUserList"
             :disabled="updating"
