@@ -214,7 +214,7 @@ export default {
         this.$refs.form.reset()
       } else {
         console.log("agent 1:",this.form.agent)
-        if (this.form.agent && this.form.agent !== 0) {
+        if (this.form.agent) {
           this.form.affected = true
         } else {
           this.form.affected = false

@@ -124,26 +124,18 @@ class HospitalController extends Controller
       $assignedAgent = null;
 
       if (isset($data['agent_id'])) {
-
-        if ($data['deAssignedAgent'] !== 0) {
+        $assignedAgent = Administrator::where('id', $data['agent_id'])->first();
+        $assignedAgent->update(['affected' =>  $data['affected']]);
+        $data['agent_id'] = $data['agent_id'];
+        if ($data['deAssignedAgent'] > 0) {
           $deAssignedAgent = Administrator::where('id', $data['deAssignedAgent'])->first();
-          if ($deAssignedAgent->affected) {
-            $deAssignedAgent->update(['affected' => false]);
-
-            $assignedAgent = Administrator::where('id', $data['agent_id'])->first();
-            $assignedAgent->update(['affected' => $data['affected']]);
-            $data['agent_id'] = $data['agent_id'];
-          }
-        } else {
-          $assignedAgent = Administrator::where('id', $data['agent_id'])->first();
-          $assignedAgent->update(['affected' => $data['affected']]);
-          $data['agent_id'] = $data['agent_id'];
+          $deAssignedAgent->update(['affected' =>  false]);
         }
       } else {
-        $deAssignedAgent = Administrator::where('id', $data['deAssignedAgent'])->first();
-        $deAssignedAgent->update(['affected' => $data['affected']]);
-        $data['agent_id'] = null;
-        Log::info('ici', [$data]);
+        if ($data['deAssignedAgent'] > 0) {
+          $deAssignedAgent = Administrator::where('id', $data['deAssignedAgent'])->first();
+          $deAssignedAgent->update(['affected' =>  $data['affected']]);
+        }
       }
 
       $hospital->update($data);
