@@ -79,7 +79,7 @@
             rules="required"
             />
            <FomFieldSelect
-          v-model="form.agent"
+            v-model="form.agent"
             :options="updating ?usersUpdating :users"
             label="name"
             :reduce="(item) => item.id"
@@ -213,10 +213,12 @@ export default {
         this.$emit('onCreate', this.form)
         this.$refs.form.reset()
       } else {
-        if (this.form.agent.length === 0) {
-          this.form.affected = false
-        } else {
+        console.log("agent 1:",this.form.agent)
+        if (this.form.agent && this.form.agent !== 0) {
           this.form.affected = true
+        } else {
+          this.form.affected = false
+          console.log("agent 2:",this.form.agent)
         }
         this.form.deAssignedAgent = (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)

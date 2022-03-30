@@ -66,7 +66,7 @@ export default {
             }
           })
           .then(({ data }) => {
-            const Features = data.map(value => {
+            const Features = data.map((value) => {
               return {
                 type: 'Feature',
                 geometry: {
@@ -190,7 +190,7 @@ export default {
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             reject(response)
           })
           .finally(() => {
@@ -209,7 +209,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             reject(response)
           })
           .finally(() => {
@@ -232,7 +232,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response)
             reject(response)
           })
@@ -249,7 +249,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response)
             reject(response)
           })
@@ -263,7 +263,7 @@ export default {
             name: payload.name,
             latitude: payload.latitude,
             longitude: payload.longitude,
-            agent_id: payload.agent[0],
+            agent_id: payload.agent ?? null,
             township_id: payload.township_id
           })
           .then(({ data }) => {
@@ -271,7 +271,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response)
             reject(response)
           })
@@ -288,7 +288,7 @@ export default {
               name: payload.name,
               latitude: payload.latitude,
               longitude: payload.longitude,
-              agent_id: payload.agent[0]??0,
+              agent_id: payload.agent ?? null,
               township_id: payload.township_id,
               deAssignedAgent: payload.deAssignedAgent,
               affected: payload.affected
@@ -299,7 +299,7 @@ export default {
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response)
             reject(response)
           })
@@ -315,7 +315,7 @@ export default {
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response)
             reject(response)
           })
@@ -330,7 +330,7 @@ export default {
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response)
             reject(response)
           })

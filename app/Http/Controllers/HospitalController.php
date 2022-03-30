@@ -44,13 +44,14 @@ class HospitalController extends Controller
   public function store(StoreHospitalRequest $request)
   {
     $data = $request->validated();
+    Log::info(['data' => $data]);
     try {
       DB::beginTransaction();
       if (isset($data['agent_id'])) {
         $adminUser = Administrator::where('id', $data['agent_id'])->first();
         $adminUser->update(['affected' => true]);
       }
-        $hospital = Hospital::create($data);
+      $hospital = Hospital::create($data);
 
       DB::commit();
       return response()->json($hospital, 201);
@@ -110,6 +111,7 @@ class HospitalController extends Controller
   {
     $data = $request->validated();
 
+
     try {
       DB::beginTransaction();
 
@@ -121,7 +123,7 @@ class HospitalController extends Controller
       $deAssignedAgent = null;
       $assignedAgent = null;
 
-      if ($data['agent_id'] !== 0) {
+      if (isset($data['agent_id'])) {
 
         if ($data['deAssignedAgent'] !== 0) {
           $deAssignedAgent = Administrator::where('id', $data['deAssignedAgent'])->first();
@@ -141,6 +143,7 @@ class HospitalController extends Controller
         $deAssignedAgent = Administrator::where('id', $data['deAssignedAgent'])->first();
         $deAssignedAgent->update(['affected' => $data['affected']]);
         $data['agent_id'] = null;
+        Log::info('ici', [$data]);
       }
 
       $hospital->update($data);

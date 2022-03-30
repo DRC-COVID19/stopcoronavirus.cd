@@ -105,11 +105,10 @@
       <label class="text-dash-color" for="check-group-1">Hopital</label>
       <v-select
         v-model="form.hospitals"
-        multiple
         :options="hospitals"
         label="name"
         :reduce="(item) => item.id"
-        :searchable="false"
+        
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger"> </span
