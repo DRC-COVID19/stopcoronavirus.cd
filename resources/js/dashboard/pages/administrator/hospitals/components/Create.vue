@@ -84,7 +84,7 @@
             label="name"
             :reduce="(item) => item.id"
             id="form.agent_id"
-            labelText="Agent attitré"
+            labelText="Agent Attitré"
              name="agent attitré"
             mode="aggressive"
             />

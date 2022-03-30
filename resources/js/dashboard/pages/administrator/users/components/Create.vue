@@ -30,15 +30,15 @@
         ></b-form-text
       >
       <label id="input-group-2" class="text-dash-color" for="input-2">
-        Adresse mail <span class="text-danger">*</span></label
+        Adresse Email <span class="text-danger">*</span></label
       >
       <FormFieldInput
         v-model="form.email"
         type="email"
-        :placeholder="`Entrer l'adresse mail`"
+        :placeholder="`Entrer l'Adresse Email`"
         id="input-2"
         rules="required|email"
-        name="adresse mail"
+        name="adresse email"
         :state="stateForm.email"
         mode="aggressive"
       />
@@ -75,7 +75,7 @@
         type="text"
         :placeholder="`Ex: 0820000000`"
         id="input-4"
-        name="numero"
+        name="numéro de téléphone"
         rules="required|regex"
         :state="stateForm.phoneNumber"
         mode="aggressive"
@@ -107,8 +107,8 @@
         label="name"
         :reduce="(item) => item.id"
         id="hopitalId"
-        labelText="Hopital(CTCO)"
-        name="Hopital(CTCO)"
+        labelText="Hopital"
+        name="Hopital"
         mode="aggressive"
       />
       <b-form-text id="password-help-block" class="mb-4"

@@ -147,7 +147,7 @@
                             class="p-1 w-full"
                             :value="
                               inputValue
-                                ? moment(inputValue).format('DD.MM.YYYY')
+                                ? moment(completedForm.last_update).format('DD.MM.YYYY')
                                 : 'Choisir la date'
                             "
                             v-on="inputEvents"
