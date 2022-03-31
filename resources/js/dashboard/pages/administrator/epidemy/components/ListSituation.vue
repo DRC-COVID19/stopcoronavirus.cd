@@ -140,7 +140,6 @@ export default {
   data () {
     return {
       fields: [
-        { key: 'id', label: 'ID' },
         { key: 'last_update', label: 'Date' },
         { key: 'confirmed', label: 'Confirme', sortable: true },
         { key: 'sick', label: 'Actifs', sortable: true },
