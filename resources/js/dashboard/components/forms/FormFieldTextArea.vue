@@ -9,7 +9,7 @@
       :name="name"
       class="bg-transparent"
     >
-      <b-form-group :class="className">
+      <b-form-group>
         <label class="text-dash-color" :for="id"
           >{{ labelText
           }}<span v-show="isObligated" class="text-danger">*</span></label
@@ -20,7 +20,7 @@
           :required="isRequired || required"
           :id="id"
           :state="errors[0] ? !true : null || state"
-          class="input-dash"
+           class="input-dash"
           :disabled="disabled"
         />
       </b-form-group>
