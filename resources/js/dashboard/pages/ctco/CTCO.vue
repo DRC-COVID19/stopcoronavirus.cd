@@ -1,5 +1,5 @@
 <template>
-  <b-row class="ctco-container no-gutters flex-lg-nowrap">
+  <b-row class="ctco-container d-block d-lg-flex no-gutters">
     <b-col cols="12" lg="auto">
       <CTCOMenu />
     </b-col>
