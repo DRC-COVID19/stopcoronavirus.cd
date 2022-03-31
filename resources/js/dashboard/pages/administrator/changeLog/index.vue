@@ -74,7 +74,8 @@
                 labelText="Description"
                 :state="errors.description ? false : null"
                 id="descriptionId"
-                :rows="5"
+                rows="5"
+                className="mb-4"
                 :isObligated="true"
               />
               <b-form-text id="description-help-block" class="mb-4"
