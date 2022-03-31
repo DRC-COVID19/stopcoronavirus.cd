@@ -137,7 +137,7 @@
         v-model="form.confirmPassword"
         type="password"
         id="text-password-confirm"
-        :rules="`${!updating? 'required|confirmed:pass:null' : ''}`"
+        :rules="`${!updating? 'required|confirmed:pass' : ''}`"
         name="mot de passe confirmé"
         mode="aggressive"
       />
