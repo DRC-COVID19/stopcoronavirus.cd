@@ -12,6 +12,7 @@
                 "
                 :state="errors.publish_date ? false : null"
                 :disabled="isCreating"
+                class="mt-4 mb-4"
               >
                 <label for="dataId" class="text-dash-color">
                   Date<span class="text-danger">*</span></label
@@ -60,50 +61,54 @@
                   :state="errors.title ? false : null"
                   id="titleId"
                 />
-                <b-form-text id="password-help-block" class="mb-4"
+                <b-form-text id="password-help-block"
                   ><span class="text-danger">{{
                     errors.title ? errors.title[0] : null
                   }}</span></b-form-text
                 >
               </b-form-group>
-              <form-field-text-area
-                v-model="form.description"
-                type="text"
-                rules="required"
-                name="description"
-                labelText="Description"
-                :state="errors.description ? false : null"
-                id="descriptionId"
-                :rows="10"
-                :isObligated="true"
-              />
-              <b-form-text id="description-help-block" class="mb-4"
-                ><span class="text-danger">{{
-                  errors.description ? errors.description[0] : null
-                }}</span></b-form-text
-              >
-              <b-button
-                type="submit"
-                variant="primary"
-                :disabled="isCreating || invalid"
-              >
-                <span v-if="isCreating"
-                  ><b-spinner class="align-middle"></b-spinner>
-                  <span>en cours ...</span>
-                </span>
-                <div v-else>
-                  <span v-if="isEditingMode">Modifier</span>
-                  <span v-else>Enregistrer</span>
-                </div>
-              </b-button>
-              <b-button
-                type="reset"
-                variant="outline-danger"
-                :disabled="isCreating"
-                class="ml-4"
-                @click="resetForm"
-                >{{ isEditingMode ?'Annuler' :'Réinitialiser'}}</b-button
-              >
+              <b-form-group class="mt-4">
+                <form-field-text-area
+                  v-model="form.description"
+                  type="text"
+                  rules="required"
+                  name="description"
+                  labelText="Description"
+                  :state="errors.description ? false : null"
+                  id="descriptionId"
+                  :rows="5"
+                  :isObligated="true"
+                />
+                <b-form-text id="description-help-block"
+                  ><span class="text-danger">{{
+                    errors.description ? errors.description[0] : null
+                  }}</span></b-form-text
+                >
+              </b-form-group>
+              <div class="mt-4">
+                <b-button
+                  type="submit"
+                  variant="primary"
+                  :disabled="isCreating || invalid ? true : false"
+                >
+                  <span v-if="isCreating"
+                    ><b-spinner class="align-middle"></b-spinner>
+                    <span>en cours ...</span>
+                  </span>
+                  <div v-else>
+                    <span v-if="isEditingMode">Modifier</span>
+                    <span v-else>Enregistrer</span>
+                  </div>
+                </b-button>
+                <b-button
+                  type="reset"
+                  variant="outline-danger"
+                  :disabled="isCreating"
+                  class="ml-4"
+                  @click="resetForm()"
+                  >{{ isEditingMode ? "Annuler" : "Réinitialiser" }}</b-button
+                >
+              </div>
             </b-form>
           </ValidationObserver>
         </b-card>
@@ -177,6 +182,9 @@
           <template #cell(from)="data">
             {{ moment(data.item.from).format("DD.MM.YYYY") }}
           </template>
+          <template #cell(Titre)="data">
+            {{ data.title }}
+          </template>
           <template #cell(action)="data">
             <b-button
               variant="outline-success mb-1"
@@ -244,15 +252,11 @@ export default {
         },
         {
           key: "title",
-          lablel: "Titre",
-        },
-        {
-          key: "owner",
-          lablel: "Par",
+          label: "Titre",
         },
         {
           key: "action",
-          label: "Action",
+          label: "Actions",
         },
       ],
       form: {},
@@ -312,6 +316,7 @@ export default {
       } else {
         this.submitcreateChangeLog();
       }
+      this.resetForm();
     },
     submitcreateChangeLog() {
       this.errors = {};

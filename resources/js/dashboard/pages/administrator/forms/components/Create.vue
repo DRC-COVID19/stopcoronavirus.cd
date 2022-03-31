@@ -85,7 +85,7 @@
           <b-button
             type="submit"
             variant="primary"
-            :disabled="btnTitle === 'Enregistrer' ? invalid : false"
+            :disabled="invalid ? true : false"
           >
             <span v-if="isLoading"
               ><b-spinner class="align-middle"></b-spinner>
@@ -100,7 +100,7 @@
             variant="outline-danger"
             class="ml-4"
             @click="resetForm()"
-            >{{ updating ?'Annuler' :'Réinitialiser'}}</b-button
+            >{{ updating ? "Annuler" : "Réinitialiser" }}</b-button
           >
         </b-row>
       </b-form>

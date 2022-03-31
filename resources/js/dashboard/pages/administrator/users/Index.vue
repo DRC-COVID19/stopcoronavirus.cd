@@ -132,7 +132,7 @@ export default {
           this.$notify({
             group: 'alert',
             title: 'Supprimer utilisateur',
-            text: 'Une erreur est surveni',
+            text: 'Une erreur est survenue',
             type: 'error'
           })
         })

@@ -1,11 +1,13 @@
 <template>
   <div class="h-100 d-flex align-items-center">
     <b-container>
-      <Logo />
+      <div class="text-center mr-5">
+        <Logo />
+      </div>
       <b-row align-h="center">
-        <b-col cols="12" md="4">
-          <h1 class="dash-login-title">Connexion</h1>
-          <p class="text-dash-color">
+        <b-col cols="12" md="4" class="bg-dash p-4">
+          <h1 class="dash-login-title text-center">Connexion</h1>
+          <p class="text-dash-color text-center">
             Entrez vos paramètres de connexion pour continuer
           </p>
           <b-form @submit.prevent="submitLogin">
@@ -137,5 +139,9 @@ export default {
   &:hover {
     text-decoration: underline;
   }
+}
+.bg-dash {
+  box-shadow: -5px 5px 205px -1px rgba(0, 0, 0, 0.1);
+  border: 0 !important;
 }
 </style>
