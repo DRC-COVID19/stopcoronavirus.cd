@@ -45,7 +45,7 @@
                 />
               </b-form-group>
               <div class="mt-4 text-center">
-                <b-button type="submit" class="btn-dash-blue" :disabled="invalid"
+                <b-button type="submit" variant="primary" :disabled="invalid"
                   >Continuer</b-button
                 >
               </div>
