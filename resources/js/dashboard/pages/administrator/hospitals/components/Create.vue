@@ -65,28 +65,28 @@
           {{ errors.longitude ? errors.longitude[0] : null }}</span
         ></b-form-text
       >
-      <FomFieldSelect
-        v-model="form.township_id"
-        :options="townships"
-        label="name"
-        :reduce="(item) => item.id"
-        id="form.township_id"
-        labelText="Communes"
-        name="communes"
-        mode="aggressive"
-        :isObligated="true"
-        rules="required"
-      />
-      <FomFieldSelect
-        v-model="form.agent"
-        :options="updating ? usersUpdating : users"
-        label="name"
-        :reduce="(item) => item.id"
-        id="form.agent_id"
-        labelText="Agent attitré"
-        name="agent attitré"
-        mode="aggressive"
-      />
+         <FomFieldSelect
+          v-model="form.township_id"
+            :options="townships"
+            label="name"
+            :reduce="(item) => item.id"
+            id="form.township_id"
+            labelText="Communes"
+             name="communes"
+            mode="aggressive"
+            :isObligated="true"
+            rules="required"
+            />
+           <FomFieldSelect
+            v-model="form.agent"
+            :options="updating ?usersUpdating :users"
+            label="name"
+            :reduce="(item) => item.id"
+            id="form.agent_id"
+            labelText="Agent Attitré"
+             name="agent attitré"
+            mode="aggressive"
+            />
       <b-row class="px-3 pt-4 d-flex justify-content-start">
         <b-button
           type="submit"
