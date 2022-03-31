@@ -122,7 +122,7 @@
         type="password"
         id="text-password"
         vid="pass"
-        :rules="`${!updating? 'required' : ''}`"
+        :rules="`${!updating ? 'required' : ''}`"
         name="mot de passe"
         :state="stateForm.password"
         mode="aggressive"
@@ -131,13 +131,14 @@
         ><span class="text-danger"></span
       ></b-form-text>
       <label class="text-dash-color" for="text-password-confirm"
-        >Confirmation de mot de passe <span class="text-danger" v-if="!updating">*</span></label
+        >Confirmation de mot de passe
+        <span class="text-danger" v-if="!updating">*</span></label
       >
       <FormFieldInput
         v-model="form.confirmPassword"
         type="password"
         id="text-password-confirm"
-        :rules="`${!updating? 'required|confirmed:pass:null' : ''}`"
+        :rules="`${!updating ? 'required|confirmed:pass' : ''}`"
         name="mot de passe confirmé"
         mode="aggressive"
       />
