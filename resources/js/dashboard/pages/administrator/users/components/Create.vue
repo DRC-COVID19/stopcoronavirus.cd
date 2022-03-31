@@ -8,7 +8,6 @@
       novalidate
       @submit.prevent="onSubmit"
       @reset.prevent="onReset"
-      v-if="show"
       label-class="text-dash-color"
     >
       <label id="input-group-1" class="text-dash-color" for="input-1"
@@ -122,7 +121,7 @@
         type="password"
         id="text-password"
         vid="pass"
-        :rules="`${!updating? 'required' : ''}`"
+        :rules="`${!updating ? 'required' : ''}`"
         name="mot de passe"
         :state="stateForm.password"
         mode="aggressive"
@@ -131,13 +130,14 @@
         ><span class="text-danger"></span
       ></b-form-text>
       <label class="text-dash-color" for="text-password-confirm"
-        >Confirmation de mot de passe <span class="text-danger" v-if="!updating">*</span></label
+        >Confirmation de mot de passe
+        <span class="text-danger" v-if="!updating">*</span></label
       >
       <FormFieldInput
         v-model="form.confirmPassword"
         type="password"
         id="text-password-confirm"
-        :rules="`${!updating? 'required|confirmed:pass:null' : ''}`"
+        :rules="`${!updating ? 'required|confirmed:pass' : ''}`"
         name="mot de passe confirmé"
         mode="aggressive"
       />
@@ -148,7 +148,7 @@
         <b-button
           type="submit"
           variant="primary"
-          :disabled="btnTitle === 'Enregistrer' ? invalid : false"
+          :disabled="invalid ? true : false"
         >
           <span v-if="isLoading"
             ><b-spinner class="align-middle"></b-spinner>

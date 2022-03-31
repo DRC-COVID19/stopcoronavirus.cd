@@ -1,13 +1,5 @@
 <template>
   <div>
-    <b-form-group v-slot="{ ariaDescribedby }" v-if="type === 'boolean'">
-      <b-form-radio-group
-        v-model="formFieldValue"
-        :options="requiredOptions"
-        :aria-describedby="ariaDescribedby"
-        :id="id"
-      ></b-form-radio-group>
-    </b-form-group>
     <ValidationProvider
       v-slot="{ errors }"
       :mode="mode"
@@ -28,7 +20,7 @@
           :required="isRequired || required"
           :id="id"
           :state="errors[0] ? !true : null || state"
-          class="input-dash"
+           class="input-dash"
           :disabled="disabled"
         />
       </b-form-group>
@@ -37,101 +29,105 @@
   </div>
 </template>
 <script>
-import { ValidationProvider } from "vee-validate";
+import { ValidationProvider } from 'vee-validate'
 export default {
-  name: "FormFieldTextArea",
+  name: 'FormFieldTextArea',
   components: {
-    ValidationProvider,
+    ValidationProvider
   },
   props: {
     type: {
       type: String,
-      required: true,
+      required: true
     },
     value: {
       type: String,
-      default: "",
+      default: ''
     },
     rows: {
       type: Number,
-      required: false,
+      required: false
     },
     rules: {
       type: String,
-      required: false,
+      required: false
+    },
+    className: {
+      type: String,
+      required: false
     },
     id: {
       type: [String, Number],
-      required: true,
+      required: true
     },
     required: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     state: {
       type: Boolean,
       required: false,
       default: () => {
-        return null;
-      },
+        return null
+      }
     },
     disabled: {
       type: Boolean,
-      required: false,
+      required: false
     },
     name: {
       type: String,
-      required: false,
+      required: false
     },
     vid: {
       type: String,
-      required: false,
+      required: false
     },
     mode: {
       type: String,
-      required: false,
+      required: false
     },
     isObligated: {
       type: Boolean,
-      required: false,
+      required: false
     },
     labelText: {
       type: String,
-      required: false,
-    },
+      required: false
+    }
   },
-  data() {
+  data () {
     return {
       requiredOptions: [
-        { text: "Oui", value: 1 },
-        { text: "Non", value: 0 },
+        { text: 'Oui', value: 1 },
+        { text: 'Non', value: 0 }
       ],
-      formFieldValue: this.value,
-    };
+      formFieldValue: this.value
+    }
   },
   computed: {
-    isRequired() {
-      return !!this.rules?.match(/required/i) || false;
+    isRequired () {
+      return !!this.rules?.match(/required/i) || false
     },
-    stateFormFields() {
-      return true;
+    stateFormFields () {
+      return true
 
       // if(){
       //   return true
       // }
-    },
+    }
   },
   watch: {
-    formFieldValue(value) {
-      this.$emit("input", value);
+    formFieldValue (value) {
+      this.$emit('input', value)
     },
-    value(value) {
-      this.formFieldValue = value;
-    },
+    value (value) {
+      this.formFieldValue = value
+    }
   },
-  methods: {},
-};
+  methods: {}
+}
 </script>
 <style scoped>
 .input-error {
