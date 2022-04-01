@@ -1,15 +1,19 @@
 <template>
   <b-container fluid>
     <b-row no-gutters class="mb-3">
-      <b-col cols="12" md="6">
-        <b-form-input
+      <b-col cols="12" md="12 d-flex justify-content-between">
+        <div class="">
+          <b-form-input
           v-model="filter"
           debounce="1500"
           class="input-dash input-filter"
           type="search"
           placeholder="Filtrer"
         ></b-form-input>
+        </div>
+        <b-button v-b-toggle.sidebar-right class="btn btn-sm btn-dash-blue d-block">+ Nouveau</b-button>
       </b-col>
+
     </b-row>
     <b-row no-gutters>
       <b-col cols="12">
@@ -55,8 +59,13 @@
 
                 )
               "
+              v-b-toggle.sidebar-right
               >Editer</b-button>
-              <b-button variant="outline-danger mb-1" class="btn-dash" @click="deleteUser(data.item.name, data.item.id)">
+              <b-button
+              variant="outline-danger mb-1"
+              class="btn-dash"
+              @click="deleteUser(data.item.name, data.item.id)"
+              >
              Supprimer
             </b-button>
           </template>
@@ -109,11 +118,11 @@ export default {
   data () {
     return {
       fields: [
-        { key: 'usernmae', sortable: false, label: 'Nom utilisateur' },// usernmae instead of username (see backend response)
+        { key: 'usernmae', sortable: false, label: 'Nom utilisateur' }, // usernmae instead of username (see backend response)
         { key: 'phone_number', sortable: false, label: 'N°Téléphone' },
         { key: 'role', sortable: false, label: 'Rôle' },
         { key: 'hopital', sortable: false, label: 'Hôpital' },
-        { key: 'actions', sortable: false, label: 'Actions' }], 
+        { key: 'actions', sortable: false, label: 'Actions' }],
       filter: '',
       perPage: 15,
       currentPage: 1,

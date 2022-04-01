@@ -1,21 +1,36 @@
 <template>
   <b-container fluid>
     <b-row class="flex-md-row-reverse" no-gutters>
-      <b-col cols="12" md="4" class="mt-3">
-        <Create
-          @onUpdate="updateUser"
-          @onCreate="createUser"
-          @onCancelUpdate="cancelUpdate"
-          @onReset="reset"
-          :userAdded="userAdded"
-          :userUpdated="userUpdated"
-          :formToPopulate="formToPopulate"
-          :roles="roles"
-          :hospitals="hospitals"
-          :errors="errors"
+      <b-col cols="12" md="12" class="mt-3">
+        <template>
+        <div>
+          <b-sidebar
+          id="sidebar-right"
+          right
+          bg-variant ="white"
+          width="25rem"
+      
+          :no-close-on-route-change="true"
+          shadow>
+            <div class="">
+            <Create
+              @onUpdate="updateUser"
+              @onCreate="createUser"
+              @onCancelUpdate="cancelUpdate"
+              @onReset="reset"
+              :userAdded="userAdded"
+              :userUpdated="userUpdated"
+              :formToPopulate="formToPopulate"
+              :roles="roles"
+              :hospitals="hospitals"
+              :errors="errors"
         />
+            </div>
+          </b-sidebar>
+        </div>
+     </template>
       </b-col>
-      <b-col cols="12" md="8">
+      <b-col cols="12" md="12">
         <Header :title="title" :iconClass="iconClass" />
         <div class="hide-waiting" v-if="updating"></div>
         <ListUser

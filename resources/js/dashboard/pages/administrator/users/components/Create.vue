@@ -1,6 +1,6 @@
 <template>
-  <b-card>
-    <h2 class="h2">{{ title }}</h2>
+  <b-card class="border-0 mt-0">
+    <Header :title="title"/>
     <ValidationObserver
       v-slot="{ invalid }"
       ref="form"
@@ -174,12 +174,14 @@
 <script>
 import FormFieldInput from "../../../../components/forms/FormFieldInput";
 import FomFieldSelect from "../../../../components/forms/FomFieldSelect";
+import Header from '../../components/Header'
 import { ValidationObserver } from "vee-validate";
 
 export default {
   components: {
     FormFieldInput,
     FomFieldSelect,
+    Header,
     ValidationObserver,
   },
   props: {
@@ -221,7 +223,7 @@ export default {
     return {
       title: "Nouveau Utilisateur",
       btnTitle: "Enregistrer",
-      iconClass: "fas fa-plus-square",
+      iconClass: "fa fa-plus",
       updating: false,
       isLoading: false,
       validatedMessage: {
