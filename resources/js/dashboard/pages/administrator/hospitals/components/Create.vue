@@ -110,7 +110,6 @@
           {{ updating ? "Annuler" : "Réinitialiser" }}</b-button
         >
       </b-row>
-      <p>{{ invalid }}</p>
     </ValidationObserver>
   </b-card>
 </template>

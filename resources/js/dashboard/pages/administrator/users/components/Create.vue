@@ -148,6 +148,7 @@
         <b-button
           type="submit"
           variant="primary"
+          class="btn btn-sm"
           :disabled="invalid ? true : false"
         >
           <span v-if="isLoading"
