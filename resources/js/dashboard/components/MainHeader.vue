@@ -35,6 +35,12 @@
             >
               CTCOS
             </b-nav-item>
+                <b-nav-item
+              :to="{name: 'bug_tracker'}"
+              :active="this.$route.name.startsWith('bug_tracker')"
+            >
+              Signaler un problème
+            </b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
             <b-nav-item class="position-relative nav-item d-flex align-items-center">
