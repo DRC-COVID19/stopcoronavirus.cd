@@ -6,6 +6,7 @@ import ResetPasseword from './pages/auth/ResetPassword'
 import PasswordResetComplete from './pages/auth/PasswordResetComplete'
 import HospitalsHome from './pages/hospital/Home'
 import HospitalForm from './pages/hospital/HospitalForm'
+import BugTracker from './pages/bug_tracker/Index'
 import HospitalsDetail from './pages/hospital/HospitalDetail'
 import HospitalData from './pages/hospital/HospitalData'
 import HospitalAdmin from './pages/adminHospital/Home'
@@ -185,7 +186,6 @@ export default [
           }
         ]
       },
-
       /**
        * CTCO routes
        */
@@ -263,6 +263,26 @@ export default [
             }
           }
         ]
+      },
+
+      /**
+       * Bug tracker route routes
+       */
+      {
+        path: '/bug_tracker',
+        name: 'bug_tracker',
+        component: BugTracker,
+        meta: {
+          requiresAuth: false,
+          role: [
+            AGENT_HOSPITAL,
+            ADMIN_HOSPITAL,
+            ADMINISTRATOR,
+            CREATE_FORM,
+            EDIT_FORM,
+            MANANGER_EPIDEMIC
+          ]
+        }
       }
     ]
   },
