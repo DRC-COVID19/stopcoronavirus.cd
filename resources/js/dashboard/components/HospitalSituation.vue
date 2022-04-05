@@ -128,7 +128,7 @@ export default {
     this.completedForm__getAggregatedByHospitals({
       hospital_id: id
     })
-    if (this.filterdHospitalSituation.last_update.length > 0) {
+    if (this.filterdHospitalSituation && this.filterdHospitalSituation.last_update.length > 0) {
       this.hospitalSituationFiltered()
     }
   },
