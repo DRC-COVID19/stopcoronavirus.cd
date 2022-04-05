@@ -1,14 +1,14 @@
 <template>
   <div class="bug__container">
-    <b-container class="mt-4">
+    <b-container class="mt-4 px-lg-5">
       <Loading
         v-if="isLoading"
         class="h-100"
         message="Chargement du formulaire ..."
       />
-      <b-row v-else align-h="center" class="px-5">
+      <b-row v-else align-h="center" class="px-md-5 px-lg-5">
         <b-col cols="12">
-          <b-card class="p-4 bg-dash">
+          <b-card class="p-md-5 p-lg-5 bg-dash">
             <b-link :to="backRoute">
               <span class="fa fa-chevron-left">Retour</span>
             </b-link>
@@ -94,8 +94,6 @@
                 <FomFieldSelect
                   v-model="form.device"
                   :options="devices"
-                  label="name"
-                  :reduce="item => item.id"
                   id="deviceId"
                   labelText="Type Appareil"
                   name="Type Appareil"
@@ -111,8 +109,6 @@
                 <FomFieldSelect
                   v-model="form.occurence"
                   :options="occurences"
-                  label="name"
-                  :reduce="item => item.id"
                   id="deviceId"
                   labelText="Nombre de fois que le problème a été découvert"
                   name="Type Appareil"
@@ -125,7 +121,7 @@
                 ></b-form-text>
               </b-form-group>
               {{ JSON.stringify(projects) }}
-              <vue2Dropzone
+              <!-- <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
                 @vdropzone-upload-progress="uploadProgress"
@@ -142,7 +138,7 @@
                 <h4 class="dropzone-custom-title mb-0 mt-3">TELECHARGER UNE IMAGE</h4>
                 <div class="subtitle">Ajouter plusieurs images si vous le souhaitez</div>
               </div>
-              </vue2Dropzone>
+              </vue2Dropzone> -->
               <b-form-group class="border-0 m-0">
                 <form-field-text-area
                   v-model="form.description"
@@ -161,7 +157,7 @@
                   }}</span></b-form-text
                 >
               </b-form-group>
-              <b-row class="px-3 pt-4 d-flex justify-content-end">
+              <b-row class="pt-lg-4 px-lg-4 pt-sm-2 px-sm-3 d-flex justify-content-lg-end justify-content-sm-between align-items-center">
                 <b-button
                   type="submit"
                   variant="primary"
@@ -182,7 +178,7 @@
                   class="ml-4"
                   @click="resetForm()"
                 >
-                  {{ updating ? "Annuler" : "Réinitialiser" }}</b-button
+                  {{ "Réinitialiser" }}</b-button
                 >
               </b-row>
             </ValidationObserver>
@@ -204,6 +200,7 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { mapState, mapActions } from 'vuex'
 import { ValidationObserver } from 'vee-validate'
 import { ASANA_API_URL, ASANA_TOKEN } from '../../config/env'
+
 export default {
   components: {
     Loading,
@@ -226,6 +223,7 @@ export default {
         description: '',
         images: []
       },
+      toToCanceled: false,
       projects: [],
       stateForm: {
         name: null,
@@ -237,15 +235,8 @@ export default {
       validatedMessage: {
         mail: null
       },
-      devices: [
-        { id: 1, name: ' Ordinateur' },
-        { id: 2, name: ' Telephone' }
-      ],
-      occurences: [
-        { id: 1, name: ' Première fois' },
-        { id: 2, name: ' Regulièrement' },
-        { id: 2, name: ' Aucun' }
-      ],
+      devices: ['Ordinateur', 'Téléphone'],
+      occurences: [' Première fois', ' Regulièrement', ' Aucun'],
       max: now,
       errors: {},
       isLoading: false,
@@ -253,7 +244,9 @@ export default {
       axiosOptions: {
         headers: {
           contentType: 'application/json',
-          Authorization: `Bearer ${ASANA_TOKEN}`
+          Accept: 'application/json',
+          // 'Access-Control-Allow-Origin': '*',
+          Authorization: `Basic ${ASANA_TOKEN}`
         }
       },
       dropzoneOptions: {
@@ -289,11 +282,16 @@ export default {
   },
   methods: {
     ...mapActions(['formShow']),
+    onReset () {
+      this.$refs.form.reset()
+      this.toToCanceled = true
+      this.validatedMessage = {}
+      this.form = {}
+    },
     resetForm () {
       this.form = {}
       this.$refs.form.reset()
       this.isLoading = false
-      this.$el.removeChild(this.$refs.more)
     },
 
     afterComplete (file) {
@@ -317,7 +315,7 @@ export default {
       }
     },
     handleMoreThumbnail () {
-      const dropzone = this.$refs.myVueDropzone.dropzone
+      const dropzone = this.$refs.imgDropzone.dropzone
       dropzone.files.length > 0
         ? dropzone.element.appendChild(this.$refs.more)
         : dropzone.element.removeChild(this.$refs.more)
@@ -326,15 +324,20 @@ export default {
     onSubmit () {
       this.isLoading = true
       this.errors = {}
+      if (this.form !== 0) {
+        this.isLoading = false
+        alert(JSON.stringify(this.form))
+        this.resetForm()
+      }
     },
-    async getProjects () {
+    getProjects () {
       this.isLoading = true
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get(ASANA_API_URL + '/projects', this.axiosOptions)
+          .get(`${ASANA_API_URL}/projects`, this.axiosOptions)
           .then(({ data }) => {
-            this.projects = data
+            this.$$set('projects', data)
             this.isLoading = false
             resolve(true)
             alert('esimbi')
@@ -349,7 +352,7 @@ export default {
             reject(response)
           })
           .finally(() => {
-            alert('esimbi')
+            this.isLoading = false
           })
       })
     }
@@ -358,6 +361,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@media screen and(max-width: 768px){
+    h2{
+      font-size: 1.6rem !important;
+      margin-top: 1rem;
+    }
+  }
 .bug__container {
   overflow-y: hidden;
 }

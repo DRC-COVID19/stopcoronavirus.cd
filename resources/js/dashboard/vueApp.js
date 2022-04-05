@@ -23,8 +23,10 @@ import Notifications from "vue-notification";
 import VCalendar from "v-calendar";
 import "./validation";
 import "./directive";
+import AxiosPlugin from 'vue-axios-cors';
 require("./helper");
 
+Vue.use(AxiosPlugin)
 Vue.use(BootstrapVue);
 Vue.use(Meta);
 Vue.use(VueLazyLoad);
