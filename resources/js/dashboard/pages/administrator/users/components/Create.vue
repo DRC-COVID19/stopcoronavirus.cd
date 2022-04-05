@@ -1,172 +1,171 @@
 <template>
   <b-card class="border-0 mt-0">
-    <Header :title="title"/>
+    <h2 class="h2 mb-4">{{ title }}</h2>
     <ValidationObserver
-      v-slot="{ invalid }"
+      v-slot="{ passes }"
       ref="form"
       tag="form"
       novalidate
-      @submit.prevent="onSubmit"
-      @reset.prevent="onReset"
       label-class="text-dash-color"
     >
-      <label id="input-group-1" class="text-dash-color" for="input-1"
-        >Nom d'utilisateur <span class="text-danger">*</span></label
-      >
-      <FormFieldInput
-        v-model="form.username"
-        type="text"
-        :placeholder="`Entrer le nom d'utilisateur`"
-        id="input-1"
-        rules="required"
-        name="nom d'utilisateur"
-        :state="stateForm.username"
-        mode="aggressive"
-      />
-      <b-form-text id="password-help-block" class="mb-4"
-        ><span class="text-danger">
-          {{ errors.username ? errors.username[0] : null }}</span
-        ></b-form-text
-      >
-      <label id="input-group-2" class="text-dash-color" for="input-2">
-        Adresse Email <span class="text-danger">*</span></label
-      >
-      <FormFieldInput
-        v-model="form.email"
-        type="email"
-        :placeholder="`Entrer l'Adresse Email`"
-        id="input-2"
-        rules="required|email"
-        name="adresse email"
-        :state="stateForm.email"
-        mode="aggressive"
-      />
-      <b-form-text id="email-help-block" class="mb-4">
-        <span class="text-danger">
-          {{
-            errors.mail ? errors.email[0] : null || validatedMessage.mail
-          }}</span
+      <form @submit.prevent="passes(onSubmit)" @reset.prevent="onReset">
+        <label id="input-group-1" class="text-dash-color" for="input-1"
+          >Nom d'utilisateur <span class="text-danger">*</span></label
         >
-      </b-form-text>
-      <label id="input-group-3" class="text-dash-color" for="input-3">
-        Nom <span class="text-danger">*</span></label
-      >
-      <FormFieldInput
-        v-model="form.name"
-        type="text"
-        :placeholder="`Entrer le nom`"
-        id="input-3"
-        rules="required"
-        name="nom"
-        :state="stateForm.name"
-        mode="aggressive"
-      />
-      <b-form-text id="password-help-block" class="mb-4"
-        ><span class="text-danger">
-          {{ errors.name ? errors.name[0] : null }}</span
-        ></b-form-text
-      >
-      <label id="input-group-4" class="text-dash-color" for="input-4">
-        Numéro Téléphone <span class="text-danger">*</span></label
-      >
-      <FormFieldInput
-        v-model="form.phoneNumber"
-        type="text"
-        :placeholder="`Ex: 0820000000`"
-        id="input-4"
-        name="numéro de téléphone"
-        rules="required|regex"
-        :state="stateForm.phoneNumber"
-        mode="aggressive"
-      />
-      <b-form-text id="password-help-block" class="mb-4"
-        ><span class="text-danger">
-          {{ errors.phone_number ? errors.phone_number[0] : null }}</span
-        ></b-form-text
-      >
-      <FomFieldSelect
-        v-model="form.roles"
-        :options="roles"
-        label="name"
-        :reduce="(item) => item.id"
-        id="roleId"
-        labelText="Rôles"
-        name="rôle"
-        mode="aggressive"
-        :isMultiple="true"
-        :isObligated="true"
-        rules="required"
-      />
-      <b-form-text id="password-help-block" class="mb-4"
-        ><span class="text-danger"> </span
-      ></b-form-text>
-      <FomFieldSelect
-        v-model="form.hospitals"
-        :options="hospitals"
-        label="name"
-        :reduce="(item) => item.id"
-        id="hopitalId"
-        labelText="Hopital"
-        name="Hopital"
-        mode="aggressive"
-      />
-      <b-form-text id="password-help-block" class="mb-4"
-        ><span class="text-danger"> </span
-      ></b-form-text>
-      <label class="text-dash-color" for="text-password"
-        >Mot de passe <span class="text-danger" v-if="!updating">*</span></label
-      >
-      <FormFieldInput
-        v-model="form.password"
-        type="password"
-        id="text-password"
-        vid="pass"
-        :rules="`${!updating ? 'required' : ''}`"
-        name="mot de passe"
-        :state="stateForm.password"
-        mode="aggressive"
-      />
-      <b-form-text id="password-help-block" class="mb-4"
-        ><span class="text-danger"></span
-      ></b-form-text>
-      <label class="text-dash-color" for="text-password-confirm"
-        >Confirmation de mot de passe
-        <span class="text-danger" v-if="!updating">*</span></label
-      >
-      <FormFieldInput
-        v-model="form.confirmPassword"
-        type="password"
-        id="text-password-confirm"
-        :rules="`${!updating? 'required|confirmed:pass' : ''}`"
-        name="mot de passe confirmé"
-        mode="aggressive"
-      />
-      <b-form-text id="password-help-block" class="mb-4"
-        ><span class="text-danger"></span
-      ></b-form-text>
-      <b-row class="px-3 pt-4 d-flex justify-content-start">
-        <b-button
-          type="submit"
-          variant="primary"
-          :disabled="invalid ? true : false"
+        <FormFieldInput
+          v-model="form.username"
+          type="text"
+          :placeholder="`Entrer le nom d'utilisateur`"
+          id="input-1"
+          rules="required"
+          name="nom d'utilisateur"
+          :state="stateForm.username"
+          mode="aggressive"
+        />
+        <b-form-text id="password-help-block" class="mb-4"
+          ><span class="text-danger">
+            {{ errors.username ? errors.username[0] : null }}</span
+          ></b-form-text
         >
-          <span v-if="isLoading"
-            ><b-spinner class="align-middle"></b-spinner>
-            <span>en cours ...</span>
-          </span>
-          <div v-else class="btn-submit">
-            {{ btnTitle }}
-          </div>
-        </b-button>
-        <b-button
-          type="reset"
-          variant="outline-danger"
-          class="ml-4"
-          @click="resetForm()"
+        <label id="input-group-2" class="text-dash-color" for="input-2">
+          Adresse Email <span class="text-danger">*</span></label
         >
-          {{ updating ? "Annuler" : "Réinitialiser" }}</b-button
+        <FormFieldInput
+          v-model="form.email"
+          type="email"
+          :placeholder="`Entrer l'Adresse Email`"
+          id="input-2"
+          rules="required|email"
+          name="adresse email"
+          :state="stateForm.email"
+          mode="aggressive"
+        />
+        <b-form-text id="email-help-block" class="mb-4">
+          <span class="text-danger">
+            {{
+              errors.mail ? errors.email[0] : null || validatedMessage.mail
+            }}</span
+          >
+        </b-form-text>
+        <label id="input-group-3" class="text-dash-color" for="input-3">
+          Nom <span class="text-danger">*</span></label
         >
-      </b-row>
+        <FormFieldInput
+          v-model="form.name"
+          type="text"
+          :placeholder="`Entrer le nom`"
+          id="input-3"
+          rules="required"
+          name="nom"
+          :state="stateForm.name"
+          mode="aggressive"
+        />
+        <b-form-text id="password-help-block" class="mb-4"
+          ><span class="text-danger">
+            {{ errors.name ? errors.name[0] : null }}</span
+          ></b-form-text
+        >
+        <label id="input-group-4" class="text-dash-color" for="input-4">
+          Numéro Téléphone <span class="text-danger">*</span></label
+        >
+        <FormFieldInput
+          v-model="form.phoneNumber"
+          type="text"
+          :placeholder="`Ex: 0820000000`"
+          id="input-4"
+          name="numéro de téléphone"
+          rules="required|regex"
+          :state="stateForm.phoneNumber"
+          mode="aggressive"
+        />
+        <b-form-text id="password-help-block" class="mb-4"
+          ><span class="text-danger">
+            {{ errors.phone_number ? errors.phone_number[0] : null }}</span
+          ></b-form-text
+        >
+        <FomFieldSelect
+          v-model="form.roles"
+          :options="roles"
+          label="name"
+          :reduce="(item) => item.id"
+          id="roleId"
+          labelText="Rôles"
+          name="rôle"
+          mode="aggressive"
+          :isMultiple="true"
+          :isObligated="true"
+          rules="required"
+        />
+        <b-form-text id="password-help-block" class="mb-4"
+          ><span class="text-danger"> </span
+        ></b-form-text>
+        <FomFieldSelect
+          v-model="form.hospitals"
+          :options="hospitals"
+          label="name"
+          :reduce="(item) => item.id"
+          id="hopitalId"
+          labelText="Hopital"
+          name="Hopital"
+          mode="aggressive"
+        />
+        <b-form-text id="password-help-block" class="mb-4"
+          ><span class="text-danger"> </span
+        ></b-form-text>
+        <label class="text-dash-color" for="text-password"
+          >Mot de passe
+          <span class="text-danger" v-if="!updating">*</span></label
+        >
+        <FormFieldInput
+          v-model="form.password"
+          type="password"
+          id="text-password"
+          vid="pass"
+          :rules="`${updating ? '' : 'required'}`"
+          name="mot de passe"
+          :state="stateForm.password"
+          mode="aggressive"
+        />
+        <b-form-text id="password-help-block" class="mb-4"
+          ><span class="text-danger"></span
+        ></b-form-text>
+        <label class="text-dash-color" for="text-password-confirm"
+          >Confirmation de mot de passe
+          <span class="text-danger" v-if="!updating">*</span></label
+        >
+        <FormFieldInput
+          v-model="form.confirmPassword"
+          type="password"
+          id="text-password-confirm"
+          :rules="`${
+            (updating ? '' : 'required', updating ? '' : 'confirmed:pass')
+          }`"
+          name="mot de passe confirmé"
+          mode="aggressive"
+        />
+        <b-form-text id="password-help-block" class="mb-4"
+          ><span class="text-danger"></span
+        ></b-form-text>
+        <b-row class="px-3 pt-4 d-flex justify-content-start">
+          <b-button type="submit" variant="primary" :disabled="!updating">
+            <span v-if="isLoading"
+              ><b-spinner class="align-middle"></b-spinner>
+              <span>en cours ...</span>
+            </span>
+            <div v-else class="btn-submit">
+              {{ btnTitle }}
+            </div>
+          </b-button>
+          <b-button
+            type="reset"
+            variant="outline-danger"
+            class="ml-4"
+            @click="resetForm()"
+          >
+            {{ updating ? "Annuler" : "Réinitialiser" }}</b-button
+          >
+        </b-row>
+      </form>
     </ValidationObserver>
   </b-card>
 </template>
@@ -174,14 +173,12 @@
 <script>
 import FormFieldInput from "../../../../components/forms/FormFieldInput";
 import FomFieldSelect from "../../../../components/forms/FomFieldSelect";
-import Header from '../../components/Header'
 import { ValidationObserver } from "vee-validate";
 
 export default {
   components: {
     FormFieldInput,
     FomFieldSelect,
-    Header,
     ValidationObserver,
   },
   props: {
@@ -263,9 +260,7 @@ export default {
     userAdded() {
       this.resetForm();
     },
-    userUpdated() {
-      this.resetForm();
-    },
+
     formToPopulate() {
       this.resetForm();
       this.populateForm();
@@ -276,14 +271,11 @@ export default {
   },
   methods: {
     async onSubmit() {
-      const valid = await this.$refs.form.validate();
-      if (valid) {
-        this.isLoading = true;
-        if (this.btnTitle === "Enregistrer") {
-          this.$emit("onCreate", this.form);
-        } else {
-          this.$emit("onUpdate", this.form);
-        }
+      this.isLoading = true;
+      if (this.btnTitle === "Enregistrer") {
+        this.$emit("onCreate", this.form);
+      } else {
+        this.$emit("onUpdate", this.form);
       }
     },
 
@@ -326,19 +318,28 @@ export default {
     },
 
     populateForm() {
-      this.updating = true;
-      this.disablePassword = true;
-      this.form.id = this.formToPopulate.id;
-      this.form.username = this.formToPopulate.usernmae;
-      this.form.email = this.formToPopulate.email;
-      this.form.phoneNumber = this.formToPopulate.phone_number;
-      this.form.roles = this.formToPopulate.roles.map((role) => role.id);
-      this.form.hospitals = this.formToPopulate.hospitals.map(
-        (hospital) => hospital.id
+      this.updating = false;
+      console.log("this.updating", this.updating);
+      console.log(
+        "Object.keys()",
+        Object.keys(this.formToPopulate).length !== 0
       );
-      this.form.name = this.formToPopulate.name;
-      this.title = "Modification de l'utilisateur";
-      this.btnTitle = "Modifier";
+
+      if (Object.keys(this.formToPopulate).length !== 0) {
+        this.updating = true;
+        this.form.id = this.formToPopulate.id;
+        this.form.username = this.formToPopulate.usernmae;
+        this.form.email = this.formToPopulate.email;
+        this.form.phoneNumber = this.formToPopulate.phone_number;
+        this.form.roles = this.formToPopulate.roles.map((role) => role.id);
+        this.form.hospitals = this.formToPopulate.hospitals.map(
+          (hospital) => hospital.id
+        );
+        this.form.name = this.formToPopulate.name;
+        this.title = "Modification de l'utilisateur";
+        this.btnTitle = "Modifier";
+      }
+      console.log("this.updating", this.updating);
     },
     errorForm() {
       if (this.errors.username) {

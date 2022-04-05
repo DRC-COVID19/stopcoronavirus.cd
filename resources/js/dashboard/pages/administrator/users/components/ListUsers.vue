@@ -4,16 +4,20 @@
       <b-col cols="12" md="12 d-flex justify-content-between">
         <div class="">
           <b-form-input
-          v-model="filter"
-          debounce="1500"
-          class="input-dash input-filter"
-          type="search"
-          placeholder="Filtrer"
-        ></b-form-input>
+            v-model="filter"
+            debounce="1500"
+            class="input-dash input-filter"
+            type="search"
+            placeholder="Filtrer"
+          ></b-form-input>
         </div>
-        <b-button v-b-toggle.sidebar-right class="btn btn-sm btn-dash-blue d-block">+ Nouveau</b-button>
+        <b-button
+          @click="openToogle()"
+          v-b-toggle.sidebar-right
+          class="btn btn-sm btn-dash-blue d-block"
+          >+ Nouveau</b-button
+        >
       </b-col>
-
     </b-row>
     <b-row no-gutters>
       <b-col cols="12">
@@ -37,17 +41,24 @@
         >
           <template #table-busy>
             <div
-              class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height"
+              class="
+                align-items-center
+                d-flex
+                justify-content-center
+                my-2
+                text-center text-danger
+                loading-height
+              "
             >
               <b-spinner class="align-middle"></b-spinner>
               <strong>Loading...</strong>
             </div>
           </template>
           <template v-slot:cell(actions)="data" class="action-btn-group">
-             <b-button
-               variant="outline-success mb-1"
-               class="btn-dash"
-               @click="
+            <b-button
+              variant="outline-success mb-1"
+              class="btn-dash"
+              @click="
                 updateUser(
                   data.item.name,
                   data.item.id,
@@ -56,17 +67,17 @@
                   data.item.hospitals,
                   data.item.email,
                   data.item.phone_number
-
                 )
               "
               v-b-toggle.sidebar-right
-              >Editer</b-button>
-              <b-button
+              >Editer</b-button
+            >
+            <b-button
               variant="outline-danger mb-1"
               class="btn-dash"
               @click="deleteUser(data.item.name, data.item.id)"
-              >
-             Supprimer
+            >
+              Supprimer
             </b-button>
           </template>
           <template v-slot:cell(role)="data">
@@ -108,63 +119,71 @@ export default {
   props: {
     users: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     isLoading: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
       fields: [
-        { key: 'usernmae', sortable: false, label: 'Nom utilisateur' }, // usernmae instead of username (see backend response)
-        { key: 'phone_number', sortable: false, label: 'N°Téléphone' },
-        { key: 'role', sortable: false, label: 'Rôle' },
-        { key: 'hopital', sortable: false, label: 'Hôpital' },
-        { key: 'actions', sortable: false, label: 'Actions' }],
-      filter: '',
+        { key: "usernmae", sortable: false, label: "Nom utilisateur" }, // usernmae instead of username (see backend response)
+        { key: "phone_number", sortable: false, label: "N°Téléphone" },
+        { key: "role", sortable: false, label: "Rôle" },
+        { key: "hopital", sortable: false, label: "Hôpital" },
+        { key: "actions", sortable: false, label: "Actions" },
+      ],
+      filter: "",
       perPage: 15,
       currentPage: 1,
       isDeleteModalShown: false,
       currentUser: {
         id: -1,
-        name: ''
+        name: "",
       },
-      editModalShow: false
-    }
+      editModalShow: false,
+    };
   },
   computed: {
-    rows () {
-      return this.users.length
+    rows() {
+      return this.users.length;
     },
 
-    userFilter () {
-      return (this.users.data && this.users.data.slice().sort((a, b) => a.id - b.id)) ?? []
-    }
+    userFilter() {
+      return (
+        (this.users.data &&
+          this.users.data.slice().sort((a, b) => a.id - b.id)) ??
+        []
+      );
+    },
   },
   watch: {
-    filter () {
-      this.search()
-    }
+    filter() {
+      this.search();
+    },
   },
   methods: {
-    search () {
-      this.$emit('onSearch', this.filter.trim())
+    search() {
+      this.$emit("onSearch", this.filter.trim());
     },
-    deleteUser (name, userId) {
-      this.isDeleteModalShown = true
-      this.currentUser.id = userId
-      this.currentUser.name = name
+    deleteUser(name, userId) {
+      this.isDeleteModalShown = true;
+      this.currentUser.id = userId;
+      this.currentUser.name = name;
     },
-    onValidateDelection () {
-      this.$emit('onDeleteUser', this.currentUser.id)
-      this.isDeleteModalShown = false
+    onValidateDelection() {
+      this.$emit("onDeleteUser", this.currentUser.id);
+      this.isDeleteModalShown = false;
     },
-    onCancelDelection () {
-      this.isDeleteModalShown = false
+    onCancelDelection() {
+      this.isDeleteModalShown = false;
     },
-    updateUser (name, id, usernmae, roles, hospitals, email, phone_number) {
+    openToogle() {
+      this.$emit("openToogle", false);
+    },
+    updateUser(name, id, usernmae, roles, hospitals, email, phone_number) {
       this.currentUser = {
         id,
         name,
@@ -172,14 +191,14 @@ export default {
         roles,
         hospitals,
         email,
-        phone_number
-      }
-      this.$emit('onUpdateUser', this.currentUser)
-    }
-  }
-}
+        phone_number,
+      };
+      this.$emit("onUpdateUser", this.currentUser);
+    },
+  },
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .input-filter {
   background: white;
@@ -206,5 +225,4 @@ export default {
   flex-direction: row;
   justify-content: space-around;
 }
-
 </style>
