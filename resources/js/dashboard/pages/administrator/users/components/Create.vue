@@ -19,7 +19,7 @@
         :placeholder="`Entrer le nom d'utilisateur`"
         id="input-1"
         rules="required"
-        name="nom d'utilisateur"
+        name="Nom d'utilisateur"
         :state="stateForm.username"
         mode="aggressive"
       />
@@ -37,7 +37,7 @@
         :placeholder="`Entrer l'Adresse Email`"
         id="input-2"
         rules="required|email"
-        name="adresse email"
+        name="Adresse email"
         :state="stateForm.email"
         mode="aggressive"
       />
@@ -57,7 +57,7 @@
         :placeholder="`Entrer le nom`"
         id="input-3"
         rules="required"
-        name="nom"
+        name="Nom"
         :state="stateForm.name"
         mode="aggressive"
       />
@@ -74,7 +74,7 @@
         type="text"
         :placeholder="`Ex: 0820000000`"
         id="input-4"
-        name="numéro de téléphone"
+        name="Numéro de téléphone"
         rules="required|regex"
         :state="stateForm.phoneNumber"
         mode="aggressive"
@@ -91,7 +91,7 @@
         :reduce="(item) => item.id"
         id="roleId"
         labelText="Rôles"
-        name="rôle"
+        name="Rôle"
         mode="aggressive"
         :isMultiple="true"
         :isObligated="true"
@@ -106,8 +106,8 @@
         label="name"
         :reduce="(item) => item.id"
         id="hopitalId"
-        labelText="Hopital"
-        name="Hopital"
+        labelText="Hôpital"
+        name="Hôpital"
         mode="aggressive"
       />
       <b-form-text id="password-help-block" class="mb-4"
@@ -122,7 +122,7 @@
         id="text-password"
         vid="pass"
         :rules="`${!updating ? 'required' : ''}`"
-        name="mot de passe"
+        name="Mot de passe"
         :state="stateForm.password"
         mode="aggressive"
       />
@@ -138,7 +138,7 @@
         type="password"
         id="text-password-confirm"
         :rules="`${!updating? 'required|confirmed:pass' : ''}`"
-        name="mot de passe confirmé"
+        name="Mot de passe confirmé"
         mode="aggressive"
       />
       <b-form-text id="password-help-block" class="mb-4"
