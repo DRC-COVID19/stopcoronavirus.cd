@@ -376,7 +376,7 @@ export default {
   margin-top: 5px;
 }
 .bg-dash {
-  box-shadow: -5px 10px 25px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: -5px 10px 25px -1px rgba(145, 144, 144, 0.1);
   border: 0 !important;
 }
 fieldset {
