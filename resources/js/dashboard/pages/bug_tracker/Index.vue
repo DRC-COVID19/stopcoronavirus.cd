@@ -124,6 +124,7 @@
                   ><span class="text-danger"> </span
                 ></b-form-text>
               </b-form-group>
+              {{ JSON.stringify(projects) }}
               <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
@@ -202,6 +203,7 @@ import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { mapState, mapActions } from 'vuex'
 import { ValidationObserver } from 'vee-validate'
+import { ASANA_API_URL, ASANA_TOKEN } from '../../config/env'
 export default {
   components: {
     Loading,
@@ -224,6 +226,7 @@ export default {
         description: '',
         images: []
       },
+      projects: [],
       stateForm: {
         name: null,
         firstName: null,
@@ -247,6 +250,12 @@ export default {
       errors: {},
       isLoading: false,
       title: 'Signaler un Problème',
+      axiosOptions: {
+        headers: {
+          contentType: 'application/json',
+          Authorization: `Bearer ${ASANA_TOKEN}`
+        }
+      },
       dropzoneOptions: {
         url: 'https://httpbin.org/post',
         thumbnailWidth: 150,
@@ -276,6 +285,7 @@ export default {
   },
   mounted () {
     this.resetForm()
+    this.getProjects()
   },
   methods: {
     ...mapActions(['formShow']),
@@ -292,7 +302,7 @@ export default {
         const metaData = {
           contentType: 'image/png'
         }
-        this.images.push({ src: file})
+        this.images.push({ src: file })
         alert(JSON.stringify(file))
         this.$refs.imgdropzone.removeFile(file)
       } catch (error) {
@@ -316,57 +326,30 @@ export default {
     onSubmit () {
       this.isLoading = true
       this.errors = {}
-      if (this.isUpdateMode) {
-        this.form._method = 'PUT'
-        this.form.updated_manager_name = this.hospitalManagerName
-        this.form.updated_manager_first_name = this.hospitalManagerFirstName
-        this.form.id = this.$route.params.completed_form_id
-      } else {
-        this.form.created_manager_name = this.hospitalManagerName
-        this.form.created_manager_first_name = this.hospitalManagerFirstName
-      }
-      this.submitCompletedForm(
-        this.isUpdateMode
-          ? this.completedForm__update
-          : this.completedForm__store
-      )
-        .then(() => {
-          if (this.user.isHospitalAdmin) {
-            const additionalRoute = this.isUpdateMode
-              ? `/${this.$route.params.hospital_id}`
-              : ''
-            this.$router.push(`/admin/hospitals${additionalRoute}`)
-          } else {
-            this.$router.push('/hospitals')
-          }
-        })
-        .finally(() => {
-          this.isLoading = false
-        })
     },
-    submitCompletedForm (method) {
+    async getProjects () {
+      this.isLoading = true
       return new Promise((resolve, reject) => {
-        this.form.hospital_id = this.getHospitalId
-        this.form.form_id = this.targetForm.id
-        method(this.form)
-          .then(() => {
-            this.$bvToast.toast('Formulaire soumis avec succès', {
-              title: 'Formulaire de soumission',
-              appendToast: true,
-              variant: 'success',
-              solid: true
-            })
+        // eslint-disable-next-line no-undef
+        axios
+          .get(ASANA_API_URL + '/projects', this.axiosOptions)
+          .then(({ data }) => {
+            this.projects = data
+            this.isLoading = false
             resolve(true)
+            alert('esimbi')
           })
-          .catch(({ response }) => {
-            this.errors = response.data.errors
-            reject(response)
+          .catch((response) => {
             this.$bvToast.toast('Une erreur est survenue!', {
-              title: 'Erreur de soumission de reponses',
+              title: 'Erreur du chargement des projets',
               appendToast: true,
               variant: 'danger',
               solid: true
             })
+            reject(response)
+          })
+          .finally(() => {
+            alert('esimbi')
           })
       })
     }
