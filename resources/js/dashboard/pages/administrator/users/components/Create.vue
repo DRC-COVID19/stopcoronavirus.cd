@@ -2,11 +2,12 @@
   <b-card class="border-0 mt-0">
     <h2 class="h2 mb-4">{{ title }}</h2>
     <ValidationObserver
-      v-slot="{ passes }"
+      v-slot="{ invalid, passes }"
       ref="form"
       tag="form"
       novalidate
       label-class="text-dash-color"
+      slim
     >
       <form @submit.prevent="passes(onSubmit)" @reset.prevent="onReset">
         <label id="input-group-1" class="text-dash-color" for="input-1"
@@ -84,9 +85,9 @@
           ></b-form-text
         >
         <FomFieldSelect
-          v-model="form.roles"
-          :options="roles"
-          label="name"
+          v-model="rules"
+          :options="filterRole"
+          label="label"
           :reduce="(item) => item.id"
           id="roleId"
           labelText="Rôles"
@@ -137,17 +138,15 @@
           v-model="form.confirmPassword"
           type="password"
           id="text-password-confirm"
-          :rules="`${
-            (updating ? '' : 'required', updating ? '' : 'confirmed:pass')
-          }`"
-          name="mot de passe confirmé"
+          :rules="`${updating ? '' : 'required|confirmed:pass'}`"
+          name="Mot de passe confirmé"
           mode="aggressive"
         />
         <b-form-text id="password-help-block" class="mb-4"
           ><span class="text-danger"></span
         ></b-form-text>
         <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" :disabled="!updating">
+          <b-button type="submit" variant="primary" :disabled="invalid">
             <span v-if="isLoading"
               ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
@@ -174,6 +173,7 @@
 import FormFieldInput from "../../../../components/forms/FormFieldInput";
 import FomFieldSelect from "../../../../components/forms/FomFieldSelect";
 import { ValidationObserver } from "vee-validate";
+import { ADMIN_ID } from "../../../../config/env.js";
 
 export default {
   components: {
@@ -229,6 +229,7 @@ export default {
         password: null,
       },
       disablePassword: false,
+      rules: [],
       stateForm: {
         username: null,
         name: null,
@@ -272,9 +273,22 @@ export default {
   methods: {
     async onSubmit() {
       this.isLoading = true;
+      console.log(this.form.roles);
+      if (this.rules.find((rule) => rule === ADMIN_ID)) {
+        this.form.roles = this.roles
+          .filter((rule) => {
+            if (rule.label === "Administrateur") {
+              return rule.id;
+            }
+          })
+          .map((rule) => rule.id);
+      }
       if (this.btnTitle === "Enregistrer") {
         this.$emit("onCreate", this.form);
+        this.isLoading = false;
       } else {
+        this.isLoading = false;
+
         this.$emit("onUpdate", this.form);
       }
     },
@@ -284,6 +298,7 @@ export default {
       this.toToCanceled = true;
       this.validatedMessage = {};
       this.form = {};
+      this.rules = [];
 
       this.stateForm.email = null;
       this.stateForm.confirmPassword = null;
@@ -310,6 +325,8 @@ export default {
       this.stateForm.username = null;
       this.stateForm.name = null;
       this.form = {};
+      this.rules = [];
+
       if (this.userAdded | this.userUpdated) {
         this.btnTitle = "Enregistrer";
         this.title = "Nouveau Utilisateur";
@@ -331,7 +348,10 @@ export default {
         this.form.username = this.formToPopulate.usernmae;
         this.form.email = this.formToPopulate.email;
         this.form.phoneNumber = this.formToPopulate.phone_number;
-        this.form.roles = this.formToPopulate.roles.map((role) => role.id);
+        this.form.roles = this.formToPopulate.roles.filter((v) =>
+          this.filterRole.find((t) => t.id === v.id)
+        );
+        this.rules = this.form.roles.map((rule) => rule.id);
         this.form.hospitals = this.formToPopulate.hospitals.map(
           (hospital) => hospital.id
         );
@@ -363,7 +383,15 @@ export default {
     },
   },
 
-  computed: {},
+  computed: {
+    filterRole() {
+      return this.roles.filter(
+        (v, i, a) =>
+          a.findIndex((t) => t.label === v.label) === i &&
+          (v.label === "Administrateur" || v.label === "Agent Point Focal")
+      );
+    },
+  },
 };
 </script>
 

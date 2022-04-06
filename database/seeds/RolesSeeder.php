@@ -38,7 +38,7 @@ class RolesSeeder extends Seeder
             [
                 'name' => 'admin-dashboard',
                 'slug' => 'admin-dashboard',
-                'label' => 'Gestionnaire du dashboard',
+                'label' => 'Administrateur',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
@@ -52,28 +52,28 @@ class RolesSeeder extends Seeder
             [
                 'name' => 'admin-hospital',
                 'slug' => 'admin-hospital',
-                'label' => 'Gestionnaire des points focaux',
+                'label' => 'Administrateur',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'name' => 'manager_epidemic',
                 'slug' => 'manager_epidemic',
-                'label' => 'Manager Epidémiologique',
+                'label' => 'Administrateur',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'name'  => 'create_form',
                 'slug' => 'create_form',
-                'label' => 'Créateur des Formulaires',
+                'label' => 'Administrateur',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ],
             [
                 'name' => 'edit_form',
                 'slug' => 'edit_form',
-                'label' => 'Editeur des Formulaires',
+                'label' => 'Administrateur',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ]

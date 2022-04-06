@@ -154,7 +154,18 @@ export default {
     userFilter() {
       return (
         (this.users.data &&
-          this.users.data.slice().sort((a, b) => a.id - b.id)) ??
+          this.users.data
+            .slice()
+            .sort((a, b) => a.id - b.id)
+            .map((user) => {
+              user.roles = user.roles.filter(
+                (v, i, a) =>
+                  a.findIndex((t) => t.label === v.label) === i &&
+                  (v.label === "Administrateur" ||
+                    v.label === "Agent Point Focal")
+              );
+              return user;
+            })) ??
         []
       );
     },
