@@ -273,7 +273,9 @@ export default {
   methods: {
     async onSubmit() {
       this.isLoading = true;
-      console.log(this.form.roles);
+      console.log(this.rules);
+      this.form.roles = this.rules;
+
       if (this.rules.find((rule) => rule === ADMIN_ID)) {
         this.form.roles = this.roles
           .filter((rule) => {
@@ -287,9 +289,8 @@ export default {
         this.$emit("onCreate", this.form);
         this.isLoading = false;
       } else {
-        this.isLoading = false;
-
         this.$emit("onUpdate", this.form);
+        this.isLoading = false;
       }
     },
 
@@ -336,11 +337,6 @@ export default {
 
     populateForm() {
       this.updating = false;
-      console.log("this.updating", this.updating);
-      console.log(
-        "Object.keys()",
-        Object.keys(this.formToPopulate).length !== 0
-      );
 
       if (Object.keys(this.formToPopulate).length !== 0) {
         this.updating = true;
@@ -355,6 +351,7 @@ export default {
         this.form.hospitals = this.formToPopulate.hospitals.map(
           (hospital) => hospital.id
         );
+        console.log("rule", this.rules);
         this.form.name = this.formToPopulate.name;
         this.title = "Modification de l'utilisateur";
         this.btnTitle = "Modifier";
