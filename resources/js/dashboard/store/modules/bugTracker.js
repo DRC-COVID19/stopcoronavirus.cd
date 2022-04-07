@@ -19,7 +19,7 @@ export default {
           .post(
             `${ASANA_API_URL}/tasks`,
             {
-              data: payload.data
+              data: payload
             },
             axiosOptions
           )

@@ -130,7 +130,7 @@
                 @vdropzone-complete="afterComplete"
                 @vdropzone-success="uploadSuccess"
               >
-              {{ projects }}
+
               <!-- <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
@@ -209,8 +209,6 @@ import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { mapState, mapActions } from 'vuex'
 import { ValidationObserver } from 'vee-validate'
-import { ASANA_API_URL, ASANA_TOKEN } from '../../config/env'
-import axios from 'axios'
 
 export default {
   components: {
@@ -309,10 +307,14 @@ export default {
   },
   mounted () {
     this.resetForm()
-    this.getProjects()
+  },
+  watch: {
+    bugStored () {
+      this.resetForm()
+    }
   },
   methods: {
-    ...mapActions(['formShow']),
+    ...mapActions(['formShow', 'bugTracker__store']),
     onReset () {
       this.$refs.form.reset()
       this.toToCanceled = true
@@ -366,28 +368,19 @@ export default {
       this.form.page = 'CTCO'
       this.data.name = `[Bug: ${this.form.page}]`
       this.data.html_notes = this.renderHTMLContents()
-      const axiosOptions = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${ASANA_TOKEN}`
-        }
-      }
       if (this.form !== 0) {
         return new Promise((resolve, reject) => {
-          axios
-            .post(`${ASANA_API_URL}/tasks`, {
-              data: this.data
-            }, axiosOptions)
+          this.bugTracker__store(this.data)
             .then(({ data }) => {
               this.isLoading = false
-              this.resetForm()
-              this.$bvToast.toast('Le problème a été soumis avec succèss', {
+              this.$bvToast.toast('Le problème a été signalé avec succèss', {
                 title: 'Signaler un Problème',
                 appendToast: true,
                 variant: 'success',
                 solid: true
               })
               resolve(data)
+              this.form = {}
             })
             .catch((response) => {
               this.$bvToast.toast('Une erreur est survenue!', {
@@ -417,7 +410,6 @@ export default {
        <li><strong>Message :</strong></li>
       <li>${this.form.description}.</li>
       </ul>
-   
       </body>`
     }
 
