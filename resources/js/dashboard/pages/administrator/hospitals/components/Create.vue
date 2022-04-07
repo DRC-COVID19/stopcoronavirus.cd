@@ -1,5 +1,5 @@
 <template>
-  <b-card>
+  <b-card class="border-0">
     <h2 class="h2 mb-4">{{ title }}</h2>
     <ValidationObserver
       v-slot="{ invalid }"
@@ -65,28 +65,28 @@
           {{ errors.longitude ? errors.longitude[0] : null }}</span
         ></b-form-text
       >
-         <FomFieldSelect
-          v-model="form.township_id"
-            :options="townships"
-            label="name"
-            :reduce="(item) => item.id"
-            id="form.township_id"
-            labelText="Communes"
-             name="communes"
-            mode="aggressive"
-            :isObligated="true"
-            rules="required"
-            />
-           <FomFieldSelect
-            v-model="form.agent"
-            :options="updating ?usersUpdating :users"
-            label="name"
-            :reduce="(item) => item.id"
-            id="form.agent_id"
-            labelText="Agent Attitré"
-             name="agent attitré"
-            mode="aggressive"
-            />
+      <FomFieldSelect
+        v-model="form.township_id"
+        :options="townships"
+        label="name"
+        :reduce="(item) => item.id"
+        id="form.township_id"
+        labelText="Communes"
+        name="communes"
+        mode="aggressive"
+        :isObligated="true"
+        rules="required"
+      />
+      <FomFieldSelect
+        v-model="form.agent"
+        :options="updating ? usersUpdating : users"
+        label="name"
+        :reduce="(item) => item.id"
+        id="form.agent_id"
+        labelText="Agent Attitré"
+        name="agent attitré"
+        mode="aggressive"
+      />
       <b-row class="px-3 pt-4 d-flex justify-content-start">
         <b-button
           type="submit"
@@ -110,7 +110,6 @@
           {{ updating ? "Annuler" : "Réinitialiser" }}</b-button
         >
       </b-row>
-      <p>{{ invalid }}</p>
     </ValidationObserver>
   </b-card>
 </template>
@@ -251,20 +250,23 @@ export default {
     },
 
     populateForm() {
-      this.updating = true;
-      this.title = "Modification du CTCO ";
-      this.btnTitle = "Modifier";
-      this.form.id = this.formToPopulate.id;
-      this.form.name = this.formToPopulate.name;
-      this.form.longitude = this.formToPopulate.longitude;
-      this.form.latitude = this.formToPopulate.latitude;
-      this.form.agent = this.formToPopulate.agent;
-      this.form.township_id =
-        this.formToPopulate.township && this.formToPopulate.township.id
-          ? this.formToPopulate.township.id
-          : 0;
-      this.usersUpdating = [...this.users];
-      this.usersUpdating.push({ ...this.form.agent });
+      this.updating = false;
+      if (Object.keys(this.formToPopulate).length !== 0) {
+        this.updating = true;
+        this.title = "Modification du CTCO ";
+        this.btnTitle = "Modifier";
+        this.form.id = this.formToPopulate.id;
+        this.form.name = this.formToPopulate.name;
+        this.form.longitude = this.formToPopulate.longitude;
+        this.form.latitude = this.formToPopulate.latitude;
+        this.form.agent = this.formToPopulate.agent;
+        this.form.township_id =
+          this.formToPopulate.township && this.formToPopulate.township.id
+            ? this.formToPopulate.township.id
+            : 0;
+        this.usersUpdating = [...this.users];
+        this.usersUpdating.push({ ...this.form.agent });
+      }
     },
     errorForm() {
       if (this.errors.name) {

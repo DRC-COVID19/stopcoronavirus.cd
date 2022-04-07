@@ -1,8 +1,8 @@
 <template>
   <b-container fluid>
     <b-row no-gutters class="mb-3">
-      <b-col cols="12" md="12 d-flex justify-content-between">
-        <div class="">
+      <b-col cols="12" md="12 d-flex flex-row-reverse justify-content-between">
+        <div class="container-filter">
           <b-form-input
             v-model="filter"
             debounce="1500"
@@ -211,9 +211,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.input-filter {
-  background: white;
-}
 .fa-user-times {
   color: $dash-red;
   font-size: 16px;
