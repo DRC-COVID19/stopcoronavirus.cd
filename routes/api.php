@@ -270,7 +270,6 @@ Route::group([
   Route::group(['prefix' => 'form-fields'], function () {
     Route::get('get-form/{form}', 'FormFieldController@getFormFieldByForm');
   });
-  Route::apiResource('bug-tracker','BugTrackerController');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');
