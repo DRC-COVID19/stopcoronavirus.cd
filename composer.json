@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "asana/asana": "^0.10.8",
         "cviebrock/eloquent-sluggable": "^7.0",
         "doctrine/dbal": "^3.3",
         "encore/laravel-admin": "^1.7",

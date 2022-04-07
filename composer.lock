@@ -4,8 +4,97 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "27b2cf1ad88f8d74f7572f2203903e26",
+    "content-hash": "f1f4f719aa3e91726ffef945bdb8305b",
     "packages": [
+        {
+            "name": "adoy/oauth2",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/adoy/PHP-OAuth2.git",
+                "reference": "617d8605955cbb0ca929358fda74eab308c39cfa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/adoy/PHP-OAuth2/zipball/617d8605955cbb0ca929358fda74eab308c39cfa",
+                "reference": "617d8605955cbb0ca929358fda74eab308c39cfa",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "OAuth2": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Berejeb Anis",
+                    "email": "anis.berejeb@gmail.com"
+                },
+                {
+                    "name": "Charron Pierrick",
+                    "email": "pierrick@webstart.fr"
+                }
+            ],
+            "description": "Light PHP wrapper for the OAuth 2.0 protocol (based on OAuth 2.0 Authorization Protocol draft-ietf-oauth-v2-15)",
+            "support": {
+                "issues": "https://github.com/adoy/PHP-OAuth2/issues",
+                "source": "https://github.com/adoy/PHP-OAuth2/tree/1.3.0"
+            },
+            "time": "2015-08-03T19:57:06+00:00"
+        },
+        {
+            "name": "asana/asana",
+            "version": "v0.10.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Asana/php-asana.git",
+                "reference": "1aeaf3a66b5eca57b85b9c43db14ca657ebce967"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Asana/php-asana/zipball/1aeaf3a66b5eca57b85b9c43db14ca657ebce967",
+                "reference": "1aeaf3a66b5eca57b85b9c43db14ca657ebce967",
+                "shasum": ""
+            },
+            "require": {
+                "adoy/oauth2": "^1.2.0",
+                "nategood/httpful": "~0.2",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "instaclick/php-code-sniffer": "dev-master",
+                "phpunit/phpunit": "^9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Asana\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A PHP client for the Asana API",
+            "homepage": "https://github.com/Asana/php-asana",
+            "keywords": [
+                "asana",
+                "client"
+            ],
+            "support": {
+                "issues": "https://github.com/Asana/php-asana/issues",
+                "source": "https://github.com/Asana/php-asana/tree/v0.10.8"
+            },
+            "time": "2022-03-04T22:47:57+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "1.3.0",
@@ -2924,6 +3013,60 @@
                 "source": "https://github.com/namshi/jose/tree/master"
             },
             "time": "2016-12-05T07:27:31+00:00"
+        },
+        {
+            "name": "nategood/httpful",
+            "version": "0.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nategood/httpful.git",
+                "reference": "0cded3ea97ba905600de9ceb9ef13f3ab681587c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nategood/httpful/zipball/0cded3ea97ba905600de9ceb9ef13f3ab681587c",
+                "reference": "0cded3ea97ba905600de9ceb9ef13f3ab681587c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Httpful": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nate Good",
+                    "email": "me@nategood.com",
+                    "homepage": "http://nategood.com"
+                }
+            ],
+            "description": "A Readable, Chainable, REST friendly, PHP HTTP Client",
+            "homepage": "http://github.com/nategood/httpful",
+            "keywords": [
+                "api",
+                "curl",
+                "http",
+                "requests",
+                "rest",
+                "restful"
+            ],
+            "support": {
+                "issues": "https://github.com/nategood/httpful/issues",
+                "source": "https://github.com/nategood/httpful/tree/v0.3.2"
+            },
+            "time": "2020-01-25T01:13:13+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -10280,5 +10423,5 @@
         "php": "^7.2.5"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }

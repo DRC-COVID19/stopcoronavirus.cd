@@ -4,7 +4,7 @@
       <Loading
         v-if="isLoading"
         class="h-100"
-        message="Chargement du formulaire ..."
+        :message="message"
       />
       <b-row v-else align-h="center" class="px-md-5 px-lg-5">
         <b-col cols="12">
@@ -111,7 +111,7 @@
                   :options="occurences"
                   id="deviceId"
                   labelText="Nombre de fois que le problème a été découvert"
-                  name="Type Appareil"
+                  name="Nombre de fois"
                   mode="aggressive"
                   :isObligated="true"
                   rules="required"
@@ -120,7 +120,17 @@
                   ><span class="text-danger"> </span
                 ></b-form-text>
               </b-form-group>
-              {{ JSON.stringify(projects) }}
+               <vue2Dropzone
+                ref="imgDropzone"
+                id="dropzone"
+                class="border border-1 rounded pe-auto"
+                :useCustomSlot="true"
+                :options="dropzoneOptions"
+                :destroyDropzone="true"
+                @vdropzone-complete="afterComplete"
+                @vdropzone-success="uploadSuccess"
+              >
+              {{ projects }}
               <!-- <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
@@ -132,13 +142,13 @@
                 @vdropzone-success-multiple="success"
                 :destroyDropzone="true"
                 @vdropzone-complete="afterComplete"
-              >
+              > -->
                 <div class="dropzone-custom-content">
                 <i class="fas fa-cloud-upload-alt fa-3x"></i>
                 <h4 class="dropzone-custom-title mb-0 mt-3">TELECHARGER UNE IMAGE</h4>
                 <div class="subtitle">Ajouter plusieurs images si vous le souhaitez</div>
               </div>
-              </vue2Dropzone> -->
+              </vue2Dropzone>
               <b-form-group class="border-0 m-0">
                 <form-field-text-area
                   v-model="form.description"
@@ -200,6 +210,7 @@ import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { mapState, mapActions } from 'vuex'
 import { ValidationObserver } from 'vee-validate'
 import { ASANA_API_URL, ASANA_TOKEN } from '../../config/env'
+import axios from 'axios'
 
 export default {
   components: {
@@ -221,7 +232,8 @@ export default {
         email: '',
         device: null,
         description: '',
-        images: []
+        images: [],
+        occurence: null
       },
       toToCanceled: false,
       projects: [],
@@ -230,7 +242,9 @@ export default {
         firstName: null,
         email: null,
         description: null,
-        images: null
+        images: null,
+        device: null,
+        occurence: null
       },
       validatedMessage: {
         mail: null
@@ -241,14 +255,7 @@ export default {
       errors: {},
       isLoading: false,
       title: 'Signaler un Problème',
-      axiosOptions: {
-        headers: {
-          contentType: 'application/json',
-          Accept: 'application/json',
-          // 'Access-Control-Allow-Origin': '*',
-          Authorization: `Basic ${ASANA_TOKEN}`
-        }
-      },
+      message: 'Chargement du formulaire',
       dropzoneOptions: {
         url: 'https://httpbin.org/post',
         thumbnailWidth: 150,
@@ -257,9 +264,29 @@ export default {
         addRemoveLinks: true,
         acceptedFiles: '.jpg, .png, .gif',
         parallelUploads: 3,
-        dictDefaultMessage:
-          "<i class='fas fa-cloud-upload-alt mr-2 text-primary'></i>TELECHARGER  IMAGE"
+        dictCancelUpload: 'Annuler',
+        dictRemoveFile: 'Supprimer',
+        dictRemoveFileConfirmation: 'Etes-vous sûr de supprimer cette image ?',
+        dictCancelUploadConfirmation: "Etes-vous sûr d'annuler cette image ?"
+      },
+      data: {
+        approval_status: 'pending',
+        assignee_section: '1202084007644818',
+        assignee_status: 'upcoming',
+        completed: false,
+        completed_by: null,
+        due_at: '2019-09-15T02:06:58.147Z',
+        html_notes: '<body>Mittens <em>really</em> likes the stuff from Humboldt.</body>',
+        name: '',
+        projects: [
+          '1200603864497962'
+        ],
+        resource_subtype: 'default_task',
+        start_at: '2019-09-14T02:06:58.147Z',
+        tags: [],
+        workspace: '688460071936074'
       }
+
     }
   },
   computed: {
@@ -292,56 +319,102 @@ export default {
       this.form = {}
       this.$refs.form.reset()
       this.isLoading = false
+      this.$refs.imgDropzone.removeAllFiles()
     },
-
+    uploadSuccess: function (file, response) {
+      alert(JSON.stringify(file))
+      this.form.images.push({ src: file })
+      this.$bvToast.toast('L\'image a été téléchargé avec succèss!', {
+        title: 'Chargement des images',
+        appendToast: true,
+        variant: 'success',
+        solid: true
+      })
+    },
     afterComplete (file) {
-      try {
-        const imageName = new Date().getDate()
-        const metaData = {
-          contentType: 'image/png'
-        }
-        this.images.push({ src: file })
-        alert(JSON.stringify(file))
-        this.$refs.imgdropzone.removeFile(file)
-      } catch (error) {
-        this.$bvToast.toast('Une erreur est survenue!', {
-          title: 'Erreur du chargement des images',
-          appendToast: true,
-          variant: 'danger',
-          solid: true
-        })
-        this.$el.removeChild(file)
-        this.$refs.imgDropzone.removeFile(file)
-      }
+      // this.isLoading = true
+      // try {
+      //   const imageName = new Date().getDate()
+      //   const metaData = {
+      //     contentType: 'image/png'
+      //   }
+      //   this.form.images.push({ src: file })
+      //   alert(JSON.stringify(file))
+      //   this.$bvToast.toast('L\'image a été téléchargé avec succèss!', {
+      //     title: 'Erreur du chargement des images',
+      //     appendToast: true,
+      //     variant: 'success',
+      //     solid: true
+      //   })
+      // } catch (error) {
+      //   this.$bvToast.toast('Une erreur est survenue!', {
+      //     title: 'Erreur du chargement des images',
+      //     appendToast: true,
+      //     variant: 'danger',
+      //     solid: true
+      //   })
+      // }
     },
-    handleMoreThumbnail () {
-      const dropzone = this.$refs.imgDropzone.dropzone
-      dropzone.files.length > 0
-        ? dropzone.element.appendChild(this.$refs.more)
-        : dropzone.element.removeChild(this.$refs.more)
-    },
-
     onSubmit () {
       this.isLoading = true
+      this.message = ' Votre requête est en cours de soumission...'
       this.errors = {}
+      //this.data.custom_fields = this.form
+      const axiosOptions = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${ASANA_TOKEN}`
+        }
+      }
       if (this.form !== 0) {
-        this.isLoading = false
-        alert(JSON.stringify(this.form))
-        this.resetForm()
+        return new Promise((resolve, reject) => {
+          axios
+            .post(`${ASANA_API_URL}/tasks`, {
+              data: this.data
+            }, axiosOptions)
+            .then(({ data }) => {
+              this.isLoading = false
+              this.resetForm()
+              this.$bvToast.toast('Le problème a été soumis avec succèss', {
+                title: 'Signaler un Problème',
+                appendToast: true,
+                variant: 'success',
+                solid: true
+              })
+              resolve(true)
+            })
+            .catch((response) => {
+              this.$bvToast.toast('Une erreur est survenue!', {
+                title: 'Signaler un Problème',
+                appendToast: true,
+                variant: 'danger',
+                solid: true
+              })
+              reject(response)
+            })
+            .finally(() => {
+              this.isLoading = false
+            })
+        })
       }
     },
     getProjects () {
       this.isLoading = true
       return new Promise((resolve, reject) => {
-        // eslint-disable-next-line no-undef
+        const axiosOptions = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${ASANA_TOKEN}`
+          }
+        }
+
         axios
-          .get(`${ASANA_API_URL}/projects`, this.axiosOptions)
+          .get(`${ASANA_API_URL}/workspaces`, axiosOptions)
           .then(({ data }) => {
-            this.$$set('projects', data)
+            this.projects.push(data)
             this.isLoading = false
-            resolve(true)
-            alert('esimbi')
           })
+
           .catch((response) => {
             this.$bvToast.toast('Une erreur est survenue!', {
               title: 'Erreur du chargement des projets',
@@ -356,6 +429,7 @@ export default {
           })
       })
     }
+
   }
 }
 </script>
