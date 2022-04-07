@@ -49,7 +49,7 @@
           @click="openToogle()"
           v-b-toggle.sidebar-right
           class="btn btn-sm btn-dash-blue d-block"
-          >+ Nouveau</b-button
+          >Nouveau</b-button
         >
       </b-col>
     </b-row>
@@ -105,6 +105,7 @@
                   data.item.seriously
                 )
               "
+              v-b-toggle.sidebar-right
               >Editer</b-button
             >
             <b-button

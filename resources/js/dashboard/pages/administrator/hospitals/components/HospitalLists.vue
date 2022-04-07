@@ -15,7 +15,7 @@
           @click="openToogle()"
           v-b-toggle.sidebar-right
           class="btn btn-sm btn-dash-blue d-block"
-          >+ Nouveau</b-button
+          >Nouveau</b-button
         >
       </b-col>
     </b-row>

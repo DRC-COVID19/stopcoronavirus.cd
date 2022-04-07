@@ -328,10 +328,8 @@ export default {
       this.form = {};
       this.rules = [];
 
-      if (this.userAdded | this.userUpdated) {
-        this.btnTitle = "Enregistrer";
-        this.title = "Nouveau Utilisateur";
-      }
+      this.btnTitle = "Enregistrer";
+      this.title = "Nouveau Utilisateur";
       this.$emit("onReset");
     },
 
@@ -356,7 +354,6 @@ export default {
         this.title = "Modification de l'utilisateur";
         this.btnTitle = "Modifier";
       }
-      console.log("this.updating", this.updating);
     },
     errorForm() {
       if (this.errors.username) {

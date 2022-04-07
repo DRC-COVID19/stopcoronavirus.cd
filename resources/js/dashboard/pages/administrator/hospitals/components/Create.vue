@@ -204,6 +204,7 @@ export default {
       this.resetForm();
     },
     formToPopulate() {
+      this.resetForm();
       this.populateForm();
     },
     errors() {
@@ -242,11 +243,9 @@ export default {
       this.updating = false;
       this.isLoading = false;
       this.toToCanceled = true;
-      if (this.hospitalAdded | this.hospitalUpdated) {
-        this.form = {};
-        this.btnTitle = "Enregistrer";
-        this.title = "Nouveau CTCO";
-      }
+      this.form = {};
+      this.btnTitle = "Enregistrer";
+      this.title = "Nouveau CTCO";
     },
 
     populateForm() {
