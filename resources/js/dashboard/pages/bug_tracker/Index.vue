@@ -145,15 +145,16 @@
                   rules="required"
                 />
                 </div>
-                <b-form-text id="password-help-block" class="mb-4"
+                <b-form-text id="password-help-block" class="mb-2"
                   ><span class="text-danger"> </span
                 ></b-form-text>
               </b-form-group>
-              <label for="dropzone" class="text-dash-color">Optionnel</label>
+             <div class="mb-4">
+              <label for="dropzone" class="text-dash-color">Joindre un fichier ( Optionnel )</label>
                <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
-                class="border border-1 rounded pe-auto mb-4"
+                class="border border-1 rounded pe-auto"
                 :useCustomSlot="true"
                 :options="dropzoneOptions"
                 :destroyDropzone="true"
@@ -179,6 +180,7 @@
                 <div class="subtitle">Ajouter plusieurs images si vous le souhaitez</div>
               </div>
               </vue2Dropzone>
+             </div>
               <b-form-group class="border-0 m-0">
                 <form-field-text-area
                   v-model="form.description"
