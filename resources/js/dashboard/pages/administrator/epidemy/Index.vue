@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
     <b-row class="flex-md-row-reverse" no-gutterse>
-      <b-col cols="12" md="12" class="mt-3">
+      <b-col cols="12" md="4" class="mt-3">
         <b-alert
           :show="showWarning"
           dismissible
