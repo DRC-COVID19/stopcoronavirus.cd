@@ -95,7 +95,7 @@
                   v-model="form.device"
                   :options="devices"
                   id="deviceId"
-                  labelText="Type Appareil"
+                  labelText="Type Appareil "
                   name="Type Appareil"
                   mode="aggressive"
                   :isObligated="true"
@@ -110,7 +110,7 @@
                   v-model="form.occurence"
                   :options="occurences"
                   id="deviceId"
-                  labelText="Combien de fois avez-vous rencontré ce problème ?"
+                  labelText="Combien de fois avez-vous rencontré ce problème ? "
                   name="Nombre de fois"
                   mode="aggressive"
                   :isObligated="true"
@@ -126,7 +126,7 @@
                   v-model="form.page"
                   :options="adminPages"
                   id="deviceId"
-                  labelText="Sur quel menu(page) avez-vous rencontré ce problème ?"
+                  labelText="Sur quel menu(page) avez-vous rencontré ce problème ? "
                   name="Menu"
                   mode="aggressive"
                   :isObligated="true"
@@ -138,7 +138,7 @@
                   v-model="form.page"
                   :options="agentPages"
                   id="deviceId"
-                  labelText="Sur quel page avez-vous rencontré ce problème ?"
+                  labelText="Sur quel page avez-vous rencontré ce problème ? "
                   name="Menu"
                   mode="aggressive"
                   :isObligated="true"
@@ -149,6 +149,7 @@
                   ><span class="text-danger"> </span
                 ></b-form-text>
               </b-form-group>
+              <label for="dropzone" class="text-dash-color">Optionnel</label>
                <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
@@ -184,7 +185,7 @@
                   type="text"
                   rules="required"
                   name="Un Message"
-                  labelText="Message"
+                  labelText="Message "
                   :state="errors.description ? false : null"
                   id="descriptionId"
                   :rows="4"
@@ -196,11 +197,12 @@
                   }}</span></b-form-text
                 >
               </b-form-group>
-              <b-row class="pt-lg-4 px-lg-4 pt-sm-2 px-sm-3 d-flex justify-content-lg-end justify-content-sm-between align-items-center">
-                <b-button
+              <b-row>
+               <b-col class="d-flex justify-content-end align-items-center mt-4">
+                  <b-button
                   type="submit"
                   variant="primary"
-                  class="btn btn-sm rounded"
+                  class="rounded"
                   :disabled="invalid ? true : false"
                 >
                   <span v-if="isLoading"
@@ -219,6 +221,7 @@
                 >
                   {{ "Réinitialiser" }}</b-button
                 >
+               </b-col>
               </b-row>
             </ValidationObserver>
           </b-card>
@@ -489,7 +492,7 @@ export default {
   margin-top: 5px;
 }
 .bg-dash {
-  box-shadow: -5px 10px 25px -1px rgba(145, 144, 144, 0.1);
+  box-shadow: -5px 10px 30px -1px rgba(107, 106, 106, 0.1);
   border: 0 !important;
 }
 fieldset {
