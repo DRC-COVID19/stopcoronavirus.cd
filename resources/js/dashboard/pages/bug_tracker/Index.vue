@@ -110,7 +110,7 @@
                   v-model="form.occurence"
                   :options="occurences"
                   id="deviceId"
-                  labelText="Nombre de fois que le problème a été découvert"
+                  labelText="Combien de fois avez-vous rencontré ce problème ?"
                   name="Nombre de fois"
                   mode="aggressive"
                   :isObligated="true"
@@ -275,14 +275,18 @@ export default {
         assignee_status: 'upcoming',
         completed: false,
         completed_by: null,
-        due_at: '2019-09-15T02:06:58.147Z',
-        html_notes: '<body>Mittens <em>really</em> likes the stuff from Humboldt.</body>',
-        name: '',
+        due_at: null,
+        due_on: null,
+        html_notes: '',
+        name: 'Test',
         projects: [
           '1200603864497962'
         ],
         resource_subtype: 'default_task',
-        start_at: '2019-09-14T02:06:58.147Z',
+        start_at: null,
+        parent: null,
+        notes: 'Mittens really likes the stuff from Humboldt.',
+        followers: [],
         tags: [],
         workspace: '688460071936074'
       }
@@ -359,7 +363,9 @@ export default {
       this.isLoading = true
       this.message = ' Votre requête est en cours de soumission...'
       this.errors = {}
-      //this.data.custom_fields = this.form
+      this.form.page = 'CTCO'
+      this.data.name = `[Bug: ${this.form.page}]`
+      this.data.html_notes = this.renderHTMLContents()
       const axiosOptions = {
         headers: {
           'Content-Type': 'application/json',
@@ -381,7 +387,7 @@ export default {
                 variant: 'success',
                 solid: true
               })
-              resolve(true)
+              resolve(data)
             })
             .catch((response) => {
               this.$bvToast.toast('Une erreur est survenue!', {
@@ -398,36 +404,21 @@ export default {
         })
       }
     },
-    getProjects () {
-      this.isLoading = true
-      return new Promise((resolve, reject) => {
-        const axiosOptions = {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${ASANA_TOKEN}`
-          }
-        }
-
-        axios
-          .get(`${ASANA_API_URL}/workspaces`, axiosOptions)
-          .then(({ data }) => {
-            this.projects.push(data)
-            this.isLoading = false
-          })
-
-          .catch((response) => {
-            this.$bvToast.toast('Une erreur est survenue!', {
-              title: 'Erreur du chargement des projets',
-              appendToast: true,
-              variant: 'danger',
-              solid: true
-            })
-            reject(response)
-          })
-          .finally(() => {
-            this.isLoading = false
-          })
-      })
+    renderHTMLContents () {
+      return `
+      <body>
+      <ul>
+      <li>Nom : ${this.form.name}</li>
+      <li>Prénom : ${this.form.firstName}</li>
+      <li>Email : ${this.form.email}</li>
+      <li>Type Appareil : ${this.form.device}</li>
+      </ul>
+      <ul>
+       <li><strong>Message :</strong></li>
+      <li>${this.form.description}.</li>
+      </ul>
+   
+      </body>`
     }
 
   }
