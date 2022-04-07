@@ -105,13 +105,40 @@
                   ><span class="text-danger"> </span
                 ></b-form-text>
               </b-form-group>
-                 <b-form-group class="border-0 m-0">
+                <b-form-group class="border-0 m-0">
                 <FomFieldSelect
                   v-model="form.occurence"
                   :options="occurences"
                   id="deviceId"
                   labelText="Combien de fois avez-vous rencontré ce problème ?"
                   name="Nombre de fois"
+                  mode="aggressive"
+                  :isObligated="true"
+                  rules="required"
+                />
+                <b-form-text id="password-help-block" class="mb-4"
+                  ><span class="text-danger"> </span
+                ></b-form-text>
+              </b-form-group>
+                <b-form-group class="border-0 m-0">
+                <FomFieldSelect
+                  v-show="canViewAdmin"
+                  v-model="form.page"
+                  :options="adminPages"
+                  id="deviceId"
+                  labelText="Sur quel menu avez-vous rencontré ce problème ?"
+                  name="Menu"
+                  mode="aggressive"
+                  :isObligated="true"
+                  rules="required"
+                />
+                 <FomFieldSelect
+                  v-show="canViewAgent"
+                  v-model="form.page"
+                  :options="agentPages"
+                  id="deviceId"
+                  labelText="Sur quel menu avez-vous rencontré ce problème ?"
+                  name="Menu"
                   mode="aggressive"
                   :isObligated="true"
                   rules="required"
@@ -204,6 +231,7 @@ import Loading from '../../components/Loading'
 import FormFieldInput from '../../components/forms/FormFieldInput'
 import FomFieldSelect from '../../components/forms/FomFieldSelect'
 import FormFieldTextArea from '../../components/forms/FormFieldTextArea'
+import { ADMIN_HOSPITAL, AGENT_HOSPITAL } from '../../config/env'
 import 'vue-form-wizard/dist/vue-form-wizard.min.css'
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
@@ -231,10 +259,10 @@ export default {
         device: null,
         description: '',
         images: [],
-        occurence: null
+        occurence: null,
+        page: null
       },
       toToCanceled: false,
-      projects: [],
       stateForm: {
         name: null,
         firstName: null,
@@ -249,6 +277,8 @@ export default {
       },
       devices: ['Ordinateur', 'Téléphone'],
       occurences: [' Première fois', ' Regulièrement', ' Aucun'],
+      adminPages: [' Admininstration', ' Dashboard', ' CTCOS'],
+      agentPages: [' CTCOS', 'Autres'],
       max: now,
       errors: {},
       isLoading: false,
@@ -295,6 +325,15 @@ export default {
     ...mapState({
       user: state => state.auth.user
     }),
+    canViewAdmin () {
+      return this.userHaveRole(ADMIN_HOSPITAL)
+    },
+    canViewAgent () {
+      if (this.user.hospital) {
+        return this.userHaveRole(AGENT_HOSPITAL)
+      }
+      return ''
+    },
     backRoute () {
       // [TODO] fix backRou te
       if (this.user.isHospitalAdmin) {
@@ -304,6 +343,7 @@ export default {
         }
       } else return { name: 'hospital.home' }
     }
+
   },
   mounted () {
     this.resetForm()
@@ -365,7 +405,6 @@ export default {
       this.isLoading = true
       this.message = ' Votre requête est en cours de soumission...'
       this.errors = {}
-      this.form.page = 'CTCO'
       this.data.name = `[Bug: ${this.form.page}]`
       this.data.html_notes = this.renderHTMLContents()
       if (this.form !== 0) {
