@@ -120,29 +120,31 @@
                   ><span class="text-danger"> </span
                 ></b-form-text>
               </b-form-group>
-                <b-form-group class="border-0 m-0">
+                <b-form-group class="border-0 mb-3">
                 <FomFieldSelect
                   v-show="canViewAdmin"
                   v-model="form.page"
                   :options="adminPages"
                   id="deviceId"
-                  labelText="Sur quel menu avez-vous rencontré ce problème ?"
+                  labelText="Sur quel menu(page) avez-vous rencontré ce problème ?"
                   name="Menu"
                   mode="aggressive"
                   :isObligated="true"
                   rules="required"
                 />
+                <div v-if="!canViewAdmin">
                  <FomFieldSelect
                   v-show="canViewAgent"
                   v-model="form.page"
                   :options="agentPages"
                   id="deviceId"
-                  labelText="Sur quel menu avez-vous rencontré ce problème ?"
+                  labelText="Sur quel page avez-vous rencontré ce problème ?"
                   name="Menu"
                   mode="aggressive"
                   :isObligated="true"
                   rules="required"
                 />
+                </div>
                 <b-form-text id="password-help-block" class="mb-4"
                   ><span class="text-danger"> </span
                 ></b-form-text>
@@ -150,7 +152,7 @@
                <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
-                class="border border-1 rounded pe-auto"
+                class="border border-1 rounded pe-auto mb-4"
                 :useCustomSlot="true"
                 :options="dropzoneOptions"
                 :destroyDropzone="true"
@@ -198,7 +200,7 @@
                 <b-button
                   type="submit"
                   variant="primary"
-                  class="btn btn-sm"
+                  class="btn btn-sm rounded"
                   :disabled="invalid ? true : false"
                 >
                   <span v-if="isLoading"
@@ -297,6 +299,8 @@ export default {
         dictRemoveFileConfirmation: 'Etes-vous sûr de supprimer cette image ?',
         dictCancelUploadConfirmation: "Etes-vous sûr d'annuler cette image ?"
       },
+      importantNotUrgentTag: '1155747022304322',
+      importantUrgentTag: '1155747022304324',
       data: {
         approval_status: 'pending',
         assignee_section: '1202084007644818',
@@ -402,11 +406,7 @@ export default {
       // }
     },
     onSubmit () {
-      this.isLoading = true
-      this.message = ' Votre requête est en cours de soumission...'
-      this.errors = {}
-      this.data.name = `[Bug: ${this.form.page}]`
-      this.data.html_notes = this.renderHTMLContents()
+      this.initializeDataForSubmission()
       if (this.form !== 0) {
         return new Promise((resolve, reject) => {
           this.bugTracker__store(this.data)
@@ -436,6 +436,14 @@ export default {
         })
       }
     },
+    initializeDataForSubmission () {
+      this.isLoading = true
+      this.message = ' Votre requête est en cours de soumission...'
+      this.errors = {}
+      this.data.name = `[Bug: ${this.form.page}]`
+      this.data.html_notes = this.renderHTMLContents()
+      this.data.tags = this.getTaskPriority(this.form.occurence)
+    },
     renderHTMLContents () {
       return `
       <body>
@@ -450,6 +458,15 @@ export default {
       <li>${this.form.description}.</li>
       </ul>
       </body>`
+    },
+    getTaskPriority (occurence) {
+      this.data.tags = []
+      if (occurence === this.occurences[0]) {
+        this.data.tags.push(this.importantNotUrgentTag)
+      } else if (occurence === this.occurences[1]) {
+        this.data.tags.push(this.importantUrgentTag)
+      }
+      return this.data.tags
     }
 
   }
