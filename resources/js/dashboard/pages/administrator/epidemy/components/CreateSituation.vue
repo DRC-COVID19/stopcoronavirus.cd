@@ -26,7 +26,7 @@
               show-weeknumbers
               is-required
             >
-              <template v-slot="{ inputEvents, inputValue }">
+              <template v-slot="{ inputEvents }">
                 <div class="d-flex btn-container-calendar">
                   <i
                     for="publish_date"
@@ -37,8 +37,8 @@
                     class="p-1 w-full"
                     style="font-size: 16px"
                     :value="
-                      inputValue
-                        ? moment(inputValue).format('DD.MM.YYYY')
+                      form.last_update
+                        ? moment(form.last_update).format('DD.MM.YYYY')
                         : 'Choisir la date'
                     "
                     v-on="inputEvents"
@@ -291,10 +291,7 @@ export default {
     populateForm() {
       this.disableDate = false;
       this.isUpdating = false;
-      console.log(
-        "this.formToPopulate",
-        Object.keys(this.formToPopulate).length
-      );
+
       if (Object.keys(this.formToPopulate).length !== 0) {
         this.disableDate = true;
         this.isUpdating = true;

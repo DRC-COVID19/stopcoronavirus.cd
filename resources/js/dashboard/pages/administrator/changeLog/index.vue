@@ -2,163 +2,187 @@
   <b-container fluid>
     <b-row class="flex-md-row-reverse">
       <b-col cols="12" md="4">
-        <b-card class="mt-3">
-          <h3 class="h2 mb-4">Nouveau log</h3>
-          <ValidationObserver v-slot="{ invalid }" novalidate ref="form">
-            <b-form @submit.prevent="submit_form">
-              <b-form-group
-                :invalid-feedback="
-                  errors.publish_date ? errors.publish_date[0] : null
-                "
-                :state="errors.publish_date ? false : null"
-                :disabled="isCreating"
-                class="mt-4 mb-4"
-              >
-                <label for="dataId" class="text-dash-color">
-                  Date<span class="text-danger">*</span></label
-                >
-                <v-date-picker
-                  v-model="form.publish_date"
-                  opens="center"
-                  :max-date="new Date()"
-                  class="d-flex input-dash"
-                  id="dateId"
-                  show-weeknumbers
-                  is-required
-                >
-                  <template v-slot="{ inputEvents, inputValue }">
-                    <div class="d-flex btn-container-calendar">
-                      <i
-                        for="publish_date"
-                        class="fas fa-light fa-calendar p-2"
-                      ></i>
-                      <input
-                        id="publish_date"
-                        class="p-1 w-full"
-                        style="font-size: 16px"
-                        :value="
-                          inputValue
-                            ? moment(inputValue).format('DD.MM.YYYY')
-                            : 'Choisir la date'
-                        "
-                        v-on="inputEvents"
-                        readonly
-                      />
-                    </div>
-                  </template>
-                </v-date-picker>
-              </b-form-group>
-              <b-form-group :disabled="isCreating">
-                <label for="titleId" class="text-dash-color"
-                  >Titre <span class="text-danger">*</span></label
-                >
-                <FormFieldInput
-                  v-model="form.title"
-                  type="text"
-                  rules="required"
-                  name="titre"
-                  label="Titre"
-                  :state="errors.title ? false : null"
-                  id="titleId"
-                />
-                <b-form-text id="password-help-block"
-                  ><span class="text-danger">{{
-                    errors.title ? errors.title[0] : null
-                  }}</span></b-form-text
-                >
-              </b-form-group>
-              <b-form-group class="mt-4">
-                <form-field-text-area
-                  v-model="form.description"
-                  type="text"
-                  rules="required"
-                  name="description"
-                  labelText="Description"
-                  :state="errors.description ? false : null"
-                  id="descriptionId"
-                  :rows="5"
-                  :isObligated="true"
-                />
-                <b-form-text id="description-help-block"
-                  ><span class="text-danger">{{
-                    errors.description ? errors.description[0] : null
-                  }}</span></b-form-text
-                >
-              </b-form-group>
-              <div class="mt-4">
-                <b-button
-                  type="submit"
-                  variant="primary"
-                  :disabled="isCreating || invalid ? true : false"
-                >
-                  <span v-if="isCreating"
-                    ><b-spinner class="align-middle"></b-spinner>
-                    <span>en cours ...</span>
-                  </span>
-                  <div v-else>
-                    <span v-if="isEditingMode">Modifier</span>
-                    <span v-else>Enregistrer</span>
-                  </div>
-                </b-button>
-                <b-button
-                  type="reset"
-                  variant="outline-danger"
+        <b-sidebar
+          id="sidebar-right"
+          right
+          bg-variant="white"
+          width="25rem"
+          backdrop
+          :no-close-on-route-change="true"
+          shadow
+          backdrop-variant="transparent"
+        >
+          <b-card class="mt-3 border-0">
+            <h3 class="h2 mb-4">
+              {{ isEditingMode ? "Modifier log" : "Nouveau log" }}
+            </h3>
+            <ValidationObserver v-slot="{ invalid }" novalidate ref="form">
+              <b-form @submit.prevent="submit_form">
+                <b-form-group
+                  :invalid-feedback="
+                    errors.publish_date ? errors.publish_date[0] : null
+                  "
+                  :state="errors.publish_date ? false : null"
                   :disabled="isCreating"
-                  class="ml-4"
-                  @click="resetForm()"
-                  >{{ isEditingMode ? "Annuler" : "Réinitialiser" }}</b-button
+                  class="mt-4 mb-4"
                 >
-              </div>
-            </b-form>
-          </ValidationObserver>
-        </b-card>
+                  <label for="dataId" class="text-dash-color">
+                    Date<span class="text-danger">*</span></label
+                  >
+                  <v-date-picker
+                    v-model="form.publish_date"
+                    opens="center"
+                    :max-date="new Date()"
+                    class="d-flex input-dash"
+                    id="dateId"
+                    show-weeknumbers
+                    is-required
+                  >
+                    <template v-slot="{ inputEvents }">
+                      <div class="d-flex btn-container-calendar">
+                        <i
+                          for="publish_date"
+                          class="fas fa-light fa-calendar p-2"
+                        ></i>
+                        <input
+                          id="publish_date"
+                          class="p-1 w-full"
+                          style="font-size: 16px"
+                          :value="
+                            form.publish_date
+                              ? moment(form.publish_date).format('DD.MM.YYYY')
+                              : 'Choisir la date'
+                          "
+                          v-on="inputEvents"
+                          readonly
+                        />
+                      </div>
+                    </template>
+                  </v-date-picker>
+                </b-form-group>
+                <b-form-group :disabled="isCreating">
+                  <label for="titleId" class="text-dash-color"
+                    >Titre <span class="text-danger">*</span></label
+                  >
+                  <FormFieldInput
+                    v-model="form.title"
+                    type="text"
+                    rules="required"
+                    name="titre"
+                    label="Titre"
+                    :state="errors.title ? false : null"
+                    id="titleId"
+                  />
+                  <b-form-text id="password-help-block"
+                    ><span class="text-danger">{{
+                      errors.title ? errors.title[0] : null
+                    }}</span></b-form-text
+                  >
+                </b-form-group>
+                <b-form-group class="mt-4">
+                  <form-field-text-area
+                    v-model="form.description"
+                    type="text"
+                    rules="required"
+                    name="description"
+                    labelText="Description"
+                    :state="errors.description ? false : null"
+                    id="descriptionId"
+                    :rows="5"
+                    :isObligated="true"
+                  />
+                  <b-form-text id="description-help-block"
+                    ><span class="text-danger">{{
+                      errors.description ? errors.description[0] : null
+                    }}</span></b-form-text
+                  >
+                </b-form-group>
+                <div class="mt-4">
+                  <b-button
+                    type="submit"
+                    variant="primary"
+                    :disabled="isCreating || invalid ? true : false"
+                  >
+                    <span v-if="isCreating"
+                      ><b-spinner class="align-middle"></b-spinner>
+                      <span>en cours ...</span>
+                    </span>
+                    <div v-else>
+                      <span v-if="isEditingMode">Modifier</span>
+                      <span v-else>Enregistrer</span>
+                    </div>
+                  </b-button>
+                  <b-button
+                    type="reset"
+                    variant="outline-danger"
+                    :disabled="isCreating"
+                    class="ml-4"
+                    @click="resetForm()"
+                    >{{ isEditingMode ? "Annuler" : "Réinitialiser" }}</b-button
+                  >
+                </div>
+              </b-form>
+            </ValidationObserver>
+          </b-card>
+        </b-sidebar>
       </b-col>
-      <b-col cols="12" md="8">
+      <b-col cols="12" md="12">
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
         <Header title="Change log" iconClass="fa fa-history" />
         <b-row class="my-3" align-h="start">
-          <b-col cols="12" md="6">
-            <v-date-picker
-              v-model="filter"
-              opens="center"
-              :max-date="new Date()"
-              @input="onRangeDateObservation"
-              class="d-flex style-picker mb-2"
-              show-weeknumbers
-              ref="datepicker"
-              :attributes="attrs"
-            >
-              <template v-slot="{ inputEvents }">
-                <div class="d-flex btn-container-calendar">
-                  <i for="filter" class="fas fa-light fa-calendar p-2"></i>
-                  <input
-                    id="filter"
-                    class="p-1 w-full"
-                    style="font-size: 16px"
-                    :value="
-                      filter
-                        ? moment(filter).format('DD.MM.YYYY')
-                        : 'Choisir la date'
-                    "
-                    v-on="inputEvents"
-                    readonly
-                  />
-                </div>
-              </template>
-              <div
-                slot="footer"
-                slot-scope=""
-                class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
-                style="width: 330px"
+          <b-col
+            cols="12"
+            md="12 d-flex flex-row-reverse justify-content-between"
+          >
+            <div class="container-filter">
+              <v-date-picker
+                v-model="filter"
+                opens="center"
+                :max-date="new Date()"
+                @input="onRangeDateObservation"
+                class="d-flex style-picker mb-2"
+                show-weeknumbers
+                ref="datepicker"
+                :attributes="attrs"
               >
-                <span class="btn-date-picker today" style="" @click="btnToday"
-                  >Aujourd'hui
-                </span>
-                <span class="btn-date-picker reset" @click="btnReset">
-                  Annuler</span
+                <template v-slot="{ inputEvents }">
+                  <div class="d-flex btn-container-calendar">
+                    <i for="filter" class="fas fa-light fa-calendar p-2"></i>
+                    <input
+                      id="filter"
+                      class="p-1 w-full"
+                      style="font-size: 16px"
+                      :value="
+                        filter
+                          ? moment(filter).format('DD.MM.YYYY')
+                          : 'Choisir la date'
+                      "
+                      v-on="inputEvents"
+                      readonly
+                    />
+                  </div>
+                </template>
+                <div
+                  slot="footer"
+                  slot-scope=""
+                  class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
+                  style="width: 330px"
                 >
-              </div>
-            </v-date-picker>
+                  <span class="btn-date-picker today" style="" @click="btnToday"
+                    >Aujourd'hui
+                  </span>
+                  <span class="btn-date-picker reset" @click="btnReset">
+                    Annuler</span
+                  >
+                </div>
+              </v-date-picker>
+            </div>
+            <b-button
+              @click="openToogle()"
+              v-b-toggle.sidebar-right
+              class="btn btn-sm btn-dash-blue d-block"
+              >Nouveau</b-button
+            >
           </b-col>
         </b-row>
         <b-skeleton-table
@@ -190,6 +214,7 @@
               variant="outline-success mb-1"
               class="btn-dash"
               @click="toEdit(data.item)"
+              v-b-toggle.sidebar-right
               >Editer</b-button
             >
             <b-button
@@ -268,6 +293,7 @@ export default {
   },
 
   mounted() {
+    this.resetForm();
     this.getListChangedLogs();
   },
 
@@ -368,15 +394,26 @@ export default {
           }
         });
     },
+    openToogle() {
+      this.isEditingMode = false;
+      this.form = {};
+      this.form.publish_date = null;
+    },
     switchPage(page) {
       this.getListChangedLogs({ page }).then(() => {
         window.scrollTo(0, 0);
       });
     },
     toEdit(item) {
-      this.isEditingMode = true;
-      this.form = { ...item };
-      this.form.publish_date = item.from;
+      this.isEditingMode = false;
+      this.form = {};
+      this.form.publish_date = null;
+
+      if (Object.keys(item).length !== 0) {
+        this.isEditingMode = true;
+        this.form = { ...item };
+        this.form.publish_date = item.from;
+      }
     },
     resetForm() {
       this.isEditingMode = false;
