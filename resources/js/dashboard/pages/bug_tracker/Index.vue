@@ -354,7 +354,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['formShow', 'bugTracker__store']),
+    ...mapActions(['formShow', 'bugTracker__addTask']),
     onReset () {
       this.$refs.form.reset()
       this.toToCanceled = true
@@ -417,7 +417,7 @@ export default {
       this.initializeDataForSubmission()
       if (this.form !== 0) {
         return new Promise((resolve, reject) => {
-          this.bugTracker__store({ task: this.data, attachements: this.form.images })
+          this.bugTracker__addTask({ task: this.data, attachements: this.form.images })
             .then(({ data }) => {
               this.isLoading = false
               this.$bvToast.toast('Le problème a été signalé avec succèss', {

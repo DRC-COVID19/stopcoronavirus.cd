@@ -13,7 +13,7 @@ export default {
 
   mutation: {},
   actions: {
-    bugTracker__store (__, { task, attachements }) {
+    bugTracker__addTask (__, { task, attachements }) {
       return new Promise((resolve, reject) => {
         axios
           .post(
@@ -26,7 +26,7 @@ export default {
           .then(({ data }) => {
             resolve(data)
             const { gid } = data
-           //axiosOptions.headers['Content-Type'] = 'multipart/form-data'
+            // axiosOptions.headers['Content-Type'] = 'multipart/form-data'
             // return new Promise((resolve, reject) => {
             //   axios
             //     .post(
@@ -51,6 +51,9 @@ export default {
             reject(response)
           })
       })
+    },
+    bugTracker__addAttachementsToTask () {
+
     }
   }
 }
