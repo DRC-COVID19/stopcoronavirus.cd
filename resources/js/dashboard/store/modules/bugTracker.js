@@ -21,7 +21,7 @@ export default {
     }
   },
   actions: {
-    bugTracker__addTask ({ commit, dispatch }, { task, attachements }) {
+    bugTracker__addTask ({ commit, dispatch }, { task }) {
       commit('SET_TASK', false)
       return new Promise((resolve, reject) => {
         axios
@@ -34,8 +34,6 @@ export default {
           )
           .then(({ data }) => {
             resolve(data)
-            commit('SET_TASK', data)
-            // dispatch('bugTracker__addAttachementsToTask', attachements)
           })
           .catch(response => {
             reject(response)

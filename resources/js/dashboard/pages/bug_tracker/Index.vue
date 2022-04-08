@@ -379,6 +379,7 @@ export default {
           variant: 'success',
           solid: true
         })
+        alert(JSON.stringify(this.form.images))
       } catch (error) {
         this.$bvToast.toast('Une erreur est survenue!', {
           title: 'Chargement image',
@@ -416,37 +417,39 @@ export default {
       this.initializeDataForSubmission()
       if (this.form !== 0) {
         return new Promise((resolve, reject) => {
-          this.bugTracker__addTask({ task: this.data, attachements: this.form.images })
+          this.bugTracker__addTask({ task: this.data })
             .then(({ data }) => {
               this.isLoading = false
+              resolve(data)
+              this.form = {}
+              if (this.form.images !== null) {
+                this.bugTracker__addAttachementsToTask({ task: data, attachements: this.form.images })
+                  .then(({ data }) => {
+                    this.isLoading = false
+                    this.$bvToast.toast('Le problème a été signalé avec succèss', {
+                      title: 'Signaler un Problème',
+                      appendToast: true,
+                      variant: 'success',
+                      solid: true
+                    })
+                    resolve(data)
+                  })
+                  .catch((response) => {
+                    this.$bvToast.toast('Une erreur est survenue!', {
+                      title: 'Signaler un Problème',
+                      appendToast: true,
+                      variant: 'danger',
+                      solid: true
+                    })
+                    reject(response)
+                  })
+              }
               this.$bvToast.toast('Le problème a été signalé avec succèss', {
                 title: 'Signaler un Problème',
                 appendToast: true,
                 variant: 'success',
                 solid: true
               })
-              resolve(data)
-              this.form = {}
-              this.bugTracker__addAttachementsToTask({ task: data, attachements: this.form.images })
-                .then(({ data }) => {
-                  this.isLoading = false
-                  this.$bvToast.toast('Le problème a été signalé avec succèss', {
-                    title: 'Signaler un Problème',
-                    appendToast: true,
-                    variant: 'success',
-                    solid: true
-                  })
-                  resolve(data)
-                })
-                .catch((response) => {
-                  this.$bvToast.toast('Une erreur est survenue!', {
-                    title: 'Signaler un Problème',
-                    appendToast: true,
-                    variant: 'danger',
-                    solid: true
-                  })
-                  reject(response)
-                })
             })
             .catch((response) => {
               this.$bvToast.toast('Une erreur est survenue!', {
