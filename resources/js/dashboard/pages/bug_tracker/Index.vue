@@ -151,6 +151,7 @@
               </b-form-group>
              <div class="mb-4">
               <label for="dropzone" class="text-dash-color">Joindre un fichier ( Optionnel )</label>
+               <!-- <b-progress :value="progress" :max="100" show-progress animated></b-progress> -->
                <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
@@ -160,20 +161,9 @@
                 :destroyDropzone="true"
                 @vdropzone-complete="afterComplete"
                 @vdropzone-success="uploadSuccess"
+                @vdropzone-upload-progress="uploadProgress"
               >
 
-              <!-- <vue2Dropzone
-                ref="imgDropzone"
-                id="dropzone"
-                @vdropzone-upload-progress="uploadProgress"
-                :useCustomSlot="true"
-                :options="dropzoneOptions"
-                @vdropzone-file-added="fileAdded"
-                @vdropzone-sending-multiple="sendingFiles"
-                @vdropzone-success-multiple="success"
-                :destroyDropzone="true"
-                @vdropzone-complete="afterComplete"
-              > -->
                 <div class="dropzone-custom-content">
                 <i class="fas fa-cloud-upload-alt fa-3x"></i>
                 <h4 class="dropzone-custom-title mb-0 mt-3">TELECHARGER UNE IMAGE</h4>
@@ -282,6 +272,7 @@ export default {
       validatedMessage: {
         mail: null
       },
+      progress: null,
       devices: ['Ordinateur', 'Téléphone'],
       occurences: [' Première fois', ' Regulièrement', ' Aucun'],
       adminPages: [' Admininstration', ' Dashboard', ' CTCOS'],
@@ -295,7 +286,7 @@ export default {
         url: 'https://httpbin.org/post',
         thumbnailWidth: 150,
         maxFilesize: 0.5,
-        maxFiles: 5,
+        maxFiles: 3,
         addRemoveLinks: true,
         acceptedFiles: '.jpg, .png, .gif',
         parallelUploads: 3,
@@ -315,14 +306,14 @@ export default {
         due_at: null,
         due_on: null,
         html_notes: '',
-        name: 'Test',
+        name: '',
         projects: [
           '1200603864497962'
         ],
         resource_subtype: 'default_task',
         start_at: null,
         parent: null,
-        notes: 'Mittens really likes the stuff from Humboldt.',
+        notes: '',
         followers: [],
         tags: [],
         workspace: '688460071936074'
@@ -374,7 +365,10 @@ export default {
       this.form = {}
       this.$refs.form.reset()
       this.isLoading = false
-      this.$refs.imgDropzone.removeAllFiles()
+      this.$refs.imgDropzone.removeAllFiles(true)
+    },
+    uploadProgress (file, progress, byte) {
+      this.progress = progress
     },
     uploadSuccess (file, response) {
       try {
