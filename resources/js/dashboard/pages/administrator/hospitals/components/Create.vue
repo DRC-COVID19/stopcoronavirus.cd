@@ -1,5 +1,5 @@
 <template>
-  <b-card class="border-0">
+  <b-card class="border-0 pt-0">
     <h2 class="h2 mb-4">{{ title }}</h2>
     <ValidationObserver
       v-slot="{ invalid }"

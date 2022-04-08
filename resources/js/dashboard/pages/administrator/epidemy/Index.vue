@@ -31,6 +31,27 @@
             :formToPopulate="formToPopulate"
             :errors="errors"
           />
+          <template #header="{ hide }" fluid>
+            <div
+              class="
+                w-100
+                d-flex
+                bg-white
+                align-items-center
+                justify-content-end
+                py-2
+              "
+            >
+              <b-button
+                size="sm"
+                class=""
+                variant="outline-danger"
+                @click="hide"
+                style="font-size: 1rem; font-weight: 900"
+                >X</b-button
+              >
+            </div>
+          </template>
         </b-sidebar>
       </b-col>
       <b-col cols="12" md="12">

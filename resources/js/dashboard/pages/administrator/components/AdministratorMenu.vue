@@ -96,7 +96,7 @@ export default {
     }
   }
 }
-@media (max-width: 990px) {
+@media (max-width: $max-width) {
   .nav {
     z-index: 5;
     height: 10vh;
