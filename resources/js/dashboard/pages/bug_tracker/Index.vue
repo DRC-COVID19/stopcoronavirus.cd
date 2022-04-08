@@ -354,7 +354,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['formShow', 'bugTracker__addTask']),
+    ...mapActions(['formShow', 'bugTracker__addTask', 'bugTracker__addAttachementsToTask']),
     onReset () {
       this.$refs.form.reset()
       this.toToCanceled = true
@@ -386,7 +386,6 @@ export default {
           variant: 'danger',
           solid: true
         })
-        this.$refs.imgDropzone.removeFile(file)
       }
     },
     afterComplete (file) {
@@ -428,6 +427,26 @@ export default {
               })
               resolve(data)
               this.form = {}
+              this.bugTracker__addAttachementsToTask({ task: data, attachements: this.form.images })
+                .then(({ data }) => {
+                  this.isLoading = false
+                  this.$bvToast.toast('Le problème a été signalé avec succèss', {
+                    title: 'Signaler un Problème',
+                    appendToast: true,
+                    variant: 'success',
+                    solid: true
+                  })
+                  resolve(data)
+                })
+                .catch((response) => {
+                  this.$bvToast.toast('Une erreur est survenue!', {
+                    title: 'Signaler un Problème',
+                    appendToast: true,
+                    variant: 'danger',
+                    solid: true
+                  })
+                  reject(response)
+                })
             })
             .catch((response) => {
               this.$bvToast.toast('Une erreur est survenue!', {
@@ -448,7 +467,7 @@ export default {
       this.isLoading = true
       this.message = ' Votre requête est en cours de soumission...'
       this.errors = {}
-      this.data.name = `[Bug: ${this.form.page}]`
+      this.data.name = `[Bug: ${this.form.page}]: <br> ${this.form.description.slice(0, 100)} ...`
       this.data.html_notes = this.renderHTMLContents()
       this.data.tags = this.getTaskPriority(this.form.occurence)
     },
