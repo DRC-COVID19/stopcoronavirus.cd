@@ -376,15 +376,24 @@ export default {
       this.isLoading = false
       this.$refs.imgDropzone.removeAllFiles()
     },
-    uploadSuccess: function (file, response) {
-      alert(JSON.stringify(file))
-      this.form.images.push({ src: file })
-      this.$bvToast.toast('L\'image a été téléchargé avec succèss!', {
-        title: 'Chargement des images',
-        appendToast: true,
-        variant: 'success',
-        solid: true
-      })
+    uploadSuccess (file, response) {
+      try {
+        this.form.images = file
+        this.$bvToast.toast('L\'image a été téléchargé avec succèss!', {
+          title: 'Chargement des images',
+          appendToast: true,
+          variant: 'success',
+          solid: true
+        })
+      } catch (error) {
+        this.$bvToast.toast('Une erreur est survenue!', {
+          title: 'Chargement image',
+          appendToast: true,
+          variant: 'danger',
+          solid: true
+        })
+        this.$refs.imgDropzone.removeFile(file)
+      }
     },
     afterComplete (file) {
       // this.isLoading = true
@@ -414,7 +423,7 @@ export default {
       this.initializeDataForSubmission()
       if (this.form !== 0) {
         return new Promise((resolve, reject) => {
-          this.bugTracker__store(this.data)
+          this.bugTracker__store({ task: this.data, attachements: this.form.images })
             .then(({ data }) => {
               this.isLoading = false
               this.$bvToast.toast('Le problème a été signalé avec succèss', {
@@ -458,8 +467,8 @@ export default {
       <li>Email : ${this.form.email}</li>
       <li>Type Appareil : ${this.form.device}</li>
       </ul>
+      <strong>Message :</strong>
       <ul>
-       <li><strong>Message :</strong></li>
       <li>${this.form.description}.</li>
       </ul>
       </body>`
