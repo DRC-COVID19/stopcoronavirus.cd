@@ -83,7 +83,7 @@
         </b-table>
       </b-col>
     </b-row>
-    <b-modal v-model="isDeleteModalShown">
+    <b-modal v-model="isDeleteModalShown" centered hide-header>
       <template #modal-header>
         <div class="mx-auto">
           <h5 class="lead text-secondary">

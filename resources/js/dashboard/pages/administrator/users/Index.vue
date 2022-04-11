@@ -30,18 +30,24 @@
                 class="
                   w-100
                   d-flex
-                  bg-white
                   align-items-center
-                  justify-content-end
-                  py-2
+                  justify-content-between
+                  py-0
+                  px-0
+                  bg-white
                 "
               >
+                <h2 class="h2">
+                  {{
+                    Object.keys(formToPopulate).length !== 0
+                      ? "Modification de l'utilisateur"
+                      : "Nouveau Utilisateur"
+                  }}
+                </h2>
                 <b-button
-                  size="sm"
-                  class=""
+                  class="btn-circle btn-xl"
                   variant="outline-danger"
                   @click="hide"
-                  style="font-size: 1rem; font-weight: 900"
                   >X</b-button
                 >
               </div>
@@ -176,21 +182,28 @@ export default {
       this.userUpdated = true;
       this.formToPopulate = currentUser;
       this.errors = {};
+      console.log(this.userUpdated);
     },
     cancelUpdate() {
       this.errors = {};
       this.userUpdated = false;
+      this.updating = false;
+      this.formToPopulate = {};
     },
     reset() {
       this.errors = {};
+      this.updating = false;
+      this.userUpdated = false;
     },
-    openToogle(state) {
+    openToogle() {
       this.formToPopulate = {};
-      this.updating = state;
+      this.updating = false;
     },
     updateUser(currentUser) {
       this.isLoading = true;
       this.userUpdated = true;
+      this.updating = true;
+
       this.errors = {};
       this.isAgentHospital(currentUser);
       const form = {

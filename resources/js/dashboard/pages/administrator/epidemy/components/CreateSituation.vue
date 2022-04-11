@@ -1,7 +1,6 @@
 /* eslint-disable no-sequences */
 <template>
   <b-card class="border-0">
-    <h2 class="h2 mb-4">{{ title }}</h2>
     <b-form @submit.prevent="onSubmit" @reset.prevent="onReset" class="mt-2">
       <b-row class="d-flex justify-content-start">
         <b-col class="md-12 mb-2">

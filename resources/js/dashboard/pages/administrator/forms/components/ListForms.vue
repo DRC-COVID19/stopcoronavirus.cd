@@ -101,8 +101,12 @@
         </b-table>
       </b-col>
     </b-row>
-    <b-modal v-model="isDeleteModalShown">
-      Voulez-vous vraiment supprimer ce formulaire {{ currentForm.title }} ?
+    <b-modal v-model="isDeleteModalShown" centered hide-header>
+      <b-container class="text-center">
+        Voulez-vous vraiment supprimer ce formulaire
+        {{ currentForm.title }} ?</b-container
+      >
+
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter

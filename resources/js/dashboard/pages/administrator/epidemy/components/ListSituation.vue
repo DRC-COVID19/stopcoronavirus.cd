@@ -1,6 +1,6 @@
 <template>
-  <b-container>
-    <b-row class="my-3" align-h="start">
+  <b-container fluid>
+    <b-row class="mb-3" no-gutters>
       <b-col cols="12" md="12 d-flex flex-row-reverse justify-content-between">
         <div class="container-filter">
           <v-date-picker
@@ -122,9 +122,12 @@
         </b-table>
       </b-col>
     </b-row>
-    <b-modal v-model="isDeleteModalShown">
-      Voulez-vous supprimer la mise à jour du
-      {{ currentSituation.last_update }} ?
+    <b-modal v-model="isDeleteModalShown" centered hide-header>
+      <b-container class="text-center"
+        >Voulez-vous supprimer la mise à jour du
+        {{ currentSituation.last_update }} ?</b-container
+      >
+
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter

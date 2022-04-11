@@ -29,16 +29,23 @@
                 d-flex
                 bg-white
                 align-items-center
-                justify-content-end
-                py-2
+                justify-content-between
+                py-0
+                px-0
               "
             >
+              <h2 class="h2">
+                {{
+                  Object.keys(formToPopulate).length !== 0
+                    ? "Modification du Formulaire"
+                    : "Nouveau Formulaire"
+                }}
+              </h2>
               <b-button
                 size="sm"
-                class=""
+                class="btn-circle btn-xl"
                 variant="outline-danger"
                 @click="hide"
-                style="font-size: 1rem; font-weight: 900"
                 >X</b-button
               >
             </div>
@@ -59,6 +66,7 @@
           @onSearch="search"
           @onDeleteForm="deleteForm"
           @onUpdateForm="populateForm"
+           @openToogle="openToogle"
         />
         <b-col cols="12" class="d-flex justify-content-end">
           <b-pagination
@@ -135,6 +143,10 @@ export default {
         this.isLoading = false;
       }
     },
+    openToogle(state) {
+      this.formToPopulate = {};
+      this.updating = state;
+    },
     deleteForm(currentFormId) {
       axios
         .delete("/api/dashboard/forms/" + currentFormId)
@@ -164,6 +176,7 @@ export default {
     },
     cancelUpdate() {
       this.updating = false;
+      this.formToPopulate={}
     },
     updateForm(currentForm) {
       this.isLoading = true;

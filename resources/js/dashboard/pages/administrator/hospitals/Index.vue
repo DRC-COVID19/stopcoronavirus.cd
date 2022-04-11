@@ -33,16 +33,23 @@
                 d-flex
                 bg-white
                 align-items-center
-                justify-content-end
-                py-2
+                justify-content-between
+                py-0
+                px-0
               "
             >
+              <h2 class="h2">
+                {{
+                  Object.keys(formToPopulate).length !== 0
+                    ? "Modification du CTCO"
+                    : "Nouveau CTCO"
+                }}
+              </h2>
               <b-button
                 size="sm"
-                class=""
+                class="btn-circle btn-xl"
                 variant="outline-danger"
                 @click="hide"
-                style="font-size: 1rem; font-weight: 900"
                 >X</b-button
               >
             </div>
@@ -201,6 +208,7 @@ export default {
     cancelUpdate() {
       this.updating = false;
       this.isLoading = false;
+      this.formToPopulate = {};
     },
 
     updateHospital(currentHospital) {

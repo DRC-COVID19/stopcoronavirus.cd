@@ -12,10 +12,7 @@
           shadow
           backdrop-variant="transparent"
         >
-          <b-card class="mt-3 border-0">
-            <h3 class="h2 mb-4">
-              {{ isEditingMode ? "Modifier log" : "Nouveau log" }}
-            </h3>
+          <b-card class="border-0 p-0 p-0" no-gutters>
             <ValidationObserver v-slot="{ invalid }" novalidate ref="form">
               <b-form @submit.prevent="submit_form">
                 <b-form-group
@@ -24,7 +21,7 @@
                   "
                   :state="errors.publish_date ? false : null"
                   :disabled="isCreating"
-                  class="mt-4 mb-4"
+                  class="mb-4"
                 >
                   <label for="dataId" class="text-dash-color">
                     Date<span class="text-danger">*</span></label
@@ -124,23 +121,26 @@
               </b-form>
             </ValidationObserver>
           </b-card>
-          <template #header="{ hide }" fluid>
+          <template #header="{ hide }">
             <div
               class="
                 w-100
                 d-flex
                 bg-white
                 align-items-center
-                justify-content-end
-                py-2
+                justify-content-between
+                py-0
+                px-0
               "
             >
+              <h2 class="h2">
+                {{ isEditingMode ? "Modifier log" : "Nouveau log" }}
+              </h2>
               <b-button
                 size="sm"
-                class=""
+                class="btn-circle btn-xl"
                 variant="outline-danger"
                 @click="hide"
-                style="font-size: 1rem; font-weight: 900"
                 >X</b-button
               >
             </div>
@@ -150,7 +150,7 @@
       <b-col cols="12" md="12">
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
         <Header title="Change log" iconClass="fa fa-history" />
-        <b-row class="my-3" align-h="start">
+        <b-row class="mb-3" no-gutters>
           <b-col
             cols="12"
             md="12 d-flex flex-row-reverse justify-content-between"
@@ -206,47 +206,55 @@
             >
           </b-col>
         </b-row>
-        <b-skeleton-table
-          v-if="isLoading"
-          :rows="15"
-          :columns="5"
-          :table-props="{ bordered: false, striped: true, responsive: true }"
-        ></b-skeleton-table>
+        <b-row no-gutters>
+          <b-col cols="12">
+            <b-skeleton-table
+              v-if="isLoading"
+              :rows="15"
+              :columns="5"
+              :table-props="{
+                bordered: false,
+                striped: true,
+                responsive: true,
+              }"
+            ></b-skeleton-table>
 
-        <b-table
-          v-else
-          hover
-          striped
-          responsive
-          :fields="fields"
-          :items="changeLogsData"
-        >
-          <template #cell(number)="data">
-            {{ data.index + 1 }}
-          </template>
-          <template #cell(from)="data">
-            {{ moment(data.item.from).format("DD.MM.YYYY") }}
-          </template>
-          <template #cell(Titre)="data">
-            {{ data.title }}
-          </template>
-          <template #cell(action)="data">
-            <b-button
-              variant="outline-success mb-1"
-              class="btn-dash"
-              @click="toEdit(data.item)"
-              v-b-toggle.sidebar-right
-              >Editer</b-button
+            <b-table
+              v-else
+              hover
+              striped
+              responsive
+              :fields="fields"
+              :items="changeLogsData"
             >
-            <b-button
-              variant="outline-danger mb-1"
-              class="btn-dash"
-              @click="remove(data.item)"
-            >
-              Supprimer
-            </b-button>
-          </template>
-        </b-table>
+              <template #cell(number)="data">
+                {{ data.index + 1 }}
+              </template>
+              <template #cell(from)="data">
+                {{ moment(data.item.from).format("DD.MM.YYYY") }}
+              </template>
+              <template #cell(Titre)="data">
+                {{ data.title }}
+              </template>
+              <template #cell(action)="data">
+                <b-button
+                  variant="outline-success mb-1"
+                  class="btn-dash"
+                  @click="toEdit(data.item)"
+                  v-b-toggle.sidebar-right
+                  >Editer</b-button
+                >
+                <b-button
+                  variant="outline-danger mb-1"
+                  class="btn-dash"
+                  @click="remove(data.item)"
+                >
+                  Supprimer
+                </b-button>
+              </template>
+            </b-table>
+          </b-col>
+        </b-row>
         <b-row>
           <b-col class="d-flex justify-content-end">
             <b-pagination
@@ -260,13 +268,25 @@
         </b-row>
       </b-col>
     </b-row>
-    <b-modal id="confirmation-box">
-      Voulez-vous supprimer cette ligne ?
+    <b-modal id="confirmation-box" centered hide-header>
+      <b-container class="text-center"
+        >Voulez-vous supprimer cette ligne ?</b-container
+      >
       <template #modal-footer="{ hide }">
-        <b-button size="sm" variant="success" @click="onValidate">
+        <b-button
+          size="sm"
+          variant="outline-success mb-1"
+          class="btn-dash"
+          @click="onValidate"
+        >
           Accepter
         </b-button>
-        <b-button size="sm" variant="danger" @click="hide('confirmation-box')">
+        <b-button
+          size="sm"
+          variant="outline-danger mb-1"
+          class="btn-dash"
+          @click="hide('confirmation-box')"
+        >
           Annuler
         </b-button>
       </template>
@@ -537,6 +557,11 @@ export default {
   &:hover {
     color: red;
     border: 1px solid red;
+  }
+}
+@media (max-width: $max-width) {
+  .modal {
+    width: 100%;
   }
 }
 </style>

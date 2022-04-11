@@ -38,16 +38,23 @@
                 d-flex
                 bg-white
                 align-items-center
-                justify-content-end
-                py-2
+                justify-content-between
+                py-0
+                px-0
               "
             >
+              <h2 class="h2">
+                {{
+                  Object.keys(formToPopulate).length !== 0
+                    ? "Modification de la Situation"
+                    : "Nouvelle Situation"
+                }}
+              </h2>
               <b-button
                 size="sm"
-                class=""
+                class="btn-circle btn-xl"
                 variant="outline-danger"
                 @click="hide"
-                style="font-size: 1rem; font-weight: 900"
                 >X</b-button
               >
             </div>
@@ -260,6 +267,7 @@ export default {
     cancelUpdate() {
       this.errors = {};
       this.isUpdating = false;
+      this.formToPopulate = {};
     },
     switchPage(page) {
       this.getSituationList(page);
