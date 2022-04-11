@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <b-row class="flex-md-row-reverse" no-gutters>
+    <b-row class="flex-md-row-reverse h-100" no-gutters>
       <b-col cols="12" md="12" class="mt-3">
         <div>
           <b-sidebar
@@ -55,7 +55,7 @@
           </b-sidebar>
         </div>
       </b-col>
-      <b-col cols="12" md="12">
+      <b-col cols="12" md="12" class="h-100">
         <Header :title="title" :iconClass="iconClass" />
         <div class="hide-waiting" v-if="updating"></div>
         <ListUser

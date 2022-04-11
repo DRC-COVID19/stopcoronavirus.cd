@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <b-row class="flex-md-row-reverse" no-gutterse>
+    <b-row class="flex-md-row-reverse h-100" no-gutterse>
       <b-col cols="12" md="4" class="mt-3">
         <b-alert
           :show="showWarning"
@@ -61,7 +61,7 @@
           </template>
         </b-sidebar>
       </b-col>
-      <b-col cols="12" md="12">
+      <b-col cols="12" md="12" class="h-100">
         <div class="ml-2">
           <Header :title="title" :iconClass="iconClass" />
         </div>

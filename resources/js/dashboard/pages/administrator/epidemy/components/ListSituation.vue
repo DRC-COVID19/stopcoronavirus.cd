@@ -303,10 +303,11 @@ export default {
 }
 .today {
   &:hover {
-    color: #00c163;
-    border: 1px solid #00c163;
+    color: #0013c1;
+    border: 1px solid #0013c1;
   }
 }
+
 .reset {
   &:hover {
     color: red;

@@ -1,6 +1,6 @@
 <template>
   <b-container fluid>
-    <b-row class="flex-md-row-reverse">
+    <b-row class="flex-md-row-reverse h-100">
       <b-col cols="12" md="4">
         <b-sidebar
           id="sidebar-right"
@@ -147,7 +147,7 @@
           </template>
         </b-sidebar>
       </b-col>
-      <b-col cols="12" md="12">
+      <b-col cols="12" md="12" class="h-100">
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
         <Header title="Change log" iconClass="fa fa-history" />
         <b-row class="mb-3" no-gutters>
