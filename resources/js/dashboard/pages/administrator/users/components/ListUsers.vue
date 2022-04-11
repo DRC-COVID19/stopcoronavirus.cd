@@ -6,7 +6,7 @@
           cols="12"
           md="12 d-flex flex-row-reverse justify-content-between"
         >
-          <div class="container-filter">
+          <div class="container-filter" sm="12">
             <b-form-input
               v-model="filter"
               debounce="1500"
@@ -18,9 +18,10 @@
           <b-button
             @click="openToogle()"
             v-b-toggle.sidebar-right
-            class="btn btn-sm btn-dash-blue d-block"
-            >Nouveau</b-button
-          >
+            class="btn btn-sm btn-dash-blue d-block container-new-btn"
+            ><span class="default-label">Nouveau</span>
+            <i class="fas fa-plus responsive-label"></i>
+          </b-button>
         </b-col>
       </b-row>
       <b-row no-gutters>
@@ -245,10 +246,20 @@ export default {
 .modal-dialog {
   width: auto !important;
 }
+.responsive-label {
+  display: none;
+}
+.default-label {
+  display: block;
+}
+@media (max-width: $max-width) {
+  .default-label {
+    display: none;
+  }
+  .responsive-label {
+    display: block;
 
-@media (max-width: 768px) {
-  .modal {
-    display: auto !important;
+    font-size: 20px;
   }
 }
 </style>

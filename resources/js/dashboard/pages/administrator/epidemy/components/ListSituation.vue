@@ -48,9 +48,10 @@
         <b-button
           @click="openToogle()"
           v-b-toggle.sidebar-right
-          class="btn btn-sm btn-dash-blue d-block"
-          >Nouveau</b-button
-        >
+          class="btn btn-sm btn-dash-blue d-block container-new-btn"
+          ><span class="default-label">Nouveau</span>
+          <i class="fas fa-plus responsive-label"></i>
+        </b-button>
       </b-col>
     </b-row>
     <b-row>
@@ -310,6 +311,22 @@ export default {
   &:hover {
     color: red;
     border: 1px solid red;
+  }
+}
+.responsive-label {
+  display: none;
+}
+.default-label {
+  display: block;
+}
+@media (max-width: $max-width) {
+  .default-label {
+    display: none;
+  }
+  .responsive-label {
+    display: block;
+
+    font-size: 20px;
   }
 }
 </style>
