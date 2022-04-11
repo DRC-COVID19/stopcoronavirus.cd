@@ -379,7 +379,6 @@ export default {
           variant: 'success',
           solid: true
         })
-        alert(JSON.stringify(this.form.images))
       } catch (error) {
         this.$bvToast.toast('Une erreur est survenue!', {
           title: 'Chargement image',
@@ -422,7 +421,8 @@ export default {
               this.isLoading = false
               resolve(data)
               this.form = {}
-              if (this.form.images !== null) {
+              if (this.form.images !== undefined) {
+                alert(JSON.stringify(this.form.images))
                 this.bugTracker__addAttachementsToTask({ task: data, attachements: this.form.images })
                   .then(({ data }) => {
                     this.isLoading = false

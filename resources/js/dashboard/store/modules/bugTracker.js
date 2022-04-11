@@ -44,12 +44,9 @@ export default {
       { commit, dispatch },
       { task, attachements }
     ) {
-      const url =
-        'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.nameslook.com%2Fasna%2F&psig=AOvVaw0-UIrObDMBLIU2Rv-TEdgd&ust=1649521414568000&source=images&cd=vfe&ved=2ahUKEwivsv6g8IT3AhWEAWMBHZexClgQr4kDegUIARDrAQ'
-
-      formData.append('file', 'test.png')
-      formData.append('name', 'test')
-      formData.append('url', url)
+      formData.append('file', attachements.upload.filename)
+      formData.append('name', +new Date().getDate())
+      formData.append('url', attachements.dataURL)
       formData.append('resource_subtype', 'external')
       return new Promise((resolve, reject) => {
         axios({
