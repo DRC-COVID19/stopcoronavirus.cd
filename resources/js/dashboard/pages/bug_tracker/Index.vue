@@ -151,7 +151,6 @@
               </b-form-group>
              <div class="mb-4">
               <label for="dropzone" class="text-dash-color">Joindre un fichier ( Optionnel )</label>
-               <!-- <b-progress :value="progress" :max="100" show-progress animated></b-progress> -->
                <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
@@ -269,6 +268,11 @@ export default {
         device: null,
         occurence: null
       },
+      cloudinaryConfig: {
+        preset: 'uzcpaoas',
+        apiURL: 'https://api.cloudinary.com/v1_1/www-kinshasadigital-com/image/upload',
+        apiKey: '693455967377919'
+      },
       validatedMessage: {
         mail: null
       },
@@ -318,7 +322,6 @@ export default {
         tags: [],
         workspace: '688460071936074'
       },
-      formData: new FormData(),
       attachements: []
 
     }
@@ -376,22 +379,22 @@ export default {
       try {
         const formData = new FormData()
         formData.append('file', file)
-        formData.append('upload_preset', 'uzcpaoas')
-        formData.append('api_key', '693455967377919')
+        formData.append('upload_preset', this.cloudinaryConfig.preset)
+        formData.append('api_key', this.cloudinaryConfig.apiKey)
         formData.append('timestamp', (Date.now() / 1000) | 0)
 
         // cloudinary request API of upload images
-        return axios.post('https://api.cloudinary.com/v1_1/www-kinshasadigital-com/image/upload', formData, {
+        return axios.post(this.cloudinaryConfig.apiURL, formData, {
           headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
           const data = response.data
-          this.attachements.push(data)
           this.$bvToast.toast('L\'image a été téléchargé avec succèss!', {
             title: 'Chargement des images',
             appendToast: true,
             variant: 'success',
             solid: true
           })
+          this.attachements.push(data)
         })
       } catch (error) {
         this.$bvToast.toast('Une erreur est survenue!', {
@@ -416,7 +419,7 @@ export default {
                 this.bugTracker__addAttachementsToTask({ task: data, attachements: this.attachements })
                   .then(({ data }) => {
                     this.isLoading = false
-                    this.$bvToast.toast('Le problème a été signalé avec succèss', {
+                    this.$bvToast.toast('Le problème a été soumis avec succèss', {
                       title: 'Signaler un Problème',
                       appendToast: true,
                       variant: 'success',
@@ -433,13 +436,14 @@ export default {
                     })
                     reject(response)
                   })
+              } else {
+                this.$bvToast.toast('Le problème a été soumis avec succèss', {
+                  title: 'Signaler un Problème',
+                  appendToast: true,
+                  variant: 'success',
+                  solid: true
+                })
               }
-              this.$bvToast.toast('Le problème a été signalé avec succèss', {
-                title: 'Signaler un Problème',
-                appendToast: true,
-                variant: 'success',
-                solid: true
-              })
             })
             .catch((response) => {
               this.$bvToast.toast('Une erreur est survenue!', {
