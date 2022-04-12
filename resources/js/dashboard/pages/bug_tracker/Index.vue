@@ -509,6 +509,7 @@ $small:'min-width:576px';
 $medium:'min-width:768px';
 $large:'min-width:992px';
 $x-large:'min-width:1200px';
+
 #dropzone .dz-preview .dz-progress {
     display: none;
 }
@@ -529,6 +530,7 @@ h4 {
   font-size: .8rem;
   font-weight: 300;
 }
+
 @media screen and($small){
     h2{
       font-size: 1.6rem;
