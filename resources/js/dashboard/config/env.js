@@ -1,7 +1,11 @@
 export const GOOGLE_ANALYTICS_ID = 'UA-113285849-15'
 export const MAPBOX_TOKEN =
-    'pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw'
-export const MAPBOX_DEFAULT_STYLE = 'mapbox://styles/merki230/ckas344r30gmj1ips9gar4uxw'
+  'pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw'
+export const ASANA_API_URL = 'https://app.asana.com/api/1.0'
+export const ASANA_TOKEN =
+  '1/1201337579622176:27020d37454f7274f0e1cdbac25b2997'
+export const MAPBOX_DEFAULT_STYLE =
+  'mapbox://styles/merki230/ckas344r30gmj1ips9gar4uxw'
 export const ADMIN_DASHBOARD = 'admin-dashboard'
 export const AGENT_HOSPITAL = 'agent-hospital'
 export const ADMIN_HOSPITAL = 'admin-hospital'
@@ -116,8 +120,7 @@ export const FLUX_PREDEFINED_INPUT = [
   // },
   {
     id: 6,
-    name:
-        'Mobilité à la Gombe une semaine après le debut du confinement (24h)'
+    name: 'Mobilité à la Gombe une semaine après le debut du confinement (24h)'
   },
   {
     id: 5,
@@ -180,7 +183,7 @@ export const INDICATEUR_PREDEFINED_INPUT = [
   {
     id: 1,
     name:
-        'Mobilité vs Epidémiologie à la Gombe, une semaine après le debut du confinement'
+      'Mobilité vs Epidémiologie à la Gombe, une semaine après le debut du confinement'
   },
   {
     id: 2,
@@ -191,12 +194,12 @@ export const DRC_COVID_EVENT = [
   {
     id: 1,
     name:
-        'Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)',
+      'Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)',
     date: '2020-03-10',
     measures: [
       {
         item:
-            'Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)',
+          'Premier cas de COVID-19 confirmé (ressortissant congolais de retour de France)',
         zones: ['Kinshasa']
       }
     ],
@@ -221,18 +224,21 @@ et les ports)`,
   {
     id: 3,
     name:
-        'Vols en provenance de pays à risque suspendus (sauf certaines cargaisons)',
+      'Vols en provenance de pays à risque suspendus (sauf certaines cargaisons)',
     measures: [
       {
-        item: 'Vols en provenance de pays à risque suspendus (sauf certaines cargaisons);',
+        item:
+          'Vols en provenance de pays à risque suspendus (sauf certaines cargaisons);',
         zones: ['Kinshasa']
       },
       {
-        item: 'Bars, restaurants fermés; écoles fermées; les rassemblements de plus de 20 personnes interdits;',
+        item:
+          'Bars, restaurants fermés; écoles fermées; les rassemblements de plus de 20 personnes interdits;',
         zones: ['Kinshasa']
       },
       {
-        item: 'les rassemblements religieux et les événements sportifs suspendus jusqu\'à nouvel ordre; passagers limités dans les transports publics à Kinshasa;',
+        item:
+          "les rassemblements religieux et les événements sportifs suspendus jusqu'à nouvel ordre; passagers limités dans les transports publics à Kinshasa;",
         zones: ['Kinshasa']
       }
     ],
@@ -243,10 +249,11 @@ et les ports)`,
   {
     id: 4,
     name:
-        'Tous les voyages à destination ou en provenance de Kinshasa sont interdits (sauf le fret)',
+      'Tous les voyages à destination ou en provenance de Kinshasa sont interdits (sauf le fret)',
     measures: [
       {
-        item: 'Tous les voyages à destination ou en provenance de Kinshasa sont interdits (sauf le fret)',
+        item:
+          'Tous les voyages à destination ou en provenance de Kinshasa sont interdits (sauf le fret)',
         zones: ['Kinshasa']
       }
     ],
@@ -267,10 +274,12 @@ et les ports)`,
   },
   {
     id: 6,
-    name: 'Confinement de 48 heures (deux cas suspects sortant d\'un avion de Kinshasa)',
+    name:
+      "Confinement de 48 heures (deux cas suspects sortant d'un avion de Kinshasa)",
     measures: [
       {
-        item: 'Confinement de 48 heures (deux cas suspects sortant d\'un avion de Kinshasa)',
+        item:
+          "Confinement de 48 heures (deux cas suspects sortant d'un avion de Kinshasa)",
         zones: ['Lubumbashi']
       }
     ],
@@ -279,10 +288,10 @@ et les ports)`,
   },
   {
     id: 7,
-    name: 'État d\'urgence déclaré par le gouvernement congolais',
+    name: "État d'urgence déclaré par le gouvernement congolais",
     measures: [
       {
-        item: 'État d\'urgence déclaré par le gouvernement congolais',
+        item: "État d'urgence déclaré par le gouvernement congolais",
         zones: ['Lubumbashi']
       }
     ],
@@ -291,10 +300,12 @@ et les ports)`,
   },
   {
     id: 8,
-    name: 'Les voyages intérieurs entre Kinshasa et le reste du pays sont suspendus; toutes les frontières sont fermées sauf pour le commerce',
+    name:
+      'Les voyages intérieurs entre Kinshasa et le reste du pays sont suspendus; toutes les frontières sont fermées sauf pour le commerce',
     measures: [
       {
-        item: 'Les voyages intérieurs entre Kinshasa et le reste du pays sont suspendus; toutes les frontières sont fermées sauf pour le commerce',
+        item:
+          'Les voyages intérieurs entre Kinshasa et le reste du pays sont suspendus; toutes les frontières sont fermées sauf pour le commerce',
         zones: ['ALL']
       }
     ],
@@ -303,10 +314,12 @@ et les ports)`,
   },
   {
     id: 9,
-    name: 'Interdiction de tout rassemblement de personnes dans les espaces publics',
+    name:
+      'Interdiction de tout rassemblement de personnes dans les espaces publics',
     measures: [
       {
-        item: 'Interdiction de tout rassemblement de personnes dans les espaces publics',
+        item:
+          'Interdiction de tout rassemblement de personnes dans les espaces publics',
         zones: ['ALL']
       }
     ],
@@ -315,22 +328,26 @@ et les ports)`,
   },
   {
     id: 10,
-    name: 'Suspension de l\'impôt sur le revenu pour tous les fonctionnaires et autres employés de l\'État pendant 3 mois',
+    name:
+      "Suspension de l'impôt sur le revenu pour tous les fonctionnaires et autres employés de l'État pendant 3 mois",
     measures: [
       {
-        item: 'Suspension de l\'impôt sur le revenu pour tous les fonctionnaires et autres employés de l\'État pendant 3 mois',
+        item:
+          "Suspension de l'impôt sur le revenu pour tous les fonctionnaires et autres employés de l'État pendant 3 mois",
         zones: ['ALL']
       },
       {
-        item: 'Premier cas de COVID-19 dans la province d\'Ituri',
+        item: "Premier cas de COVID-19 dans la province d'Ituri",
         zones: ['Ituri']
       },
       {
-        item: 'Confinement de 3 semaines annoncé par le gouverneur de Kinshasa du 28 mars au 27 avril',
+        item:
+          'Confinement de 3 semaines annoncé par le gouverneur de Kinshasa du 28 mars au 27 avril',
         zones: ['Kinshasa']
       },
       {
-        item: 'Le confinement à Kinshasa reporté dans un contexte d\'insécurité et de spéculation sur les prix des produits de base',
+        item:
+          "Le confinement à Kinshasa reporté dans un contexte d'insécurité et de spéculation sur les prix des produits de base",
         zones: ['Kinshasa']
       }
     ],
@@ -405,10 +422,12 @@ et les ports)`,
   },
   {
     id: 16,
-    name: 'Prolongation des mesures de confinement dans la province du Nord-Kivu (jusqu\'au 30/4)',
+    name:
+      "Prolongation des mesures de confinement dans la province du Nord-Kivu (jusqu'au 30/4)",
     measures: [
       {
-        item: 'Prolongation des mesures de confinement dans la province du Nord-Kivu (jusqu\'au 30/4)',
+        item:
+          "Prolongation des mesures de confinement dans la province du Nord-Kivu (jusqu'au 30/4)",
         zones: ['Nord-kivu']
       }
     ],
@@ -416,18 +435,22 @@ et les ports)`,
   },
   {
     id: 17,
-    name: 'Masques faciaux obligatoires dans les espaces publics à Kinshasa  (5000 CF si les masques ne sont pas portés)',
+    name:
+      'Masques faciaux obligatoires dans les espaces publics à Kinshasa  (5000 CF si les masques ne sont pas portés)',
     measures: [
       {
-        item: 'Masques faciaux obligatoires dans les espaces publics à Kinshasa  (5000 CF si les masques ne sont pas portés)',
+        item:
+          'Masques faciaux obligatoires dans les espaces publics à Kinshasa  (5000 CF si les masques ne sont pas portés)',
         zones: ['Kinshasa']
       },
       {
-        item: 'Auto-quarantaine pour les personnes à haut risque (plus de 60 ans ou avec des conditions préexistantes) obligatoire au Sud-Kivu.',
+        item:
+          'Auto-quarantaine pour les personnes à haut risque (plus de 60 ans ou avec des conditions préexistantes) obligatoire au Sud-Kivu.',
         zones: ['Sud-kivu']
       },
       {
-        item: 'Les déplacements internes entre les villes de Goma, Beni et Butembo ont continué d\'être suspendus',
+        item:
+          "Les déplacements internes entre les villes de Goma, Beni et Butembo ont continué d'être suspendus",
         zones: ['Nord-kivu']
       },
       {
@@ -439,10 +462,12 @@ et les ports)`,
   },
   {
     id: 17,
-    name: 'État d\'urgence prorogé par le gouvernement congolais - 20 jours (21/4 - 10/5)',
+    name:
+      "État d'urgence prorogé par le gouvernement congolais - 20 jours (21/4 - 10/5)",
     measures: [
       {
-        item: 'État d\'urgence prorogé par le gouvernement congolais - 20 jours (21/4 - 10/5)',
+        item:
+          "État d'urgence prorogé par le gouvernement congolais - 20 jours (21/4 - 10/5)",
         zones: ['ALL']
       }
     ],
@@ -463,10 +488,12 @@ magasins vendant de la nourriture)`,
   },
   {
     id: 19,
-    name: 'L\'état d\'urgence sanitaire a été prolongé par le Parlement pour deux semaines.',
+    name:
+      "L'état d'urgence sanitaire a été prolongé par le Parlement pour deux semaines.",
     measures: [
       {
-        item: 'L\'état d\'urgence sanitaire a été prolongé par le Parlement pour deux semaines.',
+        item:
+          "L'état d'urgence sanitaire a été prolongé par le Parlement pour deux semaines.",
         zones: ['ALL']
       }
     ],
@@ -485,10 +512,12 @@ magasins vendant de la nourriture)`,
   },
   {
     id: 21,
-    name: 'Lubumbashi et Kasumbalesa sous un confinement de 24 heures pour la recherche des contacts',
+    name:
+      'Lubumbashi et Kasumbalesa sous un confinement de 24 heures pour la recherche des contacts',
     measures: [
       {
-        item: 'Lubumbashi et Kasumbalesa sous un confinement de 24 heures pour la recherche des contacts',
+        item:
+          'Lubumbashi et Kasumbalesa sous un confinement de 24 heures pour la recherche des contacts',
         zones: ['Lubumbashi', 'Kasumbalesa']
       }
     ],
@@ -523,10 +552,12 @@ les non-conformes`,
   },
   {
     id: 24,
-    name: 'Réouverture partielle de la frontière entre la RDC et la Zambie aux piétons suite aux affrontements entre civils et forces de sécurité',
+    name:
+      'Réouverture partielle de la frontière entre la RDC et la Zambie aux piétons suite aux affrontements entre civils et forces de sécurité',
     measures: [
       {
-        item: 'Réouverture partielle de la frontière entre la RDC et la Zambie aux piétons suite aux affrontements entre civils et forces de sécurité',
+        item:
+          'Réouverture partielle de la frontière entre la RDC et la Zambie aux piétons suite aux affrontements entre civils et forces de sécurité',
         zones: ['Kasumbalesa']
       }
     ],
@@ -535,10 +566,11 @@ les non-conformes`,
   {
     id: 25,
     name:
-        'Masques faciaux obligatoires dans les espaces publics de Matadi (province du Kongo Central)',
+      'Masques faciaux obligatoires dans les espaces publics de Matadi (province du Kongo Central)',
     measures: [
       {
-        item: 'Masques faciaux obligatoires dans les espaces publics de Matadi (province du Kongo Central)',
+        item:
+          'Masques faciaux obligatoires dans les espaces publics de Matadi (province du Kongo Central)',
         zones: ['Matadi', 'Kongo-central']
       }
     ],
@@ -552,12 +584,14 @@ des Finances justifie cette décision en accusant les fermetures de mines et de 
 de revenus pour Kinshasa`,
     measures: [
       {
-        item: 'L\'impôt sur le revenu (suspendu le 27 mars pendant 3 mois pour les fonctionnaires / employés de l\'État) a été rétabli pour combler le déficit de 11 millions de dollars américains',
+        item:
+          "L'impôt sur le revenu (suspendu le 27 mars pendant 3 mois pour les fonctionnaires / employés de l'État) a été rétabli pour combler le déficit de 11 millions de dollars américains",
         zones: ['Kinshasa']
       },
       {
         isSuite: true,
-        item: '(le ministre des Finances justifie cette décision en accusant les fermetures de mines et de frontières de perte de revenus pour Kinshasa',
+        item:
+          '(le ministre des Finances justifie cette décision en accusant les fermetures de mines et de frontières de perte de revenus pour Kinshasa',
         zones: ['Kinshasa']
       }
     ],
@@ -578,10 +612,12 @@ de revenus pour Kinshasa`,
   },
   {
     id: 28,
-    name: 'Activités de la mairie de Goma suspendues jusqu\'à nouvel ordre (membre testé positif au COVID)',
+    name:
+      "Activités de la mairie de Goma suspendues jusqu'à nouvel ordre (membre testé positif au COVID)",
     measures: [
       {
-        item: 'Activités de la mairie de Goma suspendues jusqu\'à nouvel ordre (membre testé positif au COVID)',
+        item:
+          "Activités de la mairie de Goma suspendues jusqu'à nouvel ordre (membre testé positif au COVID)",
         zones: ['Goma']
       }
     ],
@@ -596,17 +632,20 @@ de revenus pour Kinshasa`,
         trois agents de la riposte qui étaient détenus dans un ménage du district de Maviokele)`,
     measures: [
       {
-        item: 'Des rapports d\'attaques contre les équipes de riposte au COVID se sont multipli',
+        item:
+          "Des rapports d'attaques contre les équipes de riposte au COVID se sont multipli",
         zones: ['Kinshasa']
       },
       {
         isSuite: true,
-        item: '- A entraîné une interruption des activités de surveillance et de recherche des contacts',
+        item:
+          '- A entraîné une interruption des activités de surveillance et de recherche des contacts',
         zones: ['Kinshasa']
       },
       {
         isSuite: true,
-        item: '- Plus récent enregistré dans la zone de santé de Kimbanseke (concernant des violences contre trois agents de la riposte qui étaient détenus dans un ménage du district de Maviokele)',
+        item:
+          '- Plus récent enregistré dans la zone de santé de Kimbanseke (concernant des violences contre trois agents de la riposte qui étaient détenus dans un ménage du district de Maviokele)',
         zones: ['Kinshasa']
       }
     ],
@@ -625,10 +664,12 @@ de revenus pour Kinshasa`,
   },
   {
     id: 31,
-    name: 'Le Parlement vote pour prolonger la période d\'urgence sanitaire de 15 jours',
+    name:
+      "Le Parlement vote pour prolonger la période d'urgence sanitaire de 15 jours",
     measures: [
       {
-        item: 'Le Parlement vote pour prolonger la période d\'urgence sanitaire de 15 jours',
+        item:
+          "Le Parlement vote pour prolonger la période d'urgence sanitaire de 15 jours",
         zones: ['ALL']
       }
     ],
@@ -647,10 +688,12 @@ de revenus pour Kinshasa`,
   },
   {
     id: 33,
-    name: 'Confinement de la commune d\'Ibanda, Bukavu et couvre-feu à l\'échelle de la ville (20h-17h)',
+    name:
+      "Confinement de la commune d'Ibanda, Bukavu et couvre-feu à l'échelle de la ville (20h-17h)",
     measures: [
       {
-        item: 'Confinement de la commune d\'Ibanda, Bukavu et couvre-feu à l\'échelle de la ville (20h-17h)',
+        item:
+          "Confinement de la commune d'Ibanda, Bukavu et couvre-feu à l'échelle de la ville (20h-17h)",
         zones: ['Bukavu']
       }
     ],
@@ -674,10 +717,10 @@ de revenus pour Kinshasa`,
   },
   {
     id: 35,
-    name: 'État d\'urgence prolongé de 15 jours (à partir du 06/08/20)',
+    name: "État d'urgence prolongé de 15 jours (à partir du 06/08/20)",
     measures: [
       {
-        item: 'État d\'urgence prolongé de 15 jours (à partir du 06/08/20)',
+        item: "État d'urgence prolongé de 15 jours (à partir du 06/08/20)",
         zones: ['ALL']
       }
     ],
@@ -689,12 +732,14 @@ de revenus pour Kinshasa`,
         (les commerçants faisaient du commerce malgré la fermeture obligatoire)`,
     measures: [
       {
-        item: '3 morts dans des manifestations contre les restrictions COVID sur le marché central de Kinshasa',
+        item:
+          '3 morts dans des manifestations contre les restrictions COVID sur le marché central de Kinshasa',
         zones: ['Kinshasa']
       },
       {
         isSuite: true,
-        item: '(les commerçants faisaient du commerce malgré la fermeture obligatoire)',
+        item:
+          '(les commerçants faisaient du commerce malgré la fermeture obligatoire)',
         zones: ['Kinshasa']
       }
     ],
@@ -702,18 +747,20 @@ de revenus pour Kinshasa`,
   },
   {
     id: 37,
-    name: 'Confinement localisé dans la province du Haut-Katanga (y compris Lubumbashi) pour la campagne de tests de masse COVID (20e et 21e)',
+    name:
+      'Confinement localisé dans la province du Haut-Katanga (y compris Lubumbashi) pour la campagne de tests de masse COVID (20e et 21e)',
     measures: [
       {
-        item: 'Confinement localisé dans la province du Haut-Katanga (y compris Lubumbashi) pour la campagne de tests de masse COVID (20e et 21e)',
+        item:
+          'Confinement localisé dans la province du Haut-Katanga (y compris Lubumbashi) pour la campagne de tests de masse COVID (20e et 21e)',
         zones: ['Haut-katanga']
       },
       {
-        item: 'État d\'urgence sanitaire',
+        item: "État d'urgence sanitaire",
         zones: ['ALL']
       },
       {
-        item: 'prolongé jusqu\'au 5 juillet',
+        item: "prolongé jusqu'au 5 juillet",
         zones: ['ALL']
       }
     ],
@@ -721,10 +768,12 @@ de revenus pour Kinshasa`,
   },
   {
     id: 38,
-    name: 'COVID-19 déclaré dans la province du Sud-Ubangi (14e province en RDC à confirmer les cas)',
+    name:
+      'COVID-19 déclaré dans la province du Sud-Ubangi (14e province en RDC à confirmer les cas)',
     measures: [
       {
-        item: 'COVID-19 déclaré dans la province du Sud-Ubangi (14e province en RDC à confirmer les cas)',
+        item:
+          'COVID-19 déclaré dans la province du Sud-Ubangi (14e province en RDC à confirmer les cas)',
         zones: ['Sud-Ubangi']
       }
     ],
@@ -732,10 +781,12 @@ de revenus pour Kinshasa`,
   },
   {
     id: 39,
-    name: '(À l\'exception du marché central) Ouverture de clubs, bars, écoles, universités / restrictions levées',
+    name:
+      "(À l'exception du marché central) Ouverture de clubs, bars, écoles, universités / restrictions levées",
     measures: [
       {
-        item: '(À l\'exception du marché central) Ouverture de clubs, bars, écoles, universités / restrictions levées',
+        item:
+          "(À l'exception du marché central) Ouverture de clubs, bars, écoles, universités / restrictions levées",
         zones: ['Kinshasa', 'Gombe']
       }
     ],
@@ -743,10 +794,10 @@ de revenus pour Kinshasa`,
   },
   {
     id: 40,
-    name: '3e cas confirmé dans la province d\'Ituri (ville de Mahagi)',
+    name: "3e cas confirmé dans la province d'Ituri (ville de Mahagi)",
     measures: [
       {
-        item: '3e cas confirmé dans la province d\'Ituri (ville de Mahagi)',
+        item: "3e cas confirmé dans la province d'Ituri (ville de Mahagi)",
         zones: ['Ituri', 'Mahagi']
       }
     ],
@@ -754,10 +805,12 @@ de revenus pour Kinshasa`,
   },
   {
     id: 41,
-    name: 'État d\'urgence du COVID-19 levé (ouverture des banques, des magasins, des restaurants et des bars)',
+    name:
+      "État d'urgence du COVID-19 levé (ouverture des banques, des magasins, des restaurants et des bars)",
     measures: [
       {
-        item: 'État d\'urgence du COVID-19 levé (ouverture des banques, des magasins, des restaurants et des bars)',
+        item:
+          "État d'urgence du COVID-19 levé (ouverture des banques, des magasins, des restaurants et des bars)",
         zones: ['ALL']
       }
     ],
@@ -765,10 +818,12 @@ de revenus pour Kinshasa`,
   },
   {
     id: 42,
-    name: 'Les écoles, les universités, les institutions académiques peuvent ouvrir',
+    name:
+      'Les écoles, les universités, les institutions académiques peuvent ouvrir',
     measures: [
       {
-        item: 'Les écoles, les universités, les institutions académiques peuvent ouvrir',
+        item:
+          'Les écoles, les universités, les institutions académiques peuvent ouvrir',
         zones: ['ALL']
       }
     ],
@@ -776,10 +831,12 @@ de revenus pour Kinshasa`,
   },
   {
     id: 43,
-    name: 'Lieux de culte, stades, aéroports, frontières internationales ouvertes',
+    name:
+      'Lieux de culte, stades, aéroports, frontières internationales ouvertes',
     measures: [
       {
-        item: 'Lieux de culte, stades, aéroports, frontières internationales ouvertes',
+        item:
+          'Lieux de culte, stades, aéroports, frontières internationales ouvertes',
         zones: ['ALL']
       }
     ],
@@ -787,10 +844,10 @@ de revenus pour Kinshasa`,
   },
   {
     id: 44,
-    name: 'Couvre feu déclaré sur toutes l\'étendu du territoire national',
+    name: "Couvre feu déclaré sur toutes l'étendu du territoire national",
     measures: [
       {
-        item: 'Couvre feu déclaré sur toutes l\'étendu du territoire national',
+        item: "Couvre feu déclaré sur toutes l'étendu du territoire national",
         zones: ['ALL']
       }
     ],
