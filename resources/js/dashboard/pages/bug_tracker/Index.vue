@@ -159,7 +159,6 @@
                 :useCustomSlot="true"
                 :options="dropzoneOptions"
                 :destroyDropzone="true"
-                @vdropzone-complete="afterComplete"
                 @vdropzone-success="uploadSuccess"
                 @vdropzone-upload-progress="uploadProgress"
               >
@@ -234,7 +233,7 @@ import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { mapState, mapActions } from 'vuex'
 import { ValidationObserver } from 'vee-validate'
-
+import axios from 'axios'
 export default {
   components: {
     Loading,
@@ -259,6 +258,7 @@ export default {
         occurence: null,
         page: null
       },
+      uploadUrl: 'https://httpbin.org/post',
       toToCanceled: false,
       stateForm: {
         name: null,
@@ -274,7 +274,7 @@ export default {
       },
       progress: null,
       devices: ['Ordinateur', 'Téléphone'],
-      occurences: [' Première fois', ' Regulièrement', ' Aucun'],
+      occurences: ['1 fois', '2 fois ou Plus de 2 fois'],
       adminPages: [' Admininstration', ' Dashboard', ' CTCOS'],
       agentPages: [' CTCOS', 'Autres'],
       max: now,
@@ -285,11 +285,11 @@ export default {
       dropzoneOptions: {
         url: 'https://httpbin.org/post',
         thumbnailWidth: 150,
-        maxFilesize: 0.5,
+        maxFilesize: 5,
         maxFiles: 3,
         addRemoveLinks: true,
         acceptedFiles: '.jpg, .png, .gif',
-        parallelUploads: 3,
+        parallelUploads: 2,
         dictCancelUpload: 'Annuler',
         dictRemoveFile: 'Supprimer',
         dictRemoveFileConfirmation: 'Etes-vous sûr de supprimer cette image ?',
@@ -317,7 +317,9 @@ export default {
         followers: [],
         tags: [],
         workspace: '688460071936074'
-      }
+      },
+      formData: new FormData(),
+      attachements: []
 
     }
   },
@@ -372,12 +374,24 @@ export default {
     },
     uploadSuccess (file, response) {
       try {
-        this.form.images = file
-        this.$bvToast.toast('L\'image a été téléchargé avec succèss!', {
-          title: 'Chargement des images',
-          appendToast: true,
-          variant: 'success',
-          solid: true
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('upload_preset', 'uzcpaoas')
+        formData.append('api_key', '693455967377919')
+        formData.append('timestamp', (Date.now() / 1000) | 0)
+
+        // cloudinary request API of upload images
+        return axios.post('https://api.cloudinary.com/v1_1/www-kinshasadigital-com/image/upload', formData, {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+          const data = response.data
+          this.attachements.push(data)
+          this.$bvToast.toast('L\'image a été téléchargé avec succèss!', {
+            title: 'Chargement des images',
+            appendToast: true,
+            variant: 'success',
+            solid: true
+          })
         })
       } catch (error) {
         this.$bvToast.toast('Une erreur est survenue!', {
@@ -388,30 +402,6 @@ export default {
         })
       }
     },
-    afterComplete (file) {
-      // this.isLoading = true
-      // try {
-      //   const imageName = new Date().getDate()
-      //   const metaData = {
-      //     contentType: 'image/png'
-      //   }
-      //   this.form.images.push({ src: file })
-      //   alert(JSON.stringify(file))
-      //   this.$bvToast.toast('L\'image a été téléchargé avec succèss!', {
-      //     title: 'Erreur du chargement des images',
-      //     appendToast: true,
-      //     variant: 'success',
-      //     solid: true
-      //   })
-      // } catch (error) {
-      //   this.$bvToast.toast('Une erreur est survenue!', {
-      //     title: 'Erreur du chargement des images',
-      //     appendToast: true,
-      //     variant: 'danger',
-      //     solid: true
-      //   })
-      // }
-    },
     onSubmit () {
       this.initializeDataForSubmission()
       if (this.form !== 0) {
@@ -421,9 +411,9 @@ export default {
               this.isLoading = false
               resolve(data)
               this.form = {}
-              if (this.form.images !== undefined) {
-                alert(JSON.stringify(this.form.images))
-                this.bugTracker__addAttachementsToTask({ task: data, attachements: this.form.images })
+
+              if (this.attachements.length !== undefined && this.attachements.length !== 0) {
+                this.bugTracker__addAttachementsToTask({ task: data, attachements: this.attachements })
                   .then(({ data }) => {
                     this.isLoading = false
                     this.$bvToast.toast('Le problème a été signalé avec succèss', {
@@ -470,7 +460,7 @@ export default {
       this.isLoading = true
       this.message = ' Votre requête est en cours de soumission...'
       this.errors = {}
-      this.data.name = `[Bug: ${this.form.page}]: <br> ${this.form.description.slice(0, 100)} ...`
+      this.data.name = `[Bug: ${this.form.page}]: \t\n ${this.form.description.slice(0, 100)} ...`
       this.data.html_notes = this.renderHTMLContents()
       this.data.tags = this.getTaskPriority(this.form.occurence)
     },
@@ -504,6 +494,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+#dropzone .dz-preview .dz-progress {
+    display: none;
+}
 @media screen and(max-width: 768px){
     h2{
       font-size: 1.6rem !important;

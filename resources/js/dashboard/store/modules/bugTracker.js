@@ -22,7 +22,6 @@ export default {
   },
   actions: {
     bugTracker__addTask ({ commit, dispatch }, { task }) {
-      commit('SET_TASK', false)
       return new Promise((resolve, reject) => {
         axios
           .post(
@@ -44,9 +43,9 @@ export default {
       { commit, dispatch },
       { task, attachements }
     ) {
-      formData.append('file', attachements.upload.filename)
+      formData.append('file', attachements[0].original_filename)
       formData.append('name', +new Date().getDate())
-      formData.append('url', attachements.dataURL)
+      formData.append('url', attachements[0].secure_url)
       formData.append('resource_subtype', 'external')
       return new Promise((resolve, reject) => {
         axios({
@@ -57,10 +56,8 @@ export default {
         })
           .then(({ data }) => {
             resolve(data)
-            alert('esimbi')
           })
           .catch(response => {
-            alert('esimbi te')
             reject(response)
           })
       })
