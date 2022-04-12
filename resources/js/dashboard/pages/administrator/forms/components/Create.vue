@@ -26,7 +26,7 @@
           id="input-1"
           :placeholder="`Entrer le titre du formulaire`"
           rules="required"
-          name="titre du formulaire"
+          name="Titre du formulaire"
           mode="aggressive"
         />
         <b-form-text id="title-help-block" class="mb-4"
@@ -41,7 +41,7 @@
           rules="required"
           id="form.form_recurrence_id"
           labelText="Recurrence du formulaire "
-          name="recurrence du formulaire"
+          name="Recurrence du formulaire"
           mode="aggressive"
         />
         <b-form-group

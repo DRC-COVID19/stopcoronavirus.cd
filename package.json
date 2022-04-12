@@ -33,6 +33,8 @@
         "@growthbunker/vuetimeline": "^0.1.17",
         "@mapbox/expression-jamsession": "^0.4.2",
         "@pipedream/platform": "github:pipedreamhq/platform",
+        "@sentry/tracing": "^6.19.3",
+        "@sentry/vue": "^6.19.3",
         "@turf/buffer": "^5.1.5",
         "@turf/collect": "^6.0.1",
         "@turf/turf": "^5.1.6",

@@ -20,7 +20,7 @@
         :placeholder="`Entrer le nom du CTCO`"
         id="input-1"
         rules="required"
-        name="nom ctco"
+        name="Nom ctco"
         mode="aggressive"
         :state="state.name"
       />
@@ -38,7 +38,7 @@
         :placeholder="`Entrer la Latitude`"
         id="input-2"
         rules="required"
-        name="latitude"
+        name="Latitude"
         mode="aggressive"
         :state="state.latitude"
       />
@@ -56,7 +56,7 @@
         :placeholder="`Entrer la longitude`"
         id="input-3"
         rules="required"
-        name="longitude"
+        name="Longitude"
         mode="aggressive"
         :state="state.longitude"
       />
@@ -72,7 +72,7 @@
             :reduce="(item) => item.id"
             id="form.township_id"
             labelText="Communes"
-             name="communes"
+             name="Communes"
             mode="aggressive"
             :isObligated="true"
             rules="required"
@@ -84,7 +84,7 @@
             :reduce="(item) => item.id"
             id="form.agent_id"
             labelText="Agent Attitré"
-             name="agent attitré"
+             name="Agent attitré"
             mode="aggressive"
             />
       <b-row class="px-3 pt-4 d-flex justify-content-start">

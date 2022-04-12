@@ -3,7 +3,7 @@
     <b-row class="flex-md-row-reverse">
       <b-col cols="12" md="4">
         <b-card class="mt-3">
-          <h3 class="h2 mb-4">Nouveau log</h3>
+          <h3 class="h2 mb-4">Nouveau log </h3>
           <ValidationObserver v-slot="{ invalid }" novalidate ref="form">
             <b-form @submit.prevent="submit_form">
               <b-form-group
@@ -56,7 +56,7 @@
                   v-model="form.title"
                   type="text"
                   rules="required"
-                  name="titre"
+                  name="Titre"
                   label="Titre"
                   :state="errors.title ? false : null"
                   id="titleId"
@@ -72,7 +72,7 @@
                   v-model="form.description"
                   type="text"
                   rules="required"
-                  name="description"
+                  name="Description"
                   labelText="Description"
                   :state="errors.description ? false : null"
                   id="descriptionId"
@@ -229,210 +229,213 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
-import Header from "../components/Header";
-import FormFieldInput from "../../../components/forms/FormFieldInput";
-import FormFieldTextArea from "../../../components/forms/FormFieldTextArea";
-import { ValidationObserver } from "vee-validate";
+import { mapActions, mapState } from 'vuex'
+import Header from '../components/Header'
+import FormFieldInput from '../../../components/forms/FormFieldInput'
+import FormFieldTextArea from '../../../components/forms/FormFieldTextArea'
+import { ValidationObserver } from 'vee-validate'
 
 export default {
   components: {
     Header,
     FormFieldInput,
     FormFieldTextArea,
-    ValidationObserver,
+    ValidationObserver
   },
-  data() {
+  data () {
     return {
       filter: null,
       fields: [
         {
-          key: "from",
-          label: "Date",
+          key: 'from',
+          label: 'Date'
         },
         {
-          key: "title",
-          label: "Titre",
+          key: 'title',
+          label: 'Titre'
         },
         {
-          key: "action",
-          label: "Actions",
-        },
+          key: 'action',
+          label: 'Actions'
+        }
       ],
       form: {},
       errors: {},
       isEditingMode: false,
       itemToRemove: {},
-      attrs: [],
-    };
+      attrs: []
+    }
   },
 
-  mounted() {
-    this.getListChangedLogs();
+  mounted () {
+    this.getListChangedLogs()
   },
 
   watch: {
-    filter() {
-      this.search();
-    },
+    filter () {
+      this.search()
+    }
   },
 
   computed: {
     ...mapState({
       listChangeLogs: (state) => state.changeLog.listChangeLogs,
       isCreating: (state) => state.changeLog.isCreating,
-      isLoading: (state) => state.changeLog.isLoading,
+      isLoading: (state) => state.changeLog.isLoading
     }),
-    changeLogsData() {
-      return this.listChangeLogs.data;
+    changeLogsData () {
+      return this.listChangeLogs.data
     },
 
-    changeLogsMeta() {
+    changeLogsMeta () {
       return this.listChangeLogs.meta
         ? this.listChangeLogs.meta
         : {
             current_page: 1,
             from: 1,
             last_page: 1,
-            path: "#",
+            path: '#',
             per_page: 1,
             to: 1,
-            total: 1,
-          };
-    },
+            total: 1
+          }
+    }
   },
 
   methods: {
-    ...mapActions(["createChangeLog"]),
+    ...mapActions(['createChangeLog']),
     ...mapActions([
-      "getListChangedLogs",
-      "updateChangeLog",
-      "removeChangeLog",
-      "searchChangeLog",
+      'getListChangedLogs',
+      'updateChangeLog',
+      'removeChangeLog',
+      'searchChangeLog'
     ]),
-    submit_form() {
+    submit_form () {
       if (this.isEditingMode) {
-        this.submitUpdatingChangeLog();
+        this.submitUpdatingChangeLog()
       } else {
-        this.submitcreateChangeLog();
+        this.submitcreateChangeLog()
       }
-      this.resetForm();
+      this.resetForm()
     },
-    submitcreateChangeLog() {
-      this.errors = {};
+    throwError () {
+      throw new Error('Sentry Error')
+    },
+    submitcreateChangeLog () {
+      this.errors = {}
       this.createChangeLog(this.form)
         .then(() => {
-          this.form = {};
-          this.isEditingMode = false;
+          this.form = {}
+          this.isEditingMode = false
           this.$notify({
-            group: "alert",
-            title: "Nouveau log",
-            text: "Ajouter avec succès",
-            type: "success",
-          });
+            group: 'alert',
+            title: 'Nouveau log',
+            text: 'Ajouter avec succès',
+            type: 'success'
+          })
         })
         .catch(({ response }) => {
           this.$notify({
-            group: "alert",
-            title: "Nouveau log",
-            text: "Une erreur est surveni",
-            type: "error",
-          });
+            group: 'alert',
+            title: 'Nouveau log',
+            text: 'Une erreur est surveni',
+            type: 'error'
+          })
           if (response.status == 422) {
-            this.errors = response.data.errors;
+            this.errors = response.data.errors
           }
-        });
+        })
     },
-    submitUpdatingChangeLog() {
-      this.errors = {};
+    submitUpdatingChangeLog () {
+      this.errors = {}
       this.updateChangeLog(this.form)
         .then(() => {
-          this.form = {};
-          this.isEditingMode = false;
+          this.form = {}
+          this.isEditingMode = false
           this.$notify({
-            group: "alert",
-            title: "Modifer log",
-            text: "Modifier avec succès",
-            type: "success",
-          });
+            group: 'alert',
+            title: 'Modifer log',
+            text: 'Modifier avec succès',
+            type: 'success'
+          })
         })
         .catch(({ response }) => {
           this.$notify({
-            group: "alert",
-            title: "Modifer log",
-            text: "Une erreur est survenue",
-            type: "error",
-          });
+            group: 'alert',
+            title: 'Modifer log',
+            text: 'Une erreur est survenue',
+            type: 'error'
+          })
           if (response.status == 422) {
-            this.errors = response.data.errors;
+            this.errors = response.data.errors
           }
-        });
+        })
     },
-    switchPage(page) {
+    switchPage (page) {
       this.getListChangedLogs({ page }).then(() => {
-        window.scrollTo(0, 0);
-      });
+        window.scrollTo(0, 0)
+      })
     },
-    toEdit(item) {
-      this.isEditingMode = true;
-      this.form = { ...item };
-      this.form.publish_date = item.from;
+    toEdit (item) {
+      this.isEditingMode = true
+      this.form = { ...item }
+      this.form.publish_date = item.from
     },
-    resetForm() {
-      this.isEditingMode = false;
-      this.form = {};
-      this.$refs.form.reset();
+    resetForm () {
+      this.isEditingMode = false
+      this.form = {}
+      this.$refs.form.reset()
     },
-    search() {
-      this.searchChangeLog(moment(this.filter).format("DD.MM.YYYY")).catch(
+    search () {
+      this.searchChangeLog(moment(this.filter).format('DD.MM.YYYY')).catch(
         (error) => {
-          console.log(error);
+          console.log(error)
         }
-      );
+      )
     },
-    onValidate() {
-      this.$bvModal.hide("confirmation-box");
+    onValidate () {
+      this.$bvModal.hide('confirmation-box')
       this.removeChangeLog(this.itemToRemove)
         .then(() => {
           this.$notify({
-            group: "alert",
-            title: "Supprimer log",
-            text: "Supprimer avec succès",
-            type: "success",
-          });
+            group: 'alert',
+            title: 'Supprimer log',
+            text: 'Supprimer avec succès',
+            type: 'success'
+          })
         })
         .catch(() => {
           this.$notify({
-            group: "alert",
-            title: "Supprimer log",
-            text: "Une erreur est surveni",
-            type: "error",
-          });
-        });
+            group: 'alert',
+            title: 'Supprimer log',
+            text: 'Une erreur est surveni',
+            type: 'error'
+          })
+        })
     },
-    remove(item) {
-      this.itemToRemove = item;
-      this.$bvModal.show("confirmation-box");
+    remove (item) {
+      this.itemToRemove = item
+      this.$bvModal.show('confirmation-box')
     },
-    onRangeDateObservation(inputValueDate) {
+    onRangeDateObservation (inputValueDate) {
       // this.filter = inputValueDate
-      this.attrs = [];
+      this.attrs = []
     },
-    btnReset() {
-      this.attrs = [];
-      this.filter = null;
-      this.getListChangedLogs();
+    btnReset () {
+      this.attrs = []
+      this.filter = null
+      this.getListChangedLogs()
     },
-    btnToday() {
-      this.filter = new Date();
+    btnToday () {
+      this.filter = new Date()
       this.attrs.push({
-        key: "today",
+        key: 'today',
         dates: new Date(),
-        highlight: true,
-      });
-    },
-  },
-};
+        highlight: true
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
