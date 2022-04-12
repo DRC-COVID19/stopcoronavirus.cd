@@ -31,8 +31,8 @@
             <SideCaseCovid :covidCases="covidCases" />
           </b-tab>
           <b-tab title="Covid-19 chart" v-if="covidCases">
-            <CovidCaseChart 
-            :covidCasesStat="covidCasesStat" 
+            <CovidCaseChart
+            :covidCasesStat="covidCasesStat"
             :covidCasesStatDaily="covidCasesStatDaily" />
           </b-tab>
         </b-tabs>
@@ -42,12 +42,12 @@
 </template>
 
 <script>
-import SideFluxChart from "./SideFlux";
-import FluxChart from "./FluxChart";
-import SideCaseCovid from "./SideCaseCovid";
-import CovidCaseChart from './CovidCaseChart';
-import SideOrientation from "./SideOrientation";
-import OrientationChart from "./OrientationChart";
+import SideFluxChart from './SideFlux'
+import FluxChart from './FluxChart'
+import SideCaseCovid from './SideCaseCovid'
+import CovidCaseChart from './CovidCaseChart'
+import SideOrientation from './SideOrientation'
+import OrientationChart from './OrientationChart'
 export default {
   components: {
     SideFluxChart,
@@ -60,7 +60,7 @@ export default {
   props: {
     id: {
       type: String,
-      default: "data-modal"
+      default: 'data-modal'
     },
     flux24: {
       type: Array,
@@ -99,37 +99,37 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       flux24Local: []
-    };
+    }
   },
   computed: {
-    hasFlux24() {
-      return this.flux24.length > 0;
+    hasFlux24 () {
+      return this.flux24.length > 0
     },
-    hasFlux24Daily() {
-      return this.flux24Daily.length > 0;
+    hasFlux24Daily () {
+      return this.flux24Daily.length > 0
     },
-    hasCovidCases() {
-      return this.getHasCoviCases();
+    hasCovidCases () {
+      return this.getHasCoviCases()
     },
-    hasOrientation() {
-      return this.getHasOrientation();
+    hasOrientation () {
+      return this.getHasOrientation()
     }
   },
   methods: {
-    show() {
-      this.flux24Local = this.flux24;
+    show () {
+      this.flux24Local = this.flux24
     },
-    getHasCoviCases() {
-      return this.covidCases && this.covidCases.data.features.length > 0;
+    getHasCoviCases () {
+      return this.covidCases && this.covidCases.data.features.length > 0
     },
-    getHasOrientation() {
-      return this.medicalOrientations && this.medicalOrientations.length > 0;
+    getHasOrientation () {
+      return this.medicalOrientations && this.medicalOrientations.length > 0
     }
   }
-};
+}
 </script>
 
 <style>

@@ -15,6 +15,7 @@ export const EDIT_FORM = 'edit_form'
 export const CREATE_FORM = 'create_form'
 export const ADMIN_ROLE_ID = 5
 export const DEFAULT_FORM_ID = 1
+export const ADMIN_ID = 1
 export const TYPE_CUSTOM_FIELD = {
   TEXT: 1,
   NUMBER: 2,
