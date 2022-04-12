@@ -9,13 +9,18 @@ import VueLazyLoad from 'vue-lazyload'
 import vSelect from 'vue-select'
 import excel from 'vue-excel-export'
 import App from './App.vue'
-import { GOOGLE_ANALYTICS_ID, ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env'
+import {
+  GOOGLE_ANALYTICS_ID,
+  ADMIN_DASHBOARD,
+  AGENT_HOSPITAL,
+  ADMIN_HOSPITAL
+} from './config/env'
 import GlobalComponents from './globalComponents'
 import 'chartjs-plugin-crosshair'
 import fullscreen from 'vue-fullscreen'
 import VueEllipseProgress from 'vue-ellipse-progress'
 // import VueSkeletonLoading from 'vue-skeleton-loading';
-import Cloudinary, { CldImage, CldVideo, CldTransformation, CldContext } from 'cloudinary-vue'
+
 import VueGtag from 'vue-gtag'
 import VueMq from 'vue-mq'
 import VueTimeline from '@growthbunker/vuetimeline'
@@ -25,16 +30,6 @@ import './validation'
 import './directive'
 import AxiosPlugin from 'vue-axios-cors'
 require('./helper')
-
-Vue.use(Cloudinary, {
-  configuration: { cloudName: 'www-kinshasadigital-com' },
-  components: {
-    CldContext,
-    CldImage,
-    CldVideo,
-    CldTransformation
-  }
-})
 
 Vue.use(AxiosPlugin)
 Vue.use(BootstrapVue)

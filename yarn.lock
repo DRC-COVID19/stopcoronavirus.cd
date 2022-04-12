@@ -3480,18 +3480,6 @@
     "kind-of" "^6.0.2"
     "shallow-clone" "^3.0.0"
 
-"cloudinary-core@^2.10.3":
-  "integrity" "sha512-Ll4eDzcrIVn4zCttMh3Mdi+KNz07p5EEjBT2PQSRx8Eok1lKPt3uBBenOk/w88RKK3B8SFIWcEe/mN4BHQ0p8A=="
-  "resolved" "https://registry.npmjs.org/cloudinary-core/-/cloudinary-core-2.12.3.tgz"
-  "version" "2.12.3"
-
-"cloudinary-vue@^1.2.4":
-  "integrity" "sha512-wHBwxEXQGv7nbQUL7pQITGVeauxPK3CwHllAcIfQpPIdEa8f5F8jIyk6z/bG5rMeZV2NBah0h9lfHDMEv9v2PA=="
-  "resolved" "https://registry.npmjs.org/cloudinary-vue/-/cloudinary-vue-1.2.4.tgz"
-  "version" "1.2.4"
-  dependencies:
-    "cloudinary-core" "^2.10.3"
-
 "coa@^2.0.2":
   "integrity" "sha512-q5/jG+YQnSy4nRTV4F7lPepBJZ8qBNJJDBuJdoejDyLXgmL7IEo+Le2JDZudFTFt7mrCqIRaSjws4ygRCTCAXA=="
   "resolved" "https://registry.npmjs.org/coa/-/coa-2.0.2.tgz"
@@ -6862,7 +6850,7 @@
   "resolved" "https://registry.npmjs.org/lodash.uniq/-/lodash.uniq-4.5.0.tgz"
   "version" "4.5.0"
 
-"lodash@^4.17.11", "lodash@^4.17.13", "lodash@^4.17.14", "lodash@^4.17.15", "lodash@^4.17.19", "lodash@^4.17.21", "lodash@^4.17.5", "lodash@>=4.0":
+"lodash@^4.17.11", "lodash@^4.17.13", "lodash@^4.17.14", "lodash@^4.17.15", "lodash@^4.17.19", "lodash@^4.17.21", "lodash@^4.17.5":
   "integrity" "sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg=="
   "resolved" "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
   "version" "4.17.21"
