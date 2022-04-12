@@ -13,7 +13,7 @@
               <span class="fa fa-chevron-left">Retour</span>
             </b-link>
             <h2 class="h2 text-center">{{ title }}</h2>
-            <h6 class="mb-4 mt-2 text-center">
+            <h6 class="mb-4 mt-2 text-center text-label">
               Veuillez fournir des détails sur le problème que vous avez
               rencontré.
             </h6>
@@ -27,7 +27,7 @@
               label-class="text-dash-color"
             >
               <b-form-group class="border-0 m-0">
-                <label id="input-group-3" class="text-dash-color" for="input-3">
+                <label id="input-group-3" class="text-dash-color text-label" for="input-3">
                   Nom <span class="text-danger">*</span></label
                 >
                 <FormFieldInput
@@ -47,7 +47,7 @@
                 >
               </b-form-group>
               <b-form-group class="border-0 m-0">
-                <label id="input-group-3" class="text-dash-color" for="input-3">
+                <label id="input-group-3" class="text-dash-color text-label" for="input-3">
                   Prénom <span class="text-danger">*</span></label
                 >
                 <FormFieldInput
@@ -67,7 +67,7 @@
                 >
               </b-form-group>
               <b-form-group class="border-0 m-0">
-                <label id="input-group-2" class="text-dash-color" for="input-2">
+                <label id="input-group-2" class="text-dash-color text-label" for="input-2">
                   Adresse Email <span class="text-danger">*</span></label
                 >
                 <FormFieldInput
@@ -100,6 +100,7 @@
                   mode="aggressive"
                   :isObligated="true"
                   rules="required"
+                  class="text-label"
                 />
                 <b-form-text id="password-help-block" class="mb-4"
                   ><span class="text-danger"> </span
@@ -115,6 +116,7 @@
                   mode="aggressive"
                   :isObligated="true"
                   rules="required"
+                  class="text-label"
                 />
                 <b-form-text id="password-help-block" class="mb-4"
                   ><span class="text-danger"> </span
@@ -131,6 +133,7 @@
                   mode="aggressive"
                   :isObligated="true"
                   rules="required"
+                  class="text-label"
                 />
                 <div v-if="!canViewAdmin">
                  <FomFieldSelect
@@ -143,6 +146,7 @@
                   mode="aggressive"
                   :isObligated="true"
                   rules="required"
+                  class="text-label"
                 />
                 </div>
                 <b-form-text id="password-help-block" class="mb-2"
@@ -150,7 +154,7 @@
                 ></b-form-text>
               </b-form-group>
              <div class="mb-4">
-              <label for="dropzone" class="text-dash-color">Joindre un fichier ( Optionnel )</label>
+              <label for="dropzone" class="text-dash-color text-label">Joindre un fichier ( Optionnel )</label>
                <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
@@ -165,7 +169,7 @@
                 <div class="dropzone-custom-content">
                 <i class="fas fa-cloud-upload-alt fa-3x"></i>
                 <h4 class="dropzone-custom-title mb-0 mt-3">TELECHARGER UNE IMAGE</h4>
-                <div class="subtitle">Ajouter plusieurs images si vous le souhaitez</div>
+                <h6 class="subtitle text-label">Ajouter plusieurs images si vous le souhaitez</h6>
               </div>
               </vue2Dropzone>
              </div>
@@ -180,6 +184,7 @@
                   id="descriptionId"
                   :rows="4"
                   :isObligated="true"
+                  class="text-label"
                 />
                 <b-form-text id="description-help-block"
                   ><span class="text-danger">{{
@@ -192,7 +197,7 @@
                   <b-button
                   type="submit"
                   variant="primary"
-                  class="rounded"
+                  class="rounded btn__bug-tracker"
                   :disabled="invalid ? true : false"
                 >
                   <span v-if="isLoading"
@@ -206,7 +211,7 @@
                 <b-button
                   type="reset"
                   variant="outline-danger"
-                  class="ml-4"
+                  class="ml-4 btn__bug-tracker"
                   @click="resetForm()"
                 >
                   {{ "Réinitialiser" }}</b-button
@@ -500,12 +505,71 @@ export default {
 </script>
 
 <style scoped lang="scss">
+$small:'min-width:576px';
+$medium:'min-width:768px';
+$large:'min-width:992px';
+$x-large:'min-width:1200px';
 #dropzone .dz-preview .dz-progress {
     display: none;
 }
-@media screen and(max-width: 768px){
+h2{
+      font-size: 1.5rem;
+      margin-top: 1rem;
+}
+.text-label{
+   font-size: .85rem;
+}
+h4 {
+   font-size: 1rem;
+}
+.subtitle{
+  margin-top: .5rem;
+}.btn__bug-tracker{
+  width: 6rem;
+  font-size: .8rem;
+  font-weight: 300;
+}
+@media screen and($small){
     h2{
-      font-size: 1.6rem !important;
+      font-size: 1.6rem;
+      margin-top: 1rem;
+    }
+    .btn__bug-tracker{
+      width: 8rem;
+      font-size: 1rem;
+   }
+  }
+  @media screen and($medium){
+    h2{
+      font-size: 1.8rem;
+      margin-top: 1rem;
+    }
+    h4 {
+      font-size: 1.5rem;
+    }
+    .text-label{
+      font-size: 1rem;
+  }
+   .btn__bug-tracker{
+      width: 9rem;
+      font-size: 1.2rem;
+   }
+  }
+  @media screen and($medium){
+    h2{
+      font-size: 2rem;
+      margin-top: 1rem;
+    }
+  }
+  @media screen and($large){
+    h2{
+      font-size: 2.2rem ;
+      margin-top: 1rem;
+    }
+  }
+    @media screen and($x-large){
+    h2{
+      font-size: 2rem ;
       margin-top: 1rem;
     }
   }
