@@ -394,6 +394,7 @@ export default {
             variant: 'success',
             solid: true
           })
+          this.attachements = []
           this.attachements.push(data)
         })
       } catch (error) {
