@@ -462,7 +462,7 @@ export default {
     },
     initializeDataForSubmission () {
       this.isLoading = true
-      this.message = ' Votre requête est en cours de soumission...'
+      this.message = ' Votre requête est en cours de traitement...'
       this.errors = {}
       this.data.name = `[Bug: ${this.form.page}]: \t\n ${this.form.description.slice(0, 100)} ...`
       this.data.html_notes = this.renderHTMLContents()
