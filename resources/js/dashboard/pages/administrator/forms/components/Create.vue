@@ -1,6 +1,5 @@
 <template>
-  <b-card>
-    <h2 class="h2 mb-4">{{ title }}</h2>
+  <b-card class="border-0">
     <ValidationObserver
       v-slot="{ invalid }"
       ref="form"
@@ -180,6 +179,7 @@ export default {
       this.resetForm();
     },
     formToPopulate() {
+      this.resetForm();
       this.populateForm();
     },
   },
@@ -208,28 +208,30 @@ export default {
 
       this.updating = false;
       this.isLoading = false;
-      if (this.formAdded || this.formUpdated) {
-        this.form = {
-          title: "",
-          form_recurrence_value: null,
-          form_recurrence_id: "",
-          publish: false,
-        };
-        this.btnTitle = "Enregistrer";
-        this.title = "Nouveau Formulaire";
-      }
+      this.form = {
+        title: "",
+        form_recurrence_value: null,
+        form_recurrence_id: "",
+        publish: false,
+      };
+      this.btnTitle = "Enregistrer";
+      this.title = "Nouveau Formulaire";
     },
 
     populateForm() {
-      this.updating = true;
-      this.form.id = this.formToPopulate.id;
-      this.form.title = this.formToPopulate.title;
-      this.form.form_recurrence_value =
-        this.formToPopulate.form_recurrence_value;
-      this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id;
-      this.form.publish = this.formToPopulate.publish;
-      this.title = "Modification du formulaire";
-      this.btnTitle = "Modifier";
+      this.updating = false;
+
+      if (Object.keys(this.formToPopulate).length !== 0) {
+        this.updating = true;
+        this.form.id = this.formToPopulate.id;
+        this.form.title = this.formToPopulate.title;
+        this.form.form_recurrence_value =
+          this.formToPopulate.form_recurrence_value;
+        this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id;
+        this.form.publish = this.formToPopulate.publish;
+        this.title = "Modification du formulaire";
+        this.btnTitle = "Modifier";
+      }
     },
 
     onFormRecurrenceChange(formRecurrenceId) {

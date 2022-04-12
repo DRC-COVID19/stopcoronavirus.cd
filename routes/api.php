@@ -273,3 +273,5 @@ Route::group([
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');
+
+

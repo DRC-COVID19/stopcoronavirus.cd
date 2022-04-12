@@ -1,4 +1,4 @@
-.style-chooser .vs__selected {
+.style-chooser .vs__selected  .style-picker{
   white-space: nowrap;
   width: 100%;
   text-overflow: ellipsis;
@@ -7,7 +7,7 @@
   position: absolute;
   z-index: 999;
 }
-.style-chooser.style-chooser-multiple .vs__selected {
+.style-chooser.style-chooser-multiple .style-picker .vs__selected {
   width: auto;
   max-width: calc(100% - 5px);
   padding-right: 22px;

@@ -1,15 +1,25 @@
 .btn {
-    font-size: 1.2rem;
-    font-weight: 300;
-    text-decoration: none;
-    text-align: center !important;
+  font-size: 1.2rem;
+  font-weight: 300;
+  text-decoration: none;
+  text-align: center !important;
 }
 .btn.btn-secondary {
-    border: 3px solid lighten($secondary, 30%);
-    &:hover {
-        border: 3px solid $primary;
-    }
+  border: 3px solid lighten($secondary, 30%);
+  &:hover {
+    border: 3px solid $primary;
+  }
 }
-.btn-start-test{
-    font-size: 1.8rem !important;
+.btn-start-test {
+  font-size: 1.8rem !important;
+}
+.btn-circle.btn-xl {
+  width: 30px;
+  height: 30px;
+
+  border-radius: 50%;
+  padding: 1%;
+  font-size: 12px;
+  text-align: center !important;
+  font-weight: 900;
 }

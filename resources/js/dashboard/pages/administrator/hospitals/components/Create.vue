@@ -1,6 +1,5 @@
 <template>
-  <b-card>
-    <h2 class="h2 mb-4">{{ title }}</h2>
+  <b-card class="border-0 pt-0">
     <ValidationObserver
       v-slot="{ invalid }"
       ref="form"
@@ -65,28 +64,28 @@
           {{ errors.longitude ? errors.longitude[0] : null }}</span
         ></b-form-text
       >
-         <FomFieldSelect
-          v-model="form.township_id"
-            :options="townships"
-            label="name"
-            :reduce="(item) => item.id"
-            id="form.township_id"
-            labelText="Communes"
-             name="Communes"
-            mode="aggressive"
-            :isObligated="true"
-            rules="required"
-            />
-           <FomFieldSelect
-            v-model="form.agent"
-            :options="updating ?usersUpdating :users"
-            label="name"
-            :reduce="(item) => item.id"
-            id="form.agent_id"
-            labelText="Agent Attitré"
-             name="Agent attitré"
-            mode="aggressive"
-            />
+      <FomFieldSelect
+        v-model="form.township_id"
+        :options="townships"
+        label="name"
+        :reduce="(item) => item.id"
+        id="form.township_id"
+        labelText="Communes"
+        name="communes"
+        mode="aggressive"
+        :isObligated="true"
+        rules="required"
+      />
+      <FomFieldSelect
+        v-model="form.agent"
+        :options="updating ? usersUpdating : users"
+        label="name"
+        :reduce="(item) => item.id"
+        id="form.agent_id"
+        labelText="Agent Attitré"
+        name="agent attitré"
+        mode="aggressive"
+      />
       <b-row class="px-3 pt-4 d-flex justify-content-start">
         <b-button
           type="submit"
@@ -200,10 +199,8 @@ export default {
     hospitalAdded() {
       this.resetForm();
     },
-    hospitalUpdated() {
-      this.resetForm();
-    },
     formToPopulate() {
+      this.resetForm();
       this.populateForm();
     },
     errors() {
@@ -242,28 +239,29 @@ export default {
       this.updating = false;
       this.isLoading = false;
       this.toToCanceled = true;
-      if (this.hospitalAdded | this.hospitalUpdated) {
-        this.form = {};
-        this.btnTitle = "Enregistrer";
-        this.title = "Nouveau CTCO";
-      }
+      this.form = {};
+      this.btnTitle = "Enregistrer";
+      this.title = "Nouveau CTCO";
     },
 
     populateForm() {
-      this.updating = true;
-      this.title = "Modification du CTCO ";
-      this.btnTitle = "Modifier";
-      this.form.id = this.formToPopulate.id;
-      this.form.name = this.formToPopulate.name;
-      this.form.longitude = this.formToPopulate.longitude;
-      this.form.latitude = this.formToPopulate.latitude;
-      this.form.agent = this.formToPopulate.agent;
-      this.form.township_id =
-        this.formToPopulate.township && this.formToPopulate.township.id
-          ? this.formToPopulate.township.id
-          : 0;
-      this.usersUpdating = [...this.users];
-      this.usersUpdating.push({ ...this.form.agent });
+      this.updating = false;
+      if (Object.keys(this.formToPopulate).length !== 0) {
+        this.updating = true;
+        this.title = "Modification du CTCO ";
+        this.btnTitle = "Modifier";
+        this.form.id = this.formToPopulate.id;
+        this.form.name = this.formToPopulate.name;
+        this.form.longitude = this.formToPopulate.longitude;
+        this.form.latitude = this.formToPopulate.latitude;
+        this.form.agent = this.formToPopulate.agent;
+        this.form.township_id =
+          this.formToPopulate.township && this.formToPopulate.township.id
+            ? this.formToPopulate.township.id
+            : 0;
+        this.usersUpdating = [...this.users];
+        this.usersUpdating.push({ ...this.form.agent });
+      }
     },
     errorForm() {
       if (this.errors.name) {

@@ -11,21 +11,25 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav class="nav-container">
             <b-link
-             v-if="canViewUsersPage"
+              v-if="canViewUsersPage"
               class="mx-2"
-              :class="{ active: $route.name === 'administrator.users' || $route.name==='administrator.home' }"
+              :class="{
+                active:
+                  $route.name === 'administrator.users' ||
+                  $route.name === 'administrator.home',
+              }"
               :to="{ name: 'administrator.users' }"
               >Utilisateurs</b-link
             >
             <b-link
-             v-if="canViewEpidemicPage"
+              v-if="canViewEpidemicPage"
               class="mx-2"
               :class="{ active: $route.name === 'administrator.epidemie' }"
               :to="{ name: 'administrator.epidemie' }"
               >Situation Epidémiologie</b-link
             >
             <b-link
-            v-if="canViewChangeLogPage"
+              v-if="canViewChangeLogPage"
               class="mx-2"
               :class="{ active: $route.name === 'administrator.changeLog' }"
               :to="{ name: 'administrator.changeLog' }"
@@ -42,7 +46,12 @@
           <b-navbar-nav class="ml-auto">
             <b-nav-item>
               <div
-                class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
+                class="
+                  map-form-logo
+                  d-flex
+                  justify-content-center justify-content-md-end
+                  align-items-center
+                "
               >
                 <img
                   src="/img/partener2.png"
@@ -92,52 +101,60 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations } from "vuex";
 export default {
-  data () {
+  data() {
     return {
-      showUserCard: false
-    }
+      showUserCard: false,
+    };
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
-      activeMenu: (state) => state.nav.activeMenu
+      activeMenu: (state) => state.nav.activeMenu,
     }),
-    canViewFormsPage () {
-      return this.user.roles.find(role => ['create_form', 'edit_form'].includes(role.slug))
+    canViewFormsPage() {
+      return this.user.roles.find((role) =>
+        ["create_form", "edit_form"].includes(role.slug)
+      );
     },
-    canViewUsersPage () {
-      return this.user.roles.find(role => ['administrator'].includes(role.slug))
+    canViewUsersPage() {
+      return this.user.roles.find((role) =>
+        ["administrator"].includes(role.slug)
+      );
     },
-    canViewChangeLogPage () {
-      return this.user.roles.find(role => ['administrator'].includes(role.slug))
+    canViewChangeLogPage() {
+      return this.user.roles.find((role) =>
+        ["administrator"].includes(role.slug)
+      );
     },
-    canViewEpidemicPage () {
-      return this.user.roles.find(role => ['manager_epidemic'].includes(role.slug))
-    }
+    canViewEpidemicPage() {
+      return this.user.roles.find((role) =>
+        ["manager_epidemic"].includes(role.slug)
+      );
+    },
   },
   methods: {
-    ...mapActions(['logout']),
-    ...mapMutations(['setActiveMenu']),
-    userAvatarMouseEnter () {
-      this.showUserCard = true
+    ...mapActions(["logout"]),
+    ...mapMutations(["setActiveMenu"]),
+    userAvatarMouseEnter() {
+      this.showUserCard = true;
     },
-    userAvatarMouseLeave () {
-      this.showUserCard = false
+    userAvatarMouseLeave() {
+      this.showUserCard = false;
     },
-    userLogout () {
+    userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: 'login'
-        })
-      })
+          name: "login",
+        });
+      });
     },
-    selectMenu (value) {
-      this.setActiveMenu(value)
-    }
-  }
-}
+    selectMenu(value) {
+      this.setActiveMenu(value);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
