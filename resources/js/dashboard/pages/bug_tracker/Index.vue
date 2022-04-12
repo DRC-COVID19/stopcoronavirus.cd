@@ -412,7 +412,6 @@ export default {
         return new Promise((resolve, reject) => {
           this.bugTracker__addTask({ task: this.data })
             .then(({ data }) => {
-              this.isLoading = false
               resolve(data)
               this.form = {}
 
@@ -435,9 +434,11 @@ export default {
                       variant: 'danger',
                       solid: true
                     })
+                    this.isLoading = false
                     reject(response)
                   })
               } else {
+                this.isLoading = false
                 this.$bvToast.toast('Le problème a été soumis avec succèss', {
                   title: 'Signaler un Problème',
                   appendToast: true,
