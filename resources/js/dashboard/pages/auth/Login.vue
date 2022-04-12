@@ -141,7 +141,8 @@ export default {
   }
 }
 .bg-dash {
-  box-shadow: -5px 5px 205px -1px rgba(0, 0, 0, 0.1);
+  /* box-shadow: -5px 5px 205px -1px rgba(0, 0, 0, 0.1); */
+  box-shadow: -5px 10px 30px -1px rgba(107, 106, 106, 0.1);
   border: 0 !important;
 }
 </style>

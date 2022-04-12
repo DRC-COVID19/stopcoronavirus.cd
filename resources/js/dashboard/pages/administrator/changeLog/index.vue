@@ -386,6 +386,9 @@ export default {
       }
       this.resetForm();
     },
+    throwError() {
+      throw new Error("Sentry Error");
+    },
     submitcreateChangeLog() {
       this.errors = {};
       this.createChangeLog(this.form)

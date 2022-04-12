@@ -19,7 +19,7 @@
         :placeholder="`Entrer le nom du CTCO`"
         id="input-1"
         rules="required"
-        name="nom ctco"
+        name="Nom ctco"
         mode="aggressive"
         :state="state.name"
       />
@@ -37,7 +37,7 @@
         :placeholder="`Entrer la Latitude`"
         id="input-2"
         rules="required"
-        name="latitude"
+        name="Latitude"
         mode="aggressive"
         :state="state.latitude"
       />
@@ -55,7 +55,7 @@
         :placeholder="`Entrer la longitude`"
         id="input-3"
         rules="required"
-        name="longitude"
+        name="Longitude"
         mode="aggressive"
         :state="state.longitude"
       />
@@ -197,9 +197,6 @@ export default {
   },
   watch: {
     hospitalAdded() {
-      this.resetForm();
-    },
-    hospitalUpdated() {
       this.resetForm();
     },
     formToPopulate() {

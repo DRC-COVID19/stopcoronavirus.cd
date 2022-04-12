@@ -122,9 +122,22 @@ export default {
   methods: {},
 };
 </script>
-<style scoped>
+<style lang="scss">
+$small: "min-width:576px";
+$medium: "min-width:768px";
+$large: "min-width:992px";
+$x-large: "min-width:1200px";
+
+::placeholder {
+  font-size: 0.85rem;
+}
+@media screen and($medium) {
+  ::placeholder {
+    font-size: 1rem;
+  }
+}
 .input-error {
-  font-family: "Rubik", sans-serif;
+  font-family: "Lato", sans-serif;
   font-size: 12px;
 }
 </style>
