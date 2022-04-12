@@ -15,8 +15,7 @@ import App from './App.vue'
 import { GOOGLE_ANALYTICS_ID, ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env'
 import GlobalComponents from './globalComponents'
 
-import 'chartjs-plugin-crosshair'
-import fullscreen from 'vue-fullscreen'
+// import fullscreen from 'vue-fullscreen'
 import VueEllipseProgress from 'vue-ellipse-progress'
 // import VueSkeletonLoading from 'vue-skeleton-loading';
 import VueGtag from 'vue-gtag'
@@ -35,7 +34,7 @@ Vue.component('v-select', vSelect)
 Vue.mixin(commont)
 Vue.use(GlobalComponents)
 Vue.use(onlyInt)
-Vue.use(fullscreen)
+// Vue.use(fullscreen)
 Vue.use(VueEllipseProgress)
 // Vue.use(VueSkeletonLoading);
 Vue.use(Notifications)

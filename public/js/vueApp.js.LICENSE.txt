@@ -1,6 +1,6 @@
 /*!
-  * vue-router v3.4.3
-  * (c) 2020 Evan You
+  * vue-router v3.5.3
+  * (c) 2021 Evan You
   * @license MIT
   */
 
@@ -26,21 +26,14 @@
  */
 
 /*!
- * Vue.js v2.6.12
- * (c) 2014-2020 Evan You
+ * Vue.js v2.6.14
+ * (c) 2014-2021 Evan You
  * Released under the MIT License.
  */
 
 /*!
- * chartjs-plugin-crosshair v1.1.6
- * https://chartjs-plugin-crosshair.netlify.com
- * (c) 2020 Chart.js Contributors
- * Released under the MIT license
- */
-
-/*!
- * vuex v3.5.1
- * (c) 2020 Evan You
+ * vuex v3.6.2
+ * (c) 2021 Evan You
  * @license MIT
  */
 
@@ -240,7 +233,5 @@ PERFORMANCE OF THIS SOFTWARE.
  */
 
 //! moment.js
-
-//! moment.js language configuration
 
 //! moment.js locale configuration
