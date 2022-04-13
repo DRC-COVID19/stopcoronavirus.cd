@@ -112,6 +112,7 @@
         <b-form-text id="password-help-block" class="mb-4"
           ><span class="text-danger"> </span
         ></b-form-text>
+        <p>{{ form.hospitals }}</p>
         <label class="text-dash-color" for="text-password"
           >Mot de passe
           <span class="text-danger" v-if="!updating">*</span></label
