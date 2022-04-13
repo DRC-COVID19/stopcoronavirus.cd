@@ -10,7 +10,7 @@
         <b-col cols="12">
           <b-card class="p-md-5 p-lg-5 bg-dash">
             <b-link :to="backRoute">
-              <span class="fa fa-chevron-left">Retour</span>
+              <span class="fa fa-chevron-left"> Retour</span>
             </b-link>
             <h2 class="h2 text-center">{{ title }}</h2>
             <h6 class="mb-4 mt-2 text-center text-label">
