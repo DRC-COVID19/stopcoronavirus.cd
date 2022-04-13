@@ -505,11 +505,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$small:'min-width:576px';
-$medium:'min-width:768px';
-$large:'min-width:992px';
-$x-large:'min-width:1200px';
-
+@import "@~/sass/_variables";
 #dropzone .dz-preview .dz-progress {
     display: none;
 }
