@@ -92,13 +92,12 @@
           labelText="Rôles"
           name="rôle"
           mode="aggressive"
-          :isMultiple="true"
           :isObligated="true"
           rules="required"
         />
         <b-form-text id="password-help-block" class="mb-4"
-          ><span class="text-danger"> </span
-        ></b-form-text>
+          ><span class="text-danger"> </span>
+        </b-form-text>
         <FomFieldSelect
           v-model="form.hospitals"
           :options="hospitals"
@@ -112,7 +111,6 @@
         <b-form-text id="password-help-block" class="mb-4"
           ><span class="text-danger"> </span
         ></b-form-text>
-        <p>{{ form.hospitals }}</p>
         <label class="text-dash-color" for="text-password"
           >Mot de passe
           <span class="text-danger" v-if="!updating">*</span></label
@@ -273,8 +271,14 @@ export default {
   methods: {
     async onSubmit() {
       this.isLoading = true;
-      console.log(this.rules);
       this.form.roles = this.rules;
+      if (typeof this.form.hospitals !== "object") {
+        this.form.hospitals = [this.form.hospitals];
+      }
+      if (typeof this.rules !== "object") {
+        this.rules = [this.rules];
+      }
+      console.log("tab:", this.form.hospitals);
 
       if (this.rules.find((rule) => rule === ADMIN_ID)) {
         this.form.roles = this.roles
@@ -354,6 +358,10 @@ export default {
         this.title = "Modification de l'utilisateur";
         this.btnTitle = "Modifier";
       }
+    },
+    onSelect(value) {
+      this.form.hospitals = [...value];
+      console.log("this.form.hospitals:", this.form.hospitals + "value", value);
     },
     errorForm() {
       if (this.errors.username) {
