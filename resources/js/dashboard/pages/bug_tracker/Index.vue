@@ -348,8 +348,7 @@ export default {
       // [TODO] fix backRou te
       if (this.user.isHospitalAdmin) {
         return {
-          name: 'hospital.admin.data',
-          params: { hospital_id: this.$route.params.hospital_id }
+          name: 'hospital.admin'
         }
       } else return { name: 'hospital.home' }
     }
@@ -550,7 +549,6 @@ h4 {
    }
    .bug__container {
       overflow-y: hidden;
-      height: 90rem;
     }
   }
 
