@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
     <b-row class="flex-md-row-reverse h-100">
-      <b-col cols="12" md="4">
+      <b-col cols="12" md="4" class="mt-3">
         <b-sidebar
           id="sidebar-right"
           right
@@ -148,67 +148,74 @@
         </b-sidebar>
       </b-col>
       <b-col cols="12" md="12" class="h-100">
+        <div class="ml-2">
+          <Header title="Change log" iconClass="fa fa-history" />
+        </div>
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
-        <Header title="Change log" iconClass="fa fa-history" />
-        <b-row class="mb-3" no-gutters>
-          <b-col
-            cols="12"
-            md="12 d-flex flex-row-reverse justify-content-between"
-          >
-            <div class="container-filter">
-              <v-date-picker
-                v-model="filter"
-                opens="center"
-                :max-date="new Date()"
-                @input="onRangeDateObservation"
-                class="d-flex style-picker mb-2"
-                show-weeknumbers
-                ref="datepicker"
-                :attributes="attrs"
-              >
-                <template v-slot="{ inputEvents }">
-                  <div class="d-flex btn-container-calendar">
-                    <i for="filter" class="fas fa-light fa-calendar p-2"></i>
-                    <input
-                      id="filter"
-                      class="p-1 w-full"
-                      style="font-size: 16px"
-                      :value="
-                        filter
-                          ? moment(filter).format('DD.MM.YYYY')
-                          : 'Choisir la date'
-                      "
-                      v-on="inputEvents"
-                      readonly
-                    />
-                  </div>
-                </template>
-                <div
-                  slot="footer"
-                  slot-scope=""
-                  class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
-                  style="width: 330px"
+        <div class="container" fuild>
+          <b-row class="mb-3" no-gutters>
+            <b-col
+              cols="12"
+              md="12 d-flex flex-row-reverse justify-content-between"
+            >
+              <div class="container-filter">
+                <v-date-picker
+                  v-model="filter"
+                  opens="center"
+                  :max-date="new Date()"
+                  @input="onRangeDateObservation"
+                  class="d-flex style-picker mb-2"
+                  show-weeknumbers
+                  ref="datepicker"
+                  :attributes="attrs"
                 >
-                  <span class="btn-date-picker today" style="" @click="btnToday"
-                    >Aujourd'hui
-                  </span>
-                  <span class="btn-date-picker reset" @click="btnReset">
-                    Annuler</span
+                  <template v-slot="{ inputEvents }">
+                    <div class="d-flex btn-container-calendar">
+                      <i for="filter" class="fas fa-light fa-calendar p-2"></i>
+                      <input
+                        id="filter"
+                        class="p-1 w-full"
+                        style="font-size: 16px"
+                        :value="
+                          filter
+                            ? moment(filter).format('DD.MM.YYYY')
+                            : 'Choisir la date'
+                        "
+                        v-on="inputEvents"
+                        readonly
+                      />
+                    </div>
+                  </template>
+                  <div
+                    slot="footer"
+                    slot-scope=""
+                    class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
+                    style="width: 330px"
                   >
-                </div>
-              </v-date-picker>
-            </div>
-            <div class="container-new-btn d-lg-none">
-              <b-button
-                @click="openToogle()"
-                v-b-toggle.sidebar-right
-                class="btn-dash-blue d-block"
-                ><span class="default-label">Nouveau</span>
-                <i class="fas fa-plus responsive-label"></i>
-              </b-button>
-            </div>
-          </b-col>
-        </b-row>
+                    <span
+                      class="btn-date-picker today"
+                      style=""
+                      @click="btnToday"
+                      >Aujourd'hui
+                    </span>
+                    <span class="btn-date-picker reset" @click="btnReset">
+                      Annuler</span
+                    >
+                  </div>
+                </v-date-picker>
+              </div>
+              <div class="container-new-btn d-lg-none">
+                <b-button
+                  @click="openToogle()"
+                  v-b-toggle.sidebar-right
+                  class="btn-dash-blue d-block"
+                  ><span class="default-label">Nouveau</span>
+                  <i class="fas fa-plus responsive-label"></i>
+                </b-button>
+              </div>
+            </b-col>
+          </b-row>
+        </div>
         <b-row no-gutters>
           <b-col cols="12">
             <b-skeleton-table
