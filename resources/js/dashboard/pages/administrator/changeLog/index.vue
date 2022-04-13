@@ -152,7 +152,7 @@
           <Header title="Change log" iconClass="fa fa-history" />
         </div>
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
-        <div class="container" fuild>
+        <div class="container-fluid">
           <b-row class="mb-3" no-gutters>
             <b-col
               cols="12"
