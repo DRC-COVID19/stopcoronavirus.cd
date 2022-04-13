@@ -227,21 +227,24 @@ export default {
           this.showSuccess = true;
           this.isLoading = false;
           this.updating = false;
+
           this.getUserList(1);
           this.$notify({
             group: "alert",
-            title: "Modifer utilisateur",
+            title: "Modification d'un utilisateur",
             text: "Modifier avec succès",
             type: "success",
           });
         })
         .catch(({ response }) => {
-          console.log(response);
           this.$gtag.exception(response);
+          this.isLoading = false;
+          this.errors = response.data.errors;
+          const messages = this.renderErrorsMessages(this.errors).join(",");
           this.$notify({
             group: "alert",
-            title: "Modifer utilisateur",
-            text: "Une erreur est survenu",
+            title: "Modification d'un utilisateur",
+            text: "Oups! Une erreur est survenue :\r\n" + messages,
             type: "error",
           });
         });

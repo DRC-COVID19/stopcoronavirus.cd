@@ -2,7 +2,12 @@
   <b-card no-body class="rounded-0 p-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row class="d-flex justify-content-between ml-0 mr-0">
-        <b-col cols="12" md="6" lg="2" class="nav-zone pl-3 pr-3 mb-2 mb-lg-0">
+        <b-col
+          cols="12"
+          md="6"
+          lg="4"
+          class="w-100 nav-zone pl-3 pr-3 mb-2 mb-lg-0"
+        >
           <b-form-group lg="5" md="12" style="width: 100%">
             <label for class="text-dash-color">Commune</label>
             <v-select
@@ -18,7 +23,7 @@
         </b-col>
         <b-col
           cols="12"
-          md="4"
+          md="6"
           lg="4"
           class="col-12 nav-zone pl-3 pr-3 justify-content-center"
         >
@@ -27,7 +32,7 @@
               >Paramètres Temporels</label
             >
 
-            <div class="w-100 d-flex justify-content-between">
+            <div md="12" lg="12" class="w-100 d-flex justify-content-between">
               <v-date-picker
                 v-model="dateRange"
                 opens="center"
@@ -44,6 +49,7 @@
                 <template v-slot="{ inputEvents }">
                   <div
                     class="
+                      w-100
                       d-flex
                       flex-col
                       sm:flex-row
@@ -104,9 +110,10 @@
 
         <b-col
           cols="12"
-          md="3"
+          sm="12"
+          md="6 "
           lg="3"
-          class="pl-3 pr-3 d-flex text-right justify-content-end"
+          class="pl-md-3 pr-md-3 d-flex text-right offset-md-3 justify-content-end"
           style="border"
           :class="{ row: !isSmOrMd }"
         >

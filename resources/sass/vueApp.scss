@@ -95,6 +95,7 @@ body,
   background: white;
   width: 100%;
 }
+
 @media (max-width: $max-width) {
   .container-filter {
     width: 100%;
@@ -104,7 +105,8 @@ body,
     right: 2%;
     top: 90%;
     z-index: 10;
-    box-shadow: 0px 0px 8px 0px #2e5bffb8;
-    padding: 10px 15px;
+    button {
+      box-shadow: 0px 0px 8px 0px #2e5bffb8;
+    }
   }
 }
