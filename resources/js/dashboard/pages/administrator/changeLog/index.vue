@@ -215,67 +215,68 @@
               </div>
             </b-col>
           </b-row>
-        </div>
-        <b-row no-gutters>
-          <b-col cols="12">
-            <b-skeleton-table
-              v-if="isLoading"
-              :rows="15"
-              :columns="5"
-              :table-props="{
-                bordered: false,
-                striped: true,
-                responsive: true,
-              }"
-            ></b-skeleton-table>
 
-            <b-table
-              v-else
-              hover
-              striped
-              responsive
-              :fields="fields"
-              :items="changeLogsData"
-            >
-              <template #cell(number)="data">
-                {{ data.index + 1 }}
-              </template>
-              <template #cell(from)="data">
-                {{ moment(data.item.from).format("DD.MM.YYYY") }}
-              </template>
-              <template #cell(Titre)="data">
-                {{ data.title }}
-              </template>
-              <template #cell(action)="data">
-                <b-button
-                  variant="outline-success mb-1"
-                  class="btn-dash"
-                  @click="toEdit(data.item)"
-                  v-b-toggle.sidebar-right
-                  >Editer</b-button
-                >
-                <b-button
-                  variant="outline-danger mb-1"
-                  class="btn-dash"
-                  @click="remove(data.item)"
-                >
-                  Supprimer
-                </b-button>
-              </template>
-            </b-table>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col class="d-flex justify-content-end">
-            <b-pagination
-              v-model="changeLogsMeta.current_page"
-              :total-rows="changeLogsMeta.total"
-              :per-page="changeLogsMeta.per_page"
-              @change="switchPage"
-              :disabled="isCreating"
-            ></b-pagination>
-          </b-col>
-        </b-row>
+          <b-row no-gutters>
+            <b-col cols="12">
+              <b-skeleton-table
+                v-if="isLoading"
+                :rows="15"
+                :columns="5"
+                :table-props="{
+                  bordered: false,
+                  striped: true,
+                  responsive: true,
+                }"
+              ></b-skeleton-table>
+
+              <b-table
+                v-else
+                hover
+                striped
+                responsive
+                :fields="fields"
+                :items="changeLogsData"
+              >
+                <template #cell(number)="data">
+                  {{ data.index + 1 }}
+                </template>
+                <template #cell(from)="data">
+                  {{ moment(data.item.from).format("DD.MM.YYYY") }}
+                </template>
+                <template #cell(Titre)="data">
+                  {{ data.title }}
+                </template>
+                <template #cell(action)="data">
+                  <b-button
+                    variant="outline-success mb-1"
+                    class="btn-dash"
+                    @click="toEdit(data.item)"
+                    v-b-toggle.sidebar-right
+                    >Editer</b-button
+                  >
+                  <b-button
+                    variant="outline-danger mb-1"
+                    class="btn-dash"
+                    @click="remove(data.item)"
+                  >
+                    Supprimer
+                  </b-button>
+                </template>
+              </b-table>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="d-flex justify-content-end">
+              <b-pagination
+                v-model="changeLogsMeta.current_page"
+                :total-rows="changeLogsMeta.total"
+                :per-page="changeLogsMeta.per_page"
+                @change="switchPage"
+                :disabled="isCreating"
+              ></b-pagination>
+            </b-col>
+          </b-row>
+        </div>
       </b-col>
     </b-row>
     <b-modal id="confirmation-box" centered hide-header>
