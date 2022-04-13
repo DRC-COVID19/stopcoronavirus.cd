@@ -35,7 +35,7 @@ export default {
       height: 3rem;
   }
   .text{
-      font-size: 2rem;
+      font-size: 1.5rem;
 
   }
 }
@@ -64,5 +64,11 @@ export default {
     transform: rotate(360deg);
   }
 }
+@media screen and($small){
+    .text{
+      font-size: 2rem;
+
+  }
+  }
 
 </style>
