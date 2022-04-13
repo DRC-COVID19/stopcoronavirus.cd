@@ -141,13 +141,14 @@ export default {
   }
 }
 .login{
-  padding: 0 4rem;
+  padding: 0 2rem;
 }
 .bg-dash {
   /* box-shadow: -5px 5px 205px -1px rgba(0, 0, 0, 0.1); */
-  box-shadow: -5px 10px 30px -1px rgba(107, 106, 106, 0.1);
+box-shadow: 0px 4px 20px -3px rgba(0,0,0,0.1);
   border: 0 !important;
   margin: 2rem 0;
+  border-radius: .8rem;
 }
 @media screen and($small){
     h2{
