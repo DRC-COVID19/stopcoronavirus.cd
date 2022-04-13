@@ -47,6 +47,13 @@ $flour: #ff5722;
 $catch_virus: #1f3677;
 $antibacterial_gel: red;
 $waiting_background: #00000052;
+
+// brackpoints
+$small:'min-width:576px';
+$medium:'min-width:768px';
+$large:'min-width:992px';
+$x-large:'min-width:1200px';
+
 $max-width: 990px;
 .dash-green {
   color: $dash-green;
@@ -63,3 +70,4 @@ $max-width: 990px;
 .flux-presence {
   color: $flux-presence;
 }
+

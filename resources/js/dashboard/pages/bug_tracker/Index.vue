@@ -505,11 +505,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$small:'min-width:576px';
-$medium:'min-width:768px';
-$large:'min-width:992px';
-$x-large:'min-width:1200px';
-
+@import "@~/sass/_variables";
 #dropzone .dz-preview .dz-progress {
     display: none;
 }
@@ -525,10 +521,6 @@ h4 {
 }
 .subtitle{
   margin-top: .5rem;
-}.btn__bug-tracker{
-  width: 6rem;
-  font-size: .8rem;
-  font-weight: 300;
 }
 
 @media screen and($small){
@@ -553,16 +545,15 @@ h4 {
       font-size: 1rem;
   }
    .btn__bug-tracker{
-      width: 9rem;
+      width: 8rem;
       font-size: 1.2rem;
    }
-  }
-  @media screen and($medium){
-    h2{
-      font-size: 2rem;
-      margin-top: 1rem;
+   .bug__container {
+      overflow-y: hidden;
+      height: 90rem;
     }
   }
+
   @media screen and($large){
     h2{
       font-size: 2.2rem ;
@@ -575,9 +566,7 @@ h4 {
       margin-top: 1rem;
     }
   }
-.bug__container {
-  overflow-y: hidden;
-}
+
 .no-data {
   font-size: 12px;
   line-height: 26px;

@@ -33,100 +33,97 @@
   </div>
 </template>
 <script>
-import { ValidationProvider } from "vee-validate";
+import { ValidationProvider } from 'vee-validate'
 export default {
-  name: "FormFieldInput",
+  name: 'FormFieldInput',
   components: {
-    ValidationProvider,
+    ValidationProvider
   },
   props: {
     type: {
       type: String,
-      required: true,
+      required: true
     },
     value: {
       type: String,
-      default: "",
+      default: ''
     },
     placeholder: {
       type: String,
-      required: false,
+      required: false
     },
     rules: {
       type: String,
       required: false,
-      default: null,
+      default: null
     },
     id: {
       type: [String, Number],
-      required: true,
+      required: true
     },
     required: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     state: {
       type: Boolean,
       required: false,
       default: () => {
-        return null;
-      },
+        return null
+      }
     },
     disabled: {
       type: Boolean,
-      required: false,
+      required: false
     },
     name: {
       type: String,
-      required: false,
+      required: false
     },
     vid: {
       type: String,
-      required: false,
+      required: false
     },
     mode: {
       type: String,
-      required: false,
-    },
+      required: false
+    }
   },
-  data() {
+  data () {
     return {
       requiredOptions: [
-        { text: "Oui", value: 1 },
-        { text: "Non", value: 0 },
+        { text: 'Oui', value: 1 },
+        { text: 'Non', value: 0 }
       ],
-      formFieldValue: this.value,
-    };
+      formFieldValue: this.value
+    }
   },
   computed: {
-    isRequired() {
-      return !!this.rules?.match(/required/i) || false;
+    isRequired () {
+      return !!this.rules?.match(/required/i) || false
     },
-    stateFormFields() {
-      return true;
+    stateFormFields () {
+      return true
 
       // if(){
       //   return true
       // }
-    },
+    }
   },
   watch: {
-    formFieldValue(value) {
-      this.$emit("input", value);
+    formFieldValue (value) {
+      this.$emit('input', value)
     },
-    value(value) {
-      this.formFieldValue = value;
-    },
+    value (value) {
+      this.formFieldValue = value
+    }
   },
-  methods: {},
-};
+  methods: {}
+}
 </script>
 <style lang="scss">
-$small: "min-width:576px";
-$medium: "min-width:768px";
-$large: "min-width:992px";
-$x-large: "min-width:1200px";
+@import "@~/sass/_variables";
 
 ::placeholder {
   font-size: 0.85rem;
