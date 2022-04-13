@@ -65,9 +65,11 @@ export default {
   }
 }
 @media screen and($small){
+  .loading-row{
     .text{
       font-size: 2rem;
 
+  }
   }
   }
 
