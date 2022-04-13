@@ -15,13 +15,15 @@
               placeholder="Filtrer"
             ></b-form-input>
           </div>
-          <b-button
-            @click="openToogle()"
-            v-b-toggle.sidebar-right
-            class="btn btn-sm btn-dash-blue d-block container-new-btn"
-            ><span class="default-label">Nouveau</span>
-            <i class="fas fa-plus responsive-label"></i>
-          </b-button>
+          <div class="container-new-btn d-lg-none">
+            <b-button
+              @click="openToogle()"
+              v-b-toggle.sidebar-right
+              class="btn-dash-blue d-block"
+              ><span class="default-label">Nouveau</span>
+              <i class="fas fa-plus responsive-label"></i>
+            </b-button>
+          </div>
         </b-col>
       </b-row>
       <b-row no-gutters>
@@ -251,6 +253,9 @@ export default {
 }
 .default-label {
   display: block;
+}
+.container-new-btn {
+  display: block !important;
 }
 @media (max-width: $max-width) {
   .default-label {

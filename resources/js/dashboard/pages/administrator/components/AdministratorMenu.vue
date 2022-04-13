@@ -7,7 +7,6 @@
         $route.name.startsWith('administrator.users') ||
         $route.name.startsWith('administrator.home')
       "
-      @click="scrollRight"
     >
       <i class="fas fa-users" aria-hidden="true"></i> &nbsp; Utilisateurs
     </b-nav-item>
@@ -15,7 +14,6 @@
       v-if="canViewChangeLog"
       :to="{ name: 'administrator.changeLog' }"
       :active="$route.name.startsWith('administrator.changeLog')"
-      @click="scrollRight"
     >
       <i class="fa fa-history" aria-hidden="true"></i> &nbsp; Change log
     </b-nav-item>
@@ -23,7 +21,6 @@
       v-if="canViewForms"
       :to="{ name: 'administrator.forms' }"
       :active="$route.name.startsWith('administrator.forms')"
-      @click="scrollLeft"
     >
       <i class="fa fa-address-card" aria-hidden="true"></i> &nbsp; Formulaires
     </b-nav-item>
@@ -34,7 +31,6 @@
         $route.name.startsWith('administrator.hospitals') ||
         $route.name.startsWith('administrator.home')
       "
-      @click="scrollLeft"
     >
       <i class="fas fa-hospital-alt" aria-hidden="true"></i> &nbsp; Hopitaux
     </b-nav-item>
@@ -42,7 +38,6 @@
       v-if="canViewEpidemic"
       :to="{ name: 'administrator.epidemie' }"
       :active="$route.name.startsWith('administrator.epidemie')"
-      @click="scrollLeft"
     >
       <i class="fas fa-virus" aria-hidden="true"></i> &nbsp; Situation
       Épidémiologique
@@ -61,9 +56,7 @@ import {
 
 export default {
   data() {
-    return {
-      scrollAmount: 0,
-    };
+    return {};
   },
   computed: {
     ...mapState({
@@ -82,25 +75,7 @@ export default {
       return this.userHaveRole(EDIT_FORM) || this.userHaveRole(CREATE_FORM);
     },
   },
-  methods: {
-    scrollLeft: function () {
-      const menu = this.$refs.menu;
-
-      menu.scrollTo({
-        left: (this.scrollAmount += 100),
-        behavior: "smooth",
-      });
-    },
-
-    scrollRight: function () {
-      const menu = this.$refs.menu;
-
-      menu.scrollTo({
-        left: (this.scrollAmount -= 100),
-        behavior: "smooth",
-      });
-    },
-  },
+  methods: {},
 };
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <b-container fluid>
     <b-row class="flex-md-row-reverse h-100">
-      <b-col cols="12" md="4">
+      <b-col cols="12" md="4" class="mt-3">
         <b-sidebar
           id="sidebar-right"
           right
@@ -148,125 +148,135 @@
         </b-sidebar>
       </b-col>
       <b-col cols="12" md="12" class="h-100">
+        <div class="ml-2">
+          <Header title="Change log" iconClass="fa fa-history" />
+        </div>
         <div class="hide-waiting" v-if="isCreating || isEditingMode"></div>
-        <Header title="Change log" iconClass="fa fa-history" />
-        <b-row class="mb-3" no-gutters>
-          <b-col
-            cols="12"
-            md="12 d-flex flex-row-reverse justify-content-between"
-          >
-            <div class="container-filter">
-              <v-date-picker
-                v-model="filter"
-                opens="center"
-                :max-date="new Date()"
-                @input="onRangeDateObservation"
-                class="d-flex style-picker mb-2"
-                show-weeknumbers
-                ref="datepicker"
-                :attributes="attrs"
-              >
-                <template v-slot="{ inputEvents }">
-                  <div class="d-flex btn-container-calendar">
-                    <i for="filter" class="fas fa-light fa-calendar p-2"></i>
-                    <input
-                      id="filter"
-                      class="p-1 w-full"
-                      style="font-size: 16px"
-                      :value="
-                        filter
-                          ? moment(filter).format('DD.MM.YYYY')
-                          : 'Choisir la date'
-                      "
-                      v-on="inputEvents"
-                      readonly
-                    />
-                  </div>
-                </template>
-                <div
-                  slot="footer"
-                  slot-scope=""
-                  class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
-                  style="width: 330px"
-                >
-                  <span class="btn-date-picker today" style="" @click="btnToday"
-                    >Aujourd'hui
-                  </span>
-                  <span class="btn-date-picker reset" @click="btnReset">
-                    Annuler</span
-                  >
-                </div>
-              </v-date-picker>
-            </div>
-            <b-button
-              @click="openToogle()"
-              v-b-toggle.sidebar-right
-              class="btn btn-sm btn-dash-blue d-block container-new-btn"
-              ><span class="default-label">Nouveau</span>
-              <i class="fas fa-plus responsive-label"></i>
-            </b-button>
-          </b-col>
-        </b-row>
-        <b-row no-gutters>
-          <b-col cols="12">
-            <b-skeleton-table
-              v-if="isLoading"
-              :rows="15"
-              :columns="5"
-              :table-props="{
-                bordered: false,
-                striped: true,
-                responsive: true,
-              }"
-            ></b-skeleton-table>
-
-            <b-table
-              v-else
-              hover
-              striped
-              responsive
-              :fields="fields"
-              :items="changeLogsData"
+        <div class="container-fluid">
+          <b-row class="mb-3" no-gutters>
+            <b-col
+              cols="12"
+              md="12 d-flex flex-row-reverse justify-content-between"
             >
-              <template #cell(number)="data">
-                {{ data.index + 1 }}
-              </template>
-              <template #cell(from)="data">
-                {{ moment(data.item.from).format("DD.MM.YYYY") }}
-              </template>
-              <template #cell(Titre)="data">
-                {{ data.title }}
-              </template>
-              <template #cell(action)="data">
+              <div class="container-filter">
+                <v-date-picker
+                  v-model="filter"
+                  opens="center"
+                  :max-date="new Date()"
+                  @input="onRangeDateObservation"
+                  class="d-flex style-picker mb-2"
+                  show-weeknumbers
+                  ref="datepicker"
+                  :attributes="attrs"
+                >
+                  <template v-slot="{ inputEvents }">
+                    <div class="d-flex btn-container-calendar">
+                      <i for="filter" class="fas fa-light fa-calendar p-2"></i>
+                      <input
+                        id="filter"
+                        class="p-1 w-full"
+                        style="font-size: 16px"
+                        :value="
+                          filter
+                            ? moment(filter).format('DD.MM.YYYY')
+                            : 'Choisir la date'
+                        "
+                        v-on="inputEvents"
+                        readonly
+                      />
+                    </div>
+                  </template>
+                  <div
+                    slot="footer"
+                    slot-scope=""
+                    class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
+                    style="width: 330px"
+                  >
+                    <span
+                      class="btn-date-picker today"
+                      style=""
+                      @click="btnToday"
+                      >Aujourd'hui
+                    </span>
+                    <span class="btn-date-picker reset" @click="btnReset">
+                      Annuler</span
+                    >
+                  </div>
+                </v-date-picker>
+              </div>
+              <div class="container-new-btn d-lg-none">
                 <b-button
-                  variant="outline-success mb-1"
-                  class="btn-dash"
-                  @click="toEdit(data.item)"
+                  @click="openToogle()"
                   v-b-toggle.sidebar-right
-                  >Editer</b-button
-                >
-                <b-button
-                  variant="outline-danger mb-1"
-                  class="btn-dash"
-                  @click="remove(data.item)"
-                >
-                  Supprimer
+                  class="btn-dash-blue d-block"
+                  ><span class="default-label">Nouveau</span>
+                  <i class="fas fa-plus responsive-label"></i>
                 </b-button>
-              </template>
-            </b-table>
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col class="d-flex justify-content-end">
-            <b-pagination
-              v-model="changeLogsMeta.current_page"
-              :total-rows="changeLogsMeta.total"
-              :per-page="changeLogsMeta.per_page"
-              @change="switchPage"
-              :disabled="isCreating"
-            ></b-pagination>
-          </b-col>
-        </b-row>
+              </div>
+            </b-col>
+          </b-row>
+
+          <b-row no-gutters>
+            <b-col cols="12">
+              <b-skeleton-table
+                v-if="isLoading"
+                :rows="15"
+                :columns="5"
+                :table-props="{
+                  bordered: false,
+                  striped: true,
+                  responsive: true,
+                }"
+              ></b-skeleton-table>
+
+              <b-table
+                v-else
+                hover
+                striped
+                responsive
+                :fields="fields"
+                :items="changeLogsData"
+              >
+                <template #cell(number)="data">
+                  {{ data.index + 1 }}
+                </template>
+                <template #cell(from)="data">
+                  {{ moment(data.item.from).format("DD.MM.YYYY") }}
+                </template>
+                <template #cell(Titre)="data">
+                  {{ data.title }}
+                </template>
+                <template #cell(action)="data">
+                  <b-button
+                    variant="outline-success mb-1"
+                    class="btn-dash"
+                    @click="toEdit(data.item)"
+                    v-b-toggle.sidebar-right
+                    >Editer</b-button
+                  >
+                  <b-button
+                    variant="outline-danger mb-1"
+                    class="btn-dash"
+                    @click="remove(data.item)"
+                  >
+                    Supprimer
+                  </b-button>
+                </template>
+              </b-table>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="d-flex justify-content-end">
+              <b-pagination
+                v-model="changeLogsMeta.current_page"
+                :total-rows="changeLogsMeta.total"
+                :per-page="changeLogsMeta.per_page"
+                @change="switchPage"
+                :disabled="isCreating"
+              ></b-pagination>
+            </b-col>
+          </b-row>
+        </div>
       </b-col>
     </b-row>
     <b-modal id="confirmation-box" centered hide-header>
@@ -569,7 +579,9 @@ export default {
 .default-label {
   display: block;
 }
-
+.container-new-btn {
+  display: block !important;
+}
 @media (max-width: $max-width) {
   .default-label {
     display: none;
