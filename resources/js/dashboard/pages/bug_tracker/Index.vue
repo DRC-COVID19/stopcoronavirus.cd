@@ -90,7 +90,7 @@
                   >
                 </b-form-text>
               </b-form-group>
-              <b-form-group>
+              <b-form-group class="border-0 m-0">
               <label id="input-group-4" class="text-dash-color" for="input-4">
                  Numéro Téléphone <span class="text-danger">*</span></label
               >
@@ -172,6 +172,23 @@
                 <b-form-text id="password-help-block" class="mb-2"
                   ><span class="text-danger"> </span
                 ></b-form-text>
+              </b-form-group>
+              <b-form-group class="border-0 m-0">
+              <label id="input-group-4" class="text-dash-color" for="input-4">
+                 Copier l'URL de la page ( Optionnel )</label
+              >
+              <FormFieldInput
+                v-model="form.pageURL"
+                type="url"
+                :placeholder="'Ex: https://dashboard.stopcoronavirusrdc.info/hospitals'"
+                id="input-4"
+                name="URL de la page"
+              />
+              <b-form-text id="password-help-block" class="mb-4"
+                ><span class="text-danger">
+                  {{ errors.phone ? errors.phone[0] : null }}</span
+                ></b-form-text
+              >
               </b-form-group>
              <div class="mb-4">
               <label for="dropzone" class="text-dash-color text-label">Joindre un fichier ( Optionnel )</label>
@@ -281,7 +298,8 @@ export default {
         description: '',
         images: [],
         occurence: null,
-        page: null
+        page: null,
+        pageURL: ''
       },
       uploadUrl: 'https://httpbin.org/post',
       toToCanceled: false,
@@ -293,7 +311,8 @@ export default {
         description: null,
         images: null,
         device: null,
-        occurence: null
+        occurence: null,
+        pageURL: null
       },
       cloudinaryConfig: {
         preset: 'uzcpaoas',
@@ -495,6 +514,10 @@ export default {
     },
     renderHTMLContents () {
       const phone = this.form.phone.split('').slice(1, 10).join('')
+      let pageURL = ''
+      if (this.form.pageURL && this.form.pageURL !== undefined) {
+        pageURL = `<a href="https://${this.form.pageURL}">{this.form.pageURL}</a>`
+      }
       return `
       <body>
   
@@ -504,7 +527,8 @@ export default {
       Phone  : +243 ${phone}
       Type Appareil : ${this.form.device}
       Fréquence du problème : ${this.form.occurence}
-      
+      URL de la page :${pageURL}
+
       <strong>Description du problème :</strong>
       ${this.form.description}.
       </body>`
