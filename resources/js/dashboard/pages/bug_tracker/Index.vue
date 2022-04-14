@@ -178,8 +178,8 @@
                   v-model="form.description"
                   type="text"
                   rules="required"
-                  name="Un Message"
-                  labelText="Message "
+                  name="Description du Problème"
+                  labelText="Description du Problème "
                   :state="errors.description ? false : null"
                   id="descriptionId"
                   :rows="4"
@@ -256,6 +256,7 @@ export default {
         name: '',
         firstName: '',
         email: '',
+        phone: '',
         device: null,
         description: '',
         images: [],
@@ -268,6 +269,7 @@ export default {
         name: null,
         firstName: null,
         email: null,
+        phone: null,
         description: null,
         images: null,
         device: null,
@@ -282,8 +284,8 @@ export default {
         mail: null
       },
       progress: null,
-      devices: ['Ordinateur', 'Téléphone'],
-      occurences: ['1 fois', '2 fois ou Plus de 2 fois'],
+      devices: ['Ordinateur', 'Tablette', 'Téléphone'],
+      occurences: ['1 fois', '2 fois', 'Plus de 2 fois'],
       adminPages: [' Admininstration', ' Dashboard', ' CTCOS'],
       agentPages: [' CTCOS', 'Autres'],
       max: now,
@@ -477,16 +479,14 @@ export default {
     renderHTMLContents () {
       return `
       <body>
-      <ul>
-      <li>Nom : ${this.form.name}</li>
-      <li>Prénom : ${this.form.firstName}</li>
-      <li>Email : ${this.form.email}</li>
-      <li>Type Appareil : ${this.form.device}</li>
-      </ul>
-      <strong>Message :</strong>
-      <ul>
-      <li>${this.form.description}.</li>
-      </ul>
+  
+      Nom : ${this.form.name}
+      Prénom : ${this.form.firstName}
+      Email : ${this.form.email}
+      Type Appareil : ${this.form.device}
+      
+      Description du problème :
+      ${this.form.description}.
       </body>`
     },
     getTaskPriority (occurence) {
