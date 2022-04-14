@@ -516,7 +516,7 @@ export default {
       const phone = this.form.phone.split('').slice(1, 10).join('')
       let pageURL = ''
       if (this.form.pageURL && this.form.pageURL !== undefined) {
-        pageURL = `<a href="https://${this.form.pageURL}">{this.form.pageURL}</a>`
+        pageURL = `<a href="${this.form.pageURL}">${this.form.pageURL}</a>`
       }
       return `
       <body>
