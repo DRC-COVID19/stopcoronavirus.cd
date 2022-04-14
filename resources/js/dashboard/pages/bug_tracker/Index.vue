@@ -306,8 +306,6 @@ export default {
         dictRemoveFileConfirmation: 'Etes-vous sûr de supprimer cette image ?',
         dictCancelUploadConfirmation: "Etes-vous sûr d'annuler cette image ?"
       },
-      importantNotUrgentTag: '1155747022304322',
-      importantUrgentTag: '1155747022304324',
       data: {
         approval_status: 'pending',
         assignee_section: '1202084007644818',
