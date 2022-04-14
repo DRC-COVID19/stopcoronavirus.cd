@@ -487,15 +487,6 @@ export default {
       Description du problème :
       ${this.form.description}.
       </body>`
-    },
-    getTaskPriority (occurence) {
-      this.data.tags = []
-      if (occurence === this.occurences[0]) {
-        this.data.tags.push(this.importantNotUrgentTag)
-      } else if (occurence === this.occurences[1]) {
-        this.data.tags.push(this.importantUrgentTag)
-      }
-      return this.data.tags
     }
 
   }
