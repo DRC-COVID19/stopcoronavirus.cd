@@ -195,123 +195,123 @@ export default {
     isSituationAdded: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     isSituationUpdated: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
-        return {};
-      },
+        return {}
+      }
     },
     errors: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
 
-  data() {
+  data () {
     return {
-      title: "Nouvelle Situation",
-      btnTitle: "Enregistrer",
-      iconClass: "fas fa-plus-square",
-      validateMailMessage: "",
+      title: 'Nouvelle Situation',
+      btnTitle: 'Enregistrer',
+      iconClass: 'fas fa-plus-square',
+      validateMailMessage: '',
       disableDate: false,
       isUpdating: false,
       isLoading: false,
-      warningMessage: "",
+      warningMessage: '',
       form: {
         last_update: null,
-        confirmed: "",
-        sick: "",
-        seriously: "",
-        dead: "",
-        imported: "",
-        local: "",
-        healed: "",
+        confirmed: '',
+        sick: '',
+        seriously: '',
+        dead: '',
+        imported: '',
+        local: '',
+        healed: ''
       },
       showWarning: false,
       toBeCanceled: true,
-      roles: [],
-    };
+      roles: []
+    }
   },
-  mounted() {
-    this.resetForm();
+  mounted () {
+    this.resetForm()
   },
   watch: {
-    isSituationAdded() {
-      this.resetForm();
+    isSituationAdded () {
+      this.resetForm()
     },
-    isSituationUpdated() {
-      this.resetForm();
+    isSituationUpdated () {
+      this.resetForm()
     },
-    formToPopulate() {
-      this.resetForm();
-      this.populateForm();
-    },
+    formToPopulate () {
+      this.resetForm()
+      this.populateForm()
+    }
   },
 
   methods: {
-    onSubmit() {
-      this.isLoading = true;
-      if (this.btnTitle === "Enregistrer") {
+    onSubmit () {
+      this.isLoading = true
+      if (this.btnTitle === 'Enregistrer') {
         if (this.form.last_update !== null) {
-          this.$emit("onCreateSituation", this.form);
+          this.$emit('onCreateSituation', this.form)
         } else {
-          this.showWarning = true;
+          this.showWarning = true
         }
       } else {
-        this.$emit("onUpdateSituation", this.form);
+        this.$emit('onUpdateSituation', this.form)
       }
     },
-    onReset() {
-      this.toToCanceled = true;
-      this.resetForm();
-      this.form = {};
-      this.title = "Nouvelle Situation";
-      this.btnTitle = "Enregistrer";
-      this.$emit("onCancelUpdate", {});
+    onReset () {
+      this.toToCanceled = true
+      this.resetForm()
+      this.form = {}
+      this.title = 'Nouvelle Situation'
+      this.btnTitle = 'Enregistrer'
+      this.$emit('onCancelUpdate', {})
     },
 
-    resetForm() {
-      this.isUpdating = false;
-      this.isLoading = false;
-      this.disableDate = false;
-      this.form = {};
-      this.form.last_update = null;
-      this.btnTitle = "Enregistrer";
-      this.title = "Nouvelle Situation";
+    resetForm () {
+      this.isUpdating = false
+      this.isLoading = false
+      this.disableDate = false
+      this.form = {}
+      this.form.last_update = null
+      this.btnTitle = 'Enregistrer'
+      this.title = 'Nouvelle Situation'
     },
-    populateForm() {
-      this.disableDate = false;
-      this.isUpdating = false;
+    populateForm () {
+      this.disableDate = false
+      this.isUpdating = false
 
       if (Object.keys(this.formToPopulate).length !== 0) {
-        this.disableDate = true;
+        this.disableDate = true
         this.isUpdating = true;
         // eslint-disable-next-line no-unused-expressions
         (this.form.id = this.formToPopulate.id),
-          (this.form.last_update = this.formToPopulate.last_update);
-        this.form.confirmed = this.formToPopulate.confirmed;
-        this.form.sick = this.formToPopulate.sick;
-        this.form.seriously = this.formToPopulate.seriously;
-        this.form.dead = this.formToPopulate.dead;
-        this.form.imported = this.formToPopulate.imported;
-        this.form.local = this.formToPopulate.local;
-        this.form.healed = this.formToPopulate.healed;
-        this.title = "Modification de la situation";
-        this.btnTitle = "Valider";
+        (this.form.last_update = this.formToPopulate.last_update)
+        this.form.confirmed = this.formToPopulate.confirmed
+        this.form.sick = this.formToPopulate.sick
+        this.form.seriously = this.formToPopulate.seriously
+        this.form.dead = this.formToPopulate.dead
+        this.form.imported = this.formToPopulate.imported
+        this.form.local = this.formToPopulate.local
+        this.form.healed = this.formToPopulate.healed
+        this.title = 'Modification de la situation'
+        this.btnTitle = 'Valider'
       }
-    },
+    }
   },
 
-  computed: {},
-};
+  computed: {}
+}
 </script>
 
 <style lang="scss" scoped>
