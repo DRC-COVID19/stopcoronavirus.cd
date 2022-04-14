@@ -474,7 +474,6 @@ export default {
       this.errors = {}
       this.data.name = `[Bug: ${this.form.page}]: \t\n ${this.form.description.slice(0, 100)} ...`
       this.data.html_notes = this.renderHTMLContents()
-      this.data.tags = this.getTaskPriority(this.form.occurence)
     },
     renderHTMLContents () {
       return `
