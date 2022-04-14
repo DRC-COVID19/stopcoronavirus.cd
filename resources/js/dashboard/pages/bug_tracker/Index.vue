@@ -90,6 +90,26 @@
                   >
                 </b-form-text>
               </b-form-group>
+              <b-form-group>
+              <label id="input-group-4" class="text-dash-color" for="input-4">
+                 Numéro Téléphone <span class="text-danger">*</span></label
+              >
+              <FormFieldInput
+                v-model="form.phone"
+                type="text"
+                :placeholder="`Ex: 0820000000`"
+                id="input-4"
+                name="Numéro de téléphone"
+                rules="required|regex"
+                :state="stateForm.phone"
+                mode="aggressive"
+              />
+              <b-form-text id="password-help-block" class="mb-4"
+                ><span class="text-danger">
+                  {{ errors.phone ? errors.phone[0] : null }}</span
+                ></b-form-text
+              >
+              </b-form-group>
               <b-form-group class="border-0 m-0">
                 <FomFieldSelect
                   v-model="form.device"
@@ -128,7 +148,7 @@
                   v-model="form.page"
                   :options="adminPages"
                   id="deviceId"
-                  labelText="Sur quel menu(page) avez-vous rencontré ce problème ? "
+                  labelText="Sur quelle page avez-vous rencontré ce problème ? "
                   name="Menu"
                   mode="aggressive"
                   :isObligated="true"
@@ -141,7 +161,7 @@
                   v-model="form.page"
                   :options="agentPages"
                   id="deviceId"
-                  labelText="Sur quel page avez-vous rencontré ce problème ? "
+                  labelText="Sur quelle page avez-vous rencontré ce problème ? "
                   name="Menu"
                   mode="aggressive"
                   :isObligated="true"
@@ -474,15 +494,18 @@ export default {
       this.data.html_notes = this.renderHTMLContents()
     },
     renderHTMLContents () {
+      const phone = this.form.phone.split('').slice(1, 10).join('')
       return `
       <body>
   
       Nom : ${this.form.name}
       Prénom : ${this.form.firstName}
-      Email : ${this.form.email}
+      Email  : <a href="mailto:${this.form.email}" data-asana-accessible="true">${this.form.email}</a>
+      Phone  : +243 ${phone}
       Type Appareil : ${this.form.device}
+      Fréquence du problème : ${this.form.occurence}
       
-      Description du problème :
+      <strong>Description du problème :</strong>
       ${this.form.description}.
       </body>`
     }
