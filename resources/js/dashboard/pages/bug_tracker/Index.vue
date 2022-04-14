@@ -516,7 +516,7 @@ export default {
       const phone = this.form.phone.split('').slice(1, 10).join('')
       let pageURL = ''
       if (this.form.pageURL && this.form.pageURL !== undefined) {
-        pageURL = `<a href="${this.form.pageURL}">${this.form.pageURL}</a>`
+        pageURL = `URL de la page: <a href="${this.form.pageURL}">${this.form.pageURL}</a>`
       }
       return `
       <body>
@@ -527,8 +527,8 @@ export default {
       Phone  : +243 ${phone}
       Type Appareil : ${this.form.device}
       Fréquence du problème : ${this.form.occurence}
-      URL de la page :${pageURL}
-
+      ${pageURL}
+      
       <strong>Description du problème :</strong>
       ${this.form.description}.
       </body>`
