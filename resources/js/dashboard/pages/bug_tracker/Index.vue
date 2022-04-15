@@ -192,6 +192,7 @@
               </b-form-group>
              <div class="mb-4">
               <label for="dropzone" class="text-dash-color text-label">Joindre un fichier ( Optionnel )</label>
+               <b-progress :value="progress" variant="success" v-show="progress > 0"></b-progress>
                <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
@@ -235,7 +236,7 @@
                   type="submit"
                   variant="primary"
                   class="rounded btn__bug-tracker"
-                  :disabled="invalid ? true : false"
+                  :disabled="invalid ? true : false|| uploading"
                 >
                   <span v-if="isLoading"
                     ><b-spinner class="align-middle"></b-spinner>
@@ -289,6 +290,7 @@ export default {
     return {
       dateFormatted: { day: 'numeric', year: 'numeric', month: 'numeric' },
       btnTitle: 'Enregistrer',
+      uploading: false,
       form: {
         name: '',
         firstName: '',
@@ -416,6 +418,7 @@ export default {
       this.$refs.imgDropzone.removeAllFiles(true)
     },
     uploadProgress (file, progress, byte) {
+      this.uploading = true
       this.progress = progress
     },
     uploadSuccess (file, response) {
@@ -439,6 +442,8 @@ export default {
           })
           this.attachements = []
           this.attachements.push(data)
+          this.uploading = false
+          this.progress = 0
         })
       } catch (error) {
         this.$bvToast.toast('Une erreur est survenue!', {
