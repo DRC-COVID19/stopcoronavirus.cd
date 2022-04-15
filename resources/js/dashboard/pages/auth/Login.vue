@@ -1,7 +1,7 @@
 <template>
   <div class="h-100 d-flex align-items-center">
     <b-container class="login">
-      <div class="text-center mr-5">
+      <div class="text-center">
         <Logo />
       </div>
       <b-row align-h="center">
