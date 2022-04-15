@@ -71,7 +71,7 @@
                     data.item.id,
                     data.item.usernmae,
                     data.item.roles,
-                    data.item.hospitals,
+                    data.item.hospital,
                     data.item.email,
                     data.item.phone_number
                   )
@@ -96,14 +96,8 @@
                 >{{ role.label }}</b-badge
               >
             </template>
-            <template v-slot:cell(hopital)="data">
-              <b-badge
-                class="mx-1 my-1"
-                v-for="(hopital, index) in data.item.hospitals"
-                variant="secondary"
-                :key="index"
-                >{{ hopital.name }}</b-badge
-              >
+            <template v-slot:cell(hospital)="data">
+              <b-badge class="mx-1 my-1">{{ data.value.name }}</b-badge>
             </template>
           </b-table>
         </b-col>
@@ -144,7 +138,7 @@ export default {
         { key: "usernmae", sortable: false, label: "Nom utilisateur" }, // usernmae instead of username (see backend response)
         { key: "phone_number", sortable: false, label: "N°Téléphone" },
         { key: "role", sortable: false, label: "Rôle" },
-        { key: "hopital", sortable: false, label: "Hôpital" },
+        { key: "hospital", sortable: false, label: "Hôpital" },
         { key: "actions", sortable: false, label: "Actions" },
       ],
       filter: "",
@@ -206,13 +200,13 @@ export default {
     openToogle() {
       this.$emit("openToogle", false);
     },
-    updateUser(name, id, usernmae, roles, hospitals, email, phone_number) {
+    updateUser(name, id, usernmae, roles, hospital, email, phone_number) {
       this.currentUser = {
         id,
         name,
         usernmae,
         roles,
-        hospitals,
+        hospital,
         email,
         phone_number,
       };

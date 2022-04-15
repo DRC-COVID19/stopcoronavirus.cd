@@ -1,14 +1,14 @@
 <template>
   <b-card class="border-0">
     <ValidationObserver
-      v-slot="{ invalid, passes }"
+      v-slot="{ invalid }"
       ref="form"
       tag="form"
       novalidate
       label-class="text-dash-color"
       slim
     >
-      <form @submit.prevent="passes(onSubmit)" @reset.prevent="onReset">
+      <form @submit.prevent="onSubmit" @reset.prevent="onReset">
         <label id="input-group-1" class="text-dash-color" for="input-1"
           >Nom d'utilisateur <span class="text-danger">*</span></label
         >
@@ -144,7 +144,11 @@
           ><span class="text-danger"></span
         ></b-form-text>
         <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" :disabled="invalid">
+          <b-button
+            type="submit"
+            variant="primary"
+            :disabled="updating ? false : invalid"
+          >
             <span v-if="isLoading"
               ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
@@ -241,7 +245,7 @@ export default {
         username: "",
         name: "",
         roles: [],
-        hospitals: [],
+        hospitals: null,
         email: "",
         password: "",
         confirmPassword: "",
@@ -271,14 +275,13 @@ export default {
   methods: {
     async onSubmit() {
       this.isLoading = true;
-      this.form.roles = this.rules;
+
       if (typeof this.form.hospitals !== "object") {
         this.form.hospitals = [this.form.hospitals];
       }
       if (typeof this.rules !== "object") {
         this.rules = [this.rules];
       }
-      console.log("tab:", this.form.hospitals);
 
       if (this.rules.find((rule) => rule === ADMIN_ID)) {
         this.form.roles = this.roles
@@ -288,14 +291,15 @@ export default {
             }
           })
           .map((rule) => rule.id);
+      } else {
+        this.form.roles = this.rules;
       }
       if (this.btnTitle === "Enregistrer") {
         this.$emit("onCreate", this.form);
-        this.isLoading = false;
       } else {
         this.$emit("onUpdate", this.form);
-        this.isLoading = false;
       }
+      this.isLoading = false;
     },
 
     onReset() {
@@ -350,19 +354,14 @@ export default {
           this.filterRole.find((t) => t.id === v.id)
         );
         this.rules = this.form.roles.map((rule) => rule.id);
-        this.form.hospitals = this.formToPopulate.hospitals.map(
-          (hospital) => hospital.id
-        );
-        console.log("rule", this.rules);
+        this.form.hospitals = this.formToPopulate.hospital;
         this.form.name = this.formToPopulate.name;
+
         this.title = "Modification de l'utilisateur";
         this.btnTitle = "Modifier";
       }
     },
-    onSelect(value) {
-      this.form.hospitals = [...value];
-      console.log("this.form.hospitals:", this.form.hospitals + "value", value);
-    },
+
     errorForm() {
       if (this.errors.username) {
         this.stateForm.username = false;
