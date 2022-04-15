@@ -1,14 +1,14 @@
 <template>
   <b-card class="border-0">
     <ValidationObserver
-      v-slot="{ invalid, passes }"
+      v-slot="{ invalid }"
       ref="form"
       tag="form"
       novalidate
       label-class="text-dash-color"
       slim
     >
-      <form @submit.prevent="passes(onSubmit)" @reset.prevent="onReset">
+      <form @submit.prevent="onSubmit" @reset.prevent="onReset">
         <label id="input-group-1" class="text-dash-color" for="input-1"
           >Nom d'utilisateur <span class="text-danger">*</span></label
         >
