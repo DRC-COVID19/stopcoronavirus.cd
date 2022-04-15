@@ -192,7 +192,7 @@
               </b-form-group>
              <div class="mb-4">
               <label for="dropzone" class="text-dash-color text-label">Joindre un fichier ( Optionnel )</label>
-               <b-progress :value="progress" variant="success" v-show="progress > 0"></b-progress>
+               <b-progress :value="progress" show-progress animated  variant="success" v-show="progress > 0"></b-progress>
                <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"

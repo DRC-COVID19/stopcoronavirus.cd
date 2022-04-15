@@ -106,7 +106,7 @@ export default {
     height: 10vh;
     width: 100%;
     border-right: 0;
-    overflow-x: auto !important;
+    overflow-x: scroll !important;
     white-space: nowrap;
     &::-webkit-scrollbar {
       width: 0; /* Remove scrollbar space */
