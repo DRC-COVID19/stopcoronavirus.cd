@@ -14,7 +14,7 @@
           >{{ labelText
           }}<span v-show="isObligated" class="text-danger">*</span></label
         >
-        <div :class="{'select-error':errors[0]}">
+        <div :class="{ 'select-error': errors[0] }">
           <v-select
             v-model="formFieldValue"
             :options="options"
@@ -24,7 +24,7 @@
             class="border-0"
             :multiple="isMultiple"
             @input="handleSelect"
-            :searchable ='false'
+            :searchable="false"
           >
           </v-select>
         </div>
@@ -34,103 +34,103 @@
   </div>
 </template>
 <script>
-import { ValidationProvider } from 'vee-validate'
+import { ValidationProvider } from "vee-validate";
 export default {
-  name: 'FomFieldSelect',
+  name: "FomFieldSelect",
   components: {
-    ValidationProvider
+    ValidationProvider,
   },
   props: {
     reduce: {
       type: [Function, String, Number],
-      required: false
+      required: false,
     },
     isMultiple: {
       type: Boolean,
-      required: false
+      required: false,
     },
     rules: {
       type: String,
-      required: false
+      required: false,
     },
     id: {
       type: [String],
-      required: true
+      required: true,
     },
     forId: {
       type: String,
-      required: false
+      required: false,
     },
     state: {
       type: Boolean,
       required: false,
-      default: () => null
+      default: () => null,
     },
     disabled: {
       type: Boolean,
-      required: false
+      required: false,
     },
     label: {
       type: String,
-      required: false
+      required: false,
     },
     vid: {
       type: String,
-      required: false
+      required: false,
     },
     mode: {
       type: String,
-      required: false
+      required: false,
     },
     value: {
       type: [String, Number, Array, Object],
-      default: ''
+      default: "",
     },
     labelText: {
       type: String,
-      default: ''
+      default: "",
     },
     options: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     isObligated: {
       type: Boolean,
-      default: false
+      default: false,
     },
     required: {
       type: Boolean,
-      default: false
+      default: false,
     },
     name: {
       type: String,
-      required: false
-    }
+      required: false,
+    },
   },
-  data () {
+  data() {
     return {
-      formFieldValue: this.value
-    }
+      formFieldValue: this.value,
+    };
   },
   computed: {
-    isRequired () {
-      return !!this.rules?.match(/required/i) || false
-    }
+    isRequired() {
+      return !!this.rules?.match(/required/i) || false;
+    },
   },
   watch: {
-    formFieldValue (value) {
-      this.$emit('input', value)
+    formFieldValue(value) {
+      this.$emit("input", value);
     },
-    value () {
-      this.formFieldValue = this.value
-    }
+    value() {
+      this.formFieldValue = this.value;
+    },
   },
   methods: {
-    handleSelect () {
-      this.$emit('handleSelect')
-    }
-  }
-}
+    handleSelect(value) {
+      this.$emit("handleSelect", value);
+    },
+  },
+};
 </script>
 <style scoped>
 .select-error {
@@ -138,9 +138,8 @@ export default {
   border-radius: 0.3rem;
   background: white;
 }
-.label-error{
-font-family: "Rubik", sans-serif;
-font-size:12px
-
+.label-error {
+  font-family: "Rubik", sans-serif;
+  font-size: 12px;
 }
 </style>

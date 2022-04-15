@@ -1,60 +1,70 @@
-h1, h2, h3, h4, h5, h6, * {
-    font-family: 'Lato', sans-serif
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+* {
+  font-family: "Lato", sans-serif;
 }
 
 .lead {
-    line-height: 1.8rem;
-    font-weight: 300;
-    .bold {
-        color: $dark-blue;
-    }
+  line-height: 1.8rem;
+  font-weight: 300;
+  .bold {
+    color: $dark-blue;
+  }
 }
 
 .bold {
-    font-weight: 700;
+  font-weight: 700;
 }
 .bolder {
-    font-weight: 900;
+  font-weight: 900;
 }
 
 a {
-    text-decoration: underline;
-    &:hover {
-        text-decoration: none;
-    }
+  text-decoration: underline;
+  &:hover {
+    text-decoration: none;
+  }
 }
 
-h1, h2, h3, h4 {
-    color: $dark-blue;
+h1,
+h2,
+h3,
+h4 {
+  color: $dark-blue;
 }
 h1 {
-    font-weight: 300;
+  font-weight: 300;
 }
 h2 {
-    /*
+  /*
     border-left: .8rem solid $primary;
     padding-left: .5rem !important;
     */
-    font-size: 3rem;
-    @media screen and (max-width: 575px) {
-        font-size: 2.5rem;
+  font-size: 3rem;
+  @media (max-width: $max-width) {
+    font-size: 1.7rem !important;
+  }
+  font-weight: 300;
+  i {
+    margin-right: 0.5rem;
+    font-size: 3.2rem;
+    @media (max-width: $max-width) {
+      font-size: 1.8rem;
     }
-    font-weight: 300;
-    i {
-        margin-right: .5rem;
-        font-size: 3.2rem;
-        @media screen and (max-width: 575px){
-            font-size: 2.8rem;
-        }
-    }
+  }
 }
 h3 {
-    font-weight: 300;
-
+  font-weight: 300;
+  @media (max-width: $max-width) {
+    font-size: 1.7rem !important;
+  }
 }
 h4 {
 }
 
 ul {
 }
-

@@ -22,12 +22,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@~/sass/_variables";
 .header_d {
   padding: 20px 0;
   i {
     color: blue;
     font-size: 24px;
     margin: 0 10px;
+  }
+  @media (max-width: $max-width) {
+    .h3 {
+      font-size: 1.6rem;
+    }
   }
 }
 </style>
