@@ -44,7 +44,7 @@ export default {
       { task, attachements }
     ) {
       formData.append('file', attachements[0].original_filename)
-      formData.append('name', +new Date().getDate())
+      formData.append('name', +new Date().getTime() + Math.random())
       formData.append('url', attachements[0].secure_url)
       formData.append('resource_subtype', 'external')
       return new Promise((resolve, reject) => {
