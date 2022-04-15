@@ -18,7 +18,7 @@
           :placeholder="`Entrer le nom d'utilisateur`"
           id="input-1"
           rules="required"
-          name="nom d'utilisateur"
+          name="Nom d'utilisateur"
           :state="stateForm.username"
           mode="aggressive"
         />
@@ -36,7 +36,7 @@
           :placeholder="`Entrer l'Adresse Email`"
           id="input-2"
           rules="required|email"
-          name="adresse email"
+          name="Adresse email"
           :state="stateForm.email"
           mode="aggressive"
         />
@@ -56,7 +56,7 @@
           :placeholder="`Entrer le nom`"
           id="input-3"
           rules="required"
-          name="nom"
+          name="Nom"
           :state="stateForm.name"
           mode="aggressive"
         />
@@ -73,7 +73,7 @@
           type="text"
           :placeholder="`Ex: 0820000000`"
           id="input-4"
-          name="numéro de téléphone"
+          name="Numéro de téléphone"
           rules="required|regex"
           :state="stateForm.phoneNumber"
           mode="aggressive"
@@ -90,7 +90,7 @@
           :reduce="(item) => item.id"
           id="roleId"
           labelText="Rôles"
-          name="rôle"
+          name="Rôle"
           mode="aggressive"
           :isObligated="true"
           rules="required"
@@ -121,7 +121,7 @@
           id="text-password"
           vid="pass"
           :rules="`${updating ? '' : 'required'}`"
-          name="mot de passe"
+          name="Mot de passe"
           :state="stateForm.password"
           mode="aggressive"
         />
@@ -137,7 +137,7 @@
           type="password"
           id="text-password-confirm"
           :rules="`${updating ? '' : 'required|confirmed:pass'}`"
-          name="Mot de passe confirmé"
+          name="Confirmation de mot de passe "
           mode="aggressive"
         />
         <b-form-text id="password-help-block" class="mb-4"
@@ -172,63 +172,63 @@
 </template>
 
 <script>
-import FormFieldInput from "../../../../components/forms/FormFieldInput";
-import FomFieldSelect from "../../../../components/forms/FomFieldSelect";
-import { ValidationObserver } from "vee-validate";
-import { ADMIN_ID } from "../../../../config/env.js";
+import FormFieldInput from '../../../../components/forms/FormFieldInput'
+import FomFieldSelect from '../../../../components/forms/FomFieldSelect'
+import { ValidationObserver } from 'vee-validate'
+import { ADMIN_ID } from '../../../../config/env.js'
 
 export default {
   components: {
     FormFieldInput,
     FomFieldSelect,
-    ValidationObserver,
+    ValidationObserver
   },
   props: {
     userAdded: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     userUpdated: {
       type: Boolean,
       required: false,
-      default: false,
+      default: false
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
-        return {};
-      },
+        return {}
+      }
     },
     roles: {
       type: Array,
       default: () => {
-        return [];
-      },
+        return []
+      }
     },
     hospitals: {
       type: Array,
       default: () => {
-        return [];
-      },
+        return []
+      }
     },
     errors: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
-  data() {
+  data () {
     return {
-      title: "Nouveau Utilisateur",
-      btnTitle: "Enregistrer",
-      iconClass: "fa fa-plus",
+      title: 'Nouveau Utilisateur',
+      btnTitle: 'Enregistrer',
+      iconClass: 'fa fa-plus',
       updating: false,
       isLoading: false,
       validatedMessage: {
         mail: null,
         phoneNumber: null,
-        password: null,
+        password: null
       },
       disablePassword: false,
       rules: [],
@@ -239,161 +239,161 @@ export default {
         email: null,
         password: null,
         confirmPassword: null,
-        phoneNumber: null,
+        phoneNumber: null
       },
       form: {
-        username: "",
-        name: "",
+        username: '',
+        name: '',
         roles: [],
         hospitals: null,
-        email: "",
-        password: "",
-        confirmPassword: "",
-        phoneNumber: "",
+        email: '',
+        password: '',
+        confirmPassword: '',
+        phoneNumber: ''
       },
       show: true,
       showWarning: false,
-      toBeCanceled: true,
-    };
+      toBeCanceled: true
+    }
   },
-  mounted() {
-    this.resetForm();
+  mounted () {
+    this.resetForm()
   },
   watch: {
-    userAdded() {
-      this.resetForm();
+    userAdded () {
+      this.resetForm()
     },
 
-    formToPopulate() {
-      this.resetForm();
-      this.populateForm();
+    formToPopulate () {
+      this.resetForm()
+      this.populateForm()
     },
-    errors() {
-      this.errorForm();
-    },
+    errors () {
+      this.errorForm()
+    }
   },
   methods: {
-    async onSubmit() {
-      this.isLoading = true;
+    async onSubmit () {
+      this.isLoading = true
 
-      if (typeof this.form.hospitals !== "object") {
-        this.form.hospitals = [this.form.hospitals];
+      if (typeof this.form.hospitals !== 'object') {
+        this.form.hospitals = [this.form.hospitals]
       }
-      if (typeof this.rules !== "object") {
-        this.rules = [this.rules];
+      if (typeof this.rules !== 'object') {
+        this.rules = [this.rules]
       }
 
       if (this.rules.find((rule) => rule === ADMIN_ID)) {
         this.form.roles = this.roles
           .filter((rule) => {
-            if (rule.label === "Administrateur") {
-              return rule.id;
+            if (rule.label === 'Administrateur') {
+              return rule.id
             }
           })
-          .map((rule) => rule.id);
+          .map((rule) => rule.id)
       } else {
-        this.form.roles = this.rules;
+        this.form.roles = this.rules
       }
-      if (this.btnTitle === "Enregistrer") {
-        this.$emit("onCreate", this.form);
+      if (this.btnTitle === 'Enregistrer') {
+        this.$emit('onCreate', this.form)
       } else {
-        this.$emit("onUpdate", this.form);
+        this.$emit('onUpdate', this.form)
       }
-      this.isLoading = false;
+      this.isLoading = false
     },
 
-    onReset() {
-      this.$refs.form.reset();
-      this.toToCanceled = true;
-      this.validatedMessage = {};
-      this.form = {};
-      this.rules = [];
+    onReset () {
+      this.$refs.form.reset()
+      this.toToCanceled = true
+      this.validatedMessage = {}
+      this.form = {}
+      this.rules = []
 
-      this.stateForm.email = null;
-      this.stateForm.confirmPassword = null;
-      this.stateForm.username = null;
-      this.stateForm.name = null;
-      this.stateForm.phoneNumber = null;
+      this.stateForm.email = null
+      this.stateForm.confirmPassword = null
+      this.stateForm.username = null
+      this.stateForm.name = null
+      this.stateForm.phoneNumber = null
 
-      this.title = "Nouveau Utilisateur";
-      this.btnTitle = "Enregistrer";
-      this.$emit("onCancelUpdate", {});
+      this.title = 'Nouveau Utilisateur'
+      this.btnTitle = 'Enregistrer'
+      this.$emit('onCancelUpdate', {})
     },
 
-    resetForm() {
-      this.$refs.form.reset();
-      this.updating = false;
-      this.isLoading = false;
-      this.disablePassword = false;
+    resetForm () {
+      this.$refs.form.reset()
+      this.updating = false
+      this.isLoading = false
+      this.disablePassword = false
 
-      this.validatedMessage = {};
+      this.validatedMessage = {}
 
-      this.stateForm.email = null;
-      this.stateForm.confirmPassword = null;
-      this.stateForm.phoneNumber = null;
-      this.stateForm.username = null;
-      this.stateForm.name = null;
-      this.form = {};
-      this.rules = [];
+      this.stateForm.email = null
+      this.stateForm.confirmPassword = null
+      this.stateForm.phoneNumber = null
+      this.stateForm.username = null
+      this.stateForm.name = null
+      this.form = {}
+      this.rules = []
 
-      this.btnTitle = "Enregistrer";
-      this.title = "Nouveau Utilisateur";
-      this.$emit("onReset");
+      this.btnTitle = 'Enregistrer'
+      this.title = 'Nouveau Utilisateur'
+      this.$emit('onReset')
     },
 
-    populateForm() {
-      this.updating = false;
+    populateForm () {
+      this.updating = false
 
       if (Object.keys(this.formToPopulate).length !== 0) {
-        this.updating = true;
-        this.form.id = this.formToPopulate.id;
-        this.form.username = this.formToPopulate.usernmae;
-        this.form.email = this.formToPopulate.email;
-        this.form.phoneNumber = this.formToPopulate.phone_number;
+        this.updating = true
+        this.form.id = this.formToPopulate.id
+        this.form.username = this.formToPopulate.usernmae
+        this.form.email = this.formToPopulate.email
+        this.form.phoneNumber = this.formToPopulate.phone_number
         this.form.roles = this.formToPopulate.roles.filter((v) =>
           this.filterRole.find((t) => t.id === v.id)
-        );
-        this.rules = this.form.roles.map((rule) => rule.id);
-        this.form.hospitals = this.formToPopulate.hospital;
-        this.form.name = this.formToPopulate.name;
+        )
+        this.rules = this.form.roles.map((rule) => rule.id)
+        this.form.hospitals = this.formToPopulate.hospital
+        this.form.name = this.formToPopulate.name
 
-        this.title = "Modification de l'utilisateur";
-        this.btnTitle = "Modifier";
+        this.title = "Modification de l'utilisateur"
+        this.btnTitle = 'Modifier'
       }
     },
 
-    errorForm() {
+    errorForm () {
       if (this.errors.username) {
-        this.stateForm.username = false;
+        this.stateForm.username = false
       }
       if (this.errors.phone_number) {
-        this.stateForm.phoneNumber = false;
+        this.stateForm.phoneNumber = false
       }
       if (this.errors.name) {
-        this.stateForm.name = false;
+        this.stateForm.name = false
       }
       if (!this.errors.username && this.form.username) {
-        this.stateForm.username = null;
+        this.stateForm.username = null
       }
       if (!this.errors.phone_number && this.form.phoneNumber) {
-        this.stateForm.phoneNumber = null;
+        this.stateForm.phoneNumber = null
       }
       if (!this.errors.name && this.form.name) {
-        this.stateForm.name = null;
+        this.stateForm.name = null
       }
-    },
+    }
   },
 
   computed: {
-    filterRole() {
+    filterRole () {
       return this.roles.filter(
         (v, i, a) =>
           a.findIndex((t) => t.label === v.label) === i &&
-          (v.label === "Administrateur" || v.label === "Agent Point Focal")
-      );
-    },
-  },
-};
+          (v.label === 'Administrateur' || v.label === 'Agent Point Focal')
+      )
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -91,6 +91,26 @@
                 </b-form-text>
               </b-form-group>
               <b-form-group class="border-0 m-0">
+              <label id="input-group-4" class="text-dash-color" for="input-4">
+                 Numéro Téléphone <span class="text-danger">*</span></label
+              >
+              <FormFieldInput
+                v-model="form.phone"
+                type="text"
+                :placeholder="`Ex: 0820000000`"
+                id="input-4"
+                name="Numéro de téléphone"
+                rules="required|regex"
+                :state="stateForm.phone"
+                mode="aggressive"
+              />
+              <b-form-text id="password-help-block" class="mb-4"
+                ><span class="text-danger">
+                  {{ errors.phone ? errors.phone[0] : null }}</span
+                ></b-form-text
+              >
+              </b-form-group>
+              <b-form-group class="border-0 m-0">
                 <FomFieldSelect
                   v-model="form.device"
                   :options="devices"
@@ -128,7 +148,7 @@
                   v-model="form.page"
                   :options="adminPages"
                   id="deviceId"
-                  labelText="Sur quel menu(page) avez-vous rencontré ce problème ? "
+                  labelText="Sur quelle page avez-vous rencontré ce problème ? "
                   name="Menu"
                   mode="aggressive"
                   :isObligated="true"
@@ -141,7 +161,7 @@
                   v-model="form.page"
                   :options="agentPages"
                   id="deviceId"
-                  labelText="Sur quel page avez-vous rencontré ce problème ? "
+                  labelText="Sur quelle page avez-vous rencontré ce problème ? "
                   name="Menu"
                   mode="aggressive"
                   :isObligated="true"
@@ -153,8 +173,26 @@
                   ><span class="text-danger"> </span
                 ></b-form-text>
               </b-form-group>
+              <b-form-group class="border-0 m-0">
+              <label id="input-group-4" class="text-dash-color" for="input-4">
+                 Copier l'URL de la page ( Optionnel )</label
+              >
+              <FormFieldInput
+                v-model="form.pageURL"
+                type="url"
+                :placeholder="'Ex: https://dashboard.stopcoronavirusrdc.info/hospitals'"
+                id="input-4"
+                name="URL de la page"
+              />
+              <b-form-text id="password-help-block" class="mb-4"
+                ><span class="text-danger">
+                  {{ errors.phone ? errors.phone[0] : null }}</span
+                ></b-form-text
+              >
+              </b-form-group>
              <div class="mb-4">
               <label for="dropzone" class="text-dash-color text-label">Joindre un fichier ( Optionnel )</label>
+               <b-progress :value="progress" variant="success" v-show="progress > 0"></b-progress>
                <vue2Dropzone
                 ref="imgDropzone"
                 id="dropzone"
@@ -178,8 +216,8 @@
                   v-model="form.description"
                   type="text"
                   rules="required"
-                  name="Un Message"
-                  labelText="Message "
+                  name="Description du Problème"
+                  labelText="Description du Problème "
                   :state="errors.description ? false : null"
                   id="descriptionId"
                   :rows="4"
@@ -198,7 +236,7 @@
                   type="submit"
                   variant="primary"
                   class="rounded btn__bug-tracker"
-                  :disabled="invalid ? true : false"
+                  :disabled="invalid ? true : false|| uploading"
                 >
                   <span v-if="isLoading"
                     ><b-spinner class="align-middle"></b-spinner>
@@ -252,15 +290,18 @@ export default {
     return {
       dateFormatted: { day: 'numeric', year: 'numeric', month: 'numeric' },
       btnTitle: 'Enregistrer',
+      uploading: false,
       form: {
         name: '',
         firstName: '',
         email: '',
+        phone: '',
         device: null,
         description: '',
         images: [],
         occurence: null,
-        page: null
+        page: null,
+        pageURL: ''
       },
       uploadUrl: 'https://httpbin.org/post',
       toToCanceled: false,
@@ -268,10 +309,12 @@ export default {
         name: null,
         firstName: null,
         email: null,
+        phone: null,
         description: null,
         images: null,
         device: null,
-        occurence: null
+        occurence: null,
+        pageURL: null
       },
       cloudinaryConfig: {
         preset: 'uzcpaoas',
@@ -282,8 +325,8 @@ export default {
         mail: null
       },
       progress: null,
-      devices: ['Ordinateur', 'Téléphone'],
-      occurences: ['1 fois', '2 fois ou Plus de 2 fois'],
+      devices: ['Ordinateur', 'Tablette', 'Téléphone'],
+      occurences: ['1 fois', '2 fois', 'Plus de 2 fois'],
       adminPages: [' Admininstration', ' Dashboard', ' CTCOS'],
       agentPages: [' CTCOS', 'Autres'],
       max: now,
@@ -304,8 +347,6 @@ export default {
         dictRemoveFileConfirmation: 'Etes-vous sûr de supprimer cette image ?',
         dictCancelUploadConfirmation: "Etes-vous sûr d'annuler cette image ?"
       },
-      importantNotUrgentTag: '1155747022304322',
-      importantUrgentTag: '1155747022304324',
       data: {
         approval_status: 'pending',
         assignee_section: '1202084007644818',
@@ -377,6 +418,7 @@ export default {
       this.$refs.imgDropzone.removeAllFiles(true)
     },
     uploadProgress (file, progress, byte) {
+      this.uploading = true
       this.progress = progress
     },
     uploadSuccess (file, response) {
@@ -400,6 +442,8 @@ export default {
           })
           this.attachements = []
           this.attachements.push(data)
+          this.uploading = false
+          this.progress = 0
         })
       } catch (error) {
         this.$bvToast.toast('Une erreur est survenue!', {
@@ -472,31 +516,27 @@ export default {
       this.errors = {}
       this.data.name = `[Bug: ${this.form.page}]: \t\n ${this.form.description.slice(0, 100)} ...`
       this.data.html_notes = this.renderHTMLContents()
-      this.data.tags = this.getTaskPriority(this.form.occurence)
     },
     renderHTMLContents () {
+      const phone = this.form.phone.split('').slice(1, 10).join('')
+      let pageURL = ''
+      if (this.form.pageURL && this.form.pageURL !== undefined) {
+        pageURL = `URL de la page: <a href="${this.form.pageURL}">${this.form.pageURL}</a>`
+      }
       return `
       <body>
-      <ul>
-      <li>Nom : ${this.form.name}</li>
-      <li>Prénom : ${this.form.firstName}</li>
-      <li>Email : ${this.form.email}</li>
-      <li>Type Appareil : ${this.form.device}</li>
-      </ul>
-      <strong>Message :</strong>
-      <ul>
-      <li>${this.form.description}.</li>
-      </ul>
+  
+      Nom : ${this.form.name}
+      Prénom : ${this.form.firstName}
+      Email  : <a href="mailto:${this.form.email}" data-asana-accessible="true">${this.form.email}</a>
+      Phone  : +243 ${phone}
+      Type Appareil : ${this.form.device}
+      Fréquence du problème : ${this.form.occurence}
+      ${pageURL}
+      
+      <strong>Description du problème :</strong>
+      ${this.form.description}.
       </body>`
-    },
-    getTaskPriority (occurence) {
-      this.data.tags = []
-      if (occurence === this.occurences[0]) {
-        this.data.tags.push(this.importantNotUrgentTag)
-      } else if (occurence === this.occurences[1]) {
-        this.data.tags.push(this.importantUrgentTag)
-      }
-      return this.data.tags
     }
 
   }
