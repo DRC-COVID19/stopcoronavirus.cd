@@ -144,7 +144,11 @@
           ><span class="text-danger"></span
         ></b-form-text>
         <b-row class="px-3 pt-4 d-flex justify-content-start">
-          <b-button type="submit" variant="primary" :disabled="invalid">
+          <b-button
+            type="submit"
+            variant="primary"
+            :disabled="updating ? false : invalid"
+          >
             <span v-if="isLoading"
               ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
@@ -271,7 +275,7 @@ export default {
   methods: {
     async onSubmit() {
       this.isLoading = true;
-      this.form.roles = this.rules;
+
       if (typeof this.form.hospitals !== "object") {
         this.form.hospitals = [this.form.hospitals];
       }
@@ -287,15 +291,15 @@ export default {
             }
           })
           .map((rule) => rule.id);
+      } else {
+        this.form.roles = this.rules;
       }
       if (this.btnTitle === "Enregistrer") {
         this.$emit("onCreate", this.form);
-        this.isLoading = false;
       } else {
-        console.log("this.form", this.form);
         this.$emit("onUpdate", this.form);
-        this.isLoading = false;
       }
+      this.isLoading = false;
     },
 
     onReset() {
