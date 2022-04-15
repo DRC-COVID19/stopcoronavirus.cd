@@ -241,7 +241,7 @@ export default {
         username: "",
         name: "",
         roles: [],
-        hospitals: [],
+        hospitals: null,
         email: "",
         password: "",
         confirmPassword: "",
@@ -278,7 +278,6 @@ export default {
       if (typeof this.rules !== "object") {
         this.rules = [this.rules];
       }
-      console.log("tab:", this.form.hospitals);
 
       if (this.rules.find((rule) => rule === ADMIN_ID)) {
         this.form.roles = this.roles
@@ -293,6 +292,7 @@ export default {
         this.$emit("onCreate", this.form);
         this.isLoading = false;
       } else {
+        console.log("this.form", this.form);
         this.$emit("onUpdate", this.form);
         this.isLoading = false;
       }
@@ -350,19 +350,14 @@ export default {
           this.filterRole.find((t) => t.id === v.id)
         );
         this.rules = this.form.roles.map((rule) => rule.id);
-        this.form.hospitals = this.formToPopulate.hospitals.map(
-          (hospital) => hospital.id
-        );
-        console.log("rule", this.rules);
+        this.form.hospitals = this.formToPopulate.hospital;
         this.form.name = this.formToPopulate.name;
+
         this.title = "Modification de l'utilisateur";
         this.btnTitle = "Modifier";
       }
     },
-    onSelect(value) {
-      this.form.hospitals = [...value];
-      console.log("this.form.hospitals:", this.form.hospitals + "value", value);
-    },
+
     errorForm() {
       if (this.errors.username) {
         this.stateForm.username = false;
