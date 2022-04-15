@@ -111,13 +111,13 @@
         <b-col
           cols="12"
           sm="12"
-          md="6 "
+          md="6"
           lg="3"
-          class="pl-md-3 pr-md-3 d-flex text-right offset-md-3 justify-content-end"
+          class="pl-md-3 pr-md-3 d-flex text-right justify-content-end"
           style="border"
           :class="{ row: !isSmOrMd }"
         >
-          <b-button type="submit" block class="btn-submit mt-2 btn-dash-blue"
+          <b-button type="submit" block class="btn-submit btn-dash-blue"
             >Filtrer les données</b-button
           >
         </b-col>
