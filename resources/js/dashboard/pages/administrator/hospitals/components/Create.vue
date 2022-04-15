@@ -223,7 +223,8 @@ export default {
           (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)
       }
-      this.$refs.form.reset()
+      this.isLoading = false;
+      this.$refs.form.reset();
     },
 
     onReset () {
