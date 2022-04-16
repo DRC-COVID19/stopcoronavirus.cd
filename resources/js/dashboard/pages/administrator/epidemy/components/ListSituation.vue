@@ -1,17 +1,59 @@
 <template>
-  <b-container>
-    <b-row class="my-3" align-h="start">
-      <b-col cols="12" md="6">
-        <b-form-datepicker
-          label-today-button="Aujourd'hui"
-          label-reset-button="Effacer"
-          reset-button
-          today-button
-          v-model="filter"
-          placeholder="Choisir la date"
-          class="mb-2"
-        >
-        </b-form-datepicker>
+  <b-container fluid>
+    <b-row class="mb-3" no-gutters>
+      <b-col cols="12" md="12 d-flex flex-row-reverse justify-content-between">
+        <div class="container-filter">
+          <v-date-picker
+            v-model="filter"
+            opens="center"
+            :max-date="new Date()"
+            @input="onRangeDateObservation"
+            class="d-flex style-picker mb-2"
+            show-weeknumbers
+            ref="datepicker"
+            :attributes="attrs"
+          >
+            <template v-slot="{ inputEvents }">
+              <div class="d-flex btn-container-calendar">
+                <i for="filter" class="fas fa-light fa-calendar p-2"></i>
+                <input
+                  id="filter"
+                  class="p-1 w-full"
+                  style="font-size: 16px"
+                  :value="
+                    filter
+                      ? moment(filter).format('DD.MM.YYYY')
+                      : 'Choisir la date'
+                  "
+                  v-on="inputEvents"
+                  readonly
+                />
+              </div>
+            </template>
+            <div
+              slot="footer"
+              slot-scope=""
+              class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
+              style="width: 330px"
+            >
+              <span class="btn-date-picker today" style="" @click="btnToday"
+                >Aujourd'hui
+              </span>
+              <span class="btn-date-picker reset" @click="btnReset">
+                Annuler</span
+              >
+            </div>
+          </v-date-picker>
+        </div>
+        <div class="container-new-btn d-lg-none">
+          <b-button
+            @click="openToogle()"
+            v-b-toggle.sidebar-right
+            class="btn-dash-blue d-block"
+            ><span class="default-label">Nouveau</span>
+            <i class="fas fa-plus responsive-label"></i>
+          </b-button>
+        </div>
       </b-col>
     </b-row>
     <b-row>
@@ -36,16 +78,23 @@
         >
           <template #table-busy>
             <div
-              class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height"
+              class="
+                align-items-center
+                d-flex
+                justify-content-center
+                my-2
+                text-center text-danger
+                loading-height
+              "
             >
               <b-spinner class="align-middle"></b-spinner>
               <strong>Loading...</strong>
             </div>
           </template>
           <template v-slot:cell(actions)="data" class="action-btn-group">
-            <i
-              class="mx-2 fas fa-pencil-alt color-green"
-              aria-hidden="true"
+            <b-button
+              variant="outline-success mb-1"
+              class="btn-dash"
               @click="
                 editSituation(
                   data.item.id,
@@ -59,22 +108,29 @@
                   data.item.seriously
                 )
               "
-            ></i>
-            <i
-              class="mx-2 fas fa-trash prim color-red"
-               aria-hidden="true"
+              v-b-toggle.sidebar-right
+              >Editer</b-button
+            >
+            <b-button
+              variant="outline-danger mb-1"
+              class="btn-dash"
               @click="deleteSituation(data.item.id)"
-            ></i>
+            >
+              Supprimer
+            </b-button>
           </template>
           <template v-slot:cell(last_update)="data">
-            {{ moment(data.item.last_update).format("D MMMM YYYY") }}
+            {{ moment(data.item.last_update).format("DD.MM.YYYY") }}
           </template>
         </b-table>
       </b-col>
     </b-row>
-    <b-modal v-model="isDeleteModalShown">
-      Voulez-vous supprimer la mise à jour du
-      {{ currentSituation.last_update }} ?
+    <b-modal v-model="isDeleteModalShown" centered hide-header>
+      <b-container class="text-center"
+        >Voulez-vous supprimer la mise à jour du
+        {{ currentSituation.last_update }} ?</b-container
+      >
+
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter
@@ -102,7 +158,6 @@ export default {
   data() {
     return {
       fields: [
-        { key: "id", label: "ID" },
         { key: "last_update", label: "Date" },
         { key: "confirmed", label: "Confirme", sortable: true },
         { key: "sick", label: "Actifs", sortable: true },
@@ -121,6 +176,7 @@ export default {
         last_update: "",
       },
       editModalShow: false,
+      attrs: [],
     };
   },
   computed: {
@@ -129,13 +185,13 @@ export default {
     },
   },
   watch: {
-    filter () {
+    filter() {
       this.search();
-    }
+    },
   },
   methods: {
-    search () {
-      this.$emit('onSearch', this.filter);
+    search() {
+      this.$emit("onSearch", this.filter);
     },
     deleteSituation(id) {
       this.isDeleteModalShown = true;
@@ -172,10 +228,30 @@ export default {
     onCancelDelection() {
       this.isDeleteModalShown = false;
     },
+    openToogle() {
+      this.$emit("openToogle", false);
+    },
+    onRangeDateObservation(inputValueDate) {
+      // this.filter = inputValueDate
+      this.attrs = [];
+    },
+    btnReset() {
+      this.attrs = [];
+      this.filter = null;
+      this.$emit("onGetSituations");
+    },
+    btnToday() {
+      this.filter = new Date();
+      this.attrs.push({
+        key: "today",
+        dates: new Date(),
+        highlight: true,
+      });
+    },
   },
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .loading-height {
   height: 660px;
@@ -198,5 +274,65 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+.btn-container-calendar {
+  border-radius: 5px;
+  border: 1px solid #c3c8ced2;
+  width: 100%;
+  align-items: center;
+  background-color: #f4f5fc;
+
+  input {
+    border: none !important;
+    width: 100%;
+    height: 100%;
+    &:focus {
+      border: none !important;
+      outline: none !important;
+    }
+  }
+}
+.style-picker {
+  padding: 5px;
+  width: 100%;
+}
+.btn-date-picker {
+  cursor: pointer;
+  border: 1px solid #c3c8ced2;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+}
+.today {
+  &:hover {
+    color: #0013c1;
+    border: 1px solid #0013c1;
+  }
+}
+
+.reset {
+  &:hover {
+    color: red;
+    border: 1px solid red;
+  }
+}
+.responsive-label {
+  display: none;
+}
+.default-label {
+  display: block;
+}
+.container-new-btn {
+  display: block !important;
+}
+@media (max-width: $max-width) {
+  .default-label {
+    display: none;
+  }
+  .responsive-label {
+    display: block;
+
+    font-size: 20px;
+  }
 }
 </style>

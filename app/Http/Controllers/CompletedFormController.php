@@ -4,17 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Hospital;
 use App\CompletedForm;
-use App\CompletedFormField;
 use App\FormFieldType;
+use App\CompletedFormField;
 use Illuminate\Http\Request;
+use function PHPSTORM_META\map;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+
+
 use App\Http\Requests\StoreCompletedFormRequest;
 use App\Http\Requests\UpdateCompletedFormRequest;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\DB;
-
-
-use function PHPSTORM_META\map;
 
 class CompletedFormController extends Controller
 {
@@ -164,6 +165,7 @@ class CompletedFormController extends Controller
         try {
             $data = $request->validated();
             $updatedManagerName = $data['updated_manager_name'];
+            $updatedManagerFirstName = $data['updated_manager_first_name'];
             $completedFormFields = $data['completed_form_fields'];
 
             foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
@@ -172,14 +174,17 @@ class CompletedFormController extends Controller
                 if ($completedFormField && $completedFormField->value !== $formFieldValue) {
                     $completedFormField->update([
                         'value'                 => $formFieldValue,
-                        'updated_manager_name'  => $updatedManagerName
+                        'updated_manager_name'  => $updatedManagerName,
+                        'updated_manager_first_name'  => $updatedManagerFirstName
                     ]);
                 } else if (!$completedFormField) {
                     CompletedFormField::create([
                         'form_field_id'          => $formFieldKey,
                         'value'                 => $formFieldValue,
                         'completed_form_id'     => $completedForm->id,
-                        'updated_manager_name'  => $updatedManagerName
+                        'updated_manager_name'  => $updatedManagerName,
+                        'updated_manager_first_name'  => $updatedManagerFirstName
+
                     ]);
                 }
             }
@@ -293,11 +298,18 @@ class CompletedFormController extends Controller
                         $query->where('last_update', $hospitalLastUpdate->max_last_update);
                     }
                 },
+                'completedForms.completedFormFields' => function ($query) {
+                    $query->whereHas('formField');
+                },
                 'completedForms.completedFormFields.formField.formStep',
                 'completedForms.adminUser'
             ])
+
+
                 ->find($hospitalLastUpdate->hospital_id);
         }
+
+
         return [
             'hospitalsData' => $hospitalsData,
             'lastUpdate'    => $hospitalsLastUpdate->max('max_last_update')
@@ -334,4 +346,10 @@ class CompletedFormController extends Controller
                 ];
             });
     }
+
+    public function checkLastUpdate($hospitalId, $lastUpdate){
+        return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id',$hospitalId)->count();
+        
+    }
+
 }

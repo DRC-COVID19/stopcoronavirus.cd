@@ -26,7 +26,7 @@ class Administrator extends Model implements JWTSubject, AuthenticatableContract
     use Notifiable;
     use SoftDeletes;
 
-    protected $fillable = ['username', 'password', 'name', 'avatar', 'email'];
+    protected $fillable = ['username', 'password', 'name', 'avatar', 'email', 'phone_number','affected'];
 
     /**
      * Create a new Eloquent model instance.
@@ -103,11 +103,11 @@ class Administrator extends Model implements JWTSubject, AuthenticatableContract
 
     public function changeLogsRead()
     {
-        return $this->belongsToMany(ChangeLog::class,'administrator_read_change_logs','administrator_id','change_log_id');
+        return $this->belongsToMany(ChangeLog::class, 'administrator_read_change_logs', 'administrator_id', 'change_log_id');
     }
     public function hospitals()
     {
-        return $this->belongsToMany(Hospital::class,'admin_user_hospital','admin_user_id','hospital_id');
+        return $this->belongsToMany(Hospital::class, 'admin_user_hospital', 'admin_user_id', 'hospital_id');
     }
 
     /**

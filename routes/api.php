@@ -35,6 +35,10 @@ Route::get('/pandemicstats', function () {
   return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->get());
 });
 
+Route::get('/debug-sentry', function () {
+  throw new Exception('My first Sentry error!');
+});
+
 Route::get('/pandemicstatsasc', function () {
   /**
    * Récupère la situation epidémiologique
@@ -49,6 +53,10 @@ Route::group(['prefix' => 'admin_users'], function () {
 });
 
 Route::apiResource('admin_users', 'AdministratorController');
+
+Route::group(['prefix' => 'admin_users'], function () {
+  Route::get('/agents-hospital', 'AdministratorController@getAgentHospitals');
+});
 
 Route::apiResource('admin_roles', 'AdminRoleController');
 
@@ -167,6 +175,8 @@ Route::group([
       });
     });
 
+    
+
     Route::group(['prefix' => 'hotspots'], function () {
       Route::get('list', 'FluxHotSpotController@index'); //ok
       Route::get('maps', 'Flux30ZoneSumController@getHotspotMaps'); //ok
@@ -196,11 +206,19 @@ Route::group([
     Route::get('/get-latest-hospital-update', 'CompletedFormController@getLatestHospitalUpdate');
     Route::get('/{last_update}/hospital_id/{hospital_id}', 'CompletedFormController@getSituationsByHospitalAndLastUpdate');
     Route::post('/get-aggregated-by-hospitals', "CompletedFormController@getAggregatedByHospitals");
+    Route::get('/check-last_update/{hospital_id}/{last_update}', 'CompletedFormController@checkLastUpdate');
   });
 
+  Route::group(['prefix' => 'hospitals-data'], function () {
+    Route::get('/by-paginate', 'HospitalController@indexByPaginate');
+    Route::get('/filter', 'HospitalController@filter');
+    Route::get('/get-agents','HospitalController@getAgents');
+    Route::patch('/update-by-admin/{hospital_id}','HospitalController@updateByAdmin');
+    Route::patch('/{id}/reject-agent', 'HospitalController@rejectAgent');
+  });
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
-
+  // Route::apiResource('townships','TownshipController');
   Route::apiResource('hospital-situations', "HospitalSituationController");
   Route::resource('hospital-situations-new', "HospitalSituationNewController");
   Route::post('get-by-hospital-situations', "HospitalSituationController@getSituationByHospitals");
@@ -255,3 +273,5 @@ Route::group([
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');
+
+

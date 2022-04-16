@@ -51,20 +51,19 @@
                 </div>
               </template>
               <template v-slot:cell(actions)="data" class="action-btn-group">
-                <button
-                  @click="deleteStep(data.item)"
-                  class="mx-2 my-1 fas fa-trash prim color-red btn"
-                  aria-hidden="true"
-                ></button>
-                <button
-                  class="mx-2 my-1 fas fa-pencil-alt color-green btn"
-                  aria-hidden="true"
-                  @click="
+                <b-button
+               variant="outline-success mb-1"
+               class="btn-dash btn-btn-dash-form-step"
+                 @click="
                     updateStep(
                       data.item
                     )
                   "
-                ></button>
+              >Editer</b-button>
+              <b-button variant="outline-danger mb-1" class="btn-dash btn-dash-form-step"  @click="deleteStep(data.item)">
+             Supprimer
+            </b-button>
+
               </template>
               <template v-slot:cell(index)="data">
                 {{ ((currentPage - 1) * perPage) + data.index + 1 }}

@@ -6,7 +6,7 @@
           <b-link :to="{
             name:'hospital.admin'
           }">
-            <span class="fa fa-chevron-left">Retour</span>
+            <span class="fa fa-chevron-left"> Retour</span>
           </b-link>
         </b-col>
         <b-col v-if="hospital">
@@ -41,8 +41,8 @@
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
-                size="sm"
-                class="btn-dash-blue mb-1"
+               variant="outline-primary"
+                class="btn-dash "
                 :to="{
                   name:'hospital.detail',
                   params:{
@@ -52,7 +52,7 @@
                     }"
               >Details</b-button>
               <b-button
-               variant="outline-success mb-1"
+               variant="outline-success btn-dash"
                 :to="{
                   name: 'hospital.edit',
                   params: {
@@ -95,17 +95,18 @@ export default {
       fields: [
         { key: 'last_update', label: 'Date' },
         { key: 'created_manager_name', label: 'Nom' },
+        { key: 'created_manager_first_name', label: 'Prénom' },
         { key: 'actions', label: 'Actions' }
       ],
-      currentPage: 1
+      currentPage: 1,
+      completedForms: {},
+      isLoading: false
     }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
-      hospital: (state) => state.hospital.hospitalData,
-      completedForms: (state) => state.completedForm.completedForms,
-      isLoading: (state) => state.completedForm.isLoading
+      hospital: (state) => state.hospital.hospitalData
     }),
     totalRows () {
       if (this.completedForms) {
@@ -131,8 +132,12 @@ export default {
     ...mapActions(['getHospital', 'completedForm__getByHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     async getCompletedForms (page) {
+      this.isLoading = true
       if (typeof page === 'undefined') page = 1
-      await this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id })
+      this.completedForms = await this.completedForm__getByHospital({ page, hospital_id: this.$route.params.hospital_id })
+      if (this.completedForms.length !== 0) {
+        this.isLoading = false
+      }
     },
     onPageChange (page) {
       this.getCompletedForms(page)

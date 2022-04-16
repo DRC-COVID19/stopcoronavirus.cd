@@ -6,6 +6,7 @@ import ResetPasseword from './pages/auth/ResetPassword'
 import PasswordResetComplete from './pages/auth/PasswordResetComplete'
 import HospitalsHome from './pages/hospital/Home'
 import HospitalForm from './pages/hospital/HospitalForm'
+import BugTracker from './pages/bug_tracker/Index'
 import HospitalsDetail from './pages/hospital/HospitalDetail'
 import HospitalData from './pages/hospital/HospitalData'
 import HospitalAdmin from './pages/adminHospital/Home'
@@ -13,6 +14,7 @@ import HospitalAdminData from './pages/adminHospital/HospitalData'
 import NotAcces from './pages/NotAccess'
 import Administrator from './pages/administrator/Administrator'
 import AdminUserIndex from './pages/administrator/users/Index'
+import AdminHospitalIndex from './pages/administrator/hospitals/Index'
 import PageNotFound from './pages/NotFound'
 import ChangeLogIndex from './pages/administrator/changeLog/index'
 import Epidemie from './pages/administrator/epidemy/Index'
@@ -138,6 +140,15 @@ export default [
             }
           },
           {
+            path: 'hospitals',
+            name: 'administrator.hospitals',
+            component: AdminHospitalIndex,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR]
+            }
+          },
+          {
             path: 'change-logs',
             component: ChangeLogIndex,
             name: 'administrator.changeLog',
@@ -175,7 +186,6 @@ export default [
           }
         ]
       },
-
       /**
        * CTCO routes
        */
@@ -243,15 +253,36 @@ export default [
             }
           },
           {
-            path: '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
+            path:
+              '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
             name: 'hospital.edit',
             component: HospitalForm,
             meta: {
               requiresAuth: true,
               role: [AGENT_HOSPITAL]
             }
-          },
+          }
         ]
+      },
+
+      /**
+       * Bug tracker route routes
+       */
+      {
+        path: '/bug_tracker',
+        name: 'bug_tracker',
+        component: BugTracker,
+        meta: {
+          requiresAuth: false,
+          role: [
+            AGENT_HOSPITAL,
+            ADMIN_HOSPITAL,
+            ADMINISTRATOR,
+            CREATE_FORM,
+            EDIT_FORM,
+            MANANGER_EPIDEMIC
+          ]
+        }
       }
     ]
   },

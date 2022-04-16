@@ -81,8 +81,8 @@
   color: $dash-text-100 !important;
 }
 .input-dash {
-  border: 1px solid $dash-input-border-color;
-  background: $dash-background;
+  border: 1px solid #d3d4d6;
+  background: #ffff;
   transition: all 0.3s ease;
   border-radius: 5px;
   &:focus {

@@ -42,16 +42,16 @@
   }
 }
 .wrapper-img-modal {
-  width: max-content;
+  width: auto;
   margin: auto;
   img {
     max-width: 900px;
   }
 }
 .modal-dialog {
-  max-width: 1000px !important;
-  width: max-content;
-  min-width: 500px;
+  max-width: auto !important;
+  width: auto;
+  min-width: 100px;
 }
 .modal-header .close:focus {
   outline: none;

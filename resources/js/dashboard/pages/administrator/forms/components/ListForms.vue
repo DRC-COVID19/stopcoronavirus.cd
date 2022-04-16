@@ -1,14 +1,25 @@
 <template>
   <b-container fluid>
     <b-row no-gutters class="mb-3">
-      <b-col cols="12" md="6">
-        <b-form-input
-          v-model="filter"
-          debounce="1500"
-          class="input-dash input-filter"
-          type="search"
-          placeholder="Filtrer"
-        ></b-form-input>
+      <b-col cols="12" md="12 d-flex flex-row-reverse justify-content-between">
+        <div class="container-filter">
+          <b-form-input
+            v-model="filter"
+            debounce="1500"
+            class="input-dash input-filter"
+            type="search"
+            placeholder="Filtrer"
+          ></b-form-input>
+        </div>
+        <div class="container-new-btn d-lg-none">
+          <b-button
+            @click="openToogle()"
+            v-b-toggle.sidebar-right
+            class="btn-dash-blue d-block"
+            ><span class="default-label">Nouveau</span>
+            <i class="fas fa-plus responsive-label"></i>
+          </b-button>
+        </div>
       </b-col>
     </b-row>
     <b-row no-gutters>
@@ -33,21 +44,34 @@
         >
           <template #table-busy>
             <div
-              class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height"
+              class="
+                align-items-center
+                d-flex
+                justify-content-center
+                my-2
+                text-center text-danger
+                loading-height
+              "
             >
               <b-spinner class="align-middle"></b-spinner>
               <strong>Loading...</strong>
             </div>
           </template>
-          <template v-slot:cell(actions)="data" class="action-btn-group">
-            <i
-              @click="deleteForm(data.item.id)"
-              class="mx-2 my-1 fas fa-trash prim color-red"
-              aria-hidden="true"
-            ></i>
-            <i
-              class="mx-2 my-1 fas fa-pencil-alt color-green"
-              aria-hidden="true"
+          <template v-slot:cell(actions)="data">
+            <b-button
+              variant="outline-primary"
+              class="btn-dash mb-1"
+              :to="{
+                name: 'administrator.forms.show',
+                params: {
+                  form_id: data.item.id,
+                },
+              }"
+              >Details</b-button
+            >
+            <b-button
+              variant="outline-success mb-1"
+              class="btn-dash"
               @click="
                 updateForm(
                   data.item.id,
@@ -57,36 +81,35 @@
                   data.item.publish
                 )
               "
-            ></i>
-           <b-link
-               :to="{
-                    name:'administrator.forms.show',
-                    params:{
-                      form_id:data.item.id,
-                    }
-                  }"
-           >
-            <i
-                class="mx-2 my-1 fas fa fa-eye color-blue"
-                aria-hidden="true"
-              ></i>
-           </b-link>
-
+              v-b-toggle.sidebar-right
+              >Editer</b-button
+            >
+            <b-button
+              variant="outline-danger mb-1"
+              class="btn-dash"
+              @click="deleteForm(data.item.id)"
+            >
+              Supprimer
+            </b-button>
           </template>
           <template v-slot:cell(index)="data">
-            {{ ((currentPage - 1) * perPage) + data.index + 1 }}
+            {{ (currentPage - 1) * perPage + data.index + 1 }}
           </template>
           <template v-slot:cell(publish)="data">
-            <p>{{data.item.publish===true?'Oui':'Non'}}</p>
+            <p>{{ data.item.publish === true ? "Oui" : "Non" }}</p>
           </template>
           <template v-slot:cell(created_at)="data">
-            <p>{{formatDateFns(data.item.created_at)}}</p>
+            <p>{{ formatDateFns(data.item.created_at) }}</p>
           </template>
         </b-table>
       </b-col>
     </b-row>
-    <b-modal v-model="isDeleteModalShown">
-      Voulez-vous vraiment supprimer ce formulaire {{ currentForm.title }} ?
+    <b-modal v-model="isDeleteModalShown" centered hide-header>
+      <b-container class="text-center">
+        Voulez-vous vraiment supprimer ce formulaire
+        {{ currentForm.title }} ?</b-container
+      >
+
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter
@@ -104,80 +127,80 @@ export default {
   props: {
     forms: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     isLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     currentPage: {
       type: Number,
-      default: 1
+      default: 1,
     },
     perPage: {
       type: Number,
-      default: 15
-    }
+      default: 15,
+    },
   },
-  data () {
+  data() {
     return {
       fields: [
-        { key: 'index', label: '#' },
-        { key: 'title', label: 'Titre' },
-        { key: 'form_recurrence.name', label: 'Recurrence' },
-        { key: 'publish', label: 'Publier' },
-        { key: 'created_at', label: 'Date création' },
-        'actions'
+        { key: "title", label: "Titre" },
+        { key: "created_at", label: "Date création" },
+        "actions",
       ],
-      filter: '',
+      filter: "",
       isDeleteModalShown: false,
       currentForm: {
         id: -1,
-        title: ''
+        title: "",
       },
-      editModalShow: false
-    }
+      editModalShow: false,
+    };
   },
 
   computed: {
-    rows () {
-      return this.forms.length
-    }
+    rows() {
+      return this.forms.length;
+    },
   },
   watch: {
-    filter () {
-      this.search()
-    }
+    filter() {
+      this.search();
+    },
   },
   methods: {
-    search () {
-      this.$emit('onSearch', this.filter.trim())
+    openToogle() {
+      this.$emit("openToogle", false);
     },
-    deleteForm (formId) {
-      this.isDeleteModalShown = true
-      this.currentForm.id = formId
+    search() {
+      this.$emit("onSearch", this.filter.trim());
     },
-    onValidateDelection () {
-      this.$emit('onDeleteForm', this.currentForm.id)
-      this.isDeleteModalShown = false
+    deleteForm(formId) {
+      this.isDeleteModalShown = true;
+      this.currentForm.id = formId;
     },
-    onCancelDelection () {
-      this.isDeleteModalShown = false
+    onValidateDelection() {
+      this.$emit("onDeleteForm", this.currentForm.id);
+      this.isDeleteModalShown = false;
     },
-    updateForm (id, title, form_recurrence_value, form_recurrence_id,publish) {
+    onCancelDelection() {
+      this.isDeleteModalShown = false;
+    },
+    updateForm(id, title, form_recurrence_value, form_recurrence_id, publish) {
       this.currentForm = {
         id,
         title,
         form_recurrence_value,
         form_recurrence_id,
-        publish
-      }
-      this.$emit('onUpdateForm', this.currentForm)
-    }
-  }
-}
+        publish,
+      };
+      this.$emit("onUpdateForm", this.currentForm);
+    },
+  },
+};
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
 .input-filter {
   background: white;
@@ -203,5 +226,24 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+.responsive-label {
+  display: none;
+}
+.default-label {
+  display: block;
+}
+.container-new-btn {
+  display: block !important;
+}
+@media (max-width: $max-width) {
+  .default-label {
+    display: none;
+  }
+  .responsive-label {
+    display: block;
+
+    font-size: 20px;
+  }
 }
 </style>

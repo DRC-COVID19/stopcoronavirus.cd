@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Hospital;
 use App\Administrator;
-use App\Http\Resources\AdministratorResource;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\AdministratorResource;
 
 /**
  * @group  Administrator management
@@ -25,7 +26,7 @@ class AdministratorController extends Controller
    */
   public function __construct()
   {
-    $this->middleware('auth:dashboard');
+    $this->middleware('auth:dashboard')->except(['index']);
   }
 
   /**
@@ -78,8 +79,23 @@ class AdministratorController extends Controller
   public function index()
   {
     try {
-      $administrators = Administrator::orderBy('username')->paginate(15);
+      $administrators = Administrator::orderBy('username')->paginate(10);
       return AdministratorResource::collection($administrators);
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
+  }
+
+  public function getAgentHospitals()
+  {
+    try {
+      $administrators = Administrator::with(['roles'])
+        ->where('roles.name', '=', 'agent-hospital')
+        ->orderBy('username')->get();
+      return response()->json($administrators, 200);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -115,7 +131,11 @@ class AdministratorController extends Controller
       $data['password'] = Hash::make($data['password']);
       $administrator = Administrator::create($data);
       $administrator->roles()->sync($data['roles_id']);
-      $administrator->hospitals()->sync($data['hospitals_id']);
+      if ($data['hospitals_id']) {
+        // $administrator->hospitals()->sync($data['hospitals_id']);
+        $hospital = Hospital::where('id', $data['hospitals_id']);
+        $hospital->update(['agent_id' => $administrator->id]);
+      }
       DB::commit();
       return response()->json(null, 201, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
@@ -213,19 +233,22 @@ class AdministratorController extends Controller
   public function update(Request $request, $admin_user_id)
   {
     $data = Validator::make($request->all(), [
-      'username' => 'required|string|unique:admin_users,username' . ($admin_user_id ? ",$admin_user_id" : ""),
-      'name' => 'required|string',
-      'avatar' => 'nullable',
-      'remember_token' => 'nullable',
-      'email' => 'required|email',
-      'roles_id' => 'required|array',
-      'hospitals_id' => 'nullable|array',
-      'password' => 'sometimes|confirmed',
+      'username'        => 'sometimes|string|unique:admin_users,username' . ($admin_user_id ? ",$admin_user_id" : ""),
+      'name'            => 'sometimes|string',
+      'avatar'          => 'nullable',
+      'remember_token'  => 'nullable',
+      'email'           => 'required|email',
+      'roles_id'        => 'required|array',
+      'hospitals_id'    => 'nullable|array',
+      'password'        => 'sometimes|confirmed',
+      'phone_number'    => 'sometimes|string|unique:admin_users,phone_number' . ($admin_user_id ? ",$admin_user_id" : ""),
+      'affected'        => 'nullable|boolean'
 
     ])->validate();
     try {
       DB::beginTransaction();
       $administrator = Administrator::find($admin_user_id);
+
       if (isset($data['password'])) {
         $data['password'] = Hash::make($data['password']);
       } else {
@@ -233,7 +256,18 @@ class AdministratorController extends Controller
       }
       $administrator->update($data);
       $administrator->roles()->sync($data['roles_id']);
-      $administrator->hospitals()->sync($data['hospitals_id']);
+      $hospital = Hospital::where('agent_id', $admin_user_id)->first();
+      if ($hospital) {
+        if ($data['hospitals_id']) {
+          $hospital->update(['agent_id' => $administrator->id]);
+        } else {
+          $hospital->update(['agent_id' => null]);
+        }
+      } else {
+        $hospital = Hospital::where('id', $data['hospitals_id'])
+          ->update(['agent_id' => $administrator->id]);
+      }
+
       DB::commit();
       return response()->json(AdministratorResource::make($administrator), 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
@@ -276,14 +310,16 @@ class AdministratorController extends Controller
   public function form_validate($data, $id = null)
   {
     return Validator::make($data, [
-      'username' => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
-      'password' => 'required|confirmed',
-      'name' => 'required|string',
-      'avatar' => 'nullable',
-      'remember_token' => 'nullable',
-      'email' => 'required|email',
-      'roles_id' => 'required|array',
-      'hospitals_id' => 'nullable|array',
+      'username'        => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
+      'password'        => 'required|confirmed',
+      'name'            => 'required|string',
+      'avatar'          => 'nullable',
+      'remember_token'  => 'nullable',
+      'email'           => 'required|email',
+      'roles_id'        => 'required|array',
+      'hospitals_id'    => 'nullable|array',
+      'phone_number'    => 'required|string|unique:admin_users,phone_number',
+      'affected'        => 'nullable|boolean'
     ])->validate();
   }
 
@@ -295,11 +331,12 @@ class AdministratorController extends Controller
     return null;
   }
 
-  public function filter (Request $request) {
+  public function filter(Request $request)
+  {
     try {
-      $key_words=$request->get('key_words');
-      $admins = Administrator::where('username', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE' , "%{$key_words}%")->paginate(15);
-      if (! $admins ) {
+      $key_words = $request->get('key_words');
+      $admins = Administrator::where('username', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE', "%{$key_words}%")->paginate(15);
+      if (!$admins) {
         return response()->json(['message' => "No admin found"], 404);
       }
       return AdministratorResource::collection($admins);
@@ -310,5 +347,4 @@ class AdministratorController extends Controller
       return response($th->getMessage())->setStatusCode(500);
     }
   }
-
 }

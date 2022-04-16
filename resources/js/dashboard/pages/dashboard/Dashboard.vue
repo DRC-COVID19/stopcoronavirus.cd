@@ -1,5 +1,5 @@
 <template>
-  <b-row class="dashboard-container no-gutters flex-lg-nowrap">
+  <b-row class="dashboard-container d-block d-lg-flex no-gutters flex-lg-nowrap">
     <b-col cols="12" lg="auto">
       <DashboardMenu />
     </b-col>

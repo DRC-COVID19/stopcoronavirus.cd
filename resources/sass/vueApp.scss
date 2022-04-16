@@ -2,6 +2,7 @@
 @import "animate";
 @import "mixins";
 @import url("https://fonts.googleapis.com/css2?family=Rubik");
+@import url("https://fonts.googleapis.com/css2?family=Lato");
 @import "node_modules/bootstrap/scss/bootstrap";
 @import "node_modules/bootstrap-vue/src/index.scss";
 @import "~timeline-vuejs/dist/timeline-vuejs.css";
@@ -62,15 +63,15 @@ body,
 }
 
 .color-red {
-  color:$primary !important;
+  color: $primary !important;
 }
 
-.color-green{
-  color:$dash-green !important;
+.color-green {
+  color: $dash-green !important;
 }
 
-.color-blue{
-  color:$dash-blue  !important;
+.color-blue {
+  color: $dash-blue !important;
 }
 .card.default-card {
   border-radius: unset;
@@ -78,4 +79,34 @@ body,
 }
 .cursor-pointer:hover {
   cursor: pointer;
+}
+.btn-dash {
+  width: 5.8rem;
+  height: 2.5rem;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 2;
+}
+.container-filter {
+  width: 20.25rem;
+}
+.input-filter {
+  background: white;
+  width: 100%;
+}
+
+@media (max-width: $max-width) {
+  .container-filter {
+    width: 100%;
+  }
+  .container-new-btn {
+    position: fixed;
+    right: 2%;
+    top: 90%;
+    z-index: 10;
+    button {
+      box-shadow: 0px 0px 8px 0px #2e5bffb8;
+    }
+  }
 }

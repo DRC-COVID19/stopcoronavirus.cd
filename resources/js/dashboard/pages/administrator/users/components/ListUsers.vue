@@ -1,86 +1,114 @@
 <template>
-  <b-container fluid>
-    <b-row no-gutters class="mb-3">
-      <b-col cols="12" md="6">
-        <b-form-input
-          v-model="filter"
-          debounce="1500"
-          class="input-dash input-filter"
-          type="search"
-          placeholder="Filtrer"
-        ></b-form-input>
-      </b-col>
-    </b-row>
-    <b-row no-gutters>
-      <b-col cols="12">
-        <b-skeleton-table
-          v-if="isLoading"
-          :rows="15"
-          :columns="5"
-          :table-props="{ bordered: false, striped: true, responsive: true }"
-        ></b-skeleton-table>
-
-        <b-table
-          v-else
-          responsive
-          striped
-          hover
-          :fields="fields"
-          :items="users.data"
-          :filter="filter"
-          :per-page="perPage"
-          :current-page="currentPage"
+  <div>
+    <b-container fluid>
+      <b-row no-gutters class="mb-3">
+        <b-col
+          cols="12"
+          md="12 d-flex flex-row-reverse justify-content-between"
         >
-          <template #table-busy>
-            <div
-              class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height"
-            >
-              <b-spinner class="align-middle"></b-spinner>
-              <strong>Loading...</strong>
-            </div>
-          </template>
-          <template v-slot:cell(actions)="data" class="action-btn-group">
-            <i
-              @click="deleteUser(data.item.name, data.item.id)"
-              class="mx-2 my-1 fas fa-user-times"
-            ></i>
-            <i
-              @click="
-                updateUser(
-                  data.item.name,
-                  data.item.id,
-                  data.item.usernmae,
-                  data.item.roles,
-                  data.item.hospitals,
-                  data.item.email
-                )
-              "
-              class="mx-2 my-1 fas fa-user-edit"
-            ></i>
-          </template>
-          <template v-slot:cell(role)="data">
-            <b-badge
-              class="mx-1 my-1"
-              v-for="(role, index) in data.item.roles"
-              variant="secondary"
-              :key="index"
-              >{{ role.name }}</b-badge
-            >
-          </template>
-          <template v-slot:cell(hopital)="data">
-            <b-badge
-              class="mx-1 my-1"
-              v-for="(hopital, index) in data.item.hospitals"
-              variant="secondary"
-              :key="index"
-              >{{ hopital.name }}</b-badge
-            >
-          </template>
-        </b-table>
-      </b-col>
-    </b-row>
-    <b-modal v-model="isDeleteModalShown">
-      Voulez-vous vraiment supprimer l'utilisateurs {{ currentUser.name }} ?
+          <div class="container-filter" sm="12">
+            <b-form-input
+              v-model="filter"
+              debounce="1500"
+              class="input-dash input-filter"
+              type="search"
+              placeholder="Filtrer"
+            ></b-form-input>
+          </div>
+          <div class="container-new-btn d-lg-none">
+            <b-button
+              @click="openToogle()"
+              v-b-toggle.sidebar-right
+              class="btn-dash-blue d-block"
+              ><span class="default-label">Nouveau</span>
+              <i class="fas fa-plus responsive-label"></i>
+            </b-button>
+          </div>
+        </b-col>
+      </b-row>
+      <b-row no-gutters>
+        <b-col cols="12">
+          <b-skeleton-table
+            v-if="isLoading"
+            :rows="15"
+            :columns="5"
+            :table-props="{ bordered: false, striped: true, responsive: true }"
+          ></b-skeleton-table>
+
+          <b-table
+            v-else
+            responsive
+            striped
+            hover
+            :fields="fields"
+            :items="userFilter"
+            :filter="filter"
+            :per-page="perPage"
+            :current-page="currentPage"
+          >
+            <template #table-busy>
+              <div
+                class="
+                  align-items-center
+                  d-flex
+                  justify-content-center
+                  my-2
+                  text-center text-danger
+                  loading-height
+                "
+              >
+                <b-spinner class="align-middle"></b-spinner>
+                <strong>Loading...</strong>
+              </div>
+            </template>
+            <template v-slot:cell(actions)="data" class="action-btn-group">
+              <b-button
+                variant="outline-success mb-1"
+                class="btn-dash"
+                @click="
+                  updateUser(
+                    data.item.name,
+                    data.item.id,
+                    data.item.usernmae,
+                    data.item.roles,
+                    data.item.hospital,
+                    data.item.email,
+                    data.item.phone_number
+                  )
+                "
+                v-b-toggle.sidebar-right
+                >Editer</b-button
+              >
+              <b-button
+                variant="outline-danger mb-1"
+                class="btn-dash"
+                @click="deleteUser(data.item.name, data.item.id)"
+              >
+                Supprimer
+              </b-button>
+            </template>
+            <template v-slot:cell(role)="data">
+              <b-badge
+                class="mx-1 my-1"
+                v-for="(role, index) in data.item.roles"
+                variant="secondary"
+                :key="index"
+                >{{ role.label }}</b-badge
+              >
+            </template>
+            <template v-slot:cell(hospital)="data">
+              <b-badge class="mx-1 my-1">{{ data.value.name }}</b-badge>
+            </template>
+          </b-table>
+        </b-col>
+      </b-row>
+    </b-container>
+    <b-modal v-model="isDeleteModalShown" centered hide-header>
+      <b-container class="text-center">
+        Voulez-vous vraiment supprimer l'utilisateurs {{ currentUser.name }} ?
+        ?</b-container
+      >
+
       <template #modal-footer>
         <b-button size="sm" variant="success" @click="onValidateDelection()">
           Accepter
@@ -90,9 +118,8 @@
         </b-button>
       </template>
     </b-modal>
-  </b-container>
+  </div>
 </template>
-
 <script>
 export default {
   props: {
@@ -107,7 +134,13 @@ export default {
   },
   data() {
     return {
-      fields: ["id", "username", "name", "role","hopital", "actions"], // usernmae instead of username (see backend response)
+      fields: [
+        { key: "usernmae", sortable: false, label: "Nom utilisateur" }, // usernmae instead of username (see backend response)
+        { key: "phone_number", sortable: false, label: "N°Téléphone" },
+        { key: "role", sortable: false, label: "Rôle" },
+        { key: "hospital", sortable: false, label: "Hôpital" },
+        { key: "actions", sortable: false, label: "Actions" },
+      ],
       filter: "",
       perPage: 15,
       currentPage: 1,
@@ -123,15 +156,34 @@ export default {
     rows() {
       return this.users.length;
     },
+
+    userFilter() {
+      return (
+        (this.users.data &&
+          this.users.data
+            .slice()
+            .sort((a, b) => a.id - b.id)
+            .map((user) => {
+              user.roles = user.roles.filter(
+                (v, i, a) =>
+                  a.findIndex((t) => t.label === v.label) === i &&
+                  (v.label === "Administrateur" ||
+                    v.label === "Agent Point Focal")
+              );
+              return user;
+            })) ??
+        []
+      );
+    },
   },
   watch: {
-    filter () {
+    filter() {
       this.search();
-    }
+    },
   },
   methods: {
-    search () {
-      this.$emit('onSearch', this.filter.trim());
+    search() {
+      this.$emit("onSearch", this.filter.trim());
     },
     deleteUser(name, userId) {
       this.isDeleteModalShown = true;
@@ -145,25 +197,26 @@ export default {
     onCancelDelection() {
       this.isDeleteModalShown = false;
     },
-    updateUser(name, id, usernmae, roles,hospitals, email) {
+    openToogle() {
+      this.$emit("openToogle", false);
+    },
+    updateUser(name, id, usernmae, roles, hospital, email, phone_number) {
       this.currentUser = {
         id,
         name,
         usernmae,
         roles,
-        hospitals,
+        hospital,
         email,
+        phone_number,
       };
       this.$emit("onUpdateUser", this.currentUser);
     },
   },
 };
 </script>
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 @import "@~/sass/_variables";
-.input-filter {
-  background: white;
-}
 .fa-user-times {
   color: $dash-red;
   font-size: 16px;
@@ -185,5 +238,27 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+.modal-dialog {
+  width: auto !important;
+}
+.responsive-label {
+  display: none;
+}
+.default-label {
+  display: block;
+}
+.container-new-btn {
+  display: block !important;
+}
+@media (max-width: $max-width) {
+  .default-label {
+    display: none;
+  }
+  .responsive-label {
+    display: block;
+
+    font-size: 20px;
+  }
 }
 </style>
