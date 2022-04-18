@@ -351,6 +351,7 @@ export default {
         approval_status: 'pending',
         assignee_section: '1202084007644818',
         assignee_status: 'upcoming',
+        assignee: '1190300120839001',
         completed: false,
         completed_by: null,
         due_at: null,
