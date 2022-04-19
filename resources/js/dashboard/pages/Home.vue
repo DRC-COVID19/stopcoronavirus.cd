@@ -695,7 +695,6 @@ export default {
     this.$set(this.loadings, 'provinceGeo', true)
     this.$set(this.loadings, 'hotspotGeo', true)
     this.$set(this.loadings, 'hotspotPointGeo', true)
-    // this.getHospitalSituationsAll();
     this.initForm()
 
     this.getFluxZone()
@@ -774,7 +773,7 @@ export default {
       'getSituationHospital',
       'getHospitals',
       'completedForm__getAggregatedByHospitals',
-      'getHospitalSituationsAll'
+      'completedForm__getDataByHospitals'
     ]),
     ...mapMutations([
       'setMapStyle',
@@ -1710,6 +1709,7 @@ export default {
       this.setCanShowNavMobile(false)
       values.isLoading = true
       this.getHospitalsData(values)
+      this.completedForm__getDataByHospitals(values)
       this.completedForm__getAggregatedByHospitals(values)
       this.initForm()
     },

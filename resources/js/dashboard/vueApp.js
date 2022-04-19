@@ -12,7 +12,12 @@ import VueLazyLoad from 'vue-lazyload'
 import vSelect from 'vue-select'
 import excel from 'vue-excel-export'
 import App from './App.vue'
-import { GOOGLE_ANALYTICS_ID, ADMIN_DASHBOARD, AGENT_HOSPITAL, ADMIN_HOSPITAL } from './config/env'
+import {
+  GOOGLE_ANALYTICS_ID,
+  ADMIN_DASHBOARD,
+  AGENT_HOSPITAL,
+  ADMIN_HOSPITAL
+} from './config/env'
 import GlobalComponents from './globalComponents'
 
 import fullscreen from 'vue-fullscreen'
@@ -60,7 +65,11 @@ Sentry.init({
   integrations: [
     new BrowserTracing({
       routingInstrumentation: Sentry.vueRouterInstrumentation(router),
-      tracingOrigins: ['localhost', 'https://dev-stopcoronavirus-cd-lw7r5.ondigitalocean.app', /^\//]
+      tracingOrigins: [
+        'localhost',
+        'https://dev-stopcoronavirus-cd-lw7r5.ondigitalocean.app',
+        /^\//
+      ]
     })
   ],
   // Set tracesSampleRate to 1.0 to capture 100%
@@ -70,14 +79,14 @@ Sentry.init({
 })
 
 if (store.state.auth.isAuthenticated) {
-  store.dispatch('userMe').catch(error => {})
+  store.dispatch('userMe').catch((error) => {})
 }
 
 store.dispatch('loadSource')
 
 router.beforeEach((to, from, next) => {
   if (
-    to.matched.some(route => route.meta.requiresAuth) &&
+    to.matched.some((route) => route.meta.requiresAuth) &&
     (!store.state.auth.isAuthenticated || !store.state.auth.userRole)
   ) {
     next({ name: 'login' })
@@ -95,7 +104,7 @@ router.beforeEach((to, from, next) => {
   }
   if (
     to.meta.role &&
-    !to.meta.role.some(x => store.state.auth.userRole.includes(x)) &&
+    !to.meta.role.some((x) => store.state.auth.userRole.includes(x)) &&
     to.name != 'acces.denied'
   ) {
     next({ name: 'acces.denied' })
@@ -118,7 +127,7 @@ Vue.use(
 
 const app = new Vue({
   el: '#app',
-  render: h => h(App),
+  render: (h) => h(App),
   store,
   router
 })
