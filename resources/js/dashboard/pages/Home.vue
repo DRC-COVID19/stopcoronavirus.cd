@@ -775,7 +775,7 @@ export default {
       "getHospitals",
       "completedForm__getAggregatedByHospitals",
       "getHospitalSituationsAll",
-      "completedForm__getDataByHospitals"
+      "completedForm__getDataByHospitals",
     ]),
     ...mapMutations([
       "setMapStyle",
@@ -1711,8 +1711,8 @@ export default {
       this.setCanShowNavMobile(false);
       values.isLoading = true;
       this.getHospitalsData(values);
+      this.completedForm__getDataByHospitals(values);
       this.completedForm__getAggregatedByHospitals(values);
-      this.completedForm__getDataByHospitals(values)
       this.initForm();
     },
     seeSide() {

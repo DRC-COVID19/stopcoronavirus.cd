@@ -140,6 +140,7 @@ export default {
     },
 
     completedForm__getAggregatedByHospitals({ commit }, payload) {
+      commit("SET_IS_LOADING", true);
       return new Promise((resolve, reject) => {
         axios
           .post(
@@ -148,20 +149,24 @@ export default {
           )
           .then(({ data }) => {
             commit("SET_COMPLETED_FORMS_AGGREGATED", data);
+            commit("SET_IS_LOADING", false);
           })
           .catch((response) => {
             reject(response);
+          })
+          .finally(() => {
+            commit("SET_IS_LOADING", false);
           });
       });
     },
     completedForm__getDataByHospitals({ commit }, payload) {
-      console.log("data filter", payload);
+      commit("SET_IS_LOADING", true);
       return new Promise((resolve, reject) => {
         axios
           .post("/api/dashboard/completed_forms/get-data-by-hospitals", payload)
           .then(({ data }) => {
-            console.log("data", data);
             commit("SET_COMPLETED_FORMS_DATA", data);
+            commit("SET_IS_LOADING", false);
           })
           .catch((response) => {
             reject(response);
