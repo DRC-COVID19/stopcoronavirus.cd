@@ -26,7 +26,7 @@ class CompletedFormController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:dashboard')->except(['show', 'getAggregatedByHospitals']);
+        $this->middleware('auth:dashboard')->except(['show', 'getAggregatedByHospitals', 'getDataByHospitals']);
     }
     /**
      * Display a listing of the resource.
@@ -256,11 +256,15 @@ class CompletedFormController extends Controller
         $hospitalsCompletedFormsData = self::getHospitalsCompletedFormsData($request);
         return response()->json([
             'aggregated'  => self::getAggregatedHospitalsDatas($hospitalsCompletedFormsData['hospitalsData']),
-            'data'        => [],
             'last_update' => $hospitalsCompletedFormsData['lastUpdate']
         ], 200);
     }
-
+    /**
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\CompletedForm  $completedForm
+     * @return \Illuminate\Http\Response
+     */
     public function getDataByHospitals(Request $request)
     {
 
