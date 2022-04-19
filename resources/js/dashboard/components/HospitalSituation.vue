@@ -1,16 +1,16 @@
 /* eslint-disable no-empty */
 <template>
-  <b-container class="p-0">
+  <b-container class="p-0" >
     <b-row lg="12" class="no-gutters">
       <b-col cols="12" fluid>
         <div class="col-12 mb-2 row align-items-center px-2 no-gutters">
           <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
-            <square-skeleton
+            <skeleton-square
               :boxProperties="{
                 width: '30%',
                 height: '40px',
               }"
-            ></square-skeleton>
+            ></skeleton-square>
           </skeleton-loading>
           <b-row v-if="!isLoading" class="mb-2 align-items-center">
             <b-col lg="12" class="align-items-center">
@@ -62,12 +62,12 @@
     <b-row no-gutters>
       <b-col cols="12" md="12" class="row no-gutters">
         <skeleton-loading v-if="isLoading" class="mb-2">
-          <square-skeleton
+          <skeleton-square
             :boxProperties="{
               width: '100%',
               height: '340px',
             }"
-          ></square-skeleton>
+          ></skeleton-square>
         </skeleton-loading>
         <b-row class="col-12 no-gutters px-2" v-else>
           <b-card
@@ -137,9 +137,7 @@ export default {
   async mounted() {
     const id = this.selectedHospital ? this.selectedHospital.id : null;
     this.completedForm__getDataByHospitals();
-    this.completedForm__getAggregatedByHospitals({
-      hospital_id: id,
-    });
+
     if (
       this.filterdHospitalSituation &&
       this.filterdHospitalSituation.last_update.length > 0
@@ -155,7 +153,7 @@ export default {
       hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
       hospitalCount: (state) => state.hospital.hospitalCount,
-      isLoading: (state) => state.hospital.isLoading,
+      isLoading: (state) => state.completedForm.isLoading,
       formSteps: (state) => state.formStep.formSteps,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,
@@ -283,7 +281,7 @@ export default {
         observation_start: this.observation_start,
         observation_end: this.observation_end,
       };
-      // this.gethospitalsFiltered(form)
+      this.completedForm__getAggregatedByHospitals(form);
     },
     situationHospital(val) {
       this.dataGlobal = val;
