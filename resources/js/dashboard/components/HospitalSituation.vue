@@ -1,6 +1,6 @@
 /* eslint-disable no-empty */
 <template>
-  <b-container class="p-0" >
+  <b-container class="p-0">
     <b-row lg="12" class="no-gutters">
       <b-col cols="12" fluid>
         <div class="col-12 mb-2 row align-items-center px-2 no-gutters">
@@ -137,6 +137,9 @@ export default {
   async mounted() {
     const id = this.selectedHospital ? this.selectedHospital.id : null;
     this.completedForm__getDataByHospitals();
+    this.completedForm__getAggregatedByHospitals({
+      hospital_id: id
+    });
 
     if (
       this.filterdHospitalSituation &&
