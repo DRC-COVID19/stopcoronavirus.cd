@@ -53,7 +53,7 @@
                 <FormFieldInput
                   v-model="form.firstName"
                   type="text"
-                  :placeholder="`Entrer le Prénom`"
+                  :placeholder="`Entrer le prénom`"
                   id="input-3"
                   rules="required"
                   name="Prénom"
@@ -68,12 +68,12 @@
               </b-form-group>
               <b-form-group class="border-0 m-0">
                 <label id="input-group-2" class="text-dash-color text-label" for="input-2">
-                  Adresse Email <span class="text-danger">*</span></label
+                  Adresse email <span class="text-danger">*</span></label
                 >
                 <FormFieldInput
                   v-model="form.email"
                   type="email"
-                  :placeholder="`Entrer l'Adresse Email`"
+                  :placeholder="`Entrer l'adresse email`"
                   id="input-2"
                   rules="required|email"
                   name="Adresse email"
@@ -92,7 +92,7 @@
               </b-form-group>
               <b-form-group class="border-0 m-0">
               <label id="input-group-4" class="text-dash-color" for="input-4">
-                 Numéro Téléphone <span class="text-danger">*</span></label
+                 Numéro téléphone <span class="text-danger">*</span></label
               >
               <FormFieldInput
                 v-model="form.phone"
@@ -115,8 +115,8 @@
                   v-model="form.device"
                   :options="devices"
                   id="deviceId"
-                  labelText="Type Appareil "
-                  name="Type Appareil"
+                  labelText="Type appareil "
+                  name="Type appareil"
                   mode="aggressive"
                   :isObligated="true"
                   rules="required"
@@ -216,8 +216,8 @@
                   v-model="form.description"
                   type="text"
                   rules="required"
-                  name="Description du Problème"
-                  labelText="Description du Problème "
+                  name="Description du problème"
+                  labelText="Description du problème "
                   :state="errors.description ? false : null"
                   id="descriptionId"
                   :rows="4"
@@ -332,7 +332,7 @@ export default {
       max: now,
       errors: {},
       isLoading: false,
-      title: 'Signaler un Problème',
+      title: 'Signaler un problème',
       message: 'Chargement du formulaire',
       dropzoneOptions: {
         url: 'https://httpbin.org/post',
@@ -351,6 +351,7 @@ export default {
         approval_status: 'pending',
         assignee_section: '1202084007644818',
         assignee_status: 'upcoming',
+        assignee: '1190300120839001',
         completed: false,
         completed_by: null,
         due_at: null,
