@@ -204,10 +204,10 @@ export default {
       show: true,
       showWarning: false,
       toBeCanceled: true,
-      // MAPBOX_TOKEN: 'pk.eyJ1IjoicmtvdGEiLCJhIjoiY2wyNXZoZW84MDRnajNicW55YXY0dTlmOCJ9.-0-CdvcPCqodYnXn0quH0Q',
-      // MAPBOX_STYLE: 'mapbox://styles/rkota/cl266z2qs001414rysjs58kkn',
-      MAPBOX_TOKEN,
-      MAPBOX_STYLE: MAPBOX_DEFAULT_STYLE,
+      MAPBOX_TOKEN: 'pk.eyJ1IjoicmtvdGEiLCJhIjoiY2wyNXZoZW84MDRnajNicW55YXY0dTlmOCJ9.-0-CdvcPCqodYnXn0quH0Q',
+      MAPBOX_STYLE: 'mapbox://styles/rkota/cl26q1z2g001015my3fnuy8p7',
+      // MAPBOX_TOKEN,
+      // MAPBOX_STYLE: MAPBOX_DEFAULT_STYLE,
       popupCoordinates: [15.31389, -4.33167],
       countryLayer: {
         paint: {
@@ -337,7 +337,7 @@ export default {
         // })
         const map = new Mapbox.Map({
           container: 'mapContainer',
-          center: this.defaultKinshasaCoordinates,
+          center: this.defaultCenterCoordinates,
           zoom: 3.5,
           pitch: 10,
           style: this.MAPBOX_STYLE,
@@ -346,7 +346,7 @@ export default {
         // add methods of mapbox et load mapbox
         map.addControl(nav, 'top-right')
         // map.addControl(geoCoder)
-        marker.setLngLat(this.defaultKinshasaCoordinates)
+        marker.setLngLat(this.defaultCenterCoordinates)
         marker.addTo(map)
         map.on('click', (e) => {
           this.form.latitude = e.lngLat.lat.toString()
