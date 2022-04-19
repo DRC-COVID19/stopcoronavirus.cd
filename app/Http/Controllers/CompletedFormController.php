@@ -256,8 +256,17 @@ class CompletedFormController extends Controller
         $hospitalsCompletedFormsData = self::getHospitalsCompletedFormsData($request);
         return response()->json([
             'aggregated'  => self::getAggregatedHospitalsDatas($hospitalsCompletedFormsData['hospitalsData']),
-            'data'        => $hospitalsCompletedFormsData['hospitalsData'],
+            'data'        => [],
             'last_update' => $hospitalsCompletedFormsData['lastUpdate']
+        ], 200);
+    }
+
+    public function getDataByHospitals(Request $request)
+    {
+
+        $hospitalsCompletedFormsData = self::getHospitalsCompletedFormsData($request);
+        return response()->json([
+            'data'        => $hospitalsCompletedFormsData['hospitalsData'],
         ], 200);
     }
 
@@ -347,9 +356,8 @@ class CompletedFormController extends Controller
             });
     }
 
-    public function checkLastUpdate($hospitalId, $lastUpdate){
-        return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id',$hospitalId)->count();
-        
+    public function checkLastUpdate($hospitalId, $lastUpdate)
+    {
+        return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id', $hospitalId)->count();
     }
-
 }
