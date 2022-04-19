@@ -41,7 +41,7 @@
           <div class="col-12 text-right" v-if="!isLoading && !isGlobal">
             <p class="mb-0" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </p>
             <button
-              class="btn btn-primary"
+              class="btn btn-danger"
               @click="backToTotalData()"
             >
               <small>
