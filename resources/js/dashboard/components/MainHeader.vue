@@ -97,8 +97,6 @@
               >
                 <img
                   src="/img/partener2.png"
-                  height="30"
-                  width="100"
                   class="img-fluid"
                   alt
                 />
@@ -323,7 +321,7 @@ export default {
   .img-fluid {
     width: auto;
     max-width: none;
-    height: 30px;
+    height: 46px;
   }
 
   @media screen and (min-width: 992px) and (max-width: 1200px) {

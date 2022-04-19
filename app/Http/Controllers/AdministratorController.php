@@ -132,7 +132,9 @@ class AdministratorController extends Controller
       $administrator = Administrator::create($data);
       $administrator->roles()->sync($data['roles_id']);
       if ($data['hospitals_id']) {
-        $administrator->hospitals()->sync($data['hospitals_id']);
+        // $administrator->hospitals()->sync($data['hospitals_id']);
+        $hospital = Hospital::where('id', $data['hospitals_id']);
+        $hospital->update(['agent_id' => $administrator->id]);
       }
       DB::commit();
       return response()->json(null, 201, [], JSON_NUMERIC_CHECK);
@@ -246,6 +248,7 @@ class AdministratorController extends Controller
     try {
       DB::beginTransaction();
       $administrator = Administrator::find($admin_user_id);
+
       if (isset($data['password'])) {
         $data['password'] = Hash::make($data['password']);
       } else {
@@ -253,7 +256,18 @@ class AdministratorController extends Controller
       }
       $administrator->update($data);
       $administrator->roles()->sync($data['roles_id']);
-      $administrator->hospitals()->sync($data['hospitals_id']);
+      $hospital = Hospital::where('agent_id', $admin_user_id)->first();
+      if ($hospital) {
+        if ($data['hospitals_id']) {
+          $hospital->update(['agent_id' => $administrator->id]);
+        } else {
+          $hospital->update(['agent_id' => null]);
+        }
+      } else {
+        $hospital = Hospital::where('id', $data['hospitals_id'])
+          ->update(['agent_id' => $administrator->id]);
+      }
+
       DB::commit();
       return response()->json(AdministratorResource::make($administrator), 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {

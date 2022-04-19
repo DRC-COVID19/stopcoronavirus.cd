@@ -19,7 +19,7 @@
                 <div></div>
                 <div></div>
             </div>
-            <p>Fetching Data</p>
+            <p>Chargement des Données...</p>
         </div>
 
         <script src="{{ mix('js/vueApp.js?v=2.980', env('REDIRECT_HTTPS')) }}"></script>
