@@ -138,7 +138,7 @@ export default {
     const id = this.selectedHospital ? this.selectedHospital.id : null;
     this.completedForm__getDataByHospitals();
     this.completedForm__getAggregatedByHospitals({
-      hospital_id: id
+      hospital_id: id,
     });
 
     if (
@@ -284,7 +284,6 @@ export default {
         observation_start: this.observation_start,
         observation_end: this.observation_end,
       };
-      this.completedForm__getAggregatedByHospitals(form);
     },
     situationHospital(val) {
       this.dataGlobal = val;
