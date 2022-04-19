@@ -1,3 +1,4 @@
+
 <template>
   <b-card class="border-0 pt-0">
     <ValidationObserver
@@ -23,6 +24,10 @@
         mode="aggressive"
         :state="state.name"
       />
+      <b-form-group class="mt-3">
+          <label for="" class="text-dash-color mb-2" >Ajouter la <strong>latitude</strong> et <strong>longitude</strong> : </label>
+          <div id="mapContainer" class="map__container"></div>
+      </b-form-group>
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
           {{ errors.name ? errors.name[0] : null }}</span
@@ -40,6 +45,7 @@
         name="Latitude"
         mode="aggressive"
         :state="state.latitude"
+        disabled
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
@@ -47,8 +53,7 @@
         ></b-form-text
       >
       <label id="input-group-3" class="text-dash-color" for="input-3">
-        Longitude <span class="text-danger">*</span></label
-      >
+        Longitude <span class="text-danger">*</span></label>
       <FormFieldInput
         v-model="form.longitude"
         type="number"
@@ -58,6 +63,7 @@
         name="Longitude"
         mode="aggressive"
         :state="state.longitude"
+        disabled
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
@@ -112,12 +118,20 @@
     </ValidationObserver>
   </b-card>
 </template>
-
 <script>
 import { ValidationObserver } from 'vee-validate'
 import FormFieldInput from '../../../../components/forms/FormFieldInput'
 import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue'
-
+import {
+  MAPBOX_TOKEN,
+  MAPBOX_DEFAULT_STYLE,
+  PALETTE,
+  HOTSPOT_TYPE
+} from '../../../../config/env'
+import Mapbox from 'mapbox-gl'
+import U from 'mapbox-gl-utils'
+// import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+// import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 export default {
   components: {
     FormFieldInput,
@@ -189,11 +203,36 @@ export default {
       usersUpdating: [],
       show: true,
       showWarning: false,
-      toBeCanceled: true
+      toBeCanceled: true,
+      // MAPBOX_TOKEN: 'pk.eyJ1IjoicmtvdGEiLCJhIjoiY2wyNXZoZW84MDRnajNicW55YXY0dTlmOCJ9.-0-CdvcPCqodYnXn0quH0Q',
+      // MAPBOX_STYLE: 'mapbox://styles/rkota/cl266z2qs001414rysjs58kkn',
+      MAPBOX_TOKEN,
+      MAPBOX_STYLE: MAPBOX_DEFAULT_STYLE,
+      popupCoordinates: [15.31389, -4.33167],
+      countryLayer: {
+        paint: {
+          'line-color': '#627BC1',
+          'line-width': 1
+        },
+        type: 'line'
+      },
+      kinLayer: {
+        paint: {
+          'line-color': '#627BC1',
+          'line-width': 1
+        },
+        type: 'line',
+        'source-layer': 'carte-administrative-de-la-vi-csh5cj'
+      },
+      drcSourceId: 'states',
+      kinSourceId: 'statesKin',
+      defaultCenterCoordinates: [23.485632, -3.983283],
+      defaultKinshasaCoordinates: [15.31389, -4.33167]
     }
   },
   mounted () {
     this.resetForm()
+    this.renderMapBox()
   },
   watch: {
     hospitalAdded () {
@@ -223,10 +262,9 @@ export default {
           (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)
       }
-      this.isLoading = false;
-      this.$refs.form.reset();
+      this.isLoading = false
+      this.$refs.form.reset()
     },
-
     onReset () {
       this.$refs.form.reset()
       this.toToCanceled = true
@@ -235,7 +273,6 @@ export default {
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
     },
-
     resetForm () {
       this.updating = false
       this.isLoading = false
@@ -244,7 +281,6 @@ export default {
       this.btnTitle = 'Enregistrer'
       this.title = 'Nouveau CTCO'
     },
-
     populateForm () {
       this.updating = false
       if (Object.keys(this.formToPopulate).length !== 0) {
@@ -288,12 +324,43 @@ export default {
       if (value.length > 1) {
         value.shift()
       }
+    },
+    async renderMapBox () {
+      try {
+        // initialisation
+        Mapbox.accessToken = this.MAPBOX_TOKEN
+        const nav = new Mapbox.NavigationControl()
+        const marker = new Mapbox.Marker()
+        // const geoCoder = new MapboxGeocoder({
+        //   accessToken: Mapbox.accessToken,
+        //   mapboxgl: Mapbox
+        // })
+        const map = new Mapbox.Map({
+          container: 'mapContainer',
+          center: this.defaultKinshasaCoordinates,
+          zoom: 3.5,
+          pitch: 10,
+          style: this.MAPBOX_STYLE,
+          testMode: true
+        })
+        // add methods of mapbox et load mapbox
+        map.addControl(nav, 'top-right')
+        // map.addControl(geoCoder)
+        marker.setLngLat(this.defaultKinshasaCoordinates)
+        marker.addTo(map)
+        map.on('click', (e) => {
+          this.form.latitude = e.lngLat.lat.toString()
+          // this.form.longitude = e.lngLat.lng.toString()
+          this.$set(this.form, 'longitude', e.lngLat.lng.toString())
+          this.$set(this.form, 'longitude', e.lngLat.lng.toString())
+        })
+      } catch (error) {
+        throw new Error(error)
+      }
     }
-  },
-  computed: {}
+  }
 }
 </script>
-
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .main {
@@ -312,5 +379,9 @@ export default {
 .btn-submit[disabled="disabled"] {
   opacity: 0.6;
   cursor: not-allowed !important;
+}
+.map__container {
+  width: 22rem;
+  height: 300px;
 }
 </style>
