@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-container>
+  <div class="px-5">
+    <b-container fluid class="px-3">
       <b-row class="mt-4">
         <b-col cols="12" md="10">
           <h3>Résumé mise à jour CTCOS</h3>
