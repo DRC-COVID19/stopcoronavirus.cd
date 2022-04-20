@@ -266,6 +266,9 @@ export default {
     hospitalAdded () {
       this.resetForm()
     },
+    hospitalUpdated () {
+      this.resetForm()
+    },
     formToPopulate () {
       this.resetForm()
       this.populateForm()
