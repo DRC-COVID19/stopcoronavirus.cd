@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-container class="mt-4">
+  <div class="px-5">
+    <b-container fluid class="px-3 mt-4">
       <b-row>
         <b-col cols="12" class="mb-3">
           <b-link :to="{
