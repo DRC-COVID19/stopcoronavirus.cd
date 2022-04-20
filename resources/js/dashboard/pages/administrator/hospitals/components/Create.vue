@@ -45,7 +45,7 @@
         name="Latitude"
         mode="aggressive"
         :state="state.latitude"
-        :disabled="!updating"
+        disabled
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
@@ -63,7 +63,7 @@
         name="Longitude"
         mode="aggressive"
         :state="state.longitude"
-        :disabled="!updating"
+        disabled
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
@@ -394,9 +394,6 @@ export default {
         map.on('load', () => {
           map.on('click', (e) => {
             e.preventDefault()
-            // console.log('long', e.lngLat.lat.toString())
-            this.$set(this.form, 'latitude', e.lngLat.lat.toString())
-            this.$set(this.form, 'longitude', e.lngLat.lng.toString())
             this.form = {
               ...this.form,
               latitude: e.lngLat.lat.toString(),
