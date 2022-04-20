@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <b-container class="mt-4">
+ <div class="px-5">
+    <b-container fluid class="px-3 mt-4">
       <b-row>
         <b-col v-if="user && user.hospital">
           <h3>
