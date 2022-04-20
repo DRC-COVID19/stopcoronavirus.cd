@@ -132,6 +132,7 @@ import Mapbox from 'mapbox-gl'
 import U from 'mapbox-gl-utils'
 // import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 // import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
+
 export default {
   components: {
     FormFieldInput,
@@ -227,7 +228,34 @@ export default {
       drcSourceId: 'states',
       kinSourceId: 'statesKin',
       defaultCenterCoordinates: [23.485632, -3.983283],
-      defaultKinshasaCoordinates: [15.31389, -4.33167]
+      defaultKinshasaCoordinates: [15.31389, -4.33167],
+      geoJson: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [-77.032, 38.913]
+            },
+            properties: {
+              title: 'Mapbox',
+              description: 'Washington, D.C.'
+            }
+          },
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [-122.414, 37.776]
+            },
+            properties: {
+              title: 'Mapbox',
+              description: 'San Francisco, California'
+            }
+          }
+        ]
+      }
     }
   },
   mounted () {
@@ -331,10 +359,21 @@ export default {
         Mapbox.accessToken = this.MAPBOX_TOKEN
         const nav = new Mapbox.NavigationControl()
         const marker = new Mapbox.Marker()
-        // const geoCoder = new MapboxGeocoder({
-        //   accessToken: Mapbox.accessToken,
-        //   mapboxgl: Mapbox
-        // })
+        const markerHeight = 50
+        const markerRadius = 10
+        const linearOffset = 25
+        const popupOffsets = {
+          top: [0, 0],
+          'top-left': [0, 0],
+          'top-right': [0, 0],
+          bottom: [0, -markerHeight],
+          'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+          'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+          left: [markerRadius, (markerHeight - markerRadius) * -1],
+          right: [-markerRadius, (markerHeight - markerRadius) * -1]
+        }
+        const popup = new Mapbox.Popup({ offset: popupOffsets, className: 'my-class' })
+
         const map = new Mapbox.Map({
           container: 'mapContainer',
           center: this.defaultCenterCoordinates,
@@ -343,16 +382,23 @@ export default {
           style: this.MAPBOX_STYLE,
           testMode: true
         })
+
         // add methods of mapbox et load mapbox
         map.addControl(nav, 'top-right')
-        // map.addControl(geoCoder)
-        marker.setLngLat(this.defaultCenterCoordinates)
+        marker.setLngLat(this.defaultKinshasaCoordinates)
         marker.addTo(map)
-        map.on('click', (e) => {
-          this.form.latitude = e.lngLat.lat.toString()
-          // this.form.longitude = e.lngLat.lng.toString()
-          this.$set(this.form, 'longitude', e.lngLat.lng.toString())
-          this.$set(this.form, 'longitude', e.lngLat.lng.toString())
+
+        map.on('load', () => {
+          map.on('click', (e) => {
+            e.preventDefault()
+            this.$set(this.form, 'latitude', e.lngLat.lat.toString())
+            this.$set(this.form, 'longitude', e.lngLat.lng.toString())
+
+            popup.setLngLat(e.lngLat)
+              .setHTML(`<p>Latitude: ${e.lngLat.lat.toString()} <br>Longitude: ${e.lngLat.lng.toString()}</p>`)
+              .setMaxWidth('250px')
+              .addTo(map)
+          })
         })
       } catch (error) {
         throw new Error(error)
@@ -375,6 +421,14 @@ export default {
   .form-select {
     outline: none !important;
   }
+}
+.marker {
+  background-image: url('@~/public/img/mapbox-icon.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
 }
 .btn-submit[disabled="disabled"] {
   opacity: 0.6;
