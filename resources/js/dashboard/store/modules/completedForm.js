@@ -4,6 +4,7 @@ export default {
     completedFormsDetail: {} || [],
     completedFormsByLastUpdate: [],
     completedFormsAggregated: {},
+    completedFormsData: {},
     isLoading: false
   },
   mutations: {
@@ -21,6 +22,9 @@ export default {
     },
     SET_COMPLETED_FORMS_DETAIL (state, payload) {
       state.completedFormsDetail = payload
+    },
+    SET_COMPLETED_FORMS_DATA (state, payload) {
+      state.completedFormsData = payload
     }
   },
   actions: {
@@ -32,7 +36,7 @@ export default {
           .then(({ data }) => {
             resolve(data)
           })
-          .catch(error => {
+          .catch((error) => {
             reject(error)
           })
       })
@@ -45,10 +49,10 @@ export default {
           .then(({ data }) => {
             resolve(data)
           })
-          .catch(error => {
+          .catch((error) => {
             reject(error)
           })
-      }) 
+      })
     },
     completedForm__getByHospital ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
@@ -65,7 +69,7 @@ export default {
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response)
             reject(response)
           })
@@ -83,7 +87,7 @@ export default {
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response)
             reject(response)
           })
@@ -99,7 +103,7 @@ export default {
             commit('SET_IS_LOADING', false)
             resolve(data)
           })
-          .catch(response => {
+          .catch((response) => {
             reject(response)
           })
           .finally(() => {
@@ -114,7 +118,7 @@ export default {
         axios
           .get('/api/dashboard/completed_forms/get-latest-hospital-update')
           .then(({ data }) => {
-            const completedForms = data.map(completedForm => ({
+            const completedForms = data.map((completedForm) => ({
               diff_date: completedForm.diff_date,
               last_update: completedForm.last_update,
               name: completedForm.form_id
@@ -126,7 +130,7 @@ export default {
             commit('SET_IS_LOADING', false)
             resolve(completedForms)
           })
-          .catch(response => {
+          .catch((response) => {
             reject(response)
           })
           .finally(() => {
@@ -135,14 +139,30 @@ export default {
       })
     },
 
-    completedForm__getAggregatedByHospitals({commit}, payload) {
+    completedForm__getAggregatedByHospitals ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .post('/api/dashboard/completed_forms/get-aggregated-by-hospitals', payload)
+          .post(
+            '/api/dashboard/completed_forms/get-aggregated-by-hospitals',
+            payload
+          )
           .then(({ data }) => {
             commit('SET_COMPLETED_FORMS_AGGREGATED', data)
           })
-          .catch(response => {
+          .catch((response) => {
+            reject(response)
+          })
+      })
+    },
+    completedForm__getDataByHospitals ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post('/api/dashboard/completed_forms/get-data-by-hospitals', payload)
+          .then(({ data }) => {
+            console.log('data--->', data)
+            commit('SET_COMPLETED_FORMS_DATA', data)
+          })
+          .catch((response) => {
             reject(response)
           })
       })

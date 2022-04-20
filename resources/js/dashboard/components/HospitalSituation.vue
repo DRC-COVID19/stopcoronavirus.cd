@@ -5,12 +5,12 @@
       <b-col cols="12" fluid>
         <div class="col-12 mb-2 row align-items-center px-2 no-gutters">
           <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
-            <square-skeleton
+            <skeleton-square
               :boxProperties="{
                 width: '30%',
                 height: '40px',
               }"
-            ></square-skeleton>
+            ></skeleton-square>
           </skeleton-loading>
           <b-row v-if="!isLoading" class="mb-2 align-items-center">
             <b-col lg="12" class="align-items-center">
@@ -23,30 +23,37 @@
               </b-badge>
             </b-col>
           </b-row>
-          <div v-if="isGlobal" class="col-12 d-flex flex-wrap text-right justify-content-end">
-            <div class="col-12 px-0 mb-1" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </div>
-            <export-excel
-              :data="hospitalSituationData"
-              :name="fileName"
-            >
+          <div
+            v-if="isGlobal"
+            class="col-12 d-flex flex-wrap text-right justify-content-end"
+          >
+            <div class="col-12 px-0 mb-1" v-if="hospitalSituationLastUpdate">
+              Mise à jour du {{ hospitalSituationLastUpdate }}
+            </div>
+            <export-excel :data="hospitalSituationData" :name="fileName">
               <button
                 :disabled="hospitalSituationData.length === 0"
-                class="btn btn-dash-blue btn-secondary btn-block cursor-pointer btn-export"
+                class="
+                  btn btn-dash-blue btn-secondary btn-block
+                  cursor-pointer
+                  btn-export
+                "
               >
                 <small>Télécharger les données</small>
-                <i class="fas fa-file-excel ml-2" style="font-size: 20px" aria-hidden="true"></i>
+                <i
+                  class="fas fa-file-excel ml-2"
+                  style="font-size: 20px"
+                  aria-hidden="true"
+                ></i>
               </button>
             </export-excel>
           </div>
           <div class="col-12 text-right" v-if="!isLoading && !isGlobal">
-            <p class="mb-0" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </p>
-            <button
-              class="btn btn-primary"
-              @click="backToTotalData()"
-            >
-              <small>
-                Retour aux données globales
-              </small>
+            <p class="mb-0" v-if="hospitalSituationLastUpdate">
+              Mise à jour du {{ hospitalSituationLastUpdate }}
+            </p>
+            <button class="btn btn-danger" @click="backToTotalData()">
+              <small> Retour aux données globales </small>
             </button>
           </div>
         </div>
@@ -55,21 +62,19 @@
     <b-row no-gutters>
       <b-col cols="12" md="12" class="row no-gutters">
         <skeleton-loading v-if="isLoading" class="mb-2">
-          <square-skeleton
+          <skeleton-square
             :boxProperties="{
               width: '100%',
               height: '340px',
             }"
-          ></square-skeleton>
+          ></skeleton-square>
         </skeleton-loading>
         <b-row class="col-12 no-gutters px-2" v-else>
           <b-card
             v-if="hospitalsDataGroupedByStep.length === 0"
             class="default-card col-12"
           >
-            <p class="text-center">
-              Aucunes données disponibles
-            </p>
+            <p class="text-center">Aucunes données disponibles</p>
           </b-card>
           <b-card
             class="col-12 default-card mb-2"
@@ -77,13 +82,19 @@
             :key="index"
           >
             <h5 class="bold">{{ step.title }}</h5>
-            <div v-for="(aggregatedFormField, key) in step.aggregated_form_fields" :key="key">
+            <div
+              v-for="(aggregatedFormField, key) in step.aggregated_form_fields"
+              :key="key"
+            >
               <p>
                 {{ aggregatedFormField.form_field.name }} :
                 <strong>{{ aggregatedFormField.value }}</strong>
-                <span v-if="aggregatedFormField.form_field.agreggation" style="color:aaa">(somme)</span>
-                <span v-else style="color:aaa">(moyenne)</span>
-
+                <span
+                  v-if="aggregatedFormField.form_field.agreggation"
+                  style="color: aaa"
+                  >(somme)</span
+                >
+                <span v-else style="color: aaa">(moyenne)</span>
               </p>
             </div>
           </b-card>
@@ -125,10 +136,15 @@ export default {
   },
   async mounted () {
     const id = this.selectedHospital ? this.selectedHospital.id : null
+    this.completedForm__getDataByHospitals()
     this.completedForm__getAggregatedByHospitals({
       hospital_id: id
     })
-    if (this.filterdHospitalSituation && this.filterdHospitalSituation.last_update.length > 0) {
+
+    if (
+      this.filterdHospitalSituation &&
+      this.filterdHospitalSituation.last_update.length > 0
+    ) {
       this.hospitalSituationFiltered()
     }
   },
@@ -140,7 +156,7 @@ export default {
       hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
       hospitalCount: (state) => state.hospital.hospitalCount,
-      isLoading: (state) => state.hospital.isLoading,
+      isLoading: (state) => state.completedForm.isLoading,
       formSteps: (state) => state.formStep.formSteps,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,
@@ -153,7 +169,8 @@ export default {
       hospitalObservationSituation: (state) =>
         state.hospitalSituation.hospitalObservationSituation,
       completedFormsAggregated: (state) =>
-        state.completedForm.completedFormsAggregated
+        state.completedForm.completedFormsAggregated,
+      completedFormsData: (state) => state.completedForm.completedFormsData
     }),
     hospital () {
       if (this.selectedHospital != null) return this.selectedHospital
@@ -174,7 +191,9 @@ export default {
       } else return null
     },
     hospitalSituationReduced () {
-      return this.createSituationsReduce(this.hospitalSituationAll.allFormFields)
+      return this.createSituationsReduce(
+        this.hospitalSituationAll.allFormFields
+      )
     },
     hospitalSituationFiltered () {
       const arrayFilterd = [].concat.apply(
@@ -192,32 +211,41 @@ export default {
       }
     },
     hospitalSituationData () {
-      const hospitalsSituationsData = this.completedFormsAggregated.data || []
+      const hospitalsSituationsData = this.completedFormsData.data || []
       return hospitalsSituationsData
-        .flatMap(hospital => {
-          return hospital.completed_forms
-            .map(completedForm => {
-              const datas = {
-                'Date de soumission': moment(completedForm.last_update).format('DD/MM/YY'),
-                'Identifiant hopital': hospital.id,
-                'Nom hopital': hospital.name,
-                'Identifiant agent': completedForm.admin_user?.username || '-',
-                'N° Téléphone Agent': completedForm.admin_user.phone_number
-
+        .flatMap((hospital) => {
+          return hospital.completed_forms.map((completedForm) => {
+            const datas = {
+              'Date de soumission': moment(completedForm.last_update).format(
+                'DD/MM/YY'
+              ),
+              'Identifiant hopital': hospital.id,
+              'Nom hopital': hospital.name,
+              'Identifiant agent': completedForm.admin_user?.username || '-',
+              'N° Téléphone Agent': completedForm.admin_user.phone_number
+            }
+            completedForm.completed_form_fields.forEach(
+              (completedFormField) => {
+                datas[completedFormField.form_field.name] =
+                  completedFormField.value
               }
-              completedForm.completed_form_fields.forEach(completedFormField => {
-                datas[completedFormField.form_field.name] = completedFormField.value
-              })
-              return datas
-            })
+            )
+            return datas
+          })
         })
-        .filter((a, b) => a['Date de soumission'].localeCompare(b['Date de soumission']))
+        .filter((a, b) =>
+          a['Date de soumission'].localeCompare(b['Date de soumission'])
+        )
     },
     hospitalSituationLastUpdate () {
       if (this.selectedHospital && this.selectedHospital.id) {
-        return this.selectedHospital.last_update ? moment(this.selectedHospital.last_update).format('DD.MM.YYYY') : null
+        return this.selectedHospital.last_update
+          ? moment(this.selectedHospital.last_update).format('DD.MM.YYYY')
+          : null
       } else if (this.completedFormsAggregated.last_update) {
-        return moment(this.completedFormsAggregated.last_update).format('DD.MM.YYYY')
+        return moment(this.completedFormsAggregated.last_update).format(
+          'DD.MM.YYYY'
+        )
       } else {
         return null
       }
@@ -237,7 +265,9 @@ export default {
         const aggregatedData = JSON.parse(this.selectedHospital.aggregated)
         return groupAggregatedDataByFormStepField(aggregatedData || [])
       } else {
-        return groupAggregatedDataByFormStepField(this.completedFormsAggregated.aggregated || [])
+        return groupAggregatedDataByFormStepField(
+          this.completedFormsAggregated.aggregated || []
+        )
       }
     }
   },
@@ -254,7 +284,7 @@ export default {
         observation_start: this.observation_start,
         observation_end: this.observation_end
       }
-      // this.gethospitalsFiltered(form)
+      this.completedForm__getAggregatedByHospitals(form)
     },
     situationHospital (val) {
       this.dataGlobal = val
@@ -267,7 +297,8 @@ export default {
   methods: {
     ...mapActions([
       'getSituationHospital',
-      'completedForm__getAggregatedByHospitals'
+      'completedForm__getAggregatedByHospitals',
+      'completedForm__getDataByHospitals'
     ]),
     ...mapMutations(['selectHospital']),
     paintStats (data) {
@@ -752,7 +783,7 @@ export default {
     left: calc(50% - 20px);
   }
 }
-.btn-export[disabled='disabled'] {
+.btn-export[disabled="disabled"] {
   opacity: 0.2;
   cursor: not-allowed;
 }
