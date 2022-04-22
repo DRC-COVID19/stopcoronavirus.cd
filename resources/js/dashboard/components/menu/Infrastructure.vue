@@ -136,54 +136,54 @@ export default {
   props: {
     hospitalCount: {
       type: Number,
-      default: null,
+      default: null
     },
     townships: {
       type: Array,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
-  data() {
+  data () {
     return {
       form: {
         observation_end: null,
         observation_start: null,
-        township: 0,
+        township: 0
       },
-      mode: "date",
+      mode: 'date',
       isRanged: false,
       dateRange: this.isRanged
         ? {
             start: new Date(),
-            end: new Date(),
+            end: new Date()
           }
         : new Date(),
       attributes: [],
-      defaultTownship: [{ id: 0, name: "Tous" }],
+      defaultTownship: [{ id: 0, name: 'Tous' }],
       hospitals: [],
-      iconStateDatePicker: "fas fa-thin fa-plus",
-      isUpdate: false,
-    };
+      iconStateDatePicker: 'fas fa-thin fa-plus',
+      isUpdate: false
+    }
   },
-  mounted() {
-    this.fillParametersFromUrlParams();
-    this.attributes.dates = this.dateRange;
+  mounted () {
+    this.fillParametersFromUrlParams()
+    this.attributes.dates = this.dateRange
   },
   filters: {
     date: (val) => {
-      return val ? moment(val).format("DD.MM.YYYY") : "";
-    },
+      return val ? moment(val).format('DD.MM.YYYY') : ''
+    }
   },
   computed: {
     ...mapState({
       observation_start: (state) => state.hospitalSituation.observation_start,
       observation_end: (state) => state.hospitalSituation.observation_end,
-      activeMenu: (state) => state.nav.activeMenu,
+      activeMenu: (state) => state.nav.activeMenu
     }),
-    townshipList() {
-      return [...this.defaultTownship, ...this.townships];
+    townshipList () {
+      return [...this.defaultTownship, ...this.townships]
     },
-    ...mapState({}),
+    ...mapState({})
   },
   methods: {
     ...mapActions(["getObservation"]),
@@ -191,70 +191,70 @@ export default {
     hospitalToggle(checked) {
       this.$emit("hopitalChecked", checked);
     },
-    activeStartDate() {
-      this.isRanged = !this.isRanged;
-      this.mode = this.mode === "date" ? "range" : "date";
+    activeStartDate () {
+      this.isRanged = !this.isRanged
+      this.mode = this.mode === 'date' ? 'range' : 'date'
       this.iconStateDatePicker =
-        this.iconStateDatePicker == "fas fa-thin fa-plus"
-          ? "fa fa-times"
-          : "fas fa-thin fa-plus";
+        this.iconStateDatePicker == 'fas fa-thin fa-plus'
+          ? 'fa fa-times'
+          : 'fas fa-thin fa-plus'
 
       if (this.isRanged) {
         this.dateRange.start =
           this.form.observation_end == null
             ? new Date()
-            : this.form.observation_end;
-        this.dateRange.end = new Date();
+            : this.form.observation_end
+        this.dateRange.end = new Date()
 
-        this.form.observation_start = this.dateRange.start;
-        this.form.observation_end = new Date();
+        this.form.observation_start = this.dateRange.start
+        this.form.observation_end = new Date()
       } else {
         this.dateRange =
           this.form.observation_end == null
             ? new Date()
-            : this.form.observation_end;
-        this.form.observation_start = null;
+            : this.form.observation_end
+        this.form.observation_start = null
       }
       this.attributes[0] = {
-        key: "today",
+        key: 'today',
         dates: this.isRanged
           ? { start: this.dateRange.start, end: this.dateRange.end }
           : this.dateRange,
-        highlight: true,
-      };
+        highlight: true
+      }
     },
-    onRangeDateObservation(inputValueDate) {
+    onRangeDateObservation (inputValueDate) {
       if (this.isRanged) {
         this.form.observation_start = moment(inputValueDate.start).format(
-          "YYYY-MM-DD"
-        );
-        this.dateRange.start = inputValueDate.start;
+          'YYYY-MM-DD'
+        )
+        this.dateRange.start = inputValueDate.start
         this.form.observation_end = moment(inputValueDate.end).format(
-          "YYYY-MM-DD"
-        );
-        this.dateRange.end = inputValueDate.end;
+          'YYYY-MM-DD'
+        )
+        this.dateRange.end = inputValueDate.end
       } else {
-        this.form.observation_start = null;
-        this.dateRange = inputValueDate;
-        this.form.observation_end = moment(inputValueDate).format("YYYY-MM-DD");
-        console.log("dateRange", this.dateRange);
+        this.form.observation_start = null
+        this.dateRange = inputValueDate
+        this.form.observation_end = moment(inputValueDate).format('YYYY-MM-DD')
+        console.log('dateRange', this.dateRange)
       }
       this.attributes[0] = {
-        key: "today",
+        key: 'today',
         dates: this.dateRange,
-        highlight: true,
-      };
+        highlight: true
+      }
     },
     // dateRangerPosition(dropdownList, component, { width, top, left, right }) {
     //   dropdownList.style.top = `${top}px`;
     //   dropdownList.style.left = `${left + 180}px`;
     // },
-    clearObservationDate() {
-      this.dateRange = { start: null, end: null };
-      this.form.observation_end = null;
-      this.form.observation_start = null;
+    clearObservationDate () {
+      this.dateRange = { start: null, end: null }
+      this.form.observation_end = null
+      this.form.observation_start = null
     },
-    submit() {
+    submit () {
       this.form.observation_end =
         this.form.observation_end === null
           ? moment().format("YYYY-MM-DD")
@@ -263,46 +263,46 @@ export default {
       
       this.$emit("submitInfrastructureForm", this.form);
     },
-    addParamToUrlWhenInThisMenu(param, value) {
+    addParamToUrlWhenInThisMenu (param, value) {
       if (this.activeMenu == 5) {
-        this.addParamToUrl(param, value);
+        this.addParamToUrl(param, value)
       }
     },
-    formTownshipChanged(value) {
-      this.addParamToUrlWhenInThisMenu("township", value);
+    formTownshipChanged (value) {
+      this.addParamToUrlWhenInThisMenu('township', value)
     },
-    fillParametersFromUrlParams() {
-      const url = new URL(window.location.href);
-      const township = url.searchParams.get("township");
+    fillParametersFromUrlParams () {
+      const url = new URL(window.location.href)
+      const township = url.searchParams.get('township')
       if (township) {
-        this.$set(this.form, "township", +township);
+        this.$set(this.form, 'township', +township)
       }
 
-      const checkedRangeDatePicker = url.searchParams.get("range");
+      const checkedRangeDatePicker = url.searchParams.get('range')
       if (checkedRangeDatePicker) {
-        this.isRanged = checkedRangeDatePicker != 1 ? false : true;
+        this.isRanged = checkedRangeDatePicker != 1 ? false : true
         // if (this.checkedRangeDatePicker) {
         //   this.iconStateDatePicker = "fa fa-times";
         // }
       }
 
       const observationStartDate = url.searchParams.get(
-        "observation-start-date"
-      );
-      const observationEndDate = url.searchParams.get("observation-end-date");
+        'observation-start-date'
+      )
+      const observationEndDate = url.searchParams.get('observation-end-date')
       try {
-        console.log("observationStartDate", observationStartDate);
+        console.log('observationStartDate', observationStartDate)
         if (this.isRanged) {
           this.dateRange.start = observationStartDate
             ? new Date(observationStartDate)
-            : new Date();
+            : new Date()
           this.dateRange.end = observationEndDate
             ? new Date(observationEndDate)
-            : this.dateRange.start;
+            : this.dateRange.start
         } else {
           this.dateRange = observationEndDate
             ? new Date(observationEndDate)
-            : new Date();
+            : new Date()
         }
 
         // if (this.dateRangeObservation.startDate) {
@@ -316,52 +316,52 @@ export default {
         //   ).format('YYYY-MM-DD')
         // }
 
-        this.form.observation_start = observationStartDate;
-        this.form.observation_end = observationEndDate;
+        this.form.observation_start = observationStartDate
+        this.form.observation_end = observationEndDate
       } catch (e) {
-        console.log(e);
+        console.log(e)
       }
     },
-    addDateRangeObservationToUrl() {
+    addDateRangeObservationToUrl () {
       if (this.isRanged) {
         if (this.dateRange.start) {
           this.addParamToUrlWhenInThisMenu(
-            "observation-start-date",
-            moment(this.dateRange.start).format("YYYY/MM/DD")
-          );
+            'observation-start-date',
+            moment(this.dateRange.start).format('YYYY/MM/DD')
+          )
         } else {
-          this.addParamToUrlWhenInThisMenu("observation-start-date", null);
+          this.addParamToUrlWhenInThisMenu('observation-start-date', null)
         }
         if (this.dateRange.end) {
           this.addParamToUrlWhenInThisMenu(
-            "observation-end-date",
-            moment(this.dateRange.end).format("YYYY/MM/DD")
-          );
+            'observation-end-date',
+            moment(this.dateRange.end).format('YYYY/MM/DD')
+          )
         } else {
-          this.addParamToUrlWhenInThisMenu("observation-end-date", null);
+          this.addParamToUrlWhenInThisMenu('observation-end-date', null)
         }
       } else {
         if (this.dateRange) {
           this.addParamToUrlWhenInThisMenu(
-            "observation-end-date",
-            moment(this.dateRange).format("YYYY/MM/DD")
-          );
+            'observation-end-date',
+            moment(this.dateRange).format('YYYY/MM/DD')
+          )
         } else {
-          this.addParamToUrlWhenInThisMenu("observation-end-date", null);
+          this.addParamToUrlWhenInThisMenu('observation-end-date', null)
         }
-        this.addParamToUrlWhenInThisMenu("observation-start-date", null);
+        this.addParamToUrlWhenInThisMenu('observation-start-date', null)
       }
-    },
+    }
   },
   watch: {
-    dateRange() {
-      this.addDateRangeObservationToUrl();
+    dateRange () {
+      this.addDateRangeObservationToUrl()
     },
-    isRanged(value) {
-      this.addParamToUrlWhenInThisMenu("range", value ? 1 : 0);
-    },
-  },
-};
+    isRanged (value) {
+      this.addParamToUrlWhenInThisMenu('range', value ? 1 : 0)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

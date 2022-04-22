@@ -89,6 +89,10 @@ export default {
       type: String,
       required: false
     }
+    // defaultValue: {
+    //   type: String,
+    //   default: ''
+    // }
   },
   data () {
     return {
