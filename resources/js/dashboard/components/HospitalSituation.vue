@@ -14,7 +14,7 @@
             justify-content-start
           "
         >
-          <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
+          <skeleton-loading v-if="isLoading == true" class="col-12 col-md-12">
             <square-skeleton
               :boxProperties="{
                 width: '30%',
@@ -79,7 +79,7 @@
     </b-row>
     <b-row no-gutters>
       <b-col cols="12" md="12" class="row no-gutters">
-        <skeleton-loading v-if="isLoading" class="mb-2">
+        <skeleton-loading v-if="isLoading ==true" class="mb-2">
           <square-skeleton
             :boxProperties="{
               width: '100%',
@@ -173,7 +173,8 @@ export default {
       hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
       hospitalCount: (state) => state.hospital.hospitalCount,
-      isLoading: (state) => state.completedForm.isLoading,
+      isLoading: (state) =>
+        state.completedForm.iscompletedFormsAggregatedLoading,
       formSteps: (state) => state.formStep.formSteps,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,

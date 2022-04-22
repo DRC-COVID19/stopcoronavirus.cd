@@ -7,6 +7,7 @@ export default {
     completedFormsData: {},
     filterData: {},
     isLoading: false,
+    iscompletedFormsAggregatedLoading: false,
     isLoadingFile: false
   },
   mutations: {
@@ -21,6 +22,9 @@ export default {
     },
     SET_COMPLETED_FORMS_AGGREGATED (state, payload) {
       state.completedFormsAggregated = payload
+    },
+    SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING (state, payload) {
+      state.iscompletedFormsAggregatedLoading = payload
     },
     SET_COMPLETED_FORMS_BY_LAST_UPDATE (state, payload) {
       state.completedFormsByLastUpdate = payload
@@ -148,6 +152,7 @@ export default {
     },
 
     completedForm__getAggregatedByHospitals ({ commit }, payload) {
+      commit('SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
           .post(
@@ -156,9 +161,13 @@ export default {
           )
           .then(({ data }) => {
             commit('SET_COMPLETED_FORMS_AGGREGATED', data)
+            commit('SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING', false)
           })
           .catch((response) => {
             reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING', false)
           })
       })
     },
