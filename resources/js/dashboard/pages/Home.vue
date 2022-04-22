@@ -780,6 +780,8 @@ export default {
       "setFluxType",
       "setObservationDate",
       "setCanShowNavMobile",
+      "SET_FILTER__DATA",
+      "SET_IS_LOADING",
     ]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
@@ -1703,13 +1705,15 @@ export default {
     },
     initForm() {
       this.setCanShowNavMobile(false);
-      this.isLoading = true;
+      this.SET_IS_LOADING(true)
+      
     },
     submitInfrastructureForm(values) {
       this.setCanShowNavMobile(false);
       values.isLoading = true;
+      console.log("values", values);
       this.getHospitalsData(values);
-      this.completedForm__getDataByHospitals(values);
+      this.SET_FILTER__DATA(values);
       this.completedForm__getAggregatedByHospitals(values);
       this.initForm();
     },

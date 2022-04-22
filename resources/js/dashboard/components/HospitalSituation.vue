@@ -1,22 +1,32 @@
 /* eslint-disable no-empty */
 <template>
   <b-container class="p-0">
-    <b-row lg="12" class="no-gutters">
+    <b-row lg="12" class="p-0 no-gutters">
       <b-col cols="12" fluid>
-        <div class="col-12 mb-2 row align-items-center px-2 no-gutters">
+        <div
+          class="
+            col-12
+            mb-2
+            row
+            align-items-start
+            px-2
+            no-gutters
+            justify-content-start
+          "
+        >
           <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
-            <skeleton-square
+            <square-skeleton
               :boxProperties="{
                 width: '30%',
                 height: '40px',
               }"
-            ></skeleton-square>
+            ></square-skeleton>
           </skeleton-loading>
-          <b-row v-if="!isLoading" class="mb-2 align-items-center">
+          <b-row v-if="!isLoading" class="mb-2 align-items-start">
             <b-col lg="12" class="align-items-center">
               <h4>{{ hospital.name || "Rapport global" }}</h4>
             </b-col>
-            <b-col lg="4" class="align-items-center">
+            <b-col lg="12" class="align-items-start">
               <b-badge v-if="hospitalCount" style="font-size: 12px">
                 {{ hospitalCount }}
                 <small>infrastructure(s)</small>
@@ -30,22 +40,30 @@
             <div class="col-12 px-0 mb-1" v-if="hospitalSituationLastUpdate">
               Mise à jour du {{ hospitalSituationLastUpdate }}
             </div>
-            <export-excel :data="hospitalSituationData" :name="fileName">
-              <button
-                :disabled="hospitalSituationData.length === 0"
-                class="
-                  btn btn-dash-blue btn-secondary btn-block
-                  cursor-pointer
-                  btn-export
-                "
-              >
-                <small>Télécharger les données</small>
-                <i
-                  class="fas fa-file-excel ml-2"
-                  style="font-size: 20px"
-                  aria-hidden="true"
-                ></i>
-              </button>
+            <export-excel :fetch="uploadFile" :name="fileName">
+              <div>
+                <button
+                  :disabled="completedFormsAggregated.aggregated.length === 0"
+                  class="
+                    btn btn-dash-blue btn-secondary btn-block
+                    cursor-pointer
+                    btn-export
+                  "
+                >
+                  <small>Télécharger les données</small>
+                  <i
+                    class="fas fa-file-excel ml-2"
+                    style="font-size: 20px"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+                <div class="text-center text-danger">
+                  <b-spinner
+                    label="Spinning"
+                    v-show="isLoadingFile == true"
+                  ></b-spinner>
+                </div>
+              </div>
             </export-excel>
           </div>
           <div class="col-12 text-right" v-if="!isLoading && !isGlobal">
@@ -62,12 +80,12 @@
     <b-row no-gutters>
       <b-col cols="12" md="12" class="row no-gutters">
         <skeleton-loading v-if="isLoading" class="mb-2">
-          <skeleton-square
+          <square-skeleton
             :boxProperties="{
               width: '100%',
               height: '340px',
             }"
-          ></skeleton-square>
+          ></square-skeleton>
         </skeleton-loading>
         <b-row class="col-12 no-gutters px-2" v-else>
           <b-card
@@ -116,6 +134,8 @@ export default {
       etatGlobal: true,
       dataGlobal: null,
       objetChart: {},
+      completedFormsData: {},
+
       chartLabels: [
         {
           title: "Evolution du taux d'occupation des respirateurs",
@@ -136,10 +156,7 @@ export default {
   },
   async mounted () {
     const id = this.selectedHospital ? this.selectedHospital.id : null
-    this.completedForm__getDataByHospitals()
-    this.completedForm__getAggregatedByHospitals({
-      hospital_id: id
-    })
+    this.completedForm__getAggregatedByHospitals({ hospital_id: id })
 
     if (
       this.filterdHospitalSituation &&
@@ -162,15 +179,15 @@ export default {
         state.hospitalSituation.hospitalSituationAll,
       hospitalSituationSelected: (state) =>
         state.hospitalSituation.hospitalSituationSelected,
-      observation_start: (state) => state.hospitalSituation.observation_start,
-      observation_end: (state) => state.hospitalSituation.observation_end,
+
       filterdHospitalSituation: (state) =>
         state.hospitalSituation.filterdHospitalSituation,
       hospitalObservationSituation: (state) =>
         state.hospitalSituation.hospitalObservationSituation,
       completedFormsAggregated: (state) =>
         state.completedForm.completedFormsAggregated,
-      completedFormsData: (state) => state.completedForm.completedFormsData
+      filterData: (state) => state.completedForm.filterData,
+      isLoadingFile: (state) => state.completedForm.isLoadingFile
     }),
     hospital () {
       if (this.selectedHospital != null) return this.selectedHospital
@@ -210,33 +227,7 @@ export default {
         return `Données_du_${this.observation_start}_au_${this.observation_end}.xls`
       }
     },
-    hospitalSituationData () {
-      const hospitalsSituationsData = this.completedFormsData.data || []
-      return hospitalsSituationsData
-        .flatMap((hospital) => {
-          return hospital.completed_forms.map((completedForm) => {
-            const datas = {
-              'Date de soumission': moment(completedForm.last_update).format(
-                'DD/MM/YY'
-              ),
-              'Identifiant hopital': hospital.id,
-              'Nom hopital': hospital.name,
-              'Identifiant agent': completedForm.admin_user?.username || '-',
-              'N° Téléphone Agent': completedForm.admin_user.phone_number
-            }
-            completedForm.completed_form_fields.forEach(
-              (completedFormField) => {
-                datas[completedFormField.form_field.name] =
-                  completedFormField.value
-              }
-            )
-            return datas
-          })
-        })
-        .filter((a, b) =>
-          a['Date de soumission'].localeCompare(b['Date de soumission'])
-        )
-    },
+
     hospitalSituationLastUpdate () {
       if (this.selectedHospital && this.selectedHospital.id) {
         return this.selectedHospital.last_update
@@ -278,11 +269,11 @@ export default {
     },
     selectedHospital (val) {
       const id = val ? val.id : null
-      console.log(val)
+
       const form = {
         hospital: id,
-        observation_start: this.observation_start,
-        observation_end: this.observation_end
+        observation_start: this.filterData.observation_start,
+        observation_end: this.filterData.observation_end
       }
       this.completedForm__getAggregatedByHospitals(form)
     },
@@ -301,11 +292,46 @@ export default {
       'completedForm__getDataByHospitals'
     ]),
     ...mapMutations(['selectHospital']),
+    async uploadFile () {
+      this.completedFormsData = await this.completedForm__getDataByHospitals(
+        this.filterData
+      )
+
+      return this.hospitalSituationDatas()
+    },
+    hospitalSituationDatas () {
+      const hospitalsSituationsData = this.completedFormsData.data || []
+
+      return hospitalsSituationsData
+        .flatMap((hospital) => {
+          return hospital.completed_forms.map((completedForm) => {
+            const datas = {
+              'Date de soumission': moment(completedForm.last_update).format(
+                'DD/MM/YY'
+              ),
+              'Identifiant hopital': hospital.id,
+              'Nom hopital': hospital.name,
+              'Identifiant agent': completedForm.admin_user?.username || '-',
+              'N° Téléphone Agent': completedForm.admin_user.phone_number
+            }
+            completedForm.completed_form_fields.forEach(
+              (completedFormField) => {
+                datas[completedFormField.form_field.name] =
+                  completedFormField.value
+              }
+            )
+            return datas
+          })
+        })
+        .filter((a, b) =>
+          a['Date de soumission'].localeCompare(b['Date de soumission'])
+        )
+    },
     paintStats (data) {
       const lastUpdates = data.last_update
       const occupiedRespirators = data.occupied_respirators
       const occupiedResuscitation_beds = data.occupied_resuscitation_beds
-      const unknow = []
+
       const Respirators = [...occupiedRespirators]
       const Resuscitation_beds = [...occupiedResuscitation_beds]
 

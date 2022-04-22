@@ -130,7 +130,7 @@
 /* eslint-disable space-before-blocks */
 /* eslint-disable no-unneeded-ternary */
 import { INFRASTRUCTURE_FIRST_UPDATE, DATEFORMAT } from "../../config/env";
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   props: {
@@ -187,6 +187,7 @@ export default {
   },
   methods: {
     ...mapActions(["getObservation"]),
+    ...mapMutations(["SET_FILTER__DATA"]),
     hospitalToggle(checked) {
       this.$emit("hopitalChecked", checked);
     },
@@ -258,9 +259,8 @@ export default {
         this.form.observation_end === null
           ? moment().format("YYYY-MM-DD")
           : moment(this.form.observation_end).format("YYYY-MM-DD");
-      this.getObservation(this.form);
-      console.log(this.form);
 
+      
       this.$emit("submitInfrastructureForm", this.form);
     },
     addParamToUrlWhenInThisMenu(param, value) {
