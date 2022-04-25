@@ -23,6 +23,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+.row {
+  justify-content: flex-start;
+}
 .header_d {
   padding: 20px 0;
   i {
