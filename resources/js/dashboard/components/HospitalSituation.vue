@@ -14,7 +14,7 @@
             justify-content-start
           "
         >
-          <skeleton-loading v-if="isLoading == true" class="col-12 col-md-12">
+          <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
             <square-skeleton
               :boxProperties="{
                 width: '30%',
@@ -57,11 +57,8 @@
                     aria-hidden="true"
                   ></i>
                 </button>
-                <div class="text-center text-danger">
-                  <b-spinner
-                    label="Spinning"
-                    v-show="isLoadingFile == true"
-                  ></b-spinner>
+                <div class="text-center text-danger" v-if="isFileLoading">
+                  <b-spinner label="Spinning"></b-spinner>
                 </div>
               </div>
             </export-excel>
@@ -79,7 +76,7 @@
     </b-row>
     <b-row no-gutters>
       <b-col cols="12" md="12" class="row no-gutters">
-        <skeleton-loading v-if="isLoading == true" class="mb-2">
+        <skeleton-loading v-if="isLoading" class="mb-2">
           <square-skeleton
             :boxProperties="{
               width: '100%',
@@ -134,8 +131,8 @@ export default {
       etatGlobal: true,
       dataGlobal: null,
       objetChart: {},
+      isFileLoading: false,
       completedFormsData: {},
-
       chartLabels: [
         {
           title: "Evolution du taux d'occupation des respirateurs",
@@ -188,7 +185,6 @@ export default {
       completedFormsAggregated: (state) =>
         state.completedForm.completedFormsAggregated,
       filterData: (state) => state.completedForm.filterData,
-      isLoadingFile: (state) => state.completedForm.isLoadingFile,
     }),
     hospital() {
       if (this.selectedHospital != null) return this.selectedHospital;
@@ -221,11 +217,11 @@ export default {
       return this.createSituationsReduce(arrayFilterd);
     },
     fileName() {
-      if (this.observation_start == null) {
+      if (this.filterData.observation_start == null) {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        return `Données_du_${this.observation_end}.xls`;
+        return `Données_du_${this.filterData.observation_start}.xls`;
       } else {
-        return `Données_du_${this.observation_start}_au_${this.observation_end}.xls`;
+        return `Données_du_${this.filterData.observation_start}_au_${this.filterData.observation_end}.xls`;
       }
     },
 
@@ -294,14 +290,16 @@ export default {
     ]),
     ...mapMutations(["selectHospital"]),
     async uploadFile() {
+      this.isFileLoading = true;
+
       this.completedFormsData = await this.completedForm__getDataByHospitals(
         this.filterData
       );
-
-      return this.hospitalSituationDatas();
+      this.isFileLoading = Object.keys(this.completedFormsData).length === 0;
+      return this.hospitalSituationDatas(this.completedFormsData);
     },
-    hospitalSituationDatas() {
-      const hospitalsSituationsData = this.completedFormsData.data || [];
+    hospitalSituationDatas(completedFormsData) {
+      const hospitalsSituationsData = completedFormsData.data || [];
 
       return hospitalsSituationsData
         .flatMap((hospital) => {

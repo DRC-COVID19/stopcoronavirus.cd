@@ -551,7 +551,6 @@ export default {
       hospitalsList: (state) => state.hospitalSituation.hospitalsList,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,
-      isLoading: (state) => state.hospitalSituation.isLoading,
     }),
     canShowMapMobile() {
       if (this.isSmOrMd) {
@@ -781,7 +780,7 @@ export default {
       "setObservationDate",
       "setCanShowNavMobile",
       "SET_FILTER__DATA",
-      "SET_IS_LOADING",
+      "SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING",
     ]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
@@ -1705,7 +1704,8 @@ export default {
     },
     initForm() {
       this.setCanShowNavMobile(false);
-      this.SET_IS_LOADING(true);
+      this.isLoading = true;
+      this.SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING(true);
     },
     submitInfrastructureForm(values) {
       this.setCanShowNavMobile(false);
