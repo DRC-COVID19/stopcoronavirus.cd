@@ -219,7 +219,7 @@ export default {
     fileName() {
       if (this.filterData.observation_start == null) {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        return `Données_du_${this.filterData.observation_start}.xls`;
+        return `Données_du_${this.filterData.observation_end}.xls`;
       } else {
         return `Données_du_${this.filterData.observation_start}_au_${this.filterData.observation_end}.xls`;
       }
