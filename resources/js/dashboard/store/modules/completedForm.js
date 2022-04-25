@@ -5,17 +5,26 @@ export default {
     completedFormsByLastUpdate: [],
     completedFormsAggregated: {},
     completedFormsData: {},
-    isLoading: false
+    filterData: {},
+    isLoading: false,
+    iscompletedFormsAggregatedLoading: false,
+    isLoadingFile: false
   },
   mutations: {
     SET_IS_LOADING (state, payload) {
       state.isLoading = payload
+    },
+    SET_IS_LOADING_FILE (state, payload) {
+      state.isLoadingFile = payload
     },
     SET_COMPLETED_FORMS (state, payload) {
       state.completedForms = payload
     },
     SET_COMPLETED_FORMS_AGGREGATED (state, payload) {
       state.completedFormsAggregated = payload
+    },
+    SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING (state, payload) {
+      state.iscompletedFormsAggregatedLoading = payload
     },
     SET_COMPLETED_FORMS_BY_LAST_UPDATE (state, payload) {
       state.completedFormsByLastUpdate = payload
@@ -25,6 +34,9 @@ export default {
     },
     SET_COMPLETED_FORMS_DATA (state, payload) {
       state.completedFormsData = payload
+    },
+    SET_FILTER__DATA (state, payload) {
+      state.filterData = payload
     }
   },
   actions: {
@@ -140,6 +152,7 @@ export default {
     },
 
     completedForm__getAggregatedByHospitals ({ commit }, payload) {
+      commit('SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
           .post(
@@ -148,22 +161,33 @@ export default {
           )
           .then(({ data }) => {
             commit('SET_COMPLETED_FORMS_AGGREGATED', data)
+            commit('SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING', false)
           })
           .catch((response) => {
             reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING', false)
           })
       })
     },
     completedForm__getDataByHospitals ({ commit }, payload) {
+      commit('SET_IS_LOADING_FILE', true)
+
       return new Promise((resolve, reject) => {
         axios
           .post('/api/dashboard/completed_forms/get-data-by-hospitals', payload)
           .then(({ data }) => {
-            console.log('data--->', data)
             commit('SET_COMPLETED_FORMS_DATA', data)
+
+            resolve(data)
+            commit('SET_IS_LOADING_FILE', false)
           })
           .catch((response) => {
             reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING_FILE', false)
           })
       })
     }

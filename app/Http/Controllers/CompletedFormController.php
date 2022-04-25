@@ -254,6 +254,8 @@ class CompletedFormController extends Controller
     {
 
         $hospitalsCompletedFormsData = self::getHospitalsCompletedFormsData($request);
+
+
         return response()->json([
             'aggregated'  => self::getAggregatedHospitalsDatas($hospitalsCompletedFormsData['hospitalsData']),
             'last_update' => $hospitalsCompletedFormsData['lastUpdate']
@@ -269,8 +271,10 @@ class CompletedFormController extends Controller
     {
 
         $hospitalsCompletedFormsData = self::getHospitalsCompletedFormsData($request);
+
         return response()->json([
             'data'        => $hospitalsCompletedFormsData['hospitalsData'],
+            'last_update' => $hospitalsCompletedFormsData['lastUpdate'],
         ], 200);
     }
 
@@ -329,9 +333,11 @@ class CompletedFormController extends Controller
         ];
     }
 
-    static public function getAggregatedHospitalsDatas($hospitalsData)
+    static public function getAggregatedHospitalsDatas($hospitalsDatas)
     {
-        $completedFormFields = collect($hospitalsData)
+
+
+        $completedFormFields = collect($hospitalsDatas)
             ->flatMap(function ($hospitalData) {
                 return $hospitalData->completedForms;
             })
@@ -341,6 +347,8 @@ class CompletedFormController extends Controller
             ->filter(function ($completedFormField) {
                 return $completedFormField->formField->form_field_type_id === FormFieldType::TYPE_NUMBER;
             });
+
+
 
         $completedFormFieldsGroup = $completedFormFields->groupBy('form_field_id')->values();
         return $completedFormFieldsGroup
