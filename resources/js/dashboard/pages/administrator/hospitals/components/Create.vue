@@ -303,6 +303,7 @@ export default {
       this.title = 'Nouveau CTCO'
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
+      this.renderMapBox()
     },
     resetForm () {
       this.updating = false
@@ -311,6 +312,7 @@ export default {
       this.form = {}
       this.btnTitle = 'Enregistrer'
       this.title = 'Nouveau CTCO'
+      this.renderMapBox()
     },
     populateForm () {
       this.updating = false
