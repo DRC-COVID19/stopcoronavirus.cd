@@ -384,17 +384,19 @@ export default {
           zoom: 3.5,
           pitch: 10,
           style: this.MAPBOX_STYLE,
-          testMode: true
+          testMode: false
         })
 
         // add methods of mapbox et load mapbox
-        marker.setLngLat(this.defaultCenterCoordinates)
+        marker.setLngLat(this.defaultKinshasaCoordinates)
         marker.addTo(map)
         const geocoder = new MapboxGeocoder({
           // Initialize the geocoder
           accessToken: Mapbox.accessToken, // Set the access token
           mapboxgl: Mapbox, // Set the mapbox-gl instance
-          marker: false, // Do not use the default marker style,
+          marker: {
+            color: 'blue'
+          },
           placeholder: 'Rechercher'
         })
 
