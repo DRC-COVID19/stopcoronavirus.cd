@@ -362,7 +362,6 @@ export default {
       try {
         // initialisation
         Mapbox.accessToken = this.MAPBOX_TOKEN
-        const nav = new Mapbox.NavigationControl()
         const marker = new Mapbox.Marker()
         const markerHeight = 50
         const markerRadius = 10
@@ -389,7 +388,6 @@ export default {
         })
 
         // add methods of mapbox et load mapbox
-        //map.addControl(nav, 'top-right')
         marker.setLngLat(this.defaultCenterCoordinates)
         marker.addTo(map)
         const geocoder = new MapboxGeocoder({
@@ -410,6 +408,7 @@ export default {
               latitude: e.lngLat.lat.toString(),
               longitude: e.lngLat.lng.toString()
             }
+
             popup.setLngLat(e.lngLat)
               .setHTML(`<p>Latitude: ${e.lngLat.lat.toString()} <br>Longitude: ${e.lngLat.lng.toString()}</p>`)
               .setMaxWidth('250px')
