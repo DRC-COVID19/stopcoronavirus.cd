@@ -130,8 +130,8 @@ import {
 } from '../../../../config/env'
 import Mapbox from 'mapbox-gl'
 import U from 'mapbox-gl-utils'
-// import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
-// import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 
 export default {
   components: {
@@ -362,7 +362,6 @@ export default {
       try {
         // initialisation
         Mapbox.accessToken = this.MAPBOX_TOKEN
-        const nav = new Mapbox.NavigationControl()
         const marker = new Mapbox.Marker()
         const markerHeight = 50
         const markerRadius = 10
@@ -389,9 +388,18 @@ export default {
         })
 
         // add methods of mapbox et load mapbox
-        map.addControl(nav, 'top-right')
-        marker.setLngLat(this.defaultKinshasaCoordinates)
+        marker.setLngLat(this.defaultCenterCoordinates)
         marker.addTo(map)
+        const geocoder = new MapboxGeocoder({
+          // Initialize the geocoder
+          accessToken: Mapbox.accessToken, // Set the access token
+          mapboxgl: Mapbox, // Set the mapbox-gl instance
+          marker: false, // Do not use the default marker style,
+          placeholder: 'Rechercher'
+        })
+
+        // Add the geocoder to the map
+        map.addControl(geocoder)
 
         map.on('load', () => {
           map.on('click', (e) => {
@@ -401,10 +409,11 @@ export default {
               latitude: e.lngLat.lat.toString(),
               longitude: e.lngLat.lng.toString()
             }
-          //   popup.setLngLat(e.lngLat)
-          //     .setHTML(`<p>Latitude: ${e.lngLat.lat.toString()} <br>Longitude: ${e.lngLat.lng.toString()}</p>`)
-          //     .setMaxWidth('250px')
-          //     .addTo(map)
+
+            popup.setLngLat(e.lngLat)
+              .setHTML(`<p>Latitude : ${e.lngLat.lat.toString()} <br>Longitude : ${e.lngLat.lng.toString()}</p>`)
+              .setMaxWidth('250px')
+              .addTo(map)
           })
         })
       } catch (error) {
