@@ -1710,6 +1710,7 @@ export default {
     submitInfrastructureForm(values) {
       this.setCanShowNavMobile(false);
       values.isLoading = true;
+      values.activeFilter=true;
       this.getHospitalsData(values);
       this.SET_FILTER__DATA(values);
       this.completedForm__getAggregatedByHospitals(values);

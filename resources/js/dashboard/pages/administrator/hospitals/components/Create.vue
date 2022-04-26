@@ -303,6 +303,7 @@ export default {
       this.title = 'Nouveau CTCO'
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
+      this.renderMapBox()
     },
     resetForm () {
       this.updating = false
@@ -311,6 +312,7 @@ export default {
       this.form = {}
       this.btnTitle = 'Enregistrer'
       this.title = 'Nouveau CTCO'
+      this.renderMapBox()
     },
     populateForm () {
       this.updating = false
@@ -399,10 +401,10 @@ export default {
               latitude: e.lngLat.lat.toString(),
               longitude: e.lngLat.lng.toString()
             }
-            popup.setLngLat(e.lngLat)
-              .setHTML(`<p>Latitude: ${e.lngLat.lat.toString()} <br>Longitude: ${e.lngLat.lng.toString()}</p>`)
-              .setMaxWidth('250px')
-              .addTo(map)
+          //   popup.setLngLat(e.lngLat)
+          //     .setHTML(`<p>Latitude: ${e.lngLat.lat.toString()} <br>Longitude: ${e.lngLat.lng.toString()}</p>`)
+          //     .setMaxWidth('250px')
+          //     .addTo(map)
           })
         })
       } catch (error) {
