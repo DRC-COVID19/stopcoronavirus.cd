@@ -389,7 +389,7 @@ export default {
         })
 
         // add methods of mapbox et load mapbox
-        // map.addControl(nav, 'top-right')
+        //map.addControl(nav, 'top-right')
         marker.setLngLat(this.defaultCenterCoordinates)
         marker.addTo(map)
         const geocoder = new MapboxGeocoder({
@@ -410,10 +410,10 @@ export default {
               latitude: e.lngLat.lat.toString(),
               longitude: e.lngLat.lng.toString()
             }
-          //   popup.setLngLat(e.lngLat)
-          //     .setHTML(`<p>Latitude: ${e.lngLat.lat.toString()} <br>Longitude: ${e.lngLat.lng.toString()}</p>`)
-          //     .setMaxWidth('250px')
-          //     .addTo(map)
+            popup.setLngLat(e.lngLat)
+              .setHTML(`<p>Latitude: ${e.lngLat.lat.toString()} <br>Longitude: ${e.lngLat.lng.toString()}</p>`)
+              .setMaxWidth('250px')
+              .addTo(map)
           })
         })
       } catch (error) {
