@@ -1,13 +1,26 @@
 <template>
-  <div id="notfound">
-    <div class="notfound">
-      <div class="notfound-404">
-        <h1>Oops!</h1>
-        <h2>403 - Vous ne disposez pas d'autorisation pour accéder à cette page</h2>
-      </div>
-      <b-button class="btn-dash-blue" @click="goHome">Retournez à l'accueil</b-button>
-    </div>
-  </div>
+  <b-container class="px-0 py-0 justify-content-center">
+    <b-row lg="12">
+      <b-col lg="6" class="illustration px-0 py-0">
+        <img
+          src="/img/401 Error Unauthorized-pana.png"
+          alt
+          class="w-100 h-100"
+        />
+      </b-col>
+      <b-col lg="8" class="text-center">
+        <div class="title">
+          <h1>Oops!</h1>
+          <h2>Vous ne disposez pas d'autorisation pour accéder à cette page</h2>
+        </div>
+      </b-col>
+      <b-col lg="6" class="text-center">
+        <b-button class="btn-dash-blue" @click="goHome"
+          >Retournez à l'accueil</b-button
+        >
+      </b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>
@@ -15,76 +28,39 @@ export default {
   methods: {
     goHome() {
       this.$router.push({
-        name: "main"
+        name: "main",
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-#notfound {
-  position: relative;
+.container {
   height: 100vh;
 }
 
-#notfound .notfound {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-}
-
-.notfound {
-  max-width: 520px;
-  width: 100%;
-  line-height: 1.4;
-  text-align: center;
-}
-
-.notfound .notfound-404 {
-  position: relative;
-  height: 200px;
-  margin: 0px auto 20px;
-  z-index: -1;
-}
-
-.notfound .notfound-404 h1 {
-  font-family: "Montserrat", sans-serif;
-  font-size: 236px;
-  font-weight: 200;
-  margin: 0px;
-  color: #211b19;
+.title h2 {
+  font-size: 2rem !important;
+  font-weight: 200 !important;
   text-transform: uppercase;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
 }
-
-.notfound .notfound-404 h2 {
-  font-family: "Montserrat", sans-serif;
-  font-size: 28px;
-  font-weight: 400;
+.title h1 {
+  font-size: 2rem !important;
+  font-weight: 200 !important;
   text-transform: uppercase;
-  color: #211b19;
-  background: #fff;
-  padding: 10px 5px;
-  margin: auto;
-  display: inline-block;
-  position: absolute;
-  bottom: 0px;
-  left: 0;
-  right: 0;
 }
 
-@media only screen and (max-width: 767px) {
-  .notfound .notfound-404 h1 {
-    font-size: 148px;
+@media only screen and (max-width: 956px) {
+  .title h2 {
+    font-size: 1.3rem !important;
+    font-weight: 200 !important;
+    text-transform: uppercase;
+  }
+  .title h1 {
+    font-size: 1.3rem !important;
+    font-weight: 200 !important;
+    text-transform: uppercase;
   }
 }
 
