@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Dashboard COVID-19 RDC</title>
     <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css" rel="stylesheet" />
-    <link href="{{ asset('css/vueApp.css?v=2.998', env('REDIRECT_HTTPS')) }}" rel="stylesheet">
+    <link href="{{ asset('css/vueApp.css?v=2.999', env('REDIRECT_HTTPS')) }}" rel="stylesheet">
 </head>
 
 <body>
@@ -22,7 +22,7 @@
             <p>Chargement des Données...</p>
         </div>
 
-        <script src="{{ asset('js/vueApp.js?v=2.998', env('REDIRECT_HTTPS')) }}"></script>
+        <script src="{{ asset('js/vueApp.js?v=2.999', env('REDIRECT_HTTPS')) }}"></script>
 
 </body>
 
