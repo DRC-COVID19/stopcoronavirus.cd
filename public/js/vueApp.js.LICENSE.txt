@@ -180,6 +180,8 @@ PERFORMANCE OF THIS SOFTWARE.
  * Copyright (c) 2016 Jorik Tangelder;
  * Licensed under the MIT license */
 
+/*! http://mths.be/base64 v0.1.0 by @mathias | MIT license */
+
 /**
  * @license
  * Lodash <https://lodash.com/>
