@@ -130,8 +130,8 @@ import {
 } from '../../../../config/env'
 import Mapbox from 'mapbox-gl'
 import U from 'mapbox-gl-utils'
-// import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
-// import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 
 export default {
   components: {
@@ -389,9 +389,18 @@ export default {
         })
 
         // add methods of mapbox et load mapbox
-        map.addControl(nav, 'top-right')
-        marker.setLngLat(this.defaultKinshasaCoordinates)
+        // map.addControl(nav, 'top-right')
+        marker.setLngLat(this.defaultCenterCoordinates)
         marker.addTo(map)
+        const geocoder = new MapboxGeocoder({
+          // Initialize the geocoder
+          accessToken: Mapbox.accessToken, // Set the access token
+          mapboxgl: Mapbox, // Set the mapbox-gl instance
+          marker: false // Do not use the default marker style
+        })
+
+        // Add the geocoder to the map
+        map.addControl(geocoder)
 
         map.on('load', () => {
           map.on('click', (e) => {
