@@ -410,7 +410,7 @@ export default {
             }
 
             popup.setLngLat(e.lngLat)
-              .setHTML(`<p>Latitude: ${e.lngLat.lat.toString()} <br>Longitude: ${e.lngLat.lng.toString()}</p>`)
+              .setHTML(`<p>Latitude : ${e.lngLat.lat.toString()} <br>Longitude : ${e.lngLat.lng.toString()}</p>`)
               .setMaxWidth('250px')
               .addTo(map)
           })
