@@ -394,7 +394,8 @@ export default {
           // Initialize the geocoder
           accessToken: Mapbox.accessToken, // Set the access token
           mapboxgl: Mapbox, // Set the mapbox-gl instance
-          marker: false // Do not use the default marker style
+          marker: false, // Do not use the default marker style,
+          placeholder: 'Rechercher'
         })
 
         // Add the geocoder to the map
