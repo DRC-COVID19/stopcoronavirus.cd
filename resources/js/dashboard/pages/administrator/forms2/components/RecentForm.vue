@@ -2,7 +2,7 @@
    <div class="row">
      <div
      v-for="(form, index) in recentForms" :key="index"
-     class="col-md-4"
+     class="col-md-4 col-sm-12"
      >
         <b-card class="card__recent-form">{{ form.title}}</b-card>
         </div>
@@ -22,8 +22,13 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@~/sass/_variables";
+.card__Scroll{
+    overflow-x: scroll !important;
+    white-space: nowrap;
+}
 .card__recent-form{
-    width: 12rem;
+    width: 100%;
     height: 8rem;
     cursor: pointer;
     background: #FFFFFF;
@@ -36,7 +41,7 @@ export default {
     color: #FFFFFF;
     font-weight: 700;
     font-size: 15px;
-    transition: all .2s ease-in;
+    transition: all .3s ease-in;
     text-align: center;
     border: 0 !important;
     transform: scale(1);
@@ -45,5 +50,27 @@ export default {
         background: #FFFFFF;
         color: #3767FA;
     }
+@media screen and($small){
+   
+  }
+  @media screen and($medium){
+    &{
+
+    }
+  }
+
+  @media screen and($large){
+    
+  }
+    @media screen and($x-large){
+     &{
+        width: 100%;
+        height: 8rem;
+        font-weight: 700;
+        font-size: 15px;
+     }
+  }
 }
+
+
 </style>

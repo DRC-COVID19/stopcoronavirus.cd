@@ -1,15 +1,68 @@
 <template>
   <div>
       <b-container fluid class="form__home">
-         <b-container>
+         <b-container class="pt-5 pt-md-0">
              <b-row>
-                 <b-col cols="4" class="form__home-left">
-                     <h4 class="mb-4">Créer un Nouveau Formulaire</h4>
+             <b-col class="form__home-left col-md-4 col-sm-12 mb-5 mb-md-0">
+                     <h4 class="mb-lg-4">Créer un Nouveau Formulaire</h4>
                      <b-card class="border-0 form__home-add">
-                         <button><img src="/img/form_add.svg"/></button>
+                         <button
+                         @click="openToogle()"
+                        v-b-toggle.sidebar-right>
+                        <img src="/img/form_add.svg" class="ml-4 ml-md-0"/>
+                        </button>
                      </b-card>
-                 </b-col>
-                 <b-col cols="8" class="d-flex flex-column align-items-end">
+                <b-sidebar
+                id="sidebar-right"
+                right
+                bg-variant="white"
+                width="25rem"
+                backdrop
+                :no-close-on-route-change="true"
+                shadow
+                backdrop-variant="transparent"
+            >
+            <Create
+                @onUpdate="updateForm"
+                @onCreate="createForm"
+                @onCancelUpdate="cancelUpdate"
+                :formAdded="formAdded"
+                :formUpdated="formUpdated"
+                :formToPopulate="formToPopulate"
+                :formRecurrences="formRecurrences"
+                :errors="errors"
+            />
+            <template #header="{ hide }" fluid>
+                <div
+                class="
+                    w-100
+                    d-flex
+                    bg-white
+                    align-items-center
+                    justify-content-between
+                    py-0
+                    px-0
+                "
+                >
+                <h2 class="h2">
+                    {{
+                  Object.keys(formToPopulate).length !== 0
+                    ? "Modification du Formulaire"
+                    : "Nouveau Formulaire"
+                }}
+                </h2>
+                <b-button
+                    size="sm"
+                    class="btn-circle btn-xl"
+                    variant="outline-danger"
+                    @click="hide"
+                    >X</b-button
+                >
+                </div>
+            </template>
+        </b-sidebar>
+                </b-col>
+                 <b-col class="d-flex flex-column align-items-lg-end col-md-8 col-sm-12">
                       <h4 class="mb-4">Les fomulaires Récents</h4>
                      <recent-form :recentForms="recentForms"/>
                  </b-col>
@@ -29,10 +82,25 @@
 
 <script>
 import RecentForm from './components/RecentForm.vue'
+import Create from './components/CreateForm.vue'
 export default {
-  components: { RecentForm },
+  components: { Create, RecentForm },
   data () {
     return {
+      title: 'Formulaires',
+      iconClass: 'fa fa-address-card',
+      isLoading: false,
+      forms: [],
+      formUpdated: false,
+      formAdded: false,
+      showSuccess: false,
+      isFormDeleted: false,
+      timeOut: 3,
+      formToPopulate: {},
+      updating: false,
+      errors: {},
+      currentPage: 1,
+      formRecurrences: [],
       recentForms: []
     }
   },
@@ -46,6 +114,160 @@ export default {
         { id: 2, title: 'Formulaire Omicron' },
         { id: 3, title: 'Formulaire Rougeole' }
       ]
+    },
+    search (filter) {
+      this.isLoading = true
+      if (filter !== '') {
+        axios
+          .get('api/dashboard/forms/filter?key_words=' + filter)
+          .then(({ data }) => {
+            this.forms = data
+            this.isLoading = false
+          })
+          .catch(({ response }) => {
+            this.$gtag.exception(response)
+            this.isLoading = false
+          })
+      } else {
+        this.getFormList()
+        this.isLoading = false
+      }
+    },
+    openToogle (state) {
+      this.formToPopulate = {}
+      this.updating = state
+    },
+    deleteForm (currentFormId) {
+      axios
+        .delete('/api/dashboard/forms/' + currentFormId)
+        .then(() => {
+          this.getFormList()
+          this.isFormDeleted = true
+          this.$notify({
+            group: 'alert',
+            title: 'Supprimer formulaire',
+            text: 'Supprimer avec succès',
+            type: 'success'
+          })
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+          this.$notify({
+            group: 'alert',
+            title: 'Supprimer formulaire',
+            text: 'Une erreur est surveni',
+            type: 'error'
+          })
+        })
+    },
+    populateForm (currentForm) {
+      this.updating = true
+      this.formToPopulate = currentForm
+    },
+    cancelUpdate () {
+      this.updating = false
+      this.formToPopulate = {}
+    },
+    updateForm (currentForm) {
+      this.isLoading = true
+      this.formUpdated = false
+      const form = {
+        title: currentForm.title,
+        form_recurrence_value: currentForm.form_recurrence_value,
+        form_recurrence_id: currentForm.form_recurrence_id,
+        publish: currentForm.publish
+      }
+
+      axios
+        .put('/api/dashboard/forms/' + currentForm.id, form)
+        .then(() => {
+          this.formUpdated = true
+          this.showSuccess = true
+          this.isLoading = false
+          this.updating = false
+          this.getFormList(1)
+          this.$notify({
+            group: 'alert',
+            title: 'Modification du  Formulaire',
+            text: 'Modifier avec succès',
+            type: 'success'
+          })
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+          this.$notify({
+            group: 'alert',
+            title: 'Modification du  Formulaire',
+            text: 'Une erreur est survenus',
+            type: 'error'
+          })
+        })
+    },
+
+    createForm (form) {
+      this.formAdded = false
+      this.isLoading = true
+      this.errors = {}
+      axios
+        .post('/api/dashboard/forms', {
+          title: form.title,
+          form_recurrence_value: form.form_recurrence_value,
+          form_recurrence_id: form.form_recurrence_id,
+          publish: form.publish
+        })
+        .then(() => {
+          this.formAdded = true
+          this.showSuccess = true
+          this.isLoading = false
+          this.getFormList(1)
+          this.$notify({
+            group: 'alert',
+            title: 'Nouveau Formulaire',
+            text: 'Ajouter avec succès',
+            type: 'success'
+          })
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+          this.isLoading = false
+          this.errors = response.data.errors
+          this.$notify({
+            group: 'alert',
+            title: 'Nouveau Formulaire',
+            text: 'Une erreur est survenus',
+            type: 'error'
+          })
+        })
+    },
+
+    getFormList (page = 1) {
+      this.isLoading = true
+      axios
+        .get('api/dashboard/forms', {
+          params: { page }
+        })
+        .then(({ data }) => {
+          this.forms = data
+          this.isLoading = false
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+        })
+    },
+
+    getFormRecurrence () {
+      axios
+        .get('/api/dashboard/form-recurrences')
+        .then(({ data }) => {
+          this.formRecurrences = data
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+        })
+    },
+
+    switchPage (page) {
+      this.getFormList(page)
     }
   }
 
@@ -53,8 +275,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@~/sass/_variables";
 .form__card{
-        width: 12rem;
+        width: 100%;
         height: 8rem;
         cursor: pointer;
         background: #FFFFFF;
@@ -66,13 +289,12 @@ export default {
 }
  .form__home{
      background-color: #F4F6FC;
-     height: 419px;
      display: flex;
      align-items: center;
      h4{
          color: #14244F;
          font-weight: bold;
-         font-size: 24px;
+         font-size: 16px;
      }
      .form__home-left{
     display: flex;
@@ -103,6 +325,17 @@ export default {
  }
  .form_list{
       background-color: #fff;
+}
+@media screen and($small){ 
+    .form__card{
+        width: 12rem;
+}
+ .form__home{
+     height: 419px;
+     h4{
+         font-size: 24px;
+     }
+  }
 }
 
 </style>
