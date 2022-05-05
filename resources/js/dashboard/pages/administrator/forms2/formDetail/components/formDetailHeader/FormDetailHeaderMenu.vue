@@ -1,71 +1,48 @@
 <template>
-  <b-row class="header">
-    <b-col cols="12" class="">
-      <b-navbar toggleable="lg" type="light">
-        <b-navbar-brand class="mr-5">
-          <h1 class="title m-0">Titre du Formulaire</h1>
-        </b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse" class="default-border">
-          <span class="fa fa-bars"></span>
-        </b-navbar-toggle>
-
-        <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav
-            class="d-flex nav-container justify-content-around w-100"
-            style="margin-left: 30%"
-            align="center"
-          >
-            <b-nav-item>
-              Etat du formulaire :<span class="text-danger"> nom publié</span>
-            </b-nav-item>
-            <b-nav-item class="btn-dash-blue d-block px-3"
-              ><span class="text-white">Publier</span>
-            </b-nav-item>
-            <b-nav-item> Prévisualisation </b-nav-item>
-          </b-navbar-nav>
-          <b-navbar-nav>
-            <b-nav-item class="d-flex align-content-center">
-              <div
-                class="
-                  map-form-logo
-                  d-flex
-                  justify-content-center justify-content-md-end
-                  align-items-center
-                "
-              >
-                <div
-                  @mouseleave="userAvatarMouseLeave"
-                  @mouseenter="userAvatarMouseEnter"
-                  class="avatar-container ml-3"
-                  v-if="user"
-                >
-                  <b-img
-                    :src="user.avatar"
-                    rounded="circle"
-                    fluid
-                    width="30"
-                    v-b-tooltip.hover
-                    :title="user.username"
-                  />
-                  <b-card class="user-card text-center" v-if="showUserCard">
-                    <p>
-                      <span class="d-block">{{ user.username }}</span>
-                      <span class="d-block">{{ user.name }}</span>
-                      <span class="d-block" v-if="user.email">{{
-                        user.email
-                      }}</span>
-                    </p>
-                    <p>Revenir à l'accueil</p>
-                    <b-button @click="userLogout" variant="danger" block>
-                      Deconnexion
-                    </b-button>
-                  </b-card>
-                </div>
-              </div>
-            </b-nav-item>
-          </b-navbar-nav>
-        </b-collapse>
-      </b-navbar>
+  <b-row class="">
+    <b-col cols="12" lg="12" class="header d-flex justify-content-center w-100">
+      <b-nav
+        lg="12"
+        class="d-flex justify-content-center w-auto nav-container"
+        style=""
+      >
+        <b-nav-item
+          v-if="canViewForm"
+          :to="{ name: 'administrator.forms2.show.creation' }"
+          :active="
+            this.$route.name.startsWith('administrator.forms2.show.creation')
+          "
+        >
+          Création
+        </b-nav-item>
+        <b-nav-item
+          v-if="canViewForm"
+          :to="{ name: 'administrator.forms2.show.answer' }"
+          :active="
+            this.$route.name.startsWith('administrator.forms2.show.answer')
+          "
+        >
+          Réponses
+        </b-nav-item>
+        <b-nav-item
+          v-if="canViewForm"
+          :to="{ name: 'administrator.forms2.show.setting' }"
+          :active="
+            this.$route.name.startsWith('administrator.forms2.show.setting')
+          "
+        >
+          Paramètre
+        </b-nav-item>
+        <b-nav-item
+          v-if="canViewForm"
+          :to="{ name: 'administrator.forms2.show.schema' }"
+          :active="
+            this.$route.name.startsWith('administrator.forms2.show.schema')
+          "
+        >
+          Schèmas
+        </b-nav-item>
+      </b-nav>
     </b-col>
   </b-row>
 </template>
@@ -142,13 +119,6 @@ export default {
   a {
     text-decoration: none;
   }
-  background: white;
-  .icon-hallo {
-    width: 30px;
-    height: 30px;
-    background: $dash-background;
-    border-radius: 50px;
-  }
 
   .dropdown-nav {
     position: absolute;
@@ -214,18 +184,24 @@ export default {
     }
   }
   .nav-container {
+    background: transparent;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
     a {
-      color: #14244f;
+      color: black;
       text-decoration: none;
-      font-weight: bold;
       font-size: 12px;
+
       &:hover {
-        color: $dash-blue;
+        color: #3767fa;
+        background: white !important;
+        border-bottom-left-radius: 3px !important;
+        border-bottom-right-radius: 3px !important;
       }
     }
     .active {
       a {
-        color: $dash-blue;
+        color: #3767fa;
       }
     }
   }
@@ -261,7 +237,11 @@ export default {
 }
 .nav-item {
   a.active {
-    color: $dash-blue !important;
+    color: #3767fa !important;
+    background: white !important;
+
+    border-bottom-left-radius: 3px !important;
+    border-bottom-right-radius: 3px !important;
   }
 }
 </style>
