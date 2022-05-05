@@ -64,7 +64,7 @@ export default {
   }
     @media screen and($x-large){
      &{
-        width: 100%;
+        width: 12rem;
         height: 8rem;
         font-weight: 700;
         font-size: 15px;
