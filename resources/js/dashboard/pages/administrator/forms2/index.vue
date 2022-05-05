@@ -11,17 +11,7 @@
                  </b-col>
                  <b-col cols="8" class="d-flex flex-column align-items-end">
                       <h4 class="mb-4">Les fomulaires Récents</h4>
-                     <div class="row">
-                         <div class="col-md-4">
-                        <b-card class="card__recent-form">Formulaire COVID-19</b-card>
-                         </div>
-                         <div class="col-md-4">
-                        <b-card class="card__recent-form">Formulaire Omicron</b-card>
-                        </div>
-                         <div class="col-md-4">
-                              <b-card class="card__recent-form">Formulaire Rougeole</b-card>
-                         </div>
-                     </div>
+                     <recent-form :recentForms="recentForms"/>
                  </b-col>
              </b-row>
          </b-container>
@@ -38,7 +28,18 @@
 </template>
 
 <script>
+import RecentForm from './components/RecentForm.vue'
 export default {
+  components: { RecentForm },
+  data () {
+    return {
+      recentForms: [
+        { id: 1, title: 'Formulaire COVID-19' },
+        { id: 2, title: 'Formulaire Omicron' },
+        { id: 3, title: 'Formulaire Rougeole' }
+      ]
+    }
+  }
 
 }
 </script>
@@ -54,22 +55,6 @@ export default {
         flex-direction: row;
         align-content: center;
         align-items: center;
-}
-.card__recent-form{
-    @extend .form__card;
-    background: #3767FA;
-    color: #FFFFFF;
-    font-weight: 700;
-    font-size: 15px;
-    transition: all .2s ease-in;
-    text-align: center;
-    border: 0 !important;
-    transform: scale(1);
-    &:hover{
-        transform: scale(1.1);
-        background: #FFFFFF;
-        color: #3767FA;
-    }
 }
  .form__home{
      background-color: #F4F6FC;
