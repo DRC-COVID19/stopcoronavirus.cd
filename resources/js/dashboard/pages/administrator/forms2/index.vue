@@ -106,6 +106,8 @@ export default {
   },
   async mounted () {
     this.getRecentForms()
+    this.getFormList()
+    this.getFormRecurrence()
   },
   methods: {
     async getRecentForms () {
@@ -215,7 +217,7 @@ export default {
           form_recurrence_id: form.form_recurrence_id,
           publish: form.publish
         })
-        .then(() => {
+        .then(({ data }) => {
           this.formAdded = true
           this.showSuccess = true
           this.isLoading = false
@@ -226,6 +228,7 @@ export default {
             text: 'Ajouter avec succès',
             type: 'success'
           })
+          this.backToRoute({ formId: data.id })
         })
         .catch(({ response }) => {
           this.$gtag.exception(response)
@@ -268,6 +271,9 @@ export default {
 
     switchPage (page) {
       this.getFormList(page)
+    },
+    backToRoute ({ formId }) {
+      return this.$router.push(`/administrator/forms/${formId}`)
     }
   }
 
@@ -326,7 +332,7 @@ export default {
  .form_list{
       background-color: #fff;
 }
-@media screen and($small){ 
+@media screen and($small){
     .form__card{
         width: 12rem;
 }
