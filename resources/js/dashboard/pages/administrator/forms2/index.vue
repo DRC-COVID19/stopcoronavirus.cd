@@ -33,7 +33,15 @@ export default {
   components: { RecentForm },
   data () {
     return {
-      recentForms: [
+      recentForms: []
+    }
+  },
+  async mounted () {
+    this.getRecentForms()
+  },
+  methods: {
+    async getRecentForms () {
+      this.recentForms = await [
         { id: 1, title: 'Formulaire COVID-19' },
         { id: 2, title: 'Formulaire Omicron' },
         { id: 3, title: 'Formulaire Rougeole' }
