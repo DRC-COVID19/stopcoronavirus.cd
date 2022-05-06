@@ -26,8 +26,43 @@
                 </div>
                  <div class="d-flex">
                      <div class="input-search d-flex justify-content-around">
-                        <input type="text" class="input-lg" placeholder="Rechercher par Nom" />
-                         <img src="/img/codicon_search.svg" class="img-search ml-4 ml-md-0"/>
+                    <v-date-picker
+                      v-model="form.last_update"
+                      opens="center"
+                      :max-date="max"
+                      class="d-flex style-picker"
+                      @input="selectLastUpdate()"
+                      show-weeknumbers
+                    >
+                      <template v-slot="{ inputEvents, inputValue }">
+                        <div
+                          class="
+                            d-flex
+                            flex-col
+                            sm:flex-row
+                            justify-content-center
+                            text-center
+                            item-center
+                            btn-container-calendar
+                          "
+                        >
+                          <input
+                            id="last_update"
+                            class="p-1 w-full"
+                            :value="
+                              inputValue
+                                ? moment(form.last_update).format('DD.MM.YYYY')
+                                : 'Filtrer par Date'
+                            "
+                            v-on="inputEvents"
+                            :disabled="isUpdateMode"
+                            hidePopover
+                            readonly
+                          />
+                         <i class="fas fa-calendar-alt pt-2"></i>
+                        </div>
+                      </template>
+                    </v-date-picker>
                     </div>
                     <div>
                         <v-select
@@ -92,7 +127,8 @@ export default {
         title: '',
         form_recurrence_value: null,
         form_recurrence_id: '',
-        publish: false
+        publish: false,
+        last_update: null
       },
       show: true,
       showWarning: false,

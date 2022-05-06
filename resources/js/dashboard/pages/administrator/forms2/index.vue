@@ -64,7 +64,10 @@
                 </b-col>
                  <b-col class="d-flex flex-column align-items-lg-end col-md-8 col-sm-12">
                       <h4 class="mb-4">Les fomulaires Récents</h4>
-                     <recent-form :recentForms="recentForms"/>
+                     <recent-form 
+                     :recentForms="recentForms"
+                     :formRecurrences="formRecurrences"
+                     />
                  </b-col>
              </b-row>
          </b-container>
