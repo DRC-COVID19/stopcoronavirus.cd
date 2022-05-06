@@ -30,4 +30,7 @@ class Form extends Model
     {
         return $this->hasMany(FormField::class);
     }
+    public function completedforms(){
+        return $this->hasMany(CompletedForm::class);
+    }
 }
