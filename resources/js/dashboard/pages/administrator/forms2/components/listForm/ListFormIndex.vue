@@ -63,7 +63,7 @@ export default {
    }
    .form_card-list{
         background-color: #F4F6FC;
-        height: 20rem;
+        height: auto;
    }
 }
 
