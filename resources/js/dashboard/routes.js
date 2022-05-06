@@ -313,8 +313,8 @@ export default [
         },
       },
       {
-        path: "/administrator/forms2/detail/answer",
-        name: "administrator.forms2.show.answer",
+        path: "/administrator/forms2/detail/response",
+        name: "administrator.forms2.show.response",
         component: formResponse,
         meta: {
           requiresAuth: true,

@@ -3,7 +3,13 @@
     <b-col cols="12" class="">
       <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
-          <h1 class="title m-0">Titre du Formulaire</h1>
+          <b-form-input
+            v-model="titleForm"
+            class="title input-header"
+            placeholder="Entrer le titre du formulaire"
+            :value="titleForm"
+            :state="stateTitleForm"
+          ></b-form-input>
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse" class="default-border">
           <span class="fa fa-bars"></span>
@@ -84,6 +90,7 @@ export default {
     return {
       showUserCard: false,
       showHeaderNotification: false,
+      titleForm: "Titre du Formulaire",
     };
   },
   computed: {
@@ -93,7 +100,9 @@ export default {
       changeLogs: (state) => state.app.changeLogs,
     }),
     ...mapGetters(["getChangeLogNotRead"]),
-
+    stateTitleForm() {
+      return this.titleForm.length === 0 ? false : null;
+    },
     canViewForm() {
       return (
         this.userHaveRole(ADMINISTRATOR) ||
@@ -138,11 +147,19 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+.input-header {
+  border: none !important;
+  outline: 0 none;
+}
+.from-control {
+  border: none !important;
+}
 .header {
   a {
     text-decoration: none;
   }
   background: white;
+
   .icon-hallo {
     width: 30px;
     height: 30px;

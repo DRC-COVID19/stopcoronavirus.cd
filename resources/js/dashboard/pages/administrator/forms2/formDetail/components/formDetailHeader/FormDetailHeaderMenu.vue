@@ -17,9 +17,9 @@
         </b-nav-item>
         <b-nav-item
           v-if="canViewForm"
-          :to="{ name: 'administrator.forms2.show.answer' }"
+          :to="{ name: 'administrator.forms2.show.response' }"
           :active="
-            this.$route.name.startsWith('administrator.forms2.show.answer')
+            this.$route.name.startsWith('administrator.forms2.show.response')
           "
         >
           Réponses
