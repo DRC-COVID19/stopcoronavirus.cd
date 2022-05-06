@@ -67,7 +67,7 @@
                     <div>
                         <v-select
                         v-model="form.recurrences_id"
-                        :options="recurrences"
+                        :options="formRecurrences"
                         label="name"
                         :reduce="(item)=>item.id"
                         id="id"
@@ -86,6 +86,7 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
 export default {
   props: {
     formAdded: {
@@ -103,12 +104,6 @@ export default {
       required: false,
       default: () => {
         return {}
-      }
-    },
-    formRecurrences: {
-      type: Array,
-      default: () => {
-        return []
       }
     },
     errors: {
@@ -135,8 +130,19 @@ export default {
       toBeCanceled: true,
       formRecurrenceSelected: null
     }
+  },
+  async mounted () {
+    this.resetForm()
+    await this.getFormsRecurrences()
+  },
+  computed: {
+    ...mapState({
+      formRecurrences: (state) => state.form.formsRecurrences
+    })
+  },
+  methods: {
+    ...mapActions(['getFormsRecurrences'])
   }
-
 }
 </script>
 
@@ -200,7 +206,7 @@ export default {
 		opacity: 0;
 		transform: translateX(20px);
 	}
-    
+
 }
 
 </style>

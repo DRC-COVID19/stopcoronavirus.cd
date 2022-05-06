@@ -89,7 +89,7 @@
 import FormFieldInput from '../../../../components/forms/FormFieldInput'
 import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue'
 import { ValidationObserver } from 'vee-validate'
-
+import { mapState, mapActions } from 'vuex'
 export default {
   components: {
     FormFieldInput,
@@ -112,12 +112,6 @@ export default {
       required: false,
       default: () => {
         return {}
-      }
-    },
-    formRecurrences: {
-      type: Array,
-      default: () => {
-        return []
       }
     },
     errors: {
@@ -146,8 +140,14 @@ export default {
       formRecurrenceSelected: null
     }
   },
-  mounted () {
+  async mounted () {
     this.resetForm()
+    await this.getFormsRecurrences()
+  },
+  computed: {
+    ...mapState({
+      formRecurrences: (state) => state.form.formsRecurrences
+    })
   },
   watch: {
     formAdded () {
@@ -162,6 +162,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['getFormsRecurrences']),
     onSubmit () {
       this.isLoading = true
       if (this.btnTitle === 'Enregistrer') {
