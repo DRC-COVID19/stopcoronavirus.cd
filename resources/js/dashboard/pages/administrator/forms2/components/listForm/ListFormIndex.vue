@@ -2,7 +2,7 @@
     <b-container fluid class="form_list">
          <div class="container">
              <hr>
-        <list-form-navigation/>
+        <list-form-navigation @filterForms="filterForms"/>
           <list-forms :formsList="formsList"/>
          </div>
       </b-container>
@@ -18,6 +18,11 @@ export default {
       type: Array,
       default: () => ([]),
       required: false
+    }
+  },
+  methods: {
+    filterForms (value) {
+      this.$emit('filterForms', value)
     }
   }
 

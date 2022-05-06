@@ -25,7 +25,7 @@
                 </a>
                 </div>
                  <div class="d-flex">
-                     <div class="input-search d-flex justify-content-around">
+                    <div class="input-search d-flex justify-content-around">
                     <v-date-picker
                       v-model="form.last_update"
                       opens="center"
@@ -141,7 +141,10 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getFormsRecurrences'])
+    ...mapActions(['getFormsRecurrences']),
+    filterForms () {
+      this.$emit('filterForms', this.filter)
+    }
   }
 }
 </script>
