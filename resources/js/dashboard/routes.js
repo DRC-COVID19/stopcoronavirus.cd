@@ -295,7 +295,7 @@ export default [
    * FormDetail routes
    */
   {
-    path: "/administrator/forms2/detail",
+    path: "/administrator/forms2/:form_id",
     name: "administrator.forms2.show",
     component: FormShow2,
     meta: {
@@ -313,7 +313,7 @@ export default [
         },
       },
       {
-        path: "/administrator/forms2/detail/response",
+        path: "/administrator/forms2/:form_id/response",
         name: "administrator.forms2.show.response",
         component: FormResponse,
         meta: {
@@ -322,7 +322,7 @@ export default [
         },
       },
       {
-        path: "/administrator/forms2/detail/schema",
+        path: "/administrator/forms2/:form_id/schema",
         name: "administrator.forms2.show.schema",
         component: formschemas,
         meta: {
@@ -331,7 +331,7 @@ export default [
         },
       },
       {
-        path: "/administrator/forms2/detail/setting",
+        path: "/administrator/forms2/:form_id/setting",
         name: "administrator.forms2.show.setting",
         component: FormSettings,
         meta: {
@@ -340,7 +340,7 @@ export default [
         },
       },
       {
-        path: "/administrator/forms2/detail/form-preview",
+        path: "/administrator/forms2/:form_id/form-preview",
         name: "administrator.forms2.show.form-preview",
         component: FormPreview,
         meta: {
