@@ -17,13 +17,13 @@
                  </div>
 
              </div>
-          <list-forms/>
+          <list-forms :formsList="formsList"/>
          </div>
       </b-container>
 </template>
 
 <script>
-import ListForms from '../../../forms/components/ListForms.vue'
+import ListForms from './ListForms.vue'
 export default {
   components: { ListForms },
   props: {
@@ -37,6 +37,73 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "@~/sass/_variables";
+.card-list{
+    width: 100%;
+    height: 247.39px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    .card-list-header{
+         width: 100%;
+        height: 146.01px;
+        background: linear-gradient(180deg, rgba(99, 132, 234, 0.9) 0%, #6384EA 100%);
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        h4{
+            color: #FFFFFF;
+        }
+    }
+    .card-list-body{
+        position: absolute;
+         width: 100%;
+        height: 108.42px;
+        background: #FFFFFF;
+        border-radius: 0px 0px 10px 10px;
+    }
+}
+.form__card{
+        width: 100%;
+        height: 8rem;
+        cursor: pointer;
+        background: #FFFFFF;
+        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+         display: flex;
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+}
+ .form_list{
+      background-color: #fff;
+      text-align: inherit;
+   ul{
+       display: flex;
+       justify-content: space-between;
+       li{
+           list-style: none;
+
+       }
+   }
+   .form_card-list{
+        background-color: #F4F6FC;
+        height: 20rem;
+   }
+}
+
+a{
+    text-decoration: none;
+}
+@media screen and($small){
+    .form__card{
+        width: 12rem;
+}
+ .form__home{
+     height: 419px;
+     h4{
+         font-size: 24px;
+     }
+  }
+}
 
 </style>
