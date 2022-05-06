@@ -47,7 +47,7 @@ export default {
     transform: scale(1);
     &:hover{
         transform: scale(1.1);
-        background: #FFFFFF;
+        background-color: #FFFFFF;
         color: #3767FA;
     }
 @media screen and($small){

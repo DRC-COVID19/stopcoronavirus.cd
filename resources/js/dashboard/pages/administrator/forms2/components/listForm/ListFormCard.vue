@@ -8,7 +8,7 @@
                    <h6>Crée  le {{ moment(form.created_at).format('DD/MM/Y')}}</h6>
                      <h6>{{ form.form_recurrence.name}}</h6>
                  </div>
-                     <h6 class="text-danger">5 Réponses</h6>
+                     <h6 class="text-danger card-badge">5 Réponses</h6>
              </div>
     </div>
 </template>
@@ -29,11 +29,11 @@ export default {
 @import "@~/sass/_variables";
 .card-list{
     width: 100%;
-    height: 247.39px;
+    min-height: 220px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     .card-list-header{
          width: 100%;
-        height: 146.01px;
+        min-height: 120px;
         background: linear-gradient(180deg, rgba(99, 132, 234, 0.9) 0%, #6384EA 100%);
         text-align: center;
         display: flex;
@@ -46,9 +46,24 @@ export default {
     .card-list-body{
         position: absolute;
          width: 100%;
-        height: 108.42px;
+        min-height: 100px;
         background: #FFFFFF;
         border-radius: 0px 0px 10px 10px;
+        h6{
+            font-size: 12.5px;
+        }
+        .card-badge{
+            font-size: 14px;
+            font-weight: 400;
+        }
+    }
+    transition: all .3s ease-in;
+    text-align: left;
+    border: 0 !important;
+    transform: scale(1);
+    &:hover{
+        transform: scale(1.1);
+        background-color: #e9e7e7;
     }
 }
 
