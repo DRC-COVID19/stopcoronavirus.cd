@@ -69,22 +69,16 @@
              </b-row>
          </b-container>
       </b-container>
-        <b-container fluid class="form_list">
-         <div class="container">
-             <b-row>
-                 <b-col>1</b-col>
-                 <b-col>2</b-col>
-             </b-row>
-         </div>
-      </b-container>
+      <list-form-index :formsList="forms"/>
   </div>
 </template>
 
 <script>
 import RecentForm from './components/RecentForm.vue'
 import Create from './components/CreateForm.vue'
+import ListFormIndex from './components/listForm/ListFormIndex.vue'
 export default {
-  components: { Create, RecentForm },
+  components: { Create, RecentForm, ListFormIndex },
   data () {
     return {
       title: 'Formulaires',
@@ -101,7 +95,7 @@ export default {
       errors: {},
       currentPage: 1,
       formRecurrences: [],
-      recentForms: []
+      recentForms: [],
     }
   },
   async mounted () {
@@ -282,6 +276,30 @@ export default {
 
 <style lang="scss">
 @import "@~/sass/_variables";
+.card-list{
+    width: 100%;
+    height: 247.39px;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    .card-list-header{
+         width: 100%;
+        height: 146.01px;
+        background: linear-gradient(180deg, rgba(99, 132, 234, 0.9) 0%, #6384EA 100%);
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        h4{
+            color: #FFFFFF;
+        }
+    }
+    .card-list-body{
+        position: absolute;
+         width: 100%;
+        height: 108.42px;
+        background: #FFFFFF;
+        border-radius: 0px 0px 10px 10px;
+    }
+}
 .form__card{
         width: 100%;
         height: 8rem;
@@ -308,6 +326,7 @@ export default {
      justify-content: space-between;
      .form__home-add{
         @extend .form__card;
+        transition: .2s ease-in ;
         border-radius: 0;
         button{
             display: block;
@@ -331,6 +350,23 @@ export default {
  }
  .form_list{
       background-color: #fff;
+      text-align: inherit;
+   ul{
+       display: flex;
+       justify-content: space-between;
+       li{
+           list-style: none;
+
+       }
+   }
+   .form_card-list{
+        background-color: #F4F6FC;
+        height: 20rem;
+   }
+}
+
+a{
+    text-decoration: none;
 }
 @media screen and($small){
     .form__card{
