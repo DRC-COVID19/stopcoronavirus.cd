@@ -1,15 +1,36 @@
 <template>
   <div class="d-flex justify-content-between mb-4">
-                <div>
-                    <ul>
-                    <li><a href="#">Publiés</a></li>
-                    <li><a href="#">Non Publiés</a></li>
-                    <li><a href="#">Tous</a></li>
-                </ul>
+
+                <div class="form__nav">
+                    <a
+                    :class="{ selected: filter === 'published' }"
+                    @click.prevent="filter = 'published'"
+                    class="filterLink"
+                >
+                    Publiés
+                </a>
+                <a
+                    :class="{ selected: filter === 'unPublished' }"
+                    @click.prevent="filter = 'unPublished'"
+                    class="filterLink"
+                >
+                    Non publiés
+                </a>
+                <a
+                    :class="{ selected: filter === 'all' }"
+                    @click.prevent="filter = 'all'"
+                    class="filterLink"
+                >
+                    Tous
+                </a>
                 </div>
                  <div class="d-flex">
+                     <div class="input-search d-flex justify-content-around">
+                        <input type="text" class="input-lg" placeholder="Rechercher par Nom" />
+                         <img src="/img/codicon_search.svg" class="img-search ml-4 ml-md-0"/>
+                    </div>
                     <div>
-                           <v-select
+                        <v-select
                         v-model="form.recurrences_id"
                         :options="recurrences"
                         label="name"
@@ -22,7 +43,7 @@
 
                     <div class="input-search d-flex justify-content-around">
                         <input type="text" class="input-lg" placeholder="Rechercher par Nom" />
-                         <img src="/img/codicon_search.svg" class="ml-4 ml-md-0"/>
+                         <img src="/img/codicon_search.svg" class="img-search ml-4 ml-md-0"/>
                     </div>
                  </div>
 
@@ -62,9 +83,7 @@ export default {
   },
   data () {
     return {
-      title: 'Nouveau Formulaire',
-      btnTitle: 'Enregistrer',
-      iconClass: 'fas fa-plus-square',
+      filter: '',
       updating: false,
       isLoading: false,
       validateMailMessage: '',
@@ -87,14 +106,14 @@ export default {
 
 <style lang="scss">
 .input-select{
-    width: 250px;
+    width: 220px;
     border: solid 1px #E4E4E4;
     background-color: #F1F3F4;
     border-radius: 5px;
     margin-right: 2rem;
 }
 .input-search{
-    width: 250px;
+    width: 220px;
      height: 35px;
       border: solid 1px #cfcdcd;
     background-color: #F1F3F4;
@@ -111,8 +130,41 @@ export default {
         }
     }
 }
-img{
+.img-search{
     width: 20px !important;
+}
+.form__nav{
+    display: flex;
+    justify-content: space-around;
+    .filterLink{
+	  display: block;
+	  color: #14244F;
+		cursor: pointer;
+		padding: 0.5rem 1rem;
+		border:0;
+		background-color:transparent;
+		text-align: center;
+		transition: background-color .3s ease-in;
+		font-weight: 700;
+   }
+    .selected{
+		transition: all .2s ease-in;
+		color:#3767FA;
+        &::after{
+            content: "";
+            display: block;
+            border: 1px solid #3767FA;
+        }
+	}
+
+	.fade-enter-active,.fade-leave-active{
+		transition: opacity 5s transform 5s;
+	}
+	.fade-enter, .fade-leave-active{
+		opacity: 0;
+		transform: translateX(20px);
+	}
+    
 }
 
 </style>
