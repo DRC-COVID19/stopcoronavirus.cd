@@ -23,7 +23,7 @@ import FormShow from "./pages/administrator/forms/form";
 import FormShow2 from "./pages/administrator/forms2/formDetail/index";
 import FormCreation from "./pages/administrator/forms2/formDetail/formCreation";
 import FormSettings from "./pages/administrator/forms2/formDetail/formSettings";
-import formschemas from "./pages/administrator/forms2/formDetail/formschemas";
+import FormSchemas from "./pages/administrator/forms2/formDetail/formSchemas";
 import FormResponse from "./pages/administrator/forms2/formDetail/formResponse";
 import FormPreview from "./pages/administrator/forms2/formDetail/formPreview";
 import Main from "./pages/Main";
@@ -172,15 +172,15 @@ export default [
               role: [CREATE_FORM, EDIT_FORM],
             },
           },
-          {
-            path: "/administrator/forms/:form_id",
-            name: "administrator.forms.show",
-            component: FormShow,
-            meta: {
-              requiresAuth: true,
-              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
-            },
-          },
+          // {
+          //   path: "/administrator/forms/:form_id",
+          //   name: "administrator.forms.show",
+          //   component: FormShow,
+          //   meta: {
+          //     requiresAuth: true,
+          //     role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+          //   },
+          // },
           {
             path: "epidemie/",
             name: "administrator.epidemie",
@@ -295,8 +295,8 @@ export default [
    * FormDetail routes
    */
   {
-    path: "/administrator/forms2/:form_id",
-    name: "administrator.forms2.show",
+    path: "/administrator/forms/:form_id",
+    name: "administrator.forms.show",
     component: FormShow2,
     meta: {
       requiresAuth: true,
@@ -305,7 +305,7 @@ export default [
     children: [
       {
         path: "/",
-        name: "administrator.forms2.show.creation",
+        name: "administrator.forms.show.creation",
         component: FormCreation,
         meta: {
           requiresAuth: true,
@@ -313,8 +313,8 @@ export default [
         },
       },
       {
-        path: "/administrator/forms2/:form_id/response",
-        name: "administrator.forms2.show.response",
+        path: "/administrator/forms/:form_id/response",
+        name: "administrator.forms.show.response",
         component: FormResponse,
         meta: {
           requiresAuth: true,
@@ -322,17 +322,17 @@ export default [
         },
       },
       {
-        path: "/administrator/forms2/:form_id/schema",
-        name: "administrator.forms2.show.schema",
-        component: formschemas,
+        path: "/administrator/forms/:form_id/schema",
+        name: "administrator.forms.show.schema",
+        component: FormSchemas,
         meta: {
           requiresAuth: true,
           role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
         },
       },
       {
-        path: "/administrator/forms2/:form_id/setting",
-        name: "administrator.forms2.show.setting",
+        path: "/administrator/forms/:form_id/setting",
+        name: "administrator.forms.show.setting",
         component: FormSettings,
         meta: {
           requiresAuth: true,
@@ -340,8 +340,8 @@ export default [
         },
       },
       {
-        path: "/administrator/forms2/:form_id/form-preview",
-        name: "administrator.forms2.show.form-preview",
+        path: "/administrator/forms/:form_id/form-preview",
+        name: "administrator.forms.show.form-preview",
         component: FormPreview,
         meta: {
           requiresAuth: true,

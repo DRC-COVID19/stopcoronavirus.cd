@@ -115,6 +115,7 @@ export default {
       user: (state) => state.auth.user,
       activeMenu: (state) => state.nav.activeMenu,
       changeLogs: (state) => state.app.changeLogs,
+      isUpdateFormTitle: (state) => state.form.isUpdateFormTitle,
     }),
     ...mapGetters(["getChangeLogNotRead"]),
     stateTitleForm() {
@@ -130,18 +131,27 @@ export default {
   },
   mounted() {
     this.init();
+    console.log(this.form);
   },
   methods: {
-    ...mapActions(["logout", "setChangeLogsRead", "formShow"]),
+    ...mapActions([
+      "logout",
+      "setChangeLogsRead",
+      "formShow",
+      "updateFormTitle",
+    ]),
     ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
     async init() {
       this.isLoading = true;
       this.form = await this.formShow({ id: this.$route.params.form_id });
+      this.titleForm = this.form.title;
       if (this.form.length !== 0) {
         this.isLoading = false;
       }
     },
     onChangeTilte() {
+      this.form.title = this.titleForm;
+      this.updateFormTitle(this.form);
       console.log("titleForm", this.titleForm);
     },
     userAvatarMouseEnter() {

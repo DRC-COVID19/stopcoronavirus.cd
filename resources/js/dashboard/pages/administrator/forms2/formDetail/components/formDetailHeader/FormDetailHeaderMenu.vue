@@ -8,36 +8,36 @@
       >
         <b-nav-item
           v-if="canViewForm"
-          :to="{ name: 'administrator.forms2.show.creation' }"
+          :to="{ name: 'administrator.forms.show.creation' }"
           :active="
-            this.$route.name.startsWith('administrator.forms2.show.creation')
+            this.$route.name.startsWith('administrator.forms.show.creation')
           "
         >
           Création
         </b-nav-item>
         <b-nav-item
           v-if="canViewForm"
-          :to="{ name: 'administrator.forms2.show.response' }"
+          :to="{ name: 'administrator.forms.show.response' }"
           :active="
-            this.$route.name.startsWith('administrator.forms2.show.response')
+            this.$route.name.startsWith('administrator.forms.show.response')
           "
         >
           Réponses
         </b-nav-item>
         <b-nav-item
           v-if="canViewForm"
-          :to="{ name: 'administrator.forms2.show.setting' }"
+          :to="{ name: 'administrator.forms.show.setting' }"
           :active="
-            this.$route.name.startsWith('administrator.forms2.show.setting')
+            this.$route.name.startsWith('administrator.forms.show.setting')
           "
         >
           Paramètre
         </b-nav-item>
         <b-nav-item
           v-if="canViewForm"
-          :to="{ name: 'administrator.forms2.show.schema' }"
+          :to="{ name: 'administrator.forms.show.schema' }"
           :active="
-            this.$route.name.startsWith('administrator.forms2.show.schema')
+            this.$route.name.startsWith('administrator.forms.show.schema')
           "
         >
           Schèmas
