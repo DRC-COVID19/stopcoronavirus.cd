@@ -32,7 +32,10 @@
             <b-navbar-nav
               class="d-flex nav-container align-center justify-content-around"
             >
-              <b-button class="d-block btn-dash-blue px-4 nav-btn-action">
+              <b-button
+                class="d-block btn-dash-blue px-4 nav-btn-action"
+                @click="changeStatusPublishForm"
+              >
                 Publier
               </b-button>
 
@@ -92,7 +95,6 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import Button from "../../../../../../components/Button/Button.vue";
 import {
   ADMINISTRATOR,
   CREATE_FORM,
@@ -100,7 +102,7 @@ import {
 } from "../../../../../../config/env";
 
 export default {
-  components: { Button },
+  components: {},
   data() {
     return {
       showUserCard: false,
@@ -131,7 +133,6 @@ export default {
   },
   mounted() {
     this.init();
-    console.log(this.form);
   },
   methods: {
     ...mapActions([
@@ -139,6 +140,7 @@ export default {
       "setChangeLogsRead",
       "formShow",
       "updateFormTitle",
+      "changeStatusForm",
     ]),
     ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
     async init() {
@@ -149,10 +151,15 @@ export default {
         this.isLoading = false;
       }
     },
-    onChangeTilte() {
+    async onChangeTilte() {
       this.form.title = this.titleForm;
-      this.updateFormTitle(this.form);
-      console.log("titleForm", this.titleForm);
+      await this.updateFormTitle(this.form);
+    },
+    async changeStatusPublishForm() {
+      this.form.publish = !this.isPublish;
+      this.form.form_id = this.form.id;
+      await this.changeStatusForm(this.form);
+      this.isPublish = !this.isPublish;
     },
     userAvatarMouseEnter() {
       this.showUserCard = true;
