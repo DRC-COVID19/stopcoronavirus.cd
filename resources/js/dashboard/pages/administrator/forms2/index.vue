@@ -29,7 +29,6 @@
                 :formAdded="formAdded"
                 :formUpdated="formUpdated"
                 :formToPopulate="formToPopulate"
-                :formRecurrences="formRecurrences"
                 :errors="errors"
             />
             <template #header="{ hide }" fluid>
@@ -66,7 +65,6 @@
                       <h4 class="mb-4">Les fomulaires Récents</h4>
                      <recent-form 
                      :recentForms="recentForms"
-                     :formRecurrences="formRecurrences"
                      />
                  </b-col>
              </b-row>
@@ -97,14 +95,12 @@ export default {
       updating: false,
       errors: {},
       currentPage: 1,
-      formRecurrences: [],
       recentForms: [],
     }
   },
   async mounted () {
     this.getRecentForms()
     this.getFormList()
-    this.getFormRecurrence()
   },
   methods: {
     async getRecentForms () {
@@ -249,17 +245,6 @@ export default {
         .then(({ data }) => {
           this.forms = data
           this.isLoading = false
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
-    },
-
-    getFormRecurrence () {
-      axios
-        .get('/api/dashboard/form-recurrences')
-        .then(({ data }) => {
-          this.formRecurrences = data
         })
         .catch(({ response }) => {
           this.$gtag.exception(response)
