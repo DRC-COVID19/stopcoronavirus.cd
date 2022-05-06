@@ -3,7 +3,8 @@ export default {
     forms: [],
     recentForms: [],
     formFiltered: [],
-    isLoading: false
+    isLoading: false,
+    isUpdating: false
   },
   mutations: {
     SET_FORMS (state, payload) {
@@ -17,6 +18,9 @@ export default {
     },
     SET_IS_LOADING (state, payload) {
       state.isLoading = payload
+    },
+    SET_IS_UPDATING (state, payload) {
+      state.isUpdating = payload
     }
   },
   actions: {
@@ -86,5 +90,25 @@ export default {
           })
       })
     }
+  },
+  changeStatusForm ({ commit }, payload = {}) {
+    commit('SET_IS_UPDATING', true)
+    return new Promise((resolve, reject) => {
+      axios
+        .put(
+          `/api/dashboard/forms/${payload.form_id}`,
+          payload
+        )
+        .then(({ data }) => {
+          commit('SET_IS_LOADING', false)
+          resolve(true)
+        })
+        .catch(response => {
+          reject(response)
+        })
+        .finally(() => {
+          commit('SET_IS_UPDATING', false)
+        })
+    })
   }
 }

@@ -99,6 +99,7 @@ class FormController extends Controller
         $paginate         = $request->input('paginate');
 
         $forms =  Form::with('formRecurrence') 
+                      ->withCount('completedforms')
                       ->where(function ($query) use ($recurrence_form, $form_date, $published_form, $unpublished_form){
                         if($form_date){
                           $query->whereDate('created_at', $form_date);
