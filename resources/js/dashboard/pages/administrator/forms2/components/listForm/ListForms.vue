@@ -18,9 +18,11 @@
 <script>
 import ListFormCard from './ListFormCard.vue'
 export default {
+  components: {
+    ListFormCard
+  },
   props: {
-    formsLis
-    ListFormCardt: {
+    formsList: {
       type: Array,
       default: () => ([]),
       required: false
