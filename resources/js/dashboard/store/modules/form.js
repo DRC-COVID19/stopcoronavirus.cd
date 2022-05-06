@@ -2,6 +2,7 @@ export default {
   state: {
     forms: [],
     recentForms: [],
+    formsRecurrences: [],
     formFiltered: [],
     isLoading: false,
     isUpdating: false
@@ -12,6 +13,9 @@ export default {
     },
     SET_RECENT_FORMS (state, payload) {
       state.recentForms = payload
+    },
+    SET_FORMS_RECURRENCES (state, payload) {
+      state.formsRecurrences = payload
     },
     SET_FORM_FILTERED (state, payload) {
       state.formFiltered = payload
@@ -52,7 +56,20 @@ export default {
           })
       })
     },
-
+    getFormsRecurrences ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios.get('/api/dashboard/form-recurrences')
+          .then(({ data }) => {
+            commit('SET_FORMS_RECURRENCES', data)
+            commit('SET_IS_LOADING', false)
+            resolve(true)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
+    },
     getRecentForms ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
