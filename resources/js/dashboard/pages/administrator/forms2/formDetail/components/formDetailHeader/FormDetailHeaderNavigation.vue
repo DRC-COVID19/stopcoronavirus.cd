@@ -4,6 +4,7 @@
       <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
           <b-form-input
+            @blur="onChangeTilte"
             v-model="titleForm"
             class="title input-header"
             placeholder="Entrer le titre du formulaire"
@@ -11,65 +12,78 @@
             :state="stateTitleForm"
           ></b-form-input>
         </b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse" class="default-border">
+        <b-navbar-toggle target="nav-collapse" class="">
           <span class="fa fa-bars"></span>
         </b-navbar-toggle>
 
         <b-collapse id="nav-collapse" is-nav>
-          <b-navbar-nav
-            class="d-flex nav-container justify-content-around w-100"
-            style="margin-left: 30%"
-            align="center"
-          >
-            <b-nav-item>
-              Etat du formulaire :<span class="text-danger"> nom publié</span>
-            </b-nav-item>
-            <b-nav-item class="btn-dash-blue d-block px-3"
-              ><span class="text-white">Publier</span>
-            </b-nav-item>
-            <b-nav-item> Prévisualisation </b-nav-item>
-          </b-navbar-nav>
-          <b-navbar-nav>
-            <b-nav-item class="d-flex align-content-center">
-              <div
-                class="
-                  map-form-logo
-                  d-flex
-                  justify-content-center justify-content-md-end
-                  align-items-center
-                "
-              >
-                <div
-                  @mouseleave="userAvatarMouseLeave"
-                  @mouseenter="userAvatarMouseEnter"
-                  class="avatar-container ml-3"
-                  v-if="user"
+          <div class="d-flex justify-content-between w-100 container-nav-space">
+            <b-navbar-nav class="nav-container" align="center">
+              <span class="d-flex align-center">
+                Etat du formulaire :
+                <span
+                  class="ml-3"
+                  :class="isPublish ? 'text-success' : 'text-danger'"
                 >
-                  <b-img
-                    :src="user.avatar"
-                    rounded="circle"
-                    fluid
-                    width="30"
-                    v-b-tooltip.hover
-                    :title="user.username"
-                  />
-                  <b-card class="user-card text-center" v-if="showUserCard">
-                    <p>
-                      <span class="d-block">{{ user.username }}</span>
-                      <span class="d-block">{{ user.name }}</span>
-                      <span class="d-block" v-if="user.email">{{
-                        user.email
-                      }}</span>
-                    </p>
-                    <p>Revenir à l'accueil</p>
-                    <b-button @click="userLogout" variant="danger" block>
-                      Deconnexion
-                    </b-button>
-                  </b-card>
+                  {{ isPublish ? "publié" : "nom publié" }}</span
+                >
+              </span>
+            </b-navbar-nav>
+            <b-navbar-nav
+              class="d-flex nav-container align-center justify-content-around"
+            >
+              <b-button class="d-block btn-dash-blue px-4 nav-btn-action">
+                Publier
+              </b-button>
+
+              <b-nav-item
+                class="d-block preview btn-dash-blue px-4 nav-btn-action"
+              >
+                Prévisualisation
+              </b-nav-item>
+            </b-navbar-nav>
+            <b-navbar-nav class="my-auto">
+              <b-nav-item class="d-flex align-content-center">
+                <div
+                  class="
+                    map-form-logo
+                    d-flex
+                    justify-content-center justify-content-md-end
+                    align-items-center
+                  "
+                >
+                  <div
+                    @mouseleave="userAvatarMouseLeave"
+                    @mouseenter="userAvatarMouseEnter"
+                    class="avatar-container ml-3"
+                    v-if="user"
+                  >
+                    <b-img
+                      :src="user.avatar"
+                      rounded="circle"
+                      fluid
+                      width="30"
+                      v-b-tooltip.hover
+                      :title="user.username"
+                    />
+                    <b-card class="user-card text-center" v-if="showUserCard">
+                      <p>
+                        <span class="d-block">{{ user.username }}</span>
+                        <span class="d-block">{{ user.name }}</span>
+                        <span class="d-block" v-if="user.email">{{
+                          user.email
+                        }}</span>
+                      </p>
+                      <p>Revenir à l'accueil</p>
+                      <b-button @click="userLogout" variant="danger" block>
+                        Deconnexion
+                      </b-button>
+                    </b-card>
+                  </div>
                 </div>
-              </div>
-            </b-nav-item>
-          </b-navbar-nav>
+              </b-nav-item>
+            </b-navbar-nav>
+          </div>
         </b-collapse>
       </b-navbar>
     </b-col>
@@ -78,6 +92,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import Button from "../../../../../../components/Button/Button.vue";
 import {
   ADMINISTRATOR,
   CREATE_FORM,
@@ -85,12 +100,14 @@ import {
 } from "../../../../../../config/env";
 
 export default {
-  components: {},
+  components: { Button },
   data() {
     return {
       showUserCard: false,
       showHeaderNotification: false,
       titleForm: "Titre du Formulaire",
+      isPublish: false,
+      form: {},
     };
   },
   computed: {
@@ -111,10 +128,22 @@ export default {
       );
     },
   },
-  mounted() {},
+  mounted() {
+    this.init();
+  },
   methods: {
-    ...mapActions(["logout", "setChangeLogsRead"]),
+    ...mapActions(["logout", "setChangeLogsRead", "formShow"]),
     ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
+    async init() {
+      this.isLoading = true;
+      this.form = await this.formShow({ id: this.$route.params.form_id });
+      if (this.form.length !== 0) {
+        this.isLoading = false;
+      }
+    },
+    onChangeTilte() {
+      console.log("titleForm", this.titleForm);
+    },
     userAvatarMouseEnter() {
       this.showUserCard = true;
     },
@@ -151,76 +180,11 @@ export default {
   border: none !important;
   outline: 0 none;
 }
-.from-control {
-  border: none !important;
-}
 .header {
   a {
     text-decoration: none;
   }
   background: white;
-
-  .icon-hallo {
-    width: 30px;
-    height: 30px;
-    background: $dash-background;
-    border-radius: 50px;
-  }
-
-  .dropdown-nav {
-    position: absolute;
-    top: 55px;
-    min-width: 300px;
-    padding: 0;
-    border-radius: 4px;
-    box-shadow: 0px 0px 10px 0px rgb(33 30 30 / 15%);
-    animation: dropdownanimate 200ms ease-in;
-    z-index: 20;
-    background-color: #fff;
-    :after {
-      content: "";
-      height: 0;
-      width: 0;
-      border-bottom: 10px solid $dash-blue;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      position: absolute;
-      top: -8px;
-      left: 14px;
-    }
-    .item-header {
-      text-align: center;
-      background-color: $dash-blue;
-      padding: 20px 25px;
-      border-radius: 4px 4px 0 0;
-      position: relative;
-      .item-title {
-        margin-bottom: 0;
-        color: #fff;
-      }
-    }
-    .item-content {
-      .media {
-        border-bottom: 1px solid #eaeaea;
-        padding-bottom: 14px;
-        padding: 20px 25px;
-        cursor: pointer;
-        &:hover {
-          background: $waiting_background;
-        }
-        .item-icon {
-          height: 30px;
-          width: 30px;
-          border-radius: 50%;
-          line-height: 31px;
-          text-align: center;
-        }
-        .media-body.space-sm {
-          margin-left: 15px;
-        }
-      }
-    }
-  }
 
   .title {
     font-size: 20px;
@@ -230,7 +194,21 @@ export default {
       cursor: pointer;
     }
   }
+  .container-nav-space {
+    margin-left: 40%;
+  }
   .nav-container {
+    .nav-btn-action {
+      margin: 17px !important;
+      font-size: 16px !important;
+    }
+    span {
+      color: #14244f;
+      font-weight: bold;
+      font-size: 12px;
+      align-items: center;
+      justify-content: center;
+    }
     a {
       color: #14244f;
       text-decoration: none;
@@ -244,6 +222,13 @@ export default {
       a {
         color: $dash-blue;
       }
+    }
+    .preview {
+      background: #f4f6fc !important;
+      border-color: #f4f6fc !important;
+    }
+    a {
+      color: #3767fa !important;
     }
   }
   .avatar-container {
@@ -276,6 +261,26 @@ export default {
     }
   }
 }
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  .container-nav-space {
+    margin-left: 20% !important;
+  }
+}
+@media (max-width: $max-width) {
+  .preview {
+    width: 20% !important;
+  }
+  .navbar-nav {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .container-nav-space {
+    display: block !important;
+    margin-left: 0 !important;
+  }
+}
+
 .nav-item {
   a.active {
     color: $dash-blue !important;

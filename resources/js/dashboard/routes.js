@@ -21,11 +21,11 @@ import Epidemie from "./pages/administrator/epidemy/Index";
 import FormIndex from "./pages/administrator/forms/index";
 import FormShow from "./pages/administrator/forms/form";
 import FormShow2 from "./pages/administrator/forms2/formDetail/index";
-import formCreation from "./pages/administrator/forms2/formDetail/formCreation";
-import formSettings from "./pages/administrator/forms2/formDetail/formSettings";
+import FormCreation from "./pages/administrator/forms2/formDetail/formCreation";
+import FormSettings from "./pages/administrator/forms2/formDetail/formSettings";
 import formschemas from "./pages/administrator/forms2/formDetail/formschemas";
-import formResponse from "./pages/administrator/forms2/formDetail/formResponse";
-import formPreview from "./pages/administrator/forms2/formDetail/formPreview";
+import FormResponse from "./pages/administrator/forms2/formDetail/formResponse";
+import FormPreview from "./pages/administrator/forms2/formDetail/formPreview";
 import Main from "./pages/Main";
 import Dashboard from "./pages/dashboard/Dashboard";
 import CTCO from "./pages/ctco/CTCO";
@@ -306,7 +306,7 @@ export default [
       {
         path: "/",
         name: "administrator.forms2.show.creation",
-        component: formCreation,
+        component: FormCreation,
         meta: {
           requiresAuth: true,
           role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
@@ -315,7 +315,7 @@ export default [
       {
         path: "/administrator/forms2/detail/response",
         name: "administrator.forms2.show.response",
-        component: formResponse,
+        component: FormResponse,
         meta: {
           requiresAuth: true,
           role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
@@ -333,7 +333,16 @@ export default [
       {
         path: "/administrator/forms2/detail/setting",
         name: "administrator.forms2.show.setting",
-        component: formSettings,
+        component: FormSettings,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+        },
+      },
+      {
+        path: "/administrator/forms2/detail/form-preview",
+        name: "administrator.forms2.show.form-preview",
+        component: FormPreview,
         meta: {
           requiresAuth: true,
           role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
