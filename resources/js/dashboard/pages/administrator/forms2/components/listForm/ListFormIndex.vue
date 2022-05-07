@@ -3,7 +3,10 @@
          <div class="container">
              <hr>
         <list-form-navigation @filterForms="filterForms"/>
-          <list-forms :formsList="formsList"/>
+          <list-forms
+          :isLoading = "isLoading"
+          :formsList="formsList"
+          />
          </div>
       </b-container>
 </template>
@@ -15,8 +18,13 @@ export default {
   components: { ListForms, ListFormNavigation },
   props: {
     formsList: {
-      type: Array,
-      default: () => ([]),
+      type: Object,
+      default: () => {},
+      required: false
+    },
+    isLoading: {
+      type: Boolean,
+      default: () => {},
       required: false
     }
   },

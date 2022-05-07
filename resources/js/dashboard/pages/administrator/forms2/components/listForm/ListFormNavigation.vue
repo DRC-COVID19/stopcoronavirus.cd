@@ -4,21 +4,21 @@
                 <div class="form__nav">
                     <a
                     :class="{ selected: filter === 'published' }"
-                    @click.prevent="filter = 'published'"
+                    @click.prevent="getfilter('publish')"
                     class="filterLink"
                 >
                     Publiés
                 </a>
                 <a
-                    :class="{ selected: filter === 'unPublished' }"
-                    @click.prevent="filter = 'unPublished'"
+                    :class="{ selected: filter === 'unpublished' }"
+                    @click.prevent="getfilter('unpublish')"
                     class="filterLink"
                 >
                     Non publiés
                 </a>
                 <a
                     :class="{ selected: filter === 'all' }"
-                    @click.prevent="filter = 'all'"
+                    @click.prevent="getfilter('all')"
                     class="filterLink"
                 >
                     Tous
@@ -121,8 +121,9 @@ export default {
       form: {
         title: '',
         form_recurrence_value: null,
-        form_recurrence_id: '',
+        form_recurrence_id: null,
         publish: false,
+        unpublish: false,
         last_update: null
       },
       show: true,
@@ -142,8 +143,24 @@ export default {
   },
   methods: {
     ...mapActions(['getFormsRecurrences']),
-    filterForms () {
-      this.$emit('filterForms', this.filter)
+    getfilter (value) {
+      if (value === 'publish') {
+        this.form.publish = true
+        delete (this.form.unpublish)
+      } else if (value === 'unpublish') {
+        this.form.unpublish = true
+        delete (this.form.publish)
+      } else if (value === 'all') {
+        delete (this.form.publish)
+        delete (this.form.unpublish)
+      }
+      const form = {
+        form_date: this.form.last_update ?? null,
+        published_form: this.form.publish ?? null,
+        unpublished_form: this.form.unpublish ?? null,
+        recurrence_form: this.form.form_recurrence_id ?? null
+      }
+      this.$emit('filterForms', form)
     }
   }
 }

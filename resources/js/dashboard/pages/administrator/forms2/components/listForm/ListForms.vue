@@ -1,16 +1,34 @@
 <template>
        <b-container>
                  <b-row class="form_card-list">
-                 <b-container>
+
+                   <b-row v-if="isLoading">
+                  <b-col>
+                    <b-skeleton-img></b-skeleton-img>
+                  </b-col>
+                  <b-col>
+                    <b-skeleton-img></b-skeleton-img>
+                  </b-col>
+                  <b-col cols="12" class="mt-3">
+                    <b-skeleton-img no-aspect height="150px" style="width: 100%;"></b-skeleton-img>
+                  </b-col>
+                </b-row>
+                 <b-container v-else>
                      <b-row class="mt-4 px-md-3 d-flex justify-content-start">
                      <b-col
-                       v-for="(form, index) in formsList" :key="index"
+                       v-for="(form, index) in formsList.data" :key="index"
                      md="3" sm="12 mt-4"
                      >
                          <list-form-card :form="form"/>
                      </b-col>
                      </b-row>
                  </b-container>
+                   <b-pagination
+                v-model="currentPage"
+                :total-rows="rows"
+                :per-page="perPage"
+                aria-controls="my-table"
+              ></b-pagination>
              </b-row>
              </b-container>
 </template>
@@ -23,9 +41,19 @@ export default {
   },
   props: {
     formsList: {
-      type: Array,
-      default: () => ([]),
+      type: Object,
+      default: () => ({}),
       required: false
+    },
+    isLoading: {
+      type: Boolean,
+      default: () => {},
+      required: false
+    }
+  },
+  data () {
+    return {
+      currentPage: null
     }
   }
 

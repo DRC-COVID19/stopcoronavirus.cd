@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Form;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FormController extends Controller
 {
@@ -91,6 +92,7 @@ class FormController extends Controller
         return response()->json($forms, 200);
     }
     public function getFormFiltered(Request $request){
+      Log::info("message",[(bool)$request->input('published_form')]);
       try {
         $form_date        = $request->input('form_date');
         $published_form   = $request->input('published_form');
@@ -107,10 +109,12 @@ class FormController extends Controller
                         if($recurrence_form){
                           $query->where('form_recurrence_id', $recurrence_form);
                         }
-                        if($published_form){
+                        if($published_form == true){
+                      Log::info("message",['colllllll']); 
                           $query->where('publish',true);
                         }
-                        if($unpublished_form){
+                        if($unpublished_form == true){
+                          Log::info("message",['noooooon']); 
                           $query->where('publish',false);
                         }
                       })->paginate($paginate);

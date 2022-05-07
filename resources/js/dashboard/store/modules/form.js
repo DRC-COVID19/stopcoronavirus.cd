@@ -3,7 +3,6 @@ export default {
     forms: [],
     recentForms: [],
     formsRecurrences: [],
-    formFiltered: [],
     isLoading: false,
     isUpdating: false
   },
@@ -16,9 +15,6 @@ export default {
     },
     SET_FORMS_RECURRENCES (state, payload) {
       state.formsRecurrences = payload
-    },
-    SET_FORM_FILTERED (state, payload) {
-      state.formFiltered = payload
     },
     SET_IS_LOADING (state, payload) {
       state.isLoading = payload
@@ -49,7 +45,7 @@ export default {
           .then(({ data }) => {
             commit('SET_FORMS', data)
             commit('SET_IS_LOADING', false)
-            resolve(true)
+            resolve(data)
           })
           .catch((response) => {
             reject(response)
@@ -98,9 +94,10 @@ export default {
           }
         })
           .then(({ data }) => {
-            commit('SET_FORM_FILTERED', data)
+            console.log('payload-->', payload)
+            console.log('data-->', data)
+            resolve(data)
             commit('SET_IS_LOADING', false)
-            resolve(true)
           })
           .catch((response) => {
             reject(response)

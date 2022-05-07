@@ -63,14 +63,18 @@
                 </b-col>
                  <b-col class="d-flex flex-column align-items-lg-end col-md-8 col-sm-12">
                       <h4 class="mb-4">Les fomulaires Récents</h4>
-                     <recent-form 
+                     <recent-form
                      :recentForms="recentForms"
                      />
                  </b-col>
              </b-row>
          </b-container>
       </b-container>
-      <list-form-index :formsList="forms"/>
+      <list-form-index
+      :formsList="forms"
+      :isLoading="isLoading"
+       @filterForms="filterForms"
+      />
   </div>
 </template>
 
@@ -78,14 +82,17 @@
 import RecentForm from './components/RecentForm.vue'
 import Create from './components/CreateForm.vue'
 import ListFormIndex from './components/listForm/ListFormIndex.vue'
+import { mapActions } from 'vuex'
+
 export default {
   components: { Create, RecentForm, ListFormIndex },
   data () {
     return {
       title: 'Formulaires',
       iconClass: 'fa fa-address-card',
+      filter: '',
       isLoading: false,
-      forms: [],
+      forms: {},
       formUpdated: false,
       formAdded: false,
       showSuccess: false,
@@ -95,20 +102,32 @@ export default {
       updating: false,
       errors: {},
       currentPage: 1,
-      recentForms: [],
+      recentForms: []
     }
   },
   async mounted () {
     this.getRecentForms()
-    this.getFormList()
+    await this.getFormList()
   },
   methods: {
+    ...mapActions(['getFormFiltered', 'getForms']),
     async getRecentForms () {
       this.recentForms = await [
         { id: 1, title: 'Formulaire COVID-19' },
         { id: 2, title: 'Formulaire Omicron' },
         { id: 3, title: 'Formulaire Rougeole' }
       ]
+    },
+    async filterForms (value) {
+      this.isLoading = true
+      this.forms = await this.getFormFiltered({
+        form_date: value.form_date,
+        published_form: value.published_form,
+        unpublished_form: value.unpublished_form,
+        recurrence_form: value.recurrence_form,
+        paginate: value.paginate
+      })
+      this.isLoading = false
     },
     search (filter) {
       this.isLoading = true
@@ -236,19 +255,11 @@ export default {
         })
     },
 
-    getFormList (page = 1) {
+    async getFormList (page = 1) {
       this.isLoading = true
-      axios
-        .get('api/dashboard/forms', {
-          params: { page }
-        })
-        .then(({ data }) => {
-          this.forms = data
-          this.isLoading = false
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
+
+      this.forms = await this.getFormFiltered()
+      this.isLoading = false
     },
 
     switchPage (page) {
