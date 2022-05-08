@@ -15,12 +15,7 @@
                      </b-col>
                      </b-row>
                  </b-container>
-                   <b-pagination
-                v-model="currentPage"
-                :total-rows="rows"
-                :per-page="perPage"
-                aria-controls="my-table"
-              ></b-pagination>
+                
              </b-row>
              </b-container>
 </template>

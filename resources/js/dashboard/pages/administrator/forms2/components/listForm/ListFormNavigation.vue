@@ -3,7 +3,7 @@
 
                 <div class="form__nav">
                     <a
-                    :class="{ selected: filter === 'published' }"
+                    :class="{ selected: filter === 'publish' }"
                     @click.prevent="getfilter('publish')"
                     class="filterLink"
                 >
@@ -31,7 +31,7 @@
                       opens="center"
                       :max-date="max"
                       class="d-flex style-picker"
-                      @input="selectLastUpdate()"
+                      @input="getFormsByDate()"
                       show-weeknumbers
                     >
                       <template v-slot="{ inputEvents, inputValue }">
@@ -55,9 +55,6 @@
                                 : 'Filtrer par Date'
                             "
                             v-on="inputEvents"
-                            :disabled="isUpdateMode"
-                            hidePopover
-                            readonly
                           />
                          <i class="fas fa-calendar-alt pt-2"></i>
                         </div>
@@ -114,6 +111,7 @@ export default {
   data () {
     return {
       filter: '',
+      max: new Date(),
       updating: false,
       isLoading: false,
       validateMailMessage: '',
@@ -153,9 +151,24 @@ export default {
       } else if (value === 'all') {
         delete (this.form.publish)
         delete (this.form.unpublish)
+        delete (this.form.last_update)
       }
       const form = {
         form_date: this.form.last_update ?? null,
+        published_form: this.form.publish ?? null,
+        unpublished_form: this.form.unpublish ?? null,
+        recurrence_form: this.form.form_recurrence_id ?? null
+      }
+      this.$emit('filterForms', form)
+    },
+    getFormsByDate () {
+      this.setFormAndEmmit()
+    },
+    setFormAndEmmit () {
+      const form = {
+        form_date: this.moment(this.form.last_update).format(
+          'YYYY-MM-DD'
+        ) ?? null,
         published_form: this.form.publish ?? null,
         unpublished_form: this.form.unpublish ?? null,
         recurrence_form: this.form.form_recurrence_id ?? null
