@@ -42,6 +42,7 @@ export default {
         h4{
             color: #FFFFFF;
         }
+        
     }
     .card-list-body{
         position: absolute;
@@ -64,6 +65,9 @@ export default {
     &:hover{
         transform: scale(1.1);
         background-color: #e9e7e7;
+        .card-list-header{
+          background-color: #fa3782;
+        }
     }
 }
 

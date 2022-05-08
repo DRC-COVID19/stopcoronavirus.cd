@@ -3,15 +3,7 @@
                  <b-row class="form_card-list">
 
                    <b-row v-if="isLoading">
-                  <b-col>
-                    <b-skeleton-img></b-skeleton-img>
-                  </b-col>
-                  <b-col>
-                    <b-skeleton-img></b-skeleton-img>
-                  </b-col>
-                  <b-col cols="12" class="mt-3">
-                    <b-skeleton-img no-aspect height="150px" style="width: 100%;"></b-skeleton-img>
-                  </b-col>
+                  <b-spinner :show="true" variant="primary"></b-spinner>
                 </b-row>
                  <b-container v-else>
                      <b-row class="mt-4 px-md-3 d-flex justify-content-start">

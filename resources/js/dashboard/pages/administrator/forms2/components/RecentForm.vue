@@ -2,7 +2,7 @@
    <div class="row">
      <div
      v-for="(form, index) in recentForms" :key="index"
-     class="col-md-4 col-sm-12"
+     class="col-md-4 col-sm-12 pb-3 pb-md-0"
      >
         <b-card class="card__recent-form">{{ form.title}}</b-card>
         </div>
