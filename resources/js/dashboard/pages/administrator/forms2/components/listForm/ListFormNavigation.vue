@@ -74,6 +74,7 @@
                     <div>
                         <v-select
                         v-model="form.form_recurrence_id"
+                        placeholder="Filtrer par Reccurence"
                         :options="formRecurrences"
                         label="name"
                         :reduce="(item)=>item.id"
@@ -126,7 +127,7 @@ export default {
   },
   data () {
     return {
-      filter: '',
+      filter: 'all',
       max: new Date(),
       updating: false,
       isLoading: false,
@@ -224,6 +225,11 @@ export default {
     padding: .2rem 0;
     /* font-style: italic; */
 }
+.vs__dropdown-toggle::placeholder{
+          color:#535356 !important;
+          font-style: italic;
+          font-size: 14px;
+    }
 }
 .input-search{
     width: 220px;
@@ -238,7 +244,7 @@ export default {
             &::placeholder{
             color:#535356;
             padding: 10px;
-            font-style: initial;
+            font-style: italic;
             font-size: 14px;
         }
     }
