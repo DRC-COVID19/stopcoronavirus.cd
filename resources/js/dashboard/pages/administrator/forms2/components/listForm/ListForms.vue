@@ -36,12 +36,12 @@
                         v-model="form.perPage"
                         :options="perPages"
                         id="id"
-                        class="ml-4"
+                        class="ml-3"
                         :searchable="false"
                         @input="getFormsByPerPage()"
                      />
                     </div>
-                    <p  class="mx-4">1-{{form.perPage}} sur  {{ paginate.total }}</p>
+                    <p  class="mx-3">1-{{form.perPage}} sur  {{ paginate.total }}</p>
                       <b-pagination
                     v-model="currentPage"
                     :total-rows="paginate.total"
