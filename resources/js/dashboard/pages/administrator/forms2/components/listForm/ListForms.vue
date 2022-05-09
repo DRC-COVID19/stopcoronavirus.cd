@@ -33,6 +33,7 @@
                     :total-rows="paginate.total"
                     :per-page="paginate.perPage"
                     aria-controls="my-table"
+                    @change="switchPage"
                   ></b-pagination>
                  </div>
 

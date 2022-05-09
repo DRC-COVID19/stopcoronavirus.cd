@@ -285,7 +285,8 @@ export default {
     },
 
     switchPage (page) {
-      this.getFormList(page)
+      alert(page)
+      //this.getFormList(page)
     },
     backToRoute ({ formId }) {
       return this.$router.push(`/administrator/forms/${formId}`)
