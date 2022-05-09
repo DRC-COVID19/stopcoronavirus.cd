@@ -65,6 +65,7 @@
                       <h4 class="mb-4">Les fomulaires Récents</h4>
                      <recent-form
                      :recentForms="recentForms"
+                     :isLoading="isRecentFormsLoading"
                      />
                  </b-col>
              </b-row>
@@ -94,6 +95,7 @@ export default {
       iconClass: 'fa fa-address-card',
       filter: '',
       isLoading: false,
+      isRecentFormsLoading: false,
       forms: {},
       formUpdated: false,
       formAdded: false,
@@ -110,17 +112,15 @@ export default {
     }
   },
   async mounted () {
-    this.getRecentForms()
+    await this.findRecentForms()
     await this.getFormList()
   },
   methods: {
     ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms']),
-    async getRecentForms () {
-      this.recentForms = await [
-        { id: 1, title: 'Formulaire COVID-19' },
-        { id: 2, title: 'Formulaire Omicron' },
-        { id: 3, title: 'Formulaire Rougeole' }
-      ]
+    async findRecentForms () {
+      this.isRecentFormsLoading = true
+      this.recentForms = await this.getRecentForms()
+      this.isRecentFormsLoading = false
     },
     async filterForms (value) {
       this.isLoading = true

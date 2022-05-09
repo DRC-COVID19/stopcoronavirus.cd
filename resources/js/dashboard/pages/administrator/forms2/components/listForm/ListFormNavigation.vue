@@ -166,7 +166,6 @@ export default {
       this.setFormAndEmmit()
     },
     selectRecurrence () {
-      alert(JSON.stringify(this.form))
       this.setFormAndEmmit()
     },
     onSearch () {

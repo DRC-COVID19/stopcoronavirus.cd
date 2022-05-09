@@ -1,6 +1,10 @@
 <template>
    <div class="card__Scroll">
+     <div v-if="isLoading">
+       <b-spinner :show="true" variant="danger">Chargement des fomulaires Récents...</b-spinner>
+     </div>
      <div
+     v-else
      v-for="(form, index) in recentForms" :key="index"
      class="px-2"
      >
@@ -15,6 +19,11 @@ export default {
     recentForms: {
       type: Array,
       default: () => ([])
+    },
+    isLoading: {
+      type: Boolean,
+      default: () => false,
+      required: false
     }
   }
 
@@ -62,7 +71,7 @@ export default {
         color: #3767FA;
     }
 @media screen and($small){
-   
+
   }
   @media screen and($medium){
     &{
@@ -71,7 +80,7 @@ export default {
   }
 
   @media screen and($large){
-    
+
   }
     @media screen and($x-large){
      &{
@@ -82,6 +91,5 @@ export default {
      }
   }
 }
-
 
 </style>
