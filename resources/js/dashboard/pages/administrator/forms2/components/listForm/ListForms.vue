@@ -10,7 +10,8 @@
                 </b-container>
                 </b-col>
                  <b-container v-else>
-                     <b-row class="mt-4 px-md-3 d-flex justify-content-start">
+                     <b-row
+                     class="mt-4 px-md-3 d-flex justify-content-start" v-if="getFormListLength > 0">
                      <b-col
                        v-for="(form, index) in formsList.data" :key="index"
                      md="3" sm="12 mt-4"
@@ -18,8 +19,16 @@
                          <list-form-card :form="form"/>
                      </b-col>
                      </b-row>
+                     <b-row
+                     class="mt-5 px-md-3 d-flex justify-content-center" v-else>
+                     <b-col
+                     md="10 mt-5" sm="12 mt-5"
+                     >
+                         <h4 class="mt-5 text-center text-danger">Aucune donnée disponible</h4>
+                     </b-col>
+                     </b-row>
                  </b-container>
-                 <div class="col-8 col-offset-3 mt-4">
+                 <div class="col-6 col-offset-4 mt-4" v-show="getFormListLength > 0">
                     <div class="paginate__scroll">
                          <p>Par page: </p>
                     <div class="perpage__select">
@@ -79,6 +88,11 @@ export default {
       }
     }
   },
+  computed: {
+    getFormListLength () {
+      return this.formsList.data.length
+    }
+  },
   methods: {
     getFormsByPerPage () {
       this.$emit('getFormsByPerPage', this.form.perPage)
@@ -114,8 +128,7 @@ export default {
   .vs__dropdown-toggle{
     box-shadow: none;
     border: 0;
-    border-bottom: 2px solid #cfcdcd;
-    box-shadow: 0px 10px 15px -5px rgba(116, 116, 116, 0.1);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
     color: #14244F;
     font-weight: bold;
   }

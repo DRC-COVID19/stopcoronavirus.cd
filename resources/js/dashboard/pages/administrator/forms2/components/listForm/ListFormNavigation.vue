@@ -227,7 +227,7 @@ export default {
 }
 .vs__dropdown-toggle::placeholder{
           color:#535356 !important;
-          font-style: italic;
+          font-style: italic !important;
           font-size: 14px;
     }
 }
