@@ -73,7 +73,9 @@
       <list-form-index
       :formsList="forms"
       :isLoading="isLoading"
+      :paginate="paginate"
        @filterForms="filterForms"
+       @onSearch="onSearch"
       />
   </div>
 </template>
@@ -101,7 +103,9 @@ export default {
       formToPopulate: {},
       updating: false,
       errors: {},
-      currentPage: 1,
+      paginate: {
+        currentPage: 1
+      },
       recentForms: []
     }
   },
@@ -129,7 +133,7 @@ export default {
       })
       this.isLoading = false
     },
-    search (filter) {
+    onSearch (filter) {
       this.isLoading = true
       if (filter !== '') {
         axios

@@ -15,7 +15,12 @@
                      </b-col>
                      </b-row>
                  </b-container>
-                
+                <b-pagination
+                v-model="currentPage"
+                :total-rows="paginate.rows"
+                :per-page="paginate.perPage"
+                aria-controls="my-table"
+              ></b-pagination>
              </b-row>
              </b-container>
 </template>
@@ -32,6 +37,11 @@ export default {
       default: () => ({}),
       required: false
     },
+    paginate: {
+      type: Object,
+      default: () => ({}),
+      required: false
+    },
     isLoading: {
       type: Boolean,
       default: () => {},
@@ -40,7 +50,7 @@ export default {
   },
   data () {
     return {
-      currentPage: null
+      currentPage: this.paginate.currentPage
     }
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex justify-content-between mb-4">
+  <div class="form__navigation-container mb-4">
 
                 <div class="form__nav">
                     <a
@@ -52,8 +52,9 @@
                             :value="
                               inputValue
                                 ? moment(form.last_update).format('DD.MM.YYYY')
-                                : 'Filtrer par Date'
+                                : ''
                             "
+                            placeholder="Filtrer par Date"
                             v-on="inputEvents"
                           />
                          <i class="fas fa-calendar-alt pt-2"></i>
@@ -63,18 +64,24 @@
                     </div>
                     <div>
                         <v-select
-                        v-model="form.recurrences_id"
+                        v-model="form.form_recurrence_id"
                         :options="formRecurrences"
                         label="name"
                         :reduce="(item)=>item.id"
                         id="id"
                         class="border-0 input-select ml-4"
                         :searchable="false"
-                />
+                        @input="selectRecurrence()"
+                     />
                     </div>
 
                     <div class="input-search d-flex justify-content-around">
-                        <input type="text" class="input-lg" placeholder="Rechercher par Nom" />
+                        <input
+                        v-model="form.title"
+                        @input="onSearch()"
+                        type="text"
+                        class="input-lg"
+                        placeholder="Rechercher par Nom" />
                          <img src="/img/codicon_search.svg" class="img-search ml-4 ml-md-0"/>
                     </div>
                  </div>
@@ -153,22 +160,21 @@ export default {
         delete (this.form.unpublish)
         delete (this.form.last_update)
       }
-      const form = {
-        form_date: this.form.last_update ?? null,
-        published_form: this.form.publish ?? null,
-        unpublished_form: this.form.unpublish ?? null,
-        recurrence_form: this.form.form_recurrence_id ?? null
-      }
-      this.$emit('filterForms', form)
+      this.setFormAndEmmit()
     },
     getFormsByDate () {
       this.setFormAndEmmit()
     },
+    selectRecurrence () {
+      alert(JSON.stringify(this.form))
+      this.setFormAndEmmit()
+    },
+    onSearch () {
+      this.$emit('onSearch', this.form.title.trim())
+    },
     setFormAndEmmit () {
       const form = {
-        form_date: this.moment(this.form.last_update).format(
-          'YYYY-MM-DD'
-        ) ?? null,
+        form_date: this.form.last_update ?? null,
         published_form: this.form.publish ?? null,
         unpublished_form: this.form.unpublish ?? null,
         recurrence_form: this.form.form_recurrence_id ?? null
@@ -180,6 +186,23 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@~/sass/_variables";
+
+.form__navigation-container{
+  display: flex;
+  justify-content: space-between;
+
+ @media (max-width: $max-width) {
+  & {
+    z-index: 5;
+    height: 10vh;
+    width: 100%;
+    border-right: 0;
+    overflow-x: scroll !important;
+    white-space: nowrap;
+  }
+}      /* color of the tracking area */
+}
 .input-select{
     width: 220px;
     border: solid 1px #E4E4E4;

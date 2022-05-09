@@ -110,11 +110,11 @@ class FormController extends Controller
                           $query->where('form_recurrence_id', $recurrence_form);
                         }
                         if($published_form == true){
-                      Log::info("message",['colllllll']); 
+                     
                           $query->where('publish',true);
                         }
                         if($unpublished_form == true){
-                          Log::info("message",['noooooon']); 
+                        
                           $query->where('publish',false);
                         }
                       })->paginate($paginate);

@@ -2,10 +2,11 @@
     <b-container fluid class="form_list">
          <div class="container">
              <hr>
-        <list-form-navigation @filterForms="filterForms"/>
+        <list-form-navigation @filterForms="filterForms" @onSearch="onSearch"/>
           <list-forms
           :isLoading = "isLoading"
           :formsList="formsList"
+          :paginate="paginate"
           />
          </div>
       </b-container>
@@ -22,6 +23,11 @@ export default {
       default: () => {},
       required: false
     },
+    paginate: {
+      type: Object,
+      default: () => ({}),
+      required: false
+    },
     isLoading: {
       type: Boolean,
       default: () => {},
@@ -31,6 +37,9 @@ export default {
   methods: {
     filterForms (value) {
       this.$emit('filterForms', value)
+    },
+    onSearch (value) {
+      this.$emit('onSearch', value)
     }
   }
 
