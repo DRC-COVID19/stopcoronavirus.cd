@@ -1,3 +1,3 @@
 <template>
-  <div>Réponse</div>
+  <div>Création</div>
 </template>
