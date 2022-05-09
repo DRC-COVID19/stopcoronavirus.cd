@@ -30,7 +30,7 @@
                  </b-container>
                  <div class="col-6 col-offset-4 mt-4" v-show="getFormListLength > 0">
                     <div class="paginate__scroll">
-                         <p>Par page: </p>
+                    <p>Par page: </p>
                     <div class="perpage__select">
                        <v-select
                         v-model="form.perPage"
@@ -46,8 +46,8 @@
                     v-model="currentPage"
                     :total-rows="paginate.total"
                     :per-page="paginate.perPage"
-                    aria-controls="my-table"
-                    @change="switchPage"
+                    aria-controls="form_card-list"
+                    @change="switchPage(currentPage)"
                   ></b-pagination>
                     </div>
                    </div>
@@ -81,7 +81,7 @@ export default {
   },
   data () {
     return {
-      currentPage: this.paginate.currentPage,
+      currentPage: 1,
       perPages: [8, 16, 32, 64],
       form: {
         perPage: 1
@@ -97,8 +97,8 @@ export default {
     getFormsByPerPage () {
       this.$emit('getFormsByPerPage', this.form.perPage)
     },
-    switchPage () {
-      this.$emit('switchPage', this.currentPage)
+    switchPage (currentPage) {
+      this.$emit('switchPage', currentPage)
     }
   }
 
@@ -109,17 +109,8 @@ export default {
 .paginate__scroll{
   display: flex;
    @media (max-width: $max-width) {
-  & {
-    z-index: 5;
-    display: flex;
-    height: 10vh;
-    width: 100%;
-    border-right: 0;
-    overflow-x: scroll !important;
-    white-space: nowrap;
-    padding: 3rem 1rem;
-    padding-top: 1rem;
-    padding-bottom: 4rem !important;
+  & .perpage__select, p{
+   width: 0;
   }
   }
 }

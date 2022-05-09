@@ -114,7 +114,7 @@ export default {
   computed: {
     paginate () {
       return {
-        currentPage: this.forms.current_page,
+        currentPage: 1,
         perPage: this.forms.per_page,
         total: this.forms.total
       }
@@ -287,6 +287,7 @@ export default {
     },
 
     switchPage (page) {
+      alert(page)
       this.getFormList(page)
     },
     backToRoute ({ formId }) {

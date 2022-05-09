@@ -6,11 +6,11 @@
                       form_id: form.id,
                     },
         }" class="card-link">
-        <div class="card-list">
-        <div class="card-list-header">
+        <div class="card__list">
+        <div class="card__list-header">
         <h4 class="mx-2">{{ form.title}}</h4>
           </div>
-             <div class="card-list-body px-2 pt-3">
+             <div class="card__list-body px-2 pt-3">
                 <div class="d-flex justify-content-between mb-2">
                 <h6>Crée  le {{ moment(form.created_at).format('DD/MM/Y')}}</h6>
 
@@ -50,12 +50,12 @@ export default {
 a{
   color: inherit;
 }
-.card-list{
+.card__list{
     width: 100%;
     cursor: pointer;
     min-height: 220px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
-    .card-list-header{
+    .card__list-header{
          width: 100%;
         min-height: 120px;
         background: linear-gradient(180deg, rgba(99, 132, 234, 0.9) 0%, #6384EA 100%);
@@ -68,7 +68,7 @@ a{
         }
 
     }
-    .card-list-body{
+    .card__list-body{
         position: absolute;
          width: 100%;
         min-height: 100px;
@@ -89,7 +89,7 @@ a{
     &:hover{
         transform: scale(1.1);
         background-color: #e9e7e7;
-        .card-list-header{
+        .card__list-header{
           background-color: #fa3782;
         }
     }
