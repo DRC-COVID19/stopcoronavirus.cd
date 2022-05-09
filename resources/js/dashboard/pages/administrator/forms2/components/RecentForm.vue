@@ -1,8 +1,8 @@
 <template>
-   <div class="row">
+   <div class="card__Scroll">
      <div
      v-for="(form, index) in recentForms" :key="index"
-     class="col-md-4 col-sm-12 pb-3 pb-md-0"
+     class="px-2"
      >
         <b-card class="card__recent-form">{{ form.title}}</b-card>
         </div>
@@ -24,8 +24,19 @@ export default {
 <style lang="scss">
 @import "@~/sass/_variables";
 .card__Scroll{
+  display: flex;
+  justify-content: space-between;
+     @media (max-width: $max-width) {
+  & {
+    z-index: 5;
+    display: flex;
+    height: 30vh;
+    width: 100%;
+    border-right: 0;
     overflow-x: scroll !important;
     white-space: nowrap;
+  }
+}
 }
 .card__recent-form{
     width: 100%;

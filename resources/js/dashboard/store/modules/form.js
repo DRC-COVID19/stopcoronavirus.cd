@@ -73,6 +73,7 @@ export default {
           .then(({ data }) => {
             commit('SET_RECENT_FORMS', data)
             commit('SET_IS_LOADING', false)
+            console.log('data-->', data)
             resolve(data)
           })
           .catch((response) => {
@@ -94,8 +95,6 @@ export default {
           }
         })
           .then(({ data }) => {
-            console.log('payload-->', payload)
-            console.log('data-->', data)
             resolve(data)
             commit('SET_IS_LOADING', false)
           })

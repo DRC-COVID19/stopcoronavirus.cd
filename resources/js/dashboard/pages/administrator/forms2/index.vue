@@ -114,7 +114,7 @@ export default {
     await this.getFormList()
   },
   methods: {
-    ...mapActions(['getFormFiltered', 'getForms']),
+    ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms']),
     async getRecentForms () {
       this.recentForms = await [
         { id: 1, title: 'Formulaire COVID-19' },
