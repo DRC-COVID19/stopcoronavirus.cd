@@ -73,7 +73,7 @@ export default {
           .then(({ data }) => {
             commit('SET_RECENT_FORMS', data)
             commit('SET_IS_LOADING', false)
-            resolve(true)
+            resolve(data)
           })
           .catch((response) => {
             reject(response)
