@@ -214,10 +214,16 @@ export default {
 }
 .input-select{
     width: 220px;
-    border: solid 1px #E4E4E4;
     background-color: #F1F3F4;
     border-radius: 5px;
     margin-right: 2rem;
+
+  .vs__dropdown-toggle{
+    box-shadow: none;
+    border: 0;
+    padding: .2rem 0;
+    /* font-style: italic; */
+}
 }
 .input-search{
     width: 220px;
