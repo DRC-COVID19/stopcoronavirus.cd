@@ -159,6 +159,7 @@ export default {
         delete (this.form.publish)
         delete (this.form.unpublish)
         delete (this.form.last_update)
+        delete (this.form.form_recurrence_id)
       }
       this.setFormAndEmmit()
     },

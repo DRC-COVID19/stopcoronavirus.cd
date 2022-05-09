@@ -85,7 +85,7 @@ export default {
     getFormFiltered ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
-        axios.get('api/dashboard/forms/get-form-filtered', {
+        axios.get(`api/dashboard/forms/get-form-filtered?page=${payload.page}`, {
           params: {
             form_date: payload.form_date,
             published_form: payload.published_form,

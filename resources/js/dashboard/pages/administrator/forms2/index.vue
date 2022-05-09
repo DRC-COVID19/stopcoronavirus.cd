@@ -137,7 +137,7 @@ export default {
         published_form: value.published_form,
         unpublished_form: value.unpublished_form,
         recurrence_form: value.recurrence_form,
-        paginate: value.paginate
+        paginate: this.paginate.perPage
       })
       this.isLoading = false
     },
@@ -275,18 +275,18 @@ export default {
         })
     },
 
-    async getFormList (perPage = 8) {
+    async getFormList (page = 1, perPage = 8) {
       this.isLoading = true
 
       this.forms = await this.getFormFiltered({
-        paginate: perPage
+        paginate: perPage,
+        page: page
       })
       this.isLoading = false
     },
 
     switchPage (page) {
-      alert(page)
-      //this.getFormList(page)
+      this.getFormList(page)
     },
     backToRoute ({ formId }) {
       return this.$router.push(`/administrator/forms/${formId}`)
