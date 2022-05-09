@@ -222,7 +222,7 @@ export default {
 .input-search{
     width: 220px;
      height: 35px;
-      border: solid 1px #cfcdcd;
+      /* border: solid 1px #cfcdcd; */
     background-color: #F1F3F4;
     border-radius: 5px;
         input {

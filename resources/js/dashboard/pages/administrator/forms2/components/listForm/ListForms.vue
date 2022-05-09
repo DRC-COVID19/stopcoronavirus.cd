@@ -22,17 +22,17 @@
                  <div class="col-8 col-offset-3 mt-4">
                     <div class="paginate__scroll">
                          <p>Par page: </p>
-                    <div>
+                    <div class="perpage__select">
                        <v-select
                         v-model="form.perPage"
                         :options="perPages"
                         id="id"
-                        class="border-0 input-select ml-4"
+                        class="ml-4"
                         :searchable="false"
                         @input="getFormsByPerPage()"
                      />
                     </div>
-                    <p  class="mr-4">1-{{form.perPage}} sur  {{ paginate.total }}</p>
+                    <p  class="mx-4">1-{{form.perPage}} sur  {{ paginate.total }}</p>
                       <b-pagination
                     v-model="currentPage"
                     :total-rows="paginate.total"
@@ -107,6 +107,17 @@ export default {
     padding-top: 1rem;
     padding-bottom: 4rem !important;
   }
+  }
+}
+.perpage__select{
+
+  .vs__dropdown-toggle{
+    box-shadow: none;
+    border: 0;
+    border-bottom: 2px solid #cfcdcd;
+    box-shadow: 0px 10px 15px -5px rgba(116, 116, 116, 0.1);
+    color: #14244F;
+    font-weight: bold;
   }
 }
 
