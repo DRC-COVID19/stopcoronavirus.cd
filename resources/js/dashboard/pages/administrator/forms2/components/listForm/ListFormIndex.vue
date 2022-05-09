@@ -7,6 +7,8 @@
           :isLoading = "isLoading"
           :formsList="formsList"
           :paginate="paginate"
+          @getFormsByPerPage ="getFormsByPerPage"
+          @switchPage="switchPage"
           />
          </div>
       </b-container>
@@ -40,6 +42,12 @@ export default {
     },
     onSearch (value) {
       this.$emit('onSearch', value)
+    },
+    getFormsByPerPage (value) {
+      this.$emit('getFormsByPerPage', value)
+    },
+    switchPage (value) {
+      this.$emit('switchPage', value)
     }
   }
 

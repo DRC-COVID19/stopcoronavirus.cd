@@ -77,6 +77,8 @@
       :paginate="paginate"
        @filterForms="filterForms"
        @onSearch="onSearch"
+       @getFormsByPerPage ="getFormsByPerPage"
+       @switchPage="switchPage"
       />
   </div>
 </template>
@@ -105,10 +107,16 @@ export default {
       formToPopulate: {},
       updating: false,
       errors: {},
-      paginate: {
-        currentPage: 1
-      },
       recentForms: []
+    }
+  },
+  computed: {
+    paginate () {
+      return {
+        currentPage: this.forms.current_page,
+        perPage: this.forms.per_page,
+        total: this.forms.total
+      }
     }
   },
   async mounted () {
@@ -130,6 +138,14 @@ export default {
         unpublished_form: value.unpublished_form,
         recurrence_form: value.recurrence_form,
         paginate: value.paginate
+      })
+      this.isLoading = false
+    },
+    async getFormsByPerPage (page) {
+      this.isLoading = true
+
+      this.forms = await this.getFormFiltered({
+        paginate: page ?? 8
       })
       this.isLoading = false
     },
@@ -259,10 +275,12 @@ export default {
         })
     },
 
-    async getFormList (page = 1) {
+    async getFormList (perPage = 8) {
       this.isLoading = true
 
-      this.forms = await this.getFormFiltered()
+      this.forms = await this.getFormFiltered({
+        paginate: perPage
+      })
       this.isLoading = false
     },
 

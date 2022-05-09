@@ -15,12 +15,27 @@
                      </b-col>
                      </b-row>
                  </b-container>
-                <b-pagination
-                v-model="currentPage"
-                :total-rows="paginate.rows"
-                :per-page="paginate.perPage"
-                aria-controls="my-table"
-              ></b-pagination>
+                 <div class="paginate__scroll mt-3">
+                   <p>Par page: </p>
+                    <div>
+                       <v-select
+                        v-model="form.perPage"
+                        :options="perPages"
+                        id="id"
+                        class="border-0 input-select ml-4"
+                        :searchable="false"
+                        @input="getFormsByPerPage()"
+                     />
+                    </div>
+                    <p  class="mr-4">1-{{form.perPage}} sur  {{ paginate.total }}</p>
+                      <b-pagination
+                    v-model="currentPage"
+                    :total-rows="paginate.total"
+                    :per-page="paginate.perPage"
+                    aria-controls="my-table"
+                  ></b-pagination>
+                 </div>
+
              </b-row>
              </b-container>
 </template>
@@ -50,7 +65,16 @@ export default {
   },
   data () {
     return {
-      currentPage: this.paginate.currentPage
+      currentPage: this.paginate.currentPage,
+      perPages: [8, 16, 32, 64],
+      form: {
+        perPage: 1
+      }
+    }
+  },
+  methods: {
+    getFormsByPerPage () {
+      this.$emit('getFormsByPerPage', this.form.perPage)
     }
   }
 
@@ -58,5 +82,22 @@ export default {
 </script>
 <style lang="scss">
 @import "@~/sass/_variables";
+.paginate__scroll{
+  display: flex;
+   @media (max-width: $max-width) {
+  & {
+    z-index: 5;
+    display: flex;
+    height: 10vh;
+    width: 100%;
+    border-right: 0;
+    overflow-x: scroll !important;
+    white-space: nowrap;
+    padding: 3rem 1rem;
+    padding-top: 1rem;
+    padding-bottom: 4rem !important;
+  }
+  }
+}
 
 </style>
