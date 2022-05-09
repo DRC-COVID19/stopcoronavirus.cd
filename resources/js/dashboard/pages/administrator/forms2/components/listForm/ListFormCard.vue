@@ -23,9 +23,12 @@ export default {
   },
   computed: {
     getCompletedFormCount () {
-      return this.form.completedforms_count > 1
-        ? `${this.form.completedforms_count} Réponses`
-        : `${this.form.completedforms_count} Réponse`
+      if (this.form.completedforms_count === 0) {
+        return 'Pas de Réponses'
+      } else if (this.form.completedforms_count === 1) {
+        return `${this.form.completedforms_count} Réponse`
+      }
+      return `${this.form.completedforms_count} Réponses`
     }
   }
 

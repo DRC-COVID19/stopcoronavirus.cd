@@ -94,7 +94,7 @@
                          <img src="/img/codicon_search.svg" class="img-search ml-4 ml-md-0"/>
                     </div>
                  </div>
-
+                  
              </div>
 </template>
 
