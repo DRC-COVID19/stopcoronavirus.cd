@@ -62,7 +62,7 @@
               variant="outline-primary"
               class="btn-dash mb-1"
               :to="{
-                name: 'administrator.forms.show',
+                name: 'administrator.forms.show.creation',
                 params: {
                   form_id: data.item.id,
                 },
