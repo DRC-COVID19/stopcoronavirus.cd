@@ -126,7 +126,6 @@ export default {
 }
 @media (max-width: $max-width) {
   .nav {
-    justify-content: start !important;
     height: auto;
     width: 100% !important;
     overflow-x: scroll !important;

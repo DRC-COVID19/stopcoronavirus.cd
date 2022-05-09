@@ -2,11 +2,12 @@
   <b-row class="header">
     <b-col cols="12" class="">
       <b-navbar toggleable="lg" type="light">
-        <b-navbar-brand class="mr-5">
+        <b-navbar-brand class="">
           <b-form-input
             @blur="onChangeTilte"
             v-model="titleForm"
-            class="title input-header"
+            class="input-header"
+            :class="stateTitleForm ? 'border-1' : 'border-0 '"
             placeholder="Entrer le titre du formulaire"
             :value="titleForm"
             :state="stateTitleForm"
@@ -209,10 +210,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.input-header {
-  border: none !important;
-  outline: 0 none;
-}
+
 .header {
   a {
     text-decoration: none;
@@ -237,7 +235,7 @@ export default {
     a {
       color: #14244f;
       text-decoration: none;
-      font-weight: bold;
+
       font-size: 14px;
       &:hover {
         color: $dash-blue;
@@ -256,6 +254,16 @@ export default {
       color: #3767fa !important;
     }
   }
+  .input-header {
+    outline: 0 none;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
   .avatar-container {
     position: relative;
 
@@ -292,10 +300,6 @@ export default {
   }
 }
 @media (max-width: $max-width) {
-  .navbar-brand {
-    margin-right: 0px !important ;
-  }
-
   .container-nav-space {
     display: block !important;
     margin-left: 0 !important;
