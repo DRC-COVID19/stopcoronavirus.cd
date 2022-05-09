@@ -8,7 +8,17 @@
      v-for="(form, index) in recentForms" :key="index"
      class="px-2"
      >
-        <b-card class="card__recent-form">{{ form.title}}</b-card>
+      <b-link
+           :to="{
+                name: 'administrator.forms.show.creation',
+                params: {
+                  form_id: form.id,
+                },
+              }" class="card-link">
+              <b-card class="card__recent-form">
+         {{ form.title}}
+          </b-card>
+      </b-link>
         </div>
     </div>
 </template>
