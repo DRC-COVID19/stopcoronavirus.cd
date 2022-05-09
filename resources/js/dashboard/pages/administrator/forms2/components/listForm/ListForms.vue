@@ -75,6 +75,9 @@ export default {
   methods: {
     getFormsByPerPage () {
       this.$emit('getFormsByPerPage', this.form.perPage)
+    },
+    switchPage () {
+      this.$emit('switchPage', this.currentPage)
     }
   }
 
