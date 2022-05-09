@@ -1,16 +1,26 @@
 <template>
-  <div class="card-list">
+    <b-link
+        :to="{
+                    name: 'administrator.forms.show.creation',
+                    params: {
+                      form_id: form.id,
+                    },
+        }" class="card-link">
+        <div class="card-list">
         <div class="card-list-header">
         <h4 class="mx-2">{{ form.title}}</h4>
           </div>
              <div class="card-list-body px-2 pt-3">
                 <div class="d-flex justify-content-between mb-2">
-                   <h6>Crée  le {{ moment(form.created_at).format('DD/MM/Y')}}</h6>
-                     <h6>{{ form.form_recurrence.name}}</h6>
+                <h6>Crée  le {{ moment(form.created_at).format('DD/MM/Y')}}</h6>
+
+                 <h6>{{ form.form_recurrence.name}}</h6>
                  </div>
                      <h6 class="text-danger card-badge">{{  getCompletedFormCount }}</h6>
              </div>
-    </div>
+          </div>
+        </b-link>
+
 </template>
 
 <script>
@@ -37,8 +47,12 @@ export default {
 
 <style lang="scss">
 @import "@~/sass/_variables";
+a{
+  color: inherit;
+}
 .card-list{
     width: 100%;
+    cursor: pointer;
     min-height: 220px;
     filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
     .card-list-header{
