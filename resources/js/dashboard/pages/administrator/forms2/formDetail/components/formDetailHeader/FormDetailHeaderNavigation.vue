@@ -41,6 +41,13 @@
               </b-button>
 
               <b-nav-item
+                v-if="canViewForm"
+                :to="{ name: 'administrator.forms.show.form-preview' }"
+                :active="
+                  this.$route.name.startsWith(
+                    'administrator.forms.show.form-preview'
+                  )
+                "
                 class="
                   d-block
                   preview

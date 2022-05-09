@@ -172,15 +172,7 @@ export default [
               role: [CREATE_FORM, EDIT_FORM],
             },
           },
-          // {
-          //   path: "/administrator/forms/:form_id",
-          //   name: "administrator.forms.show",
-          //   component: FormShow,
-          //   meta: {
-          //     requiresAuth: true,
-          //     role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
-          //   },
-          // },
+
           {
             path: "epidemie/",
             name: "administrator.epidemie",
