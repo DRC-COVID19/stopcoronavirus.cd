@@ -2,7 +2,7 @@
        <b-container>
                  <b-row class="form_card-list">
 
-                <b-col v-if="isLoading" class="col-8 col-offset-3 mt-5">
+                <b-col v-if="isLoading" class="col-8 col-offset-3 mt-3">
                   <b-container class="d-flex justify-content-center align-items-center mt-5">
                   <b-row class="mt-5">
                   <b-spinner :show="true" variant="danger" class="mt-5"></b-spinner>

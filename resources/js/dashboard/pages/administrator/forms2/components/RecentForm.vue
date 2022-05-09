@@ -1,7 +1,7 @@
 <template>
    <div class="card__Scroll">
      <div v-if="isLoading">
-       <b-spinner :show="true" variant="danger">Chargement des fomulaires Récents...</b-spinner>
+       <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
      </div>
      <div
      v-else
