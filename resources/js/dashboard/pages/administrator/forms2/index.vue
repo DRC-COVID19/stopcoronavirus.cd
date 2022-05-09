@@ -76,7 +76,7 @@
       :isLoading="isLoading"
       :paginate="paginate"
        @filterForms="filterForms"
-       @onSearch="onSearch"
+       @onSearchForm="search"
        @getFormsByPerPage ="getFormsByPerPage"
        @switchPage="switchPage"
       />
@@ -125,7 +125,7 @@ export default {
     await this.getFormList()
   },
   methods: {
-    ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms']),
+    ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms', 'form__filterByWords']),
     async findRecentForms () {
       this.isRecentFormsLoading = true
       this.recentForms = await this.getRecentForms()
@@ -150,22 +150,17 @@ export default {
       })
       this.isLoading = false
     },
-    onSearch (filter) {
+    async search (filter) {
       this.isLoading = true
-      if (filter !== '') {
-        axios
-          .get('api/dashboard/forms/filter?key_words=' + filter)
-          .then(({ data }) => {
-            this.forms = data
-            this.isLoading = false
-          })
-          .catch(({ response }) => {
-            this.$gtag.exception(response)
-            this.isLoading = false
-          })
-      } else {
-        this.getFormList()
+      try {
+        if (filter !== '') {
+          this.forms = await this.form__filterByWords({ filter })
+        } else {
+          this.getFormList()
+        }
         this.isLoading = false
+      } catch (error) {
+
       }
     },
     openToogle (state) {

@@ -2,7 +2,7 @@
     <b-container fluid class="form_list">
          <div class="container">
              <hr>
-        <list-form-navigation @filterForms="filterForms" @onSearch="onSearch"/>
+        <list-form-navigation @filterForms="filterForms" @onSearch="search"/>
           <list-forms
           :isLoading = "isLoading"
           :formsList="formsList"
@@ -40,8 +40,8 @@ export default {
     filterForms (value) {
       this.$emit('filterForms', value)
     },
-    onSearch (value) {
-      this.$emit('onSearch', value)
+    search (value) {
+      this.$emit('onSearchForm', value)
     },
     getFormsByPerPage (value) {
       this.$emit('getFormsByPerPage', value)

@@ -87,8 +87,7 @@
 
                     <div class="input-search d-flex justify-content-around">
                         <input
-                        v-model="form.title"
-                        @input="onSearch()"
+                        v-model="title"
                         type="text"
                         class="input-lg"
                         placeholder="Rechercher par Nom" />
@@ -133,8 +132,8 @@ export default {
       isLoading: false,
       validateMailMessage: '',
       published: false,
+      title: '',
       form: {
-        title: '',
         form_recurrence_value: null,
         form_recurrence_id: null,
         publish: false,
@@ -155,6 +154,11 @@ export default {
     ...mapState({
       formRecurrences: (state) => state.form.formsRecurrences
     })
+  },
+  watch: {
+    title () {
+      this.search()
+    }
   },
   methods: {
     ...mapActions(['getFormsRecurrences']),
@@ -179,8 +183,8 @@ export default {
     selectRecurrence () {
       this.setFormAndEmmit()
     },
-    onSearch () {
-      this.$emit('onSearch', this.form.title.trim())
+    search () {
+      this.$emit('onSearch', this.title.trim())
     },
     setFormAndEmmit () {
       const form = {

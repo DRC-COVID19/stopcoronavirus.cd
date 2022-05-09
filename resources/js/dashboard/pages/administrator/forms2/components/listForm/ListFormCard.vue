@@ -7,18 +7,17 @@
                     },
         }" class="card-link">
         <div class="card__list">
-        <div class="card__list-header">
-        <h4 class="mx-2">{{ form.title}}</h4>
+          <div class="card__list-header">
+            <h4 class="mx-2">{{ form.title}}</h4>
           </div>
-             <div class="card__list-body px-2 pt-3">
-                <div class="d-flex justify-content-between mb-2">
+             <div class="card__list-body px-2  pt-3">
+                <div class="d-flex mb-2">
                 <h6>Crée  le {{ moment(form.created_at).format('DD/MM/Y')}}</h6>
-
-                 <h6>{{ form.form_recurrence.name}}</h6>
+                 <h6 class="ml-3">{{ form.form_recurrence.name}}</h6>
                  </div>
                      <h6 class="text-danger card-badge">{{  getCompletedFormCount }}</h6>
              </div>
-          </div>
+        </div>
         </b-link>
 
 </template>
