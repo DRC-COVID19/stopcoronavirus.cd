@@ -331,16 +331,16 @@ export default [
           role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
         },
       },
-      {
-        path: "/administration/forms/:form_id/form-preview",
-        name: "administrator.forms.show.form-preview",
-        component: FormPreview,
-        meta: {
-          requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
-        },
-      },
     ],
+  },
+  {
+    path: "/administration/forms/:form_id/form-preview",
+    name: "administrator.forms.show.form-preview",
+    component: FormPreview,
+    meta: {
+      requiresAuth: true,
+      role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+    },
   },
   {
     path: "/acces-denied",
