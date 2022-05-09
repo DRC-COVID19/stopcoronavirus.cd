@@ -70,14 +70,6 @@ export default {
  .form_list{
       background-color: #fff;
       text-align: inherit;
-   ul{
-       display: flex;
-       justify-content: space-between;
-       li{
-           list-style: none;
-
-       }
-   }
    .form_card-list{
         background-color: #F4F6FC;
         min-height: 40rem;

@@ -80,16 +80,7 @@
        @getFormsByPerPage ="getFormsByPerPage"
        @switchPage="switchPage"
       />
-      <div>
-           <v-select
-                        v-model="timeOut"
-                        :options="[1,2,4]"
-                        id="id"
-                        class="border-0 input-select ml-4"
-                        :searchable="false"
-                        @input="getFormsByPerPage()"
-                     />
-</div>
+     
   </div>
 </template>
 
