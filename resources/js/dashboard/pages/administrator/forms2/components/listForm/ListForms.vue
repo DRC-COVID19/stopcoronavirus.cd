@@ -2,9 +2,13 @@
        <b-container>
                  <b-row class="form_card-list">
 
-                   <b-row v-if="isLoading">
-                  <b-spinner :show="true" variant="danger"></b-spinner>
+                <b-col v-if="isLoading" class="col-8 col-offset-3 mt-5">
+                  <b-container class="d-flex justify-content-center align-items-center mt-5">
+                  <b-row class="mt-5">
+                  <b-spinner :show="true" variant="danger" class="mt-5"></b-spinner>
                 </b-row>
+                </b-container>
+                </b-col>
                  <b-container v-else>
                      <b-row class="mt-4 px-md-3 d-flex justify-content-start">
                      <b-col
@@ -15,8 +19,9 @@
                      </b-col>
                      </b-row>
                  </b-container>
-                 <div class="paginate__scroll mt-3">
-                   <p>Par page: </p>
+                 <div class="col-8 col-offset-3 mt-4">
+                    <div class="paginate__scroll">
+                         <p>Par page: </p>
                     <div>
                        <v-select
                         v-model="form.perPage"
@@ -35,7 +40,8 @@
                     aria-controls="my-table"
                     @change="switchPage"
                   ></b-pagination>
-                 </div>
+                    </div>
+                   </div>
 
              </b-row>
              </b-container>
