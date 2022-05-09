@@ -2,27 +2,36 @@
   <div class="form__navigation-container mb-4">
 
                 <div class="form__nav">
+                   <Transition name="fade">
                     <a
                     :class="{ selected: filter === 'publish' }"
                     @click.prevent="getfilter('publish')"
+                    @mouseenter="filter='publish'"
                     class="filterLink"
                 >
                     Publiés
                 </a>
+                   </Transition>
+                 <Transition name="fade">
                 <a
-                    :class="{ selected: filter === 'unpublished' }"
+                    :class="{ selected: filter === 'unpublish' }"
                     @click.prevent="getfilter('unpublish')"
+                     @mouseenter="filter='unpublish'"
                     class="filterLink"
                 >
                     Non publiés
                 </a>
+                </Transition>
+                <Transition name="fade">
                 <a
                     :class="{ selected: filter === 'all' }"
                     @click.prevent="getfilter('all')"
                     class="filterLink"
+                     @mouseenter="filter='all'"
                 >
                     Tous
                 </a>
+                 </Transition>
                 </div>
                  <div class="d-flex">
                     <div class="input-search d-flex justify-content-around">
@@ -262,6 +271,7 @@ export default {
 		opacity: 0;
 		transform: translateX(20px);
 	}
+
 
 }
 

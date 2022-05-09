@@ -92,7 +92,7 @@ class FormController extends Controller
         return response()->json($forms, 200);
     }
     public function getFormFiltered(Request $request){
-      Log::info("message",[(bool)$request->input('published_form')]);
+     
       try {
         $form_date        = $request->input('form_date');
         $published_form   = $request->input('published_form');
