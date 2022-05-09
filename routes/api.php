@@ -225,6 +225,7 @@ Route::group([
  */
   Route::group(['prefix' => 'forms'], function () {
     Route::get('/recent-form', 'FormController@recentForm');
+    Route::get('/filter', 'FormController@filter');
     Route::get('/get-form-filtered', 'FormController@getFormFiltered');
   });
 

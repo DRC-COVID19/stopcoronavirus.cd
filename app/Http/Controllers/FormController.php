@@ -130,8 +130,8 @@ class FormController extends Controller
     public function filter (Request $request) {
         try {
           $key_words=$request->get('key_words');
-          $forms = Form::where('title', 'LIKE', "%{$key_words}%")->orWhere('title', 'LIKE' , "%{$key_words}%")->paginate(15);
-          if (! $forms ) {
+          $forms = Form::where('title', 'LIKE', "%{$key_words}%")->orWhere('title', 'LIKE', "%{$key_words}%")->paginate(15);
+          if (!$forms ) {
             return response()->json(['message' => "No form found"], 404);
           }
           return response()->json( $forms, 200);

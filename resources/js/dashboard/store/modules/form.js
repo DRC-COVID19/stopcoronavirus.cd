@@ -141,6 +141,24 @@ export default {
             commit('SET_IS_UPDATING', false)
           })
       })
+    },
+    form__filterByWords ({ commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios.get('api/dashboard/forms/filter?key_words=' + payload.filter)
+          .then(({ data }) => {
+            commit('SET_IS_LOADING', false)
+            resolve(data)
+          })
+          .catch(({ response }) => {
+            this.$gtag.exception(response)
+            commit('SET_IS_LOADING', false)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
     }
   }
 }

@@ -80,7 +80,7 @@
        @getFormsByPerPage ="getFormsByPerPage"
        @switchPage="switchPage"
       />
-     
+
   </div>
 </template>
 
