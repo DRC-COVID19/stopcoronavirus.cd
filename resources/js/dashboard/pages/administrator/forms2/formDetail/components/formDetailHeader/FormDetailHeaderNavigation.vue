@@ -19,13 +19,13 @@
         <b-collapse id="nav-collapse" is-nav>
           <div class="d-flex justify-content-between w-100 container-nav-space">
             <b-navbar-nav class="nav-container" align="center">
-              <span class="d-flex align-center">
+              <span class="d-flex align-center text-center w-100">
                 Etat du formulaire :
                 <span
                   class="ml-3"
                   :class="isPublish ? 'text-success' : 'text-danger'"
                 >
-                  {{ isPublish ? "publié" : "nom publié" }}</span
+                  {{ isPublish ? "publié" : "non publié" }}</span
                 >
               </span>
             </b-navbar-nav>
@@ -36,11 +36,18 @@
                 class="d-block btn-dash-blue px-4 nav-btn-action"
                 @click="changeStatusPublishForm"
               >
-                Publier
+                {{ isPublish ? "Ne plus Publier" : "Publier" }}
               </b-button>
 
               <b-nav-item
-                class="d-block preview btn-dash-blue px-4 nav-btn-action"
+                class="
+                  d-block
+                  preview
+                  btn-dash-blue
+                  text-center
+                  px-4
+                  nav-btn-action
+                "
               >
                 Prévisualisation
               </b-nav-item>
@@ -77,7 +84,15 @@
                           user.email
                         }}</span>
                       </p>
-                      <p>Revenir à l'accueil</p>
+                      <b-nav-item
+                        v-if="canViewForm"
+                        :to="{ name: 'administrator.forms' }"
+                        :active="
+                          this.$route.name.startsWith('administrator.forms')
+                        "
+                      >
+                        Revenir aux Formulaires
+                      </b-nav-item>
                       <b-button @click="userLogout" variant="danger" block>
                         Deconnexion
                       </b-button>
@@ -147,6 +162,7 @@ export default {
       this.isLoading = true;
       this.form = await this.formShow({ id: this.$route.params.form_id });
       this.titleForm = this.form.title;
+      this.isPublish = this.form.publish;
       if (this.form.length !== 0) {
         this.isLoading = false;
       }
@@ -203,21 +219,13 @@ export default {
   }
   background: white;
 
-  .title {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 24px;
-    &:hover {
-      cursor: pointer;
-    }
-  }
   .container-nav-space {
     margin-left: 40%;
   }
   .nav-container {
     .nav-btn-action {
       margin: 17px !important;
-      font-size: 16px !important;
+      font-size: 14px !important;
     }
     span {
       color: #14244f;
@@ -230,7 +238,7 @@ export default {
       color: #14244f;
       text-decoration: none;
       font-weight: bold;
-      font-size: 12px;
+      font-size: 14px;
       &:hover {
         color: $dash-blue;
       }
@@ -284,17 +292,14 @@ export default {
   }
 }
 @media (max-width: $max-width) {
-  .preview {
-    width: 20% !important;
-  }
-  .navbar-nav {
-    display: block !important;
-    width: 100% !important;
+  .navbar-brand {
+    margin-right: 0px !important ;
   }
 
   .container-nav-space {
     display: block !important;
     margin-left: 0 !important;
+    padding: 0 15%;
   }
 }
 

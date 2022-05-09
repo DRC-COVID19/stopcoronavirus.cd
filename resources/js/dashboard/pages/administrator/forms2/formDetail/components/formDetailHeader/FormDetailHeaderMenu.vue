@@ -1,50 +1,34 @@
 <template>
-  <b-row class="">
-    <b-col cols="12" lg="12" class="header d-flex justify-content-center w-100">
-      <b-nav
-        lg="12"
-        class="d-flex justify-content-center w-auto nav-container"
-        style=""
-      >
-        <b-nav-item
-          v-if="canViewForm"
-          :to="{ name: 'administrator.forms.show.creation' }"
-          :active="
-            this.$route.name.startsWith('administrator.forms.show.creation')
-          "
-        >
-          Création
-        </b-nav-item>
-        <b-nav-item
-          v-if="canViewForm"
-          :to="{ name: 'administrator.forms.show.response' }"
-          :active="
-            this.$route.name.startsWith('administrator.forms.show.response')
-          "
-        >
-          Réponses
-        </b-nav-item>
-        <b-nav-item
-          v-if="canViewForm"
-          :to="{ name: 'administrator.forms.show.setting' }"
-          :active="
-            this.$route.name.startsWith('administrator.forms.show.setting')
-          "
-        >
-          Paramètre
-        </b-nav-item>
-        <b-nav-item
-          v-if="canViewForm"
-          :to="{ name: 'administrator.forms.show.schema' }"
-          :active="
-            this.$route.name.startsWith('administrator.forms.show.schema')
-          "
-        >
-          Schèmas
-        </b-nav-item>
-      </b-nav>
-    </b-col>
-  </b-row>
+  <b-nav lg="12" class="d-flex justify-content-center nav-container">
+    <b-nav-item
+      v-if="canViewForm"
+      :to="{ name: 'administrator.forms.show.creation' }"
+      :active="this.$route.name.startsWith('administrator.forms.show.creation')"
+    >
+      Création
+    </b-nav-item>
+    <b-nav-item
+      v-if="canViewForm"
+      :to="{ name: 'administrator.forms.show.response' }"
+      :active="this.$route.name.startsWith('administrator.forms.show.response')"
+    >
+      Réponses
+    </b-nav-item>
+    <b-nav-item
+      v-if="canViewForm"
+      :to="{ name: 'administrator.forms.show.setting' }"
+      :active="this.$route.name.startsWith('administrator.forms.show.setting')"
+    >
+      Paramètre
+    </b-nav-item>
+    <b-nav-item
+      v-if="canViewForm"
+      :to="{ name: 'administrator.forms.show.schema' }"
+      :active="this.$route.name.startsWith('administrator.forms.show.schema')"
+    >
+      Schèmas
+    </b-nav-item>
+  </b-nav>
 </template>
 
 <script>
@@ -115,133 +99,43 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.header {
+.nav {
+  background: transparent;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
   a {
+    color: black;
     text-decoration: none;
-  }
+    font-size: 12px;
 
-  .dropdown-nav {
-    position: absolute;
-    top: 55px;
-    min-width: 300px;
-    padding: 0;
-    border-radius: 4px;
-    box-shadow: 0px 0px 10px 0px rgb(33 30 30 / 15%);
-    animation: dropdownanimate 200ms ease-in;
-    z-index: 20;
-    background-color: #fff;
-    :after {
-      content: "";
-      height: 0;
-      width: 0;
-      border-bottom: 10px solid $dash-blue;
-      border-left: 8px solid transparent;
-      border-right: 8px solid transparent;
-      position: absolute;
-      top: -8px;
-      left: 14px;
-    }
-    .item-header {
-      text-align: center;
-      background-color: $dash-blue;
-      padding: 20px 25px;
-      border-radius: 4px 4px 0 0;
-      position: relative;
-      .item-title {
-        margin-bottom: 0;
-        color: #fff;
-      }
-    }
-    .item-content {
-      .media {
-        border-bottom: 1px solid #eaeaea;
-        padding-bottom: 14px;
-        padding: 20px 25px;
-        cursor: pointer;
-        &:hover {
-          background: $waiting_background;
-        }
-        .item-icon {
-          height: 30px;
-          width: 30px;
-          border-radius: 50%;
-          line-height: 31px;
-          text-align: center;
-        }
-        .media-body.space-sm {
-          margin-left: 15px;
-        }
-      }
-    }
-  }
-
-  .title {
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 24px;
     &:hover {
-      cursor: pointer;
-    }
-  }
-  .nav-container {
-    background: transparent;
-    border-bottom-left-radius: 3px;
-    border-bottom-right-radius: 3px;
-    a {
-      color: black;
-      text-decoration: none;
-      font-size: 12px;
-
-      &:hover {
-        color: #3767fa;
-        background: white !important;
-        border-bottom-left-radius: 3px !important;
-        border-bottom-right-radius: 3px !important;
-      }
-    }
-    .active {
-      a {
-        color: #3767fa;
-      }
-    }
-  }
-  .avatar-container {
-    position: relative;
-
-    img {
-      cursor: pointer;
-      height: 30px;
-    }
-    .user-card {
-      position: absolute;
-      right: 0;
-      top: 110%;
-      z-index: 99;
-      width: 250px;
-    }
-  }
-  .img-fluid {
-    width: auto;
-    max-width: none;
-    height: 46px;
-  }
-
-  @media screen and (min-width: 992px) and (max-width: 1200px) {
-    .img-fluid {
-      height: 20px;
-    }
-    .title {
-      font-size: 18px;
+      color: #3767fa;
     }
   }
 }
+
 .nav-item {
+  width: auto;
   a.active {
     color: #3767fa !important;
     background: white !important;
 
     border-bottom-left-radius: 3px !important;
     border-bottom-right-radius: 3px !important;
+  }
+}
+@media (max-width: $max-width) {
+  .nav {
+    justify-content: start !important;
+    height: auto;
+    width: 100% !important;
+    overflow-x: scroll !important;
+    white-space: nowrap;
+    flex-wrap: nowrap !important;
+    &::-webkit-scrollbar {
+      width: 0; /* Remove scrollbar space */
+      background: transparent; /* Optional: just make scrollbar invisible */
+    }
   }
 }
 </style>
