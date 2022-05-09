@@ -152,7 +152,7 @@ export default {
             resolve(data)
           })
           .catch(({ response }) => {
-            this.$gtag.exception(response)
+            console.log(response)
             commit('SET_IS_LOADING', false)
           })
           .finally(() => {
