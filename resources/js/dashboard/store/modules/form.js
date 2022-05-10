@@ -81,7 +81,6 @@ export default {
           .then(({ data }) => {
             commit('SET_RECENT_FORMS', data)
             commit('SET_IS_LOADING', false)
-            console.log('data-->', data)
             resolve(data)
           })
           .catch((response) => {
@@ -91,6 +90,7 @@ export default {
     },
 
     getFormFiltered ({ state, commit }, payload = {}) {
+      console.log('payload', payload)
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
@@ -105,8 +105,8 @@ export default {
           })
           .then(({ data }) => {
             resolve(data)
+            console.log('data--->', data)
             commit('SET_IS_LOADING', false)
-            console.log(data)
           })
           .catch((response) => {
             reject(response)
@@ -155,7 +155,6 @@ export default {
             resolve(data)
           })
           .catch(({ response }) => {
-            console.log(response)
             commit('SET_IS_LOADING', false)
           })
           .finally(() => {
