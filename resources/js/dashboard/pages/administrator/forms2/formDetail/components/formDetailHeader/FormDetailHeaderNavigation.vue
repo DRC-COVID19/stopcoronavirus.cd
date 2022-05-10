@@ -329,7 +329,9 @@ export default {
     margin-left: 0 !important;
     padding: 0 12%;
   }
-
+  .nav-btn-action {
+    margin: 10px 0px;
+  }
   .profil-container {
     display: none !important;
   }
@@ -338,6 +340,7 @@ export default {
     justify-content: center !important;
     align-items: center !important;
     padding: 0 5%;
+    width: 100%;
     a {
       background: #f4f6fc !important;
       border-color: #f4f6fc !important;
