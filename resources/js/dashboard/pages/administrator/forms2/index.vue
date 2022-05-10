@@ -282,7 +282,6 @@ export default {
     },
 
     switchPage (page) {
-      alert(page)
       this.getFormList(page)
     },
     backToRoute ({ formId }) {
@@ -317,7 +316,7 @@ export default {
          font-size: 14px;
      }
      .form__home-left{
-    display: flex;
+     display: flex;
      flex-direction: column;
      justify-content: space-between;
      .form__home-add{

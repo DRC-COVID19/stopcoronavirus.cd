@@ -28,7 +28,7 @@
                      </b-col>
                      </b-row>
                  </b-container>
-                 <div class="col-6 col-offset-4 mt-4" v-show="getFormListLength > 0">
+                 <div class="col-md-6 col-md-offset-4 mt-4 d-sm-flex justify-content-sm-between" v-show="getFormListLength > 0">
                     <div class="paginate__scroll">
                     <p>Par page: </p>
                     <div class="perpage__select">
@@ -110,12 +110,11 @@ export default {
   display: flex;
    @media (max-width: $max-width) {
   & .perpage__select, p{
-   width: 0;
+   display: none;
   }
   }
 }
 .perpage__select{
-
   .vs__dropdown-toggle{
     box-shadow: none;
     border: 0;
@@ -124,6 +123,5 @@ export default {
     font-weight: bold;
   }
 }
-
 
 </style>
