@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Form;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FormController extends Controller
 {
@@ -83,11 +84,57 @@ class FormController extends Controller
             'form_recurrence_id'    => 'sometimes|integer|exists:form_recurrences,id'
         ]);
     }
+    public function recentForm(){
+        $forms = Form::with('formRecurrence')
+                      ->orderBy('created_at','DESC')
+                      ->limit(3)
+                      ->get();
+        return response()->json($forms, 200);
+    }
+    public function getFormFiltered(Request $request){
+     
+      try {
+        $form_date        = $request->input('form_date');
+        $published_form   = $request->input('published_form');
+        $unpublished_form = $request->input('unpublished_form');
+        $recurrence_form  = $request->input('recurrence_form');
+        $paginate         = $request->input('paginate');
+
+        $forms =  Form::with('formRecurrence') 
+                      ->withCount('completedforms')
+                      ->where(function ($query) use ($recurrence_form, $form_date, $published_form, $unpublished_form){
+                        if($form_date){
+                          $query->whereDate('created_at', $form_date);
+                        }
+                        if($recurrence_form){
+                          $query->where('form_recurrence_id', $recurrence_form);
+                        }
+                        if($published_form == true){
+                     
+                          $query->where('publish',true);
+                        }
+                        if($unpublished_form == true){
+                        
+                          $query->where('publish',false);
+                        }
+                      })->paginate($paginate);
+        return response()->json($forms, 200);
+        
+      } catch (\Throwable $th) {
+        if (env('APP_DEBUG') == true) {
+          return response($th)->setStatusCode(500);
+        }
+        return response($th->getMessage())->setStatusCode(500);
+      }
+    }
     public function filter (Request $request) {
         try {
           $key_words=$request->get('key_words');
-          $forms = Form::where('title', 'LIKE', "%{$key_words}%")->orWhere('title', 'LIKE' , "%{$key_words}%")->paginate(15);
-          if (! $forms ) {
+          $forms = Form::with('formRecurrence')
+                        ->withCount('completedforms')
+                        ->where('title', 'LIKE', "%{$key_words}%")->orWhere('title', 'LIKE', "%{$key_words}%")->paginate(15);
+          Log::info('forms', [$forms]);
+          if (!$forms ) {
             return response()->json(['message' => "No form found"], 404);
           }
           return response()->json( $forms, 200);

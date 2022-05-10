@@ -220,6 +220,17 @@ Route::group([
     Route::patch('/{id}/reject-agent', 'HospitalController@rejectAgent');
   });
 
+ /***
+ * forms routes
+ */
+  Route::group(['prefix' => 'forms'], function () {
+    Route::get('/recent-form', 'FormController@recentForm');
+    Route::get('/filter', 'FormController@filter');
+    Route::get('/get-form-filtered', 'FormController@getFormFiltered');
+  });
+
+
+
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
   // Route::apiResource('townships','TownshipController');
   Route::apiResource('hospital-situations', "HospitalSituationController");
