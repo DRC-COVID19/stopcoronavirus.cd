@@ -94,7 +94,7 @@
                          <img src="/img/codicon_search.svg" class="img-search ml-4 ml-md-0"/>
                     </div>
                  </div>
-                  
+
              </div>
 </template>
 
@@ -102,22 +102,10 @@
 import { mapActions, mapState } from 'vuex'
 export default {
   props: {
-    formAdded: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    formUpdated: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    formToPopulate: {
+    paginate: {
       type: Object,
-      required: false,
-      default: () => {
-        return {}
-      }
+      default: () => ({}),
+      required: false
     },
     errors: {
       type: Object,
@@ -158,6 +146,9 @@ export default {
   watch: {
     title () {
       this.search()
+    },
+    filter () {
+      this.getfilter(this.filter)
     }
   },
   methods: {
@@ -287,7 +278,6 @@ export default {
 		opacity: 0;
 		transform: translateX(20px);
 	}
-
 
 }
 

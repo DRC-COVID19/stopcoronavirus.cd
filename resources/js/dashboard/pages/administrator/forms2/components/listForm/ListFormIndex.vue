@@ -2,7 +2,11 @@
     <b-container fluid class="form_list">
          <div class="container">
              <hr>
-        <list-form-navigation @filterForms="filterForms" @onSearch="search"/>
+        <list-form-navigation 
+          @filterForms="filterForms" 
+          @onSearch="search"
+          :paginate="paginate"
+        />
           <list-forms
           :isLoading = "isLoading"
           :formsList="formsList"

@@ -114,7 +114,7 @@ export default {
   computed: {
     paginate () {
       return {
-        currentPage: 1,
+        currentPage: this.forms.current_page,
         perPage: this.forms.per_page,
         total: this.forms.total
       }
@@ -138,7 +138,8 @@ export default {
         published_form: value.published_form,
         unpublished_form: value.unpublished_form,
         recurrence_form: value.recurrence_form,
-        paginate: this.paginate.perPage
+        paginate: this.paginate.perPage,
+        page: this.paginate.currentPage
       })
       this.isLoading = false
     },
@@ -282,7 +283,8 @@ export default {
     },
 
     switchPage (page) {
-      this.getFormList(page)
+      this.paginate.currentPage = page
+      this.getFormList(this.paginate.currentPage)
     },
     backToRoute ({ formId }) {
       return this.$router.push(`/administrator/forms/${formId}`)

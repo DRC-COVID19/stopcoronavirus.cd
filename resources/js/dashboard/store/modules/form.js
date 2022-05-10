@@ -106,6 +106,7 @@ export default {
           .then(({ data }) => {
             resolve(data)
             commit('SET_IS_LOADING', false)
+            console.log(data)
           })
           .catch((response) => {
             reject(response)
