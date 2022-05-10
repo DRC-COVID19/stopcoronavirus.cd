@@ -6,7 +6,7 @@
                     <a
                     :class="{ selected: filter === 'publish' }"
                     @click.prevent="getfilter('publish')"
-                    @mouseenter="filter='publish'"
+                    @click="filter='publish'"
                     class="filterLink"
                 >
                     Publiés
@@ -16,7 +16,7 @@
                 <a
                     :class="{ selected: filter === 'unpublish' }"
                     @click.prevent="getfilter('unpublish')"
-                     @mouseenter="filter='unpublish'"
+                     @click="filter='unpublish'"
                     class="filterLink"
                 >
                     Non publiés
@@ -27,7 +27,7 @@
                     :class="{ selected: filter === 'all' }"
                     @click.prevent="getfilter('all')"
                     class="filterLink"
-                     @mouseenter="filter='all'"
+                     @click="filter='all'"
                 >
                     Tous
                 </a>
@@ -146,9 +146,6 @@ export default {
   watch: {
     title () {
       this.search()
-    },
-    filter () {
-      this.getfilter(this.filter)
     }
   },
   methods: {
@@ -184,7 +181,13 @@ export default {
         unpublished_form: this.form.unpublish ?? null,
         recurrence_form: this.form.form_recurrence_id ?? null
       }
-      this.$emit('filterForms', form)
+      if (this.form.publish === false || this.form.unpublish === false) {
+        delete (this.form.publish)
+        delete (this.form.unpublish)
+        this.$emit('filterForms', form)
+      } else {
+        this.$emit('filterForms', form)
+      }
     }
   }
 }
