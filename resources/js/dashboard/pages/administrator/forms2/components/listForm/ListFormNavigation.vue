@@ -1,37 +1,46 @@
 <template>
-  <div class="d-flex justify-content-between mb-4">
+  <div class="form__navigation-container mb-4">
 
                 <div class="form__nav">
+                   <Transition name="fade">
                     <a
-                    :class="{ selected: filter === 'published' }"
-                    @click.prevent="filter = 'published'"
+                    :class="{ selected: filter === 'publish' }"
+                    @click.prevent="getfilter('publish')"
+                    @click="filter='publish'"
                     class="filterLink"
                 >
                     Publiés
                 </a>
+                   </Transition>
+                 <Transition name="fade">
                 <a
-                    :class="{ selected: filter === 'unPublished' }"
-                    @click.prevent="filter = 'unPublished'"
+                    :class="{ selected: filter === 'unpublish' }"
+                    @click.prevent="getfilter('unpublish')"
+                     @click="filter='unpublish'"
                     class="filterLink"
                 >
                     Non publiés
                 </a>
+                </Transition>
+                <Transition name="fade">
                 <a
                     :class="{ selected: filter === 'all' }"
-                    @click.prevent="filter = 'all'"
+                    @click.prevent="getfilter('all')"
                     class="filterLink"
+                     @click="filter='all'"
                 >
                     Tous
                 </a>
+                 </Transition>
                 </div>
                  <div class="d-flex">
-                     <div class="input-search d-flex justify-content-around">
+                    <div class="input-search d-flex justify-content-around">
                     <v-date-picker
                       v-model="form.last_update"
                       opens="center"
                       :max-date="max"
                       class="d-flex style-picker"
-                      @input="selectLastUpdate()"
+                      @input="getFormsByDate()"
                       show-weeknumbers
                     >
                       <template v-slot="{ inputEvents, inputValue }">
@@ -52,12 +61,10 @@
                             :value="
                               inputValue
                                 ? moment(form.last_update).format('DD.MM.YYYY')
-                                : 'Filtrer par Date'
+                                : ''
                             "
+                            placeholder="Filtrer par Date"
                             v-on="inputEvents"
-                            :disabled="isUpdateMode"
-                            hidePopover
-                            readonly
                           />
                          <i class="fas fa-calendar-alt pt-2"></i>
                         </div>
@@ -66,18 +73,24 @@
                     </div>
                     <div>
                         <v-select
-                        v-model="form.recurrences_id"
+                        v-model="form.form_recurrence_id"
+                        placeholder="Filtrer par Reccurence"
                         :options="formRecurrences"
                         label="name"
                         :reduce="(item)=>item.id"
                         id="id"
                         class="border-0 input-select ml-4"
                         :searchable="false"
-                />
+                        @input="selectRecurrence()"
+                     />
                     </div>
 
                     <div class="input-search d-flex justify-content-around">
-                        <input type="text" class="input-lg" placeholder="Rechercher par Nom" />
+                        <input
+                        v-model="title"
+                        type="text"
+                        class="input-lg"
+                        placeholder="Rechercher par Nom" />
                          <img src="/img/codicon_search.svg" class="img-search ml-4 ml-md-0"/>
                     </div>
                  </div>
@@ -89,22 +102,10 @@
 import { mapActions, mapState } from 'vuex'
 export default {
   props: {
-    formAdded: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    formUpdated: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    formToPopulate: {
+    paginate: {
       type: Object,
-      required: false,
-      default: () => {
-        return {}
-      }
+      default: () => ({}),
+      required: false
     },
     errors: {
       type: Object,
@@ -113,16 +114,18 @@ export default {
   },
   data () {
     return {
-      filter: '',
+      filter: 'all',
+      max: new Date(),
       updating: false,
       isLoading: false,
       validateMailMessage: '',
       published: false,
+      title: '',
       form: {
-        title: '',
         form_recurrence_value: null,
-        form_recurrence_id: '',
+        form_recurrence_id: null,
         publish: false,
+        unpublish: false,
         last_update: null
       },
       show: true,
@@ -140,24 +143,96 @@ export default {
       formRecurrences: (state) => state.form.formsRecurrences
     })
   },
+  watch: {
+    title () {
+      this.search()
+    }
+  },
   methods: {
-    ...mapActions(['getFormsRecurrences'])
+    ...mapActions(['getFormsRecurrences']),
+    getfilter (value) {
+      if (value === 'publish') {
+        this.form.publish = true
+        delete (this.form.unpublish)
+      } else if (value === 'unpublish') {
+        this.form.unpublish = true
+        delete (this.form.publish)
+      } else if (value === 'all') {
+        delete (this.form.publish)
+        delete (this.form.unpublish)
+        delete (this.form.last_update)
+        delete (this.form.form_recurrence_id)
+      }
+      this.setFormAndEmmit()
+    },
+    getFormsByDate () {
+      this.setFormAndEmmit()
+    },
+    selectRecurrence () {
+      this.setFormAndEmmit()
+    },
+    search () {
+      this.$emit('onSearch', this.title.trim())
+    },
+    setFormAndEmmit () {
+      const form = {
+        form_date: this.form.last_update ?? null,
+        published_form: this.form.publish ?? null,
+        unpublished_form: this.form.unpublish ?? null,
+        recurrence_form: this.form.form_recurrence_id ?? null
+      }
+      if (this.form.publish === false || this.form.unpublish === false) {
+        delete (this.form.publish)
+        delete (this.form.unpublish)
+        this.$emit('filterForms', form)
+      } else {
+        this.$emit('filterForms', form)
+      }
+    }
   }
 }
 </script>
 
 <style lang="scss">
+@import "@~/sass/_variables";
+
+.form__navigation-container{
+  display: flex;
+  justify-content: space-between;
+
+ @media (max-width: $max-width) {
+  & {
+    z-index: 5;
+    height: 10vh;
+    width: 100%;
+    border-right: 0;
+    overflow-x: scroll !important;
+    white-space: nowrap;
+  }
+}      /* color of the tracking area */
+}
 .input-select{
     width: 220px;
-    border: solid 1px #E4E4E4;
     background-color: #F1F3F4;
     border-radius: 5px;
     margin-right: 2rem;
+
+  .vs__dropdown-toggle{
+    box-shadow: none;
+    border: 0;
+    padding: .2rem 0;
+    /* font-style: italic; */
+}
+.vs__dropdown-toggle::placeholder{
+          color:#535356 !important;
+          font-style: italic !important;
+          font-size: 14px;
+    }
 }
 .input-search{
     width: 220px;
      height: 35px;
-      border: solid 1px #cfcdcd;
+      /* border: solid 1px #cfcdcd; */
     background-color: #F1F3F4;
     border-radius: 5px;
         input {
@@ -167,7 +242,7 @@ export default {
             &::placeholder{
             color:#535356;
             padding: 10px;
-            font-style: initial;
+            font-style: italic;
             font-size: 14px;
         }
     }

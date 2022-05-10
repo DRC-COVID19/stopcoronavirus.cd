@@ -127,78 +127,78 @@ export default {
   props: {
     forms: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     isLoading: {
       type: Boolean,
-      default: false,
+      default: false
     },
     currentPage: {
       type: Number,
-      default: 1,
+      default: 1
     },
     perPage: {
       type: Number,
-      default: 15,
-    },
+      default: 15
+    }
   },
-  data() {
+  data () {
     return {
       fields: [
-        { key: "title", label: "Titre" },
-        { key: "created_at", label: "Date création" },
-        "actions",
+        { key: 'title', label: 'Titre' },
+        { key: 'created_at', label: 'Date création' },
+        'actions'
       ],
-      filter: "",
+      filter: '',
       isDeleteModalShown: false,
       currentForm: {
         id: -1,
-        title: "",
+        title: ''
       },
-      editModalShow: false,
-    };
+      editModalShow: false
+    }
   },
 
   computed: {
-    rows() {
-      return this.forms.length;
-    },
+    rows () {
+      return this.forms.length
+    }
   },
   watch: {
-    filter() {
-      this.search();
-    },
+    filter () {
+      this.search()
+    }
   },
   methods: {
-    openToogle() {
-      this.$emit("openToogle", false);
+    openToogle () {
+      this.$emit('openToogle', false)
     },
-    search() {
-      this.$emit("onSearch", this.filter.trim());
+    search () {
+      this.$emit('onSearch', this.filter.trim())
     },
-    deleteForm(formId) {
-      this.isDeleteModalShown = true;
-      this.currentForm.id = formId;
+    deleteForm (formId) {
+      this.isDeleteModalShown = true
+      this.currentForm.id = formId
     },
-    onValidateDelection() {
-      this.$emit("onDeleteForm", this.currentForm.id);
-      this.isDeleteModalShown = false;
+    onValidateDelection () {
+      this.$emit('onDeleteForm', this.currentForm.id)
+      this.isDeleteModalShown = false
     },
-    onCancelDelection() {
-      this.isDeleteModalShown = false;
+    onCancelDelection () {
+      this.isDeleteModalShown = false
     },
-    updateForm(id, title, form_recurrence_value, form_recurrence_id, publish) {
+    updateForm (id, title, form_recurrence_value, form_recurrence_id, publish) {
       this.currentForm = {
         id,
         title,
         form_recurrence_value,
         form_recurrence_id,
-        publish,
-      };
-      this.$emit("onUpdateForm", this.currentForm);
-    },
-  },
-};
+        publish
+      }
+      this.$emit('onUpdateForm', this.currentForm)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";

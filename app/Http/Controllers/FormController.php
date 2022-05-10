@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Form;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class FormController extends Controller
 {
@@ -91,6 +92,7 @@ class FormController extends Controller
         return response()->json($forms, 200);
     }
     public function getFormFiltered(Request $request){
+     
       try {
         $form_date        = $request->input('form_date');
         $published_form   = $request->input('published_form');
@@ -107,10 +109,12 @@ class FormController extends Controller
                         if($recurrence_form){
                           $query->where('form_recurrence_id', $recurrence_form);
                         }
-                        if($published_form){
+                        if($published_form == true){
+                     
                           $query->where('publish',true);
                         }
-                        if($unpublished_form){
+                        if($unpublished_form == true){
+                        
                           $query->where('publish',false);
                         }
                       })->paginate($paginate);
@@ -126,8 +130,11 @@ class FormController extends Controller
     public function filter (Request $request) {
         try {
           $key_words=$request->get('key_words');
-          $forms = Form::where('title', 'LIKE', "%{$key_words}%")->orWhere('title', 'LIKE' , "%{$key_words}%")->paginate(15);
-          if (! $forms ) {
+          $forms = Form::with('formRecurrence')
+                        ->withCount('completedforms')
+                        ->where('title', 'LIKE', "%{$key_words}%")->orWhere('title', 'LIKE', "%{$key_words}%")->paginate(15);
+          Log::info('forms', [$forms]);
+          if (!$forms ) {
             return response()->json(['message' => "No form found"], 404);
           }
           return response()->json( $forms, 200);

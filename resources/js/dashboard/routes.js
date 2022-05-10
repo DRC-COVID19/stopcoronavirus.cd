@@ -18,7 +18,7 @@ import AdminHospitalIndex from "./pages/administrator/hospitals/Index";
 import PageNotFound from "./pages/NotFound";
 import ChangeLogIndex from "./pages/administrator/changeLog/index";
 import Epidemie from "./pages/administrator/epidemy/Index";
-import FormIndex from "./pages/administrator/forms/index";
+import FormIndex from "./pages/administrator/forms2/index";
 import FormShow from "./pages/administrator/forms/form";
 import FormShow2 from "./pages/administrator/forms2/formDetail/index";
 import FormCreation from "./pages/administrator/forms2/formDetail/formCreation";
@@ -346,13 +346,5 @@ export default [
     path: "/acces-denied",
     name: "acces.denied",
     component: NotAcces,
-    meta: {
-      requiresAuth: true,
-    },
-  },
-  {
-    name: "not_found",
-    path: "*",
-    component: PageNotFound,
   },
 ];
