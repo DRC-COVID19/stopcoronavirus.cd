@@ -58,7 +58,7 @@ export default {
 }
 }
 .card__recent-form{
-    width: 100%;
+    min-width: 200px;
     height: 8rem;
     cursor: pointer;
     background: #FFFFFF;
