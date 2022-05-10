@@ -398,7 +398,7 @@ a{
     @media screen and($x-large){
       .form__home{
      h4{
-         font-size: 24px;
+         font-size: 20px;
      }
   }
   }

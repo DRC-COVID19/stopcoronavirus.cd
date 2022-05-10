@@ -216,11 +216,17 @@ export default {
     background-color: #F1F3F4;
     border-radius: 5px;
     margin-right: 2rem;
+    .vs__selected-options>input
+    {
+      color:#535356 !important;
+          font-style: italic !important;
+          font-size: 13px;
 
+    }
   .vs__dropdown-toggle{
     box-shadow: none;
     border: 0;
-    padding: .2rem 0;
+    padding: .3rem 0;
     /* font-style: italic; */
 }
 .vs__dropdown-toggle::placeholder{
@@ -283,5 +289,4 @@ export default {
 	}
 
 }
-
 </style>
