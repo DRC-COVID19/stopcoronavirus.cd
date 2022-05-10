@@ -28,7 +28,7 @@
                      </b-col>
                      </b-row>
                  </b-container>
-                 <div class="col-md-6 col-md-offset-4 mt-4 d-sm-flex justify-content-sm-between" v-show="getFormListLength > 0">
+                 <div class="col-md-6 col-md-offset-4 mt-4 d-flex justify-content-center" v-show="getFormListLength > 0">
                     <div class="paginate__scroll">
                     <p>Par page: </p>
                     <div class="perpage__select">

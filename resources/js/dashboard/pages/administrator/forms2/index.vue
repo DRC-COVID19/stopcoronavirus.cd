@@ -3,14 +3,24 @@
       <b-container fluid class="form__home">
          <b-container class="pt-5 pt-md-0">
              <b-row>
+              <b-col class="col-12 d-flex justify-content-md-between">
+                 <h4 class="mb-lg-4">{{ formCreationTitle }}</h4>
+                  <h4 class="mb-4 recent-form-title-md">{{ recentFormTitle }}</h4>
+              </b-col>
              <b-col class="form__home-left col-md-4 col-sm-12 mb-5 mb-md-0">
-                     <h4 class="mb-lg-4">Créer un Nouveau Formulaire</h4>
-                     <b-card class="border-0 form__home-add">
-                         <button
-                         @click="openToogle()"
-                        v-b-toggle.sidebar-right>
-                        <img src="/img/form_add.svg" class="ml-4 ml-md-0"/>
-                        </button>
+                     <b-card
+                        @click="openToogle()"
+                        v-b-toggle.sidebar-right
+                       class="border-0 form__home-add d-flex align-items-center"
+                     >
+                        <div class="img__add">
+                          <img
+                          src="/img/form_add.svg"
+                          width="100%"
+                          height="100%"
+                          />
+                        </div>
+
                      </b-card>
                 <b-sidebar
                 id="sidebar-right"
@@ -62,7 +72,7 @@
         </b-sidebar>
                 </b-col>
                  <b-col class="d-flex flex-column align-items-lg-end col-md-8 col-sm-12">
-                      <h4 class="mb-4">Les fomulaires Récents</h4>
+                   <h4 class="mb-4 recent-form-title-sm">{{ recentFormTitle }}</h4>
                      <recent-form
                      :recentForms="recentForms"
                      :isLoading="isRecentFormsLoading"
@@ -96,6 +106,8 @@ export default {
     return {
       title: 'Formulaires',
       iconClass: 'fa fa-address-card',
+      formCreationTitle: 'Créer un Nouveau Formulaire',
+      recentFormTitle: 'Les fomulaires Récents',
       filter: '',
       isLoading: false,
       isRecentFormsLoading: false,
@@ -287,7 +299,7 @@ export default {
       this.getFormList(this.paginate.currentPage)
     },
     backToRoute ({ formId }) {
-      return this.$router.push(`/administrator/forms/${formId}`)
+      return this.$router.push(`/administration/forms/${formId}/`)
     }
   }
 
@@ -297,6 +309,16 @@ export default {
 <style lang="scss">
 @import "@~/sass/_variables";
 
+ @media (max-width: $max-width) {
+   .recent-form-title-md{
+    display: none;
+  }
+ }
+ @media screen and (width: 768px) {
+   .recent-form-title-md{
+    display: block;
+  }
+ }
 .form__card{
         width: 100%;
         height: 8rem;
@@ -307,6 +329,10 @@ export default {
         flex-direction: row;
         align-content: center;
         align-items: center;
+        border:0;
+        &:hover, img:hover{
+          background: #fafbfc;
+        }
 }
  .form__home{
      background-color: #F4F6FC;
@@ -325,11 +351,6 @@ export default {
         @extend .form__card;
         transition: .2s ease-in ;
         border-radius: 0;
-        button{
-            display: block;
-            border: 0;
-            background: #FFFFFF;
-        }
         .fa{
             color: #3767FA;
             font-size: 4rem;
@@ -352,7 +373,10 @@ a{
 @media screen and($small){
     .form__card{
         width: 12rem;
-}
+  }
+  .recent-form-title-sm{
+    display: none;
+  }
 }
 
   @media screen and($medium){
@@ -369,7 +393,7 @@ a{
          font-size: 20px;
      }
   }
-  
+
   }
     @media screen and($x-large){
       .form__home{
