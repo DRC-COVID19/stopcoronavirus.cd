@@ -246,7 +246,6 @@ export default {
   }
   .nav-container {
     .nav-btn-action {
-      margin: 17px !important;
       font-size: 14px !important;
     }
     span {
@@ -322,9 +321,6 @@ export default {
 @media screen and (min-width: 991px) and (max-width: 1200px) {
   .container-nav-space {
     margin-left: 5% !important;
-  }
-  .header .nav-container .nav-btn-action {
-    margin: 0px !important;
   }
 }
 @media (max-width: $max-width) {
