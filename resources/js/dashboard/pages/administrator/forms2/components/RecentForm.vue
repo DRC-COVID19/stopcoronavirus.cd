@@ -70,7 +70,7 @@ export default {
     background: #3767FA;
     color: #FFFFFF;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     transition: all .3s ease-in;
     text-align: center;
     border: 0 !important;
@@ -81,24 +81,25 @@ export default {
         color: #3767FA;
     }
 @media screen and($small){
-
+    .card__recent-form{
+       font-size: 15px;
+    }
   }
   @media screen and($medium){
     &{
-
+      .card__recent-form{
+       font-size: 15.5px;
+    }
     }
   }
 
   @media screen and($large){
-
+    .card__recent-form{
+       font-size: 16px;
+    }
   }
     @media screen and($x-large){
-     &{
-        width: 12rem;
-        height: 8rem;
-        font-weight: 700;
-        font-size: 15px;
-     }
+    
   }
 }
 
