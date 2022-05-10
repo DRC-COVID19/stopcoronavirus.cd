@@ -270,11 +270,17 @@ export default {
       }
     }
     .preview {
-      background: #f4f6fc !important;
-      border-color: #f4f6fc !important;
+      background: #f4f6fc;
+      border-color: #f4f6fc;
+      border-radius: 5px;
+      display:flex;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+      
     }
     a {
-      color: #3767fa !important;
+      color: #3767fa ;
     }
   }
   .input-header {
@@ -324,7 +330,9 @@ export default {
   }
 }
 @media (max-width: $max-width) {
-  .container-nav-space {
+  .nav-btn-action {
+    margin: 10px 0px;
+  }  .container-nav-space {
     display: block !important;
     margin-left: 0 !important;
     padding: 0 12%;
@@ -337,7 +345,6 @@ export default {
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    padding: 0 5%;
     a {
       background: #f4f6fc !important;
       border-color: #f4f6fc !important;

@@ -35,6 +35,7 @@
                        <v-select
                         v-model="form.perPage"
                         :options="perPages"
+                        :value="perPage"
                         id="id"
                         class="ml-3"
                         :searchable="false"
@@ -84,8 +85,9 @@ export default {
       currentPage: 1,
       perPages: [8, 16, 32, 64],
       form: {
-        perPage: 1
-      }
+        perPage: 8
+      },
+      perPage: 8
     }
   },
   computed: {
@@ -121,6 +123,9 @@ export default {
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
     color: #14244F;
     font-weight: bold;
+  }
+  .vs__clear{
+    display: none;
   }
 }
 
