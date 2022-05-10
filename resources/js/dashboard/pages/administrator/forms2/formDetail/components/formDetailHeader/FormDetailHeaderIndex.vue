@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="position-fixed w-100" style="z-index: 1000">
     <HeaderNavigation />
     <HeaderMenu />
   </div>
