@@ -93,15 +93,16 @@ export default {
     getFormFiltered ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
-        axios.get(`api/dashboard/forms/get-form-filtered?page=${payload.page}`, {
-          params: {
-            form_date: payload.form_date,
-            published_form: payload.published_form,
-            unpublished_form: payload.unpublished_form,
-            recurrence_form: payload.recurrence_form,
-            paginate: payload.paginate
-          }
-        })
+        axios
+          .get(`api/dashboard/forms/get-form-filtered?page=${payload.page}`, {
+            params: {
+              form_date: payload.form_date,
+              published_form: payload.published_form,
+              unpublished_form: payload.unpublished_form,
+              recurrence_form: payload.recurrence_form,
+              paginate: payload.paginate
+            }
+          })
           .then(({ data }) => {
             resolve(data)
             commit('SET_IS_LOADING', false)
@@ -146,7 +147,8 @@ export default {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
-        axios.get('api/dashboard/forms/filter?key_words=' + payload.filter)
+        axios
+          .get('api/dashboard/forms/filter?key_words=' + payload.filter)
           .then(({ data }) => {
             commit('SET_IS_LOADING', false)
             resolve(data)

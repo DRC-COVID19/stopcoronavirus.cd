@@ -64,6 +64,7 @@ a{
         justify-content: center;
         h4{
             color: #FFFFFF;
+             font-size: 16px;
         }
 
     }
@@ -74,10 +75,10 @@ a{
         background: #FFFFFF;
         border-radius: 0px 0px 10px 10px;
         h6{
-            font-size: 12.5px;
+            font-size: 11px;
         }
         .card-badge{
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 400;
         }
     }
@@ -93,5 +94,58 @@ a{
         }
     }
 }
+@media screen and($small){
+  .card__list{
+   .card__list-header{
+        h4{
+            font-size: 17px;
+        }
+
+    }
+    .card__list-body{
+        h6{
+            font-size: 11px;
+        }
+        .card-badge{
+            font-size: 12.5px;
+            font-weight: 400;
+        }
+    }
+  }
+}
+  @media screen and($medium){
+    .card__list{
+     .card__list-body{
+        h6{
+            font-size: 11px;
+        }
+        .card-badge{
+            font-size: 13px;
+            font-weight: 400;
+        }
+    }
+    }
+  }
+
+  @media screen and($large){
+    .card__list{
+     .card__list-header{
+        h4{
+            font-size: 18px;
+        }
+
+    }
+    }
+  }
+    @media screen and($x-large){
+     .card__list{
+     .card__list-header{
+        h4{
+            font-size: 20px;
+        }
+
+    }
+     }
+  }
 
 </style>
