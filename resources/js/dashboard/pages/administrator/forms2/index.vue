@@ -287,7 +287,7 @@ export default {
       this.getFormList(this.paginate.currentPage)
     },
     backToRoute ({ formId }) {
-      return this.$router.push(`/administrator/forms/${formId}`)
+      return this.$router.push(`/administration/forms/${formId}/`)
     }
   }
 
