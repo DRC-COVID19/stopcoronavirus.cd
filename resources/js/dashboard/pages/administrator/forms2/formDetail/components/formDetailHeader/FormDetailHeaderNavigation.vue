@@ -19,7 +19,7 @@
 
         <b-collapse id="nav-collapse" is-nav>
           <div class="d-flex justify-content-between w-100 container-nav-space">
-            <b-navbar-nav class="nav-container" align="center">
+            <b-navbar-nav class="nav-container w-100" align="center" lg="3">
               <span class="d-flex align-center text-center w-100">
                 Etat du formulaire :
                 <span
@@ -31,7 +31,13 @@
               </span>
             </b-navbar-nav>
             <b-navbar-nav
-              class="d-flex nav-container align-center justify-content-around"
+              class="
+                d-flex
+                nav-container
+                align-center
+                justify-content-around
+                w-100
+              "
             >
               <b-button
                 class="d-block btn-dash-blue px-4 nav-btn-action"
@@ -48,14 +54,7 @@
                     'administrator.forms.show.form-preview'
                   )
                 "
-                class="
-                  d-block
-                  preview
-                  btn-dash-blue
-                  text-center
-                  px-4
-                  nav-btn-action
-                "
+                class="d-block preview text-center px-4 nav-btn-action"
               >
                 Prévisualisation
               </b-nav-item>
@@ -63,6 +62,7 @@
             <b-navbar-nav class="d-lg-none profil-container-responsive">
               <b-nav-item
                 v-if="canViewForm"
+                class="d-block text-center w-100"
                 :to="{ name: 'administrator.forms' }"
                 :active="this.$route.name.startsWith('administrator.forms')"
               >
@@ -242,7 +242,7 @@ export default {
   background: white;
 
   .container-nav-space {
-    margin-left: 40%;
+    margin-left: 25%;
   }
   .nav-container {
     .nav-btn-action {
@@ -319,17 +319,21 @@ export default {
     }
   }
 }
-@media screen and (min-width: 992px) and (max-width: 1200px) {
+@media screen and (min-width: 991px) and (max-width: 1200px) {
   .container-nav-space {
-    margin-left: 20% !important;
+    margin-left: 5% !important;
+  }
+  .header .nav-container .nav-btn-action {
+    margin: 0px !important;
   }
 }
 @media (max-width: $max-width) {
   .container-nav-space {
     display: block !important;
     margin-left: 0 !important;
-    padding: 0 15%;
+    padding: 0 12%;
   }
+
   .profil-container {
     display: none !important;
   }
@@ -342,12 +346,10 @@ export default {
       background: #f4f6fc !important;
       border-color: #f4f6fc !important;
       font-size: 14px;
-      padding: 0.7rem 1rem;
-      border-bottom-right-radius: 5%;
-      border-bottom-left-radius: 5%;
+      padding: 0.5rem;
     }
     .btn-deconnexion {
-      margin: 17px !important;
+      margin: 15px !important;
       font-size: 14px !important;
     }
   }
