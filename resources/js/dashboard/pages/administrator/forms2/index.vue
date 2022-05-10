@@ -314,7 +314,7 @@ export default {
      h4{
          color: #14244F;
          font-weight: bold;
-         font-size: 16px;
+         font-size: 14px;
      }
      .form__home-left{
     display: flex;
@@ -352,12 +352,30 @@ a{
     .form__card{
         width: 12rem;
 }
- .form__home{
-     height: 419px;
+}
+
+  @media screen and($medium){
+   .form__home{
+     h4{
+         font-size: 16px;
+     }
+  }
+  }
+
+  @media screen and($large){
+    .form__home{
+     h4{
+         font-size: 20px;
+     }
+  }
+  
+  }
+    @media screen and($x-large){
+      .form__home{
      h4{
          font-size: 24px;
      }
   }
-}
+  }
 
 </style>
