@@ -2,8 +2,18 @@
     <b-container fluid class="form_list">
          <div class="container">
              <hr>
-        <list-form-navigation/>
-          <list-forms :formsList="formsList"/>
+        <list-form-navigation 
+          @filterForms="filterForms" 
+          @onSearch="search"
+          :paginate="paginate"
+        />
+          <list-forms
+          :isLoading = "isLoading"
+          :formsList="formsList"
+          :paginate="paginate"
+          @getFormsByPerPage ="getFormsByPerPage"
+          @switchPage="switchPage"
+          />
          </div>
       </b-container>
 </template>
@@ -15,9 +25,33 @@ export default {
   components: { ListForms, ListFormNavigation },
   props: {
     formsList: {
-      type: Array,
-      default: () => ([]),
+      type: Object,
+      default: () => {},
       required: false
+    },
+    paginate: {
+      type: Object,
+      default: () => ({}),
+      required: false
+    },
+    isLoading: {
+      type: Boolean,
+      default: () => {},
+      required: false
+    }
+  },
+  methods: {
+    filterForms (value) {
+      this.$emit('filterForms', value)
+    },
+    search (value) {
+      this.$emit('onSearchForm', value)
+    },
+    getFormsByPerPage (value) {
+      this.$emit('getFormsByPerPage', value)
+    },
+    switchPage (value) {
+      this.$emit('switchPage', value)
     }
   }
 
@@ -40,14 +74,6 @@ export default {
  .form_list{
       background-color: #fff;
       text-align: inherit;
-   ul{
-       display: flex;
-       justify-content: space-between;
-       li{
-           list-style: none;
-
-       }
-   }
    .form_card-list{
         background-color: #F4F6FC;
         min-height: 40rem;

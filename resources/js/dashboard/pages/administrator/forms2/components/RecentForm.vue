@@ -1,10 +1,24 @@
 <template>
-   <div class="row">
+   <div class="card__Scroll">
+     <div v-if="isLoading">
+       <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
+     </div>
      <div
+     v-else
      v-for="(form, index) in recentForms" :key="index"
-     class="col-md-4 col-sm-12"
+     class="px-2"
      >
-        <b-card class="card__recent-form">{{ form.title}}</b-card>
+      <b-link
+           :to="{
+                name: 'administrator.forms.show.creation',
+                params: {
+                  form_id: form.id,
+                },
+              }" class="card-link">
+              <b-card class="card__recent-form">
+         {{ form.title}}
+          </b-card>
+      </b-link>
         </div>
     </div>
 </template>
@@ -15,6 +29,11 @@ export default {
     recentForms: {
       type: Array,
       default: () => ([])
+    },
+    isLoading: {
+      type: Boolean,
+      default: () => false,
+      required: false
     }
   }
 
@@ -24,8 +43,19 @@ export default {
 <style lang="scss">
 @import "@~/sass/_variables";
 .card__Scroll{
+  display: flex;
+  justify-content: space-between;
+     @media (max-width: $max-width) {
+  & {
+    z-index: 5;
+    display: flex;
+    height: 30vh;
+    width: 100%;
+    border-right: 0;
     overflow-x: scroll !important;
     white-space: nowrap;
+  }
+}
 }
 .card__recent-form{
     width: 100%;
@@ -40,7 +70,7 @@ export default {
     background: #3767FA;
     color: #FFFFFF;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14px;
     transition: all .3s ease-in;
     text-align: center;
     border: 0 !important;
@@ -51,26 +81,26 @@ export default {
         color: #3767FA;
     }
 @media screen and($small){
-   
+    .card__recent-form{
+       font-size: 15px;
+    }
   }
   @media screen and($medium){
     &{
-
+      .card__recent-form{
+       font-size: 15.5px;
+    }
     }
   }
 
   @media screen and($large){
-    
+    .card__recent-form{
+       font-size: 16px;
+    }
   }
     @media screen and($x-large){
-     &{
-        width: 12rem;
-        height: 8rem;
-        font-weight: 700;
-        font-size: 15px;
-     }
+    
   }
 }
-
 
 </style>

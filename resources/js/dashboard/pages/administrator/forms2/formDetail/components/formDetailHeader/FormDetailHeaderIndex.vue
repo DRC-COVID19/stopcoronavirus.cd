@@ -6,75 +6,75 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import HeaderNavigation from "./FormDetailHeaderNavigation.vue";
-import HeaderMenu from "./FormDetailHeaderMenu.vue";
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import HeaderNavigation from './FormDetailHeaderNavigation.vue'
+import HeaderMenu from './FormDetailHeaderMenu.vue'
 
 import {
   ADMINISTRATOR,
   CREATE_FORM,
-  EDIT_FORM,
-} from "../../../../../../config/env";
+  EDIT_FORM
+} from '../../../../../../config/env'
 
 export default {
   components: {
     HeaderNavigation,
-    HeaderMenu,
+    HeaderMenu
   },
-  data() {
+  data () {
     return {
       showUserCard: false,
-      showHeaderNotification: false,
-    };
+      showHeaderNotification: false
+    }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       activeMenu: (state) => state.nav.activeMenu,
-      changeLogs: (state) => state.app.changeLogs,
+      changeLogs: (state) => state.app.changeLogs
     }),
-    ...mapGetters(["getChangeLogNotRead"]),
+    ...mapGetters(['getChangeLogNotRead']),
 
-    canViewForm() {
+    canViewForm () {
       return (
         this.userHaveRole(ADMINISTRATOR) ||
         this.userHaveRole(EDIT_FORM) ||
         this.userHaveRole(CREATE_FORM)
-      );
-    },
+      )
+    }
   },
-  mounted() {},
+  mounted () {},
   methods: {
-    ...mapActions(["logout", "setChangeLogsRead"]),
-    ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
-    userAvatarMouseEnter() {
-      this.showUserCard = true;
+    ...mapActions(['logout', 'setChangeLogsRead']),
+    ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
+    userAvatarMouseEnter () {
+      this.showUserCard = true
     },
-    userAvatarMouseLeave() {
-      this.showUserCard = false;
+    userAvatarMouseLeave () {
+      this.showUserCard = false
     },
-    userLogout() {
+    userLogout () {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
-        });
-      });
+          name: 'login'
+        })
+      })
     },
-    selectNotification(item) {
-      this.setSelectedChangeLog(item);
-      this.setActiveMenu(7);
+    selectNotification (item) {
+      this.setSelectedChangeLog(item)
+      this.setActiveMenu(7)
     },
-    toggleHeaderNotification() {
-      this.showHeaderNotification = !this.showHeaderNotification;
+    toggleHeaderNotification () {
+      this.showHeaderNotification = !this.showHeaderNotification
     },
-    clickOutsideNotification() {
+    clickOutsideNotification () {
       if (this.showHeaderNotification) {
-        this.showHeaderNotification = false;
-        this.setChangeLogsRead();
+        this.showHeaderNotification = false
+        this.setChangeLogsRead()
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -63,14 +63,24 @@
                 </b-col>
                  <b-col class="d-flex flex-column align-items-lg-end col-md-8 col-sm-12">
                       <h4 class="mb-4">Les fomulaires Récents</h4>
-                     <recent-form 
+                     <recent-form
                      :recentForms="recentForms"
+                     :isLoading="isRecentFormsLoading"
                      />
                  </b-col>
              </b-row>
          </b-container>
       </b-container>
-      <list-form-index :formsList="forms"/>
+      <list-form-index
+      :formsList="forms"
+      :isLoading="isLoading"
+      :paginate="paginate"
+       @filterForms="filterForms"
+       @onSearchForm="search"
+       @getFormsByPerPage ="getFormsByPerPage"
+       @switchPage="switchPage"
+      />
+
   </div>
 </template>
 
@@ -78,14 +88,18 @@
 import RecentForm from './components/RecentForm.vue'
 import Create from './components/CreateForm.vue'
 import ListFormIndex from './components/listForm/ListFormIndex.vue'
+import { mapActions } from 'vuex'
+
 export default {
   components: { Create, RecentForm, ListFormIndex },
   data () {
     return {
       title: 'Formulaires',
       iconClass: 'fa fa-address-card',
+      filter: '',
       isLoading: false,
-      forms: [],
+      isRecentFormsLoading: false,
+      forms: {},
       formUpdated: false,
       formAdded: false,
       showSuccess: false,
@@ -94,38 +108,60 @@ export default {
       formToPopulate: {},
       updating: false,
       errors: {},
-      currentPage: 1,
-      recentForms: [],
+      recentForms: []
+    }
+  },
+  computed: {
+    paginate () {
+      return {
+        currentPage: this.forms.current_page,
+        perPage: this.forms.per_page,
+        total: this.forms.total
+      }
     }
   },
   async mounted () {
-    this.getRecentForms()
-    this.getFormList()
+    await this.findRecentForms()
+    await this.getFormList()
   },
   methods: {
-    async getRecentForms () {
-      this.recentForms = await [
-        { id: 1, title: 'Formulaire COVID-19' },
-        { id: 2, title: 'Formulaire Omicron' },
-        { id: 3, title: 'Formulaire Rougeole' }
-      ]
+    ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms', 'form__filterByWords']),
+    async findRecentForms () {
+      this.isRecentFormsLoading = true
+      this.recentForms = await this.getRecentForms()
+      this.isRecentFormsLoading = false
     },
-    search (filter) {
+    async filterForms (value) {
       this.isLoading = true
-      if (filter !== '') {
-        axios
-          .get('api/dashboard/forms/filter?key_words=' + filter)
-          .then(({ data }) => {
-            this.forms = data
-            this.isLoading = false
-          })
-          .catch(({ response }) => {
-            this.$gtag.exception(response)
-            this.isLoading = false
-          })
-      } else {
-        this.getFormList()
+      this.forms = await this.getFormFiltered({
+        form_date: value.form_date,
+        published_form: value.published_form,
+        unpublished_form: value.unpublished_form,
+        recurrence_form: value.recurrence_form,
+        paginate: this.paginate.perPage,
+        page: this.paginate.currentPage
+      })
+      this.isLoading = false
+    },
+    async getFormsByPerPage (page) {
+      this.isLoading = true
+
+      this.forms = await this.getFormFiltered({
+        paginate: page ?? 8
+      })
+      this.isLoading = false
+    },
+    async search (filter) {
+      this.isLoading = true
+      try {
+        if (filter !== '') {
+          this.forms = await this.form__filterByWords({ filter })
+        } else {
+          this.getFormList()
+        }
         this.isLoading = false
+      } catch (error) {
+
       }
     },
     openToogle (state) {
@@ -236,23 +272,19 @@ export default {
         })
     },
 
-    getFormList (page = 1) {
+    async getFormList (page = 1, perPage = 8) {
       this.isLoading = true
-      axios
-        .get('api/dashboard/forms', {
-          params: { page }
-        })
-        .then(({ data }) => {
-          this.forms = data
-          this.isLoading = false
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
+
+      this.forms = await this.getFormFiltered({
+        paginate: perPage,
+        page: page
+      })
+      this.isLoading = false
     },
 
     switchPage (page) {
-      this.getFormList(page)
+      this.paginate.currentPage = page
+      this.getFormList(this.paginate.currentPage)
     },
     backToRoute ({ formId }) {
       return this.$router.push(`/administrator/forms/${formId}`)
@@ -283,10 +315,10 @@ export default {
      h4{
          color: #14244F;
          font-weight: bold;
-         font-size: 16px;
+         font-size: 14px;
      }
      .form__home-left{
-    display: flex;
+     display: flex;
      flex-direction: column;
      justify-content: space-between;
      .form__home-add{
@@ -321,12 +353,30 @@ a{
     .form__card{
         width: 12rem;
 }
- .form__home{
-     height: 419px;
+}
+
+  @media screen and($medium){
+   .form__home{
+     h4{
+         font-size: 16px;
+     }
+  }
+  }
+
+  @media screen and($large){
+    .form__home{
+     h4{
+         font-size: 20px;
+     }
+  }
+  
+  }
+    @media screen and($x-large){
+      .form__home{
      h4{
          font-size: 24px;
      }
   }
-}
+  }
 
 </style>

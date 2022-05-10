@@ -3,7 +3,6 @@ export default {
     forms: [],
     recentForms: [],
     formsRecurrences: [],
-    formFiltered: [],
     isLoading: false,
     isUpdating: false,
     isUpdateFormTitle: null
@@ -20,9 +19,6 @@ export default {
     },
     SET_FORMS_RECURRENCES (state, payload) {
       state.formsRecurrences = payload
-    },
-    SET_FORM_FILTERED (state, payload) {
-      state.formFiltered = payload
     },
     SET_IS_LOADING (state, payload) {
       state.isLoading = payload
@@ -55,7 +51,7 @@ export default {
           .then(({ data }) => {
             commit('SET_FORMS', data)
             commit('SET_IS_LOADING', false)
-            resolve(true)
+            resolve(data)
           })
           .catch((response) => {
             reject(response)
@@ -85,7 +81,8 @@ export default {
           .then(({ data }) => {
             commit('SET_RECENT_FORMS', data)
             commit('SET_IS_LOADING', false)
-            resolve(true)
+            console.log('data-->', data)
+            resolve(data)
           })
           .catch((response) => {
             reject(response)
@@ -97,7 +94,7 @@ export default {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
-          .get('api/dashboard/forms/get-form-filtered', {
+          .get(`api/dashboard/forms/get-form-filtered?page=${payload.page}`, {
             params: {
               form_date: payload.form_date,
               published_form: payload.published_form,
@@ -107,9 +104,9 @@ export default {
             }
           })
           .then(({ data }) => {
-            commit('SET_FORM_FILTERED', data)
+            resolve(data)
             commit('SET_IS_LOADING', false)
-            resolve(true)
+            console.log(data)
           })
           .catch((response) => {
             reject(response)
@@ -144,6 +141,25 @@ export default {
           })
           .finally(() => {
             commit('SET_IS_UPDATING', false)
+          })
+      })
+    },
+    form__filterByWords ({ commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .get('api/dashboard/forms/filter?key_words=' + payload.filter)
+          .then(({ data }) => {
+            commit('SET_IS_LOADING', false)
+            resolve(data)
+          })
+          .catch(({ response }) => {
+            console.log(response)
+            commit('SET_IS_LOADING', false)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
           })
       })
     }
