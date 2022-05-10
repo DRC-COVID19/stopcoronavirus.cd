@@ -5,12 +5,19 @@
              <b-row>
              <b-col class="form__home-left col-md-4 col-sm-12 mb-5 mb-md-0">
                      <h4 class="mb-lg-4">Créer un Nouveau Formulaire</h4>
-                     <b-card class="border-0 form__home-add">
-                         <button
-                         @click="openToogle()"
-                        v-b-toggle.sidebar-right>
-                        <img src="/img/form_add.svg" class="ml-4 ml-md-0"/>
-                        </button>
+                     <b-card 
+                        @click="openToogle()"
+                        v-b-toggle.sidebar-right
+                       class="border-0 form__home-add d-flex align-items-center"
+                     >
+                        <div class="img__add">
+                          <img
+                          src="/img/form_add.svg"
+                          width="100%"
+                          height="100%"
+                          />
+                        </div>
+
                      </b-card>
                 <b-sidebar
                 id="sidebar-right"
@@ -297,6 +304,14 @@ export default {
 <style lang="scss">
 @import "@~/sass/_variables";
 
+ /* @media (max-width: $max-width) {
+   .form__home-left{
+     .img-create{
+       display: block;
+       margin-left: 3rem !important;
+     }
+   }
+ } */
 .form__card{
         width: 100%;
         height: 8rem;
@@ -307,6 +322,10 @@ export default {
         flex-direction: row;
         align-content: center;
         align-items: center;
+        border:0;
+        &:hover, img:hover{
+          background: #fafbfc;
+        }
 }
  .form__home{
      background-color: #F4F6FC;
@@ -325,11 +344,6 @@ export default {
         @extend .form__card;
         transition: .2s ease-in ;
         border-radius: 0;
-        button{
-            display: block;
-            border: 0;
-            background: #FFFFFF;
-        }
         .fa{
             color: #3767FA;
             font-size: 4rem;
@@ -369,7 +383,7 @@ a{
          font-size: 20px;
      }
   }
-  
+
   }
     @media screen and($x-large){
       .form__home{
