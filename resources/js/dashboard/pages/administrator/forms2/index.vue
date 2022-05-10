@@ -3,9 +3,12 @@
       <b-container fluid class="form__home">
          <b-container class="pt-5 pt-md-0">
              <b-row>
+              <b-col class="col-12 d-flex justify-content-md-between">
+                 <h4 class="mb-lg-4">{{ formCreationTitle }}</h4>
+                  <h4 class="mb-4 recent-form-title-md">{{ recentFormTitle }}</h4>
+              </b-col>
              <b-col class="form__home-left col-md-4 col-sm-12 mb-5 mb-md-0">
-                     <h4 class="mb-lg-4">Créer un Nouveau Formulaire</h4>
-                     <b-card 
+                     <b-card
                         @click="openToogle()"
                         v-b-toggle.sidebar-right
                        class="border-0 form__home-add d-flex align-items-center"
@@ -69,7 +72,7 @@
         </b-sidebar>
                 </b-col>
                  <b-col class="d-flex flex-column align-items-lg-end col-md-8 col-sm-12">
-                      <h4 class="mb-4">Les fomulaires Récents</h4>
+                   <h4 class="mb-4 recent-form-title-sm">{{ recentFormTitle }}</h4>
                      <recent-form
                      :recentForms="recentForms"
                      :isLoading="isRecentFormsLoading"
@@ -103,6 +106,8 @@ export default {
     return {
       title: 'Formulaires',
       iconClass: 'fa fa-address-card',
+      formCreationTitle: 'Créer un Nouveau Formulaire',
+      recentFormTitle: 'Les fomulaires Récents',
       filter: '',
       isLoading: false,
       isRecentFormsLoading: false,
@@ -304,14 +309,16 @@ export default {
 <style lang="scss">
 @import "@~/sass/_variables";
 
- /* @media (max-width: $max-width) {
-   .form__home-left{
-     .img-create{
-       display: block;
-       margin-left: 3rem !important;
-     }
-   }
- } */
+ @media (max-width: $max-width) {
+   .recent-form-title-md{
+    display: none;
+  }
+ }
+ @media screen and (width: 768px) {
+   .recent-form-title-md{
+    display: block;
+  }
+ }
 .form__card{
         width: 100%;
         height: 8rem;
@@ -366,7 +373,10 @@ a{
 @media screen and($small){
     .form__card{
         width: 12rem;
-}
+  }
+  .recent-form-title-sm{
+    display: none;
+  }
 }
 
   @media screen and($medium){
