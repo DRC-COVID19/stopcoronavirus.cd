@@ -15,49 +15,7 @@
               </div>
               <h6>Avoir la possibilité de modifier le nom du formulaire</h6>
               <hr>
-              <b-modal id="updateFormModal"  centered hide-footer hide-header>
-              <b-container>
-      <b-row>
-        <b-col>
-          <div class="mb-4 p-2">
-            <h3 class="text-center text-bold">
-              Modifier le titre du  formulaire
-            </h3>
-          </div>
-          <ValidationObserver
-            v-slot="{ invalid }"
-            ref="form"
-            tag="form"
-            novalidate
-            @submit.prevent="onUpdateFormSubmit"
-            @reset.prevent="onReset"
-            label-class="text-dash-color"
-          >
-            <b-form @submit.prevent="onUpdateFormSubmit">
-              <b-form-group>
-                <label class="text-dash-color" for="text-firstName"
-                  >Titre du formulaire <span class="text-danger"> *</span></label
-                >
-                <FormFieldInput
-                  v-model="form.title"
-                  type="text"
-                  id="text-firstName"
-                  rules="required"
-                  name="Titre du formulaire"
-                  mode="aggressive"
-                />
-              </b-form-group>
-              <div class="mt-4 text-center">
-                <b-button type="submit" variant="primary"
-                  >Modifier</b-button
-                >
-              </div>
-            </b-form>
-          </ValidationObserver>
-        </b-col>
-      </b-row>
-    </b-container>
-       </b-modal>
+              <update-form-modal :form="form"/>
           </div>
            <div class="mt-5">
               <div class="d-flex justify-content-between">
@@ -91,19 +49,16 @@
   </b-container>
 </template>
 <script>
-import FormFieldInput from '../../../../components/forms/FormFieldInput'
 import FomFieldSelect from '../../../../components/forms/FomFieldSelect'
-import { ValidationObserver } from 'vee-validate'
+import UpdateFormModal from './components/formSettingsModals/updateFormModal.vue'
 export default {
   components: {
-    FormFieldInput,
-    FomFieldSelect,
-    ValidationObserver
+    UpdateFormModal
   },
   data () {
     return {
       form: {
-        title: ''
+        title: 'kota'
       }
     }
   },

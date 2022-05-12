@@ -1,0 +1,84 @@
+<template>
+    <b-modal id="updateFormModal"  centered hide-footer hide-header>
+    <b-container>
+      <b-row>
+        <b-col>
+          <div class="mb-4 p-2">
+            <h3 class="text-center text-bold">
+              Modifier le titre du  formulaire
+            </h3>
+          </div>
+          <ValidationObserver
+            v-slot="{ invalid }"
+            ref="form"
+            tag="form"
+            novalidate
+            @submit.prevent="onUpdateFormSubmit"
+            @reset.prevent="onReset"
+            label-class="text-dash-color"
+          >
+            <b-form @submit.prevent="onUpdateFormSubmit">
+              <b-form-group>
+                <label class="text-dash-color" for="text-firstName"
+                  >Titre du formulaire <span class="text-danger"> *</span></label
+                >
+                <FormFieldInput
+                  v-model="formTitle"
+                  type="text"
+                  id="text-firstName"
+                  rules="required"
+                  name="Titre du formulaire"
+                  mode="aggressive"
+                />
+              </b-form-group>
+              <div class="mt-4 text-center">
+                <b-button type="submit" variant="primary"
+                  >Modifier</b-button
+                >
+              </div>
+            </b-form>
+          </ValidationObserver>
+        </b-col>
+      </b-row>
+    </b-container>
+       </b-modal>
+</template>
+
+<script>
+import FormFieldInput from '../../../../../../components/forms/FormFieldInput.vue'
+import { ValidationObserver } from 'vee-validate'
+export default {
+  components: {
+    FormFieldInput,
+    ValidationObserver
+  },
+  props: {
+    form: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  data () {
+    return {
+      formTitle: this.form.title
+
+    }
+  },
+//   watch: {
+//     form (value) {
+//       this.$$set('formTitle', value)
+//     }
+//   },
+
+  methods: {
+    onReset () {
+      this.formUpdate = {}
+    },
+    onUpdateFormSubmit () {}
+  }
+}
+</script>
+
+<style>
+
+</style>
