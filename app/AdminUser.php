@@ -21,4 +21,6 @@ class AdminUser extends Model
         'remember_token',
         'phone_number'
     ];
+
+
 }
