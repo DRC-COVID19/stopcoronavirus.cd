@@ -40059,7 +40059,8 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             return wordKey[2];
         },
         translate: function (number, withoutSuffix, key, isFuture) {
-            var wordKey = translator.words[key];
+            var wordKey = translator.words[key],
+                word;
 
             if (key.length === 1) {
                 // Nominativ
@@ -40067,7 +40068,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
                 return isFuture || withoutSuffix ? wordKey[0] : wordKey[1];
             }
 
-            const word = translator.correctGrammaticalCase(number, wordKey);
+            word = translator.correctGrammaticalCase(number, wordKey);
             // Nominativ
             if (key === 'yy' && withoutSuffix && word === 'годину') {
                 return number + ' година';
@@ -40205,7 +40206,8 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
             return wordKey[2];
         },
         translate: function (number, withoutSuffix, key, isFuture) {
-            var wordKey = translator.words[key];
+            var wordKey = translator.words[key],
+                word;
 
             if (key.length === 1) {
                 // Nominativ
@@ -40213,7 +40215,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
                 return isFuture || withoutSuffix ? wordKey[0] : wordKey[1];
             }
 
-            const word = translator.correctGrammaticalCase(number, wordKey);
+            word = translator.correctGrammaticalCase(number, wordKey);
             // Nominativ
             if (key === 'yy' && withoutSuffix && word === 'godinu') {
                 return number + ' godina';
@@ -43198,7 +43200,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var require;//! moment.js
-//! version : 2.29.2
+//! version : 2.29.3
 //! authors : Tim Wood, Iskren Chernev, Moment.js contributors
 //! license : MIT
 //! momentjs.com
@@ -48833,7 +48835,7 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";
 
     //! moment.js
 
-    hooks.version = '2.29.2';
+    hooks.version = '2.29.3';
 
     setHookCallback(createLocal);
 

@@ -16279,15 +16279,6 @@ input[type=color].form-control:disabled {
   pointer-events: none;
 }
 
-.b-form-tags .b-form-tags-list {
-  margin-top: -0.25rem;
-}
-
-.b-form-tags .b-form-tags-list .b-from-tags-field,
-.b-form-tags .b-form-tags-list .b-form-tag {
-  margin-top: 0.25rem;
-}
-
 .b-form-tags.focus {
   color: #495057;
   background-color: #fff;
@@ -16308,6 +16299,19 @@ input[type=color].form-control:disabled {
 
 .b-form-tags.disabled {
   background-color: #e9ecef;
+}
+
+.b-form-tags-list {
+  margin-top: -0.25rem;
+}
+
+.b-form-tags-list .b-form-tags-field,
+.b-form-tags-list .b-form-tag {
+  margin-top: 0.25rem;
+}
+
+.b-form-tags-input {
+  color: #495057;
 }
 
 .b-form-tag {
