@@ -26,6 +26,6 @@ export default {
 <style lang="scss" scoped>
 .form-container {
   background: #f4f6fc;
-  height: 100vh;
+  height: auto;
 }
 </style>

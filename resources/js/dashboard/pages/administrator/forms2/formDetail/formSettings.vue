@@ -20,9 +20,9 @@
       <b-row>
         <b-col>
           <div class="mb-4 p-2">
-            <h2 class="lead text-center text-uppercase text-bold">
+            <h3 class="text-center text-bold">
               Modifier le titre du  formulaire
-            </h2>
+            </h3>
           </div>
           <ValidationObserver
             v-slot="{ invalid }"
@@ -57,7 +57,7 @@
         </b-col>
       </b-row>
     </b-container>
-          </b-modal>
+       </b-modal>
           </div>
            <div class="mt-5">
               <div class="d-flex justify-content-between">
@@ -70,6 +70,14 @@
            <div class="mt-5">
               <div class="d-flex justify-content-between">
                 <h4>Supprimer  le formulaire </h4>
+                <img src="/img/ant-design_delete-twotone.svg"  class="form__settings-icon">
+              </div>
+              <h6>Cette action supprimera le formulaire définitivement</h6>
+              <hr>
+          </div>
+          <div class="mt-5">
+              <div class="d-flex justify-content-between">
+                <h4>Rendre visible le formulaire </h4>
                 <img src="/img/ant-design_delete-twotone.svg"  class="form__settings-icon">
               </div>
               <h6>Cette action supprimera le formulaire définitivement</h6>
@@ -112,9 +120,10 @@ export default {
   width: 100%;
   position: relative;
    top: 10rem;
+   height:2000px ;
  .form__settings-body{
    width: 100%;
-   height: 400px;
+   min-height: 400px;
    background-color: #FFFFFF;
     h3, h4{
      font-weight: 500;
