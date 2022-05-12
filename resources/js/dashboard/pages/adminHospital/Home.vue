@@ -7,7 +7,7 @@
         </b-col>
         <b-col cols="12" md="2">
           <b-button class="btn-dash-blue btn-dash" @click.prevent="refreshData()">
-            <i class="fa fa-sync"></i>
+            <i class="fa fa-sync" aria-hidden="true"></i>
           </b-button>
         </b-col>
       </b-row>
@@ -61,6 +61,9 @@
                 <span class="ml-4">Jamais mis à jour </span>
              </div>
             </template>
+            <template v-slot:cell(created_manager)="data">
+              <span>{{ data.item.created_manager_name }} {{ data.item.created_manager_first_name }}</span>
+            </template>
             <template v-slot:cell(last_update)="data">
               <span v-if="data.item.last_update">{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
               <span v-else> </span>
@@ -95,7 +98,7 @@ export default {
         { key: 'statut', label: 'Statut' },
         { key: 'last_update', label: 'Date' },
         { key: 'name', label: 'Nom CTCO' },
-        { key: 'created_manager_name', label: 'Soumis par' },
+        { key: 'created_manager', label: 'Soumis par' },
         { key: 'actions', label: 'Action' }
       ],
       completedForms: [],

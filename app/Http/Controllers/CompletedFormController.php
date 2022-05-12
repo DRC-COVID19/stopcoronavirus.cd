@@ -58,34 +58,28 @@ class CompletedFormController extends Controller
     {
 
         try {
-            $completedForms = collect();
-            $hospitalIds = Hospital::all('id')
-                ->pluck('id')
-                ->unique()
-                ->sort()
-                ->values();
+            $hospitals = Hospital::with(['completedForms' => function ($query) {
+                $query
+                  ->select('*')
+                  ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date')
+                  ->orderBy('last_update', 'desc');
+              }])
+            ->get();
 
-            foreach ($hospitalIds as $id) {
-
-                $completedForm = CompletedForm::where('hospital_id', '=', intval($id));
-                $completedForm = $this->selectCompletedForms($completedForm)
-                    ->latest('last_update')
-                    ->first();
-
-                if ($completedForm === null) {
-                    $completedForm = [
-                        'diff_date' => -1,
-                        'last_update' => null,
-                        'hospital_id' => $id,
-                        'name' => Hospital::where('id', $id)->select('name')->first()->name,
-                        "created_manager_name" => null,
-                    ];
-                    $completedForms->push($completedForm);
+            $hospitalsSanitized = $hospitals->map(function ($hospital) {
+                if (sizeof($hospital->completedForms) > 0) {
+                  $hospital['diff_date'] = $hospital->completedForms[0]->diff_date ;
+                  $hospital['last_update'] = $hospital->completedForms[0]->last_update ;
+                  $hospital['created_manager_name'] = $hospital->completedForms[0]->created_manager_name ;
+                  $hospital['created_manager_first_name'] = $hospital->completedForms[0]->created_manager_first_name ;
                 } else {
-                    $completedForms->push($completedForm);
+                  $hospital['diff_date'] = -1 ;
+                  $hospital['last_update'] = null ;
                 }
-            }
-            return response()->json($completedForms, 200, [], JSON_NUMERIC_CHECK);
+                return $hospital;
+            });
+
+            return response()->json($hospitalsSanitized, 200, [], JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);

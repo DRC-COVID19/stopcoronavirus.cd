@@ -130,23 +130,10 @@ export default {
         axios
           .get('/api/dashboard/completed_forms/get-latest-hospital-update')
           .then(({ data }) => {
-            const completedForms = data.map((completedForm) => ({
-              diff_date: completedForm.diff_date,
-              last_update: completedForm.last_update,
-              name: completedForm.form_id
-                ? completedForm.hospital.name
-                : completedForm.name,
-              created_manager_name: completedForm.created_manager_name,
-              hospital_id: completedForm.hospital_id
-            }))
-            commit('SET_IS_LOADING', false)
-            resolve(completedForms)
+            resolve(data)
           })
           .catch((response) => {
             reject(response)
-          })
-          .finally(() => {
-            commit('SET_IS_LOADING', false)
           })
       })
     },
