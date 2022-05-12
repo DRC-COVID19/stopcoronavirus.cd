@@ -120,7 +120,7 @@ export default {
   width: 100%;
   position: relative;
    top: 10rem;
-   height:2000px ;
+   height:auto ;
  .form__settings-body{
    width: 100%;
    min-height: 400px;
