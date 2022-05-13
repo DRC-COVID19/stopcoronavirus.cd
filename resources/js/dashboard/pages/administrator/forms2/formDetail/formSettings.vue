@@ -37,7 +37,10 @@
               </div>
               <h6>Cette action supprimera le formulaire définitivement</h6>
               <hr>
-              <delete-form-modal/>
+              <delete-form-modal 
+              @onDeleteForm="deleteForm"
+              :formId="getFormId"
+              />
           </div>
           <div class="mt-5">
               <div class="d-flex justify-content-between">

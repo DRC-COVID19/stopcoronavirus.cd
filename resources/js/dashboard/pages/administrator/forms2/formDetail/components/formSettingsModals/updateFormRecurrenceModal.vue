@@ -8,7 +8,6 @@
               Changer  la récurrence du formulaire
             </h3>
           </div>
-          {{ targetForm }}
           <ValidationObserver
             v-slot="{ invalid }"
             ref="form"
@@ -25,6 +24,7 @@
               label="name"
               :reduce="(item) => item.id"
               :isObligated="true"
+              value="name"
               rules="required"
               id="form.form_recurrence_id"
               labelText="Recurrence du formulaire "

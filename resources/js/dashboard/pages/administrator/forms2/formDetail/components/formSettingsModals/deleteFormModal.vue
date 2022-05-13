@@ -10,7 +10,7 @@
                 >Annuler</b-button
                 >
                  <b-button
-                @click="onDeleteForm"
+                @click="onDeleteForm(formId)"
                 type="submit"
                 variant="primary"
                 >Supprimer</b-button
@@ -22,9 +22,20 @@
 
 <script>
 export default {
+
+  props: {
+    formId: {
+      type: Number,
+      default: () => null,
+      required: true
+    }
+  },
   methods: {
     onCancelDeleteForm () {
       this.$bvModal.hide('deleteForm')
+    },
+    onDeleteForm (id) {
+      this.$emit('onDeleteForm', id)
     }
   }
 }
