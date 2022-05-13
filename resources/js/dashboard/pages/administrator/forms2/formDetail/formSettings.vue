@@ -45,10 +45,13 @@
           <div class="mt-5">
               <div class="d-flex justify-content-between">
                 <h4>Rendre visible le formulaire </h4>
-                <img src="/img/ant-design_delete-twotone.svg"  class="form__settings-icon">
+                    <i class="fa fa-eye form__settings-icon" aria-hidden="true" v-b-modal.renderFormVisibleModal></i>
               </div>
               <h6>Cette action supprimera le formulaire définitivement</h6>
               <hr>
+              <render-form-visible-modal
+               @onUpdateFormVisible="updateForm"
+              />
           </div>
           </div>
        </b-container>
@@ -58,7 +61,8 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import DeleteFormModal from './components/formSettingsModals/deleteFormModal.vue'
+import DeleteFormModal from './components/formSettingsModals/DeleteFormModal'
+import RenderFormVisibleModal from './components/formSettingsModals/RenderFormVisibleModal.vue'
 import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
 import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
 export default {
@@ -66,6 +70,7 @@ export default {
     UpdateFormModal,
     UpdateFormRecurrenceModal,
     DeleteFormModal
+    RenderFormVisibleModal
   },
   data () {
     return {
