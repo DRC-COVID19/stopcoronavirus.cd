@@ -43,23 +43,25 @@
           <b-button
             type="submit"
             variant="primary"
-            class="btn-dash-dash"
-            size="sm"
+            class="btn-dash-dash mx-2"
+            size="lg"
           >
             <span v-if="isLoading"
               ><b-spinner class="align-middle"></b-spinner>
               <span>en cours ...</span>
             </span>
             <div v-else>
-              <small>{{ btnTitle }}</small>
+              <small>{{
+                isCreatingStepList ? "Enregistrer" : "Modifier"
+              }}</small>
             </div>
           </b-button>
           <b-button
-            v-if="updating"
+            v-if="!isCreatingStepList"
             type="reset"
-            variant="primary"
-            class="ml-4 btn-dash-danger"
-            size="sm"
+            variant="danger"
+            class="mx-2"
+            size="lg"
           >
             <small>Annuler</small>
           </b-button>
@@ -86,6 +88,10 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    isCreatingStepList: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -111,13 +117,12 @@ export default {
       this.form = { ...this.rowFormStep };
       this.updating = true;
       this.title = "Modification de l'étape";
-      this.btnTitle = "Modifier";
     },
   },
   methods: {
     ...mapActions(["createFormStep", "updateFormStep"]),
     onSubmit() {
-      if (this.btnTitle === "Enregistrer") {
+      if (this.isCreatingStepList === true) {
         this.errors = {};
         const formStape = {
           ...this.form,
@@ -175,9 +180,8 @@ export default {
     onReset() {
       this.toToCanceled = true;
       this.form = {};
-      this.title = "Creation d'un étape";
-      this.btnTitle = "Enregistrer";
       this.$emit("onCancelUpdate", {});
+     
     },
   },
 };

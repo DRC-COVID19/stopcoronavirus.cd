@@ -1,24 +1,20 @@
 <template>
   <b-container class="container-creation" fluid>
     <b-row class="h-100">
-      <b-col lg="2" class="w-100 bg-white container-creation-list px-0 mx-0">
-        <FormStepIndex :formId="+$route.params.form_id" />
+      <b-col lg="12" class="w-100 px-0 mx-0">
+        <formStepFieldIndex />
       </b-col>
-      <b-col lg="10" class="w-100"> </b-col>
     </b-row>
   </b-container>
 </template>
 <script>
-import FormStepIndex from "./components/formStep/FormStepIndex.vue";
+import formStepFieldIndex from "./components/formStepFieldIndex.vue";
 export default {
   components: {
-    FormStepIndex,
+    formStepFieldIndex,
   },
 };
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.container-creation-list {
-  padding-top: 4% !important;
-}
 </style>

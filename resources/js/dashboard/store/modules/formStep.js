@@ -4,7 +4,7 @@ export default {
     currentPage: 1,
     selectedFormStep: null,
     isLoading: false,
-    isCreating: false
+    isCreating: false,
   },
   mutations: {
     SET_FORM_STEP(state, payload) {
@@ -18,7 +18,7 @@ export default {
     },
     SET_IS_CREATING(state, payload) {
       state.isCreating = payload;
-    }
+    },
   },
   actions: {
     createFormStep({ state, commit, dispatch }, payload = {}) {
@@ -31,7 +31,7 @@ export default {
             dispatch("getFormSteps");
             resolve(true);
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response);
             reject(response);
           })
@@ -50,7 +50,7 @@ export default {
             dispatch("getFormSteps");
             resolve(true);
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response);
             reject(response);
           })
@@ -69,7 +69,7 @@ export default {
             dispatch("getFormSteps");
             resolve(true);
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response);
             reject(response);
           })
@@ -104,19 +104,17 @@ export default {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get(`api/dashboard/form-steps/get-form/${payload.id}`, {
-            params: { page: payload.page || 1 }
-          })
+          .get(`api/dashboard/form-steps/get-form/${payload.id}`)
           .then(({ data }) => {
             commit("SET_FORM_STEP", data);
             commit("SET_IS_LOADING", false);
             resolve(true);
           })
-          .catch(response => {
+          .catch((response) => {
             console.log(response);
             reject(response);
           });
       });
-    }
-  }
+    },
+  },
 };
