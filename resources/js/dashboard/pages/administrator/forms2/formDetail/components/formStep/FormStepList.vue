@@ -2,7 +2,7 @@
   <b-row class="w-100">
     <b-col lg="12" class="px-0">
       <b-card lg="12" class="border-0 px-0 w-100form-step-list-title mx-0">
-        <div class="d-flex justify-content-between w-100">
+        <div class="d-flex justify-content-between w-100 pt-2 pb-3 px-3">
           <div class="d-flex justify-content-center align-center">
             <h2 class="title">Étape</h2>
           </div>
@@ -22,15 +22,31 @@
     <b-col lg="12" class="px-0">
       <b-card
         lg="12"
-        class="border-0 px-0 w-100 form-step-list mx-0 px-0"
+        class="border-0 px-0 w-100 form-step-list mx-0"
         v-for="(step, index) in formStepsSorted"
         :key="index"
       >
         <b-nav class="d-block w-100 px-0 mx-0">
-          <b-nav-item class="d-block w-100 mx-0">
-            <div class="d-flex justify-content-between w-100">
-              <h3>{{ step.title }}</h3>
-
+          <b-nav-item
+            class="d-block w-100 mx-0 px-0 form-step-list-nav"
+            :to="{
+              name: 'administrator.forms.show.creation.step',
+              params: { step_id: step.id },
+            }"
+            active-class="nav-item-active"
+          >
+            <div
+              class="
+                d-flex
+                justify-content-between
+                align-center
+                text-center
+                w-100
+              "
+            >
+              <div class="d-flex align-center text-center my-2">
+                <h3>{{ step.title }}</h3>
+              </div>
               <b-dropdown
                 size="lg"
                 variant="link"
@@ -109,6 +125,8 @@ export default {
       isDeleteModalShown: false,
       formStepId: null,
       editModalShow: false,
+      isActived: null,
+      routeStep: {},
     };
   },
 
@@ -136,6 +154,20 @@ export default {
     search() {
       this.searchFormStep(this.filter.trim()).catch((error) => {
         console.log(error);
+      });
+    },
+    activeStep(id) {
+      console.log("id ->", id);
+      this.isActived = this.router.push.name.startsWith(
+        "administrator.forms.show.creation.step"
+      );
+      this.routeStep = {
+        name: "administrator.forms.show.creation.step",
+        params: { step_id: id, form_id: this.formId },
+      };
+      this.router.push({
+        name: "administrator.forms.show.creation.step",
+        params: { step_id: id, form_id: this.formId },
       });
     },
     deleteStep(formId) {
@@ -192,15 +224,17 @@ export default {
   font-weight: 600;
 }
 .card-body {
-  padding: auto 15px;
+  padding: 0px !important;
+  /* margin: auto 0px !important; */
 }
 .form-step-list {
   border-radius: 0px;
   h3 {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 100;
     color: $dash-blue;
   }
+
   &:hover {
     background-color: #f4f6fc;
   }
@@ -208,9 +242,9 @@ export default {
     background-color: #f4f6fc;
   }
 }
-.nav-item {
-  a.active {
-    background-color: #f4f6fc !important;
-  }
+
+.nav-item-active {
+  padding: 15px auto !important;
+  background-color: #f4f6fc !important;
 }
 </style>

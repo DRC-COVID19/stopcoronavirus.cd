@@ -11,12 +11,13 @@
         :per-page="formStepMeta.perPage"
         :total-rows="formStepMeta.total"
         class="mt-4"
-        @onUpdateStep="toEdit"
       />
     </b-row>
     <b-modal ref="modal-creation" hide-footer hide-header centered title="">
       <h2 class="title text-center">
-        {{ isCreatingStep ? "Création des étapes" : "Modification des étapes" }}
+        {{
+          isCreatingStep ? "Création d'une étape" : "Modification d'une étape"
+        }}
       </h2>
       <FormStepCreate
         :formId="formId"
@@ -83,25 +84,27 @@ export default {
     ...mapActions(["getFormSteps"]),
     showModalCreatedModal() {
       this.isCreatingStep = true;
+      this.rowFormStep = {};
       this.$refs["modal-creation"].show();
     },
-    showModalUpdatedModal() {
+    showModalUpdatedModal(form) {
       this.isCreatingStep = false;
+      this.rowformStep = { ...form };
       this.$refs["modal-creation"].show();
     },
     onCreatedFormStep() {
       this.getFormSteps({ id: this.formId });
+      this.$refs["modal-creation"].hide();
     },
     onUpdatedFormStep() {
       this.getFormSteps({ id: this.formId });
+      this.$refs["modal-creation"].hide();
     },
-    toEdit(item) {
-      this.isEditingMode = true;
-      this.rowformStep = { ...item };
-    },
+
     cancelEditMode() {
       this.isEditingMode = false;
       this.isCreatingStep = true;
+      this.rowFormStep = {};
     },
   },
 };

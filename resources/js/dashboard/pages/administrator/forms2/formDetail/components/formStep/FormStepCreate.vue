@@ -10,11 +10,11 @@
         <b-form-group
           label-class="text-dash-color"
           id="input-group-1"
-          label="Titre de l'Etape*"
-          label-for="input-1"
           :invalid-feedback="errors.title ? errors.title[0] : null"
           :state="!errors.title"
-        >
+          ><label for="input-1"
+            >Titre de l'Etape<span class="text-danger">*</span></label
+          >
           <b-form-input
             id="input-1"
             v-model="form.title"
@@ -26,13 +26,11 @@
         <b-form-group
           label-class="text-dash-color"
           id="input-group-1"
-          label="Etape*"
-          label-for="input-1"
           :invalid-feedback="errors.step ? errors.step[0] : null"
           :state="!errors.step"
-        >
+          ><label for="input-2">Etape<span class="text-danger">*</span></label>
           <b-form-input
-            id="input-1"
+            id="input-2"
             v-model="form.step"
             type="number"
             placeholder="Entrer l'étape"
@@ -112,13 +110,10 @@ export default {
       formRecurrenceSelected: null,
     };
   },
-  watch: {
-    rowFormStep() {
-      this.form = { ...this.rowFormStep };
-      this.updating = true;
-      this.title = "Modification de l'étape";
-    },
+  mounted() {
+    this.form = { ...this.rowFormStep };
   },
+  watch: {},
   methods: {
     ...mapActions(["createFormStep", "updateFormStep"]),
     onSubmit() {
@@ -181,7 +176,6 @@ export default {
       this.toToCanceled = true;
       this.form = {};
       this.$emit("onCancelUpdate", {});
-     
     },
   },
 };
