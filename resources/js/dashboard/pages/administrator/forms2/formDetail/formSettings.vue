@@ -46,7 +46,7 @@
                 <h4>Rendre visible le formulaire </h4>
                     <img src="/img/akar-icons_pencil.svg"  class="form__settings-icon" v-b-modal.updateFormVisibilityModal>
               </div>
-              <h6>Cette action supprimera le formulaire définitivement</h6>
+              <h6>Cliquer sur l'icon à droite pour changer la visibilité de ce le formulaire</h6>
               <hr>
               <render-form-visible-modal
                @onUpdateFormVisible="updateForm"
@@ -61,7 +61,7 @@
 <script>
 import { mapActions } from 'vuex'
 import DeleteFormModal from './components/formSettingsModals/DeleteFormModal'
-import RenderFormVisibleModal from './components/formSettingsModals/UpdateFormVisibleModal.vue'
+import RenderFormVisibleModal from './components/formSettingsModals/UpdateFormVisibilityModal.vue'
 import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
 import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
 export default {
@@ -125,6 +125,7 @@ export default {
             text: 'Modifier avec succès',
             type: 'success'
           })
+          console.log('event')
         })
         .catch(({ response }) => {
           this.$gtag.exception(response)

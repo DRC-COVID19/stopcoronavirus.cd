@@ -15,27 +15,37 @@
             ref="form"
             tag="form"
             novalidate
-            @submit.prevent="onUpdateFormVisible"
+            @submit.prevent="onUpdateFormVisibility"
             @reset.prevent="onReset"
             label-class="text-dash-color"
           >
-            <b-form @submit.prevent="onUpdateFormVisible">
-               <FomFieldSelect
-              v-model="targetForm.hospitals"
-              :options="hospitals"
-              label="name"
-              :reduce="(item) => item.id"
-              :isObligated="true"
-              value="name"
-              rules="required"
-              id="form.form_recurrence_id"
-              labelText="Recurrence du formulaire "
-              name="Recurrence du formulaire"
-              mode="aggressive"
-             />
+            <b-form @submit.prevent="onUpdateFormVisibility">
+              <b-row class="d-flex flex-column justify-content-between mt-3">
+                <b-col md="12" class="border-1">
+                   <b-form-checkbox v-model="checked" name="check-button" switch class="mb-4">
+                   Pour tous les CTCOS <strong class="ml-4">Ou</strong>
+                  </b-form-checkbox>
+               </b-col>
+                <b-col md="12">
+                  <FomFieldSelect
+                    v-model="targetForm.hospitals"
+                    :options="hospitals"
+                    label="name"
+                    :reduce="(item) => item.id"
+                    :isObligated="true"
+                    value="name"
+                    rules="required"
+                    isMultiple
+                    id="form.form_recurrence_id"
+                    labelText="Selectionnez un ou plusieurs CTCOs "
+                    name="Recurrence du formulaire"
+                    mode="aggressive"
+              />
+                </b-col>
+              </b-row>
               <div class="mt-4 text-center">
                 <b-button type="submit" variant="primary"
-                  >Modifier</b-button
+                  >Publier</b-button
                 >
               </div>
             </b-form>
@@ -87,13 +97,13 @@ export default {
     onReset () {
       this.targetForm = {}
     },
-    onUpdateFormVisible () {
+    onUpdateFormVisibility () {
       const form = {
         ...this.targetForm,
         form_recurrence_value: this.formRecurrences.find((form) => form.id === this.targetForm.form_recurrence_id)
       }
-      this.$emit('onUpdateFormVisible', this.targetForm)
-      this.$bvModal.hide('updateFormRecurrenceModal')
+      this.$emit('onUpdateFormVisibility', this.targetForm)
+      this.$bvModal.hide('updateFormVisibilityModal')
     }
   }
 }
