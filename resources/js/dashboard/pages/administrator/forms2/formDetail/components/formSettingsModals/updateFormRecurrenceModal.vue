@@ -87,12 +87,16 @@ export default {
   methods: {
     ...mapActions(['getFormsRecurrences']),
     onReset () {
-      this.formUpdate = {}
+      this.targetForm = {}
     },
 
     onUpdateFormRecurrence () {
+      const form = {
+        ...this.targetForm,
+        form_recurrence_value: this.formRecurrences.find((form) => form.id === this.targetForm.form_recurrence_id)
+      }
       this.$emit('onUpdateFormRecurrence', this.targetForm)
-      this.$bvModal.hide('updateFormModal')
+      this.$bvModal.hide('updateFormRecurrenceModal')
     }
   }
 }

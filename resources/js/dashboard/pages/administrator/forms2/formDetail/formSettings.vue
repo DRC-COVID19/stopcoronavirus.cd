@@ -16,7 +16,7 @@
               <h6>Avoir la possibilité de modifier le nom du formulaire</h6>
               <hr>
               <update-form-modal
-              @onUpdateFormTitle="updateFormTitleSubmit"
+              @onUpdateFormTitle="updateForm"
               />
           </div>
            <div class="mt-5">
@@ -27,16 +27,17 @@
               <h6>Avoir la possibilité de modifier la récurrence</h6>
               <hr>
               <update-form-recurrence-modal
-              @onUpdateFormRecurrence="updateFormRecurrence"
+              @onUpdateFormRecurrence="updateForm"
               />
           </div>
            <div class="mt-5">
               <div class="d-flex justify-content-between">
                 <h4>Supprimer  le formulaire </h4>
-                <img src="/img/ant-design_delete-twotone.svg"  class="form__settings-icon">
+                <img src="/img/ant-design_delete-twotone.svg"  class="form__settings-icon" v-b-modal.deleteForm>
               </div>
               <h6>Cette action supprimera le formulaire définitivement</h6>
               <hr>
+              <delete-form-modal/>
           </div>
           <div class="mt-5">
               <div class="d-flex justify-content-between">
@@ -54,12 +55,14 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import DeleteFormModal from './components/formSettingsModals/deleteFormModal.vue'
 import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
 import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
 export default {
   components: {
     UpdateFormModal,
-    UpdateFormRecurrenceModal
+    UpdateFormRecurrenceModal,
+    DeleteFormModal
   },
   data () {
     return {
@@ -75,38 +78,38 @@ export default {
   mounted () {
     this.init()
   },
+  computed: {
+    getFormId () {
+      return this.$route.params.form_id ?? null
+    }
+  },
   methods: {
     ...mapActions(['formShow']),
     async init () {
       this.isLoading = true
-      await this.formShow({ id: this.$route.params.form_id })
+      await this.formShow({ id: this.getFormId })
     },
     onReset () {
       this.form = {}
     },
-    updateFormTitleSubmit (value) {
-      this.updateForm(value)
-    },
-    updateFormRecurrence (value) {
-      this.updateForm(value)
-    },
     updateForm (currentForm) {
       this.isLoading = true
       this.formUpdated = false
+
       const form = {
-        title: currentForm.title ?? null,
-        form_recurrence_value: currentForm.form_recurrence_value ?? null,
-        form_recurrence_id: currentForm.form_recurrence_id ?? null,
-        publish: currentForm.publish ?? null
+        title: currentForm.title,
+        form_recurrence_value: currentForm.form_recurrence_value,
+        form_recurrence_id: currentForm.form_recurrence_id,
+        publish: currentForm.publish
       }
 
       axios
-        .put('/api/dashboard/forms/' + currentForm.id, form)
+        .put('/api/dashboard/forms/' + this.getFormId, form)
         .then(() => {
-          // this.formUpdated = true
-          // this.showSuccess = true
-          // this.isLoading = false
-          // this.updating = false
+          this.formUpdated = true
+          this.showSuccess = true
+          this.isLoading = false
+          this.updating = false
           this.init()
           this.$notify({
             group: 'alert',
