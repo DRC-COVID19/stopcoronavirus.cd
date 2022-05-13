@@ -27,7 +27,7 @@
               <h6>Avoir la possibilité de modifier la récurrence</h6>
               <hr>
               <update-form-recurrence-modal
-              @onUpdateFormTitle="updateFormTitleSubmit"
+              @onUpdateFormRecurrence="updateFormRecurrence"
               />
           </div>
            <div class="mt-5">
@@ -85,6 +85,9 @@ export default {
       this.form = {}
     },
     updateFormTitleSubmit (value) {
+      this.updateForm(value)
+    },
+    updateFormRecurrence (value) {
       this.updateForm(value)
     },
     updateForm (currentForm) {

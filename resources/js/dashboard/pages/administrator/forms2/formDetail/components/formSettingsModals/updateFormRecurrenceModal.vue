@@ -14,11 +14,11 @@
             ref="form"
             tag="form"
             novalidate
-            @submit.prevent="onUpdateFormSubmit"
+            @submit.prevent="onUpdateFormRecurrence"
             @reset.prevent="onReset"
             label-class="text-dash-color"
           >
-            <b-form @submit.prevent="onUpdateFormSubmit">
+            <b-form @submit.prevent="onUpdateFormRecurrence">
                <FomFieldSelect
               v-model="targetForm.form_recurrence_id"
               :options="formRecurrences"
@@ -90,8 +90,8 @@ export default {
       this.formUpdate = {}
     },
 
-    onUpdateFormSubmit () {
-      this.$emit('onUpdateFormTitle', this.targetForm)
+    onUpdateFormRecurrence () {
+      this.$emit('onUpdateFormRecurrence', this.targetForm)
       this.$bvModal.hide('updateFormModal')
     }
   }
