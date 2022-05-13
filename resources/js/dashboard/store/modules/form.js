@@ -53,10 +53,10 @@ export default {
           })
       })
     },
-    updateForm ({ commit }, payload) {
+    formUpdate ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios
-          .put('/api/dashboard/forms/' + payload.id, payload)
+          .put('/api/dashboard/forms/' + payload.id, payload.form)
           .then(() => {
             commit('SET_IS_UPDATE_FORM', true)
           })
@@ -145,7 +145,6 @@ export default {
           })
           .then(({ data }) => {
             resolve(data)
-            console.log('data--->', data)
             commit('SET_IS_LOADING', false)
           })
           .catch((response) => {

@@ -75,7 +75,8 @@ export default {
       isUpdatingFormTile: false,
       formUpdated: false,
       showSuccess: false,
-      updating: false
+      updating: false,
+      isFormDeleted: false
     }
   },
   mounted () {
@@ -95,7 +96,7 @@ export default {
     onReset () {
       this.form = {}
     },
-    updateForm (currentForm) {
+    async updateForm (currentForm) {
       this.isLoading = true
       this.formUpdated = false
 
@@ -106,8 +107,10 @@ export default {
         publish: currentForm.publish
       }
 
-      this.formUpdate(axios
-        .put('/api/dashboard/forms/' + this.getFormId, form)
+      this.formUpdate({
+        id: this.getFormId,
+        form
+      })
         .then(() => {
           this.formUpdated = true
           this.showSuccess = true
@@ -120,6 +123,7 @@ export default {
             text: 'Modifier avec succès',
             type: 'success'
           })
+          alert('esimbi')
         })
         .catch(({ response }) => {
           this.$gtag.exception(response)
@@ -135,7 +139,7 @@ export default {
     deleteForm (currentFormId) {
       this.formDelete(currentFormId)
         .then(() => {
-          this.getFormList()
+          this.init()
           this.isFormDeleted = true
           this.$notify({
             group: 'alert',
@@ -143,19 +147,21 @@ export default {
             text: 'Supprimer avec succès',
             type: 'success'
           })
+          this.backToRoute()
         })
         .catch(({ response }) => {
           this.$gtag.exception(response)
           this.$notify({
             group: 'alert',
             title: 'Supprimer formulaire',
-            text: 'Une erreur est surveni',
+            text: 'Une erreur est survenue',
             type: 'error'
           })
         })
     },
-    backToRoute ({ formId }) {
-      return this.$router.push(`/administration/forms/${formId}/`)
+    backToRoute ({ formId = null }) {
+      const routePath = formId ? `/administration/forms/${formId}/` : '/administration/forms/'
+      return this.$router.push(routePath)
     }
   }
 }
