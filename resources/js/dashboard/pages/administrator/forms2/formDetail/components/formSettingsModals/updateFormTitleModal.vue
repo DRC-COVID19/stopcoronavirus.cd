@@ -83,7 +83,7 @@ export default {
     },
 
     onUpdateFormSubmit () {
-      const formSubmit = { ...this.targetForm, title: this.targetForm.title }
+      const formSubmit = { ...this.targetForm, title: this.targetForm.title, formFieldmodalMessage: 'Le titre du formulaire a été modifié avec succès' }
       this.$emit('onUpdateFormTitle', formSubmit)
       this.$bvModal.hide('updateFormTitleModal')
     }
