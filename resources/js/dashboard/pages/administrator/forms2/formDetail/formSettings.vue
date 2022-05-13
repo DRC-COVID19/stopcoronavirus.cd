@@ -87,7 +87,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['formShow']),
+    ...mapActions(['formShow', 'formDelete', 'formUpdate']),
     async init () {
       this.isLoading = true
       await this.formShow({ id: this.getFormId })
@@ -106,7 +106,7 @@ export default {
         publish: currentForm.publish
       }
 
-      axios
+      this.formUpdate(axios
         .put('/api/dashboard/forms/' + this.getFormId, form)
         .then(() => {
           this.formUpdated = true
@@ -133,8 +133,7 @@ export default {
     },
 
     deleteForm (currentFormId) {
-      axios
-        .delete('/api/dashboard/forms/' + currentFormId)
+      this.formDelete(currentFormId)
         .then(() => {
           this.getFormList()
           this.isFormDeleted = true

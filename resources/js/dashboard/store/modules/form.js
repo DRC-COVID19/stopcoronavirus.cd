@@ -6,7 +6,9 @@ export default {
     formsRecurrences: [],
     isLoading: false,
     isUpdating: false,
-    isUpdateFormTitle: null
+    isUpdateFormTitle: null,
+    isUpdateForm: false,
+    isDeleteForm: false
   },
   mutations: {
     SET_FORMS (state, payload) {
@@ -17,6 +19,12 @@ export default {
     },
     SET_IS_UPDATE_FORM_TITLE (state, payload) {
       state.isUpdateFormTitle = payload
+    },
+    SET_IS_UPDATE_FORM (state, payload) {
+      state.isUpdateForm = payload
+    },
+    SET_IS_DELETE_FORM (state, payload) {
+      state.isDeleteForm = payload
     },
     SET_RECENT_FORMS (state, payload) {
       state.recentForms = payload
@@ -45,15 +53,29 @@ export default {
           })
       })
     },
+    updateForm ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .put('/api/dashboard/forms/' + payload.id, payload)
+          .then(() => {
+            commit('SET_IS_UPDATE_FORM', true)
+          })
+
+          .catch(({ response }) => {
+            commit('SET_IS_UPDATE_FORM', false)
+          })
+      })
+    },
     formDelete ({ commit }, formId) {
       return new Promise((resolve, reject) => {
         axios
           .delete(`/api/dashboard/forms/${formId}`)
           .then(({ data }) => {
-            commit('SET_FORM', data)
+            commit('SET_IS_DELETE_FORM', true)
             resolve(data)
           })
           .catch((error) => {
+            commit('SET_IS_DELETE_FORM', false)
             reject(error)
           })
       })
