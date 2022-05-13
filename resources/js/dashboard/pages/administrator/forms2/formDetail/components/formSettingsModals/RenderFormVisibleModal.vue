@@ -1,11 +1,13 @@
 <template>
     <b-modal id="renderFormVisibleModal"  centered hide-footer hide-header>
-    <b-container>
+      <div v-if="isLoading">
+      </div>
+    <b-container v-else>
       <b-row>
         <b-col>
           <div class="mb-4 p-2">
             <h3 class="lead text-center text-bold">
-              Changer  la récurrence du formulaire
+              Rendre visible le formulaire
             </h3>
           </div>
           <ValidationObserver
@@ -13,14 +15,14 @@
             ref="form"
             tag="form"
             novalidate
-            @submit.prevent="onUpdateFormRecurrence"
+            @submit.prevent="onUpdateFormVisible"
             @reset.prevent="onReset"
             label-class="text-dash-color"
           >
-            <b-form @submit.prevent="onUpdateFormRecurrence">
+            <b-form @submit.prevent="onUpdateFormVisible">
                <FomFieldSelect
-              v-model="targetForm.form_recurrence_id"
-              :options="formRecurrences"
+              v-model="targetForm.hospitals"
+              :options="hospitals.data"
               label="name"
               :reduce="(item) => item.id"
               :isObligated="true"
@@ -65,8 +67,11 @@ export default {
   },
   data () {
     return {
-      targetForm: { form_recurrence_id: null },
-      isUpdating: this.isUpdatingFormTile
+      targetForm: {
+        hospitals: []
+      },
+      isLoading: false,
+      hospitals: {}
     }
   },
   async mounted () {
@@ -75,27 +80,30 @@ export default {
   },
   computed: {
     ...mapState({
-      formRecurrences: (state) => state.form.formsRecurrences
+      hospitals: (state) => state.hospital.hospitals
     })
   },
-  watch: {
-    // formTitle () {
-    //   this.getFormTitle()
-    // }
-  },
-
   methods: {
-    ...mapActions(['getFormsRecurrences']),
+    ...mapActions(['getHospitals']),
     onReset () {
       this.targetForm = {}
     },
-
-    onUpdateFormRecurrence () {
+    async getHospitalList (page = 1) {
+      await this.getHospitals({ page })
+      this.isLoading = true
+      this.hospitals = Object.assign({})[
+        '0'
+      ]
+      if (this.hospitals.length !== 0) {
+        this.isLoading = false
+      }
+    },
+    onUpdateFormVisible () {
       const form = {
         ...this.targetForm,
         form_recurrence_value: this.formRecurrences.find((form) => form.id === this.targetForm.form_recurrence_id)
       }
-      this.$emit('onUpdateFormRecurrence', this.targetForm)
+      this.$emit('onUpdateFormVisible', this.targetForm)
       this.$bvModal.hide('updateFormRecurrenceModal')
     }
   }

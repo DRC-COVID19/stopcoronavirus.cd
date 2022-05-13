@@ -69,7 +69,7 @@ export default {
   components: {
     UpdateFormModal,
     UpdateFormRecurrenceModal,
-    DeleteFormModal
+    DeleteFormModal,
     RenderFormVisibleModal
   },
   data () {
