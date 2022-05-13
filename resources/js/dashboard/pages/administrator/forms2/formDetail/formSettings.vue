@@ -26,6 +26,9 @@
               </div>
               <h6>Avoir la possibilité de modifier la récurrence</h6>
               <hr>
+              <update-form-recurrence-modal
+              @onUpdateFormTitle="updateFormTitleSubmit"
+              />
           </div>
            <div class="mt-5">
               <div class="d-flex justify-content-between">
@@ -51,10 +54,12 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
+import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
 import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
 export default {
   components: {
-    UpdateFormModal
+    UpdateFormModal,
+    UpdateFormRecurrenceModal
   },
   data () {
     return {

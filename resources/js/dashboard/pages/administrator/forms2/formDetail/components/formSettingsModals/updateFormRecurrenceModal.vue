@@ -4,10 +4,11 @@
       <b-row>
         <b-col>
           <div class="mb-4 p-2">
-            <h3 class="text-center text-bold">
-              Modifier le titre du  formulaire
+            <h3 class="lead text-center text-bold">
+              Changer  la récurrence du formulaire
             </h3>
           </div>
+          {{ targetForm }}
           <ValidationObserver
             v-slot="{ invalid }"
             ref="form"
@@ -69,7 +70,6 @@ export default {
     }
   },
   async mounted () {
-    this.getFormTitle()
     this.resetForm()
     await this.getFormsRecurrences()
   },
@@ -88,9 +88,6 @@ export default {
     ...mapActions(['getFormsRecurrences']),
     onReset () {
       this.formUpdate = {}
-    },
-    getFormTitle () {
-      this.targetForm = this.form
     },
 
     onUpdateFormSubmit () {
