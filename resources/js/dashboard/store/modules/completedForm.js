@@ -8,7 +8,8 @@ export default {
     filterData: {},
     isLoading: false,
     iscompletedFormsAggregatedLoading: false,
-    isLoadingFile: false
+    isLoadingFile: false,
+    selectedForm: null
   },
   mutations: {
     SET_IS_LOADING (state, payload) {
@@ -37,6 +38,9 @@ export default {
     },
     SET_FILTER__DATA (state, payload) {
       state.filterData = payload
+    },
+    SET_SELECTED_FORM (state, payload) {
+      state.selectedForm = payload
     }
   },
   actions: {
@@ -123,12 +127,16 @@ export default {
           })
       })
     },
-    completedForm__getAllByLastUpdate ({ state, commit }) {
+    completedForm__getAllByLastUpdate ({ state, commit }, payload) {
       commit('SET_IS_CREATING', true)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get('/api/dashboard/completed_forms/get-latest-hospital-update')
+          .get('/api/dashboard/completed_forms/get-latest-hospital-update', {
+            params: {
+              form_id: payload.form_id
+            }
+          })
           .then(({ data }) => {
             resolve(data)
           })
@@ -177,6 +185,9 @@ export default {
             commit('SET_IS_LOADING_FILE', false)
           })
       })
+    },
+    completedForm__setSelectedForm({ commit }, payload) {
+      commit('SET_SELECTED_FORM', payload)
     }
   }
 }

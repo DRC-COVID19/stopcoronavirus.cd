@@ -54,16 +54,20 @@ class CompletedFormController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
-    public function getLatestHospitalUpdate()
+    public function getLatestHospitalUpdate(Request $request)
     {
-
+        $formId = $request->query('form_id');
         try {
-            $hospitals = Hospital::with(['completedForms' => function ($query) {
+            $hospitals = Hospital::with(['completedForms' => function ($query) use($formId)  {
+                if ($formId) {
+                  $query->where('form_id', $formId);
+                }
                 $query
                   ->select('*')
                   ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date')
                   ->orderBy('last_update', 'desc');
-              }])
+              },
+              'completedForms.form'])
             ->get();
 
             $hospitalsSanitized = $hospitals->map(function ($hospital) {
