@@ -53,30 +53,32 @@ export default {
           })
       })
     },
-    formUpdate ({ commit }, payload) {
+    form__Update ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios
           .put('/api/dashboard/forms/' + payload.id, payload.form)
           .then(() => {
+            resolve(true)
             commit('SET_IS_UPDATE_FORM', true)
           })
 
           .catch(({ response }) => {
+            reject(response)
             commit('SET_IS_UPDATE_FORM', false)
           })
       })
     },
-    formDelete ({ commit }, formId) {
+    form__Delete ({ commit }, formId) {
       return new Promise((resolve, reject) => {
         axios
           .delete(`/api/dashboard/forms/${formId}`)
           .then(({ data }) => {
             commit('SET_IS_DELETE_FORM', true)
-            resolve(data)
+            resolve(true)
           })
-          .catch((error) => {
+          .catch(({ response }) => {
             commit('SET_IS_DELETE_FORM', false)
-            reject(error)
+            reject(response)
           })
       })
     },

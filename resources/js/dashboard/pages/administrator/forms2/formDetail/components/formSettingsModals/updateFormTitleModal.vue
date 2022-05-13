@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="updateFormModal"  centered hide-footer hide-header>
+    <b-modal id="updateFormTitleModal"  centered hide-footer hide-header>
     <b-container>
       <b-row>
         <b-col>
@@ -85,7 +85,7 @@ export default {
     onUpdateFormSubmit () {
       const formSubmit = { ...this.targetForm, title: this.targetForm.title }
       this.$emit('onUpdateFormTitle', formSubmit)
-      this.$bvModal.hide('updateFormModal')
+      this.$bvModal.hide('updateFormTitleModal')
     }
   }
 }

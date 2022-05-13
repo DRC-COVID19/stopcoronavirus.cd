@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="renderFormVisibleModal"  centered hide-footer hide-header>
+    <b-modal id="updateFormVisibilityModal"  centered hide-footer hide-header>
       <div v-if="isLoading">
       </div>
     <b-container v-else>
@@ -22,7 +22,7 @@
             <b-form @submit.prevent="onUpdateFormVisible">
                <FomFieldSelect
               v-model="targetForm.hospitals"
-              :options="hospitals.data"
+              :options="hospitals"
               label="name"
               :reduce="(item) => item.id"
               :isObligated="true"
@@ -70,33 +70,22 @@ export default {
       targetForm: {
         hospitals: []
       },
-      isLoading: false,
-      hospitals: {}
+      isLoading: false
     }
   },
   async mounted () {
     this.resetForm()
-    await this.getFormsRecurrences()
+    await this.getAllHospitals()
   },
   computed: {
     ...mapState({
-      hospitals: (state) => state.hospital.hospitals
+      hospitals: (state) => state.hospital.AllHospitals
     })
   },
   methods: {
-    ...mapActions(['getHospitals']),
+    ...mapActions(['getAllHospitals']),
     onReset () {
       this.targetForm = {}
-    },
-    async getHospitalList (page = 1) {
-      await this.getHospitals({ page })
-      this.isLoading = true
-      this.hospitals = Object.assign({})[
-        '0'
-      ]
-      if (this.hospitals.length !== 0) {
-        this.isLoading = false
-      }
     },
     onUpdateFormVisible () {
       const form = {

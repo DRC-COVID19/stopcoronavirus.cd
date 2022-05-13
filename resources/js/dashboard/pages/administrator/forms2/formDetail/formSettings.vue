@@ -8,15 +8,15 @@
             <hr>
           </div>
           <div>
-          <div>
+         <div>
               <div class="d-flex justify-content-between">
                 <h4>Modifier le titre du  formulaire </h4>
-                <img src="/img/akar-icons_pencil.svg" class="form__settings-icon" v-b-modal.updateFormModal>
+                <img src="/img/akar-icons_pencil.svg" class="form__settings-icon" v-b-modal.updateFormTitleModal>
               </div>
               <h6>Avoir la possibilité de modifier le nom du formulaire</h6>
               <hr>
               <update-form-modal
-              @onUpdateFormTitle="updateForm"
+                @onUpdateFormTitle="updateForm"
               />
           </div>
            <div class="mt-5">
@@ -33,19 +33,18 @@
            <div class="mt-5">
               <div class="d-flex justify-content-between">
                 <h4>Supprimer  le formulaire </h4>
-                <img src="/img/ant-design_delete-twotone.svg"  class="form__settings-icon" v-b-modal.deleteForm>
+                <img src="/img/ant-design_delete-twotone.svg"  class="form__settings-icon" v-b-modal.deleteFormModal>
               </div>
               <h6>Cette action supprimera le formulaire définitivement</h6>
               <hr>
               <delete-form-modal
-              @onDeleteForm="deleteForm"
               :formId="getFormId"
               />
           </div>
           <div class="mt-5">
               <div class="d-flex justify-content-between">
                 <h4>Rendre visible le formulaire </h4>
-                    <i class="fa fa-eye form__settings-icon" aria-hidden="true" v-b-modal.renderFormVisibleModal></i>
+                    <img src="/img/akar-icons_pencil.svg"  class="form__settings-icon" v-b-modal.updateFormVisibilityModal>
               </div>
               <h6>Cette action supprimera le formulaire définitivement</h6>
               <hr>
@@ -62,7 +61,7 @@
 <script>
 import { mapActions } from 'vuex'
 import DeleteFormModal from './components/formSettingsModals/DeleteFormModal'
-import RenderFormVisibleModal from './components/formSettingsModals/RenderFormVisibleModal.vue'
+import RenderFormVisibleModal from './components/formSettingsModals/UpdateFormVisibleModal.vue'
 import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
 import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
 export default {
@@ -75,13 +74,11 @@ export default {
   data () {
     return {
       form: {},
-      formRecurrences: [],
       isLoading: false,
       isUpdatingFormTile: false,
       formUpdated: false,
       showSuccess: false,
       updating: false,
-      isFormDeleted: false
     }
   },
   mounted () {
@@ -93,7 +90,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['formShow', 'formDelete', 'formUpdate']),
+    ...mapActions(['formShow', 'form__Update']),
     async init () {
       this.isLoading = true
       await this.formShow({ id: this.getFormId })
@@ -112,7 +109,7 @@ export default {
         publish: currentForm.publish
       }
 
-      this.formUpdate({
+      this.form__Update({
         id: this.getFormId,
         form
       })
@@ -124,49 +121,20 @@ export default {
           this.init()
           this.$notify({
             group: 'alert',
-            title: 'Modification du  Formulaire',
+            title: 'Modification du Formulaire',
             text: 'Modifier avec succès',
             type: 'success'
           })
-          alert('esimbi')
         })
         .catch(({ response }) => {
           this.$gtag.exception(response)
           this.$notify({
             group: 'alert',
-            title: 'Modification du  Formulaire',
-            text: 'Une erreur est survenus',
+            title: 'Modification du Formulaire',
+            text: 'Une erreur est survenu',
             type: 'error'
           })
         })
-    },
-
-    deleteForm (currentFormId) {
-      this.formDelete(currentFormId)
-        .then(() => {
-          this.init()
-          this.isFormDeleted = true
-          this.$notify({
-            group: 'alert',
-            title: 'Supprimer formulaire',
-            text: 'Supprimer avec succès',
-            type: 'success'
-          })
-          this.backToRoute()
-        })
-        .catch(({ response }) => {
-          this.$gtag.exception(response)
-          this.$notify({
-            group: 'alert',
-            title: 'Supprimer formulaire',
-            text: 'Une erreur est survenue',
-            type: 'error'
-          })
-        })
-    },
-    backToRoute ({ formId = null }) {
-      const routePath = formId ? `/administration/forms/${formId}/` : '/administration/forms/'
-      return this.$router.push(routePath)
     }
   }
 }

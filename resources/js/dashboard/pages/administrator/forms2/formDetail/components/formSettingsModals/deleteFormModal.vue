@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="deleteForm" centered title="Suppression du formulaire" hide-header-close hide-footer>
+  <b-modal id="deleteFormModal" centered title="Suppression du formulaire" hide-header-close hide-footer>
       <p>Voulez-vous vraiment supprimer ce formulaire ?</p>
               <div class="mt-4 text-center">
                 <b-button
@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
 
   props: {
@@ -32,13 +33,34 @@ export default {
   },
   methods: {
     hideModal () {
-      this.$bvModal.hide('deleteForm')
+      this.$bvModal.hide('deleteFormModal')
     },
+    ...mapActions(['form__Delete']),
     onCancelDeleteForm () {
       this.hideModal()
     },
     onDeleteForm (id) {
-      this.$emit('onDeleteForm', id)
+      this.form__Delete(id)
+        .then(() => {
+          this.init()
+          this.isFormDeleted = true
+          this.$notify({
+            group: 'alert',
+            title: 'Supprimer formulaire',
+            text: 'Supprimer avec succès',
+            type: 'success'
+          })
+          this.$router.push('/administration/forms/')
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+          this.$notify({
+            group: 'alert',
+            title: 'Supprimer formulaire',
+            text: 'Une erreur est survenue',
+            type: 'error'
+          })
+        })
       this.hideModal()
     }
   }
