@@ -37,7 +37,7 @@
               </div>
               <h6>Cette action supprimera le formulaire définitivement</h6>
               <hr>
-              <delete-form-modal 
+              <delete-form-modal
               @onDeleteForm="deleteForm"
               :formId="getFormId"
               />
@@ -127,6 +127,30 @@ export default {
             group: 'alert',
             title: 'Modification du  Formulaire',
             text: 'Une erreur est survenus',
+            type: 'error'
+          })
+        })
+    },
+
+    deleteForm (currentFormId) {
+      axios
+        .delete('/api/dashboard/forms/' + currentFormId)
+        .then(() => {
+          this.getFormList()
+          this.isFormDeleted = true
+          this.$notify({
+            group: 'alert',
+            title: 'Supprimer formulaire',
+            text: 'Supprimer avec succès',
+            type: 'success'
+          })
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+          this.$notify({
+            group: 'alert',
+            title: 'Supprimer formulaire',
+            text: 'Une erreur est surveni',
             type: 'error'
           })
         })

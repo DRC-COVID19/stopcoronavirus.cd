@@ -45,7 +45,19 @@ export default {
           })
       })
     },
-
+    formDelete ({ commit }, formId) {
+      return new Promise((resolve, reject) => {
+        axios
+          .delete(`/api/dashboard/forms/${formId}`)
+          .then(({ data }) => {
+            commit('SET_FORM', data)
+            resolve(data)
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      })
+    },
     getForms ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {

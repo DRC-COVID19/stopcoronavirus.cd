@@ -25,17 +25,21 @@ export default {
 
   props: {
     formId: {
-      type: Number,
+      type: [String, Number],
       default: () => null,
       required: true
     }
   },
   methods: {
-    onCancelDeleteForm () {
+    hideModal () {
       this.$bvModal.hide('deleteForm')
+    },
+    onCancelDeleteForm () {
+      this.hideModal()
     },
     onDeleteForm (id) {
       this.$emit('onDeleteForm', id)
+      this.hideModal()
     }
   }
 }
