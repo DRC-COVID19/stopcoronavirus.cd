@@ -85,7 +85,7 @@ export default {
     },
 
     onUpdateFormRecurrence () {
-      this.$emit('onUpdateFormRecurrence', this.targetForm)
+      this.$emit('onUpdateFormRecurrence', { ...this.targetForm, formFieldmodalMessage: 'La recurrence du formulaire a été modifiée avec succès' })
       this.$bvModal.hide('updateFormRecurrenceModal')
     }
   }

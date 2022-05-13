@@ -15,8 +15,8 @@ class CreatePivotTableFormHospital extends Migration
     {
         Schema::create('form_hospital', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('form_id')->constrained();
-            $table->foreignId('hospital_id')->constrained();
+            $table->foreignId('form_id')->constrained()->onDelete('cascade');
+            $table->foreignId('hospital_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

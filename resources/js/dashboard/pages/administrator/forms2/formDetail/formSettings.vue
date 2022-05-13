@@ -122,7 +122,7 @@ export default {
           this.$notify({
             group: 'alert',
             title: 'Modification du Formulaire',
-            text: 'Modifier avec succès',
+            text: currentForm.formFieldmodalMessage,
             type: 'success'
           })
           console.log('event')
