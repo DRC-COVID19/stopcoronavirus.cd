@@ -122,7 +122,7 @@ export default {
   },
   computed: {
     ...mapState({
-      completedForm__selectedForm: (state) => state.completedForm.selectedForm,
+      completedForm__selectedForm: (state) => state.completedForm.selectedForm
     }),
     completedFormsSorted () {
       return this.completedForms.slice().sort((a, b) => {
@@ -141,6 +141,7 @@ export default {
     }
   },
   mounted () {
+    this.selectedForm = this.completedForm__selectedForm
     this.getForms()
     this.refreshData()
   },

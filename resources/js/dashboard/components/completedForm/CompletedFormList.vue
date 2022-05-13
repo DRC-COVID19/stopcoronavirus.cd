@@ -1,7 +1,7 @@
 <template>
   <div>
-    <b-row class="mt-4 mb-4">
-      <b-col>
+    <b-row class="mb-4">
+      <b-col cols="12" md>
         <b-button
           :to="{ name:'hospital.create', params:{ form_id: 1 }}"
           class="btn-dash-blue"
@@ -9,6 +9,20 @@
         >
           + Nouveau
         </b-button>
+      </b-col>
+      <b-col cols="12" md="auto" class="d-flex">
+        <div>
+          <label for="input-formulaire" class="small text-muted">Formulaire</label>
+          <b-form-select
+            v-model="selectedForm"
+            :options="formList"
+            text-field="title"
+            value-field="id"
+            class="mr-2"
+            id="input-formulaire"
+          >
+          </b-form-select>
+        </div>
       </b-col>
     </b-row>
     <b-row class="mt-4" >
@@ -32,6 +46,10 @@
           </template>
           <template v-slot:cell(last_update)="data">
             <span>{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
+          </template>
+          <template v-slot:cell(form)="data">
+            <span v-if="data.item.form">{{ data.item.form.title }}</span>
+            <span v-else>-</span>
           </template>
           <template v-slot:cell(actions)="data">
             <b-button
@@ -81,7 +99,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 import { ADMIN_HOSPITAL } from '../../config/env'
 
 export default {
@@ -101,16 +119,19 @@ export default {
         { key: 'last_update', label: 'Date' },
         { key: 'created_manager_name', label: 'Nom' },
         { key: 'created_manager_first_name', label: 'Prénom' },
+        { key: 'form', label: 'Formulaire' },
         { key: 'actions', label: 'Actions' }
       ],
       currentPage: 1,
       completedForms: {},
-      isLoading: false
+      isLoading: false,
+      selectedForm: null
     }
   },
   computed: {
     ...mapState({
-      user: (state) => state.auth.user
+      user: (state) => state.auth.user,
+      completedForm__selectedForm: (state) => state.completedForm.selectedForm
     }),
     totalRows () {
       if (this.completedForms) {
@@ -123,22 +144,43 @@ export default {
         return this.completedForms.per_page
       }
       return 15
+    },
+    formList() {
+      return [
+        { id: null, title: 'Tous' },
+        ...this.form__publishedForms()
+      ]
     }
   },
   async mounted () {
+    this.selectedForm = this.completedForm__selectedForm
+    this.getForms()
     this.getCompletedForms()
   },
   watch: {
     user () {
       this.getCompletedForms()
+    },
+    selectedForm(value) {
+      this.completedForm__setSelectedForm(value)
+      this.getCompletedForms()
     }
   },
   methods: {
-    ...mapActions(['completedForm__getAllFiltered']),
+    ...mapActions([
+      'completedForm__getAllFiltered',
+      'getForms',
+      'completedForm__setSelectedForm'
+    ]),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
+    ...mapGetters(['form__publishedForms']),
     async getCompletedForms (page = 1) {
       this.isLoading = true
-      this.completedForms = await this.completedForm__getAllFiltered({ page, hospital_id: this.hospitalId })
+      this.completedForms = await this.completedForm__getAllFiltered({
+        page,
+        hospital_id: this.hospitalId,
+        form_id: this.completedForm__selectedForm
+      })
       this.isLoading = false
     },
     onPageChange (page) {
