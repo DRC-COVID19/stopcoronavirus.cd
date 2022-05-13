@@ -56,11 +56,11 @@
                 <template #button-content>
                   <i class="fas fa-ellipsis-v"></i>
                 </template>
-                <b-dropdown-item-button @click="deleteStep(step.id)"
-                  >Supprimer</b-dropdown-item-button
-                >
                 <b-dropdown-item-button @click="openModalUpdateList(step)"
                   >Modifier</b-dropdown-item-button
+                >
+                <b-dropdown-item-button @click="deleteStep(step.id)"
+                  >Supprimer</b-dropdown-item-button
                 >
               </b-dropdown>
             </div>
@@ -144,11 +144,7 @@ export default {
       return this.formSteps.length;
     },
   },
-  watch: {
-    filter() {
-      this.search();
-    },
-  },
+  watch: {},
   methods: {
     ...mapActions(["getFormSteps", "removeFormStep", "searchFormStep"]),
     search() {
@@ -156,23 +152,10 @@ export default {
         console.log(error);
       });
     },
-    activeStep(id) {
-      console.log("id ->", id);
-      this.isActived = this.router.push.name.startsWith(
-        "administrator.forms.show.creation.step"
-      );
-      this.routeStep = {
-        name: "administrator.forms.show.creation.step",
-        params: { step_id: id, form_id: this.formId },
-      };
-      this.router.push({
-        name: "administrator.forms.show.creation.step",
-        params: { step_id: id, form_id: this.formId },
-      });
-    },
-    deleteStep(formId) {
+
+    deleteStep(id) {
       this.isDeleteModalShown = true;
-      this.formStepId = formId.id;
+      this.formStepId = id;
     },
     onValidateDelection() {
       this.$bvModal.show("confirmation-box");

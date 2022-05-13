@@ -28,7 +28,6 @@ export default {
         axios
           .post("api/dashboard/form-steps", payload)
           .then(({ data }) => {
-            dispatch("getFormSteps");
             resolve(true);
           })
           .catch((response) => {
@@ -47,7 +46,6 @@ export default {
         axios
           .put(`api/dashboard/form-steps/${payload.id}`, payload)
           .then(({ data }) => {
-            dispatch("getFormSteps");
             resolve(true);
           })
           .catch((response) => {
@@ -66,7 +64,6 @@ export default {
         axios
           .delete(`api/dashboard/form-steps/${payload}`)
           .then(({ data }) => {
-            dispatch("getFormSteps");
             resolve(true);
           })
           .catch((response) => {

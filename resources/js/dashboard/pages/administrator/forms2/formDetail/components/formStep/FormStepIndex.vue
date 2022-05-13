@@ -92,12 +92,12 @@ export default {
       this.rowformStep = { ...form };
       this.$refs["modal-creation"].show();
     },
-    onCreatedFormStep() {
-      this.getFormSteps({ id: this.formId });
+    async onCreatedFormStep() {
+      await this.getFormSteps({ id: this.formId });
       this.$refs["modal-creation"].hide();
     },
-    onUpdatedFormStep() {
-      this.getFormSteps({ id: this.formId });
+    async onUpdatedFormStep() {
+      await this.getFormSteps({ id: this.formId });
       this.$refs["modal-creation"].hide();
     },
 
