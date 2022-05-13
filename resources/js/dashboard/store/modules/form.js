@@ -1,6 +1,7 @@
 export default {
   state: {
     forms: [],
+    form: {},
     recentForms: [],
     formsRecurrences: [],
     isLoading: false,
@@ -10,6 +11,9 @@ export default {
   mutations: {
     SET_FORMS (state, payload) {
       state.forms = payload
+    },
+    SET_FORM (state, payload) {
+      state.form = payload
     },
     SET_IS_UPDATE_FORM_TITLE (state, payload) {
       state.isUpdateFormTitle = payload
@@ -28,11 +32,12 @@ export default {
     }
   },
   actions: {
-    formShow (_, payload) {
+    formShow ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios
           .get(`/api/dashboard/forms/${payload.id}`)
           .then(({ data }) => {
+            commit('SET_FORM', data)
             resolve(data)
           })
           .catch((error) => {
@@ -44,6 +49,7 @@ export default {
     getForms ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
         axios
           .get('api/dashboard/forms', {
             params: { page: payload.page || 1 }

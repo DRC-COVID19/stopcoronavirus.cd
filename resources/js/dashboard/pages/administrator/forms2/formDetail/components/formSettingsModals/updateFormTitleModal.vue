@@ -23,7 +23,7 @@
                   >Titre du formulaire <span class="text-danger"> *</span></label
                 >
                 <FormFieldInput
-                  v-model="formTitle"
+                  v-model="targetForm.title"
                   type="text"
                   id="text-firstName"
                   rules="required"
@@ -47,34 +47,46 @@
 <script>
 import FormFieldInput from '../../../../../../components/forms/FormFieldInput.vue'
 import { ValidationObserver } from 'vee-validate'
+import { mapActions, mapState } from 'vuex'
 export default {
   components: {
     FormFieldInput,
     ValidationObserver
   },
   props: {
-    form: {
-      type: Object,
-      default: () => {}
+    isUpdatingFormTile: {
+      type: Boolean,
+      default: () => false
     }
   },
   data () {
     return {
-      formTitle: this.form.title
-
+      isUpdating: this.isUpdatingFormTile,
     }
   },
-//   watch: {
-//     form (value) {
-//       this.$$set('formTitle', value)
-//     }
-//   },
+  mounted () {
+    this.getFormTitle()
+  },
+  computed: {
+    ...mapState({
+      targetForm: (state) => state.form.form
+    })
+  },
 
   methods: {
+    ...mapActions(['formShow']),
     onReset () {
       this.formUpdate = {}
     },
-    onUpdateFormSubmit () {}
+    async getFormTitle () {
+      await this.formShow({ id: this.$route.params.form_id })
+    },
+
+    onUpdateFormSubmit () {
+      const formSubmit = { ...this.targetForm, title: this.targetForm.title }
+      this.$emit('onUpdateFormTitle', formSubmit)
+      this.$bvModal.hide('updateFormModal')
+    }
   }
 }
 </script>

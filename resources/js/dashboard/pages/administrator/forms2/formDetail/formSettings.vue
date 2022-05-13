@@ -15,12 +15,14 @@
               </div>
               <h6>Avoir la possibilité de modifier le nom du formulaire</h6>
               <hr>
-              <update-form-modal :form="form"/>
+              <update-form-modal
+              @onUpdateFormTitle="updateFormTitleSubmit"
+              />
           </div>
            <div class="mt-5">
               <div class="d-flex justify-content-between">
                 <h4>Changer  la récurrence du formulaire </h4>
-                <img src="/img/akar-icons_pencil.svg"  class="form__settings-icon">
+                <img src="/img/akar-icons_pencil.svg"  class="form__settings-icon" v-b-modal.updateFormRecurrenceModal>
               </div>
               <h6>Avoir la possibilité de modifier la récurrence</h6>
               <hr>
@@ -42,31 +44,91 @@
               <hr>
           </div>
           </div>
-
        </b-container>
       </b-col>
     </b-row>
   </b-container>
 </template>
 <script>
-import FomFieldSelect from '../../../../components/forms/FomFieldSelect'
-import UpdateFormModal from './components/formSettingsModals/updateFormModal.vue'
+import { mapActions } from 'vuex'
+import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
 export default {
   components: {
-    UpdateFormModal
+    UpdateFormModal,
   },
   data () {
     return {
-      form: {
-        title: 'kota'
-      }
+      form: {},
+      formRecurrences: [],
+      isLoading: false,
+      isUpdatingFormTile: false,
+      formUpdated: false,
+      showSuccess: false,
+      updating: false
     }
   },
+  mounted () {
+    this.getForm()
+  },
   methods: {
+    ...mapActions(['formShow']),
     onReset () {
       this.form = {}
     },
-    onUpdateFormSubmit () {}
+    getForm () {
+      return new Promise((resolve, reject) => {
+        this.isLoading = true
+        this.formShow({ id: this.$route.params.form_id })
+          .then((data) => {
+            this.form = data
+            this.isLoading = false
+            resolve(true)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
+    },
+    updateFormTitleSubmit (value) {
+      this.updateForm(value)
+    },
+    updateForm (currentForm) {
+      this.isLoading = true
+      this.formUpdated = false
+      const form = {
+        title: currentForm.title ?? null,
+        form_recurrence_value: currentForm.form_recurrence_value ?? null,
+        form_recurrence_id: currentForm.form_recurrence_id ?? null,
+        publish: currentForm.publish ?? null
+      }
+
+      axios
+        .put('/api/dashboard/forms/' + currentForm.id, form)
+        .then(() => {
+          this.formUpdated = true
+          this.showSuccess = true
+          this.isLoading = false
+          this.updating = false
+          this.$notify({
+            group: 'alert',
+            title: 'Modification du  Formulaire',
+            text: 'Modifier avec succès',
+            type: 'success'
+          })
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+          this.$notify({
+            group: 'alert',
+            title: 'Modification du  Formulaire',
+            text: 'Une erreur est survenus',
+            type: 'error'
+          })
+        })
+    },
+    backToRoute ({ formId }) {
+      return this.$router.push(`/administration/forms/${formId}/`)
+    }
   }
 }
 </script>
