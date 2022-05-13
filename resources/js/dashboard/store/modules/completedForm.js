@@ -188,6 +188,20 @@ export default {
     },
     completedForm__setSelectedForm({ commit }, payload) {
       commit('SET_SELECTED_FORM', payload)
+    },
+    completedForm__getAllFiltered(_, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/completed_forms/get-all-filtered', {
+            params: payload
+          })
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
     }
   }
 }

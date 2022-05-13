@@ -370,4 +370,27 @@ class CompletedFormController extends Controller
     {
         return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id', $hospitalId)->count();
     }
+
+    public function getAllFiltered(Request $request, int $paginate = 15) {
+        $formId = $request->query('form_id');
+        $hospitalId = $request->query('hospital_id');
+
+
+        $query = CompletedForm::with(['hospital', 'form']);
+
+        if ($formId) {
+          $query = $query->where('form_id', $formId);
+        }
+        if ($hospitalId) {
+          $query = $query->where('hospital_id', $hospitalId);
+        }
+
+        $data = $query
+          ->select('*')
+          ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date')
+          ->orderBy('last_update', 'desc')
+          ->paginate($paginate);
+
+        return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
+    }
 }

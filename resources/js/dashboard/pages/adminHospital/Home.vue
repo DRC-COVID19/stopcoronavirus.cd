@@ -88,7 +88,7 @@
                 :to="{
                   name:'hospital.admin.data',
                   params:{
-                    hospital_id:data.item.hospital_id
+                    hospital_id: data.item.id
                   }
                 }"
                 v-if="data.item.last_update"
