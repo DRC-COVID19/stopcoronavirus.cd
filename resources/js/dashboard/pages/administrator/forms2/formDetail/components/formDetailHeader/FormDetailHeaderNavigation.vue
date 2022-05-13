@@ -149,7 +149,6 @@ export default {
       showHeaderNotification: false,
       titleForm: "Titre du Formulaire",
       isPublish: false,
-      form: {},
     };
   },
   computed: {
@@ -158,6 +157,7 @@ export default {
       activeMenu: (state) => state.nav.activeMenu,
       changeLogs: (state) => state.app.changeLogs,
       isUpdateFormTitle: (state) => state.form.isUpdateFormTitle,
+      form: (state) => state.form.form
     }),
     ...mapGetters(["getChangeLogNotRead"]),
     stateTitleForm() {
@@ -185,7 +185,7 @@ export default {
     ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
     async init() {
       this.isLoading = true;
-      this.form = await this.formShow({ id: this.$route.params.form_id });
+      await this.formShow({ id: this.$route.params.form_id });
       this.titleForm = this.form.title;
       this.isPublish = this.form.publish;
       if (this.form.length !== 0) {

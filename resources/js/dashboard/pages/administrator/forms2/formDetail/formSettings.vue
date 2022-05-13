@@ -54,7 +54,7 @@ import { mapActions } from 'vuex'
 import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
 export default {
   components: {
-    UpdateFormModal,
+    UpdateFormModal
   },
   data () {
     return {
@@ -68,26 +68,16 @@ export default {
     }
   },
   mounted () {
-    this.getForm()
+    this.init()
   },
   methods: {
     ...mapActions(['formShow']),
+    async init () {
+      this.isLoading = true
+      await this.formShow({ id: this.$route.params.form_id })
+    },
     onReset () {
       this.form = {}
-    },
-    getForm () {
-      return new Promise((resolve, reject) => {
-        this.isLoading = true
-        this.formShow({ id: this.$route.params.form_id })
-          .then((data) => {
-            this.form = data
-            this.isLoading = false
-            resolve(true)
-          })
-          .catch((response) => {
-            reject(response)
-          })
-      })
     },
     updateFormTitleSubmit (value) {
       this.updateForm(value)
@@ -105,10 +95,11 @@ export default {
       axios
         .put('/api/dashboard/forms/' + currentForm.id, form)
         .then(() => {
-          this.formUpdated = true
-          this.showSuccess = true
-          this.isLoading = false
-          this.updating = false
+          // this.formUpdated = true
+          // this.showSuccess = true
+          // this.isLoading = false
+          // this.updating = false
+          this.init()
           this.$notify({
             group: 'alert',
             title: 'Modification du  Formulaire',
