@@ -144,7 +144,11 @@ export default {
       return this.formSteps.length;
     },
   },
-  watch: {},
+  watch: {
+    rows() {
+      this.init();
+    },
+  },
   methods: {
     ...mapActions(["getFormSteps", "removeFormStep", "searchFormStep"]),
     search() {
@@ -152,7 +156,14 @@ export default {
         console.log(error);
       });
     },
-
+    init() {
+      if (this.rows !== 0) {
+        this.$router.push({
+          name: "administrator.forms.show.creation.step",
+          params: { step_id: this.formSteps[this.rows - 1].id },
+        });
+      }
+    },
     deleteStep(id) {
       this.isDeleteModalShown = true;
       this.formStepId = id;

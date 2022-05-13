@@ -118,12 +118,11 @@ export default {
     ...mapActions(["createFormStep", "updateFormStep"]),
     onSubmit() {
       if (this.isCreatingStepList === true) {
-        this.errors = {};
-        const formStape = {
+        const formStep = {
           ...this.form,
           form_id: this.formId,
         };
-        this.createFormStep(formStape)
+        this.createFormStep(formStep)
           .then(() => {
             this.$notify({
               group: "alert",
