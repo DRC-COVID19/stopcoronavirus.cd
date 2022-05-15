@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import CardFormRecent from '../../../../components/forms/CardFormRecent.vue'
+import CardFormRecent from '../../../../components/forms/CardForm.vue'
 export default {
   components: {
     CardFormRecent

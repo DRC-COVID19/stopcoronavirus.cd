@@ -20,8 +20,17 @@
         </b-col>
       </b-row>
       <b-row class="mt-4 mb-4">
-        <b-col>
-          <b-button :to="{name:'hospital.create',params:{ form_id: defaultFormId }}" class="btn-dash-blue">+ Nouveau</b-button>
+        <h4 class="text-left">Mes Formulaires</h4>
+        <div v-if="isHospitalFormsLoading">
+       <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
+      </div>
+        <b-col
+        v-else
+        v-for="(form, index) in hospitalForms" :key="index">
+           <card-form
+            :route="getFormRoute(form.id)"
+            :form="form"
+          />
         </b-col>
       </b-row>
       <b-row>
@@ -94,10 +103,11 @@
 <script>
 import ManagerUserName from '../../components/hospital/ManagerUserName'
 import { mapState, mapActions, mapMutations } from 'vuex'
-import { DEFAULT_FORM_ID } from '../../config/env'
+import CardForm from '../../components/forms/CardForm.vue'
 export default {
   components: {
-    ManagerUserName
+    ManagerUserName,
+    CardForm
   },
   data () {
     return {
@@ -111,6 +121,8 @@ export default {
       hospitalId: null,
       alertVariant: 'secondary',
       iscompletedFormsLoading: false,
+      isHospitalFormsLoading: false,
+      hospitalForms: [],
       completedForms: {}
     }
   },
@@ -133,9 +145,6 @@ export default {
       }
       return 15
     },
-    defaultFormId () {
-      return DEFAULT_FORM_ID
-    },
     completedFormsData () {
       return this.completedForms.data.map((completedForm) => {
         completedForm.name_manager = completedForm.created_manager_name.split(' ')[0]
@@ -150,31 +159,35 @@ export default {
     }
     this.$store.commit('SET_COMPLETED_FORMS', { isLoading: true })
     this.getCompletedForms()
+    this.getHospitalForms()
   },
   watch: {
     user () {
       this.getCompletedForms()
+      this.getHospitalForms()
     }
   },
   methods: {
-    ...mapActions(['completedForm__getByHospital']),
+    ...mapActions(['completedForm__getByHospital', 'hospital__getHospitalForms']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    async getCompletedForms (page) {
-      this.iscompletedFormsLoading = true
-      if (typeof page === 'undefined') page = 1
+
+    async getHospitalForms () {
+      this.isHospitalFormsLoading = true
+
       if (this.user && this.user.hospital) {
-        this.completedForms = await this.completedForm__getByHospital({
-          page,
+        this.hospitalForms = await this.hospital__getHospitalForms({
           hospital_id: this.user.hospital.id
         })
-        if (this.completedForms.length !== 0) {
-          this.iscompletedFormsLoading = false
+        if (this.hospitalForms.length !== 0) {
+          this.isHospitalFormsLoading = false
         }
       }
     },
-
     onPageChange (page) {
       this.getCompletedForms(page)
+    },
+    getFormRoute (formId) {
+      return { name: 'hospital.create', params: { form_id: formId } }
     }
 
   }
