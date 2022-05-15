@@ -87,7 +87,7 @@ export default {
   },
   async mounted () {
     this.resetForm()
-    await this.getAllHospitals()
+    await this.hospital__getAll()
   },
   computed: {
     ...mapState({
