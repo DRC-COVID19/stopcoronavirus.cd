@@ -36,6 +36,17 @@ class HospitalController extends Controller
   }
 
   /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function getHospitalList()
+  {
+    $hospitals = Hospital::all();
+    return response()->json($hospitals, 200);
+  }
+
+  /**
    * Store a newly created resource in storage.
    *
    * @param  \Illuminate\Http\Request  $request

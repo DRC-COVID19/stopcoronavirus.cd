@@ -19,14 +19,15 @@
           </b-card>
         </b-col>
       </b-row>
-      <b-row class="mt-4 mb-4">
+      <b-row class="mt-4 mb-5">
+       {{hospitalForms}}
         <h4 class="text-left">Mes Formulaires</h4>
         <div v-if="isHospitalFormsLoading">
        <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
       </div>
         <b-col
         v-else
-        v-for="(form, index) in hospitalForms" :key="index">
+        v-for="(form, index) in hospitalForms.forms" :key="index">
            <card-form
             :route="getFormRoute(form.id)"
             :form="form"
@@ -122,7 +123,7 @@ export default {
       alertVariant: 'secondary',
       iscompletedFormsLoading: false,
       isHospitalFormsLoading: false,
-      hospitalForms: [],
+      hospitalForms: {},
       completedForms: {}
     }
   },
@@ -168,17 +169,28 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['completedForm__getByHospital', 'hospital__getHospitalForms']),
+    ...mapActions(['completedForm__getByHospital', 'getHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-
-    async getHospitalForms () {
-      this.isHospitalFormsLoading = true
-
+    async getCompletedForms (page) {
+      this.iscompletedFormsLoading = true
+      if (typeof page === 'undefined') page = 1
       if (this.user && this.user.hospital) {
-        this.hospitalForms = await this.hospital__getHospitalForms({
+        this.completedForms = await this.completedForm__getByHospital({
+          page,
           hospital_id: this.user.hospital.id
         })
-        if (this.hospitalForms.length !== 0) {
+        if (this.completedForms.length !== 0) {
+          this.iscompletedFormsLoading = false
+        }
+      }
+    },
+    async getHospitalForms () {
+      this.isHospitalFormsLoading = true
+      if (this.user && this.user.hospital) {
+        this.hospitalForms = await this.getHospital({
+          hospital_id: this.user.hospital.id
+        })
+        if (this.hospitalForms !== 0) {
           this.isHospitalFormsLoading = false
         }
       }

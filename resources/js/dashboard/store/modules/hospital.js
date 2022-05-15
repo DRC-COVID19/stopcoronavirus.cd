@@ -229,7 +229,7 @@ export default {
           .get(`/api/dashboard/hospitals-data/${payload.hospital_id}`)
           .then(({ data }) => {
             commit('SET_HOSPITAL', data)
-            resolve(true)
+            resolve(data)
             commit('SET_IS_LOADING', false)
           })
           .catch((response) => {
