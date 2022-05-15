@@ -94,7 +94,7 @@ class FormFieldController extends Controller
 
 
     public function getFormFieldByForm($form){
-        $formFields = FormField::with(['form','formStep'])->where('form_id',$form)->get();
+        $formFields = FormField::with(['form','formStep','formFieldType'])->where('form_id',$form)->get();
         return response()->json($formFields, 200);
 
     }

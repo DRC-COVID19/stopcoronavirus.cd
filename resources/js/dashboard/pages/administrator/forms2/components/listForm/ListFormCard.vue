@@ -1,10 +1,10 @@
 <template>
     <b-link
         :to="{
-                    name: 'administrator.forms.show.creation',
-                    params: {
-                      form_id: form.id,
-                    },
+              name: 'administrator.forms.show.creation',
+              params: {
+                form_id: form.id,
+              },
         }" class="card-link">
         <div class="card__list">
           <div class="card__list-header">
@@ -15,10 +15,10 @@
                 <h6>Crée  le {{ moment(form.created_at).format('DD/MM/Y')}}</h6>
                  <h6 class="ml-3">{{ form.form_recurrence.name}}</h6>
                  </div>
-                     <h6 class="text-danger card-badge">{{  getCompletedFormCount }}</h6>
+                  <h6 class="text-danger card-badge">{{  getCompletedFormCount }}</h6>
              </div>
         </div>
-        </b-link>
+    </b-link>
 
 </template>
 
