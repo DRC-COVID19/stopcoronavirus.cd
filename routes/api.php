@@ -218,6 +218,7 @@ Route::group([
     Route::get('/get-agents', 'HospitalController@getAgents');
     Route::patch('/update-by-admin/{hospital_id}', 'HospitalController@updateByAdmin');
     Route::patch('/{id}/reject-agent', 'HospitalController@rejectAgent');
+    Route::get('/get-hospital-list','HospitalController@getHospitalList');
   });
 
  /***
