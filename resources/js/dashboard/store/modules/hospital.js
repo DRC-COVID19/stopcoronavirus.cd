@@ -207,7 +207,7 @@ export default {
 
       return new Promise((resolve, reject) => {
         axios
-          .get('/api/dashboard/hospitals-data')
+          .get('/api/dashboard/hospitals-data/get-hospital-list')
           .then(({ data }) => {
             commit('SET_ALL_HOSPITALS', data)
             resolve(data)
