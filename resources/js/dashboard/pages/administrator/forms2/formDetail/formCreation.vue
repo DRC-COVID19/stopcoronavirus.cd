@@ -1,11 +1,9 @@
 <template>
   <b-container
-    class="mx-0 my-0 px-0 justify-content-start container-creation"
+    class=" container-creation"
   >
-    <b-row class="h-100">
-      <b-col lg="3" class=" container-creation-list">
-      </b-col>
-      <b-col lg="9" class="w-100">
+    <b-row>
+      <b-col lg="9" class="mx-auto">
         <FormFieldIndex/>
       </b-col>
     </b-row>

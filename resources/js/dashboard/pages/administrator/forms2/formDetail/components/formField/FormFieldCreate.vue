@@ -3,7 +3,7 @@
       <b-card class="border-0">
       <div class="mb-4 p-2">
             <h2 class="lead text-center text-bold">
-              Création d'un champs
+              {{title}}
             </h2>
           </div>
     <ValidationObserver
@@ -103,7 +103,7 @@
                 <span>en cours ...</span>
               </span>
               <div v-else>
-                Créer
+                {{btnTitle}}
               </div>
             </b-button>
           </b-row>
@@ -119,6 +119,13 @@ import FomFieldSelect from '../../../../../../components/forms/FomFieldSelect.vu
 import { ValidationObserver } from 'vee-validate'
 import { mapState, mapActions } from 'vuex'
 export default {
+  props: {
+    formToPopulate: {
+      type: Object,
+      default: () => ({}),
+      required: false
+    }
+  },
   components: {
     FormFieldInput,
     ValidationObserver,
@@ -126,6 +133,9 @@ export default {
   },
   data () {
     return {
+      title: ' Création d\'un champ',
+      btnTitle: 'Créer',
+      isLoading: false,
       form: {
         question: '',
         form_field_type_id: '',
@@ -140,6 +150,15 @@ export default {
     await this.formFieldTypeIndex()
     await this.getFormFields({ id: this.form_id })
   },
+  watch: {
+    formToPopulate: {
+      immediate: true,
+      deep: true,
+      handler () {
+        this.populateForm()
+      }
+    }
+  },
   computed: {
     ...mapState({
       formFieldType: (state) => state.formFieldType.formFieldTypes,
@@ -150,8 +169,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['formFieldTypeIndex', 'getFormFields', 'formFieldStore']),
+    ...mapActions(['formFieldTypeIndex', 'getFormFields', 'formFieldStore', 'updateFormField']),
     onSubmit () {
+      this.isLoading = true
       const formField = {
         name: this.form.question,
         order_field: this.form.order_field ? this.form.order_field : 1,
@@ -161,12 +181,44 @@ export default {
         form_step_id: 1,
         default_value: this.form.default_value_id
       }
+      if (this.btnTitle === 'Créer') {
+        this.createdField(formField)
+      } else {
+        this.updatedField(formField)
+      }
+    },
+    createdField (formField) {
       this.formFieldStore(formField)
         .then(() => {
           this.$notify({
             group: 'alert',
             title: 'Champs du Formulaire',
             text: 'Ajouter avec succès',
+            type: 'success'
+          })
+          this.$bvModal.hide('createResponse')
+          this.$emit('created')
+        })
+        .catch(({ response }) => {
+          this.$notify({
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Une erreur est survenus',
+            type: 'error'
+          })
+          this.$bvModal.hide('createResponse')
+          if (response.status == 422) {
+            this.errors = response.data.errors
+          }
+        })
+    },
+    updatedField (formField) {
+      this.updateFormField({ id: this.form.id, ...formField })
+        .then(() => {
+          this.$notify({
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Modifier avec succès',
             type: 'success'
           })
           this.$bvModal.hide('createResponse')
@@ -183,6 +235,31 @@ export default {
             this.errors = response.data.errors
           }
         })
+    },
+    populateForm () {
+      if (this.formToPopulate && Object.keys(this.formToPopulate).length !== 0) {
+        this.form.id = this.formToPopulate.id
+        this.form.question = this.formToPopulate.name
+        this.form.order_field = this.formToPopulate.order_field
+        this.form.require = !!this.formToPopulate.rules?.match(/required/i) || false
+        this.form.form_field_type_id = this.formToPopulate.form_field_type_id
+        this.form.default_value = this.formToPopulate.default_value
+        this.title = 'Modification d\'un champ'
+        this.btnTitle = 'Modifier'
+      } else {
+        console.log('reseting...')
+        this.resetForm()
+      }
+    },
+    resetForm () {
+      this.form.id = null
+      this.form.question = ''
+      this.form.order_field = ''
+      this.form.require = false
+      this.form.form_field_type_id = ''
+      this.form.default_value = ''
+      this.title = ' Création d\'un champ'
+      this.btnTitle = 'Créer'
     }
   }
 
