@@ -23,10 +23,9 @@
               <b-row class="d-flex flex-column justify-content-between mt-3">
                 <b-col md="12" class="border-1">
                    <b-form-checkbox v-model="visibleAllHositals" name="check-button" switch class="mb-4">
-                   Pour tous les CTCOS {{ visibleAllHositals }}
+                   Pour tous les CTCOS
                   </b-form-checkbox>
                </b-col>
-               {{targetForm.hospitals}}
                 <b-col md="12" >
                   <FomFieldSelect
                     v-model="targetForm.hospitals"
@@ -40,12 +39,14 @@
                     id="form.form_recurrence_id"
                     labelText="Selectionnez un ou plusieurs CTCOs "
                     name="Recurrence du formulaire"
-                    mode="aggressive"/>
+                    mode="aggressive"
+                    :disabled="visibleAllHositals"
+                    />
                 </b-col>
               </b-row>
               <div class="mt-4 text-center">
                 <b-button type="submit" variant="primary"
-                   :v-if="visibleAllHositals">Publier</b-button
+                >Publier</b-button
                 >
               </div>
             </b-form>

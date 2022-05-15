@@ -72,7 +72,7 @@ class HospitalController extends Controller
    */
   public function show($hospital_id)
   {
-    $hospital = Hospital::find($hospital_id);
+    $hospital = Hospital::with('forms')->find($hospital_id);
     return response()->json($hospital);
   }
   /**

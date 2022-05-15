@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Form;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FormController extends Controller
@@ -58,12 +59,12 @@ class FormController extends Controller
         if (isset($data['hospital_id'])) {
           $form->hospitals()->sync($data['hospital_id']);
         } else {
-          $form->update($this->updateValidator());
+          $form->update($data);
         }
         
         DB::commit();
         return response()->json( $form, 200);
-        
+
       } catch (\Throwable $th) {
         DB::rollback();
         if (env('APP_DEBUG') == true) {
@@ -71,7 +72,7 @@ class FormController extends Controller
         }
         return response($th->getMessage())->setStatusCode(500);
      }
-      }
+      
     }
 
     /**
