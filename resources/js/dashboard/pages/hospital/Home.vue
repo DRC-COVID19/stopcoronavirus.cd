@@ -11,27 +11,30 @@
 
           </h3>
           <b-card class="mb-4 bg-dash">
-            <b-card-header class="border-0 p-2 bg-default text-dark"><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
+            <b-card-header class="border-0 p-2 hospital__home-form text-dark"><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
            <b-card-body>
               <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
             <p v-if="hospitalManagerName && hospitalManagerFirstName">Connecté en tant que <strong>{{hospitalManagerName }} - </strong><span><strong>{{ hospitalManagerFirstName}}</strong></span></p>
+           
+            <b-row class="mt-4 mb-5 hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center">
+            <h4 class="ml-2 mb-4">Mes Formulaires</h4>
+            <div v-if="isHospitalFormsLoading">
+          <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
+          </div>
+            <b-col
+            v-else
+            v-for="(form, index) in hospitalForms.forms" :key="index"
+            md="12"
+            >
+              <card-form
+                :route="getFormRoute(form.id)"
+                :form="form"
+              />
+            </b-col>
+          </b-row>
+    
            </b-card-body>
           </b-card>
-        </b-col>
-      </b-row>
-      <b-row class="mt-4 mb-5">
-       {{hospitalForms}}
-        <h4 class="text-left">Mes Formulaires</h4>
-        <div v-if="isHospitalFormsLoading">
-       <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
-      </div>
-        <b-col
-        v-else
-        v-for="(form, index) in hospitalForms.forms" :key="index">
-           <card-form
-            :route="getFormRoute(form.id)"
-            :form="form"
-          />
         </b-col>
       </b-row>
       <b-row>
@@ -217,5 +220,8 @@ $bg_primary:#F4F6FC;
   .bg-dash{
     box-shadow: -5px 10px 25px -1px rgba(0,0,0,0.1);
     border: 0 !important;
+  }
+  .hospital__home-form{
+      background-color: $bg_primary;
   }
 </style>

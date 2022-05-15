@@ -86,7 +86,6 @@ export default {
     }
   },
   async mounted () {
-    this.resetForm()
     await this.hospital__getAll()
   },
   computed: {
