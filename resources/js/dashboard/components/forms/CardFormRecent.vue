@@ -1,45 +1,26 @@
 <template>
-   <div class="card__Scroll">
-     <div v-if="isLoading">
-       <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
-     </div>
-     <div
-     v-else
-     v-for="(form, index) in recentForms" :key="index"
-     class="px-2"
-     >
-      <b-link
-           :to="{
-                name: 'administrator.forms.show.creation',
-                params: {
-                  form_id: form.id,
-                },
-              }" class="card-link">
+   <b-link
+           :to="route" class="card-link">
               <b-card class="card__recent-form">
          {{ form.title}}
           </b-card>
       </b-link>
-        </div>
-    </div>
 </template>
 
 <script>
 export default {
   props: {
-    recentForms: {
-      type: Array,
-      default: () => ([])
+    form: {
+      type: Object,
+      default: () => {}
     },
-    isLoading: {
-      type: Boolean,
-      default: () => false,
-      required: false
+    route: {
+      type: Object,
+      default: () => {}
     }
   }
-
 }
 </script>
-
 <style lang="scss">
 @import "@~/sass/_variables";
 .card__Scroll{
