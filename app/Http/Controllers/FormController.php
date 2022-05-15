@@ -51,12 +51,26 @@ class FormController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Form $form)
-    {   $data = $this->updateValidator();
-        $result = $form->update($this->updateValidator());
-        if (isset($data['hospital_id']) && count($data['hospital_id']) > 0) {
+      {  try 
+        {
+        DB::beginTransaction();
+        $data = $this->updateValidator();
+        if (isset($data['hospital_id'])) {
           $form->hospitals()->sync($data['hospital_id']);
+        } else {
+          $form->update($this->updateValidator());
         }
-        return response()->json( $result, 200);
+        
+        DB::commit();
+        return response()->json( $form, 200);
+      } catch (\Throwable $th) {
+        DB::rollback();
+        if (env('APP_DEBUG') == true) {
+          return response($th)->setStatusCode(500);
+        }
+        return response($th->getMessage())->setStatusCode(500);
+     }
+      }
     }
 
     /**

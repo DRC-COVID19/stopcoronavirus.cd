@@ -72,11 +72,6 @@ export default {
       targetForm: (state) => state.form.form
     })
   },
-  watch: {
-    async targetForm () {
-      await this.formShow({ id: this.$route.params.form_id })
-    }
-  },
   methods: {
     ...mapActions(['formShow']),
     onReset () {
