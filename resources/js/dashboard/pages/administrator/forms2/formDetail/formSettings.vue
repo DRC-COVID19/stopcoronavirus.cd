@@ -98,9 +98,8 @@ export default {
         form_recurrence_id: currentForm.form_recurrence_id,
         publish: currentForm.publish,
         hospital_id: currentForm.hospitals,
-        visible_all_hositals: currentForm.visibleAllHositals
+        visible_all_hospitals: currentForm.visibleAllHositals
       }
-      alert(JSON.stringify(form))
 
       this.form__Update({
         id: this.getFormId,

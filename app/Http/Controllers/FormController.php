@@ -99,7 +99,7 @@ class FormController extends Controller
         return request()->validate([
             'title'                 => 'sometimes|string|max:255',
             'publish'               => 'nullable|boolean',
-            'visible_all_hositals'  => 'nullable|boolean',
+            'visible_all_hospitals'  => 'nullable|boolean',
             'form_recurrence_value' => 'nullable|string|max:255',
             'hospital_id'          =>  'nullable|array',
             'form_recurrence_id'    => 'sometimes|integer|exists:form_recurrences,id'

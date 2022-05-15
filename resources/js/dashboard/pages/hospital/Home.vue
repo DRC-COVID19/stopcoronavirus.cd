@@ -1,42 +1,68 @@
 <template>
- <div class="px-5">
+  <div class="px-5">
     <b-container fluid class="px-3 mt-4">
       <b-row>
         <b-col v-if="user && user.hospital">
           <h3>
             Situations CTCO
-            <b-link :to="{name:'hospital.data'}" v-b-tooltip.hover title="Editer le CTCO">
+            <b-link
+              :to="{ name: 'hospital.data' }"
+              v-b-tooltip.hover
+              title="Editer le CTCO"
+            >
               <span class="fa fa-edit"></span>
             </b-link>
-
           </h3>
           <b-card class="mb-4 bg-dash">
-            <b-card-header class="border-0 p-2 hospital__home-form text-dark"><h5 class="mt-2">{{`Structure: ${user.hospital.name}`}}</h5></b-card-header>
-           <b-card-body>
-              <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
-            <p v-if="hospitalManagerName && hospitalManagerFirstName">Connecté en tant que <strong>{{hospitalManagerName }} - </strong><span><strong>{{ hospitalManagerFirstName}}</strong></span></p>
-
-            <b-row class="mt-4 mb-5 hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center">
-            <h4 class="ml-2 mb-4">Mes Formulaires</h4>
-            <div v-if="isHospitalFormsLoading">
-          <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
-          </div>
-            <b-col
-            v-else-if="hospitalForms.forms.length > 0"
-            v-for="(form, index) in hospitalForms.forms" :key="index"
-            md="12"
+            <b-card-header class="border-0 p-2 hospital__home-form text-dark"
+              ><h5 class="mt-2">
+                {{ `Structure: ${user.hospital.name}` }}
+              </h5></b-card-header
             >
-              <card-form
-                :route="getFormRoute(form.id)"
-                :form="form"
-              />
-            </b-col>
-           <b-col v-else md="12">
-              <p class="text-center text-bold"> Aucun formulaire n'est disponible</p>
-           </b-col>
-          </b-row>
+            <b-card-body>
+              <p v-if="user.hospital.address">
+                {{ `Adresse: ${user.hospital.address}` }}
+              </p>
+              <p v-if="hospitalManagerName && hospitalManagerFirstName">
+                Connecté en tant que
+                <strong>{{ hospitalManagerName }} - </strong
+                ><span
+                  ><strong>{{ hospitalManagerFirstName }}</strong></span
+                >
+              </p>
 
-           </b-card-body>
+              <b-row
+                class="mt-4 mb-5 hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center"
+              >
+                <b-col sm="12">
+                  <h4 class="ml-2 mb-4">Mes Formulaires</h4>
+                </b-col>
+                <b-col v-if="isHospitalFormsLoading" sm="12">
+                  <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
+                </b-col>
+                <b-col
+                  v-else
+                  class="d-flex flex-column align-items-lg-start col-md-8 col-sm-12"
+                >
+                  <div class="card__Scroll" v-if="hospitalForms.length > 0">
+                    <div
+                      v-for="(form, index) in hospitalForms"
+                      :key="index"
+                      class="px-2"
+                    >
+                      <card-form :route="getFormRoute(form.id)" :form="form" />
+                    </div>
+                  </div>
+                  <div v-else>
+                      <h4 class="text-center text-bold">
+                        <b-badge>
+                          Aucun formulaire n'est disponible
+                        </b-badge>
+                      </h4>
+                  </div>
+                </b-col>
+              </b-row>
+            </b-card-body>
           </b-card>
         </b-col>
       </b-row>
@@ -60,33 +86,35 @@
               </div>
             </template>
             <template v-slot:cell(last_update)="data">
-              <span>{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
+              <span>{{ moment(data.item.last_update).format("DD.MM.Y") }}</span>
             </template>
             <template v-slot:cell(actions)="data">
               <b-button
-              variant="outline-primary"
+                variant="outline-primary"
                 class="mb-1 btn-dash"
                 :to="{
-                  name:'hospital.detail',
-                  params:{
-                    completed_form_id:data.item.id,
-                    hospital_id: data.item.hospital_id || 0
-                    }
-                    }"
-              >Details</b-button>
+                  name: 'hospital.detail',
+                  params: {
+                    completed_form_id: data.item.id,
+                    hospital_id: data.item.hospital_id || 0,
+                  },
+                }"
+                >Details</b-button
+              >
               <b-button
-                v-if="(data.item.diff_date * 24) < 24"
+                v-if="data.item.diff_date * 24 < 24"
                 variant="outline-success mb-1"
                 class="btn-dash"
                 :to="{
                   name: 'hospital.edit',
                   params: {
-                    completed_form_id:data.item.id,
-                    hospital_id:user.hospital.id,
-                    form_id: defaultFormId
-                  }
+                    completed_form_id: data.item.id,
+                    hospital_id: user.hospital.id,
+                    form_id: defaultFormId,
+                  },
                 }"
-              >Editer</b-button>
+                >Editer</b-button
+              >
             </template>
           </b-table>
         </b-col>
@@ -129,7 +157,7 @@ export default {
       alertVariant: 'secondary',
       iscompletedFormsLoading: false,
       isHospitalFormsLoading: false,
-      hospitalForms: {},
+      hospitalForms: [],
       completedForms: {}
     }
   },
@@ -137,7 +165,8 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
-      hospitalManagerFirstName: (state) => state.hospital.hospitalManagerFirstName,
+      hospitalManagerFirstName: (state) =>
+        state.hospital.hospitalManagerFirstName,
       isLoading: (state) => state.hospital.isLoading
     }),
     totalRows () {
@@ -154,8 +183,10 @@ export default {
     },
     completedFormsData () {
       return this.completedForms.data.map((completedForm) => {
-        completedForm.name_manager = completedForm.created_manager_name.split(' ')[0]
-        completedForm.first_name_manager = completedForm.created_manager_name.split(' ')[1]
+        completedForm.name_manager =
+          completedForm.created_manager_name.split(' ')[0]
+        completedForm.first_name_manager =
+          completedForm.created_manager_name.split(' ')[1]
         return completedForm
       })
     }
@@ -196,7 +227,7 @@ export default {
         this.hospitalForms = await this.getHospital({
           hospital_id: this.user.hospital.id
         })
-        if (this.hospitalForms !== 0) {
+        if (this.hospitalForms.length !== 0) {
           this.isHospitalFormsLoading = false
         }
       }
@@ -207,24 +238,23 @@ export default {
     getFormRoute (formId) {
       return { name: 'hospital.create', params: { form_id: formId } }
     }
-
   }
 }
 </script>
 
 <style lang="scss">
-$bg_primary:#F4F6FC;
- .hopita_mome{
+$bg_primary: #f4f6fc;
+.hopita_mome {
   background-color: $bg_primary;
 }
-  .light{
-    background-color: $bg_primary;
-  }
-  .bg-dash{
-    box-shadow: -5px 10px 25px -1px rgba(0,0,0,0.1);
-    border: 0 !important;
-  }
-  .hospital__home-form{
-      background-color: $bg_primary;
-  }
+.light {
+  background-color: $bg_primary;
+}
+.bg-dash {
+  box-shadow: -5px 10px 25px -1px rgba(0, 0, 0, 0.1);
+  border: 0 !important;
+}
+.hospital__home-form {
+  background-color: $bg_primary;
+}
 </style>
