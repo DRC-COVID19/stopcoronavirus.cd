@@ -1,6 +1,8 @@
 <template>
   <div class="form-container">
-    <div><Header /></div>
+    <div>
+      <Header/>
+    </div>
     <router-view></router-view>
   </div>
 </template>
@@ -26,6 +28,6 @@ export default {
 <style lang="scss" scoped>
 .form-container {
   background: #f4f6fc;
-  height: 100vh;
+  min-height: 200vh;
 }
 </style>
