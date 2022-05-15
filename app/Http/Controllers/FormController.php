@@ -51,8 +51,11 @@ class FormController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Form $form)
-    {
+    {   $data = $this->updateValidator();
         $result = $form->update($this->updateValidator());
+        if (count($data['hospital_id']) > 0) {
+          $form->hospitals()->sync($data['hospital_id']);
+        }
         return response()->json( $result, 200);
     }
 

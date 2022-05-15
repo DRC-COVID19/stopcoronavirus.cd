@@ -99,7 +99,7 @@ export default {
       this.targetForm = {}
     },
     onUpdateFormVisibility () {
-      this.$emit('onUpdateFormVisibility', this.targetForm)
+      this.$emit('onUpdateFormVisibility', { ...this.targetForm, visibleAllHositals: this.visibleAllHositals })
       this.$bvModal.hide('updateFormVisibilityModal')
     }
   }
