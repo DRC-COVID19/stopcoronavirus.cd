@@ -26,6 +26,7 @@
                    Pour tous les CTCOS {{ visibleAllHositals }}
                   </b-form-checkbox>
                </b-col>
+               {{targetForm.hospitals}}
                 <b-col md="12" >
                   <FomFieldSelect
                     v-model="targetForm.hospitals"
@@ -39,9 +40,7 @@
                     id="form.form_recurrence_id"
                     labelText="Selectionnez un ou plusieurs CTCOs "
                     name="Recurrence du formulaire"
-                    mode="aggressive"
-                   
-              />
+                    mode="aggressive"/>
                 </b-col>
               </b-row>
               <div class="mt-4 text-center">
