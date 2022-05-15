@@ -40,6 +40,7 @@ export default {
       this.hideModal()
     },
     onDeleteForm (id) {
+      this.isFormDeleted = false
       this.form__Delete(id)
         .then(() => {
           this.init()
@@ -47,7 +48,7 @@ export default {
           this.$notify({
             group: 'alert',
             title: 'Supprimer formulaire',
-            text: 'Supprimer avec succès',
+            text: 'Le formulaire a été supprimé avec succès',
             type: 'success'
           })
           this.$router.push('/administration/forms/')

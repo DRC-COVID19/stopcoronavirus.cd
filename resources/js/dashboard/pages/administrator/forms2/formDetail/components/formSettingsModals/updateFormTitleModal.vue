@@ -61,7 +61,7 @@ export default {
   },
   data () {
     return {
-      isUpdating: this.isUpdatingFormTile,
+      isUpdating: this.isUpdatingFormTile
     }
   },
   mounted () {
@@ -72,7 +72,11 @@ export default {
       targetForm: (state) => state.form.form
     })
   },
-
+  watch: {
+    async targetForm () {
+      await this.formShow({ id: this.$route.params.form_id })
+    }
+  },
   methods: {
     ...mapActions(['formShow']),
     onReset () {

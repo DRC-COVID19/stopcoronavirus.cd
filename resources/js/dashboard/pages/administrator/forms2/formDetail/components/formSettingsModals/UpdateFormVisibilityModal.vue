@@ -22,11 +22,11 @@
             <b-form @submit.prevent="onUpdateFormVisibility">
               <b-row class="d-flex flex-column justify-content-between mt-3">
                 <b-col md="12" class="border-1">
-                   <b-form-checkbox v-model="checked" name="check-button" switch class="mb-4">
-                   Pour tous les CTCOS <strong class="ml-4">Ou</strong>
+                   <b-form-checkbox v-model="visibleAllHositals" name="check-button" switch class="mb-4">
+                   Pour tous les CTCOS {{ visibleAllHositals }}
                   </b-form-checkbox>
                </b-col>
-                <b-col md="12">
+                <b-col md="12" >
                   <FomFieldSelect
                     v-model="targetForm.hospitals"
                     :options="hospitals"
@@ -40,12 +40,13 @@
                     labelText="Selectionnez un ou plusieurs CTCOs "
                     name="Recurrence du formulaire"
                     mode="aggressive"
+                   
               />
                 </b-col>
               </b-row>
               <div class="mt-4 text-center">
                 <b-button type="submit" variant="primary"
-                  >Publier</b-button
+                   :v-if="visibleAllHositals">Publier</b-button
                 >
               </div>
             </b-form>
@@ -80,7 +81,8 @@ export default {
       targetForm: {
         hospitals: []
       },
-      isLoading: false
+      isLoading: false,
+      visibleAllHositals: false
     }
   },
   async mounted () {
@@ -98,10 +100,6 @@ export default {
       this.targetForm = {}
     },
     onUpdateFormVisibility () {
-      const form = {
-        ...this.targetForm,
-        form_recurrence_value: this.formRecurrences.find((form) => form.id === this.targetForm.form_recurrence_id)
-      }
       this.$emit('onUpdateFormVisibility', this.targetForm)
       this.$bvModal.hide('updateFormVisibilityModal')
     }

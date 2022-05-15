@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Hospital;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -33,4 +34,9 @@ class Form extends Model
     public function completedforms(){
         return $this->hasMany(CompletedForm::class);
     }
+    
+    public function hospitals(){
+        return $this->belongsToMany(Hospital::class);
+    }
+    
 }
