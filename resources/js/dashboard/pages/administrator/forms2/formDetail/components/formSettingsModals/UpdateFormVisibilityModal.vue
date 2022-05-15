@@ -99,7 +99,13 @@ export default {
       this.targetForm = {}
     },
     onUpdateFormVisibility () {
-      this.$emit('onUpdateFormVisibility', { ...this.targetForm, visibleAllHositals: this.visibleAllHositals })
+      const form =
+      {
+        ...this.targetForm,
+        visibleAllHositals: this.visibleAllHositals,
+        formFieldmodalMessage: 'La visibilité du formulaire a été modifié avec succès'
+      }
+      this.$emit('onUpdateFormVisibility', form)
       this.$bvModal.hide('updateFormVisibilityModal')
     }
   }

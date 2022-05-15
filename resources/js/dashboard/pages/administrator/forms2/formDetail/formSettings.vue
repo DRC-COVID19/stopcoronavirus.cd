@@ -48,8 +48,8 @@
               </div>
               <h6>Cliquer sur l'icon à droite pour changer la visibilité de ce le formulaire</h6>
               <hr>
-              <render-form-visible-modal
-               @onUpdateFormVisible="updateForm"
+              <update-form-visibility-modal
+               @UpdateFormVisibilityModal="updateForm"
               />
           </div>
           </div>
@@ -61,7 +61,7 @@
 <script>
 import { mapActions } from 'vuex'
 import DeleteFormModal from './components/formSettingsModals/DeleteFormModal'
-import RenderFormVisibleModal from './components/formSettingsModals/UpdateFormVisibilityModal.vue'
+import UpdateFormVisibilityModal from './components/formSettingsModals/UpdateFormVisibilityModal'
 import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
 import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
 export default {
@@ -69,7 +69,7 @@ export default {
     UpdateFormModal,
     UpdateFormRecurrenceModal,
     DeleteFormModal,
-    RenderFormVisibleModal
+    UpdateFormVisibilityModal
   },
   data () {
     return {
@@ -78,7 +78,7 @@ export default {
       isUpdatingFormTile: false,
       formUpdated: false,
       showSuccess: false,
-      updating: false,
+      updating: false
     }
   },
   mounted () {
@@ -106,7 +106,9 @@ export default {
         title: currentForm.title,
         form_recurrence_value: currentForm.form_recurrence_value,
         form_recurrence_id: currentForm.form_recurrence_id,
-        publish: currentForm.publish
+        publish: currentForm.publish,
+        hospital_id: currentForm.hospitals,
+        visible_all_hositals: currentForm.visibleAllHositals
       }
 
       this.form__Update({
