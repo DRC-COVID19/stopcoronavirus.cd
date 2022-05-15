@@ -49,7 +49,7 @@
               <h6>Cliquer sur l'icon à droite pour changer la visibilité de ce le formulaire</h6>
               <hr>
               <update-form-visibility-modal
-               @UpdateFormVisibilityModal="updateForm"
+               @updateFormVisibility="updateForm"
               />
           </div>
           </div>
@@ -81,9 +81,6 @@ export default {
       updating: false
     }
   },
-  mounted () {
-    this.init()
-  },
   computed: {
     getFormId () {
       return this.$route.params.form_id ?? null
@@ -91,13 +88,6 @@ export default {
   },
   methods: {
     ...mapActions(['formShow', 'form__Update']),
-    async init () {
-      this.isLoading = true
-      await this.formShow({ id: this.getFormId })
-    },
-    onReset () {
-      this.form = {}
-    },
     async updateForm (currentForm) {
       this.isLoading = true
       this.formUpdated = false
@@ -110,6 +100,7 @@ export default {
         hospital_id: currentForm.hospitals,
         visible_all_hositals: currentForm.visibleAllHositals
       }
+      alert(JSON.stringify(form))
 
       this.form__Update({
         id: this.getFormId,

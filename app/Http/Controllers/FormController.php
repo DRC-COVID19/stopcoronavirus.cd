@@ -53,7 +53,7 @@ class FormController extends Controller
     public function update(Form $form)
     {   $data = $this->updateValidator();
         $result = $form->update($this->updateValidator());
-        if (count($data['hospital_id']) > 0) {
+        if (isset($data['hospital_id']) && count($data['hospital_id']) > 0) {
           $form->hospitals()->sync($data['hospital_id']);
         }
         return response()->json( $result, 200);
