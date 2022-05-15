@@ -202,7 +202,7 @@ export default {
           })
       })
     },
-    getAllHospitals ({ state, commit }, payload = {}) {
+    hospital__getAll ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
 
       return new Promise((resolve, reject) => {

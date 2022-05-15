@@ -95,7 +95,7 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getAllHospitals']),
+    ...mapActions(['hospital__getAll']),
     onReset () {
       this.targetForm = {}
     },
