@@ -15,14 +15,14 @@
            <b-card-body>
               <p v-if="user.hospital.address">{{`Adresse: ${user.hospital.address}`}}</p>
             <p v-if="hospitalManagerName && hospitalManagerFirstName">Connecté en tant que <strong>{{hospitalManagerName }} - </strong><span><strong>{{ hospitalManagerFirstName}}</strong></span></p>
-           
+
             <b-row class="mt-4 mb-5 hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center">
             <h4 class="ml-2 mb-4">Mes Formulaires</h4>
             <div v-if="isHospitalFormsLoading">
           <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
           </div>
             <b-col
-            v-else
+            v-else-if="hospitalForms.forms.length > 0"
             v-for="(form, index) in hospitalForms.forms" :key="index"
             md="12"
             >
@@ -31,8 +31,11 @@
                 :form="form"
               />
             </b-col>
+           <b-col v-else md="12">
+              <p class="text-center text-bold"> Aucun formulaire n'est disponible</p>
+           </b-col>
           </b-row>
-    
+
            </b-card-body>
           </b-card>
         </b-col>
