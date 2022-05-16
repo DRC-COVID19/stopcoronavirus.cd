@@ -1,23 +1,11 @@
 <template>
   <div class="container-icon">
       <div class="">
-          <img
-           src="/img/icon/create_response.svg"
-           class="img-create"
-           height="32px"
-           width="32px"
-           alt
-           @click="callCardOrderField"
-            />
+          <i class="fa fa-plus-circle icon-action icon-action-add" aria-hidden="true" @click="callCardOrderField"></i>
       </div>
       <div class="img-response-action">
-          <img src="/img/icon/delete_response.svg"
-          class="img-delete"
-          height="32px"
-          width="32px"
-          alt
-          @click="deleteHospital"
-           />
+          <i class="fa fa-trash icon-action icon-action-delete" aria-hidden="true" @click="deleteHospital"></i>
+
           <b-modal v-model="isDeleteModalShown" centered hide-header>
             <template #modal-header>
               <div class="mx-auto">
@@ -42,13 +30,7 @@
           </b-modal>
       </div>
       <div class="img-response-action">
-          <img src="/img/icon/pencil_response.svg"
-           class="img-pencil"
-           height="32px"
-           width="32px"
-            alt
-            @click="setPopulateForm"
-             />
+          <i class="fa fa-pencil icon-action icon-action-edit" aria-hidden="true" @click="setPopulateForm"></i>
       </div>
   </div>
 </template>
@@ -114,12 +96,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+ @import "@~/sass/_variables";
+
   .container-icon{
     background-color: white;
-    padding: 3px;
-    padding-right: 10px;
-    padding-bottom: 54px;
+    padding: 20px 10px;
     margin-right: 0px;
+    text-align: center;
+    border-radius: 8px;
     .img-response-action{
       margin-top: 20px;
     }
@@ -133,9 +117,20 @@ export default {
       cursor: pointer;
     }
   }
- @media screen and (max-width: 767px) {
-   .container-icon{
-     padding-bottom: 145px;
-   }
+ .icon-action {
+  font-size: 20px;
+  cursor: pointer;
+  &:hover {
+    opacity: 0.7;
+  }
+  &.icon-action-add {
+    color: $dash-blue;
+  }
+  &.icon-action-edit {
+    color: $flag-yellow;
+  }
+  &.icon-action-delete {
+    color: $dash-red;
+  }
  }
 </style>

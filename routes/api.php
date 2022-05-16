@@ -50,13 +50,10 @@ Route::post('/medicale-orientation', 'DiagnosticController@store');
 
 Route::group(['prefix' => 'admin_users'], function () {
   Route::get('/filter', 'AdministratorController@filter');
+  Route::get('/agents-hospital', 'AdministratorController@getAgentHospitals');
 });
 
 Route::apiResource('admin_users', 'AdministratorController');
-
-Route::group(['prefix' => 'admin_users'], function () {
-  Route::get('/agents-hospital', 'AdministratorController@getAgentHospitals');
-});
 
 Route::apiResource('admin_roles', 'AdminRoleController');
 
@@ -208,6 +205,7 @@ Route::group([
 
     Route::post('/get-aggregated-by-hospitals', "CompletedFormController@getAggregatedByHospitals");
     Route::post('/get-data-by-hospitals', "CompletedFormController@getDataByHospitals");
+    Route::get('/get-all-filtered', "CompletedFormController@getAllFiltered");
 
     Route::get('/check-last_update/{hospital_id}/{last_update}', 'CompletedFormController@checkLastUpdate');
   });
@@ -254,6 +252,7 @@ Route::group([
   });
   Route::group(['prefix' => 'hospitals'], function () {
     Route::get('/', 'HospitalController@getHospitals'); //ok
+    Route::get('/all-Without-agent', 'HospitalController@allWithoutAgent'); //ok
     Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution'); //ok
     Route::get('/totaux', 'HospitalController@getHospitalsTotaux'); //ok
   });

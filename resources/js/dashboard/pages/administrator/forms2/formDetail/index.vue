@@ -1,10 +1,8 @@
 <template>
   <div class="form-container">
-    <div class="">
-      <Header class=""/>
-    </div>
+    <div><Header /></div>
     <notifications group="alert" />
-    <div id="container-body">
+    <div>
       <router-view></router-view>
     </div>
   </div>
@@ -33,7 +31,13 @@ export default {
   background: #f4f6fc;
   min-height: 100vh;
 }
- #container-body {
-   padding-top: 120px;
- }
+.router-view-container {
+  margin-top: 70px;
+}
+</style>
+
+<style lang="scss">
+.container-dash{
+  overflow: unset;
+}
 </style>

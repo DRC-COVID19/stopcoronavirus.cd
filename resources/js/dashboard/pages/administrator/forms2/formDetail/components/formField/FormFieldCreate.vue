@@ -32,9 +32,9 @@
             name="Question"
             mode="aggressive"
           />
-          <b-form-text id="title-help-block" class="mb-4"
-            ><span class="text-danger"></span
-          ></b-form-text>
+          <b-form-text id="title-help-block" class="mb-4">
+            <span class="text-danger"></span>
+          </b-form-text>
           <FomFieldSelect
             v-model="form.form_field_type_id"
             :options="formFieldType"

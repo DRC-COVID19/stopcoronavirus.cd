@@ -1,54 +1,53 @@
 <template>
-   <div class="container-all">
-      <Loading v-if="isLoading" class="h-100"  message="Chargement des champs ..."/>
-      <div class="row">
-         <div class="col-12">
-            <div class="text-right">
-               <b-button
-               class="btn-dash-blue btn-create-field"
-               @click="onResetModalCreate"
-               >
-                  Ajouter un champ
-               </b-button>
-               <FormFieldCreate
-               :form-to-populate="formFieldKey"
-               :form-field-order="form_field_order"
-               @created="onCreatedField"
-
-               />
-               <FormFieldCardOrder
-               :form-to-populate="formFieldKey"
-               :form-fields="formField"
-               @createdField="onCallCreatedFieldCard"
-               @createdFieldAfter="onCallCreatedFieldAfter"
-               />
-            </div>
-         </div>
-      </div>
-      <div class="row">
-         <div class="col-12">
-             <div class="container-component-field d-flex justify-content-between align-items-center mt-4"
-               v-for="(formField, index) in formField" :key="index"
+  <b-container>
+    <Loading v-if="isLoading" class="h-100"  message="Chargement des champs ..."/>
+    <div class="row">
+      <div class="col-12">
+          <div class="text-right">
+            <b-button
+              class="btn-dash-blue btn-create-field"
+              @click="onResetModalCreate"
             >
-               <div class="field-card" style="width: 90%">
-                  <FormFieldList
-                  :formField="formField"
-                  />
-               </div>
-               <div class="field-create">
-                  <FormFieldCard
+              <small>Ajouter un champ</small>
+            </b-button>
+            <FormFieldCreate
+              :form-to-populate="formFieldKey"
+              :form-field-order="form_field_order"
+              @created="onCreatedField"
+            />
+            <FormFieldCardOrder
+              :form-to-populate="formFieldKey"
+              :form-fields="formField"
+              @createdField="onCallCreatedFieldCard"
+              @createdFieldAfter="onCallCreatedFieldAfter"
+            />
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+          <div class="container-component-field d-flex justify-content-between mt-4"
+            v-for="(formField, index) in formField" :key="index"
+          >
+            <div class="field-card">
+              <FormFieldList
+                :formField="formField"
+              />
+            </div>
+            <div class="field-create">
+                <FormFieldCard
                   @deleted="onDeletedField"
                   @edit="onEditField"
                   @orderFieldCard="onCallOrderFieldCrad"
                   @updated="onUpdated"
                   :formField="formField"
                   :fieldKey="formField.id"
-                  />
-               </div>
+                />
             </div>
-         </div>
+          </div>
       </div>
-   </div>
+    </div>
+  </b-container>
 </template>
 
 <script>
@@ -133,6 +132,14 @@ export default {
 
 }
 </script>
- <style lang="scss" scoped>
-
- </style>
+<style lang="scss" scoped>
+  .container {
+    margin-top: 10px;
+    @media (min-width: 1441px) {
+      margin-top: 100px;
+    }
+  }
+  .field-card {
+    width: calc(100% - 65px);
+  }
+</style>

@@ -1,34 +1,67 @@
 <template>
-  <b-container
-    class=" container-creation"
-  >
-    <b-row>
-      <b-col lg="9" class="mx-auto">
-        <FormFieldIndex/>
+  <b-container class="px-0 mx-0" fluid>
+    <b-row class="h-100 px-0 mx-0">
+      <b-col
+        lg="2"
+        class="
+          w-100
+          d-flex
+          justify-content-start
+          bg-white
+          container-creation-list
+          px-0
+          mx-0
+        "
+      >
+        <FormStepIndex :formId="+$route.params.form_id" />
+      </b-col>
+      <b-col cols="12" class="container-creation-list-responsive">
+        <div>
+          <b-button v-b-toggle.sidebar-left class="btn-dash-blue d-block" side="sm">
+            <small>Étapes</small>
+          </b-button>
+        </div>
+        <b-sidebar
+          id="sidebar-left"
+          left
+          bg-variant="white"
+          width="25rem"
+          backdrop
+          :no-close-on-route-change="true"
+          shadow
+          backdrop-variant="transparent"
+        >
+          <FormStepIndex :formId="+$route.params.form_id" />
+        </b-sidebar>
+      </b-col>
+      <b-col cols="auto" lg="10">
+        <router-view></router-view>
       </b-col>
     </b-row>
   </b-container>
 </template>
+
 <script>
-import FormFieldIndex from '../formDetail/components/formField/FormFieldIndex.vue'
+import FormStepIndex from './components/formStep/FormStepIndex'
 export default {
   components: {
-    FormFieldIndex
-  },
-  mounted () {
-  },
-  methods: {
+    FormStepIndex
   }
 }
 </script>
+
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.container-creation-list {
-  padding-top: 0px !important;
+.container-creation-list-responsive {
+  display: none;
+  margin-top: 115px;
 }
-@media screen and (max-width: 767px) {
-   .container-creation-list{
-     padding-top: 0px !important;
-   }
- }
+@media (max-width: 1440px) {
+  .container-creation-list {
+    display: none !important;
+  }
+  .container-creation-list-responsive {
+    display: block !important;
+  }
+}
 </style>

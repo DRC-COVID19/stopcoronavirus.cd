@@ -27,6 +27,9 @@ export default {
       state.isUpdating = payload
     }
   },
+  getters: {
+    form__publishedForms: state => state.forms.filter(form => form.publish)
+  },
   actions: {
     formShow (_, payload) {
       return new Promise((resolve, reject) => {

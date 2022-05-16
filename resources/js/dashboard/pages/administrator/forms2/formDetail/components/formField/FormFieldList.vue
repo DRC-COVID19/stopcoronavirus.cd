@@ -28,8 +28,15 @@
                 </b-col>
               </b-row>
               <b-row class="mt-3">
-                  <b-col cols="12">
-                      <b-form-checkbox v-model="form.require"  switch size="lg" class="switch-required" @input="updateRequiredFormField">obligatoire</b-form-checkbox>
+                  <b-col cols="12" class="text-right">
+                      <b-form-checkbox
+                        v-model="form.require"
+                        switch size="lg"
+                        class="switch-required"
+                        @input="updateRequiredFormField"
+                      >
+                        obligatoire
+                      </b-form-checkbox>
                   </b-col>
               </b-row>
           </b-container>
@@ -129,6 +136,11 @@ export default {
     margin-left: 370px;
     color:rgba(0, 0, 0, 0.5);
     font-size: 15px;
+    &::v-deep {
+      label {
+        font-size: 15px;
+      }
+    }
   }
  }
  @media screen and (max-width: 767px) {

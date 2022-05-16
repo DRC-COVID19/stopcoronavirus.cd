@@ -15,9 +15,9 @@
                      >
                         <div class="img__add">
                           <img
-                          src="/img/form_add.svg"
-                          width="100%"
-                          height="100%"
+                            src="/img/form_add.svg"
+                            width="100%"
+                            height="100%"
                           />
                         </div>
 
