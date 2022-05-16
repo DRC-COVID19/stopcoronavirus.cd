@@ -244,13 +244,10 @@ export default {
 @media (max-width: 768px) {
   .title {
     font-size: 16px !important;
-    font-weight: 600;
   }
   .form-step-list {
     h3 {
       font-size: 12px !important;
-      font-weight: 100;
-      color: $dash-blue;
     }
   }
 }
