@@ -26,6 +26,12 @@ class HospitalController extends Controller
    */
   public function index()
   {
+    $hospitals = Hospital::with(['agent', 'township'])->get();
+    return response()->json($hospitals, 200);
+  }
+
+  public function allWithoutAgent()
+  {
     $hospitals = Hospital::with(['agent', 'township'])->where('agent_id', null)->get();
     return response()->json($hospitals, 200);
   }

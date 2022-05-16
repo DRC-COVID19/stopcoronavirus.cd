@@ -142,7 +142,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getHospitals',
+      'getHospitalsByPaginate',
       'hospital__remove',
       'townships__getAll',
       'hospital__store',
@@ -302,12 +302,8 @@ export default {
     },
     async getHospitalList (page = 1) {
       this.isLoading = true
-      this.hospitals = Object.assign({}, await this.getHospitals({ page }))[
-        '0'
-      ]
-      if (this.hospitals.length !== 0) {
-        this.isLoading = false
-      }
+      this.hospitals = await this.getHospitalsByPaginate({ page })
+      this.isLoading = false
     },
 
     switchPage (page) {

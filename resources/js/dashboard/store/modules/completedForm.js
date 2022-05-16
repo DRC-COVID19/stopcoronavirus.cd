@@ -8,7 +8,8 @@ export default {
     filterData: {},
     isLoading: false,
     iscompletedFormsAggregatedLoading: false,
-    isLoadingFile: false
+    isLoadingFile: false,
+    selectedForm: null
   },
   mutations: {
     SET_IS_LOADING (state, payload) {
@@ -37,6 +38,9 @@ export default {
     },
     SET_FILTER__DATA (state, payload) {
       state.filterData = payload
+    },
+    SET_SELECTED_FORM (state, payload) {
+      state.selectedForm = payload
     }
   },
   actions: {
@@ -123,30 +127,21 @@ export default {
           })
       })
     },
-    completedForm__getAllByLastUpdate ({ state, commit }) {
+    completedForm__getAllByLastUpdate ({ state, commit }, payload) {
       commit('SET_IS_CREATING', true)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .get('/api/dashboard/completed_forms/get-latest-hospital-update')
+          .get('/api/dashboard/completed_forms/get-latest-hospital-update', {
+            params: {
+              form_id: payload.form_id
+            }
+          })
           .then(({ data }) => {
-            const completedForms = data.map((completedForm) => ({
-              diff_date: completedForm.diff_date,
-              last_update: completedForm.last_update,
-              name: completedForm.form_id
-                ? completedForm.hospital.name
-                : completedForm.name,
-              created_manager_name: completedForm.created_manager_name,
-              hospital_id: completedForm.hospital_id
-            }))
-            commit('SET_IS_LOADING', false)
-            resolve(completedForms)
+            resolve(data)
           })
           .catch((response) => {
             reject(response)
-          })
-          .finally(() => {
-            commit('SET_IS_LOADING', false)
           })
       })
     },
@@ -188,6 +183,23 @@ export default {
           })
           .finally(() => {
             commit('SET_IS_LOADING_FILE', false)
+          })
+      })
+    },
+    completedForm__setSelectedForm({ commit }, payload) {
+      commit('SET_SELECTED_FORM', payload)
+    },
+    completedForm__getAllFiltered(_, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/completed_forms/get-all-filtered', {
+            params: payload
+          })
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
           })
       })
     }

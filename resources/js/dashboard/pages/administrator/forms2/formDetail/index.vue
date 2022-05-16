@@ -2,7 +2,9 @@
   <div class="form-container">
     <div><Header /></div>
     <notifications group="alert" />
-    <router-view></router-view>
+    <div>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 <script>
@@ -30,6 +32,16 @@ export default {
 
 .form-container {
   background: #f4f6fc;
-  min-height: 200vh;
+  min-height: 100vh;
+  height: max-content;
+}
+.router-view-container {
+  margin-top: 70px;
+}
+</style>
+
+<style lang="scss">
+.container-dash{
+  overflow: unset;
 }
 </style>

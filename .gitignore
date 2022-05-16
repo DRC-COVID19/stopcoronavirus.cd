@@ -16,4 +16,13 @@ yarn-error.log
 .vs/covid19/v16/.suo
 .vs/covid19/config/applicationhost.config
 resources/docs/source/_tmp/b0944bb837f20517fb65833231adaba3de9d5dc9.php
-public/mix-manifest.json
+
+# Build assets
+/public/css/app.css
+/public/css/vueApp.css
+/public/js/app.js
+/public/js/app.js.LICENSE.txt
+/public/js/vueApp.js
+/public/js/vueApp.js.LICENSE.txt
+/public/fonts/vendor
+/public/mix-manifest.json
