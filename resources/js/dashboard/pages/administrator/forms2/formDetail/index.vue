@@ -30,6 +30,7 @@ export default {
 .form-container {
   background: #f4f6fc;
   min-height: 100vh;
+  height: max-content;
 }
 .router-view-container {
   margin-top: 70px;
