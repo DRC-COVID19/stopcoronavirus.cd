@@ -45,8 +45,6 @@
                 </b-col>
               </b-row>
               <div class="mt-4 text-center">
-                <b-button type="submit" variant="primary"
-                >Publier</b-button
                 >
                   <b-button
                 @click.prevent="onCancelFormVisibility()"
@@ -59,7 +57,7 @@
                 @click.prevent="onUpdateFormVisibility()"
                 type="submit"
                 variant="primary"
-                >Supprimer</b-button
+                >Publier</b-button
                 >
               </div>
             </b-form>

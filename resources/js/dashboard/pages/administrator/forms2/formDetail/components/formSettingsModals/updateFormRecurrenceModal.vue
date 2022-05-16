@@ -43,7 +43,7 @@
                 @click.prevent="onUpdateFormRecurrence()"
                 type="submit"
                 variant="primary"
-                >Supprimer</b-button
+                >Modifier</b-button
                 >
               </div>
             </b-form>
