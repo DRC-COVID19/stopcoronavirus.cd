@@ -279,10 +279,10 @@ Route::group([
   });
 
   Route::apiResource('form-field-types', 'FormFieldTypeController');
-  Route::apiResource('form-fields', 'FormFieldController');
   Route::group(['prefix' => 'form-fields'], function () {
-    Route::get('get-form/{form}', 'FormFieldController@getFormFieldByForm');
+    Route::get('get-form', 'FormFieldController@getFormFieldByForm');
   });
+  Route::apiResource('form-fields', 'FormFieldController');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');
