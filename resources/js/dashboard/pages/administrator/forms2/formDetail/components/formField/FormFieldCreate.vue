@@ -60,6 +60,7 @@
             class="mb-4"
           />
           <FomFieldSelect
+            v-if="!formFieldOrder"
             v-model="form.order_field"
             :options="formField"
             label="name"
@@ -124,6 +125,11 @@ export default {
       type: Object,
       default: () => ({}),
       required: false
+    },
+    formFieldOrder: {
+      type: Number,
+      default: null,
+      required: false
     }
   },
   components: {
@@ -148,7 +154,7 @@ export default {
   },
   async mounted () {
     await this.formFieldTypeIndex()
-    await this.getFormFields({ id: this.form_id })
+    await this.getFormFields({ form_id: this.form_id, step_id: 1 })
   },
   watch: {
     formToPopulate: {
@@ -174,7 +180,7 @@ export default {
       this.isLoading = true
       const formField = {
         name: this.form.question,
-        order_field: this.form.order_field ? this.form.order_field : 1,
+        form_field_order: this.formFieldOrder ? this.formFieldOrder : this.form.order_field,
         rules: this.form.require ? 'required' : '',
         form_id: this.form_id,
         form_field_type_id: this.form.form_field_type_id,
@@ -198,6 +204,7 @@ export default {
           })
           this.$bvModal.hide('createResponse')
           this.$emit('created')
+          this.isLoading = false
         })
         .catch(({ response }) => {
           this.$notify({
@@ -222,6 +229,8 @@ export default {
             type: 'success'
           })
           this.$bvModal.hide('createResponse')
+          this.$emit('updated')
+          this.isLoading = false
         })
         .catch(({ response }) => {
           this.$notify({
@@ -247,7 +256,6 @@ export default {
         this.title = 'Modification d\'un champ'
         this.btnTitle = 'Modifier'
       } else {
-        console.log('reseting...')
         this.resetForm()
       }
     },

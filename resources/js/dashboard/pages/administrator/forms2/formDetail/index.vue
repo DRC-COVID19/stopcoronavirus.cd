@@ -3,6 +3,7 @@
     <div class="">
       <Header class=""/>
     </div>
+    <notifications group="alert" />
     <div id="container-body">
       <router-view></router-view>
     </div>

@@ -1,7 +1,14 @@
 <template>
   <div class="container-icon">
       <div class="">
-          <img src="/img/icon/create_response.svg" class="img-create" height="32px" width="32px" alt  />
+          <img
+           src="/img/icon/create_response.svg"
+           class="img-create"
+           height="32px"
+           width="32px"
+           alt
+           @click="callCardOrderField"
+            />
       </div>
       <div class="img-response-action">
           <img src="/img/icon/delete_response.svg"
@@ -71,6 +78,9 @@ export default {
     ...mapActions(['removeFormField']),
     setPopulateForm () {
       this.$emit('edit', this.fieldKey)
+    },
+    callCardOrderField () {
+      this.$emit('orderFieldCard', this.fieldKey)
     },
     deleteHospital () {
       this.isDeleteModalShown = true
