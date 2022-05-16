@@ -19,6 +19,7 @@
       <CompletedFormList
         :hospitalId="$route.params.hospital_id"
         :showNewAction="false"
+        :showHospitalFilter="false"
       />
     </b-container>
   </div>

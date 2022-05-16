@@ -255,6 +255,7 @@ Route::group([
   });
   Route::group(['prefix' => 'hospitals'], function () {
     Route::get('/', 'HospitalController@getHospitals'); //ok
+    Route::get('/all-Without-agent', 'HospitalController@allWithoutAgent'); //ok
     Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution'); //ok
     Route::get('/totaux', 'HospitalController@getHospitalsTotaux'); //ok
   });

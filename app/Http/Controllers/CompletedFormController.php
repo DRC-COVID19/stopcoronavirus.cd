@@ -371,10 +371,10 @@ class CompletedFormController extends Controller
         return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id', $hospitalId)->count();
     }
 
-    public function getAllFiltered(Request $request, int $paginate = 15) {
+    public function getAllFiltered(Request $request) {
         $formId = $request->query('form_id');
         $hospitalId = $request->query('hospital_id');
-
+        $perPage = $request->query('per_page') ?? 15;
 
         $query = CompletedForm::with(['hospital', 'form']);
 
@@ -389,7 +389,7 @@ class CompletedFormController extends Controller
           ->select('*')
           ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date')
           ->orderBy('last_update', 'desc')
-          ->paginate($paginate);
+          ->paginate($perPage);
 
         return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
     }

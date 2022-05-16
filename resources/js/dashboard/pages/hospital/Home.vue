@@ -22,6 +22,7 @@
 
       <CompletedFormList
         :hospitalId="user.hospital.id"
+        :showHospitalFilter="false"
       />
     </b-container>
     <ManagerUserName id="nameModal" />

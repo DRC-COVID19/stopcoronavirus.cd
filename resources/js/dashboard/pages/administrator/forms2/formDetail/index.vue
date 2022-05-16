@@ -1,7 +1,9 @@
 <template>
   <div class="form-container">
     <div><Header /></div>
-    <router-view></router-view>
+    <div class="router-view-container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 <script>
@@ -26,6 +28,9 @@ export default {
 <style lang="scss" scoped>
 .form-container {
   background: #f4f6fc;
-  height: 100vh;
+  min-height: 100vh;
+}
+.router-view-container {
+  margin-top: 70px;
 }
 </style>
