@@ -20,7 +20,7 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col>
+      <b-col lg="17">
         <form-wizard
           subtitle
           shape="tab"
@@ -30,21 +30,21 @@
           @on-complete="onComplete"
         >
           <tab-content>
-            <b-row align-h="center">
-              <b-col
-                lg="7"
-                class="
-                  d-flex
-                  justify-content-center
-                  container-preview-field-form
-                  w-100
-                  mb-3
-                "
-              >
+            <b-row align-h="center" class="mx-0 px-0">
+              <b-col>
                 <b-form-group>
                   <b-row class="w-100">
-                    <b-col lg="12" class="w-100">
-                      <form-field-input lg="12" class="w-100" />
+                    <b-col
+                      lg="7"
+                      class="
+                        d-flex
+                        justify-content-center
+                        container-preview-field-form
+                        w-100
+                        mb-3
+                      "
+                    >
+                      <form-field-input />
                     </b-col>
                   </b-row>
                 </b-form-group>
