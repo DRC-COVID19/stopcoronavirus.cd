@@ -42,8 +42,13 @@ class HospitalController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function getHospitalList()
-  {
+  { $formId =9;
     $hospitals = Hospital::all();
+                          //  ->get()
+                          //  ->map(function($hospital) use ($formId){
+                          //   return $hospital->forms->filter(fn($form)=> $form->id !== $formId);
+                          //  });
+                          //  ->forms->filter(fn($form)=> $form->hospital_id === null);
     return response()->json($hospitals, 200);
   }
 

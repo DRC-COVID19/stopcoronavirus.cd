@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="updateFormTitleModal"  centered hide-footer hide-header>
+    <b-modal id="updateFormTitleModal" centered hide-footer hide-header>
     <b-container>
       <b-row>
         <b-col>

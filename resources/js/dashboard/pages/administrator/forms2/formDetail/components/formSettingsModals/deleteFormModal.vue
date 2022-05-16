@@ -31,6 +31,11 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      isFormDeleted: false
+    }
+  },
   methods: {
     hideModal () {
       this.$bvModal.hide('deleteFormModal')
@@ -43,8 +48,8 @@ export default {
       this.isFormDeleted = false
       this.form__Delete(id)
         .then(() => {
-          this.init()
           this.isFormDeleted = true
+
           this.$notify({
             group: 'alert',
             title: 'Supprimer formulaire',

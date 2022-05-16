@@ -1,5 +1,5 @@
 <template>
-    <b-modal id="updateFormVisibilityModal"  centered hide-footer hide-header>
+    <b-modal id="updateFormVisibilityModal" centered hide-footer hide-header>
       <div v-if="isLoading">
       </div>
     <b-container v-else>

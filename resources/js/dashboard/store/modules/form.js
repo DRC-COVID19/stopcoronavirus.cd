@@ -55,6 +55,7 @@ export default {
     },
     form__Update ({ commit }, payload) {
       return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
         axios
           .put('/api/dashboard/forms/' + payload.id, payload.form)
           .then(() => {
