@@ -204,7 +204,8 @@ export default {
         admin_user_id: null
       },
       perPage: 15,
-      agentsHospitals: []
+      agentsHospitals: [],
+      allCurrentFilters: {}
     }
   },
   computed: {
@@ -281,7 +282,7 @@ export default {
     ...mapGetters(['form__publishedForms']),
     async getCompletedForms (page = 1) {
       this.isLoading = true
-      this.completedForms = await this.completedForm__getAllFiltered({
+      this.allCurrentFilters = {
         page,
         ...this.form,
         hospital_id: this.hospitalId || this.form.hospital_id,
@@ -289,7 +290,8 @@ export default {
         per_page: this.perPage,
         date_range_start: this.form?.dateRange?.start || null,
         date_range_end: this.form?.dateRange?.end || null
-      })
+      }
+      this.completedForms = await this.completedForm__getAllFiltered(this.allCurrentFilters)
       this.isLoading = false
     },
     onPageChange (page) {
