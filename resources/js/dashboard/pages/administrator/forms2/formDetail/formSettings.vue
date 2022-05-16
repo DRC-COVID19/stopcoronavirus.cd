@@ -111,7 +111,7 @@ export default {
         form_recurrence_value: currentForm.form_recurrence_value,
         form_recurrence_id: currentForm.form_recurrence_id,
         publish: currentForm.publish,
-        hospitals_id: currentForm.hospitals,
+        hospitals_id: currentForm.hospitals ?? [],
         visible_all_hospitals: currentForm.visibleAllHositals
       }
 
