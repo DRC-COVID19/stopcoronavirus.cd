@@ -32,8 +32,18 @@
                 />
               </b-form-group>
               <div class="mt-4 text-center">
-                <b-button type="submit" variant="primary"
-                  >Modifier</b-button
+                <b-button
+                @click.prevent="onCancelFormTitleSubmit()"
+                type="submit"
+                variant="outline-danger"
+                class="mr-3"
+                >Annuler</b-button
+                >
+                 <b-button
+                @click.prevent="onUpdateFormTitleSubmit()"
+                type="submit"
+                variant="primary"
+                >Supprimer</b-button
                 >
               </div>
             </b-form>
@@ -80,11 +90,16 @@ export default {
     async getFormTitle () {
       await this.formShow({ id: this.$route.params.form_id })
     },
-
-    onUpdateFormSubmit () {
+    hideModal () {
+      this.$bvModal.hide('updateFormTitleModal')
+    },
+    onUpdateFormTitleSubmit () {
       const formSubmit = { ...this.targetForm, title: this.targetForm.title, formFieldmodalMessage: 'Le titre du formulaire a été modifié avec succès' }
       this.$emit('onUpdateFormTitle', formSubmit)
-      this.$bvModal.hide('updateFormTitleModal')
+      this.hideModal()
+    },
+    onCancelFormTitleSubmit () {
+      this.hideModal()
     }
   }
 }

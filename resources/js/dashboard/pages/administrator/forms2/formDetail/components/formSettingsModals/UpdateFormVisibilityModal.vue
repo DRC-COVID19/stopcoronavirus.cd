@@ -48,6 +48,19 @@
                 <b-button type="submit" variant="primary"
                 >Publier</b-button
                 >
+                  <b-button
+                @click.prevent="onCancelFormVisibility()"
+                type="submit"
+                variant="outline-danger"
+                class="mr-3"
+                >Annuler</b-button
+                >
+                 <b-button
+                @click.prevent="onUpdateFormVisibility()"
+                type="submit"
+                variant="primary"
+                >Supprimer</b-button
+                >
               </div>
             </b-form>
           </ValidationObserver>
@@ -98,6 +111,9 @@ export default {
     onReset () {
       this.targetForm = {}
     },
+    hideModal () {
+      this.$bvModal.hide('updateFormVisibilityModal')
+    },
     onUpdateFormVisibility () {
       const form =
       {
@@ -107,7 +123,10 @@ export default {
       }
 
       this.$emit('updateFormVisibility', form)
-      this.$bvModal.hide('updateFormVisibilityModal')
+      this.hideModal()
+    },
+    onCancelFormVisibility () {
+      this.hideModal()
     }
   }
 }

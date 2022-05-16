@@ -3,7 +3,7 @@
       <p>Voulez-vous vraiment supprimer ce formulaire ?</p>
               <div class="mt-4 text-center">
                 <b-button
-                @click="onCancelDeleteForm"
+                @click="onCancelDeleteForm()"
                 type="submit"
                 variant="outline-danger"
                 class="mr-3"

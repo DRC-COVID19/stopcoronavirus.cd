@@ -31,8 +31,20 @@
                 name="Recurrence du formulaire"
                 mode="aggressive"
               />
-              <div class="mt-4 text-center">
-                <b-button type="submit" variant="primary">Modifier</b-button>
+               <div class="mt-4 text-center">
+                <b-button
+                @click.prevent="onCancelRecurrenceForm()"
+                type="submit"
+                variant="outline-danger"
+                class="mr-3"
+                >Annuler</b-button
+                >
+                 <b-button
+                @click.prevent="onUpdateFormRecurrence()"
+                type="submit"
+                variant="primary"
+                >Supprimer</b-button
+                >
               </div>
             </b-form>
           </ValidationObserver>
@@ -43,55 +55,59 @@
 </template>
 
 <script>
-import FomFieldSelect from "../../../../../../components/forms/FomFieldSelect";
-import { ValidationObserver } from "vee-validate";
-import { mapActions, mapState } from "vuex";
+import FomFieldSelect from '../../../../../../components/forms/FomFieldSelect'
+import { ValidationObserver } from 'vee-validate'
+import { mapActions, mapState } from 'vuex'
 export default {
   components: {
     FomFieldSelect,
-    ValidationObserver,
+    ValidationObserver
   },
   props: {
     form: {
       type: Object,
-      default: () => {},
+      default: () => {}
     },
     isUpdatingFormTile: {
       type: Boolean,
-      default: () => false,
-    },
+      default: () => false
+    }
   },
-  data() {
+  data () {
     return {
       targetForm: { form_recurrence_id: null },
-      isUpdating: this.isUpdatingFormTile,
-    };
+      isUpdating: this.isUpdatingFormTile
+    }
   },
-  async mounted() {
-    this.resetForm();
-    await this.getFormsRecurrences();
+  async mounted () {
+    await this.getFormsRecurrences()
   },
   computed: {
     ...mapState({
-      formRecurrences: (state) => state.form.formsRecurrences,
-    }),
+      formRecurrences: (state) => state.form.formsRecurrences
+    })
   },
   methods: {
-    ...mapActions(["getFormsRecurrences"]),
-    onReset() {
-      this.targetForm = {};
+    ...mapActions(['getFormsRecurrences']),
+    onReset () {
+      this.targetForm = {}
     },
-
-    onUpdateFormRecurrence() {
-      this.$emit("onUpdateFormRecurrence", {
+    hideModal () {
+      this.$bvModal.hide('updateFormRecurrenceModal')
+    },
+    onCancelRecurrenceForm () {
+      this.hideModal()
+    },
+    onUpdateFormRecurrence () {
+      this.$emit('onUpdateFormRecurrence', {
         ...this.targetForm,
         formFieldmodalMessage:
-          "La recurrence du formulaire a été modifiée avec succès",
-      });
-      this.$bvModal.hide("updateFormRecurrenceModal");
-    },
-  },
-};
+          'La recurrence du formulaire a été modifiée avec succès'
+      })
+      this.this.hideModal()
+    }
+  }
+}
 </script>
 
 <style></style>
