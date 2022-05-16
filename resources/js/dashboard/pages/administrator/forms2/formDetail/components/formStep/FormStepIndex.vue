@@ -1,18 +1,114 @@
 <template>
-  <b-container class="h-100">
-    <b-row>
-      <b-col class="bg-white">
-        <FormStepList />
-      </b-col>
+  <b-container class="mx-0 px-0" fluid>
+    <b-row class="mx-0">
+      <FormStepList
+        @openModalCreateList="showModalCreatedModal"
+        @openModalUpdateList="showModalUpdatedModal"
+        :isLoading="isLoading"
+        :updating="isCreating"
+        :formId="formId"
+        class="mt-4"
+      />
     </b-row>
+    <b-modal ref="modal-creation" hide-footer hide-header centered title="">
+      <h2 class="title text-center">
+        {{
+          isCreatingStep === true
+            ? "Création d'une étape"
+            : "Modification d'une étape"
+        }}
+      </h2>
+      <FormStepCreate
+        :formId="formId"
+        :rowFormStep="rowformStep"
+        @updated="onUpdatedFormStep"
+        @created="onCreatedFormStep"
+        @onCancelUpdate="cancelEditMode"
+        :isCreatingStepList="isCreatingStep"
+      />
+    </b-modal>
   </b-container>
 </template>
 <script>
+import { mapActions, mapState } from "vuex";
+
 import FormStepList from "./FormStepList.vue";
+import FormStepCreate from "./FormStepCreate.vue";
+
 export default {
   components: {
     FormStepList,
+    FormStepCreate,
+  },
+  props: {
+    formId: {
+      type: Number,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      isEditingMode: false,
+      title: "Les étapes du Formulaire",
+      iconClass: "fa fa-sliders",
+      rowformStep: {},
+      isCreatingStep: false,
+    };
+  },
+  mounted() {
+    this.getFormSteps({ id: this.formId });
+  },
+
+  computed: {
+    ...mapState({
+      formSteps: (state) => state.formStep.formSteps,
+      isCreating: (state) => state.formStep.isCreating,
+      isLoading: (state) => state.formStep.isLoading,
+    }),
+    formStepData() {
+      return this.formSteps.data;
+    },
+    formStepMeta() {
+      return this.formSteps.meta
+        ? this.formSteps.meta
+        : {
+            currentPage: 1,
+            perPage: 16,
+            total: this.formSteps.length,
+          };
+    },
+  },
+  methods: {
+    ...mapActions(["getFormSteps"]),
+    showModalCreatedModal() {
+      this.isCreatingStep = true;
+      this.rowformStep = {};
+      this.$refs["modal-creation"].show();
+    },
+    showModalUpdatedModal(form) {
+      this.isCreatingStep = false;
+      this.rowformStep = { ...form };
+      this.$refs["modal-creation"].show();
+    },
+    async onCreatedFormStep() {
+      await this.getFormSteps({ id: this.formId });
+      this.$refs["modal-creation"].hide();
+    },
+    async onUpdatedFormStep() {
+      await this.getFormSteps({ id: this.formId });
+      this.$refs["modal-creation"].hide();
+    },
+
+    cancelEditMode() {
+      this.isEditingMode = false;
+    },
   },
 };
 </script>
-
+<style scoped>
+.title {
+  font-size: 20px;
+  font-weight: 600;
+}
+</style>

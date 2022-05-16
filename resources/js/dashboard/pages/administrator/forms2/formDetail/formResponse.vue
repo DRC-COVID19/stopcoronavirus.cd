@@ -1,8 +1,17 @@
 <template>
   <b-container class="form-response">
     <b-row>
-      <b-col cols="12">
+      <b-col cols="12" class="">
         <b-card class="infos-card default-card">
+          <div class="btn-export-wrapper">
+            <b-button
+              class='button-icon text-sm btn-export'
+              variant="primary"
+              size="sm"
+            >
+              <small>Exporter</small> <i class="fa fa-file-excel ml-1" aria-hidden="true"></i>
+            </b-button>
+          </div>
           <div class="d-flex flex-wrap position-relative">
             <b-col cols="12" lg="6" class="response-text text-center text-lg-left">
               <h3> {{ totalCompletedForm }} réponse(s) </h3>
@@ -60,7 +69,7 @@ export default {
   .form-response {
     padding-top: 60px;
     .infos-card {
-      padding: 50px 20px;
+      padding: 10px 20px 50px 20px;
       margin-bottom: 40px;
       .response-text {
         @media (min-width: 992px) {
@@ -71,6 +80,10 @@ export default {
         strong {
           color: $dash-red;
         }
+      }
+      .btn-export-wrapper {
+        text-align: right;
+        margin-bottom: 20px;
       }
     }
   }

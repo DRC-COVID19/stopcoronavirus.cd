@@ -22,6 +22,8 @@ import FormIndex from "./pages/administrator/forms2/index";
 import FormShow from "./pages/administrator/forms/form";
 import FormShow2 from "./pages/administrator/forms2/formDetail/index";
 import FormCreation from "./pages/administrator/forms2/formDetail/formCreation";
+import FormFieldIndex from "./pages/administrator/forms2/formDetail/components/formField/FormFieldIndex";
+
 import FormSettings from "./pages/administrator/forms2/formDetail/formSettings";
 import FormSchemas from "./pages/administrator/forms2/formDetail/formSchemas";
 import FormResponse from "./pages/administrator/forms2/formDetail/formResponse";
@@ -303,6 +305,17 @@ export default [
           requiresAuth: true,
           role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
         },
+        children: [
+          {
+            path: "/administration/forms/:form_id/step/:step_id",
+            name: "administrator.forms.show.creation.step",
+            component: FormFieldIndex,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+            },
+          },
+        ],
       },
       {
         path: "/administration/forms/:form_id/response",
