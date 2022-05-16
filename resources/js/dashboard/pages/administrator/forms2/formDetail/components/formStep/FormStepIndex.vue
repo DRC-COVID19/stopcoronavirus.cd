@@ -7,9 +7,6 @@
         :isLoading="isLoading"
         :updating="isCreating"
         :formId="formId"
-        :current-page="formStepMeta.currentPage"
-        :per-page="formStepMeta.perPage"
-        :total-rows="formStepMeta.total"
         class="mt-4"
       />
     </b-row>

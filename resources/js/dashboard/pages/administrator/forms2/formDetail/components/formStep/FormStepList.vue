@@ -152,9 +152,9 @@ export default {
   methods: {
     ...mapActions(["getFormSteps", "removeFormStep", "searchFormStep"]),
     search() {
-      this.searchFormStep(this.filter.trim()).catch((error) => {
-        console.log(error);
-      });
+      // this.searchFormStep(this.filter.trim()).catch((error) => {
+      //   console.log(error);
+      // });
     },
     init() {
       if (this.rows !== 0) {
@@ -240,5 +240,18 @@ export default {
 .nav-item-active {
   padding: 15px auto !important;
   background-color: #f4f6fc !important;
+}
+@media (max-width: 768px) {
+  .title {
+    font-size: 16px !important;
+    font-weight: 600;
+  }
+  .form-step-list {
+    h3 {
+      font-size: 12px !important;
+      font-weight: 100;
+      color: $dash-blue;
+    }
+  }
 }
 </style>

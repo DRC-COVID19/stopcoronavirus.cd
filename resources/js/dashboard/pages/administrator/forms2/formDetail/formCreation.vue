@@ -15,6 +15,25 @@
       >
         <FormStepIndex :formId="+$route.params.form_id" />
       </b-col>
+      <b-col class="container-creation-list-responsive">
+        <div class="position-absolute">
+          <b-button v-b-toggle.sidebar-left class="btn-dash-blue d-block"
+            >Étapes
+          </b-button>
+        </div>
+        <b-sidebar
+          id="sidebar-left"
+          left
+          bg-variant="white"
+          width="25rem"
+          backdrop
+          :no-close-on-route-change="true"
+          shadow
+          backdrop-variant="transparent"
+        >
+          <FormStepIndex :formId="+$route.params.form_id" />
+        </b-sidebar>
+      </b-col>
       <b-col>
         <router-view></router-view>
       </b-col>
@@ -34,4 +53,19 @@ export default {
 .container-creation-list {
   padding-top: 3% !important;
 }
+.container-creation-list-responsive {
+  display: none;
+}
+@media (max-width: 1440px) {
+  .container-creation-list {
+    display: none !important;
+  }
+  .container-creation-list-responsive {
+    display: block !important;
+    div {
+      top: 15%;
+    }
+  }
+}
+
 </style>
