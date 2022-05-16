@@ -5,11 +5,11 @@
         <b-navbar-brand class="">
           <b-form-input
             @blur="onChangeTilte"
-            v-model="titleForm"
+            v-model="form.title"
             class="input-header"
             :class="stateTitleForm ? 'border-1' : 'border-0 '"
             placeholder="Entrer le titre du formulaire"
-            :value="titleForm"
+            :value="form.title"
             :state="stateTitleForm"
           ></b-form-input>
         </b-navbar-brand>
@@ -161,7 +161,7 @@ export default {
     }),
     ...mapGetters(['getChangeLogNotRead']),
     stateTitleForm () {
-      return this.titleForm.length === 0 ? false : null
+      return this.form.title.length === 0 ? false : null
     },
     canViewForm () {
       return (
@@ -173,10 +173,6 @@ export default {
   },
   mounted () {
     this.init()
-  },
-  watch: {
-    titleForm () {
-    }
   },
   methods: {
     ...mapActions([
@@ -190,15 +186,14 @@ export default {
     async init () {
       this.isLoading = true
       await this.formShow({ id: this.$route.params.form_id })
-      this.titleForm = this.form.title
       this.isPublish = this.form.publish
       if (this.form.length !== 0) {
         this.isLoading = false
       }
     },
     async onChangeTilte () {
-      this.form.title = this.titleForm
-      await this.form__Update({ id: this.form.id, form: this.form })
+      const form = { ...this.form, title: this.form.title }
+      await this.form__Update({ id: this.form.id, form })
     },
     async changeStatusPublishForm () {
       this.form.publish = !this.isPublish

@@ -83,8 +83,8 @@ export default {
     })
   },
   watch: {
-    async targetForm () {
-      await this.formShow({ id: this.$route.params.form_id })
+    targetForm () {
+      return this.targetForm
     }
   },
   methods: {
