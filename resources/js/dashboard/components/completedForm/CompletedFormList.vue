@@ -10,9 +10,50 @@
           + Nouveau
         </b-button>
       </b-col>
-      <b-col cols="12" md="auto" class="d-flex">
+      <b-col cols="12" md="auto" class="d-flex form-filters flex-wrap justify-content-center">
+        <div v-if="showDateFilter">
+          <label for="input-user" class="small text-muted">Filter par plage de date</label> <br>
+          <v-date-picker
+            v-model="form.dateRange"
+            is-range
+            @input="onFiltersChange"
+          >
+            <template v-slot="{ inputValue, inputEvents }">
+              <div class="d-flex">
+                <b-form-input
+                  :value="(inputValue.end || '') + ' - ' + (inputValue.start || '')"
+                  v-on="inputEvents.end"
+                  placeholder="Sélectionner une plage de date"
+                  readonly
+                >
+                </b-form-input>
+                <b-button
+                  class='button-icon'
+                  variant="primary"
+                  :disabled="!form.dateRange"
+                  @click="form.dateRange = null"
+                >
+                  <i class="fa fa-close" aria-hidden="true"></i>
+                </b-button>
+              </div>
+            </template>
+        </v-date-picker>
+        </div>
+        <div v-if="showUserFilter">
+          <label for="input-user" class="small text-muted">Filter par utilisateur</label> <br>
+          <b-form-select
+            v-model="form.admin_user_id"
+            :options="usersList"
+            text-field="name"
+            value-field="id"
+            class="mr-2"
+            id="input-user"
+            @change="onFiltersChange"
+          >
+          </b-form-select>
+        </div>
         <div v-if="showFormFilter">
-          <label for="input-formulaire" class="small text-muted">Formulaire</label>
+          <label for="input-formulaire" class="small text-muted">Filter par formulaire</label> <br>
           <b-form-select
             v-model="form.form_id"
             :options="formList"
@@ -25,7 +66,7 @@
           </b-form-select>
         </div>
         <div v-if="showHospitalFilter">
-          <label for="input-ctco" class="small text-muted">CTCO</label>
+          <label for="input-ctco" class="small text-muted">Filter par CTCO</label> <br>
           <b-form-select
             v-model="form.hospital_id"
             :options="hospitalList"
@@ -144,6 +185,14 @@ export default {
       type: Boolean,
       default: true
     },
+    showUserFilter: {
+      type: Boolean,
+      default: true
+    },
+    showDateFilter: {
+      type: Boolean,
+      default: true
+    },
     showFormColumn: {
       type: Boolean,
       default: true
@@ -159,9 +208,11 @@ export default {
       completedForms: {},
       isLoading: false,
       form: {
-        hospital_id: null
+        hospital_id: null,
+        admin_user_id: null
       },
-      perPage: 15
+      perPage: 15,
+      agentsHospitals: []
     }
   },
   computed: {
@@ -188,6 +239,12 @@ export default {
         ...this.hospital__hospitals
       ]
     },
+    usersList () {
+      return [
+        { id: null, name: 'Tous' },
+        ...this.agentsHospitals
+      ]
+    },
     fields () {
       const data = [
         { key: 'numero', label: '#' },
@@ -210,6 +267,7 @@ export default {
     this.getForms()
     this.getHospitals()
     this.getCompletedForms()
+    this.agentsHospitals = await this.adminUser__getAgentHospitals()
   },
   watch: {
     user () {
@@ -224,7 +282,8 @@ export default {
       'completedForm__getAllFiltered',
       'getForms',
       'completedForm__setSelectedForm',
-      'getHospitals'
+      'getHospitals',
+      'adminUser__getAgentHospitals'
     ]),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     ...mapGetters(['form__publishedForms']),
@@ -232,10 +291,12 @@ export default {
       this.isLoading = true
       this.completedForms = await this.completedForm__getAllFiltered({
         page,
-        ...this.Form,
+        ...this.form,
         hospital_id: this.hospitalId || this.form.hospital_id,
         form_id: this.formId || this.form.form_id,
-        per_page: this.perPage
+        per_page: this.perPage,
+        date_range_start: this.form?.dateRange?.start || null,
+        date_range_end: this.form?.dateRange?.end || null
       })
       this.isLoading = false
     },
@@ -274,6 +335,24 @@ export default {
         background-color: white;
       }
     }
+  }
+}
+.form-filters {
+  > div {
+    margin-left: 20px;
+    margin-bottom: 10px;
+  }
+  select, input {
+    width: 200px;
+  }
+
+  button.button-icon {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    background-color: $dash-blue;
+  }
+  .form-control[readonly]{
+    background-color: white;
   }
 }
 </style>

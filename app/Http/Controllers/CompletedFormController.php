@@ -374,15 +374,27 @@ class CompletedFormController extends Controller
     public function getAllFiltered(Request $request) {
         $formId = $request->query('form_id');
         $hospitalId = $request->query('hospital_id');
+        $adminUserId = $request->query('admin_user_id');
+        $dateRangeStart = $request->query('date_range_start');
+        $dateRangeEnd = $request->query('date_range_end');
+        $dateRange = $request->query('date_range');
         $perPage = $request->query('per_page') ?? 15;
 
         $query = CompletedForm::with(['hospital', 'form']);
+
+
 
         if ($formId) {
           $query = $query->where('form_id', $formId);
         }
         if ($hospitalId) {
           $query = $query->where('hospital_id', $hospitalId);
+        }
+        if ($adminUserId) {
+          $query = $query->where('admin_user_id', $adminUserId);
+        }
+        if ($dateRangeStart && $dateRangeEnd) {
+          $query = $query->whereBetween('last_update', [$dateRangeStart, $dateRangeEnd]);
         }
 
         $data = $query

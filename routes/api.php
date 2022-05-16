@@ -50,13 +50,10 @@ Route::post('/medicale-orientation', 'DiagnosticController@store');
 
 Route::group(['prefix' => 'admin_users'], function () {
   Route::get('/filter', 'AdministratorController@filter');
+  Route::get('/agents-hospital', 'AdministratorController@getAgentHospitals');
 });
 
 Route::apiResource('admin_users', 'AdministratorController');
-
-Route::group(['prefix' => 'admin_users'], function () {
-  Route::get('/agents-hospital', 'AdministratorController@getAgentHospitals');
-});
 
 Route::apiResource('admin_roles', 'AdminRoleController');
 

@@ -1,6 +1,6 @@
 <template>
   <b-row align-v="start" align-h="center">
-    <b-col  col="12" md="auto" class="d-flex align-items-center">
+    <b-col cols="12" lg="auto" class="d-flex align-items-center justify-content-center mb-3">
       <p class="mb-0">Par page: </p>
       <div>
         <b-form-select
@@ -12,9 +12,9 @@
           @change="onPerPageChange"
         />
       </div>
-      <p  class="mb-0 mx-5"> {{ ((page - 1) * perPage) + 1 }} - {{ perPage }} sur  {{ totalRows }}</p>
+      <p  class="mb-0 ml-5 mr-lg-5"> {{ ((page - 1) * perPage) + 1 }} - {{ perPage }} sur  {{ totalRows }}</p>
     </b-col>
-    <b-col v-if="perPageValue !== totalRows" col="12" md="auto">
+    <b-col v-if="perPageValue !== totalRows" cols="12" lg="auto" class="d-flex justify-content-center mb-3">
       <b-pagination
         v-model="currentPage"
         :total-rows="totalRows"

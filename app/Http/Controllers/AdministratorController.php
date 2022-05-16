@@ -93,8 +93,8 @@ class AdministratorController extends Controller
   {
     try {
       $administrators = Administrator::with(['roles'])
-        ->where('roles.name', '=', 'agent-hospital')
-        ->orderBy('username')->get();
+        // ->where('admin_role_users', '=', 'agent-hospital')
+        ->orderBy('name')->get();
       return response()->json($administrators, 200);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
