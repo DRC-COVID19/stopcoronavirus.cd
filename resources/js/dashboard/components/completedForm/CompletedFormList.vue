@@ -1,15 +1,7 @@
 <template>
   <div>
     <b-row class="mb-4">
-      <b-col cols="12" md>
-        <b-button
-          :to="{ name:'hospital.create', params:{ form_id: 1 }}"
-          class="btn-dash-blue"
-          v-if="showNewAction"
-        >
-          + Nouveau
-        </b-button>
-      </b-col>
+      <b-col cols="12" md></b-col>
       <b-col cols="12" md="auto" class="d-flex form-filters flex-wrap justify-content-center">
         <div v-if="showDateFilter">
           <label for="input-user" class="small text-muted">Filter par plage de date</label> <br>

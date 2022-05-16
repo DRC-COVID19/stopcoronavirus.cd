@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Administrator;
+use App\Form;
 use App\Hospital;
 use App\HospitalLog;
+use App\Administrator;
 use App\HospitalSituation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\HospitalResources;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreHospitalRequest;
 use App\Http\Requests\UpdateHospitalRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class HospitalController extends Controller
 {
@@ -38,6 +39,22 @@ class HospitalController extends Controller
   public function indexByPaginate()
   {
     $hospitals = Hospital::with(['agent', 'township'])->orderBy('name')->paginate(15);
+    return response()->json($hospitals, 200);
+  }
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function getHospitalList()
+  { $formId =9;
+    $hospitals = Hospital::all();
+                          //  ->get()
+                          //  ->map(function($hospital) use ($formId){
+                          //   return $hospital->forms->filter(fn($form)=> $form->id !== $formId);
+                          //  });
+                          //  ->forms->filter(fn($form)=> $form->hospital_id === null);
     return response()->json($hospitals, 200);
   }
 
@@ -78,8 +95,15 @@ class HospitalController extends Controller
    */
   public function show($hospital_id)
   {
-    $hospital = Hospital::find($hospital_id);
-    return response()->json($hospital);
+    $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
+                               ->where('publish', true)
+                               ->get();
+                               
+    $hospitalForms = Hospital::with('forms')
+                              ->find($hospital_id)
+                              ->forms->filter(fn($form)=> $form->publish)
+                                     ->merge($formsAllVisibility);
+    return response()->json($hospitalForms);
   }
   /**
    * Update the specified resource in storage.

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Form;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class FormController extends Controller
@@ -51,9 +52,29 @@ class FormController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Form $form)
-    {
-        $result = $form->update($this->updateValidator());
+      { 
+       
+         try 
+        {
+          DB::beginTransaction();
+          $data = $this->updateValidator();
+          $result = null;
+          if ($data['hospitals_id']) {
+            $result = $form->hospitals()->sync($data['hospitals_id']);
+          }
+            $result = $form->update($data);
+        
+          DB::commit();
         return response()->json( $result, 200);
+
+      } catch (\Throwable $th) {
+         DB::rollback();
+        if (env('APP_DEBUG') == true) {
+          return response($th)->setStatusCode(500);
+        }
+        return response($th->getMessage())->setStatusCode(500);
+     }
+      
     }
 
     /**
@@ -80,8 +101,11 @@ class FormController extends Controller
         return request()->validate([
             'title'                 => 'sometimes|string|max:255',
             'publish'               => 'nullable|boolean',
+            'visible_all_hospitals'  => 'nullable|boolean',
             'form_recurrence_value' => 'nullable|string|max:255',
+            'hospitals_id'          =>  'nullable|array',
             'form_recurrence_id'    => 'sometimes|integer|exists:form_recurrences,id'
+            
         ]);
     }
     public function recentForm(){

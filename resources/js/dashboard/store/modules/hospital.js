@@ -11,6 +11,7 @@ export default {
     selectedHospital: null,
     detailHospital: null,
     situationHospital: [],
+    AllHospitals: [],
     hospitalSituations: {},
     situationHospitalLoading: false,
     hospitalTotalData: null,
@@ -36,6 +37,9 @@ export default {
     },
     SET_IS_LOADING (state, payload) {
       state.isLoading = payload
+    },
+    SET_ALL_HOSPITALS (state, payload) {
+      state.AllHospitals = payload
     },
     SET_HOSPITAL_SITUATIONS (state, payload) {
       state.hospitalSituations = payload
@@ -203,6 +207,25 @@ export default {
           })
       })
     },
+    hospital__getAll ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/hospitals-data/get-hospital-list')
+          .then(({ data }) => {
+            commit('SET_ALL_HOSPITALS', data)
+            resolve(data)
+            commit('SET_IS_LOADING', false)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
+    },
 
     getHospitals ({ commit }) {
       return new Promise((resolve, reject) => {
@@ -215,6 +238,9 @@ export default {
           .catch((response) => {
             reject(response)
           })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
       })
     },
 
@@ -226,7 +252,7 @@ export default {
           .get(`/api/dashboard/hospitals-data/${payload.hospital_id}`)
           .then(({ data }) => {
             commit('SET_HOSPITAL_DATA', data)
-            resolve(true)
+            resolve(data)
             commit('SET_IS_LOADING', false)
           })
           .catch((response) => {

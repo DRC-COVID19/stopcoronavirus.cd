@@ -8,26 +8,24 @@
      v-for="(form, index) in recentForms" :key="index"
      class="px-2"
      >
-      <b-link
-           :to="{
-                name: 'administrator.forms.show.creation',
-                params: {
-                  form_id: form.id,
-                },
-              }" class="card-link">
-              <b-card class="card__recent-form">
-         {{ form.title}}
-          </b-card>
-      </b-link>
+     <card-form-recent
+       :route="getRoute(form)"
+       :form="form"
+     />
         </div>
     </div>
 </template>
 
 <script>
+import CardFormRecent from '../../../../components/forms/CardForm.vue'
 export default {
+  components: {
+    CardFormRecent
+  },
   props: {
     recentForms: {
-      type: Array,
+
+      CardFormRecenttype: Array,
       default: () => ([])
     },
     isLoading: {
@@ -35,72 +33,20 @@ export default {
       default: () => false,
       required: false
     }
+  },
+  methods: {
+    getRoute (form) {
+      return {
+        name: 'administrator.forms.show.creation',
+        params: {
+          form_id: form.id
+        }
+      }
+    }
   }
 
 }
 </script>
 
 <style lang="scss">
-@import "@~/sass/_variables";
-.card__Scroll{
-  display: flex;
-  justify-content: space-between;
-     @media (max-width: $max-width) {
-  & {
-    z-index: 5;
-    display: flex;
-    height: 30vh;
-    width: 100%;
-    border-right: 0;
-    overflow-x: scroll !important;
-    white-space: nowrap;
-  }
-}
-}
-.card__recent-form{
-    width: 170px;
-    height: 8rem;
-    cursor: pointer;
-    background: #FFFFFF;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-items: center;
-    background: #3767FA;
-    color: #FFFFFF;
-    font-weight: 700;
-    font-size: 14px;
-    transition: all .3s ease-in;
-    text-align: center;
-    border: 0 !important;
-    transform: scale(1);
-    &:hover{
-        transform: scale(1.1);
-        background-color: #FFFFFF;
-        color: #3767FA;
-    }
-@media screen and($small){
-    .card__recent-form{
-       font-size: 15px;
-    }
-  }
-  @media screen and($medium){
-    &{
-      .card__recent-form{
-       font-size: 15.5px;
-    }
-    }
-  }
-
-  @media screen and($large){
-    .card__recent-form{
-       font-size: 16px;
-    }
-  }
-    @media screen and($x-large){
-    
-  }
-}
-
 </style>

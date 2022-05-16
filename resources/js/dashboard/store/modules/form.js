@@ -1,18 +1,30 @@
 export default {
   state: {
     forms: [],
+    form: {},
     recentForms: [],
     formsRecurrences: [],
     isLoading: false,
     isUpdating: false,
-    isUpdateFormTitle: null
+    isUpdateFormTitle: null,
+    isUpdateForm: false,
+    isDeleteForm: false
   },
   mutations: {
     SET_FORMS (state, payload) {
       state.forms = payload
     },
+    SET_FORM (state, payload) {
+      state.form = payload
+    },
     SET_IS_UPDATE_FORM_TITLE (state, payload) {
       state.isUpdateFormTitle = payload
+    },
+    SET_IS_UPDATE_FORM (state, payload) {
+      state.isUpdateForm = payload
+    },
+    SET_IS_DELETE_FORM (state, payload) {
+      state.isDeleteForm = payload
     },
     SET_RECENT_FORMS (state, payload) {
       state.recentForms = payload
@@ -31,11 +43,12 @@ export default {
     form__publishedForms: state => state.forms.filter(form => form.publish)
   },
   actions: {
-    formShow (_, payload) {
+    formShow ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios
           .get(`/api/dashboard/forms/${payload.id}`)
           .then(({ data }) => {
+            commit('SET_FORM', data)
             resolve(data)
           })
           .catch((error) => {
@@ -43,10 +56,40 @@ export default {
           })
       })
     },
+    form__Update ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .put('/api/dashboard/forms/' + payload.id, payload.form)
+          .then(() => {
+            resolve(true)
+            commit('SET_IS_UPDATE_FORM', true)
+          })
 
+          .catch(({ response }) => {
+            reject(response)
+            commit('SET_IS_UPDATE_FORM', false)
+          })
+      })
+    },
+    form__Delete ({ commit }, formId) {
+      return new Promise((resolve, reject) => {
+        axios
+          .delete(`/api/dashboard/forms/${formId}`)
+          .then(({ data }) => {
+            commit('SET_IS_DELETE_FORM', true)
+            resolve(true)
+          })
+          .catch(({ response }) => {
+            commit('SET_IS_DELETE_FORM', false)
+            reject(response)
+          })
+      })
+    },
     getForms ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
         axios
           .get('api/dashboard/forms', {
             params: { page: payload.page || 1 }
@@ -93,7 +136,6 @@ export default {
     },
 
     getFormFiltered ({ state, commit }, payload = {}) {
-      console.log('payload', payload)
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
@@ -108,7 +150,6 @@ export default {
           })
           .then(({ data }) => {
             resolve(data)
-            console.log('data--->', data)
             commit('SET_IS_LOADING', false)
           })
           .catch((response) => {

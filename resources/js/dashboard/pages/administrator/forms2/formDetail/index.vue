@@ -20,13 +20,16 @@ export default {
     }
   },
 
-  mounted () {},
+  mounted () {
+  },
 
   methods: {}
 }
 </script>
 
 <style lang="scss" scoped>
+  @import "@~/sass/_variables";
+
 .form-container {
   background: #f4f6fc;
   min-height: 100vh;
