@@ -4,7 +4,7 @@
       <b-card-body class="py-0">
         <div class="d-flex justify-content-between align-items-center">
           <strong class="mb-0">
-            ETAPES
+            ÉTAPES
           </strong>
           <i class="fas fa-list-ol" aria-hidden="true"></i>
         </div>
@@ -56,6 +56,7 @@ export default {
   },
   mounted () {
     this.getFormSteps({ id: this.formId })
+    this.selectDefaultStep()
   },
 
   computed: {
@@ -77,6 +78,11 @@ export default {
           }
     }
   },
+  watch: {
+    formSteps () {
+      this.selectDefaultStep()
+    }
+  },
   methods: {
     ...mapActions([
       'getFormSteps'
@@ -94,6 +100,15 @@ export default {
     },
     cancelEditMode () {
       this.isEditingMode = false
+    },
+    selectDefaultStep () {
+      if (!this.$route.params.step_id) {
+        const steps = this.formSteps.slice().sort((a, b) => b.step - a.step)
+        this.$router.push({
+          name: 'administrator.forms.show.creation.step',
+          params: { step_id: steps[0].id }
+        });
+      }
     }
   }
 

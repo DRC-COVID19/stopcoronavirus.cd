@@ -16,9 +16,9 @@
         <FormStepIndex :formId="+$route.params.form_id" />
       </b-col>
       <b-col class="container-creation-list-responsive">
-        <div class="position-absolute">
-          <b-button v-b-toggle.sidebar-left class="btn-dash-blue d-block"
-            >Étapes
+        <div class="mt-5">
+          <b-button v-b-toggle.sidebar-left class="btn-dash-blue d-block" side="sm">
+            <small>Étapes</small>
           </b-button>
         </div>
         <b-sidebar
@@ -44,15 +44,12 @@
 import FormStepIndex from "./components/formStep/FormStepIndex";
 export default {
   components: {
-    FormStepIndex,
-  },
+    FormStepIndex
+  }
 };
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-.container-creation-list {
-  padding-top: 3% !important;
-}
 .container-creation-list-responsive {
   display: none;
 }

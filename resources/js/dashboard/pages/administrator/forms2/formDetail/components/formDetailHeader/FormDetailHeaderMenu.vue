@@ -26,7 +26,7 @@
       :to="{ name: 'administrator.forms.show.schema' }"
       :active="this.$route.name.startsWith('administrator.forms.show.schema')"
     >
-      Schèmas
+      Schemas
     </b-nav-item>
   </b-nav>
 </template>
@@ -103,6 +103,9 @@ export default {
   background: transparent;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+  .nav-item {
+    background-color: $dash-background;
+  }
   a {
     color: black;
     text-decoration: none;

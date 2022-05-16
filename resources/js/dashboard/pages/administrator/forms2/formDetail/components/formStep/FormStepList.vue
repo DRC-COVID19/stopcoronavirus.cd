@@ -2,9 +2,9 @@
   <b-row class="w-100">
     <b-col lg="12" class="px-0">
       <b-card lg="12" class="border-0 px-0 w-100form-step-list-title mx-0">
-        <div class="d-flex justify-content-between w-100 pt-2 pb-3 px-3">
+        <div class="d-flex justify-content-between w-100 pt-2 pb-3 px-3 align-items-center">
           <div class="d-flex justify-content-center align-center">
-            <h2 class="title">Étape</h2>
+            <h2 class="title mb-0">Étape</h2>
           </div>
           <div class="d-flex align-item-center">
             <b-button
@@ -35,17 +35,9 @@
             }"
             active-class="nav-item-active"
           >
-            <div
-              class="
-                d-flex
-                justify-content-between
-                align-center
-                text-center
-                w-100
-              "
-            >
+            <div class="d-flex justify-content-between align-center text-center w-100">
               <div class="d-flex align-center text-center my-2">
-                <h3>{{ step.title }}</h3>
+                <h3 class="mb-0">{{ step.title }}</h3>
               </div>
               <b-dropdown
                 size="lg"
@@ -54,7 +46,7 @@
                 no-caret
               >
                 <template #button-content>
-                  <i class="fas fa-ellipsis-v"></i>
+                  <i class="fas fa-ellipsis-v black--text text--black" aria-hidden="true"></i>
                 </template>
                 <b-dropdown-item-button @click="openModalUpdateList(step)"
                   >Modifier</b-dropdown-item-button
@@ -151,11 +143,6 @@ export default {
   },
   methods: {
     ...mapActions(["getFormSteps", "removeFormStep", "searchFormStep"]),
-    search() {
-      // this.searchFormStep(this.filter.trim()).catch((error) => {
-      //   console.log(error);
-      // });
-    },
     init() {
       if (this.rows !== 0) {
         this.$router.push({
@@ -226,13 +213,12 @@ export default {
   h3 {
     font-size: 14px;
     font-weight: 100;
-    color: $dash-blue;
+    color: black;
   }
-
+  i {
+    color: black;
+  }
   &:hover {
-    background-color: #f4f6fc;
-  }
-  &:active {
     background-color: #f4f6fc;
   }
 }
@@ -240,6 +226,13 @@ export default {
 .nav-item-active {
   padding: 15px auto !important;
   background-color: #f4f6fc !important;
+  h3 {
+    background-color: #f4f6fc;
+    color: $dash-blue;
+  }
+  i {
+    color: $dash-blue;
+  }
 }
 @media (max-width: 768px) {
   .title {
