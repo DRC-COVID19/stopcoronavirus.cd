@@ -60,7 +60,7 @@ class FormController extends Controller
           $data = $this->updateValidator();
           $result = null;
           if ($data['hospitals_id']) {
-            $result = $form->hospitals()->sync(['hospital_id' => $data['hospitals_id']]);
+            $result = $form->hospitals()->sync($data['hospitals_id']);
           }
             $result = $form->update($data);
         
