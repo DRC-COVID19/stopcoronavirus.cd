@@ -17,7 +17,7 @@
                   v-b-modal.updateFormTitleModal
                 />
               </div>
-              <h6>Avoir la possibilité de modifier le nom du formulaire</h6>
+              <h6>Cliquer sur l'icon à droite pour modifier le titre du formulaire</h6>
               <hr />
               <update-form-modal @onUpdateFormTitle="updateForm" />
             </div>
@@ -30,7 +30,7 @@
                   v-b-modal.updateFormRecurrenceModal
                 />
               </div>
-              <h6>Avoir la possibilité de modifier la récurrence</h6>
+              <h6>Pour mettre à jour la récurrence, cliquer sur l'icon à droite</h6>
               <hr />
               <update-form-recurrence-modal
                 @onUpdateFormRecurrence="updateForm"
@@ -160,6 +160,12 @@ export default {
     }
     .form__settings-icon {
       cursor: pointer;
+      transition: all .5s ease-in-out;
+      &:hover{
+        background-color: #e6e6e7;
+        border-radius: 10px;
+        padding: 2rem;
+      }
     }
   }
 }

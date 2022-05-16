@@ -133,7 +133,6 @@ export default {
     },
 
     getFormFiltered ({ state, commit }, payload = {}) {
-      console.log('payload', payload)
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios

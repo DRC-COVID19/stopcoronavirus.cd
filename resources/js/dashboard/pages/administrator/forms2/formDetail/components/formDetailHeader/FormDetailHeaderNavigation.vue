@@ -4,7 +4,7 @@
       <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="">
           <b-form-input
-            @blur="onChangeTilte"
+            @blur="onChangeFormTitle"
             v-model="form.title"
             class="input-header"
             :class="stateTitleForm ? 'border-1' : 'border-0 '"
@@ -191,7 +191,7 @@ export default {
         this.isLoading = false
       }
     },
-    async onChangeTilte () {
+    async onChangeFormTitle () {
       const form = { ...this.form, title: this.form.title }
       await this.form__Update({ id: this.form.id, form })
     },
