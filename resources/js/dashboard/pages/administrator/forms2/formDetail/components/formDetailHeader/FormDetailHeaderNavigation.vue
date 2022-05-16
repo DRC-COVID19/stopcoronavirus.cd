@@ -161,7 +161,7 @@ export default {
     }),
     ...mapGetters(['getChangeLogNotRead']),
     stateTitleForm () {
-      return this.form.title.length === 0 ? false : null
+      return this.form?.title?.length === 0 ? false : null
     },
     canViewForm () {
       return (

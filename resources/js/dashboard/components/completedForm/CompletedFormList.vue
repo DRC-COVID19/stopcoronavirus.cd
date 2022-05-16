@@ -3,34 +3,6 @@
     <b-row class="mb-4">
       <b-col cols="12" md></b-col>
       <b-col cols="12" md="auto" class="d-flex form-filters flex-wrap justify-content-center">
-        <div v-if="showDateFilter">
-          <label for="input-user" class="small text-muted">Filter par plage de date</label> <br>
-          <v-date-picker
-            v-model="form.dateRange"
-            is-range
-            @input="onFiltersChange"
-          >
-            <template v-slot="{ inputValue, inputEvents }">
-              <div class="d-flex">
-                <b-form-input
-                  :value="(inputValue.end || '') + ' - ' + (inputValue.start || '')"
-                  v-on="inputEvents.end"
-                  placeholder="Sélectionner une plage de date"
-                  readonly
-                >
-                </b-form-input>
-                <b-button
-                  class='button-icon'
-                  variant="primary"
-                  :disabled="!form.dateRange"
-                  @click="form.dateRange = null"
-                >
-                  <i class="fa fa-close" aria-hidden="true"></i>
-                </b-button>
-              </div>
-            </template>
-        </v-date-picker>
-        </div>
         <div v-if="showUserFilter">
           <label for="input-user" class="small text-muted">Filter par utilisateur</label> <br>
           <b-form-select
@@ -69,6 +41,34 @@
             @change="onFiltersChange"
           >
           </b-form-select>
+        </div>
+        <div v-if="showDateFilter">
+          <label for="input-user" class="small text-muted">Filter par plage de date</label> <br>
+          <v-date-picker
+            v-model="form.dateRange"
+            is-range
+            @input="onFiltersChange"
+          >
+            <template v-slot="{ inputValue, inputEvents }">
+              <div class="d-flex">
+                <b-form-input
+                  :value="(inputValue.end || '') + ' - ' + (inputValue.start || '')"
+                  v-on="inputEvents.end"
+                  placeholder="Sélectionner une plage de date"
+                  readonly
+                >
+                </b-form-input>
+                <b-button
+                  class='button-icon'
+                  variant="primary"
+                  :disabled="!form.dateRange"
+                  @click="form.dateRange = null"
+                >
+                  <i class="fa fa-close" aria-hidden="true"></i>
+                </b-button>
+              </div>
+            </template>
+          </v-date-picker>
         </div>
       </b-col>
     </b-row>
@@ -323,8 +323,13 @@ export default {
       color: white;
     }
     tbody {
-      &:nth-child(2n) {
-        background-color: white;
+      tr {
+        &:nth-child(2n) {
+          background-color: white;
+        }
+        &:nth-child(2n+1) {
+          background-color: rgba(0, 0, 0, 0.02);
+        }
       }
     }
   }
