@@ -58,11 +58,14 @@ class FormController extends Controller
         {
           DB::beginTransaction();
           $data = $this->updateValidator();
+          Log::info('visible 0', [$data]);
           $result = null;
-          if (isset($data['hospital_id'])) {
+          if (isset($data['hospital_id'])&& $data['hospital_id'] > 0) {
             $result = $form->hospitals()->sync($data['hospital_id']);
+            Log::info('visible 1', [$data]);
           } else {
             $result = $form->update($data);
+            Log::info('visible 2', [$data]);
             
           }
         

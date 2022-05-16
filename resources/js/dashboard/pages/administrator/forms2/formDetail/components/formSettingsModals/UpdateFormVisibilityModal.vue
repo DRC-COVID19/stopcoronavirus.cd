@@ -26,7 +26,7 @@
                    Pour tous les CTCOS
                   </b-form-checkbox>
                </b-col>
-                <b-col md="12" >
+                <b-col md="12">
                   <FomFieldSelect
                     v-model="targetForm.hospitals"
                     :options="hospitals"
@@ -40,12 +40,11 @@
                     labelText="Selectionnez un ou plusieurs CTCOs "
                     name="Recurrence du formulaire"
                     mode="aggressive"
-                    :disabled="visibleAllHositals"
+                     v-show="!visibleAllHositals"
                     />
                 </b-col>
               </b-row>
               <div class="mt-4 text-center">
-                >
                   <b-button
                 @click.prevent="onCancelFormVisibility()"
                 type="submit"

@@ -174,12 +174,16 @@ export default {
   mounted () {
     this.init()
   },
+  watch: {
+    titleForm () {
+    }
+  },
   methods: {
     ...mapActions([
       'logout',
       'setChangeLogsRead',
       'formShow',
-      'updateFormTitle',
+      'form__Update',
       'changeStatusForm'
     ]),
     ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
@@ -194,7 +198,7 @@ export default {
     },
     async onChangeTilte () {
       this.form.title = this.titleForm
-      await this.updateFormTitle(this.form)
+      await this.form__Update({ id: this.form.id, form: this.form })
     },
     async changeStatusPublishForm () {
       this.form.publish = !this.isPublish
