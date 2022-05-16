@@ -13,7 +13,9 @@
     <b-modal ref="modal-creation" hide-footer hide-header centered title="">
       <h2 class="title text-center">
         {{
-          isCreatingStep ? "Création d'une étape" : "Modification d'une étape"
+          isCreatingStep === true
+            ? "Création d'une étape"
+            : "Modification d'une étape"
         }}
       </h2>
       <FormStepCreate
@@ -81,7 +83,7 @@ export default {
     ...mapActions(["getFormSteps"]),
     showModalCreatedModal() {
       this.isCreatingStep = true;
-      this.rowFormStep = {};
+      this.rowformStep = {};
       this.$refs["modal-creation"].show();
     },
     showModalUpdatedModal(form) {
@@ -100,8 +102,6 @@ export default {
 
     cancelEditMode() {
       this.isEditingMode = false;
-      this.isCreatingStep = true;
-      this.rowFormStep = {};
     },
   },
 };

@@ -111,7 +111,7 @@ export default {
     };
   },
   mounted() {
-    this.form = { ...this.rowFormStep };
+    this.onUpdateRowFormStep();
   },
   watch: {},
   methods: {
@@ -155,7 +155,7 @@ export default {
               type: "success",
             });
             this.$emit("updated");
-            this.onReset();
+            // this.onReset();
           })
           .catch(({ response }) => {
             this.$notify({
@@ -170,10 +170,19 @@ export default {
           });
       }
     },
-
+    onUpdateRowFormStep() {
+      this.form = {
+        title: "",
+        step: null,
+        form_id: null,
+      };
+      if (Object.keys(this.rowFormStep) !== 0) {
+        this.form = { ...this.rowFormStep };
+      }
+    },
     onReset() {
       this.toToCanceled = true;
-      this.form = {};
+      this.form = { title: "", step: null, form_id: null };
       this.$emit("onCancelUpdate", {});
     },
   },
