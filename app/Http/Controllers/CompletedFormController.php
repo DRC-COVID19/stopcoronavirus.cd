@@ -203,7 +203,8 @@ class CompletedFormController extends Controller
      */
     public function destroy(CompletedForm $completedForm)
     {
-        //
+        $completedForm->delete();
+        return response()->json(null, 204);
     }
     /**
      * Get the guard to be used during authentication.

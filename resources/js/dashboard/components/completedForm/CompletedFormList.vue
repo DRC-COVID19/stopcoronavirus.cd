@@ -136,10 +136,19 @@
             >
               Éditer
             </b-button>
+            <b-button
+              v-if="userIsAdminHospital"
+              variant="outline-danger btn-dash"
+              class="btn-dash"
+              @click="showDeleteCompletedFormModal(data.item.id)"
+            >
+              Supprimer
+            </b-button>
           </template>
         </b-table>
       </b-col>
     </b-row>
+
     <Pagination
       class="mb-4"
       :total-rows="totalRows"
@@ -147,6 +156,30 @@
       @pageChanged="onPageChange"
       @perPageChanged="onPerPageChange"
     />
+
+    <b-modal v-model="deleteModalVisible" centered>
+      Voulez-vous vraiment supprimer cette soumission
+      <template #modal-footer>
+        <b-row class="px-3 pt-4 d-flex justify-content-center">
+          <b-button
+            size="sm"
+            variant="success"
+            class="btn-dash-blue mx-2"
+            @click="onValidateDeletion()"
+          >
+            Accepter
+          </b-button>
+          <b-button
+            size="sm"
+            variant="danger"
+            class="mx-2"
+            @click="onCancelDeletion()"
+          >
+            Annuler
+          </b-button>
+        </b-row>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -205,7 +238,9 @@ export default {
       },
       perPage: 15,
       agentsHospitals: [],
-      allCurrentFilters: {}
+      allCurrentFilters: {},
+      deleteModalVisible: false,
+      completedFormIdToDelete: null
     }
   },
   computed: {
@@ -214,6 +249,9 @@ export default {
       completedForm__selectedForm: (state) => state.completedForm.selectedForm,
       hospital__hospitals: (state) => state.hospital.hospitals
     }),
+    userIsAdminHospital () {
+      return this.userHaveRole(ADMIN_HOSPITAL)
+    },
     totalRows () {
       return this.completedForms?.total || 0
     },
@@ -266,8 +304,8 @@ export default {
     user () {
       this.getCompletedForms()
     },
-    totalRows(value) {
-      this.$emit('totalChanged', value);
+    totalRows (value) {
+      this.$emit('totalChanged', value)
     }
   },
   methods: {
@@ -276,7 +314,8 @@ export default {
       'getForms',
       'completedForm__setSelectedForm',
       'getHospitals',
-      'adminUser__getAgentHospitals'
+      'adminUser__getAgentHospitals',
+      'completedForm__delete'
     ]),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     ...mapGetters(['form__publishedForms']),
@@ -310,6 +349,36 @@ export default {
     },
     onFiltersChange () {
       this.getCompletedForms(1)
+    },
+    showDeleteCompletedFormModal (id) {
+      this.deleteModalVisible = true
+      this.completedFormIdToDelete = id
+    },
+    onCancelDeletion () {
+      this.deleteModalVisible = false
+      this.completedFormIdToDelete = null
+    },
+    onValidateDeletion () {
+      this.$bvModal.show('confirmation-box')
+      this.completedForm__delete(this.completedFormIdToDelete)
+        .then(() => {
+          this.$notify({
+            group: 'alert',
+            title: 'Suppression...',
+            text: 'Soumission supprimer avec succès',
+            type: 'success'
+          })
+          this.deleteModalVisible = false
+          this.getCompletedForms()
+        })
+        .catch(() => {
+          this.$notify({
+            group: 'alert',
+            title: 'Suppression...',
+            text: 'Une erreur est survenu',
+            type: 'error'
+          })
+        })
     }
   }
 }
