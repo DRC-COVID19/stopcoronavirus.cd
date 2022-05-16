@@ -4,6 +4,7 @@ import { event } from 'vue-gtag'
 
 export default {
   state: {
+    hospitals: [],
     hospitalData: null,
     hospitalCount: null,
     isLoading: false,
@@ -30,7 +31,7 @@ export default {
       state.hospitalManagerName = payload.name
       state.hospitalManagerFirstName = payload.firstName
     },
-    SET_HOSPITAL (state, payload) {
+    SET_HOSPITAL_DATA (state, payload) {
       state.hospitalData = payload
     },
     SET_IS_LOADING (state, payload) {
@@ -38,7 +39,10 @@ export default {
     },
     SET_HOSPITAL_SITUATIONS (state, payload) {
       state.hospitalSituations = payload
-    }
+    },
+    SET_HOSPITALS (state, payload) {
+      state.hospitals = payload
+    },
   },
   actions: {
     getHospitalsData ({ state }, payload) {
@@ -177,7 +181,8 @@ export default {
           exception(response)
         })
     },
-    getHospitals ({ state, commit }, payload = {}) {
+
+    getHospitalsByPaginate ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
 
       return new Promise((resolve, reject) => {
@@ -186,7 +191,7 @@ export default {
             params: { page: payload.page }
           })
           .then(({ data }) => {
-            commit('SET_HOSPITAL', data)
+            commit('SET_HOSPITAL_DATA', data)
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
@@ -198,6 +203,21 @@ export default {
           })
       })
     },
+
+    getHospitals ({ commit }) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/hospitals')
+          .then(({ data }) => {
+            resolve(data)
+            commit('SET_HOSPITALS', data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
+    },
+
     getHospital ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
 
@@ -205,7 +225,7 @@ export default {
         axios
           .get(`/api/dashboard/hospitals-data/${payload.hospital_id}`)
           .then(({ data }) => {
-            commit('SET_HOSPITAL', data)
+            commit('SET_HOSPITAL_DATA', data)
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
@@ -217,6 +237,7 @@ export default {
           })
       })
     },
+
     getHospitalSituations ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', payload.isLoading)
       return new Promise((resolve, reject) => {
@@ -245,7 +266,7 @@ export default {
         axios
           .patch(`/api/dashboard/hospitals-data/${payload.id}/reject-agent`)
           .then(({ data }) => {
-            commit('SET_HOSPITAL', data)
+            commit('SET_HOSPITAL_DATA', data)
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
@@ -267,7 +288,7 @@ export default {
             township_id: payload.township_id
           })
           .then(({ data }) => {
-            commit('SET_HOSPITAL', data)
+            commit('SET_HOSPITAL_DATA', data)
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
@@ -295,7 +316,7 @@ export default {
             }
           )
           .then(({ data }) => {
-            commit('SET_HOSPITAL', data)
+            commit('SET_HOSPITAL_DATA', data)
             resolve(true)
             commit('SET_IS_LOADING', false)
           })
@@ -311,7 +332,7 @@ export default {
         axios
           .get(`/api/dashboard/hospitals-data/filter/key_words=${payload}`)
           .then(({ data }) => {
-            commit('SET_HOSPITAL', data)
+            commit('SET_HOSPITAL_DATA', data)
             resolve(data)
             commit('SET_IS_LOADING', false)
           })
@@ -331,7 +352,6 @@ export default {
             commit('SET_IS_LOADING', false)
           })
           .catch((response) => {
-            console.log(response)
             reject(response)
           })
       })

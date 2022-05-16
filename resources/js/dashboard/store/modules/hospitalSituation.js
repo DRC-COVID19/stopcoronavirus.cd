@@ -3,7 +3,6 @@ import moment from 'moment'
 
 export default {
   state: {
-    hospitalsList: [],
     hospitalSituation: [],
     filterdHospitalSituation: [],
     hospitalSituationDetail: {},
@@ -38,9 +37,6 @@ export default {
     },
     HOSPITAL_SITUATION_DETAIL (state, payload) {
       state.hospitalSituationDetail = payload
-    },
-    SET_HOSPITALS (state, payload) {
-      state.hospitalsList = payload
     },
     SET_SITUATION (state, payload) {
       state.hospitalSituationSelected = payload
@@ -152,24 +148,6 @@ export default {
           .finally(() => {
             commit('SET_IS_LOADING', false)
             commit('SET_IS_CREATING', false)
-          })
-      })
-    },
-    getHospitals ({ state, commit }) {
-      commit('SET_IS_LOADING', true)
-      return new Promise((resolve, reject) => {
-        axios
-          .get('api/dashboard/hospitals-data')
-          .then(({ data }) => {
-            commit('SET_HOSPITALS', data)
-            commit('SET_IS_LOADING', false)
-            resolve(true)
-          })
-          .catch(response => {
-            reject(response)
-          })
-          .finally(() => {
-            commit('SET_IS_LOADING', false)
           })
       })
     },
