@@ -15,24 +15,24 @@
           </h3>
           <b-card class="mb-4 bg-dash">
             <b-card-header class="border-0 p-2 hospital__home-form text-dark"
-              ><h5 class="mt-2">
+              ><h5 class="ml-4">
                 {{ `Structure: ${user.hospital.name}` }}
-              </h5></b-card-header
-            >
-            <b-card-body>
-              <p v-if="user.hospital.address">
+              </h5>
+               <p v-if="user.hospital.address" class="ml-4">
                 {{ `Adresse: ${user.hospital.address}` }}
               </p>
-              <p v-if="hospitalManagerName && hospitalManagerFirstName">
+              <p v-if="hospitalManagerName && hospitalManagerFirstName" class="ml-4 font-italic">
                 Connecté en tant que
                 <strong>{{ hospitalManagerName }} - </strong
                 ><span
                   ><strong>{{ hospitalManagerFirstName }}</strong></span
                 >
               </p>
+              </b-card-header>
+            <b-card-body>
 
               <b-row
-                class="mt-4 mb-5 hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center"
+                class="mb-5 hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center"
               >
                 <b-col sm="12">
                   <h4 class="ml-2 mb-4">Mes Formulaires</h4>
@@ -243,7 +243,7 @@ export default {
 </script>
 
 <style lang="scss">
-$bg_primary: #f4f6fc;
+$bg_primary: #fff;
 .hopita_mome {
   background-color: $bg_primary;
 }
