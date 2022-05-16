@@ -58,16 +58,11 @@ class FormController extends Controller
         {
           DB::beginTransaction();
           $data = $this->updateValidator();
-          Log::info('visible 0', [$data]);
           $result = null;
-          if (isset($data['hospital_id'])&& $data['hospital_id'] > 0) {
-            $result = $form->hospitals()->sync($data['hospital_id']);
-            Log::info('visible 1', [$data]);
-          } else {
-            $result = $form->update($data);
-            Log::info('visible 2', [$data]);
-            
+          if ($data['hospitals_id']) {
+            $result = $form->hospitals()->sync($data['hospitals_id']);
           }
+            $result = $form->update($data);
         
           DB::commit();
         return response()->json( $result, 200);
@@ -108,7 +103,7 @@ class FormController extends Controller
             'publish'               => 'nullable|boolean',
             'visible_all_hospitals'  => 'nullable|boolean',
             'form_recurrence_value' => 'nullable|string|max:255',
-            'hospital_id'          =>  'nullable|array',
+            'hospitals_id'          =>  'nullable|array',
             'form_recurrence_id'    => 'sometimes|integer|exists:form_recurrences,id'
             
         ]);

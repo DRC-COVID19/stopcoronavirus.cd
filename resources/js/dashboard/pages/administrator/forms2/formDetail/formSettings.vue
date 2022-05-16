@@ -111,7 +111,7 @@ export default {
         form_recurrence_value: currentForm.form_recurrence_value,
         form_recurrence_id: currentForm.form_recurrence_id,
         publish: currentForm.publish,
-        hospital_id: currentForm.hospitals,
+        hospitals_id: currentForm.hospitals,
         visible_all_hospitals: currentForm.visibleAllHositals
       }
 
@@ -160,11 +160,12 @@ export default {
     }
     .form__settings-icon {
       cursor: pointer;
-      transition: all .5s ease-in-out;
+      padding: 2px;
+      transition: all .3s ease-in-out;
       &:hover{
         background-color: #e6e6e7;
-        border-radius: 10px;
-        padding: 2rem;
+        border-radius: 5px;
+
       }
     }
   }

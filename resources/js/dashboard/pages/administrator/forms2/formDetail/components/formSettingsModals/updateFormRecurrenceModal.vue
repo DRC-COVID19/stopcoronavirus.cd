@@ -104,7 +104,7 @@ export default {
         formFieldmodalMessage:
           'La recurrence du formulaire a été modifiée avec succès'
       })
-      this.this.hideModal()
+      this.hideModal()
     }
   }
 }
