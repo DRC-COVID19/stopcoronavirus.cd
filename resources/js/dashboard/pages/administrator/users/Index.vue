@@ -116,7 +116,7 @@ export default {
   mounted () {
     this.getUserList()
     this.getUserRoles()
-    this.getHospitals()
+    this.getHospitalsWithoutAgent()
   },
   computed: {
     userMeta () {
@@ -321,10 +321,10 @@ export default {
           this.$gtag.exception(response)
         })
     },
-    getHospitals () {
+    getHospitalsWithoutAgent () {
       // eslint-disable-next-line no-undef
       axios
-        .get('/api/dashboard/hospitals-data')
+        .get('/api/dashboard/hospitals/all-Without-agent')
         .then(({ data }) => {
           this.hospitals = data
         })

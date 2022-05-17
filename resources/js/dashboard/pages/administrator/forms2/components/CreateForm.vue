@@ -204,8 +204,7 @@ export default {
         this.updating = true
         this.form.id = this.formToPopulate.id
         this.form.title = this.formToPopulate.title
-        this.form.form_recurrence_value =
-          this.formToPopulate.form_recurrence_value
+        this.form.form_recurrence_value = this.formToPopulate.form_recurrence_value
         this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id
         this.form.publish = this.formToPopulate.publish
         this.title = 'Modification du formulaire'

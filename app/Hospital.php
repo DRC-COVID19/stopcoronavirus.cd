@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Form;
 use App\HospitalSituationNew;
 use App\Events\HospitalUpdatedEvent;
 use Illuminate\Database\Eloquent\Model;
@@ -50,6 +51,9 @@ class Hospital extends Model
         return $this->belongsTo(Township::class);
     }
 
+    public function forms(){
+        return $this->belongsToMany(Form::class);
+    }
     public static function boot()
     {
         parent::boot();

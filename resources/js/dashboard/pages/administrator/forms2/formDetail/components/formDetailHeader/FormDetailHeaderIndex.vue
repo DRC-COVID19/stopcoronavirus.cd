@@ -1,5 +1,5 @@
 <template>
-  <div class="position-fixed w-100" style="z-index: 1000">
+  <div class="position-fixed w-100 form-detail-header" style="z-index: 1000">
     <HeaderNavigation />
     <HeaderMenu />
   </div>
@@ -79,4 +79,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+.form-detail-header {
+  top: 0;
+}
 </style>
