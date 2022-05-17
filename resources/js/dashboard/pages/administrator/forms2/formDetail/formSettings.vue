@@ -75,7 +75,7 @@
 </template>
 <script>
 import { mapActions } from 'vuex'
-import DeleteFormModal from './components/formSettingsModals/DeleteFormModal'
+import DeleteFormModal from './components/formSettingsModals/deleteFormModal'
 import UpdateFormVisibilityModal from './components/formSettingsModals/UpdateFormVisibilityModal'
 import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
 import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
