@@ -148,7 +148,7 @@ export default {
   .container {
     margin-top: 10px;
     @media (min-width: 1441px) {
-      margin-top: 100px;
+      margin-top: 50px;
     }
   }
   .field-card {

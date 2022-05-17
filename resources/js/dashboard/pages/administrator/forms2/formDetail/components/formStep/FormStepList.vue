@@ -1,5 +1,5 @@
 <template>
-  <b-row class="w-100">
+  <b-row class="form-step-list-wrapper w-100">
     <b-col lg="12" class="px-0">
       <b-card lg="12" class="border-0 px-0 w-100form-step-list-title mx-0">
         <div class="d-flex justify-content-between w-100 pt-2 pb-3 px-3 align-items-center">
@@ -197,6 +197,11 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 
+.form-step-list-wrapper {
+  min-height: 100vh;
+  align-items: flex-start;
+  align-content: baseline;
+}
 .form-step-list-title {
   border-bottom: 1px solid #f4f6fc !important;
 }

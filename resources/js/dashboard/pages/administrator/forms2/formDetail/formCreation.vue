@@ -54,7 +54,7 @@ export default {
 @import "@~/sass/_variables";
 .container-creation-list-responsive {
   display: none;
-  margin-top: 115px;
+  margin-top: 35px;
 }
 @media (max-width: 1440px) {
   .container-creation-list {
