@@ -12,6 +12,7 @@
             <FormFieldCreate
               :form-to-populate="formFieldKey"
               :form-field-order="form_field_order"
+              :order-field-end="order_field_end"
               @created="onCreatedField"
               @updated="onUpdated"
             />
@@ -20,6 +21,7 @@
               :form-fields="formField"
               @createdField="onCallCreatedFieldCard"
               @createdFieldAfter="onCallCreatedFieldAfter"
+              @createdFieldEnd="onCreatedFieldEnd"
             />
           </div>
       </div>
@@ -65,7 +67,8 @@ export default {
       isLoading: false,
       fieldForm: {},
       selectedFormKey: null,
-      form_field_order: null
+      form_field_order: null,
+      order_field_end: null
     }
   },
   async  mounted () {
@@ -133,6 +136,11 @@ export default {
     onCallCreatedFieldAfter (idField) {
       this.selectedFormKey = null
       this.form_field_order = idField
+      this.$bvModal.show('createResponse')
+    },
+    onCreatedFieldEnd (idField) {
+      this.selectedFormKey = null
+      this.order_field_end = idField
       this.$bvModal.show('createResponse')
     },
     onResetModalCreate () {
