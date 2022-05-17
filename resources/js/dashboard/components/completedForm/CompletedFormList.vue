@@ -76,10 +76,14 @@
           :busy="isLoading"
           :fields="fields"
           :items="completedForms.data"
+          :sort-by="sortBy"
+          :sort-desc="sortDesc"
+          no-local-sorting
           responsive
           hover
           striped
           show-empty
+          @sort-changed="sortingChanged"
         >
           <template v-slot:empty="scope">
             <h4>{{ scope.emptyText }}</h4>
@@ -150,6 +154,7 @@
       class="mb-4"
       :total-rows="totalRows"
       :per-page="perPage"
+      :page="currentPage"
       @pageChanged="onPageChange"
       @perPageChanged="onPerPageChange"
     />
@@ -237,7 +242,9 @@ export default {
       agentsHospitals: [],
       allCurrentFilters: {},
       deleteModalVisible: false,
-      completedFormIdToDelete: null
+      completedFormIdToDelete: null,
+      sortBy: 'last_update',
+      sortDesc: true
     }
   },
   computed: {
@@ -276,15 +283,15 @@ export default {
     fields () {
       const data = [
         { key: 'numero', label: '#' },
-        { key: 'last_update', label: 'Date' },
-        { key: 'created_manager_name', label: 'Nom' },
-        { key: 'created_manager_first_name', label: 'Prénom' }
+        { key: 'last_update', label: 'Date', sortable: true },
+        { key: 'created_manager_name', label: 'Nom', sortable: true },
+        { key: 'created_manager_first_name', label: 'Prénom', sortable: true }
       ]
       if (this.showFormColumn) {
-        data.push({ key: 'form', label: 'Formulaire' })
+        data.push({ key: 'form', label: 'Formulaire', sortable: true })
       }
       if (this.showHospitalColumn) {
-        data.push({ key: 'hospital', label: 'CTCO' })
+        data.push({ key: 'hospital', label: 'CTCO', sortable: true })
       }
       data.push({ key: 'actions', label: 'Actions' })
       return data
@@ -318,17 +325,23 @@ export default {
     ...mapGetters(['form__publishedForms']),
     async getCompletedForms (page = 1) {
       this.isLoading = true
-      this.allCurrentFilters = {
-        page,
-        ...this.form,
-        hospital_id: this.hospitalId || this.form.hospital_id,
-        form_id: this.formId || this.form.form_id,
-        per_page: this.perPage,
-        date_range_start: this.form?.dateRange?.start || null,
-        date_range_end: this.form?.dateRange?.end || null
+      try {
+        this.allCurrentFilters = {
+          page,
+          ...this.form,
+          hospital_id: this.hospitalId || this.form.hospital_id,
+          form_id: this.formId || this.form.form_id,
+          per_page: this.perPage,
+          date_range_start: this.form?.dateRange?.start || null,
+          date_range_end: this.form?.dateRange?.end || null,
+          sort_by: this.sortBy,
+          sort_desc: this.sortDesc ? 1 : 0
+        }
+        this.completedForms = await this.completedForm__getAllFiltered(this.allCurrentFilters)
+        this.isLoading = false
+      } catch (error) {
+        this.isLoading = false
       }
-      this.completedForms = await this.completedForm__getAllFiltered(this.allCurrentFilters)
-      this.isLoading = false
     },
     onPageChange (page) {
       this.getCompletedForms(page)
@@ -376,6 +389,11 @@ export default {
             type: 'error'
           })
         })
+    },
+    sortingChanged(ctx) {
+      this.sortBy = ctx.sortBy
+      this.sortDesc = ctx.sortDesc
+      this.getCompletedForms()
     }
   }
 }

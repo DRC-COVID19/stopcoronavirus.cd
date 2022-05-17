@@ -60,6 +60,11 @@ export default {
       ]
     }
   },
+  watch: {
+    page(value) {
+      this.currentPage = value
+    }
+  },
   methods: {
     onPageChange(value) {
       this.$emit('pageChanged', value)
