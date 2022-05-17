@@ -26,7 +26,7 @@ class Form extends Model
 
     public function formSteps()
     {
-        return $this->hasMany(FormStep::class);
+        return $this->hasMany(FormStep::class)->orderBy('step');
     }
     public function formFields()
     {
@@ -35,9 +35,9 @@ class Form extends Model
     public function completedforms(){
         return $this->hasMany(CompletedForm::class);
     }
-    
+
     public function hospitals(){
         return $this->belongsToMany(Hospital::class);
     }
-    
+
 }

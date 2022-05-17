@@ -22,8 +22,7 @@ class FormStep extends Model
 
     public function formFields()
     {
-        return $this->hasMany(FormField::class)
-          ->orderBy('order_field');
+        return $this->hasMany(FormField::class)->orderBy('order_field');
     }
 
 }
