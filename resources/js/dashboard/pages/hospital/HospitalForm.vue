@@ -212,8 +212,14 @@ export default {
       isLastUpdateChecking: false,
       targetForm: {},
       completedFormFields: {},
-      formTitle: 'Formulaire'
+      formTitle: 'Formulaire',
+      prevRoute: null
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.prevRoute = from
+    })
   },
   computed: {
     ...mapState({
@@ -233,8 +239,12 @@ export default {
       }
     }),
     backRoute () {
-      // [TODO] fix backRou te
-      if (this.user.isHospitalAdmin) {
+      if (this.prevRoute && this.prevRoute.name) {
+        return {
+          name: this.prevRoute.name,
+          params: this.prevRoute.params
+        }
+      } else if (this.user.isHospitalAdmin) {
         return {
           name: 'hospital.admin.data',
           params: { hospital_id: this.$route.params.hospital_id }

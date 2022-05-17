@@ -70,6 +70,19 @@ export default {
           })
       })
     },
+    completedForm__delete (_, id) {
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .delete(`/api/dashboard/completed_forms/${id}`)
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      })
+    },
     completedForm__getByHospital ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {

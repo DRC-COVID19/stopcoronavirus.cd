@@ -4,13 +4,21 @@
       <b-col cols="12" class="">
         <b-card class="infos-card default-card">
           <div class="btn-export-wrapper">
-            <b-button
-              class='button-icon text-sm btn-export'
-              variant="primary"
-              size="sm"
-            >
-              <small>Exporter</small> <i class="fa fa-file-excel ml-1" aria-hidden="true"></i>
-            </b-button>
+            <export-excel :fetch="uploadFile" :name="fileName">
+              <b-button
+                :disabled="isFileLoading"
+                class='button-icon text-sm btn-export'
+                variant="primary"
+                size="sm"
+              >
+                <div class="text-center text-danger" v-if="isFileLoading">
+                  <b-spinner label="Spinning"></b-spinner>
+                </div>
+                <div v-else>
+                  <small>Exporter</small> <i class="fa fa-file-excel ml-1" aria-hidden="true"></i>
+                </div>
+              </b-button>
+            </export-excel>
           </div>
           <div class="d-flex flex-wrap position-relative">
             <b-col cols="12" lg="6" class="response-text text-center text-lg-left">
@@ -27,6 +35,7 @@
     <b-row>
       <b-col cols="12">
         <CompletedFormList
+          ref="completedFormList"
           :formId="$route.params.form_id"
           :showNewAction="false"
           :showFormColumn="false"
@@ -46,7 +55,9 @@ export default {
   data() {
     return {
       form: {},
-      totalCompletedForm: 0
+      totalCompletedForm: 0,
+      isFileLoading: false,
+      completedFormsToExport: []
     }
   },
   components: {
@@ -55,10 +66,34 @@ export default {
   async mounted () {
     this.form = await this.formShow({ id: this.$route.params.form_id })
   },
+  computed: {
+    fileName() {
+      const dateTime = new Date().toISOString().replace(/:/g, '-')
+      return `export_du_${dateTime}.xls`;
+    }
+  },
   methods: {
-    ...mapActions(['formShow']),
+    ...mapActions(['formShow', 'completedForm__getAllFiltered']),
     updateTotalCompletedForm(value) {
       this.totalCompletedForm = value
+    },
+    async uploadFile() {
+      this.isFileLoading = true;
+
+      this.completedFormsToExport = await this.completedForm__getAllFiltered({
+        ...this.$refs.completedFormList.allCurrentFilters,
+        per_page: this.totalCompletedForm
+      });
+      this.isFileLoading = false;
+      return this.completedFormsToExport.data.map((completedForm) => {
+        return {
+          Date: completedForm.last_update,
+          Nom: completedForm.created_manager_name,
+          Prénom: completedForm.created_manager_first_name,
+          Ctco: completedForm.hospital.name,
+          Formulaire: completedForm.form.title
+        }
+      })
     }
   }
 }

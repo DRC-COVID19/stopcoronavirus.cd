@@ -20,8 +20,6 @@
         :hospitalId="$route.params.hospital_id"
         :showNewAction="false"
         :showHospitalFilter="false"
-        :showUserFilter="false"
-        :showDateFilter="false"
       />
     </b-container>
   </div>

@@ -2,7 +2,7 @@
   <div class="form-container">
     <div><Header /></div>
     <notifications group="alert" />
-    <div>
+    <div class="router-view-container">
       <router-view></router-view>
     </div>
   </div>
@@ -20,8 +20,7 @@ export default {
     }
   },
 
-  mounted () {
-  },
+  mounted () {},
 
   methods: {}
 }
