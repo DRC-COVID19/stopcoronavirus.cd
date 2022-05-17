@@ -67,7 +67,6 @@
             :reduce="(item) => item.id"
             id="form.order_field"
             labelText="Ordre du champ(insérer avant?)"
-            name="Ordre du champ"
             mode="aggressive"
           />
           <b-form-group
@@ -145,6 +144,7 @@ export default {
       form: {
         question: '',
         form_field_type_id: '',
+        order_field: '',
         default_value_id: null,
         form_recurrence_id: '',
         require: false
@@ -154,7 +154,7 @@ export default {
   },
   async mounted () {
     await this.formFieldTypeIndex()
-    await this.getFormFields({ form_id: this.form_id, step_id: 1 })
+    await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
   },
   watch: {
     formToPopulate: {
@@ -172,6 +172,9 @@ export default {
     }),
     form_id () {
       return this.$route.params.form_id
+    },
+    step_id () {
+      return this.$route.params.step_id
     }
   },
   methods: {
@@ -184,11 +187,16 @@ export default {
         rules: this.form.require ? 'required' : '',
         form_id: this.form_id,
         form_field_type_id: this.form.form_field_type_id,
-        form_step_id: 1,
+        form_step_id: this.step_id,
         default_value: this.form.default_value_id
       }
       if (this.btnTitle === 'Créer') {
-        this.createdField(formField)
+        if (!formField.form_field_order) {
+          delete formField.form_field_order
+          this.createdField({ order_field: 1, ...formField })
+        } else {
+          this.createdField(formField)
+        }
       } else {
         this.updatedField(formField)
       }
@@ -214,6 +222,7 @@ export default {
             type: 'error'
           })
           this.$bvModal.hide('createResponse')
+          this.isLoading = false
           if (response.status == 422) {
             this.errors = response.data.errors
           }
@@ -249,7 +258,7 @@ export default {
       if (this.formToPopulate && Object.keys(this.formToPopulate).length !== 0) {
         this.form.id = this.formToPopulate.id
         this.form.question = this.formToPopulate.name
-        this.form.order_field = this.formToPopulate.order_field
+        this.form.order_field = this.formToPopulate.id
         this.form.require = !!this.formToPopulate.rules?.match(/required/i) || false
         this.form.form_field_type_id = this.formToPopulate.form_field_type_id
         this.form.default_value = this.formToPopulate.default_value

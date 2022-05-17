@@ -1,6 +1,5 @@
 <template>
   <b-container>
-    <Loading v-if="isLoading" class="h-100"  message="Chargement des champs ..."/>
     <div class="row">
       <div class="col-12">
           <div class="text-right">
@@ -14,6 +13,7 @@
               :form-to-populate="formFieldKey"
               :form-field-order="form_field_order"
               @created="onCreatedField"
+              @updated="onUpdated"
             />
             <FormFieldCardOrder
               :form-to-populate="formFieldKey"
@@ -24,6 +24,7 @@
           </div>
       </div>
     </div>
+    <Loading v-if="isLoading" class="h-25"  message="Chargement des champs ..."/>
     <div class="row">
       <div class="col-12">
           <div class="container-component-field d-flex justify-content-between mt-4"
@@ -32,6 +33,7 @@
             <div class="field-card">
               <FormFieldList
                 :formField="formField"
+                @updatedTypeForm="onUpdatedTypeForm"
               />
             </div>
             <div class="field-create">
@@ -39,7 +41,6 @@
                   @deleted="onDeletedField"
                   @edit="onEditField"
                   @orderFieldCard="onCallOrderFieldCrad"
-                  @updated="onUpdated"
                   :formField="formField"
                   :fieldKey="formField.id"
                 />
@@ -68,8 +69,13 @@ export default {
     }
   },
   async  mounted () {
-    await this.getFormFields({ form_id: this.form_id, step_id: 1 })
+    await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
     this.init()
+  },
+  watch: {
+    step_id () {
+      this.init()
+    }
   },
   computed: {
     ...mapState({
@@ -77,6 +83,9 @@ export default {
     }),
     form_id () {
       return this.$route.params.form_id
+    },
+    step_id () {
+      return this.$route.params.step_id
     },
     formFieldKey () {
       if (this.selectedFormKey && this.selectedFormKey > -1) {
@@ -91,7 +100,7 @@ export default {
     ...mapActions(['getFormFields']),
     async init () {
       this.isLoading = true
-      this.fieldForm = await this.getFormFields({ form_id: this.form_id, step_id: 1 })
+      this.fieldForm = await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
       if (this.fieldForm.length !== 0) {
         this.isLoading = false
       }
@@ -103,6 +112,9 @@ export default {
       this.init()
     },
     onDeletedField () {
+      this.init()
+    },
+    onUpdatedTypeForm () {
       this.init()
     },
     onEditField (formId) {

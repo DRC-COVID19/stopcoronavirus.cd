@@ -108,7 +108,6 @@ export default {
           })
           .then(({ data }) => {
             resolve(data)
-            console.log('data--->', data)
             commit('SET_IS_LOADING', false)
           })
           .catch((response) => {
