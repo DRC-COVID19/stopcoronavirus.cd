@@ -4,17 +4,14 @@
       <b-col cols="12" md></b-col>
       <b-col cols="12" md="auto" class="d-flex form-filters flex-wrap justify-content-center">
         <div v-if="showUserFilter">
-          <label for="input-user" class="small text-muted">Filter par utilisateur</label> <br>
-          <b-form-select
-            v-model="form.admin_user_id"
-            :options="usersList"
-            text-field="name"
-            value-field="id"
-            class="mr-2"
-            id="input-user"
+          <label for="input-user" class="small text-muted">Rechercher par utilisateur</label> <br>
+          <b-form-input
+            v-model="form.created_manager"
+            placeholder="Rechercher un agent"
             @change="onFiltersChange"
+            id="input-user"
           >
-          </b-form-select>
+          </b-form-input>
         </div>
         <div v-if="showFormFilter">
           <label for="input-formulaire" class="small text-muted">Filter par formulaire</label> <br>

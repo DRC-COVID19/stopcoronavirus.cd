@@ -378,7 +378,7 @@ class CompletedFormController extends Controller
         $adminUserId = $request->query('admin_user_id');
         $dateRangeStart = $request->query('date_range_start');
         $dateRangeEnd = $request->query('date_range_end');
-        $dateRange = $request->query('date_range');
+        $createdManager = $request->query('created_manager');
         $perPage = $request->query('per_page') ?? 15;
 
         $query = CompletedForm::with(['hospital', 'form']);
@@ -393,6 +393,11 @@ class CompletedFormController extends Controller
         }
         if ($adminUserId) {
           $query = $query->where('admin_user_id', $adminUserId);
+        }
+        if ($createdManager) {
+          $query = $query
+            ->where('created_manager_name', 'ILIKE', '%' . $createdManager . '%')
+            ->orWhere('created_manager_first_name', 'ILIKE', '%' . $createdManager . '%');
         }
         if ($dateRangeStart && $dateRangeEnd) {
           $query = $query->whereBetween('last_update', [$dateRangeStart, $dateRangeEnd]);
