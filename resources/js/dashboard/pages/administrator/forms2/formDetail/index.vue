@@ -1,7 +1,10 @@
 <template>
   <div class="form-container">
     <div><Header /></div>
-    <router-view></router-view>
+    <notifications group="alert" />
+    <div class="router-view-container">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 <script>
@@ -24,8 +27,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import "@~/sass/_variables";
+
 .form-container {
   background: #f4f6fc;
-  height: 100vh;
+  min-height: 100vh;
+  height: max-content;
+}
+.router-view-container {
+  margin-top: 70px;
+}
+</style>
+
+<style lang="scss">
+.container-dash{
+  overflow: unset;
 }
 </style>

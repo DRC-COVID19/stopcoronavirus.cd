@@ -50,7 +50,7 @@
             v-show="activeMenu == 5"
             :hospitalCount="hospitalCount"
             :townships="townships"
-            :hospitals="hospitalsList"
+            :hospitals="hospitalsData"
             @hopitalChecked="gethopitals"
             @submitInfrastructureForm="submitInfrastructureForm"
           />
@@ -261,7 +261,7 @@
             >
               <Maps
                 :covidCases="covidCases"
-                :hospitals="hospitals"
+                :hospitals="hospitalsData"
                 :medicalOrientations="medicalOrientations"
                 :medicalOrientationSelected="medicalOrientationSelected"
                 :sondages="sondages"
@@ -534,7 +534,7 @@ export default {
   },
   computed: {
     ...mapState({
-      hospitals: (state) => state.hospital.hospitalData,
+      hospitalsData: (state) => state.hospital.hospitalData,
       hospitalCount: (state) => state.hospital.hospitalCount,
       selectedHospital: (state) => state.hospital.selectedHospital,
       hospitalTotalData: (state) => state.hospital.hospitalTotalData,
@@ -548,7 +548,6 @@ export default {
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
       canShowNavMobile: (state) => state.app.canShowNavMobile,
       fluxType: (state) => state.flux.fluxType,
-      hospitalsList: (state) => state.hospitalSituation.hospitalsList,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,
     }),
