@@ -70,7 +70,11 @@ export default {
         this.$emit('createdField', this.formToPopulate.id)
       } else {
         const index = this.formFields.findIndex((formField) => formField.id === this.formToPopulate.id) + 1
-        this.$emit('createdFieldAfter', this.formFields[index].id)
+        if (this.formFields[index]) {
+          this.$emit('createdFieldAfter', this.formFields[index].id)
+        } else {
+          this.$emit('createdFieldEnd', this.formFields[index - 1].id)
+        }
       }
     }
   }
