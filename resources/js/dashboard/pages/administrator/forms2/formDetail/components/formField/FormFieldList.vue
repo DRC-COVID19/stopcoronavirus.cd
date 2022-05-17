@@ -85,6 +85,7 @@ export default {
             text: 'Modifier avec succès',
             type: 'success'
           })
+          this.$emit('updatedTypeForm')
         })
         .catch(({ response }) => {
           this.$notify({

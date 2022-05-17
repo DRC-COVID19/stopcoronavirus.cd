@@ -88,8 +88,8 @@ class FormFieldController extends Controller
      */
     public function destroy(FormField $formField)
     {
-        $formField->delete();
-        return response()->json(null, 200);
+      $formField->delete();
+      return response()->json(null, 200);
     }
 
 
