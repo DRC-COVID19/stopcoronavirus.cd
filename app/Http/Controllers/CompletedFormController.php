@@ -203,7 +203,8 @@ class CompletedFormController extends Controller
      */
     public function destroy(CompletedForm $completedForm)
     {
-        //
+        $completedForm->delete();
+        return response()->json(null, 204);
     }
     /**
      * Get the guard to be used during authentication.
@@ -377,12 +378,13 @@ class CompletedFormController extends Controller
         $adminUserId = $request->query('admin_user_id');
         $dateRangeStart = $request->query('date_range_start');
         $dateRangeEnd = $request->query('date_range_end');
-        $dateRange = $request->query('date_range');
+        $createdManager = $request->query('created_manager');
+
         $perPage = $request->query('per_page') ?? 15;
+        $sortBy = $request->query('sort_by') ?? 'last_update';
+        $sortDirection = $request->query('sort_desc') ? 'desc' : 'asc';
 
         $query = CompletedForm::with(['hospital', 'form']);
-
-
 
         if ($formId) {
           $query = $query->where('form_id', $formId);
@@ -393,15 +395,29 @@ class CompletedFormController extends Controller
         if ($adminUserId) {
           $query = $query->where('admin_user_id', $adminUserId);
         }
+        if ($createdManager) {
+          $query = $query
+            ->where('created_manager_name', 'ILIKE', '%' . $createdManager . '%')
+            ->orWhere('created_manager_first_name', 'ILIKE', '%' . $createdManager . '%');
+        }
         if ($dateRangeStart && $dateRangeEnd) {
           $query = $query->whereBetween('last_update', [$dateRangeStart, $dateRangeEnd]);
         }
 
-        $data = $query
-          ->select('*')
-          ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date')
-          ->orderBy('last_update', 'desc')
-          ->paginate($perPage);
+        $query->select('*')->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
+
+        if ($sortBy === 'hospital') {
+          $query->join('hospitals', 'hospital_id', '=', 'hospitals.id')
+                ->select('completed_forms.*', 'hospitals.name as hospital_name')
+                ->orderBy('hospital_name', $sortDirection);
+        } else if ($sortBy === 'form') {
+          $query->join('forms', 'form_id', '=', 'forms.id')
+                ->select('completed_forms.*', 'forms.title as form_title')
+                ->orderBy('form_title', $sortDirection);
+        } else {
+          $query->orderBy($sortBy, $sortDirection);
+        }
+        $data = $query->paginate($perPage);
 
         return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
     }

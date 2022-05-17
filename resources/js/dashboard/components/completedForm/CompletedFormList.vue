@@ -1,56 +1,17 @@
 <template>
   <div>
     <b-row class="mb-4">
-      <b-col cols="12" md>
-        <b-button
-          :to="{ name:'hospital.create', params:{ form_id: 1 }}"
-          class="btn-dash-blue"
-          v-if="showNewAction"
-        >
-          + Nouveau
-        </b-button>
-      </b-col>
+      <b-col cols="12" md></b-col>
       <b-col cols="12" md="auto" class="d-flex form-filters flex-wrap justify-content-center">
-        <div v-if="showDateFilter">
-          <label for="input-user" class="small text-muted">Filter par plage de date</label> <br>
-          <v-date-picker
-            v-model="form.dateRange"
-            is-range
-            @input="onFiltersChange"
-          >
-            <template v-slot="{ inputValue, inputEvents }">
-              <div class="d-flex">
-                <b-form-input
-                  :value="(inputValue.end || '') + ' - ' + (inputValue.start || '')"
-                  v-on="inputEvents.end"
-                  placeholder="Sélectionner une plage de date"
-                  readonly
-                >
-                </b-form-input>
-                <b-button
-                  class='button-icon'
-                  variant="primary"
-                  :disabled="!form.dateRange"
-                  @click="form.dateRange = null"
-                >
-                  <i class="fa fa-close" aria-hidden="true"></i>
-                </b-button>
-              </div>
-            </template>
-        </v-date-picker>
-        </div>
         <div v-if="showUserFilter">
-          <label for="input-user" class="small text-muted">Filter par utilisateur</label> <br>
-          <b-form-select
-            v-model="form.admin_user_id"
-            :options="usersList"
-            text-field="name"
-            value-field="id"
-            class="mr-2"
-            id="input-user"
+          <label for="input-user" class="small text-muted">Rechercher par utilisateur</label> <br>
+          <b-form-input
+            v-model="form.created_manager"
+            placeholder="Rechercher un agent"
             @change="onFiltersChange"
+            id="input-user"
           >
-          </b-form-select>
+          </b-form-input>
         </div>
         <div v-if="showFormFilter">
           <label for="input-formulaire" class="small text-muted">Filter par formulaire</label> <br>
@@ -78,6 +39,34 @@
           >
           </b-form-select>
         </div>
+        <div v-if="showDateFilter">
+          <label for="input-user" class="small text-muted">Filter par plage de date</label> <br>
+          <v-date-picker
+            v-model="form.dateRange"
+            is-range
+            @input="onFiltersChange"
+          >
+            <template v-slot="{ inputValue, inputEvents }">
+              <div class="d-flex">
+                <b-form-input
+                  :value="(inputValue.end || '') + ' - ' + (inputValue.start || '')"
+                  v-on="inputEvents.end"
+                  placeholder="Sélectionner une plage de date"
+                  readonly
+                >
+                </b-form-input>
+                <b-button
+                  class='button-icon'
+                  variant="primary"
+                  :disabled="!form.dateRange"
+                  @click="form.dateRange = null"
+                >
+                  <i class="fa fa-close" aria-hidden="true"></i>
+                </b-button>
+              </div>
+            </template>
+          </v-date-picker>
+        </div>
       </b-col>
     </b-row>
     <b-row class="mt-4" >
@@ -87,10 +76,14 @@
           :busy="isLoading"
           :fields="fields"
           :items="completedForms.data"
+          :sort-by="sortBy"
+          :sort-desc="sortDesc"
+          no-local-sorting
           responsive
           hover
           striped
           show-empty
+          @sort-changed="sortingChanged"
         >
           <template v-slot:empty="scope">
             <h4>{{ scope.emptyText }}</h4>
@@ -144,17 +137,51 @@
             >
               Éditer
             </b-button>
+            <b-button
+              v-if="userIsAdminHospital"
+              variant="outline-danger btn-dash"
+              class="btn-dash"
+              @click="showDeleteCompletedFormModal(data.item.id)"
+            >
+              Supprimer
+            </b-button>
           </template>
         </b-table>
       </b-col>
     </b-row>
+
     <Pagination
       class="mb-4"
       :total-rows="totalRows"
       :per-page="perPage"
+      :page="currentPage"
       @pageChanged="onPageChange"
       @perPageChanged="onPerPageChange"
     />
+
+    <b-modal v-model="deleteModalVisible" centered>
+      Voulez-vous vraiment supprimer cette soumission
+      <template #modal-footer>
+        <b-row class="px-3 pt-4 d-flex justify-content-center">
+          <b-button
+            size="sm"
+            variant="success"
+            class="btn-dash-blue mx-2"
+            @click="onValidateDeletion()"
+          >
+            Accepter
+          </b-button>
+          <b-button
+            size="sm"
+            variant="danger"
+            class="mx-2"
+            @click="onCancelDeletion()"
+          >
+            Annuler
+          </b-button>
+        </b-row>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -212,7 +239,12 @@ export default {
         admin_user_id: null
       },
       perPage: 15,
-      agentsHospitals: []
+      agentsHospitals: [],
+      allCurrentFilters: {},
+      deleteModalVisible: false,
+      completedFormIdToDelete: null,
+      sortBy: 'last_update',
+      sortDesc: true
     }
   },
   computed: {
@@ -221,6 +253,9 @@ export default {
       completedForm__selectedForm: (state) => state.completedForm.selectedForm,
       hospital__hospitals: (state) => state.hospital.hospitals
     }),
+    userIsAdminHospital () {
+      return this.userHaveRole(ADMIN_HOSPITAL)
+    },
     totalRows () {
       return this.completedForms?.total || 0
     },
@@ -248,15 +283,15 @@ export default {
     fields () {
       const data = [
         { key: 'numero', label: '#' },
-        { key: 'last_update', label: 'Date' },
-        { key: 'created_manager_name', label: 'Nom' },
-        { key: 'created_manager_first_name', label: 'Prénom' }
+        { key: 'last_update', label: 'Date', sortable: true },
+        { key: 'created_manager_name', label: 'Nom', sortable: true },
+        { key: 'created_manager_first_name', label: 'Prénom', sortable: true }
       ]
       if (this.showFormColumn) {
-        data.push({ key: 'form', label: 'Formulaire' })
+        data.push({ key: 'form', label: 'Formulaire', sortable: true })
       }
       if (this.showHospitalColumn) {
-        data.push({ key: 'hospital', label: 'CTCO' })
+        data.push({ key: 'hospital', label: 'CTCO', sortable: true })
       }
       data.push({ key: 'actions', label: 'Actions' })
       return data
@@ -273,8 +308,8 @@ export default {
     user () {
       this.getCompletedForms()
     },
-    totalRows(value) {
-      this.$emit('totalChanged', value);
+    totalRows (value) {
+      this.$emit('totalChanged', value)
     }
   },
   methods: {
@@ -283,22 +318,30 @@ export default {
       'getForms',
       'completedForm__setSelectedForm',
       'getHospitals',
-      'adminUser__getAgentHospitals'
+      'adminUser__getAgentHospitals',
+      'completedForm__delete'
     ]),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
     ...mapGetters(['form__publishedForms']),
     async getCompletedForms (page = 1) {
       this.isLoading = true
-      this.completedForms = await this.completedForm__getAllFiltered({
-        page,
-        ...this.form,
-        hospital_id: this.hospitalId || this.form.hospital_id,
-        form_id: this.formId || this.form.form_id,
-        per_page: this.perPage,
-        date_range_start: this.form?.dateRange?.start || null,
-        date_range_end: this.form?.dateRange?.end || null
-      })
-      this.isLoading = false
+      try {
+        this.allCurrentFilters = {
+          page,
+          ...this.form,
+          hospital_id: this.hospitalId || this.form.hospital_id,
+          form_id: this.formId || this.form.form_id,
+          per_page: this.perPage,
+          date_range_start: this.form?.dateRange?.start || null,
+          date_range_end: this.form?.dateRange?.end || null,
+          sort_by: this.sortBy,
+          sort_desc: this.sortDesc ? 1 : 0
+        }
+        this.completedForms = await this.completedForm__getAllFiltered(this.allCurrentFilters)
+        this.isLoading = false
+      } catch (error) {
+        this.isLoading = false
+      }
     },
     onPageChange (page) {
       this.getCompletedForms(page)
@@ -316,6 +359,41 @@ export default {
     },
     onFiltersChange () {
       this.getCompletedForms(1)
+    },
+    showDeleteCompletedFormModal (id) {
+      this.deleteModalVisible = true
+      this.completedFormIdToDelete = id
+    },
+    onCancelDeletion () {
+      this.deleteModalVisible = false
+      this.completedFormIdToDelete = null
+    },
+    onValidateDeletion () {
+      this.$bvModal.show('confirmation-box')
+      this.completedForm__delete(this.completedFormIdToDelete)
+        .then(() => {
+          this.$notify({
+            group: 'alert',
+            title: 'Suppression...',
+            text: 'Soumission supprimer avec succès',
+            type: 'success'
+          })
+          this.deleteModalVisible = false
+          this.getCompletedForms()
+        })
+        .catch(() => {
+          this.$notify({
+            group: 'alert',
+            title: 'Suppression...',
+            text: 'Une erreur est survenu',
+            type: 'error'
+          })
+        })
+    },
+    sortingChanged(ctx) {
+      this.sortBy = ctx.sortBy
+      this.sortDesc = ctx.sortDesc
+      this.getCompletedForms()
     }
   }
 }
@@ -331,8 +409,13 @@ export default {
       color: white;
     }
     tbody {
-      &:nth-child(2n) {
-        background-color: white;
+      tr {
+        &:nth-child(2n) {
+          background-color: white;
+        }
+        &:nth-child(2n+1) {
+          background-color: rgba(0, 0, 0, 0.02);
+        }
       }
     }
   }

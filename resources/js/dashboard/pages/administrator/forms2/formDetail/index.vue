@@ -2,7 +2,7 @@
   <div class="form-container">
     <div><Header /></div>
     <notifications group="alert" />
-    <div>
+    <div class="router-view-container">
       <router-view></router-view>
     </div>
   </div>
@@ -27,6 +27,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  @import "@~/sass/_variables";
+
 .form-container {
   background: #f4f6fc;
   min-height: 100vh;

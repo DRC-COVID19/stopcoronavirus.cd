@@ -135,9 +135,11 @@ export default {
   async mounted () {
     await this.findRecentForms()
     await this.getFormList()
+    // await this.getAllHospitals()
   },
   methods: {
     ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms', 'form__filterByWords']),
+    // ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms', 'form__filterByWords', 'getAllHospitals']),
     async findRecentForms () {
       this.isRecentFormsLoading = true
       this.recentForms = await this.getRecentForms()

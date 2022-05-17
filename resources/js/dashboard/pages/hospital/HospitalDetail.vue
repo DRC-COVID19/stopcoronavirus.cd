@@ -76,11 +76,18 @@ export default {
       completedForm: {
         completed_form_fields: {}
       },
-      isLoading: false
+      isLoading: false,
+      prevRoute: null
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.prevRoute = from
+    })
   },
   async mounted () {
     this.getCompletedForm()
+    console.log(this.$store.state.route)
   },
   computed: {
     ...mapState({
@@ -88,7 +95,12 @@ export default {
       formSteps: (state) => state.formStep.formSteps
     }),
     backRoute () {
-      if (this.user.isHospitalAdmin) {
+      if (this.prevRoute && this.prevRoute.name) {
+        return {
+          name: this.prevRoute.name,
+          params: this.prevRoute.params
+        }
+      } else if (this.user.isHospitalAdmin) {
         return {
           name: 'hospital.admin.data',
           params: { hospital_id: this.$route.params.hospital_id }

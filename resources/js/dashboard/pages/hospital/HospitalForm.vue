@@ -12,9 +12,6 @@
           <b-link :to="backRoute">
             <span class="fa fa-chevron-left">Retour</span>
           </b-link>
-          <!-- <b-col cols="12" v-if="errors && errors.last_update">
-                    <b-alert variant="danger" dismissible show>Vous ne pouvez plus soumettre pour le  {{ moment(completedForm.last_update).format("DD/MM/Y") }}! car, les données ont déjà été soumis.</b-alert>
-                  </b-col> -->
           <h3 v-if="isUpdateMode" class="mb-4 mt-4">
             Modifier la mise à jour du
             {{ moment(completedForm.last_update).format("DD/MM/Y") }}
@@ -57,9 +54,7 @@
                       <b-row>
                         <b-col class="col-sm-12 col-md-12">
                           <FormFieldInput
-                            v-model="
-                              completedForm.completed_form_fields[formField.id]
-                            "
+                            v-model=" completedForm.completed_form_fields[formField.id]"
                             :type="formField.form_field_type.name"
                             :placeholder="`Entrer ${formField.name}`"
                             :id="formField.name"
@@ -87,9 +82,7 @@
                         <ul>
                           <li>
                             {{ formField.name }} :
-                            {{
-                              completedForm.completed_form_fields[formField.id]
-                            }}
+                            {{ completedForm.completed_form_fields[formField.id] }}
                           </li>
                         </ul>
                       </div>
@@ -127,21 +120,8 @@
                       show-weeknumbers
                     >
                       <template v-slot="{ inputEvents, inputValue }">
-                        <div
-                          class="
-                            d-flex
-                            flex-col
-                            sm:flex-row
-                            justify-content-center
-                            text-center
-                            item-center
-                            btn-container-calendar
-                          "
-                        >
-                          <i
-                            for="last_update"
-                            class="fas fa-light fa-calendar p-2"
-                          ></i>
+                        <div class="d-flex flex-col sm:flex-row justify-content-center text-center item-center btn-container-calendar">
+                          <i for="last_update" class="fas fa-light fa-calendar p-2" aria-hidden="true"></i>
                           <input
                             id="last_update"
                             class="p-1 w-full"
@@ -158,17 +138,6 @@
                         </div>
                       </template>
                     </v-date-picker>
-                    <!-- <b-form-datepicker
-                    v-model="completedForm.last_update"
-                    :max="max"
-                    required
-                    id="last_update"
-                    class="mb-2"
-                    :disabled="isUpdateMode"
-                    locale="fr"
-                    @input="selectLastUpdate()"
-                  >
-                  </b-form-datepicker> -->
                   </b-form-group>
                 </b-row>
               </tab-content>
@@ -212,8 +181,14 @@ export default {
       isLastUpdateChecking: false,
       targetForm: {},
       completedFormFields: {},
-      formTitle: 'Formulaire'
+      formTitle: 'Formulaire',
+      prevRoute: null
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.prevRoute = from
+    })
   },
   computed: {
     ...mapState({
@@ -233,8 +208,12 @@ export default {
       }
     }),
     backRoute () {
-      // [TODO] fix backRou te
-      if (this.user.isHospitalAdmin) {
+      if (this.prevRoute && this.prevRoute.name) {
+        return {
+          name: this.prevRoute.name,
+          params: this.prevRoute.params
+        }
+      } else if (this.user.isHospitalAdmin) {
         return {
           name: 'hospital.admin.data',
           params: { hospital_id: this.$route.params.hospital_id }
