@@ -129,6 +129,11 @@ export default {
       type: Number,
       default: null,
       required: false
+    },
+    orderFieldEnd: {
+      type: Number,
+      default: null,
+      required: false
     }
   },
   components: {
@@ -191,11 +196,15 @@ export default {
         default_value: this.form.default_value_id
       }
       if (this.btnTitle === 'Créer') {
-        if (!formField.form_field_order) {
+        if (!formField.form_field_order && !this.formFieldOrder) {
           delete formField.form_field_order
           this.createdField({ order_field: 1, ...formField })
-        } else {
-          this.createdField(formField)
+        }
+        if (this.formFieldOrder) {
+          this.createdField({ form_field_order: this.formFieldOrder, ...formField })
+        }
+        if (this.orderFieldEnd) {
+          this.createdField({ order_field: this.formToPopulate.order_field + 1, ...formField })
         }
       } else {
         this.updatedField(formField)
