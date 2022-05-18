@@ -40,7 +40,7 @@
               >
                   <b-form-group
                     :label="
-                      formField.rules && !!formField.rules.match(/required/i)
+                      formField.rules && formField.rules.match(/required/i)
                         ? formField.name + ' * '
                         : formField.name
                     "
@@ -53,6 +53,7 @@
                           :type="formField.form_field_type.name"
                           :placeholder="`Entrer ${formField.name}`"
                           :id="formField.name"
+                          :rules="formField.rules"
                         />
                       </b-col>
                     </b-row>
@@ -86,7 +87,6 @@
                     :max-date="maxDate"
                     class="d-flex style-picker"
                     @input="selectLastUpdate()"
-                    show-weeknumbers
                   >
                     <template v-slot="{ inputEvents, inputValue }">
                       <div class="w-100">
