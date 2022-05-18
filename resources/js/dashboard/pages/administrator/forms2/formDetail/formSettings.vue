@@ -68,6 +68,7 @@
               </h6>
               <hr />
               <update-form-visibility-modal
+                :formToPopulate="form"
                 @updateFormVisibility="updateForm"
               />
             </div>
@@ -127,7 +128,7 @@ export default {
         form_recurrence_id: currentForm.form_recurrence_id,
         publish: currentForm.publish,
         hospitals_id: currentForm.hospitals ?? [],
-        visible_all_hospitals: currentForm.visibleAllHositals
+        visible_all_hospitals: currentForm.visibleAllHospitals
       }
 
       this.form__Update({ form, id: this.getFormId })

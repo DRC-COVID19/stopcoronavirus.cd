@@ -22,7 +22,7 @@
             <b-form @submit.prevent="onUpdateFormVisibility">
               <b-row class="d-flex flex-column justify-content-between mt-3">
                 <b-col md="12" class="border-1">
-                   <b-form-checkbox v-model="visibleAllHositals" name="check-button" switch class="mb-4">
+                   <b-form-checkbox v-model="targetForm.visibleAllHospitals" name="check-button" switch class="mb-4">
                    Pour tous les CTCOS
                   </b-form-checkbox>
                </b-col>
@@ -40,9 +40,10 @@
                     labelText="Selectionnez un ou plusieurs CTCOs "
                     name="Recurrence du formulaire"
                     mode="aggressive"
-                     v-show="!visibleAllHositals"
+                     v-show="!targetForm.visibleAllHospitals"
                     />
                 </b-col>
+                {{ targetForm.visibleAllHospitals }}
               </b-row>
               <div class="mt-4 text-center">
                   <b-button
@@ -77,7 +78,7 @@ export default {
     ValidationObserver
   },
   props: {
-    form: {
+    formToPopulate: {
       type: Object,
       default: () => {}
     },
@@ -89,10 +90,10 @@ export default {
   data () {
     return {
       targetForm: {
-        hospitals: []
+        hospitals: [],
+        visibleAllHospitals: false
       },
-      isLoading: false,
-      visibleAllHositals: false
+      isLoading: false
     }
   },
   async mounted () {
@@ -103,10 +104,19 @@ export default {
       hospitals: (state) => state.hospital.AllHospitals
     })
   },
+  watch: {
+    formToPopulate () {
+      this.populateFormVisibility()
+    }
+  },
   methods: {
     ...mapActions(['hospital__getAll']),
     onReset () {
       this.targetForm = {}
+    },
+    populateFormVisibility () {
+      this.targetForm.visibleAllHospitals = this.formToPopulate.visible_all_hospitals
+      alert('visibility')
     },
     hideModal () {
       this.$bvModal.hide('updateFormVisibilityModal')
@@ -115,7 +125,7 @@ export default {
       const form =
       {
         ...this.targetForm,
-        visibleAllHositals: this.visibleAllHositals,
+        visibleAllHospitals: this.visibleAllHospitals,
         formFieldmodalMessage: 'La visibilité du formulaire a été modifié avec succès'
       }
 

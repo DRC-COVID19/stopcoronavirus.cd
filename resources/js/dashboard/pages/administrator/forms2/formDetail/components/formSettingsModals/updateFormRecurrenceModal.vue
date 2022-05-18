@@ -105,7 +105,6 @@ export default {
     },
     populateRecurrenceForm () {
       this.targetForm.form_recurrence_id = this.formToPopulate.form_recurrence
-      alert('kioka')
     },
     onUpdateFormRecurrence () {
       this.$emit('onUpdateFormRecurrence', {
