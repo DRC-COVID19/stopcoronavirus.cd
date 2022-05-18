@@ -251,7 +251,7 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       completedForm__selectedForm: (state) => state.completedForm.selectedForm,
-      hospital__hospitals: (state) => state.hospital.hospitals
+      hospital__allHospitals: (state) => state.hospital.allHospitals
     }),
     userIsAdminHospital () {
       return this.userHaveRole(ADMIN_HOSPITAL)
@@ -271,7 +271,7 @@ export default {
     hospitalList () {
       return [
         { id: null, name: 'Tous' },
-        ...this.hospital__hospitals
+        ...this.hospital__allHospitals
       ]
     },
     usersList () {
@@ -300,7 +300,7 @@ export default {
   async mounted () {
     this.$set(this.form, 'form_id', this.completedForm__selectedForm)
     this.getForms()
-    this.getHospitals()
+    this.hospital__getAll()
     this.getCompletedForms()
     this.agentsHospitals = await this.adminUser__getAgentHospitals()
   },
@@ -317,7 +317,7 @@ export default {
       'completedForm__getAllFiltered',
       'getForms',
       'completedForm__setSelectedForm',
-      'getHospitals',
+      'hospital__getAll',
       'adminUser__getAgentHospitals',
       'completedForm__delete'
     ]),
