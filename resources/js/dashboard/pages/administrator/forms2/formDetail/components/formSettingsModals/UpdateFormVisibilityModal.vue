@@ -43,7 +43,6 @@
                      v-show="!targetForm.visibleAllHospitals"
                     />
                 </b-col>
-                {{ targetForm.visibleAllHospitals }}
               </b-row>
               <div class="mt-4 text-center">
                   <b-button
@@ -116,7 +115,7 @@ export default {
     },
     populateFormVisibility () {
       this.targetForm.visibleAllHospitals = this.formToPopulate.visible_all_hospitals
-      alert('visibility')
+      this.targetForm.hospitals = [...this.formToPopulate.hospitals.map((hospital) => hospital.id)]
     },
     hideModal () {
       this.$bvModal.hide('updateFormVisibilityModal')
