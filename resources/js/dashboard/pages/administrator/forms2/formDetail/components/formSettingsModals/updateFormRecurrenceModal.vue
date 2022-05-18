@@ -64,7 +64,7 @@ export default {
     ValidationObserver
   },
   props: {
-    form: {
+    formToPopulate: {
       type: Object,
       default: () => {}
     },
@@ -88,7 +88,7 @@ export default {
     })
   },
   watch: {
-    form () {
+    formToPopulate () {
       this.populateRecurrenceForm()
     }
   },
@@ -104,7 +104,8 @@ export default {
       this.hideModal()
     },
     populateRecurrenceForm () {
-      this.targetForm.form_recurrence_id = this.form.form_recurrence
+      this.targetForm.form_recurrence_id = this.formToPopulate.form_recurrence
+      alert('kioka')
     },
     onUpdateFormRecurrence () {
       this.$emit('onUpdateFormRecurrence', {

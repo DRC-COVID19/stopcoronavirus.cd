@@ -19,7 +19,10 @@
               </div>
               <h6>Cliquer sur l'icon à droite pour modifier le titre du formulaire</h6>
               <hr />
-              <update-form-modal @onUpdateFormTitle="updateForm" />
+              <update-form-modal
+               :formToPopulate="form"
+              @onUpdateFormTitle="updateForm"
+              />
             </div>
             <div class="mt-5">
               <div class="d-flex justify-content-between">
@@ -33,7 +36,7 @@
               <h6>Pour mettre à jour la récurrence, cliquer sur l'icon à droite</h6>
               <hr />
               <update-form-recurrence-modal
-                :form="form"
+                :formToPopulate="form"
                 @onUpdateFormRecurrence="updateForm"
               />
             </div>
@@ -112,7 +115,7 @@ export default {
   methods: {
     ...mapActions(['formShow', 'form__Update']),
     async getForm () {
-      await this.formShow({ id: this.getFormId() })
+      await this.formShow({ id: this.getFormId })
     },
     async updateForm (currentForm) {
       this.isLoading = true
