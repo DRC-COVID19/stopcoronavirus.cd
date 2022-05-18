@@ -67,10 +67,7 @@
                 formulaire
               </h6>
               <hr />
-              <update-form-visibility-modal
-                :formToPopulate="form"
-                @updateFormVisibility="updateForm"
-              />
+              <update-form-visibility-modal :formToPopulate="form"/>
             </div>
           </div>
         </b-container>

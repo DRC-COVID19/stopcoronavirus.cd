@@ -92,7 +92,10 @@ export default {
         hospitals: [],
         visibleAllHospitals: false
       },
-      isLoading: false
+      isLoading: false,
+      formUpdated: false,
+      updating: false,
+      formFieldmodalMessage: 'La visibilité du formulaire a été modifié avec succès'
     }
   },
   async mounted () {
@@ -109,7 +112,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['hospital__getAll']),
+    ...mapActions(['hospital__getAll', 'form__UpdateFormVisibility']),
     onReset () {
       this.targetForm = {}
     },
@@ -121,14 +124,27 @@ export default {
       this.$bvModal.hide('updateFormVisibilityModal')
     },
     onUpdateFormVisibility () {
-      const form =
-      {
-        ...this.targetForm,
-        visibleAllHospitals: this.visibleAllHospitals,
-        formFieldmodalMessage: 'La visibilité du formulaire a été modifié avec succès'
-      }
-
-      this.$emit('updateFormVisibility', form)
+      this.form__UpdateFormVisibility({ form: this.targetForm, id: this.$route.params.form_id })
+        .then(() => {
+          this.formUpdated = true
+          this.isLoading = false
+          this.updating = false
+          this.$notify({
+            group: 'alert',
+            title: 'Modification du Formulaire',
+            text: this.formFieldmodalMessage,
+            type: 'success'
+          })
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+          this.$notify({
+            group: 'alert',
+            title: 'Modification du Formulaire',
+            text: 'Une erreur est survenu',
+            type: 'error'
+          })
+        })
       this.hideModal()
     },
     onCancelFormVisibility () {
