@@ -44,9 +44,9 @@
                   v-else
                   class="d-flex flex-column align-items-lg-start col-md-8 col-sm-12"
                 >
-                  <div class="card__Scroll" v-if="hospitalForms.length > 0">
+                  <div class="card__Scroll" v-if="hospitalForms.forms.length > 0">
                     <div
-                      v-for="(form, index) in hospitalForms"
+                      v-for="(form, index) in hospitalForms.forms"
                       :key="index"
                       class="px-2"
                     >
@@ -90,7 +90,7 @@ export default {
     return {
       alertVariant: 'secondary',
       isHospitalFormsLoading: false,
-      hospitalForms: []
+      hospitalForms: {}
     }
   },
   computed: {
