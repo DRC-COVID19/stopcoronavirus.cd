@@ -28,6 +28,10 @@
               <span v-else> Confirmation </span>
             </b-card>
 
+            <b-card class="default-card mb-3 meta-info-card">
+              <strong>*</strong> Champs requis
+            </b-card>
+
             <div v-if="!submitStep && targetForm.form_steps[currentStep - 1].form_fields.length > 0">
               <b-card
                 v-for="(formField, counter) in targetForm.form_steps[currentStep - 1].form_fields"
@@ -75,9 +79,7 @@
                     <b-spinner class="align-middle" />
                     <strong>Verification de la date de Mise a jour...</strong>
                   </div>
-                  <label for="last_update" class="text-dash-color"
-                    >Sélectionnez la date</label
-                  >
+                  <label for="last_update" class="text-dash-color">Sélectionnez la date *</label>
                   <v-date-picker
                     v-model="completedForm.last_update"
                     opens="center"
@@ -269,14 +271,14 @@ export default {
     padding: 5px 20px;
   }
 }
-.field-card {
+.field-card, .meta-info-card {
   border-radius: 15px;
-  &:nth-child(1) {
-    border-radius: 0px 0px 15px 15px;
-  }
   .card-body {
     padding: 30px;
   }
+}
+.meta-info-card {
+  border-radius: 0px 0px 15px 15px;
 }
 .date-picker-input {
   &.form-control[readonly]{
