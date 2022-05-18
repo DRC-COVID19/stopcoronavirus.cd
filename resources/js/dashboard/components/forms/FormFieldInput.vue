@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <b-form-group v-slot="{ ariaDescribedby }" v-if="type === 'boolean'">
       <b-form-radio-group
         v-model="formFieldValue"
@@ -8,7 +9,42 @@
         :id="id"
       ></b-form-radio-group>
     </b-form-group>
+
+    <v-date-picker
+      v-else-if="type === 'date'"
+      v-model="formFieldValue"
+      opens="center"
+      class="d-flex style-picker"
+      show-weeknumbers
+    >
+      <template v-slot="{ inputEvents, inputValue }">
+        <div class="w-100 d-flex">
+          <b-form-input
+            :value="
+              inputValue
+                ? moment(formFieldValue).format('DD/MM/YYYY')
+                : 'Sélectionner la date'
+            "
+            v-on="inputEvents"
+            class="date-picker-input"
+            placeholder="Sélectionner la date"
+            readonly
+          >
+          </b-form-input>
+          <b-button
+            class='button-icon'
+            variant="primary"
+            :disabled="!formFieldValue"
+            @click="formFieldValue = null"
+          >
+            <i class="fa fa-close" aria-hidden="true"></i>
+          </b-button>
+        </div>
+      </template>
+    </v-date-picker>
+
     <ValidationProvider
+      v-else
       v-slot="{ errors }"
       :mode="mode"
       :rules="rules"
@@ -140,5 +176,17 @@ export default {
 .input-error {
   font-family: "Lato", sans-serif;
   font-size: 12px;
+}
+.date-picker-input {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  &.form-control[readonly]{
+    background-color: white;
+  }
+}
+button.button-icon {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  background-color: $dash-blue;
 }
 </style>
