@@ -33,6 +33,7 @@
               <h6>Pour mettre à jour la récurrence, cliquer sur l'icon à droite</h6>
               <hr />
               <update-form-recurrence-modal
+                :form="form"
                 @onUpdateFormRecurrence="updateForm"
               />
             </div>

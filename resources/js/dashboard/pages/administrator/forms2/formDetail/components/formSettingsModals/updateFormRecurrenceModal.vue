@@ -87,6 +87,11 @@ export default {
       formRecurrences: (state) => state.form.formsRecurrences
     })
   },
+  watch: {
+    form () {
+      this.populateRecurrenceForm()
+    }
+  },
   methods: {
     ...mapActions(['getFormsRecurrences']),
     onReset () {
@@ -97,6 +102,9 @@ export default {
     },
     onCancelRecurrenceForm () {
       this.hideModal()
+    },
+    populateRecurrenceForm () {
+      this.targetForm.form_recurrence_id = this.form.form_recurrence
     },
     onUpdateFormRecurrence () {
       this.$emit('onUpdateFormRecurrence', {
