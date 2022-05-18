@@ -54,27 +54,47 @@ class FormController extends Controller
     public function update(Form $form)
       { 
        
-         try 
+       try 
+       {
+          
+          $result = $form->update($this->updateValidator());
+        
+          return response()->json( $result, 200);
+
+      } catch (\Throwable $th) {
+        if (env('APP_DEBUG') == true) {
+          return response($th)->setStatusCode(500);
+        }
+          return response($th->getMessage())->setStatusCode(500);
+     }
+      
+    }
+
+     /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function updateFormVisibility(Form $form){
+        try 
         {
           DB::beginTransaction();
           $data = $this->updateValidator();
-          $result = null;
-          if ($data['hospitals_id']) {
-            $result = $form->hospitals()->sync($data['hospitals_id']);
-          }
-            $result = $form->update($data);
+          $result = $form->hospitals()->sync($data['hospitals_id']);
+          $result = $form->update($data);
         
           DB::commit();
         return response()->json( $result, 200);
 
       } catch (\Throwable $th) {
-         DB::rollback();
-        if (env('APP_DEBUG') == true) {
-          return response($th)->setStatusCode(500);
-        }
-        return response($th->getMessage())->setStatusCode(500);
-     }
-      
+          DB::rollback();
+          if (env('APP_DEBUG') == true) {
+            return response($th)->setStatusCode(500);
+          }
+          return response($th->getMessage())->setStatusCode(500);
+    }
     }
 
     /**

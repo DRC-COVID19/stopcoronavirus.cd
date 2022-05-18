@@ -60,7 +60,7 @@ export default {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .put('/api/dashboard/forms/update-form-visibility' + payload.id, payload.form)
+          .put(`/api/dashboard/forms/update-form-visibility/${payload.id}`, payload.form)
           .then(() => {
             resolve(true)
             commit('SET_IS_UPDATE_FORM', true)
