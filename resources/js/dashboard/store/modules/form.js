@@ -56,6 +56,22 @@ export default {
           })
       })
     },
+    form__UpdateFormVisibility ({ commit }, payload) {
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .put('/api/dashboard/forms/update-form-visibility' + payload.id, payload.form)
+          .then(() => {
+            resolve(true)
+            commit('SET_IS_UPDATE_FORM', true)
+          })
+
+          .catch(({ response }) => {
+            reject(response)
+            commit('SET_IS_UPDATE_FORM', false)
+          })
+      })
+    },
     form__Update ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
