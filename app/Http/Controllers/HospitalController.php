@@ -26,7 +26,7 @@ class HospitalController extends Controller
    */
   public function index()
   {
-    $hospitals = Hospital::with(['agent', 'township'])->get();
+    $hospitals = Hospital::with(['agent', 'township'])->orderBy('name')->get();
     return response()->json($hospitals, 200);
   }
 
@@ -48,14 +48,9 @@ class HospitalController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function getHospitalList()
-  { $formId =9;
-    $hospitals = Hospital::all();
-                          //  ->get()
-                          //  ->map(function($hospital) use ($formId){
-                          //   return $hospital->forms->filter(fn($form)=> $form->id !== $formId);
-                          //  });
-                          //  ->forms->filter(fn($form)=> $form->hospital_id === null);
-    return response()->json($hospitals, 200);
+  {
+      $hospitals = Hospital::orderBy('name')->get();
+      return response()->json($hospitals, 200);
   }
 
   /**
@@ -96,14 +91,19 @@ class HospitalController extends Controller
   public function show($hospital_id)
   {
     $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
-                               ->where('publish', true)
-                               ->get();
-                               
+                              ->where('publish', true)
+                              ->get();
+
     $hospitalForms = Hospital::with('forms')
                               ->find($hospital_id)
-                              ->forms->filter(fn($form)=> $form->publish)
-                                     ->merge($formsAllVisibility);
-    return response()->json($hospitalForms);
+                              ->forms
+                              ->filter(fn($form) => $form->publish)
+                              ->merge($formsAllVisibility);
+
+    $hospital = Hospital::find($hospital_id);
+    $hospital->forms = $hospitalForms;
+
+    return response()->json($hospital);
   }
   /**
    * Update the specified resource in storage.
