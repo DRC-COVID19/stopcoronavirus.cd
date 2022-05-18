@@ -91,14 +91,19 @@ class HospitalController extends Controller
   public function show($hospital_id)
   {
     $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
-                               ->where('publish', true)
-                               ->get();
+                              ->where('publish', true)
+                              ->get();
 
     $hospitalForms = Hospital::with('forms')
                               ->find($hospital_id)
-                              ->forms->filter(fn($form)=> $form->publish)
-                                     ->merge($formsAllVisibility);
-    return response()->json($hospitalForms);
+                              ->forms
+                              ->filter(fn($form) => $form->publish)
+                              ->merge($formsAllVisibility);
+
+    $hospital = Hospital::find($hospital_id);
+    $hospital->forms = $hospitalForms;
+
+    return response()->json($hospital);
   }
   /**
    * Update the specified resource in storage.
