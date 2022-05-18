@@ -53,12 +53,10 @@
                       <card-form :route="getFormRoute(form.id)" :form="form" />
                     </div>
                   </div>
-                  <div v-else>
-                      <h4 class="text-center text-bold">
-                        <b-badge>
-                          Aucun formulaire n'est disponible
-                        </b-badge>
-                      </h4>
+                  <div v-else class="d-flex justify-content-center align-items-center">
+                      <h6 class="text-center text-bold alert alert-warning">
+                        Vous n'avez accès à aucun formulaire pour l'instant
+                      </h6>
                   </div>
                 </b-col>
               </b-row>
@@ -125,9 +123,8 @@ export default {
         this.hospitalForms = await this.getHospital({
           hospital_id: this.user.hospital.id
         })
-        if (this.hospitalForms.length !== 0) {
-          this.isHospitalFormsLoading = false
-        }
+
+        this.isHospitalFormsLoading = false
       }
     },
     getFormRoute (formId) {

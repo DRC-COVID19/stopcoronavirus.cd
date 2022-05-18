@@ -36,8 +36,7 @@
                 @onUpdateFormRecurrence="updateForm"
               />
             </div>
-            {{ form}}
-            <div class="mt-5">
+            <div class="mt-5" v-show="checkCompletedForms">
               <div class="d-flex justify-content-between">
                 <h4>Supprimer le formulaire</h4>
                 <img
@@ -104,6 +103,9 @@ export default {
     }),
     getFormId () {
       return this.$route.params.form_id ?? null
+    },
+    checkCompletedForms () {
+      return this.form.completedforms.length === 0
     }
   },
   methods: {
@@ -152,13 +154,9 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .form__settings-container {
-  width: 100%;
-  position: relative;
-  top: 10rem;
-  height: auto;
+  padding-top: 60px;
   .form__settings-body {
     width: 100%;
-    min-height: 400px;
     background-color: #ffffff;
     h3,
     h4 {
@@ -181,10 +179,6 @@ export default {
 }
  @media (max-width: $max-width) {
   .form__settings-container {
-  width: 100%;
-  position: relative;
-  top: 10rem;
-  height: auto;
   .form__settings-body {
     h3,
     h4 {
