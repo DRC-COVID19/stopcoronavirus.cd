@@ -36,6 +36,7 @@
                 @onUpdateFormRecurrence="updateForm"
               />
             </div>
+            {{ form}}
             <div class="mt-5">
               <div class="d-flex justify-content-between">
                 <h4>Supprimer le formulaire</h4>
@@ -74,7 +75,7 @@
   </b-container>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import DeleteFormModal from './components/formSettingsModals/deleteFormModal'
 import UpdateFormVisibilityModal from './components/formSettingsModals/UpdateFormVisibilityModal'
 import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
@@ -88,20 +89,28 @@ export default {
   },
   data () {
     return {
-      form: {},
       isLoading: false,
       isUpdatingFormTile: false,
       formUpdated: false,
       updating: false
     }
   },
+  mounted () {
+    this.getForm()
+  },
   computed: {
+    ...mapState({
+      form: (state) => state.form.form
+    }),
     getFormId () {
       return this.$route.params.form_id ?? null
     }
   },
   methods: {
     ...mapActions(['formShow', 'form__Update']),
+    async getForm () {
+      await this.formShow({ id: this.getFormId() })
+    },
     async updateForm (currentForm) {
       this.isLoading = true
       this.formUpdated = false
