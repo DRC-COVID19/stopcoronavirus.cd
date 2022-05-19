@@ -66,10 +66,7 @@ export default {
       formSteps: (state) => state.formStep.formSteps,
       isCreating: (state) => state.formStep.isCreating,
       isLoading: (state) => state.formStep.isLoading
-    }),
-    formStepsSorted () {
-      return this.formSteps.slice().sort((a, b) => a.step - b.step)
-    }
+    })
   },
   watch: {
     '$route.name' () {
@@ -77,12 +74,15 @@ export default {
         this.initStepIndex()
       }
     },
-    formStepsSorted () {
+    formSteps () {
       this.initStepIndex()
     }
   },
   methods: {
     ...mapActions(['getFormSteps']),
+    formStepsSorted (formSteps) {
+      return formSteps.slice().sort((a, b) => a.step - b.step)
+    },
     initStepIndex () {
       const stepId = this.$route.params.step_id
       if (
@@ -93,7 +93,7 @@ export default {
         this.$router.push({
           name: 'administrator.forms.show.creation.step',
           params: {
-            step_id: this.formSteps[0].id
+            step_id: this.formStepsSorted(this.formSteps)[0].id
           }
         })
       }
