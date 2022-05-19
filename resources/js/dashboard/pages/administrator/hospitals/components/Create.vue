@@ -183,7 +183,6 @@ export default {
       form: {
         name: '',
         agent: null,
-        deAssignedAgent: null,
         township_id: null,
         longitude: null,
         latitude: null
@@ -271,8 +270,6 @@ export default {
         this.$emit('onCreate', this.form)
         this.$refs.form.reset()
       } else {
-        this.form.deAssignedAgent =
-          (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)
       }
       this.isLoading = false
