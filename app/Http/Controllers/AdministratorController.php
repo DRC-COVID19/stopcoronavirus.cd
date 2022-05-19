@@ -242,7 +242,6 @@ class AdministratorController extends Controller
       'hospitals_id'    => 'nullable|array',
       'password'        => 'sometimes|confirmed',
       'phone_number'    => 'sometimes|string|unique:admin_users,phone_number' . ($admin_user_id ? ",$admin_user_id" : ""),
-      'affected'        => 'nullable|boolean'
 
     ])->validate();
     try {
@@ -319,7 +318,6 @@ class AdministratorController extends Controller
       'roles_id'        => 'required|array',
       'hospitals_id'    => 'nullable|array',
       'phone_number'    => 'required|string|unique:admin_users,phone_number',
-      'affected'        => 'nullable|boolean'
     ])->validate();
   }
 

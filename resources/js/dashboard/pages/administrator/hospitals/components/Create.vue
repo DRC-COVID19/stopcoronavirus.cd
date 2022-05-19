@@ -122,14 +122,7 @@
 import { ValidationObserver } from 'vee-validate'
 import FormFieldInput from '../../../../components/forms/FormFieldInput'
 import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue'
-import {
-  MAPBOX_TOKEN,
-  MAPBOX_DEFAULT_STYLE,
-  PALETTE,
-  HOTSPOT_TYPE
-} from '../../../../config/env'
 import Mapbox from 'mapbox-gl'
-import U from 'mapbox-gl-utils'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 
@@ -172,11 +165,6 @@ export default {
     errors: {
       type: Object,
       default: () => ({})
-    },
-    affected: {
-      type: Boolean,
-      default: null,
-      required: false
     }
   },
   data () {
@@ -196,7 +184,6 @@ export default {
         name: '',
         agent: null,
         deAssignedAgent: null,
-        affected: this.affected,
         township_id: null,
         longitude: null,
         latitude: null
@@ -284,11 +271,6 @@ export default {
         this.$emit('onCreate', this.form)
         this.$refs.form.reset()
       } else {
-        if (this.form.agent) {
-          this.form.affected = true
-        } else {
-          this.form.affected = false
-        }
         this.form.deAssignedAgent =
           (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)

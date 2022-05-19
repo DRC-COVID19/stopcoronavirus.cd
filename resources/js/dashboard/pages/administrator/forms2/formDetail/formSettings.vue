@@ -19,7 +19,10 @@
               </div>
               <h6>Cliquer sur l'icon à droite pour modifier le titre du formulaire</h6>
               <hr />
-              <update-form-modal @onUpdateFormTitle="updateForm" />
+              <update-form-modal
+               :formToPopulate="form"
+              @onUpdateFormTitle="updateForm"
+              />
             </div>
             <div class="mt-5">
               <div class="d-flex justify-content-between">
@@ -33,10 +36,11 @@
               <h6>Pour mettre à jour la récurrence, cliquer sur l'icon à droite</h6>
               <hr />
               <update-form-recurrence-modal
+                :formToPopulate="form"
                 @onUpdateFormRecurrence="updateForm"
               />
             </div>
-            <div class="mt-5">
+            <div class="mt-5" v-show="checkCompletedForms">
               <div class="d-flex justify-content-between">
                 <h4>Supprimer le formulaire</h4>
                 <img
@@ -63,9 +67,7 @@
                 formulaire
               </h6>
               <hr />
-              <update-form-visibility-modal
-                @updateFormVisibility="updateForm"
-              />
+              <update-form-visibility-modal :formToPopulate="form"/>
             </div>
           </div>
         </b-container>
@@ -74,7 +76,7 @@
   </b-container>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import DeleteFormModal from './components/formSettingsModals/deleteFormModal'
 import UpdateFormVisibilityModal from './components/formSettingsModals/UpdateFormVisibilityModal'
 import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
@@ -88,20 +90,31 @@ export default {
   },
   data () {
     return {
-      form: {},
       isLoading: false,
       isUpdatingFormTile: false,
       formUpdated: false,
       updating: false
     }
   },
+  mounted () {
+    this.getForm()
+  },
   computed: {
+    ...mapState({
+      form: (state) => state.form.form
+    }),
     getFormId () {
       return this.$route.params.form_id ?? null
+    },
+    checkCompletedForms () {
+      return this.form.completedforms.length === 0
     }
   },
   methods: {
     ...mapActions(['formShow', 'form__Update']),
+    async getForm () {
+      await this.formShow({ id: this.getFormId })
+    },
     async updateForm (currentForm) {
       this.isLoading = true
       this.formUpdated = false
@@ -112,7 +125,7 @@ export default {
         form_recurrence_id: currentForm.form_recurrence_id,
         publish: currentForm.publish,
         hospitals_id: currentForm.hospitals ?? [],
-        visible_all_hospitals: currentForm.visibleAllHositals
+        visible_all_hospitals: currentForm.visibleAllHospitals
       }
 
       this.form__Update({ form, id: this.getFormId })
@@ -143,13 +156,9 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .form__settings-container {
-  width: 100%;
-  position: relative;
-  top: 10rem;
-  height: auto;
+  padding-top: 60px;
   .form__settings-body {
     width: 100%;
-    min-height: 400px;
     background-color: #ffffff;
     h3,
     h4 {
@@ -172,10 +181,6 @@ export default {
 }
  @media (max-width: $max-width) {
   .form__settings-container {
-  width: 100%;
-  position: relative;
-  top: 10rem;
-  height: auto;
   .form__settings-body {
     h3,
     h4 {
