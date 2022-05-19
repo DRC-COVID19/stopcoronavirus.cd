@@ -105,98 +105,98 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState } from 'vuex'
 export default {
   props: {
     paginate: {
       type: Object,
       default: () => ({}),
-      required: false,
+      required: false
     },
     errors: {
       type: Object,
-      default: () => ({}),
-    },
+      default: () => ({})
+    }
   },
-  data() {
+  data () {
     return {
-      filter: "all",
+      filter: 'all',
       max: new Date(),
       updating: false,
       isLoading: false,
-      validateMailMessage: "",
+      validateMailMessage: '',
       published: false,
-      title: "",
+      title: '',
       form: {
         form_recurrence_value: null,
         form_recurrence_id: null,
         publish: false,
         unpublish: false,
-        last_update: null,
+        last_update: null
       },
       show: true,
       showWarning: false,
       toBeCanceled: true,
-      formRecurrenceSelected: null,
-    };
+      formRecurrenceSelected: null
+    }
   },
-  async mounted() {
-    this.resetForm();
-    await this.getFormsRecurrences();
+  async mounted () {
+    this.resetForm()
+    await this.getFormsRecurrences()
   },
   computed: {
     ...mapState({
-      formRecurrences: (state) => state.form.formsRecurrences,
-    }),
+      formRecurrences: (state) => state.form.formsRecurrences
+    })
   },
   watch: {
-    title() {
-      this.search();
-    },
+    title () {
+      this.search()
+    }
   },
   methods: {
-    ...mapActions(["getFormsRecurrences"]),
-    getfilter(value) {
-      if (value === "publish") {
-        this.form.publish = true;
-        delete this.form.unpublish;
-      } else if (value === "unpublish") {
-        this.form.unpublish = true;
-        delete this.form.publish;
-      } else if (value === "all") {
-        delete this.form.publish;
-        delete this.form.unpublish;
-        delete this.form.last_update;
-        delete this.form.form_recurrence_id;
+    ...mapActions(['getFormsRecurrences']),
+    getfilter (value) {
+      if (value === 'publish') {
+        this.form.publish = true
+        delete this.form.unpublish
+      } else if (value === 'unpublish') {
+        this.form.unpublish = true
+        delete this.form.publish
+      } else if (value === 'all') {
+        delete this.form.publish
+        delete this.form.unpublish
+        delete this.form.last_update
+        delete this.form.form_recurrence_id
       }
-      this.setFormAndEmmit();
+      this.setFormAndEmmit()
     },
-    getFormsByDate() {
-      this.setFormAndEmmit();
+    getFormsByDate () {
+      this.setFormAndEmmit()
     },
-    selectRecurrence() {
-      this.setFormAndEmmit();
+    selectRecurrence () {
+      this.setFormAndEmmit()
     },
-    search() {
-      this.$emit("onSearch", this.title.trim());
+    search () {
+      this.$emit('onSearch', this.title.trim())
     },
-    setFormAndEmmit() {
+    setFormAndEmmit () {
       const form = {
         form_date: this.form.last_update ?? null,
         published_form: this.form.publish ?? null,
         unpublished_form: this.form.unpublish ?? null,
-        recurrence_form: this.form.form_recurrence_id ?? null,
-      };
-      if (this.form.publish === false || this.form.unpublish === false) {
-        delete this.form.publish;
-        delete this.form.unpublish;
-        this.$emit("filterForms", form);
-      } else {
-        this.$emit("filterForms", form);
+        recurrence_form: this.form.form_recurrence_id ?? null
       }
-    },
-  },
-};
+      if (this.form.publish === false || this.form.unpublish === false) {
+        delete this.form.publish
+        delete this.form.unpublish
+        this.$emit('filterForms', form)
+      } else {
+        this.$emit('filterForms', form)
+      }
+    }
+  }
+}
 </script>
 
 <style lang="scss">
