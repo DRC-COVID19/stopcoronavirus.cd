@@ -21,7 +21,7 @@
             :formToPopulate="formToPopulate"
             :townships="townships"
             :hospitals="hospitals"
-            :users="users"
+            :users="getAgentsHospital"
             :errors="errors"
             :isLoading="isLoading"
             :updating="updating"
@@ -137,6 +137,9 @@ export default {
         }
       }
       return this.hospitals
+    },
+    getAgentsHospital () {
+      return this.users.filter((agent) => agent.isAgentHospital && agent.isHospitalManager === false)
     }
   },
   methods: {

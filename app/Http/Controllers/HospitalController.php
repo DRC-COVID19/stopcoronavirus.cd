@@ -16,6 +16,7 @@ use App\Http\Resources\HospitalResources;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Requests\StoreHospitalRequest;
 use App\Http\Requests\UpdateHospitalRequest;
+use App\Http\Resources\AdministratorResource;
 
 class HospitalController extends Controller
 {
@@ -226,9 +227,9 @@ class HospitalController extends Controller
   {
     $agents = collect();
     try {
-      $agentIds = Administrator::where('affected', '=', false)
-        ->get();
-
+      $agentsHospital = 
+                        
+      $agentIds = AdministratorResource::collection(Administrator::with(['hospitalManager','roles'])->get());
       return response()->json($agentIds, 200);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
