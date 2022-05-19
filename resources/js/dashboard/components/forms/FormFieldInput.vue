@@ -5,24 +5,28 @@
       :mode="mode"
       :rules="rules"
       tag="div"
-      :vid="vid"
-      name="Ce champ"
+      :name="name"
       class="bg-transparent"
     >
-      <b-form-group v-slot="{ ariaDescribedby }" v-if="type === 'boolean'">
-        <b-form-radio-group
-          v-model="formFieldValue"
-          :options="requiredOptions"
-          :aria-describedby="ariaDescribedby"
-          :id="id"
-        ></b-form-radio-group>
-      </b-form-group>
+      <div v-if="type === 'boolean'">
+        <b-form-group v-slot="{ ariaDescribedby }">
+          <b-form-radio-group
+            v-model="formFieldValue"
+            :options="requiredOptions"
+            :aria-describedby="ariaDescribedby"
+            :id="id"
+            :required="isRequired || required"
+          ></b-form-radio-group>
+        </b-form-group>
+        <input type="hidden" v-model="formFieldValue">
+      </div>
 
       <v-date-picker
         v-else-if="type === 'date'"
         v-model="formFieldValue"
         opens="center"
         class="d-flex style-picker"
+        :max-date="maxDate"
       >
         <template v-slot="{ inputEvents, inputValue }">
           <div class="w-100 d-flex">
@@ -82,8 +86,8 @@ export default {
       required: true
     },
     value: {
-      type: String,
-      default: ''
+      type: [String, Date, Number],
+      default: null
     },
     placeholder: {
       type: String,
@@ -125,6 +129,11 @@ export default {
     mode: {
       type: String,
       required: false
+    },
+    maxDate: {
+      type: Date,
+      required: false,
+      default: null
     }
     // defaultValue: {
     //   type: String,

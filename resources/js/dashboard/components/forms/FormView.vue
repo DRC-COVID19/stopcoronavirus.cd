@@ -21,156 +21,145 @@
           </b-col>
         </b-row>
 
-        <b-row class="mt-4">
-          <b-col lg="8" v-if="targetForm.form_steps && targetForm.form_steps.length > 0" class="px-0">
-            <b-card class="text-center card-step default-card">
-              <span v-if="!submitStep"> {{ targetForm.form_steps[currentStep - 1].title.toUpperCase() }}</span>
-              <span v-else> Confirmation </span>
-            </b-card>
+        <ValidationObserver v-slot="{ handleSubmit, valid }" ref="form">
+          <form @submit.prevent="handleSubmit()">
+            <b-row class="mt-4">
+              <b-col lg="8" v-if="targetForm.form_steps && targetForm.form_steps.length > 0" class="px-0">
+                <b-card class="text-center card-step default-card">
+                  <span v-if="!submitStep"> {{ targetForm.form_steps[currentStep - 1].title.toUpperCase() }}</span>
+                  <span v-else> Confirmation </span>
+                </b-card>
 
-            <b-card class="default-card mb-3 meta-info-card">
-              <strong>*</strong> Champs requis
-            </b-card>
+                <b-card class="default-card mb-3 meta-info-card">
+                  <strong>*</strong> Champs requis
+                </b-card>
 
-            <div v-if="!submitStep && targetForm.form_steps[currentStep - 1].form_fields.length > 0">
-              <b-card
-                v-for="(formField, counter) in targetForm.form_steps[currentStep - 1].form_fields"
-                :key="counter"
-                class="default-card mb-3 field-card"
-              >
-                  <b-form-group
-                    :label="
-                      formField.rules && formField.rules.match(/required/i)
-                        ? formField.name + ' * '
-                        : formField.name
-                    "
-                    :label-for="formField.name"
+                <div v-if="!submitStep && targetForm.form_steps[currentStep - 1].form_fields.length > 0">
+                  <b-card
+                    v-for="(formField, counter) in targetForm.form_steps[currentStep - 1].form_fields"
+                    :key="counter"
+                    class="default-card mb-3 field-card"
                   >
-                    <b-row>
-                      <b-col class="col-sm-12 col-md-12">
-                        <FormFieldInput
-                          v-model=" completedForm.completed_form_fields[formField.id]"
-                          :type="formField.form_field_type.name"
-                          :placeholder="`Entrer ${formField.name}`"
-                          :id="formField.name"
-                          :rules="formField.rules"
-                        />
-                      </b-col>
-                    </b-row>
-                  </b-form-group>
-              </b-card>
-            </div>
-            <div v-else-if="submitStep">
-              <b-card class="default-card mb-3 field-card">
-                <b-alert
-                  show
-                  variant="warning"
-                  v-if="!user.isHospitalAdmin"
-                >
-                  <p class="text-center">
-                    NB: Une soumission ne peut plus être modifiée après 24
-                    heures!
-                  </p>
-                </b-alert>
-                <b-form-group class="no-border">
-                  <div
-                    class="text-center text-danger my-2"
-                    v-if="isLastUpdateChecking"
-                  >
-                    <b-spinner class="align-middle" />
-                    <strong>Verification de la date de Mise a jour...</strong>
-                  </div>
-                  <label for="last_update" class="text-dash-color">Sélectionnez la date *</label>
-                  <v-date-picker
-                    v-model="completedForm.last_update"
-                    opens="center"
-                    :max-date="maxDate"
-                    class="d-flex style-picker"
-                    @input="selectLastUpdate()"
-                  >
-                    <template v-slot="{ inputEvents, inputValue }">
-                      <div class="w-100">
-                        <b-form-input
-                          :value="
-                            inputValue
-                              ? moment(completedForm.last_update).format('DD.MM.YYYY')
-                              : 'Choisir la date'
-                          "
-                          :disabled="isUpdateMode"
-                          v-on="inputEvents"
-                          class="date-picker-input"
-                          placeholder="Sélectionner une date"
-                          readonly
-                        >
-                        </b-form-input>
-                      </div>
-                    </template>
-                  </v-date-picker>
-                </b-form-group>
-              </b-card>
-            </div>
-            <b-card v-else class="default-card text-muted text-center">Aucun champ créer pour l'instant</b-card>
-          </b-col>
-          <b-col lg="8" v-else-if="!isLoading">
-            <p>Aucune étape n'a été créée pour l'instant</p>
-          </b-col>
-        </b-row>
-
-        <b-row  class="mt-4">
-          <b-col lg="8" class="px-0 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-            <b-col lg="auto" class="px-0 text-center text-md-left mr-md-3">
-              <b-button
-                :disabled="currentStep === 1"
-                variant="outline-primary"
-                size="sm"
-                @click="onPrevStep"
-              >
-                <small>Précédent</small>
-              </b-button>
-            </b-col>
-
-            <b-col lg class="d-flex flex-wrap align-items-center justify-content-center my-4 my-md-0">
-              <div class="mr-4 my-2 d-flex col align-items-center">
-                <div class="col">
-                  <b-progress
-                    :value="currentStep"
-                    :max="targetForm.form_steps.length + 1"
-                    class="form-progress d-none d-lg-flex"
-                    height="8px"
-                  >
-                  </b-progress>
+                      <b-form-group
+                        :label="formField.rules && formField.rules.match(/required/i)  ? formField.name + ' * ' : formField.name"
+                        :label-for="formField.name"
+                      >
+                        <b-row>
+                          <b-col class="col-sm-12 col-md-12">
+                            <FormFieldInput
+                              v-model=" completedForm.completed_form_fields[formField.id]"
+                              :type="formField.form_field_type.name"
+                              :placeholder="`Entrer ${formField.name}`"
+                              :id="formField.name"
+                              :name="formField.name"
+                              :rules="formField.rules"
+                            />
+                          </b-col>
+                        </b-row>
+                      </b-form-group>
+                  </b-card>
                 </div>
-                <small class="font-weight-bold">Etape {{ currentStep }} sur {{ targetForm.form_steps.length + 1 }}</small>
-              </div>
-              <div class="my-2">
-                <b-pagination
-                  v-model="currentStep"
-                  :total-rows="targetForm.form_steps.length + 1"
-                  :per-page="1"
-                  size="sm"
-                ></b-pagination>
-              </div>
-            </b-col>
+                <div v-else-if="submitStep">
+                  <b-card class="default-card mb-3 field-card">
+                    <b-alert
+                      show
+                      variant="warning"
+                      v-if="!user.isHospitalAdmin"
+                    >
+                      <p class="text-center">
+                        NB: Une soumission ne peut plus être modifiée après 24
+                        heures!
+                      </p>
+                    </b-alert>
+                    <b-form-group class="no-border">
+                      <div
+                        class="text-center text-danger my-2"
+                        v-if="isLastUpdateChecking"
+                      >
+                        <b-spinner class="align-middle" />
+                        <strong>Verification de la date de Mise a jour...</strong>
+                      </div>
+                      <label for="last_update" class="text-dash-color">Sélectionnez la date *</label>
+                      <FormFieldInput
+                        v-model=" completedForm.last_update"
+                        name="date de la mise à jour"
+                        :max-date="maxDate"
+                        type="date"
+                        placeholder="Veuillez choisir une date"
+                        id="last_update"
+                        rules="required"
+                        @input="selectLastUpdate()"
+                      />
+                    </b-form-group>
+                  </b-card>
+                </div>
+                <b-card v-else class="default-card text-muted text-center">Aucun champ créer pour l'instant</b-card>
+              </b-col>
+              <b-col lg="8" v-else-if="!isLoading">
+                <p>Aucune étape n'a été créée pour l'instant</p>
+              </b-col>
+            </b-row>
 
-            <b-col lg="auto" class="px-0 text-center text-md-right ml-md-3">
-              <b-button
-                v-if="!submitStep"
-                variant="primary"
-                size="sm"
-                @click="onNextStep"
-              >
-                <small>Suivant</small>
-              </b-button>
-              <b-button
-                v-if="submitStep"
-                variant="primary"
-                size="sm"
-              >
-                <small>Soumettre</small>
-              </b-button>
-            </b-col>
-          </b-col>
-        </b-row>
+            <b-row  class="mt-4">
+              <b-col lg="8" class="px-0 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+                <b-col lg="auto" class="px-0 text-center text-md-left mr-md-3">
+                  <b-button
+                    :disabled="currentStep === 1"
+                    variant="outline-primary"
+                    size="sm"
+                    type="submit"
+                    @click="onPrevStep"
+                  >
+                    <small>Précédent</small>
+                  </b-button>
+                </b-col>
+
+                <b-col lg class="d-flex flex-wrap align-items-center justify-content-center my-4 my-md-0">
+                  <div class="mr-4 my-2 d-flex col align-items-center">
+                    <div class="col">
+                      <b-progress
+                        :value="currentStep"
+                        :max="targetForm.form_steps.length + 1"
+                        class="form-progress d-none d-lg-flex"
+                        height="8px"
+                      >
+                      </b-progress>
+                    </div>
+                    <small class="font-weight-bold">Etape {{ currentStep }} sur {{ targetForm.form_steps.length + 1 }}</small>
+                  </div>
+                  <div class="my-2">
+                    <b-pagination
+                      v-model="currentStepPaginate"
+                      :total-rows="targetForm.form_steps.length + 1"
+                      :per-page="1"
+                      size="sm"
+                    ></b-pagination>
+                  </div>
+                </b-col>
+
+                <b-col lg="auto" class="px-0 text-center text-md-right ml-md-3">
+                  <b-button
+                    v-if="!submitStep"
+                    variant="primary"
+                    size="sm"
+                    @click="onNextStep"
+                  >
+                    <small>Suivant</small>
+                  </b-button>
+                  <b-button
+                    v-if="submitStep"
+                    type="submit"
+                    variant="primary"
+                    size="sm"
+                    :disabled="!valid"
+                  >
+                    <small>Soumettre</small>
+                  </b-button>
+                </b-col>
+              </b-col>
+            </b-row>
+          </form>
+      </ValidationObserver>
       </div>
     </b-container>
   </b-container>
@@ -179,9 +168,10 @@
 import FormFieldInput from './FormFieldInput.vue'
 import Loading from '../Loading'
 import { mapState, mapActions } from 'vuex'
+import { ValidationObserver } from 'vee-validate'
 
 export default {
-  components: { FormFieldInput, Loading },
+  components: { FormFieldInput, Loading, ValidationObserver },
   props: {
     preview: { type: Boolean, default: false },
     backRouteName: String
@@ -190,6 +180,8 @@ export default {
     return {
       targetForm: {},
       currentStep: 1,
+      currentStepPaginate: 1,
+      maxStepReached: 1,
       completedForm: {
         completed_form_fields: {},
         checkLastUpdate: null
@@ -199,7 +191,7 @@ export default {
       maxDate: new Date()
     }
   },
-  async mounted() {
+  async mounted () {
     this.isLoading = true
     this.targetForm = await this.formShow({ id: this.$route.params.form_id })
     this.isLoading = false
@@ -215,21 +207,82 @@ export default {
       return !!this.$route.params.completed_form_id
     }
   },
+  watch: {
+    currentStep (value) {
+      this.currentStepPaginate = value
+      if (value > this.maxStepReached) {
+        this.maxStepReached = value
+      }
+      this.$refs.form.reset()
+      window.scrollTo({top: 0, behavior: 'smooth'})
+    },
+    currentStepPaginate (value) {
+      if (value === this.currentStep) {
+        return true
+      }
+      if (this.currentStep === this.maxStepReached && value < this.currentStep) {
+        this.currentStep = value
+      } else {
+        this.$refs.form.validate().then(success => {
+          if (success) {
+            if (this.maxStepReached < value) {
+              this.$notify({
+                group: 'alert',
+                title: 'Attention',
+                text: "Vous n'avez pas encore soumis l'étape " + this.maxStepReached,
+                type: 'error'
+              })
+              this.currentStepPaginate = this.currentStep
+            } else {
+              this.currentStep = value
+            }
+          } else {
+            this.showWarningErrorOnForm()
+            this.currentStepPaginate = this.currentStep
+          }
+        })
+      }
+    }
+  },
   methods: {
     ...mapActions([
       'formShow'
     ]),
-    onNextStep() {
-      if (this.currentStep + 1 <= this.targetForm.form_steps.length + 1) {
-        this.currentStep++
-      }
+    onNextStep () {
+      this.$refs.form.validate().then(success => {
+        if (success) {
+          if (this.currentStep + 1 <= this.targetForm.form_steps.length + 1) {
+            this.currentStep++
+          }
+        } else {
+          this.showWarningErrorOnForm()
+        }
+      })
     },
-    onPrevStep() {
-      if (this.currentStep - 1 >= 1) {
+    onPrevStep () {
+      if (this.currentStep - 1 >= 1 && this.currentStep === this.maxStepReached) {
         this.currentStep--
+      } else {
+        this.$refs.form.validate().then(success => {
+          if (success) {
+            if (this.currentStep - 1 >= 1) {
+              this.currentStep--
+            }
+          } else {
+            this.showWarningErrorOnForm()
+          }
+        })
       }
     },
-    selectLastUpdate() {
+    showWarningErrorOnForm () {
+      this.$notify({
+        group: 'alert',
+        title: 'Attention',
+        text: "Veuillez tout d'abord corriger les erreurs sur le formulaire",
+        type: 'error'
+      })
+    },
+    selectLastUpdate () {
       // to implement
     }
   }
