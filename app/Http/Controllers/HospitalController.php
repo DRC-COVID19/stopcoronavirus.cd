@@ -136,13 +136,10 @@ class HospitalController extends Controller
    */
   public function updateByAdmin(UpdateHospitalRequest $request, $id)
   {
-    $data = $request->validated();
-
-
     try {
-      DB::beginTransaction();
-
-      $hospital = Hospital::find($id);
+   
+        $data = $request->validated();
+        $hospital = Hospital::find($id);
         if ($data['agent_id']) {
           $hospital->update(['agent_id' => $data['agent_id']]);
         } 
@@ -150,16 +147,13 @@ class HospitalController extends Controller
           $hospital->update(['agent_id' => null]);
         }
 
-      DB::commit();
-
       return response()->json($hospital, 201);
     } catch (\Throwable $th) {
 
-      DB::rollBack();
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
       }
-      return response($th->getMessage())->setStatusCode(500);
+        return response($th->getMessage())->setStatusCode(500);
     }
   }
   /**
