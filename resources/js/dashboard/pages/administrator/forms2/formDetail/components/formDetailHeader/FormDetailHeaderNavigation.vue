@@ -59,7 +59,7 @@
                 Prévisualisation
               </b-nav-item>
             </b-navbar-nav>
-            <b-navbar-nav class="d-lg-none profil-container-responsive">
+            <!-- <b-navbar-nav class="d-lg-none profil-container-responsive">
               <b-nav-item
                 v-if="canViewForm"
                 class="d-block text-center w-100"
@@ -76,8 +76,8 @@
               >
                 Deconnexion
               </b-button>
-            </b-navbar-nav>
-            <b-navbar-nav class="my-auto profil-container">
+            </b-navbar-nav> -->
+            <!-- <b-navbar-nav class="my-auto profil-container">
               <b-nav-item class="d-flex align-content-center">
                 <div
                   class="
@@ -125,7 +125,7 @@
                   </div>
                 </div>
               </b-nav-item>
-            </b-navbar-nav>
+            </b-navbar-nav> -->
           </div>
         </b-collapse>
       </b-navbar>
@@ -286,6 +286,8 @@ export default {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+    background-color: transparent;
+    color: #14244f;
     &:hover {
       cursor: pointer;
     }
