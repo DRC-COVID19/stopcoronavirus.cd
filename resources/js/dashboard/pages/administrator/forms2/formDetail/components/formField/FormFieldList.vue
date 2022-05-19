@@ -18,7 +18,7 @@
                   <v-select
                       v-model="form.form_field_type_id"
                       :options="formFieldType"
-                      label="name"
+                      label="label"
                       :reduce="(item)=>item.id"
                       :searchable="false"
                       id="form.form_field_type_id"
@@ -61,18 +61,21 @@ export default {
   data () {
     return {
       form: {
-        form_field_type_id: '',
+        form_field_type_id: this.formField.form_field_type_id,
         require: !!this.formField.rules?.match(/required/i) || false
       }
+    }
+  },
+  watch: {
+    formField () {
+      this.form.form_field_type_id = this.formField.form_field_type_id
+      this.form.require = !!this.formField.rules?.match(/required/i) || false
     }
   },
   computed: {
     ...mapState({
       formFieldType: (state) => state.formFieldType.formFieldTypes
-    }),
-    isRequired () {
-      return !!this.formField.rules?.match(/required/i) || false
-    }
+    })
   },
   methods: {
     ...mapActions(['formFieldTypeIndex', 'updateFormField']),

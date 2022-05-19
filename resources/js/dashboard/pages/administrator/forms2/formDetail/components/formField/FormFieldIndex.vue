@@ -102,6 +102,9 @@ export default {
   methods: {
     ...mapActions(['getFormFields']),
     async init () {
+      this.selectedFormKey = null
+      this.form_field_order = null
+      this.order_field_end = null
       this.isLoading = true
       this.fieldForm = await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
       if (this.fieldForm.length !== 0) {
@@ -138,14 +141,13 @@ export default {
       this.form_field_order = idField
       this.$bvModal.show('createResponse')
     },
-    onCreatedFieldEnd (idField) {
+    onCreatedFieldEnd (field) {
       this.selectedFormKey = null
-      this.order_field_end = idField
+      this.order_field_end = field
       this.$bvModal.show('createResponse')
     },
     onResetModalCreate () {
       this.selectedFormKey = null
-      this.form_field_order = null
       this.$bvModal.show('createResponse')
     }
   }

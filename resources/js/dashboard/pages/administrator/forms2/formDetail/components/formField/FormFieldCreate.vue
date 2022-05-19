@@ -38,7 +38,7 @@
           <FomFieldSelect
             v-model="form.form_field_type_id"
             :options="formFieldType"
-            label="name"
+            label="label"
             :reduce="(item) => item.id"
             :isObligated="true"
             rules="required"
@@ -60,12 +60,12 @@
             class="mb-4"
           />
           <FomFieldSelect
-            v-if="!formFieldOrder"
-            v-model="form.order_field"
+            v-if="!formFieldOrder && !orderFieldEnd"
+            v-model="form.form_field_order"
             :options="formField"
             label="name"
             :reduce="(item) => item.id"
-            id="form.order_field"
+            id="form.form_field_order"
             labelText="Ordre du champ(insérer avant?)"
             mode="aggressive"
           />
@@ -131,8 +131,8 @@ export default {
       required: false
     },
     orderFieldEnd: {
-      type: Number,
-      default: null,
+      type: Object,
+      default: () => (null),
       required: false
     }
   },
@@ -149,8 +149,8 @@ export default {
       form: {
         question: '',
         form_field_type_id: '',
-        order_field: '',
-        default_value_id: null,
+        form_field_order: null,
+        default_value: '',
         form_recurrence_id: '',
         require: false
       },
@@ -188,24 +188,15 @@ export default {
       this.isLoading = true
       const formField = {
         name: this.form.question,
-        form_field_order: this.formFieldOrder ? this.formFieldOrder : this.form.order_field,
+        form_field_order: this.formFieldOrder || this.form.form_field_order,
         rules: this.form.require ? 'required' : '',
         form_id: this.form_id,
         form_field_type_id: this.form.form_field_type_id,
         form_step_id: this.step_id,
-        default_value: this.form.default_value_id
+        default_value: this.form.default_value
       }
       if (this.btnTitle === 'Créer') {
-        if (!formField.form_field_order && !this.formFieldOrder) {
-          delete formField.form_field_order
-          this.createdField({ order_field: 1, ...formField })
-        }
-        if (this.formFieldOrder) {
-          this.createdField({ form_field_order: this.formFieldOrder, ...formField })
-        }
-        if (this.orderFieldEnd) {
-          this.createdField({ order_field: this.formToPopulate.order_field + 1, ...formField })
-        }
+        this.createdField(formField)
       } else {
         this.updatedField(formField)
       }
@@ -221,6 +212,7 @@ export default {
           })
           this.$bvModal.hide('createResponse')
           this.$emit('created')
+          this.resetForm()
           this.isLoading = false
         })
         .catch(({ response }) => {
@@ -248,6 +240,7 @@ export default {
           })
           this.$bvModal.hide('createResponse')
           this.$emit('updated')
+          this.resetForm()
           this.isLoading = false
         })
         .catch(({ response }) => {
@@ -267,7 +260,7 @@ export default {
       if (this.formToPopulate && Object.keys(this.formToPopulate).length !== 0) {
         this.form.id = this.formToPopulate.id
         this.form.question = this.formToPopulate.name
-        this.form.order_field = this.formToPopulate.id
+        this.form.form_field_order = this.formToPopulate.id
         this.form.require = !!this.formToPopulate.rules?.match(/required/i) || false
         this.form.form_field_type_id = this.formToPopulate.form_field_type_id
         this.form.default_value = this.formToPopulate.default_value
@@ -280,7 +273,7 @@ export default {
     resetForm () {
       this.form.id = null
       this.form.question = ''
-      this.form.order_field = ''
+      this.form.form_field_order = null
       this.form.require = false
       this.form.form_field_type_id = ''
       this.form.default_value = ''
