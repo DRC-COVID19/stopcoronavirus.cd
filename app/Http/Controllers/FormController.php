@@ -77,9 +77,8 @@ class FormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateFormVisibility($form_id){
-     
-    
+    public function updateFormVisibility($form_id)
+    {
         try 
         {
           $data = $this->updateValidator();
