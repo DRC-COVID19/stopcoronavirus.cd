@@ -85,7 +85,7 @@ class FormController extends Controller
           DB::beginTransaction();
           $form = Form::find($form_id);
           $form->update($data);
-          $form->hospitals()->sync($data['hospitals']);
+          $form->hospitals()->sync($data['hospitals_id']);
         
           DB::commit();
           return response()->json( $form, 200);
@@ -125,7 +125,7 @@ class FormController extends Controller
             'publish'               => 'nullable|boolean',
             'visible_all_hospitals'  => 'nullable|boolean',
             'form_recurrence_value' => 'nullable|string|max:255',
-            'hospitals'          =>  'nullable|array',
+            'hospitals_id'          =>  'nullable|array',
             'form_recurrence_id'    => 'sometimes|integer|exists:form_recurrences,id'
             
         ]);

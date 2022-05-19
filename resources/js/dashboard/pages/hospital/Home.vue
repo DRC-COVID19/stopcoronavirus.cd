@@ -32,7 +32,7 @@
             <b-card-body>
 
               <b-row
-                class="mb-5 hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center"
+                class="hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center"
               >
                 <b-col sm="12">
                   <h4 class="ml-2 mb-4">Mes Formulaires</h4>

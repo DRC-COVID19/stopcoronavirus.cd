@@ -86,7 +86,6 @@
 import Header from '../components/Header'
 import ListUser from './components/ListUsers'
 import Create from './components/Create'
-import { ADMIN_ROLE_ID } from '../../../config/env'
 export default {
   components: {
     Header,
@@ -110,7 +109,6 @@ export default {
       currentPage: 1,
       roles: [],
       hospitals: [],
-      affected: null
     }
   },
   mounted () {
@@ -205,15 +203,13 @@ export default {
       this.updating = true
 
       this.errors = {}
-      this.isAgentHospital(currentUser)
       const form = {
         username: currentUser.username,
         name: currentUser.name,
         email: currentUser.email,
         roles_id: currentUser.roles,
         hospitals_id: currentUser.hospitals,
-        phone_number: currentUser.phoneNumber,
-        affected: this.affected
+        phone_number: currentUser.phoneNumber
       }
       if (currentUser && currentUser.password) {
         form.password = currentUser.password
@@ -254,7 +250,6 @@ export default {
       this.userAdded = false
       this.isLoading = true
       this.errors = {}
-      this.isAgentHospital(form)
       // eslint-disable-next-line no-undef
       axios
         .post('/api/admin_users', {
@@ -265,8 +260,7 @@ export default {
           email: form.email,
           roles_id: form.roles,
           hospitals_id: form.hospitals,
-          phone_number: form.phoneNumber,
-          affected: this.affected
+          phone_number: form.phoneNumber
         })
         .then(() => {
           this.userAdded = true
@@ -331,17 +325,6 @@ export default {
         .catch(({ response }) => {
           this.$gtag.exception(response)
         })
-    },
-    isAgentHospital (form) {
-      if (!form.hospitals) {
-        form.hospitals = []
-      }
-      if (form.roles.includes(ADMIN_ROLE_ID)) {
-        this.affected = false
-        if (form.hospitals && form.hospitals.length !== 0) {
-          this.affected = true
-        }
-      }
     },
     switchPage (page) {
       this.getUserList(page)

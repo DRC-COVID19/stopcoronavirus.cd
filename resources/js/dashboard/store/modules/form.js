@@ -62,7 +62,7 @@ export default {
         axios
           .put(`/api/dashboard/forms/update-form-visibility/${payload.id}`, {
             visible_all_hospitals: payload.visibleAllHospitals,
-            hospitals: payload.hospitals
+            hospitals_id: payload.hospitals
           })
           .then(() => {
             resolve(true)
