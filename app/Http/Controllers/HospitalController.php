@@ -62,13 +62,9 @@ class HospitalController extends Controller
   public function store(StoreHospitalRequest $request)
   {
     $data = $request->validated();
-    Log::info(['data' => $data]);
     try {
       DB::beginTransaction();
-      if (isset($data['agent_id'])) {
-        $adminUser = Administrator::where('id', $data['agent_id'])->first();
-        $adminUser->update(['affected' => true]);
-      }
+      
       $hospital = Hospital::create($data);
 
       DB::commit();

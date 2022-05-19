@@ -112,8 +112,7 @@ export default {
       updating: false,
       errors: {},
       currentPage: 1,
-      users: [],
-      affected: null
+      users: []
     }
   },
   async mounted () {

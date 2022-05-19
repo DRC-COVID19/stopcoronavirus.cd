@@ -108,7 +108,7 @@ export default {
       errors: {},
       currentPage: 1,
       roles: [],
-      hospitals: [],
+      hospitals: []
     }
   },
   mounted () {
