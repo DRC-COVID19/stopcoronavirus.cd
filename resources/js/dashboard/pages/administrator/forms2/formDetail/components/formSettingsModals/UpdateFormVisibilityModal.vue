@@ -124,7 +124,7 @@ export default {
       this.$bvModal.hide('updateFormVisibilityModal')
     },
     onUpdateFormVisibility () {
-      this.form__UpdateFormVisibility({ form: this.targetForm, id: this.$route.params.form_id })
+      this.form__UpdateFormVisibility({ ...this.targetForm, id: this.$route.params.form_id })
         .then(() => {
           this.formUpdated = true
           this.isLoading = false

@@ -57,10 +57,14 @@ export default {
       })
     },
     form__UpdateFormVisibility ({ commit }, payload) {
+      alert(JSON.stringify(payload))
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .put(`/api/dashboard/forms/update-form-visibility/${payload.id}`, payload.form)
+          .put(`/api/dashboard/forms/update-form-visibility/${payload.id}`, {
+            visible_all_hospitals: payload.visibleAllHospitals,
+            hospitals: payload.hospitals
+          })
           .then(() => {
             resolve(true)
             commit('SET_IS_UPDATE_FORM', true)

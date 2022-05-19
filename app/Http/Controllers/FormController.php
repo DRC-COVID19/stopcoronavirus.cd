@@ -77,16 +77,20 @@ class FormController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateFormVisibility(Form $form){
+    public function updateFormVisibility($form_id){
+     
+    
         try 
         {
-          DB::beginTransaction();
           $data = $this->updateValidator();
-          $result = $form->hospitals()->sync($data['hospitals_id']);
-          $result = $form->update($data);
+          DB::beginTransaction();
+          $form = Form::find($form_id);
+          $form->update($data);
+          $form->hospitals()->sync($data['hospitals']);
         
           DB::commit();
-        return response()->json( $result, 200);
+          Log::info('data',[$data]);
+         return response()->json( $form, 200);
 
       } catch (\Throwable $th) {
           DB::rollback();
@@ -123,7 +127,7 @@ class FormController extends Controller
             'publish'               => 'nullable|boolean',
             'visible_all_hospitals'  => 'nullable|boolean',
             'form_recurrence_value' => 'nullable|string|max:255',
-            'hospitals_id'          =>  'nullable|array',
+            'hospitals'          =>  'nullable|array',
             'form_recurrence_id'    => 'sometimes|integer|exists:form_recurrences,id'
             
         ]);
