@@ -1,36 +1,36 @@
-import Home from "./pages/Home";
-import Login from "./pages/auth/Login";
-import LostPassword from "./pages/auth/LostPassword";
-import ResetPasswordThank from "./pages/auth/ResetPasswordThank";
-import ResetPasseword from "./pages/auth/ResetPassword";
-import PasswordResetComplete from "./pages/auth/PasswordResetComplete";
-import HospitalsHome from "./pages/hospital/Home";
-import HospitalForm from "./pages/hospital/HospitalForm";
-import BugTracker from "./pages/bug_tracker/Index";
-import HospitalsDetail from "./pages/hospital/HospitalDetail";
-import HospitalData from "./pages/hospital/HospitalData";
-import HospitalAdmin from "./pages/adminHospital/Home";
-import HospitalAdminData from "./pages/adminHospital/HospitalData";
-import NotAcces from "./pages/NotAccess";
-import Administrator from "./pages/administrator/Administrator";
-import AdminUserIndex from "./pages/administrator/users/Index";
-import AdminHospitalIndex from "./pages/administrator/hospitals/Index";
-import PageNotFound from "./pages/NotFound";
-import ChangeLogIndex from "./pages/administrator/changeLog/index";
-import Epidemie from "./pages/administrator/epidemy/Index";
-import FormIndex from "./pages/administrator/forms2/index";
-import FormShow from "./pages/administrator/forms/form";
-import FormShow2 from "./pages/administrator/forms2/formDetail/index";
-import FormCreation from "./pages/administrator/forms2/formDetail/formCreation";
-import FormFieldIndex from "./pages/administrator/forms2/formDetail/components/formField/FormFieldIndex";
+import Home from './pages/Home'
+import Login from './pages/auth/Login'
+import LostPassword from './pages/auth/LostPassword'
+import ResetPasswordThank from './pages/auth/ResetPasswordThank'
+import ResetPasseword from './pages/auth/ResetPassword'
+import PasswordResetComplete from './pages/auth/PasswordResetComplete'
+import HospitalsHome from './pages/hospital/Home'
+import HospitalForm from './pages/hospital/HospitalForm'
+import BugTracker from './pages/bug_tracker/Index'
+import HospitalsDetail from './pages/hospital/HospitalDetail'
+import HospitalData from './pages/hospital/HospitalData'
+import HospitalAdmin from './pages/adminHospital/Home'
+import HospitalAdminData from './pages/adminHospital/HospitalData'
+import NotAcces from './pages/NotAccess'
+import Administrator from './pages/administrator/Administrator'
+import AdminUserIndex from './pages/administrator/users/Index'
+import AdminHospitalIndex from './pages/administrator/hospitals/Index'
+import PageNotFound from './pages/NotFound'
+import ChangeLogIndex from './pages/administrator/changeLog/index'
+import Epidemie from './pages/administrator/epidemy/Index'
+import FormIndex from './pages/administrator/forms2/index'
+import FormShow from './pages/administrator/forms/form'
+import FormShow2 from './pages/administrator/forms2/formDetail/index'
+import FormCreation from './pages/administrator/forms2/formDetail/formCreation'
+import FormFieldIndex from './pages/administrator/forms2/formDetail/components/formField/FormFieldIndex'
 
-import FormSettings from "./pages/administrator/forms2/formDetail/formSettings";
-import FormSchemas from "./pages/administrator/forms2/formDetail/formSchemas";
-import FormResponse from "./pages/administrator/forms2/formDetail/formResponse";
-import FormPreview from "./pages/administrator/forms2/formDetail/formPreview";
-import Main from "./pages/Main";
-import Dashboard from "./pages/dashboard/Dashboard";
-import CTCO from "./pages/ctco/CTCO";
+import FormSettings from './pages/administrator/forms2/formDetail/formSettings'
+import FormSchemas from './pages/administrator/forms2/formDetail/formSchemas'
+import FormResponse from './pages/administrator/forms2/formDetail/formResponse'
+import FormPreview from './pages/administrator/forms2/formDetail/formPreview'
+import Main from './pages/Main'
+import Dashboard from './pages/dashboard/Dashboard'
+import CTCO from './pages/ctco/CTCO'
 import {
   ADMIN_DASHBOARD,
   AGENT_HOSPITAL,
@@ -303,16 +303,16 @@ export default [
         component: FormCreation,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
         },
         children: [
           {
-            path: "/administration/forms/:form_id/step/:step_id",
-            name: "administrator.forms.show.creation.step",
+            path: '/administration/forms/:form_id/step/:step_id',
+            name: 'administrator.forms.show.creation.step',
             component: FormFieldIndex,
             meta: {
               requiresAuth: true,
-              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
             }
           }
         ]
