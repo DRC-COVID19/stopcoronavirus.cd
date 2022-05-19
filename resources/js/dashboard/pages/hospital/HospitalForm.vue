@@ -287,9 +287,6 @@ export default {
       this.getLastUpdate()
       this.laodFormData()
     },
-    completedFormSorted (completedForm) {
-      return completedForm.sort((a, b) => a.name.localeCompare(b.name))
-    },
     getLastUpdate () {
       this.completedForm.last_update =
         this.completedFormFields[0].completed_form.last_update
@@ -302,10 +299,6 @@ export default {
           item.value
         )
       })
-    },
-    onRangeDateObservation (inputValueDate) {
-      // this.completedForm.last_update = moment(inputValueDate).format(
-      //   'YYYY-MM-DD')
     },
     onComplete () {
       this.isLoading = true

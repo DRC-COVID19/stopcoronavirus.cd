@@ -36,6 +36,7 @@
               :required="isRequired || required"
               :state="errors[0] ? false : null || state"
               :id="id"
+              :disabled="disabled"
               v-on="inputEvents"
               class="date-picker-input"
               placeholder="Sélectionner la date"

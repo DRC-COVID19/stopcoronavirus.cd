@@ -123,7 +123,7 @@ export default {
       })
     },
     completedForm__getByHospitalDetail ({ state, commit }, payload) {
-      commit('SET_IS_LOADING', payload.isLoading)
+      commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
           .get(`/api/dashboard/completed_forms/${payload.completed_form_id}`)

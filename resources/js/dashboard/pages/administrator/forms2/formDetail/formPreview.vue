@@ -4,7 +4,7 @@
     <b-row class="w-100 h-100 mx-0 px-0">
       <b-col lg="12" class="w-100 mx-0 px-0">
         <FormView
-          back-route-name="administrator.forms.show.creation"
+          :back-route="{name: 'administrator.forms.show.creation'}"
           preview
         />
       </b-col>
