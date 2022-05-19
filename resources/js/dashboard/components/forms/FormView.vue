@@ -16,8 +16,8 @@
         </b-row>
 
         <b-row>
-          <b-col lg="8" class="d-flex justify-content-center container-preview-title-form w-100 mb-3">
-            <h3 v-if="targetForm.title" class="text-white text-center"> {{ targetForm.title.toUpperCase() || 'Formulaire'}} </h3>
+          <b-col lg="8" class="d-flex justify-content-center container-preview-title-form w-100 mb-3 flex-wrap">
+            <h3 v-if="targetForm.title" class="text-white text-center w-100"> {{ targetForm.title.toUpperCase() || 'Formulaire'}} </h3>
             <h4 v-if="isUpdateMode">
               Modifier la mise à jour du {{ moment(completedForm.last_update).format("DD/MM/Y") }}
             </h4>
@@ -69,7 +69,7 @@
                       variant="warning"
                       v-if="!user.isHospitalAdmin"
                     >
-                      <p class="text-center"> NB: Une soumission ne peut plus être modifiée après 24 heures! </p>
+                      <p class="text-center mb-0"> NB: Une soumission ne peut plus être modifiée après 24 heures! </p>
                     </b-alert>
                     <b-form-group class="no-border">
                       <div
@@ -81,7 +81,7 @@
                       </div>
                       <label for="last_update" class="text-dash-color">Sélectionnez la date *</label>
                       <FormFieldInput
-                        v-model=" completedForm.last_update"
+                        v-model="completedForm.last_update"
                         :max-date="maxDate"
                         :disabled="isUpdateMode"
                         name="date de la mise à jour"
@@ -116,12 +116,12 @@
                 </b-col>
 
                 <b-col lg class="d-flex flex-wrap align-items-center justify-content-center my-4 my-md-0">
-                  <div class="mr-4 my-2 d-flex col align-items-center">
-                    <div class="col">
+                  <div class="mx-4 my-2 d-flex col align-items-center justify-content-center">
+                    <div class="col d-none d-lg-block">
                       <b-progress
                         :value="currentStep"
                         :max="targetForm.form_steps.length + 1"
-                        class="form-progress d-none d-lg-flex"
+                        class="form-progress"
                         height="8px"
                       >
                       </b-progress>
@@ -149,10 +149,11 @@
                   </b-button>
                   <b-button
                     v-if="submitStep"
+                    :disabled="!valid || isLastUpdateChecking"
                     type="submit"
                     variant="primary"
                     size="sm"
-                    :disabled="!valid"
+                    @click="onComplete"
                   >
                     <small>Soumettre</small>
                   </b-button>
@@ -179,8 +180,13 @@ export default {
   props: {
     preview: { type: Boolean, default: false },
     backRoute: Object,
-    completedFormId: Number,
-    hospitalId: Number
+    completedFormId: [Number, String],
+    hospitalId: [Number, String],
+    formId: [Number, String],
+    containerToScroll: {
+      type: HTMLDivElement,
+      default: () => { return window }
+    }
   },
   data () {
     return {
@@ -194,12 +200,13 @@ export default {
       },
       isLoading: false,
       isLastUpdateChecking: false,
-      maxDate: new Date()
+      maxDate: new Date(),
+      completedFormFields: []
     }
   },
   async mounted () {
     this.isLoading = true
-    this.targetForm = await this.formShow({ id: this.$route.params.form_id })
+    this.targetForm = await this.formShow({ id: this.formId })
     if (this.isUpdateMode) {
       this.getCompletedFormFields()
     }
@@ -218,12 +225,7 @@ export default {
       return this.currentStep === this.targetForm.form_steps.length + 1
     },
     isUpdateMode () {
-      return this.completedFormId
-    },
-    getHospitalId () {
-      return this.$route.params.hospital_id
-        ? this.$route.params.hospital_id
-        : this.user.hospital.id
+      return !!this.completedFormId
     }
   },
   watch: {
@@ -233,7 +235,7 @@ export default {
         this.maxStepReached = value
       }
       this.$refs.form.reset()
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      this.containerToScroll.scrollTo({ top: 0, behavior: 'smooth' })
     },
     currentStepPaginate (value) {
       if (value === this.currentStep) {
@@ -244,7 +246,7 @@ export default {
       } else {
         this.$refs.form.validate().then(success => {
           if (success) {
-            if (this.maxStepReached < value) {
+            if (this.maxStepReached + 1 < value && !this.isUpdateMode) {
               this.$notify({
                 group: 'alert',
                 title: 'Attention',
@@ -268,7 +270,8 @@ export default {
       'formShow',
       'completedForm__store',
       'completedForm__update',
-      'completedForm__checkLastUpdate'
+      'completedForm__checkLastUpdate',
+      'completedForm__getByHospitalDetail'
     ]),
     onNextStep () {
       this.$refs.form.validate().then(success => {
@@ -305,37 +308,41 @@ export default {
       })
     },
     async selectLastUpdate () {
+      if (this.preview || !this.completedForm.last_update) {
+        return false
+      }
       this.isLastUpdateChecking = true
-      this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({
-        hospital_id: this.hospitalId,
-        last_update: this.moment(this.completedForm.last_update).format('YYYY-MM-DD')
-      })
-      this.isLastUpdateChecking = false
+      try {
+        this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({
+          hospital_id: this.hospitalId,
+          form_id: this.formId,
+          last_update: this.moment(this.completedForm.last_update).format('YYYY-MM-DD')
+        })
+        this.isLastUpdateChecking = false
+      } catch (error) {
+        this.isLastUpdateChecking = false
+      }
 
       if (this.completedForm.checkLastUpdate && !this.isUpdateMode) {
-        this.$bvToast.toast(
-            `Le ${this.moment(this.completedForm.last_update).format('DD/MM/Y')} a déjà une soumission. Veuillez choisir une autre date SVP!`,
-            {
-              title: 'Erreur',
-              autoHideDelay: 4000,
-              appendToast: true,
-              variant: 'danger',
-              solid: true
-            }
-        )
+        this.$notify({
+          group: 'alert',
+          title: 'Erreur',
+          text: `Le ${this.moment(this.completedForm.last_update).format('DD/MM/Y')} a déjà une soumission. Veuillez choisir une autre date SVP!`,
+          type: 'error'
+        })
+        this.$set(this.completedForm, 'last_update', null)
       } else if (this.completedForm.checkLastUpdate === 0 && !this.isUpdateMode) {
-        this.$bvToast.toast('Aucune soumission constatée en cette date.', {
+        this.$notify({
+          group: 'alert',
           title: 'Success',
-          autoHideDelay: 4000,
-          appendToast: true,
-          variant: 'success',
-          solid: true
+          text: 'Aucune soumission constatée en cette date',
+          type: 'success'
         })
       }
     },
     async getCompletedFormFields () {
       this.completedFormFields = await this.completedForm__getByHospitalDetail({
-        completed_form_id: this.$route.params.completed_form_id
+        completed_form_id: this.completedFormId
       })
       this.setLastUpdate()
       this.setCompletedFormFields()
@@ -349,7 +356,6 @@ export default {
       })
     },
     onComplete () {
-      ù
       if (this.preview) {
         return false
       }
@@ -363,10 +369,12 @@ export default {
       } else {
         this.completedForm.created_manager_name = this.hospitalManagerName
         this.completedForm.created_manager_first_name = this.hospitalManagerFirstName
+        this.completedForm.hospital_id = this.hospitalId
+        this.completedForm.form_id = this.targetForm.id
       }
       this.submitCompletedForm(this.isUpdateMode ? this.completedForm__update : this.completedForm__store)
         .then(() => {
-          this.$router.push(backRoute)
+          this.$router.push(this.backRoute)
         })
         .finally(() => {
           this.isLoading = false
@@ -374,26 +382,24 @@ export default {
     },
     submitCompletedForm (method) {
       return new Promise((resolve, reject) => {
-        this.completedForm.hospital_id = this.getHospitalId
-        this.completedForm.form_id = this.targetForm.id
         method(this.completedForm)
           .then(() => {
-            this.$bvToast.toast('Formulaire soumis avec succès', {
-              title: 'Formulaire de soumission',
-              appendToast: true,
-              variant: 'success',
-              solid: true
+            this.$notify({
+              group: 'alert',
+              title: 'Statut de la soumission',
+              text: 'Formulaire soumis avec succès',
+              type: 'success'
             })
             resolve(true)
           })
           .catch(({ response }) => {
             this.errors = response.data.errors
             reject(response)
-            this.$bvToast.toast('Une erreur est survenue!', {
-              title: 'Erreur de soumission de reponses',
-              appendToast: true,
-              variant: 'danger',
-              solid: true
+            this.$notify({
+              group: 'alert',
+              title: 'Une erreur est survenue !',
+              text: 'Impossible de soumettre vos réponses',
+              type: 'error'
             })
           })
       })
@@ -449,6 +455,9 @@ export default {
 .date-picker-input {
   &.form-control[readonly]{
     background-color: white;
+  }
+  &.form-control[disabled] {
+    background-color: #e9ecef;
   }
 }
 .pagination  {

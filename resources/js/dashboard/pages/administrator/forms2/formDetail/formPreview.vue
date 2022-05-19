@@ -5,6 +5,7 @@
       <b-col lg="12" class="w-100 mx-0 px-0">
         <FormView
           :back-route="{name: 'administrator.forms.show.creation'}"
+          :form-id="$route.params.form_id"
           preview
         />
       </b-col>

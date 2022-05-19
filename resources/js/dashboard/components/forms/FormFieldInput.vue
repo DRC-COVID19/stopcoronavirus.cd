@@ -2,7 +2,6 @@
   <div>
     <ValidationProvider
       v-slot="{ errors }"
-      :mode="mode"
       :rules="rules"
       tag="div"
       :name="name"
@@ -27,6 +26,7 @@
         opens="center"
         class="d-flex style-picker"
         :max-date="maxDate"
+        :mode="mode"
       >
         <template v-slot="{ inputEvents, inputValue }">
           <div class="w-100 d-flex">
@@ -129,7 +129,8 @@ export default {
     },
     mode: {
       type: String,
-      required: false
+      required: false,
+      default: 'date'
     },
     maxDate: {
       type: Date,

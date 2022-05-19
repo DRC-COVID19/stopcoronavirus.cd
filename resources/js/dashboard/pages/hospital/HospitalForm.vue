@@ -1,171 +1,23 @@
 /* eslint-disable space-before-blocks */
 <template>
   <div>
-    <b-container class="mt-4">
-      <Loading
-        v-if="isLoading"
-        class="h-100"
-        message="Chargement du formulaire ..."
-      />
-      <b-row v-else align-h="center">
-        <b-col cols="12">
-          <b-link :to="backRoute">
-            <span class="fa fa-chevron-left">Retour</span>
-          </b-link>
-          <h3 v-if="isUpdateMode" class="mb-4 mt-4">
-            Modifier la mise à jour du
-            {{ moment(completedForm.last_update).format("DD/MM/Y") }}
-          </h3>
-          <ValidationObserver
-            v-slot="{}"
-            ref="form"
-            tag="form"
-            novalidate
-          >
-            <form-wizard
-              :finishButtonText="isUpdateMode ? 'Modifier' : 'Envoyer'"
-              :startIndex="0"
-              :title="formTitle"
-              subtitle
-              shape="tab"
-              color="#2e5bff"
-              nextButtonText="Suivant"
-              backButtonText="Précédent"
-              @on-complete="onComplete"
-            >
-              <tab-content
-                v-for="(formStep, index) in targetForm.form_steps"
-                :key="index"
-              >
-                <h3 class="mb-4 text-center">{{ formStep.title }}</h3>
-
-                <b-row align-h="center">
-                  <b-col cols="12" md="8">
-                    <b-form-group
-                      v-for="(formField, counter) in formStep.form_fields"
-                      :key="counter"
-                      :label="
-                        formField.rules && !!formField.rules.match(/required/i)
-                          ? formField.name + ' * '
-                          : formField.name
-                      "
-                      :label-for="formField.name"
-                    >
-                      <b-row>
-                        <b-col class="col-sm-12 col-md-12">
-                          <FormFieldInput
-                            v-model=" completedForm.completed_form_fields[formField.id]"
-                            :type="formField.form_field_type.name"
-                            :placeholder="`Entrer ${formField.name}`"
-                            :id="formField.name"
-                          />
-                        </b-col>
-                      </b-row>
-                    </b-form-group>
-                  </b-col>
-                </b-row>
-              </tab-content>
-              <tab-content>
-                <b-row align-h="center">
-                  <b-col
-                    v-for="(formStep, index) in targetForm.form_steps"
-                    :key="index"
-                    cols="12"
-                    md="6"
-                  >
-                    <h3 class="mb-4">{{ formStep.title }}</h3>
-                    <div>
-                      <div
-                        v-for="(formField, count) in formStep.form_fields"
-                        :key="count"
-                      >
-                        <ul>
-                          <li>
-                            {{ formField.name }} :
-                            {{ completedForm.completed_form_fields[formField.id] }}
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </b-col>
-                  <b-col class="col-md-12">
-                    <b-alert
-                      show
-                      variant="warning"
-                      v-if="!user.isHospitalAdmin"
-                    >
-                      <p class="text-center">
-                        NB: Une soumission ne peut plus être modifiée après 24
-                        heures!
-                      </p>
-                    </b-alert>
-                  </b-col>
-                  <b-form-group class="no-border">
-                    <div
-                      class="text-center text-danger my-2"
-                      v-if="isLastUpdateChecking"
-                    >
-                      <b-spinner class="align-middle" />
-                      <strong>Verification de la date de Mise a jour...</strong>
-                    </div>
-                    <label for="last_update" class="text-dash-color"
-                      >Sélectionnez la date</label
-                    >
-                    <v-date-picker
-                      v-model="completedForm.last_update"
-                      opens="center"
-                      :max-date="max"
-                      class="d-flex style-picker"
-                      @input="selectLastUpdate()"
-                      show-weeknumbers
-                    >
-                      <template v-slot="{ inputEvents, inputValue }">
-                        <div class="d-flex flex-col sm:flex-row justify-content-center text-center item-center btn-container-calendar">
-                          <i for="last_update" class="fas fa-light fa-calendar p-2" aria-hidden="true"></i>
-                          <input
-                            id="last_update"
-                            class="p-1 w-full"
-                            :value="
-                              inputValue
-                                ? moment(completedForm.last_update).format('DD.MM.YYYY')
-                                : 'Choisir la date'
-                            "
-                            v-on="inputEvents"
-                            :disabled="isUpdateMode"
-                            hidePopover
-                            readonly
-                          />
-                        </div>
-                      </template>
-                    </v-date-picker>
-                  </b-form-group>
-                </b-row>
-              </tab-content>
-            </form-wizard>
-          </ValidationObserver>
-        </b-col>
-      </b-row>
-    </b-container>
-    <ManagerUserName />
+    <FormView
+      :back-route="backRoute"
+      :completed-form-id="$route.params.completed_form_id"
+      :hospital-id="getHospitalId"
+      :form-id="$route.params.form_id"
+      :containerToScroll="ctcoContainerBody"
+    />
   </div>
 </template>
 
 <script>
-import Loading from '../../components/Loading'
-import ManagerUserName from '../../components/hospital/ManagerUserName'
-import FormFieldInput from '../../components/forms/FormFieldInput'
-import { FormWizard, TabContent } from 'vue-form-wizard'
-import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+import FormView from '../../components/forms/FormView'
 import { mapState, mapActions } from 'vuex'
-import { ValidationObserver } from 'vee-validate'
+
 export default {
   components: {
-    ManagerUserName,
-    Loading,
-    FormWizard,
-    TabContent,
-    FormFieldInput,
-    ValidationObserver
+    FormView
   },
   data () {
     const now = new Date()
@@ -205,6 +57,9 @@ export default {
         return this.$route.params.hospital_id
           ? this.$route.params.hospital_id
           : this.user.hospital.id
+      },
+      ctcoContainerBody () {
+        return document.querySelector('.ctco-container-body')
       }
     }),
     backRoute () {

@@ -108,9 +108,11 @@ export default {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
-          .get(
-            `/api/dashboard/completed_forms/check-last_update/${payload.hospital_id}/${payload.last_update}`
-          )
+          .get(`/api/dashboard/completed_forms/check-last_update/${payload.hospital_id}/${payload.last_update}`, {
+            params: {
+              form_id: payload.form_id
+            }
+          })
           .then(({ data }) => {
             commit('SET_COMPLETED_FORMS', data)
             resolve(data)
