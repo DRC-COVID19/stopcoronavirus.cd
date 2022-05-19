@@ -320,8 +320,6 @@ class CompletedFormController extends Controller
                 'completedForms.completedFormFields.formField.formStep',
                 'completedForms.adminUser'
             ])
-
-
                 ->find($hospitalLastUpdate->hospital_id);
         }
 
