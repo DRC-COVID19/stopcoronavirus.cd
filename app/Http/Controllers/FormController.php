@@ -89,8 +89,7 @@ class FormController extends Controller
           $form->hospitals()->sync($data['hospitals']);
         
           DB::commit();
-          Log::info('data',[$data]);
-         return response()->json( $form, 200);
+          return response()->json( $form, 200);
 
       } catch (\Throwable $th) {
           DB::rollback();

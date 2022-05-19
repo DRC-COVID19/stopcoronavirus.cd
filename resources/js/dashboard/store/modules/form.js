@@ -57,7 +57,6 @@ export default {
       })
     },
     form__UpdateFormVisibility ({ commit }, payload) {
-      alert(JSON.stringify(payload))
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
