@@ -1,8 +1,6 @@
 <template>
-    <b-modal id="updateFormVisibilityModal" centered hide-footer hide-header>
-      <div v-if="isLoading">
-      </div>
-    <b-container v-else>
+  <b-modal id="updateFormVisibilityModal" centered hide-footer hide-header>
+    <b-container>
       <b-row>
         <b-col>
           <div class="mb-4 p-2">
@@ -22,7 +20,7 @@
             <b-form @submit.prevent="onUpdateFormVisibility">
               <b-row class="d-flex flex-column justify-content-between mt-3">
                 <b-col md="12" class="border-1">
-                   <b-form-checkbox v-model="visibleAllHositals" name="check-button" switch class="mb-4">
+                   <b-form-checkbox v-model="targetForm.visibleAllHospitals" name="check-button" switch class="mb-4">
                    Pour tous les CTCOS
                   </b-form-checkbox>
                </b-col>
@@ -40,7 +38,7 @@
                     labelText="Selectionnez un ou plusieurs CTCOs "
                     name="Recurrence du formulaire"
                     mode="aggressive"
-                     v-show="!visibleAllHositals"
+                     v-show="!targetForm.visibleAllHospitals"
                     />
                 </b-col>
               </b-row>
@@ -64,7 +62,7 @@
         </b-col>
       </b-row>
     </b-container>
-       </b-modal>
+  </b-modal>
 </template>
 
 <script>
@@ -77,7 +75,7 @@ export default {
     ValidationObserver
   },
   props: {
-    form: {
+    formToPopulate: {
       type: Object,
       default: () => {}
     },
@@ -89,10 +87,10 @@ export default {
   data () {
     return {
       targetForm: {
-        hospitals: []
+        hospitals: [],
+        visibleAllHospitals: false
       },
-      isLoading: false,
-      visibleAllHositals: false
+      formFieldmodalMessage: 'La visibilité du formulaire a été modifié avec succès'
     }
   },
   async mounted () {
@@ -103,23 +101,42 @@ export default {
       hospitals: (state) => state.hospital.allHospitals
     })
   },
+  watch: {
+    formToPopulate () {
+      this.populateFormVisibility()
+    }
+  },
   methods: {
-    ...mapActions(['hospital__getAll']),
+    ...mapActions(['hospital__getAll', 'form__UpdateFormVisibility']),
     onReset () {
       this.targetForm = {}
+    },
+    populateFormVisibility () {
+      this.targetForm.visibleAllHospitals = this.formToPopulate.visible_all_hospitals
+      this.targetForm.hospitals = [...this.formToPopulate.hospitals.map((hospital) => hospital.id)]
     },
     hideModal () {
       this.$bvModal.hide('updateFormVisibilityModal')
     },
     onUpdateFormVisibility () {
-      const form =
-      {
-        ...this.targetForm,
-        visibleAllHositals: this.visibleAllHositals,
-        formFieldmodalMessage: 'La visibilité du formulaire a été modifié avec succès'
-      }
-
-      this.$emit('updateFormVisibility', form)
+      this.form__UpdateFormVisibility({ ...this.targetForm, id: this.$route.params.form_id })
+        .then(() => {
+          this.$notify({
+            group: 'alert',
+            title: 'Modification du Formulaire',
+            text: this.formFieldmodalMessage,
+            type: 'success'
+          })
+        })
+        .catch(({ response }) => {
+          this.$gtag.exception(response)
+          this.$notify({
+            group: 'alert',
+            title: 'Modification du Formulaire',
+            text: 'Une erreur est survenu',
+            type: 'error'
+          })
+        })
       this.hideModal()
     },
     onCancelFormVisibility () {

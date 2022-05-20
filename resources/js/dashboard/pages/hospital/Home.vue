@@ -32,7 +32,7 @@
             <b-card-body>
 
               <b-row
-                class="mb-5 hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center"
+                class="hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center"
               >
                 <b-col sm="12">
                   <h4 class="ml-2 mb-4">Mes Formulaires</h4>
@@ -44,21 +44,19 @@
                   v-else
                   class="d-flex flex-column align-items-lg-start col-md-8 col-sm-12"
                 >
-                  <div class="card__Scroll" v-if="hospitalForms.length > 0">
+                  <div class="card__Scroll" v-if="hospitalForms.forms.length > 0">
                     <div
-                      v-for="(form, index) in hospitalForms"
+                      v-for="(form, index) in hospitalForms.forms"
                       :key="index"
                       class="px-2"
                     >
                       <card-form :route="getFormRoute(form.id)" :form="form" />
                     </div>
                   </div>
-                  <div v-else>
-                      <h4 class="text-center text-bold">
-                        <b-badge>
-                          Aucun formulaire n'est disponible
-                        </b-badge>
-                      </h4>
+                  <div v-else class="d-flex justify-content-center align-items-center">
+                      <h6 class="text-center text-bold alert alert-warning">
+                        Vous n'avez accès à aucun formulaire pour l'instant
+                      </h6>
                   </div>
                 </b-col>
               </b-row>
@@ -92,7 +90,7 @@ export default {
     return {
       alertVariant: 'secondary',
       isHospitalFormsLoading: false,
-      hospitalForms: []
+      hospitalForms: {}
     }
   },
   computed: {
@@ -125,9 +123,8 @@ export default {
         this.hospitalForms = await this.getHospital({
           hospital_id: this.user.hospital.id
         })
-        if (this.hospitalForms.length !== 0) {
-          this.isHospitalFormsLoading = false
-        }
+
+        this.isHospitalFormsLoading = false
       }
     },
     getFormRoute (formId) {

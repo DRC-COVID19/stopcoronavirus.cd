@@ -226,6 +226,7 @@ Route::group([
     Route::get('/recent-form', 'FormController@recentForm');
     Route::get('/filter', 'FormController@filter');
     Route::get('/get-form-filtered', 'FormController@getFormFiltered');
+    Route::put('/update-form-visibility/{form_id}', 'FormController@updateFormVisibility');
   });
 
 
