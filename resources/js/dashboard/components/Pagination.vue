@@ -2,7 +2,7 @@
   <b-row align-v="start" align-h="center">
     <b-col cols="12" lg="auto" class="d-flex align-items-center justify-content-center mb-3">
       <p class="mb-0">Par page: </p>
-      <div class="p-relative">
+      <div class="p-relative perpage__select">
         <v-select
           v-model="perPageValue"
           :options="perPages"

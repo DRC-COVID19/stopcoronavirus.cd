@@ -436,8 +436,17 @@ export default {
     background-color: white;
   }
   .v-select {
-    &::v-deep .vs__dropdown-toggle {
-      height: 100%;
+    &::v-deep{
+      .vs__dropdown-toggle {
+        height: 100%;
+      }
+      .vs__selected {
+        white-space: nowrap;
+        width: 165px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+      }
     }
   }
 

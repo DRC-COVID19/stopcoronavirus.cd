@@ -56,11 +56,11 @@
             >
               <input
                 id="last_update"
-                class="p-1 w-full"
+                class="p-1 w-full input__date"
                 :value="
                   inputValue
                     ? moment(form.last_update).format('DD.MM.YYYY')
-                    : '-'
+                    : 'Filtrer par Date'
                 "
                 placeholder="Filtrer par Date"
                 v-on="inputEvents"
@@ -69,7 +69,7 @@
           </template>
         </v-date-picker>
         <b-button
-          class="button-icon"
+          class="ml-2 button-icon"
           variant="primary"
           :disabled="!form.last_update"
           @click="form.last_update = null"
@@ -152,6 +152,9 @@ export default {
   watch: {
     title () {
       this.search()
+    },
+    filter () {
+      this.getfilter()
     }
   },
   methods: {
@@ -216,6 +219,10 @@ export default {
       white-space: nowrap;
     }
   } /* color of the tracking area */
+}
+.input__date{
+  color: #535356 !important;
+  font-style: italic !important;
 }
 .input-select {
   width: 220px;
