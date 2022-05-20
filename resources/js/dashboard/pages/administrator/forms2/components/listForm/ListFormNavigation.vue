@@ -60,7 +60,7 @@
                 :value="
                   inputValue
                     ? moment(form.last_update).format('DD.MM.YYYY')
-                    : '-'
+                    : 'Filtrer par Date'
                 "
                 placeholder="Filtrer par Date"
                 v-on="inputEvents"
@@ -152,6 +152,9 @@ export default {
   watch: {
     title () {
       this.search()
+    },
+    filter () {
+      this.getfilter()
     }
   },
   methods: {

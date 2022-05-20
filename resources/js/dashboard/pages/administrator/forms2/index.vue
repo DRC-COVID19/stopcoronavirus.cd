@@ -183,6 +183,7 @@ export default {
       this.updating = state
     },
     deleteForm (currentFormId) {
+      // eslint-disable-next-line no-undef
       axios
         .delete('/api/dashboard/forms/' + currentFormId)
         .then(() => {
@@ -223,6 +224,7 @@ export default {
         publish: currentForm.publish
       }
 
+      // eslint-disable-next-line no-undef
       axios
         .put('/api/dashboard/forms/' + currentForm.id, form)
         .then(() => {
@@ -253,6 +255,7 @@ export default {
       this.formAdded = false
       this.isLoading = true
       this.errors = {}
+      // eslint-disable-next-line no-undef
       axios
         .post('/api/dashboard/forms', {
           title: form.title,
@@ -297,6 +300,7 @@ export default {
     },
 
     switchPage (page) {
+      alert(page)
       this.paginate.currentPage = page
       this.getFormList(this.paginate.currentPage)
     },

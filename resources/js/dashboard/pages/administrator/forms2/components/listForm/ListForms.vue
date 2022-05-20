@@ -28,42 +28,30 @@
                      </b-col>
                      </b-row>
                  </b-container>
-                 <div class="col-md-6 col-md-offset-4 mt-4 d-flex justify-content-center" v-show="getFormListLength > 0">
-                    <div class="paginate__scroll">
-                    <p>Par page: </p>
-                    <div class="perpage__select">
-                       <v-select
-                        v-model="form.perPage"
-                        :options="perPages"
-                        :value="perPage"
-                        id="id"
-                        class="ml-3"
-                        :searchable="false"
-                        @input="getFormsByPerPage()"
-                     />
-                    </div>
-                    <p  class="mx-3">1-{{form.perPage}} sur  {{ paginate.total }}</p>
-                      <b-pagination
-                    v-model="currentPage"
-                    :total-rows="paginate.total"
-                    :per-page="paginate.perPage"
-                    aria-controls="form_card-list"
-                    @change="switchPage(currentPage)"
-                  ></b-pagination>
-                    </div>
-                   </div>
+
+                     <pagination
+                      class="mb-4 paginate__scroll"
+                      :total-rows="paginate.total"
+                      :per-page="paginate.perPage"
+                      :page="currentPage"
+                      @pageChanged="switchPage"
+                      @perPageChanged="onPerPageChange"
+                    />
 
              </b-row>
              </b-container>
 </template>
 
 <script>
+import Pagination from '../../../../../components/Pagination.vue'
 import ListFormCard from './ListFormCard.vue'
 export default {
   components: {
-    ListFormCard
+    ListFormCard,
+    Pagination
   },
   props: {
+
     formsList: {
       type: Object,
       default: () => ({}),
@@ -96,12 +84,13 @@ export default {
     }
   },
   methods: {
-    getFormsByPerPage () {
+    onPerPageChange () {
       this.$emit('getFormsByPerPage', this.form.perPage)
     },
     switchPage (currentPage) {
       this.$emit('switchPage', currentPage)
     }
+
   }
 
 }
