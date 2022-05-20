@@ -15,7 +15,7 @@
             class="bg-white form-container-header-administration"
           />
         </b-col>
-        <b-col cols="12" lg>
+        <b-col cols="12" class="px-0 form-container-header-detail-container" lg>
           <Header class="form-container-header-detail" />
         </b-col>
       </div>
@@ -65,6 +65,11 @@ export default {
     height: 32px;
     @media (min-width: 992px) {
       height: 0px;
+    }
+  }
+  &-header-detail-container {
+    @media (max-width: 992px) {
+      margin: auto 0px !important;
     }
   }
   &-header-administration {
