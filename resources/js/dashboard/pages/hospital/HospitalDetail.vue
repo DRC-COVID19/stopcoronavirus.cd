@@ -29,8 +29,18 @@
                 :key="count"
               >
                 <li>
-                  {{ formField.name }} :
-                  {{ completedForm.completed_form_fields[formField.id] }}
+                  <div class="d-flex flex-wrap">
+                    {{ formField.name }} :&nbsp;
+                    <div class="font-weight-bold">
+                      <div v-if="formField.form_field_type.name === 'boolean'">
+                        {{ +completedForm.completed_form_fields[formField.id] ? 'Oui' : "Non" }}
+                      </div>
+                      <div v-else-if="formField.form_field_type.name === 'date'">
+                        {{ moment(completedForm.completed_form_fields[formField.id]).format("DD/MM/Y") }}
+                      </div>
+                      <div v-else> {{ completedForm.completed_form_fields[formField.id] }} </div>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </b-card>
@@ -38,7 +48,7 @@
 
           <div class="ml-3 mt-2">
             Données envoyées par
-            <b> {{ completedForm.created_manager_name }}</b>
+            <strong> {{ completedForm.created_manager_name }} {{ completedForm.created_manager_first_name }}</strong>
           </div>
 
           <b-row class="mt-4" v-if="updatedManageNamesListSorted.length">
@@ -51,7 +61,7 @@
                 :key="count"
               >
                 <li>
-                  <strong> {{ item.updatedManagerName }}</strong
+                  <strong> {{ item.updated_manager_name }} {{ item.updated_manager_first_name }} </strong
                   >, le {{ moment(item.updatedAt).format("DD/MM/Y à H:m") }}
                 </li>
               </ul>
@@ -111,16 +121,15 @@ export default {
       if (this.completedFormFields.length > 0) {
         return this.completedFormFields
           .map((completedFormField) => ({
-            updatedManagerName: completedFormField.updated_manager_name,
+            updated_manager_name: completedFormField.updated_manager_name,
+            updated_manager_first_name: completedFormField.updated_manager_first_name,
             updatedAt: completedFormField.updated_at
           }))
           .sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
           .filter(
             (item, i, self) =>
-              item.updatedManagerName &&
-              self.findIndex(
-                (x) => x.updatedManagerName === item.updatedManagerName
-              ) === i
+              item.updated_manager_name &&
+              self.findIndex((x) => x.updated_manager_name === item.updated_manager_name) === i
           )
       }
       return []
@@ -153,7 +162,8 @@ export default {
         )
 
         this.setCreatedManagerName(
-          this.completedFormFields[0].completed_form.created_manager_name
+          this.completedFormFields[0].completed_form.created_manager_name,
+          this.completedFormFields[0].completed_form.created_manager_first_name
         )
 
         this.setcompletedForm()
@@ -162,8 +172,9 @@ export default {
     setLastUpdate (lastUpdate) {
       this.completedForm.last_update = lastUpdate
     },
-    setCreatedManagerName (createdManagerName) {
+    setCreatedManagerName (createdManagerName, createdManagerFirstName) {
       this.completedForm.created_manager_name = createdManagerName
+      this.completedForm.created_manager_first_name = createdManagerFirstName
     },
     setcompletedForm () {
       this.completedFormFields.forEach((item) => {

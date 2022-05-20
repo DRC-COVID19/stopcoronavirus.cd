@@ -32,6 +32,12 @@
       <div class="img-response-action">
           <i class="fa fa-pencil icon-action icon-action-edit" aria-hidden="true" @click="setPopulateForm"></i>
       </div>
+      <div class="img-response-action">
+        <i class="fa fa-arrow-up icon-action icon-action-up"  v-show="isFirstField"    aria-hidden="true"  @click="dropUpField"></i>
+      </div>
+       <div class="img-response-action"  >
+         <i class="fa fa-arrow-down  icon-action icon-action-down" v-show="isLastField"  aria-hidden="false" @click="dropDownField"></i>
+      </div>
   </div>
 </template>
 
@@ -44,7 +50,22 @@ export default {
       default: () => ({}),
       required: false
     },
+    fieldForms: {
+      type: Array,
+      default: () => [],
+      required: false
+    },
     fieldKey: {
+      type: Number,
+      default: null,
+      required: false
+    },
+    indexField: {
+      type: Number,
+      default: null,
+      required: false
+    },
+    lastField: {
       type: Number,
       default: null,
       required: false
@@ -56,8 +77,16 @@ export default {
       fillInFormField: {}
     }
   },
+  computed: {
+    isFirstField () {
+      return this.indexField !== 0
+    },
+    isLastField () {
+      return this.indexField !== this.lastField
+    }
+  },
   methods: {
-    ...mapActions(['removeFormField']),
+    ...mapActions(['removeFormField', 'updateFormField']),
     setPopulateForm () {
       this.$emit('edit', this.fieldKey)
     },
@@ -90,7 +119,30 @@ export default {
     },
     onCancelDelete () {
       this.isDeleteModalShown = false
+    },
+    dropUpField () {
+      this.$emit('dropUp')
+      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) - 1
+      Promise.all([
+        this.updateFormField({ id: this.formField.id, order_field: this.formField.order_field - 1 }),
+        this.updateFormField({ id: this.fieldForms[index].id, order_field: this.fieldForms[index].order_field + 1 })
+      ])
+        .then(() => {
+          this.$emit('resetList')
+        })
+    },
+    dropDownField () {
+      this.$emit('dropDown')
+      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) + 1
+      Promise.all([
+        this.updateFormField({ id: this.formField.id, order_field: this.formField.order_field + 1 }),
+        this.updateFormField({ id: this.fieldForms[index].id, order_field: this.fieldForms[index].order_field - 1 })
+      ])
+        .then(() => {
+          this.$emit('resetList')
+        })
     }
+
   }
 
 }
@@ -100,7 +152,7 @@ export default {
 
   .container-icon{
     background-color: white;
-    padding: 20px 10px;
+    padding: 6px 10px;
     margin-right: 0px;
     text-align: center;
     border-radius: 8px;
@@ -132,5 +184,12 @@ export default {
   &.icon-action-delete {
     color: $dash-red;
   }
+  &.icon-action-up {
+    color: $dash-blue;
+  }
+  &.icon-action-down {
+    color: $dash-blue;
+  }
+
  }
 </style>

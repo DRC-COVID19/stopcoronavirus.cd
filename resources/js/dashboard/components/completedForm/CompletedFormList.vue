@@ -55,6 +55,7 @@
                 <b-form-input
                   :value="(inputValue.end || '') + ' - ' + (inputValue.start || '')"
                   v-on="inputEvents.end"
+                  class="date-picker-input"
                   placeholder="Sélectionner une plage de date"
                   readonly
                 >
@@ -447,6 +448,10 @@ export default {
   }
   .form-control[readonly]{
     background-color: white;
+  }
+  .date-picker-input {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
   }
 }
 </style>

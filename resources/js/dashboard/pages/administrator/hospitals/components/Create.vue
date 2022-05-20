@@ -122,14 +122,7 @@
 import { ValidationObserver } from 'vee-validate'
 import FormFieldInput from '../../../../components/forms/FormFieldInput'
 import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue'
-import {
-  MAPBOX_TOKEN,
-  MAPBOX_DEFAULT_STYLE,
-  PALETTE,
-  HOTSPOT_TYPE
-} from '../../../../config/env'
 import Mapbox from 'mapbox-gl'
-import U from 'mapbox-gl-utils'
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
 import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 
@@ -172,11 +165,6 @@ export default {
     errors: {
       type: Object,
       default: () => ({})
-    },
-    affected: {
-      type: Boolean,
-      default: null,
-      required: false
     }
   },
   data () {
@@ -195,8 +183,6 @@ export default {
       form: {
         name: '',
         agent: null,
-        deAssignedAgent: null,
-        affected: this.affected,
         township_id: null,
         longitude: null,
         latitude: null
@@ -284,13 +270,6 @@ export default {
         this.$emit('onCreate', this.form)
         this.$refs.form.reset()
       } else {
-        if (this.form.agent) {
-          this.form.affected = true
-        } else {
-          this.form.affected = false
-        }
-        this.form.deAssignedAgent =
-          (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)
       }
       this.isLoading = false
@@ -363,19 +342,7 @@ export default {
         // initialisation
         Mapbox.accessToken = this.MAPBOX_TOKEN
         const marker = new Mapbox.Marker()
-        const markerHeight = 50
-        const markerRadius = 10
-        const linearOffset = 25
-        const popupOffsets = {
-          top: [0, 0],
-          'top-left': [0, 0],
-          'top-right': [0, 0],
-          bottom: [0, -markerHeight],
-          'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-          'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
-          left: [markerRadius, (markerHeight - markerRadius) * -1],
-          right: [-markerRadius, (markerHeight - markerRadius) * -1]
-        }
+        const popupOffsets = this.getPopupOffset()
         const popup = new Mapbox.Popup({ offset: popupOffsets, className: 'my-class' })
 
         const map = new Mapbox.Map({
@@ -420,6 +387,21 @@ export default {
         })
       } catch (error) {
         throw new Error(error)
+      }
+    },
+    getPopupOffset () {
+      const markerHeight = 50
+      const markerRadius = 10
+      const linearOffset = 25
+      return {
+        top: [0, 0],
+        'top-left': [0, 0],
+        'top-right': [0, 0],
+        bottom: [0, -markerHeight],
+        'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+        'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+        left: [markerRadius, (markerHeight - markerRadius) * -1],
+        right: [-markerRadius, (markerHeight - markerRadius) * -1]
       }
     }
   }

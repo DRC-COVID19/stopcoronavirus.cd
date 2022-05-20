@@ -16,7 +16,8 @@ class Form extends Model
         'publish',
         'visible_all_hospitals',
         'form_recurrence_value',
-        'form_recurrence_id'
+        'form_recurrence_id',
+        'form_recurrence_number'
     ];
 
     public function formRecurrence()
