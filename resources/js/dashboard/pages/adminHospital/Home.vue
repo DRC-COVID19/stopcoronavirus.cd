@@ -135,7 +135,7 @@ export default {
         return 0
       }).sort((a, b) => new Date(b.last_update) - new Date(a.last_update))
     },
-    formList() {
+    formList () {
       return [
         { id: null, title: 'Tous' },
         ...this.form__publishedForms()
@@ -148,7 +148,7 @@ export default {
     this.refreshData()
   },
   watch: {
-    selectedForm(value) {
+    selectedForm (value) {
       this.completedForm__setSelectedForm(value)
       this.refreshData()
     }
@@ -191,8 +191,18 @@ export default {
     width: 200px;
     height: 38px;
     background-color: white;
-    &::v-deep .vs__dropdown-toggle {
-      height: 100%;
+    &::v-deep {
+        .vs__dropdown-toggle {
+        height: 100%;
+      }
+       .vs__selected {
+        white-space: nowrap;
+        width: 165px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+      }
     }
+
   }
 </style>
