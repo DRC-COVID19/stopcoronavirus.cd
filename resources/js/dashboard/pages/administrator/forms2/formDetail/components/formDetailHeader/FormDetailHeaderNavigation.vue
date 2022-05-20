@@ -335,7 +335,7 @@ export default {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-      width: 150px;
+      width: 200px;
     }
   }
   .nav-btn-action {
