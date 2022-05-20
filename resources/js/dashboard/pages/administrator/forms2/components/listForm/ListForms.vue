@@ -29,8 +29,9 @@
                      </b-row>
                  </b-container>
 
-                     <pagination
-                      class="mb-4 paginate__scroll"
+                     <Pagination
+                      class="mb-4 mt-4 paginate__scroll"
+                       v-show="getFormListLength > 0"
                       :total-rows="paginate.total"
                       :per-page="paginate.perPage"
                       :page="currentPage"
@@ -84,8 +85,9 @@ export default {
     }
   },
   methods: {
-    onPerPageChange () {
-      this.$emit('getFormsByPerPage', this.form.perPage)
+    onPerPageChange (value) {
+      alert(value)
+      this.$emit('getFormsByPerPage', value)
     },
     switchPage (currentPage) {
       this.$emit('switchPage', currentPage)

@@ -300,7 +300,6 @@ export default {
     },
 
     switchPage (page) {
-      alert(page)
       this.paginate.currentPage = page
       this.getFormList(this.paginate.currentPage)
     },
