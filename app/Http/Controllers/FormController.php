@@ -116,6 +116,7 @@ class FormController extends Controller
             'title'                 => 'required|string|max:255',
             'publish'               => 'nullable|boolean',
             'form_recurrence_value' => 'nullable|string|max:255',
+            'form_recurrence_number' => 'nullable|integer',
             'form_recurrence_id'    => 'required|integer|exists:form_recurrences,id'
         ]);
     }
@@ -125,6 +126,7 @@ class FormController extends Controller
             'publish'               => 'nullable|boolean',
             'visible_all_hospitals'  => 'nullable|boolean',
             'form_recurrence_value' => 'nullable|string|max:255',
+            'form_recurrence_number' => 'nullable|integer',
             'hospitals_id'          =>  'nullable|array',
             'form_recurrence_id'    => 'sometimes|integer|exists:form_recurrences,id'
             
