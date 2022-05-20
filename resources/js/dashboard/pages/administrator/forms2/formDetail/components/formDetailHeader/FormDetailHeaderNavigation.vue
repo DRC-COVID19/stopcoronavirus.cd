@@ -2,7 +2,7 @@
   <b-row class="header">
     <b-col cols="12" class="">
       <b-navbar toggleable="lg" type="light">
-        <b-navbar-brand class="">
+        <b-navbar-brand class="nav-brand-input-header">
           <b-form-input
             @blur="onChangeFormTitle"
             v-model="form.title"
@@ -331,11 +331,14 @@ export default {
 }
 @media (max-width: $max-width) {
   .navbar {
+    .nav-brand-input-header{
+      width: calc(100% - 60px);
+    }
     input {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
-      width: 200px;
+      width: 100%;
     }
   }
   .nav-btn-action {
