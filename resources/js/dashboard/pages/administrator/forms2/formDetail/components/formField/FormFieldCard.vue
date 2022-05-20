@@ -128,8 +128,6 @@ export default {
         this.updateFormField({ id: this.fieldForms[index].id, order_field: this.fieldForms[index].order_field + 1 })
       ])
         .then(() => {
-          console.log('champ actuel : id', this.formField.id, 'order_field', this.formField.order_field - 1)
-          console.log('champ precedent:id', this.fieldForms[index].id, 'order_field', this.fieldForms[index].order_field + 1)
           this.$emit('resetList')
         })
     },
