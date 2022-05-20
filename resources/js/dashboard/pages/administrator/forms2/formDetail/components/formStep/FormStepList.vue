@@ -2,7 +2,17 @@
   <b-row class="form-step-list-wrapper w-100">
     <b-col lg="12" class="px-0">
       <b-card lg="12" class="border-0 px-0 w-100form-step-list-title mx-0">
-        <div class="d-flex justify-content-between w-100 pt-2 pb-3 px-3 align-items-center">
+        <div
+          class="
+            d-flex
+            justify-content-between
+            w-100
+            pt-2
+            pb-3
+            px-3
+            align-items-center
+          "
+        >
           <div class="d-flex justify-content-center align-center">
             <h2 class="title mb-0">Étape</h2>
           </div>
@@ -35,7 +45,15 @@
             }"
             active-class="nav-item-active"
           >
-            <div class="d-flex justify-content-between align-center text-center w-100">
+            <div
+              class="
+                d-flex
+                justify-content-between
+                align-center
+                text-center
+                w-100
+              "
+            >
               <div class="d-flex align-center text-center my-2">
                 <h3 class="mb-0">{{ step.title }}</h3>
               </div>
@@ -46,7 +64,10 @@
                 no-caret
               >
                 <template #button-content>
-                  <i class="fas fa-ellipsis-v black--text text--black" aria-hidden="true"></i>
+                  <i
+                    class="fas fa-ellipsis-v black--text text--black"
+                    aria-hidden="true"
+                  ></i>
                 </template>
                 <b-dropdown-item-button @click="openModalUpdateList(step)"
                   >Modifier</b-dropdown-item-button
@@ -108,17 +129,10 @@ export default {
   },
   data() {
     return {
-      fields: [
-        { key: "step", label: "Etape" },
-        { key: "title", label: "Titre" },
-        "actions",
-      ],
-      filter: "",
       isDeleteModalShown: false,
       formStepId: null,
       editModalShow: false,
       isActived: null,
-      routeStep: {},
     };
   },
 
@@ -136,26 +150,15 @@ export default {
       return this.formSteps.length;
     },
   },
-  watch: {
-    rows() {
-      this.init();
-    },
-  },
+  watch: {},
   methods: {
     ...mapActions(["getFormSteps", "removeFormStep", "searchFormStep"]),
-    init() {
-      if (this.rows !== 0) {
-        this.$router.push({
-          name: "administrator.forms.show.creation.step",
-          params: { step_id: this.formSteps[this.rows - 1].id },
-        });
-      }
-    },
+
     deleteStep(id) {
       this.isDeleteModalShown = true;
       this.formStepId = id;
     },
-    onValidateDelection() {
+    onValidateDeletion() {
       this.$bvModal.show("confirmation-box");
       this.removeFormStep(this.formStepId)
         .then(() => {
@@ -172,7 +175,7 @@ export default {
           this.$notify({
             group: "alert",
             title: "Supprimer  l'étape",
-            text: "Une erreur est survenus",
+            text: "Une erreur est survenue",
             type: "error",
           });
         });
@@ -190,7 +193,6 @@ export default {
     openModalUpdateList(form) {
       this.$emit("openModalUpdateList", form);
     },
-    ShowStepField() {},
   },
 };
 </script>
