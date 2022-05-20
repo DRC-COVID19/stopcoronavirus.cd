@@ -65,7 +65,7 @@ class HospitalController extends Controller
     $data = $request->validated();
     try {
       DB::beginTransaction();
-      
+
       $hospital = Hospital::create($data);
 
       DB::commit();
@@ -137,13 +137,13 @@ class HospitalController extends Controller
   public function updateByAdmin(UpdateHospitalRequest $request, $id)
   {
     try {
-   
+
         $data = $request->validated();
         $hospital = Hospital::find($id);
         if ($data['agent_id']) {
           $hospital->update(['agent_id' => $data['agent_id']]);
-        } 
-        else{
+        }
+        else if ($data['agent_id'] === null){
           $hospital->update(['agent_id' => null]);
         }
 
@@ -203,7 +203,7 @@ class HospitalController extends Controller
   public function getAgents()
   {
     try {
-              
+
       $users = AdministratorResource::collection(Administrator::with(['hospitalManager','roles'])->get());
       return response()->json($users, 200);
     } catch (\Throwable $th) {

@@ -1,8 +1,6 @@
 <template>
-    <b-modal id="updateFormVisibilityModal" centered hide-footer hide-header>
-      <div v-if="isLoading">
-      </div>
-    <b-container v-else>
+  <b-modal id="updateFormVisibilityModal" centered hide-footer hide-header>
+    <b-container>
       <b-row>
         <b-col>
           <div class="mb-4 p-2">
@@ -64,7 +62,7 @@
         </b-col>
       </b-row>
     </b-container>
-       </b-modal>
+  </b-modal>
 </template>
 
 <script>
@@ -92,9 +90,6 @@ export default {
         hospitals: [],
         visibleAllHospitals: false
       },
-      isLoading: false,
-      formUpdated: false,
-      updating: false,
       formFieldmodalMessage: 'La visibilité du formulaire a été modifié avec succès'
     }
   },
@@ -126,9 +121,6 @@ export default {
     onUpdateFormVisibility () {
       this.form__UpdateFormVisibility({ ...this.targetForm, id: this.$route.params.form_id })
         .then(() => {
-          this.formUpdated = true
-          this.isLoading = false
-          this.updating = false
           this.$notify({
             group: 'alert',
             title: 'Modification du Formulaire',
