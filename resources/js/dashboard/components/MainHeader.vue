@@ -2,7 +2,7 @@
   <b-row class="header">
     <b-col cols="12" class="map-form-header">
       <b-navbar toggleable="lg" type="light">
-        <b-navbar-brand class="mr-5">
+        <b-navbar-brand class="mr-md-5">
           <h1
             class="title m-0"
           >
@@ -284,6 +284,9 @@ export default {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+    @media (max-width: 400px) {
+      font-size: 15px;
+    }
     &:hover {
       cursor: pointer;
     }
