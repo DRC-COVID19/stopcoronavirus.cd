@@ -15,29 +15,33 @@
         </div>
         <div v-if="showFormFilter">
           <label for="input-formulaire" class="small text-muted">Filter par formulaire</label> <br>
-          <b-form-select
+          <v-select
             v-model="form.form_id"
             :options="formList"
-            text-field="title"
-            value-field="id"
+            :reduce="form => form.id"
+            :clearable="false"
+            :searchable="false"
+            label="title"
             class="mr-2"
             id="input-formulaire"
-            @change="onFormFilterChange"
+            @input="onFormFilterChange"
           >
-          </b-form-select>
+          </v-select>
         </div>
         <div v-if="showHospitalFilter">
           <label for="input-ctco" class="small text-muted">Filter par CTCO</label> <br>
-          <b-form-select
+          <v-select
             v-model="form.hospital_id"
             :options="hospitalList"
-            text-field="name"
-            value-field="id"
+            :reduce="form => form.id"
+            :clearable="false"
+            :searchable="false"
+            label="name"
             class="mr-2"
             id="input-ctco"
-            @change="onFiltersChange"
+            @input="onFiltersChange"
           >
-          </b-form-select>
+          </v-select>
         </div>
         <div v-if="showDateFilter">
           <label for="input-user" class="small text-muted">Filter par plage de date</label> <br>
@@ -251,7 +255,7 @@ export default {
     ...mapState({
       user: (state) => state.auth.user,
       completedForm__selectedForm: (state) => state.completedForm.selectedForm,
-      hospital__hospitals: (state) => state.hospital.hospitals
+      hospital__allHospitals: (state) => state.hospital.allHospitals
     }),
     userIsAdminHospital () {
       return this.userHaveRole(ADMIN_HOSPITAL)
@@ -271,7 +275,7 @@ export default {
     hospitalList () {
       return [
         { id: null, name: 'Tous' },
-        ...this.hospital__hospitals
+        ...this.hospital__allHospitals
       ]
     },
     usersList () {
@@ -300,7 +304,7 @@ export default {
   async mounted () {
     this.$set(this.form, 'form_id', this.completedForm__selectedForm)
     this.getForms()
-    this.getHospitals()
+    this.hospital__getAll()
     this.getCompletedForms()
     this.agentsHospitals = await this.adminUser__getAgentHospitals()
   },
@@ -317,7 +321,7 @@ export default {
       'completedForm__getAllFiltered',
       'getForms',
       'completedForm__setSelectedForm',
-      'getHospitals',
+      'hospital__getAll',
       'adminUser__getAgentHospitals',
       'completedForm__delete'
     ]),
@@ -425,8 +429,15 @@ export default {
     margin-left: 20px;
     margin-bottom: 10px;
   }
-  select, input {
+  select, input, .v-select {
     width: 200px;
+    height: 38px;
+    background-color: white;
+  }
+  .v-select {
+    &::v-deep .vs__dropdown-toggle {
+      height: 100%;
+    }
   }
 
   button.button-icon {

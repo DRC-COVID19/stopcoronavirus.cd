@@ -100,7 +100,7 @@ export default {
   },
   computed: {
     ...mapState({
-      hospitals: (state) => state.hospital.AllHospitals
+      hospitals: (state) => state.hospital.allHospitals
     })
   },
   methods: {

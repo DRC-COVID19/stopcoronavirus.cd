@@ -2,14 +2,18 @@
   <b-row align-v="start" align-h="center">
     <b-col cols="12" lg="auto" class="d-flex align-items-center justify-content-center mb-3">
       <p class="mb-0">Par page: </p>
-      <div>
-        <b-form-select
+      <div class="p-relative">
+        <v-select
           v-model="perPageValue"
           :options="perPages"
           :value="perPage"
           :searchable="false"
+          :reduce="page => page.value"
+          :clearable="false"
+          :calculate-position="calculatePositionOfVueSelect"
+          append-to-body
           class="ml-3"
-          @change="onPerPageChange"
+          @input="onPerPageChange"
         />
       </div>
       <p  class="mb-0 ml-5 mr-lg-5"> {{ ((page - 1) * perPage) + 1 }} - {{ perPage }} sur  {{ totalRows }}</p>
@@ -42,35 +46,40 @@ export default {
       default: 1
     }
   },
-  data() {
+  data () {
     return {
       currentPage: this.page,
       perPageValue: this.perPage
     }
   },
   computed: {
-    perPages() {
+    perPages () {
       return [
-        { value: 5, text: 5 },
-        { value: 15, text: 15 },
-        { value: 30, text: 30 },
-        { value: 60, text: 60 },
-        { value: 100, text: 100 },
-        { value: this.totalRows, text: 'Tous' }
+        { value: 5, label: 5 },
+        { value: 15, label: 15 },
+        { value: 30, label: 30 },
+        { value: 60, label: 60 },
+        { value: 100, label: 100 },
+        { value: this.totalRows, label: 'Tous' }
       ]
     }
   },
   watch: {
-    page(value) {
+    page (value) {
       this.currentPage = value
     }
   },
   methods: {
-    onPageChange(value) {
+    onPageChange (value) {
       this.$emit('pageChanged', value)
     },
-    onPerPageChange(value) {
+    onPerPageChange (value) {
       this.$emit('perPageChanged', value)
+    },
+    calculatePositionOfVueSelect (dropdownList, component, { width, left, top }) {
+      dropdownList.style.width = width
+      dropdownList.style.top = parseFloat(top) - dropdownList.getBoundingClientRect().height - component.$refs.toggle.getBoundingClientRect().height
+      dropdownList.style.left = left
     }
   }
 }

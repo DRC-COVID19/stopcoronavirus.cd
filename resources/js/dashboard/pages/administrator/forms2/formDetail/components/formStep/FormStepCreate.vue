@@ -69,124 +69,124 @@
   </b-card>
 </template>
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 export default {
   props: {
     rowFormStep: {
       type: Object,
       default: () => {
-        return {};
-      },
+        return {}
+      }
     },
     formId: {
       type: Number,
-      required: true,
+      required: true
     },
     errors: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     isCreatingStepList: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
       title: "Creation d'un formulaire",
-      btnTitle: "Enregistrer",
-      iconClass: "fas fa-plus-square",
+      btnTitle: 'Enregistrer',
+      iconClass: 'fas fa-plus-square',
       updating: false,
       isLoading: false,
       published: false,
       form: {
-        title: "",
+        title: '',
         step: null,
-        form_id: null,
+        form_id: null
       },
       show: true,
       showWarning: false,
       toBeCanceled: true,
-      formRecurrenceSelected: null,
-    };
+      formRecurrenceSelected: null
+    }
   },
-  mounted() {
-    this.onUpdateRowFormStep();
+  mounted () {
+    this.onUpdateRowFormStep()
   },
   watch: {},
   methods: {
-    ...mapActions(["createFormStep", "updateFormStep"]),
-    onSubmit() {
+    ...mapActions(['createFormStep', 'updateFormStep']),
+    onSubmit () {
       if (this.isCreatingStepList === true) {
         const formStep = {
           ...this.form,
-          form_id: this.formId,
-        };
+          form_id: this.formId
+        }
         this.createFormStep(formStep)
           .then(() => {
             this.$notify({
-              group: "alert",
-              title: "Nouvelle Etape du Formulaire",
-              text: "Ajouter avec succès",
-              type: "success",
-            });
-            this.$emit("created");
-            this.onReset();
+              group: 'alert',
+              title: 'Nouvelle Etape du Formulaire',
+              text: 'Ajouter avec succès',
+              type: 'success'
+            })
+            this.$emit('created')
+            this.onReset()
           })
           .catch(({ response }) => {
             this.$notify({
-              group: "alert",
-              title: "Nouvelle Etape du Formulaire",
-              text: "Une erreur est survenus",
-              type: "error",
-            });
+              group: 'alert',
+              title: 'Nouvelle Etape du Formulaire',
+              text: 'Une erreur est survenus',
+              type: 'error'
+            })
             if (response.status == 422) {
-              this.errors = response.data.errors;
+              this.errors = response.data.errors
             }
-          });
+          })
       } else {
         this.updateFormStep(this.form)
           .then(() => {
-            this.formStepUpdated = true;
+            this.formStepUpdated = true
             this.$notify({
-              group: "alert",
+              group: 'alert',
               title: "Modication d'un Etape du Formulaire",
-              text: "Modifier avec succès",
-              type: "success",
-            });
-            this.$emit("updated");
+              text: 'Modifier avec succès',
+              type: 'success'
+            })
+            this.$emit('updated')
             // this.onReset();
           })
           .catch(({ response }) => {
             this.$notify({
-              group: "alert",
-              title: "Modifer log",
-              text: "Une erreur est surveni",
-              type: "error",
-            });
+              group: 'alert',
+              title: 'Modifer log',
+              text: 'Une erreur est surveni',
+              type: 'error'
+            })
             if (response.status == 422) {
-              this.errors = response.data.errors;
+              this.errors = response.data.errors
             }
-          });
+          })
       }
     },
-    onUpdateRowFormStep() {
+    onUpdateRowFormStep () {
       this.form = {
-        title: "",
+        title: '',
         step: null,
-        form_id: null,
-      };
+        form_id: null
+      }
       if (Object.keys(this.rowFormStep) !== 0) {
-        this.form = { ...this.rowFormStep };
+        this.form = { ...this.rowFormStep }
       }
     },
-    onReset() {
-      this.toToCanceled = true;
-      this.form = { title: "", step: null, form_id: null };
-      this.$emit("onCancelUpdate", {});
-    },
-  },
-};
+    onReset () {
+      this.toToCanceled = true
+      this.form = { title: '', step: null, form_id: null }
+      this.$emit('onCancelUpdate', {})
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

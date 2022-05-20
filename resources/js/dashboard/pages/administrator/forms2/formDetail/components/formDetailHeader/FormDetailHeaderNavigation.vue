@@ -134,22 +134,22 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
 import {
   ADMINISTRATOR,
   CREATE_FORM,
-  EDIT_FORM
-} from '../../../../../../config/env'
+  EDIT_FORM,
+} from "../../../../../../config/env";
 
 export default {
   components: {},
-  data () {
+  data() {
     return {
       showUserCard: false,
       showHeaderNotification: false,
-      titleForm: 'Titre du Formulaire',
-      isPublish: false
-    }
+      titleForm: "Titre du Formulaire",
+      isPublish: false,
+    };
   },
   computed: {
     ...mapState({
@@ -157,78 +157,78 @@ export default {
       activeMenu: (state) => state.nav.activeMenu,
       changeLogs: (state) => state.app.changeLogs,
       isUpdateFormTitle: (state) => state.form.isUpdateFormTitle,
-      form: (state) => state.form.form
+      form: (state) => state.form.form,
     }),
-    ...mapGetters(['getChangeLogNotRead']),
-    stateTitleForm () {
-      return this.form?.title?.length === 0 ? false : null
+    ...mapGetters(["getChangeLogNotRead"]),
+    stateTitleForm() {
+      return this.form?.title?.length === 0 ? false : null;
     },
-    canViewForm () {
+    canViewForm() {
       return (
         this.userHaveRole(ADMINISTRATOR) ||
         this.userHaveRole(EDIT_FORM) ||
         this.userHaveRole(CREATE_FORM)
-      )
-    }
+      );
+    },
   },
-  mounted () {
-    this.init()
+  mounted() {
+    this.init();
   },
   methods: {
     ...mapActions([
-      'logout',
-      'setChangeLogsRead',
-      'formShow',
-      'form__Update',
-      'changeStatusForm'
+      "logout",
+      "setChangeLogsRead",
+      "formShow",
+      "form__Update",
+      "changeStatusForm",
     ]),
-    ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
-    async init () {
-      this.isLoading = true
-      await this.formShow({ id: this.$route.params.form_id })
-      this.isPublish = this.form.publish
+    ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
+    async init() {
+      this.isLoading = true;
+      await this.formShow({ id: this.$route.params.form_id });
+      this.isPublish = this.form.publish;
       if (this.form.length !== 0) {
-        this.isLoading = false
+        this.isLoading = false;
       }
     },
-    async onChangeFormTitle () {
-      const form = { ...this.form, title: this.form.title }
-      await this.form__Update({ id: this.form.id, form })
+    async onChangeFormTitle() {
+      const form = { ...this.form, title: this.form.title };
+      await this.form__Update({ id: this.form.id, form });
     },
-    async changeStatusPublishForm () {
-      this.form.publish = !this.isPublish
-      this.form.form_id = this.form.id
-      await this.changeStatusForm(this.form)
-      this.isPublish = !this.isPublish
+    async changeStatusPublishForm() {
+      this.form.publish = !this.isPublish;
+      this.form.form_id = this.form.id;
+      await this.changeStatusForm(this.form);
+      this.isPublish = !this.isPublish;
     },
-    userAvatarMouseEnter () {
-      this.showUserCard = true
+    userAvatarMouseEnter() {
+      this.showUserCard = true;
     },
-    userAvatarMouseLeave () {
-      this.showUserCard = false
+    userAvatarMouseLeave() {
+      this.showUserCard = false;
     },
-    userLogout () {
+    userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: 'login'
-        })
-      })
+          name: "login",
+        });
+      });
     },
-    selectNotification (item) {
-      this.setSelectedChangeLog(item)
-      this.setActiveMenu(7)
+    selectNotification(item) {
+      this.setSelectedChangeLog(item);
+      this.setActiveMenu(7);
     },
-    toggleHeaderNotification () {
-      this.showHeaderNotification = !this.showHeaderNotification
+    toggleHeaderNotification() {
+      this.showHeaderNotification = !this.showHeaderNotification;
     },
-    clickOutsideNotification () {
+    clickOutsideNotification() {
       if (this.showHeaderNotification) {
-        this.showHeaderNotification = false
-        this.setChangeLogsRead()
+        this.showHeaderNotification = false;
+        this.setChangeLogsRead();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -272,14 +272,13 @@ export default {
       background: #f4f6fc;
       border-color: #f4f6fc;
       border-radius: 5px;
-      display:flex;
+      display: flex;
       justify-content: center;
       align-items: center;
       align-content: center;
-
     }
     a {
-      color: #3767fa ;
+      color: #3767fa;
     }
   }
   .input-header {
@@ -329,9 +328,18 @@ export default {
   }
 }
 @media (max-width: $max-width) {
+  .navbar {
+    flex-wrap: nowrap !important;
+    input {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
   .nav-btn-action {
     margin: 10px 0px;
-  }  .container-nav-space {
+  }
+  .container-nav-space {
     display: block !important;
     margin-left: 0 !important;
     padding: 0 12%;

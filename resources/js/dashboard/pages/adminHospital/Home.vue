@@ -6,14 +6,16 @@
           <h3>Résumé mise à jour CTCOS</h3>
         </b-col>
         <b-col cols="12" md="auto" class="d-flex">
-          <b-form-select
+          <v-select
             v-model="selectedForm"
             :options="formList"
-            text-field="title"
-            value-field="id"
+            :reduce="form => form.id"
+            :clearable="false"
+            :searchable="false"
+            label="title"
             class="mr-2"
           >
-          </b-form-select>
+          </v-select>
           <b-button class="btn-dash-blue btn-dash" @click.prevent="refreshData()">
             <i class="fa fa-sync" aria-hidden="true"></i>
           </b-button>
@@ -175,7 +177,7 @@ export default {
 <style>
 
 </style>
-<style lang="scss">
+<style lang="scss" scoped>
   .badge-statut{
     content: "";
     display: block !important;
@@ -184,5 +186,13 @@ export default {
     width: 30px;
     height: 30px;
     box-shadow: 0px 0px 10px rgba(0,0,0,.2);
+  }
+  .v-select {
+    width: 200px;
+    height: 38px;
+    background-color: white;
+    &::v-deep .vs__dropdown-toggle {
+      height: 100%;
+    }
   }
 </style>
