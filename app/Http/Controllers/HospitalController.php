@@ -65,7 +65,7 @@ class HospitalController extends Controller
     $data = $request->validated();
     try {
       DB::beginTransaction();
-      
+
       $hospital = Hospital::create($data);
 
       DB::commit();
@@ -136,47 +136,24 @@ class HospitalController extends Controller
    */
   public function updateByAdmin(UpdateHospitalRequest $request, $id)
   {
-    $data = $request->validated();
-
-
     try {
-      DB::beginTransaction();
 
-      $hospital = Hospital::find($id);
-
-      if (!$hospital) {
-        return response()->json([], 404);
-      }
-      $deAssignedAgent = null;
-      $assignedAgent = null;
-
-      if (isset($data['agent_id'])) {
-        $assignedAgent = Administrator::where('id', $data['agent_id'])->first();
-        $assignedAgent->update(['affected' =>  $data['affected']]);
-        $data['agent_id'] = $data['agent_id'];
-        if ($data['deAssignedAgent'] > 0) {
-          $deAssignedAgent = Administrator::where('id', $data['deAssignedAgent'])->first();
-          $deAssignedAgent->update(['affected' =>  false]);
+        $data = $request->validated();
+        $hospital = Hospital::find($id);
+        if ($data['agent_id']) {
+          $hospital->update(['agent_id' => $data['agent_id']]);
         }
-      } else {
-        if ($data['deAssignedAgent'] > 0) {
-          $deAssignedAgent = Administrator::where('id', $data['deAssignedAgent'])->first();
-          $deAssignedAgent->update(['affected' =>  $data['affected']]);
+        else if ($data['agent_id'] === null){
+          $hospital->update(['agent_id' => null]);
         }
-      }
-
-      $hospital->update($data);
-
-      DB::commit();
 
       return response()->json($hospital, 201);
     } catch (\Throwable $th) {
 
-      DB::rollBack();
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
       }
-      return response($th->getMessage())->setStatusCode(500);
+        return response($th->getMessage())->setStatusCode(500);
     }
   }
   /**
@@ -225,12 +202,10 @@ class HospitalController extends Controller
 
   public function getAgents()
   {
-    $agents = collect();
     try {
-      $agentsHospital = 
-                        
-      $agentIds = AdministratorResource::collection(Administrator::with(['hospitalManager','roles'])->get());
-      return response()->json($agentIds, 200);
+
+      $users = AdministratorResource::collection(Administrator::with(['hospitalManager','roles'])->get());
+      return response()->json($users, 200);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -535,15 +510,5 @@ class HospitalController extends Controller
       'nurses' => 'numeric|required',
       'para_medicals' => 'numeric|required'
     ])->validate();
-  }
-
-  private function deAssignAgent(array $data = [], $agentId)
-  {
-    $deAssignedAgent = Administrator::where('id', $agentId)->first();
-    $deAssignedAgent->update(['affected' => $agentId]);
-
-    $data['agent_id'] = $agentId;
-
-    return $deAssignedAgent;
   }
 }

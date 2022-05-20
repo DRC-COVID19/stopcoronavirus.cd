@@ -263,7 +263,9 @@ export default {
     userAdded () {
       this.resetForm()
     },
-
+    userUpdated () {
+      this.resetForm()
+    },
     formToPopulate () {
       this.resetForm()
       this.populateForm()
