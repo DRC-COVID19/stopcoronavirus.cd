@@ -87,7 +87,7 @@
       :paginate="paginate"
        @filterForms="filterForms"
        @onSearchForm="search"
-       @getFormsByPerPage ="getFormsByPerPage"
+       @onPerPageChange ="perPageChange"
        @switchPage="switchPage"
       />
 
@@ -157,7 +157,7 @@ export default {
       })
       this.isLoading = false
     },
-    async getFormsByPerPage (page) {
+    async perPageChange (page) {
       this.isLoading = true
 
       this.forms = await this.getFormFiltered({
