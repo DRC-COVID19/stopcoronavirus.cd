@@ -13,11 +13,11 @@
             :state="stateTitleForm"
           ></b-form-input>
         </b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse" class="">
+        <b-navbar-toggle target="nav-collapse-header-detail" class="">
           <span class="fa fa-bars"></span>
         </b-navbar-toggle>
 
-        <b-collapse id="nav-collapse" is-nav>
+        <b-collapse id="nav-collapse-header-detail" is-nav>
           <div class="d-flex justify-content-between w-100 container-nav-space">
             <b-navbar-nav class="nav-container w-100" align="center" lg="3">
               <span class="d-flex align-center text-center w-100">
@@ -331,11 +331,11 @@ export default {
 }
 @media (max-width: $max-width) {
   .navbar {
-    flex-wrap: nowrap !important;
     input {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      width: 150px;
     }
   }
   .nav-btn-action {

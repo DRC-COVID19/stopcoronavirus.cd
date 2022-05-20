@@ -59,6 +59,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+.container-fluid {
+  @media (min-width: 992px) {
+    margin-left: 70px !important;
+  }
+}
 .container-creation-list-responsive {
   display: none;
   margin-top: 35px;

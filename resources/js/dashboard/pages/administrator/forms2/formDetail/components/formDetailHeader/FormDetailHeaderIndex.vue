@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100 form-detail-header" style="z-index: 1000">
+  <div class="w-100 form-detail-header">
     <HeaderNavigation />
     <HeaderMenu />
   </div>

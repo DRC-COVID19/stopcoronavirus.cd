@@ -2,14 +2,22 @@
   <div class="form-container">
     <div class="form-container-header position-fixed container-fluid mx-0 px-0">
       <div class="container-fluid mx-0 px-0">
-        <MainHeader style="z-index: 1000" />
+        <MainHeader />
       </div>
-      <div class="d-flex">
-        <AdministrationMenuForm
-          style="z-index: 1000"
-          class="bg-white form-container-header-administration"
-        />
-        <Header style="z-index: 1000" class="form-container-header-detail" />
+      <div class="d-flex flex-wrap">
+        <b-col
+          cols="12"
+          lg="auto"
+          class="px-0 form-container-header-administration-container"
+        >
+          <AdministratorMenu
+            :show-label="false"
+            class="bg-white form-container-header-administration"
+          />
+        </b-col>
+        <b-col cols="12" lg>
+          <Header class="form-container-header-detail" />
+        </b-col>
       </div>
     </div>
 
@@ -22,12 +30,12 @@
 <script>
 import Header from "./components/formDetailHeader/FormDetailHeaderIndex.vue";
 import MainHeader from "../../../../components/MainHeader.vue";
-import AdministrationMenuForm from "../../components/AdministrationMenuForm.vue";
+import AdministratorMenu from "../../components/AdministratorMenu.vue";
 export default {
   components: {
     MainHeader,
     Header,
-    AdministrationMenuForm,
+    AdministratorMenu,
   },
   data() {
     return {
@@ -49,25 +57,25 @@ export default {
   background: #f4f6fc;
   min-height: 100vh;
   height: max-content;
+
   &-header {
-    top: 0;
+    z-index: 100;
   }
-  &-header-detail {
-    top: 10;
+  &-header-administration-container {
+    height: 32px;
+    @media (min-width: 992px) {
+      height: 0px;
+    }
   }
   &-header-administration {
-    min-height: 100vh;
-    width: 70px;
+    @media (min-width: 992px) {
+      min-height: 100vh;
+    }
   }
 }
 .router-view-container {
-  margin-top: 150px;
-  margin-left: 75px;
+  padding-top: 160px;
 }
-</style>
-
-<style lang="scss">
 .container-dash {
-  overflow: unset !important;
 }
 </style>
