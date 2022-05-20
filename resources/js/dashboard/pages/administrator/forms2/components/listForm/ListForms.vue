@@ -69,12 +69,7 @@ export default {
   },
   data () {
     return {
-      currentPage: 1,
-      perPages: [8, 16, 32, 64],
-      form: {
-        perPage: 8
-      },
-      perPage: 8
+      currentPage: 1
     }
   },
   computed: {

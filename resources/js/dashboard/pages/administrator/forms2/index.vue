@@ -135,11 +135,9 @@ export default {
   async mounted () {
     await this.findRecentForms()
     await this.getFormList()
-    // await this.getAllHospitals()
   },
   methods: {
     ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms', 'form__filterByWords']),
-    // ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms', 'form__filterByWords', 'getAllHospitals']),
     async findRecentForms () {
       this.isRecentFormsLoading = true
       this.recentForms = await this.getRecentForms()
@@ -161,7 +159,7 @@ export default {
       this.isLoading = true
 
       this.forms = await this.getFormFiltered({
-        paginate: page ?? 8
+        paginate: page ?? 15
       })
       this.isLoading = false
     },
@@ -289,7 +287,7 @@ export default {
         })
     },
 
-    async getFormList (page = 1, perPage = 8) {
+    async getFormList (page = 1, perPage = 15) {
       this.isLoading = true
 
       this.forms = await this.getFormFiltered({
