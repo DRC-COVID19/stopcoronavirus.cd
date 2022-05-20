@@ -64,16 +64,20 @@ export default {
       }
     }
   },
+
   methods: {
     onSubmit () {
       if (this.form.form_field_order) {
+        this.$bvModal.hide('orderResponse')
         this.$emit('createdField', this.formToPopulate.id)
       } else {
         const index = this.formFields.findIndex((formField) => formField.id === this.formToPopulate.id) + 1
         if (this.formFields[index]) {
+          this.$bvModal.hide('orderResponse')
           this.$emit('createdFieldAfter', this.formFields[index].id)
         } else {
-          this.$emit('createdFieldEnd', this.formFields[index - 1].id)
+          this.$bvModal.hide('orderResponse')
+          this.$emit('createdFieldEnd', this.formFields[index - 1])
         }
       }
     }
