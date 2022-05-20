@@ -27,11 +27,11 @@ class FormFieldController extends Controller
     public function store(Request $request)
     {
       $data = $this->storeValidator();
-      if(request()->has('order_field')){
+      $formField = null;
+      if(request()->has('order_field')&& $request->order_field){
           $data['order_field'] = request('order_field');
           $formField = FormField::create($data);
-        return response()->json($formField, 200);
-      } else{
+      } else if(request()->has('form_field_order') && $request->form_field_order){
           $formFieldOrder = FormField::find($request->form_field_order);
           $data['order_field'] = $formFieldOrder->order_field;
           $formField = FormField::create($data);
@@ -39,9 +39,19 @@ class FormFieldController extends Controller
           FormField::where('order_field', '>', $formFieldOrder->order_field)->increment('order_field', 1);
           $formFieldOrder->order_field++;
           $formFieldOrder->save();
-
-          return response()->json($formField, 200);
+      } else {
+          $lastField = FormField::where('form_id', $data['form_id'])
+            ->where('form_step_id', $data['form_step_id'])
+            ->orderBy('order_field', 'desc')
+            ->first();
+          if (!$lastField) {
+            $data['order_field'] = 1;
+          } else {
+            $data['order_field'] = $lastField->order_field + 1;
+          }
+          $formField = FormField::create($data);
       }
+      return response()->json($formField, 200);
 
     }
 
@@ -124,6 +134,7 @@ class FormFieldController extends Controller
           'rules'                 => 'nullable|string',
           'agreggation'           => 'nullable|boolean',
           'default_value'         => 'nullable|string|max:255',
+          'form_field_order'      => 'nullable|integer|exists:form_fields,id',
           'form_id'               => 'required|integer|exists:forms,id',
           'form_field_type_id'    => 'required|integer|exists:form_field_types,id',
           'form_step_id'          => 'required|integer|exists:form_steps,id'

@@ -26,7 +26,7 @@ class Administrator extends Model implements JWTSubject, AuthenticatableContract
     use Notifiable;
     use SoftDeletes;
 
-    protected $fillable = ['username', 'password', 'name', 'avatar', 'email', 'phone_number','affected'];
+    protected $fillable = ['username', 'password', 'name', 'avatar', 'email', 'phone_number'];
 
     /**
      * Create a new Eloquent model instance.

@@ -52,7 +52,7 @@ import CompletedFormList from '../../../../components/completedForm/CompletedFor
 import { mapActions } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
       form: {},
       totalCompletedForm: 0,
@@ -67,24 +67,24 @@ export default {
     this.form = await this.formShow({ id: this.$route.params.form_id })
   },
   computed: {
-    fileName() {
+    fileName () {
       const dateTime = new Date().toISOString().replace(/:/g, '-')
-      return `export_du_${dateTime}.xls`;
+      return `export_du_${dateTime}.xls`
     }
   },
   methods: {
     ...mapActions(['formShow', 'completedForm__getAllFiltered']),
-    updateTotalCompletedForm(value) {
+    updateTotalCompletedForm (value) {
       this.totalCompletedForm = value
     },
-    async uploadFile() {
-      this.isFileLoading = true;
+    async uploadFile () {
+      this.isFileLoading = true
 
       this.completedFormsToExport = await this.completedForm__getAllFiltered({
         ...this.$refs.completedFormList.allCurrentFilters,
         per_page: this.totalCompletedForm
-      });
-      this.isFileLoading = false;
+      })
+      this.isFileLoading = false
       return this.completedFormsToExport.data.map((completedForm) => {
         return {
           Date: completedForm.last_update,

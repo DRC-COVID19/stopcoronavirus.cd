@@ -11,7 +11,7 @@ export default {
     selectedHospital: null,
     detailHospital: null,
     situationHospital: [],
-    AllHospitals: [],
+    allHospitals: [],
     hospitalSituations: {},
     situationHospitalLoading: false,
     hospitalTotalData: null,
@@ -39,7 +39,7 @@ export default {
       state.isLoading = payload
     },
     SET_ALL_HOSPITALS (state, payload) {
-      state.AllHospitals = payload
+      state.allHospitals = payload
     },
     SET_HOSPITAL_SITUATIONS (state, payload) {
       state.hospitalSituations = payload

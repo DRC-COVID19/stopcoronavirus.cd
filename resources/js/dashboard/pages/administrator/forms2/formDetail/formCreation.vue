@@ -13,11 +13,17 @@
           mx-0
         "
       >
-        <FormStepIndex :formId="+$route.params.form_id" />
+        <FormStepIndex
+          :formId="+$route.params.form_id"
+        />
       </b-col>
       <b-col cols="12" class="container-creation-list-responsive">
         <div>
-          <b-button v-b-toggle.sidebar-left class="btn-dash-blue d-block" side="sm">
+          <b-button
+            v-b-toggle.sidebar-left
+            class="btn-dash-blue d-block"
+            side="sm"
+          >
             <small>Étapes</small>
           </b-button>
         </div>
@@ -31,7 +37,9 @@
           shadow
           backdrop-variant="transparent"
         >
-          <FormStepIndex :formId="+$route.params.form_id" />
+          <FormStepIndex
+            :formId="+$route.params.form_id"
+          />
         </b-sidebar>
       </b-col>
       <b-col cols="auto" lg="10">
@@ -42,12 +50,17 @@
 </template>
 
 <script>
-import FormStepIndex from './components/formStep/FormStepIndex'
+import FormStepIndex from "./components/formStep/FormStepIndex";
 export default {
   components: {
-    FormStepIndex
-  }
-}
+    FormStepIndex,
+  },
+  mounted() {
+  },
+  methods: {
+    
+  },
+};
 </script>
 
 <style lang="scss" scoped>

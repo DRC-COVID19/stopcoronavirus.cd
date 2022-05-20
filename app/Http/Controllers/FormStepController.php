@@ -96,7 +96,7 @@ class FormStepController extends Controller
       }
 
     public function getFormStepByForm($form){
-        $formSteps = FormStep::with(['form', 'formFields'])
+        $formSteps = FormStep::with(['form', 'formFields.formFieldType'])
                               ->where('form_id',$form)
                               ->get();
         return response()->json($formSteps, 200);

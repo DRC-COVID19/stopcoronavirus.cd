@@ -19,7 +19,7 @@
       :to="{ name: 'administrator.forms.show.setting' }"
       :active="this.$route.name.startsWith('administrator.forms.show.setting')"
     >
-      Paramètre
+      Paramètres
     </b-nav-item>
     <b-nav-item
       v-if="canViewForm"

@@ -320,8 +320,6 @@ class CompletedFormController extends Controller
                 'completedForms.completedFormFields.formField.formStep',
                 'completedForms.adminUser'
             ])
-
-
                 ->find($hospitalLastUpdate->hospital_id);
         }
 
@@ -369,7 +367,15 @@ class CompletedFormController extends Controller
 
     public function checkLastUpdate($hospitalId, $lastUpdate)
     {
-        return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id', $hospitalId)->count();
+        $query = CompletedForm::where('last_update', $lastUpdate)->where('hospital_id', $hospitalId);
+
+        $formId = request()->query('form_id');
+        if($formId ) {
+          $query->where('form_id', $formId);
+        }
+
+        $completedForms = $query->count();
+        return $completedForms;
     }
 
     public function getAllFiltered(Request $request) {
