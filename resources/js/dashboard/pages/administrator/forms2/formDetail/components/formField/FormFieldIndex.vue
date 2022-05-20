@@ -30,11 +30,11 @@
     <div class="row">
       <div class="col-12">
           <div class="container-component-field d-flex justify-content-between mt-4"
-            v-for="(formField, index) in formField" :key="index"
+            v-for="(field, index) in formField" :key="index"
           >
             <div class="field-card">
               <FormFieldList
-                :formField="formField"
+                :formField="field"
                 @updatedTypeForm="onUpdatedTypeForm"
               />
             </div>
@@ -43,8 +43,14 @@
                   @deleted="onDeletedField"
                   @edit="onEditField"
                   @orderFieldCard="onCallOrderFieldCrad"
-                  :formField="formField"
-                  :fieldKey="formField.id"
+                  @dropUp="onDropUpField"
+                  @dropDown="onDropDownField"
+                  @resetList="onResetList"
+                  :indexField="index"
+                  :lastField="lastField"
+                  :fieldForms="fieldForms"
+                  :formField="field"
+                  :fieldKey="field.id"
                 />
             </div>
           </div>
@@ -66,9 +72,11 @@ export default {
     return {
       isLoading: false,
       fieldForm: {},
+      fieldForms: [],
       selectedFormKey: null,
       form_field_order: null,
       order_field_end: null
+
     }
   },
   async  mounted () {
@@ -90,6 +98,9 @@ export default {
     step_id () {
       return this.$route.params.step_id
     },
+    lastField () {
+      return this.formField.length - 1
+    },
     formFieldKey () {
       if (this.selectedFormKey && this.selectedFormKey > -1) {
         const index = this.formField.findIndex((field) => this.selectedFormKey === field.id)
@@ -102,6 +113,9 @@ export default {
   methods: {
     ...mapActions(['getFormFields']),
     async init () {
+      this.selectedFormKey = null
+      this.form_field_order = null
+      this.order_field_end = null
       this.isLoading = true
       this.fieldForm = await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
       if (this.fieldForm.length !== 0) {
@@ -128,6 +142,15 @@ export default {
       this.selectedFormKey = fieldId
       this.$bvModal.show('orderResponse')
     },
+    onDropUpField () {
+      this.fieldForms = this.formField
+    },
+    onDropDownField () {
+      this.fieldForms = this.formField
+    },
+    onResetList () {
+      this.init()
+    },
     onCallCreatedFieldCard (idField) {
       this.selectedFormKey = null
       this.form_field_order = idField
@@ -138,14 +161,13 @@ export default {
       this.form_field_order = idField
       this.$bvModal.show('createResponse')
     },
-    onCreatedFieldEnd (idField) {
+    onCreatedFieldEnd (field) {
       this.selectedFormKey = null
-      this.order_field_end = idField
+      this.order_field_end = field
       this.$bvModal.show('createResponse')
     },
     onResetModalCreate () {
       this.selectedFormKey = null
-      this.form_field_order = null
       this.$bvModal.show('createResponse')
     }
   }
