@@ -120,19 +120,29 @@ export default {
     onCancelDelete () {
       this.isDeleteModalShown = false
     },
-    async dropUpField () {
+    dropUpField () {
       this.$emit('dropUp')
-      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) + 1
-      await this.updateFormField({ id: this.formField.id, order_field: this.formField.order_field - 1 })
-      await this.updateFormField({ id: this.fieldForms[index].id, order_field: this.fieldForms[index].order_field + 1 })
-      this.$emit('resetList')
+      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) - 1
+      Promise.all([
+        this.updateFormField({ id: this.formField.id, order_field: this.formField.order_field - 1 }),
+        this.updateFormField({ id: this.fieldForms[index].id, order_field: this.fieldForms[index].order_field + 1 })
+      ])
+        .then(() => {
+          console.log('champ actuel : id', this.formField.id, 'order_field', this.formField.order_field - 1)
+          console.log('champ precedent:id', this.fieldForms[index].id, 'order_field', this.fieldForms[index].order_field + 1)
+          this.$emit('resetList')
+        })
     },
-    async dropDownField () {
+    dropDownField () {
       this.$emit('dropDown')
       const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) + 1
-      await this.updateFormField({ id: this.formField.id, order_field: this.formField.order_field + 1 })
-      await this.updateFormField({ id: this.fieldForms[index].id, order_field: this.fieldForms[index].order_field - 1 })
-      this.$emit('resetList')
+      Promise.all([
+        this.updateFormField({ id: this.formField.id, order_field: this.formField.order_field + 1 }),
+        this.updateFormField({ id: this.fieldForms[index].id, order_field: this.fieldForms[index].order_field - 1 })
+      ])
+        .then(() => {
+          this.$emit('resetList')
+        })
     }
 
   }
