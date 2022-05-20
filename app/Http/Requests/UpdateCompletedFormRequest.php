@@ -24,10 +24,10 @@ class UpdateCompletedFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'updated_manager_name'  => 'required|string',
-            'updated_manager_first_name' => 'required|string',
-            'hospital_id'           => 'required|integer|exists:hospitals,id',
-            'completed_form_fields' => 'required|array'
+            'updated_manager_name'        => 'required|string',
+            'updated_manager_first_name'  => 'required|string',
+            'hospital_id'                 => 'sometimes|integer|exists:hospitals,id',
+            'completed_form_fields'       => 'required|array'
         ];
     }
 }

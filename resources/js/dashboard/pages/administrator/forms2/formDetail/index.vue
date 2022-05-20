@@ -41,6 +41,6 @@ export default {
 
 <style lang="scss">
 .container-dash{
-  overflow: unset;
+  overflow: unset !important;
 }
 </style>

@@ -30,81 +30,106 @@
   </b-container>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState } from 'vuex'
 
-import FormStepList from "./FormStepList.vue";
-import FormStepCreate from "./FormStepCreate.vue";
+import FormStepList from './FormStepList.vue'
+import FormStepCreate from './FormStepCreate.vue'
 
 export default {
   components: {
     FormStepList,
-    FormStepCreate,
+    FormStepCreate
   },
   props: {
     formId: {
       type: Number,
-      required: true,
-    },
+      required: true
+    }
   },
 
-  data() {
+  data () {
     return {
       isEditingMode: false,
-      title: "Les étapes du Formulaire",
-      iconClass: "fa fa-sliders",
+      title: 'Les étapes du Formulaire',
+      iconClass: 'fa fa-sliders',
       rowformStep: {},
-      isCreatingStep: false,
-    };
+      isCreatingStep: false
+    }
   },
-  mounted() {
-    this.getFormSteps({ id: this.formId });
+  mounted () {
+    this.getFormSteps({ id: this.formId })
+    this.initStepIndex()
   },
 
   computed: {
     ...mapState({
       formSteps: (state) => state.formStep.formSteps,
       isCreating: (state) => state.formStep.isCreating,
-      isLoading: (state) => state.formStep.isLoading,
-    }),
-    formStepData() {
-      return this.formSteps.data;
+      isLoading: (state) => state.formStep.isLoading
+    })
+  },
+  watch: {
+    '$route.name' () {
+      if (this.$route.name === 'administrator.forms.show.creation') {
+        this.initStepIndex()
+      }
     },
-    formStepMeta() {
-      return this.formSteps.meta
-        ? this.formSteps.meta
-        : {
-            currentPage: 1,
-            perPage: 16,
-            total: this.formSteps.length,
-          };
-    },
+    formSteps () {
+      this.initStepIndex()
+    }
   },
   methods: {
-    ...mapActions(["getFormSteps"]),
-    showModalCreatedModal() {
-      this.isCreatingStep = true;
-      this.rowformStep = {};
-      this.$refs["modal-creation"].show();
+    ...mapActions(['getFormSteps']),
+    formStepsSorted (formSteps) {
+      return formSteps.slice().sort((a, b) => a.step - b.step)
     },
-    showModalUpdatedModal(form) {
-      this.isCreatingStep = false;
-      this.rowformStep = { ...form };
-      this.$refs["modal-creation"].show();
+    initStepIndex () {
+      const stepId = this.$route.params.step_id
+      if (
+        this.formSteps.length !== 0 &&
+        this.$route.path !==
+          `/administration/forms/${this.formId}/step/${stepId}`
+      ) {
+        this.$router.push({
+          name: 'administrator.forms.show.creation.step',
+          params: {
+            step_id: this.formStepsSorted(this.formSteps)[0].id
+          }
+        })
+      }
+      if (
+        this.formSteps.length === 0 &&
+        this.$route.path !== `/administration/forms/${this.formId}/`
+      ) {
+        this.$router.push({
+          name: 'administrator.forms.show.creation'
+        })
+      }
     },
-    async onCreatedFormStep() {
-      await this.getFormSteps({ id: this.formId });
-      this.$refs["modal-creation"].hide();
+    showModalCreatedModal () {
+      this.isCreatingStep = true
+      this.rowformStep = {}
+      this.$refs['modal-creation'].show()
     },
-    async onUpdatedFormStep() {
-      await this.getFormSteps({ id: this.formId });
-      this.$refs["modal-creation"].hide();
+    showModalUpdatedModal (form) {
+      this.isCreatingStep = false
+      this.rowformStep = { ...form }
+      this.$refs['modal-creation'].show()
+    },
+    async onCreatedFormStep () {
+      await this.getFormSteps({ id: this.formId })
+      this.$refs['modal-creation'].hide()
+    },
+    async onUpdatedFormStep () {
+      await this.getFormSteps({ id: this.formId })
+      this.$refs['modal-creation'].hide()
     },
 
-    cancelEditMode() {
-      this.isEditingMode = false;
-    },
-  },
-};
+    cancelEditMode () {
+      this.isEditingMode = false
+    }
+  }
+}
 </script>
 <style scoped>
 .title {
