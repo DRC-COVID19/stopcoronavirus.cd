@@ -1,10 +1,11 @@
 <template>
   <div>
     <ValidationProvider
-      v-slot="{ errors }"
       :rules="rules"
-      tag="div"
       :name="name"
+      :vid="vid"
+      v-slot="{ errors }"
+      tag="div"
       class="bg-transparent"
     >
       <div v-if="type === 'boolean'">
@@ -125,7 +126,8 @@ export default {
     },
     vid: {
       type: String,
-      required: false
+      required: false,
+      default: null
     },
     mode: {
       type: String,
