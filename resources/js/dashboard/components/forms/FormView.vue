@@ -185,7 +185,7 @@ export default {
     hospitalId: [Number, String],
     formId: [Number, String],
     containerToScroll: {
-      type: HTMLDivElement,
+      type: [HTMLDivElement, Window],
       default: () => { return window }
     }
   },

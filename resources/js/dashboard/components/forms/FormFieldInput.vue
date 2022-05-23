@@ -146,8 +146,8 @@ export default {
   data () {
     return {
       requiredOptions: [
-        { text: 'Oui', value: 1 },
-        { text: 'Non', value: 0 }
+        { text: 'Oui', value: '1' },
+        { text: 'Non', value: '0' }
       ],
       formFieldValue: this.value
     }
