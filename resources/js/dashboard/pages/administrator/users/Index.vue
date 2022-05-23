@@ -224,7 +224,7 @@ export default {
           this.isLoading = false
           this.updating = false
 
-          this.getUserList(1)
+          this.getUserList()
           this.$notify({
             group: 'alert',
             title: "Modification d'un utilisateur",
