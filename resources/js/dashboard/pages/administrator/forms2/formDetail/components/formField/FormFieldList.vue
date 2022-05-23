@@ -6,12 +6,14 @@
               <b-row class="">
                 <b-col  md="6" xs="12">
                     <label id="input-group-1" for="input-1" class="">{{formField.name}}</label>
-                      <b-form-input
-                        :type="formField.form_field_type.name"
-                        :placeholder="formField.default_value"
-                        class="input-dash"
-                        >
-                      </b-form-input>
+                    <FormFieldInput
+                      :type="formField.form_field_type.name"
+                      :placeholder="`Entrer ${formField.name}`"
+                      :default-value="formField.default_value"
+                      :id="formField.name"
+                      :name="formField.name"
+                      :rules="formField.rules"
+                    />
                 </b-col>
                 <b-col  md="6" xs="12">
                   <label  for="input-1" class="label-format-response">Format réponse</label>
@@ -46,6 +48,7 @@
 </template>
 
 <script>
+import FormFieldInput from '../../../../../../components/forms/FormFieldInput.vue'
 import { mapState, mapActions } from 'vuex'
 export default {
   props: {
@@ -54,6 +57,9 @@ export default {
       default: () => ({}),
       required: false
     }
+  },
+  components: {
+    FormFieldInput
   },
   async mounted () {
     await this.formFieldTypeIndex()

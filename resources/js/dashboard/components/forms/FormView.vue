@@ -56,6 +56,7 @@
                               :id="formField.name"
                               :name="formField.name"
                               :rules="formField.rules"
+                              :default-value="formField.default_value"
                             />
                           </b-col>
                         </b-row>
