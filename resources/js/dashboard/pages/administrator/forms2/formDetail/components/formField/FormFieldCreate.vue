@@ -232,12 +232,12 @@ export default {
     updatedField (formField) {
       this.updateFormField({ id: this.form.id, ...formField })
         .then(() => {
-          this.$notify({
-            group: 'alert',
-            title: 'Champs du Formulaire',
-            text: 'Modifier avec succès',
-            type: 'success'
-          })
+          // this.$notify({
+          //   group: 'alert',
+          //   title: 'Champs du Formulaire',
+          //   text: 'Modifier avec succès',
+          //   type: 'success'
+          // })
           this.$bvModal.hide('createResponse')
           this.$emit('updated')
           this.resetForm()
