@@ -125,39 +125,39 @@ export default {
   props: {
     users: {
       type: Object,
-      default: () => ({}),
+      default: () => ({})
     },
     isLoading: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
       fields: [
-        { key: "usernmae", sortable: false, label: "Nom utilisateur" }, // usernmae instead of username (see backend response)
-        { key: "phone_number", sortable: false, label: "N°Téléphone" },
-        { key: "role", sortable: false, label: "Rôle" },
-        { key: "hospital", sortable: false, label: "Hôpital" },
-        { key: "actions", sortable: false, label: "Actions" },
+        { key: 'usernmae', sortable: false, label: 'Nom utilisateur' }, // usernmae instead of username (see backend response)
+        { key: 'phone_number', sortable: false, label: 'N°Téléphone' },
+        { key: 'role', sortable: false, label: 'Rôle' },
+        { key: 'hospital', sortable: false, label: 'Hôpital' },
+        { key: 'actions', sortable: false, label: 'Actions' }
       ],
-      filter: "",
+      filter: '',
       perPage: 15,
       currentPage: 1,
       isDeleteModalShown: false,
       currentUser: {
         id: -1,
-        name: "",
+        name: ''
       },
-      editModalShow: false,
-    };
+      editModalShow: false
+    }
   },
   computed: {
-    rows() {
-      return this.users.length;
+    rows () {
+      return this.users.length
     },
 
-    userFilter() {
+    userFilter () {
       return (
         (this.users.data &&
           this.users.data
@@ -167,40 +167,40 @@ export default {
               user.roles = user.roles.filter(
                 (v, i, a) =>
                   a.findIndex((t) => t.label === v.label) === i &&
-                  (v.label === "Administrateur" ||
-                    v.label === "Agent Point Focal")
-              );
-              return user;
+                  (v.label === 'Administrateur' ||
+                    v.label === 'Agent Point Focal')
+              )
+              return user
             })) ??
         []
-      );
-    },
+      )
+    }
   },
   watch: {
-    filter() {
-      this.search();
-    },
+    filter () {
+      this.search()
+    }
   },
   methods: {
-    search() {
-      this.$emit("onSearch", this.filter.trim());
+    search () {
+      this.$emit('onSearch', this.filter.trim())
     },
-    deleteUser(name, userId) {
-      this.isDeleteModalShown = true;
-      this.currentUser.id = userId;
-      this.currentUser.name = name;
+    deleteUser (name, userId) {
+      this.isDeleteModalShown = true
+      this.currentUser.id = userId
+      this.currentUser.name = name
     },
-    onValidateDelection() {
-      this.$emit("onDeleteUser", this.currentUser.id);
-      this.isDeleteModalShown = false;
+    onValidateDelection () {
+      this.$emit('onDeleteUser', this.currentUser.id)
+      this.isDeleteModalShown = false
     },
-    onCancelDelection() {
-      this.isDeleteModalShown = false;
+    onCancelDelection () {
+      this.isDeleteModalShown = false
     },
-    openToogle() {
-      this.$emit("openToogle", false);
+    openToogle () {
+      this.$emit('openToogle', false)
     },
-    updateUser(name, id, usernmae, roles, hospital, email, phone_number) {
+    updateUser (name, id, usernmae, roles, hospital, email, phone_number) {
       this.currentUser = {
         id,
         name,
@@ -208,12 +208,12 @@ export default {
         roles,
         hospital,
         email,
-        phone_number,
-      };
-      this.$emit("onUpdateUser", this.currentUser);
-    },
-  },
-};
+        phone_number
+      }
+      this.$emit('onUpdateUser', this.currentUser)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";

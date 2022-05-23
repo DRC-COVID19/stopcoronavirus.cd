@@ -180,7 +180,6 @@ export default {
       this.userUpdated = true
       this.formToPopulate = currentUser
       this.errors = {}
-      console.log(this.userUpdated)
     },
     cancelUpdate () {
       this.errors = {}
@@ -223,8 +222,7 @@ export default {
           this.showSuccess = true
           this.isLoading = false
           this.updating = false
-
-          this.getUserList(1)
+          this.getUserList(this.currentPage)
           this.$notify({
             group: 'alert',
             title: "Modification d'un utilisateur",
