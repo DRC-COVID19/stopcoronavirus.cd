@@ -180,7 +180,6 @@ export default {
       this.userUpdated = true
       this.formToPopulate = currentUser
       this.errors = {}
-      console.log(this.userUpdated)
     },
     cancelUpdate () {
       this.errors = {}
