@@ -1,7 +1,7 @@
 <template>
   <div>
     <ValidationProvider
-      :rules="rules"
+      :rules="matchRules"
       :name="name"
       :vid="vid"
       v-slot="{ errors }"
@@ -160,6 +160,9 @@ export default {
     },
     getType () {
       return this.type === 'number' ? 'text' : this.type
+    },
+    matchRules () {
+      return this.type === 'number' ? `${this.rules}|numeric` : this.rules
     }
   },
   mounted () {
