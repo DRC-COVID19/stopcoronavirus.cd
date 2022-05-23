@@ -168,6 +168,11 @@ export default {
     },
     value (value) {
       this.formFieldValue = value
+    },
+    defaultValue (value) {
+      if (this.value === null && this.formFieldValue === null) {
+        this.formFieldValue = value
+      }
     }
   },
   methods: {}
