@@ -60,7 +60,7 @@
       <b-form-input
         v-else
         v-model="formFieldValue"
-        :type="type"
+        :type="getType"
         :placeholder="placeholder"
         :id="id"
         :required="isRequired || required"
@@ -157,6 +157,9 @@ export default {
   computed: {
     isRequired () {
       return !!this.rules?.match(/required/i) || false
+    },
+    getType () {
+      return this.type === 'number' ? 'text' : this.type
     }
   },
   mounted () {
