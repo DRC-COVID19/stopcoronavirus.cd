@@ -299,7 +299,7 @@ export default {
 
     switchPage (page) {
       this.paginate.currentPage = page
-      this.getFormList(this.paginate.currentPage)
+      this.getFormList(this.paginate.currentPage, this.paginate.perPage)
     },
     backToRoute ({ formId }) {
       return this.$router.push(`/administration/forms/${formId}/`)
