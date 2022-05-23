@@ -157,7 +157,7 @@ export default {
     },
     async perPageChange (page) {
       this.isLoading = true
-
+      this.paginate.perPage = page
       this.forms = await this.getFormFiltered({
         paginate: page ?? 15
       })
