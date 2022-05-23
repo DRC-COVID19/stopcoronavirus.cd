@@ -9,10 +9,9 @@
                     <FormFieldInput
                       :type="formField.form_field_type.name"
                       :placeholder="`Entrer ${formField.name}`"
-                      :default-value="formField.default_value"
+                      :default-value="formField.form_field_type.name ? formField.default_value : ''"
                       :id="formField.name"
                       :name="formField.name"
-                      :rules="formField.rules"
                     />
                 </b-col>
                 <b-col  md="6" xs="12">
