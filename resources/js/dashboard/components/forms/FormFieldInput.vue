@@ -44,6 +44,7 @@
             >
             </b-form-input>
             <b-button
+              v-if="!disabled"
               class='button-icon'
               variant="primary"
               :disabled="!formFieldValue"
