@@ -52,11 +52,10 @@
           >
           <FormFieldInput
             v-model="form.default_value"
-            type="text"
-            id="input-1"
-            :placeholder="`entrer une valeur`"
-            name="Valeur par défaut"
-            mode="aggressive"
+            :type="formFieldTypeSelected"
+            placeholder="Entrer la valeur par défaut"
+            id="default_value"
+            name="default_value"
             class="mb-4"
           />
           <FomFieldSelect
@@ -180,6 +179,9 @@ export default {
     },
     step_id () {
       return this.$route.params.step_id
+    },
+    formFieldTypeSelected () {
+      return this.formFieldType.find(type => type.id === this.form.form_field_type_id)?.name || 'text'
     }
   },
   methods: {

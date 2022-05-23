@@ -56,6 +56,7 @@
                               :id="formField.name"
                               :name="formField.name"
                               :rules="formField.rules"
+                              :default-value="formField.default_value"
                             />
                           </b-col>
                         </b-row>
@@ -184,7 +185,7 @@ export default {
     hospitalId: [Number, String],
     formId: [Number, String],
     containerToScroll: {
-      type: HTMLDivElement,
+      type: [HTMLDivElement, Window],
       default: () => { return window }
     }
   },

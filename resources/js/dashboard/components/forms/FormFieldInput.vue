@@ -45,6 +45,7 @@
             >
             </b-form-input>
             <b-button
+              v-if="!disabled"
               class='button-icon'
               variant="primary"
               :disabled="!formFieldValue"
@@ -138,17 +139,17 @@ export default {
       type: Date,
       required: false,
       default: null
+    },
+    defaultValue: {
+      type: String,
+      default: null
     }
-    // defaultValue: {
-    //   type: String,
-    //   default: ''
-    // }
   },
   data () {
     return {
       requiredOptions: [
-        { text: 'Oui', value: 1 },
-        { text: 'Non', value: 0 }
+        { text: 'Oui', value: '1' },
+        { text: 'Non', value: '0' }
       ],
       formFieldValue: this.value
     }
@@ -156,13 +157,11 @@ export default {
   computed: {
     isRequired () {
       return !!this.rules?.match(/required/i) || false
-    },
-    stateFormFields () {
-      return true
-
-      // if(){
-      //   return true
-      // }
+    }
+  },
+  mounted () {
+    if (this.value === null) {
+      this.formFieldValue = this.defaultValue
     }
   },
   watch: {
@@ -171,6 +170,11 @@ export default {
     },
     value (value) {
       this.formFieldValue = value
+    },
+    defaultValue (value) {
+      if (this.value === null) {
+        this.formFieldValue = value
+      }
     }
   },
   methods: {}
