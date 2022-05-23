@@ -170,7 +170,7 @@ export default {
       this.formFieldValue = value
     },
     defaultValue (value) {
-      if (this.value === null && this.formFieldValue === null) {
+      if (this.value === null) {
         this.formFieldValue = value
       }
     }
