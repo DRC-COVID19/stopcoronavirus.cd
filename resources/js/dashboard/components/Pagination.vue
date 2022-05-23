@@ -16,7 +16,7 @@
           @input="onPerPageChange"
         />
       </div>
-      <p  class="mb-0 ml-5 mr-lg-5"> {{ ((page - 1) * perPage) + 1 }} - {{ perPage }} sur  {{ totalRows }}</p>
+      <p  class="mb-0 ml-5 mr-lg-5"> {{ ((page - 1) * perPage) + 1 }} - {{ limitIndexCurrentStep }} sur  {{ totalRows }}</p>
     </b-col>
     <b-col v-if="perPageValue !== totalRows" cols="12" lg="auto" class="d-flex justify-content-center mb-3">
       <b-pagination
@@ -62,6 +62,10 @@ export default {
         { value: 100, label: 100 },
         { value: this.totalRows, label: 'Tous' }
       ]
+    },
+    limitIndexCurrentStep () {
+      const lastIndex = this.page * this.perPage
+      return lastIndex > this.totalRows ? this.totalRows : lastIndex
     }
   },
   watch: {

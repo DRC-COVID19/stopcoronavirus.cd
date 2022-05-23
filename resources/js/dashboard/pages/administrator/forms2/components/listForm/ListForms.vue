@@ -33,7 +33,7 @@
                        v-show="getFormListLength > 0"
                       :total-rows="paginate.total"
                       :per-page="paginate.perPage"
-                      :page="currentPage"
+                      :page="paginate.currentPage"
                       @pageChanged="switchPage"
                       @perPageChanged="onPerPageChange"
                     />
