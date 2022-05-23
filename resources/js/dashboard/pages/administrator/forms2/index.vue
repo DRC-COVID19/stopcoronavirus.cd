@@ -126,9 +126,9 @@ export default {
   computed: {
     paginate () {
       return {
-        currentPage: this.forms.current_page,
-        perPage: this.forms.per_page,
-        total: this.forms.total
+        currentPage: Number(this.forms.current_page),
+        perPage: Number(this.forms.per_page),
+        total: Number(this.forms.total)
       }
     }
   },
@@ -157,7 +157,7 @@ export default {
     },
     async perPageChange (page) {
       this.isLoading = true
-
+      this.paginate.perPage = page
       this.forms = await this.getFormFiltered({
         paginate: page ?? 15
       })

@@ -231,7 +231,7 @@ export default {
             this.showSuccess = true
             this.isLoading = false
             this.updating = false
-            this.getHospitalList(1)
+            this.getHospitalList(this.currentPage)
             this.getUsers()
             this.getTownShips()
             this.$notify({

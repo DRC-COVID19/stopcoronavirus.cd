@@ -190,13 +190,13 @@ export default {
         unpublished_form: this.form.unpublish ?? null,
         recurrence_form: this.form.form_recurrence_id ?? null
       }
-      if (this.form.publish === false || this.form.unpublish === false) {
-        delete this.form.publish
-        delete this.form.unpublish
-        this.$emit('filterForms', form)
-      } else {
-        this.$emit('filterForms', form)
+      if (form.published_form === false) {
+        delete form.published_form
       }
+      if (form.unpublished_form === false) {
+        delete form.unpublished_form
+      }
+      this.$emit('filterForms', form)
     }
   }
 }
