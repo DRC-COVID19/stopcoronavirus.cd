@@ -223,8 +223,7 @@ export default {
           this.showSuccess = true
           this.isLoading = false
           this.updating = false
-
-          this.getUserList()
+          this.getUserList(this.currentPage)
           this.$notify({
             group: 'alert',
             title: "Modification d'un utilisateur",
