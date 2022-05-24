@@ -1,8 +1,8 @@
 <template>
 <div class="">
- <b-card class="border-0 card-form-field">
-        <b-card-body>
-          <b-container>
+ <b-card class="border-0 card-form-field px-0">
+        <b-card-body class="px-0">
+          <b-container class="px-0">
               <b-row class="">
                 <b-col  md="6" xs="12">
                     <label id="input-group-1" for="input-1" class="">{{formField.name}}</label>
@@ -86,14 +86,14 @@ export default {
     ...mapActions(['formFieldTypeIndex', 'updateFormField']),
     updateFormFieldType () {
       this.updateFormField({ id: this.formField.id, form_field_type_id: this.form.form_field_type_id })
-        .then(() => {
-          // this.$notify({
-          //   group: 'alert',
-          //   title: 'Champs du Formulaire',
-          //   text: 'Modifier avec succès',
-          //   type: 'success'
-          // })
-          this.$emit('updatedTypeForm')
+        .then((formFieldUpdated) => {
+          this.$notify({
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Modifier avec succès',
+            type: 'success'
+          })
+          this.$emit('updatedTypeForm', formFieldUpdated)
         })
         .catch(({ response }) => {
           this.$notify({
@@ -102,7 +102,7 @@ export default {
             text: 'Une erreur est survenus',
             type: 'error'
           })
-          if (response.status == 422) {
+          if (response.status === 422) {
             this.errors = response.data.errors
           }
         })
@@ -110,12 +110,12 @@ export default {
     updateRequiredFormField () {
       this.updateFormField({ id: this.formField.id, rules: this.form.require ? 'required' : '' })
         .then(() => {
-          // this.$notify({
-          //   group: 'alert',
-          //   title: 'Champs du Formulaire',
-          //   text: 'Modifier avec succès',
-          //   type: 'success'
-          // })
+          this.$notify({
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Modifier avec succès',
+            type: 'success'
+          })
         })
         .catch(({ response }) => {
           this.$notify({
@@ -124,7 +124,7 @@ export default {
             text: 'Une erreur est survenus',
             type: 'error'
           })
-          if (response.status == 422) {
+          if (response.status === 422) {
             this.errors = response.data.errors
           }
         })
