@@ -12,7 +12,7 @@ extend('confirmed', {
 })
 extend('double', {
   ...double,
-  message: 'Ce champs ne peut contenir que des données numérique (e.g. 1000)'
+  message: 'Ce champs ne peut contenir que des données numérique (e.g. 1000 ou 1000.01)'
 })
 extend('regex', {
   ...regex,
