@@ -34,7 +34,7 @@
             v-for="(field, index) in formFields"
             :key="'form-field' + field.id"
             :class="{'container-component-field-skeleton' : field.animateVisibility, 'animate-in-leave': selectedFormKey || deleteContext}"
-            class="container-component-field d-flex justify-content-between mt-4"
+            class="container-component-field d-sm-flex justify-content-between mt-4"
           >
             <div class="d-flex justify-content-between w-100" v-if="field.skeleton">
               <b-skeleton-img no-aspect class="skeleton-form-field"></b-skeleton-img>
@@ -76,7 +76,13 @@ import FormFieldCardOrder from './FormFieldCardOrder.vue'
 import Loading from '../../../../../../components/Loading.vue'
 import { mapActions } from 'vuex'
 export default {
-  components: { FormFieldCard, FormFieldList, FormFieldCreate, Loading, FormFieldCardOrder },
+  components: {
+    FormFieldCard,
+    FormFieldList,
+    FormFieldCreate,
+    Loading,
+    FormFieldCardOrder
+  },
   data () {
     return {
       isLoading: false,
@@ -221,56 +227,65 @@ export default {
       this.$bvModal.show('createResponse')
     }
   }
-
 }
 </script>
 <style lang="scss" scoped>
-  .container {
-    margin-top: 10px;
-    @media (min-width: 1441px) {
-      margin-top: 50px;
-    }
+.container {
+  margin-top: 10px;
+  @media (min-width: 1441px) {
+    margin-top: 50px;
   }
-  .field-card {
+}
+.field-card {
+  width: 100%;
+  @media (min-width: 576px) {
     width: calc(100% - 65px);
   }
+}
 
-  .container-component-field {
-    .skeleton-form-field, .skeleton-form-field-actions {
-      height: 192px;
-    }
-    .skeleton-form-field {
+.container-component-field {
+  .skeleton-form-field, .skeleton-form-field-actions {
+    height: 192px;
+  }
+  .skeleton-form-field {
+    width: 100%;
+    @media (min-width: 576px) {
       width: calc(100% - 65px);
     }
-    .skeleton-form-field-actions {
-      width: 40px;
+  }
+  .skeleton-form-field-actions {
+    display: none;
+    width: 40px;
+    @media (min-width: 576px) {
+      display: block;
     }
   }
-  .form-field-list-enter-active, .form-field-list-leave-active {
-    &.container-component-field-skeleton {
-      transition: all 1s;
-      overflow: hidden;
-      max-height: 1000px;
-    }
+}
+.form-field-list-enter-active, .form-field-list-leave-active {
+  &.container-component-field-skeleton {
+    transition: all 1s;
+    overflow: hidden;
+    max-height: 1000px;
   }
-  .form-field-list-enter, .form-field-list-leave-to {
-    &.container-component-field-skeleton {
-      opacity: 0;
-      transform: translateX(100%);
-      max-height: 0px;
-    }
+}
+.form-field-list-enter, .form-field-list-leave-to {
+  &.container-component-field-skeleton {
+    opacity: 0;
+    transform: translateX(100%);
+    max-height: 0px;
   }
-  .form-field-list-enter {
-    &.container-component-field-skeleton {
-      transition: all 1s;
-    }
+}
+.form-field-list-enter {
+  &.container-component-field-skeleton {
+    transition: all 1s;
   }
-  .form-field-list-leave-to {
-    &.container-component-field-skeleton {
-      transition: all 0s;
-    }
-    &.animate-in-leave {
-      transition: all 1s !important;
-    }
+}
+.form-field-list-leave-to {
+  &.container-component-field-skeleton {
+    transition: all 0s;
   }
+  &.animate-in-leave {
+    transition: all 1s !important;
+  }
+}
 </style>
