@@ -45,7 +45,7 @@ export default {
           .then(({ data }) => {
             commit('SET_FORM_FIELD', data)
             commit('SET_IS_LOADING', false)
-            resolve(true)
+            resolve(data)
           })
           .catch(response => {
             console.log(response)

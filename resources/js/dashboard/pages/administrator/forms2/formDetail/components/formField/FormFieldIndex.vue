@@ -18,7 +18,7 @@
             />
             <FormFieldCardOrder
               :form-to-populate="formFieldKey"
-              :form-fields="formField"
+              :form-fields="formFields"
               @createdField="onCallCreatedFieldCard"
               @createdFieldAfter="onCallCreatedFieldAfter"
               @createdFieldEnd="onCreatedFieldEnd"
@@ -26,34 +26,43 @@
           </div>
       </div>
     </div>
-    <Loading v-if="isLoading" class="h-25"  message="Chargement des champs ..."/>
+
     <div class="row">
       <div class="col-12">
-          <div class="container-component-field d-flex justify-content-between mt-4"
-            v-for="(field, index) in formField" :key="index"
+         <transition-group name="form-field-list" tag="div">
+          <div
+            v-for="(field, index) in formFields"
+            :key="'form-field' + field.id"
+            :class="{'container-component-field-skeleton' : field.skeleton}"
+            class="container-component-field d-flex justify-content-between mt-4"
           >
-            <div class="field-card">
+            <div class="d-flex justify-content-between w-100" v-if="field.skeleton">
+              <b-skeleton-img no-aspect class="skeleton-form-field"></b-skeleton-img>
+              <b-skeleton-img no-aspect class="skeleton-form-field-actions"></b-skeleton-img>
+            </div>
+            <div v-if="!field.skeleton" class="field-card">
               <FormFieldList
                 :formField="field"
                 @updatedTypeForm="onUpdatedTypeForm"
               />
             </div>
-            <div class="field-create">
-                <FormFieldCard
-                  @deleted="onDeletedField"
-                  @edit="onEditField"
-                  @orderFieldCard="onCallOrderFieldCrad"
-                  @dropUp="onDropUpField"
-                  @dropDown="onDropDownField"
-                  @resetList="onResetList"
-                  :indexField="index"
-                  :lastField="lastField"
-                  :fieldForms="fieldForms"
-                  :formField="field"
-                  :fieldKey="field.id"
-                />
+            <div v-if="!field.skeleton" class="field-create">
+              <FormFieldCard
+                @deleted="onDeletedField"
+                @edit="onEditField"
+                @orderFieldCard="onCallOrderFieldCrad"
+                @dropUp="onDropUpField"
+                @dropDown="onDropDownField"
+                @resetList="onResetList"
+                :indexField="index"
+                :lastField="lastField"
+                :fieldForms="fieldForms"
+                :formField="field"
+                :fieldKey="field.id"
+              />
             </div>
           </div>
+         </transition-group>
       </div>
     </div>
   </b-container>
@@ -65,13 +74,17 @@ import FormFieldCard from './FormFieldCard.vue'
 import FormFieldCreate from './FormFieldCreate.vue'
 import FormFieldCardOrder from './FormFieldCardOrder.vue'
 import Loading from '../../../../../../components/Loading.vue'
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   components: { FormFieldCard, FormFieldList, FormFieldCreate, Loading, FormFieldCardOrder },
   data () {
     return {
       isLoading: false,
-      fieldForm: {},
+      formFields: [
+        { id: 1, skeleton: true },
+        { id: 2, skeleton: true },
+        { id: 3, skeleton: true }
+      ],
       fieldForms: [],
       selectedFormKey: null,
       form_field_order: null,
@@ -80,7 +93,6 @@ export default {
     }
   },
   async  mounted () {
-    await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
     this.init()
   },
   watch: {
@@ -89,9 +101,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      formField: (state) => state.formField.formFields
-    }),
     form_id () {
       return this.$route.params.form_id
     },
@@ -99,12 +108,12 @@ export default {
       return this.$route.params.step_id
     },
     lastField () {
-      return this.formField.length - 1
+      return this.formFields.length - 1
     },
     formFieldKey () {
       if (this.selectedFormKey && this.selectedFormKey > -1) {
-        const index = this.formField.findIndex((field) => this.selectedFormKey === field.id)
-        return this.formField[index]
+        const index = this.formFields.findIndex((field) => this.selectedFormKey === field.id)
+        return this.formFields[index]
       } else {
         return null
       }
@@ -116,13 +125,13 @@ export default {
       this.selectedFormKey = null
       this.form_field_order = null
       this.order_field_end = null
-      this.isLoading = true
-      this.fieldForm = await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
-      if (this.fieldForm.length !== 0) {
-        this.isLoading = false
-      }
+      this.formFields = await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
     },
-    onCreatedField () {
+    onCreatedField (formFieldCreated) {
+      formFieldCreated.skeleton = true
+      let indexToPlace = this.formFields.findIndex((field) => field.order_field > formFieldCreated.order_field)
+      indexToPlace = indexToPlace === -1 ? this.formFields.length : indexToPlace - 1
+      this.formFields.splice(indexToPlace, 0, formFieldCreated)
       this.init()
     },
     onUpdated () {
@@ -143,10 +152,10 @@ export default {
       this.$bvModal.show('orderResponse')
     },
     onDropUpField () {
-      this.fieldForms = this.formField
+      this.fieldForms = this.formFields
     },
     onDropDownField () {
-      this.fieldForms = this.formField
+      this.fieldForms = this.formFields
     },
     onResetList () {
       this.init()
@@ -183,5 +192,41 @@ export default {
   }
   .field-card {
     width: calc(100% - 65px);
+  }
+
+  .container-component-field {
+    .skeleton-form-field, .skeleton-form-field-actions {
+      height: 192px;
+    }
+    .skeleton-form-field {
+      width: calc(100% - 65px);
+    }
+    .skeleton-form-field-actions {
+      width: 40px;
+    }
+  }
+  .form-field-list-enter-active, .form-field-list-leave-active {
+    &.container-component-field-skeleton {
+      transition: all 1s;
+      overflow: hidden;
+      max-height: 1000px;
+    }
+  }
+  .form-field-list-enter, .form-field-list-leave-to {
+    &.container-component-field-skeleton {
+      opacity: 0;
+      transform: translateX(100%);
+      max-height: 0px;
+    }
+  }
+  .form-field-list-enter {
+    &.container-component-field-skeleton {
+      transition: all 1s;
+    }
+  }
+  .form-field-list-leave-to {
+    &.container-component-field-skeleton {
+      transition: all 0s;
+    }
   }
 </style>

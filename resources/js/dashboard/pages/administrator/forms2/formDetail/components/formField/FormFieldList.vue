@@ -87,12 +87,12 @@ export default {
     updateFormFieldType () {
       this.updateFormField({ id: this.formField.id, form_field_type_id: this.form.form_field_type_id })
         .then(() => {
-          // this.$notify({
-          //   group: 'alert',
-          //   title: 'Champs du Formulaire',
-          //   text: 'Modifier avec succès',
-          //   type: 'success'
-          // })
+          this.$notify({
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Modifier avec succès',
+            type: 'success'
+          })
           this.$emit('updatedTypeForm')
         })
         .catch(({ response }) => {
@@ -110,12 +110,12 @@ export default {
     updateRequiredFormField () {
       this.updateFormField({ id: this.formField.id, rules: this.form.require ? 'required' : '' })
         .then(() => {
-          // this.$notify({
-          //   group: 'alert',
-          //   title: 'Champs du Formulaire',
-          //   text: 'Modifier avec succès',
-          //   type: 'success'
-          // })
+          this.$notify({
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Modifier avec succès',
+            type: 'success'
+          })
         })
         .catch(({ response }) => {
           this.$notify({
