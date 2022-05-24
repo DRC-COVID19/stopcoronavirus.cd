@@ -233,7 +233,7 @@ export default {
     },
     updatedField (formField) {
       this.updateFormField({ id: this.form.id, ...formField })
-        .then(() => {
+        .then((formFieldUpdated) => {
           this.$notify({
             group: 'alert',
             title: 'Champs du Formulaire',
@@ -241,7 +241,7 @@ export default {
             type: 'success'
           })
           this.$bvModal.hide('createResponse')
-          this.$emit('updated')
+          this.$emit('updated', formFieldUpdated)
           this.resetForm()
           this.isLoading = false
         })

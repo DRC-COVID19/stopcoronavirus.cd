@@ -53,27 +53,27 @@ export default {
           })
       })
     },
-    removeFormField ({ state, commit, dispatch }, payload = {}) {
+    removeFormField (_, payload = {}) {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
           .delete(`api/dashboard/form-fields/${payload}`)
           .then(({ data }) => {
-            resolve(true)
+            resolve(data)
           })
           .catch(response => {
             reject(response)
           })
       })
     },
-    updateFormField ({ state, commit, dispatch }, payload = {}) {
+    updateFormField ({ commit }, payload = {}) {
       commit('SET_IS_UPDATING', true)
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
           .put(`api/dashboard/form-fields/${payload.id}`, payload)
           .then(({ data }) => {
-            resolve(true)
+            resolve(data)
           })
           .catch(response => {
             reject(response)

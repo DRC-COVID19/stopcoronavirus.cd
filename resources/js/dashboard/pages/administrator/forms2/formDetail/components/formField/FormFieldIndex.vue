@@ -14,7 +14,7 @@
               :form-field-order="form_field_order"
               :order-field-end="order_field_end"
               @created="onCreatedField"
-              @updated="onUpdated"
+              @updated="onUpdatedField"
             />
             <FormFieldCardOrder
               :form-to-populate="formFieldKey"
@@ -33,7 +33,7 @@
           <div
             v-for="(field, index) in formFields"
             :key="'form-field' + field.id"
-            :class="{'container-component-field-skeleton' : field.skeleton}"
+            :class="{'container-component-field-skeleton' : field.animateVisibility, 'animate-in-leave': selectedFormKey}"
             class="container-component-field d-flex justify-content-between mt-4"
           >
             <div class="d-flex justify-content-between w-100" v-if="field.skeleton">
@@ -122,25 +122,54 @@ export default {
   methods: {
     ...mapActions(['getFormFields']),
     async init () {
-      this.selectedFormKey = null
       this.form_field_order = null
       this.order_field_end = null
+      setTimeout(() => {
+        // this.selectedFormKey = null
+      }, 2000);
       this.formFields = await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
     },
     onCreatedField (formFieldCreated) {
       formFieldCreated.skeleton = true
+      formFieldCreated.animateVisibility = true
+
       let indexToPlace = this.formFields.findIndex((field) => field.order_field > formFieldCreated.order_field)
       indexToPlace = indexToPlace === -1 ? this.formFields.length : indexToPlace - 1
       this.formFields.splice(indexToPlace, 0, formFieldCreated)
       this.init()
     },
-    onUpdated () {
-      this.init()
+    onUpdatedField (formFieldUpdated) {
+      formFieldUpdated.skeleton = true
+      formFieldUpdated.animateVisibility = true
+
+      const targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formFieldUpdated.id)
+      if (formFieldUpdated.order_field === this.formFields[targetFormFieldIndex].order_field) {
+        this.$set(this.formFields, targetFormFieldIndex, formFieldUpdated)
+        this.init()
+      } else {
+        this.formFields[targetFormFieldIndex].animateVisibility = true
+        this.$set(this.formFields, targetFormFieldIndex, this.formFields[targetFormFieldIndex])
+        this.$nextTick(() => {
+          this.formFields.splice(targetFormFieldIndex, 1)
+          setTimeout(() => {
+            let indexToPlace = this.formFields.findIndex((field) => field.order_field > formFieldUpdated.order_field)
+            indexToPlace = indexToPlace === -1 ? this.formFields.length : indexToPlace - 1
+            this.formFields.splice(indexToPlace, 0, formFieldUpdated)
+            setTimeout(() => {
+              this.init()
+            }, 1000)
+          }, 1000)
+        })
+      }
     },
     onDeletedField () {
       this.init()
     },
-    onUpdatedTypeForm () {
+    onUpdatedTypeForm (formFieldUpdated) {
+      formFieldUpdated.skeleton = true
+      formFieldUpdated.animateVisibility = true
+      const targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formFieldUpdated.id)
+      this.$set(this.formFields, targetFormFieldIndex, formFieldUpdated)
       this.init()
     },
     onEditField (formId) {
@@ -227,6 +256,9 @@ export default {
   .form-field-list-leave-to {
     &.container-component-field-skeleton {
       transition: all 0s;
+    }
+    &.animate-in-leave {
+      transition: all 1s !important;
     }
   }
 </style>

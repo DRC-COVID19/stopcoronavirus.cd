@@ -86,14 +86,14 @@ export default {
     ...mapActions(['formFieldTypeIndex', 'updateFormField']),
     updateFormFieldType () {
       this.updateFormField({ id: this.formField.id, form_field_type_id: this.form.form_field_type_id })
-        .then(() => {
+        .then((formFieldUpdated) => {
           this.$notify({
             group: 'alert',
             title: 'Champs du Formulaire',
             text: 'Modifier avec succès',
             type: 'success'
           })
-          this.$emit('updatedTypeForm')
+          this.$emit('updatedTypeForm', formFieldUpdated)
         })
         .catch(({ response }) => {
           this.$notify({

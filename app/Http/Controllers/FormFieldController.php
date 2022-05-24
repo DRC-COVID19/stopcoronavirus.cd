@@ -76,7 +76,7 @@ class FormFieldController extends Controller
      */
     public function update(FormField $formField, Request $request)
     {
-        $result = $formField->update($this->updateValidator());
+        $formField->update($this->updateValidator());
         if($request->form_field_order) {
           $formFieldOrder = FormField::find($request->form_field_order);
           if ($formFieldOrder->id !== $formField->id) {
@@ -87,7 +87,8 @@ class FormFieldController extends Controller
             $formFieldOrder->save();
           }
         }
-        return response()->json( $result, 200);
+        $formField->refresh();
+        return response()->json( $formField, 200);
     }
 
     /**
