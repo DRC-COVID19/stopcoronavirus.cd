@@ -100,7 +100,7 @@ class FormFieldController extends Controller
     public function destroy(FormField $formField)
     {
       $formField->delete();
-      return response()->json(null, 200);
+      return response()->json($formField, 200);
     }
 
 
@@ -108,16 +108,16 @@ class FormFieldController extends Controller
         $form_id = $request->input('form_id');
         $step_id = $request->input('step_id');
         $formFields = FormField::with(['form','formStep','formFieldType'])
-                                ->where(function($query) use ($form_id, $step_id){
-                                  if($form_id){
-                                    $query->where('form_id', $form_id);
-                                  }
-                                  if($step_id){
-                                    $query->where('form_step_id', $step_id);
-                                  }
-                                })
-                                ->orderBy('order_field')
-                                ->get();
+          ->where(function($query) use ($form_id, $step_id){
+            if($form_id){
+              $query->where('form_id', $form_id);
+            }
+            if($step_id){
+              $query->where('form_step_id', $step_id);
+            }
+          })
+          ->orderBy('order_field')
+          ->get();
         return response()->json($formFields, 200);
 
     }

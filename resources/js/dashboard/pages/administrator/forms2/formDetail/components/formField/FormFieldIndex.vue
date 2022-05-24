@@ -33,7 +33,7 @@
           <div
             v-for="(field, index) in formFields"
             :key="'form-field' + field.id"
-            :class="{'container-component-field-skeleton' : field.animateVisibility, 'animate-in-leave': selectedFormKey}"
+            :class="{'container-component-field-skeleton' : field.animateVisibility, 'animate-in-leave': selectedFormKey || deleteContext}"
             class="container-component-field d-flex justify-content-between mt-4"
           >
             <div class="d-flex justify-content-between w-100" v-if="field.skeleton">
@@ -88,8 +88,8 @@ export default {
       fieldForms: [],
       selectedFormKey: null,
       form_field_order: null,
-      order_field_end: null
-
+      order_field_end: null,
+      deleteContext: false
     }
   },
   async  mounted () {
@@ -125,7 +125,8 @@ export default {
       this.form_field_order = null
       this.order_field_end = null
       setTimeout(() => {
-        // this.selectedFormKey = null
+        this.selectedFormKey = null
+        this.deleteContext = false
       }, 2000);
       this.formFields = await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
     },
@@ -136,7 +137,9 @@ export default {
       let indexToPlace = this.formFields.findIndex((field) => field.order_field > formFieldCreated.order_field)
       indexToPlace = indexToPlace === -1 ? this.formFields.length : indexToPlace - 1
       this.formFields.splice(indexToPlace, 0, formFieldCreated)
-      this.init()
+      setTimeout(() => {
+        this.init()
+      }, 1000)
     },
     onUpdatedField (formFieldUpdated) {
       formFieldUpdated.skeleton = true
@@ -162,8 +165,17 @@ export default {
         })
       }
     },
-    onDeletedField () {
-      this.init()
+    onDeletedField (formFieldDeleted) {
+      formFieldDeleted.animateVisibility = true
+      const targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formFieldDeleted.id)
+      this.$set(this.formFields, targetFormFieldIndex, formFieldDeleted)
+      this.deleteContext = true
+      this.$nextTick(() => {
+        this.formFields.splice(targetFormFieldIndex, 1)
+        setTimeout(() => {
+          this.init()
+        }, 1000)
+      })
     },
     onUpdatedTypeForm (formFieldUpdated) {
       formFieldUpdated.skeleton = true

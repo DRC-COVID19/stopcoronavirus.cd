@@ -33,10 +33,15 @@
           <i class="fa fa-pencil icon-action icon-action-edit" aria-hidden="true" @click="setPopulateForm"></i>
       </div>
       <div class="img-response-action">
-        <i class="fa fa-arrow-up icon-action icon-action-up"  v-show="isFirstField"    aria-hidden="true"  @click="dropUpField"></i>
+        <i class="fa fa-arrow-up icon-action icon-action-up" v-show="isFirstField" aria-hidden="true" @click="dropUpField"></i>
       </div>
        <div class="img-response-action"  >
-         <i class="fa fa-arrow-down  icon-action icon-action-down" v-show="isLastField"  aria-hidden="false" @click="dropDownField"></i>
+         <i
+          v-show="isLastField"
+          class="fa fa-arrow-down  icon-action icon-action-down"
+          aria-hidden="true"
+          @click="dropDownField"
+        ></i>
       </div>
   </div>
 </template>
@@ -98,7 +103,7 @@ export default {
     },
     onValidateDelete () {
       this.removeFormField(this.formField.id)
-        .then(() => {
+        .then((formFieldDeleted) => {
           this.$notify({
             group: 'alert',
             title: 'Supprimer ce champ',
@@ -106,7 +111,7 @@ export default {
             type: 'Supprimer avec succès'
           })
           this.isDeleteModalShown = false
-          this.$emit('deleted')
+          this.$emit('deleted', formFieldDeleted)
         })
         .catch(() => {
           this.$notify({
