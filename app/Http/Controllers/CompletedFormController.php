@@ -64,7 +64,7 @@ class CompletedFormController extends Controller
                 }
                 $query
                   ->select('*')
-                  ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date')
+                  ->selectRaw('CAST(NOW() as DATE) - (created_at) as diff_date')
                   ->orderBy('last_update', 'desc');
               },
               'completedForms.form'])
@@ -225,7 +225,7 @@ class CompletedFormController extends Controller
                 'hospital'
             ])
             ->select('*')
-            ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
+            ->selectRaw('CAST(NOW() as DATE) - (created_at) as diff_date');
     }
 
 
@@ -410,7 +410,7 @@ class CompletedFormController extends Controller
           $query = $query->whereBetween('last_update', [$dateRangeStart, $dateRangeEnd]);
         }
 
-        $query->select('*')->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
+        $query->select('*')->selectRaw('CAST(NOW() as DATE) - (created_at) as diff_date');
 
         if ($sortBy === 'hospital') {
           $query->join('hospitals', 'hospital_id', '=', 'hospitals.id')

@@ -164,7 +164,7 @@ export default {
     matchRules () {
       let rules = this.rules ? this.rules + '' : ''
       if (this.type === 'number') {
-        rules += 'double'
+        rules += '|double'
       }
       return rules
     }
