@@ -102,7 +102,7 @@ export default {
             text: 'Une erreur est survenus',
             type: 'error'
           })
-          if (response.status == 422) {
+          if (response.status === 422) {
             this.errors = response.data.errors
           }
         })
@@ -124,7 +124,7 @@ export default {
             text: 'Une erreur est survenus',
             type: 'error'
           })
-          if (response.status == 422) {
+          if (response.status === 422) {
             this.errors = response.data.errors
           }
         })

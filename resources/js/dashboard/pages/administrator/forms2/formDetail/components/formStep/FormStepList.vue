@@ -107,94 +107,94 @@
   </b-row>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 export default {
   props: {
     formId: {
       type: Number,
-      required: true,
+      required: true
     },
     isLoading: {
       type: Boolean,
-      default: false,
+      default: false
     },
     perPage: {
       type: Number,
-      default: 15,
+      default: 15
     },
     totalRows: {
       type: Number,
-      default: 0,
-    },
+      default: 0
+    }
   },
-  data() {
+  data () {
     return {
       isDeleteModalShown: false,
       formStepId: null,
       editModalShow: false,
-      isActived: null,
-    };
+      isActived: null
+    }
   },
 
-  mounted() {
-    this.getFormSteps({ id: this.formId });
+  mounted () {
+    this.getFormSteps({ id: this.formId })
   },
   computed: {
     ...mapState({
-      formSteps: (state) => state.formStep.formSteps,
+      formSteps: (state) => state.formStep.formSteps
     }),
-    formStepsSorted() {
-      return this.formSteps.slice().sort((a, b) => a.step - b.step);
+    formStepsSorted () {
+      return this.formSteps.slice().sort((a, b) => a.step - b.step)
     },
-    rows() {
-      return this.formSteps.length;
-    },
+    rows () {
+      return this.formSteps.length
+    }
   },
   watch: {},
   methods: {
-    ...mapActions(["getFormSteps", "removeFormStep", "searchFormStep"]),
+    ...mapActions(['getFormSteps', 'removeFormStep', 'searchFormStep']),
 
-    deleteStep(id) {
-      this.isDeleteModalShown = true;
-      this.formStepId = id;
+    deleteStep (id) {
+      this.isDeleteModalShown = true
+      this.formStepId = id
     },
-    onValidateDeletion() {
-      this.$bvModal.show("confirmation-box");
+    onValidateDeletion () {
+      this.$bvModal.show('confirmation-box')
       this.removeFormStep(this.formStepId)
         .then(() => {
           this.$notify({
-            group: "alert",
+            group: 'alert',
             title: "Supprimer l'étape",
-            text: "Supprimer avec succès",
-            type: "success",
-          });
-          this.isDeleteModalShown = false;
-          this.getFormSteps({ id: this.formId });
+            text: 'Supprimer avec succès',
+            type: 'success'
+          })
+          this.isDeleteModalShown = false
+          this.getFormSteps({ id: this.formId })
         })
         .catch(() => {
           this.$notify({
-            group: "alert",
+            group: 'alert',
             title: "Supprimer  l'étape",
-            text: "Une erreur est survenue",
-            type: "error",
-          });
-        });
+            text: 'Une erreur est survenue',
+            type: 'error'
+          })
+        })
     },
-    onCancelDelection() {
-      this.isDeleteModalShown = false;
+    onCancelDelection () {
+      this.isDeleteModalShown = false
     },
-    updateStep(form) {
-      this.$emit("onUpdateStep", form);
+    updateStep (form) {
+      this.$emit('onUpdateStep', form)
     },
-    openModalCreateList() {
-      this.$emit("openModalCreateList");
+    openModalCreateList () {
+      this.$emit('openModalCreateList')
     },
 
-    openModalUpdateList(form) {
-      this.$emit("openModalUpdateList", form);
-    },
-  },
-};
+    openModalUpdateList (form) {
+      this.$emit('openModalUpdateList', form)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";

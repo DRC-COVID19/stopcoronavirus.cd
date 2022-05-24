@@ -46,15 +46,15 @@
 </template>
 
 <script>
-import FormStepIndex from "./components/formStep/FormStepIndex";
+import FormStepIndex from './components/formStep/FormStepIndex'
 
 export default {
   components: {
-    FormStepIndex,
+    FormStepIndex
   },
-  mounted() {},
-  methods: {},
-};
+  mounted () {},
+  methods: {}
+}
 </script>
 
 <style lang="scss" scoped>
