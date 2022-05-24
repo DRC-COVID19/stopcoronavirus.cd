@@ -1,8 +1,8 @@
 <template>
 <div class="">
- <b-card class="border-0 card-form-field">
-        <b-card-body>
-          <b-container>
+ <b-card class="border-0 card-form-field px-0">
+        <b-card-body class="px-0">
+          <b-container class="px-0">
               <b-row class="">
                 <b-col  md="6" xs="12">
                     <label id="input-group-1" for="input-1" class="">{{formField.name}}</label>

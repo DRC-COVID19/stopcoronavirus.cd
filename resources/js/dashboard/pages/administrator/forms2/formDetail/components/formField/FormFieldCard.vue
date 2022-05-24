@@ -1,175 +1,217 @@
 <template>
   <div class="container-icon">
-      <div class="">
-          <i class="fa fa-plus-circle icon-action icon-action-add" aria-hidden="true" @click="callCardOrderField"></i>
-      </div>
-      <div class="img-response-action">
-          <i class="fa fa-trash icon-action icon-action-delete" aria-hidden="true" @click="deleteHospital"></i>
+    <div class="img-response-action">
+      <i
+        class="fa fa-plus-circle icon-action icon-action-add"
+        aria-hidden="true"
+        @click="callCardOrderField"
+      ></i>
+    </div>
+    <div class="img-response-action">
+      <i
+        class="fa fa-trash icon-action icon-action-delete"
+        aria-hidden="true"
+        @click="deleteHospital"
+      ></i>
 
-          <b-modal v-model="isDeleteModalShown" centered hide-header>
-            <template #modal-header>
-              <div class="mx-auto">
-                <h5 class="lead text-secondary">
-                  Suppression du champ
-                </h5>
-              </div>
-            </template>
-            <div class="col-12">
-              <div class="mx-5 my-2">
-                Voulez-vous supprimer le champ ?
-              </div>
-            </div>
-            <template #modal-footer>
-              <b-button size="sm" variant="success" @click="onValidateDelete()">
-                Accepter
-              </b-button>
-              <b-button size="sm" variant="danger" @click="onCancelDelete()">
-                Annuler
-              </b-button>
-            </template>
-          </b-modal>
-      </div>
-      <div class="img-response-action">
-          <i class="fa fa-pencil icon-action icon-action-edit" aria-hidden="true" @click="setPopulateForm"></i>
-      </div>
-      <div class="img-response-action">
-        <i class="fa fa-arrow-up icon-action icon-action-up"  v-show="isFirstField"    aria-hidden="true"  @click="dropUpField"></i>
-      </div>
-       <div class="img-response-action"  >
-         <i class="fa fa-arrow-down  icon-action icon-action-down" v-show="isLastField"  aria-hidden="false" @click="dropDownField"></i>
-      </div>
+      <b-modal v-model="isDeleteModalShown" centered hide-header>
+        <template #modal-header>
+          <div class="mx-auto">
+            <h5 class="lead text-secondary">Suppression du champ</h5>
+          </div>
+        </template>
+        <div class="col-12">
+          <div class="mx-5 my-2">Voulez-vous supprimer le champ ?</div>
+        </div>
+        <template #modal-footer>
+          <b-button size="sm" variant="success" @click="onValidateDelete()">
+            Accepter
+          </b-button>
+          <b-button size="sm" variant="danger" @click="onCancelDelete()">
+            Annuler
+          </b-button>
+        </template>
+      </b-modal>
+    </div>
+    <div class="img-response-action">
+      <i
+        class="fa fa-pencil icon-action icon-action-edit"
+        aria-hidden="true"
+        @click="setPopulateForm"
+      ></i>
+    </div>
+    <div class="img-response-action">
+      <i
+        class="fa fa-arrow-up icon-action icon-action-up"
+        v-show="isFirstField"
+        aria-hidden="true"
+        @click="dropUpField"
+      ></i>
+    </div>
+    <div class="img-response-action">
+      <i
+        class="fa fa-arrow-down icon-action icon-action-down"
+        v-show="isLastField"
+        aria-hidden="false"
+        @click="dropDownField"
+      ></i>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 export default {
   props: {
     formField: {
       type: Object,
       default: () => ({}),
-      required: false
+      required: false,
     },
     fieldForms: {
       type: Array,
       default: () => [],
-      required: false
+      required: false,
     },
     fieldKey: {
       type: Number,
       default: null,
-      required: false
+      required: false,
     },
     indexField: {
       type: Number,
       default: null,
-      required: false
+      required: false,
     },
     lastField: {
       type: Number,
       default: null,
-      required: false
-    }
+      required: false,
+    },
   },
-  data () {
+  data() {
     return {
       isDeleteModalShown: false,
-      fillInFormField: {}
-    }
+      fillInFormField: {},
+    };
   },
   computed: {
-    isFirstField () {
-      return this.indexField !== 0
+    isFirstField() {
+      return this.indexField !== 0;
     },
-    isLastField () {
-      return this.indexField !== this.lastField
-    }
+    isLastField() {
+      return this.indexField !== this.lastField;
+    },
   },
   methods: {
-    ...mapActions(['removeFormField', 'updateFormField']),
-    setPopulateForm () {
-      this.$emit('edit', this.fieldKey)
+    ...mapActions(["removeFormField", "updateFormField"]),
+    setPopulateForm() {
+      this.$emit("edit", this.fieldKey);
     },
-    callCardOrderField () {
-      this.$emit('orderFieldCard', this.fieldKey)
+    callCardOrderField() {
+      this.$emit("orderFieldCard", this.fieldKey);
     },
-    deleteHospital () {
-      this.isDeleteModalShown = true
+    deleteHospital() {
+      this.isDeleteModalShown = true;
     },
-    onValidateDelete () {
+    onValidateDelete() {
       this.removeFormField(this.formField.id)
         .then(() => {
           this.$notify({
-            group: 'alert',
-            title: 'Supprimer ce champ',
-            text: 'Supprimer avec succès',
-            type: 'Supprimer avec succès'
-          })
-          this.isDeleteModalShown = false
-          this.$emit('deleted')
+            group: "alert",
+            title: "Supprimer ce champ",
+            text: "Supprimer avec succès",
+            type: "Supprimer avec succès",
+          });
+          this.isDeleteModalShown = false;
+          this.$emit("deleted");
         })
         .catch(() => {
           this.$notify({
-            group: 'alert',
+            group: "alert",
             title: "Supprimer  l'étape",
-            text: 'Une erreur est survenus',
-            type: 'error'
-          })
-        })
+            text: "Une erreur est survenus",
+            type: "error",
+          });
+        });
     },
-    onCancelDelete () {
-      this.isDeleteModalShown = false
+    onCancelDelete() {
+      this.isDeleteModalShown = false;
     },
-    dropUpField () {
-      this.$emit('dropUp')
-      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) - 1
+    dropUpField() {
+      this.$emit("dropUp");
+      const index =
+        this.fieldForms.findIndex((field) => field.id === this.formField.id) -
+        1;
       Promise.all([
-        this.updateFormField({ id: this.formField.id, order_field: this.formField.order_field - 1 }),
-        this.updateFormField({ id: this.fieldForms[index].id, order_field: this.fieldForms[index].order_field + 1 })
-      ])
-        .then(() => {
-          this.$emit('resetList')
-        })
+        this.updateFormField({
+          id: this.formField.id,
+          order_field: this.formField.order_field - 1,
+        }),
+        this.updateFormField({
+          id: this.fieldForms[index].id,
+          order_field: this.fieldForms[index].order_field + 1,
+        }),
+      ]).then(() => {
+        this.$emit("resetList");
+      });
     },
-    dropDownField () {
-      this.$emit('dropDown')
-      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) + 1
+    dropDownField() {
+      this.$emit("dropDown");
+      const index =
+        this.fieldForms.findIndex((field) => field.id === this.formField.id) +
+        1;
       Promise.all([
-        this.updateFormField({ id: this.formField.id, order_field: this.formField.order_field + 1 }),
-        this.updateFormField({ id: this.fieldForms[index].id, order_field: this.fieldForms[index].order_field - 1 })
-      ])
-        .then(() => {
-          this.$emit('resetList')
-        })
-    }
-
-  }
-
-}
+        this.updateFormField({
+          id: this.formField.id,
+          order_field: this.formField.order_field + 1,
+        }),
+        this.updateFormField({
+          id: this.fieldForms[index].id,
+          order_field: this.fieldForms[index].order_field - 1,
+        }),
+      ]).then(() => {
+        this.$emit("resetList");
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
- @import "@~/sass/_variables";
+@import "@~/sass/_variables";
 
-  .container-icon{
-    background-color: white;
-    padding: 6px 10px;
-    margin-right: 0px;
-    text-align: center;
-    border-radius: 8px;
-    .img-response-action{
-      margin-top: 20px;
-    }
-    .img-create{
-      cursor: pointer;
-    }
-    .img-delete{
-      cursor: pointer;
-    }
-    .img-pencil{
-      cursor: pointer;
+.container-icon {
+  background-color: white;
+  padding: 6px 10px;
+  margin-right: 0px;
+  text-align: center;
+  border-radius: 8px;
+  @media (max-width: 575px) {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    align-content: center;
+    margin-top: 10px;
+    padding: 15px;
+  }
+  .img-response-action {
+    margin-top: 20px;
+    @media (max-width: 575px) {
+      margin-top: 0px;
     }
   }
- .icon-action {
+  .img-create {
+    cursor: pointer;
+  }
+  .img-delete {
+    cursor: pointer;
+  }
+  .img-pencil {
+    cursor: pointer;
+  }
+}
+.icon-action {
   font-size: 20px;
   cursor: pointer;
   &:hover {
@@ -190,6 +232,5 @@ export default {
   &.icon-action-down {
     color: $dash-blue;
   }
-
- }
+}
 </style>
