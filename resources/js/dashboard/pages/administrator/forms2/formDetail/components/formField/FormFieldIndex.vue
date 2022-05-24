@@ -204,8 +204,33 @@ export default {
     onDropDownField () {
       this.fieldForms = this.formFields
     },
-    onResetList () {
-      this.init()
+    onResetList ({formField, asc}) {
+      let targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formField.id)
+      const placeholderIndex = asc ? targetFormFieldIndex - 1 : targetFormFieldIndex + 1
+      const placeholderFormField = this.formFields[placeholderIndex]
+
+      // active animation
+      placeholderFormField.animateVisibility = true
+      this.$set(this.formFields, placeholderIndex, placeholderFormField)
+      this.deleteContext = true
+
+      this.$nextTick(() => {
+        // delete the placeholder
+        this.formFields.splice(placeholderIndex, 1)
+
+        setTimeout(() => {
+          // permute order
+          targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formField.id)
+          if (asc) {
+            this.formFields.splice(targetFormFieldIndex + 1, 0, placeholderFormField)
+          } else {
+            this.formFields.splice(targetFormFieldIndex, 0, placeholderFormField)
+          }
+          setTimeout(() => {
+            this.init()
+          }, 1000)
+        }, 1000)
+      })
     },
     onCallCreatedFieldCard (idField) {
       this.selectedFormKey = null
