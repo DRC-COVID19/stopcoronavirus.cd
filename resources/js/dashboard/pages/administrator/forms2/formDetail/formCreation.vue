@@ -38,7 +38,7 @@
           <FormStepIndex :formId="+$route.params.form_id" />
         </b-sidebar>
       </b-col>
-      <b-col cols="auto" lg="10" class="px-0">
+      <b-col cols="12" lg="10" class="px-0">
         <router-view></router-view>
       </b-col>
     </b-row>

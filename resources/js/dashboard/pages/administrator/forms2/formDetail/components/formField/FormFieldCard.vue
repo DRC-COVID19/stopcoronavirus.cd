@@ -7,6 +7,7 @@
         @click="callCardOrderField"
       ></i>
     </div>
+
     <div class="img-response-action">
       <i
         class="fa fa-trash icon-action icon-action-delete"
@@ -17,11 +18,15 @@
       <b-modal v-model="isDeleteModalShown" centered hide-header>
         <template #modal-header>
           <div class="mx-auto">
-            <h5 class="lead text-secondary">Suppression du champ</h5>
+            <h5 class="lead text-secondary">
+              Suppression du champ
+            </h5>
           </div>
         </template>
         <div class="col-12">
-          <div class="mx-5 my-2">Voulez-vous supprimer le champ ?</div>
+          <div class="mx-5 my-2">
+            Voulez-vous supprimer le champ ?
+          </div>
         </div>
         <template #modal-footer>
           <b-button size="sm" variant="success" @click="onValidateDelete()">
@@ -33,26 +38,20 @@
         </template>
       </b-modal>
     </div>
+
     <div class="img-response-action">
-      <i
-        class="fa fa-pencil icon-action icon-action-edit"
-        aria-hidden="true"
-        @click="setPopulateForm"
-      ></i>
+        <i class="fa fa-pencil icon-action icon-action-edit" aria-hidden="true" @click="setPopulateForm"></i>
     </div>
+
     <div class="img-response-action">
-      <i
-        class="fa fa-arrow-up icon-action icon-action-up"
-        v-show="isFirstField"
-        aria-hidden="true"
-        @click="dropUpField"
-      ></i>
+      <i class="fa fa-arrow-up icon-action icon-action-up" v-show="isFirstField" aria-hidden="true" @click="dropUpField"></i>
     </div>
-    <div class="img-response-action">
+
+    <div class="img-response-action"  >
       <i
-        class="fa fa-arrow-down icon-action icon-action-down"
         v-show="isLastField"
-        aria-hidden="false"
+        class="fa fa-arrow-down  icon-action icon-action-down"
+        aria-hidden="true"
         @click="dropDownField"
       ></i>
     </div>
@@ -60,122 +59,122 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions } from 'vuex'
 export default {
   props: {
     formField: {
       type: Object,
       default: () => ({}),
-      required: false,
+      required: false
     },
     fieldForms: {
       type: Array,
       default: () => [],
-      required: false,
+      required: false
     },
     fieldKey: {
       type: Number,
       default: null,
-      required: false,
+      required: false
     },
     indexField: {
       type: Number,
       default: null,
-      required: false,
+      required: false
     },
     lastField: {
       type: Number,
       default: null,
-      required: false,
-    },
+      required: false
+    }
   },
-  data() {
+  data () {
     return {
       isDeleteModalShown: false,
-      fillInFormField: {},
-    };
+      fillInFormField: {}
+    }
   },
   computed: {
-    isFirstField() {
-      return this.indexField !== 0;
+    isFirstField () {
+      return this.indexField !== 0
     },
-    isLastField() {
-      return this.indexField !== this.lastField;
-    },
+    isLastField () {
+      return this.indexField !== this.lastField
+    }
   },
   methods: {
-    ...mapActions(["removeFormField", "updateFormField"]),
-    setPopulateForm() {
-      this.$emit("edit", this.fieldKey);
+    ...mapActions(['removeFormField', 'updateFormField']),
+    setPopulateForm () {
+      this.$emit('edit', this.fieldKey)
     },
-    callCardOrderField() {
-      this.$emit("orderFieldCard", this.fieldKey);
+    callCardOrderField () {
+      this.$emit('orderFieldCard', this.fieldKey)
     },
-    deleteHospital() {
-      this.isDeleteModalShown = true;
+    deleteHospital () {
+      this.isDeleteModalShown = true
     },
-    onValidateDelete() {
+    onValidateDelete () {
       this.removeFormField(this.formField.id)
-        .then(() => {
+        .then((formFieldDeleted) => {
           this.$notify({
-            group: "alert",
-            title: "Supprimer ce champ",
-            text: "Supprimer avec succès",
-            type: "Supprimer avec succès",
-          });
-          this.isDeleteModalShown = false;
-          this.$emit("deleted");
+            group: 'alert',
+            title: 'Supprimer ce champ',
+            text: 'Supprimer avec succès',
+            type: 'Supprimer avec succès'
+          })
+          this.isDeleteModalShown = false
+          this.$emit('deleted', formFieldDeleted)
         })
         .catch(() => {
           this.$notify({
-            group: "alert",
+            group: 'alert',
             title: "Supprimer  l'étape",
-            text: "Une erreur est survenus",
-            type: "error",
-          });
-        });
+            text: 'Une erreur est survenus',
+            type: 'error'
+          })
+        })
     },
-    onCancelDelete() {
-      this.isDeleteModalShown = false;
+    onCancelDelete () {
+      this.isDeleteModalShown = false
     },
-    dropUpField() {
-      this.$emit("dropUp");
+    dropUpField () {
+      this.$emit('dropUp')
       const index =
         this.fieldForms.findIndex((field) => field.id === this.formField.id) -
-        1;
+        1
       Promise.all([
         this.updateFormField({
           id: this.formField.id,
-          order_field: this.formField.order_field - 1,
+          order_field: this.formField.order_field - 1
         }),
         this.updateFormField({
           id: this.fieldForms[index].id,
-          order_field: this.fieldForms[index].order_field + 1,
-        }),
+          order_field: this.fieldForms[index].order_field + 1
+        })
       ]).then(() => {
-        this.$emit("resetList");
-      });
+        this.$emit('resetList')
+      })
     },
-    dropDownField() {
-      this.$emit("dropDown");
+    dropDownField () {
+      this.$emit('dropDown')
       const index =
         this.fieldForms.findIndex((field) => field.id === this.formField.id) +
-        1;
+        1
       Promise.all([
         this.updateFormField({
           id: this.formField.id,
-          order_field: this.formField.order_field + 1,
+          order_field: this.formField.order_field + 1
         }),
         this.updateFormField({
           id: this.fieldForms[index].id,
-          order_field: this.fieldForms[index].order_field - 1,
-        }),
+          order_field: this.fieldForms[index].order_field - 1
+        })
       ]).then(() => {
-        this.$emit("resetList");
-      });
-    },
-  },
-};
+        this.$emit('resetList')
+      })
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
