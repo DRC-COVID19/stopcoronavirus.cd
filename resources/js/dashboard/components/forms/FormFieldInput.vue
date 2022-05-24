@@ -162,7 +162,15 @@ export default {
       return this.type === 'number' ? 'text' : this.type
     },
     matchRules () {
-      return this.type === 'number' ? `${this.rules}|numeric` : this.rules
+      const numericRule = 'numeric'
+      if (this.type === 'number') {
+        if (this.isRequired) {
+          return `${this.rules}|${numericRule}`
+        } else {
+          return numericRule
+        }
+      }
+      return this.rules
     }
   },
   mounted () {
