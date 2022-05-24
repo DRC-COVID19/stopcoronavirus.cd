@@ -99,7 +99,7 @@ export default {
     rules: {
       type: String,
       required: false,
-      default: null
+      default: ''
     },
     id: {
       type: [String, Number],
@@ -162,15 +162,11 @@ export default {
       return this.type === 'number' ? 'text' : this.type
     },
     matchRules () {
-      const numericRule = 'numeric'
+      let rules = this.rules ? this.rules + '' : ''
       if (this.type === 'number') {
-        if (this.isRequired) {
-          return `${this.rules}|${numericRule}`
-        } else {
-          return numericRule
-        }
+        rules += 'double'
       }
-      return this.rules
+      return rules
     }
   },
   mounted () {

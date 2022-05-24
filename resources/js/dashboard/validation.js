@@ -1,5 +1,5 @@
 import { extend } from 'vee-validate'
-import { required, email, confirmed, regex, numeric } from 'vee-validate/dist/rules'
+import { required, email, confirmed, regex, double } from 'vee-validate/dist/rules'
 
 extend('email', { ...email, message: 'Adresse mail incorrecte' })
 extend('required', {
@@ -10,10 +10,9 @@ extend('confirmed', {
   ...confirmed,
   message: 'Le mot de passes ne correspond pas'
 })
-
-extend('numeric', {
-  ...numeric,
-  message: 'Le Champ "{_field_}" doit être un nombre'
+extend('double', {
+  ...double,
+  message: 'Ce champs ne peut contenir que des données numérique (e.g. 1000)'
 })
 extend('regex', {
   ...regex,
