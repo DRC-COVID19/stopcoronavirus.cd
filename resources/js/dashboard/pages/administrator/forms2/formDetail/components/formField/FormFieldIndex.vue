@@ -51,12 +51,10 @@
                 @deleted="onDeletedField"
                 @edit="onEditField"
                 @orderFieldCard="onCallOrderFieldCrad"
-                @dropUp="onDropUpField"
-                @dropDown="onDropDownField"
                 @resetList="onResetList"
                 :indexField="index"
                 :lastField="lastField"
-                :fieldForms="fieldForms"
+                :fieldForms="formFields"
                 :formField="field"
                 :fieldKey="field.id"
               />
@@ -197,12 +195,6 @@ export default {
     onCallOrderFieldCrad (fieldId) {
       this.selectedFormKey = fieldId
       this.$bvModal.show('orderResponse')
-    },
-    onDropUpField () {
-      this.fieldForms = this.formFields
-    },
-    onDropDownField () {
-      this.fieldForms = this.formFields
     },
     onResetList ({formField, asc}) {
       let targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formField.id)
