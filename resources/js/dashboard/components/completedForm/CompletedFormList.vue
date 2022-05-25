@@ -356,7 +356,7 @@ export default {
       this.getCompletedForms()
     },
     canShowEditButton (completedForm) {
-      return this.userHaveRole(ADMIN_HOSPITAL) || completedForm.diff_date * 24 < 24
+      return this.userHaveRole(ADMIN_HOSPITAL) || !completedForm.diff_date.split(':')[0].includes('days')
     },
     onFormFilterChange () {
       this.completedForm__setSelectedForm(this.form.form_id)
@@ -395,7 +395,7 @@ export default {
           })
         })
     },
-    sortingChanged(ctx) {
+    sortingChanged (ctx) {
       this.sortBy = ctx.sortBy
       this.sortDesc = ctx.sortDesc
       this.getCompletedForms()

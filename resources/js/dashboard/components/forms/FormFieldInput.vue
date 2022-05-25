@@ -1,7 +1,7 @@
 <template>
   <div>
     <ValidationProvider
-      :rules="rules"
+      :rules="matchRules"
       :name="name"
       :vid="vid"
       v-slot="{ errors }"
@@ -60,7 +60,7 @@
       <b-form-input
         v-else
         v-model="formFieldValue"
-        :type="type"
+        :type="getType"
         :placeholder="placeholder"
         :id="id"
         :required="isRequired || required"
@@ -99,7 +99,7 @@ export default {
     rules: {
       type: String,
       required: false,
-      default: null
+      default: ''
     },
     id: {
       type: [String, Number],
@@ -157,6 +157,16 @@ export default {
   computed: {
     isRequired () {
       return !!this.rules?.match(/required/i) || false
+    },
+    getType () {
+      return this.type === 'number' ? 'text' : this.type
+    },
+    matchRules () {
+      let rules = this.rules ? this.rules + '' : ''
+      if (this.type === 'number') {
+        rules += '|double'
+      }
+      return rules
     }
   },
   mounted () {
