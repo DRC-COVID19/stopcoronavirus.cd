@@ -68,7 +68,7 @@ class CompletedFormController extends Controller
                 }
                 $query
                   ->select('*')
-                  ->selectRaw ("'$this->now'- created_at as diff_date")
+                  ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date')
                   ->orderBy('last_update', 'desc');
               },
               'completedForms.form'])
@@ -229,7 +229,7 @@ class CompletedFormController extends Controller
                 'hospital'
             ])
             ->select('*')
-            ->selectRaw ("'$this->now'- created_at as diff_date");
+            ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
     }
 
 
