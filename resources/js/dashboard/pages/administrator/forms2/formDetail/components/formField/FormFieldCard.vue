@@ -18,15 +18,11 @@
       <b-modal v-model="isDeleteModalShown" centered hide-header>
         <template #modal-header>
           <div class="mx-auto">
-            <h5 class="lead text-secondary">
-              Suppression du champ
-            </h5>
+            <h5 class="lead text-secondary">Suppression du champ</h5>
           </div>
         </template>
         <div class="col-12">
-          <div class="mx-5 my-2">
-            Voulez-vous supprimer le champ ?
-          </div>
+          <div class="mx-5 my-2">Voulez-vous supprimer le champ ?</div>
         </div>
         <template #modal-footer>
           <b-button size="sm" variant="success" @click="onValidateDelete()">
@@ -40,26 +36,27 @@
     </div>
 
     <div class="img-response-action">
-        <i
-          class="fa fa-pencil icon-action icon-action-edit"
-          aria-hidden="true"
-          @click="setPopulateForm"
-        >
-        </i>
+      <i
+        class="fa fa-pencil icon-action icon-action-edit"
+        aria-hidden="true"
+        @click="setPopulateForm"
+      >
+      </i>
     </div>
 
     <div class="img-response-action">
       <i
-        :class="{ 'icon-action-disabled': inMoving}"
+        :class="{ 'icon-action-disabled': inMoving }"
         class="fa fa-arrow-up icon-action icon-action-up"
-        v-show="isFirstField" aria-hidden="true"
+        v-show="isFirstField"
+        aria-hidden="true"
         @click="dropUpField"
       ></i>
     </div>
 
     <div class="img-response-action">
       <i
-        :class="{ 'icon-action-disabled': inMoving}"
+        :class="{ 'icon-action-disabled': inMoving }"
         v-show="isLastField"
         class="fa fa-arrow-down icon-action icon-action-down"
         aria-hidden="true"
@@ -70,127 +67,131 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
 export default {
   props: {
     formField: {
       type: Object,
       default: () => ({}),
-      required: false
+      required: false,
     },
     fieldForms: {
       type: Array,
       default: () => [],
-      required: false
+      required: false,
     },
     fieldKey: {
       type: Number,
       default: null,
-      required: false
+      required: false,
     },
     indexField: {
       type: Number,
       default: null,
-      required: false
+      required: false,
     },
     lastField: {
       type: Number,
       default: null,
-      required: false
-    }
+      required: false,
+    },
   },
-  data () {
+  data() {
     return {
       isDeleteModalShown: false,
       fillInFormField: {},
-      inMoving: false
-    }
+      inMoving: false,
+    };
   },
   computed: {
-    isFirstField () {
-      return this.indexField !== 0
+    isFirstField() {
+      return this.indexField !== 0;
     },
-    isLastField () {
-      return this.indexField !== this.lastField
-    }
+    isLastField() {
+      return this.indexField !== this.lastField;
+    },
   },
   methods: {
-    ...mapActions(['removeFormField', 'updateFormField']),
-    setPopulateForm () {
-      this.$emit('edit', this.fieldKey)
+    ...mapActions(["removeFormField", "updateFormField"]),
+    setPopulateForm() {
+      this.$emit("edit", this.fieldKey);
     },
-    callCardOrderField () {
-      this.$emit('orderFieldCard', this.fieldKey)
+    callCardOrderField() {
+      this.$emit("orderFieldCard", this.fieldKey);
     },
-    deleteHospital () {
-      this.isDeleteModalShown = true
+    deleteHospital() {
+      this.isDeleteModalShown = true;
     },
-    onValidateDelete () {
+    onValidateDelete() {
       this.removeFormField(this.formField.id)
         .then((formFieldDeleted) => {
           this.$notify({
-            group: 'alert',
-            title: 'Supprimer ce champ',
-            text: 'Supprimer avec succès',
-            type: 'Supprimer avec succès'
-          })
-          this.isDeleteModalShown = false
-          this.$emit('deleted', formFieldDeleted)
+            group: "alert",
+            title: "Supprimer ce champ",
+            text: "Supprimer avec succès",
+            type: "Supprimer avec succès",
+          });
+          this.isDeleteModalShown = false;
+          this.$emit("deleted", formFieldDeleted);
         })
         .catch(() => {
           this.$notify({
-            group: 'alert',
+            group: "alert",
             title: "Supprimer  l'étape",
-            text: 'Une erreur est survenus',
-            type: 'error'
-          })
-        })
+            text: "Une erreur est survenus",
+            type: "error",
+          });
+        });
     },
-    onCancelDelete () {
-      this.isDeleteModalShown = false
+    onCancelDelete() {
+      this.isDeleteModalShown = false;
     },
-    dropUpField () {
+    dropUpField() {
       if (this.inMoving) {
-        return false
+        return false;
       }
-      this.inMoving = true
-      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) - 1
+      this.inMoving = true;
+      const index =
+        this.fieldForms.findIndex((field) => field.id === this.formField.id) -
+        1;
       Promise.all([
         this.updateFormField({
           id: this.formField.id,
-          order_field: this.fieldForms[index].order_field
+          order_field: this.fieldForms[index].order_field,
         }),
         this.updateFormField({
           id: this.fieldForms[index].id,
-          order_field: this.formField.order_field
-        })
+          order_field: this.formField.order_field,
+        }),
       ]).then(() => {
-        this.$emit('resetList', { formField: this.formField, asc: true })
-        this.inMoving = false
-      })
+        this.$emit("resetList", { formField: this.formField, asc: true });
+        this.inMoving = false;
+      });
     },
-    dropDownField () {
+    dropDownField() {
       if (this.inMoving) {
-        return false
+        return false;
       }
-      this.inMoving = true
-      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) + 1
+      this.inMoving = true;
+      const index =
+        this.fieldForms.findIndex((field) => field.id === this.formField.id) +
+        1;
       Promise.all([
         this.updateFormField({
           id: this.formField.id,
-          order_field: this.fieldForms[index].order_field
+          order_field: this.fieldForms[index].order_field,
         }),
         this.updateFormField({
           id: this.fieldForms[index].id,
-          order_field: this.formField.order_field
-        })
+          order_field: this.formField.order_field,
+        }),
       ]).then(() => {
-        this.$emit('resetList', { formField: this.formField, asc: false })
-        this.inMoving = false
-      })
-    }
-  }
-}
+        this.$emit("resetList", { formField: this.formField, asc: false });
+        this.inMoving = false;
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
@@ -207,8 +208,10 @@ export default {
     justify-content: space-around;
     align-items: center;
     align-content: center;
-    margin-top: 10px;
+    margin-top: 1px;
     padding: 15px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
   }
   .img-response-action {
     margin-top: 20px;
