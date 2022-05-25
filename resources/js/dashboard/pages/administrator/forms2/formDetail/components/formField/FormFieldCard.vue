@@ -139,9 +139,7 @@ export default {
     },
     dropUpField () {
       this.$emit('dropUp')
-      const index =
-        this.fieldForms.findIndex((field) => field.id === this.formField.id) -
-        1
+      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) - 1
       Promise.all([
         this.updateFormField({
           id: this.formField.id,
@@ -152,7 +150,7 @@ export default {
           order_field: this.fieldForms[index].order_field + 1
         })
       ]).then(() => {
-        this.$emit('resetList')
+        this.$emit('resetList', { formField: this.formField, asc: true })
       })
     },
     dropDownField () {
@@ -170,7 +168,7 @@ export default {
           order_field: this.fieldForms[index].order_field - 1
         })
       ]).then(() => {
-        this.$emit('resetList')
+        this.$emit('resetList', { formField: this.formField, asc: false })
       })
     }
   }
