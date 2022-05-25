@@ -356,7 +356,7 @@ export default {
       this.getCompletedForms()
     },
     canShowEditButton (completedForm) {
-      return this.userHaveRole(ADMIN_HOSPITAL) || !completedForm.diff_date.match('day')
+      return this.userHaveRole(ADMIN_HOSPITAL) || !completedForm.diff_date.match(/day/)
     },
     onFormFilterChange () {
       this.completedForm__setSelectedForm(this.form.form_id)
