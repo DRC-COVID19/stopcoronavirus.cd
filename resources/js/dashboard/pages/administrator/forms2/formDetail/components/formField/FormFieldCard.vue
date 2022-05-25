@@ -40,17 +40,28 @@
     </div>
 
     <div class="img-response-action">
-        <i class="fa fa-pencil icon-action icon-action-edit" aria-hidden="true" @click="setPopulateForm"></i>
+        <i
+          class="fa fa-pencil icon-action icon-action-edit"
+          aria-hidden="true"
+          @click="setPopulateForm"
+        >
+        </i>
     </div>
 
     <div class="img-response-action">
-      <i class="fa fa-arrow-up icon-action icon-action-up" v-show="isFirstField" aria-hidden="true" @click="dropUpField"></i>
+      <i
+        :class="{ 'icon-action-disabled': inMoving}"
+        class="fa fa-arrow-up icon-action icon-action-up"
+        v-show="isFirstField" aria-hidden="true"
+        @click="dropUpField"
+      ></i>
     </div>
 
-    <div class="img-response-action"  >
+    <div class="img-response-action">
       <i
+        :class="{ 'icon-action-disabled': inMoving}"
         v-show="isLastField"
-        class="fa fa-arrow-down  icon-action icon-action-down"
+        class="fa fa-arrow-down icon-action icon-action-down"
         aria-hidden="true"
         @click="dropDownField"
       ></i>
@@ -91,7 +102,8 @@ export default {
   data () {
     return {
       isDeleteModalShown: false,
-      fillInFormField: {}
+      fillInFormField: {},
+      inMoving: false
     }
   },
   computed: {
@@ -138,6 +150,10 @@ export default {
       this.isDeleteModalShown = false
     },
     dropUpField () {
+      if (this.inMoving) {
+        return false
+      }
+      this.inMoving = true
       const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) - 1
       Promise.all([
         this.updateFormField({
@@ -150,9 +166,14 @@ export default {
         })
       ]).then(() => {
         this.$emit('resetList', { formField: this.formField, asc: true })
+        this.inMoving = false
       })
     },
     dropDownField () {
+      if (this.inMoving) {
+        return false
+      }
+      this.inMoving = true
       const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) + 1
       Promise.all([
         this.updateFormField({
@@ -165,6 +186,7 @@ export default {
         })
       ]).then(() => {
         this.$emit('resetList', { formField: this.formField, asc: false })
+        this.inMoving = false
       })
     }
   }
@@ -207,6 +229,7 @@ export default {
 .icon-action {
   font-size: 20px;
   cursor: pointer;
+  transition: all 0.4s ease-in-out;
   &:hover {
     opacity: 0.7;
   }
@@ -224,6 +247,11 @@ export default {
   }
   &.icon-action-down {
     color: $dash-blue;
+  }
+  &.icon-action-disabled {
+    cursor: default;
+    opacity: 0.1;
+    color: black;
   }
 }
 </style>
