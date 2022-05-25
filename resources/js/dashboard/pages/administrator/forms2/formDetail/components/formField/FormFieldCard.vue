@@ -138,34 +138,30 @@ export default {
       this.isDeleteModalShown = false
     },
     dropUpField () {
-      this.$emit('dropUp')
       const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) - 1
       Promise.all([
         this.updateFormField({
           id: this.formField.id,
-          order_field: this.formField.order_field - 1
+          order_field: this.fieldForms[index].order_field
         }),
         this.updateFormField({
           id: this.fieldForms[index].id,
-          order_field: this.fieldForms[index].order_field + 1
+          order_field: this.formField.order_field
         })
       ]).then(() => {
         this.$emit('resetList', { formField: this.formField, asc: true })
       })
     },
     dropDownField () {
-      this.$emit('dropDown')
-      const index =
-        this.fieldForms.findIndex((field) => field.id === this.formField.id) +
-        1
+      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) + 1
       Promise.all([
         this.updateFormField({
           id: this.formField.id,
-          order_field: this.formField.order_field + 1
+          order_field: this.fieldForms[index].order_field
         }),
         this.updateFormField({
           id: this.fieldForms[index].id,
-          order_field: this.fieldForms[index].order_field - 1
+          order_field: this.formField.order_field
         })
       ]).then(() => {
         this.$emit('resetList', { formField: this.formField, asc: false })
