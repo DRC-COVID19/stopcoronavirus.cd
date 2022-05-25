@@ -131,7 +131,7 @@ export default {
       setTimeout(() => {
         this.selectedFormKey = null
         this.deleteContext = false
-      }, 2000);
+      }, 2000)
       this.formFields = await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
     },
     onCreatedField (formFieldCreated) {
@@ -147,26 +147,26 @@ export default {
     },
     onUpdatedField (formFieldUpdated) {
       formFieldUpdated.skeleton = true
-      formFieldUpdated.animateVisibility = true
 
       const targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formFieldUpdated.id)
       if (formFieldUpdated.order_field === this.formFields[targetFormFieldIndex].order_field) {
         this.$set(this.formFields, targetFormFieldIndex, formFieldUpdated)
         this.init()
       } else {
-        this.formFields[targetFormFieldIndex].animateVisibility = true
-        this.$set(this.formFields, targetFormFieldIndex, this.formFields[targetFormFieldIndex])
-        this.$nextTick(() => {
-          this.formFields.splice(targetFormFieldIndex, 1)
-          setTimeout(() => {
-            let indexToPlace = this.formFields.findIndex((field) => field.order_field > formFieldUpdated.order_field)
-            indexToPlace = indexToPlace === -1 ? this.formFields.length : indexToPlace - 1
-            this.formFields.splice(indexToPlace, 0, formFieldUpdated)
-            setTimeout(() => {
-              this.init()
-            }, 1000)
-          }, 1000)
+        let newFormFields = this.formFields.slice()
+        newFormFields.splice(targetFormFieldIndex, 1)
+        newFormFields = newFormFields.map((formField) => {
+          if (formField.order_field >= formFieldUpdated.order_field) {
+            formField.order_field++
+          }
+          return formField
         })
+        newFormFields.push(formFieldUpdated)
+        newFormFields.sort((a, b) => a.order_field - b.order_field)
+        this.formFields = newFormFields
+        setTimeout(() => {
+          this.init()
+        }, 1000)
       }
     },
     onDeletedField (formFieldDeleted) {
@@ -196,33 +196,15 @@ export default {
       this.selectedFormKey = fieldId
       this.$bvModal.show('orderResponse')
     },
-    onResetList ({formField, asc}) {
-      let targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formField.id)
-      const placeholderIndex = asc ? targetFormFieldIndex - 1 : targetFormFieldIndex + 1
-      const placeholderFormField = this.formFields[placeholderIndex]
+    onResetList ({ formField, newIndex }) {
+      const placeholderFormField = this.formFields[newIndex]
+      const targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formField.id)
 
-      // active animation
-      placeholderFormField.animateVisibility = true
-      this.$set(this.formFields, placeholderIndex, placeholderFormField)
-      this.deleteContext = true
-
-      this.$nextTick(() => {
-        // delete the placeholder
-        this.formFields.splice(placeholderIndex, 1)
-
-        setTimeout(() => {
-          // permute order
-          targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formField.id)
-          if (asc) {
-            this.formFields.splice(targetFormFieldIndex + 1, 0, placeholderFormField)
-          } else {
-            this.formFields.splice(targetFormFieldIndex, 0, placeholderFormField)
-          }
-          setTimeout(() => {
-            this.init()
-          }, 1000)
-        }, 1000)
-      })
+      this.$set(this.formFields, newIndex, formField)
+      this.$set(this.formFields, targetFormFieldIndex, placeholderFormField)
+      setTimeout(() => {
+        this.init()
+      }, 1000)
     },
     onCallCreatedFieldCard (idField) {
       this.selectedFormKey = null
@@ -304,5 +286,8 @@ export default {
   &.animate-in-leave {
     transition: all 1s !important;
   }
+}
+.form-field-list-move {
+  transition: transform 1s;
 }
 </style>
