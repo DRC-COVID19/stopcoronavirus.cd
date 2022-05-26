@@ -1,5 +1,5 @@
 <template>
-  <b-container class="mx-0 px-0" fluid>
+  <b-container class="mx-0 px-0">
     <b-row class="mx-0">
       <FormStepList
         @openModalCreateList="showModalCreatedModal"
@@ -84,11 +84,10 @@ export default {
       return formSteps.slice().sort((a, b) => a.step - b.step)
     },
     initStepIndex () {
-      const stepId = this.$route.params.step_id
       if (
         this.formSteps.length !== 0 &&
         this.$route.path !==
-          `/administration/forms/${this.formId}/step/${stepId}`
+          `/administration/forms/${this.formId}/step/${this.formStepsSorted(this.formSteps)[0].id}`
       ) {
         this.$router.push({
           name: 'administrator.forms.show.creation.step',

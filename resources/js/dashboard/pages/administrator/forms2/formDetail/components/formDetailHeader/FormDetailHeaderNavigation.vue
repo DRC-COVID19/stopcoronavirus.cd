@@ -2,7 +2,7 @@
   <b-row class="header">
     <b-col cols="12" class="">
       <b-navbar toggleable="lg" type="light">
-        <b-navbar-brand class="">
+        <b-navbar-brand class="nav-brand-input-header">
           <b-form-input
             @blur="onChangeFormTitle"
             v-model="form.title"
@@ -13,11 +13,11 @@
             :state="stateTitleForm"
           ></b-form-input>
         </b-navbar-brand>
-        <b-navbar-toggle target="nav-collapse" class="">
+        <b-navbar-toggle target="nav-collapse-header-detail" class="">
           <span class="fa fa-bars"></span>
         </b-navbar-toggle>
 
-        <b-collapse id="nav-collapse" is-nav>
+        <b-collapse id="nav-collapse-header-detail" is-nav>
           <div class="d-flex justify-content-between w-100 container-nav-space">
             <b-navbar-nav class="nav-container w-100" align="center" lg="3">
               <span class="d-flex align-center text-center w-100">
@@ -59,7 +59,7 @@
                 Prévisualisation
               </b-nav-item>
             </b-navbar-nav>
-            <b-navbar-nav class="d-lg-none profil-container-responsive">
+            <!-- <b-navbar-nav class="d-lg-none profil-container-responsive">
               <b-nav-item
                 v-if="canViewForm"
                 class="d-block text-center w-100"
@@ -76,8 +76,8 @@
               >
                 Deconnexion
               </b-button>
-            </b-navbar-nav>
-            <b-navbar-nav class="my-auto profil-container">
+            </b-navbar-nav> -->
+            <!-- <b-navbar-nav class="my-auto profil-container">
               <b-nav-item class="d-flex align-content-center">
                 <div
                   class="
@@ -125,7 +125,7 @@
                   </div>
                 </div>
               </b-nav-item>
-            </b-navbar-nav>
+            </b-navbar-nav> -->
           </div>
         </b-collapse>
       </b-navbar>
@@ -286,6 +286,8 @@ export default {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+    background-color: transparent;
+    color: #14244f;
     &:hover {
       cursor: pointer;
     }
@@ -329,11 +331,14 @@ export default {
 }
 @media (max-width: $max-width) {
   .navbar {
-    flex-wrap: nowrap !important;
+    .nav-brand-input-header{
+      width: calc(100% - 60px);
+    }
     input {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;
+      width: 100%;
     }
   }
   .nav-btn-action {

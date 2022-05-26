@@ -136,7 +136,7 @@
                 params: {
                   completed_form_id: data.item.id,
                   hospital_id: data.item.hospital_id,
-                  form_id: 1
+                  form_id: data.item.form_id
                 }
               }"
             >
@@ -356,7 +356,7 @@ export default {
       this.getCompletedForms()
     },
     canShowEditButton (completedForm) {
-      return this.userHaveRole(ADMIN_HOSPITAL) || completedForm.diff_date * 24 < 24
+      return this.userHaveRole(ADMIN_HOSPITAL) || !completedForm.diff_date.match(/day/)
     },
     onFormFilterChange () {
       this.completedForm__setSelectedForm(this.form.form_id)
@@ -395,7 +395,7 @@ export default {
           })
         })
     },
-    sortingChanged(ctx) {
+    sortingChanged (ctx) {
       this.sortBy = ctx.sortBy
       this.sortDesc = ctx.sortDesc
       this.getCompletedForms()
@@ -436,8 +436,17 @@ export default {
     background-color: white;
   }
   .v-select {
-    &::v-deep .vs__dropdown-toggle {
-      height: 100%;
+    &::v-deep{
+      .vs__dropdown-toggle {
+        height: 100%;
+      }
+      .vs__selected {
+        white-space: nowrap;
+        width: 165px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+      }
     }
   }
 

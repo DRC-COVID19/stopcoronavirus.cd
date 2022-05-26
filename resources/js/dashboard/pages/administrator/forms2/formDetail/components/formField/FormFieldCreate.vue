@@ -1,115 +1,114 @@
 <template>
   <b-modal id="createResponse" centered hide-footer hide-header>
-      <b-card class="border-0">
+    <b-card class="border-0">
       <div class="mb-4 p-2">
-            <h2 class="lead text-center text-bold">
-              {{title}}
-            </h2>
-          </div>
-    <ValidationObserver
-      v-slot="{ invalid }"
-      ref="form"
-      tag="form"
-      novalidate
-      @submit.prevent="onSubmit"
-      v-if="show"
-      label-class="text-dash-color"
-    >
-        <b-form
-          @submit.prevent="onSubmit"
-          v-if="show"
-          label-class="text-dash-color"
-        >
-          <label id="input-group-1" for="input-1" class="text-dash-color"
-            >Question <span class="text-danger">*</span></label
-          >
-          <FormFieldInput
-            v-model="form.question"
-            type="text"
-            id="input-1"
-            :placeholder="`Nom`"
-            rules="required"
-            name="Question"
-            mode="aggressive"
-          />
-          <b-form-text id="title-help-block" class="mb-4">
-            <span class="text-danger"></span>
-          </b-form-text>
-          <FomFieldSelect
-            v-model="form.form_field_type_id"
-            :options="formFieldType"
-            label="label"
-            :reduce="(item) => item.id"
-            :isObligated="true"
-            rules="required"
-            id="form.form_field_type_id"
-            labelText="Choix du format "
-            name="Choix du format"
-            mode="aggressive"
-          />
-          <label id="input-group-1" for="input-1" class="text-dash-color"
-            >Valeur par défaut <span class="text-danger"></span></label
-          >
-          <FormFieldInput
-            v-model="form.default_value"
-            type="text"
-            id="input-1"
-            :placeholder="`entrer une valeur`"
-            name="Valeur par défaut"
-            mode="aggressive"
-            class="mb-4"
-          />
-          <FomFieldSelect
-            v-if="!formFieldOrder && !orderFieldEnd"
-            v-model="form.form_field_order"
-            :options="formField"
-            label="name"
-            :reduce="(item) => item.id"
-            id="form.form_field_order"
-            labelText="Ordre du champ(insérer avant?)"
-            mode="aggressive"
-          />
-          <b-form-group
+        <h2 class="lead text-center text-bold">
+          {{title}}
+        </h2>
+      </div>
+      <ValidationObserver
+        v-slot="{ invalid }"
+        ref="form"
+        tag="form"
+        novalidate
+        @submit.prevent="onSubmit"
+        v-if="show"
+        label-class="text-dash-color"
+      >
+          <b-form
+            @submit.prevent="onSubmit"
+            v-if="show"
             label-class="text-dash-color"
-            class="mt-4"
-            id="input-group-1"
-            label="Obligatoire"
-            v-slot="{ ariaDescribedby }"
           >
-            <b-form-radio
-              v-model="form.require"
-              :aria-describedby="ariaDescribedby"
-              name="some-radios"
-              :value="true"
-              >Oui</b-form-radio
+            <label id="input-group-1" for="input-1" class="text-dash-color"
+              >Question <span class="text-danger">*</span></label
             >
-            <b-form-radio
-              v-model="form.require"
-              :aria-describedby="ariaDescribedby"
-              name="some-radios"
-              :value="false"
-              >Non</b-form-radio
+            <FormFieldInput
+              v-model="form.question"
+              type="text"
+              id="input-1"
+              :placeholder="`Nom`"
+              rules="required"
+              name="Question"
+              mode="aggressive"
+            />
+            <b-form-text id="title-help-block" class="mb-4">
+              <span class="text-danger"></span>
+            </b-form-text>
+            <FomFieldSelect
+              v-model="form.form_field_type_id"
+              :options="formFieldType"
+              label="label"
+              :reduce="(item) => item.id"
+              :isObligated="true"
+              rules="required"
+              id="form.form_field_type_id"
+              labelText="Choix du format "
+              name="Choix du format"
+              mode="aggressive"
+            />
+            <label id="input-group-1" for="input-1" class="text-dash-color"
+              >Valeur par défaut <span class="text-danger"></span></label
             >
-          </b-form-group>
-          <b-row class="px-3 pt-4 d-flex justify-content-center">
-            <b-button
-              type="submit"
-              variant="primary"
-              class="btn-dash-blue"
-              :disabled="invalid ? true : false"
+            <FormFieldInput
+              v-model="form.default_value"
+              :type="formFieldTypeSelected"
+              placeholder="Entrer la valeur par défaut"
+              id="default_value"
+              name="default_value"
+              class="mb-4"
+            />
+            <FomFieldSelect
+              v-if="!formFieldOrder && !orderFieldEnd"
+              v-model="form.form_field_order"
+              :options="formField"
+              label="name"
+              :reduce="(item) => item.id"
+              id="form.form_field_order"
+              labelText="Ordre du champ(insérer avant?)"
+              mode="aggressive"
+            />
+            <b-form-group
+              label-class="text-dash-color"
+              class="mt-4"
+              id="input-group-1"
+              label="Obligatoire"
+              v-slot="{ ariaDescribedby }"
             >
-              <span v-if="isLoading"
-                ><b-spinner class="align-middle"></b-spinner>
-                <span>en cours ...</span>
-              </span>
-              <div v-else>
-                {{btnTitle}}
-              </div>
-            </b-button>
-          </b-row>
-        </b-form>
-    </ValidationObserver>
-  </b-card>
+              <b-form-radio
+                v-model="form.require"
+                :aria-describedby="ariaDescribedby"
+                name="some-radios"
+                :value="true"
+                >Oui</b-form-radio
+              >
+              <b-form-radio
+                v-model="form.require"
+                :aria-describedby="ariaDescribedby"
+                name="some-radios"
+                :value="false"
+                >Non</b-form-radio
+              >
+            </b-form-group>
+            <b-row class="px-3 pt-4 d-flex justify-content-center">
+              <b-button
+                type="submit"
+                variant="primary"
+                class="btn-dash-blue"
+                :disabled="invalid ? true : false"
+              >
+                <span v-if="isLoading"
+                  ><b-spinner class="align-middle"></b-spinner>
+                  <span>en cours ...</span>
+                </span>
+                <div v-else>
+                  {{btnTitle}}
+                </div>
+              </b-button>
+            </b-row>
+          </b-form>
+      </ValidationObserver>
+    </b-card>
   </b-modal>
 </template>
 
@@ -180,6 +179,9 @@ export default {
     },
     step_id () {
       return this.$route.params.step_id
+    },
+    formFieldTypeSelected () {
+      return this.formFieldType.find(type => type.id === this.form.form_field_type_id)?.name || 'text'
     }
   },
   methods: {
@@ -203,7 +205,7 @@ export default {
     },
     createdField (formField) {
       this.formFieldStore(formField)
-        .then(() => {
+        .then((formFieldCreated) => {
           this.$notify({
             group: 'alert',
             title: 'Champs du Formulaire',
@@ -211,7 +213,7 @@ export default {
             type: 'success'
           })
           this.$bvModal.hide('createResponse')
-          this.$emit('created')
+          this.$emit('created', formFieldCreated)
           this.resetForm()
           this.isLoading = false
         })
@@ -231,7 +233,7 @@ export default {
     },
     updatedField (formField) {
       this.updateFormField({ id: this.form.id, ...formField })
-        .then(() => {
+        .then((formFieldUpdated) => {
           this.$notify({
             group: 'alert',
             title: 'Champs du Formulaire',
@@ -239,7 +241,7 @@ export default {
             type: 'success'
           })
           this.$bvModal.hide('createResponse')
-          this.$emit('updated')
+          this.$emit('updated', formFieldUpdated)
           this.resetForm()
           this.isLoading = false
         })

@@ -1,5 +1,5 @@
 <template>
-  <b-nav lg="12" class="d-flex justify-content-center nav-container">
+  <b-nav lg="12" class="d-flex justify-content-sm-center nav-container">
     <b-nav-item
       v-if="canViewForm"
       :to="{ name: 'administrator.forms.show.creation' }"
