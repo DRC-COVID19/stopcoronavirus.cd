@@ -11,7 +11,7 @@
           :isLoading = "isLoading"
           :formsList="formsList"
           :paginate="paginate"
-          @getFormsByPerPage ="getFormsByPerPage"
+          @onPerPageChange ="onPerPageChange"
           @switchPage="switchPage"
           />
          </div>
@@ -47,8 +47,8 @@ export default {
     search (value) {
       this.$emit('onSearchForm', value)
     },
-    getFormsByPerPage (value) {
-      this.$emit('getFormsByPerPage', value)
+    onPerPageChange (value) {
+      this.$emit('onPerPageChange', value)
     },
     switchPage (value) {
       this.$emit('switchPage', value)

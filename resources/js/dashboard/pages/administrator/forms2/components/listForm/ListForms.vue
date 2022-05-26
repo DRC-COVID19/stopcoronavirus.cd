@@ -28,42 +28,29 @@
                      </b-col>
                      </b-row>
                  </b-container>
-                 <div class="col-md-6 col-md-offset-4 mt-4 d-flex justify-content-center" v-show="getFormListLength > 0">
-                    <div class="paginate__scroll">
-                    <p>Par page: </p>
-                    <div class="perpage__select">
-                       <v-select
-                        v-model="form.perPage"
-                        :options="perPages"
-                        :value="perPage"
-                        id="id"
-                        class="ml-3"
-                        :searchable="false"
-                        @input="getFormsByPerPage()"
-                     />
-                    </div>
-                    <p  class="mx-3">1-{{form.perPage}} sur  {{ paginate.total }}</p>
-                      <b-pagination
-                    v-model="currentPage"
-                    :total-rows="paginate.total"
-                    :per-page="paginate.perPage"
-                    aria-controls="form_card-list"
-                    @change="switchPage(currentPage)"
-                  ></b-pagination>
-                    </div>
-                   </div>
-
+                     <Pagination
+                      class="mb-4 mt-4 paginate__scroll"
+                       v-show="getFormListLength > 0"
+                      :total-rows="paginate.total"
+                      :per-page="paginate.perPage"
+                      :page="paginate.currentPage"
+                      @pageChanged="switchPage"
+                      @perPageChanged="onPerPageChange"
+                    />
              </b-row>
              </b-container>
 </template>
 
 <script>
+import Pagination from '../../../../../components/Pagination.vue'
 import ListFormCard from './ListFormCard.vue'
 export default {
   components: {
-    ListFormCard
+    ListFormCard,
+    Pagination
   },
   props: {
+
     formsList: {
       type: Object,
       default: () => ({}),
@@ -82,12 +69,7 @@ export default {
   },
   data () {
     return {
-      currentPage: 1,
-      perPages: [8, 16, 32, 64],
-      form: {
-        perPage: 8
-      },
-      perPage: 8
+      currentPage: 1
     }
   },
   computed: {
@@ -96,12 +78,13 @@ export default {
     }
   },
   methods: {
-    getFormsByPerPage () {
-      this.$emit('getFormsByPerPage', this.form.perPage)
+    onPerPageChange (value) {
+      this.$emit('onPerPageChange', value)
     },
     switchPage (currentPage) {
       this.$emit('switchPage', currentPage)
     }
+
   }
 
 }

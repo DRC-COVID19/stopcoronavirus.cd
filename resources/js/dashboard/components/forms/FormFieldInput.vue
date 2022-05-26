@@ -1,10 +1,11 @@
 <template>
   <div>
     <ValidationProvider
-      v-slot="{ errors }"
-      :rules="rules"
-      tag="div"
+      :rules="matchRules"
       :name="name"
+      :vid="vid"
+      v-slot="{ errors }"
+      tag="div"
       class="bg-transparent"
     >
       <div v-if="type === 'boolean'">
@@ -44,6 +45,7 @@
             >
             </b-form-input>
             <b-button
+              v-if="!disabled"
               class='button-icon'
               variant="primary"
               :disabled="!formFieldValue"
@@ -58,7 +60,7 @@
       <b-form-input
         v-else
         v-model="formFieldValue"
-        :type="type"
+        :type="getType"
         :placeholder="placeholder"
         :id="id"
         :required="isRequired || required"
@@ -97,7 +99,7 @@ export default {
     rules: {
       type: String,
       required: false,
-      default: null
+      default: ''
     },
     id: {
       type: [String, Number],
@@ -125,7 +127,8 @@ export default {
     },
     vid: {
       type: String,
-      required: false
+      required: false,
+      default: null
     },
     mode: {
       type: String,
@@ -136,17 +139,17 @@ export default {
       type: Date,
       required: false,
       default: null
+    },
+    defaultValue: {
+      type: String,
+      default: null
     }
-    // defaultValue: {
-    //   type: String,
-    //   default: ''
-    // }
   },
   data () {
     return {
       requiredOptions: [
-        { text: 'Oui', value: 1 },
-        { text: 'Non', value: 0 }
+        { text: 'Oui', value: '1' },
+        { text: 'Non', value: '0' }
       ],
       formFieldValue: this.value
     }
@@ -155,12 +158,20 @@ export default {
     isRequired () {
       return !!this.rules?.match(/required/i) || false
     },
-    stateFormFields () {
-      return true
-
-      // if(){
-      //   return true
-      // }
+    getType () {
+      return this.type === 'number' ? 'text' : this.type
+    },
+    matchRules () {
+      let rules = this.rules ? this.rules + '' : ''
+      if (this.type === 'number') {
+        rules += '|double'
+      }
+      return rules
+    }
+  },
+  mounted () {
+    if (this.value === null) {
+      this.formFieldValue = this.defaultValue
     }
   },
   watch: {
@@ -169,6 +180,11 @@ export default {
     },
     value (value) {
       this.formFieldValue = value
+    },
+    defaultValue (value) {
+      if (this.value === null) {
+        this.formFieldValue = value
+      }
     }
   },
   methods: {}

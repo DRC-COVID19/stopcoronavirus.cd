@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\Hospital;
+use Carbon\Carbon;
 use App\CompletedForm;
 use App\FormFieldType;
 use App\CompletedFormField;
 use Illuminate\Http\Request;
 use function PHPSTORM_META\map;
 use Illuminate\Validation\Rule;
+
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-
-
 use App\Http\Requests\StoreCompletedFormRequest;
 use App\Http\Requests\UpdateCompletedFormRequest;
 
@@ -24,9 +26,11 @@ class CompletedFormController extends Controller
      *
      * @return void
      */
+    private $now = null;
     public function __construct()
     {
         $this->middleware('auth:dashboard')->except(['show', 'getAggregatedByHospitals', 'getDataByHospitals']);
+        $this->now = Carbon::now();
     }
     /**
      * Display a listing of the resource.
@@ -409,8 +413,8 @@ class CompletedFormController extends Controller
         if ($dateRangeStart && $dateRangeEnd) {
           $query = $query->whereBetween('last_update', [$dateRangeStart, $dateRangeEnd]);
         }
-
-        $query->select('*')->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date');
+        $query->select('*')
+              ->selectRaw ("'$this->now'- created_at as diff_date");
 
         if ($sortBy === 'hospital') {
           $query->join('hospitals', 'hospital_id', '=', 'hospitals.id')

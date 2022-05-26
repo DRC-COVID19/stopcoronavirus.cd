@@ -87,7 +87,7 @@
       :paginate="paginate"
        @filterForms="filterForms"
        @onSearchForm="search"
-       @getFormsByPerPage ="getFormsByPerPage"
+       @onPerPageChange ="perPageChange"
        @switchPage="switchPage"
       />
 
@@ -126,20 +126,18 @@ export default {
   computed: {
     paginate () {
       return {
-        currentPage: this.forms.current_page,
-        perPage: this.forms.per_page,
-        total: this.forms.total
+        currentPage: Number(this.forms.current_page),
+        perPage: Number(this.forms.per_page),
+        total: Number(this.forms.total)
       }
     }
   },
   async mounted () {
     await this.findRecentForms()
     await this.getFormList()
-    // await this.getAllHospitals()
   },
   methods: {
     ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms', 'form__filterByWords']),
-    // ...mapActions(['getFormFiltered', 'getForms', 'getRecentForms', 'form__filterByWords', 'getAllHospitals']),
     async findRecentForms () {
       this.isRecentFormsLoading = true
       this.recentForms = await this.getRecentForms()
@@ -157,11 +155,11 @@ export default {
       })
       this.isLoading = false
     },
-    async getFormsByPerPage (page) {
+    async perPageChange (page) {
       this.isLoading = true
-
+      this.paginate.perPage = page
       this.forms = await this.getFormFiltered({
-        paginate: page ?? 8
+        paginate: page ?? 15
       })
       this.isLoading = false
     },
@@ -183,6 +181,7 @@ export default {
       this.updating = state
     },
     deleteForm (currentFormId) {
+      // eslint-disable-next-line no-undef
       axios
         .delete('/api/dashboard/forms/' + currentFormId)
         .then(() => {
@@ -224,6 +223,7 @@ export default {
         publish: currentForm.publish
       }
 
+      // eslint-disable-next-line no-undef
       axios
         .put('/api/dashboard/forms/' + currentForm.id, form)
         .then(() => {
@@ -254,6 +254,7 @@ export default {
       this.formAdded = false
       this.isLoading = true
       this.errors = {}
+      // eslint-disable-next-line no-undef
       axios
         .post('/api/dashboard/forms', {
           title: form.title,
@@ -288,7 +289,7 @@ export default {
         })
     },
 
-    async getFormList (page = 1, perPage = 8) {
+    async getFormList (page = 1, perPage = 15) {
       this.isLoading = true
 
       this.forms = await this.getFormFiltered({
@@ -300,7 +301,7 @@ export default {
 
     switchPage (page) {
       this.paginate.currentPage = page
-      this.getFormList(this.paginate.currentPage)
+      this.getFormList(this.paginate.currentPage, this.paginate.perPage)
     },
     backToRoute ({ formId }) {
       return this.$router.push(`/administration/forms/${formId}/`)
