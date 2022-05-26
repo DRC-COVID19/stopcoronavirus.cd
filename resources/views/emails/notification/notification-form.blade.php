@@ -1,8 +1,8 @@
 @component('mail::message')
 <div>
-  <p>hello {{$form}}</p>
+  <p>Rappel de remplissage de formulaire</p>
 
-  <p>j'ai l'impression que mon mail marche sans problème</p>
+  <p>Nous vous rappelons que vous devrez remplir le formulaire {{$form->title}}</p>
   
 </div>
 @endcomponent

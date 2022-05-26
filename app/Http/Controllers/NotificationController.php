@@ -1,10 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+
+use App\Form;
+use App\Hospital;
 use App\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class NotificationController extends Controller
 {
@@ -19,6 +22,23 @@ class NotificationController extends Controller
         return response()->json($notifications, 200);
     }
 
+    public function notificationHospital($hospital_id){
+        $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
+        ->where('publish', true)
+        ->get();
+
+        $hospitalForms = Hospital::with('forms')
+        ->find($hospital_id)
+        ->forms
+        ->filter(fn($form) => $form->publish)
+        ->merge($formsAllVisibility);
+
+        $notifications = Notification::with('form')
+                                    ->whereIn('form_id', $hospitalForms->pluck('id'))
+                                    ->get();
+        return response()->json($notifications);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -27,8 +47,8 @@ class NotificationController extends Controller
      */
     public function store(Request $request)
     {
-      $result = Notification::create($this->validator());
-      return response()->json($result, 200);
+        $result = Notification::create($this->validator());
+        return response()->json($result, 200);
     }
 
     /**

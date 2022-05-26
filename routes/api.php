@@ -229,6 +229,14 @@ Route::group([
     Route::put('/update-form-visibility/{form_id}', 'FormController@updateFormVisibility');
   });
 
+  /***
+ * notifications routes
+ */
+Route::group(['prefix' => 'notifications'], function () {
+  Route::get('/{hospital_id}', 'NotificationController@notificationHospital');
+});
+Route::resource('notifications', 'NotificationController');
+
 
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
