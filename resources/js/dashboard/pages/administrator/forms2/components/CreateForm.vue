@@ -40,9 +40,11 @@
           </b-col>
           <b-col md="3" xs="12">
               <b-form-input
+                v-if="isNumber"
                 v-model="form.form_recurrence_number"
                 type="number"
                 class="mt-2 input-recurrence"
+                min="0"
                 >
               </b-form-input>
           </b-col>
@@ -66,29 +68,29 @@
         </b-row>
         <div class="row-week-day" v-if="isWeek">
            <div>
-            <span :class="showColorDim?styleBlue:styleGrey" disabled="true" @click="onclickWeek('Dim')">D</span>
+            <span :class="showColorDim?styleBlue:styleGrey" disabled="true" @click="onclickWeek('0')">D</span>
           </div>
           <div>
-            <span :class="showColorLun?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('Lun')">L</span>
+            <span :class="showColorLun?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('1')">L</span>
           </div>
           <div>
-            <span :class="showColorMar?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('Mar')">M</span>
+            <span :class="showColorMar?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('2')">M</span>
           </div>
           <div>
-            <span :class="showColorMer?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('Mer')">M</span>
+            <span :class="showColorMer?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('3')">M</span>
           </div>
           <div>
-            <span :class="showColorJeu?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('Jeu')">J</span>
+            <span :class="showColorJeu?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('4')">J</span>
           </div>
           <div>
-            <span :class="showColorVen?styleBlue:styleGrey"  class="left-cell"  @click="onclickWeek('Ven')">V</span>
+            <span :class="showColorVen?styleBlue:styleGrey"  class="left-cell"  @click="onclickWeek('5')">V</span>
           </div>
           <div>
-            <span :class="showColorSam?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('Sam')">S</span>
+            <span :class="showColorSam?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('6')">S</span>
           </div>
         </div>
         <b-row v-if="isMonth" class="mt-3">
-          <b-col>
+          <b-col md="8">
             <span>Le jour</span>
           </b-col>
           <b-col>
@@ -97,6 +99,22 @@
               :options="dayofMonth"
               label="label"
               :reduce="(item)=>item.label"
+              :searchable="false"
+              id="form.form_recurrence_value"
+            >
+            </v-select>
+          </b-col>
+        </b-row>
+        <b-row v-if="isYear" class="mt-3">
+          <b-col>
+            <span>Le mois de </span>
+          </b-col>
+          <b-col>
+            <v-select
+              v-model="form.form_recurrence_value"
+              :options="monthsofYear"
+              label="label"
+              :reduce="(item)=>item.id"
               :searchable="false"
               id="form.form_recurrence_value"
             >
@@ -292,6 +310,56 @@ export default {
           label: 'last'
         }
       ],
+      monthsofYear: [
+        {
+          id: '1',
+          label: 'Janvier'
+        },
+        {
+          id: '2',
+          label: 'Février'
+        },
+        {
+          id: '3',
+          label: 'Mars'
+        },
+        {
+          id: '4',
+          label: 'Avril'
+        },
+        {
+          id: '5',
+          label: 'Mai'
+        },
+        {
+          id: '6',
+          label: 'Juin'
+        },
+        {
+          id: '7',
+          label: 'Juillet'
+        },
+        {
+          id: '8',
+          label: 'Août'
+        },
+        {
+          id: '9',
+          label: 'Septembre'
+        },
+        {
+          id: '10',
+          label: 'Octobre'
+        },
+        {
+          id: '11',
+          label: 'Novembre'
+        },
+        {
+          id: '12',
+          label: 'Décembre'
+        }
+      ],
       form: {
         title: '',
         form_recurrence_value: null,
@@ -299,6 +367,7 @@ export default {
         form_recurrence_id: '',
         publish: false
       },
+      isNumber: false,
       show: true,
       showColorDim: false,
       showColorLun: false,
@@ -327,6 +396,9 @@ export default {
     },
     isMonth () {
       return this.form.form_recurrence_id === this.formRecurrences.find((recurrence) => recurrence.id === formRecurrences.MONTH).id
+    },
+    isYear () {
+      return this.form.form_recurrence_id === this.formRecurrences.find((recurrence) => recurrence.id === formRecurrences.YEAR).id
     }
 
   },
@@ -346,32 +418,32 @@ export default {
     ...mapActions(['getFormsRecurrences']),
     onclickWeek (week) {
       this.form.form_recurrence_value = week
-      if (week === 'Dim') {
+      if (week === '0') {
         this.showColorDim = true
       }
-      if (week === 'Lun') {
+      if (week === '1') {
         this.showColorLun = true
         this.showColorDim = false
       }
-      if (week === 'Mar') {
+      if (week === '2') {
         this.showColorMar = true
         this.showColorLun = false
         this.showColorDim = false
       }
-      if (week === 'Mer') {
+      if (week === '3') {
         this.showColorMer = true
         this.showColorMar = false
         this.showColorLun = false
         this.showColorDim = false
       }
-      if (week === 'Jeu') {
+      if (week === '4') {
         this.showColorJeu = true
         this.showColorMer = false
         this.showColorMar = false
         this.showColorLun = false
         this.showColorDim = false
       }
-      if (week === 'Ven') {
+      if (week === '5') {
         this.showColorVen = true
         this.showColorJeu = false
         this.showColorMer = false
@@ -379,7 +451,7 @@ export default {
         this.showColorLun = false
         this.showColorDim = false
       }
-      if (week === 'Sam') {
+      if (week === '6') {
         this.showColorSam = true
         this.showColorVen = false
         this.showColorJeu = false
@@ -421,6 +493,13 @@ export default {
       }
       this.btnTitle = 'Enregistrer'
       this.title = 'Nouveau Formulaire'
+      this.showColorSam = false
+      this.showColorVen = false
+      this.showColorJeu = false
+      this.showColorMer = false
+      this.showColorMar = false
+      this.showColorLun = false
+      this.showColorDim = false
     },
 
     populateForm () {
