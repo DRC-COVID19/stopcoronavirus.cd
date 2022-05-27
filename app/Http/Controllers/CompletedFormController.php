@@ -135,14 +135,11 @@ class CompletedFormController extends Controller
      * @param  \App\CompletedForm  $completedForm
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(CompletedForm $completedForm)
     {
         try {
 
-            $completedForm = CompletedFormField::with('completedForm', 'formField.formStep')
-                ->where('completed_form_id', $id)
-                ->orderBy('created_at')
-                ->get();
+            $completedForm->load('completedFormFields.formField.formStep', 'completedFormFields.completedForm');
 
             return response()->json($completedForm, 206);
         } catch (\Throwable $th) {
@@ -349,7 +346,7 @@ class CompletedFormController extends Controller
 
     public function checkLastUpdate($hospitalId, $lastUpdate){
         return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id',$hospitalId)->count();
-        
+
     }
 
 }

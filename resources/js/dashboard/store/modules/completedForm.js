@@ -48,7 +48,7 @@ export default {
           .catch(error => {
             reject(error)
           })
-      }) 
+      })
     },
     completedForm__getByHospital ({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true)
@@ -89,7 +89,7 @@ export default {
           })
       })
     },
-    completedForm__getByHospitalDetail ({ state, commit }, payload) {
+    completedForm__show ({ state, commit }, payload) {
       commit('SET_IS_LOADING', payload.isLoading)
       return new Promise((resolve, reject) => {
         axios

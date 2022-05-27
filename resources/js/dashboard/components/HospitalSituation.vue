@@ -244,7 +244,7 @@ export default {
   watch: {
     hospitalData () {
       this.selectHospital(null)
-      this.getSituationHospital()
+      // this.getSituationHospital()
     },
     selectedHospital (val) {
       const id = val ? val.id : null
