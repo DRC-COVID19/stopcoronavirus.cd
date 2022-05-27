@@ -66,6 +66,14 @@ export default {
             },
           })
           .then(({ data }) => {
+            if (!payload.observation_start) {
+              data = data.map((hospital) => {
+                if (hospital.completed_forms.length > 0) {
+                  hospital.completed_forms = [hospital.completed_forms[0]]
+                }
+                return hospital
+              })
+            }
             const Features = data.map((value) => {
               return {
                 type: "Feature",

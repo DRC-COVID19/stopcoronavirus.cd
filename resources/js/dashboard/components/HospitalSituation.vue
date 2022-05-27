@@ -62,7 +62,7 @@
             }"
           ></square-skeleton>
         </skeleton-loading>
-        <b-row class="col-12 no-gutters px-2" v-else>
+        <b-row class="col-12 no-gutters px-2 pb-5" v-else>
           <b-card
             v-if="hospitalsDataGroupedByStep.length === 0"
             class="default-card col-12"
