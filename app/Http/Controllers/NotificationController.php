@@ -7,6 +7,7 @@ use App\Form;
 use App\Hospital;
 use App\Notification;
 use Illuminate\Http\Request;
+use App\AdminUserNotification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,7 +34,7 @@ class NotificationController extends Controller
         return response()->json($notifications, 200);
     }
 
-    public function notificationHospital($hospital_id){
+    public function getFormByHospital($hospital_id){
         $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
         ->where('publish', true)
         ->get();
@@ -44,55 +45,47 @@ class NotificationController extends Controller
         ->filter(fn($form) => $form->publish)
         ->merge($formsAllVisibility);
 
+        return $hospitalForms;
+
+    }
+
+    public function notificationHospital($hospital_id){
         $notifications = Notification::with('form')
-                                    ->whereIn('form_id', $hospitalForms->pluck('id'))
+                                    ->whereIn('form_id', $this->getFormByHospital($hospital_id)->pluck('id'))
                                     ->get();
         return response()->json($notifications);
     }
 
     public function indexNotificationByPaginate($hospital_id){
-        $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
-        ->where('publish', true)
-        ->get();
-
-        $hospitalForms = Hospital::with('forms')
-        ->find($hospital_id)
-        ->forms
-        ->filter(fn($form) => $form->publish)
-        ->merge($formsAllVisibility);
-
         $notifications = Notification::with('form')
-                                    ->whereIn('form_id', $hospitalForms->pluck('id'))
+                                    ->whereIn('form_id', $this->getFormByHospital($hospital_id)->pluck('id'))
                                     ->paginate(15);
         return response()->json($notifications);
     }
 
     public function getNotificationNotReadUser($hospital_id){
         $userId =  $this->guard()->user()->id;
-        Log::info("userId",[$userId]);
-        $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
-        ->where('publish', true)
-        ->get();
-
-        $hospitalForms = Hospital::with('forms')
-        ->find($hospital_id)
-        ->forms
-        ->filter(fn($form) => $form->publish)
-        ->merge($formsAllVisibility);
-
         $notifications = Notification::with('adminUsers')
-                                            ->whereIn('form_id', $hospitalForms->pluck('id'))
+                                            ->whereIn('form_id', $this->getFormByHospital($hospital_id)->pluck('id'))
                                             ->get();
-        
+                
         $notificationsNotRead = $notifications->filter(function ($notification) use ($userId) {
             return !$notification->adminUsers->first(function ($adminUser) use ($userId) {
                 return $adminUser->pivot->read && $adminUser->id == $userId;
             });
         });
-        
+
         return response()->json($notificationsNotRead);
                                            
+    }
 
+    public function setNotificationByHospital($hospital_id,Notification $notification){
+        $userId =  $this->guard()->user()->id;
+        $notificationNotReads = $this->getNotificationNotReadUser($hospital_id)->original;
+         foreach($notificationNotReads as $notificationNotRead){
+            $notificationNotRead->adminUsers()->attach([$userId => ['read' => true]]);
+         }
+        return response()->json(null,200);
     }
 
 
