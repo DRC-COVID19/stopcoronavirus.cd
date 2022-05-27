@@ -305,7 +305,7 @@ export default {
         completed_form_id: this.$route.params.completed_form_id
       })
       this.completedFormFields = completedForm.completed_form_fields
-      this.$set(this.completedForm, 'last_update',  completedForm.last_update)
+      this.$set(this.completedForm, 'last_update', completedForm.last_update)
       this.laodFormData()
     },
     completedFormSorted (completedForm) {

@@ -74,7 +74,7 @@ export default {
     return {
       completedFormFields: [],
       completedForm: {
-        completed_form_fields: {}
+        completed_form_fields: []
       },
       isLoading: false
     }
@@ -122,21 +122,26 @@ export default {
     async getCompletedForm () {
       this.isLoading = true
 
-      this.completedForm = await this.completedForm__show({
-        completed_form_id: this.$route.params.completed_form_id
-      })
-      this.completedFormFields = this.completedForm.completed_form_fields
-      this.setCompletedForm()
+      try {
+        this.completedForm = await this.completedForm__show({
+          completed_form_id: this.$route.params.completed_form_id
+        })
+        this.completedFormFields = this.completedForm.completed_form_fields
+        this.completedForm.completed_form_fields = []
+        this.setCompletedForm()
 
-      await this.getFormSteps({id: this.completedForm.form_id})
-
-      this.isLoading = false
+        await this.getFormSteps({ id: this.completedForm.form_id })
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isLoading = false
+      }
     },
     setCompletedForm () {
       this.completedFormFields.forEach((item) => {
         this.$set(
           this.completedForm.completed_form_fields,
-          item.form_field.id,
+          item.form_field_id,
           item.value
         )
       })
