@@ -18,6 +18,13 @@
     >
       <i class="fas fa-list" aria-hidden="true"></i> &nbsp; Situations
     </b-nav-item>
+    <b-nav-item
+      v-if="canViewAgent"
+      :to="{ name: 'hospital.notification' }"
+      :active="$route.name.startsWith('hospital.notification')"
+    >
+      <i class="fas fa-bell" aria-hidden="true"></i> &nbsp; Notifications
+    </b-nav-item>
   </b-nav>
 </template>
 

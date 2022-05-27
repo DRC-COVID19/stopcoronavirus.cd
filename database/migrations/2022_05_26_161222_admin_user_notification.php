@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class NotificationUsers extends Migration
+class AdminUserNotification extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class NotificationUsers extends Migration
      */
     public function up()
     {
-        Schema::create('notification_users', function (Blueprint $table) {
+        Schema::create('admin_user_notification', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('admin_user_id');
             $table->unsignedBigInteger('notification_id');
-            $table->foreign('user_id')->references('id')->on('admin_users');
+            $table->boolean('read')->default('false');
+            $table->foreign('admin_user_id')->references('id')->on('admin_users');
             $table->foreign('notification_id')->references('id')->on('notifications');
             $table->timestamps();
             $table->softDeletes();
-        });
+        }); 
     }
 
     /**
@@ -31,6 +32,6 @@ class NotificationUsers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notification_users');
+        Schema::dropIfExists('admin_user_notification');
     }
 }

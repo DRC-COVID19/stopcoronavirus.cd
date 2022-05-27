@@ -18,4 +18,8 @@ class Notification extends Model
     public function form (){
         return $this->belongsTo(Form::class);
     }
+
+    public function adminUsers(){
+        return $this->belongsToMany(AdminUser::class)->withPivot('read');
+    }
 }

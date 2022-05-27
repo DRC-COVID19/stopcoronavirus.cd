@@ -72,7 +72,7 @@ class NotificationUser implements ShouldQueue
         foreach($dayForms as $dayForm){
             Notification::create([
                 'title'     => 'Rappel de remplissage de formulaire',
-                'message'   => 'Nous vous rappelons que vous devrez remplir le formulaire'.$dayForm->title,
+                'message'   => 'Nous vous rappelons que vous devrez remplir le "'.$dayForm->title.'"',
                 'form_id'   =>  $dayForm->id
             ]);
             event(new NotificationEvent($dayForm));

@@ -5,6 +5,7 @@ import ResetPasswordThank from './pages/auth/ResetPasswordThank'
 import ResetPasseword from './pages/auth/ResetPassword'
 import PasswordResetComplete from './pages/auth/PasswordResetComplete'
 import HospitalsHome from './pages/hospital/Home'
+import HospitalNotification from './pages/hospital/Notification'
 import HospitalForm from './pages/hospital/HospitalForm'
 import BugTracker from './pages/bug_tracker/Index'
 import HospitalsDetail from './pages/hospital/HospitalDetail'
@@ -202,6 +203,15 @@ export default [
             path: '/hospitals',
             name: 'hospital.home',
             component: HospitalsHome,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+          {
+            path: '/notifications',
+            name: 'hospital.notification',
+            component: HospitalNotification,
             meta: {
               requiresAuth: true,
               role: [AGENT_HOSPITAL]

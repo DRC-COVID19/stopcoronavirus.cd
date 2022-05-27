@@ -8,9 +8,20 @@ use App\Hospital;
 use App\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class NotificationController extends Controller
 {
+    /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
+     */
+    public function guard()
+    {
+        return Auth::guard('dashboard');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -38,6 +49,52 @@ class NotificationController extends Controller
                                     ->get();
         return response()->json($notifications);
     }
+
+    public function indexNotificationByPaginate($hospital_id){
+        $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
+        ->where('publish', true)
+        ->get();
+
+        $hospitalForms = Hospital::with('forms')
+        ->find($hospital_id)
+        ->forms
+        ->filter(fn($form) => $form->publish)
+        ->merge($formsAllVisibility);
+
+        $notifications = Notification::with('form')
+                                    ->whereIn('form_id', $hospitalForms->pluck('id'))
+                                    ->paginate(15);
+        return response()->json($notifications);
+    }
+
+    public function getNotificationNotReadUser($hospital_id){
+        $userId =  $this->guard()->user()->id;
+        Log::info("userId",[$userId]);
+        $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
+        ->where('publish', true)
+        ->get();
+
+        $hospitalForms = Hospital::with('forms')
+        ->find($hospital_id)
+        ->forms
+        ->filter(fn($form) => $form->publish)
+        ->merge($formsAllVisibility);
+
+        $notifications = Notification::with('adminUsers')
+                                            ->whereIn('form_id', $hospitalForms->pluck('id'))
+                                            ->get();
+        
+        $notificationsNotRead = $notifications->filter(function ($notification) use ($userId) {
+            return !$notification->adminUsers->first(function ($adminUser) use ($userId) {
+                return $adminUser->pivot->read && $adminUser->id == $userId;
+            });
+        });
+        
+        return response()->json($notificationsNotRead);
+                                           
+
+    }
+
 
     /**
      * Store a newly created resource in storage.
