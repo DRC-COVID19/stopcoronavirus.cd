@@ -143,6 +143,10 @@ export default {
         state.hospitalTotalData = null;
       }
     },
+    /**
+     *
+     * @deprecated use completedForm/completedForm__getAggregatedByHospitals instead
+     */
     getSituationHospital({ state }, payload) {
       const selectedHospital = payload || "";
       state.situationHospitalLoading = true;

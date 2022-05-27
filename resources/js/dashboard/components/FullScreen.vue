@@ -10,10 +10,11 @@
 </template>
 
 <script>
-import Fullscreen from 'vue-fullscreen/src/component.vue'
+import { component } from 'vue-fullscreen'
+
 export default {
   components: {
-    Fullscreen
+    Fullscreen: component
   },
   props: {
     id: {

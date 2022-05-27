@@ -64,43 +64,43 @@
 </template>
 
 <script>
-import Loading from "../../components/Loading";
-import { mapActions, mapState } from "vuex";
+import Loading from '../../components/Loading'
+import { mapActions, mapState } from 'vuex'
 export default {
   components: {
-    Loading,
+    Loading
   },
-  data() {
+  data () {
     return {
       completedFormFields: [],
       completedForm: {
-        completed_form_fields: {},
+        completed_form_fields: []
       },
-      isLoading: false,
-    };
+      isLoading: false
+    }
   },
-  async mounted() {
-    this.getCompletedForm();
+  async mounted () {
+    this.getCompletedForm()
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
-      formSteps: (state) => state.formStep.formSteps,
+      formSteps: (state) => state.formStep.formSteps
     }),
-    backRoute() {
+    backRoute () {
       if (this.user.isHospitalAdmin) {
         return {
-          name: "hospital.admin.data",
-          params: { hospital_id: this.$route.params.hospital_id },
-        };
-      } else return { name: "hospital.home" };
+          name: 'hospital.admin.data',
+          params: { hospital_id: this.$route.params.hospital_id }
+        }
+      } else return { name: 'hospital.home' }
     },
-    updatedManageNamesListSorted() {
+    updatedManageNamesListSorted () {
       if (this.completedFormFields.length > 0) {
         return this.completedFormFields
           .map((completedFormField) => ({
             updatedManagerName: completedFormField.updated_manager_name,
-            updatedAt: completedFormField.updated_at,
+            updatedAt: completedFormField.updated_at
           }))
           .sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
           .filter(
@@ -109,61 +109,45 @@ export default {
               self.findIndex(
                 (x) => x.updatedManagerName === item.updatedManagerName
               ) === i
-          );
+          )
       }
-      return [];
+      return []
     },
-    formStepsSorted() {
-      return this.formSteps.slice().sort((a, b) => a.step - b.step);
-    },
-  },
-  watch: {
-    completedForm() {
-      this.getCompletedForm();
-    },
+    formStepsSorted () {
+      return this.formSteps.slice().sort((a, b) => a.step - b.step)
+    }
   },
   methods: {
-    ...mapActions(["completedForm__getByHospitalDetail", "getFormSteps"]),
-    async getCompletedForm() {
-      this.isLoading = true;
-      this.completedFormFields = await this.completedForm__getByHospitalDetail({
-        isLoading: this.isLoading,
-        completed_form_id: this.$route.params.completed_form_id,
-      });
-      if (this.completedFormFields.length > 0) {
-        this.isLoading = false;
-        await this.getFormSteps({
-          id: this.completedFormFields[0].completed_form.form_id,
-        });
+    ...mapActions(['completedForm__show', 'completedForm__show', 'getFormSteps']),
+    async getCompletedForm () {
+      this.isLoading = true
 
-        this.setLastUpdate(
-          this.completedFormFields[0].completed_form.last_update
-        );
+      try {
+        this.completedForm = await this.completedForm__show({
+          completed_form_id: this.$route.params.completed_form_id
+        })
+        this.completedFormFields = this.completedForm.completed_form_fields
+        this.completedForm.completed_form_fields = []
+        this.setCompletedForm()
 
-        this.setCreatedManagerName(
-          this.completedFormFields[0].completed_form.created_manager_name
-        );
-
-        this.setcompletedForm();
+        await this.getFormSteps({ id: this.completedForm.form_id })
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isLoading = false
       }
     },
-    setLastUpdate(lastUpdate) {
-      this.completedForm.last_update = lastUpdate;
-    },
-    setCreatedManagerName(createdManagerName) {
-      this.completedForm.created_manager_name = createdManagerName;
-    },
-    setcompletedForm() {
+    setCompletedForm () {
       this.completedFormFields.forEach((item) => {
         this.$set(
           this.completedForm.completed_form_fields,
-          item.form_field.id,
+          item.form_field_id,
           item.value
-        );
-      });
-    },
-  },
-};
+        )
+      })
+    }
+  }
+}
 </script>
 <style lang="scss">
 .bg-dash {

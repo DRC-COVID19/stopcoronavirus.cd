@@ -175,7 +175,7 @@ Route::group([
       });
     });
 
-    
+
 
     Route::group(['prefix' => 'hotspots'], function () {
       Route::get('list', 'FluxHotSpotController@index'); //ok
