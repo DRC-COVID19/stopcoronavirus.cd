@@ -738,7 +738,6 @@ export default {
     // Prefetch infranstructure data
     this.getHospitalsData({
       observation_end: moment().format("YYYY-MM-DD"),
-      observation_start: INFRASTRUCTURE_FIRST_UPDATE,
       township: 0,
       isLoading: false,
     });

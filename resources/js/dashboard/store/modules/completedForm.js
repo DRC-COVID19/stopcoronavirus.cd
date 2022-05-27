@@ -140,6 +140,14 @@ export default {
         axios
           .post('/api/dashboard/completed_forms/get-aggregated-by-hospitals', payload)
           .then(({ data }) => {
+            if (!payload.observation_start) {
+              data.data = data.data.map((hospital) => {
+                if (hospital.completed_forms.length > 0) {
+                  hospital.completed_forms = [hospital.completed_forms[0]]
+                }
+                return hospital
+              })
+            }
             commit('SET_COMPLETED_FORMS_AGGREGATED', data)
           })
           .catch(response => {
