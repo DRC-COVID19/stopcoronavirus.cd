@@ -267,7 +267,7 @@ class CompletedFormController extends Controller
 
         $query = Hospital::with([
             'completedForms' => function ($query) use ($observation_end, $observation_start) {
-                $query->select('id', 'form_id', 'admin_user_id', 'hospital_id', 'last_update', 'created_manager_name', 'created_manager_first_name');
+                $query->select('id', 'admin_user_id', 'hospital_id', 'last_update');
                 if ($observation_end && $observation_start) {
                     $query->whereBetween('last_update', [$observation_start, $observation_end]);
                 } else if ($observation_end) {
@@ -276,7 +276,7 @@ class CompletedFormController extends Controller
                 $query->orderBy('last_update', 'desc');
             },
             'completedForms.completedFormFields' => function ($query) {
-                $query->select('id', 'value', 'completed_form_id', 'form_field_id', 'updated_manager_name', 'updated_manager_first_name')
+                $query->select('id', 'value', 'completed_form_id', 'form_field_id')
                       ->whereHas('formField');
             },
             'completedForms.completedFormFields.formField' => function ($query) {
@@ -286,7 +286,7 @@ class CompletedFormController extends Controller
                 $query->select('id', 'title', 'step');
             },
             'completedForms.adminUser' => function ($query) {
-                $query->select('id', 'username', 'name', 'email', 'phone_number');
+                $query->select('id', 'username', 'phone_number');
             },
         ]);
 
