@@ -1,3 +1,5 @@
+import { getAggregatedHospitalsDatas } from '../../functions/customFormFieldFunction'
+
 export default {
   state: {
     completedForms: {} || [],
@@ -148,6 +150,8 @@ export default {
                 return hospital
               })
             }
+            // aggregated data
+            // data.aggregated = getAggregatedHospitalsDatas(data.data)
             commit('SET_COMPLETED_FORMS_AGGREGATED', data)
           })
           .catch(response => {

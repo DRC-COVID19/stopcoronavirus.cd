@@ -1,6 +1,7 @@
 /* eslint-disable comma-spacing */
 import axios from "axios";
 import { event } from "vue-gtag";
+import { getAggregatedHospitalsDatas } from '../../functions/customFormFieldFunction'
 
 export default {
   state: {
@@ -71,9 +72,11 @@ export default {
                 if (hospital.completed_forms.length > 0) {
                   hospital.completed_forms = [hospital.completed_forms[0]]
                 }
+                // hospital.aggregated = getAggregatedHospitalsDatas([hospital])
                 return hospital
               })
             }
+
             const Features = data.map((value) => {
               return {
                 type: "Feature",
