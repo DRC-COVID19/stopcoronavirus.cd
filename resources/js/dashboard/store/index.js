@@ -17,6 +17,7 @@ import completedForm from './modules/completedForm'
 import township from './modules/township'
 import bugTracker from './modules/bugTracker'
 import adminUser from './modules/adminUser'
+import notification from './modules/notification'
 
 Vue.use(Vuex)
 
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     hospitalSituation,
     completedForm,
     township,
-    adminUser
+    adminUser,
+    notification
   }
 })

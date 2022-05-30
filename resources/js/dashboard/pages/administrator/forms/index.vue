@@ -223,7 +223,8 @@ export default {
           title: form.title,
           form_recurrence_value: form.form_recurrence_value,
           form_recurrence_id: form.form_recurrence_id,
-          publish: form.publish,
+          form_recurrence_number: form.form_recurrence_number,
+          publish: form.publish
         })
         .then(() => {
           this.formAdded = true;
