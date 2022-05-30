@@ -18,28 +18,45 @@
     >
       <i class="fas fa-list" aria-hidden="true"></i> &nbsp; Situations
     </b-nav-item>
+    <b-nav-item
+      v-if="canViewAgent"
+      :to="{ name: 'hospital.notification' }"
+      :active="$route.name.startsWith('hospital.notification')"
+      @click.prevent="setNotificationToRead"
+    >
+      <i class="fas fa-bell" aria-hidden="true"></i> &nbsp; Notifications
+    </b-nav-item>
   </b-nav>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { ADMIN_HOSPITAL, AGENT_HOSPITAL } from "../../../config/env";
+import { mapState, mapActions } from 'vuex'
+import { ADMIN_HOSPITAL, AGENT_HOSPITAL } from '../../../config/env'
 export default {
   computed: {
     ...mapState({
-      user: (state) => state.auth.user,
+      user: (state) => state.auth.user
     }),
-    canViewAdmin() {
-      return this.userHaveRole(ADMIN_HOSPITAL);
+    canViewAdmin () {
+      return this.userHaveRole(ADMIN_HOSPITAL)
     },
-    canViewAgent() {
+    canViewAgent () {
       if (this.user.hospital) {
-        return this.userHaveRole(AGENT_HOSPITAL);
+        return this.userHaveRole(AGENT_HOSPITAL)
       }
-      return "";
-    },
+      return ''
+    }
   },
-};
+
+  methods: {
+    ...mapActions(['setNotification', 'notificationCreated']),
+    async setNotificationToRead () {
+      await this.setNotification({ id: this.user.hospital.id })
+      this.notificationCreated()
+    }
+  }
+
+}
 </script>
 
 <style lang="scss" scoped>
