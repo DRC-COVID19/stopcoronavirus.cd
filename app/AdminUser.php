@@ -22,5 +22,10 @@ class AdminUser extends Model
         'phone_number'
     ];
 
+    public function notifications(){
+        return $this->belongsToMany(Notification::class);
+    }
+
+
 
 }

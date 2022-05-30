@@ -29,15 +29,24 @@ class Form extends Model
     {
         return $this->hasMany(FormStep::class)->orderBy('step');
     }
+    
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     public function formFields()
     {
         return $this->hasMany(FormField::class);
     }
-    public function completedforms(){
+
+    public function completedforms()
+    {
         return $this->hasMany(CompletedForm::class);
     }
 
-    public function hospitals(){
+    public function hospitals()
+    {
         return $this->belongsToMany(Hospital::class);
     }
 

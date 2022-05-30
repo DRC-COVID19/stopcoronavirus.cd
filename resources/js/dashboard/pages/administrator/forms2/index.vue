@@ -219,6 +219,7 @@ export default {
         title: currentForm.title,
         form_recurrence_value: currentForm.form_recurrence_value,
         form_recurrence_id: currentForm.form_recurrence_id,
+        form_recurrence_number: currentForm.form_recurrence_number,
         publish: currentForm.publish
       }
 
@@ -259,6 +260,7 @@ export default {
           title: form.title,
           form_recurrence_value: form.form_recurrence_value,
           form_recurrence_id: form.form_recurrence_id,
+          form_recurrence_number: form.form_recurrence_number,
           publish: form.publish
         })
         .then(({ data }) => {

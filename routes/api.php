@@ -23,7 +23,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
 
-
 // Route::post('/migrate-hospital-situation-controller', 'MigrateHospitalSituationController@migrateToCompletedForm');
 
 
@@ -228,6 +227,17 @@ Route::group([
     Route::get('/get-form-filtered', 'FormController@getFormFiltered');
     Route::put('/update-form-visibility/{form_id}', 'FormController@updateFormVisibility');
   });
+
+  /***
+ * notifications routes
+ */
+Route::group(['prefix' => 'notifications'], function () {
+  Route::get('/{hospital_id}', 'NotificationController@notificationHospital');
+  Route::get('/by-paginate/{hospital_id}', 'NotificationController@indexNotificationByPaginate');
+  Route::get('/notification-not-read/{hospital_id}', 'NotificationController@getNotificationNotReadUser');
+  Route::get('/set-notification-by-hospital/{hospital_id}', 'NotificationController@setNotificationByHospital');
+});
+Route::resource('notifications', 'NotificationController');
 
 
 
