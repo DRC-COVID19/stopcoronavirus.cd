@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NotificationListener
+class NotificationListener implements ShouldQueue
 {
     /**
      * Create the event listener.
