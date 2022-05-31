@@ -160,7 +160,7 @@ export default {
     return {
       showUserCard: false,
       showHeaderNotification: false,
-      notificationNotReads: []
+      notificationNotReads: null
     }
   },
   watch: {
@@ -196,6 +196,7 @@ export default {
     }
   },
   mounted () {
+    console.log('hospital id', this.user.hospital.id)
     this.notificationNotRead()
   },
   methods: {
