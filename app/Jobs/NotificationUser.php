@@ -34,6 +34,7 @@ class NotificationUser implements ShouldQueue
 
         foreach($listOfRecurrenceForms as $listOfRecurrenceForm){
             $query = Form::with(['formRecurrence','hospitals.agent'])
+            ->where('publish', true)
             ->whereHas('formRecurrence',function($q) use ($listOfRecurrenceForm){
                                 $q->where('name','=', $listOfRecurrenceForm);
                         })
