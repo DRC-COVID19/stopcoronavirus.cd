@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChangeLogController;
 use App\Http\Controllers\HospitalSituationController;
+use App\Http\Controllers\CronJobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\PandemicStat;
@@ -22,6 +23,8 @@ use Encore\Admin\Form\Row;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
+
+Route::get('/run-cron-job',[CronJobController::class,'index']);
 
 // Route::post('/migrate-hospital-situation-controller', 'MigrateHospitalSituationController@migrateToCompletedForm');
 

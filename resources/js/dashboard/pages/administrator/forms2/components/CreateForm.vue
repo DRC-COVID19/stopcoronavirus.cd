@@ -307,7 +307,15 @@ export default {
         },
         {
           id: 29,
-          label: 'last'
+          label: '29'
+        },
+        {
+          id: 30,
+          label: '30'
+        },
+        {
+          id: 31,
+          label: '31'
         }
       ],
       monthsofYear: [
