@@ -396,9 +396,10 @@ export default {
             reject(response)
             this.$notify({
               group: 'alert',
-              title: 'Une erreur est survenue !',
+              title: 'Une erreur s\'est produite, veuillez contacter l\'administrateur !',
               text: 'Impossible de soumettre vos réponses',
-              type: 'error'
+              type: 'error',
+              duration: 10000
             })
           })
       })

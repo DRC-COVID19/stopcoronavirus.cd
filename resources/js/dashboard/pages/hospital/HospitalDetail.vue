@@ -33,10 +33,14 @@
                     {{ formField.name }} :&nbsp;
                     <div class="font-weight-bold">
                       <div v-if="formField.form_field_type.name === 'boolean'">
-                        {{ +completedForm.completed_form_fields[formField.id] ? 'Oui' : "Non" }}
+                        <span v-if="completedForm.completed_form_fields[formField.id] !== null && completedForm.completed_form_fields[formField.id] !== undefined">
+                          {{ +completedForm.completed_form_fields[formField.id] ? 'Oui' : "Non" }}
+                        </span>
                       </div>
                       <div v-else-if="formField.form_field_type.name === 'date'">
+                        <span v-if="completedForm.completed_form_fields[formField.id] !== null && completedForm.completed_form_fields[formField.id] !== undefined">
                         {{ moment(completedForm.completed_form_fields[formField.id]).format("DD/MM/Y") }}
+                        </span>
                       </div>
                       <div v-else> {{ completedForm.completed_form_fields[formField.id] }} </div>
                     </div>
