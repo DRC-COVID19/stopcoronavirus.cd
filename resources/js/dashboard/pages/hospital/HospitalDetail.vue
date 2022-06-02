@@ -141,17 +141,18 @@ export default {
     ...mapActions(['completedForm__show', 'getFormSteps']),
     async getCompletedForm () {
       this.isLoading = true
-
       try {
         this.completedForm = await this.completedForm__show({
           completed_form_id: this.$route.params.completed_form_id
         })
         this.completedFormFields = this.completedForm.completed_form_fields
-        this.completedForm.completed_form_fields = []
+        this.completedForm.completed_form_fields = {}
         this.setCompletedForm()
 
         await this.getFormSteps({ id: this.completedForm.form_id })
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         console.log(error)
       } finally {
         this.isLoading = false
