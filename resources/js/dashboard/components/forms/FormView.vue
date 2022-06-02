@@ -272,7 +272,7 @@ export default {
       'completedForm__store',
       'completedForm__update',
       'completedForm__checkLastUpdate',
-      'completedForm__getByHospitalDetail'
+      'completedForm__show'
     ]),
     onNextStep () {
       this.$refs.form.validate().then(success => {
@@ -342,14 +342,12 @@ export default {
       }
     },
     async getCompletedFormFields () {
-      this.completedFormFields = await this.completedForm__getByHospitalDetail({
+      this.completedForm = await this.completedForm__show({
         completed_form_id: this.completedFormId
       })
-      this.setLastUpdate()
+      this.completedFormFields = this.completedForm.completed_form_fields
+      this.completedForm.completed_form_fields = {}
       this.setCompletedFormFields()
-    },
-    setLastUpdate () {
-      this.completedForm.last_update = this.completedFormFields[0].completed_form.last_update
     },
     setCompletedFormFields () {
       this.completedFormFields.forEach((item) => {
