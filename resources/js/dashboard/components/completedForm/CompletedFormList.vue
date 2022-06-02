@@ -6,15 +6,9 @@
         cols="12"
         md="auto"
         lg="12"
-        class="
-          d-sm-flex
-          form-filters
-          w-100
-          flex-wrap
-          justify-content-sm-between
-        "
+        class="d-md-flex form-filters w-100 justify-content-md-end"
       >
-        <div v-if="showUserFilter" class="">
+        <div v-if="showUserFilter" class="mr-md-2">
           <label for="input-user" class="small text-muted"
             >Rechercher par utilisateur</label
           >
@@ -27,7 +21,7 @@
           >
           </b-form-input>
         </div>
-        <div v-if="showFormFilter">
+        <div v-if="showFormFilter" class="mr-md-2">
           <label for="input-formulaire" class="small text-muted"
             >Filter par formulaire</label
           >
@@ -39,7 +33,7 @@
             :clearable="false"
             :searchable="false"
             label="title"
-            class="mr-2"
+            class="mr-md-2"
             id="input-formulaire"
             @input="onFormFilterChange"
           >
@@ -453,7 +447,7 @@ export default {
   select,
   input,
   .v-select {
-    width: 400px;
+    width: 200px;
     height: 38px;
     background-color: white;
     @media (max-width: $max-width) {

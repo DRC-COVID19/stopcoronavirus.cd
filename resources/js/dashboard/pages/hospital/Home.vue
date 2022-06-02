@@ -15,10 +15,10 @@
           </h3>
           <b-card class="mb-4 bg-dash">
             <b-card-header class="border-0 p-2 hospital__home-form text-dark"
-              ><h5 class="ml-4">
+              ><h5 class="">
                 {{ `Structure: ${user.hospital.name}` }}
               </h5>
-              <p v-if="user.hospital.address" class="ml-4">
+              <p v-if="user.hospital.address" class="">
                 {{ `Adresse: ${user.hospital.address}` }}
               </p>
               <p
@@ -36,8 +36,6 @@
               <b-row
                 class="
                   hospital__home-form
-                  pb-5
-                  pt-3
                   d-flex
                   justify-content-start
                   align-items-center
