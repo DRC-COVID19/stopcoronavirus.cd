@@ -8,7 +8,7 @@
         lg="12"
         class="d-md-flex form-filters w-100 justify-content-md-end"
       >
-        <div v-if="showUserFilter" class="mr-md-2">
+        <div v-if="showUserFilter">
           <label for="input-user" class="small text-muted"
             >Rechercher par utilisateur</label
           >
@@ -21,10 +21,8 @@
           >
           </b-form-input>
         </div>
-        <div v-if="showFormFilter" class="mr-md-2">
-          <label for="input-formulaire" class="small text-muted"
-            >Filter par formulaire</label
-          >
+        <div v-if="showFormFilter" class="ml-md-2">
+          <label for="input-formulaire" class="small text-muted">Filter par formulaire</label>
           <br />
           <v-select
             v-model="form.form_id"
@@ -39,10 +37,8 @@
           >
           </v-select>
         </div>
-        <div v-if="showHospitalFilter">
-          <label for="input-ctco" class="small text-muted"
-            >Filter par CTCO</label
-          >
+        <div v-if="showHospitalFilter" class="ml-md-2">
+          <label for="input-ctco" class="small text-muted">Filter par CTCO</label>
           <br />
           <v-select
             v-model="form.hospital_id"
@@ -57,7 +53,7 @@
           >
           </v-select>
         </div>
-        <div v-if="showDateFilter">
+        <div v-if="showDateFilter" class="ml-md-2">
           <label for="input-user" class="small text-muted"
             >Filter par plage de date</label
           >
@@ -94,7 +90,7 @@
       </b-col>
     </b-row>
     <b-row class="mt-4">
-      <b-col class="px-0">
+      <b-col>
         <b-table
           class="completed-form-table"
           :busy="isLoading"
@@ -135,7 +131,7 @@
           <template v-slot:cell(actions)="data">
             <b-button
               variant="outline-primary"
-              class="btn-dash"
+              class="btn-dash mb-1 mb-lg-0"
               :to="{
                 name: 'hospital.detail',
                 params: {
@@ -149,7 +145,7 @@
             <b-button
               v-if="canShowEditButton(data.item)"
               variant="outline-success btn-dash"
-              class="btn-dash"
+              class="btn-dash mb-1 mb-lg-0"
               :to="{
                 name: 'hospital.edit',
                 params: {

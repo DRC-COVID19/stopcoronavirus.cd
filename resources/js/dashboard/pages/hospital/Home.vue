@@ -21,15 +21,10 @@
               <p v-if="user.hospital.address" class="">
                 {{ `Adresse: ${user.hospital.address}` }}
               </p>
-              <p
-                v-if="hospitalManagerName && hospitalManagerFirstName"
-                class="ml-4 font-italic"
-              >
-                Connecté en tant que
-                <strong>{{ hospitalManagerName }} - </strong
-                ><span
-                  ><strong>{{ hospitalManagerFirstName }}</strong></span
-                >
+              <p v-if="hospitalManagerName && hospitalManagerFirstName" class="text-muted mb-0">
+                Connecté en tant que:
+                <strong>{{ hospitalManagerName }} - </strong>
+                <strong>{{ hospitalManagerFirstName }}</strong>
               </p>
             </b-card-header>
             <b-card-body class="px-0">
