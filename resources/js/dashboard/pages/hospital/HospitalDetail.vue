@@ -97,7 +97,6 @@ export default {
   },
   async mounted () {
     this.getCompletedForm()
-    console.log(this.$store.state.route)
   },
   computed: {
     ...mapState({
@@ -138,49 +137,31 @@ export default {
       return this.formSteps.slice().sort((a, b) => a.step - b.step)
     }
   },
-  watch: {
-    completedForm () {
-      this.getCompletedForm()
-    }
-  },
   methods: {
-    ...mapActions(['completedForm__getByHospitalDetail', 'getFormSteps']),
+    ...mapActions(['completedForm__show', 'getFormSteps']),
     async getCompletedForm () {
       this.isLoading = true
-      this.completedFormFields = await this.completedForm__getByHospitalDetail({
-        isLoading: this.isLoading,
-        completed_form_id: this.$route.params.completed_form_id
-      })
-      if (this.completedFormFields.length > 0) {
-        this.isLoading = false
-        await this.getFormSteps({
-          id: this.completedFormFields[0].completed_form.form_id
+
+      try {
+        this.completedForm = await this.completedForm__show({
+          completed_form_id: this.$route.params.completed_form_id
         })
+        this.completedFormFields = this.completedForm.completed_form_fields
+        this.completedForm.completed_form_fields = []
+        this.setCompletedForm()
 
-        this.setLastUpdate(
-          this.completedFormFields[0].completed_form.last_update
-        )
-
-        this.setCreatedManagerName(
-          this.completedFormFields[0].completed_form.created_manager_name,
-          this.completedFormFields[0].completed_form.created_manager_first_name
-        )
-
-        this.setcompletedForm()
+        await this.getFormSteps({ id: this.completedForm.form_id })
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isLoading = false
       }
     },
-    setLastUpdate (lastUpdate) {
-      this.completedForm.last_update = lastUpdate
-    },
-    setCreatedManagerName (createdManagerName, createdManagerFirstName) {
-      this.completedForm.created_manager_name = createdManagerName
-      this.completedForm.created_manager_first_name = createdManagerFirstName
-    },
-    setcompletedForm () {
+    setCompletedForm () {
       this.completedFormFields.forEach((item) => {
         this.$set(
           this.completedForm.completed_form_fields,
-          item.form_field.id,
+          item.form_field_id,
           item.value
         )
       })

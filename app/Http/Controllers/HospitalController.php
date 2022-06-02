@@ -216,26 +216,10 @@ class HospitalController extends Controller
   public function getHospitals(Request $request)
   {
     try {
-      $hospitalsCompletedFormsData = collect(CompletedFormController::getHospitalsCompletedFormsData($request)['hospitalsData']);
-      $township = $request->input('township');
-      $hospitals = Hospital::where(function ($query) use ($township) {
-        if ($township) {
-          $query->where('township_id', $township);
-        }
-      })->get();
-      foreach ($hospitals as $hospital) {
-        $index = $hospitalsCompletedFormsData->search(function ($item) use ($hospital) {
-          return $item->id === $hospital->id;
-        });
-        if ($index === false) {
-          $hospital->completed_forms = [];
-          $hospital->aggregated = [];
-          $hospital->last_update = null;
-          $hospitalsCompletedFormsData->push($hospital);
-        } else {
-          $hospitalsCompletedFormsData[$index]->aggregated = CompletedFormController::getAggregatedHospitalsDatas([$hospitalsCompletedFormsData[$index]]);
-          $hospitalsCompletedFormsData[$index]->last_update = $hospitalsCompletedFormsData[$index]->completedForms->max('last_update');
-        }
+      $hospitalsCompletedFormsData = CompletedFormController::getHospitalsCompletedFormsData($request)['hospitalsData'];
+      foreach ($hospitalsCompletedFormsData as $index => $hospitalCompletedFormsData) {
+        $hospitalsCompletedFormsData[$index]->aggregated = CompletedFormController::getAggregatedHospitalsDatas([$hospitalCompletedFormsData]);
+        $hospitalsCompletedFormsData[$index]->last_update = collect($hospitalCompletedFormsData->completedForms)->max('last_update');
       }
       return response()->json($hospitalsCompletedFormsData, 200);
     } catch (\Throwable $th) {

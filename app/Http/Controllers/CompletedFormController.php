@@ -137,14 +137,11 @@ class CompletedFormController extends Controller
      * @param  \App\CompletedForm  $completedForm
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(CompletedForm $completedForm)
     {
         try {
 
-            $completedForm = CompletedFormField::with('completedForm', 'formField.formStep')
-                ->where('completed_form_id', $id)
-                ->orderBy('created_at')
-                ->get();
+            $completedForm->load('completedFormFields.formField.formStep', 'completedFormFields.completedForm');
 
             return response()->json($completedForm, 206);
         } catch (\Throwable $th) {
@@ -283,54 +280,64 @@ class CompletedFormController extends Controller
 
     static public function getHospitalsCompletedFormsData(Request $request)
     {
-        $observation_end = $request->input('observation_end');
-        $observation_start = $request->input('observation_start');
-        $township = $request->input('township');
-        $hospital = $request->input('hospital');
+        $observation_end = $request->input('observation_end') ;
+        $observation_start = $request->input('observation_start') ;
+        $township = $request->input('township') ;
+        $hospital = $request->input('hospital') ;
 
-        $hospitalsLastUpdate = CompletedForm
-            ::whereHas('hospital', function ($query) use ($hospital, $township) {
-                if ($township) {
-                    $query->where('township_id', $township);
-                }
-                if ($hospital) {
-                    $query->where('id', $hospital);
-                }
-            })
-            ->where(function ($query) use ($observation_end, $observation_start) {
+        $query = Hospital::with([
+            'completedForms' => function ($query) use ($observation_end, $observation_start) {
+                $query->select('id', 'admin_user_id', 'hospital_id', 'last_update');
                 if ($observation_end && $observation_start) {
                     $query->whereBetween('last_update', [$observation_start, $observation_end]);
                 } else if ($observation_end) {
                     $query->where('last_update', '<=', $observation_end);
                 }
-            })
-            ->selectRaw('completed_forms.hospital_id, MAX(last_update) AS max_last_update')
-            ->groupBy('completed_forms.hospital_id')
-            ->get();
+                $query->orderBy('last_update', 'desc');
+            },
+            'completedForms.completedFormFields' => function ($query) {
+                $query->select('id', 'value', 'completed_form_id', 'form_field_id')
+                      ->whereHas('formField');
+            },
+            'completedForms.completedFormFields.formField' => function ($query) {
+                $query->select('id', 'name', 'order_field', 'form_field_type_id', 'form_step_id', 'agreggation', 'show_in_summary_report');
+            },
+            'completedForms.completedFormFields.formField.formStep' => function ($query) {
+                $query->select('id', 'title', 'step');
+            },
+            'completedForms.adminUser' => function ($query) {
+                $query->select('id', 'username', 'phone_number');
+            },
+        ]);
 
-        $hospitalsData = [];
-        foreach ($hospitalsLastUpdate as $hospitalLastUpdate) {
-            $hospitalsData[] = Hospital::with([
-                'completedForms' => function ($query) use ($hospitalLastUpdate, $observation_end, $observation_start) {
-                    if ($observation_end && $observation_start) {
-                        $query->whereBetween('last_update', [$observation_start, $observation_end]);
-                    } else {
-                        $query->where('last_update', $hospitalLastUpdate->max_last_update);
-                    }
-                },
-                'completedForms.completedFormFields' => function ($query) {
-                    $query->whereHas('formField');
-                },
-                'completedForms.completedFormFields.formField.formStep',
-                'completedForms.adminUser'
-            ])
-                ->find($hospitalLastUpdate->hospital_id);
+        if ($township) {
+            $query->where('township_id', $township);
+        }
+        if ($hospital) {
+            $query->where('id', $hospital);
         }
 
+        $hospitalsData = $query->get();
+
+        $lastUpdate = $hospitalsData
+          ->flatMap(function ($hospitalData) {
+              return $hospitalData->completedForms;
+          })
+          ->max('last_update');
+
+        if (!$observation_start) {
+            // quand qu'une seule date a été définie, on ne récupère que les dernières données
+            foreach ($hospitalsData as $key => $hospital) {
+                if (sizeof($hospital->completedForms) > 1) {
+                  $hospitalsData[$key]->completed_forms = [$hospital->completedForms[0]];
+                  $hospitalsData[$key]->completedForms = [$hospital->completedForms[0]];
+                }
+            }
+        }
 
         return [
             'hospitalsData' => $hospitalsData,
-            'lastUpdate'    => $hospitalsLastUpdate->max('max_last_update')
+            'lastUpdate'    => $lastUpdate
         ];
     }
 
@@ -431,4 +438,5 @@ class CompletedFormController extends Controller
 
         return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
     }
+
 }

@@ -1,3 +1,4 @@
+
 export default {
   state: {
     completedForms: {} || [],
@@ -124,8 +125,8 @@ export default {
           })
       })
     },
-    completedForm__getByHospitalDetail ({ state, commit }, payload) {
-      commit('SET_IS_LOADING', true)
+    completedForm__show ({ state, commit }, payload) {
+      commit('SET_IS_LOADING', payload.isLoading)
       return new Promise((resolve, reject) => {
         axios
           .get(`/api/dashboard/completed_forms/${payload.completed_form_id}`)
@@ -170,6 +171,15 @@ export default {
             payload
           )
           .then(({ data }) => {
+            if (!payload.observation_start) {
+              data.data = data.data.map((hospital) => {
+                if (hospital.completed_forms.length > 0) {
+                  hospital.completed_forms = [hospital.completed_forms[0]]
+                }
+                return hospital
+              })
+            }
+            // aggregated data
             commit('SET_COMPLETED_FORMS_AGGREGATED', data)
             commit('SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING', false)
           })
