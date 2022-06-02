@@ -171,8 +171,9 @@ export default {
             payload
           )
           .then(({ data }) => {
+            const aggregatedData = { ...data }
             if (!payload.observation_start) {
-              data.data = data.data.map((hospital) => {
+              aggregatedData.data = aggregatedData.data.map((hospital) => {
                 if (hospital.completed_forms.length > 0) {
                   hospital.completed_forms = [hospital.completed_forms[0]]
                 }
@@ -180,7 +181,7 @@ export default {
               })
             }
             // aggregated data
-            commit('SET_COMPLETED_FORMS_AGGREGATED', data)
+            commit('SET_COMPLETED_FORMS_AGGREGATED', aggregatedData)
             commit('SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING', false)
           })
           .catch((response) => {
@@ -211,10 +212,10 @@ export default {
           })
       })
     },
-    completedForm__setSelectedForm({ commit }, payload) {
+    completedForm__setSelectedForm ({ commit }, payload) {
       commit('SET_SELECTED_FORM', payload)
     },
-    completedForm__getAllFiltered(_, payload) {
+    completedForm__getAllFiltered (_, payload) {
       return new Promise((resolve, reject) => {
         axios
           .get('/api/dashboard/completed_forms/get-all-filtered', {
