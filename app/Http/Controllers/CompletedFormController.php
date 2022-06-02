@@ -261,6 +261,7 @@ class CompletedFormController extends Controller
 
         return response()->json([
             'aggregated'  => self::getAggregatedHospitalsDatas($hospitalsCompletedFormsData['hospitalsData']),
+            'data'        => $hospitalsCompletedFormsData['hospitalsData'],
             'last_update' => $hospitalsCompletedFormsData['lastUpdate']
         ], 200);
     }
