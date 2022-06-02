@@ -95,7 +95,7 @@ export default {
       'formShow',
       'createHospitalSituation',
       'updateHospitalSituation',
-      'completedForm__getByHospitalDetail',
+      'completedForm__show',
       'completedForm__store',
       'completedForm__update',
       'completedForm__checkLastUpdate'
@@ -135,16 +135,12 @@ export default {
       }
     },
     async getCompletedFormFields () {
-      this.completedFormFields = await this.completedForm__getByHospitalDetail({
-        isLoading: this.isLoading,
+      const completedForm = await this.completedForm__show({
         completed_form_id: this.$route.params.completed_form_id
       })
-      this.getLastUpdate()
+      this.completedFormFields = completedForm.completed_form_fields
+      this.$set(this.completedForm, 'last_update', completedForm.last_update)
       this.laodFormData()
-    },
-    getLastUpdate () {
-      this.completedForm.last_update =
-        this.completedFormFields[0].completed_form.last_update
     },
     laodFormData () {
       this.completedFormFields.forEach((item) => {

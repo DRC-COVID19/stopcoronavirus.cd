@@ -89,7 +89,7 @@
             size="sm"
             variant="success"
             class="btn-dash-blue mx-2"
-            @click="onValidateDelection()"
+            @click="onValidateDeletion()"
           >
             Accepter
           </b-button>

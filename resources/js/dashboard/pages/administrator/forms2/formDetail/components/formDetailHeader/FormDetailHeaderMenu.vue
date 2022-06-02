@@ -21,13 +21,13 @@
     >
       Paramètres
     </b-nav-item>
-    <b-nav-item
+    <!-- <b-nav-item
       v-if="canViewForm"
       :to="{ name: 'administrator.forms.show.schema' }"
       :active="this.$route.name.startsWith('administrator.forms.show.schema')"
     >
       Schemas
-    </b-nav-item>
+    </b-nav-item> -->
   </b-nav>
 </template>
 
