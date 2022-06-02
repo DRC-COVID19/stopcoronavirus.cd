@@ -22,7 +22,7 @@
             <p>Chargement des données...</p>
         </div>
 
-        <script src="{{ asset('js/vueApp.js?v=3.027', env('REDIRECT_HTTPS')) }}"></script>
+        <script src="{{ asset('js/vueApp.js?v=3.029', env('REDIRECT_HTTPS')) }}"></script>
 
 </body>                 
 
