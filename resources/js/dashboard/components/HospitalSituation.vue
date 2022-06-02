@@ -43,10 +43,7 @@
             <export-excel :fetch="uploadFile" :name="fileName">
               <div>
                 <button
-                  :disabled="
-                    completedFormsAggregated.aggregated.length === 0 ||
-                    filterData.hasOwnProperty('activeFilter') === false
-                  "
+                  :disabled="completedFormsAggregated.aggregated.length === 0"
                   class="
                     btn btn-dash-blue btn-secondary btn-block
                     cursor-pointer
