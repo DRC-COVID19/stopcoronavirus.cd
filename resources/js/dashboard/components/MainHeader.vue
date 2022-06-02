@@ -2,7 +2,7 @@
   <b-row class="header">
     <b-col cols="12" class="map-form-header">
       <b-navbar toggleable="lg" type="light">
-        <b-navbar-brand class="mr-5">
+        <b-navbar-brand class="mr-md-5">
           <h1
             class="title m-0"
           >
@@ -44,19 +44,34 @@
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
             <b-nav-item class="position-relative nav-item d-flex align-items-center">
-              <a
-                class="nav-link position-relative"
-                href="#"
-                @click.prevent="toggleHeaderNotification"
-                v-click-outside="clickOutsideNotification"
-              >
-                <div
-                  class="icon-hallo d-flex justify-content-center align-items-center"
+            <div class="d-flex">
+                <a
+                  class="nav-link position-relative"
+                  href="#"
+                  @click.prevent="toggleHeaderNotification"
+                  v-click-outside="clickOutsideNotification"
                 >
-                  <i class="fas fa-bell" aria-hidden="true"></i>
-                </div>
-                <span class="notification-count"> {{ getChangeLogNotRead.length }} </span>
-              </a>
+                  <div
+                    class="icon-hallo d-flex justify-content-center align-items-center"
+                  >
+                    <i class="fa fa-history" aria-hidden="true"></i>
+                  </div>
+                  <span class="notification-count"> {{ getChangeLogNotRead.length }} </span>
+                </a>
+                <a
+                  v-if="canViewAgent"
+                  class="nav-link position-relative"
+                  href="#"
+                  @click.prevent="goToPageNotification"
+                >
+                  <div
+                    class="icon-hallo d-flex justify-content-center align-items-center"
+                  >
+                    <i class="fas fa-bell" aria-hidden="true"></i>
+                  </div>
+                  <span class="notification-count"> {{ notificationNotReads.length }} </span>
+                </a>
+              </div>
               <div class="dropdown-nav" v-show="showHeaderNotification">
                 <div class="item-header">
                   <h6 class="item-title">Change log</h6>
@@ -136,37 +151,56 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
-import { ADMINISTRATOR, ADMIN_DASHBOARD, ADMIN_HOSPITAL, AGENT_HOSPITAL, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC } from '../config/env';
+import { ADMINISTRATOR, ADMIN_DASHBOARD, ADMIN_HOSPITAL, AGENT_HOSPITAL, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC } from '../config/env'
 
 export default {
-  components:{
+  components: {
   },
   data () {
     return {
       showUserCard: false,
-      showHeaderNotification: false
+      showHeaderNotification: false,
+      notificationNotReads: null
+    }
+  },
+  watch: {
+    user () {
+      this.notificationNotRead()
+    },
+    notificationCreated () {
+      this.notificationNotRead()
     }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
+      notificationCreated: (state) => state.notification.isCreated,
       activeMenu: (state) => state.nav.activeMenu,
       changeLogs: (state) => state.app.changeLogs
     }),
     ...mapGetters(['getChangeLogNotRead']),
-    canViewDashBoard() {
+    canViewDashBoard () {
       return this.userHaveRole(ADMIN_DASHBOARD)
     },
-    canViewAdministration() {
+    canViewAdministration () {
       return this.userHaveRole(ADMINISTRATOR) || this.userHaveRole(MANANGER_EPIDEMIC) || this.userHaveRole(EDIT_FORM) || this.userHaveRole(CREATE_FORM)
     },
     canViewCTCOS () {
       return this.userHaveRole(ADMIN_HOSPITAL) || this.userHaveRole(AGENT_HOSPITAL)
+    },
+    canViewAgent () {
+      if (this.user.hospital) {
+        return this.userHaveRole(AGENT_HOSPITAL)
+      }
+      return ''
     }
   },
-  mounted() {},
+  mounted () {
+    console.log('hospital id', this.user.hospital.id)
+    this.notificationNotRead()
+  },
   methods: {
-    ...mapActions(['logout', 'setChangeLogsRead']),
+    ...mapActions(['logout', 'setChangeLogsRead', 'getnotificationNotRead', 'setNotification']),
     ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
     userAvatarMouseEnter () {
       this.showUserCard = true
@@ -193,9 +227,19 @@ export default {
         this.showHeaderNotification = false
         this.setChangeLogsRead()
       }
+    },
+    async notificationNotRead () {
+      this.notificationNotReads = await this.getnotificationNotRead({ id: this.user.hospital.id })
+    },
+    async goToPageNotification () {
+      await this.setNotification({ id: this.user.hospital.id })
+      this.$router.push({
+        name: 'hospital.notification'
+      })
+      this.notificationNotRead()
     }
-  },
-};
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -284,6 +328,9 @@ export default {
     font-size: 20px;
     font-weight: 600;
     line-height: 24px;
+    @media (max-width: 400px) {
+      font-size: 15px;
+    }
     &:hover {
       cursor: pointer;
     }

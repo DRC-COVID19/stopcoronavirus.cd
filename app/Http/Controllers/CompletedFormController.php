@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use App\Hospital;
+use Carbon\Carbon;
 use App\CompletedForm;
 use App\FormFieldType;
 use App\CompletedFormField;
 use Illuminate\Http\Request;
 use function PHPSTORM_META\map;
 use Illuminate\Validation\Rule;
+
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-
-
 use App\Http\Requests\StoreCompletedFormRequest;
 use App\Http\Requests\UpdateCompletedFormRequest;
 
@@ -24,9 +26,11 @@ class CompletedFormController extends Controller
      *
      * @return void
      */
+    private $now = null;
     public function __construct()
     {
-        $this->middleware('auth:dashboard')->except(['show', 'getAggregatedByHospitals']);
+        $this->middleware('auth:dashboard')->except(['show', 'getAggregatedByHospitals', 'getDataByHospitals']);
+        $this->now = Carbon::now();
     }
     /**
      * Display a listing of the resource.
@@ -54,38 +58,36 @@ class CompletedFormController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
-    public function getLatestHospitalUpdate()
+    public function getLatestHospitalUpdate(Request $request)
     {
-
+        $formId = $request->query('form_id');
         try {
-            $completedForms = collect();
-            $hospitalIds = Hospital::all('id')
-                ->pluck('id')
-                ->unique()
-                ->sort()
-                ->values();
-
-            foreach ($hospitalIds as $id) {
-
-                $completedForm = CompletedForm::where('hospital_id', '=', intval($id));
-                $completedForm = $this->selectCompletedForms($completedForm)
-                    ->latest('last_update')
-                    ->first();
-
-                if ($completedForm === null) {
-                    $completedForm = [
-                        'diff_date' => -1,
-                        'last_update' => null,
-                        'hospital_id' => $id,
-                        'name' => Hospital::where('id', $id)->select('name')->first()->name,
-                        "created_manager_name" => null,
-                    ];
-                    $completedForms->push($completedForm);
-                } else {
-                    $completedForms->push($completedForm);
+            $hospitals = Hospital::with(['completedForms' => function ($query) use($formId)  {
+                if ($formId) {
+                  $query->where('form_id', $formId);
                 }
-            }
-            return response()->json($completedForms, 200, [], JSON_NUMERIC_CHECK);
+                $query
+                  ->select('*')
+                  ->selectRaw('CAST(NOW() as DATE) - (last_update) as diff_date')
+                  ->orderBy('last_update', 'desc');
+              },
+              'completedForms.form'])
+            ->get();
+
+            $hospitalsSanitized = $hospitals->map(function ($hospital) {
+                if (sizeof($hospital->completedForms) > 0) {
+                  $hospital['diff_date'] = $hospital->completedForms[0]->diff_date ;
+                  $hospital['last_update'] = $hospital->completedForms[0]->last_update ;
+                  $hospital['created_manager_name'] = $hospital->completedForms[0]->created_manager_name ;
+                  $hospital['created_manager_first_name'] = $hospital->completedForms[0]->created_manager_first_name ;
+                } else {
+                  $hospital['diff_date'] = -1 ;
+                  $hospital['last_update'] = null ;
+                }
+                return $hospital;
+            });
+
+            return response()->json($hospitalsSanitized, 200, [], JSON_NUMERIC_CHECK);
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -102,24 +104,25 @@ class CompletedFormController extends Controller
     public function store(StoreCompletedFormRequest $request)
     {
         try {
+            DB::transaction(function () use ($request) {
+              $admin_user =  $this->guard()->user();
+              $completedForm = CompletedForm::create(array_merge(
+                  $request->validated(),
+                  ['admin_user_id' => $admin_user->id]
+              ));
 
-            $admin_user =  $this->guard()->user();
-            $completedForm = CompletedForm::create(array_merge(
-                $request->validated(),
-                ['admin_user_id' => $admin_user->id]
-            ));
 
+              $completedFormFields = $request['completed_form_fields'];
 
-            $completedFormFields = $request['completed_form_fields'];
-
-            foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
-                CompletedFormField::create([
-                    'form_field_id'     => $formFieldKey,
-                    'value'             => $formFieldValue,
-                    'completed_form_id' => $completedForm->id
-                ]);
-            }
-            return response()->json($completedForm, 200, []);
+              foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+                  CompletedFormField::create([
+                      'form_field_id'     => $formFieldKey,
+                      'value'             => $formFieldValue,
+                      'completed_form_id' => $completedForm->id
+                  ]);
+              }
+              return response()->json($completedForm, 200, []);
+            });
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -160,6 +163,7 @@ class CompletedFormController extends Controller
     public function update(UpdateCompletedFormRequest $request, CompletedForm $completedForm)
     {
         try {
+          DB::transaction(function () use ($request, $completedForm) {
             $data = $request->validated();
             $updatedManagerName = $data['updated_manager_name'];
             $updatedManagerFirstName = $data['updated_manager_first_name'];
@@ -186,6 +190,7 @@ class CompletedFormController extends Controller
                 }
             }
             return response()->json($completedForm, 200, []);
+          });
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
@@ -202,7 +207,8 @@ class CompletedFormController extends Controller
      */
     public function destroy(CompletedForm $completedForm)
     {
-        //
+        $completedForm->delete();
+        return response()->json(null, 204);
     }
     /**
      * Get the guard to be used during authentication.
@@ -251,10 +257,27 @@ class CompletedFormController extends Controller
     {
 
         $hospitalsCompletedFormsData = self::getHospitalsCompletedFormsData($request);
+
+
         return response()->json([
             'aggregated'  => self::getAggregatedHospitalsDatas($hospitalsCompletedFormsData['hospitalsData']),
-            'data'        => $hospitalsCompletedFormsData['hospitalsData'],
             'last_update' => $hospitalsCompletedFormsData['lastUpdate']
+        ], 200);
+    }
+    /**
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\CompletedForm  $completedForm
+     * @return \Illuminate\Http\Response
+     */
+    public function getDataByHospitals(Request $request)
+    {
+
+        $hospitalsCompletedFormsData = self::getHospitalsCompletedFormsData($request);
+
+        return response()->json([
+            'data'        => $hospitalsCompletedFormsData['hospitalsData'],
+            'last_update' => $hospitalsCompletedFormsData['lastUpdate'],
         ], 200);
     }
 
@@ -321,9 +344,11 @@ class CompletedFormController extends Controller
         ];
     }
 
-    static public function getAggregatedHospitalsDatas($hospitalsData)
+    static public function getAggregatedHospitalsDatas($hospitalsDatas)
     {
-        $completedFormFields = collect($hospitalsData)
+
+
+        $completedFormFields = collect($hospitalsDatas)
             ->flatMap(function ($hospitalData) {
                 return $hospitalData->completedForms;
             })
@@ -333,6 +358,8 @@ class CompletedFormController extends Controller
             ->filter(function ($completedFormField) {
                 return $completedFormField->formField->form_field_type_id === FormFieldType::TYPE_NUMBER;
             });
+
+
 
         $completedFormFieldsGroup = $completedFormFields->groupBy('form_field_id')->values();
         return $completedFormFieldsGroup
@@ -352,9 +379,67 @@ class CompletedFormController extends Controller
             });
     }
 
-    public function checkLastUpdate($hospitalId, $lastUpdate){
-        return CompletedForm::where('last_update', $lastUpdate)->where('hospital_id',$hospitalId)->count();
+    public function checkLastUpdate($hospitalId, $lastUpdate)
+    {
+        $query = CompletedForm::where('last_update', $lastUpdate)->where('hospital_id', $hospitalId);
 
+        $formId = request()->query('form_id');
+        if($formId ) {
+          $query->where('form_id', $formId);
+        }
+
+        $completedForms = $query->count();
+        return $completedForms;
+    }
+
+    public function getAllFiltered(Request $request) {
+        $formId = $request->query('form_id');
+        $hospitalId = $request->query('hospital_id');
+        $adminUserId = $request->query('admin_user_id');
+        $dateRangeStart = $request->query('date_range_start');
+        $dateRangeEnd = $request->query('date_range_end');
+        $createdManager = $request->query('created_manager');
+
+        $perPage = $request->query('per_page') ?? 15;
+        $sortBy = $request->query('sort_by') ?? 'last_update';
+        $sortDirection = $request->query('sort_desc') ? 'desc' : 'asc';
+
+        $query = CompletedForm::with(['hospital', 'form']);
+
+        if ($formId) {
+          $query = $query->where('form_id', $formId);
+        }
+        if ($hospitalId) {
+          $query = $query->where('hospital_id', $hospitalId);
+        }
+        if ($adminUserId) {
+          $query = $query->where('admin_user_id', $adminUserId);
+        }
+        if ($createdManager) {
+          $query = $query
+            ->where('created_manager_name', 'ILIKE', '%' . $createdManager . '%')
+            ->orWhere('created_manager_first_name', 'ILIKE', '%' . $createdManager . '%');
+        }
+        if ($dateRangeStart && $dateRangeEnd) {
+          $query = $query->whereBetween('last_update', [$dateRangeStart, $dateRangeEnd]);
+        }
+        $query->select('*')
+              ->selectRaw ("'$this->now'- created_at as diff_date");
+
+        if ($sortBy === 'hospital') {
+          $query->join('hospitals', 'hospital_id', '=', 'hospitals.id')
+                ->select('completed_forms.*', 'hospitals.name as hospital_name')
+                ->orderBy('hospital_name', $sortDirection);
+        } else if ($sortBy === 'form') {
+          $query->join('forms', 'form_id', '=', 'forms.id')
+                ->select('completed_forms.*', 'forms.title as form_title')
+                ->orderBy('form_title', $sortDirection);
+        } else {
+          $query->orderBy($sortBy, $sortDirection);
+        }
+        $data = $query->paginate($perPage);
+
+        return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
     }
 
 }

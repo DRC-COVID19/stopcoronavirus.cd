@@ -15,16 +15,20 @@ class FormRecurrenceSeeder extends Seeder
         DB::table('form_recurrences')->truncate();
         DB::table('form_recurrences')->insert([
             [
-                'name'    =>'Tous les jours',
-                'slug'    =>'every_day'
+                'name'    =>'jour',
+                'slug'    =>'day'
             ],
             [
-                'name'    => 'Une fois par semaine',
-                'slug'    => 'one_time_by_week',
+                'name'    => 'semaine',
+                'slug'    => 'week',
             ],
             [
-                'name'    => 'Une fois par mois',
-                'slug'    => 'one_time_by_month'
+                'name'    => 'mois',
+                'slug'    => 'month'
+            ],
+            [
+                'name'    => 'année',
+                'slug'    => 'year'
             ],
         ]);
     }

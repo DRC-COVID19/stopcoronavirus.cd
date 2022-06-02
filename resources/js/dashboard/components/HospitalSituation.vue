@@ -1,9 +1,19 @@
 /* eslint-disable no-empty */
 <template>
   <b-container class="p-0">
-    <b-row lg="12" class="no-gutters">
+    <b-row lg="12" class="p-0 no-gutters">
       <b-col cols="12" fluid>
-        <div class="col-12 mb-2 row align-items-center px-2 no-gutters">
+        <div
+          class="
+            col-12
+            mb-2
+            row
+            align-items-start
+            px-2
+            no-gutters
+            justify-content-start
+          "
+        >
           <skeleton-loading v-if="isLoading" class="col-12 col-md-12">
             <square-skeleton
               :boxProperties="{
@@ -12,41 +22,56 @@
               }"
             ></square-skeleton>
           </skeleton-loading>
-          <b-row v-if="!isLoading" class="mb-2 align-items-center">
+          <b-row v-if="!isLoading" class="mb-2 align-items-start">
             <b-col lg="12" class="align-items-center">
               <h4>{{ hospital.name || "Rapport global" }}</h4>
             </b-col>
-            <b-col lg="4" class="align-items-center">
+            <b-col lg="12" class="align-items-start">
               <b-badge v-if="hospitalCount" style="font-size: 12px">
                 {{ hospitalCount }}
                 <small>infrastructure(s)</small>
               </b-badge>
             </b-col>
           </b-row>
-          <div v-if="isGlobal" class="col-12 d-flex flex-wrap text-right justify-content-end">
-            <div class="col-12 px-0 mb-1" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </div>
-            <export-excel
-              :data="hospitalSituationData"
-              :name="fileName"
-            >
-              <button
-                :disabled="hospitalSituationData.length === 0"
-                class="btn btn-dash-blue btn-secondary btn-block cursor-pointer btn-export"
-              >
-                <small>Télécharger les données</small>
-                <i class="fas fa-file-excel ml-2" style="font-size: 20px" aria-hidden="true"></i>
-              </button>
+          <div
+            v-if="isGlobal"
+            class="col-12 d-flex flex-wrap text-right justify-content-end"
+          >
+            <div class="col-12 px-0 mb-1" v-if="hospitalSituationLastUpdate">
+              Mise à jour du {{ hospitalSituationLastUpdate }}
+            </div>
+            <export-excel :fetch="uploadFile" :name="fileName">
+              <div>
+                <button
+                  :disabled="
+                    completedFormsAggregated.aggregated.length === 0 ||
+                    filterData.hasOwnProperty('activeFilter') === false
+                  "
+                  class="
+                    btn btn-dash-blue btn-secondary btn-block
+                    cursor-pointer
+                    btn-export
+                  "
+                >
+                  <small>Télécharger les données</small>
+                  <i
+                    class="fas fa-file-excel ml-2"
+                    style="font-size: 20px"
+                    aria-hidden="true"
+                  ></i>
+                </button>
+                <div class="text-center text-danger" v-if="isFileLoading">
+                  <b-spinner label="Spinning"></b-spinner>
+                </div>
+              </div>
             </export-excel>
           </div>
           <div class="col-12 text-right" v-if="!isLoading && !isGlobal">
-            <p class="mb-0" v-if="hospitalSituationLastUpdate">Mise à jour du {{ hospitalSituationLastUpdate }} </p>
-            <button
-              class="btn btn-primary"
-              @click="backToTotalData()"
-            >
-              <small>
-                Retour aux données globales
-              </small>
+            <p class="mb-0" v-if="hospitalSituationLastUpdate">
+              Mise à jour du {{ hospitalSituationLastUpdate }}
+            </p>
+            <button class="btn btn-danger" @click="backToTotalData()">
+              <small> Retour aux données globales </small>
             </button>
           </div>
         </div>
@@ -67,9 +92,7 @@
             v-if="hospitalsDataGroupedByStep.length === 0"
             class="default-card col-12"
           >
-            <p class="text-center">
-              Aucunes données disponibles
-            </p>
+            <p class="text-center">Aucunes données disponibles</p>
           </b-card>
           <b-card
             class="col-12 default-card mb-2"
@@ -77,13 +100,19 @@
             :key="index"
           >
             <h5 class="bold">{{ step.title }}</h5>
-            <div v-for="(aggregatedFormField, key) in step.aggregated_form_fields" :key="key">
+            <div
+              v-for="(aggregatedFormField, key) in step.aggregated_form_fields"
+              :key="key"
+            >
               <p>
                 {{ aggregatedFormField.form_field.name }} :
                 <strong>{{ aggregatedFormField.value }}</strong>
-                <span v-if="aggregatedFormField.form_field.agreggation" style="color:aaa">(somme)</span>
-                <span v-else style="color:aaa">(moyenne)</span>
-
+                <span
+                  v-if="aggregatedFormField.form_field.agreggation"
+                  class="mode-agreggation"
+                  >(somme)</span
+                >
+                <span v-else class="mode-agreggation">(moyenne)</span>
               </p>
             </div>
           </b-card>
@@ -94,42 +123,46 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
-import { PALETTE } from '../config/env'
-import { groupAggregatedDataByFormStepField } from '../functions/customFormFieldFunction'
+import { mapState, mapActions, mapMutations } from "vuex";
+import { PALETTE } from "../config/env";
+import { groupAggregatedDataByFormStepField } from "../functions/customFormFieldFunction";
 
 export default {
   components: {},
-  data () {
+  data() {
     return {
       etatGlobal: true,
       dataGlobal: null,
       objetChart: {},
+      isFileLoading: false,
+      completedFormsData: {},
       chartLabels: [
         {
           title: "Evolution du taux d'occupation des respirateurs",
-          lableY: 'Nombre de respirateurs'
+          lableY: "Nombre de respirateurs",
         },
 
         {
           title: "Evolution du taux d'occupation des lits de réanimation",
-          lableY: 'Nombre de lits'
+          lableY: "Nombre de lits",
         },
 
         {
           title: "Evolution global du taux d'occupation",
-          lableY: "Taux d'occupation"
-        }
-      ]
-    }
+          lableY: "Taux d'occupation",
+        },
+      ],
+    };
   },
-  async mounted () {
-    const id = this.selectedHospital ? this.selectedHospital.id : null
-    this.completedForm__getAggregatedByHospitals({
-      hospital_id: id
-    })
-    if (this.filterdHospitalSituation && this.filterdHospitalSituation.last_update.length > 0) {
-      this.hospitalSituationFiltered()
+  async mounted() {
+    const id = this.selectedHospital ? this.selectedHospital.id : null;
+    this.completedForm__getAggregatedByHospitals({ hospital_id: id });
+
+    if (
+      this.filterdHospitalSituation &&
+      this.filterdHospitalSituation.last_update.length > 0
+    ) {
+      this.hospitalSituationFiltered();
     }
   },
   computed: {
@@ -140,273 +173,299 @@ export default {
       hospitalData: (state) => state.hospital.hospitalData,
       situationHospital: (state) => state.hospital.situationHospital,
       hospitalCount: (state) => state.hospital.hospitalCount,
-      isLoading: (state) => state.hospital.isLoading,
+      isLoading: (state) =>
+        state.completedForm.iscompletedFormsAggregatedLoading,
       formSteps: (state) => state.formStep.formSteps,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,
       hospitalSituationSelected: (state) =>
         state.hospitalSituation.hospitalSituationSelected,
-      observation_start: (state) => state.hospitalSituation.observation_start,
-      observation_end: (state) => state.hospitalSituation.observation_end,
+
       filterdHospitalSituation: (state) =>
         state.hospitalSituation.filterdHospitalSituation,
       hospitalObservationSituation: (state) =>
         state.hospitalSituation.hospitalObservationSituation,
       completedFormsAggregated: (state) =>
-        state.completedForm.completedFormsAggregated
+        state.completedForm.completedFormsAggregated,
+      filterData: (state) => state.completedForm.filterData,
     }),
-    hospital () {
-      if (this.selectedHospital != null) return this.selectedHospital
+    hospital() {
+      if (this.selectedHospital != null) return this.selectedHospital;
       else {
-        return this.hospitalTotalData ? this.hospitalTotalData : {}
+        return this.hospitalTotalData ? this.hospitalTotalData : {};
       }
     },
-    isGlobal () {
-      return this.selectedHospital == null
+    isGlobal() {
+      return this.selectedHospital == null;
     },
-    lastUpdate () {
+    lastUpdate() {
       if (this.selectedHospital != null) {
-        return this.selectedHospital.last_update
+        return this.selectedHospital.last_update;
       } else if (this.dataGlobal) {
         return this.dataGlobal.last_update[
           this.dataGlobal.last_update.length - 1
-        ]
-      } else return null
+        ];
+      } else return null;
     },
-    hospitalSituationReduced () {
-      return this.createSituationsReduce(this.hospitalSituationAll.allFormFields)
+    hospitalSituationReduced() {
+      return this.createSituationsReduce(
+        this.hospitalSituationAll.allFormFields
+      );
     },
-    hospitalSituationFiltered () {
+    hospitalSituationFiltered() {
       const arrayFilterd = [].concat.apply(
         [],
         this.filterdHospitalSituation.form_fields_names
-      )
-      return this.createSituationsReduce(arrayFilterd)
+      );
+      return this.createSituationsReduce(arrayFilterd);
     },
-    fileName () {
-      if (this.observation_start == null) {
+    fileName() {
+      if (this.filterData.observation_start == null) {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        return `Données_du_${this.observation_end}.xls`
+        return `Données_du_${this.filterData.observation_end}.xls`;
       } else {
-        return `Données_du_${this.observation_start}_au_${this.observation_end}.xls`
+        return `Données_du_${this.filterData.observation_start}_au_${this.filterData.observation_end}.xls`;
       }
     },
-    hospitalSituationData () {
-      const hospitalsSituationsData = this.completedFormsAggregated.data || []
-      return hospitalsSituationsData
-        .flatMap(hospital => {
-          return hospital.completed_forms
-            .map(completedForm => {
-              const datas = {
-                'Date de soumission': moment(completedForm.last_update).format('DD/MM/YY'),
-                'Identifiant hopital': hospital.id,
-                'Nom hopital': hospital.name,
-                'Identifiant agent': completedForm.admin_user?.username || '-',
-                'N° Téléphone Agent': completedForm.admin_user.phone_number
 
-              }
-              completedForm.completed_form_fields.forEach(completedFormField => {
-                datas[completedFormField.form_field.name] = completedFormField.value
-              })
-              return datas
-            })
-        })
-        .filter((a, b) => a['Date de soumission'].localeCompare(b['Date de soumission']))
-    },
-    hospitalSituationLastUpdate () {
+    hospitalSituationLastUpdate() {
       if (this.selectedHospital && this.selectedHospital.id) {
-        return this.selectedHospital.last_update ? moment(this.selectedHospital.last_update).format('DD.MM.YYYY') : null
+        return this.selectedHospital.last_update
+          ? moment(this.selectedHospital.last_update).format("DD.MM.YYYY")
+          : null;
       } else if (this.completedFormsAggregated.last_update) {
-        return moment(this.completedFormsAggregated.last_update).format('DD.MM.YYYY')
+        return moment(this.completedFormsAggregated.last_update).format(
+          "DD.MM.YYYY"
+        );
       } else {
-        return null
+        return null;
       }
     },
-    prepareGraphicSituation () {
-      return this.hospitalSituationAll.formFieldsFiltered
+    prepareGraphicSituation() {
+      return this.hospitalSituationAll.formFieldsFiltered;
     },
-    hospitalSelectedFiltered () {
+    hospitalSelectedFiltered() {
       const arrayFilterd = [].concat.apply(
         [],
         this.hospitalSituationSelected.form_fields_names
-      )
-      return this.createSituationsReduce(arrayFilterd)
+      );
+      return this.createSituationsReduce(arrayFilterd);
     },
-    hospitalsDataGroupedByStep () {
+    hospitalsDataGroupedByStep() {
       if (this.selectedHospital && this.selectedHospital.id) {
-        const aggregatedData = JSON.parse(this.selectedHospital.aggregated)
-        return groupAggregatedDataByFormStepField(aggregatedData || [])
+        const aggregatedData = JSON.parse(this.selectedHospital.aggregated);
+        return groupAggregatedDataByFormStepField(aggregatedData || []);
       } else {
-        return groupAggregatedDataByFormStepField(this.completedFormsAggregated.aggregated || [])
+        return groupAggregatedDataByFormStepField(
+          this.completedFormsAggregated.aggregated || []
+        );
       }
-    }
+    },
   },
   watch: {
     hospitalData () {
       this.selectHospital(null)
       // this.getSituationHospital()
     },
-    selectedHospital (val) {
-      const id = val ? val.id : null
-      console.log(val)
+    selectedHospital(val) {
+      const id = val ? val.id : null;
+
       const form = {
         hospital: id,
-        observation_start: this.observation_start,
-        observation_end: this.observation_end
-      }
-      // this.gethospitalsFiltered(form)
+        observation_start: this.filterData.observation_start,
+        observation_end: this.filterData.observation_end,
+      };
+      this.completedForm__getAggregatedByHospitals(form);
     },
-    situationHospital (val) {
-      this.dataGlobal = val
-      this.paintStats(val)
+    situationHospital(val) {
+      this.dataGlobal = val;
+      this.paintStats(val);
     },
-    chartData () {
-      this.$data._chart.update()
-    }
+    chartData() {
+      this.$data._chart.update();
+    },
   },
   methods: {
     ...mapActions([
-      'getSituationHospital',
-      'completedForm__getAggregatedByHospitals'
+      "getSituationHospital",
+      "completedForm__getAggregatedByHospitals",
+      "completedForm__getDataByHospitals",
     ]),
-    ...mapMutations(['selectHospital']),
-    paintStats (data) {
-      const lastUpdates = data.last_update
-      const occupiedRespirators = data.occupied_respirators
-      const occupiedResuscitation_beds = data.occupied_resuscitation_beds
-      const unknow = []
-      const Respirators = [...occupiedRespirators]
-      const Resuscitation_beds = [...occupiedResuscitation_beds]
+    ...mapMutations(["selectHospital"]),
+    async uploadFile() {
+      this.isFileLoading = true;
 
-      const valideIndex = []
+      this.completedFormsData = await this.completedForm__getDataByHospitals(
+        this.filterData
+      );
+      this.isFileLoading = Object.keys(this.completedFormsData).length === 0;
+      return this.hospitalSituationDatas(this.completedFormsData);
+    },
+    hospitalSituationDatas(completedFormsData) {
+      const hospitalsSituationsData = completedFormsData.data || [];
+
+      return hospitalsSituationsData
+        .flatMap((hospital) => {
+          return hospital.completed_forms.map((completedForm) => {
+            const datas = {
+              "Date de soumission": moment(completedForm.last_update).format(
+                "DD/MM/YY"
+              ),
+              "Identifiant hopital": hospital.id,
+              "Nom hopital": hospital.name,
+              "Identifiant agent": completedForm.admin_user?.username || "-",
+              "N° Téléphone Agent": completedForm.admin_user.phone_number,
+            };
+            completedForm.completed_form_fields.forEach(
+              (completedFormField) => {
+                datas[completedFormField.form_field.name] =
+                  completedFormField.value;
+              }
+            );
+            return datas;
+          });
+        })
+        .filter((a, b) =>
+          a["Date de soumission"].localeCompare(b["Date de soumission"])
+        );
+    },
+    paintStats(data) {
+      const lastUpdates = data.last_update;
+      const occupiedRespirators = data.occupied_respirators;
+      const occupiedResuscitation_beds = data.occupied_resuscitation_beds;
+
+      const Respirators = [...occupiedRespirators];
+      const Resuscitation_beds = [...occupiedResuscitation_beds];
+
+      const valideIndex = [];
       data.occupied_respirators = occupiedRespirators.map((item, index) => {
         if (!item || Number(item) == 0) {
-          const y1Array = []
-          const y2Array = []
+          const y1Array = [];
+          const y2Array = [];
 
           occupiedRespirators.map((x, i) => {
             if (i < index && x && Number(x) > 0) {
               y1Array.push({
                 value: x,
-                i
-              })
+                i,
+              });
             }
             if (i > index && x && Number(x) > 0) {
               y2Array.push({
                 value: x,
-                i
-              })
+                i,
+              });
             }
-          })
-          let y1 = null
-          let y2 = null
-          let x1 = null
-          let x2 = null
+          });
+          let y1 = null;
+          let y2 = null;
+          let x1 = null;
+          let x2 = null;
           if (y1Array && y1Array.length > 0) {
-            y1 = y1Array[y1Array.length - 1]
-            x1 = lastUpdates[y1.i]
+            y1 = y1Array[y1Array.length - 1];
+            x1 = lastUpdates[y1.i];
           }
           if (y2Array && y2Array.length > 0) {
-            y2 = y2Array[0]
-            x2 = lastUpdates[y2.i]
+            y2 = y2Array[0];
+            x2 = lastUpdates[y2.i];
           }
-          const x = lastUpdates[index]
+          const x = lastUpdates[index];
 
           if (y1 && y2 && x1 && x2) {
-            const x_x1 = Math.abs(new Date(x) - new Date(x1))
-            const x2_x1 = Math.abs(new Date(x2) - new Date(x1))
-            const y2_y1 = Number(y2.value) - Number(y1.value)
-            const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1
+            const x_x1 = Math.abs(new Date(x) - new Date(x1));
+            const x2_x1 = Math.abs(new Date(x2) - new Date(x1));
+            const y2_y1 = Number(y2.value) - Number(y1.value);
+            const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
 
-            return y
+            return y;
           }
         }
-        return item
-      })
+        return item;
+      });
 
       data.occupied_resuscitation_beds = occupiedResuscitation_beds.map(
         (item, index) => {
           if (!item || Number(item) === 0) {
-            const y1Array = []
-            const y2Array = []
+            const y1Array = [];
+            const y2Array = [];
 
             occupiedResuscitation_beds.map((x, i) => {
               if (i < index && x && Number(x) > 0) {
                 y1Array.push({
                   value: x,
-                  i
-                })
+                  i,
+                });
               }
               if (i > index && x && Number(x) > 0) {
                 y2Array.push({
                   value: x,
-                  i
-                })
+                  i,
+                });
               }
-            })
-            let y1 = null
-            let y2 = null
-            let x1 = null
-            let x2 = null
+            });
+            let y1 = null;
+            let y2 = null;
+            let x1 = null;
+            let x2 = null;
             if (y1Array && y1Array.length > 0) {
-              y1 = y1Array[y1Array.length - 1]
-              x1 = lastUpdates[y1.i]
+              y1 = y1Array[y1Array.length - 1];
+              x1 = lastUpdates[y1.i];
             }
             if (y2Array && y2Array.length > 0) {
-              y2 = y2Array[0]
-              x2 = lastUpdates[y2.i]
+              y2 = y2Array[0];
+              x2 = lastUpdates[y2.i];
             }
-            const x = lastUpdates[index]
+            const x = lastUpdates[index];
 
             if (y1 && y2 && x1 && x2) {
-              const x_x1 = Math.abs(new Date(x) - new Date(x1))
-              const x2_x1 = Math.abs(new Date(x2) - new Date(x1))
-              const y2_y1 = Number(y2.value) - Number(y1.value)
-              const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1
+              const x_x1 = Math.abs(new Date(x) - new Date(x1));
+              const x2_x1 = Math.abs(new Date(x2) - new Date(x1));
+              const y2_y1 = Number(y2.value) - Number(y1.value);
+              const y = Number(y1.value) + (y2_y1 / x2_x1) * x_x1;
 
-              return y
+              return y;
             }
           }
-          return item
+          return item;
         }
-      )
+      );
 
       const totalRescitationBed = Number(
         data.resuscitation_beds[data.resuscitation_beds.length - 1]
-      )
+      );
       const totalRespirator = Number(
         data.respirators[data.respirators.length - 1]
-      )
+      );
 
       for (let i = 0; i < 3; i++) {
         const callbacks = {
           title: (a, d) => {
-            return this.moment(a[0].xLabel).format('DD.MM.Y')
-          }
-        }
-        let ticksY = {}
-        let datasets = []
-        let annotation = {}
+            return this.moment(a[0].xLabel).format("DD.MM.Y");
+          },
+        };
+        let ticksY = {};
+        let datasets = [];
+        let annotation = {};
         if (i == 0) {
           annotation = {
-            drawTime: 'afterDraw',
+            drawTime: "afterDraw",
             annotations: [
               {
-                id: 'line' + i,
-                type: 'line',
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
+                id: "line" + i,
+                type: "line",
+                mode: "horizontal",
+                scaleID: "y-axis-0",
                 value: totalRespirator,
-                borderColor: 'magenta',
-                label: { content: 'label' },
-                borderWidth: 3
-              }
-            ]
-          }
+                borderColor: "magenta",
+                label: { content: "label" },
+                borderWidth: 3,
+              },
+            ],
+          };
 
           datasets = [
             {
-              label: 'Respirateurs occupés',
+              label: "Respirateurs occupés",
               fill: false,
               backgroundColor: PALETTE.dash_green,
               borderColor: PALETTE.dash_green,
@@ -414,62 +473,62 @@ export default {
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
+              lineTension: 0.4,
             },
             {
-              label: 'Interpolation',
+              label: "Interpolation",
               fill: false,
               backgroundColor: PALETTE.dash_red,
               borderColor: PALETTE.dash_red,
               data: data.occupied_respirators.map((x, i) => {
-                if (x == 0) return null
+                if (x == 0) return null;
                 if (
                   !+Respirators[i] ||
                   (!+Respirators[i - 1] && +data.occupied_respirators[i - 1]) ||
                   (!+Respirators[i + 1] && +data.occupied_respirators[i + 1])
                 ) {
-                  return x
+                  return x;
                 }
 
-                return null
+                return null;
               }),
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
-            }
-          ]
-          const respiratorMax = Math.max(...Respirators.map((x) => Number(x)))
-          let tickMax = respiratorMax
+              lineTension: 0.4,
+            },
+          ];
+          const respiratorMax = Math.max(...Respirators.map((x) => Number(x)));
+          let tickMax = respiratorMax;
           if (totalRespirator > respiratorMax) {
-            tickMax = totalRespirator + 1
+            tickMax = totalRespirator + 1;
           }
           ticksY = {
             min: 0,
             max: tickMax,
-            precision: 0
-          }
+            precision: 0,
+          };
         } else if (i == 1) {
           annotation = {
-            drawTime: 'afterDraw',
+            drawTime: "afterDraw",
             annotations: [
               {
-                id: 'line' + i,
-                type: 'line',
-                mode: 'horizontal',
-                scaleID: 'y-axis-0',
+                id: "line" + i,
+                type: "line",
+                mode: "horizontal",
+                scaleID: "y-axis-0",
                 value: totalRescitationBed,
-                borderColor: 'magenta',
+                borderColor: "magenta",
                 borderWidth: 3,
-                label: 'label'
-              }
-            ]
-          }
+                label: "label",
+              },
+            ],
+          };
 
           datasets = [
             {
-              label: 'Lits de réanimation occupés',
+              label: "Lits de réanimation occupés",
               backgroundColor: PALETTE.dash_green,
               borderColor: PALETTE.dash_green,
               data: Resuscitation_beds.map((x) => (x === 0 ? null : x)),
@@ -477,14 +536,14 @@ export default {
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
+              lineTension: 0.4,
             },
             {
-              label: 'interpolation',
+              label: "interpolation",
               backgroundColor: PALETTE.dash_red,
               borderColor: PALETTE.dash_red,
               data: data.occupied_resuscitation_beds.map((x, i) => {
-                if (x == 0) return null
+                if (x == 0) return null;
                 if (
                   !+Resuscitation_beds[i] ||
                   (!+Resuscitation_beds[i - 1] &&
@@ -492,51 +551,51 @@ export default {
                   (!+Resuscitation_beds[i + 1] &&
                     +data.occupied_resuscitation_beds[i + 1])
                 ) {
-                  return x
+                  return x;
                 }
 
-                return null
+                return null;
               }),
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
-            }
-          ]
+              lineTension: 0.4,
+            },
+          ];
 
           const resuscitationBedsMax = Math.max(
             ...Resuscitation_beds.map((x) => Number(x))
-          )
-          let tickMax = resuscitationBedsMax
+          );
+          let tickMax = resuscitationBedsMax;
           if (totalRescitationBed > resuscitationBedsMax) {
-            tickMax = totalRescitationBed + 1
+            tickMax = totalRescitationBed + 1;
           }
 
           ticksY = {
             min: 0,
             precision: 0,
-            max: tickMax
-          }
+            max: tickMax,
+          };
         } else {
           const dataset1 = data.occupied_resuscitation_beds.map((a, i) => {
             // if (a == 0 || data.resuscitation_beds[i] == 0) return null;
             return Math.round(
               (a * 100) /
                 data.resuscitation_beds[data.resuscitation_beds.length - 1]
-            )
-          })
+            );
+          });
 
           const dataset2 = data.occupied_respirators.map((a, i) => {
             // if (a == 0 || data.respirators[i] == 0) return null;
             return Math.round(
               (a * 100) / data.respirators[data.respirators.length - 1]
-            )
-          })
+            );
+          });
 
           datasets = [
             {
-              label: 'Taux occupation des Réspirateurs',
+              label: "Taux occupation des Réspirateurs",
               backgroundColor: PALETTE.dash_green,
               borderColor: PALETTE.dash_green,
               data: dataset2,
@@ -544,123 +603,123 @@ export default {
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
+              lineTension: 0.4,
             },
             {
-              label: 'Taux occupation des lits de réanimation',
-              backgroundColor: 'magenta',
-              borderColor: 'magenta',
+              label: "Taux occupation des lits de réanimation",
+              backgroundColor: "magenta",
+              borderColor: "magenta",
               data: dataset1,
               fill: false,
               interpolate: true,
               showLine: true,
               pointRadius: 2,
-              lineTension: 0.4
-            }
-          ]
+              lineTension: 0.4,
+            },
+          ];
 
           callbacks.label = function (tooltipItem, data) {
-            let label = data.datasets[tooltipItem.datasetIndex].label || ''
-            if (label) label += ': '
-            label += tooltipItem.yLabel + '%'
-            return label
-          }
+            let label = data.datasets[tooltipItem.datasetIndex].label || "";
+            if (label) label += ": ";
+            label += tooltipItem.yLabel + "%";
+            return label;
+          };
 
           ticksY = {
             min: 0,
             callback: function (value, index, values) {
-              return value + '%'
-            }
-          }
+              return value + "%";
+            },
+          };
         }
         const config = {
-          type: 'line',
+          type: "line",
           data: {
             labels: data.last_update.map((d) => new Date(d)),
-            datasets: datasets
+            datasets: datasets,
           },
           options: {
             responsive: true,
             maintainAspectRatio: false,
             legend: {
-              display: false
+              display: false,
             },
             title: {
               display: false,
               text: this.chartLabels[i].title,
-              fontSize: 11
+              fontSize: 11,
             },
             tooltips: {
-              mode: 'index',
+              mode: "index",
               intersect: false,
-              callbacks: callbacks
+              callbacks: callbacks,
             },
             annotation,
             plugins: {
               crosshair: {
                 sync: {
-                  enabled: false // enable trace line syncing with other charts
+                  enabled: false, // enable trace line syncing with other charts
                 },
                 zoom: {
-                  enabled: false
-                }
-              }
+                  enabled: false,
+                },
+              },
             },
             hover: {
-              mode: 'nearest',
-              intersect: true
+              mode: "nearest",
+              intersect: true,
             },
             scales: {
               xAxes: [
                 {
                   display: true,
-                  type: 'time',
-                  distribution: 'series',
+                  type: "time",
+                  distribution: "series",
                   time: {
-                    unit: 'day',
+                    unit: "day",
                     unitStepSize: 1,
                     displayFormats: {
-                      day: 'DD.MM'
-                    }
+                      day: "DD.MM",
+                    },
                   },
                   scaleLabel: {
                     display: true,
-                    labelString: 'Periode'
+                    labelString: "Periode",
                   },
                   ticks: {
                     fontSize: 9,
                     autoSkip: false,
                     maxRotation: 90,
-                    minRotation: 90
-                  }
-                }
+                    minRotation: 90,
+                  },
+                },
               ],
               yAxes: [
                 {
                   display: true,
                   scaleLabel: {
                     display: true,
-                    labelString: this.chartLabels[i].lableY
+                    labelString: this.chartLabels[i].lableY,
                   },
-                  ticks: ticksY
-                }
-              ]
-            }
-          }
-        }
-        const reference = this.$refs[`canvasStat${i + 1}`]
-        if (this.lineCharts[i]) this.lineCharts[i].destroy()
-        this.lineCharts[i] = new Chart(reference.getContext('2d'), config)
-        reference.style.height = '200px'
-        reference.style.maxHeight = '200px'
+                  ticks: ticksY,
+                },
+              ],
+            },
+          },
+        };
+        const reference = this.$refs[`canvasStat${i + 1}`];
+        if (this.lineCharts[i]) this.lineCharts[i].destroy();
+        this.lineCharts[i] = new Chart(reference.getContext("2d"), config);
+        reference.style.height = "200px";
+        reference.style.maxHeight = "200px";
         // this.lineCharts[i].generateLegend();
       }
     },
-    backToTotalData () {
-      this.selectHospital(null)
+    backToTotalData() {
+      this.selectHospital(null);
     },
-    createSituationsReduce (array = []) {
-      const formIds = []
+    createSituationsReduce(array = []) {
+      const formIds = [];
       if (array.length > 0) {
         array
           ?.slice()
@@ -674,30 +733,30 @@ export default {
             ) {
               formIds.push({
                 form_step_id: item.form_step_id,
-                form_step_title: item.form_step_title
-              })
+                form_step_title: item.form_step_title,
+              });
             }
-          })
+          });
         const formStepsList = formIds.map((form) => {
           const formStep = {
             form_step_id: form.form_step_id,
-            form_step_title: form.form_step_title
-          }
+            form_step_title: form.form_step_title,
+          };
           formStep.form_field_values = array.filter(
             (arr) => arr.form_step_id == formStep.form_step_id
-          )
-          return formStep
-        })
-        return formStepsList
+          );
+          return formStep;
+        });
+        return formStepsList;
       }
-      return []
+      return [];
     },
-    parseData (data) {
-      if (data == null) return 'N/A'
-      else return data
-    }
-  }
-}
+    parseData(data) {
+      if (data == null) return "N/A";
+      else return data;
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
@@ -752,8 +811,11 @@ export default {
     left: calc(50% - 20px);
   }
 }
-.btn-export[disabled='disabled'] {
+.btn-export[disabled="disabled"] {
   opacity: 0.2;
   cursor: not-allowed;
+}
+.mode-agreggation {
+  color: #aaa;
 }
 </style>

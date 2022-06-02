@@ -27,11 +27,11 @@ class FormFieldController extends Controller
     public function store(Request $request)
     {
       $data = $this->storeValidator();
-      if(request()->has('order_field')){
+      $formField = null;
+      if(request()->has('order_field')&& $request->order_field){
           $data['order_field'] = request('order_field');
           $formField = FormField::create($data);
-        return response()->json($formField, 200);
-      } else{
+      } else if(request()->has('form_field_order') && $request->form_field_order){
           $formFieldOrder = FormField::find($request->form_field_order);
           $data['order_field'] = $formFieldOrder->order_field;
           $formField = FormField::create($data);
@@ -39,9 +39,19 @@ class FormFieldController extends Controller
           FormField::where('order_field', '>', $formFieldOrder->order_field)->increment('order_field', 1);
           $formFieldOrder->order_field++;
           $formFieldOrder->save();
-
-          return response()->json($formField, 200);
+      } else {
+          $lastField = FormField::where('form_id', $data['form_id'])
+            ->where('form_step_id', $data['form_step_id'])
+            ->orderBy('order_field', 'desc')
+            ->first();
+          if (!$lastField) {
+            $data['order_field'] = 1;
+          } else {
+            $data['order_field'] = $lastField->order_field + 1;
+          }
+          $formField = FormField::create($data);
       }
+      return response()->json($formField, 200);
 
     }
 
@@ -66,7 +76,7 @@ class FormFieldController extends Controller
      */
     public function update(FormField $formField, Request $request)
     {
-        $result = $formField->update($this->updateValidator());
+        $formField->update($this->updateValidator());
         if($request->form_field_order) {
           $formFieldOrder = FormField::find($request->form_field_order);
           if ($formFieldOrder->id !== $formField->id) {
@@ -77,7 +87,8 @@ class FormFieldController extends Controller
             $formFieldOrder->save();
           }
         }
-        return response()->json( $result, 200);
+        $formField->refresh();
+        return response()->json( $formField, 200);
     }
 
     /**
@@ -88,13 +99,25 @@ class FormFieldController extends Controller
      */
     public function destroy(FormField $formField)
     {
-        $formField->delete();
-        return response()->json(null, 200);
+      $formField->delete();
+      return response()->json($formField, 200);
     }
 
 
-    public function getFormFieldByForm($form){
-        $formFields = FormField::with(['form','formStep'])->where('form_id',$form)->get();
+    public function getFormFieldByForm(Request $request){
+        $form_id = $request->input('form_id');
+        $step_id = $request->input('step_id');
+        $formFields = FormField::with(['form','formStep','formFieldType'])
+          ->where(function($query) use ($form_id, $step_id){
+            if($form_id){
+              $query->where('form_id', $form_id);
+            }
+            if($step_id){
+              $query->where('form_step_id', $step_id);
+            }
+          })
+          ->orderBy('order_field')
+          ->get();
         return response()->json($formFields, 200);
 
     }
@@ -112,6 +135,7 @@ class FormFieldController extends Controller
           'rules'                 => 'nullable|string',
           'agreggation'           => 'nullable|boolean',
           'default_value'         => 'nullable|string|max:255',
+          'form_field_order'      => 'nullable|integer|exists:form_fields,id',
           'form_id'               => 'required|integer|exists:forms,id',
           'form_field_type_id'    => 'required|integer|exists:form_field_types,id',
           'form_step_id'          => 'required|integer|exists:form_steps,id'

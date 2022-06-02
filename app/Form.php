@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Hospital;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,8 +14,10 @@ class Form extends Model
     protected $fillable = [
         'title',
         'publish',
+        'visible_all_hospitals',
         'form_recurrence_value',
-        'form_recurrence_id'
+        'form_recurrence_id',
+        'form_recurrence_number'
     ];
 
     public function formRecurrence()
@@ -24,10 +27,27 @@ class Form extends Model
 
     public function formSteps()
     {
-        return $this->hasMany(FormStep::class);
+        return $this->hasMany(FormStep::class)->orderBy('step');
     }
+    
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
     public function formFields()
     {
         return $this->hasMany(FormField::class);
     }
+
+    public function completedforms()
+    {
+        return $this->hasMany(CompletedForm::class);
+    }
+
+    public function hospitals()
+    {
+        return $this->belongsToMany(Hospital::class);
+    }
+
 }

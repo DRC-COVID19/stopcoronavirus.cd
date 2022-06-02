@@ -21,4 +21,11 @@ class AdminUser extends Model
         'remember_token',
         'phone_number'
     ];
+
+    public function notifications(){
+        return $this->belongsToMany(Notification::class);
+    }
+
+
+
 }

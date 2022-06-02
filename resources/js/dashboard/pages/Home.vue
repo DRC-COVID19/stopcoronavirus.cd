@@ -50,7 +50,7 @@
             v-show="activeMenu == 5"
             :hospitalCount="hospitalCount"
             :townships="townships"
-            :hospitals="hospitalsList"
+            :hospitals="hospitalsData"
             @hopitalChecked="gethopitals"
             @submitInfrastructureForm="submitInfrastructureForm"
           />
@@ -261,7 +261,7 @@
             >
               <Maps
                 :covidCases="covidCases"
-                :hospitals="hospitals"
+                :hospitals="hospitalsData"
                 :medicalOrientations="medicalOrientations"
                 :medicalOrientationSelected="medicalOrientationSelected"
                 :sondages="sondages"
@@ -534,7 +534,7 @@ export default {
   },
   computed: {
     ...mapState({
-      hospitals: (state) => state.hospital.hospitalData,
+      hospitalsData: (state) => state.hospital.hospitalData,
       hospitalCount: (state) => state.hospital.hospitalCount,
       selectedHospital: (state) => state.hospital.selectedHospital,
       hospitalTotalData: (state) => state.hospital.hospitalTotalData,
@@ -548,10 +548,8 @@ export default {
       fluxHotspotType: (state) => state.flux.fluxHotspotType,
       canShowNavMobile: (state) => state.app.canShowNavMobile,
       fluxType: (state) => state.flux.fluxType,
-      hospitalsList: (state) => state.hospitalSituation.hospitalsList,
       hospitalSituationAll: (state) =>
         state.hospitalSituation.hospitalSituationAll,
-      isLoading: (state) => state.hospitalSituation.isLoading,
     }),
     canShowMapMobile() {
       if (this.isSmOrMd) {
@@ -695,7 +693,6 @@ export default {
     this.$set(this.loadings, "provinceGeo", true);
     this.$set(this.loadings, "hotspotGeo", true);
     this.$set(this.loadings, "hotspotPointGeo", true);
-    this.getHospitalSituationsAll();
     this.initForm();
 
     this.getFluxZone();
@@ -773,13 +770,15 @@ export default {
       "getSituationHospital",
       "getHospitals",
       "completedForm__getAggregatedByHospitals",
-      "getHospitalSituationsAll",
+      "completedForm__getDataByHospitals",
     ]),
     ...mapMutations([
       "setMapStyle",
       "setFluxType",
       "setObservationDate",
       "setCanShowNavMobile",
+      "SET_FILTER__DATA",
+      "SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING",
     ]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
@@ -1704,11 +1703,14 @@ export default {
     initForm() {
       this.setCanShowNavMobile(false);
       this.isLoading = true;
+      this.SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING(true);
     },
     submitInfrastructureForm(values) {
       this.setCanShowNavMobile(false);
       values.isLoading = true;
+      values.activeFilter=true;
       this.getHospitalsData(values);
+      this.SET_FILTER__DATA(values);
       this.completedForm__getAggregatedByHospitals(values);
       this.initForm();
     },

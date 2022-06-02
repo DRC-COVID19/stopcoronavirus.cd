@@ -5,6 +5,7 @@ import ResetPasswordThank from './pages/auth/ResetPasswordThank'
 import ResetPasseword from './pages/auth/ResetPassword'
 import PasswordResetComplete from './pages/auth/PasswordResetComplete'
 import HospitalsHome from './pages/hospital/Home'
+import HospitalNotification from './pages/hospital/Notification'
 import HospitalForm from './pages/hospital/HospitalForm'
 import BugTracker from './pages/bug_tracker/Index'
 import HospitalsDetail from './pages/hospital/HospitalDetail'
@@ -18,8 +19,16 @@ import AdminHospitalIndex from './pages/administrator/hospitals/Index'
 import PageNotFound from './pages/NotFound'
 import ChangeLogIndex from './pages/administrator/changeLog/index'
 import Epidemie from './pages/administrator/epidemy/Index'
-import FormIndex from './pages/administrator/forms/index'
+import FormIndex from './pages/administrator/forms2/index'
 import FormShow from './pages/administrator/forms/form'
+import FormShow2 from './pages/administrator/forms2/formDetail/index'
+import FormCreation from './pages/administrator/forms2/formDetail/formCreation'
+import FormFieldIndex from './pages/administrator/forms2/formDetail/components/formField/FormFieldIndex'
+
+import FormSettings from './pages/administrator/forms2/formDetail/formSettings'
+import FormSchemas from './pages/administrator/forms2/formDetail/formSchemas'
+import FormResponse from './pages/administrator/forms2/formDetail/formResponse'
+import FormPreview from './pages/administrator/forms2/formDetail/formPreview'
 import Main from './pages/Main'
 import Dashboard from './pages/dashboard/Dashboard'
 import CTCO from './pages/ctco/CTCO'
@@ -166,15 +175,7 @@ export default [
               role: [CREATE_FORM, EDIT_FORM]
             }
           },
-          {
-            path: '/administrator/forms/:form_id',
-            name: 'administrator.forms.show',
-            component: FormShow,
-            meta: {
-              requiresAuth: true,
-              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
-            }
-          },
+
           {
             path: 'epidemie/',
             name: 'administrator.epidemie',
@@ -202,6 +203,15 @@ export default [
             path: '/hospitals',
             name: 'hospital.home',
             component: HospitalsHome,
+            meta: {
+              requiresAuth: true,
+              role: [AGENT_HOSPITAL]
+            }
+          },
+          {
+            path: '/notifications',
+            name: 'hospital.notification',
+            component: HospitalNotification,
             meta: {
               requiresAuth: true,
               role: [AGENT_HOSPITAL]
@@ -253,8 +263,7 @@ export default [
             }
           },
           {
-            path:
-              '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
+            path: '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
             name: 'hospital.edit',
             component: HospitalForm,
             meta: {
@@ -286,17 +295,79 @@ export default [
       }
     ]
   },
+  /**
+   * FormDetail routes
+   */
   {
-    path: '/acces-denied',
-    name: 'acces.denied',
-    component: NotAcces,
+    path: '/administration/forms/:form_id',
+    name: 'administrator.forms.show',
+    component: FormShow2,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+    },
+    children: [
+      {
+        path: '/',
+        name: 'administrator.forms.show.creation',
+        component: FormCreation,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+        },
+        children: [
+          {
+            path: '/administration/forms/:form_id/step/:step_id',
+            name: 'administrator.forms.show.creation.step',
+            component: FormFieldIndex,
+            meta: {
+              requiresAuth: true,
+              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+            }
+          }
+        ]
+      },
+      {
+        path: '/administration/forms/:form_id/response',
+        name: 'administrator.forms.show.response',
+        component: FormResponse,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+        }
+      },
+      {
+        path: '/administration/forms/:form_id/schema',
+        name: 'administrator.forms.show.schema',
+        component: FormSchemas,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+        }
+      },
+      {
+        path: '/administration/forms/:form_id/setting',
+        name: 'administrator.forms.show.setting',
+        component: FormSettings,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+        }
+      }
+    ]
+  },
+  {
+    path: '/administration/forms/:form_id/form-preview',
+    name: 'administrator.forms.show.form-preview',
+    component: FormPreview,
+    meta: {
+      requiresAuth: true,
+      role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
     }
   },
   {
-    name: 'not_found',
-    path: '*',
-    component: PageNotFound
+    path: '/acces-denied',
+    name: 'acces.denied',
+    component: NotAcces
   }
 ]

@@ -32,6 +32,7 @@
         "@fortawesome/fontawesome-free": "^6.1.1",
         "@growthbunker/vuetimeline": "^0.1.17",
         "@mapbox/expression-jamsession": "^0.4.2",
+        "@mapbox/mapbox-gl-geocoder": "^5.0.0",
         "@pipedream/platform": "github:pipedreamhq/platform",
         "@sentry/tracing": "^6.19.3",
         "@sentry/vue": "^6.19.3",

@@ -23,6 +23,10 @@
         mode="aggressive"
         :state="state.name"
       />
+      <b-form-group class="mt-3">
+          <label for="" class="text-dash-color mb-2" >Ajouter la <strong>latitude</strong> et <strong>longitude</strong> : </label>
+          <div id="mapContainer" class="map__container"></div>
+      </b-form-group>
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
           {{ errors.name ? errors.name[0] : null }}</span
@@ -40,6 +44,7 @@
         name="Latitude"
         mode="aggressive"
         :state="state.latitude"
+        disabled
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
@@ -47,8 +52,7 @@
         ></b-form-text
       >
       <label id="input-group-3" class="text-dash-color" for="input-3">
-        Longitude <span class="text-danger">*</span></label
-      >
+        Longitude <span class="text-danger">*</span></label>
       <FormFieldInput
         v-model="form.longitude"
         type="number"
@@ -58,6 +62,7 @@
         name="Longitude"
         mode="aggressive"
         :state="state.longitude"
+        disabled
       />
       <b-form-text id="password-help-block" class="mb-4"
         ><span class="text-danger">
@@ -112,11 +117,13 @@
     </ValidationObserver>
   </b-card>
 </template>
-
 <script>
 import { ValidationObserver } from 'vee-validate'
 import FormFieldInput from '../../../../components/forms/FormFieldInput'
 import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue'
+import Mapbox from 'mapbox-gl'
+import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder'
+import '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css'
 
 export default {
   components: {
@@ -157,11 +164,6 @@ export default {
     errors: {
       type: Object,
       default: () => ({})
-    },
-    affected: {
-      type: Boolean,
-      default: null,
-      required: false
     }
   },
   data () {
@@ -180,8 +182,6 @@ export default {
       form: {
         name: '',
         agent: null,
-        deAssignedAgent: null,
-        affected: this.affected,
         township_id: null,
         longitude: null,
         latitude: null
@@ -189,14 +189,69 @@ export default {
       usersUpdating: [],
       show: true,
       showWarning: false,
-      toBeCanceled: true
+      toBeCanceled: true,
+      MAPBOX_TOKEN: 'pk.eyJ1IjoicmtvdGEiLCJhIjoiY2wyNXZoZW84MDRnajNicW55YXY0dTlmOCJ9.-0-CdvcPCqodYnXn0quH0Q',
+      MAPBOX_STYLE: 'mapbox://styles/rkota/cl26q1z2g001015my3fnuy8p7',
+      // MAPBOX_TOKEN,
+      // MAPBOX_STYLE: MAPBOX_DEFAULT_STYLE,
+      popupCoordinates: [15.31389, -4.33167],
+      countryLayer: {
+        paint: {
+          'line-color': '#627BC1',
+          'line-width': 1
+        },
+        type: 'line'
+      },
+      kinLayer: {
+        paint: {
+          'line-color': '#627BC1',
+          'line-width': 1
+        },
+        type: 'line',
+        'source-layer': 'carte-administrative-de-la-vi-csh5cj'
+      },
+      drcSourceId: 'states',
+      kinSourceId: 'statesKin',
+      defaultCenterCoordinates: [23.485632, -3.983283],
+      defaultKinshasaCoordinates: [15.31389, -4.33167],
+      geoJson: {
+        type: 'FeatureCollection',
+        features: [
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [-77.032, 38.913]
+            },
+            properties: {
+              title: 'Mapbox',
+              description: 'Washington, D.C.'
+            }
+          },
+          {
+            type: 'Feature',
+            geometry: {
+              type: 'Point',
+              coordinates: [-122.414, 37.776]
+            },
+            properties: {
+              title: 'Mapbox',
+              description: 'San Francisco, California'
+            }
+          }
+        ]
+      }
     }
   },
   mounted () {
     this.resetForm()
+    this.renderMapBox()
   },
   watch: {
     hospitalAdded () {
+      this.resetForm()
+    },
+    hospitalUpdated () {
       this.resetForm()
     },
     formToPopulate () {
@@ -214,19 +269,11 @@ export default {
         this.$emit('onCreate', this.form)
         this.$refs.form.reset()
       } else {
-        if (this.form.agent) {
-          this.form.affected = true
-        } else {
-          this.form.affected = false
-        }
-        this.form.deAssignedAgent =
-          (this.formToPopulate.agent && this.formToPopulate.agent.id) ?? 0
         this.$emit('onUpdate', this.form)
       }
-      this.isLoading = false;
-      this.$refs.form.reset();
+      this.isLoading = false
+      this.$refs.form.reset()
     },
-
     onReset () {
       this.$refs.form.reset()
       this.toToCanceled = true
@@ -234,8 +281,8 @@ export default {
       this.title = 'Nouveau CTCO'
       this.btnTitle = 'Enregistrer'
       this.$emit('onCancelUpdate', {})
+      this.renderMapBox()
     },
-
     resetForm () {
       this.updating = false
       this.isLoading = false
@@ -243,8 +290,8 @@ export default {
       this.form = {}
       this.btnTitle = 'Enregistrer'
       this.title = 'Nouveau CTCO'
+      this.renderMapBox()
     },
-
     populateForm () {
       this.updating = false
       if (Object.keys(this.formToPopulate).length !== 0) {
@@ -288,12 +335,77 @@ export default {
       if (value.length > 1) {
         value.shift()
       }
+    },
+    async renderMapBox () {
+      try {
+        // initialisation
+        Mapbox.accessToken = this.MAPBOX_TOKEN
+        const marker = new Mapbox.Marker()
+        const popupOffsets = this.getPopupOffset()
+        const popup = new Mapbox.Popup({ offset: popupOffsets, className: 'my-class' })
+
+        const map = new Mapbox.Map({
+          container: 'mapContainer',
+          center: this.defaultCenterCoordinates,
+          zoom: 3.5,
+          pitch: 10,
+          style: this.MAPBOX_STYLE,
+          testMode: false
+        })
+
+        // add methods of mapbox et load mapbox
+        marker.setLngLat(this.defaultKinshasaCoordinates)
+        marker.addTo(map)
+        const geocoder = new MapboxGeocoder({
+          // Initialize the geocoder
+          accessToken: Mapbox.accessToken, // Set the access token
+          mapboxgl: Mapbox, // Set the mapbox-gl instance
+          marker: {
+            color: 'blue'
+          },
+          placeholder: 'Rechercher'
+        })
+
+        // Add the geocoder to the map
+        map.addControl(geocoder)
+
+        map.on('load', () => {
+          map.on('click', (e) => {
+            e.preventDefault()
+            this.form = {
+              ...this.form,
+              latitude: e.lngLat.lat.toString(),
+              longitude: e.lngLat.lng.toString()
+            }
+
+            popup.setLngLat(e.lngLat)
+              .setHTML(`<p>Latitude : ${e.lngLat.lat.toString()} <br>Longitude : ${e.lngLat.lng.toString()}</p>`)
+              .setMaxWidth('250px')
+              .addTo(map)
+          })
+        })
+      } catch (error) {
+        throw new Error(error)
+      }
+    },
+    getPopupOffset () {
+      const markerHeight = 50
+      const markerRadius = 10
+      const linearOffset = 25
+      return {
+        top: [0, 0],
+        'top-left': [0, 0],
+        'top-right': [0, 0],
+        bottom: [0, -markerHeight],
+        'bottom-left': [linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+        'bottom-right': [-linearOffset, (markerHeight - markerRadius + linearOffset) * -1],
+        left: [markerRadius, (markerHeight - markerRadius) * -1],
+        right: [-markerRadius, (markerHeight - markerRadius) * -1]
+      }
     }
-  },
-  computed: {}
+  }
 }
 </script>
-
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .main {
@@ -309,8 +421,20 @@ export default {
     outline: none !important;
   }
 }
+.marker {
+  background-image: url('@~/public/img/mapbox-icon.png');
+  background-size: cover;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
 .btn-submit[disabled="disabled"] {
   opacity: 0.6;
   cursor: not-allowed !important;
+}
+.map__container {
+  width: 22rem;
+  height: 300px;
 }
 </style>

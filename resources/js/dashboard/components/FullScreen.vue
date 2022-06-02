@@ -11,7 +11,6 @@
 
 <script>
 import { component } from 'vue-fullscreen'
-
 export default {
   components: {
     Fullscreen: component

@@ -1,34 +1,78 @@
 <template>
   <div>
-    <b-form-group v-slot="{ ariaDescribedby }" v-if="type === 'boolean'">
-      <b-form-radio-group
-        v-model="formFieldValue"
-        :options="requiredOptions"
-        :aria-describedby="ariaDescribedby"
-        :id="id"
-      ></b-form-radio-group>
-    </b-form-group>
     <ValidationProvider
-      v-slot="{ errors }"
-      :mode="mode"
-      :rules="rules"
-      tag="div"
-      :vid="vid"
+      :rules="matchRules"
       :name="name"
+      :vid="vid"
+      v-slot="{ errors }"
+      tag="div"
       class="bg-transparent"
     >
-      <b-form-input
+      <div v-if="type === 'boolean'">
+        <b-form-group v-slot="{ ariaDescribedby }">
+          <b-form-radio-group
+            v-model="formFieldValue"
+            :options="requiredOptions"
+            :aria-describedby="ariaDescribedby"
+            :id="id"
+            :required="isRequired || required"
+          ></b-form-radio-group>
+        </b-form-group>
+        <input type="hidden" v-model="formFieldValue">
+      </div>
+
+      <v-date-picker
+        v-else-if="type === 'date'"
         v-model="formFieldValue"
-        :type="type"
+        opens="center"
+        class="d-flex style-picker"
+        :max-date="maxDate"
+        :mode="mode"
+      >
+        <template v-slot="{ inputEvents, inputValue }">
+          <div class="w-100 d-flex">
+            <input type="hidden" v-model="formFieldValue">
+            <b-form-input
+              :value="inputValue ? moment(formFieldValue).format('DD/MM/YYYY') : 'Sélectionner la date'"
+              :required="isRequired || required"
+              :state="errors[0] ? false : null || state"
+              :id="id"
+              :disabled="disabled"
+              v-on="inputEvents"
+              class="date-picker-input"
+              placeholder="Sélectionner la date"
+              readonly
+            >
+            </b-form-input>
+            <b-button
+              v-if="!disabled"
+              class='button-icon'
+              variant="primary"
+              :disabled="!formFieldValue"
+              @click="formFieldValue = null"
+            >
+              <i class="fa fa-close" aria-hidden="true"></i>
+            </b-button>
+          </div>
+        </template>
+      </v-date-picker>
+
+      <b-form-input
+        v-else
+        v-model="formFieldValue"
+        :type="getType"
         :placeholder="placeholder"
         :id="id"
         :required="isRequired || required"
-        :state="errors[0] ? !true : null || state"
+        :state="errors[0] ? false : null || state"
         class="input-dash"
         :disabled="disabled"
       >
       </b-form-input>
-      <span class="text-danger input-error">{{ errors[0] }}</span>
+
+      <div v-if="errors.length">
+        <div class="text-danger input-error mt-2">{{ errors[0] }}</div>
+      </div>
     </ValidationProvider>
   </div>
 </template>
@@ -45,8 +89,8 @@ export default {
       required: true
     },
     value: {
-      type: String,
-      default: ''
+      type: [String, Date, Number],
+      default: null
     },
     placeholder: {
       type: String,
@@ -55,7 +99,7 @@ export default {
     rules: {
       type: String,
       required: false,
-      default: null
+      default: ''
     },
     id: {
       type: [String, Number],
@@ -83,18 +127,29 @@ export default {
     },
     vid: {
       type: String,
-      required: false
+      required: false,
+      default: null
     },
     mode: {
       type: String,
-      required: false
+      required: false,
+      default: 'date'
+    },
+    maxDate: {
+      type: Date,
+      required: false,
+      default: null
+    },
+    defaultValue: {
+      type: String,
+      default: null
     }
   },
   data () {
     return {
       requiredOptions: [
-        { text: 'Oui', value: 1 },
-        { text: 'Non', value: 0 }
+        { text: 'Oui', value: '1' },
+        { text: 'Non', value: '0' }
       ],
       formFieldValue: this.value
     }
@@ -103,12 +158,20 @@ export default {
     isRequired () {
       return !!this.rules?.match(/required/i) || false
     },
-    stateFormFields () {
-      return true
-
-      // if(){
-      //   return true
-      // }
+    getType () {
+      return this.type === 'number' ? 'text' : this.type
+    },
+    matchRules () {
+      let rules = this.rules ? this.rules + '' : ''
+      if (this.type === 'number') {
+        rules += '|double'
+      }
+      return rules
+    }
+  },
+  mounted () {
+    if (this.value === null) {
+      this.formFieldValue = this.defaultValue
     }
   },
   watch: {
@@ -117,6 +180,11 @@ export default {
     },
     value (value) {
       this.formFieldValue = value
+    },
+    defaultValue (value) {
+      if (this.value === null) {
+        this.formFieldValue = value
+      }
     }
   },
   methods: {}
@@ -136,5 +204,17 @@ export default {
 .input-error {
   font-family: "Lato", sans-serif;
   font-size: 12px;
+}
+.date-picker-input {
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  &.form-control[readonly]{
+    background-color: white;
+  }
+}
+button.button-icon {
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  background-color: $dash-blue;
 }
 </style>

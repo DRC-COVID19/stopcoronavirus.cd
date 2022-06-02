@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ChangeLogController;
 use App\Http\Controllers\HospitalSituationController;
+use App\Http\Controllers\CronJobController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\PandemicStat;
@@ -23,6 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
 
+Route::get('/run-cron-job',[CronJobController::class,'index']);
 
 // Route::post('/migrate-hospital-situation-controller', 'MigrateHospitalSituationController@migrateToCompletedForm');
 
@@ -50,13 +52,10 @@ Route::post('/medicale-orientation', 'DiagnosticController@store');
 
 Route::group(['prefix' => 'admin_users'], function () {
   Route::get('/filter', 'AdministratorController@filter');
+  Route::get('/agents-hospital', 'AdministratorController@getAgentHospitals');
 });
 
 Route::apiResource('admin_users', 'AdministratorController');
-
-Route::group(['prefix' => 'admin_users'], function () {
-  Route::get('/agents-hospital', 'AdministratorController@getAgentHospitals');
-});
 
 Route::apiResource('admin_roles', 'AdminRoleController');
 
@@ -205,17 +204,45 @@ Route::group([
     Route::get('/by-hospital/{hospital_id}', 'CompletedFormController@indexByHospital');
     Route::get('/get-latest-hospital-update', 'CompletedFormController@getLatestHospitalUpdate');
     Route::get('/{last_update}/hospital_id/{hospital_id}', 'CompletedFormController@getSituationsByHospitalAndLastUpdate');
+
     Route::post('/get-aggregated-by-hospitals', "CompletedFormController@getAggregatedByHospitals");
+    Route::post('/get-data-by-hospitals', "CompletedFormController@getDataByHospitals");
+    Route::get('/get-all-filtered', "CompletedFormController@getAllFiltered");
+
     Route::get('/check-last_update/{hospital_id}/{last_update}', 'CompletedFormController@checkLastUpdate');
   });
 
   Route::group(['prefix' => 'hospitals-data'], function () {
     Route::get('/by-paginate', 'HospitalController@indexByPaginate');
     Route::get('/filter', 'HospitalController@filter');
-    Route::get('/get-agents','HospitalController@getAgents');
-    Route::patch('/update-by-admin/{hospital_id}','HospitalController@updateByAdmin');
+    Route::get('/get-agents', 'HospitalController@getAgents');
+    Route::patch('/update-by-admin/{hospital_id}', 'HospitalController@updateByAdmin');
     Route::patch('/{id}/reject-agent', 'HospitalController@rejectAgent');
+    Route::get('/get-hospital-list','HospitalController@getHospitalList');
   });
+
+ /***
+ * forms routes
+ */
+  Route::group(['prefix' => 'forms'], function () {
+    Route::get('/recent-form', 'FormController@recentForm');
+    Route::get('/filter', 'FormController@filter');
+    Route::get('/get-form-filtered', 'FormController@getFormFiltered');
+    Route::put('/update-form-visibility/{form_id}', 'FormController@updateFormVisibility');
+  });
+
+  /***
+ * notifications routes
+ */
+Route::group(['prefix' => 'notifications'], function () {
+  Route::get('/{hospital_id}', 'NotificationController@notificationHospital');
+  Route::get('/by-paginate/{hospital_id}', 'NotificationController@indexNotificationByPaginate');
+  Route::get('/notification-not-read/{hospital_id}', 'NotificationController@getNotificationNotReadUser');
+  Route::get('/set-notification-by-hospital/{hospital_id}', 'NotificationController@setNotificationByHospital');
+});
+Route::resource('notifications', 'NotificationController');
+
+
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
   // Route::apiResource('townships','TownshipController');
@@ -240,6 +267,7 @@ Route::group([
   });
   Route::group(['prefix' => 'hospitals'], function () {
     Route::get('/', 'HospitalController@getHospitals'); //ok
+    Route::get('/all-Without-agent', 'HospitalController@allWithoutAgent'); //ok
     Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution'); //ok
     Route::get('/totaux', 'HospitalController@getHospitalsTotaux'); //ok
   });
@@ -266,12 +294,10 @@ Route::group([
   });
 
   Route::apiResource('form-field-types', 'FormFieldTypeController');
-  Route::apiResource('form-fields', 'FormFieldController');
   Route::group(['prefix' => 'form-fields'], function () {
-    Route::get('get-form/{form}', 'FormFieldController@getFormFieldByForm');
+    Route::get('get-form', 'FormFieldController@getFormFieldByForm');
   });
+  Route::apiResource('form-fields', 'FormFieldController');
 });
 
 Route::post('self-test', 'SelfTestController@apiCovidTest');
-
-

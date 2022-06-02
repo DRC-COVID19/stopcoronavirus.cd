@@ -29,8 +29,22 @@
                 :key="count"
               >
                 <li>
-                  {{ formField.name }} :
-                  {{ completedForm.completed_form_fields[formField.id] }}
+                  <div class="d-flex flex-wrap">
+                    {{ formField.name }} :&nbsp;
+                    <div class="font-weight-bold">
+                      <div v-if="formField.form_field_type.name === 'boolean'">
+                        <span v-if="completedForm.completed_form_fields[formField.id] !== null && completedForm.completed_form_fields[formField.id] !== undefined">
+                          {{ +completedForm.completed_form_fields[formField.id] ? 'Oui' : "Non" }}
+                        </span>
+                      </div>
+                      <div v-else-if="formField.form_field_type.name === 'date'">
+                        <span v-if="completedForm.completed_form_fields[formField.id] !== null && completedForm.completed_form_fields[formField.id] !== undefined">
+                        {{ moment(completedForm.completed_form_fields[formField.id]).format("DD/MM/Y") }}
+                        </span>
+                      </div>
+                      <div v-else> {{ completedForm.completed_form_fields[formField.id] }} </div>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </b-card>
@@ -38,7 +52,7 @@
 
           <div class="ml-3 mt-2">
             Données envoyées par
-            <b> {{ completedForm.created_manager_name }}</b>
+            <strong> {{ completedForm.created_manager_name }} {{ completedForm.created_manager_first_name }}</strong>
           </div>
 
           <b-row class="mt-4" v-if="updatedManageNamesListSorted.length">
@@ -51,7 +65,7 @@
                 :key="count"
               >
                 <li>
-                  <strong> {{ item.updatedManagerName }}</strong
+                  <strong> {{ item.updated_manager_name }} {{ item.updated_manager_first_name }} </strong
                   >, le {{ moment(item.updatedAt).format("DD/MM/Y à H:m") }}
                 </li>
               </ul>
@@ -74,10 +88,16 @@ export default {
     return {
       completedFormFields: [],
       completedForm: {
-        completed_form_fields: []
+        completed_form_fields: {}
       },
-      isLoading: false
+      isLoading: false,
+      prevRoute: null
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next(vm => {
+      vm.prevRoute = from
+    })
   },
   async mounted () {
     this.getCompletedForm()
@@ -88,7 +108,12 @@ export default {
       formSteps: (state) => state.formStep.formSteps
     }),
     backRoute () {
-      if (this.user.isHospitalAdmin) {
+      if (this.prevRoute && this.prevRoute.name) {
+        return {
+          name: this.prevRoute.name,
+          params: this.prevRoute.params
+        }
+      } else if (this.user.isHospitalAdmin) {
         return {
           name: 'hospital.admin.data',
           params: { hospital_id: this.$route.params.hospital_id }
@@ -99,16 +124,15 @@ export default {
       if (this.completedFormFields.length > 0) {
         return this.completedFormFields
           .map((completedFormField) => ({
-            updatedManagerName: completedFormField.updated_manager_name,
+            updated_manager_name: completedFormField.updated_manager_name,
+            updated_manager_first_name: completedFormField.updated_manager_first_name,
             updatedAt: completedFormField.updated_at
           }))
           .sort((a, b) => a.updatedAt.localeCompare(b.updatedAt))
           .filter(
             (item, i, self) =>
-              item.updatedManagerName &&
-              self.findIndex(
-                (x) => x.updatedManagerName === item.updatedManagerName
-              ) === i
+              item.updated_manager_name &&
+              self.findIndex((x) => x.updated_manager_name === item.updated_manager_name) === i
           )
       }
       return []
@@ -118,20 +142,21 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['completedForm__show', 'completedForm__show', 'getFormSteps']),
+    ...mapActions(['completedForm__show', 'getFormSteps']),
     async getCompletedForm () {
       this.isLoading = true
-
       try {
         this.completedForm = await this.completedForm__show({
           completed_form_id: this.$route.params.completed_form_id
         })
         this.completedFormFields = this.completedForm.completed_form_fields
-        this.completedForm.completed_form_fields = []
+        this.completedForm.completed_form_fields = {}
         this.setCompletedForm()
 
         await this.getFormSteps({ id: this.completedForm.form_id })
+        this.isLoading = false
       } catch (error) {
+        this.isLoading = false
         console.log(error)
       } finally {
         this.isLoading = false

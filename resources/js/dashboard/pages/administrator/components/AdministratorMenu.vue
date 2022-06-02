@@ -8,21 +8,24 @@
         $route.name.startsWith('administrator.home')
       "
     >
-      <i class="fas fa-users" aria-hidden="true"></i> &nbsp; Utilisateurs
+      <i class="fas fa-users" aria-hidden="true"></i> &nbsp;
+      <span v-if="showLabel">Utilisateurs</span>
     </b-nav-item>
     <b-nav-item
       v-if="canViewChangeLog"
       :to="{ name: 'administrator.changeLog' }"
       :active="$route.name.startsWith('administrator.changeLog')"
     >
-      <i class="fa fa-history" aria-hidden="true"></i> &nbsp; Change log
+      <i class="fa fa-history" aria-hidden="true"></i>
+      <span v-if="showLabel">&nbsp; Change log</span>
     </b-nav-item>
     <b-nav-item
       v-if="canViewForms"
       :to="{ name: 'administrator.forms' }"
       :active="$route.name.startsWith('administrator.forms')"
     >
-      <i class="fa fa-address-card" aria-hidden="true"></i> &nbsp; Formulaires
+      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <span v-if="showLabel">&nbsp; Formulaires</span>
     </b-nav-item>
     <b-nav-item
       v-if="canViewUsers"
@@ -32,15 +35,16 @@
         $route.name.startsWith('administrator.home')
       "
     >
-      <i class="fas fa-hospital-alt" aria-hidden="true"></i> &nbsp; Hopitaux
+      <i class="fas fa-hospital-alt" aria-hidden="true"></i>
+      <span v-if="showLabel">&nbsp; Hopitaux</span>
     </b-nav-item>
     <b-nav-item
       v-if="canViewEpidemic"
       :to="{ name: 'administrator.epidemie' }"
       :active="$route.name.startsWith('administrator.epidemie')"
     >
-      <i class="fas fa-virus" aria-hidden="true"></i> &nbsp; Situation
-      Épidémiologique
+      <i class="fas fa-virus" aria-hidden="true"></i>
+      <span v-if="showLabel">&nbsp; Situation Épidémiologique</span>
     </b-nav-item>
   </b-nav>
 </template>
@@ -55,6 +59,12 @@ import {
 } from "../../../config/env";
 
 export default {
+  props: {
+    showLabel: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {};
   },
@@ -86,11 +96,19 @@ export default {
   border-right: 8px solid $dash-background;
   height: 100%;
   padding-left: 5px;
+  li {
+    width: 100%;
+  }
   .nav-link {
     border-bottom: 2px solid $dash-background;
     text-decoration: none;
     font-size: 14px;
     color: black;
+    height: 39px;
+    text-align: center;
+    @media (min-width: 992px) {
+      text-align: left;
+    }
     &:hover {
       background-color: $dash-background;
     }
@@ -99,15 +117,21 @@ export default {
       color: white;
     }
   }
+  @media (min-width: 992px) {
+    text-align: left;
+    flex-direction: column;
+  }
 }
 @media (max-width: $max-width) {
   .nav {
     z-index: 5;
-    height: 10vh;
+    height: auto;
     width: 100%;
     border-right: 0;
     overflow-x: scroll !important;
     white-space: nowrap;
+    flex-direction: row !important;
+    flex-wrap: nowrap;
     &::-webkit-scrollbar {
       width: 0; /* Remove scrollbar space */
       background: transparent; /* Optional: just make scrollbar invisible */
