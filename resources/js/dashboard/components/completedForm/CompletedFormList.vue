@@ -2,9 +2,23 @@
   <div>
     <b-row class="mb-4">
       <b-col cols="12" md></b-col>
-      <b-col cols="12" md="auto" class="d-flex form-filters flex-wrap justify-content-center">
-        <div v-if="showUserFilter">
-          <label for="input-user" class="small text-muted">Rechercher par utilisateur</label> <br>
+      <b-col
+        cols="12"
+        md="auto"
+        lg="12"
+        class="
+          d-sm-flex
+          form-filters
+          w-100
+          flex-wrap
+          justify-content-sm-between
+        "
+      >
+        <div v-if="showUserFilter" class="">
+          <label for="input-user" class="small text-muted"
+            >Rechercher par utilisateur</label
+          >
+          <br />
           <b-form-input
             v-model="form.created_manager"
             placeholder="Rechercher un agent"
@@ -14,11 +28,14 @@
           </b-form-input>
         </div>
         <div v-if="showFormFilter">
-          <label for="input-formulaire" class="small text-muted">Filter par formulaire</label> <br>
+          <label for="input-formulaire" class="small text-muted"
+            >Filter par formulaire</label
+          >
+          <br />
           <v-select
             v-model="form.form_id"
             :options="formList"
-            :reduce="form => form.id"
+            :reduce="(form) => form.id"
             :clearable="false"
             :searchable="false"
             label="title"
@@ -29,11 +46,14 @@
           </v-select>
         </div>
         <div v-if="showHospitalFilter">
-          <label for="input-ctco" class="small text-muted">Filter par CTCO</label> <br>
+          <label for="input-ctco" class="small text-muted"
+            >Filter par CTCO</label
+          >
+          <br />
           <v-select
             v-model="form.hospital_id"
             :options="hospitalList"
-            :reduce="form => form.id"
+            :reduce="(form) => form.id"
             :clearable="false"
             :searchable="false"
             label="name"
@@ -44,7 +64,10 @@
           </v-select>
         </div>
         <div v-if="showDateFilter">
-          <label for="input-user" class="small text-muted">Filter par plage de date</label> <br>
+          <label for="input-user" class="small text-muted"
+            >Filter par plage de date</label
+          >
+          <br />
           <v-date-picker
             v-model="form.dateRange"
             is-range
@@ -53,7 +76,9 @@
             <template v-slot="{ inputValue, inputEvents }">
               <div class="d-flex">
                 <b-form-input
-                  :value="(inputValue.end || '') + ' - ' + (inputValue.start || '')"
+                  :value="
+                    (inputValue.end || '') + ' - ' + (inputValue.start || '')
+                  "
                   v-on="inputEvents.end"
                   class="date-picker-input"
                   placeholder="Sélectionner une plage de date"
@@ -61,7 +86,7 @@
                 >
                 </b-form-input>
                 <b-button
-                  class='button-icon'
+                  class="button-icon"
                   variant="primary"
                   :disabled="!form.dateRange"
                   @click="form.dateRange = null"
@@ -74,8 +99,8 @@
         </div>
       </b-col>
     </b-row>
-    <b-row class="mt-4" >
-      <b-col>
+    <b-row class="mt-4">
+      <b-col class="px-0">
         <b-table
           class="completed-form-table"
           :busy="isLoading"
@@ -100,10 +125,10 @@
             </div>
           </template>
           <template v-slot:cell(numero)="data">
-            <span> {{ data.index + 1 + (perPage * (currentPage - 1)) }} </span>
+            <span> {{ data.index + 1 + perPage * (currentPage - 1) }} </span>
           </template>
           <template v-slot:cell(last_update)="data">
-            <span>{{moment(data.item.last_update).format('DD.MM.Y')}}</span>
+            <span>{{ moment(data.item.last_update).format("DD.MM.Y") }}</span>
           </template>
           <template v-slot:cell(form)="data">
             <span v-if="data.item.form">{{ data.item.form.title }}</span>
@@ -116,13 +141,13 @@
           <template v-slot:cell(actions)="data">
             <b-button
               variant="outline-primary"
-              class="btn-dash "
+              class="btn-dash"
               :to="{
-                name:'hospital.detail',
+                name: 'hospital.detail',
                 params: {
                   hospital_id: data.item.hospital_id || 0,
-                  completed_form_id: data.item.id
-                }
+                  completed_form_id: data.item.id,
+                },
               }"
             >
               Details
@@ -136,8 +161,8 @@
                 params: {
                   completed_form_id: data.item.id,
                   hospital_id: data.item.hospital_id,
-                  form_id: data.item.form_id
-                }
+                  form_id: data.item.form_id,
+                },
               }"
             >
               Éditer
@@ -191,145 +216,136 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
-import { ADMIN_HOSPITAL } from '../../config/env'
-import Pagination from '../Pagination.vue'
+import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
+import { ADMIN_HOSPITAL } from "../../config/env";
+import Pagination from "../Pagination.vue";
 
 export default {
   props: {
     hospitalId: {
       type: [String, Number],
-      default: null
+      default: null,
     },
     formId: {
       type: [String, Number],
-      default: null
+      default: null,
     },
     showNewAction: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showHospitalFilter: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showFormFilter: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showUserFilter: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showDateFilter: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showFormColumn: {
       type: Boolean,
-      default: true
+      default: true,
     },
     showHospitalColumn: {
       type: Boolean,
-      default: true
-    }
+      default: true,
+    },
   },
   components: { Pagination },
-  data () {
+  data() {
     return {
       completedForms: {},
       isLoading: false,
       form: {
         hospital_id: null,
-        admin_user_id: null
+        admin_user_id: null,
       },
       perPage: 15,
       agentsHospitals: [],
       allCurrentFilters: {},
       deleteModalVisible: false,
       completedFormIdToDelete: null,
-      sortBy: 'last_update',
-      sortDesc: true
-    }
+      sortBy: "last_update",
+      sortDesc: true,
+    };
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       completedForm__selectedForm: (state) => state.completedForm.selectedForm,
-      hospital__allHospitals: (state) => state.hospital.allHospitals
+      hospital__allHospitals: (state) => state.hospital.allHospitals,
     }),
-    userIsAdminHospital () {
-      return this.userHaveRole(ADMIN_HOSPITAL)
+    userIsAdminHospital() {
+      return this.userHaveRole(ADMIN_HOSPITAL);
     },
-    totalRows () {
-      return this.completedForms?.total || 0
+    totalRows() {
+      return this.completedForms?.total || 0;
     },
-    currentPage () {
-      return this.completedForms?.current_page || 1
+    currentPage() {
+      return this.completedForms?.current_page || 1;
     },
-    formList () {
-      return [
-        { id: null, title: 'Tous' },
-        ...this.form__publishedForms()
-      ]
+    formList() {
+      return [{ id: null, title: "Tous" }, ...this.form__publishedForms()];
     },
-    hospitalList () {
-      return [
-        { id: null, name: 'Tous' },
-        ...this.hospital__allHospitals
-      ]
+    hospitalList() {
+      return [{ id: null, name: "Tous" }, ...this.hospital__allHospitals];
     },
-    usersList () {
-      return [
-        { id: null, name: 'Tous' },
-        ...this.agentsHospitals
-      ]
+    usersList() {
+      return [{ id: null, name: "Tous" }, ...this.agentsHospitals];
     },
-    fields () {
+    fields() {
       const data = [
-        { key: 'numero', label: '#' },
-        { key: 'last_update', label: 'Date', sortable: true },
-        { key: 'created_manager_name', label: 'Nom', sortable: true },
-        { key: 'created_manager_first_name', label: 'Prénom', sortable: true }
-      ]
+        { key: "numero", label: "#" },
+        { key: "last_update", label: "Date", sortable: true },
+        { key: "created_manager_name", label: "Nom", sortable: true },
+        { key: "created_manager_first_name", label: "Prénom", sortable: true },
+      ];
       if (this.showFormColumn) {
-        data.push({ key: 'form', label: 'Formulaire', sortable: true })
+        data.push({ key: "form", label: "Formulaire", sortable: true });
       }
       if (this.showHospitalColumn) {
-        data.push({ key: 'hospital', label: 'CTCO', sortable: true })
+        data.push({ key: "hospital", label: "CTCO", sortable: true });
       }
-      data.push({ key: 'actions', label: 'Actions' })
-      return data
-    }
+      data.push({ key: "actions", label: "Actions" });
+      return data;
+    },
   },
-  async mounted () {
-    this.$set(this.form, 'form_id', this.completedForm__selectedForm)
-    this.getForms()
-    this.hospital__getAll()
-    this.getCompletedForms()
-    this.agentsHospitals = await this.adminUser__getAgentHospitals()
+  async mounted() {
+    this.$set(this.form, "form_id", this.completedForm__selectedForm);
+    this.getForms();
+    this.hospital__getAll();
+    this.getCompletedForms();
+    this.agentsHospitals = await this.adminUser__getAgentHospitals();
   },
   watch: {
-    user () {
-      this.getCompletedForms()
+    user() {
+      this.getCompletedForms();
     },
-    totalRows (value) {
-      this.$emit('totalChanged', value)
-    }
+    totalRows(value) {
+      this.$emit("totalChanged", value);
+    },
   },
   methods: {
     ...mapActions([
-      'completedForm__getAllFiltered',
-      'getForms',
-      'completedForm__setSelectedForm',
-      'hospital__getAll',
-      'adminUser__getAgentHospitals',
-      'completedForm__delete'
+      "completedForm__getAllFiltered",
+      "getForms",
+      "completedForm__setSelectedForm",
+      "hospital__getAll",
+      "adminUser__getAgentHospitals",
+      "completedForm__delete",
     ]),
-    ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    ...mapGetters(['form__publishedForms']),
-    async getCompletedForms (page = 1) {
-      this.isLoading = true
+    ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
+    ...mapGetters(["form__publishedForms"]),
+    async getCompletedForms(page = 1) {
+      this.isLoading = true;
       try {
         this.allCurrentFilters = {
           page,
@@ -340,75 +356,80 @@ export default {
           date_range_start: this.form?.dateRange?.start || null,
           date_range_end: this.form?.dateRange?.end || null,
           sort_by: this.sortBy,
-          sort_desc: this.sortDesc ? 1 : 0
-        }
-        this.completedForms = await this.completedForm__getAllFiltered(this.allCurrentFilters)
-        this.isLoading = false
+          sort_desc: this.sortDesc ? 1 : 0,
+        };
+        this.completedForms = await this.completedForm__getAllFiltered(
+          this.allCurrentFilters
+        );
+        this.isLoading = false;
       } catch (error) {
-        this.isLoading = false
+        this.isLoading = false;
       }
     },
-    onPageChange (page) {
-      this.getCompletedForms(page)
+    onPageChange(page) {
+      this.getCompletedForms(page);
     },
-    onPerPageChange (perPage) {
-      this.perPage = perPage
-      this.getCompletedForms()
+    onPerPageChange(perPage) {
+      this.perPage = perPage;
+      this.getCompletedForms();
     },
-    canShowEditButton (completedForm) {
-      return this.userHaveRole(ADMIN_HOSPITAL) || !completedForm.diff_date.match(/day/)
+    canShowEditButton(completedForm) {
+      return (
+        this.userHaveRole(ADMIN_HOSPITAL) ||
+        !completedForm.diff_date.match(/day/)
+      );
     },
-    onFormFilterChange () {
-      this.completedForm__setSelectedForm(this.form.form_id)
-      this.getCompletedForms()
+    onFormFilterChange() {
+      this.completedForm__setSelectedForm(this.form.form_id);
+      this.getCompletedForms();
     },
-    onFiltersChange () {
-      this.getCompletedForms(1)
+    onFiltersChange() {
+      this.getCompletedForms(1);
     },
-    showDeleteCompletedFormModal (id) {
-      this.deleteModalVisible = true
-      this.completedFormIdToDelete = id
+    showDeleteCompletedFormModal(id) {
+      this.deleteModalVisible = true;
+      this.completedFormIdToDelete = id;
     },
-    onCancelDeletion () {
-      this.deleteModalVisible = false
-      this.completedFormIdToDelete = null
+    onCancelDeletion() {
+      this.deleteModalVisible = false;
+      this.completedFormIdToDelete = null;
     },
-    onValidateDeletion () {
-      this.$bvModal.show('confirmation-box')
+    onValidateDeletion() {
+      this.$bvModal.show("confirmation-box");
       this.completedForm__delete(this.completedFormIdToDelete)
         .then(() => {
           this.$notify({
-            group: 'alert',
-            title: 'Suppression...',
-            text: 'Soumission supprimer avec succès',
-            type: 'success'
-          })
-          this.deleteModalVisible = false
-          this.getCompletedForms()
+            group: "alert",
+            title: "Suppression...",
+            text: "Soumission supprimer avec succès",
+            type: "success",
+          });
+          this.deleteModalVisible = false;
+          this.getCompletedForms();
         })
         .catch(() => {
           this.$notify({
-            group: 'alert',
-            title: 'Suppression...',
-            text: 'Une erreur est survenu',
-            type: 'error'
-          })
-        })
+            group: "alert",
+            title: "Suppression...",
+            text: "Une erreur est survenu",
+            type: "error",
+          });
+        });
     },
-    sortingChanged (ctx) {
-      this.sortBy = ctx.sortBy
-      this.sortDesc = ctx.sortDesc
-      this.getCompletedForms()
-    }
-  }
-}
+    sortingChanged(ctx) {
+      this.sortBy = ctx.sortBy;
+      this.sortDesc = ctx.sortDesc;
+      this.getCompletedForms();
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 
 .completed-form-table {
-  &::v-deep{
+  &::v-deep {
     thead {
       background-color: $dash-blue;
       color: white;
@@ -418,7 +439,7 @@ export default {
         &:nth-child(2n) {
           background-color: white;
         }
-        &:nth-child(2n+1) {
+        &:nth-child(2n + 1) {
           background-color: rgba(0, 0, 0, 0.02);
         }
       }
@@ -427,16 +448,20 @@ export default {
 }
 .form-filters {
   > div {
-    margin-left: 20px;
     margin-bottom: 10px;
   }
-  select, input, .v-select {
-    width: 200px;
+  select,
+  input,
+  .v-select {
+    width: 400px;
     height: 38px;
     background-color: white;
+    @media (max-width: $max-width) {
+      width: 100%;
+    }
   }
   .v-select {
-    &::v-deep{
+    &::v-deep {
       .vs__dropdown-toggle {
         height: 100%;
       }
@@ -455,7 +480,7 @@ export default {
     border-bottom-left-radius: 0px;
     background-color: $dash-blue;
   }
-  .form-control[readonly]{
+  .form-control[readonly] {
     background-color: white;
   }
   .date-picker-input {

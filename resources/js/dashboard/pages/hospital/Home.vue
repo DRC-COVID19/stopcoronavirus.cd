@@ -1,6 +1,6 @@
 <template>
-  <div class="px-5">
-    <b-container fluid class="px-3 mt-4">
+  <div class="px-md-5">
+    <b-container fluid class="px-md-3 mt-4">
       <b-row>
         <b-col v-if="user && user.hospital">
           <h3>
@@ -18,33 +18,53 @@
               ><h5 class="ml-4">
                 {{ `Structure: ${user.hospital.name}` }}
               </h5>
-               <p v-if="user.hospital.address" class="ml-4">
+              <p v-if="user.hospital.address" class="ml-4">
                 {{ `Adresse: ${user.hospital.address}` }}
               </p>
-              <p v-if="hospitalManagerName && hospitalManagerFirstName" class="ml-4 font-italic">
+              <p
+                v-if="hospitalManagerName && hospitalManagerFirstName"
+                class="ml-4 font-italic"
+              >
                 Connecté en tant que
                 <strong>{{ hospitalManagerName }} - </strong
                 ><span
                   ><strong>{{ hospitalManagerFirstName }}</strong></span
                 >
               </p>
-              </b-card-header>
-            <b-card-body>
-
+            </b-card-header>
+            <b-card-body class="px-0">
               <b-row
-                class="hospital__home-form pb-5 pt-3 d-flex justify-content-start align-items-center"
+                class="
+                  hospital__home-form
+                  pb-5
+                  pt-3
+                  d-flex
+                  justify-content-start
+                  align-items-center
+                "
               >
                 <b-col sm="12">
                   <h4 class="ml-2 mb-4">Mes Formulaires</h4>
                 </b-col>
                 <b-col v-if="isHospitalFormsLoading" sm="12">
-                  <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
+                  <b-spinner :show="true" variant="danger" class="mr-5"
+                    >Chargement des fomulaires Récents...</b-spinner
+                  >
                 </b-col>
                 <b-col
                   v-else
-                  class="d-flex flex-column align-items-lg-start col-md-8 col-sm-12"
+                  class="
+                    d-flex
+                    flex-column
+                    align-items-lg-start
+                    col-md-8 col-sm-12
+                  "
                 >
-                  <div class="card__Scroll" v-if="hospitalForms.forms.length > 0">
+                  <b-col
+                    class="card__Scroll px-0 mx-0 flex-wrap d-flex"
+                    lg="12"
+                    v-if="hospitalForms.forms.length > 0"
+                  >
                     <div
                       v-for="(form, index) in hospitalForms.forms"
                       :key="index"
@@ -52,11 +72,14 @@
                     >
                       <card-form :route="getFormRoute(form.id)" :form="form" />
                     </div>
-                  </div>
-                  <div v-else class="d-flex justify-content-center align-items-center">
-                      <h6 class="text-center text-bold alert alert-warning">
-                        Vous n'avez accès à aucun formulaire pour l'instant
-                      </h6>
+                  </b-col>
+                  <div
+                    v-else
+                    class="d-flex justify-content-center align-items-center"
+                  >
+                    <h6 class="text-center text-bold alert alert-warning">
+                      Vous n'avez accès à aucun formulaire pour l'instant
+                    </h6>
                   </div>
                 </b-col>
               </b-row>
@@ -75,23 +98,23 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
-import ManagerUserName from '../../components/hospital/ManagerUserName'
-import CompletedFormList from '../../components/completedForm/CompletedFormList'
-import CardForm from '../../components/forms/CardForm.vue'
+import { mapState, mapMutations, mapActions } from "vuex";
+import ManagerUserName from "../../components/hospital/ManagerUserName";
+import CompletedFormList from "../../components/completedForm/CompletedFormList";
+import CardForm from "../../components/forms/CardForm.vue";
 
 export default {
   components: {
     ManagerUserName,
     CompletedFormList,
-    CardForm
+    CardForm,
   },
-  data () {
+  data() {
     return {
-      alertVariant: 'secondary',
+      alertVariant: "secondary",
       isHospitalFormsLoading: false,
-      hospitalForms: {}
-    }
+      hospitalForms: {},
+    };
   },
   computed: {
     ...mapState({
@@ -99,39 +122,39 @@ export default {
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
       hospitalManagerFirstName: (state) =>
         state.hospital.hospitalManagerFirstName,
-      isLoading: (state) => state.hospital.isLoading
-    })
+      isLoading: (state) => state.hospital.isLoading,
+    }),
   },
-  mounted () {
+  mounted() {
     if (!this.hospitalManagerName) {
-      this.$bvModal.show('nameModal')
+      this.$bvModal.show("nameModal");
     }
-    this.$store.commit('SET_COMPLETED_FORMS', { isLoading: true })
-    this.getHospitalForms()
+    this.$store.commit("SET_COMPLETED_FORMS", { isLoading: true });
+    this.getHospitalForms();
   },
   watch: {
-    user () {
-      this.getHospitalForms()
-    }
+    user() {
+      this.getHospitalForms();
+    },
   },
   methods: {
-    ...mapActions(['completedForm__getByHospital', 'getHospital']),
-    ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    async getHospitalForms () {
-      this.isHospitalFormsLoading = true
+    ...mapActions(["completedForm__getByHospital", "getHospital"]),
+    ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
+    async getHospitalForms() {
+      this.isHospitalFormsLoading = true;
       if (this.user && this.user.hospital) {
         this.hospitalForms = await this.getHospital({
-          hospital_id: this.user.hospital.id
-        })
+          hospital_id: this.user.hospital.id,
+        });
 
-        this.isHospitalFormsLoading = false
+        this.isHospitalFormsLoading = false;
       }
     },
-    getFormRoute (formId) {
-      return { name: 'hospital.create', params: { form_id: formId } }
-    }
-  }
-}
+    getFormRoute(formId) {
+      return { name: "hospital.create", params: { form_id: formId } };
+    },
+  },
+};
 </script>
 
 <style lang="scss">
