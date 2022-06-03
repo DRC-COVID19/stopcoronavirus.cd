@@ -16,7 +16,7 @@
             }}</b-alert>
             <b-form-group>
               <label class="text-dash-color" for="email"
-                >E-mail, Utilisateur OU Téléphone</label
+                >E-mail, Utilisateur ou Téléphone</label
               >
               <b-input
                 :disabled="isAuthenticating"
