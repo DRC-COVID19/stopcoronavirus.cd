@@ -91,7 +91,7 @@ class HospitalController extends Controller
                               ->where('publish', true)
                               ->get();
 
-    $hospitalForms = Hospital::with('forms')
+    $hospitalForms = Hospital::with('forms.formRecurrence')
                               ->find($hospital_id)
                               ->forms
                               ->filter(fn($form) => $form->publish)
