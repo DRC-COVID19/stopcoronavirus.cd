@@ -16,7 +16,7 @@
             }}</b-alert>
             <b-form-group>
               <label class="text-dash-color" for="email"
-                >E-MAIL, UTILISATEUR OU TELEPHONE</label
+                >E-mail, Utilisateur OU Téléphone</label
               >
               <b-input
                 :disabled="isAuthenticating"
@@ -30,7 +30,7 @@
             <b-form-group>
               <div class="d-flex justify-content-between">
                 <label class="text-dash-color" for="password"
-                  >MOT DE PASSE</label
+                  >Mot de passe</label
                 >
                 <b-link
                   :disabled="isAuthenticating"
