@@ -529,7 +529,7 @@ export default {
       fluxAfricelInOut: [],
       showMobileMaps: true,
       activeRightSide: 0,
-      mapMdTop: 46.4,
+      mapMdTop: 46.4
     };
   },
   computed: {
