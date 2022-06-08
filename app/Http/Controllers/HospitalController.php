@@ -97,7 +97,7 @@ class HospitalController extends Controller
       ->get();
 
     $hospitalForms = Hospital::with(['forms.formRecurrence', 'forms.completedForms' => function ($query)  use ($hospital_id) {
-        $query->select('id', 'created_manager_name', 'hospital_id', 'last_update', 'created_manager_first_name');
+        $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
         $query->where('hospital_id', $hospital_id);
         $query->orderBy('last_update', 'desc');
       }])
