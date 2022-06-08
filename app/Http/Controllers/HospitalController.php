@@ -87,15 +87,24 @@ class HospitalController extends Controller
    */
   public function show($hospital_id)
   {
-    $formsAllVisibility = Form::where(['visible_all_hospitals' => true])
-                              ->where('publish', true)
-                              ->get();
+    $formsAllVisibility = Form::with(['formRecurrence', 'completedForms' => function ($query) use ($hospital_id) {
+        $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
+        $query->where('hospital_id', $hospital_id);
+        $query->orderBy('last_update', 'desc');
+      }])
+      ->where('visible_all_hospitals' , true)
+      ->where('publish', true)
+      ->get();
 
-    $hospitalForms = Hospital::with('forms.formRecurrence')
-                              ->find($hospital_id)
-                              ->forms
-                              ->filter(fn($form) => $form->publish)
-                              ->merge($formsAllVisibility);
+    $hospitalForms = Hospital::with(['forms.formRecurrence', 'forms.completedForms' => function ($query)  use ($hospital_id) {
+        $query->select('id', 'created_manager_name', 'hospital_id', 'last_update', 'created_manager_first_name');
+        $query->where('hospital_id', $hospital_id);
+        $query->orderBy('last_update', 'desc');
+      }])
+      ->find($hospital_id)
+      ->forms
+      ->filter(fn($form) => $form->publish)
+      ->merge($formsAllVisibility);
 
     $hospital = Hospital::find($hospital_id);
     $hospital->forms = $hospitalForms;

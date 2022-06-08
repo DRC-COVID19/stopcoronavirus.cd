@@ -29,7 +29,7 @@ class Form extends Model
     {
         return $this->hasMany(FormStep::class)->orderBy('step');
     }
-    
+
     public function notifications()
     {
         return $this->hasMany(Notification::class);
@@ -40,7 +40,7 @@ class Form extends Model
         return $this->hasMany(FormField::class);
     }
 
-    public function completedforms()
+    public function completedForms()
     {
         return $this->hasMany(CompletedForm::class);
     }
