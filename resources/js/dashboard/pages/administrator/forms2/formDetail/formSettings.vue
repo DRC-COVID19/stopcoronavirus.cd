@@ -107,7 +107,7 @@ export default {
       return this.$route.params.form_id ?? null
     },
     checkCompletedForms () {
-      return this.form.completedforms.length === 0
+      return this.form.completed_forms.length === 0
     }
   },
   methods: {
