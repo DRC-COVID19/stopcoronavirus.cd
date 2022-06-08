@@ -40,7 +40,7 @@ class FormController extends Controller
      */
       public function show(Form $form)
     {
-        $form->load(['formRecurrence', 'hospitals', 'completedforms', 'formSteps.formFields.formFieldType', 'formFields.formFieldType']);
+        $form->load(['formRecurrence', 'hospitals', 'completedForms', 'formSteps.formFields.formFieldType', 'formFields.formFieldType']);
         return response()->json($form, 200);
     }
 
@@ -52,13 +52,13 @@ class FormController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Form $form)
-      { 
-       
-       try 
+      {
+
+       try
        {
-          
+
           $result = $form->update($this->updateValidator());
-        
+
           return response()->json( $result, 200);
 
       } catch (\Throwable $th) {
@@ -67,7 +67,7 @@ class FormController extends Controller
         }
           return response($th->getMessage())->setStatusCode(500);
      }
-      
+
     }
 
      /**
@@ -79,14 +79,14 @@ class FormController extends Controller
      */
     public function updateFormVisibility($form_id)
     {
-        try 
+        try
         {
           $data = $this->updateValidator();
           DB::beginTransaction();
           $form = Form::find($form_id);
           $form->update($data);
           $form->hospitals()->sync($data['hospitals_id']);
-        
+
           DB::commit();
           return response()->json( $form, 200);
 
@@ -129,7 +129,7 @@ class FormController extends Controller
             'form_recurrence_number' => 'nullable|integer',
             'hospitals_id'          =>  'nullable|array',
             'form_recurrence_id'    => 'sometimes|integer|exists:form_recurrences,id'
-            
+
         ]);
     }
     public function recentForm(){
@@ -140,7 +140,7 @@ class FormController extends Controller
         return response()->json($forms, 200);
     }
     public function getFormFiltered(Request $request){
-     
+
       try {
         $form_date        = $request->input('form_date');
         $published_form   = $request->input('published_form');
@@ -148,8 +148,8 @@ class FormController extends Controller
         $recurrence_form  = $request->input('recurrence_form');
         $paginate         = $request->input('paginate');
 
-        $forms =  Form::with('formRecurrence') 
-                      ->withCount('completedforms')
+        $forms =  Form::with('formRecurrence')
+                      ->withCount('completedForms')
                       ->where(function ($query) use ($recurrence_form, $form_date, $published_form, $unpublished_form){
                         if($form_date){
                           $query->whereDate('created_at', $form_date);
@@ -158,16 +158,16 @@ class FormController extends Controller
                           $query->where('form_recurrence_id', $recurrence_form);
                         }
                         if($published_form == true){
-                     
+
                           $query->where('publish',true);
                         }
                         if($unpublished_form == true){
-                        
+
                           $query->where('publish',false);
                         }
                       })->paginate($paginate);
         return response()->json($forms, 200);
-        
+
       } catch (\Throwable $th) {
         if (env('APP_DEBUG') == true) {
           return response($th)->setStatusCode(500);
@@ -179,7 +179,7 @@ class FormController extends Controller
         try {
           $key_words=$request->get('key_words');
           $forms = Form::with('formRecurrence')
-                        ->withCount('completedforms')
+                        ->withCount('completedForms')
                         ->where('title', 'LIKE', "%{$key_words}%")->orWhere('title', 'LIKE', "%{$key_words}%")->paginate(15);
           Log::info('forms', [$forms]);
           if (!$forms ) {
