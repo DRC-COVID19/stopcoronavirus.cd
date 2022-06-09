@@ -87,20 +87,73 @@ class HospitalController extends Controller
    */
   public function show($hospital_id)
   {
-    $formsAllVisibility = Form::with(['formRecurrence', 'completedForms' => function ($query) use ($hospital_id) {
-        $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
-        $query->where('hospital_id', $hospital_id);
-        $query->orderBy('last_update', 'desc');
-      }])
+    $formsAllVisibility = Form::with('formRecurrence')
+      ->where('visible_all_hospitals', true)
+      ->where('publish', true)
+      ->get();
+
+    $hospitalForms = Hospital::with([
+      'forms' => function ($query) {
+        $query->where('visible_all_hospitals', '<>', true)
+              ->where('publish', true);
+      },
+      'forms.formRecurrence'
+    ])
+      ->find($hospital_id)
+      ->forms
+      ->filter(fn($form) => $form->publish)
+      ->merge($formsAllVisibility);
+
+    $hospital = Hospital::find($hospital_id);
+    $hospital->forms = $hospitalForms;
+
+    return response()->json($hospital);
+  }
+
+  public function showDeep($hospital_id) {
+    $formsAllVisibility = Form::with(
+      [
+        'formRecurrence',
+        'completedForms' => function ($query) use ($hospital_id) {
+          $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
+          $query->where('hospital_id', $hospital_id);
+          $query->orderBy('last_update', 'desc');
+        },
+        'formSteps' => function ($query) {
+          $query->select('id', 'form_id', 'title', 'step');
+        },
+        'formSteps.formFields' => function ($query) {
+          $query->select('id', 'name', 'order_field', 'rules', 'form_step_id', 'default_value', 'form_field_type_id');
+        },
+        'formSteps.formFields.formFieldType' => function ($query) {
+          $query->select('id', 'name');
+        }
+      ])
       ->where('visible_all_hospitals' , true)
       ->where('publish', true)
       ->get();
 
-    $hospitalForms = Hospital::with(['forms.formRecurrence', 'forms.completedForms' => function ($query)  use ($hospital_id) {
-        $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
-        $query->where('hospital_id', $hospital_id);
-        $query->orderBy('last_update', 'desc');
-      }])
+    $hospitalForms = Hospital::with([
+        'forms' => function ($query) {
+          $query->where('visible_all_hospitals', '<>', true)
+                ->where('publish', true);
+        },
+        'forms.formRecurrence',
+        'forms.completedForms' => function ($query)  use ($hospital_id) {
+          $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
+          $query->where('hospital_id', $hospital_id);
+          $query->orderBy('last_update', 'desc');
+        },
+        'forms.formSteps' => function ($query) {
+          $query->select('id', 'form_id', 'title', 'step');
+        },
+        'forms.formSteps.formFields' => function ($query) {
+          $query->select('id', 'name', 'order_field', 'rules', 'form_step_id', 'default_value', 'form_field_type_id');
+        },
+        'forms.formSteps.formFields.formFieldType' => function ($query) {
+          $query->select('id', 'name');
+        }
+      ])
       ->find($hospital_id)
       ->forms
       ->filter(fn($form) => $form->publish)
