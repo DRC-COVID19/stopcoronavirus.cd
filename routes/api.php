@@ -236,6 +236,7 @@ Route::group([
  */
 Route::group(['prefix' => 'notifications'], function () {
   Route::get('/{hospital_id}', 'NotificationController@notificationHospital');
+  Route::get('notification-by-date/{hospital_id}', 'NotificationController@notificationHospitalByDate');
   Route::get('/by-paginate/{hospital_id}', 'NotificationController@indexNotificationByPaginate');
   Route::get('/notification-not-read/{hospital_id}', 'NotificationController@getNotificationNotReadUser');
   Route::get('/set-notification-by-hospital/{hospital_id}', 'NotificationController@setNotificationByHospital');
