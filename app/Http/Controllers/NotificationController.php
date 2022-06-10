@@ -61,6 +61,7 @@ class NotificationController extends Controller
                                     ->whereIn('form_id', $this->getFormByHospital($hospital_id)->pluck('id'))
                                     ->select('*')
                                     ->selectRaw(DB::raw('CAST( created_at AS DATE) as date'))
+                                    ->orderBy('date', 'desc')
                                     ->get();
         $notificationsByDate = $notifications->groupBy('date');
         return response()->json($notificationsByDate);
