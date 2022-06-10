@@ -529,7 +529,7 @@ export default {
       fluxAfricelInOut: [],
       showMobileMaps: true,
       activeRightSide: 0,
-      mapMdTop: 46.4,
+      mapMdTop: 46.4
     };
   },
   computed: {
@@ -735,7 +735,6 @@ export default {
     // Prefetch infranstructure data
     this.getHospitalsData({
       observation_end: moment().format("YYYY-MM-DD"),
-      observation_start: INFRASTRUCTURE_FIRST_UPDATE,
       township: 0,
       isLoading: false,
     });

@@ -1,8 +1,8 @@
 <template>
   <b-link :to="route" class="card-link">
     <b-card class="card__recent-form">
-      {{ form.title }} <br>
-      <b-badge v-if="form.visible_all_hospitals===true" class="mt-2">
+      {{ form.title }} <br />
+      <b-badge v-if="form.visible_all_hospitals === true" class="mt-2">
         Visible pour tout le monde
       </b-badge>
     </b-card>
@@ -14,34 +14,30 @@ export default {
   props: {
     form: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     route: {
       type: Object,
-      default: () => {}
-    }
-  }
-}
+      default: () => {},
+    },
+  },
+};
 </script>
 <style lang="scss">
 @import "@~/sass/_variables";
 .card__Scroll {
   display: flex;
-  justify-content: space-between;
   @media (max-width: $max-width) {
     & {
       z-index: 5;
-      display: flex;
-      height: 30vh;
+      height: 100%;
       width: 100%;
       border-right: 0;
-      overflow-x: scroll !important;
-      white-space: nowrap;
     }
   }
 }
 .card__recent-form {
-  width: 170px;
+  width: 100%;
   height: 8rem;
   cursor: pointer;
   background: #ffffff;
@@ -58,6 +54,7 @@ export default {
   text-align: center;
   border: 0 !important;
   transform: scale(1);
+  margin-top: 10px;
   &:hover {
     transform: scale(1.1);
     background-color: #ffffff;

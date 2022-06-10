@@ -74,6 +74,15 @@ export default {
             }
           })
           .then(({ data }) => {
+            if (!payload.observation_start) {
+              data = data.map((hospital) => {
+                if (hospital.completed_forms.length > 0) {
+                  hospital.completed_forms = [hospital.completed_forms[0]]
+                }
+                return hospital
+              })
+            }
+
             const Features = data.map((value) => {
               return {
                 type: 'Feature',
@@ -151,9 +160,13 @@ export default {
         state.hospitalTotalData = null
       }
     },
-    getSituationHospital ({ state }, payload) {
-      const selectedHospital = payload || ''
-      state.situationHospitalLoading = true
+    /**
+     *
+     * @deprecated use completedForm/completedForm__getAggregatedByHospitals instead
+     */
+    getSituationHospital({ state }, payload) {
+      const selectedHospital = payload || "";
+      state.situationHospitalLoading = true;
       const params = {
         observation_end: state.observation_end,
         observation_start: state.observation_start,

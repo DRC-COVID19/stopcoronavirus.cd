@@ -1,3 +1,4 @@
+
 export default {
   state: {
     completedForms: {} || [],
@@ -124,8 +125,8 @@ export default {
           })
       })
     },
-    completedForm__getByHospitalDetail ({ state, commit }, payload) {
-      commit('SET_IS_LOADING', true)
+    completedForm__show ({ state, commit }, payload) {
+      commit('SET_IS_LOADING', payload.isLoading)
       return new Promise((resolve, reject) => {
         axios
           .get(`/api/dashboard/completed_forms/${payload.completed_form_id}`)
@@ -170,7 +171,17 @@ export default {
             payload
           )
           .then(({ data }) => {
-            commit('SET_COMPLETED_FORMS_AGGREGATED', data)
+            const aggregatedData = { ...data }
+            if (!payload.observation_start) {
+              aggregatedData.data = aggregatedData.data.map((hospital) => {
+                if (hospital.completed_forms.length > 0) {
+                  hospital.completed_forms = [hospital.completed_forms[0]]
+                }
+                return hospital
+              })
+            }
+            // aggregated data
+            commit('SET_COMPLETED_FORMS_AGGREGATED', aggregatedData)
             commit('SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING', false)
           })
           .catch((response) => {
@@ -201,10 +212,10 @@ export default {
           })
       })
     },
-    completedForm__setSelectedForm({ commit }, payload) {
+    completedForm__setSelectedForm ({ commit }, payload) {
       commit('SET_SELECTED_FORM', payload)
     },
-    completedForm__getAllFiltered(_, payload) {
+    completedForm__getAllFiltered (_, payload) {
       return new Promise((resolve, reject) => {
         axios
           .get('/api/dashboard/completed_forms/get-all-filtered', {
