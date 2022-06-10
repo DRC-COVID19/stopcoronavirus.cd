@@ -32,8 +32,8 @@ export default {
     flex-direction: row !important;
     flex-wrap: nowrap;
     &::-webkit-scrollbar {
-      width: 0; /* Remove scrollbar space */
-      background: transparent; /* Optional: just make scrollbar invisible */
+      width: 0;
+      background: transparent;
     }
   @media (max-width: $max-width) {
     & {
