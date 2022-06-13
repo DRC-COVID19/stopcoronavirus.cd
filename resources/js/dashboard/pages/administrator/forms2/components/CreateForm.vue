@@ -121,6 +121,22 @@
             </v-select>
           </b-col>
         </b-row>
+        <b-row>
+          <b-col md="6" xs="12">
+            <FomFieldSelect
+              v-model="form.conflict_resolution_mode_id"
+              :options="conflictResolutionModes"
+              label="name"
+              :reduce="(item) => item.id"
+              :isObligated="true"
+              rules="required"
+              id="form.conflict_resolution_mode_id"
+              name="Mode résolution de conflit"
+              mode="aggressive"
+              class="form-select"
+            />
+          </b-col>
+        </b-row>
         <b-row class="px-3 pt-4 d-flex justify-content-start">
           <b-button
             type="submit"
@@ -373,6 +389,7 @@ export default {
         form_recurrence_value: null,
         form_recurrence_number: null,
         form_recurrence_id: '',
+        conflict_resolution_mode_id: '',
         publish: false
       },
       isNumber: false,
@@ -394,10 +411,14 @@ export default {
   async mounted () {
     this.resetForm()
     await this.getFormsRecurrences()
+    await this.getConflictResolutionModes()
   },
   computed: {
     ...mapState({
       formRecurrences: (state) => state.form.formsRecurrences
+    }),
+    ...mapState({
+      conflictResolutionModes: (state) => state.form.conflictResolutionModes
     }),
     isWeek () {
       return this.form.form_recurrence_id === this.formRecurrences.find((recurrence) => recurrence.id === formRecurrences.WEEK).id
@@ -423,7 +444,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getFormsRecurrences']),
+    ...mapActions(['getFormsRecurrences', 'getConflictResolutionModes']),
     onclickWeek (week) {
       this.form.form_recurrence_value = week
       if (week === '0') {

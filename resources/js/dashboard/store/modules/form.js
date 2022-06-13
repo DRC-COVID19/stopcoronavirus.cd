@@ -4,6 +4,7 @@ export default {
     form: {},
     recentForms: [],
     formsRecurrences: [],
+    conflictResolutionModes: [],
     isLoading: false,
     isUpdating: false,
     isUpdateFormTitle: null,
@@ -31,6 +32,9 @@ export default {
     },
     SET_FORMS_RECURRENCES (state, payload) {
       state.formsRecurrences = payload
+    },
+    SET_CONFLICT_RESOLUTION_MODES (state, payload) {
+      state.conflictResolutionModes = payload
     },
     SET_IS_LOADING (state, payload) {
       state.isLoading = payload
@@ -130,6 +134,21 @@ export default {
           .get('/api/dashboard/form-recurrences')
           .then(({ data }) => {
             commit('SET_FORMS_RECURRENCES', data)
+            commit('SET_IS_LOADING', false)
+            resolve(true)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
+    },
+    getConflictResolutionModes ({ state, commit }, payload = {}) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/conflict-resolution-modes')
+          .then(({ data }) => {
+            commit('SET_CONFLICT_RESOLUTION_MODES', data)
             commit('SET_IS_LOADING', false)
             resolve(true)
           })

@@ -113,22 +113,24 @@ class FormController extends Controller
 
     public function validator(){
         return request()->validate([
-            'title'                 => 'required|string|max:255',
-            'publish'               => 'nullable|boolean',
-            'form_recurrence_value' => 'nullable|string|max:255',
-            'form_recurrence_number' => 'nullable|integer',
-            'form_recurrence_id'    => 'required|integer|exists:form_recurrences,id'
+            'title'                          => 'required|string|max:255',
+            'publish'                        => 'nullable|boolean',
+            'form_recurrence_value'          => 'nullable|string|max:255',
+            'form_recurrence_number'         => 'nullable|integer',
+            'form_recurrence_id'             => 'required|integer|exists:form_recurrences,id',
+            'conflict_resolution_mode_id'    => 'required|integer|exists:conflict_resolution_modes,id'
         ]);
     }
     public function updateValidator(){
         return request()->validate([
-            'title'                 => 'sometimes|string|max:255',
-            'publish'               => 'nullable|boolean',
-            'visible_all_hospitals'  => 'nullable|boolean',
-            'form_recurrence_value' => 'nullable|string|max:255',
-            'form_recurrence_number' => 'nullable|integer',
-            'hospitals_id'          =>  'nullable|array',
-            'form_recurrence_id'    => 'sometimes|integer|exists:form_recurrences,id'
+            'title'                          => 'sometimes|string|max:255',
+            'publish'                        => 'nullable|boolean',
+            'visible_all_hospitals'          => 'nullable|boolean',
+            'form_recurrence_value'          => 'nullable|string|max:255',
+            'form_recurrence_number'         => 'nullable|integer',
+            'hospitals_id'                   =>  'nullable|array',
+            'form_recurrence_id'             => 'sometimes|integer|exists:form_recurrences,id',
+            'conflict_resolution_mode_id'    => 'sometimes|integer|exists:conflict_resolution_modes,id'
 
         ]);
     }

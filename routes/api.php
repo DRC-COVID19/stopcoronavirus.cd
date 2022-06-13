@@ -243,6 +243,7 @@ Route::group(['prefix' => 'notifications'], function () {
   Route::get('/set-notification-by-hospital/{hospital_id}', 'NotificationController@setNotificationByHospital');
 });
 Route::resource('notifications', 'NotificationController');
+Route::resource('conflict-resolution-modes', 'ConflictResolutionModeController');
 
 
 
