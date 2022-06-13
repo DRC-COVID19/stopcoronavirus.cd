@@ -23,7 +23,7 @@ class ConflictResolutionModeSeeder extends Seeder
                 'slug'    => 'new_submission',
             ],
             [
-                'name'    => 'dernière soumission résout le conflit',
+                'name'    => 'le dernier à soumettre résout le conflit',
                 'slug'    => 'last_submission',
             ],
             [

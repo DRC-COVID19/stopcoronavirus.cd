@@ -121,8 +121,8 @@
             </v-select>
           </b-col>
         </b-row>
-        <b-row>
-          <b-col md="6" xs="12">
+        <b-row class="mt-3">
+          <b-col md="12" xs="12">
             <FomFieldSelect
               v-model="form.conflict_resolution_mode_id"
               :options="conflictResolutionModes"
@@ -131,6 +131,7 @@
               :isObligated="true"
               rules="required"
               id="form.conflict_resolution_mode_id"
+              labelText="Mode résolution de conflit"
               name="Mode résolution de conflit"
               mode="aggressive"
               class="form-select"
