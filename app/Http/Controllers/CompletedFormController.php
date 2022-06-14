@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCompletedFormRequest;
+use App\Http\Requests\StoreForOfflineCompletedFormRequest;
 use App\Http\Requests\UpdateCompletedFormRequest;
 
 class CompletedFormController extends Controller
@@ -95,6 +96,23 @@ class CompletedFormController extends Controller
             return response($th->getMessage())->setStatusCode(500);
         }
     }
+
+    public function storeForOffline(StoreForOfflineCompletedFormRequest $request) {
+      $formId = $request->input('form_id');
+      $hospitalId = $request->input('hospital_id');
+      $completedForm = CompletedForm::where(function ($query) use ($hospitalId, $formId, $request) {
+          return $query->where('hospital_id', $hospitalId)
+                      ->where('form_id', $formId)
+                      ->where('last_update', $request['last_update']);
+      })
+        ->first();
+      if ($completedForm) {
+        return response(['error' => 'Conflit'])->setStatusCode(422);
+      } else {
+        return $this->store($request);
+      }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
