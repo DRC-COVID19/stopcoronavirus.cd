@@ -57,7 +57,9 @@ class NotificationController extends Controller
         return response()->json($notifications);
     }
     public function notificationHospitalByDate($hospital_id){
-        $notifications = Notification::with('form')
+        $notifications = Notification::with(['form' => function($query) {
+                                        $query->select('id', 'title');
+                                    }])
                                     ->whereIn('form_id', $this->getFormByHospital($hospital_id)->pluck('id'))
                                     ->select('*')
                                     ->selectRaw(DB::raw('CAST( created_at AS DATE) as date'))

@@ -156,7 +156,6 @@ class HospitalController extends Controller
       ])
       ->find($hospital_id)
       ->forms
-      ->filter(fn($form) => $form->publish)
       ->merge($formsAllVisibility);
 
     $hospital = Hospital::find($hospital_id);

@@ -207,6 +207,7 @@ Route::group([
 
     Route::post('/get-aggregated-by-hospitals', "CompletedFormController@getAggregatedByHospitals");
     Route::post('/get-data-by-hospitals', "CompletedFormController@getDataByHospitals");
+    Route::post('/store-for-offline', "CompletedFormController@storeForOffline");
     Route::get('/get-all-filtered', "CompletedFormController@getAllFiltered");
 
     Route::get('/check-last_update/{hospital_id}/{last_update}', 'CompletedFormController@checkLastUpdate');
