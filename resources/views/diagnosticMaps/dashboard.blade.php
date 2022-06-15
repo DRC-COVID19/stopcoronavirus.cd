@@ -23,7 +23,7 @@
         </div>
 
         <script src="{{ asset('js/vueApp.js?v=3.036', env('REDIRECT_HTTPS')) }}"></script>
-
+    </div>
 </body>
 
 </html>

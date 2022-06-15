@@ -27,6 +27,14 @@ export default {
 @import "@~/sass/_variables";
 .card__Scroll {
   display: flex;
+   overflow-x: scroll !important;
+    white-space: nowrap;
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    &::-webkit-scrollbar {
+      width: 0;
+      background: transparent;
+    }
   @media (max-width: $max-width) {
     & {
       z-index: 5;
