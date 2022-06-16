@@ -16,10 +16,10 @@
     </b-nav-item>
     <b-nav-item
       @click="selectMenu(9)"
-      :to="{ name: 'main.dashboard.graphique' }"
+      :to="{ name: 'main.dashboard.rapport' }"
       :active="activeMenu === 9"
     >
-      <i class="fas fa-chart-line" aria-hidden="true"></i> &nbsp; Graphique
+      <i class="fas fa-chart-line" aria-hidden="true"></i> &nbsp; Rapport
     </b-nav-item>
     <b-nav-item
       :active="activeMenu === 7"
@@ -56,7 +56,7 @@ export default {
         this.selectMenu(5)
       } else if (this.$route.name === 'main.dashboard.aPropos') {
         this.selectMenu(7)
-      } else if (this.$route.name === 'main.dashboard.graphique') {
+      } else if (this.$route.name === 'main.dashboard.rapport') {
         this.selectMenu(9)
       } else {
         this.selectMenu(1)

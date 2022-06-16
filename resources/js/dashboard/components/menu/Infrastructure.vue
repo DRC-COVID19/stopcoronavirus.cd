@@ -245,10 +245,6 @@ export default {
         highlight: true,
       };
     },
-    // dateRangerPosition(dropdownList, component, { width, top, left, right }) {
-    //   dropdownList.style.top = `${top}px`;
-    //   dropdownList.style.left = `${left + 180}px`;
-    // },
     clearObservationDate() {
       this.dateRange = { start: null, end: null };
       this.form.observation_end = null;
