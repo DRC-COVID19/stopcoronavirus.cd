@@ -27,25 +27,25 @@
       <label for class="text-dash-color">Indicateurs :</label>
       <v-select
         v-model="reporting.indicatorId"
-        :options="indicators"
+        :options="formFields"
         :reduce="(item) => item.id"
         label="name"
         placeholder="Sélectionner des indicateurs"
         class="style-chooser"
         @input="selectedIndicators"
         multiple
-        :class="{ disabled: true }"
-        :area-disable="indicators.length === 0"
+        :disabled="formFields.length === 0"
     /></b-col>
     <b-col class="mx-0 w-100" lg="2">
       <label for class="text-dash-color">Opération :</label>
       <v-select
-        v-model="reporting.form"
+        v-model="reporting.operationId"
         :options="operations"
         :reduce="(item) => item.id"
         label="type"
         placeholder="Choisir  une opération"
         class="style-chooser"
+        @input="selectedOperations"
     /></b-col>
     <b-col lg="2" class="mx-0 w-100">
       <label for class="text-dash-color">Date :</label>
@@ -126,116 +126,139 @@
     <b-col class="d-flex mx-0 w-100 align-item-center text-center h-100" lg="2">
       <b-button type="submit" block class="btn-dash-blue"
         ><small>Générer </small>
-      </b-button></b-col
-    >
+      </b-button>
+      </b-col>
   </b-row>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: "HeaderReporting",
+  name: 'HeaderReporting',
   props: {
     forms: {
       type: Array,
       default: () => {
-        return [];
-      },
+        return []
+      }
     },
     hospitals: {
       type: Array,
       default: () => {
-        return [];
-      },
-    },
+        return []
+      }
+    }
   },
-  data() {
+  data () {
     return {
-      mode: "date",
+      mode: 'date',
       isRanged: false,
       dateRange: this.isRanged
         ? {
             start: new Date(),
-            end: new Date(),
+            end: new Date()
           }
         : new Date(),
-      indicators: [],
       reporting: {
         formId: null,
         hospitalId: [],
         indicatorId: [],
         operationId: null,
+        observation_start: null,
+        observation_end: null
       },
-      iconStateDatePicker: "fas fa-thin fa-plus",
+      iconStateDatePicker: 'fas fa-thin fa-plus',
       attributes: [],
       operations: [
-        { id: 1, type: "Somme" },
-        { id: 2, type: "Moyenne" },
-      ],
-    };
+        { id: 1, type: 'Somme' },
+        { id: 2, type: 'Moyenne' }
+      ]
+    }
   },
   computed: {
     ...mapState({
-      formFields: (state) => state.formField.formFields,
-    }),
+      formFields: (state) => state.formField.formFields
+    })
   },
+  watch: {},
   methods: {
-    ...mapActions(["getFormFields"]),
-    activeStartDate() {
-      this.isRanged = !this.isRanged;
-      this.mode = this.mode === "date" ? "range" : "date";
+    ...mapActions(['getFormFields']),
+    activeStartDate () {
+      this.isRanged = !this.isRanged
+      this.mode = this.mode === 'date' ? 'range' : 'date'
       this.iconStateDatePicker =
-        this.iconStateDatePicker === "fas fa-thin fa-plus"
-          ? "fa fa-times"
-          : "fas fa-thin fa-plus";
+        this.iconStateDatePicker === 'fas fa-thin fa-plus'
+          ? 'fa fa-times'
+          : 'fas fa-thin fa-plus'
 
       if (this.isRanged) {
         this.dateRange.start =
-          this.form.observation_end == null
+          this.reporting.observation_end == null
             ? new Date()
-            : this.form.observation_end;
-        this.dateRange.end = new Date();
+            : this.reporting.observation_end
+        this.dateRange.end = new Date()
 
-        this.form.observation_start = this.dateRange.start;
-        this.form.observation_end = new Date();
+        this.reporting.observation_start = this.dateRange.start
+        this.reporting.observation_end = new Date()
       } else {
         this.dateRange =
-          this.form.observation_end == null
+          this.reporting.observation_end == null
             ? new Date()
-            : this.form.observation_end;
-        this.form.observation_start = null;
+            : this.reporting.observation_end
+        this.reporting.observation_start = null
       }
       this.attributes[0] = {
-        key: "today",
+        key: 'today',
         dates: this.isRanged
           ? { start: this.dateRange.start, end: this.dateRange.end }
           : this.dateRange,
-        highlight: true,
-      };
-    },
-    onRangeDateObservation(inputValueDate) {},
-    clearObservationDate() {
-      this.dateRange = new Date();
-      this.isRanged = false;
-    },
-    selectedForm(value) {
-      if (value) {
-        this.getFormFields({ form_id: value });
-        this.indicators = [...this.formFields];
-      } else {
-        this.indicators = [];
+        highlight: true
       }
-
-      console.log("value ->", value);
     },
-    selectedHospitals(value) {
-      console.log("value ->", value);
+    onRangeDateObservation (inputValueDate) {
+      if (this.isRanged) {
+        this.reporting.observation_start = moment(inputValueDate.start).format(
+          'YYYY-MM-DD'
+        )
+        this.dateRange.start = inputValueDate.start
+        this.reporting.observation_end = moment(inputValueDate.end).format(
+          'YYYY-MM-DD'
+        )
+        this.dateRange.end = inputValueDate.end
+      } else {
+        this.reporting.observation_start = null
+        this.dateRange = inputValueDate
+        this.reporting.observation_end =
+          moment(inputValueDate).format('YYYY-MM-DD')
+      }
+      this.attributes[0] = {
+        key: 'today',
+        dates: this.dateRange,
+        highlight: true
+      }
+      console.log('dateRange', this.dateRange)
     },
-    selectedIndicators(value) {
-      console.log("value ->", value);
+    clearObservationDate () {
+      this.dateRange = new Date()
+      this.isRanged = false
     },
-  },
-};
+    selectedForm (value) {
+      this.getFormFields({ form_id: value })
+      console.log('value ->', value)
+    },
+    selectedHospitals (value) {
+      this.reporting.hospitalId = value
+      console.log('value ->', this.reporting.hospitalId)
+    },
+    selectedIndicators (value) {
+      this.reporting.indicatorId = value
+      console.log('value ->', this.reporting.indicatorId)
+    },
+    selectedOperations (value) {
+      this.reporting.operationId = value
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -297,7 +320,8 @@ export default {
 .style-picker {
   width: 80%;
 }
-.disabled {
+
+.style-chooser[disabled="disabled"] {
   pointer-events: none;
   color: #bfcbd9;
   cursor: not-allowed;

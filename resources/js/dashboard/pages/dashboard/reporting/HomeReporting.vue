@@ -26,7 +26,7 @@
     </b-row>
     <b-row> </b-row>
     <div>Bonjour</div>
-    <div>{{  }}</div>
+    <div>{{}}</div>
   </b-container>
 </template>
 <script>
@@ -46,6 +46,11 @@ export default {
         },
         xaxis: {
           categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true
+          }
         }
       },
       series: [
@@ -68,7 +73,11 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getForms', 'getHospitals'])
+    ...mapActions([
+      'getForms',
+      'getHospitals',
+      'completedForm__getDataByHospitals'
+    ])
   }
 }
 </script>
