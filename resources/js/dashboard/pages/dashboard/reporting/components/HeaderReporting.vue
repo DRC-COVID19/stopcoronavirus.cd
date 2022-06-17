@@ -1,34 +1,49 @@
 <template>
-  <b-row class="mx-0 px-0 w-100 " lg="12">
+  <b-row class="mx-0" lg="12">
     <b-col class="mx-0 w-100" lg="2">
       <label for class="text-dash-color">Formulaire :</label>
       <v-select
-        v-model="chart.form"
-        label="name"
+        v-model="reporting.formId"
+        :options="forms"
+        :reduce="(item) => item.id"
+        label="title"
         placeholder="Sélectionner un formulaire"
         class="style-chooser"
+        @input="selectedForm"
     /></b-col>
     <b-col class="mx-0 w-100" lg="2">
       <label for class="text-dash-color">Hôpitaux :</label>
       <v-select
-        v-model="chart.form"
+        v-model="reporting.hospitalId"
+        :options="hospitals"
+        :reduce="(item) => item.id"
         label="name"
+        @input="selectedHospitals"
         placeholder="Sélectionner des hôpitaux"
         class="style-chooser"
+        multiple
     /></b-col>
     <b-col class="mx-0 w-100" lg="2">
       <label for class="text-dash-color">Indicateurs :</label>
       <v-select
-        v-model="chart.form"
+        v-model="reporting.indicatorId"
+        :options="indicators"
+        :reduce="(item) => item.id"
         label="name"
         placeholder="Sélectionner des indicateurs"
         class="style-chooser"
+        @input="selectedIndicators"
+        multiple
+        :class="{ disabled: true }"
+        :area-disable="indicators.length === 0"
     /></b-col>
     <b-col class="mx-0 w-100" lg="2">
       <label for class="text-dash-color">Opération :</label>
       <v-select
-        v-model="chart.form"
-        label="name"
+        v-model="reporting.form"
+        :options="operations"
+        :reduce="(item) => item.id"
+        label="type"
         placeholder="Choisir  une opération"
         class="style-chooser"
     /></b-col>
@@ -108,75 +123,131 @@
         </b-button>
       </div>
     </b-col>
-    <b-col class="d-flex mx-0 w-100 align-item-center h-100" lg="2">
-      <b-button type="submit" block class="btn-submit btn-dash-blue"
-        ><small>Générer le graphique</small>
+    <b-col class="d-flex mx-0 w-100 align-item-center text-center h-100" lg="2">
+      <b-button type="submit" block class="btn-dash-blue"
+        ><small>Générer </small>
       </b-button></b-col
     >
   </b-row>
 </template>
 <script>
+import { mapState, mapActions } from "vuex";
+
 export default {
-  name: 'HeaderReporting',
-  data () {
+  name: "HeaderReporting",
+  props: {
+    forms: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
+    hospitals: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
+  },
+  data() {
     return {
+      mode: "date",
       isRanged: false,
       dateRange: this.isRanged
         ? {
             start: new Date(),
-            end: new Date()
+            end: new Date(),
           }
         : new Date(),
-      chart: {
-        form: null
+      indicators: [],
+      reporting: {
+        formId: null,
+        hospitalId: [],
+        indicatorId: [],
+        operationId: null,
       },
-      iconStateDatePicker: 'fas fa-thin fa-plus'
-    }
+      iconStateDatePicker: "fas fa-thin fa-plus",
+      attributes: [],
+      operations: [
+        { id: 1, type: "Somme" },
+        { id: 2, type: "Moyenne" },
+      ],
+    };
+  },
+  computed: {
+    ...mapState({
+      formFields: (state) => state.formField.formFields,
+    }),
   },
   methods: {
-    activeStartDate () {
-      this.isRanged = !this.isRanged
-      this.mode = this.mode === 'date' ? 'range' : 'date'
+    ...mapActions(["getFormFields"]),
+    activeStartDate() {
+      this.isRanged = !this.isRanged;
+      this.mode = this.mode === "date" ? "range" : "date";
       this.iconStateDatePicker =
-        this.iconStateDatePicker === 'fas fa-thin fa-plus'
-          ? 'fa fa-times'
-          : 'fas fa-thin fa-plus'
+        this.iconStateDatePicker === "fas fa-thin fa-plus"
+          ? "fa fa-times"
+          : "fas fa-thin fa-plus";
 
       if (this.isRanged) {
         this.dateRange.start =
           this.form.observation_end == null
             ? new Date()
-            : this.form.observation_end
-        this.dateRange.end = new Date()
+            : this.form.observation_end;
+        this.dateRange.end = new Date();
 
-        this.form.observation_start = this.dateRange.start
-        this.form.observation_end = new Date()
+        this.form.observation_start = this.dateRange.start;
+        this.form.observation_end = new Date();
       } else {
         this.dateRange =
           this.form.observation_end == null
             ? new Date()
-            : this.form.observation_end
-        this.form.observation_start = null
+            : this.form.observation_end;
+        this.form.observation_start = null;
       }
       this.attributes[0] = {
-        key: 'today',
+        key: "today",
         dates: this.isRanged
           ? { start: this.dateRange.start, end: this.dateRange.end }
           : this.dateRange,
-        highlight: true
-      }
+        highlight: true,
+      };
     },
-    onRangeDateObservation (inputValueDate) {},
-    clearObservationDate () {
-      this.dateRange = new Date()
-      this.isRanged = false
-    }
-  }
-}
+    onRangeDateObservation(inputValueDate) {},
+    clearObservationDate() {
+      this.dateRange = new Date();
+      this.isRanged = false;
+    },
+    selectedForm(value) {
+      if (value) {
+        this.getFormFields({ form_id: value });
+        this.indicators = [...this.formFields];
+      } else {
+        this.indicators = [];
+      }
+
+      console.log("value ->", value);
+    },
+    selectedHospitals(value) {
+      console.log("value ->", value);
+    },
+    selectedIndicators(value) {
+      console.log("value ->", value);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+.style-chooser {
+  background-color: #f4f6fc;
+  /* text-align: ; */
+  width: 100%;
+}
+.vs__dropdown-toggle {
+  border-color: #c2cef5 !important;
+}
 .btn-clear-observation {
   height: 32px;
   margin-left: 5px;
@@ -225,5 +296,13 @@ export default {
 }
 .style-picker {
   width: 80%;
+}
+.disabled {
+  pointer-events: none;
+  color: #bfcbd9;
+  cursor: not-allowed;
+  background-image: none;
+  background-color: #eef1f6;
+  border-color: #d1dbe5;
 }
 </style>
