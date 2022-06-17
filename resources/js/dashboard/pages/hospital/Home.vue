@@ -54,7 +54,7 @@
                   "
                 >
                   <b-col
-                    class="card__Scroll px-0 mx-0 flex-wrap d-flex"
+                    class="card__Scroll px-0 mx-0 flex-md-wrap d-flex"
                     lg="12"
                     v-if="hospitalForms.forms.length > 0"
                   >
