@@ -1,6 +1,7 @@
 export default {
   state: {
     forms: [],
+    formsIndex: [],
     form: {},
     recentForms: [],
     formsRecurrences: [],
@@ -14,6 +15,9 @@ export default {
   mutations: {
     SET_FORMS (state, payload) {
       state.forms = payload
+    },
+    SET_FORMS_INDEX (state, payload) {
+      state.formsIndex = payload
     },
     SET_FORM (state, payload) {
       state.form = payload
@@ -47,6 +51,22 @@ export default {
     form__publishedForms: state => state.forms.filter(form => form.publish)
   },
   actions: {
+    form__index ({ commit, state }) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .get('api/dashboard/forms')
+          .then(({ data }) => {
+            commit('SET_FORMS_INDEX', data)
+            commit('SET_IS_LOADING', false)
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
+    },
     formShow ({ commit }, payload) {
       return new Promise((resolve, reject) => {
         axios

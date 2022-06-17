@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\CompletedForm;
 use App\FormFieldType;
 use App\CompletedFormField;
+use App\Form;
 use Illuminate\Http\Request;
 use function PHPSTORM_META\map;
 use Illuminate\Validation\Rule;
@@ -441,6 +442,21 @@ class CompletedFormController extends Controller
         $data = $query->paginate($perPage);
 
         return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
+    }
+
+    public function getCompletedFormConflict(Request $request){
+        $formId = $request->query('form_id');
+        $forms = Form::with(['formSteps.formFields'])->where('id', $formId)->get();
+
+        return response()->json($forms, 200);
+    }
+
+    public function getCompletedFormByHospital(Request $request){
+        $formId = $request->query('form_id');
+        $hospitalId = $request->query('hospital_id');
+
+        $completedForms = CompletedForm::with(['CompletedFormFields'])->where('form_id', $formId)->where('hospital_id', $hospitalId)->get();
+        return response()->json($completedForms, 200);
     }
 
 }

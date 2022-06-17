@@ -242,8 +242,16 @@ Route::group(['prefix' => 'notifications'], function () {
   Route::get('/notification-not-read/{hospital_id}', 'NotificationController@getNotificationNotReadUser');
   Route::get('/set-notification-by-hospital/{hospital_id}', 'NotificationController@setNotificationByHospital');
 });
+
+/***
+ * completedFormHistory routes
+ */
+Route::group(['prefix'=>'completed-form-histories'],function (){
+  Route::get('get-completed-form-by-conflict', 'CompletedFormHistoryController@getCompletedFormHistoryByConflict');
+});
 Route::resource('notifications', 'NotificationController');
 Route::resource('conflict-resolution-modes', 'ConflictResolutionModeController');
+Route::resource('completed-form-histories', 'CompletedFormHistoryController');
 
 
 
@@ -260,6 +268,10 @@ Route::resource('conflict-resolution-modes', 'ConflictResolutionModeController')
   Route::apiResource('forms', 'FormController');
   Route::apiResource('form-steps', 'FormStepController');
   Route::resource('form-recurrences', 'FormRecurrenceController');
+  Route::group(['prefix' => 'completed-forms'], function () {
+    Route::get('/completed-form-conflict', 'CompletedFormController@getCompletedFormConflict');
+    Route::get('/completed-form-hospital', 'CompletedFormController@getCompletedFormByHospital');
+  });
   Route::apiResource('completed_forms', 'CompletedFormController');
   Route::group(['prefix' => 'forms'], function () {
     Route::get('/filter', 'FormController@filter');

@@ -31,7 +31,7 @@ class CompletedFormHistory extends Model
         return $this->belongsTo(Hospital::class);
     }
 
-    public function completedFormFields()
+    public function completedFormFieldHistories()
     {
         return $this->hasMany(CompletedFormFieldHistory::class);
     }
