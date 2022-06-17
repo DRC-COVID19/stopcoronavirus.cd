@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCompletedFormRequest;
 use App\Http\Requests\StoreForOfflineCompletedFormRequest;
 use App\Http\Requests\UpdateCompletedFormRequest;
+use App\Http\Controllers\CompletedFormHistoryController;
 
 class CompletedFormController extends Controller
 {
@@ -108,7 +109,26 @@ class CompletedFormController extends Controller
       })
         ->first();
       if ($completedForm) {
-        return response(['error' => 'Conflit'])->setStatusCode(422);
+        $conflictResolutionMode = Form::with('conflictResolutionMode')
+                                     ->where('id', $formId)
+                                     ->first();
+        if($conflictResolutionMode->conflictResolutionMode->slug =='admin_resolution') {
+            $completedFormHistory_controller = new CompletedFormHistoryController;
+            $completedFormHistory_controller->storeCompletedFormHistory($request);
+            return response(['succès' => 'réussie'])->setStatusCode(200);
+        }
+        if($conflictResolutionMode->conflictResolutionMode->slug =='old_submission'){
+            return response(['message' => 'vous ne pouvez plus soumettre les données'])->setStatusCode(200);
+        }
+        if($conflictResolutionMode->conflictResolutionMode->slug =='new_submission'){
+            $completedFormHistory_controller = new CompletedFormHistoryController;
+            $completedFormHistory_controller->storeCompletedForm($request);
+            return response(['message' => 'vous ne pouvez plus soumettre les données'])->setStatusCode(200);
+        }
+        if($conflictResolutionMode->conflictResolutionMode->slug =='last_submission'){
+            return response(['erreur' => 'conflict'])->setStatusCode(500);
+        }
+
       } else {
         return $this->store($request);
       }

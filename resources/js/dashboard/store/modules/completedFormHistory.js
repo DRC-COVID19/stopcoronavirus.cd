@@ -32,6 +32,19 @@ export default {
             commit('SET_IS_LOADING', false)
           })
       })
+    },
+    completedFormHistoryStore (_, payload) {
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .post('/api/dashboard/completed-form-histories/store-completed-form-history', payload)
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch((error) => {
+            reject(error)
+          })
+      })
     }
   }
 }

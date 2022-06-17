@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\CompletedFormHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Http\Requests\StoreResolvedConflict;
+use Illuminate\Support\Facades\DB;
+use App\CompletedForm;
+use App\CompletedFormField;
+use App\CompletedFormFieldHistory;
+use Illuminate\Support\Facades\Auth;
 
 class CompletedFormHistoryController extends Controller
 {
@@ -61,6 +67,75 @@ class CompletedFormHistoryController extends Controller
         return response()->json( $result, 200);
     }
 
+    public  function  storeCompletedForm(StoreResolvedConflict $request){
+        try {
+            DB::transaction(function () use ($request) {
+              $admin_user =  $this->guard()->user();
+              $completedForm = CompletedForm::create(array_merge(
+                  $request->validated(),
+                  ['admin_user_id' => $admin_user->id]
+              ));
+
+
+              $completedFormFields = $request['completed_form_fields'];
+
+              foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+                  CompletedFormField::create([
+                      'form_field_id'     => $formFieldKey,
+                      'value'             => $formFieldValue,
+                      'completed_form_id' => $completedForm->id
+                  ]);
+              }
+
+              CompletedForm::destroy($request['completed_form_id']);
+              CompletedFormField::where('completed_form_id', $request['completed_form_id'])->delete();
+              CompletedFormHistory::where('id', $request['completed_form_history_id'])->update([
+                    'conflict' => 0
+              ]);
+              return response()->json($completedForm, 200, []);
+            });
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
+    public function storeCompletedFormHistory (StoreResolvedConflict $request){
+        try {
+            DB::transaction(function () use ($request) {
+                $admin_user =  $this->guard()->user();
+                $completedForm = CompletedFormHistory::create(array_merge(
+                    $request->validated(),
+                    [
+                    'admin_user_id' => $admin_user->id,
+                    'conflict'      =>1
+                    ]
+                ));
+
+               
+  
+                $completedFormFields = $request['completed_form_fields'];
+  
+                foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+                    CompletedFormFieldHistory::create([
+                        'form_field_id'     => $formFieldKey,
+                        'value'             => $formFieldValue,
+                        'completed_form_history_id' => $completedForm->id
+                    ]);
+                }
+
+                return response()->json($completedForm, 200, []);
+              });
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
     /**
      * Display the specified resource.
      *
@@ -96,6 +171,17 @@ class CompletedFormHistoryController extends Controller
     {
         $result = CompletedFormHistory::destroy($id);
         return response()->json( $result, 200);
+    }
+
+     /**
+     * Get the guard to be used during authentication.
+     *
+     * @return \Illuminate\Contracts\Auth\Guard
+     */
+
+    public function guard()
+    {
+        return Auth::guard('dashboard');
     }
 
     public function validator(){

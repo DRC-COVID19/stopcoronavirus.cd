@@ -195,7 +195,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getCompletedFormByHospital', 'getCompletedFormConflict']),
+    ...mapActions(['getCompletedFormByHospital', 'getCompletedFormConflict', 'completedFormHistoryStore']),
     async completedFormByFormAndHospital () {
       this.isLoading = true
       this.completedFormsHospitalForm = await this.getCompletedFormByHospital({
@@ -254,7 +254,35 @@ export default {
     //   this.form.oldValue = null
     // },
     onComplete () {
-      console.log('done')
+      this.completedFormHistoryStore({
+        form_id: this.$route.params.form_id,
+        hospital_id: this.$route.params.hospital_id,
+        completed_form_fields: this.completedForm.completed_form_field,
+        completed_form_id: this.completedFormsHospitalForm[0].id,
+        completed_form_history_id: this.$route.params.id,
+        created_manager_name: this.completedFormsHospitalForm[0].created_manager_name,
+        created_manager_first_name: this.completedFormsHospitalForm[0].created_manager_first_name,
+        last_update: this.completedFormsHospitalForm[0].last_update
+      })
+        .then(() => {
+          this.$notify({
+            group: 'alert',
+            title: 'Statut de la soumission',
+            text: 'Conflict résolus avec succès',
+            type: 'success'
+          })
+          this.$router.push({ name: 'admin.conflict.form' })
+        })
+        .catch(err => {
+          this.$notify({
+            group: 'alert',
+            title: 'Une erreur s\'est produite, veuillez contacter l\'administrateur !',
+            text: 'Impossible de soumettre vos réponses',
+            type: 'error',
+            duration: 10000
+          })
+          console.log(err)
+        })
     }
   }
 }

@@ -249,6 +249,7 @@ Route::group(['prefix' => 'notifications'], function () {
  */
 Route::group(['prefix'=>'completed-form-histories'],function (){
   Route::get('get-completed-form-by-conflict', 'CompletedFormHistoryController@getCompletedFormHistoryByConflict');
+  Route::post('store-completed-form-history', 'CompletedFormHistoryController@storeCompletedForm');
 });
 Route::resource('notifications', 'NotificationController');
 Route::resource('conflict-resolution-modes', 'ConflictResolutionModeController');
