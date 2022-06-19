@@ -118,12 +118,16 @@ class CompletedFormController extends Controller
             return response(['succès' => 'réussie'])->setStatusCode(200);
         }
         if($conflictResolutionMode->conflictResolutionMode->slug =='old_submission'){
-            return response(['message' => 'vous ne pouvez plus soumettre les données'])->setStatusCode(200);
+            $completedFormHistory_controller = new CompletedFormHistoryController;
+            $completedFormHistory_controller->storeOldCompletedForm($request);
+            return response(['succès' => 'réussie'])->setStatusCode(200);
         }
         if($conflictResolutionMode->conflictResolutionMode->slug =='new_submission'){
             $completedFormHistory_controller = new CompletedFormHistoryController;
-            $completedFormHistory_controller->storeCompletedForm($request);
-            return response(['message' => 'vous ne pouvez plus soumettre les données'])->setStatusCode(200);
+            $completedFormHistory_controller->storeNewCompletedForm($request);
+            CompletedForm::destroy($completedForm->id);
+            CompletedFormField::where('completed_form_id', $completedForm->id)->delete();
+            return response(['succès' => 'réussie'])->setStatusCode(200);
         }
         if($conflictResolutionMode->conflictResolutionMode->slug =='last_submission'){
             return response(['erreur' => 'conflict'])->setStatusCode(500);

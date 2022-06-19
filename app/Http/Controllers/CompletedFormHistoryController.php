@@ -136,6 +136,68 @@ class CompletedFormHistoryController extends Controller
         }
     }
 
+    public function storeOldCompletedForm(StoreResolvedConflict $request){
+        try {
+            DB::transaction(function () use ($request) {
+                $admin_user =  $this->guard()->user();
+                $completedForm = CompletedFormHistory::create(array_merge(
+                    $request->validated(),
+                    [
+                    'admin_user_id' => $admin_user->id,
+                    'conflict'      => 0
+                    ]
+                ));
+
+               
+  
+                $completedFormFields = $request['completed_form_fields'];
+  
+                foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+                    CompletedFormFieldHistory::create([
+                        'form_field_id'     => $formFieldKey,
+                        'value'             => $formFieldValue,
+                        'completed_form_history_id' => $completedForm->id
+                    ]);
+                }
+
+                return response()->json($completedForm, 200, []);
+              });
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+    public  function  storeNewCompletedForm(StoreResolvedConflict $request){
+        try {
+            DB::transaction(function () use ($request) {
+              $admin_user =  $this->guard()->user();
+              $completedForm = CompletedForm::create(array_merge(
+                  $request->validated(),
+                  ['admin_user_id' => $admin_user->id]
+              ));
+
+
+              $completedFormFields = $request['completed_form_fields'];
+
+              foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+                  CompletedFormField::create([
+                      'form_field_id'     => $formFieldKey,
+                      'value'             => $formFieldValue,
+                      'completed_form_id' => $completedForm->id
+                  ]);
+              }
+              return response()->json($completedForm, 200, []);
+            });
+        } catch (\Throwable $th) {
+            if (env('APP_DEBUG') == true) {
+                return response($th)->setStatusCode(500);
+            }
+            return response($th->getMessage())->setStatusCode(500);
+        }
+    }
+
     /**
      * Display the specified resource.
      *
