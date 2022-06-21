@@ -200,7 +200,8 @@ export default {
       this.isLoading = true
       this.completedFormsHospitalForm = await this.getCompletedFormByHospital({
         form_id: this.$route.params.form_id,
-        hospital_id: this.$route.params.hospital_id
+        hospital_id: this.$route.params.hospital_id,
+        last_update: this.$route.params.last_update
       })
       this.isLoading = false
     },

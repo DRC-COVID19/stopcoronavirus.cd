@@ -494,10 +494,15 @@ class CompletedFormController extends Controller
     }
 
     public function getCompletedFormByHospital(Request $request){
-        $formId = $request->query('form_id');
-        $hospitalId = $request->query('hospital_id');
+        $formId       = $request->query('form_id');
+        $hospitalId   = $request->query('hospital_id');
+        $lastUpdate   = $request->query('last_update');
 
-        $completedForms = CompletedForm::with(['CompletedFormFields'])->where('form_id', $formId)->where('hospital_id', $hospitalId)->get();
+        $completedForms = CompletedForm::with(['CompletedFormFields'])
+                                    ->where('form_id', $formId)
+                                    ->where('hospital_id', $hospitalId)
+                                    ->where('last_update', $lastUpdate)
+                                    ->get();
         return response()->json($completedForms, 200);
     }
 
