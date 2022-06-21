@@ -26,6 +26,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
+import VueApexCharts from 'vue-apexcharts'
 import HeaderReporting from './components/HeaderReporting'
 export default {
   name: 'Reporting',
@@ -39,9 +40,6 @@ export default {
       options: {
         chart: {
           id: 'vuechart-example'
-        },
-        xaxis: {
-          categories: []
         },
         plotOptions: {
           bar: {
@@ -77,25 +75,31 @@ export default {
         observation_start: reporting.observation_start,
         observation_end: reporting.observation_end
       })
+    },
+    updateAxis (data) {
+      this.options = {
+        ...this.options,
+        xaxis: {
+          categories: [...data]
+        }
+      }
     }
   },
   watch: {
     hospitalsDataAggregated () {
       const categories = []
-      const data = []
+      const dataSerie = []
       const series = this.hospitalsDataAggregated
         .filter((hospital) => {
           return this.reportingChart.hospitalId.includes(hospital.id)
         })
         .map((form) => {
-          categories.push(form.name)
+          categories.push(form.name.replace(/ /g, ""))
           const dataSeries = form.aggregated
             .filter((aggregate) =>
               this.reportingChart.indicatorId.includes(aggregate.form_field.id)
             )
             .map((aggregate) => {
-              console.log(' ->', aggregate.value, form.id)
-
               return {
                 name: aggregate.form_field.name,
                 x: aggregate.value,
@@ -104,26 +108,25 @@ export default {
             })
           return dataSeries
         })
-        .flatMap((formField, arr) => formField)
-        .forEach((formField, arr) => {
-          data.push({
-            name: formField.name,
-            data: arr
-              .filter((element) => formField.name === element.name)
-              .map((element) => {
-                return { x: element.x, y: element.y }
-              })
-          })
-          console.log('formField ->', formField)
+        .flatMap((formField) => formField)
+        .forEach((formField, index, arr) => {
+          if (dataSerie.every((data) => data.name !== formField.name)) {
+            dataSerie.push({
+              name: formField.name,
+              data: arr
+                .filter((data) => data.name === formField.name)
+                .map((data) => {
+                  return data.x
+                })
+            })
+          }
         })
+      this.updateAxis(categories)
 
-      // this.series = [...series]
-      this.options.xaxis.categories = [...categories]
-      console.log('series ->', series)
-      console.log(
-        'this.options.xaxis.categories ->',
-        this.options.xaxis.categories
-      )
+      this.series = [...dataSerie]
+
+      console.log('series ->', this.series)
+      console.log('this.options.xaxis.categories ->', categories)
     }
   }
 }
