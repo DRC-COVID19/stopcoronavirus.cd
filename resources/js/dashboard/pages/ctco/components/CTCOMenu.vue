@@ -12,6 +12,15 @@
       jour
     </b-nav-item>
     <b-nav-item
+      v-if="canViewAdmin"
+      :to="{ name: 'admin.conflict.form' }"
+      :active="
+        $route.name.startsWith('admin.conflict.form')
+      "
+    >
+      <i class="fas fa-close" aria-hidden="true"></i> &nbsp; Gestion des conflicts
+    </b-nav-item>
+    <b-nav-item
       v-if="canViewAgent"
       :to="{ name: 'hospital.home' }"
       :active="$route.name.startsWith('hospital.home')"

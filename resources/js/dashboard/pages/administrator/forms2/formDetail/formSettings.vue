@@ -40,6 +40,22 @@
                 @onUpdateFormRecurrence="updateForm"
               />
             </div>
+            <div class="mt-5">
+              <div class="d-flex justify-content-between">
+                <h4>Changer le mode de résolution de conflict</h4>
+                <img
+                  src="/img/akar-icons_pencil.svg"
+                  class="form__settings-icon"
+                  v-b-modal.updateConflictResolutionMode
+                />
+              </div>
+              <h6>Pour mettre à jour le mode de résolution de conflict, cliquer sur l'icon à droite</h6>
+              <hr />
+              <update-conflict-resolution-modal
+                :formToPopulate="form"
+                @onUpdateConflictResolutionMode="updateForm"
+              />
+            </div>
             <div class="mt-5" v-show="checkCompletedForms">
               <div class="d-flex justify-content-between">
                 <h4>Supprimer le formulaire</h4>
@@ -80,13 +96,15 @@ import { mapActions, mapState } from 'vuex'
 import DeleteFormModal from './components/formSettingsModals/deleteFormModal'
 import UpdateFormVisibilityModal from './components/formSettingsModals/UpdateFormVisibilityModal'
 import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
+import updateConflictResolutionModal from './components/formSettingsModals/updateConflictResolutionModal'
 import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
 export default {
   components: {
     UpdateFormModal,
     UpdateFormRecurrenceModal,
     DeleteFormModal,
-    UpdateFormVisibilityModal
+    UpdateFormVisibilityModal,
+    updateConflictResolutionModal
   },
   data () {
     return {
@@ -123,6 +141,7 @@ export default {
         title: currentForm.title,
         form_recurrence_value: currentForm.form_recurrence_value,
         form_recurrence_id: currentForm.form_recurrence_id,
+        conflict_resolution_mode_id: currentForm.conflict_resolution_mode_id,
         publish: currentForm.publish,
         hospitals_id: currentForm.hospitals ?? [],
         visible_all_hospitals: currentForm.visibleAllHospitals

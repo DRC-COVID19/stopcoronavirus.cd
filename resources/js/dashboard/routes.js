@@ -11,6 +11,8 @@ import BugTracker from './pages/bug_tracker/Index'
 import HospitalsDetail from './pages/hospital/HospitalDetail'
 import HospitalData from './pages/hospital/HospitalData'
 import HospitalAdmin from './pages/adminHospital/Home'
+import ConflictForm from './pages/conflictForm/Index'
+import ConflictFormDetail from './pages/conflictForm/ConflictFormDetail'
 import HospitalAdminData from './pages/adminHospital/HospitalData'
 import NotAcces from './pages/NotAccess'
 import Administrator from './pages/administrator/Administrator'
@@ -221,6 +223,24 @@ export default [
             path: '/admin/hospitals',
             name: 'hospital.admin',
             component: HospitalAdmin,
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_HOSPITAL]
+            }
+          },
+          {
+            path: '/admin/conflicts/form',
+            name: 'admin.conflict.form',
+            component: ConflictForm,
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_HOSPITAL]
+            }
+          },
+          {
+            path: '/admin/conflicts/form/detail',
+            name: 'admin.conflict.form.detail',
+            component: ConflictFormDetail,
             meta: {
               requiresAuth: true,
               role: [ADMIN_HOSPITAL]
