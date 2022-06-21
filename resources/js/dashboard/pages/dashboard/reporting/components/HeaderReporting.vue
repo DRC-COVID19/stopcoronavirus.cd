@@ -124,10 +124,10 @@
       </div>
     </b-col>
     <b-col class="d-flex mx-0 w-100 align-item-center text-center h-100" lg="2">
-      <b-button type="submit" block class="btn-dash-blue"
+      <b-button type="submit" block class="btn-dash-blue" @click="submit"
         ><small>Générer </small>
       </b-button>
-      </b-col>
+    </b-col>
   </b-row>
 </template>
 <script>
@@ -256,6 +256,12 @@ export default {
     },
     selectedOperations (value) {
       this.reporting.operationId = value
+    },
+    submit () {
+      if (!this.reporting.observation_end) {
+        this.reporting.observation_end = new Date()
+      }
+      this.$emit('generatedReport', this.reporting)
     }
   }
 }

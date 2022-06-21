@@ -309,17 +309,19 @@ class CompletedFormController extends Controller
         $observation_start = $request->input('observation_start');
         $township = $request->input('township');
         $hospital = $request->input('hospital');
-        $form_id = $request->input('hospital');
+        $form_id = $request->input('form_id');
 
         $query = Hospital::with([
             'completedForms' => function ($query) use ($observation_end, $observation_start, $form_id) {
                 $query->select('id', 'admin_user_id', 'hospital_id', 'last_update', 'form_id');
                 if ($observation_end && $observation_start) {
                     $query->whereBetween('last_update', [$observation_start, $observation_end]);
-                } else if ($observation_end) {
+                }
+                if ($observation_end) {
                     $query->where('last_update', '<=', $observation_end);
-                } else if ($form_id) {
-                    $query->where('form_id', $form_id);
+                }
+                if ($form_id) {
+                    $query->where('form_id', '=', $form_id);
                 }
                 $query->orderBy('last_update', 'desc');
             },
@@ -336,7 +338,7 @@ class CompletedFormController extends Controller
             'completedForms.adminUser' => function ($query) {
                 $query->select('id', 'username', 'phone_number');
             },
-        ]);
+        ])->whereHas('completedForms');
 
         if ($township) {
             $query->where('township_id', $township);

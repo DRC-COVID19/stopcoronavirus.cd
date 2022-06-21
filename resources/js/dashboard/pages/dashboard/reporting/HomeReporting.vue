@@ -4,16 +4,11 @@
       <HeaderReporting
         :forms="forms"
         :hospitals="hospitals"
+        @generatedReport="submitGeneratedReport"
         class="d-flex justify-content-center bg-white py-3 w-100"
       />
       <b-row>
         <div class="d-flex justify-content-between">
-          <apexchart
-            width="800"
-            type="bar"
-            :options="options"
-            :series="series"
-          ></apexchart>
           <apexchart
             width="800"
             type="bar"
@@ -26,11 +21,11 @@
     </b-row>
     <b-row> </b-row>
     <div>Bonjour</div>
-    <div>{{}}</div>
+    <div v-show="hospitalsDataAggregated">{{ hospitalsDataAggregated }}</div>
   </b-container>
 </template>
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import HeaderReporting from './components/HeaderReporting'
 export default {
   name: 'Reporting',
@@ -40,12 +35,13 @@ export default {
 
   data () {
     return {
+      reportingChart: {},
       options: {
         chart: {
           id: 'vuechart-example'
         },
         xaxis: {
-          categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998]
+          categories: []
         },
         plotOptions: {
           bar: {
@@ -53,31 +49,67 @@ export default {
           }
         }
       },
-      series: [
-        {
-          name: 'series-1',
-          data: [30, 40, 45, 50, 49, 60, 70, 91]
-        }
-      ]
+      series: []
     }
   },
   mounted () {
     this.getForms()
-    this.getHospitals()
+    this.hospital__getAll()
     console.log('forms ->', this.forms)
   },
   computed: {
     ...mapState({
       forms: (state) => state.form.forms,
-      hospitals: (state) => state.hospital.hospitals
-    })
+      hospitals: (state) => state.hospital.allHospitals,
+      hospitalsDataAggregated: (state) =>
+        state.hospital.hospitalsDataAggregated
+    }),
+    renderChart () {
+      return this.completedFormsAggregated
+    }
   },
   methods: {
-    ...mapActions([
-      'getForms',
-      'getHospitals',
-      'completedForm__getDataByHospitals'
-    ])
+    ...mapActions(['getForms', 'hospital__getAll', 'getHospitalsData']),
+    submitGeneratedReport (reporting) {
+      this.reportingChart = reporting
+      this.getHospitalsData({
+        form_id: reporting.formId,
+        observation_start: reporting.observation_start,
+        observation_end: reporting.observation_end
+      })
+    }
+  },
+  watch: {
+    hospitalsDataAggregated () {
+      const categories = []
+      const series = this.hospitalsDataAggregated
+        .filter((hospital) => {
+          return this.reportingChart.hospitalId.includes(hospital.id)
+        })
+        .map((form) => {
+          categories.push(form.name)
+          const dataSeries = form.aggregated
+            .filter((aggregate) =>
+              this.reportingChart.indicatorId.includes(aggregate.form_field.id)
+            )
+            .map((aggregate) => {
+              console.log(' ->', aggregate.value, form.id)
+
+              return {
+                name: aggregate.form_field.name,
+                x: aggregate.value,
+                y: [form.id]
+              }
+            })
+          return { data: dataSeries }
+        })
+
+      this.series = [...series]
+      this.options.xaxis.categories = [...categories]
+
+      console.log('series ->', this.series)
+      console.log('this.options.xaxis.categories ->', this.options.xaxis.categories)
+    }
   }
 }
 </script>

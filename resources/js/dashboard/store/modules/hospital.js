@@ -19,7 +19,8 @@ export default {
     hospitalManagerFirstName: null,
     observation_end: null,
     observation_start: null,
-    township: null
+    township: null,
+    hospitalsDataAggregated: []
   },
   mutations: {
     selectHospital (state, payload) {
@@ -47,9 +48,12 @@ export default {
     SET_HOSPITALS (state, payload) {
       state.hospitals = payload
     },
+    SET_HOSPITALS_AGGREGATED (state, payload) {
+      state.hospitalsDataAggregated = payload
+    }
   },
   actions: {
-    getHospitalsData ({ state }, payload) {
+    getHospitalsData ({ state,commit }, payload) {
       state.isLoading = payload.isLoading
       if (payload) {
         if (payload.observation_end) {
@@ -70,10 +74,12 @@ export default {
             params: {
               observation_end: payload.observation_end || null,
               observation_start: payload.observation_start || null,
-              township: payload.township
+              township: payload.township,
+              form_id: payload.form_id
             }
           })
           .then(({ data }) => {
+            commit('SET_HOSPITALS_AGGREGATED', data)
             if (!payload.observation_start) {
               data = data.map((hospital) => {
                 if (hospital.completed_forms.length > 0) {
@@ -164,9 +170,9 @@ export default {
      *
      * @deprecated use completedForm/completedForm__getAggregatedByHospitals instead
      */
-    getSituationHospital({ state }, payload) {
-      const selectedHospital = payload || "";
-      state.situationHospitalLoading = true;
+    getSituationHospital ({ state }, payload) {
+      const selectedHospital = payload || ''
+      state.situationHospitalLoading = true
       const params = {
         observation_end: state.observation_end,
         observation_start: state.observation_start,
