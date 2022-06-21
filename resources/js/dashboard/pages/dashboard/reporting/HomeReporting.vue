@@ -82,6 +82,7 @@ export default {
   watch: {
     hospitalsDataAggregated () {
       const categories = []
+      const data = []
       const series = this.hospitalsDataAggregated
         .filter((hospital) => {
           return this.reportingChart.hospitalId.includes(hospital.id)
@@ -101,14 +102,28 @@ export default {
                 y: [form.id]
               }
             })
-          return { data: dataSeries }
+          return dataSeries
+        })
+        .flatMap((formField, arr) => formField)
+        .forEach((formField, arr) => {
+          data.push({
+            name: formField.name,
+            data: arr
+              .filter((element) => formField.name === element.name)
+              .map((element) => {
+                return { x: element.x, y: element.y }
+              })
+          })
+          console.log('formField ->', formField)
         })
 
-      this.series = [...series]
+      // this.series = [...series]
       this.options.xaxis.categories = [...categories]
-
-      console.log('series ->', this.series)
-      console.log('this.options.xaxis.categories ->', this.options.xaxis.categories)
+      console.log('series ->', series)
+      console.log(
+        'this.options.xaxis.categories ->',
+        this.options.xaxis.categories
+      )
     }
   }
 }
