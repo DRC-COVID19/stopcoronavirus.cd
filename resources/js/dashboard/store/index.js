@@ -14,6 +14,7 @@ import formField from './modules/formField'
 import formStep from './modules/formStep'
 import hospitalSituation from './modules/hospitalSituation'
 import completedForm from './modules/completedForm'
+import completedFormHistory from './modules/completedFormHistory'
 import township from './modules/township'
 import bugTracker from './modules/bugTracker'
 import adminUser from './modules/adminUser'
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     formStep,
     hospitalSituation,
     completedForm,
+    completedFormHistory,
     township,
     adminUser,
     notification

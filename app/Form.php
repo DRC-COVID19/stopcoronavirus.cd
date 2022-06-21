@@ -17,12 +17,17 @@ class Form extends Model
         'visible_all_hospitals',
         'form_recurrence_value',
         'form_recurrence_id',
-        'form_recurrence_number'
+        'form_recurrence_number',
+        'conflict_resolution_mode_id'
     ];
 
     public function formRecurrence()
     {
         return $this->belongsTo(FormRecurrence::class);
+    }
+    public function conflictResolutionMode()
+    {
+        return $this->belongsTo(ConflictResolutionMode::class);
     }
 
     public function formSteps()
