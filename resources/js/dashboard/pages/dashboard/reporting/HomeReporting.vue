@@ -7,26 +7,63 @@
         @generatedReport="submitGeneratedReport"
         class="d-flex justify-content-center bg-white py-3 w-100"
       />
-      <b-row>
-        <div class="d-flex justify-content-between">
+    </b-row>
+    <b-row no-gutters class="mt-5">
+      <b-col cols="6" md="6" class="row no-gutters">
+        <div v-if="!isHospitalsDataAggregated" class="w-100 bg-white">
           <apexchart
-            width="800"
+            width="100%"
             type="bar"
             :options="options"
             :series="series"
           ></apexchart>
         </div>
-        <div class="d-flex"></div>
-      </b-row>
+        <skeleton-loading v-else lg="12" class="w-100">
+          <square-skeleton
+            :boxProperties="{
+              width: '100%',
+              height: '540px',
+            }"
+          ></square-skeleton>
+        </skeleton-loading>
+      </b-col>
+      <b-col
+        class="d-flex w-100 h-100 justify-content-center mx-2 container-action"
+        lg="4"
+      >
+        <b-row no-gutters class="w-100">
+          <b-col lg="12" class="w-100 px-3 mb-4 py-3 bg-white">
+            <label for class="text-dash-color">Opération :</label>
+            <v-select
+              v-model="operationId"
+              :options="operations"
+              :reduce="(item) => item.id"
+              label="type"
+              placeholder="Choisir  une opération"
+              class="style-chooser"
+              @input="selectedOperations"
+            />
+          </b-col>
+          <hr />
+          <b-col lg="12" class="w-100">
+            <b-button type="submit" block class="btn-dash-blue w-100"
+              ><small>Sauvegarder </small>
+            </b-button>
+          </b-col>
+
+          <b-col
+            lg="12"
+            class="w-100d-flex justify-content-center bg-white bookmark"
+          >
+          </b-col>
+        </b-row>
+      </b-col>
     </b-row>
     <b-row> </b-row>
-    <div>Bonjour</div>
-    <div v-show="hospitalsDataAggregated">{{ hospitalsDataAggregated }}</div>
   </b-container>
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import VueApexCharts from 'vue-apexcharts'
 import HeaderReporting from './components/HeaderReporting'
 export default {
   name: 'Reporting',
@@ -47,7 +84,12 @@ export default {
           }
         }
       },
-      series: []
+      series: [],
+      operationId: null,
+      operations: [
+        { id: 1, type: 'Somme' },
+        { id: 2, type: 'Moyenne' }
+      ]
     }
   },
   mounted () {
@@ -60,11 +102,10 @@ export default {
       forms: (state) => state.form.forms,
       hospitals: (state) => state.hospital.allHospitals,
       hospitalsDataAggregated: (state) =>
-        state.hospital.hospitalsDataAggregated
-    }),
-    renderChart () {
-      return this.completedFormsAggregated
-    }
+        state.hospital.hospitalsDataAggregated,
+      isHospitalsDataAggregated: (state) =>
+        state.hospital.isHospitalsDataAggregated
+    })
   },
   methods: {
     ...mapActions(['getForms', 'hospital__getAll', 'getHospitalsData']),
@@ -83,10 +124,8 @@ export default {
           categories: [...data]
         }
       }
-    }
-  },
-  watch: {
-    hospitalsDataAggregated () {
+    },
+    renderChart () {
       const categories = []
       const dataSerie = []
       const series = this.hospitalsDataAggregated
@@ -94,7 +133,7 @@ export default {
           return this.reportingChart.hospitalId.includes(hospital.id)
         })
         .map((form) => {
-          categories.push(form.name.replace(/ /g, ""))
+          categories.push(form.name.replace(/ /g, '').toUpperCase())
           const dataSeries = form.aggregated
             .filter((aggregate) =>
               this.reportingChart.indicatorId.includes(aggregate.form_field.id)
@@ -127,6 +166,14 @@ export default {
 
       console.log('series ->', this.series)
       console.log('this.options.xaxis.categories ->', categories)
+    },
+    selectedOperations (value) {
+      this.reporting.operationId = value
+    }
+  },
+  watch: {
+    hospitalsDataAggregated () {
+      this.renderChart()
     }
   }
 }
@@ -136,5 +183,12 @@ export default {
 @import "@~/sass/_variables";
 .containerReporting {
   background-color: #f4f6fc;
+}
+.bookmark {
+  background-color: #f4f6fc;
+  height: 540px;
+}
+.container-action {
+  border-radius: 7px;
 }
 </style>

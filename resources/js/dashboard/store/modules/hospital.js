@@ -20,7 +20,8 @@ export default {
     observation_end: null,
     observation_start: null,
     township: null,
-    hospitalsDataAggregated: []
+    hospitalsDataAggregated: [],
+    isHospitalsDataAggregated: false
   },
   mutations: {
     selectHospital (state, payload) {
@@ -50,10 +51,15 @@ export default {
     },
     SET_HOSPITALS_AGGREGATED (state, payload) {
       state.hospitalsDataAggregated = payload
+    },
+    SET_IS_HOSPITALS_AGGREGATED (state, payload) {
+      state.isHospitalsDataAggregated = payload
     }
   },
   actions: {
-    getHospitalsData ({ state,commit }, payload) {
+    getHospitalsData ({ state, commit }, payload) {
+      commit('SET_IS_HOSPITALS_AGGREGATED', true)
+
       state.isLoading = payload.isLoading
       if (payload) {
         if (payload.observation_end) {
@@ -79,6 +85,7 @@ export default {
             }
           })
           .then(({ data }) => {
+            commit('SET_IS_HOSPITALS_AGGREGATED', false)
             commit('SET_HOSPITALS_AGGREGATED', data)
             if (!payload.observation_start) {
               data = data.map((hospital) => {

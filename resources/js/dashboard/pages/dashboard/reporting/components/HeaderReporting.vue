@@ -11,7 +11,7 @@
         class="style-chooser"
         @input="selectedForm"
     /></b-col>
-    <b-col class="mx-0 w-100" lg="2">
+    <b-col class="mx-0 w-100" lg="3">
       <label for class="text-dash-color">Hôpitaux :</label>
       <v-select
         v-model="reporting.hospitalId"
@@ -23,7 +23,7 @@
         class="style-chooser"
         multiple
     /></b-col>
-    <b-col class="mx-0 w-100" lg="2">
+    <b-col class="mx-0 w-100" lg="3">
       <label for class="text-dash-color">Indicateurs :</label>
       <v-select
         v-model="reporting.indicatorId"
@@ -36,7 +36,7 @@
         multiple
         :disabled="formFields.length === 0"
     /></b-col>
-    <b-col class="mx-0 w-100" lg="2">
+    <!-- <b-col class="mx-0 w-100" lg="2">
       <label for class="text-dash-color">Opération :</label>
       <v-select
         v-model="reporting.operationId"
@@ -46,7 +46,7 @@
         placeholder="Choisir  une opération"
         class="style-chooser"
         @input="selectedOperations"
-    /></b-col>
+    /></b-col> -->
     <b-col lg="2" class="mx-0 w-100">
       <label for class="text-dash-color">Date :</label>
       <div class="w-100 d-flex justify-content-between">
