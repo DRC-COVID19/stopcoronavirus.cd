@@ -113,6 +113,7 @@ class CompletedFormController extends Controller
                                      ->where('id', $formId)
                                      ->first();
         if($conflictResolutionMode->conflictResolutionMode->slug =='admin_resolution') {
+            Log::info("message",['sa marche bel eht vien']);
             $completedFormHistory_controller = new CompletedFormHistoryController;
             $completedFormHistory_controller->storeCompletedFormHistory($request);
             return response(['succès' => 'réussie'])->setStatusCode(200);
