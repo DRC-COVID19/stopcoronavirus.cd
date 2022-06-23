@@ -120,21 +120,19 @@ class CompletedFormHistoryController extends Controller
                 $completedFormFields = $request['completed_form_fields'];
   
                 foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+
                    $test =  CompletedFormFieldHistory::create([
                         'form_field_id'     => $formFieldKey,
                         'value'             => $formFieldValue,
                         'completed_form_history_id' => $completedForm->id
                     ]);
-                Log::info("message",[$test]);
                 }
-                Log::info("CompletedFormFieldHistory",[$completedForm]);
                 return response()->json($completedForm, 200, []);
               });
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
             }
-            Log::info("message",[response($th->getMessage())]);
             return response($th->getMessage())->setStatusCode(500);
         }
     }
