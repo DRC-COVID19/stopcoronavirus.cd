@@ -104,6 +104,7 @@ class CompletedFormHistoryController extends Controller
 
     public function storeCompletedFormHistory (StoreResolvedConflict $request){
         try {
+            Log::info("message",['nous somme bel et bien dans le controller admin']);
             DB::transaction(function () use ($request) {
                 $admin_user =  $this->guard()->user();
                 $completedForm = CompletedFormHistory::create(array_merge(
