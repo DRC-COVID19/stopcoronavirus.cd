@@ -49,7 +49,7 @@
                         :value="false"
                         class="text-blue-keep mt-3"
                         @input="keepNewValue"
-                        >Conserver ma soumission,Enregistré le {{moment($route.params.last_update).format('DD/MM/YYYY')}}</b-form-radio
+                        >Conserver la soumission,Enregistré le {{moment($route.params.last_update).format('DD/MM/YYYY')}}</b-form-radio
                       >
                   </b-form-group>
                 </b-card-body>
