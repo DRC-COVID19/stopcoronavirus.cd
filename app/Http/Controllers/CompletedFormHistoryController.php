@@ -114,7 +114,7 @@ class CompletedFormHistoryController extends Controller
                     ]
                 ));
 
-                Log::info("message",[$completedForm]);
+                Log::info("completedForm",[$completedForm]);
                
   
                 $completedFormFields = $request['completed_form_fields'];
@@ -126,14 +126,14 @@ class CompletedFormHistoryController extends Controller
                         'completed_form_history_id' => $completedForm->id
                     ]);
                 }
-
+                Log::info("CompletedFormFieldHistory",[$completedForm]);
                 return response()->json($completedForm, 200, []);
               });
         } catch (\Throwable $th) {
             if (env('APP_DEBUG') == true) {
                 return response($th)->setStatusCode(500);
             }
-            Log::info("message",[response($th->getMessage())->setStatusCode(500)]);
+            Log::info("message",[response($th->getMessage())]);
             return response($th->getMessage())->setStatusCode(500);
         }
     }
