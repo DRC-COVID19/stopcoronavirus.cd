@@ -1,56 +1,39 @@
 <template>
   <b-container fluid class="px-0 mx-0 containerReporting h-100">
-    <b-row class="mx-0 px-0 w-100" lg="12">
-      <HeaderReporting
-        :forms="forms"
-        :hospitals="hospitals"
-        @generatedReport="submitGeneratedReport"
-        class="d-flex justify-content-center bg-white py-3 w-100"
-      />
-    </b-row>
-    <b-row no-gutters class="mt-5">
-      <b-col cols="6" md="6" class="row no-gutters">
-        <div v-if="!isHospitalsDataAggregated" class="w-100 bg-white">
-          <apexchart
-            width="100%"
-            type="bar"
-            :options="options"
-            :series="series"
-          ></apexchart>
-        </div>
-        <skeleton-loading v-else lg="12" class="w-100">
-          <square-skeleton
-            :boxProperties="{
-              width: '100%',
-              height: '540px',
-            }"
-          ></square-skeleton>
-        </skeleton-loading>
+    <b-row class="d-flex">
+      <b-col lg="3" class="d-flex mx-0 px-0 bg-white py-3 w-100 h-100">
+        <HeaderReporting
+          :forms="forms"
+          :hospitals="hospitals"
+          @generatedReport="submitGeneratedReport"
+          class="w-100 h-100"
+        />
       </b-col>
-      <b-col
-        class="d-flex w-100 h-100 justify-content-center mx-2 container-action"
-        lg="4"
-      >
-        <b-row no-gutters class="w-100">
-          <b-col lg="12" class="w-100 px-3 mb-4 py-3 bg-white">
-            <label for class="text-dash-color">Opération :</label>
-            <v-select
-              v-model="operationId"
-              :options="operations"
-              :reduce="(item) => item.id"
-              label="type"
-              placeholder="Choisir  une opération"
-              class="style-chooser"
-              @input="selectedOperations"
-            />
-          </b-col>
-          <hr />
-          <b-col lg="12" class="w-100">
-            <b-button type="submit" block class="btn-dash-blue w-100"
-              ><small>Sauvegarder </small>
-            </b-button>
-          </b-col>
 
+      <b-col
+        class="d-flex w-100 h-100 justify-content-center container-action"
+        lg="8"
+      >
+        <b-col cols="6" md="6" class="row no-gutters">
+          <div v-if="!isHospitalsDataAggregated" class="w-100 bg-white">
+            <ApexChart
+              width="100%"
+              height="100%"
+              type="bar"
+              :options="options"
+              :series="series"
+            />
+          </div>
+          <skeleton-loading v-else lg="12" class="w-100">
+            <square-skeleton
+              :boxProperties="{
+                width: '100%',
+                height: '540px',
+              }"
+            ></square-skeleton>
+          </skeleton-loading>
+        </b-col>
+        <b-row no-gutters class="w-100">
           <b-col
             lg="12"
             class="w-100d-flex justify-content-center bg-white bookmark"
@@ -63,39 +46,41 @@
   </b-container>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-import HeaderReporting from './components/HeaderReporting'
+import { mapState, mapActions } from "vuex";
+import HeaderReporting from "./components/HeaderReporting";
+import ApexChart from "./components/ApexChart.vue";
 export default {
-  name: 'Reporting',
+  name: "Reporting",
   components: {
-    HeaderReporting
+    HeaderReporting,
+    ApexChart,
   },
 
-  data () {
+  data() {
     return {
       reportingChart: {},
       options: {
         chart: {
-          id: 'vuechart-example'
+          id: "vuechart-example",
         },
         plotOptions: {
           bar: {
-            horizontal: true
-          }
-        }
+            horizontal: true,
+          },
+        },
       },
       series: [],
       operationId: null,
       operations: [
-        { id: 1, type: 'Somme' },
-        { id: 2, type: 'Moyenne' }
-      ]
-    }
+        { id: 1, type: "Somme" },
+        { id: 2, type: "Moyenne" },
+      ],
+    };
   },
-  mounted () {
-    this.getForms()
-    this.hospital__getAll()
-    console.log('forms ->', this.forms)
+  mounted() {
+    this.getForms();
+    this.hospital__getAll();
+    console.log("forms ->", this.forms);
   },
   computed: {
     ...mapState({
@@ -104,36 +89,36 @@ export default {
       hospitalsDataAggregated: (state) =>
         state.hospital.hospitalsDataAggregated,
       isHospitalsDataAggregated: (state) =>
-        state.hospital.isHospitalsDataAggregated
-    })
+        state.hospital.isHospitalsDataAggregated,
+    }),
   },
   methods: {
-    ...mapActions(['getForms', 'hospital__getAll', 'getHospitalsData']),
-    submitGeneratedReport (reporting) {
-      this.reportingChart = reporting
+    ...mapActions(["getForms", "hospital__getAll", "getHospitalsData"]),
+    submitGeneratedReport(reporting) {
+      this.reportingChart = reporting;
       this.getHospitalsData({
         form_id: reporting.formId,
         observation_start: reporting.observation_start,
-        observation_end: reporting.observation_end
-      })
+        observation_end: reporting.observation_end,
+      });
     },
-    updateAxis (data) {
+    updateAxis(data) {
       this.options = {
         ...this.options,
         xaxis: {
-          categories: [...data]
-        }
-      }
+          categories: [...data],
+        },
+      };
     },
-    renderChart () {
-      const categories = []
-      const dataSerie = []
+    renderChart() {
+      const categories = [];
+      const dataSerie = [];
       const series = this.hospitalsDataAggregated
         .filter((hospital) => {
-          return this.reportingChart.hospitalId.includes(hospital.id)
+          return this.reportingChart.hospitalId.includes(hospital.id);
         })
         .map((form) => {
-          categories.push(form.name.replace(/ /g, '').toUpperCase())
+          categories.push(form.name.replace(/ /g, "").toUpperCase());
           const dataSeries = form.aggregated
             .filter((aggregate) =>
               this.reportingChart.indicatorId.includes(aggregate.form_field.id)
@@ -142,10 +127,10 @@ export default {
               return {
                 name: aggregate.form_field.name,
                 x: aggregate.value,
-                y: [form.id]
-              }
-            })
-          return dataSeries
+                y: [form.id],
+              };
+            });
+          return dataSeries;
         })
         .flatMap((formField) => formField)
         .forEach((formField, index, arr) => {
@@ -155,34 +140,35 @@ export default {
               data: arr
                 .filter((data) => data.name === formField.name)
                 .map((data) => {
-                  return data.x
-                })
-            })
+                  return data.x;
+                }),
+            });
           }
-        })
-      this.updateAxis(categories)
+        });
+      this.updateAxis(categories);
 
-      this.series = [...dataSerie]
+      this.series = [...dataSerie];
 
-      console.log('series ->', this.series)
-      console.log('this.options.xaxis.categories ->', categories)
+      console.log("series ->", this.series);
+      console.log("this.options.xaxis.categories ->", categories);
     },
-    selectedOperations (value) {
-      this.reporting.operationId = value
-    }
+    selectedOperations(value) {
+      this.reporting.operationId = value;
+    },
   },
   watch: {
-    hospitalsDataAggregated () {
-      this.renderChart()
-    }
-  }
-}
+    hospitalsDataAggregated() {
+      this.renderChart();
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .containerReporting {
   background-color: #f4f6fc;
+  height: 100vh;
 }
 .bookmark {
   background-color: #f4f6fc;
