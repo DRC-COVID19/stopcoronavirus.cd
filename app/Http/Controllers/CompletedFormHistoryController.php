@@ -120,6 +120,7 @@ class CompletedFormHistoryController extends Controller
                 $completedFormFields = $request['completed_form_fields'];
   
                 foreach ($completedFormFields as $formFieldKey => $formFieldValue) {
+                    Log::info("message",[$formFieldKey,$formFieldValue,$completedForm->id]);
                     CompletedFormFieldHistory::create([
                         'form_field_id'     => $formFieldKey,
                         'value'             => $formFieldValue,
