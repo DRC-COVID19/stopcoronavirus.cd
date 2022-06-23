@@ -118,11 +118,13 @@ class CompletedFormController extends Controller
             return response(['succès' => 'réussie'])->setStatusCode(200);
         }
         if($conflictResolutionMode->conflictResolutionMode->slug =='old_submission'){
+            Log::info("message",['nous somme bel et bien dans le controller old_submission']);
             $completedFormHistory_controller = new CompletedFormHistoryController;
             $completedFormHistory_controller->storeOldCompletedForm($request);
             return response(['succès' => 'réussie'])->setStatusCode(200);
         }
         if($conflictResolutionMode->conflictResolutionMode->slug =='new_submission'){
+            Log::info("message",['nous somme bel et bien dans le controller new_submission']);
             $completedFormHistory_controller = new CompletedFormHistoryController;
             $completedFormHistory_controller->storeNewCompletedForm($request);
             CompletedForm::destroy($completedForm->id);
