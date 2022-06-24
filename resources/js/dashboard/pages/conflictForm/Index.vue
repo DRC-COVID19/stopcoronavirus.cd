@@ -86,6 +86,10 @@
               <strong>Chargement des données...</strong>
             </div>
           </template>
+          <template v-slot:cell(status)="data">
+            <b-badge v-if="data.item.conflict" pill variant="danger">Non résolus</b-badge>
+            <b-badge v-else pill variant="success">Résolus</b-badge>
+          </template>
           <template v-slot:cell(last_update)="data">
             {{moment(data.item.last_update).format('DD/MM/Y')}}
           </template>
@@ -94,6 +98,7 @@
           </template>
           <template v-slot:cell(actions)="data">
             <b-button
+              v-if="data.item.conflict"
               variant="outline-primary"
               class="btn-dash mb-1 mb-lg-0"
               :to="{
@@ -162,6 +167,7 @@ export default {
     },
     fields () {
       const data = [
+        { key: 'status', label: 'Status', sortable: true },
         { key: 'created_manager_name', label: 'Nom', sortable: true },
         { key: 'created_manager_first_name', label: 'Prénom', sortable: true },
         { key: 'form.title', label: 'Formulaire', sortable: true },
