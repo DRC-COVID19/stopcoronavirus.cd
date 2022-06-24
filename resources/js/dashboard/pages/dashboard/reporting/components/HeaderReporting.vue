@@ -1,10 +1,7 @@
 <template>
   <b-row class="mx-0 h-100 w-100" lg="12">
     <b-col class="mx-0 w-100 mt-4" lg="12">
-      <h3>
-        <i class="fas fa-chart-line" aria-hidden="true"></i> &nbsp; Éditeur de
-        graphique
-      </h3>
+      <h3>Générateur de graphique</h3>
     </b-col>
 
     <b-col class="mx-0 w-100 mt-4" lg="12">
@@ -12,49 +9,49 @@
 
       <v-select
         :options="chartType"
-        :reduce="(item) => item.id"
         label="type"
         class="style-chooser"
+        @input="selectedChartType"
       >
         <template #option="{ type, icon }">
-          <div class="d-flex justify-content-between w-100">
+          <div class="d-flex justify-content-between text-align-center w-100">
             <p>{{ type }}</p>
-            <p><i :class="icon" aria-hidden="true"></i></p>
+            <p>
+              <i :class="icon" style="font-size: 18px" aria-hidden="true"></i>
+            </p>
           </div>
         </template> </v-select
     ></b-col>
     <b-col class="mx-0 w-100 mt-4" lg="12">
-      <label for class="text-dash-color">Formulaire :</label>
+      <label for class="text-dash-color">Source des données :</label>
       <v-select
         v-model="reporting.formId"
         :options="forms"
         :reduce="(item) => item.id"
         label="title"
-        placeholder="Sélectionner un formulaire"
+        placeholder="Sélectionner une source des données"
         class="style-chooser"
         @input="selectedForm"
     /></b-col>
     <b-col class="mx-0 w-100 mt-4" lg="12">
-      <label for class="text-dash-color">Hôpitaux :</label>
+      <label for class="text-dash-color">Axes :</label>
       <v-select
-        v-model="reporting.hospitalId"
-        :options="hospitals"
+        v-model="reporting.axeId"
+        :options="axes"
         :reduce="(item) => item.id"
         label="name"
-        @input="selectedHospitals"
-        placeholder="Sélectionner des hôpitaux"
+        @input="selectedAxes"
+        placeholder="Sélectionner un axe"
         class="style-chooser"
-        multiple
-        maxHeight="100%"
     /></b-col>
     <b-col class="mx-0 w-100 mt-4" lg="12">
-      <label for class="text-dash-color">Indicateurs :</label>
+      <label for class="text-dash-color">Valeur :</label>
       <v-select
         v-model="reporting.indicatorId"
         :options="formFields"
         :reduce="(item) => item.id"
         label="name"
-        placeholder="Sélectionner des indicateurs"
+        placeholder="Sélectionner une valeur"
         class="style-chooser"
         @input="selectedIndicators"
         multiple
@@ -145,157 +142,174 @@
         ><small>Sauvegarder </small>
       </b-button>
     </b-col>
+    <b-modal centered>
+      <template #modal-footer>
+        <b-row class="px-3 pt-4 d-flex justify-content-center">
+          <b-button size="sm" variant="success" class="btn-dash-blue mx-2">
+            Accepter
+          </b-button>
+          <b-button size="sm" variant="danger" class="mx-2"> Annuler </b-button>
+        </b-row>
+      </template>
+    </b-modal>
   </b-row>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: "HeaderReporting",
+  name: 'HeaderReporting',
   props: {
     forms: {
       type: Array,
       default: () => {
-        return [];
-      },
+        return []
+      }
     },
     hospitals: {
       type: Array,
       default: () => {
-        return [];
-      },
-    },
+        return []
+      }
+    }
   },
-  data() {
+  data () {
     return {
       chartType: [
         {
-          id: "",
-          type: "Courbe",
-          icon: "fas fa-chart-line",
+          id: 'line',
+          type: 'Courbe',
+          icon: 'fas fa-chart-line'
         },
         {
-          id: "",
-          type: "Colonne",
-          icon: "fas fa-chart-column",
+          id: 'bar',
+          type: 'Colonne',
+          icon: 'fas fa-chart-column'
         },
-        { id: "", type: "Barres", icon: "fas fa-chart-bar" },
-        { id: "", type: "Secteur", icon: "fas fa-chart-pie" },
+        { id: 'bar', type: 'Barres', icon: 'fas fa-chart-bar' },
+        { id: 'donut', type: 'Secteur', icon: 'fas fa-chart-pie' }
       ],
-      mode: "date",
+      axes: [
+        { id: 'township', name: 'Commune' },
+        { id: 'hospital', name: 'Hôpital' }
+      ],
+      mode: 'date',
       isRanged: false,
       dateRange: this.isRanged
         ? {
             start: new Date(),
-            end: new Date(),
+            end: new Date()
           }
         : new Date(),
       reporting: {
         formId: null,
-        hospitalId: [],
+        axeId: null,
         indicatorId: [],
         operationId: null,
         observation_start: null,
-        observation_end: null,
+        observation_end: null
       },
-      iconStateDatePicker: "fas fa-thin fa-plus",
+      iconStateDatePicker: 'fas fa-thin fa-plus',
       attributes: [],
       operations: [
-        { id: 1, type: "Somme" },
-        { id: 2, type: "Moyenne" },
-      ],
-    };
+        { id: 1, type: 'Somme' },
+        { id: 2, type: 'Moyenne' }
+      ]
+    }
   },
   computed: {
     ...mapState({
-      formFields: (state) => state.formField.formFields,
-    }),
+      formFields: (state) => state.formField.formFields
+    })
   },
   watch: {},
   methods: {
-    ...mapActions(["getFormFields"]),
-    activeStartDate() {
-      this.isRanged = !this.isRanged;
-      this.mode = this.mode === "date" ? "range" : "date";
+    ...mapActions(['getFormFields', 'townships__getAll']),
+    activeStartDate () {
+      this.isRanged = !this.isRanged
+      this.mode = this.mode === 'date' ? 'range' : 'date'
       this.iconStateDatePicker =
-        this.iconStateDatePicker === "fas fa-thin fa-plus"
-          ? "fa fa-times"
-          : "fas fa-thin fa-plus";
+        this.iconStateDatePicker === 'fas fa-thin fa-plus'
+          ? 'fa fa-times'
+          : 'fas fa-thin fa-plus'
 
       if (this.isRanged) {
         this.dateRange.start =
           this.reporting.observation_end == null
             ? new Date()
-            : this.reporting.observation_end;
-        this.dateRange.end = new Date();
+            : this.reporting.observation_end
+        this.dateRange.end = new Date()
 
-        this.reporting.observation_start = this.dateRange.start;
-        this.reporting.observation_end = new Date();
+        this.reporting.observation_start = this.dateRange.start
+        this.reporting.observation_end = new Date()
       } else {
         this.dateRange =
           this.reporting.observation_end == null
             ? new Date()
-            : this.reporting.observation_end;
-        this.reporting.observation_start = null;
+            : this.reporting.observation_end
+        this.reporting.observation_start = null
       }
       this.attributes[0] = {
-        key: "today",
+        key: 'today',
         dates: this.isRanged
           ? { start: this.dateRange.start, end: this.dateRange.end }
           : this.dateRange,
-        highlight: true,
-      };
+        highlight: true
+      }
     },
-    onRangeDateObservation(inputValueDate) {
+    onRangeDateObservation (inputValueDate) {
       if (this.isRanged) {
         this.reporting.observation_start = moment(inputValueDate.start).format(
-          "YYYY-MM-DD"
-        );
-        this.dateRange.start = inputValueDate.start;
+          'YYYY-MM-DD'
+        )
+        this.dateRange.start = inputValueDate.start
         this.reporting.observation_end = moment(inputValueDate.end).format(
-          "YYYY-MM-DD"
-        );
-        this.dateRange.end = inputValueDate.end;
+          'YYYY-MM-DD'
+        )
+        this.dateRange.end = inputValueDate.end
       } else {
-        this.reporting.observation_start = null;
-        this.dateRange = inputValueDate;
+        this.reporting.observation_start = null
+        this.dateRange = inputValueDate
         this.reporting.observation_end =
-          moment(inputValueDate).format("YYYY-MM-DD");
+          moment(inputValueDate).format('YYYY-MM-DD')
       }
       this.attributes[0] = {
-        key: "today",
+        key: 'today',
         dates: this.dateRange,
-        highlight: true,
-      };
-      console.log("dateRange", this.dateRange);
-    },
-    clearObservationDate() {
-      this.dateRange = new Date();
-      this.isRanged = false;
-    },
-    selectedForm(value) {
-      this.getFormFields({ form_id: value });
-      console.log("value ->", value);
-    },
-    selectedHospitals(value) {
-      this.reporting.hospitalId = value;
-      console.log("value ->", this.reporting.hospitalId);
-    },
-    selectedIndicators(value) {
-      this.reporting.indicatorId = value;
-      console.log("value ->", this.reporting.indicatorId);
-    },
-    selectedOperations(value) {
-      this.reporting.operationId = value;
-    },
-    submit() {
-      if (!this.reporting.observation_end) {
-        this.reporting.observation_end = new Date();
+        highlight: true
       }
-      this.$emit("generatedReport", this.reporting);
+      console.log('dateRange', this.dateRange)
     },
-  },
-};
+    clearObservationDate () {
+      this.dateRange = new Date()
+      this.isRanged = false
+    },
+    selectedForm (value) {
+      this.getFormFields({ form_id: value })
+      console.log('value ->', value)
+    },
+    selectedAxes (value) {
+      this.reporting.axeId = value
+      console.log('value ->', this.reporting.axeId)
+    },
+    selectedIndicators (value) {
+      this.reporting.indicatorId = value
+      console.log('value ->', this.reporting.indicatorId)
+    },
+    selectedOperations (value) {
+      this.reporting.operationId = value
+    },
+    selectedChartType (value) {
+      this.$emit('selectedChartType', value)
+    },
+    submit () {
+      if (!this.reporting.observation_end) {
+        this.reporting.observation_end = new Date()
+      }
+      this.$emit('generatedReport', this.reporting)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

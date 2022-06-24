@@ -291,6 +291,8 @@ Route::resource('notifications', 'NotificationController');
   Route::get('flux-provinces', 'DashBoardController@getFluxProvinces'); //ok
 
   Route::get('/townships', 'DashBoardController@getTownships'); //ok
+  Route::get('/townships/{form_id}', 'DashBoardController@getTownshipsByForm'); //ok
+
 
   Route::group(['prefix' => 'pandemics'], function () {
     Route::get('top-confirmed', 'PandemicController@getHealthZoneTopConfirmed');

@@ -1,12 +1,14 @@
 <template>
-  <b-row class="w-100 mx-0">
-    <apexchart
-      width="100%"
-      height="100%"
-      :type="type"
-      :options="options"
-      :series="series"
-    ></apexchart>
+  <b-row class="w-100 h-100 mx-0">
+    <b-col class="w-100 h-100 mx-0" lg="12">
+      <apexchart
+        width="100%"
+        height="100%"
+        :type="type"
+        :options="options"
+        :series="series"
+      ></apexchart>
+    </b-col>
   </b-row>
 </template>
 <script>
