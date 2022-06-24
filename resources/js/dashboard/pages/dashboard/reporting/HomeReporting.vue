@@ -28,11 +28,11 @@
             ></square-skeleton>
           </skeleton-loading>
         </b-col>
-          <b-col
-            lg="4"
-            class="w-100d-flex justify-content-center bg-white bookmark"
-          >
-          </b-col>
+        <b-col
+          lg="4"
+          class="w-100d-flex justify-content-center bg-white bookmark"
+        >
+        </b-col>
       </b-col>
     </b-row>
     <b-row> </b-row>
@@ -104,7 +104,7 @@ export default {
       }
     },
     onSelectedChartType (value) {
-      this.typeChart = value.id
+      this.typeChart = value.id === 'column' ? 'bar' : value.id
     },
     renderChart () {
       const categories = []

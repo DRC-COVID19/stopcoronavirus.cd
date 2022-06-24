@@ -23,10 +23,8 @@ export default {
       }
     },
     type: {
-      type: Object,
-      default: () => {
-        return {}
-      }
+      type: String,
+      default: ''
     },
     series: {
       type: Array,

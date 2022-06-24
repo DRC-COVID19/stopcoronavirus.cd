@@ -36,7 +36,6 @@
     <b-col class="mx-0 w-100 mt-4" lg="12">
       <label for class="text-dash-color">Axes :</label>
       <v-select
-        v-model="reporting.axeId"
         :options="axes"
         :reduce="(item) => item.id"
         label="name"
@@ -138,7 +137,7 @@
       <b-button type="submit" class="btn-dash-blue w-100 mr-3" @click="submit"
         ><small>Générer </small>
       </b-button>
-      <b-button type="submit" class="btn-dash-blue w-100" @click="submit"
+      <b-button type="submit" class="btn-dash-blue w-100"
         ><small>Sauvegarder </small>
       </b-button>
     </b-col>
@@ -182,7 +181,7 @@ export default {
           icon: 'fas fa-chart-line'
         },
         {
-          id: 'bar',
+          id: 'column',
           type: 'Colonne',
           icon: 'fas fa-chart-column'
         },
@@ -203,7 +202,7 @@ export default {
         : new Date(),
       reporting: {
         formId: null,
-        axeId: null,
+        axeId: [],
         indicatorId: [],
         operationId: null,
         observation_start: null,
@@ -224,7 +223,7 @@ export default {
   },
   watch: {},
   methods: {
-    ...mapActions(['getFormFields', 'townships__getAll']),
+    ...mapActions(['getFormFields', 'hospitals__TownshipsByForm']),
     activeStartDate () {
       this.isRanged = !this.isRanged
       this.mode = this.mode === 'date' ? 'range' : 'date'
@@ -289,8 +288,11 @@ export default {
       console.log('value ->', value)
     },
     selectedAxes (value) {
-      this.reporting.axeId = value
-      console.log('value ->', this.reporting.axeId)
+      // eslint-disable-next-line no-unused-expressions
+      value === 'township'
+        ? this.hospitals__TownshipsByForm({ formId: this.reporting.formId })
+        : ''
+      console.log('value ->', value)
     },
     selectedIndicators (value) {
       this.reporting.indicatorId = value

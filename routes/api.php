@@ -24,7 +24,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
 
-Route::get('/run-cron-job',[CronJobController::class,'index']);
+Route::get('/run-cron-job', [CronJobController::class, 'index']);
 
 // Route::post('/migrate-hospital-situation-controller', 'MigrateHospitalSituationController@migrateToCompletedForm');
 
@@ -219,13 +219,13 @@ Route::group([
     Route::get('/get-agents', 'HospitalController@getAgents');
     Route::patch('/update-by-admin/{hospital_id}', 'HospitalController@updateByAdmin');
     Route::patch('/{id}/reject-agent', 'HospitalController@rejectAgent');
-    Route::get('/get-hospital-list','HospitalController@getHospitalList');
+    Route::get('/get-hospital-list', 'HospitalController@getHospitalList');
     Route::get('/{id}/deep', 'HospitalController@showDeep');
   });
 
- /***
- * forms routes
- */
+  /***
+   * forms routes
+   */
   Route::group(['prefix' => 'forms'], function () {
     Route::get('/recent-form', 'FormController@recentForm');
     Route::get('/filter', 'FormController@filter');
@@ -234,16 +234,16 @@ Route::group([
   });
 
   /***
- * notifications routes
- */
-Route::group(['prefix' => 'notifications'], function () {
-  Route::get('/{hospital_id}', 'NotificationController@notificationHospital');
-  Route::get('notification-by-date/{hospital_id}', 'NotificationController@notificationHospitalByDate');
-  Route::get('/by-paginate/{hospital_id}', 'NotificationController@indexNotificationByPaginate');
-  Route::get('/notification-not-read/{hospital_id}', 'NotificationController@getNotificationNotReadUser');
-  Route::get('/set-notification-by-hospital/{hospital_id}', 'NotificationController@setNotificationByHospital');
-});
-Route::resource('notifications', 'NotificationController');
+   * notifications routes
+   */
+  Route::group(['prefix' => 'notifications'], function () {
+    Route::get('/{hospital_id}', 'NotificationController@notificationHospital');
+    Route::get('notification-by-date/{hospital_id}', 'NotificationController@notificationHospitalByDate');
+    Route::get('/by-paginate/{hospital_id}', 'NotificationController@indexNotificationByPaginate');
+    Route::get('/notification-not-read/{hospital_id}', 'NotificationController@getNotificationNotReadUser');
+    Route::get('/set-notification-by-hospital/{hospital_id}', 'NotificationController@setNotificationByHospital');
+  });
+  Route::resource('notifications', 'NotificationController');
 
 
 
@@ -273,7 +273,10 @@ Route::resource('notifications', 'NotificationController');
     Route::get('/all-Without-agent', 'HospitalController@allWithoutAgent'); //ok
     Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution'); //ok
     Route::get('/totaux', 'HospitalController@getHospitalsTotaux'); //ok
+    Route::get('/townships/{form_id}', 'HospitalController@getHospitalByForm'); //ok
+
   });
+
   Route::group(['prefix' => 'indicators'], function () {
     Route::group(['prefix' => 'zones'], function () {
       Route::get('/', 'IndicatorController@getIndicatorsZone'); //ok
@@ -291,7 +294,6 @@ Route::resource('notifications', 'NotificationController');
   Route::get('flux-provinces', 'DashBoardController@getFluxProvinces'); //ok
 
   Route::get('/townships', 'DashBoardController@getTownships'); //ok
-  Route::get('/townships/{form_id}', 'DashBoardController@getTownshipsByForm'); //ok
 
 
   Route::group(['prefix' => 'pandemics'], function () {
