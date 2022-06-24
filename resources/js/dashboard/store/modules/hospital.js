@@ -408,11 +408,11 @@ export default {
           })
       })
     },
-    hospitals__TownshipsByForm ({ state, commit }, payload) {
+    hospitals__townships ({ state, commit }, payload) {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/dashboard/hospitals/townships/${payload.form_id}`)
+          .get('/api/dashboard/hospitals/townships/')
           .then(({ data }) => {
             console.log('data ->', data)
             resolve(data)

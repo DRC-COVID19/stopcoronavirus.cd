@@ -141,7 +141,15 @@
         ><small>Sauvegarder </small>
       </b-button>
     </b-col>
-    <b-modal centered>
+    <b-modal centered ref="my-modal-axes" hide-header>
+      <b-form-checkbox-group
+        id="checkbox-group-1"
+        v-model="reporting.axeId"
+        :options="optionsAxes"
+        value-field="id"
+        text-field="name"
+        name="flavour-1"
+      ></b-form-checkbox-group>
       <template #modal-footer>
         <b-row class="px-3 pt-4 d-flex justify-content-center">
           <b-button size="sm" variant="success" class="btn-dash-blue mx-2">
@@ -208,6 +216,7 @@ export default {
         observation_start: null,
         observation_end: null
       },
+      optionsAxes: [],
       iconStateDatePicker: 'fas fa-thin fa-plus',
       attributes: [],
       operations: [
@@ -223,7 +232,7 @@ export default {
   },
   watch: {},
   methods: {
-    ...mapActions(['getFormFields', 'hospitals__TownshipsByForm']),
+    ...mapActions(['getFormFields', 'hospitals__townships']),
     activeStartDate () {
       this.isRanged = !this.isRanged
       this.mode = this.mode === 'date' ? 'range' : 'date'
@@ -288,10 +297,20 @@ export default {
       console.log('value ->', value)
     },
     selectedAxes (value) {
-      // eslint-disable-next-line no-unused-expressions
-      value === 'township'
-        ? this.hospitals__TownshipsByForm({ form_id: this.reporting.formId })
-        : ''
+      this.optionsAxes = []
+      this.hospitals__townships().then((data) => {
+        if (value === 'township') {
+          this.optionsAxes = data.map((hospital) => {
+            return { id: hospital.township.id, name: hospital.township.name }
+          })
+        }
+        if (value === 'hospital') {
+          this.optionsAxes = data.map((hospital) => {
+            return { id: hospital.id, name: hospital.name }
+          })
+        }
+        this.$refs['my-modal-axes'].show()
+      })
       console.log('value ->', value)
     },
     selectedIndicators (value) {

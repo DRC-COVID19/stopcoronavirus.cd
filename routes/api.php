@@ -273,7 +273,7 @@ Route::group([
     Route::get('/all-Without-agent', 'HospitalController@allWithoutAgent'); //ok
     Route::get('/evolution/{hospital?}', 'HospitalController@getHospitalEvolution'); //ok
     Route::get('/totaux', 'HospitalController@getHospitalsTotaux'); //ok
-    Route::get('/townships/{form_id}', 'HospitalController@getHospitalByForm'); //ok
+    Route::get('/townships', 'HospitalController@getHospitalByForm'); //ok
 
   });
 

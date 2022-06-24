@@ -543,18 +543,15 @@ class HospitalController extends Controller
       return response($th->getMessage())->setStatusCode(500);
     }
   }
-  public function getHospitalByForm($form_id)
+  public function getHospitalByForm()
   {
 
     try {
       $townships = Hospital::with(['township' => function ($query) {
         $query->select('id', 'name')
           ->orderBy('name');
-      }, 'completedForms' => function ($query) use ($form_id) {
-        $query->select('id', 'admin_user_id', 'hospital_id', 'last_update', 'form_id')
-          ->where('form_id',  $form_id);
       }])->whereHas('completedForms')->select('id', 'name', 'township_id')->get();
-      return response()->json(['data' => $townships]);
+      return response()->json($townships);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
