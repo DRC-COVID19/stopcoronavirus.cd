@@ -290,7 +290,7 @@ export default {
     selectedAxes (value) {
       // eslint-disable-next-line no-unused-expressions
       value === 'township'
-        ? this.hospitals__TownshipsByForm({ formId: this.reporting.formId })
+        ? this.hospitals__TownshipsByForm({ form_id: this.reporting.formId })
         : ''
       console.log('value ->', value)
     },

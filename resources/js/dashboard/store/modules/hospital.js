@@ -407,6 +407,20 @@ export default {
             reject(response)
           })
       })
+    },
+    hospitals__TownshipsByForm ({ state, commit }, payload) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        axios
+          .get(`/api/dashboard/hospitals/townships/${payload.form_id}`)
+          .then(({ data }) => {
+            console.log('data ->', data)
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
     }
   }
 }

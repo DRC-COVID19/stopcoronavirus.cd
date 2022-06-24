@@ -552,7 +552,7 @@ class HospitalController extends Controller
           ->orderBy('name');
       }, 'completedForms' => function ($query) use ($form_id) {
         $query->select('id', 'admin_user_id', 'hospital_id', 'last_update', 'form_id')
-          ->where('form_id', '=', $form_id);
+          ->where('form_id',  $form_id);
       }])->whereHas('completedForms')->select('id', 'name', 'township_id')->get();
       return response()->json(['data' => $townships]);
     } catch (\Throwable $th) {
