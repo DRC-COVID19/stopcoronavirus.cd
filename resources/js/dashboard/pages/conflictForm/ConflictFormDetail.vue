@@ -1,4 +1,4 @@
-<template>
+k<template>
   <b-container class="mx-0 px-4 container-preview" fluid>
     <b-container>
       <Loading
@@ -40,7 +40,7 @@
                         :value="true"
                         class="text-red-keep"
                         @input="keepOldValue"
-                        >Conserver la soumission de {{completedFormsHospitalForm ? completedFormsHospitalForm[0].created_manager_name:''}}, Enregistré le {{moment(completedFormsHospitalForm[0].created_at).format('DD/MM/YYYY')}} </b-form-radio
+                        >Conserver la soumission de {{completedFormsHospitalForm ? completedFormsHospitalForm[0].created_manager_name:''}}, Enregistrer le {{moment(completedFormsHospitalForm[0].created_at).format('DD/MM/YYYY')}} </b-form-radio
                       >
                       <b-form-radio
                         v-model="form.newValue"
@@ -49,7 +49,7 @@
                         :value="false"
                         class="text-blue-keep mt-3"
                         @input="keepNewValue"
-                        >Conserver ma soumission,Enregistré le {{moment($route.params.last_update).format('DD/MM/YYYY')}}</b-form-radio
+                        >Conserver la soumission,Enregistrer le {{moment($route.params.last_update).format('DD/MM/YYYY')}}</b-form-radio
                       >
                   </b-form-group>
                 </b-card-body>
@@ -156,7 +156,7 @@
 </template>
 <script>
 import Loading from '../../components/Loading.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 export default {
   components: {
     Loading
@@ -196,6 +196,7 @@ export default {
   },
   methods: {
     ...mapActions(['getCompletedFormByHospital', 'getCompletedFormConflict', 'completedFormHistoryStore']),
+    ...mapMutations(['SET_COUNT_CONFLICT']),
     async completedFormByFormAndHospital () {
       this.isLoading = true
       this.completedFormsHospitalForm = await this.getCompletedFormByHospital({
@@ -266,6 +267,7 @@ export default {
         last_update: this.completedFormsHospitalForm[0].last_update
       })
         .then(() => {
+          this.SET_COUNT_CONFLICT(1)
           this.$notify({
             group: 'alert',
             title: 'Statut de la soumission',
