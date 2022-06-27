@@ -33,7 +33,7 @@ class CompletedFormHistoryController extends Controller
         $sortBy = $request->query('sort_by') ?? 'last_update';
         $sortDirection = $request->query('sort_desc') ? 'desc' : 'asc';
 
-        $query = CompletedFormHistory::with(['form', 'adminUser','hospital','completedFormFieldHistories'])->where('conflict', 1);
+        $query = CompletedFormHistory::with(['form', 'adminUser','hospital','completedFormFieldHistories']);
 
         if($formId){
             $query->where('form_id', $formId);
@@ -54,6 +54,12 @@ class CompletedFormHistoryController extends Controller
 
         return response()->json($completedFormHistories, 200);
     }
+
+    public function getNotificationConflict(){
+        $completedFormHistory = CompletedFormHistory::where('conflict',1)->get();
+        return response()->json($completedFormHistory, 200);
+    }
+
 
     /**
      * Store a newly created resource in storage.
