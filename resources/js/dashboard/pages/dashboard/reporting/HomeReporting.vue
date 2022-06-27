@@ -103,7 +103,7 @@ export default {
       }
     },
     onSelectedChartType (value) {
-      this.typeChart = value.id === 'column' ? 'bar' : value.id
+      this.typeChart = value.id
     },
     renderChartBar () {
       const categories = []
@@ -151,46 +151,34 @@ export default {
       console.log('this.options.xaxis.categories ->', categories)
     },
     renderChartLine () {
-      const categories = []
       const dataSerie = []
-      const series = this.hospitalsDataAggregated
+      this.reportingChart.axeId = this.reportingChart.axeId.map(
+        (axe) => axe.id
+      )
+      const data = this.hospitalsDataAggregated
         .filter((hospital) => {
-          return this.reportingChart.hospitalId.includes(hospital.id)
+          return this.reportingChart.axeId.includes(hospital.id)
         })
         .map((form) => {
-          categories.push(form.name.replace(/ /g, '').toUpperCase())
-          const dataSeries = form.aggregated
-            .filter((aggregate) =>
-              this.reportingChart.indicatorId.includes(aggregate.form_field.id)
-            )
-            .map((aggregate) => {
-              return {
-                name: aggregate.form_field.name,
-                x: aggregate.value,
-                y: [form.id]
-              }
-            })
-          return dataSeries
+          return form.completed_forms.map((completedForm) => {
+            return completedForm.completed_form_fields
+              .filter((completedFormField) => {
+                return this.reportingChart.indicatorId.includes(
+                  completedFormField.form_field_id
+                )
+              })
+              .map((completedFormField) => {
+                return {
+                  x: completedForm.last_update,
+                  y: completedFormField.value,
+                  name: completedFormField.form_field.name
+                }
+              })
+          })
         })
-        .flatMap((formField) => formField)
-        .forEach((formField, index, arr) => {
-          if (dataSerie.every((data) => data.name !== formField.name)) {
-            dataSerie.push({
-              name: formField.name,
-              data: arr
-                .filter((data) => data.name === formField.name)
-                .map((data) => {
-                  return data.x
-                })
-            })
-          }
-        })
-      this.updateAxis(categories)
+        .flatMap((form) => form)
 
-      this.series = [...dataSerie]
-
-      console.log('series ->', this.series)
-      console.log('this.options.xaxis.categories ->', categories)
+      console.log('series ->', data)
     },
     selectedOperations (value) {
       this.reporting.operationId = value
@@ -198,8 +186,11 @@ export default {
   },
   watch: {
     hospitalsDataAggregated () {
-      this.renderChartBar()
-      // this.renderChartLine()
+      // this.renderChartBar()
+      this.renderChartLine()
+    },
+    options () {
+      this.onSelectedChartType()
     }
   }
 }

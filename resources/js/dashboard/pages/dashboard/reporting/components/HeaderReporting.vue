@@ -208,50 +208,45 @@
   </b-row>
 </template>
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex'
 
 export default {
-  name: "HeaderReporting",
+  name: 'HeaderReporting',
   props: {
     forms: {
       type: Array,
       default: () => {
-        return [];
-      },
+        return []
+      }
     },
     hospitals: {
       type: Array,
       default: () => {
-        return [];
-      },
-    },
+        return []
+      }
+    }
   },
-  data() {
+  data () {
     return {
       chartType: [
         {
-          id: "line",
-          type: "Courbe",
-          icon: "fas fa-chart-line",
+          id: 'line',
+          type: 'Courbe',
+          icon: 'fas fa-chart-line'
         },
-        {
-          id: "column",
-          type: "Colonne",
-          icon: "fas fa-chart-column",
-        },
-        { id: "bar", type: "Barres", icon: "fas fa-chart-bar" },
-        { id: "donut", type: "Secteur", icon: "fas fa-chart-pie" },
+        { id: 'bar', type: 'Barres', icon: 'fas fa-chart-bar' },
+        { id: 'donut', type: 'Secteur', icon: 'fas fa-chart-pie' }
       ],
       axes: [
-        { id: "township", name: "Commune" },
-        { id: "hospital", name: "Hôpital" },
+        { id: 'township', name: 'Commune' },
+        { id: 'hospital', name: 'Hôpital' }
       ],
-      mode: "date",
+      mode: 'date',
       isRanged: false,
       dateRange: this.isRanged
         ? {
             start: new Date(),
-            end: new Date(),
+            end: new Date()
           }
         : new Date(),
       reporting: {
@@ -260,147 +255,147 @@ export default {
         indicatorId: [],
         operationId: null,
         observation_start: null,
-        observation_end: null,
+        observation_end: null
       },
       optionsAxes: [],
       selectedAll: false,
       optionsAxesSelected: [],
-      iconStateDatePicker: "fas fa-thin fa-plus",
+      iconStateDatePicker: 'fas fa-thin fa-plus',
       attributes: [],
       operations: [
-        { id: 1, type: "Somme" },
-        { id: 2, type: "Moyenne" },
-      ],
-    };
+        { id: 1, type: 'Somme' },
+        { id: 2, type: 'Moyenne' }
+      ]
+    }
   },
   computed: {
     ...mapState({
-      formFields: (state) => state.formField.formFields,
-    }),
+      formFields: (state) => state.formField.formFields
+    })
   },
-  mounted() {},
+  mounted () {},
   watch: {
-    optionsAxesSelected() {},
+    optionsAxesSelected () {}
   },
   methods: {
-    ...mapActions(["getFormFields", "hospitals__townships"]),
-    activeStartDate() {
-      this.isRanged = !this.isRanged;
-      this.mode = this.mode === "date" ? "range" : "date";
+    ...mapActions(['getFormFields', 'hospitals__townships']),
+    activeStartDate () {
+      this.isRanged = !this.isRanged
+      this.mode = this.mode === 'date' ? 'range' : 'date'
       this.iconStateDatePicker =
-        this.iconStateDatePicker === "fas fa-thin fa-plus"
-          ? "fa fa-times"
-          : "fas fa-thin fa-plus";
+        this.iconStateDatePicker === 'fas fa-thin fa-plus'
+          ? 'fa fa-times'
+          : 'fas fa-thin fa-plus'
 
       if (this.isRanged) {
         this.dateRange.start =
           this.reporting.observation_end == null
             ? new Date()
-            : this.reporting.observation_end;
-        this.dateRange.end = new Date();
+            : this.reporting.observation_end
+        this.dateRange.end = new Date()
 
-        this.reporting.observation_start = this.dateRange.start;
-        this.reporting.observation_end = new Date();
+        this.reporting.observation_start = this.dateRange.start
+        this.reporting.observation_end = new Date()
       } else {
         this.dateRange =
           this.reporting.observation_end == null
             ? new Date()
-            : this.reporting.observation_end;
-        this.reporting.observation_start = null;
+            : this.reporting.observation_end
+        this.reporting.observation_start = null
       }
       this.attributes[0] = {
-        key: "today",
+        key: 'today',
         dates: this.isRanged
           ? { start: this.dateRange.start, end: this.dateRange.end }
           : this.dateRange,
-        highlight: true,
-      };
+        highlight: true
+      }
     },
-    onRangeDateObservation(inputValueDate) {
+    onRangeDateObservation (inputValueDate) {
       if (this.isRanged) {
         this.reporting.observation_start = moment(inputValueDate.start).format(
-          "YYYY-MM-DD"
-        );
-        this.dateRange.start = inputValueDate.start;
+          'YYYY-MM-DD'
+        )
+        this.dateRange.start = inputValueDate.start
         this.reporting.observation_end = moment(inputValueDate.end).format(
-          "YYYY-MM-DD"
-        );
-        this.dateRange.end = inputValueDate.end;
+          'YYYY-MM-DD'
+        )
+        this.dateRange.end = inputValueDate.end
       } else {
-        this.reporting.observation_start = null;
-        this.dateRange = inputValueDate;
+        this.reporting.observation_start = null
+        this.dateRange = inputValueDate
         this.reporting.observation_end =
-          moment(inputValueDate).format("YYYY-MM-DD");
+          moment(inputValueDate).format('YYYY-MM-DD')
       }
       this.attributes[0] = {
-        key: "today",
+        key: 'today',
         dates: this.dateRange,
-        highlight: true,
-      };
-      console.log("dateRange", this.dateRange);
+        highlight: true
+      }
+      console.log('dateRange', this.dateRange)
     },
-    clearObservationDate() {
-      this.dateRange = new Date();
-      this.isRanged = false;
+    clearObservationDate () {
+      this.dateRange = new Date()
+      this.isRanged = false
     },
-    selectedForm(value) {
-      this.getFormFields({ form_id: value });
-      console.log("value ->", value);
+    selectedForm (value) {
+      this.getFormFields({ form_id: value })
+      console.log('value ->', value)
     },
-    selectedAxes(value) {
-      this.optionsAxes = [];
+    selectedAxes (value) {
+      this.optionsAxes = []
       this.hospitals__townships().then((data) => {
-        if (value === "township") {
+        if (value === 'township') {
           this.optionsAxes = data.map((hospital) => {
-            return { id: hospital.township.id, name: hospital.township.name };
-          });
+            return { id: hospital.township.id, name: hospital.township.name }
+          })
         }
-        if (value === "hospital") {
+        if (value === 'hospital') {
           this.optionsAxes = data.map((hospital) => {
-            return { id: hospital.id, name: hospital.name };
-          });
+            return { id: hospital.id, name: hospital.name }
+          })
         }
         if (value) {
-          this.$refs["my-modal-axes"].show();
-          this.selectedAllAxesOption(true);
+          this.$refs['my-modal-axes'].show()
+          this.selectedAllAxesOption(true)
         }
-      });
-      console.log("value ->", value);
+      })
+      console.log('value ->', value)
     },
-    selectedIndicators(value) {
-      this.reporting.indicatorId = value;
-      console.log("value ->", this.reporting.indicatorId);
+    selectedIndicators (value) {
+      this.reporting.indicatorId = value
+      console.log('value ->', this.reporting.indicatorId)
     },
-    selectedOperations(value) {
-      this.reporting.operationId = value;
+    selectedOperations (value) {
+      this.reporting.operationId = value
     },
-    selectedChartType(value) {
-      this.$emit("selectedChartType", value);
+    selectedChartType (value) {
+      this.$emit('selectedChartType', value)
     },
-    hideModal() {
-      this.$refs["my-modal-axes"].hide();
+    hideModal () {
+      this.$refs['my-modal-axes'].hide()
     },
-    selectedAllAxesOption(checked) {
-      console.log("checked ->", checked);
+    selectedAllAxesOption (checked) {
+      console.log('checked ->', checked)
       this.optionsAxesSelected = checked
         ? this.optionsAxes.slice().map((axe) => axe.id)
-        : [];
-      console.log("checked ->", this.optionsAxesSelected);
+        : []
+      console.log('checked ->', this.optionsAxesSelected)
     },
-    selectedAxesModal() {
+    selectedAxesModal () {
       this.reporting.axeId = this.optionsAxes
         .slice()
-        .filter((axe) => this.optionsAxesSelected.includes(axe.id));
-      this.$refs["my-modal-axes"].hide();
+        .filter((axe) => this.optionsAxesSelected.includes(axe.id))
+      this.$refs['my-modal-axes'].hide()
     },
-    submit() {
+    submit () {
       if (!this.reporting.observation_end) {
-        this.reporting.observation_end = new Date();
+        this.reporting.observation_end = new Date()
       }
-      this.$emit("generatedReport", this.reporting);
-    },
-  },
-};
+      this.$emit('generatedReport', this.reporting)
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
