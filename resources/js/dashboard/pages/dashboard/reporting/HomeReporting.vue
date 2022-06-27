@@ -174,6 +174,7 @@ export default {
                   name: completedFormField.form_field.name
                 }
               })
+              .flatMap((completedFormField) => completedFormField)
           })
         })
         .flatMap((form) => form)
