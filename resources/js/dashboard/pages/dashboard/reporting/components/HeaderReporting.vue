@@ -43,11 +43,7 @@
         placeholder="Sélectionner un axe"
         class="style-chooser"
     /></b-col>
-    <b-col
-      class="w-100 mt-4 mx-1 py-1 container-axe"
-      lg="11"
-      v-show="reporting.axeId.length !== 0"
-    >
+    <b-col class="w-100 mt-4 mx-1 py-1 container-axe" lg="11">
       <div
         v-for="(axe, index) in reporting.axeId"
         :key="index"
@@ -252,6 +248,7 @@ export default {
       reporting: {
         formId: null,
         axeId: [],
+        axeIdType: '',
         indicatorId: [],
         operationId: null,
         observation_start: null,
@@ -349,14 +346,17 @@ export default {
           this.optionsAxes = data.map((hospital) => {
             return { id: hospital.township.id, name: hospital.township.name }
           })
+          this.$refs['my-modal-axes'].show()
         }
         if (value === 'hospital') {
           this.optionsAxes = data.map((hospital) => {
             return { id: hospital.id, name: hospital.name }
           })
+          this.$refs['my-modal-axes'].show()
         }
         if (value) {
           this.$refs['my-modal-axes'].show()
+          this.reporting.axeIdType = value
           this.selectedAllAxesOption(true)
         }
       })

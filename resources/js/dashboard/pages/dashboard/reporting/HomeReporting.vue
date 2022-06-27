@@ -99,24 +99,68 @@ export default {
         ...this.options,
         xaxis: {
           categories: [...data]
+        },
+        title: {
+          text: 'Forecast',
+          align: 'left',
+          style: {
+            fontSize: '16px',
+            color: '#666'
+          }
         }
       }
     },
     onSelectedChartType (value) {
       this.typeChart = value.id
     },
-    renderChartBar () {
-      const categories = []
-      const dataSerie = []
+    renderAxesSelected () {
       this.reportingChart.axeId = this.reportingChart.axeId.map(
         (axe) => axe.id
       )
-      const data = this.hospitalsDataAggregated
+      const categories = []
+      const hospitalData = this.hospitalsDataAggregated
         .filter((hospital) => {
-          return this.reportingChart.axeId.includes(hospital.id)
+          return this.reportingChart.axeId.includes(
+            this.reportingChart.axeIdType === 'township'
+              ? hospital.township_id
+              : hospital.id
+          )
         })
         .map((form) => {
-          categories.push(form.name.replace(/ /g, '').toUpperCase())
+          categories.push(
+            this.reportingChart.axeIdType === 'township'
+              ? form.township.name.replace(/ /g, '').toUpperCase()
+              : form.name.replace(/ /g, '').toUpperCase()
+          )
+          return form
+        })
+
+      this.updateAxis(categories)
+      console.log('this.options.xaxis.categories ->', categories)
+
+      return hospitalData
+    },
+    groupDataApex (data) {
+      const dataSerie = []
+      data.forEach((formField, index, arr) => {
+        if (dataSerie.every((data) => data.name !== formField.name)) {
+          dataSerie.push({
+            name: formField.name,
+            data: arr
+              .filter((data) => data.name === formField.name)
+              .map((data) => {
+                return this.typeChart === 'line'
+                  ? { x: data.x, y: data.y }
+                  : data.x
+              })
+          })
+        }
+      })
+      return dataSerie
+    },
+    renderChartBar () {
+      const data = this.renderAxesSelected()
+        .map((form) => {
           const dataSeries = form.aggregated
             .filter((aggregate) =>
               this.reportingChart.indicatorId.includes(aggregate.form_field.id)
@@ -131,68 +175,52 @@ export default {
           return dataSeries
         })
         .flatMap((formField) => formField)
-        .forEach((formField, index, arr) => {
-          if (dataSerie.every((data) => data.name !== formField.name)) {
-            dataSerie.push({
-              name: formField.name,
-              data: arr
-                .filter((data) => data.name === formField.name)
-                .map((data) => {
-                  return data.x
-                })
-            })
-          }
-        })
-      this.updateAxis(categories)
 
-      this.series = [...dataSerie]
-
-      console.log('series ->', data)
-      console.log('this.options.xaxis.categories ->', categories)
+      this.series = [...this.groupDataApex(data)]
     },
     renderChartLine () {
-      const dataSerie = []
-      this.reportingChart.axeId = this.reportingChart.axeId.map(
-        (axe) => axe.id
-      )
-      const data = this.hospitalsDataAggregated
-        .filter((hospital) => {
-          return this.reportingChart.axeId.includes(hospital.id)
-        })
+      const data = this.renderAxesSelected()
         .map((form) => {
-          return form.completed_forms.map((completedForm) => {
-            return completedForm.completed_form_fields
-              .filter((completedFormField) => {
-                return this.reportingChart.indicatorId.includes(
-                  completedFormField.form_field_id
-                )
-              })
-              .map((completedFormField) => {
-                return {
-                  x: completedForm.last_update,
-                  y: completedFormField.value,
-                  name: completedFormField.form_field.name
-                }
-              })
-              .flatMap((completedFormField) => completedFormField)
-          })
+          return form.completed_forms
+            .map((completedForm) => {
+              return completedForm.completed_form_fields
+                .filter((completedFormField) => {
+                  return this.reportingChart.indicatorId.includes(
+                    completedFormField.form_field_id
+                  )
+                })
+                .map((completedFormField) => {
+                  return {
+                    x: completedForm.last_update,
+                    y: [completedFormField.value],
+                    name: completedFormField.form_field.name
+                  }
+                })
+            })
+            .flatMap((completedFormField) => completedFormField)
         })
         .flatMap((form) => form)
 
-      console.log('series ->', data)
+      this.series = [...this.groupDataApex(data)]
     },
     selectedOperations (value) {
       this.reporting.operationId = value
+    },
+    renderChart () {
+      if (this.typeChart === 'line') {
+        this.renderChartLine()
+      } else {
+        this.renderChartBar()
+      }
     }
   },
   watch: {
     hospitalsDataAggregated () {
-      // this.renderChartBar()
-      this.renderChartLine()
-    },
-    options () {
-      this.onSelectedChartType()
+      this.renderChart()
     }
+    // typeChart () {
+    //   this.renderChart()
+    // }
   }
 }
 </script>
