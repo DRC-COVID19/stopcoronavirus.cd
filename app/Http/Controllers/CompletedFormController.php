@@ -312,6 +312,7 @@ class CompletedFormController extends Controller
         $form_id = $request->input('form_id');
 
         $query = Hospital::with([
+            'township',
             'completedForms' => function ($query) use ($observation_end, $observation_start, $form_id) {
                 $query->select('id', 'admin_user_id', 'hospital_id', 'last_update', 'form_id');
                 if ($observation_end && $observation_start) {

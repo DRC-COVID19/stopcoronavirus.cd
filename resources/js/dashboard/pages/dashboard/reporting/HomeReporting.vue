@@ -1,6 +1,6 @@
 <template>
   <b-container fluid class="px-0 mx-0 containerReporting h-100">
-    <b-row class="d-flex">
+    <b-row class="d-flex mx-0">
       <b-col lg="3" class="d-flex mx-0 px-0 bg-white py-3 w-100 h-100">
         <HeaderReporting
           :forms="forms"
@@ -12,14 +12,14 @@
       </b-col>
 
       <b-col
-        class="d-flex w-100 h-100 justify-content-center container-action"
+        class="d-flex w-100 h-100 justify-content-center container-action mx-0"
         lg="8"
       >
-        <b-col cols="8" md="6" class="row no-gutters">
+        <b-col lg="8" md="6" class="w-100 mx-0">
           <div v-if="!isHospitalsDataAggregated" class="w-100 bg-white">
             <ApexChart :type="typeChart" :options="options" :series="series" />
           </div>
-          <skeleton-loading v-else lg="12" class="w-100">
+          <skeleton-loading v-else class="w-100">
             <square-skeleton
               :boxProperties="{
                 width: '100%',
@@ -30,12 +30,11 @@
         </b-col>
         <b-col
           lg="4"
-          class="w-100d-flex justify-content-center bg-white bookmark"
+          class="w-100 d-flex justify-content-center bg-white bookmark"
         >
         </b-col>
       </b-col>
     </b-row>
-    <b-row> </b-row>
   </b-container>
 </template>
 <script>
@@ -106,7 +105,52 @@ export default {
     onSelectedChartType (value) {
       this.typeChart = value.id === 'column' ? 'bar' : value.id
     },
-    renderChart () {
+    renderChartBar () {
+      const categories = []
+      const dataSerie = []
+      this.reportingChart.axeId = this.reportingChart.axeId.map(
+        (axe) => axe.id
+      )
+      const data = this.hospitalsDataAggregated
+        .filter((hospital) => {
+          return this.reportingChart.axeId.includes(hospital.id)
+        })
+        .map((form) => {
+          categories.push(form.name.replace(/ /g, '').toUpperCase())
+          const dataSeries = form.aggregated
+            .filter((aggregate) =>
+              this.reportingChart.indicatorId.includes(aggregate.form_field.id)
+            )
+            .map((aggregate) => {
+              return {
+                name: aggregate.form_field.name,
+                x: aggregate.value,
+                y: [form.id]
+              }
+            })
+          return dataSeries
+        })
+        .flatMap((formField) => formField)
+        .forEach((formField, index, arr) => {
+          if (dataSerie.every((data) => data.name !== formField.name)) {
+            dataSerie.push({
+              name: formField.name,
+              data: arr
+                .filter((data) => data.name === formField.name)
+                .map((data) => {
+                  return data.x
+                })
+            })
+          }
+        })
+      this.updateAxis(categories)
+
+      this.series = [...dataSerie]
+
+      console.log('series ->', data)
+      console.log('this.options.xaxis.categories ->', categories)
+    },
+    renderChartLine () {
       const categories = []
       const dataSerie = []
       const series = this.hospitalsDataAggregated
@@ -154,7 +198,8 @@ export default {
   },
   watch: {
     hospitalsDataAggregated () {
-      this.renderChart()
+      this.renderChartBar()
+      // this.renderChartLine()
     }
   }
 }
