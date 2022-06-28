@@ -57,7 +57,6 @@
       <v-select
         v-model="reporting.indicatorId"
         :options="formFields"
-        :reduce="(item) => item.id"
         label="name"
         placeholder="Sélectionner une valeur"
         class="style-chooser"
@@ -65,7 +64,15 @@
         multiple
         :disabled="formFields.length === 0"
     /></b-col>
-
+    <b-col class="w-100 mt-4 mx-1 py-1 container-axe" lg="11">
+      <div
+        v-for="(indicatorId, index) in reporting.indicatorId"
+        :key="index"
+        class="mt-2 mr-1 w-100"
+      >
+        <b-badge>{{ indicatorId.name }}</b-badge>
+      </div>
+    </b-col>
     <b-col lg="12" class="mx-0 w-100 mt-4">
       <label for class="text-dash-color">Date :</label>
       <div class="w-100 d-flex justify-content-between">
@@ -172,16 +179,19 @@
             </template>
 
             <template v-slot="{ ariaDescribedby }">
-              <b-form-checkbox-group
-                id="reportingAxeId"
-                v-model="optionsAxesSelected"
-                :options="optionsAxes"
-                text-field="name"
-                :aria-describedby="ariaDescribedby"
-                value-field="id"
-                name="reportingAxeId"
-                class="mt-2"
-              ></b-form-checkbox-group>
+              <div>
+                <b-form-checkbox-group
+                  id="reportingAxeId"
+                  v-model="optionsAxesSelected"
+                  :options="optionsAxes"
+                  text-field="name"
+                  :aria-describedby="ariaDescribedby"
+                  value-field="id"
+                  name="reportingAxeId"
+                  class="mt-2"
+                  stacked
+                ></b-form-checkbox-group>
+              </div>
             </template>
           </b-form-group>
         </b-col>
@@ -407,8 +417,8 @@ export default {
   overflow-x: hidden;
   border-radius: 5px;
   &::-webkit-scrollbar {
-    width: 0; /* Remove scrollbar space */
-    background: transparent; /* Optional: just make scrollbar invisible */
+    width: 0;
+    background: transparent;
   }
 }
 .style-chooser {
