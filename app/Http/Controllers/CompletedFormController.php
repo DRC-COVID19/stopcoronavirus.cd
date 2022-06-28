@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\CompletedForm;
 use App\FormFieldType;
 use App\CompletedFormField;
+use App\Form;
 use Illuminate\Http\Request;
 use function PHPSTORM_META\map;
 use Illuminate\Validation\Rule;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCompletedFormRequest;
 use App\Http\Requests\StoreForOfflineCompletedFormRequest;
 use App\Http\Requests\UpdateCompletedFormRequest;
+use App\Http\Controllers\CompletedFormHistoryController;
 
 class CompletedFormController extends Controller
 {
@@ -99,21 +101,45 @@ class CompletedFormController extends Controller
         }
     }
 
-    public function storeForOffline(StoreForOfflineCompletedFormRequest $request)
-    {
-        $formId = $request->input('form_id');
-        $hospitalId = $request->input('hospital_id');
-        $completedForm = CompletedForm::where(function ($query) use ($hospitalId, $formId, $request) {
-            return $query->where('hospital_id', $hospitalId)
-                ->where('form_id', $formId)
-                ->where('last_update', $request['last_update']);
-        })
-            ->first();
-        if ($completedForm) {
-            return response(['error' => 'Conflit'])->setStatusCode(422);
-        } else {
-            return $this->store($request);
+    public function storeForOffline(StoreForOfflineCompletedFormRequest $request) {
+      $formId = $request->input('form_id');
+      $hospitalId = $request->input('hospital_id');
+      $completedForm = CompletedForm::where(function ($query) use ($hospitalId, $formId, $request) {
+          return $query->where('hospital_id', $hospitalId)
+                      ->where('form_id', $formId)
+                      ->where('last_update', $request['last_update']);
+      })
+        ->first();
+      if ($completedForm) {
+        $conflictResolutionMode = Form::with('conflictResolutionMode')
+                                     ->where('id', $formId)
+                                     ->first();
+        if($conflictResolutionMode->conflictResolutionMode->slug =='admin_resolution') {
+            $completedFormHistory_controller = new CompletedFormHistoryController;
+            $completedFormHistory_controller->storeCompletedFormHistory($request);
+            return response(['succès' => 'réussie'])->setStatusCode(200);
         }
+        if($conflictResolutionMode->conflictResolutionMode->slug =='old_submission'){
+            Log::info("message",['nous somme bel et bien dans le controller old_submission']);
+            $completedFormHistory_controller = new CompletedFormHistoryController;
+            $completedFormHistory_controller->storeOldCompletedForm($request);
+            return response(['succès' => 'réussie'])->setStatusCode(200);
+        }
+        if($conflictResolutionMode->conflictResolutionMode->slug =='new_submission'){
+            Log::info("message",['nous somme bel et bien dans le controller new_submission']);
+            $completedFormHistory_controller = new CompletedFormHistoryController;
+            $completedFormHistory_controller->storeNewCompletedForm($request);
+            CompletedForm::destroy($completedForm->id);
+            CompletedFormField::where('completed_form_id', $completedForm->id)->delete();
+            return response(['succès' => 'réussie'])->setStatusCode(200);
+        }
+        if($conflictResolutionMode->conflictResolutionMode->slug =='last_submission'){
+            return response(['erreur' => 'conflict'])->setStatusCode(500);
+        }
+
+      } else {
+        return $this->store($request);
+      }
     }
 
     /**
@@ -470,4 +496,25 @@ class CompletedFormController extends Controller
 
         return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
     }
+
+    public function getCompletedFormConflict(Request $request){
+        $formId = $request->query('form_id');
+        $forms = Form::with(['formSteps.formFields'])->where('id', $formId)->get();
+
+        return response()->json($forms, 200);
+    }
+
+    public function getCompletedFormByHospital(Request $request){
+        $formId       = $request->query('form_id');
+        $hospitalId   = $request->query('hospital_id');
+        $lastUpdate   = $request->query('last_update');
+
+        $completedForms = CompletedForm::with(['CompletedFormFields'])
+                                    ->where('form_id', $formId)
+                                    ->where('hospital_id', $hospitalId)
+                                    ->where('last_update', $lastUpdate)
+                                    ->get();
+        return response()->json($completedForms, 200);
+    }
+
 }

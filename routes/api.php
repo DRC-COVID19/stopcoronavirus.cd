@@ -234,16 +234,27 @@ Route::group([
   });
 
   /***
-   * notifications routes
-   */
-  Route::group(['prefix' => 'notifications'], function () {
-    Route::get('/{hospital_id}', 'NotificationController@notificationHospital');
-    Route::get('notification-by-date/{hospital_id}', 'NotificationController@notificationHospitalByDate');
-    Route::get('/by-paginate/{hospital_id}', 'NotificationController@indexNotificationByPaginate');
-    Route::get('/notification-not-read/{hospital_id}', 'NotificationController@getNotificationNotReadUser');
-    Route::get('/set-notification-by-hospital/{hospital_id}', 'NotificationController@setNotificationByHospital');
-  });
-  Route::resource('notifications', 'NotificationController');
+ * notifications routes
+ */
+Route::group(['prefix' => 'notifications'], function () {
+  Route::get('/{hospital_id}', 'NotificationController@notificationHospital');
+  Route::get('notification-by-date/{hospital_id}', 'NotificationController@notificationHospitalByDate');
+  Route::get('/by-paginate/{hospital_id}', 'NotificationController@indexNotificationByPaginate');
+  Route::get('/notification-not-read/{hospital_id}', 'NotificationController@getNotificationNotReadUser');
+  Route::get('/set-notification-by-hospital/{hospital_id}', 'NotificationController@setNotificationByHospital');
+});
+
+/***
+ * completedFormHistory routes
+ */
+Route::group(['prefix'=>'completed-form-histories'],function (){
+  Route::get('get-completed-form-by-conflict', 'CompletedFormHistoryController@getCompletedFormHistoryByConflict');
+  Route::get('get-notification-conflict', 'CompletedFormHistoryController@getNotificationConflict');
+  Route::post('store-completed-form-history', 'CompletedFormHistoryController@storeCompletedForm');
+});
+Route::resource('notifications', 'NotificationController');
+Route::resource('conflict-resolution-modes', 'ConflictResolutionModeController');
+Route::resource('completed-form-histories', 'CompletedFormHistoryController');
 
 
 
@@ -260,6 +271,10 @@ Route::group([
   Route::apiResource('forms', 'FormController');
   Route::apiResource('form-steps', 'FormStepController');
   Route::resource('form-recurrences', 'FormRecurrenceController');
+  Route::group(['prefix' => 'completed-forms'], function () {
+    Route::get('/completed-form-conflict', 'CompletedFormController@getCompletedFormConflict');
+    Route::get('/completed-form-hospital', 'CompletedFormController@getCompletedFormByHospital');
+  });
   Route::apiResource('completed_forms', 'CompletedFormController');
   Route::group(['prefix' => 'forms'], function () {
     Route::get('/filter', 'FormController@filter');

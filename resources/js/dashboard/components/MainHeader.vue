@@ -71,6 +71,19 @@
                   </div>
                   <span class="notification-count"> {{ notificationNotReads.length }} </span>
                 </a>
+                <a
+                  v-if="canViewAdministration"
+                  class="nav-link position-relative"
+                  href="#"
+                  @click.prevent="goToPageConflict"
+                >
+                  <div
+                    class="icon-hallo d-flex justify-content-center align-items-center"
+                  >
+                    <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+                  </div>
+                  <span class="notification-count"> {{ notificationConflicts.length }} </span>
+                </a>
               </div>
               <div class="dropdown-nav" v-show="showHeaderNotification">
                 <div class="item-header">
@@ -169,12 +182,17 @@ export default {
     },
     notificationCreated () {
       this.notificationNotRead()
+    },
+    countConflict () {
+      this.initCountConflict()
     }
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
+      countConflict: (state) => state.completedFormHistory.countConflict,
       notificationCreated: (state) => state.notification.isCreated,
+      notificationConflicts: (state) => state.completedFormHistory.NotificationcompletedFormHistories,
       activeMenu: (state) => state.nav.activeMenu,
       changeLogs: (state) => state.app.changeLogs
     }),
@@ -196,11 +214,11 @@ export default {
     }
   },
   mounted () {
-    console.log('hospital id', this.user.hospital.id)
+    this.initCountConflict()
     this.notificationNotRead()
   },
   methods: {
-    ...mapActions(['logout', 'setChangeLogsRead', 'getnotificationNotRead', 'setNotification']),
+    ...mapActions(['logout', 'setChangeLogsRead', 'getnotificationNotRead', 'setNotification', 'getNotificationCompletedFormHistories']),
     ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
     userAvatarMouseEnter () {
       this.showUserCard = true
@@ -237,6 +255,14 @@ export default {
         name: 'hospital.notification'
       })
       this.notificationNotRead()
+    },
+    async initCountConflict () {
+      await this.getNotificationCompletedFormHistories()
+    },
+    goToPageConflict () {
+      this.$router.push({
+        name: 'admin.conflict.form'
+      })
     }
   }
 }

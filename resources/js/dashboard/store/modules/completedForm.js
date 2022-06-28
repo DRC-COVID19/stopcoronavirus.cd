@@ -232,6 +232,36 @@ export default {
             reject(response)
           })
       })
+    },
+    getCompletedFormConflict (_, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/completed-forms/completed-form-conflict', {
+            params: {
+              form_id: payload.form_id
+            }
+          })
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
+    },
+    getCompletedFormByHospital (_, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/completed-forms/completed-form-hospital', {
+            params: payload
+          })
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
     }
   }
 }
