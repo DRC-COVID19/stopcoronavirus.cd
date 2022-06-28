@@ -28,8 +28,13 @@ import VueMq from "vue-mq";
 import VueTimeline from "@growthbunker/vuetimeline";
 import Notifications from "vue-notification";
 import VCalendar from "v-calendar";
+import VueApexCharts from 'vue-apexcharts'
 import "./validation";
 import "./directive";
+
+Vue.use(VueApexCharts)
+
+Vue.component('apexchart', VueApexCharts)
 require("./helper");
 
 Vue.use(BootstrapVue);
