@@ -3,7 +3,7 @@
     <b-col class="w-100 h-100 mx-0" lg="12">
       <apexchart
         width="100%"
-        height="100%"
+        height="750px"
         :type="type"
         :options="options"
         :series="series"
