@@ -1,8 +1,14 @@
 /*!
-  * vue-router v3.5.3
-  * (c) 2021 Evan You
+  * vue-router v3.5.4
+  * (c) 2022 Evan You
   * @license MIT
   */
+
+/*!
+ * ApexCharts v3.35.3
+ * (c) 2018-2022 ApexCharts
+ * Released under the MIT License.
+ */
 
 /*!
  * Chart.js v2.9.4
@@ -12,8 +18,8 @@
  */
 
 /*!
- * Vue-Lazyload.js v1.3.3
- * (c) 2019 Awe <hilongjw@gmail.com>
+ * Vue-Lazyload.js v1.3.4
+ * (c) 2021 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
 
@@ -21,6 +27,13 @@
  * Vue.js v2.6.14
  * (c) 2014-2021 Evan You
  * Released under the MIT License.
+ */
+
+/*!
+ * is-primitive <https://github.com/jonschlinkert/is-primitive>
+ *
+ * Copyright (c) 2014-2015, Jon Schlinkert.
+ * Licensed under the MIT License.
  */
 
 /*!
@@ -181,6 +194,16 @@ PERFORMANCE OF THIS SOFTWARE.
  * Licensed under the MIT license */
 
 /*! http://mths.be/base64 v0.1.0 by @mathias | MIT license */
+
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+
+/*! svg.draggable.js - v2.2.2 - 2019-01-08
+  * https://github.com/svgdotjs/svg.draggable.js
+  * Copyright (c) 2019 Wout Fierens; Licensed MIT */
+
+/*! svg.filter.js - v2.0.2 - 2016-02-24
+  * https://github.com/wout/svg.filter.js
+  * Copyright (c) 2016 Wout Fierens; Licensed MIT */
 
 /**
  * @license
