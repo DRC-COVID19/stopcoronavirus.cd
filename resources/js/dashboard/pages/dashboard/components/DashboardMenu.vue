@@ -15,6 +15,13 @@
       <i class="fas fa-hospital" aria-hidden="true"></i> &nbsp; Infrastructure
     </b-nav-item>
     <b-nav-item
+      @click="selectMenu(9)"
+      :to="{ name: 'main.dashboard.rapport' }"
+      :active="activeMenu === 9"
+    >
+      <i class="fas fa-chart-line" aria-hidden="true"></i> &nbsp; Rapport
+    </b-nav-item>
+    <b-nav-item
       :active="activeMenu === 7"
       :to="{ name: 'main.dashboard.aPropos' }"
       @click="selectMenu(7)"
@@ -25,36 +32,38 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from "vuex";
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   computed: {
     ...mapState({
-      activeMenu: (state) => state.nav.activeMenu,
-    }),
+      activeMenu: (state) => state.nav.activeMenu
+    })
   },
-  mounted() {
-    this.fillParametersFromUrlParams();
+  mounted () {
+    this.fillParametersFromUrlParams()
   },
   methods: {
-    ...mapMutations(["setActiveMenu"]),
-    selectMenu(value) {
+    ...mapMutations(['setActiveMenu']),
+    selectMenu (value) {
       if (this.activeMenu !== null) {
-        this.removeAllParamsFromUrl();
+        this.removeAllParamsFromUrl()
       }
-      this.setActiveMenu(value);
+      this.setActiveMenu(value)
     },
-    fillParametersFromUrlParams() {
-      if (this.$route.name === "main.dashboard.infrastructure") {
-        this.selectMenu(5);
-      } else if (this.$route.name === "main.dashboard.aPropos") {
-        this.selectMenu(7);
+    fillParametersFromUrlParams () {
+      if (this.$route.name === 'main.dashboard.infrastructure') {
+        this.selectMenu(5)
+      } else if (this.$route.name === 'main.dashboard.aPropos') {
+        this.selectMenu(7)
+      } else if (this.$route.name === 'main.dashboard.rapport') {
+        this.selectMenu(9)
       } else {
-        this.selectMenu(1);
+        this.selectMenu(1)
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

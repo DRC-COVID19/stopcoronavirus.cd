@@ -50,8 +50,8 @@ class HospitalController extends Controller
    */
   public function getHospitalList()
   {
-      $hospitals = Hospital::orderBy('name')->get();
-      return response()->json($hospitals, 200);
+    $hospitals = Hospital::orderBy('name')->get();
+    return response()->json($hospitals, 200);
   }
 
   /**
@@ -95,13 +95,13 @@ class HospitalController extends Controller
     $hospitalForms = Hospital::with([
       'forms' => function ($query) {
         $query->where('visible_all_hospitals', '<>', true)
-              ->where('publish', true);
+          ->where('publish', true);
       },
       'forms.formRecurrence'
     ])
       ->find($hospital_id)
       ->forms
-      ->filter(fn($form) => $form->publish)
+      ->filter(fn ($form) => $form->publish)
       ->merge($formsAllVisibility);
 
     $hospital = Hospital::find($hospital_id);
@@ -110,7 +110,8 @@ class HospitalController extends Controller
     return response()->json($hospital);
   }
 
-  public function showDeep($hospital_id) {
+  public function showDeep($hospital_id)
+  {
     $formsAllVisibility = Form::with(
       [
         'formRecurrence',
@@ -128,32 +129,33 @@ class HospitalController extends Controller
         'formSteps.formFields.formFieldType' => function ($query) {
           $query->select('id', 'name');
         }
-      ])
-      ->where('visible_all_hospitals' , true)
+      ]
+    )
+      ->where('visible_all_hospitals', true)
       ->where('publish', true)
       ->get();
 
     $hospitalForms = Hospital::with([
-        'forms' => function ($query) {
-          $query->where('visible_all_hospitals', '<>', true)
-                ->where('publish', true);
-        },
-        'forms.formRecurrence',
-        'forms.completedForms' => function ($query)  use ($hospital_id) {
-          $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
-          $query->where('hospital_id', $hospital_id);
-          $query->orderBy('last_update', 'desc');
-        },
-        'forms.formSteps' => function ($query) {
-          $query->select('id', 'form_id', 'title', 'step');
-        },
-        'forms.formSteps.formFields' => function ($query) {
-          $query->select('id', 'name', 'order_field', 'rules', 'form_step_id', 'default_value', 'form_field_type_id');
-        },
-        'forms.formSteps.formFields.formFieldType' => function ($query) {
-          $query->select('id', 'name');
-        }
-      ])
+      'forms' => function ($query) {
+        $query->where('visible_all_hospitals', '<>', true)
+          ->where('publish', true);
+      },
+      'forms.formRecurrence',
+      'forms.completedForms' => function ($query)  use ($hospital_id) {
+        $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
+        $query->where('hospital_id', $hospital_id);
+        $query->orderBy('last_update', 'desc');
+      },
+      'forms.formSteps' => function ($query) {
+        $query->select('id', 'form_id', 'title', 'step');
+      },
+      'forms.formSteps.formFields' => function ($query) {
+        $query->select('id', 'name', 'order_field', 'rules', 'form_step_id', 'default_value', 'form_field_type_id');
+      },
+      'forms.formSteps.formFields.formFieldType' => function ($query) {
+        $query->select('id', 'name');
+      }
+    ])
       ->find($hospital_id)
       ->forms
       ->merge($formsAllVisibility);
@@ -199,14 +201,13 @@ class HospitalController extends Controller
   {
     try {
 
-        $data = $request->validated();
-        $hospital = Hospital::find($id);
-        if ($data['agent_id']) {
-          $hospital->update(['agent_id' => $data['agent_id']]);
-        }
-        else if ($data['agent_id'] === null){
-          $hospital->update(['agent_id' => null]);
-        }
+      $data = $request->validated();
+      $hospital = Hospital::find($id);
+      if ($data['agent_id']) {
+        $hospital->update(['agent_id' => $data['agent_id']]);
+      } else if ($data['agent_id'] === null) {
+        $hospital->update(['agent_id' => null]);
+      }
 
       return response()->json($hospital, 201);
     } catch (\Throwable $th) {
@@ -214,7 +215,7 @@ class HospitalController extends Controller
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
       }
-        return response($th->getMessage())->setStatusCode(500);
+      return response($th->getMessage())->setStatusCode(500);
     }
   }
   /**
@@ -265,7 +266,7 @@ class HospitalController extends Controller
   {
     try {
 
-      $users = AdministratorResource::collection(Administrator::with(['hospitalManager','roles'])->get());
+      $users = AdministratorResource::collection(Administrator::with(['hospitalManager', 'roles'])->get());
       return response()->json($users, 200);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
@@ -535,6 +536,22 @@ class HospitalController extends Controller
       }
 
       return response()->json($results, 200, [], JSON_NUMERIC_CHECK);
+    } catch (\Throwable $th) {
+      if (env('APP_DEBUG') == true) {
+        return response($th)->setStatusCode(500);
+      }
+      return response($th->getMessage())->setStatusCode(500);
+    }
+  }
+  public function getHospitalByForm()
+  {
+
+    try {
+      $townships = Hospital::with(['township' => function ($query) {
+        $query->select('id', 'name')
+          ->orderBy('name');
+      }])->whereHas('completedForms')->select('id', 'name', 'township_id')->get();
+      return response()->json($townships);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);

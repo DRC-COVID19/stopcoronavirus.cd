@@ -33,6 +33,7 @@ import FormResponse from './pages/administrator/forms2/formDetail/formResponse'
 import FormPreview from './pages/administrator/forms2/formDetail/formPreview'
 import Main from './pages/Main'
 import Dashboard from './pages/dashboard/Dashboard'
+import Reporting from './pages/dashboard/reporting/HomeReporting'
 import CTCO from './pages/ctco/CTCO'
 import {
   ADMIN_DASHBOARD,
@@ -99,6 +100,15 @@ export default [
             path: 'infrastructure',
             component: Home,
             name: 'main.dashboard.infrastructure',
+            meta: {
+              requiresAuth: true,
+              role: [ADMIN_DASHBOARD]
+            }
+          },
+          {
+            path: 'rapport',
+            component: Reporting,
+            name: 'main.dashboard.rapport',
             meta: {
               requiresAuth: true,
               role: [ADMIN_DASHBOARD]
