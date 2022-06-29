@@ -185,7 +185,6 @@ export default {
         observation_start: reporting.observation_start,
         observation_end: reporting.observation_end
       })
-      this.$refs['my-modal-title'].show()
     },
     updateAxis (data) {
       this.options = {
