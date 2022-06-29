@@ -5,8 +5,8 @@
         <b-button
           v-b-toggle.sidebar-header-reporting
           class="btn-dash-blue btn-sidebar"
-          ><i class="fas fa-chart-line"></i></b-button
-        >
+          ><i class="fas fa-chart-line"></i
+        ></b-button>
         <b-sidebar id="sidebar-header-reporting" right shadow>
           <HeaderReporting
             :forms="forms"
@@ -30,14 +30,20 @@
         />
       </b-col>
 
-      <b-col
-        class="d-md-flex w-100 h-100 container-action mx-0"
-        lg="8"
-        md="12"
-      >
-        <b-col lg="8" md="12" class="w-100  h-100 mx-0">
-          <div v-if="!isHospitalsDataAggregated" class="w-100   h-100 bg-white">
-            <ApexChart :type="typeChart" :options="options" :series="series" class="w-100  h-100"/>
+      <b-col class="d-md-flex w-100 h-100 container-action mx-0" lg="8" md="12">
+        <b-col lg="12" md="12" class="w-100 h-100 mx-0">
+          <div
+            v-if="!isHospitalsDataAggregated"
+            lg="12"
+            md="12"
+            class="w-100 h-100 bg-white"
+          >
+            <ApexChart
+              :type="typeChart"
+              :options="options"
+              :series="series"
+              class="w-100 h-100"
+            />
           </div>
           <skeleton-loading v-else class="w-100">
             <square-skeleton
@@ -120,9 +126,9 @@ export default {
           },
           pie: {
             donut: {
-              size: '65%'
+              size: '100%'
             },
-            customScale: 0.8
+            customScale: 1
           }
         },
         labels: []
@@ -135,6 +141,7 @@ export default {
       ],
       typeChart: '',
       titleChart: ''
+
     }
   },
   mounted () {
@@ -171,7 +178,7 @@ export default {
       this.$refs['my-modal-title'].hide()
     },
     submitGeneratedReport (reporting) {
-      this.reportingChart = reporting
+      this.reportingChart = { ...reporting }
 
       this.getHospitalsData({
         form_id: reporting.formId,
@@ -192,13 +199,13 @@ export default {
       this.typeChart = value.id
     },
     renderAxesSelected () {
-      this.reportingChart.axeId = this.reportingChart.axeId.map(
+      const axes = this.reportingChart.axeId.map(
         (axe) => axe.id
       )
       const categories = []
       const hospitalData = this.hospitalsDataAggregated
         .filter((hospital) => {
-          return this.reportingChart.axeId.includes(
+          return axes.includes(
             this.reportingChart.axeIdType === 'township'
               ? hospital.township_id
               : hospital.id
@@ -237,9 +244,6 @@ export default {
       return dataSerie
     },
     renderChartBar () {
-      this.reportingChart.indicatorId = this.reportingChart.indicatorId.map(
-        (indicator) => indicator.id
-      )
       const data = this.renderAxesSelected()
         .map((form) => {
           const dataSeries = form.aggregated
@@ -261,9 +265,6 @@ export default {
       return this.series
     },
     renderChartLine () {
-      this.reportingChart.indicatorId = this.reportingChart.indicatorId.map(
-        (indicator) => indicator.id
-      )
       const data = this.renderAxesSelected()
         .map((form) => {
           return form.completed_forms
@@ -314,9 +315,6 @@ export default {
   },
   watch: {
     hospitalsDataAggregated () {
-      this.renderChart()
-    },
-    typeChart () {
       this.renderChart()
     }
   }

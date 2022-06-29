@@ -57,6 +57,7 @@
       <v-select
         v-model="reporting.indicatorId"
         :options="formFields"
+        :reduce="(item) => item.id"
         label="name"
         placeholder="Sélectionner une valeur"
         class="style-chooser"
@@ -66,7 +67,7 @@
     /></b-col>
     <b-col class="w-100 mt-4 mx-1 py-1 container-axe" lg="11">
       <div
-        v-for="(indicatorId, index) in reporting.indicatorId"
+        v-for="(indicatorId, index) in indicators"
         :key="index"
         class="mt-2 mr-1 w-100"
       >
@@ -247,6 +248,7 @@ export default {
         { id: 'township', name: 'Commune' },
         { id: 'hospital', name: 'Hôpital' }
       ],
+      indicators: [],
       mode: 'date',
       isRanged: false,
       dateRange: this.isRanged
@@ -367,13 +369,14 @@ export default {
         if (value) {
           this.$refs['my-modal-axes'].show()
           this.reporting.axeIdType = value
-          this.selectedAllAxesOption(true)
+          // this.selectedAllAxesOption(true)
         }
       })
       console.log('value ->', value)
     },
     selectedIndicators (value) {
       this.reporting.indicatorId = value
+      this.indicators = this.formFields.filter((formField) => value.includes(formField.id))
       console.log('value ->', this.reporting.indicatorId)
     },
     selectedOperations (value) {
