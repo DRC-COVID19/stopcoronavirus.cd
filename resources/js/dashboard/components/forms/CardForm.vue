@@ -37,7 +37,7 @@ export default {
       width: 0;
       background: transparent;
     }
-  @media (max-width: $max-width) {
+  @media (max-width:1210px) {
     & {
       z-index: 5;
       height: 100%;
