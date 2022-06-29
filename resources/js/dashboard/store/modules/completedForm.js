@@ -1,4 +1,3 @@
-
 export default {
   state: {
     completedForms: {} || [],
@@ -36,6 +35,8 @@ export default {
     },
     SET_COMPLETED_FORMS_DATA (state, payload) {
       state.completedFormsData = payload
+      console.log('data ->', state.completedFormsData)
+
     },
     SET_FILTER__DATA (state, payload) {
       state.filterData = payload
@@ -109,11 +110,14 @@ export default {
       commit('SET_IS_LOADING', true)
       return new Promise((resolve, reject) => {
         axios
-          .get(`/api/dashboard/completed_forms/check-last_update/${payload.hospital_id}/${payload.last_update}`, {
-            params: {
-              form_id: payload.form_id
+          .get(
+            `/api/dashboard/completed_forms/check-last_update/${payload.hospital_id}/${payload.last_update}`,
+            {
+              params: {
+                form_id: payload.form_id
+              }
             }
-          })
+          )
           .then(({ data }) => {
             commit('SET_COMPLETED_FORMS', data)
             resolve(data)
@@ -219,6 +223,36 @@ export default {
       return new Promise((resolve, reject) => {
         axios
           .get('/api/dashboard/completed_forms/get-all-filtered', {
+            params: payload
+          })
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
+    },
+    getCompletedFormConflict (_, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/completed-forms/completed-form-conflict', {
+            params: {
+              form_id: payload.form_id
+            }
+          })
+          .then(({ data }) => {
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+      })
+    },
+    getCompletedFormByHospital (_, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .get('/api/dashboard/completed-forms/completed-form-hospital', {
             params: payload
           })
           .then(({ data }) => {

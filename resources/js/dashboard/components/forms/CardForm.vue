@@ -1,7 +1,9 @@
 <template>
   <b-link :to="route" class="card-link">
     <b-card class="card__recent-form">
-      {{ form.title }} <br />
+      <div class="text-card-title">
+        {{ form.title }}
+      </div><br />
       <b-badge v-if="form.visible_all_hospitals === true" class="mt-2">
         Visible pour tout le monde
       </b-badge>
@@ -27,6 +29,14 @@ export default {
 @import "@~/sass/_variables";
 .card__Scroll {
   display: flex;
+   overflow-x: scroll !important;
+    white-space: nowrap;
+    flex-direction: row !important;
+    flex-wrap: nowrap;
+    &::-webkit-scrollbar {
+      width: 0;
+      background: transparent;
+    }
   @media (max-width: $max-width) {
     & {
       z-index: 5;
@@ -37,7 +47,8 @@ export default {
   }
 }
 .card__recent-form {
-  width: 100%;
+  width: 190px;
+  word-wrap: wrap;
   height: 8rem;
   cursor: pointer;
   background: #ffffff;
@@ -55,6 +66,10 @@ export default {
   border: 0 !important;
   transform: scale(1);
   margin-top: 10px;
+  .text-card-title{
+    white-space: normal;
+    margin-top: 15px;
+  }
   &:hover {
     transform: scale(1.1);
     background-color: #ffffff;

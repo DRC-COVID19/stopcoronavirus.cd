@@ -17,19 +17,24 @@ class Form extends Model
         'visible_all_hospitals',
         'form_recurrence_value',
         'form_recurrence_id',
-        'form_recurrence_number'
+        'form_recurrence_number',
+        'conflict_resolution_mode_id'
     ];
 
     public function formRecurrence()
     {
         return $this->belongsTo(FormRecurrence::class);
     }
+    public function conflictResolutionMode()
+    {
+        return $this->belongsTo(ConflictResolutionMode::class);
+    }
 
     public function formSteps()
     {
         return $this->hasMany(FormStep::class)->orderBy('step');
     }
-    
+
     public function notifications()
     {
         return $this->hasMany(Notification::class);
@@ -40,7 +45,7 @@ class Form extends Model
         return $this->hasMany(FormField::class);
     }
 
-    public function completedforms()
+    public function completedForms()
     {
         return $this->hasMany(CompletedForm::class);
     }
