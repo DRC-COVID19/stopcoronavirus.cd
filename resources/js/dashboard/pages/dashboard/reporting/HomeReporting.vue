@@ -248,7 +248,7 @@ export default {
         .map((form) => {
           const dataSeries = form.aggregated
             .filter((aggregate) =>
-              this.reportingChart.indicatorId.includes(aggregate.form_field.id)
+              this.reportingChart.valeurId.includes(aggregate.form_field.id)
             )
             .map((aggregate) => {
               return {
@@ -271,7 +271,7 @@ export default {
             .map((completedForm) => {
               return completedForm.completed_form_fields
                 .filter((completedFormField) => {
-                  return this.reportingChart.indicatorId.includes(
+                  return this.reportingChart.valeurId.includes(
                     completedFormField.form_field_id
                   )
                 })

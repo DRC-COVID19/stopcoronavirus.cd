@@ -32,7 +32,18 @@
         placeholder="Sélectionner une source des données"
         class="style-chooser"
         @input="selectedForm"
-    /></b-col>
+        :loading="forms.length === 0"
+      >
+        <template #spinner="{ loading }">
+          <div
+            v-if="loading"
+            style="border-left-color: rgba(88, 151, 251, 0.71)"
+            class="vs__spinner"
+          >
+          </div>
+        </template>
+      </v-select>
+    </b-col>
     <b-col class="mx-0 w-100 mt-4" lg="12">
       <label for class="text-dash-color">Axes :</label>
       <v-select
@@ -55,7 +66,7 @@
     <b-col class="mx-0 w-100 mt-4" lg="12">
       <label for class="text-dash-color">Valeur :</label>
       <v-select
-        v-model="reporting.indicatorId"
+        v-model="reporting.valeurId"
         :options="formFields"
         :reduce="(item) => item.id"
         label="name"
@@ -67,11 +78,11 @@
     /></b-col>
     <b-col class="w-100 mt-4 mx-1 py-1 container-axe" lg="11">
       <div
-        v-for="(indicatorId, index) in indicators"
+        v-for="(valeurId, index) in indicators"
         :key="index"
         class="mt-2 mr-1 w-100"
       >
-        <b-badge>{{ indicatorId.name }}</b-badge>
+        <b-badge>{{ valeurId.name }}</b-badge>
       </div>
     </b-col>
     <b-col lg="12" class="mx-0 w-100 mt-4">
@@ -261,7 +272,7 @@ export default {
         formId: null,
         axeId: [],
         axeIdType: '',
-        indicatorId: [],
+        valeurId: [],
         operationId: null,
         observation_start: null,
         observation_end: null
@@ -375,9 +386,11 @@ export default {
       console.log('value ->', value)
     },
     selectedIndicators (value) {
-      this.reporting.indicatorId = value
-      this.indicators = this.formFields.filter((formField) => value.includes(formField.id))
-      console.log('value ->', this.reporting.indicatorId)
+      this.reporting.valeurId = value
+      this.indicators = this.formFields.filter((formField) =>
+        value.includes(formField.id)
+      )
+      console.log('value ->', this.reporting.valeurId)
     },
     selectedOperations (value) {
       this.reporting.operationId = value
