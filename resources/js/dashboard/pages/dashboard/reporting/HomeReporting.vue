@@ -1,5 +1,10 @@
 <template>
   <div>
+    <b-row>
+      <b-col>
+        <DataSourceReporting/>
+      </b-col>
+    </b-row>
    <vue-pivottable-ui
     :data="ArrayAxeValue"
     :rows="['commune']"
@@ -11,9 +16,11 @@
 <script>
 import { VuePivottableUi } from 'vue-pivottable'
 import 'vue-pivottable/dist/vue-pivottable.css'
+import DataSourceReporting from '../components/DataSourceReporting.vue'
 export default {
   components: {
-    VuePivottableUi
+    VuePivottableUi,
+    DataSourceReporting
   },
   data () {
     return {
