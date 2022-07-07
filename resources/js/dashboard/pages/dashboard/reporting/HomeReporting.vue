@@ -2,18 +2,26 @@
   <div>
     <b-row>
       <b-col>
-        <DataSourceReporting/>
+        <DataSourceReporting
+        :forms="forms"
+        @getPivotTable="getPivotTable"
+        />
       </b-col>
     </b-row>
-   <vue-pivottable-ui
-    :data="ArrayAxeValue"
-    :rows="['commune']"
-    :cols="['Question']"
-  >
-  </vue-pivottable-ui>
+    <b-row>
+      <b-col>
+        <vue-pivottable-ui
+          :data="ArrayAxeValue"
+          :rows="['hospital']"
+          :cols="['question']"
+        >
+        </vue-pivottable-ui>
+      </b-col>
+    </b-row>
   </div>
 </template>
 <script>
+import { mapState, mapActions } from 'vuex'
 import { VuePivottableUi } from 'vue-pivottable'
 import 'vue-pivottable/dist/vue-pivottable.css'
 import DataSourceReporting from '../components/DataSourceReporting.vue'
@@ -24,49 +32,50 @@ export default {
   },
   data () {
     return {
-      ArrayAxeValue: [
-        {
-          commune: 'Bandalungwa',
-          Question: 'Nombre de cas confirmés',
-          value: 0
-        },
-        {
-          commune: 'Barumbu',
-          Question: 'Nombre de cas hospitalisés',
-          value: 1
-        },
-        {
-          commune: 'Bumbu',
-          Question: 'Nombre de patients ayant été guéris',
-          value: 10
-        },
-        {
-          commune: 'Gombe',
-          Question: 'Nombre de Décès',
-          value: 11
-        },
-        {
-          commune: 'Kalamu',
-          Question: 'Nombre de guéris déchargés',
-          value: 12
-        },
-        {
-          commune: 'Kasa-Vubu',
-          Question: 'Nombre de patients ayant été référés',
-          value: 15
-        },
-        {
-          commune: 'Kimbanseke',
-          Question: 'Nom du CTCO de référence',
-          value: 20
-        },
-        {
-          commune: 'Kinshasa',
-          Question: 'Lits avec mousse occupés',
-          value: 22
-        }
-      ]
+      ArrayAxeValue: []
     }
+  },
+  mounted () {
+    this.getForms()
+  },
+  computed: {
+    ...mapState({
+      forms: (state) => state.form.forms,
+      hospitalsDataAggregated: (state) => state.hospital.hospitalsDataAggregated
+    })
+  },
+  methods: {
+    ...mapActions(['getForms', 'getHospitalsData']),
+    async getPivotTable (value) {
+      await this.getHospitalsData({
+        form_id: value.formId
+      })
+      this.ArrayAxeValue = value.cloneOptionsAxes.map((axe) => {
+        return value.cloneOptionQuestions.map((question) => {
+          const hospitals = this.hospitalsDataAggregated.find((hospital) => hospital.id === axe.id)
+          if (hospitals) {
+            const completedFormField = hospitals.aggregated.find((question) => question.form_field.id === question.id)
+            console.log('hospitals', hospitals, 'completedFormField', completedFormField)
+            return {
+              hospital: axe.name,
+              question: question.name,
+              value: completedFormField?.value || 0
+            }
+          } else {
+            return {
+              hospital: axe.name,
+              question: question.name,
+              value: 1
+            }
+          }
+        })
+      })
+
+       this.ArrayAxeValue = this.ArrayAxeValue.flatMap((value) => value)
+
+      // return [...this.ArrayAxeValue]
+    }
+
   }
 }
 </script>

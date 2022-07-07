@@ -1,19 +1,18 @@
 <template>
   <div>
-      <b-row>
-        <b-col lg="6">
-          <label for class="text-dash-color">Source des données :</label>
+      <b-row class="mt-2">
+        <b-col lg="4">
           <v-select
             v-model="reporting.formId"
             :options="forms"
             :reduce="(item) => item.id"
             label="title"
             placeholder="Sélectionner une source des données"
-            class="style-chooser"
+            class="style-chooser ml-2"
             @input="selectedForm"
           />
         </b-col>
-        <b-col lg="6">
+        <b-col lg="4">
           <v-select
             :options="axes"
             :reduce="(item) => item.id"
@@ -22,6 +21,15 @@
             placeholder="Sélectionner un axe"
             class="style-chooser"
           />
+        </b-col>
+        <b-col lg="4">
+          <b-button
+          type="submit"
+          class="btn-dash-blue p-1"
+          @click="buildPivotTable"
+          >
+            <small>générer le tableau Pivot</small>
+          </b-button>
         </b-col>
       </b-row>
   </div>
@@ -51,8 +59,18 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapState({
+      formFields: (state) => state.formField.formFields
+    })
+  },
+  watch: {
+    formFields () {
+      this.cloneOptionQuestions = this.formFields.slice()
+    }
+  },
   methods: {
-    ...mapActions(['getFormFields', 'hospitals__townships', 'townships__getAll', 'hospital__getAll', 'getHospitalsData']),
+    ...mapActions(['getFormFields', 'townships__getAll', 'hospital__getAll', 'getHospitalsData']),
     selectedForm (value) {
       this.getFormFields({ form_id: value })
     },
@@ -78,6 +96,9 @@ export default {
           this.isLoading = false
         })
       }
+    },
+    buildPivotTable () {
+      this.$emit('getPivotTable', { cloneOptionsAxes: this.cloneOptionsAxes, cloneOptionQuestions: this.cloneOptionQuestions, formId: this.reporting.formId })
     }
   }
 }
