@@ -400,12 +400,16 @@ class CompletedFormController extends Controller
 
     static public function getAggregatedHospitalsDatas($hospitalsDatas)
     {
-
-
-        $completedFormFields = collect($hospitalsDatas)
+        $completedForms = collect($hospitalsDatas)
             ->flatMap(function ($hospitalData) {
                 return $hospitalData->completedForms;
-            })
+            });
+        return self::getAggregatedCompletedForms($completedForms);
+    }
+
+    static public function getAggregatedCompletedForms($hospitalsDatas)
+    {
+        $completedFormFields = collect($hospitalsDatas)
             ->flatMap(function ($completedForm) {
                 return $completedForm->completedFormFields;
             })

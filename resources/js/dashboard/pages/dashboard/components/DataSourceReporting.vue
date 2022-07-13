@@ -1,24 +1,25 @@
 <template>
   <div>
       <b-row class="mt-2">
-        <b-col lg="4">
+        <b-col lg="4" class="mt-1">
           <v-select
             v-model="reporting.formId"
             :options="forms"
             :reduce="(item) => item.id"
             label="title"
-            placeholder="Sélectionner une source des données"
+            placeholder="Sélectionner les colonnes"
             class="style-chooser ml-2"
             @input="selectedForm"
           />
         </b-col>
-        <b-col lg="4">
+        <b-col lg="4" class="mt-1">
           <v-select
+            v-model="reporting.axeId"
             :options="axes"
             :reduce="(item) => item.id"
             label="name"
             @input="selectedAxes"
-            placeholder="Sélectionner un axe"
+            placeholder="Sélectionner les lignes"
             class="style-chooser"
           />
         </b-col>
@@ -26,6 +27,7 @@
           <b-button
           type="submit"
           class="btn-dash-blue p-1"
+          :disabled="reporting.axeId?false:true"
           @click="buildPivotTable"
           >
             <small>générer le tableau Pivot</small>
@@ -48,7 +50,8 @@ export default {
   data () {
     return {
       reporting: {
-        formId: null
+        formId: null,
+        axeId: null
       },
       optionsAxes: [],
       cloneOptionsAxes: [],
@@ -98,8 +101,11 @@ export default {
       }
     },
     buildPivotTable () {
-      this.$emit('getPivotTable', { cloneOptionsAxes: this.cloneOptionsAxes, cloneOptionQuestions: this.cloneOptionQuestions, formId: this.reporting.formId })
+      this.$emit('getPivotTable', { cloneOptionsAxes: this.cloneOptionsAxes, cloneOptionQuestions: this.cloneOptionQuestions, formId: this.reporting.formId, axeId: this.reporting.axeId })
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+  
+</style>

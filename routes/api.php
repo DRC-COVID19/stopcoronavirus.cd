@@ -291,6 +291,9 @@ Route::resource('completed-form-histories', 'CompletedFormHistoryController');
     Route::get('/townships', 'HospitalController@getHospitalByForm'); //ok
 
   });
+  Route::group(['prefix' => 'townships'], function () {
+    Route::post('/completed-forms', 'TownshipController@getTownship');
+  });
 
   Route::group(['prefix' => 'indicators'], function () {
     Route::group(['prefix' => 'zones'], function () {

@@ -414,6 +414,7 @@ import {
   PREFERENCE_END,
   HOTSPOT_TYPE,
   INFRASTRUCTURE_FIRST_UPDATE,
+  DEFAULT_FORM_ID
 } from "../config/env";
 
 import { mapState, mapActions, mapMutations } from "vuex";
@@ -737,6 +738,7 @@ export default {
       observation_end: moment().format("YYYY-MM-DD"),
       township: 0,
       isLoading: false,
+      form_id: DEFAULT_FORM_ID
     });
 
     // watch activeMenu store state
@@ -1709,6 +1711,7 @@ export default {
       this.setCanShowNavMobile(false);
       values.isLoading = true;
       values.activeFilter=true;
+      values.form_id=DEFAULT_FORM_ID
       this.getHospitalsData(values);
       this.SET_FILTER__DATA(values);
       this.completedForm__getAggregatedByHospitals(values);

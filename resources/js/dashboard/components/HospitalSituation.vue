@@ -123,6 +123,7 @@
 </template>
 
 <script>
+import { DEFAULT_FORM_ID} from '../config/env';
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { PALETTE } from '../config/env'
 import { groupAggregatedDataByFormStepField } from '../functions/customFormFieldFunction'
@@ -155,7 +156,7 @@ export default {
   },
   async mounted () {
     const id = this.selectedHospital ? this.selectedHospital.id : null
-    this.completedForm__getAggregatedByHospitals({ hospital_id: id })
+    this.completedForm__getAggregatedByHospitals({ hospital_id: id, form_id: DEFAULT_FORM_ID })
 
     if (
       this.filterdHospitalSituation &&
@@ -309,6 +310,7 @@ export default {
 
       const form = {
         hospital: id,
+        form_id: DEFAULT_FORM_ID,
         observation_start: this.filterData.observation_start,
         observation_end: this.filterData.observation_end
       }
