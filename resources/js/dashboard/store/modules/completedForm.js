@@ -1,5 +1,6 @@
 export default {
   state: {
+    completedFormAll: [],
     completedForms: {} || [],
     completedFormsDetail: {} || [],
     completedFormsByLastUpdate: [],
@@ -35,17 +36,41 @@ export default {
     },
     SET_COMPLETED_FORMS_DATA (state, payload) {
       state.completedFormsData = payload
-      console.log('data ->', state.completedFormsData)
-
     },
     SET_FILTER__DATA (state, payload) {
       state.filterData = payload
     },
     SET_SELECTED_FORM (state, payload) {
       state.selectedForm = payload
+    },
+    SET_COMPLETED_FORM_ALL (state, payload) {
+      state.completedFormAll = payload
     }
   },
   actions: {
+    getCompletedFormAll ({ commit }, payload) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .get('/api/dashboard/completed_forms', {
+            params: {
+              form_id: payload.form_id
+            }
+          })
+          .then(({ data }) => {
+            commit('SET_COMPLETED_FORM_ALL', data)
+            commit('SET_IS_LOADING', false)
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
+    },
     completedForm__store (_, payload) {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef

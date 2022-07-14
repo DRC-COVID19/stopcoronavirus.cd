@@ -40,9 +40,15 @@ class CompletedFormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $form_id = $request->query('form_id');
+        $query = CompletedForm::with(['hospital.township','completedFormFields.formField']);
+        if ($form_id) {
+            $query->where('form_id', $form_id);
+        }
+        $completedForms = $query->get();
+        return response()->json($completedForms, 200);
     }
     public function indexByHospital(int $hospital_id, int $paginate = 15)
     {
