@@ -16,7 +16,7 @@
             :rows="['axe']"
             :cols="['question']"
           >
-          <!-- <template  v-slot:output="{ pivotData }">
+          <template  v-slot:output="{ pivotData }">
               <heatmap-renderer
                 v-if="pivotData.props.rendererName === 'Table Heatmap'"
                 :data="pivotData.props.data"
@@ -30,14 +30,7 @@
               :props="pivotData.props"
               >
             </table-renderer>
-              <grouped-column-chart
-              v-if="pivotData.props.rendererName === 'Grouped Column Chart'"
-              :data="pivotData.props.data"
-              :rows="['axe','date']"
-              :cols="['question']"
-              >
-            </grouped-column-chart>
-          </template> -->
+          </template>
           </vue-pivottable-ui>
         </b-col>
       </b-row>
@@ -56,15 +49,14 @@ import 'vue-pivottable/dist/vue-pivottable.css'
 import DataSourceReporting from '../components/DataSourceReporting.vue'
 const HeatmapRenderer = Renderer.TableRenderer["Table Heatmap"];
 const TableRenderer = Renderer.TableRenderer["Table"];
-const GroupedColumnChart = Renderer.TableRenderer['Grouped Column Chart']
-
+const GroupedColumnChart = Renderer.TableRenderer["Table"];
 export default {
   components: {
     VuePivottableUi,
     DataSourceReporting,
     HeatmapRenderer,
     TableRenderer,
-    GroupedColumnChart
+    TableColHeatMap
   },
   data () {
     return {
