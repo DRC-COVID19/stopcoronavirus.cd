@@ -15,8 +15,9 @@
             :data="ArrayAxeValue"
             :rows="['axe']"
             :cols="['question']"
+            :locales="locales"
           >
-          <template  v-slot:output="{ pivotData }">
+          <!-- <template  v-slot:output="{ pivotData }">
               <heatmap-renderer
                 v-if="pivotData.props.rendererName === 'Table Heatmap'"
                 :data="pivotData.props.data"
@@ -30,7 +31,14 @@
               :props="pivotData.props"
               >
             </table-renderer>
-          </template>
+            <grouped-column-chart
+            v-if="pivotData.props.rendererName === 'Grouped Column Chart'"
+            :data="pivotData.props.data"
+            :rows="['value']"
+            :cols="['axe']"
+            >
+            </grouped-column-chart>
+          </template> -->
           </vue-pivottable-ui>
         </b-col>
       </b-row>
@@ -44,25 +52,26 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import { VuePivottableUi, Renderer } from 'vue-pivottable'
+import { VuePivottableUi, PivotUtilities, Renderer } from 'vue-pivottable'
 import 'vue-pivottable/dist/vue-pivottable.css'
 import DataSourceReporting from '../components/DataSourceReporting.vue'
-const HeatmapRenderer = Renderer.TableRenderer["Table Heatmap"];
-const TableRenderer = Renderer.TableRenderer["Table"];
-const GroupedColumnChart = Renderer.TableRenderer["Table"];
+const HeatmapRenderer = Renderer.TableRenderer['Table Heatmap']
+const TableRenderer = Renderer.TableRenderer.Table
+const GroupedColumnChart = Renderer.PlotlyRenderer['Grouped Column Chart']
 export default {
   components: {
     VuePivottableUi,
     DataSourceReporting,
     HeatmapRenderer,
     TableRenderer,
-    TableColHeatMap
+    GroupedColumnChart
   },
   data () {
     return {
       ArrayAxeValue: [],
       ArrayAxeLineValue: [],
-      showArrayPivot: []
+      showArrayPivot: [],
+      aggregatorName: 'Sum'
     }
   },
   mounted () {
@@ -73,7 +82,55 @@ export default {
       forms: (state) => state.form.forms,
       hospitalsDataAggregated: (state) => state.hospital.hospitalsDataAggregated,
       townshipsCompletedForm: (state) => state.township.townshipsCompletedForm
-    })
+    }),
+    locales () {
+      return {
+        en: {
+          aggregators: this.aggregators,
+          localeStrings: {
+            renderError: 'An error occurred rendering the PivotTable results.',
+            computeError: 'An error occurred computing the PivotTable results.',
+            uiRenderError: 'An error occurred rendering the PivotTable UI.',
+            selectAll: 'Select All',
+            selectNone: 'Select None',
+            tooMany: '(too many to list)',
+            filterResults: 'Filter values',
+            totals: 'Totals',
+            only: 'Only',
+            vs: 'vs',
+            by: 'by'
+          }
+        },
+        ko: {
+          aggregators: this.aggregators,
+          localeStrings: {
+            renderError: '피벗 테이블 결과를 렌더링하는 동안 오류가 발생 했습니다.',
+            computeError: '피벗 테이블 결과를 계산하는 동안 오류가 발생 했습니다.',
+            uiRenderError: '피벗 테이블 UI를 렌더링하는 동안 오류가 발생 했습니다.',
+            selectAll: '모두 선택',
+            selectNone: '선택 안함',
+            tooMany: '표시 할 값이 너무 많습니다.',
+            filterResults: '값 필터링',
+            totals: '합계',
+            only: '단독',
+            vs: 'vs',
+            by: 'by'
+          }
+        }
+      }
+    },
+    aggregators () {
+      const usFmt = PivotUtilities.numberFormat()
+      // const usFmtInt = PivotUtilities.numberFormat({ digitsAfterDecimal: 0 })
+      // const usFmtPct = PivotUtilities.numberFormat({
+      //   digitsAfterDecimal: 1,
+      //   scaler: 100,
+      //   suffix: '%'
+      // })
+      return (tpl) => ({
+        Sum: tpl.sum(usFmt)
+      })
+    }
   },
   methods: {
     ...mapActions(['getForms', 'getHospitalsData', 'getTownshipData']),
