@@ -1,6 +1,7 @@
 <template>
-  <b-col class="mx-0 w-100 mt-4" lg="12">
-    <div class="input-search d-flex justify-content-around mb-2">
+  <b-col class="mx-0 w-100" lg="12">
+    <label for class="text-dash-color">{{ title }} :</label>
+      <div class="input-search d-flex justify-content-around mb-2">
       <input
         v-model="formFieldTitle"
         type="text"
@@ -9,7 +10,6 @@
       />
       <img src="/img/codicon_search.svg" class="img-search ml-4 ml-md-0" />
     </div>
-    <label for class="text-dash-color">{{ title }} :</label>
     <b-row>
       <b-col class="w-100 mx-1 py-1 container-axe" lg="11">
          <div class="mb-2">
@@ -230,7 +230,7 @@ export default {
   width: 20px !important;
 }
 .container-axe {
-  height: 100px;
+  height: 200px;
   border: 1px solid #bfcbd9;
   overflow-y: scroll;
   overflow-x: hidden;
