@@ -1,0 +1,227 @@
+<template>
+  <b-col class="mx-0 w-100 mt-4" lg="12">
+    <div class="input-search d-flex justify-content-around mb-2">
+      <input
+        v-model="formFieldTitle"
+        type="text"
+        class="input-lg"
+        :placeholder="placeholder"
+      />
+      <img src="/img/codicon_search.svg" class="img-search ml-4 ml-md-0" />
+    </div>
+    <label for class="text-dash-color">{{ title }} :</label>
+    <b-row>
+      <b-col class="w-100 mx-1 py-1 container-axe" lg="11">
+        <div class="mb-2">
+          <b-form-group label="" v-slot="{ ariaDescribedby }">
+            <b-form-checkbox-group
+              id="checkbox-group-2"
+              v-model="townshipsSelected"
+              :aria-describedby="ariaDescribedby"
+              name="name"
+            >
+              <b-form-checkbox :value="{ name: 'Commune' }" v-show="showTownship">
+                Commune
+              </b-form-checkbox>
+            </b-form-checkbox-group>
+          </b-form-group>
+        </div>
+        <hr v-show="showTownship"/>
+        <div class="mb-2">
+          <b-form-group label="" v-slot="{ ariaDescribedby }">
+            <b-form-checkbox-group
+              id="checkbox-group-2"
+              v-model="hospitalsSelected"
+              :aria-describedby="ariaDescribedby"
+              name="name"
+            >
+              <b-form-checkbox :value="{ name: 'Hôpital' }" v-show="showHospital"
+                >Hôpital
+              </b-form-checkbox>
+            </b-form-checkbox-group>
+          </b-form-group>
+        </div>
+        <hr v-show="showHospital"/>
+        <div class="mb-2">
+          <label for class="text-dash-color text-primary">Questions:</label>
+          <b-form-group label="" v-slot="{ ariaDescribedby }">
+            <b-form-checkbox-group
+              id="checkbox-group-2"
+              v-model="selected"
+              :aria-describedby="ariaDescribedby"
+              name="name"
+            >
+              <b-form-checkbox
+                v-for="(field, index) in formFieldsFiltered"
+                :key="index"
+                :value="{ id: field.id, name: field.name }"
+                >{{ field.name }}</b-form-checkbox
+              >
+            </b-form-checkbox-group>
+          </b-form-group>
+        </div>
+      </b-col>
+    </b-row>
+  </b-col>
+</template>
+<script>
+import { mapState } from 'vuex'
+export default {
+  props: {
+    title: {
+      type: String,
+      default: () => ''
+    },
+    cloneOptionQuestions: {
+      type: Array,
+      default: () => []
+    },
+    except: {
+      type: Array,
+      default: () => []
+    },
+    placeholder: {
+      type: Array,
+      default: () => ''
+    }
+  },
+  data () {
+    return {
+      selected: [],
+      hospitalsSelected: [],
+      townshipsSelected: [],
+      formFieldTitle: ''
+    }
+  },
+  computed: {
+    ...mapState({
+      hospitals: (state) => state.hospital.allHospitals,
+      townships: (state) => state.township.townships
+    }),
+    showTownship () {
+      return this.except.filter(
+        (item) => item.type === 'township'
+      ).length === 0
+    },
+    showHospital () {
+      return this.except.filter(
+        (item) => item.type === 'hospital'
+      ).length === 0
+    },
+    formFieldsFiltered () {
+      const exceptFormFields = this.except.filter(
+        (item) => item.type === 'form_field'
+      )
+      return this.cloneOptionQuestions.filter((formField) => {
+        return (
+          !exceptFormFields.find((item) => item.id === formField.id) &&
+          formField.name.match(this.formFieldTitle)
+        )
+      })
+    }
+  },
+  watch: {
+    selected () {
+      this.emitSelectedItems()
+    },
+    hospitalsSelected () {
+      this.emitSelectedItems()
+    },
+    townshipsSelected () {
+      this.emitSelectedItems()
+    }
+  },
+  methods: {
+    emitSelectedItems () {
+      const selectedItems = []
+      selectedItems.push(
+        ...this.selected.map((formField) => ({
+          id: formField.id,
+          name: formField.name,
+          type: 'form_field'
+        }))
+      )
+      selectedItems.push(
+        ...this.hospitalsSelected.map((hospital) => ({
+          id: new Date().getTime(),
+          name: hospital.name,
+          type: 'hospital'
+        }))
+      )
+      selectedItems.push(
+        ...this.townshipsSelected.map((township) => ({
+          id: new Date().getTime(),
+          name: township.name,
+          type: 'township'
+        }))
+      )
+      this.$emit('input', selectedItems)
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+@import "@~/sass/_variables";
+.input-search {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #bfcbd9;
+  background-color: #fff;
+  border: solid 1px #cfcdcd;
+  input {
+    border: 0;
+    outline: none;
+    background-color: #fff;
+    width: 70%;
+    &::placeholder {
+      color: #535356;
+      padding: 10px;
+      font-size: 16px;
+    }
+  }
+}
+.border-dash {
+  border: solid 1px #cfcdcd;
+}
+.img-search {
+  width: 20px !important;
+}
+.border-dash {
+  border: solid 1px #cfcdcd;
+}
+.img-search {
+  width: 20px !important;
+}
+.container-axe {
+  height: 100px;
+  border: 1px solid #bfcbd9;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-radius: 5px 5px 0px 0px;
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+  .container-axe-child {
+    display: inline-block;
+    width: auto;
+  }
+}
+
+.close-icon-list {
+  font-size: 18px;
+  color: white;
+  position: relative;
+  top: 4px;
+  left: 4px;
+  cursor: pointer;
+}
+.text-question {
+  max-width: calc(100% - 18px);
+  text-overflow: ellipsis;
+  display: inline-block;
+  overflow: hidden;
+}
+</style>
