@@ -5,7 +5,7 @@
         <b-col class="mx-0 w-100 mt-4" lg="12">
           <h3>Générateur de graphique</h3>
         </b-col>
-        <b-col class="mx-0 w-100 mt-4 mb-4" lg="12">
+        <b-col class="mx-0 w-100 mt-4" lg="12">
           <label for class="text-dash-color">Source des données :</label>
           <v-select
             v-model="reporting.formId"
@@ -17,30 +17,32 @@
             @input="selectedForm"
           />
         </b-col>
-        <hr />
         <b-col class="border-dash rounded pb-4" lg="12">
           <b-row>
-            <b-col class="mx-0 w-100 mt-4" lg="12"> </b-col>
-            <Questions
+            <div class="mx-0 w-100" lg="12">  <hr /> </div>
+           <div>
+             <Questions
               v-model="linesSelected"
               title="Lignes"
               :cloneOptionQuestions="cloneOptionQuestions"
               :except="columnsSelected"
               :isDataSourceSelected='isDataSourceSelected'
-              placeholder="Rechercher par Ligne"
+              placeholder="Recherche"
               @selectedForm="selectedForm"
             />
-            <br />
-            <hr />
-            <Questions
+             <hr />
+           </div> 
+           <div>
+             <Questions
               v-model="columnsSelected"
               title="Colonnes"
               :cloneOptionQuestions="cloneOptionQuestions"
               :except="linesSelected"
               :isDataSourceSelected='isDataSourceSelected'
-               placeholder="Rechercher par Colonne"
+               placeholder="Recherche"
               @selectedForm="selectedForm"
             />
+           </div>
           </b-row>
         </b-col>
       </b-row>
@@ -54,7 +56,7 @@
               }"
             ></square-skeleton>
           </skeleton-loading>
-         
+
       <vue-pivottable-ui
             :data="arrayAxeValue"
             :rows="linesSelected.map(line=>line.name)"
@@ -340,7 +342,9 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-
+hr{
+  width: 105%;
+}
 .container-axe {
   height: 100px;
   border: 1px solid #bfcbd9;
