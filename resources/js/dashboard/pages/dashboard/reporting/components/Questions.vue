@@ -12,6 +12,20 @@
     <label for class="text-dash-color">{{ title }} :</label>
     <b-row>
       <b-col class="w-100 mx-1 py-1 container-axe" lg="11">
+         <div class="mb-2">
+          <b-form-group label="" v-slot="{ ariaDescribedby }">
+            <b-form-checkbox-group
+              id="checkbox-group-2"
+              v-model="datesSelected"
+              :aria-describedby="ariaDescribedby"
+              name="name"
+            >
+              <b-form-checkbox :value="{ name: 'date' }" v-show="showDate && isDataSourceSelected">
+                Date
+              </b-form-checkbox>
+            </b-form-checkbox-group>
+          </b-form-group>
+        </div>
         <div class="mb-2">
           <b-form-group label="" v-slot="{ ariaDescribedby }">
             <b-form-checkbox-group
@@ -20,13 +34,12 @@
               :aria-describedby="ariaDescribedby"
               name="name"
             >
-              <b-form-checkbox :value="{ name: 'Commune' }" v-show="showTownship">
+              <b-form-checkbox :value="{ name: 'commune' }" v-show="showTownship && isDataSourceSelected">
                 Commune
               </b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
         </div>
-        <hr v-show="showTownship"/>
         <div class="mb-2">
           <b-form-group label="" v-slot="{ ariaDescribedby }">
             <b-form-checkbox-group
@@ -35,19 +48,19 @@
               :aria-describedby="ariaDescribedby"
               name="name"
             >
-              <b-form-checkbox :value="{ name: 'Hôpital' }" v-show="showHospital"
+              <b-form-checkbox :value="{ name: 'hopital' }" v-show="showHospital && isDataSourceSelected"
                 >Hôpital
               </b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
         </div>
-        <hr v-show="showHospital"/>
+        <hr v-show="showHospital && isDataSourceSelected"/>
         <div class="mb-2">
-          <label for class="text-dash-color text-primary">Questions:</label>
+          <label for class="text-dash-color text-primary">{{ !isDataSourceSelected ?'Veuillez selectionner une source de données':'Questions:'}}</label>
           <b-form-group label="" v-slot="{ ariaDescribedby }">
             <b-form-checkbox-group
               id="checkbox-group-2"
-              v-model="selected"
+              v-model="formFieldsSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
             >
@@ -81,13 +94,19 @@ export default {
       default: () => []
     },
     placeholder: {
-      type: Array,
+      type: String,
       default: () => ''
+    },
+    isDataSourceSelected: {
+      type: Boolean,
+      default: () => false,
+      required: true
     }
   },
   data () {
     return {
-      selected: [],
+      datesSelected: [],
+      formFieldsSelected: [],
       hospitalsSelected: [],
       townshipsSelected: [],
       formFieldTitle: ''
@@ -108,6 +127,11 @@ export default {
         (item) => item.type === 'hospital'
       ).length === 0
     },
+    showDate () {
+      return this.except.filter(
+        (item) => item.type === 'date'
+      ).length === 0
+    },
     formFieldsFiltered () {
       const exceptFormFields = this.except.filter(
         (item) => item.type === 'form_field'
@@ -121,7 +145,10 @@ export default {
     }
   },
   watch: {
-    selected () {
+    datesSelected () {
+      this.emitSelectedItems()
+    },
+    formFieldsSelected () {
       this.emitSelectedItems()
     },
     hospitalsSelected () {
@@ -135,7 +162,7 @@ export default {
     emitSelectedItems () {
       const selectedItems = []
       selectedItems.push(
-        ...this.selected.map((formField) => ({
+        ...this.formFieldsSelected.map((formField) => ({
           id: formField.id,
           name: formField.name,
           type: 'form_field'
@@ -148,11 +175,19 @@ export default {
           type: 'hospital'
         }))
       )
+
       selectedItems.push(
         ...this.townshipsSelected.map((township) => ({
           id: new Date().getTime(),
           name: township.name,
           type: 'township'
+        }))
+      )
+      selectedItems.push(
+        ...this.datesSelected.map((dateSelected) => ({
+          id: new Date().getTime(),
+          name: dateSelected.name,
+          type: 'date'
         }))
       )
       this.$emit('input', selectedItems)
