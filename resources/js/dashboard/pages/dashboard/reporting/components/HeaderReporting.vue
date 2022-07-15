@@ -1,249 +1,83 @@
 <template>
   <b-row>
-  <b-col lg="3" class="bg-white">
-    <b-row class="mx-0 h-100 w-100" lg="12">
-      <b-col class="mx-0 w-100 mt-4" lg="12">
-        <h3>Générateur de graphique</h3>
-      </b-col>
-      <b-col class="mx-0 w-100 mt-4" lg="12">
-        <label for class="text-dash-color">Type de graphique :</label>
+    <b-col lg="3" class="bg-white pb-5">
+      <b-row class="mx-0 h-100 w-100" lg="12">
+        <b-col class="mx-0 w-100 mt-4" lg="12">
+          <h3>Générateur de graphique</h3>
+        </b-col>
+        <b-col class="mx-0 w-100 mt-4 mb-4" lg="12">
+          <label for class="text-dash-color">Source des données :</label>
+          <v-select
+            v-model="reporting.formId"
+            :options="forms"
+            :reduce="(item) => item.id"
+            label="title"
+            placeholder="Sélectionner une source des données"
+            class="style-chooser"
+            @input="selectedForm"
+          />
+        </b-col>
+        <hr />
+        <b-col class="border-dash rounded pb-4" lg="12">
+          <b-row>
+            <b-col class="mx-0 w-100 mt-4" lg="12"> </b-col>
+            <Questions
+              v-model="linesSelected"
+              title="Lignes"
+              :cloneOptionQuestions="cloneOptionQuestions"
+              :except="columnsSelected"
+              :isDataSourceSelected='isDataSourceSelected'
+              placeholder="Rechercher par Ligne"
+              @selectedForm="selectedForm"
+            />
+            <br />
+            <hr />
+            <Questions
+              v-model="columnsSelected"
+              title="Colonnes"
+              :cloneOptionQuestions="cloneOptionQuestions"
+              :except="linesSelected"
+              :isDataSourceSelected='isDataSourceSelected'
+               placeholder="Rechercher par Colonne"
+              @selectedForm="selectedForm"
+            />
+          </b-row>
+        </b-col>
+      </b-row>
+    </b-col>
+    <b-col lg="9" v-if="showDisplayArray">
+       <skeleton-loading v-if="isLoading" class="w-100">
+            <square-skeleton
+              :boxProperties="{
+                width: '100%',
+                height: '750px',
+              }"
+            ></square-skeleton>
+          </skeleton-loading>
+         
+      <vue-pivottable-ui
+            :data="arrayAxeValue"
+            :rows="linesSelected.map(line=>line.name)"
+            :cols="columnsSelected.map(column=>column.name)"
+            v-else
+          >
+        </vue-pivottable-ui>
 
-        <v-select
-          :options="chartType"
-          label="type"
-          class="style-chooser"
-          @input="selectedChartType"
-        >
-          <template #option="{ type, icon }">
-            <div class="d-flex justify-content-between text-align-center w-100">
-              <p>{{ type }}</p>
-              <p>
-                <i :class="icon" style="font-size: 18px" aria-hidden="true"></i>
-              </p>
-            </div>
-          </template> </v-select
-      ></b-col>
-      <b-col class="mx-0 w-100 mt-4" lg="12">
-        <label for class="text-dash-color">Source des données :</label>
-        <v-select
-          v-model="reporting.formId"
-          :options="forms"
-          :reduce="(item) => item.id"
-          label="title"
-          placeholder="Sélectionner une source des données"
-          class="style-chooser"
-          @input="selectedForm"
-      /></b-col>
-      <b-col class="mx-0 w-100 mt-4" lg="12">
-        <label for class="text-dash-color">Lignes :</label>
-        <v-select
-          :options="axes"
-          :reduce="(item) => item.id"
-          label="name"
-          @input="selectedAxes"
-          placeholder="Sélectionner un axe"
-          class="style-chooser"
-      /></b-col>
-      <b-col v-if="!isLoading" class="w-100 mt-4 mx-1 py-1 container-axe" lg="11" >
-          <div
-            v-for="(axe, index) in cloneOptionsAxes"
-            :key="index"
-            class="mt-2 mr-1 container-axe-child"
-          >
-            <b-badge class="p-2">{{ axe.name }}<i class="fas fa-times-circle close-icon-list fa-xs"  aria-hidden="true" @click="deleteItemAxe(axe.id)"></i></b-badge>
-          </div>
-      </b-col>
-      <b-col v-if="!isLoading" class="mt-2" lg="12">
-        <b-button
-        type="submit"
-        class="btn-sm"
-        variant="outline-secondary"
-        @click="openModalList()"
-        >
-        <small>Ajouter</small>
-        </b-button>
-      </b-col>
-      <skeleton-loading v-else class="w-100 mt-3">
-              <square-skeleton
-                :boxProperties="{
-                  width: '100%',
-                  height: '150px',
-                }"
-              ></square-skeleton>
-      </skeleton-loading>
-      <b-col class="mx-0 w-100 mt-4" lg="12">
-        <label for class="text-dash-color">colonnes :</label>
-      </b-col>
-      <b-col  class="w-100  mx-1 py-1 container-axe" lg="11">
-        <div
-          v-for="(formField, index) in cloneOptionQuestions"
-          :key="index"
-          class="mt-2 mr-1 w-100"
-        >
-          <b-badge class="p-2 w-100 d-flex justify-content-between"><span class="text-question"> {{ formField.name}}</span><i class="fas fa-times-circle close-icon-list fa-xs"  aria-hidden="true" @click="deleteItemAxe(formField.id)"></i></b-badge>
-        </div>
-      </b-col>
-      <b-col v-if="!isLoading" class="mt-2" lg="12">
-        <b-button
-        type="submit"
-        class="btn-sm"
-        variant="outline-secondary"
-        @click="openModalListField()"
-        >
-        <small>Ajouter</small>
-        </b-button>
-      </b-col>
-      <skeleton-loading v-else class="w-100 mt-3">
-              <square-skeleton
-                :boxProperties="{
-                  width: '100%',
-                  height: '150px',
-                }"
-              ></square-skeleton>
-      </skeleton-loading>
-      <b-col lg="12" class="mx-0 w-100 mt-4">
-        <label for class="text-dash-color">Date :</label>
-        <div class="w-100 d-flex justify-content-between">
-          <v-date-picker
-            v-model="dateRange"
-            opens="center"
-            :max-date="new Date()"
-            class="d-flex style-picker"
-            :mode="mode"
-            :is-range="isRanged"
-            @input="onRangeDateObservation"
-            show-weeknumbers
-            :is-expanded="true"
-            :attributes="attributes"
-            popover.keepVisibleOnInput
-          >
-            <template v-slot="{ inputEvents }">
-              <div
-                class="
-                  w-100
-                  d-flex
-                  flex-col
-                  sm:flex-row
-                  justify-content-center
-                  text-center
-                  item-center
-                  btn-container-calendar
-                "
-              >
-                <i for="range" class="fas fa-light fa-calendar p-2"></i>
-                <input
-                  id="range"
-                  class="p-1 w-full"
-                  :value="
-                    isRanged
-                      ? `${moment(dateRange.start).format(
-                          'YYYY/MM/DD'
-                        )}- ${moment(dateRange.end).format('YYYY/MM/DD')}`
-                      : moment(dateRange).format('YYYY/MM/DD')
-                  "
-                  v-on="isRanged ? inputEvents.end : inputEvents"
-                  readonly
-                />
-              </div>
-            </template>
-            <div
-              slot="footer"
-              slot-scope=""
-              class="d-flex justify-content-between ml-2 mr-2 mb-2 mt-n2"
-              style="width: 330px"
-            >
-              <span
-                class="btn-range-date"
-                @click="activeStartDate"
-                style="cursor: pointer"
-                >{{
-                  isRanged
-                    ? moment(dateRange.start).format("YYYY/MM/DD")
-                    : "Date début"
-                }}<i :class="iconStateDatePicker" class="ml-1"></i>
-              </span>
-              <span class="btn-range-date">{{
-                isRanged
-                  ? moment(dateRange.end).format("YYYY/MM/DD")
-                  : moment(dateRange).format("YYYY/MM/DD")
-              }}</span>
-            </div>
-          </v-date-picker>
-          <b-button
-            @click="clearObservationDate"
-            class="btn-clear-observation btn-dash-blue"
-          >
-            <span class="fa fa-times"></span>
-          </b-button>
-        </div>
-      </b-col>
-      <b-col class="d-flex mx-0 w-100 align-item-center text-center mt-4" lg="12">
-        <b-button type="submit" class="btn-dash-blue w-100 mr-3" @click="generated"
-          ><small>Générer le tableau pivot </small>
-        </b-button>
-        <b-button type="submit" class="btn-dash-blue w-100"
-          ><small>Sauvegarder </small>
-        </b-button>
-      </b-col>
-      <AxeModal
-      :optionsAxes="optionsAxes"
-      :cloneOptionsAxes="cloneOptionsAxes"
-      :modalShow="modalShow"
-      @closedModal="closeModalAxe"
-      @arraySelectedOptionAxe="arraySelectedOptionAxe"
-      />
-      <AxeModal
-      :optionsAxes="formFields"
-      :cloneOptionsAxes="cloneOptionQuestions"
-      :modalShow="modalQuestion"
-      @closedModal="closeModalField"
-      @arraySelectedOptionAxe="arraySelectedOptionQuestion"
-      />
-    </b-row>
-  </b-col>
-  <b-col lg="9" v-if="showDisplayArray">
-    <ArrayPivot
-    :cloneOptionsAxes="cloneOptionsAxes"
-    :cloneOptionQuestions="cloneOptionQuestions"
-    :completedFormFields="hospitalsDataAggregated"
-    />
-     <b-button
-      type="submit"
-      class="btn-dash-blue btn-generated-rapport"
-      @click="displayChart"
-      >
-        <small>générer le graphique </small>
-       </b-button>
-  </b-col>
-  <b-col lg="9" v-if="showChartJs">
-      <ChartReporting
-        :typeChart="typeChartReporting"
-        :cloneOptionsAxes="cloneOptionsAxes"
-        :cloneOptionQuestions="cloneOptionQuestions"
-        :completedFormFields="hospitalsDataAggregated"
-      />
-      <b-button
-      type="submit"
-      class="btn-dash-blue btn-generated-rapport"
-      @click="displayArrayPivot"
-      >
-    <small>retour sur le tableau pivot</small>
-    </b-button>
-  </b-col>
+    </b-col>
   </b-row>
 </template>
 <script>
-import AxeModal from './AxeModal.vue'
-import ArrayPivot from './ArrayPivot.vue'
-import ChartReporting from './ChartReporting.vue'
+
 import { mapState, mapActions } from 'vuex'
+import Questions from './Questions'
+import { VuePivottableUi } from 'vue-pivottable'
+import 'vue-pivottable/dist/vue-pivottable.css'
 
 export default {
   name: 'HeaderReporting',
   components: {
-    AxeModal,
-    ArrayPivot,
-    ChartReporting
+    Questions,
+    VuePivottableUi
   },
   props: {
     forms: {
@@ -261,6 +95,7 @@ export default {
   },
   data () {
     return {
+      arrayAxeValue: [],
       chartType: [
         {
           id: 'line',
@@ -280,8 +115,12 @@ export default {
       modalShow: false,
       modalQuestion: false,
       showDisplayArray: true,
+      isDataSourceSelected: false,
       showChartJs: false,
       typeChartReporting: '',
+      status: false,
+      title: '',
+      filterQuestionTitle: '',
       dateRange: this.isRanged
         ? {
             start: new Date(),
@@ -298,6 +137,8 @@ export default {
         observation_end: null
       },
       optionsAxes: [],
+      lineQuestions: [],
+      columnQuestions: [],
       cloneOptionsAxes: [],
       cloneOptionQuestions: [],
       completedFormFields: [],
@@ -306,13 +147,17 @@ export default {
       operations: [
         { id: 1, type: 'Somme' },
         { id: 2, type: 'Moyenne' }
-      ]
+      ],
+      linesSelected: [],
+      columnsSelected: []
     }
   },
   computed: {
     ...mapState({
       formFields: (state) => state.formField.formFields,
-      hospitalsDataAggregated: (state) => state.hospital.hospitalsDataAggregated
+      hospitalsDataAggregated: (state) =>
+        state.hospital.hospitalsDataAggregated,
+      completedFormAll: (state) => state.completedForm.completedFormAll
     })
   },
   mounted () {},
@@ -323,7 +168,14 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getFormFields', 'hospitals__townships', 'townships__getAll', 'hospital__getAll', 'getHospitalsData']),
+    ...mapActions([
+      'getFormFields',
+      'hospitals__townships',
+      'townships__getAll',
+      'hospital__getAll',
+      'getHospitalsData',
+      'completedForm__getAll'
+    ]),
     activeStartDate () {
       this.isRanged = !this.isRanged
       this.mode = this.mode === 'date' ? 'range' : 'date'
@@ -356,6 +208,19 @@ export default {
         highlight: true
       }
     },
+    getComlpletedFormAll () {
+      this.arrayAxeValue = this.completedFormAll.map((completedForm) => {
+        const data = {
+          hopital: completedForm.hospital.name,
+          commune: completedForm.hospital.township.name,
+          date: completedForm.last_update
+        }
+        completedForm.completed_form_fields.forEach(completedFormField => {
+          data[completedFormField.form_field.name] = completedFormField.value
+        })
+        return data
+      })
+    },
     onRangeDateObservation (inputValueDate) {
       if (this.isRanged) {
         this.reporting.observation_start = moment(inputValueDate.start).format(
@@ -383,8 +248,14 @@ export default {
       this.dateRange = new Date()
       this.isRanged = false
     },
-    selectedForm (value) {
-      this.getFormFields({ form_id: value })
+    async selectedForm (value) {
+      this.isLoading = true
+      const formId = { form_id: value }
+      this.getFormFields(formId)
+      this.isDataSourceSelected = true
+      await this.completedForm__getAll(formId)
+      this.getComlpletedFormAll()
+      this.isLoading = false
     },
     selectedAxes (value) {
       this.optionsAxes = []
@@ -430,8 +301,12 @@ export default {
       this.$emit('generatedReport', this.reporting)
     },
     deleteItemAxe (index) {
-      this.cloneOptionsAxes = this.cloneOptionsAxes.filter((axe) => axe.id !== index)
-      this.cloneOptionQuestions = this.cloneOptionQuestions.filter((field) => field.id !== index)
+      this.cloneOptionsAxes = this.cloneOptionsAxes.filter(
+        (axe) => axe.id !== index
+      )
+      this.cloneOptionQuestions = this.cloneOptionQuestions.filter(
+        (field) => field.id !== index
+      )
     },
     openModalList () {
       this.modalShow = !this.modalShow
@@ -465,6 +340,7 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+
 .container-axe {
   height: 100px;
   border: 1px solid #bfcbd9;
@@ -475,8 +351,8 @@ export default {
     width: 0;
     background: transparent;
   }
-  .container-axe-child{
-    display:inline-block;
+  .container-axe-child {
+    display: inline-block;
     width: auto;
   }
 }
@@ -545,22 +421,22 @@ export default {
   background-color: #eef1f6;
   border-color: #d1dbe5;
 }
-.close-icon-list{
+.close-icon-list {
   font-size: 18px;
-  color:white;
+  color: white;
   position: relative;
   top: 4px;
-  left:4px;
+  left: 4px;
   cursor: pointer;
 }
-.text-question{
+.text-question {
   max-width: calc(100% - 18px);
   text-overflow: ellipsis;
   display: inline-block;
   overflow: hidden;
 }
-.btn-generated-rapport{
-  position:relative;
+.btn-generated-rapport {
+  position: relative;
   left: 660px;
 }
 </style>
