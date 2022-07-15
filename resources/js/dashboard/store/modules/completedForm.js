@@ -5,6 +5,7 @@ export default {
     completedFormsByLastUpdate: [],
     completedFormsAggregated: {},
     completedFormsData: {},
+    completedFormAll: [],
     filterData: {},
     isLoading: false,
     iscompletedFormsAggregatedLoading: false,
@@ -43,6 +44,9 @@ export default {
     },
     SET_SELECTED_FORM (state, payload) {
       state.selectedForm = payload
+    },
+    SET_COMPLETED_FORM_ALL (state, payload) {
+      state.completedFormAll = payload
     }
   },
   actions: {
@@ -262,6 +266,29 @@ export default {
             reject(response)
           })
       })
-    }
+    },
+    completedForm__getAll ({ commit }, payload) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .get('/api/dashboard/completed_forms', {
+            params: {
+              form_id: payload.form_id
+            }
+          })
+          .then(({ data }) => {
+            commit('SET_COMPLETED_FORM_ALL', data)
+            commit('SET_IS_LOADING', false)
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
+    },
   }
 }
