@@ -18,8 +18,8 @@
         </b-sidebar>
       </div>
       <b-col
-        lg="3"
-        class="mx-0 px-0 bg-white header-responsive py-3 w-100 h-100"
+        lg="12"
+        class="mx-0 px-0  header-responsive py-3 w-100 h-100"
       >
         <HeaderReporting
           :forms="forms"
@@ -30,12 +30,12 @@
         />
       </b-col>
 
-      <b-col
+      <!-- <b-col
         class="d-md-flex w-100 h-100 container-action mx-0"
         lg="8"
         md="12"
       >
-        <b-col lg="8" md="12" class="w-100  h-100 mx-0">
+        <!-- <b-col lg="8" md="12" class="w-100  h-100 mx-0">
           <div v-if="!isHospitalsDataAggregated" class="w-100   h-100 bg-white">
             <ApexChart :type="typeChart" :options="options" :series="series" class="w-100  h-100"/>
           </div>
@@ -47,7 +47,7 @@
               }"
             ></square-skeleton>
           </skeleton-loading>
-        </b-col>
+        </b-col> -->
         <!-- <b-col
           lg="4"
           md="12"
