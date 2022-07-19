@@ -101,6 +101,46 @@ export default {
   data () {
     return {
       arrayAxeValue: [],
+      translateTableRenders: {
+        Table: 'Tableau',
+        'Table Heatmap': 'Tableau coloré',
+        'Table Col Heatmap': 'Tableau Colonnes colorées',
+        'Table Row Heatmap': 'Tableau Ligne coloré',
+        'Export Table TSV': 'Exporter en TSV',
+        'Grouped Column Chart': 'Graphique à colonnes groupées',
+        'Stacked Column Chart': 'Graphique à colonnes empilées',
+        'Grouped Bar Chart': 'Graphique à barres groupées',
+        'Stacked Bar Chart': 'Graphique à barres empilées',
+        'Line Chart': 'Graphique linéaire',
+        'Dot Chart': 'Graphique en points',
+        'Area Chart': 'Diagramme de zone',
+        'Scatter Chart': 'Graphique en nuage de points',
+        'Multiple Pie Chart': 'Graphique circulaire multiple'
+
+      },
+      translateAggregatorsRenders: {
+        Count: 'Compter',
+        'Count Unique Values': 'Compter les valeurs uniques',
+        'List Unique Values': 'Liste des valeurs uniques',
+        Sum: 'Somme',
+        'Integer Sum': 'Somme de nombres entiers',
+        Average: 'Moyenne',
+        Median: 'Médiane',
+        'Sample Variance': "Variance de l'échantillon",
+        'Sample Standard Deviation': "Écart-type de l'échantillon",
+        Minimum: 'Minimum',
+        Maximum: 'Maximum',
+        First: 'Premier',
+        Last: 'Dernier',
+        'Sum over Sum': 'Somme Total',
+        'Sum as Fraction of Total': 'Somme en fraction du total',
+        'Sum as Fraction of Rows': 'Somme en tant que fraction de lignes',
+        'Sum as Fraction of Columns': 'Somme en tant que fraction de colonnes',
+        'Count as Fraction of Total': 'Comptage en tant que fraction du total',
+        'Count as Fraction of Rows': 'Comptage en tant que fraction de lignes',
+        'Count as Fraction of Columns': 'Comptage en tant que fraction de colonnes'
+
+      },
       locale: 'fr',
       locales: {
         en: PivotUtilities.locales.en,
@@ -120,14 +160,14 @@ export default {
             apply: 'Appliquer',
             cancel: 'Annuler'
           }
-        },
+        }
       },
       isLoading: false,
       showDisplayArray: true,
       isDataSourceSelected: false,
       title: '',
       reporting: {
-        formId: null,
+        formId: null
       },
       cloneOptionQuestions: [],
       completedFormFields: [],
@@ -174,7 +214,18 @@ export default {
       await this.completedForm__getAll(formId)
       this.getCompletedFormAll()
       this.isLoading = false
-    },
+      this.$nextTick(() => {
+        const tableRendersSelected = document.querySelector('.pvtRenderers>.pvtDropdown')
+
+        tableRendersSelected.forEach((option) => {
+          option.textContent = this.translateTableRenders[option.textContent]
+        })
+        const aggregatorsRendersSelected = document.querySelector('.pvtVals .pvtDropdown')
+        aggregatorsRendersSelected.forEach((option) => {
+          option.textContent = this.translateAggregatorsRenders[option.textContent]
+        })
+      })
+    }
   }
 }
 </script>
