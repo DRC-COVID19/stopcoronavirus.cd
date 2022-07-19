@@ -111,7 +111,7 @@ export default {
             computeError: 'Une erreur est survenue en calculant le tableau croisé.',
             uiRenderError: "Une erreur est survenue en dessinant l'interface du tableau croisé dynamique.",
             selectAll: 'Sélectionner tout',
-            selectNone: 'Sélectionner rien',
+            selectNone: 'Ne rien sélectionner',
             tooMany: '(trop de valeurs à afficher)',
             filterResults: 'Filtrer les valeurs',
             totals: 'Totaux',
@@ -153,7 +153,7 @@ export default {
       'hospitals__townships',
       'completedForm__getAll'
     ]),
-    getComlpletedFormAll () {
+    getCompletedFormAll () {
       this.arrayAxeValue = this.completedFormAll.map((completedForm) => {
         const data = {
           hopital: completedForm.hospital.name,
@@ -172,7 +172,7 @@ export default {
       this.getFormFields(formId)
       this.isDataSourceSelected = true
       await this.completedForm__getAll(formId)
-      this.getComlpletedFormAll()
+      this.getCompletedFormAll()
       this.isLoading = false
     },
   }
