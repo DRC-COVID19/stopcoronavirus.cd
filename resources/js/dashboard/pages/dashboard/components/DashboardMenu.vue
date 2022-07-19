@@ -5,28 +5,39 @@
       :active="activeMenu === 1"
       @click="selectMenu(1)"
     >
-      <i class="fas fa-walking" aria-hidden="true"></i> &nbsp; Mobilité
+      <i class="fas fa-walking" aria-hidden="true"></i> &nbsp;
+      <span v-if="showLabel">Mobilité</span>
     </b-nav-item>
     <b-nav-item
       :active="activeMenu === 5"
       :to="{ name: 'main.dashboard.infrastructure' }"
       @click="selectMenu(5)"
     >
-      <i class="fas fa-hospital" aria-hidden="true"></i> &nbsp; Infrastructure
+      <i class="fas fa-hospital" aria-hidden="true"></i> &nbsp;
+      <span v-if="showLabel">Infrastructure</span>
     </b-nav-item>
     <b-nav-item
       @click="selectMenu(9)"
       :to="{ name: 'main.dashboard.rapport' }"
       :active="activeMenu === 9"
     >
-      <i class="fas fa-chart-line" aria-hidden="true"></i> &nbsp; Rapport
+      <i class="fas fa-chart-line" aria-hidden="true"></i> &nbsp;<span
+        v-if="showLabel"
+        >Rapport</span
+      >
+
     </b-nav-item>
     <b-nav-item
       :active="activeMenu === 7"
       :to="{ name: 'main.dashboard.aPropos' }"
       @click="selectMenu(7)"
     >
-      <i class="fas fa-info-circle" aria-hidden="true"></i> &nbsp; A propos
+      <i class="fas fa-info-circle" aria-hidden="true"></i> &nbsp;
+      <span
+        v-if="showLabel"
+        >A propos</span
+      >
+
     </b-nav-item>
   </b-nav>
 </template>
@@ -35,6 +46,11 @@
 import { mapState, mapMutations } from 'vuex'
 
 export default {
+  data () {
+    return {
+      showLabel: false
+    }
+  },
   computed: {
     ...mapState({
       activeMenu: (state) => state.nav.activeMenu
@@ -46,10 +62,14 @@ export default {
   methods: {
     ...mapMutations(['setActiveMenu']),
     selectMenu (value) {
+      this.showLabel = true
       if (this.activeMenu !== null) {
         this.removeAllParamsFromUrl()
       }
       this.setActiveMenu(value)
+      if (this.$route.name.match('main.dashboard.rapport')) {
+        this.showLabel = false
+      }
     },
     fillParametersFromUrlParams () {
       if (this.$route.name === 'main.dashboard.infrastructure') {
