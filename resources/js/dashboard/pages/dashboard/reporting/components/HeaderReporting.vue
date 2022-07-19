@@ -31,7 +31,7 @@
               @selectedForm="selectedForm"
             />
              <hr />
-           </div> 
+           </div>
            <div>
              <Questions
               v-model="columnsSelected"
@@ -61,6 +61,8 @@
             :data="arrayAxeValue"
             :rows="linesSelected.map(line=>line.name)"
             :cols="columnsSelected.map(column=>column.name)"
+            :locales="locales"
+            :locale="locale"
             v-else
           >
         </vue-pivottable-ui>
@@ -72,7 +74,8 @@
 
 import { mapState, mapActions } from 'vuex'
 import Questions from './Questions'
-import { VuePivottableUi } from 'vue-pivottable'
+import { VuePivottableUi, PivotUtilities } from 'vue-pivottable'
+
 import 'vue-pivottable/dist/vue-pivottable.css'
 
 export default {
@@ -98,58 +101,76 @@ export default {
   data () {
     return {
       arrayAxeValue: [],
-      chartType: [
-        {
-          id: 'line',
-          type: 'Courbe',
-          icon: 'fas fa-chart-line'
-        },
-        { id: 'bar', type: 'Barres', icon: 'fas fa-chart-bar' },
-        { id: 'donut', type: 'Secteur', icon: 'fas fa-chart-pie' }
-      ],
-      axes: [
-        { id: 'township', name: 'Commune' },
-        { id: 'hospital', name: 'Hôpital' }
-      ],
-      mode: 'date',
-      isRanged: false,
+      translateTableRenders: {
+        Table: 'Tableau',
+        'Table Heatmap': 'Tableau coloré',
+        'Table Col Heatmap': 'Tableau Colonnes colorées',
+        'Table Row Heatmap': 'Tableau Ligne coloré',
+        'Export Table TSV': 'Exporter en TSV',
+        'Grouped Column Chart': 'Graphique à colonnes groupées',
+        'Stacked Column Chart': 'Graphique à colonnes empilées',
+        'Grouped Bar Chart': 'Graphique à barres groupées',
+        'Stacked Bar Chart': 'Graphique à barres empilées',
+        'Line Chart': 'Graphique linéaire',
+        'Dot Chart': 'Graphique en points',
+        'Area Chart': 'Diagramme de zone',
+        'Scatter Chart': 'Graphique en nuage de points',
+        'Multiple Pie Chart': 'Graphique circulaire multiple'
+
+      },
+      translateAggregatorsRenders: {
+        Count: 'Compter',
+        'Count Unique Values': 'Compter les valeurs uniques',
+        'List Unique Values': 'Liste des valeurs uniques',
+        Sum: 'Somme',
+        'Integer Sum': 'Somme de nombres entiers',
+        Average: 'Moyenne',
+        Median: 'Médiane',
+        'Sample Variance': "Variance de l'échantillon",
+        'Sample Standard Deviation': "Écart-type de l'échantillon",
+        Minimum: 'Minimum',
+        Maximum: 'Maximum',
+        First: 'Premier',
+        Last: 'Dernier',
+        'Sum over Sum': 'Somme Total',
+        'Sum as Fraction of Total': 'Somme en fraction du total',
+        'Sum as Fraction of Rows': 'Somme en tant que fraction de lignes',
+        'Sum as Fraction of Columns': 'Somme en tant que fraction de colonnes',
+        'Count as Fraction of Total': 'Comptage en tant que fraction du total',
+        'Count as Fraction of Rows': 'Comptage en tant que fraction de lignes',
+        'Count as Fraction of Columns': 'Comptage en tant que fraction de colonnes'
+
+      },
+      locale: 'fr',
+      locales: {
+        en: PivotUtilities.locales.en,
+        fr: {
+          aggregators: PivotUtilities.aggregators,
+          localeStrings: {
+            renderError: 'Une erreur est survenue en dessinant le tableau croisé.',
+            computeError: 'Une erreur est survenue en calculant le tableau croisé.',
+            uiRenderError: "Une erreur est survenue en dessinant l'interface du tableau croisé dynamique.",
+            selectAll: 'Sélectionner tout',
+            selectNone: 'Ne rien sélectionner',
+            tooMany: '(trop de valeurs à afficher)',
+            filterResults: 'Filtrer les valeurs',
+            totals: 'Totaux',
+            vs: 'sur',
+            by: 'par',
+            apply: 'Appliquer',
+            cancel: 'Annuler'
+          }
+        }
+      },
       isLoading: false,
-      modalShow: false,
-      modalQuestion: false,
       showDisplayArray: true,
       isDataSourceSelected: false,
-      showChartJs: false,
-      typeChartReporting: '',
-      status: false,
       title: '',
-      filterQuestionTitle: '',
-      dateRange: this.isRanged
-        ? {
-            start: new Date(),
-            end: new Date()
-          }
-        : new Date(),
       reporting: {
-        formId: null,
-        axeId: [],
-        axeIdType: '',
-        indicatorId: [],
-        operationId: null,
-        observation_start: null,
-        observation_end: null
+        formId: null
       },
-      optionsAxes: [],
-      lineQuestions: [],
-      columnQuestions: [],
-      cloneOptionsAxes: [],
       cloneOptionQuestions: [],
       completedFormFields: [],
-      iconStateDatePicker: 'fas fa-thin fa-plus',
-      attributes: [],
-      operations: [
-        { id: 1, type: 'Somme' },
-        { id: 2, type: 'Moyenne' }
-      ],
       linesSelected: [],
       columnsSelected: []
     }
@@ -157,14 +178,11 @@ export default {
   computed: {
     ...mapState({
       formFields: (state) => state.formField.formFields,
-      hospitalsDataAggregated: (state) =>
-        state.hospital.hospitalsDataAggregated,
       completedFormAll: (state) => state.completedForm.completedFormAll
     })
   },
   mounted () {},
   watch: {
-    optionsAxesSelected () {},
     formFields () {
       this.cloneOptionQuestions = this.formFields.slice()
     }
@@ -173,44 +191,9 @@ export default {
     ...mapActions([
       'getFormFields',
       'hospitals__townships',
-      'townships__getAll',
-      'hospital__getAll',
-      'getHospitalsData',
       'completedForm__getAll'
     ]),
-    activeStartDate () {
-      this.isRanged = !this.isRanged
-      this.mode = this.mode === 'date' ? 'range' : 'date'
-      this.iconStateDatePicker =
-        this.iconStateDatePicker === 'fas fa-thin fa-plus'
-          ? 'fa fa-times'
-          : 'fas fa-thin fa-plus'
-
-      if (this.isRanged) {
-        this.dateRange.start =
-          this.reporting.observation_end == null
-            ? new Date()
-            : this.reporting.observation_end
-        this.dateRange.end = new Date()
-
-        this.reporting.observation_start = this.dateRange.start
-        this.reporting.observation_end = new Date()
-      } else {
-        this.dateRange =
-          this.reporting.observation_end == null
-            ? new Date()
-            : this.reporting.observation_end
-        this.reporting.observation_start = null
-      }
-      this.attributes[0] = {
-        key: 'today',
-        dates: this.isRanged
-          ? { start: this.dateRange.start, end: this.dateRange.end }
-          : this.dateRange,
-        highlight: true
-      }
-    },
-    getComlpletedFormAll () {
+    getCompletedFormAll () {
       this.arrayAxeValue = this.completedFormAll.map((completedForm) => {
         const data = {
           hopital: completedForm.hospital.name,
@@ -223,118 +206,25 @@ export default {
         return data
       })
     },
-    onRangeDateObservation (inputValueDate) {
-      if (this.isRanged) {
-        this.reporting.observation_start = moment(inputValueDate.start).format(
-          'YYYY-MM-DD'
-        )
-        this.dateRange.start = inputValueDate.start
-        this.reporting.observation_end = moment(inputValueDate.end).format(
-          'YYYY-MM-DD'
-        )
-        this.dateRange.end = inputValueDate.end
-      } else {
-        this.reporting.observation_start = null
-        this.dateRange = inputValueDate
-        this.reporting.observation_end =
-          moment(inputValueDate).format('YYYY-MM-DD')
-      }
-      this.attributes[0] = {
-        key: 'today',
-        dates: this.dateRange,
-        highlight: true
-      }
-      console.log('dateRange', this.dateRange)
-    },
-    clearObservationDate () {
-      this.dateRange = new Date()
-      this.isRanged = false
-    },
     async selectedForm (value) {
       this.isLoading = true
       const formId = { form_id: value }
       this.getFormFields(formId)
       this.isDataSourceSelected = true
       await this.completedForm__getAll(formId)
-      this.getComlpletedFormAll()
+      this.getCompletedFormAll()
       this.isLoading = false
-    },
-    selectedAxes (value) {
-      this.optionsAxes = []
-      if (value === 'township') {
-        this.isLoading = true
-        this.townships__getAll().then((data) => {
-          this.optionsAxes = data.map((commune) => {
-            return { id: commune.id, name: commune.name }
-          })
-          this.cloneOptionsAxes = this.optionsAxes.slice()
-          this.isLoading = false
+      this.$nextTick(() => {
+        const tableRendersSelected = document.querySelector('.pvtRenderers>.pvtDropdown')
+
+        tableRendersSelected.forEach((option) => {
+          option.textContent = this.translateTableRenders[option.textContent]
         })
-      }
-      if (value === 'hospital') {
-        this.isLoading = true
-        this.hospital__getAll().then((data) => {
-          this.optionsAxes = data.map((hospital) => {
-            return { id: hospital.id, name: hospital.name }
-          })
-          this.cloneOptionsAxes = this.optionsAxes.slice()
-          this.isLoading = false
+        const aggregatorsRendersSelected = document.querySelector('.pvtVals .pvtDropdown')
+        aggregatorsRendersSelected.forEach((option) => {
+          option.textContent = this.translateAggregatorsRenders[option.textContent]
         })
-      }
-    },
-    selectedIndicators (value) {
-      this.reporting.indicatorId = value
-    },
-    selectedOperations (value) {
-      this.reporting.operationId = value
-    },
-    selectedChartType (value) {
-      this.typeChartReporting = value.type
-    },
-    async generated () {
-      this.completedFormFields = await this.getHospitalsData({
-        form_id: this.reporting.formId
       })
-    },
-    submit () {
-      if (!this.reporting.observation_end) {
-        this.reporting.observation_end = new Date()
-      }
-      this.$emit('generatedReport', this.reporting)
-    },
-    deleteItemAxe (index) {
-      this.cloneOptionsAxes = this.cloneOptionsAxes.filter(
-        (axe) => axe.id !== index
-      )
-      this.cloneOptionQuestions = this.cloneOptionQuestions.filter(
-        (field) => field.id !== index
-      )
-    },
-    openModalList () {
-      this.modalShow = !this.modalShow
-    },
-    openModalListField () {
-      this.modalQuestion = !this.modalQuestion
-    },
-    closeModalAxe () {
-      this.modalShow = false
-    },
-    closeModalField () {
-      this.modalQuestion = false
-    },
-    arraySelectedOptionAxe (value) {
-      this.cloneOptionsAxes = value
-    },
-    arraySelectedOptionQuestion (value) {
-      this.cloneOptionQuestions = value
-    },
-    displayChart () {
-      this.showChartJs = true
-      this.showDisplayArray = false
-    },
-    displayArrayPivot () {
-      this.showChartJs = false
-      this.showDisplayArray = true
     }
   }
 }
