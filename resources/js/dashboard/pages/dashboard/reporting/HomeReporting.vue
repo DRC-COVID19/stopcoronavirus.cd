@@ -19,7 +19,7 @@
       </div>
       <b-col
         lg="12"
-        class="mx-0 px-0  header-responsive py-3 w-100 h-100"
+        class="mx-0 px-0  header-responsive w-100 h-100"
       >
         <HeaderReporting
           :forms="forms"
