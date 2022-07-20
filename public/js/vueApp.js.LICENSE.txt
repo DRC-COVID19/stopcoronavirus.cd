@@ -1,8 +1,28 @@
+/*
+ * @copyright 2016 Sean Connelly (@voidqk), http://syntheti.cc
+ * @license MIT
+ * @preserve Project Home: https://github.com/voidqk/polybooljs
+ */
+
+/*
+object-assign
+(c) Sindre Sorhus
+@license MIT
+*/
+
 /*!
   * vue-router v3.5.4
   * (c) 2022 Evan You
   * @license MIT
   */
+
+/*!
+ * @overview es6-promise - a tiny implementation of Promises/A+.
+ * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
+ * @license   Licensed under MIT license
+ *            See https://raw.githubusercontent.com/stefanpenner/es6-promise/master/LICENSE
+ * @version   3.3.1
+ */
 
 /*!
  * ApexCharts v3.35.3
@@ -18,19 +38,54 @@
  */
 
 /*!
+ * Determine if an object is a Buffer
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
+ */
+
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <http://feross.org>
+ * @license  MIT
+ */
+
+/*!
  * Vue-Lazyload.js v1.3.4
  * (c) 2021 Awe <hilongjw@gmail.com>
  * Released under the MIT License.
  */
 
 /*!
- * Vue.js v2.6.14
- * (c) 2014-2021 Evan You
+ * Vue.js v2.7.7
+ * (c) 2014-2022 Evan You
  * Released under the MIT License.
  */
 
 /*!
  * is-primitive <https://github.com/jonschlinkert/is-primitive>
+ *
+ * Copyright (c) 2014-2015, Jon Schlinkert.
+ * Licensed under the MIT License.
+ */
+
+/*!
+ * pad-left <https://github.com/jonschlinkert/pad-left>
+ *
+ * Copyright (c) 2014-2015, Jon Schlinkert.
+ * Licensed under the MIT license.
+ */
+
+/*!
+ * repeat-string <https://github.com/jonschlinkert/repeat-string>
  *
  * Copyright (c) 2014-2015, Jon Schlinkert.
  * Licensed under the MIT License.
@@ -237,6 +292,13 @@ PERFORMANCE OF THIS SOFTWARE.
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ */
+
+/**!
+ * Sortable 1.10.2
+ * @author	RubaXa   <trash@rubaxa.org>
+ * @author	owenm    <owen23355@gmail.com>
+ * @license MIT
  */
 
 /*@preserve!
