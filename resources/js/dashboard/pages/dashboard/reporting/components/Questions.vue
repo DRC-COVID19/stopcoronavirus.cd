@@ -12,7 +12,7 @@
     </div>
     <b-row>
       <b-col class="w-100 mx-1 py-1 container-axe" lg="11">
-         <div class="mb-2">
+         <div class="mt-4">
           <b-form-group label="" v-slot="{ ariaDescribedby }">
             <b-form-checkbox-group
               id="checkbox-group-2"
@@ -20,44 +20,36 @@
               :aria-describedby="ariaDescribedby"
               name="name"
             >
-              <b-form-checkbox :value="{ name: 'date' }" v-show="showDate && isDataSourceSelected">
+              <b-form-checkbox :value="{ name: 'Date' }" v-show="showDate && isDataSourceSelected">
                 Date
               </b-form-checkbox>
             </b-form-checkbox-group>
-          </b-form-group>
-        </div>
-        <div class="mb-2">
-          <b-form-group label="" v-slot="{ ariaDescribedby }">
-            <b-form-checkbox-group
+             <b-form-checkbox-group
               id="checkbox-group-2"
               v-model="townshipsSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
             >
-              <b-form-checkbox :value="{ name: 'commune' }" v-show="showTownship && isDataSourceSelected">
+              <b-form-checkbox :value="{ name: 'Commune' }" v-show="showTownship && isDataSourceSelected">
                 Commune
               </b-form-checkbox>
             </b-form-checkbox-group>
-          </b-form-group>
-        </div>
-        <div class="mb-2">
-          <b-form-group label="" v-slot="{ ariaDescribedby }">
             <b-form-checkbox-group
               id="checkbox-group-2"
               v-model="hospitalsSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
             >
-              <b-form-checkbox :value="{ name: 'hopital' }" v-show="showHospital && isDataSourceSelected"
+              <b-form-checkbox :value="{ name: 'Hopital' }" v-show="showHospital && isDataSourceSelected"
                 >Hôpital
               </b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
         </div>
         <hr v-show="showHospital && isDataSourceSelected"/>
-        <div class="mb-2">
-          <label for class="text-dash-color text-primary">{{ !isDataSourceSelected ?'Veuillez selectionner une source de données':'Questions:'}}</label>
+
           <b-form-group label="" v-slot="{ ariaDescribedby }">
+             <label for class="text-dash-color text-primary">{{ !isDataSourceSelected ?'Veuillez selectionner une source de données':'Questions:'}}</label>
             <b-form-checkbox-group
               id="checkbox-group-2"
               v-model="formFieldsSelected"
@@ -72,7 +64,7 @@
               >
             </b-form-checkbox-group>
           </b-form-group>
-        </div>
+
       </b-col>
     </b-row>
   </b-col>
@@ -191,6 +183,12 @@ export default {
         }))
       )
       this.$emit('input', selectedItems)
+    },
+    resetForm () {
+      this.datesSelected = []
+      this.formFieldsSelected = []
+      this.townshipsSelected = []
+      this.hospitalsSelected = []
     }
   }
 }

@@ -9,7 +9,7 @@
           <label for class="text-dash-color">Source des données :</label>
           <v-select
             v-model="reporting.formId"
-            :options="forms"
+            :options="getForms"
             :reduce="(item) => item.id"
             label="title"
             placeholder="Sélectionner une source des données"
@@ -29,6 +29,7 @@
               :isDataSourceSelected='isDataSourceSelected'
               placeholder="Recherche"
               @selectedForm="selectedForm"
+              ref="QuestionsOne"
             />
              <hr />
            </div>
@@ -41,8 +42,18 @@
               :isDataSourceSelected='isDataSourceSelected'
                placeholder="Recherche"
               @selectedForm="selectedForm"
+              ref="QuestionsTwo"
             />
            </div>
+            <div class="col-md-12">
+               <b-button
+            type="reset"
+            variant="outline-danger"
+            class="ml-0 mt-2"
+            @click="resetForm()"
+            >Réinitialiser</b-button
+          >
+            </div>
           </b-row>
         </b-col>
       </b-row>
@@ -119,7 +130,7 @@ export default {
 
       },
       translateAggregatorsRenders: {
-        Count: 'Compter',
+        Count: 'Compte',
         'Count Unique Values': 'Compter les valeurs uniques',
         'List Unique Values': 'Liste des valeurs uniques',
         Sum: 'Somme',
@@ -179,7 +190,10 @@ export default {
     ...mapState({
       formFields: (state) => state.formField.formFields,
       completedFormAll: (state) => state.completedForm.completedFormAll
-    })
+    }),
+    getForms () {
+      return this.forms.map((form) => ({ id: form.id, title: form.title.charAt(0).toUpperCase() + form.title.slice(1) }))
+    }
   },
   mounted () {},
   watch: {
@@ -196,9 +210,9 @@ export default {
     getCompletedFormAll () {
       this.arrayAxeValue = this.completedFormAll.map((completedForm) => {
         const data = {
-          hopital: completedForm.hospital.name,
-          commune: completedForm.hospital.township.name,
-          date: completedForm.last_update
+          Hopital: completedForm.hospital.name,
+          Commune: completedForm.hospital.township.name,
+          Date: completedForm.last_update
         }
         completedForm.completed_form_fields.forEach(completedFormField => {
           data[completedFormField.form_field.name] = completedFormField.value
@@ -224,7 +238,17 @@ export default {
         aggregatorsRendersSelected.forEach((option) => {
           option.textContent = this.translateAggregatorsRenders[option.textContent]
         })
+
+        const pvtRenderers = document.querySelector('.pvtRenderers')
+
+        // pvtRenderers.style.width = '375px'
       })
+    },
+    resetForm () {
+      this.linesSelected = []
+      this.columnsSelected = []
+      this.$refs.QuestionsOne.resetForm()
+      this.$refs.QuestionsTwo.resetForm()
     }
   }
 }
@@ -234,6 +258,16 @@ export default {
 @import "@~/sass/_variables";
 hr{
   width: 105%;
+}
+.header-responsive{
+  padding-top: 0 !important;
+}
+.pvtRenderers {
+    border: 1px solid #a2b1c6;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    width: 372px !important;
 }
 .container-axe {
   height: 100px;
