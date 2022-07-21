@@ -1,51 +1,70 @@
 <template>
   <b-row>
     <b-col lg="3" class="bg-white pb-5">
-      <b-row class="mx-0 h-100 w-100" lg="12">
-        <b-col class="mx-0 w-100 mt-4" lg="12">
-          <h3>Générateur de graphique</h3>
-        </b-col>
-        <b-col class="mx-0 w-100 mt-4" lg="12">
-          <label for class="text-dash-color">Source des données :</label>
-          <v-select
-            v-model="reporting.formId"
-            :options="forms"
-            :reduce="(item) => item.id"
-            label="title"
-            placeholder="Sélectionner une source des données"
-            class="style-chooser"
-            @input="selectedForm"
-          />
-        </b-col>
-        <b-col class="border-dash rounded pb-4" lg="12">
-          <b-row>
-            <div class="mx-0 w-100" lg="12">  <hr /> </div>
-           <div>
-             <Questions
-              v-model="linesSelected"
-              title="Lignes"
-              :cloneOptionQuestions="cloneOptionQuestions"
-              :except="columnsSelected"
-              :isDataSourceSelected='isDataSourceSelected'
-              placeholder="Recherche"
-              @selectedForm="selectedForm"
-            />
-             <hr />
-           </div>
-           <div>
-             <Questions
-              v-model="columnsSelected"
-              title="Colonnes"
-              :cloneOptionQuestions="cloneOptionQuestions"
-              :except="linesSelected"
-              :isDataSourceSelected='isDataSourceSelected'
-               placeholder="Recherche"
-              @selectedForm="selectedForm"
-            />
-           </div>
+      <b-tabs pills card>
+        <b-tab title="paramétrage">
+            <b-row class="mx-0 h-100 w-100" lg="12">
+              <b-col class="mx-0 w-100 mt-4" lg="12">
+                <h3>Générateur de graphique</h3>
+              </b-col>
+              <b-col class="mx-0 w-100 mt-4" lg="12">
+                <label for class="text-dash-color">Source des données :</label>
+                <v-select
+                  v-model="reporting.formId"
+                  :options="forms"
+                  :reduce="(item) => item.id"
+                  label="title"
+                  placeholder="Sélectionner une source des données"
+                  class="style-chooser"
+                  @input="selectedForm"
+                />
+              </b-col>
+              <b-col class="border-dash rounded pb-4" lg="12">
+                <b-row>
+                  <div class="mx-0 w-100" lg="12">  <hr /> </div>
+                <div>
+                  <Questions
+                    v-model="linesSelected"
+                    title="Lignes"
+                    :cloneOptionQuestions="cloneOptionQuestions"
+                    :except="columnsSelected"
+                    :isDataSourceSelected='isDataSourceSelected'
+                    placeholder="Recherche"
+                    @selectedForm="selectedForm"
+                  />
+                  <hr />
+                </div>
+                <div>
+                  <Questions
+                    v-model="columnsSelected"
+                    title="Colonnes"
+                    :cloneOptionQuestions="cloneOptionQuestions"
+                    :except="linesSelected"
+                    :isDataSourceSelected='isDataSourceSelected'
+                    placeholder="Recherche"
+                    @selectedForm="selectedForm"
+                  />
+                </div>
+                </b-row>
+              </b-col>
+              <b-col class="mt-1" lg="12">
+                <b-button type="submit" variant="primary" size="sm" class="btn-saved" @click="savedBookmark">
+                  <small>Sauvegarder</small>
+                </b-button>
+              </b-col>
+            </b-row>
+        </b-tab>
+        <b-tab title="Bookmark">
+          <b-row class="mx-0 h-100 w-100" lg="12">
+            <b-col class="mx-0 w-100 mt-4" lg="12">
+                <label for class="text-dash-color">Sélectionner le bookmark :</label>
+                <b-list-group v-for="(bookmark) in bookmarks" :key="bookmark.id">
+                    <b-list-group-item :active="bookmark.id === activeItem" @click="selectedBookmark(bookmark)" style="cursor: pointer;">{{bookmark.name}}</b-list-group-item>
+                </b-list-group>
+              </b-col>
           </b-row>
-        </b-col>
-      </b-row>
+        </b-tab>
+      </b-tabs>
     </b-col>
     <b-col lg="9" v-if="showDisplayArray">
        <skeleton-loading v-if="isLoading" class="w-100">
@@ -66,14 +85,18 @@
             v-else
           >
         </vue-pivottable-ui>
-
     </b-col>
+    <NameBookmarkModal
+    :data-bookmark="dataBookmark"
+    :modalShow="modalShow"
+    />
   </b-row>
 </template>
 <script>
 
 import { mapState, mapActions } from 'vuex'
 import Questions from './Questions'
+import NameBookmarkModal from './NameBookmarkModal'
 import { VuePivottableUi, PivotUtilities } from 'vue-pivottable'
 
 import 'vue-pivottable/dist/vue-pivottable.css'
@@ -82,6 +105,7 @@ export default {
   name: 'HeaderReporting',
   components: {
     Questions,
+    NameBookmarkModal,
     VuePivottableUi
   },
   props: {
@@ -101,6 +125,7 @@ export default {
   data () {
     return {
       arrayAxeValue: [],
+      activeItem: null,
       translateTableRenders: {
         Table: 'Tableau',
         'Table Heatmap': 'Tableau coloré',
@@ -166,6 +191,11 @@ export default {
       showDisplayArray: true,
       isDataSourceSelected: false,
       title: '',
+      displayTypeValue: '',
+      displayAggregatorType: '',
+      displayParamsAggregator: '',
+      dataBookmark: {},
+      modalShow: false,
       reporting: {
         formId: null
       },
@@ -178,10 +208,13 @@ export default {
   computed: {
     ...mapState({
       formFields: (state) => state.formField.formFields,
-      completedFormAll: (state) => state.completedForm.completedFormAll
+      completedFormAll: (state) => state.completedForm.completedFormAll,
+      bookmarks: (state) => state.bookmark.bookmarks
     })
   },
-  mounted () {},
+  async mounted () {
+    await this.getBookmarks()
+  },
   watch: {
     formFields () {
       this.cloneOptionQuestions = this.formFields.slice()
@@ -191,7 +224,9 @@ export default {
     ...mapActions([
       'getFormFields',
       'hospitals__townships',
-      'completedForm__getAll'
+      'completedForm__getAll',
+      'getBookmarks',
+      'createBookmark'
     ]),
     getCompletedFormAll () {
       this.arrayAxeValue = this.completedFormAll.map((completedForm) => {
@@ -225,8 +260,44 @@ export default {
           option.textContent = this.translateAggregatorsRenders[option.textContent]
         })
       })
+    },
+    savedBookmark () {
+      const displayTypes = document.querySelector('.pvtRenderers>.pvtDropdown')
+      displayTypes.forEach(element => {
+        if (element.selected) {
+          this.displayTypeValue = element.value
+        }
+      })
+      const aggregatorsRendersSelected = document.querySelector('.pvtVals>div>.pvtDropdown')
+      aggregatorsRendersSelected.forEach(element => {
+        if (element.selected) {
+          this.displayAggregatorType = element.value
+        }
+      })
+      const paramsAggregatorSelected = document.querySelector('.pvtVals>.pvtDropdown')
+      if (paramsAggregatorSelected) {
+        paramsAggregatorSelected.forEach(element => {
+          if (element.selected) {
+            this.displayParamsAggregator = element.value
+          }
+        })
+      }
+      this.dataBookmark = {
+        form_id: this.reporting.formId,
+        row: this.linesSelected.toString(),
+        column: this.columnsSelected.toString(),
+        display_type: this.displayTypeValue,
+        aggregator_type: this.displayAggregatorType,
+        params1: this.displayParamsAggregator ? this.displayParamsAggregator : '',
+        params2: this.displayParamsAggregator ? this.displayParamsAggregator : ''
+      }
+      this.modalShow = !this.modalShow
+    },
+    selectedBookmark (item) {
+      this.activeItem = item.id
     }
   }
+
 }
 </script>
 
@@ -332,5 +403,9 @@ hr{
 .btn-generated-rapport {
   position: relative;
   left: 660px;
+}
+.btn-saved{
+  position: relative;
+  left:256px;
 }
 </style>
