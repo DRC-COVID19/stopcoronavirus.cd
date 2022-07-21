@@ -185,7 +185,8 @@ export default {
       cloneOptionQuestions: [],
       completedFormFields: [],
       linesSelected: [],
-      columnsSelected: []
+      columnsSelected: [],
+      htmlElement: null
     }
   },
   computed: {
@@ -209,6 +210,48 @@ export default {
       'hospitals__townships',
       'completedForm__getAll'
     ]),
+
+    addPvtValsHTMLBadge () {
+      const pvtVals = document.querySelector('.pvtVals')
+      const pvtValsBadge = document.createElement('div')
+      pvtValsBadge.classList.add('mb-2')
+      pvtValsBadge.classList.add('mt-5')
+      pvtValsBadge.innerHTML = '<label class="text-dash-color"><span class="badge badge-secondary px-2">Étape 4</span> : Valeurs </label> '
+      pvtVals.prepend(pvtValsBadge)
+    },
+    // addPvtRenderersHTMLBadge () {
+    //   const pvtRenderers = this.selectPvtRenderers()
+    //   const pvtRenderersBadge = document.createElement('div')
+    //   pvtRenderersBadge.classList.add('my-2')
+    //   pvtRenderersBadge.classList.add('mx-2')
+    //   pvtRenderersBadge.innerHTML = '<label class="text-dash-color"><span class="badge badge-secondary px-2">Étape 5</span> : Type des Graphiques et tableaux </label> '
+    //   pvtRenderers.prepend(pvtRenderersBadge)
+    // },
+    customPvtDropdownStyles () {
+      const pvtDropdown = document.querySelectorAll('.pvtDropdown')
+      pvtDropdown.forEach((dropDown) => {
+        dropDown.style.width = '95%'
+        dropDown.style.border = 'solid 1px #a2b1c6'
+      })
+    },
+    customRenderersStyles () {
+      const pvtRenderers = this.selectPvtRenderers()
+      pvtRenderers.style.width = '30%'
+      pvtRenderers.style.backgroundColor = '#ffff'
+    },
+    frTranslatePvtValsRenderers () {
+      const aggregatorsRendersSelected = document.querySelector('.pvtVals .pvtDropdown')
+      aggregatorsRendersSelected.forEach((option) => {
+        option.textContent = this.translateAggregatorsRenders[option.textContent]
+      })
+    },
+    frTranslateTableRenderers () {
+      const tableRendersSelected = document.querySelector('.pvtRenderers>.pvtDropdown')
+      tableRendersSelected.style.marginLeft = '6px'
+      tableRendersSelected.forEach((option) => {
+        option.textContent = this.translateTableRenders[option.textContent]
+      })
+    },
     getCompletedFormAll () {
       this.arrayAxeValue = this.completedFormAll.map((completedForm) => {
         const data = {
@@ -222,6 +265,12 @@ export default {
         return data
       })
     },
+    resetForm () {
+      this.linesSelected = []
+      this.columnsSelected = []
+      this.$refs.QuestionsOne.resetForm()
+      this.$refs.QuestionsTwo.resetForm()
+    },
     async selectedForm (value) {
       this.isLoading = true
       const formId = { form_id: value }
@@ -231,42 +280,18 @@ export default {
       this.getCompletedFormAll()
       this.isLoading = false
       this.$nextTick(() => {
-        //this.resizePvtRenderers()
-        this.translateFRTableRenders()
-        this.translateFRPvtValsRenders()
+        this.customRenderersStyles()
+        this.frTranslateTableRenderers()
+        // this.addPvtRenderersHTMLBadge()
+        this.frTranslatePvtValsRenderers()
         this.addPvtValsHTMLBadge()
-
-        const pvtRenderers = document.querySelector('.pvtRenderers')
-
-        // pvtRenderers.style.width = '375px'
+        this.customPvtDropdownStyles()
       })
     },
-    resetForm () {
-      this.linesSelected = []
-      this.columnsSelected = []
-      this.$refs.QuestionsOne.resetForm()
-      this.$refs.QuestionsTwo.resetForm()
-    },
-    addPvtValsHTMLBadge () {
-      const pvtVals = document.querySelector('.pvtVals')
-      const pvtValsBadge = document.createElement('div')
-      pvtValsBadge.classList.add('my-2')
-      pvtValsBadge.innerHTML = '<label class="text-dash-color"><span class="badge badge-secondary px-2">Étape 4</span> : Valeurs </label> '
-      pvtVals.prepend(pvtValsBadge)
-    },
-    translateFRPvtValsRenders () {
-      const aggregatorsRendersSelected = document.querySelector('.pvtVals .pvtDropdown')
-      aggregatorsRendersSelected.forEach((option) => {
-        option.textContent = this.translateAggregatorsRenders[option.textContent]
-      })
-    },
-    translateFRTableRenders () {
-      const tableRendersSelected = document.querySelector('.pvtRenderers>.pvtDropdown')
-
-      tableRendersSelected.forEach((option) => {
-        option.textContent = this.translateTableRenders[option.textContent]
-      })
+    selectPvtRenderers () {
+      return document.querySelector('.pvtRenderers')
     }
+
   }
 }
 </script>
