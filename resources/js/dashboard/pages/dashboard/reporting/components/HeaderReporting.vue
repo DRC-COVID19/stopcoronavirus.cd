@@ -60,7 +60,7 @@
         </b-col>
       </b-row>
     </b-col>
-    <b-col lg="9" v-if="showDisplayArray">
+    <b-col lg="9" v-if="showDisplayArray" class="md-display">
        <skeleton-loading v-if="isLoading" class="w-100">
             <square-skeleton
               :boxProperties="{
@@ -70,15 +70,13 @@
             ></square-skeleton>
           </skeleton-loading>
 
-      <vue-pivottable-ui
-            :data="arrayAxeValue"
-            :rows="linesSelected.map(line=>line.name)"
-            :cols="columnsSelected.map(column=>column.name)"
-            :locales="locales"
-            :locale="locale"
+      <pivottable
+            :arrayAxeValue="arrayAxeValue"
+            :linesSelected="linesSelected"
+            :columnsSelected="columnsSelected"
             v-else
           >
-        </vue-pivottable-ui>
+        </pivottable>
 
     </b-col>
   </b-row>
@@ -87,17 +85,17 @@
 
 import { mapState, mapActions } from 'vuex'
 import Questions from './Questions'
-import { VuePivottableUi, PivotUtilities } from 'vue-pivottable'
 
-import 'vue-pivottable/dist/vue-pivottable.css'
+import Pivottable from './Pivottable.vue'
 
 export default {
   name: 'HeaderReporting',
   components: {
     Questions,
-    VuePivottableUi
+    Pivottable
   },
   props: {
+
     forms: {
       type: Array,
       default: () => {
@@ -153,27 +151,6 @@ export default {
         'Count as Fraction of Rows': 'Comptage en tant que fraction de lignes',
         'Count as Fraction of Columns': 'Comptage en tant que fraction de colonnes'
 
-      },
-      locale: 'fr',
-      locales: {
-        en: PivotUtilities.locales.en,
-        fr: {
-          aggregators: PivotUtilities.aggregators,
-          localeStrings: {
-            renderError: 'Une erreur est survenue en dessinant le tableau croisé.',
-            computeError: 'Une erreur est survenue en calculant le tableau croisé.',
-            uiRenderError: "Une erreur est survenue en dessinant l'interface du tableau croisé dynamique.",
-            selectAll: 'Sélectionner tout',
-            selectNone: 'Ne rien sélectionner',
-            tooMany: '(trop de valeurs à afficher)',
-            filterResults: 'Filtrer les valeurs',
-            totals: 'Totaux',
-            vs: 'sur',
-            by: 'par',
-            apply: 'Appliquer',
-            cancel: 'Annuler'
-          }
-        }
       },
       isLoading: false,
       showDisplayArray: true,
@@ -287,6 +264,7 @@ export default {
         this.addPvtValsHTMLBadge()
         this.customPvtDropdownStyles()
       })
+      this.$emit('handleSelect', { arrayAxeValue: this.arrayAxeValue, linesSelected: this.linesSelected, columnsSelected: this.columnsSelected })
     },
     selectPvtRenderers () {
       return document.querySelector('.pvtRenderers')
@@ -408,5 +386,10 @@ hr{
 .btn-generated-rapport {
   position: relative;
   left: 660px;
+}
+@media (max-width: $max-width) {
+  .md-display{
+    display: none;
+  }
 }
 </style>
