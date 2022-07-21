@@ -1,64 +1,85 @@
 <template>
   <b-row>
     <b-col lg="3" class="bg-white pb-5">
-      <b-row class="mx-0 h-100 w-100" lg="12">
-        <b-col class="mx-0 w-100 mt-4" lg="12">
-          <h3>Générateur de graphique</h3>
-        </b-col>
-        <b-col class="mx-0 w-100 mt-4" lg="12">
-          <label for class="text-dash-color"><b-badge class="px-2">Étape 1</b-badge> : Source des données </label>
-          <v-select
-            v-model="reporting.formId"
-            :options="getForms"
-            :reduce="(item) => item.id"
-            label="title"
-            placeholder="Sélectionner une source des données"
-            class="style-chooser"
-            @input="selectedForm"
-          />
-        </b-col>
-        <b-col class="border-dash rounded pb-4" lg="12">
-          <b-row>
-            <div class="mx-0 w-100" lg="12">  <hr /> </div>
-           <div class="col-md-12 px-0">
-             <Questions
-              v-model="linesSelected"
-              title="Lignes"
-              step="Étape 2"
-              :cloneOptionQuestions="cloneOptionQuestions"
-              :except="columnsSelected"
-              :isDataSourceSelected='isDataSourceSelected'
-              placeholder="Recherche"
-              @selectedForm="selectedForm"
-              ref="QuestionsOne"
-            />
-             <hr />
-           </div>
-           <div class="col-md-12 px-0">
-             <Questions
-              v-model="columnsSelected"
-              title="Colonnes"
-              step="Étape 3"
-              :cloneOptionQuestions="cloneOptionQuestions"
-              :except="linesSelected"
-              :isDataSourceSelected='isDataSourceSelected'
-               placeholder="Recherche"
-              @selectedForm="selectedForm"
-              ref="QuestionsTwo"
-            />
-           </div>
-            <div class="col-md-12">
-               <b-button
-            type="reset"
-            variant="outline-danger"
-            class="ml-0 mt-2"
-            @click="resetForm()"
-            >Réinitialiser</b-button
-          >
-            </div>
+      <b-tabs class="mx-0">
+        <b-tab title="paramétrage">
+            <b-row class="mx-0 h-100 w-100" lg="12">
+              <b-col class="mx-0 w-100 mt-4" lg="12">
+                <h3>Générateur de graphique</h3>
+              </b-col>
+               <b-col class="mx-0 w-100 mt-4" lg="12">
+              <label for class="text-dash-color"><b-badge class="px-2">Étape 1</b-badge> : Source des données </label>
+              <v-select
+                v-model="reporting.formId"
+                :options="getForms"
+                :reduce="(item) => item.id"
+                label="title"
+                placeholder="Sélectionner une source des données"
+                class="style-chooser"
+                @input="selectedForm"
+              />
+             </b-col>
+              <b-col class="border-dash rounded pb-4" lg="12">
+                <b-row>
+                  <div class="mx-0 w-100" lg="12">  <hr /> </div>
+                   <div class="col-md-12 px-0">
+                   <Questions
+                    v-model="linesSelected"
+                    title="Lignes"
+                    step="Étape 2"
+                    :cloneOptionQuestions="cloneOptionQuestions"
+                    :except="columnsSelected"
+                    :isDataSourceSelected='isDataSourceSelected'
+                    placeholder="Recherche"
+                    @selectedForm="selectedForm"
+                    ref="QuestionsOne"
+                  />
+                   <hr />
+                 </div>
+                 <div class="col-md-12 px-0">
+                   <Questions
+                    v-model="columnsSelected"
+                    title="Colonnes"
+                    step="Étape 3"
+                    :cloneOptionQuestions="cloneOptionQuestions"
+                    :except="linesSelected"
+                    :isDataSourceSelected='isDataSourceSelected'
+                     placeholder="Recherche"
+                    @selectedForm="selectedForm"
+                    ref="QuestionsTwo"
+                  />
+                 </div>
+                </b-row>
+              </b-col>
+              <b-col class="mt-1 d-flex justify-content-around" lg="12">
+              <div>
+              <b-button
+                  type="reset"
+                  variant="outline-danger"
+                  size="lg"
+                  @click="resetForm()"
+                 >
+                  <small>Réinitialiser</small>
+                </b-button></div>
+               <div>
+                <b-button type="submit" variant="primary" size="lg" class="btn-saved" @click="savedBookmark">
+                  <small>Sauvegarder</small>
+                </b-button>
+                </div>
+              </b-col>
+            </b-row>
+        </b-tab>
+        <b-tab title="Bookmark">
+          <b-row class="mx-0 h-100 w-100" lg="12">
+            <b-col class="mx-0 w-100 mt-4" lg="12">
+                <label for class="text-dash-color">Sélectionner le bookmark :</label>
+                <b-list-group v-for="(bookmark) in bookmarks" :key="bookmark.id">
+                    <b-list-group-item :active="bookmark.id === activeItem" @click="selectedBookmark(bookmark)" style="cursor: pointer;">{{bookmark.name}}</b-list-group-item>
+                </b-list-group>
+              </b-col>
           </b-row>
-        </b-col>
-      </b-row>
+        </b-tab>
+      </b-tabs>
     </b-col>
     <b-col lg="9" v-if="showDisplayArray" class="md-display">
        <skeleton-loading v-if="isLoading" class="w-100">
@@ -77,22 +98,26 @@
             v-else
           >
         </pivottable>
-
     </b-col>
+    <NameBookmarkModal
+    :data-bookmark="dataBookmark"
+    :modalShow="modalShow"
+    />
   </b-row>
 </template>
 <script>
 
 import { mapState, mapActions } from 'vuex'
 import Questions from './Questions'
-
-import Pivottable from './Pivottable.vue'
+import NameBookmarkModal from './NameBookmarkModal'
+import Pivottable from './Pivottable'
 
 export default {
   name: 'HeaderReporting',
   components: {
     Questions,
-    Pivottable
+    Pivottable,
+    NameBookmarkModal
   },
   props: {
 
@@ -112,6 +137,7 @@ export default {
   data () {
     return {
       arrayAxeValue: [],
+      activeItem: null,
       translateTableRenders: {
         Table: 'Tableau',
         'Table Heatmap': 'Tableau coloré',
@@ -156,6 +182,11 @@ export default {
       showDisplayArray: true,
       isDataSourceSelected: false,
       title: '',
+      displayTypeValue: '',
+      displayAggregatorType: '',
+      displayParamsAggregator: '',
+      dataBookmark: {},
+      modalShow: false,
       reporting: {
         formId: null
       },
@@ -169,13 +200,17 @@ export default {
   computed: {
     ...mapState({
       formFields: (state) => state.formField.formFields,
-      completedFormAll: (state) => state.completedForm.completedFormAll
+      completedFormAll: (state) => state.completedForm.completedFormAll,
+      bookmarks: (state) => state.bookmark.bookmarks
     }),
     getForms () {
       return this.forms.map((form) => ({ id: form.id, title: form.title.charAt(0).toUpperCase() + form.title.slice(1) }))
     }
+      
   },
-  mounted () {},
+  async mounted () {
+    await this.getBookmarks()
+  },
   watch: {
     formFields () {
       this.cloneOptionQuestions = this.formFields.slice()
@@ -185,7 +220,9 @@ export default {
     ...mapActions([
       'getFormFields',
       'hospitals__townships',
-      'completedForm__getAll'
+      'completedForm__getAll',
+      'getBookmarks',
+      'createBookmark'
     ]),
 
     addPvtValsHTMLBadge () {
@@ -268,9 +305,45 @@ export default {
     },
     selectPvtRenderers () {
       return document.querySelector('.pvtRenderers')
+    },
+    savedBookmark () {
+      const displayTypes = document.querySelector('.pvtRenderers>.pvtDropdown')
+      displayTypes.forEach(element => {
+        if (element.selected) {
+          this.displayTypeValue = element.value
+        }
+      })
+      const aggregatorsRendersSelected = document.querySelector('.pvtVals>div>.pvtDropdown')
+      aggregatorsRendersSelected.forEach(element => {
+        if (element.selected) {
+          this.displayAggregatorType = element.value
+        }
+      })
+      const paramsAggregatorSelected = document.querySelector('.pvtVals>.pvtDropdown')
+      if (paramsAggregatorSelected) {
+        paramsAggregatorSelected.forEach(element => {
+          if (element.selected) {
+            this.displayParamsAggregator = element.value
+          }
+        })
+      }
+      this.dataBookmark = {
+        form_id: this.reporting.formId,
+        row: this.linesSelected.toString(),
+        column: this.columnsSelected.toString(),
+        display_type: this.displayTypeValue,
+        aggregator_type: this.displayAggregatorType,
+        params1: this.displayParamsAggregator ? this.displayParamsAggregator : '',
+        params2: this.displayParamsAggregator ? this.displayParamsAggregator : ''
+      }
+      this.modalShow = !this.modalShow
+    },
+    selectedBookmark (item) {
+      this.activeItem = item.id
     }
 
   }
+
 }
 </script>
 
@@ -391,5 +464,9 @@ hr{
   .md-display{
     display: none;
   }
+.btn-saved{
+  position: relative;
+  left:256px;
+}
 }
 </style>
