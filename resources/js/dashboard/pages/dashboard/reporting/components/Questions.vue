@@ -1,6 +1,6 @@
 <template>
   <b-col class="mx-0 w-100" lg="12">
-    <label for class="text-dash-color">{{ title }} :</label>
+    <label for class="text-dash-color"><b-badge class="px-2"> {{ step}} </b-badge> : {{ title }}</label>
       <div class="input-search d-flex justify-content-around mb-2">
       <input
         v-model="formFieldTitle"
@@ -74,6 +74,10 @@ import { mapState } from 'vuex'
 export default {
   props: {
     title: {
+      type: String,
+      default: () => ''
+    },
+    step: {
       type: String,
       default: () => ''
     },

@@ -6,7 +6,7 @@
           <h3>Générateur de graphique</h3>
         </b-col>
         <b-col class="mx-0 w-100 mt-4" lg="12">
-          <label for class="text-dash-color">Source des données :</label>
+          <label for class="text-dash-color"><b-badge class="px-2">Étape 1</b-badge> : Source des données </label>
           <v-select
             v-model="reporting.formId"
             :options="getForms"
@@ -20,10 +20,11 @@
         <b-col class="border-dash rounded pb-4" lg="12">
           <b-row>
             <div class="mx-0 w-100" lg="12">  <hr /> </div>
-           <div>
+           <div class="col-md-12 px-0">
              <Questions
               v-model="linesSelected"
               title="Lignes"
+              step="Étape 2"
               :cloneOptionQuestions="cloneOptionQuestions"
               :except="columnsSelected"
               :isDataSourceSelected='isDataSourceSelected'
@@ -33,10 +34,11 @@
             />
              <hr />
            </div>
-           <div>
+           <div class="col-md-12 px-0">
              <Questions
               v-model="columnsSelected"
               title="Colonnes"
+              step="Étape 3"
               :cloneOptionQuestions="cloneOptionQuestions"
               :except="linesSelected"
               :isDataSourceSelected='isDataSourceSelected'
@@ -229,15 +231,10 @@ export default {
       this.getCompletedFormAll()
       this.isLoading = false
       this.$nextTick(() => {
-        const tableRendersSelected = document.querySelector('.pvtRenderers>.pvtDropdown')
-
-        tableRendersSelected.forEach((option) => {
-          option.textContent = this.translateTableRenders[option.textContent]
-        })
-        const aggregatorsRendersSelected = document.querySelector('.pvtVals .pvtDropdown')
-        aggregatorsRendersSelected.forEach((option) => {
-          option.textContent = this.translateAggregatorsRenders[option.textContent]
-        })
+        //this.resizePvtRenderers()
+        this.translateFRTableRenders()
+        this.translateFRPvtValsRenders()
+        this.addPvtValsHTMLBadge()
 
         const pvtRenderers = document.querySelector('.pvtRenderers')
 
@@ -249,6 +246,26 @@ export default {
       this.columnsSelected = []
       this.$refs.QuestionsOne.resetForm()
       this.$refs.QuestionsTwo.resetForm()
+    },
+    addPvtValsHTMLBadge () {
+      const pvtVals = document.querySelector('.pvtVals')
+      const pvtValsBadge = document.createElement('div')
+      pvtValsBadge.classList.add('my-2')
+      pvtValsBadge.innerHTML = '<label class="text-dash-color"><span class="badge badge-secondary px-2">Étape 4</span> : Valeurs </label> '
+      pvtVals.prepend(pvtValsBadge)
+    },
+    translateFRPvtValsRenders () {
+      const aggregatorsRendersSelected = document.querySelector('.pvtVals .pvtDropdown')
+      aggregatorsRendersSelected.forEach((option) => {
+        option.textContent = this.translateAggregatorsRenders[option.textContent]
+      })
+    },
+    translateFRTableRenders () {
+      const tableRendersSelected = document.querySelector('.pvtRenderers>.pvtDropdown')
+
+      tableRendersSelected.forEach((option) => {
+        option.textContent = this.translateTableRenders[option.textContent]
+      })
     }
   }
 }
