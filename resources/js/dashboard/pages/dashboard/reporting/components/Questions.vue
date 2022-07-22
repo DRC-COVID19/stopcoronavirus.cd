@@ -15,12 +15,12 @@
          <div class="mt-4">
           <b-form-group label="" v-slot="{ ariaDescribedby }">
             <b-form-checkbox-group
-              id="checkbox-group-2"
+              id="checkbox-group-1"
               v-model="datesSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
             >
-              <b-form-checkbox :value="{ name: 'Date' }" v-show="showDate && isDataSourceSelected">
+              <b-form-checkbox :value="{ id: 0, name: 'Date', type: 'date' }" v-show="showDate && isDataSourceSelected">
                 Date
               </b-form-checkbox>
             </b-form-checkbox-group>
@@ -179,13 +179,7 @@ export default {
           type: 'township'
         }))
       )
-      selectedItems.push(
-        ...this.datesSelected.map((dateSelected) => ({
-          id: new Date().getTime(),
-          name: dateSelected.name,
-          type: 'date'
-        }))
-      )
+      selectedItems.push(...this.datesSelected)
       this.$emit('input', selectedItems)
     },
     resetForm () {
