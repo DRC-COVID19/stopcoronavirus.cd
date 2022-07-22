@@ -15,7 +15,7 @@
          <div class="mt-4">
           <b-form-group label="" v-slot="{ ariaDescribedby }">
             <b-form-checkbox-group
-              :id="datesSelected"
+              id="checkbox-group-1"
               v-model="datesSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
@@ -101,7 +101,6 @@ export default {
   },
   data () {
     return {
-      datesId:"id",
       datesSelected: [],
       formFieldsSelected: [],
       hospitalsSelected: [],
