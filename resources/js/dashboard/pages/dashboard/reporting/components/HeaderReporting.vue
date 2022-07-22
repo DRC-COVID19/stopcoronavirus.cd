@@ -81,27 +81,16 @@
         </b-tab>
       </b-tabs>
     </b-col>
-    <b-col lg="9" v-if="showDisplayArray" class="md-display">
-       <skeleton-loading v-if="isLoading" class="w-100">
-            <square-skeleton
-              :boxProperties="{
-                width: '100%',
-                height: '750px',
-              }"
-            ></square-skeleton>
-          </skeleton-loading>
-
-      <pivottable
-            :arrayAxeValue="arrayAxeValue"
-            :linesSelected="linesSelected"
-            :columnsSelected="columnsSelected"
-            v-else
+   <pivottable
+        :arrayAxeValue="arrayAxeValue"
+        :linesSelected="linesSelected"
+        :columnsSelected="columnsSelected"
+        :isLoading="isLoading"
           >
-        </pivottable>
-    </b-col>
+   </pivottable>
     <NameBookmarkModal
-    :data-bookmark="dataBookmark"
-    :modalShow="modalShow"
+      :data-bookmark="dataBookmark"
+      :modalShow="modalShow"
     />
   </b-row>
 </template>
@@ -206,7 +195,7 @@ export default {
     getForms () {
       return this.forms.map((form) => ({ id: form.id, title: form.title.charAt(0).toUpperCase() + form.title.slice(1) }))
     }
-      
+
   },
   async mounted () {
     await this.getBookmarks()
