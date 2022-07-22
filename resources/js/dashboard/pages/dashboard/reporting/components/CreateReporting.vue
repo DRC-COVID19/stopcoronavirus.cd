@@ -1,6 +1,6 @@
 <template>
   <b-tabs class="mx-0">
-        <b-tab title="paramétrage">
+        <b-tab title="paramétrage" :active="title==='paramétrage'">
             <b-row class="mx-0 h-100 w-100" lg="12">
               <b-col class="mx-0 w-100 mt-4" lg="12">
                 <h3>Générateur de graphique</h3>
@@ -124,7 +124,8 @@ export default {
     return {
       columns: this.columnsSelected,
       lines: this.linesSelected,
-      report: this.reporting
+      report: this.reporting,
+      title: ''
     }
   },
   watch: {

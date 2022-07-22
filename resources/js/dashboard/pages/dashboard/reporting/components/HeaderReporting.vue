@@ -1,7 +1,8 @@
 <template>
   <b-row>
-    <b-col lg="3" class="bg-white pb-5 sm-display">
+    <b-col lg="3" class="bg-white pb-5">
       <CreateReporting
+        :activeItem="activeItem"
         :bookmarks="bookmarks"
         :cloneOptionQuestions="cloneOptionQuestions"
         :columnsSelected="columnsSelected"
@@ -28,6 +29,7 @@
       backdrop-variant="transparent"
     >
       <CreateReporting
+        :activeItem="activeItem"
         :bookmarks="bookmarks"
         :cloneOptionQuestions="cloneOptionQuestions"
         :columnsSelected="columnsSelected"
@@ -270,6 +272,16 @@ export default {
         this.customPvtDropdownStyles()
       })
     },
+    async selectedFormBookmark (value) {
+      this.isLoading = true
+      const formId = { form_id: value }
+      this.getFormFields(formId)
+      this.isDataSourceSelected = true
+      await this.completedForm__getAll(formId)
+      this.getCompletedFormAll()
+      this.isLoading = false
+    },
+
     selectPvtRenderers () {
       return document.querySelector('.pvtRenderers')
     },
@@ -300,8 +312,8 @@ export default {
       }
       this.dataBookmark = {
         form_id: this.reporting.formId,
-        row: this.linesSelected.toString(),
-        column: this.columnsSelected.toString(),
+        row: JSON.stringify(this.linesSelected),
+        column: JSON.stringify(this.columnsSelected),
         display_type: this.displayTypeValue,
         aggregator_type: this.displayAggregatorType,
         params1: this.displayParamsAggregator
@@ -315,11 +327,84 @@ export default {
     },
     selectedBookmark (item) {
       this.activeItem = item.id
+      this.isLoading = true
+      this.selectedFormBookmark(item.form_id)
+      this.linesSelected = JSON.parse(item.row)
+      this.columnsSelected = JSON.parse(item.column)
+      this.$nextTick(() => {
+        const displayTypes = document.querySelector(
+          '.pvtRenderers>.pvtDropdown'
+        )
+        displayTypes.options[0].removeAttribute('selected')
+        for (let index = 0; index < displayTypes.length; index++) {
+          if (displayTypes.options[index].value === item.display_type) {
+            setTimeout(() => {
+              displayTypes.options[index].setAttribute('selected', 'seleted')
+              displayTypes.dispatchEvent(new Event('change'))
+            }, 1000)
+            break
+          }
+        }
+        if (item.aggregator_type) {
+          const aggregatorsRendersSelected = document.querySelector(
+            '.pvtVals>div>.pvtDropdown'
+          )
+          aggregatorsRendersSelected.options[0].removeAttribute('selected')
+          for (
+            let index = 0;
+            index < aggregatorsRendersSelected.length;
+            index++
+          ) {
+            if (
+              aggregatorsRendersSelected.options[index].value ===
+              item.aggregator_type
+            ) {
+              setTimeout(() => {
+                aggregatorsRendersSelected.options[index].setAttribute(
+                  'selected',
+                  'seleted'
+                )
+                aggregatorsRendersSelected.dispatchEvent(new Event('change'))
+              }, 1100)
+              break
+            }
+          }
+        }
+        setTimeout(() => {
+          if (item.params1) {
+            const paramsAggregatorSelected = document.querySelector(
+              '.pvtVals>.pvtDropdown'
+            )
+            paramsAggregatorSelected.options[0].removeAttribute('selected')
+            for (
+              let index = 0;
+              index < paramsAggregatorSelected.length;
+              index++
+            ) {
+              if (
+                paramsAggregatorSelected.options[index].value === item.params1
+              ) {
+                console.log('params1', paramsAggregatorSelected[index].value)
+
+                console.log('index', index)
+                paramsAggregatorSelected.options[index].setAttribute(
+                  'selected',
+                  'seleted'
+                )
+                window.paramsAggregatorSelected = paramsAggregatorSelected
+                paramsAggregatorSelected.dispatchEvent(new Event('change'))
+
+                break
+              }
+            }
+          }
+        }, 3000)
+      })
+      this.isLoading = false
     }
   }
 }
 </script>
-
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 hr {

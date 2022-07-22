@@ -19,22 +19,10 @@
 import { mapState, mapActions } from 'vuex'
 import HeaderReporting from './components/HeaderReporting'
 
-import Pivottable from './components/Pivottable'
-
 export default {
   name: 'Reporting',
   components: {
     HeaderReporting,
-    Pivottable
-  },
-
-  data () {
-    return {
-      linesSelected: [],
-      columnsSelected: [],
-      arrayAxeValue: [],
-      value: { linesSelected: [] }
-    }
   },
   mounted () {
     this.getForms()
