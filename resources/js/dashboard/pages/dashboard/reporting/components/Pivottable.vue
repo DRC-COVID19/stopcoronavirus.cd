@@ -1,24 +1,12 @@
 <template>
-<b-col lg="9">
-      <skeleton-loading v-if="isLoading" class="w-100">
-        <square-skeleton
-            :boxProperties="{
-                width: '100%',
-                height: '750px',
-              }"
-        ></square-skeleton>
-      </skeleton-loading>
-
-       <vue-pivottable-ui
-         v-else
-         :data="arrayAxeValue"
-         :rows="linesSelected.map(line=>line.name)"
-         :cols="columnsSelected.map(column=>column.name)"
-         :locales="locales"
-         :locale="locale"
+   <vue-pivottable-ui
+            :data="arrayAxeValue"
+            :rows="linesSelected.map(line=>line.name)"
+            :cols="columnsSelected.map(column=>column.name)"
+            :locales="locales"
+            :locale="locale"
           >
   </vue-pivottable-ui>
-    </b-col>
 </template>
 <script>
 import { VuePivottableUi, PivotUtilities } from 'vue-pivottable'
@@ -44,10 +32,6 @@ export default {
       default: () => {
         return []
       }
-    },
-    isLoading: {
-      type: Boolean,
-      default: () => false
     }
   },
 
