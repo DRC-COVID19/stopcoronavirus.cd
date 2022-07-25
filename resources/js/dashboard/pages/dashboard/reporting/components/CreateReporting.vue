@@ -27,6 +27,7 @@
                     step="Étape 2"
                     :cloneOptionQuestions="cloneOptionQuestions"
                     :except="columnsSelected"
+                    :dataSelected="linesSelected"
                     :isDataSourceSelected='isDataSourceSelected'
                     placeholder="Recherche"
                     @selectedForm="selectedForm"
@@ -41,6 +42,7 @@
                     step="Étape 3"
                     :cloneOptionQuestions="cloneOptionQuestions"
                     :except="linesSelected"
+                    :dataSelected="columnsSelected"
                     :isDataSourceSelected='isDataSourceSelected'
                      placeholder="Recherche"
                     @selectedForm="selectedForm"
@@ -68,10 +70,10 @@
             </b-row>
         </b-tab>
         <b-tab title="Bookmark">
-          <b-row class="mx-0 h-100 w-100" lg="12">
+          <b-row>
             <b-col class="mx-0 w-100 mt-4" lg="12">
                 <label for class="text-dash-color">Sélectionner le bookmark :</label>
-                <b-list-group v-for="(bookmark) in bookmarks" :key="bookmark.id">
+                <b-list-group v-for="(bookmark) in bookmarks" :key="bookmark.id" class="rounded-0 w-100">
                     <b-list-group-item :active="bookmark.id === activeItem" @click="selectedBookmark(bookmark)" style="cursor: pointer;">{{bookmark.name}}</b-list-group-item>
                 </b-list-group>
               </b-col>

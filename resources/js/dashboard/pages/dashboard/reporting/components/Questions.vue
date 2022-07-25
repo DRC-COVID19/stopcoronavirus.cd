@@ -20,7 +20,7 @@
               :aria-describedby="ariaDescribedby"
               name="name"
             >
-              <b-form-checkbox :value="{ id: 0, name: 'Date', type: 'date' }" v-show="showDate && isDataSourceSelected">
+              <b-form-checkbox :value="{ name: 'Date' }" checked="1" v-show="showDate && isDataSourceSelected">
                 Date
               </b-form-checkbox>
             </b-form-checkbox-group>
@@ -89,6 +89,10 @@ export default {
       type: Array,
       default: () => []
     },
+    dataSelected: {
+      type: Array,
+      default: () => []
+    },
     placeholder: {
       type: String,
       default: () => ''
@@ -101,7 +105,7 @@ export default {
   },
   data () {
     return {
-      datesSelected: [],
+      datesSelected: this.dataSelected.filter(item => item.type === 'date'),
       formFieldsSelected: [],
       hospitalsSelected: [],
       townshipsSelected: [],
@@ -141,7 +145,14 @@ export default {
     }
   },
   watch: {
-    datesSelected () {
+    // dataSelected () {
+    //   this.datesSelected = this.dataSelected.find(item => item.type === 'date')
+    //   this.hospitalsSelected = this.dataSelected.find(item => item.type === 'hospital')
+    //   this.formFieldsSelected = this.dataSelected.find(item => item.type === 'form_field')
+    //   this.townshipsSelected = this.dataSelected.find(item => item.type === 'township')
+    //   // township
+    // },
+    datesSelected (value) {
       this.emitSelectedItems()
     },
     formFieldsSelected () {
@@ -179,7 +190,12 @@ export default {
           type: 'township'
         }))
       )
-      selectedItems.push(...this.datesSelected)
+      selectedItems.push(
+        ...this.datesSelected.map((date) => ({
+          id: new Date().getTime(),
+          name: date.name,
+          type: 'date'
+        })))
       this.$emit('input', selectedItems)
     },
     resetForm () {

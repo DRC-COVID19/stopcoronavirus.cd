@@ -63,7 +63,11 @@
       >
       </pivottable>
     </b-col>
-    <NameBookmarkModal :data-bookmark="dataBookmark" :modalShow="modalShow" />
+    <NameBookmarkModal
+      :data-bookmark="dataBookmark"
+      :modalShow="modalShow"
+      @onSubmitBookmark="onSubmitBookmark"
+    />
   </b-row>
 </template>
 <script>
@@ -168,8 +172,8 @@ export default {
       }))
     }
   },
-  async mounted () {
-    await this.getBookmarks()
+  mounted () {
+    this.initBookMark()
   },
   watch: {
     formFields () {
@@ -244,6 +248,12 @@ export default {
         })
         return data
       })
+    },
+    async initBookMark () {
+      await this.getBookmarks()
+    },
+    onSubmitBookmark () {
+      this.initBookMark()
     },
     selectColumns (value) {
       this.columnsSelected = value

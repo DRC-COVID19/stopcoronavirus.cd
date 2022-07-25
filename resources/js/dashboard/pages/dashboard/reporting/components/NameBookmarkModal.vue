@@ -92,6 +92,7 @@ export default {
             type: 'success'
           })
           this.$bvModal.hide('my-modal-bookmark')
+          this.$emit('onSubmitBookmark')
         })
         .catch(({ response }) => {
           this.$notify({
