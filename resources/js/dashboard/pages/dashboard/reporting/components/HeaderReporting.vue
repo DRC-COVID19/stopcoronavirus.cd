@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col lg="3" class="bg-white pb-5">
+    <b-col lg="3" class="bg-white pb-5 sm-display">
       <CreateReporting
         :activeItem="activeItem"
         :bookmarks="bookmarks"
@@ -10,8 +10,6 @@
         :linesSelected="linesSelected"
         :getForms="getForms"
         :reporting="reporting"
-        @selectColumns="selectColumns"
-        @selectLines="selectLines"
         @selectedForm="selectedForm"
         @resetForm="resetForm"
         @selectedBookmark="selectedBookmark"
@@ -37,15 +35,13 @@
         :linesSelected="linesSelected"
         :getForms="getForms"
         :reporting="reporting"
-        @selectColumns="selectColumns"
-        @selectLines="selectLines"
         @selectedForm="selectedForm"
         @resetForm="resetForm"
         @selectedBookmark="selectedBookmark"
         @savedBookmark="savedBookmark"
       />
     </b-sidebar>
-    <b-col lg="9" v-if="showDisplayArray" class="md-display">
+    <b-col lg="9" v-if="showDisplayArray">
       <skeleton-loading v-if="isLoading" class="w-100">
         <square-skeleton
           :boxProperties="{
@@ -154,8 +150,6 @@ export default {
       },
       cloneOptionQuestions: [],
       completedFormFields: [],
-      linesSelected: [],
-      columnsSelected: [],
       htmlElement: null
     }
   },
@@ -163,7 +157,9 @@ export default {
     ...mapState({
       formFields: (state) => state.formField.formFields,
       completedFormAll: (state) => state.completedForm.completedFormAll,
-      bookmarks: (state) => state.bookmark.bookmarks
+      bookmarks: (state) => state.bookmark.bookmarks,
+      linesSelected: (state) => state.reporting.linesSelected,
+      columnsSelected: (state) => state.reporting.columnsSelected
     }),
     getForms () {
       return this.forms.map((form) => ({
@@ -254,12 +250,6 @@ export default {
     },
     onSubmitBookmark () {
       this.initBookMark()
-    },
-    selectColumns (value) {
-      this.columnsSelected = value
-    },
-    selectLines (value) {
-      this.linesSelected = value
     },
     resetForm () {
       this.linesSelected = []

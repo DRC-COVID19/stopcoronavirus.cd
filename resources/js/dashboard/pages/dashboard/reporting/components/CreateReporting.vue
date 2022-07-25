@@ -22,12 +22,12 @@
                   <div class="mx-0 w-100" lg="12">  <hr /> </div>
                    <div class="col-md-12 px-0">
                    <Questions
-                    v-model="lines"
+                    v-model="linesSelected"
                     title="Lignes"
+                    type="line"
                     step="Étape 2"
                     :cloneOptionQuestions="cloneOptionQuestions"
                     :except="columnsSelected"
-                    :dataSelected="linesSelected"
                     :isDataSourceSelected='isDataSourceSelected'
                     placeholder="Recherche"
                     @selectedForm="selectedForm"
@@ -37,12 +37,12 @@
                  </div>
                  <div class="col-md-12 px-0">
                    <Questions
-                    v-model="columns"
+                    v-model="columnsSelected"
                     title="Colonnes"
+                    type="column"
                     step="Étape 3"
                     :cloneOptionQuestions="cloneOptionQuestions"
                     :except="linesSelected"
-                    :dataSelected="columnsSelected"
                     :isDataSourceSelected='isDataSourceSelected'
                      placeholder="Recherche"
                     @selectedForm="selectedForm"
@@ -83,6 +83,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import Questions from './Questions'
 export default {
   components: {
@@ -97,10 +98,6 @@ export default {
       type: Array,
       default: () => ([])
     },
-    columnsSelected: {
-      type: Array,
-      default: () => ([])
-    },
     cloneOptionQuestions: {
       type: Array,
       default: () => ([])
@@ -108,10 +105,6 @@ export default {
     isDataSourceSelected: {
       type: Boolean,
       default: () => false
-    },
-    linesSelected: {
-      type: Array,
-      default: () => ([])
     },
     getForms: {
       type: Array,
@@ -122,38 +115,24 @@ export default {
       default: () => ({})
     }
   },
+  computed: {
+    ...mapState({
+      linesSelected: (state) => state.reporting.linesSelected,
+      columnsSelected: (state) => state.reporting.columnsSelected,
+    })
+  },
   data () {
     return {
-      columns: this.columnsSelected,
-      lines: this.linesSelected,
       report: this.reporting,
       title: ''
     }
   },
   watch: {
-    columns (value) {
-      this.selectColumns(value)
-    },
-    columnsSelected (value) {
-      this.columns = value
-    },
-    lines (value) {
-      this.selectLines(value)
-    },
-    linesSelected (value) {
-      this.lines = value
-    },
     reporting (value) {
       this.report = value
     }
   },
   methods: {
-    selectColumns (value) {
-      this.$emit('selectColumns', value)
-    },
-    selectLines (value) {
-      this.$emit('selectLines', value)
-    },
     selectedForm () {
       this.$emit('selectedForm')
     },

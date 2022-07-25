@@ -19,8 +19,9 @@
               v-model="datesSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
+              @change="emitSelectedItems()"
             >
-              <b-form-checkbox :value="{ name: 'Date' }" checked="1" v-show="showDate && isDataSourceSelected">
+              <b-form-checkbox :value="{ name: 'Date', type:'date' }" checked="1" v-show="showDate && isDataSourceSelected">
                 Date
               </b-form-checkbox>
             </b-form-checkbox-group>
@@ -29,8 +30,9 @@
               v-model="townshipsSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
+              @change="emitSelectedItems()"
             >
-              <b-form-checkbox :value="{ name: 'Commune' }" v-show="showTownship && isDataSourceSelected">
+              <b-form-checkbox :value="{ name: 'Commune', type:'township' }" v-show="showTownship && isDataSourceSelected">
                 Commune
               </b-form-checkbox>
             </b-form-checkbox-group>
@@ -39,8 +41,9 @@
               v-model="hospitalsSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
+              @change="emitSelectedItems()"
             >
-              <b-form-checkbox :value="{ name: 'Hopital' }" v-show="showHospital && isDataSourceSelected"
+              <b-form-checkbox :value="{ name: 'Hopital', type:'hospital' }" v-show="showHospital && isDataSourceSelected"
                 >Hôpital
               </b-form-checkbox>
             </b-form-checkbox-group>
@@ -55,11 +58,12 @@
               v-model="formFieldsSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
+              @change="emitSelectedItems()"
             >
               <b-form-checkbox
                 v-for="(field, index) in formFieldsFiltered"
                 :key="index"
-                :value="{ id: field.id, name: field.name }"
+                :value="{ id: field.id, name: field.name, type:'form_field' }"
                 >{{ field.name }}</b-form-checkbox
               >
             </b-form-checkbox-group>
@@ -70,10 +74,14 @@
   </b-col>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   props: {
     title: {
+      type: String,
+      default: () => ''
+    },
+    type: {
       type: String,
       default: () => ''
     },
@@ -89,10 +97,6 @@ export default {
       type: Array,
       default: () => []
     },
-    dataSelected: {
-      type: Array,
-      default: () => []
-    },
     placeholder: {
       type: String,
       default: () => ''
@@ -105,7 +109,7 @@ export default {
   },
   data () {
     return {
-      datesSelected: this.dataSelected.filter(item => item.type === 'date'),
+      datesSelected: [],
       formFieldsSelected: [],
       hospitalsSelected: [],
       townshipsSelected: [],
@@ -115,7 +119,9 @@ export default {
   computed: {
     ...mapState({
       hospitals: (state) => state.hospital.allHospitals,
-      townships: (state) => state.township.townships
+      townships: (state) => state.township.townships,
+      linesSelected: (state) => state.reporting.linesSelected,
+      columnsSelected: (state) => state.reporting.columnsSelected
     }),
     showTownship () {
       return this.except.filter(
@@ -145,27 +151,41 @@ export default {
     }
   },
   watch: {
-    // dataSelected () {
-    //   this.datesSelected = this.dataSelected.find(item => item.type === 'date')
-    //   this.hospitalsSelected = this.dataSelected.find(item => item.type === 'hospital')
-    //   this.formFieldsSelected = this.dataSelected.find(item => item.type === 'form_field')
-    //   this.townshipsSelected = this.dataSelected.find(item => item.type === 'township')
-    //   // township
-    // },
-    datesSelected (value) {
-      this.emitSelectedItems()
+    linesSelected () {
+      if (this.type.match('line')) {
+        this.datesSelected = this.linesSelected.filter(
+          (item) => item.type === 'date'
+        )
+        this.hospitalsSelected = this.linesSelected.filter(
+          (item) => item.type === 'hospital'
+        )
+        this.townshipsSelected = this.linesSelected.filter(
+          (item) => item.type === 'township'
+        )
+        this.formFieldsSelected = this.linesSelected.filter(
+          (item) => item.type === 'form_field'
+        )
+      }
     },
-    formFieldsSelected () {
-      this.emitSelectedItems()
-    },
-    hospitalsSelected () {
-      this.emitSelectedItems()
-    },
-    townshipsSelected () {
-      this.emitSelectedItems()
+    columnsSelected () {
+      if (this.type.match('column')) {
+        this.datesSelected = this.columnsSelected.filter(
+          (item) => item.type === 'date'
+        )
+        this.hospitalsSelected = this.columnsSelected.filter(
+          (item) => item.type === 'hospital'
+        )
+        this.townshipsSelected = this.columnsSelected.filter(
+          (item) => item.type === 'township'
+        )
+        this.formFieldsSelected = this.columnsSelected.filter(
+          (item) => item.type === 'form_field'
+        )
+      }
     }
   },
   methods: {
+    ...mapActions(['reporting__editLines', 'reporting__editColumns']),
     emitSelectedItems () {
       const selectedItems = []
       selectedItems.push(
@@ -177,7 +197,6 @@ export default {
       )
       selectedItems.push(
         ...this.hospitalsSelected.map((hospital) => ({
-          id: new Date().getTime(),
           name: hospital.name,
           type: 'hospital'
         }))
@@ -185,18 +204,20 @@ export default {
 
       selectedItems.push(
         ...this.townshipsSelected.map((township) => ({
-          id: new Date().getTime(),
           name: township.name,
           type: 'township'
         }))
       )
       selectedItems.push(
         ...this.datesSelected.map((date) => ({
-          id: new Date().getTime(),
           name: date.name,
           type: 'date'
         })))
-      this.$emit('input', selectedItems)
+      if (this.type.match('line')) {
+        this.reporting__editLines(selectedItems)
+      } else {
+        this.reporting__editColumns(selectedItems)
+      }
     },
     resetForm () {
       this.datesSelected = []
