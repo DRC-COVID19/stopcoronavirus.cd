@@ -8,6 +8,7 @@
         :isDataSourceSelected="isDataSourceSelected"
         :getForms="getForms"
         :reporting="reporting"
+        @changePivotTable="changePivotTable"
         @selectedForm="selectedForm"
         @selectedBookmark="selectedBookmark"
         @savedBookmark="savedBookmark"
@@ -30,13 +31,14 @@
         :isDataSourceSelected="isDataSourceSelected"
         :getForms="getForms"
         :reporting="reporting"
+        @changePivotTable="changePivotTable"
         @selectedForm="selectedForm"
         @selectedBookmark="selectedBookmark"
         @savedBookmark="savedBookmark"
       />
     </b-sidebar>
     <b-col lg="9" v-if="showDisplayArray">
-      <skeleton-loading v-show="isLoading" class="w-100">
+      <skeleton-loading v-if="isLoading" class="w-100">
         <square-skeleton
           :boxProperties="{
             width: '100%',
@@ -45,12 +47,12 @@
         ></square-skeleton>
       </skeleton-loading>
 
-      <div v-show="!isLoading">
+      <div v-else>
         <pivottable
           :arrayAxeValue="arrayAxeValue"
           :linesSelected="linesSelected"
           :columnsSelected="columnsSelected"
-
+          :key="'pivot-table' + keyPivotTable"
         >
       </pivottable>
       </div>
@@ -133,6 +135,7 @@ export default {
           'Comptage en tant que fraction de colonnes'
       },
       isLoading: false,
+      keyPivotTable: 0,
       showDisplayArray: true,
       isDataSourceSelected: false,
       title: '',
@@ -146,6 +149,8 @@ export default {
       },
       cloneOptionQuestions: [],
       completedFormFields: [],
+      oldArrayAxeValue: [],
+      formSelected: null,
       htmlElement: null
     }
   },
@@ -246,12 +251,23 @@ export default {
     async initBookMark () {
       await this.getBookmarks()
     },
+    changePivotTable (value) {
+      this.keyPivotTable++
+      this.oldArrayAxeValue = [...this.arrayAxeValue]
+      if (value.match('bookmark')) {
+        this.arrayAxeValue = []
+      } else {
+        this.arrayAxeValue = [...this.oldArrayAxeValue]
+        this.selectedForm(this.formSelected)
+      }
+    },
     onSubmitBookmark () {
       this.initBookMark()
     },
     async selectedForm (value) {
       this.isLoading = true
       const formId = { form_id: value }
+      this.formSelected = value
       this.getFormFields(formId)
       this.isDataSourceSelected = true
       await this.completedForm__getAll(formId)
@@ -318,12 +334,13 @@ export default {
       this.modalShow = !this.modalShow
     },
     selectedBookmark (item) {
+      // this.isLoading = true
       this.activeItem = item.id
       this.selectedFormBookmark(item.form_id)
       this.reporting__editLines(JSON.parse(item.row))
       this.reporting__editColumns(JSON.parse(item.column))
+      // this.isLoading = false
       this.$nextTick(() => {
-        this.isLoading = true
         console.log('isLoading0')
         const displayTypes = document.querySelector(
           '.pvtRenderers>.pvtDropdown'
@@ -403,7 +420,7 @@ export default {
             }
           }
           console.log('isLoading3')
-          this.isLoading = false
+          // this.isLoading = false
         }, 4000)
       })
       this.customRenderersStyles()

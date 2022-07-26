@@ -1,6 +1,6 @@
 <template>
   <b-tabs class="mx-0">
-        <b-tab title="Paramètrage" :active="title==='Paramètrage'" @click.prevent="selectedForm()">
+        <b-tab title="Paramètrage" :active="title==='Paramètrage'" @click="showBookMarks('settings')">
             <b-row class="mx-0 h-100 w-100" lg="12">
               <b-col class="mx-0 w-100 mt-4" lg="12">
                 <h3>Générateur de graphique</h3>
@@ -69,7 +69,7 @@
               </b-col>
             </b-row>
         </b-tab>
-        <b-tab title="Bookmark" @click="showBookMarks()">
+        <b-tab title="Bookmark" @click="showBookMarks('bookmark')">
           <b-row>
             <b-col class="mx-0 w-100 mt-4 bookmark__overflow" lg="12">
                 <label for class="text-dash-color">Sélectionner le bookmark :</label>
@@ -181,10 +181,11 @@ export default {
           })
       }
     },
-    showBookMarks () {
+    showBookMarks (value) {
       // document.querySelectorAll('table').forEach((tableItem) => {
-      //   tableItem.innerHTML = ''
+      //   tableItem.textContent = ''
       // })
+      this.$emit('changePivotTable', value)
     }
   }
 
