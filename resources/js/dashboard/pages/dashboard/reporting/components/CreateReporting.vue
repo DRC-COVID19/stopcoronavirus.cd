@@ -71,10 +71,10 @@
         </b-tab>
         <b-tab title="Bookmark" @click="showBookMarks()">
           <b-row>
-            <b-col class="mx-0 w-100 mt-4" lg="12">
+            <b-col class="mx-0 w-100 mt-4 bookmark__overflow" lg="12">
                 <label for class="text-dash-color">Sélectionner le bookmark :</label>
                 <b-list-group v-for="(bookmark) in bookmarks" :key="bookmark.id" class="rounded-0 w-100">
-                    <b-list-group-item :active="bookmark.id === activeItem" @click.prevent="selectedBookmark(bookmark)" style="cursor: pointer;">{{bookmark.name}}</b-list-group-item>
+                    <b-list-group-item :active="bookmark.id === activeItem" style="cursor: pointer;" class="d-flex justify-content-between" @click.prevent="selectedBookmark(bookmark)">{{bookmark.name}}  <!--<b-button :variant="bookmark.id === activeItem?'danger':'outline-danger'" size="sm" @click="deleteBookmark(bookmark)">supprimer</b-button>--></b-list-group-item>
                 </b-list-group>
               </b-col>
           </b-row>
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import Questions from './Questions'
 export default {
   components: {
@@ -134,6 +134,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['bookmark__delete']),
     selectedForm () {
       if (this.report.formId !== null) {
         this.$emit('selectedForm')
@@ -151,6 +152,35 @@ export default {
     savedBookmark () {
       this.$emit('savedBookmark')
     },
+    deleteBookmark (bookmark) {
+      const title = 'Suppression'
+      const message = 'Voulez-vous vraiment supprimer ?'
+      const response = this.$bvModal.msgBoxConfirm(message, {
+        titleHtml: title,
+        noFade: true
+      })
+      if (!response) {
+        this.bookmark__delete(bookmark)
+          .then(() => {
+            this.$notify({
+              group: 'alert',
+              title: 'Bookmark',
+              text: 'Bookmark supprimé avec succès',
+              type: 'success'
+            })
+            this.$emit('onSubmitBookmark')
+          })
+          .catch(({ response }) => {
+            this.$notify({
+              group: 'alert',
+              title: 'Bookmark',
+              text: 'Une erreur est survenus',
+              type: 'error'
+            })
+            this.$bvModal.hide('my-modal-bookmark')
+          })
+      }
+    },
     showBookMarks () {
       document.querySelectorAll('table').forEach((tableItem) => {
         tableItem.innerHTML = ''
@@ -161,6 +191,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.bookmark__overflow{
+overflow-y: scroll !important;
+}
 </style>
