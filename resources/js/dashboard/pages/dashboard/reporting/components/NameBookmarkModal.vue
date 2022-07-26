@@ -92,7 +92,7 @@ export default {
             type: 'success'
           })
           this.$bvModal.hide('my-modal-bookmark')
-          this.$emit('savedNameBookmark')
+          this.$emit('onSubmitBookmark')
         })
         .catch(({ response }) => {
           this.$notify({
