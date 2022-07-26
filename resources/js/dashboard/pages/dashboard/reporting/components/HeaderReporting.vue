@@ -176,7 +176,9 @@ export default {
       'hospitals__townships',
       'completedForm__getAll',
       'getBookmarks',
-      'createBookmark'
+      'createBookmark',
+      'reporting__editLines',
+      'reporting__editColumns'
     ]),
 
     addPvtValsHTMLBadge () {
@@ -319,8 +321,8 @@ export default {
       this.activeItem = item.id
       this.isLoading = true
       this.selectedFormBookmark(item.form_id)
-      this.linesSelected = JSON.parse(item.row)
-      this.columnsSelected = JSON.parse(item.column)
+      this.reporting__editLines(JSON.parse(item.row))
+      this.reporting__editColumns(JSON.parse(item.column))
       this.$nextTick(() => {
         const displayTypes = document.querySelector(
           '.pvtRenderers>.pvtDropdown'
@@ -361,6 +363,7 @@ export default {
           }
         }
         setTimeout(() => {
+          console.log('new feature bookmark')
           if (item.params1) {
             const paramsAggregatorSelected = document.querySelector(
               '.pvtVals>.pvtDropdown'
@@ -374,9 +377,6 @@ export default {
               if (
                 paramsAggregatorSelected.options[index].value === item.params1
               ) {
-                console.log('params1', paramsAggregatorSelected[index].value)
-
-                console.log('index', index)
                 paramsAggregatorSelected.options[index].setAttribute(
                   'selected',
                   'seleted'
@@ -388,8 +388,9 @@ export default {
               }
             }
           }
-        }, 3000)
+        }, 4000)
       })
+      this.customRenderersStyles()
       this.isLoading = false
     }
   }
