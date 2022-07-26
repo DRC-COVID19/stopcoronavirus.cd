@@ -1,6 +1,6 @@
 <template>
   <b-tabs class="mx-0">
-        <b-tab title="Paramètrage" :active="title==='Paramètrage'">
+        <b-tab title="Paramètrage" :active="title==='Paramètrage'" @click.prevent="selectedForm()">
             <b-row class="mx-0 h-100 w-100" lg="12">
               <b-col class="mx-0 w-100 mt-4" lg="12">
                 <h3>Générateur de graphique</h3>
@@ -69,12 +69,12 @@
               </b-col>
             </b-row>
         </b-tab>
-        <b-tab title="Bookmark" @click="resetPivottable()">
+        <b-tab title="Bookmark" @click="showBookMarks()">
           <b-row>
             <b-col class="mx-0 w-100 mt-4" lg="12">
                 <label for class="text-dash-color">Sélectionner le bookmark :</label>
                 <b-list-group v-for="(bookmark) in bookmarks" :key="bookmark.id" class="rounded-0 w-100">
-                    <b-list-group-item :active="bookmark.id === activeItem" @click="selectedBookmark(bookmark)" style="cursor: pointer;">{{bookmark.name}}</b-list-group-item>
+                    <b-list-group-item :active="bookmark.id === activeItem" @click.prevent="selectedBookmark(bookmark)" style="cursor: pointer;">{{bookmark.name}}</b-list-group-item>
                 </b-list-group>
               </b-col>
           </b-row>
@@ -124,7 +124,8 @@ export default {
   data () {
     return {
       report: this.reporting,
-      title: ''
+      title: '',
+      bookmark: {}
     }
   },
   watch: {
@@ -134,21 +135,23 @@ export default {
   },
   methods: {
     selectedForm () {
-      this.$emit('selectedForm')
+      if (this.report.formId !== null) {
+        this.$emit('selectedForm')
+      }
     },
     resetForm () {
       this.$refs.QuestionsOne.resetForm()
       this.$refs.QuestionsTwo.resetForm()
       this.report = {}
-      this.$emit('resetForm')
     },
     selectedBookmark (bookmark) {
-      this.$emit('selectedBookmark', bookmark)
+      this.bookmark = { ...bookmark }
+      this.$emit('selectedBookmark', this.bookmark)
     },
     savedBookmark () {
       this.$emit('savedBookmark')
     },
-    resetPivottable () {
+    showBookMarks () {
       document.querySelectorAll('table').forEach((tableItem) => {
         tableItem.innerHTML = ''
       })
