@@ -182,7 +182,9 @@ export default {
       'hospitals__townships',
       'completedForm__getAll',
       'getBookmarks',
-      'createBookmark'
+      'createBookmark',
+      'reporting__editLines',
+      'reporting__editColumns'
     ]),
 
     addPvtValsHTMLBadge () {
@@ -329,8 +331,8 @@ export default {
       this.activeItem = item.id
       this.isLoading = true
       this.selectedFormBookmark(item.form_id)
-      this.linesSelected = JSON.parse(item.row)
-      this.columnsSelected = JSON.parse(item.column)
+      this.reporting__editLines(JSON.parse(item.row))
+      this.reporting__editColumns(JSON.parse(item.column))
       this.$nextTick(() => {
         const displayTypes = document.querySelector(
           '.pvtRenderers>.pvtDropdown'
