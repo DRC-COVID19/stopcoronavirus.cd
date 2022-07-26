@@ -182,9 +182,9 @@ export default {
       }
     },
     showBookMarks () {
-      document.querySelectorAll('table').forEach((tableItem) => {
-        tableItem.innerHTML = ''
-      })
+      // document.querySelectorAll('table').forEach((tableItem) => {
+      //   tableItem.innerHTML = ''
+      // })
     }
   }
 
