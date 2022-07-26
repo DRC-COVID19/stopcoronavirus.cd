@@ -74,7 +74,7 @@
             <b-col class="mx-0 w-100 mt-4 bookmark__overflow" lg="12">
                 <label for class="text-dash-color">Sélectionner le bookmark :</label>
                 <b-list-group v-for="(bookmark) in bookmarks" :key="bookmark.id" class="rounded-0 w-100">
-                    <b-list-group-item :active="bookmark.id === activeItem" style="cursor: pointer;" class="d-flex justify-content-between"><span @click.prevent="selectedBookmark(bookmark)">{{bookmark.name}} </span><b-button :variant="bookmark.id === activeItem?'danger':'outline-danger'" size="sm" @click="deleteBookmark(bookmark)">supprimer</b-button></b-list-group-item>
+                    <b-list-group-item :active="bookmark.id === activeItem" style="cursor: pointer;" class="d-flex justify-content-between" @click.prevent="selectedBookmark(bookmark)">{{bookmark.name}}  <!--<b-button :variant="bookmark.id === activeItem?'danger':'outline-danger'" size="sm" @click="deleteBookmark(bookmark)">supprimer</b-button>--></b-list-group-item>
                 </b-list-group>
               </b-col>
           </b-row>
@@ -153,25 +153,33 @@ export default {
       this.$emit('savedBookmark')
     },
     deleteBookmark (bookmark) {
-      this.bookmark__delete(bookmark)
-        .then(() => {
-          this.$notify({
-            group: 'alert',
-            title: 'Bookmark',
-            text: 'Bookmark supprimé avec succès',
-            type: 'success'
+      const title = 'Suppression'
+      const message = 'Voulez-vous vraiment supprimer ?'
+      const response = this.$bvModal.msgBoxConfirm(message, {
+        titleHtml: title,
+        noFade: true
+      })
+      if (!response) {
+        this.bookmark__delete(bookmark)
+          .then(() => {
+            this.$notify({
+              group: 'alert',
+              title: 'Bookmark',
+              text: 'Bookmark supprimé avec succès',
+              type: 'success'
+            })
+            this.$emit('onSubmitBookmark')
           })
-          this.$emit('onSubmitBookmark')
-        })
-        .catch(({ response }) => {
-          this.$notify({
-            group: 'alert',
-            title: 'Bookmark',
-            text: 'Une erreur est survenus',
-            type: 'error'
+          .catch(({ response }) => {
+            this.$notify({
+              group: 'alert',
+              title: 'Bookmark',
+              text: 'Une erreur est survenus',
+              type: 'error'
+            })
+            this.$bvModal.hide('my-modal-bookmark')
           })
-          this.$bvModal.hide('my-modal-bookmark')
-        })
+      }
     },
     showBookMarks () {
       document.querySelectorAll('table').forEach((tableItem) => {

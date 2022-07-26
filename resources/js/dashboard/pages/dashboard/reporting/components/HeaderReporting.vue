@@ -36,7 +36,7 @@
       />
     </b-sidebar>
     <b-col lg="9" v-if="showDisplayArray">
-      <skeleton-loading v-if="isLoading" class="w-100">
+      <skeleton-loading v-show="isLoading" class="w-100">
         <square-skeleton
           :boxProperties="{
             width: '100%',
@@ -45,13 +45,15 @@
         ></square-skeleton>
       </skeleton-loading>
 
-      <pivottable
-        :arrayAxeValue="arrayAxeValue"
-        :linesSelected="linesSelected"
-        :columnsSelected="columnsSelected"
-        v-else
-      >
+      <div v-show="!isLoading">
+        <pivottable
+          :arrayAxeValue="arrayAxeValue"
+          :linesSelected="linesSelected"
+          :columnsSelected="columnsSelected"
+
+        >
       </pivottable>
+      </div>
     </b-col>
     <NameBookmarkModal
       :data-bookmark="dataBookmark"
@@ -265,13 +267,11 @@ export default {
       })
     },
     async selectedFormBookmark (value) {
-      this.isLoading = true
       const formId = { form_id: value }
       this.getFormFields(formId)
       this.isDataSourceSelected = true
       await this.completedForm__getAll(formId)
       this.getCompletedFormAll()
-      this.isLoading = false
     },
 
     selectPvtRenderers () {
@@ -319,79 +319,95 @@ export default {
     },
     selectedBookmark (item) {
       this.activeItem = item.id
-      this.isLoading = true
       this.selectedFormBookmark(item.form_id)
       this.reporting__editLines(JSON.parse(item.row))
       this.reporting__editColumns(JSON.parse(item.column))
       this.$nextTick(() => {
+        this.isLoading = true
+        console.log('isLoading0')
         const displayTypes = document.querySelector(
           '.pvtRenderers>.pvtDropdown'
         )
-        displayTypes.options[0].removeAttribute('selected')
-        for (let index = 0; index < displayTypes.length; index++) {
-          if (displayTypes.options[index].value === item.display_type) {
-            setTimeout(() => {
-              displayTypes.options[index].setAttribute('selected', 'seleted')
-              displayTypes.dispatchEvent(new Event('change'))
-            }, 1000)
-            break
-          }
-        }
-        if (item.aggregator_type) {
-          const aggregatorsRendersSelected = document.querySelector(
-            '.pvtVals>div>.pvtDropdown'
-          )
-          aggregatorsRendersSelected.options[0].removeAttribute('selected')
-          for (
-            let index = 0;
-            index < aggregatorsRendersSelected.length;
-            index++
-          ) {
-            if (
-              aggregatorsRendersSelected.options[index].value ===
-              item.aggregator_type
-            ) {
+        console.log(displayTypes)
+        if (displayTypes) {
+          displayTypes.options[0].removeAttribute('selected')
+          console.log('isLoading00')
+          for (let index = 0; index < displayTypes.length; index++) {
+            console.log('displayTypes', index)
+            if (displayTypes.options[index].value === item.display_type) {
               setTimeout(() => {
-                aggregatorsRendersSelected.options[index].setAttribute(
-                  'selected',
-                  'seleted'
-                )
-                aggregatorsRendersSelected.dispatchEvent(new Event('change'))
-              }, 1100)
+                displayTypes.options[index].setAttribute('selected', 'seleted')
+                displayTypes.dispatchEvent(new Event('change'))
+              }, 1000)
               break
             }
           }
         }
-        setTimeout(() => {
-          console.log('new feature bookmark')
-          if (item.params1) {
-            const paramsAggregatorSelected = document.querySelector(
-              '.pvtVals>.pvtDropdown'
-            )
-            paramsAggregatorSelected.options[0].removeAttribute('selected')
+        console.log('Type 1:', displayTypes)
+        console.log('isLoading1')
+        if (item.aggregator_type) {
+          const aggregatorsRendersSelected = document.querySelector(
+            '.pvtVals>div>.pvtDropdown'
+          )
+          if (aggregatorsRendersSelected) {
+            aggregatorsRendersSelected.options[0].removeAttribute('selected')
             for (
               let index = 0;
-              index < paramsAggregatorSelected.length;
+              index < aggregatorsRendersSelected.length;
               index++
             ) {
               if (
-                paramsAggregatorSelected.options[index].value === item.params1
+                aggregatorsRendersSelected.options[index].value ===
+              item.aggregator_type
               ) {
-                paramsAggregatorSelected.options[index].setAttribute(
-                  'selected',
-                  'seleted'
-                )
-                window.paramsAggregatorSelected = paramsAggregatorSelected
-                paramsAggregatorSelected.dispatchEvent(new Event('change'))
-
+                setTimeout(() => {
+                  aggregatorsRendersSelected.options[index].setAttribute(
+                    'selected',
+                    'seleted'
+                  )
+                  aggregatorsRendersSelected.dispatchEvent(new Event('change'))
+                }, 1100)
                 break
               }
             }
           }
+        }
+        console.log('isLoading2', item.params1)
+        setTimeout(() => {
+          console.log('new feature bookmark')
+          if (item.params1) {
+            // this.isLoading = false
+            const paramsAggregatorSelected = document.querySelector(
+              '.pvtVals>.pvtDropdown'
+            )
+            if (paramsAggregatorSelected) {
+              paramsAggregatorSelected.options[0].removeAttribute('selected')
+              for (
+                let index = 0;
+                index < paramsAggregatorSelected.length;
+                index++
+              ) {
+                if (
+                  paramsAggregatorSelected.options[index].value === item.params1
+                ) {
+                  paramsAggregatorSelected.options[index].setAttribute(
+                    'selected',
+                    'seleted'
+                  )
+                  window.paramsAggregatorSelected = paramsAggregatorSelected
+                  paramsAggregatorSelected.dispatchEvent(new Event('change'))
+
+                  break
+                }
+              }
+            }
+          }
+          console.log('isLoading3')
+          this.isLoading = false
         }, 4000)
       })
       this.customRenderersStyles()
-      this.isLoading = false
+      // this.isLoading = false
     }
   }
 }
