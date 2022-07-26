@@ -1,6 +1,6 @@
 <template>
   <b-tabs class="mx-0">
-        <b-tab title="paramétrage" :active="title==='paramétrage'">
+        <b-tab title="Paramètrage" :active="title==='Paramètrage'">
             <b-row class="mx-0 h-100 w-100" lg="12">
               <b-col class="mx-0 w-100 mt-4" lg="12">
                 <h3>Générateur de graphique</h3>
@@ -69,7 +69,7 @@
               </b-col>
             </b-row>
         </b-tab>
-        <b-tab title="Bookmark">
+        <b-tab title="Bookmark" @click="resetPivottable()">
           <b-row>
             <b-col class="mx-0 w-100 mt-4" lg="12">
                 <label for class="text-dash-color">Sélectionner le bookmark :</label>
@@ -118,7 +118,7 @@ export default {
   computed: {
     ...mapState({
       linesSelected: (state) => state.reporting.linesSelected,
-      columnsSelected: (state) => state.reporting.columnsSelected,
+      columnsSelected: (state) => state.reporting.columnsSelected
     })
   },
   data () {
@@ -147,6 +147,11 @@ export default {
     },
     savedBookmark () {
       this.$emit('savedBookmark')
+    },
+    resetPivottable () {
+      document.querySelectorAll('table').forEach((tableItem) => {
+        tableItem.innerHTML = ''
+      })
     }
   }
 

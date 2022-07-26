@@ -185,7 +185,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['reporting__editLines', 'reporting__editColumns']),
+    ...mapActions(['reporting__editLines', 'reporting__editColumns', 'reporting__reset']),
     emitSelectedItems () {
       const selectedItems = []
       selectedItems.push(
@@ -224,6 +224,7 @@ export default {
       this.formFieldsSelected = []
       this.townshipsSelected = []
       this.hospitalsSelected = []
+      this.reporting__reset()
     }
   }
 }
