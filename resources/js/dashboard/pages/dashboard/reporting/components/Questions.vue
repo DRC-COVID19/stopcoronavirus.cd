@@ -1,6 +1,6 @@
 <template>
   <b-col class="mx-0 w-100" lg="12">
-    <label for class="text-dash-color">{{ title }} :</label>
+    <label for class="text-dash-color"><b-badge class="px-2"> {{ step}} </b-badge> : {{ title }}</label>
       <div class="input-search d-flex justify-content-around mb-2">
       <input
         v-model="formFieldTitle"
@@ -12,76 +12,80 @@
     </div>
     <b-row>
       <b-col class="w-100 mx-1 py-1 container-axe" lg="11">
-         <div class="mb-2">
+         <div class="mt-4">
           <b-form-group label="" v-slot="{ ariaDescribedby }">
             <b-form-checkbox-group
-              id="checkbox-group-2"
+              id="checkbox-group-1"
               v-model="datesSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
+              @change="emitSelectedItems()"
             >
-              <b-form-checkbox :value="{ name: 'date' }" v-show="showDate && isDataSourceSelected">
+              <b-form-checkbox :value="{ name: 'Date', type:'date' }" checked="1" v-show="showDate && isDataSourceSelected">
                 Date
               </b-form-checkbox>
             </b-form-checkbox-group>
-          </b-form-group>
-        </div>
-        <div class="mb-2">
-          <b-form-group label="" v-slot="{ ariaDescribedby }">
-            <b-form-checkbox-group
+             <b-form-checkbox-group
               id="checkbox-group-2"
               v-model="townshipsSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
+              @change="emitSelectedItems()"
             >
-              <b-form-checkbox :value="{ name: 'commune' }" v-show="showTownship && isDataSourceSelected">
+              <b-form-checkbox :value="{ name: 'Commune', type:'township' }" v-show="showTownship && isDataSourceSelected">
                 Commune
               </b-form-checkbox>
             </b-form-checkbox-group>
-          </b-form-group>
-        </div>
-        <div class="mb-2">
-          <b-form-group label="" v-slot="{ ariaDescribedby }">
             <b-form-checkbox-group
               id="checkbox-group-2"
               v-model="hospitalsSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
+              @change="emitSelectedItems()"
             >
-              <b-form-checkbox :value="{ name: 'hopital' }" v-show="showHospital && isDataSourceSelected"
+              <b-form-checkbox :value="{ name: 'Hopital', type:'hospital' }" v-show="showHospital && isDataSourceSelected"
                 >Hôpital
               </b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
         </div>
         <hr v-show="showHospital && isDataSourceSelected"/>
-        <div class="mb-2">
-          <label for class="text-dash-color text-primary">{{ !isDataSourceSelected ?'Veuillez selectionner une source de données':'Questions:'}}</label>
+
           <b-form-group label="" v-slot="{ ariaDescribedby }">
+             <label for class="text-dash-color text-primary">{{ !isDataSourceSelected ?'Veuillez selectionner une source de données':'Questions:'}}</label>
             <b-form-checkbox-group
               id="checkbox-group-2"
               v-model="formFieldsSelected"
               :aria-describedby="ariaDescribedby"
               name="name"
+              @change="emitSelectedItems()"
             >
               <b-form-checkbox
                 v-for="(field, index) in formFieldsFiltered"
                 :key="index"
-                :value="{ id: field.id, name: field.name }"
+                :value="{ id: field.id, name: field.name, type:'form_field' }"
                 >{{ field.name }}</b-form-checkbox
               >
             </b-form-checkbox-group>
           </b-form-group>
-        </div>
+
       </b-col>
     </b-row>
   </b-col>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   props: {
     title: {
+      type: String,
+      default: () => ''
+    },
+    type: {
+      type: String,
+      default: () => ''
+    },
+    step: {
       type: String,
       default: () => ''
     },
@@ -115,7 +119,9 @@ export default {
   computed: {
     ...mapState({
       hospitals: (state) => state.hospital.allHospitals,
-      townships: (state) => state.township.townships
+      townships: (state) => state.township.townships,
+      linesSelected: (state) => state.reporting.linesSelected,
+      columnsSelected: (state) => state.reporting.columnsSelected
     }),
     showTownship () {
       return this.except.filter(
@@ -145,20 +151,41 @@ export default {
     }
   },
   watch: {
-    datesSelected () {
-      this.emitSelectedItems()
+    linesSelected () {
+      if (this.type.match('line')) {
+        this.datesSelected = this.linesSelected.filter(
+          (item) => item.type === 'date'
+        )
+        this.hospitalsSelected = this.linesSelected.filter(
+          (item) => item.type === 'hospital'
+        )
+        this.townshipsSelected = this.linesSelected.filter(
+          (item) => item.type === 'township'
+        )
+        this.formFieldsSelected = this.linesSelected.filter(
+          (item) => item.type === 'form_field'
+        )
+      }
     },
-    formFieldsSelected () {
-      this.emitSelectedItems()
-    },
-    hospitalsSelected () {
-      this.emitSelectedItems()
-    },
-    townshipsSelected () {
-      this.emitSelectedItems()
+    columnsSelected () {
+      if (this.type.match('column')) {
+        this.datesSelected = this.columnsSelected.filter(
+          (item) => item.type === 'date'
+        )
+        this.hospitalsSelected = this.columnsSelected.filter(
+          (item) => item.type === 'hospital'
+        )
+        this.townshipsSelected = this.columnsSelected.filter(
+          (item) => item.type === 'township'
+        )
+        this.formFieldsSelected = this.columnsSelected.filter(
+          (item) => item.type === 'form_field'
+        )
+      }
     }
   },
   methods: {
+    ...mapActions(['reporting__editLines', 'reporting__editColumns', 'reporting__reset']),
     emitSelectedItems () {
       const selectedItems = []
       selectedItems.push(
@@ -170,7 +197,6 @@ export default {
       )
       selectedItems.push(
         ...this.hospitalsSelected.map((hospital) => ({
-          id: new Date().getTime(),
           name: hospital.name,
           type: 'hospital'
         }))
@@ -178,19 +204,27 @@ export default {
 
       selectedItems.push(
         ...this.townshipsSelected.map((township) => ({
-          id: new Date().getTime(),
           name: township.name,
           type: 'township'
         }))
       )
       selectedItems.push(
-        ...this.datesSelected.map((dateSelected) => ({
-          id: new Date().getTime(),
-          name: dateSelected.name,
+        ...this.datesSelected.map((date) => ({
+          name: date.name,
           type: 'date'
-        }))
-      )
-      this.$emit('input', selectedItems)
+        })))
+      if (this.type.match('line')) {
+        this.reporting__editLines(selectedItems)
+      } else {
+        this.reporting__editColumns(selectedItems)
+      }
+    },
+    resetForm () {
+      this.datesSelected = []
+      this.formFieldsSelected = []
+      this.townshipsSelected = []
+      this.hospitalsSelected = []
+      this.reporting__reset()
     }
   }
 }

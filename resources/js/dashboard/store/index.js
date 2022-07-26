@@ -19,6 +19,8 @@ import township from './modules/township'
 import bugTracker from './modules/bugTracker'
 import adminUser from './modules/adminUser'
 import notification from './modules/notification'
+import bookmark from './modules/bookmark'
+import reporting from './modules/reporting'
 
 Vue.use(Vuex)
 
@@ -44,6 +46,8 @@ export default new Vuex.Store({
     completedFormHistory,
     township,
     adminUser,
-    notification
+    notification,
+    bookmark,
+    reporting
   }
 })

@@ -256,7 +256,11 @@ Route::resource('notifications', 'NotificationController');
 Route::resource('conflict-resolution-modes', 'ConflictResolutionModeController');
 Route::resource('completed-form-histories', 'CompletedFormHistoryController');
 
+/**
+ * bookmark routes
+ */
 
+Route::apiResource('bookmarks', "BookmarkController");
 
   Route::get('health-zones', 'FluxZoneController@getHealthZoneWithProvince');
   // Route::apiResource('townships','TownshipController');

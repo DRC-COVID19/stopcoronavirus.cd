@@ -1,88 +1,81 @@
 <template>
   <b-row>
-    <b-col lg="3" class="bg-white pb-5">
-      <b-row class="mx-0 h-100 w-100" lg="12">
-        <b-col class="mx-0 w-100 mt-4" lg="12">
-          <h3>Générateur de graphique</h3>
-        </b-col>
-        <b-col class="mx-0 w-100 mt-4" lg="12">
-          <label for class="text-dash-color">Source des données :</label>
-          <v-select
-            v-model="reporting.formId"
-            :options="forms"
-            :reduce="(item) => item.id"
-            label="title"
-            placeholder="Sélectionner une source des données"
-            class="style-chooser"
-            @input="selectedForm"
-          />
-        </b-col>
-        <b-col class="border-dash rounded pb-4" lg="12">
-          <b-row>
-            <div class="mx-0 w-100" lg="12">  <hr /> </div>
-           <div>
-             <Questions
-              v-model="linesSelected"
-              title="Lignes"
-              :cloneOptionQuestions="cloneOptionQuestions"
-              :except="columnsSelected"
-              :isDataSourceSelected='isDataSourceSelected'
-              placeholder="Recherche"
-              @selectedForm="selectedForm"
-            />
-             <hr />
-           </div>
-           <div>
-             <Questions
-              v-model="columnsSelected"
-              title="Colonnes"
-              :cloneOptionQuestions="cloneOptionQuestions"
-              :except="linesSelected"
-              :isDataSourceSelected='isDataSourceSelected'
-               placeholder="Recherche"
-              @selectedForm="selectedForm"
-            />
-           </div>
-          </b-row>
-        </b-col>
-      </b-row>
+    <b-col lg="3" class="bg-white pb-5 sm-display">
+      <CreateReporting
+        :activeItem="activeItem"
+        :bookmarks="bookmarks"
+        :cloneOptionQuestions="cloneOptionQuestions"
+        :isDataSourceSelected="isDataSourceSelected"
+        :getForms="getForms"
+        :reporting="reporting"
+        @changePivotTable="changePivotTable"
+        @selectedForm="selectedForm"
+        @selectedBookmark="selectedBookmark"
+        @savedBookmark="savedBookmark"
+      />
     </b-col>
+    <b-sidebar
+      id="sidebar-header-reporting"
+      right
+      bg-variant="white"
+      width="25rem"
+      backdrop
+      :no-close-on-route-change="true"
+      shadow
+      backdrop-variant="transparent"
+    >
+      <CreateReporting
+        :activeItem="activeItem"
+        :bookmarks="bookmarks"
+        :cloneOptionQuestions="cloneOptionQuestions"
+        :isDataSourceSelected="isDataSourceSelected"
+        :getForms="getForms"
+        :reporting="reporting"
+        @changePivotTable="changePivotTable"
+        @selectedForm="selectedForm"
+        @selectedBookmark="selectedBookmark"
+        @savedBookmark="savedBookmark"
+      />
+    </b-sidebar>
     <b-col lg="9" v-if="showDisplayArray">
-       <skeleton-loading v-if="isLoading" class="w-100">
-            <square-skeleton
-              :boxProperties="{
-                width: '100%',
-                height: '750px',
-              }"
-            ></square-skeleton>
-          </skeleton-loading>
+      <skeleton-loading v-if="isLoading" class="w-100">
+        <square-skeleton
+          :boxProperties="{
+            width: '100%',
+            height: '750px',
+          }"
+        ></square-skeleton>
+      </skeleton-loading>
 
-      <vue-pivottable-ui
-            :data="arrayAxeValue"
-            :rows="linesSelected.map(line=>line.name)"
-            :cols="columnsSelected.map(column=>column.name)"
-            :locales="locales"
-            :locale="locale"
-            v-else
-          >
-        </vue-pivottable-ui>
-
+      <div v-else>
+        <pivottable
+          :arrayAxeValue="arrayAxeValue"
+          :linesSelected="linesSelected"
+          :columnsSelected="columnsSelected"
+          :key="'pivot-table' + keyPivotTable"
+        >
+      </pivottable>
+      </div>
     </b-col>
+    <NameBookmarkModal
+      :data-bookmark="dataBookmark"
+      :modalShow="modalShow"
+      @onSubmitBookmark="onSubmitBookmark"
+    />
   </b-row>
 </template>
 <script>
-
 import { mapState, mapActions } from 'vuex'
-import Questions from './Questions'
-import { VuePivottableUi, PivotUtilities } from 'vue-pivottable'
-
-import 'vue-pivottable/dist/vue-pivottable.css'
+import CreateReporting from './CreateReporting'
+import NameBookmarkModal from './NameBookmarkModal'
+import Pivottable from './Pivottable'
 
 export default {
   name: 'HeaderReporting',
   components: {
-    Questions,
-    VuePivottableUi
+    CreateReporting,
+    Pivottable,
+    NameBookmarkModal
   },
   props: {
     forms: {
@@ -101,6 +94,7 @@ export default {
   data () {
     return {
       arrayAxeValue: [],
+      activeItem: null,
       translateTableRenders: {
         Table: 'Tableau',
         'Table Heatmap': 'Tableau coloré',
@@ -116,10 +110,9 @@ export default {
         'Area Chart': 'Diagramme de zone',
         'Scatter Chart': 'Graphique en nuage de points',
         'Multiple Pie Chart': 'Graphique circulaire multiple'
-
       },
       translateAggregatorsRenders: {
-        Count: 'Compter',
+        Count: 'Compte',
         'Count Unique Values': 'Compter les valeurs uniques',
         'List Unique Values': 'Liste des valeurs uniques',
         Sum: 'Somme',
@@ -138,50 +131,47 @@ export default {
         'Sum as Fraction of Columns': 'Somme en tant que fraction de colonnes',
         'Count as Fraction of Total': 'Comptage en tant que fraction du total',
         'Count as Fraction of Rows': 'Comptage en tant que fraction de lignes',
-        'Count as Fraction of Columns': 'Comptage en tant que fraction de colonnes'
-
-      },
-      locale: 'fr',
-      locales: {
-        en: PivotUtilities.locales.en,
-        fr: {
-          aggregators: PivotUtilities.aggregators,
-          localeStrings: {
-            renderError: 'Une erreur est survenue en dessinant le tableau croisé.',
-            computeError: 'Une erreur est survenue en calculant le tableau croisé.',
-            uiRenderError: "Une erreur est survenue en dessinant l'interface du tableau croisé dynamique.",
-            selectAll: 'Sélectionner tout',
-            selectNone: 'Ne rien sélectionner',
-            tooMany: '(trop de valeurs à afficher)',
-            filterResults: 'Filtrer les valeurs',
-            totals: 'Totaux',
-            vs: 'sur',
-            by: 'par',
-            apply: 'Appliquer',
-            cancel: 'Annuler'
-          }
-        }
+        'Count as Fraction of Columns':
+          'Comptage en tant que fraction de colonnes'
       },
       isLoading: false,
+      keyPivotTable: 0,
       showDisplayArray: true,
       isDataSourceSelected: false,
       title: '',
+      displayTypeValue: '',
+      displayAggregatorType: '',
+      displayParamsAggregator: '',
+      dataBookmark: {},
+      modalShow: false,
       reporting: {
         formId: null
       },
       cloneOptionQuestions: [],
       completedFormFields: [],
-      linesSelected: [],
-      columnsSelected: []
+      oldArrayAxeValue: [],
+      formSelected: null,
+      htmlElement: null
     }
   },
   computed: {
     ...mapState({
       formFields: (state) => state.formField.formFields,
-      completedFormAll: (state) => state.completedForm.completedFormAll
-    })
+      completedFormAll: (state) => state.completedForm.completedFormAll,
+      bookmarks: (state) => state.bookmark.bookmarks,
+      linesSelected: (state) => state.reporting.linesSelected,
+      columnsSelected: (state) => state.reporting.columnsSelected
+    }),
+    getForms () {
+      return this.forms.map((form) => ({
+        id: form.id,
+        title: form.title.charAt(0).toUpperCase() + form.title.slice(1)
+      }))
+    }
   },
-  mounted () {},
+  mounted () {
+    this.initBookMark()
+  },
   watch: {
     formFields () {
       this.cloneOptionQuestions = this.formFields.slice()
@@ -191,49 +181,271 @@ export default {
     ...mapActions([
       'getFormFields',
       'hospitals__townships',
-      'completedForm__getAll'
+      'completedForm__getAll',
+      'getBookmarks',
+      'createBookmark',
+      'reporting__editLines',
+      'reporting__editColumns'
     ]),
+
+    addPvtValsHTMLBadge () {
+      const pvtVals = document.querySelector('.pvtVals')
+      const pvtValsBadge = document.createElement('div')
+      pvtValsBadge.classList.add('mb-2')
+      pvtValsBadge.classList.add('mt-5')
+      pvtValsBadge.innerHTML =
+        '<label class="text-dash-color"><span class="badge badge-secondary px-2">Étape 4</span> : Valeurs </label> '
+      pvtVals.prepend(pvtValsBadge)
+    },
+    // addPvtRenderersHTMLBadge () {
+    //   const pvtRenderers = this.selectPvtRenderers()
+    //   const pvtRenderersBadge = document.createElement('div')
+    //   pvtRenderersBadge.classList.add('my-2')
+    //   pvtRenderersBadge.classList.add('mx-2')
+    //   pvtRenderersBadge.innerHTML = '<label class="text-dash-color"><span class="badge badge-secondary px-2">Étape 5</span> : Type des Graphiques et tableaux </label> '
+    //   pvtRenderers.prepend(pvtRenderersBadge)
+    // },
+    customPvtDropdownStyles () {
+      const pvtDropdown = document.querySelectorAll('.pvtDropdown')
+      pvtDropdown.forEach((dropDown) => {
+        dropDown.style.width = '95%'
+        dropDown.style.border = 'solid 1px #a2b1c6'
+      })
+    },
+    customRenderersStyles () {
+      const pvtRenderers = this.selectPvtRenderers()
+      pvtRenderers.style.width = '30%'
+      pvtRenderers.style.backgroundColor = '#ffff'
+    },
+    frTranslatePvtValsRenderers () {
+      const aggregatorsRendersSelected = document.querySelector(
+        '.pvtVals .pvtDropdown'
+      )
+      aggregatorsRendersSelected.forEach((option) => {
+        option.textContent =
+          this.translateAggregatorsRenders[option.textContent]
+      })
+    },
+    frTranslateTableRenderers () {
+      const tableRendersSelected = document.querySelector(
+        '.pvtRenderers>.pvtDropdown'
+      )
+      tableRendersSelected.style.marginLeft = '6px'
+      tableRendersSelected.forEach((option) => {
+        option.textContent = this.translateTableRenders[option.textContent]
+      })
+    },
     getCompletedFormAll () {
       this.arrayAxeValue = this.completedFormAll.map((completedForm) => {
         const data = {
-          hopital: completedForm.hospital.name,
-          commune: completedForm.hospital.township.name,
-          date: completedForm.last_update
+          Hopital: completedForm.hospital.name,
+          Commune: completedForm.hospital.township.name,
+          Date: completedForm.last_update
         }
-        completedForm.completed_form_fields.forEach(completedFormField => {
+        completedForm.completed_form_fields.forEach((completedFormField) => {
           data[completedFormField.form_field.name] = completedFormField.value
         })
         return data
       })
     },
+    async initBookMark () {
+      await this.getBookmarks()
+    },
+    changePivotTable (value) {
+      this.keyPivotTable++
+      this.oldArrayAxeValue = [...this.arrayAxeValue]
+      if (value.match('bookmark')) {
+        this.arrayAxeValue = []
+      } else {
+        this.arrayAxeValue = [...this.oldArrayAxeValue]
+        this.selectedForm(this.formSelected)
+      }
+    },
+    onSubmitBookmark () {
+      this.initBookMark()
+    },
     async selectedForm (value) {
       this.isLoading = true
       const formId = { form_id: value }
+      this.formSelected = value
       this.getFormFields(formId)
       this.isDataSourceSelected = true
       await this.completedForm__getAll(formId)
       this.getCompletedFormAll()
       this.isLoading = false
       this.$nextTick(() => {
-        const tableRendersSelected = document.querySelector('.pvtRenderers>.pvtDropdown')
-
-        tableRendersSelected.forEach((option) => {
-          option.textContent = this.translateTableRenders[option.textContent]
-        })
-        const aggregatorsRendersSelected = document.querySelector('.pvtVals .pvtDropdown')
-        aggregatorsRendersSelected.forEach((option) => {
-          option.textContent = this.translateAggregatorsRenders[option.textContent]
-        })
+        this.customRenderersStyles()
+        this.frTranslateTableRenderers()
+        // this.addPvtRenderersHTMLBadge()
+        this.frTranslatePvtValsRenderers()
+        this.addPvtValsHTMLBadge()
+        this.customPvtDropdownStyles()
       })
+    },
+    async selectedFormBookmark (value) {
+      const formId = { form_id: value }
+      this.getFormFields(formId)
+      this.isDataSourceSelected = true
+      await this.completedForm__getAll(formId)
+      this.getCompletedFormAll()
+    },
+
+    selectPvtRenderers () {
+      return document.querySelector('.pvtRenderers')
+    },
+    savedBookmark () {
+      const displayTypes = document.querySelector('.pvtRenderers>.pvtDropdown')
+      displayTypes.forEach((element) => {
+        if (element.selected) {
+          this.displayTypeValue = element.value
+        }
+      })
+      const aggregatorsRendersSelected = document.querySelector(
+        '.pvtVals>div>.pvtDropdown'
+      )
+      aggregatorsRendersSelected.forEach((element) => {
+        if (element.selected) {
+          this.displayAggregatorType = element.value
+        }
+      })
+      const paramsAggregatorSelected = document.querySelector(
+        '.pvtVals>.pvtDropdown'
+      )
+      if (paramsAggregatorSelected) {
+        paramsAggregatorSelected.forEach((element) => {
+          if (element.selected) {
+            this.displayParamsAggregator = element.value
+          }
+        })
+      }
+      this.dataBookmark = {
+        form_id: this.reporting.formId,
+        row: JSON.stringify(this.linesSelected),
+        column: JSON.stringify(this.columnsSelected),
+        display_type: this.displayTypeValue,
+        aggregator_type: this.displayAggregatorType,
+        params1: this.displayParamsAggregator
+          ? this.displayParamsAggregator
+          : '',
+        params2: this.displayParamsAggregator
+          ? this.displayParamsAggregator
+          : ''
+      }
+      this.modalShow = !this.modalShow
+    },
+    selectedBookmark (item) {
+      // this.isLoading = true
+      this.activeItem = item.id
+      this.selectedFormBookmark(item.form_id)
+      this.reporting__editLines(JSON.parse(item.row))
+      this.reporting__editColumns(JSON.parse(item.column))
+      // this.isLoading = false
+      this.$nextTick(() => {
+        console.log('isLoading0')
+        const displayTypes = document.querySelector(
+          '.pvtRenderers>.pvtDropdown'
+        )
+        console.log(displayTypes)
+        if (displayTypes) {
+          displayTypes.options[0].removeAttribute('selected')
+          console.log('isLoading00')
+          for (let index = 0; index < displayTypes.length; index++) {
+            console.log('displayTypes', index)
+            if (displayTypes.options[index].value === item.display_type) {
+              setTimeout(() => {
+                displayTypes.options[index].setAttribute('selected', 'seleted')
+                displayTypes.dispatchEvent(new Event('change'))
+              }, 1000)
+              break
+            }
+          }
+        }
+        console.log('Type 1:', displayTypes)
+        console.log('isLoading1')
+        if (item.aggregator_type) {
+          const aggregatorsRendersSelected = document.querySelector(
+            '.pvtVals>div>.pvtDropdown'
+          )
+          if (aggregatorsRendersSelected) {
+            aggregatorsRendersSelected.options[0].removeAttribute('selected')
+            for (
+              let index = 0;
+              index < aggregatorsRendersSelected.length;
+              index++
+            ) {
+              if (
+                aggregatorsRendersSelected.options[index].value ===
+              item.aggregator_type
+              ) {
+                setTimeout(() => {
+                  aggregatorsRendersSelected.options[index].setAttribute(
+                    'selected',
+                    'seleted'
+                  )
+                  aggregatorsRendersSelected.dispatchEvent(new Event('change'))
+                }, 1100)
+                break
+              }
+            }
+          }
+        }
+        console.log('isLoading2', item.params1)
+        setTimeout(() => {
+          console.log('new feature bookmark')
+          if (item.params1) {
+            // this.isLoading = false
+            const paramsAggregatorSelected = document.querySelector(
+              '.pvtVals>.pvtDropdown'
+            )
+            if (paramsAggregatorSelected) {
+              paramsAggregatorSelected.options[0].removeAttribute('selected')
+              for (
+                let index = 0;
+                index < paramsAggregatorSelected.length;
+                index++
+              ) {
+                if (
+                  paramsAggregatorSelected.options[index].value === item.params1
+                ) {
+                  paramsAggregatorSelected.options[index].setAttribute(
+                    'selected',
+                    'seleted'
+                  )
+                  window.paramsAggregatorSelected = paramsAggregatorSelected
+                  paramsAggregatorSelected.dispatchEvent(new Event('change'))
+
+                  break
+                }
+              }
+            }
+          }
+          console.log('isLoading3')
+          // this.isLoading = false
+        }, 4000)
+      })
+      this.customRenderersStyles()
+      this.frTranslateTableRenderers()
+      this.frTranslatePvtValsRenderers()
+      this.customPvtDropdownStyles()
+      // this.isLoading = false
     }
   }
 }
 </script>
-
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
-hr{
+hr {
   width: 105%;
+}
+.header-responsive {
+  padding-top: 0 !important;
+}
+.pvtRenderers {
+  border: 1px solid #a2b1c6;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  width: 372px !important;
 }
 .container-axe {
   height: 100px;
@@ -332,5 +544,14 @@ hr{
 .btn-generated-rapport {
   position: relative;
   left: 660px;
+}
+@media (max-width: $max-width) {
+  .sm-display {
+    display: none;
+  }
+  .btn-saved {
+    position: relative;
+    left: 256px;
+  }
 }
 </style>
