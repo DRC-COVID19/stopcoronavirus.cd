@@ -9,8 +9,11 @@ export default {
     },
     SET_COLUMNS (state, payload) {
       state.columnsSelected = payload
+    },
+    SET_RESET (state, payload) {
+      state.linesSelected = []
+      state.columnsSelected = []
     }
-
   },
   actions: {
     reporting__editLines ({ state, commit, dispatch }, payload = []) {
@@ -18,6 +21,9 @@ export default {
     },
     reporting__editColumns ({ state, commit, dispatch }, payload = []) {
       commit('SET_COLUMNS', payload)
+    },
+    reporting__reset ({ commit }) {
+      commit('SET_RESET')
     }
 
   }

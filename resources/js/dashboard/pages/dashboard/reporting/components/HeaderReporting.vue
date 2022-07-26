@@ -5,13 +5,10 @@
         :activeItem="activeItem"
         :bookmarks="bookmarks"
         :cloneOptionQuestions="cloneOptionQuestions"
-        :columnsSelected="columnsSelected"
         :isDataSourceSelected="isDataSourceSelected"
-        :linesSelected="linesSelected"
         :getForms="getForms"
         :reporting="reporting"
         @selectedForm="selectedForm"
-        @resetForm="resetForm"
         @selectedBookmark="selectedBookmark"
         @savedBookmark="savedBookmark"
       />
@@ -30,13 +27,10 @@
         :activeItem="activeItem"
         :bookmarks="bookmarks"
         :cloneOptionQuestions="cloneOptionQuestions"
-        :columnsSelected="columnsSelected"
         :isDataSourceSelected="isDataSourceSelected"
-        :linesSelected="linesSelected"
         :getForms="getForms"
         :reporting="reporting"
         @selectedForm="selectedForm"
-        @resetForm="resetForm"
         @selectedBookmark="selectedBookmark"
         @savedBookmark="savedBookmark"
       />
@@ -250,10 +244,6 @@ export default {
     },
     onSubmitBookmark () {
       this.initBookMark()
-    },
-    resetForm () {
-      this.linesSelected = []
-      this.columnsSelected = []
     },
     async selectedForm (value) {
       this.isLoading = true
