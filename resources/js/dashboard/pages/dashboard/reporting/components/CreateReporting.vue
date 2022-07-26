@@ -88,8 +88,8 @@ export default {
   },
   props: {
     activeItem: {
-      type: Boolean,
-      default: () => false
+      type: Number,
+      default: null
     },
     bookmarks: {
       type: Array,

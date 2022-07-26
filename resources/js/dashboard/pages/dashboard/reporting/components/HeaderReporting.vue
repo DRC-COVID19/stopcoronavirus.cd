@@ -63,7 +63,11 @@
       >
       </pivottable>
     </b-col>
-    <NameBookmarkModal :data-bookmark="dataBookmark" :modalShow="modalShow" />
+    <NameBookmarkModal
+    :data-bookmark="dataBookmark"
+    :modalShow="modalShow"
+    @savedNameBookmark="resetForm"
+     />
   </b-row>
 </template>
 <script>
@@ -371,6 +375,7 @@ export default {
           }
         }
         setTimeout(() => {
+          console.log('new feature bookmark')
           if (item.params1) {
             const paramsAggregatorSelected = document.querySelector(
               '.pvtVals>.pvtDropdown'
@@ -384,9 +389,6 @@ export default {
               if (
                 paramsAggregatorSelected.options[index].value === item.params1
               ) {
-                console.log('params1', paramsAggregatorSelected[index].value)
-
-                console.log('index', index)
                 paramsAggregatorSelected.options[index].setAttribute(
                   'selected',
                   'seleted'
@@ -398,8 +400,9 @@ export default {
               }
             }
           }
-        }, 3000)
+        }, 4000)
       })
+      this.customRenderersStyles()
       this.isLoading = false
     }
   }
