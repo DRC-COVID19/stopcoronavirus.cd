@@ -424,6 +424,9 @@ export default {
         }, 4000)
       })
       this.customRenderersStyles()
+      this.frTranslateTableRenderers()
+      this.frTranslatePvtValsRenderers()
+      this.customPvtDropdownStyles()
       // this.isLoading = false
     }
   }
