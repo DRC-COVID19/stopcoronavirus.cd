@@ -38,7 +38,7 @@
       />
     </b-sidebar>
     <b-col lg="9" v-if="showDisplayArray">
-      <skeleton-loading v-if="isLoading" class="w-100">
+      <skeleton-loading v-if="isLoading || loaderBookmark" class="w-100">
         <square-skeleton
           :boxProperties="{
             width: '100%',
@@ -47,7 +47,7 @@
         ></square-skeleton>
       </skeleton-loading>
 
-      <div v-else>
+      <div v-if="!isLoading" :class="{'isOpacity':loaderBookmark}">
         <pivottable
           :arrayAxeValue="arrayAxeValue"
           :linesSelected="linesSelected"
@@ -151,7 +151,8 @@ export default {
       completedFormFields: [],
       oldArrayAxeValue: [],
       formSelected: null,
-      htmlElement: null
+      htmlElement: null,
+      loaderBookmark: false
     }
   },
   computed: {
@@ -243,7 +244,7 @@ export default {
           Date: completedForm.last_update
         }
         completedForm.completed_form_fields.forEach((completedFormField) => {
-          data[completedFormField.form_field.name] = completedFormField.value
+          data[completedFormField.form_field.name.charAt(0).toUpperCase() + completedFormField.form_field.name.slice(1)] = completedFormField.value
         })
         return data
       })
@@ -334,25 +335,22 @@ export default {
       this.modalShow = !this.modalShow
     },
     selectedBookmark (item) {
-      // this.isLoading = true
+      this.loaderBookmark = true
       this.activeItem = item.id
       this.selectedFormBookmark(item.form_id)
       this.reporting__editLines(JSON.parse(item.row))
       this.reporting__editColumns(JSON.parse(item.column))
       // this.isLoading = false
       this.$nextTick(() => {
-        console.log('isLoading0')
         const displayTypes = document.querySelector(
           '.pvtRenderers>.pvtDropdown'
         )
-        console.log(displayTypes)
         if (displayTypes) {
           displayTypes.options[0].removeAttribute('selected')
-          console.log('isLoading00')
           for (let index = 0; index < displayTypes.length; index++) {
-            console.log('displayTypes', index)
             if (displayTypes.options[index].value === item.display_type) {
               setTimeout(() => {
+                // this.isLoading = false
                 displayTypes.options[index].setAttribute('selected', 'seleted')
                 displayTypes.dispatchEvent(new Event('change'))
               }, 1000)
@@ -360,8 +358,6 @@ export default {
             }
           }
         }
-        console.log('Type 1:', displayTypes)
-        console.log('isLoading1')
         if (item.aggregator_type) {
           const aggregatorsRendersSelected = document.querySelector(
             '.pvtVals>div>.pvtDropdown'
@@ -389,11 +385,8 @@ export default {
             }
           }
         }
-        console.log('isLoading2', item.params1)
         setTimeout(() => {
-          console.log('new feature bookmark')
           if (item.params1) {
-            // this.isLoading = false
             const paramsAggregatorSelected = document.querySelector(
               '.pvtVals>.pvtDropdown'
             )
@@ -419,13 +412,12 @@ export default {
               }
             }
           }
-          console.log('isLoading3')
-          // this.isLoading = false
+          this.loaderBookmark = false
         }, 4000)
       })
       this.customRenderersStyles()
-      this.frTranslateTableRenderers()
-      this.frTranslatePvtValsRenderers()
+      // this.frTranslateTableRenderers()
+      // this.frTranslatePvtValsRenderers()
       this.customPvtDropdownStyles()
       // this.isLoading = false
     }
@@ -436,6 +428,9 @@ export default {
 @import "@~/sass/_variables";
 hr {
   width: 105%;
+}
+.isOpacity{
+  opacity: 0;
 }
 .header-responsive {
   padding-top: 0 !important;

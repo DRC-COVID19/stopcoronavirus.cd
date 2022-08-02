@@ -74,7 +74,7 @@
             <b-col class="mx-0 w-100 mt-4 bookmark__overflow" lg="12">
                 <label for class="text-dash-color">Sélectionner le bookmark :</label>
                 <b-list-group v-for="(bookmark) in bookmarks" :key="bookmark.id" class="rounded-0 w-100">
-                    <b-list-group-item :active="bookmark.id === activeItem" style="cursor: pointer;" class="d-flex justify-content-between" @click.prevent="selectedBookmark(bookmark)">{{bookmark.name}}  <!--<b-button :variant="bookmark.id === activeItem?'danger':'outline-danger'" size="sm" @click="deleteBookmark(bookmark)">supprimer</b-button>--></b-list-group-item>
+                    <b-list-group-item :active="bookmark.id === activeItem && visibleBookmark" style="cursor: pointer;" class="d-flex justify-content-between" @click.prevent="selectedBookmark(bookmark)">{{bookmark.name.charAt(0).toUpperCase()+ bookmark.name.slice(1)}}  <!--<b-button :variant="bookmark.id === activeItem?'danger':'outline-danger'" size="sm" @click="deleteBookmark(bookmark)">supprimer</b-button>--></b-list-group-item>
                 </b-list-group>
               </b-col>
           </b-row>
@@ -125,7 +125,8 @@ export default {
     return {
       report: this.reporting,
       title: '',
-      bookmark: {}
+      bookmark: {},
+      visibleBookmark: true
     }
   },
   watch: {
@@ -137,7 +138,7 @@ export default {
     ...mapActions(['bookmark__delete']),
     selectedForm () {
       if (this.report.formId !== null) {
-        this.$emit('selectedForm')
+        this.$emit('selectedForm', this.report.formId)
       }
     },
     resetForm () {
@@ -146,6 +147,7 @@ export default {
       this.report = {}
     },
     selectedBookmark (bookmark) {
+      this.visibleBookmark = true
       this.bookmark = { ...bookmark }
       this.$emit('selectedBookmark', this.bookmark)
     },
@@ -185,6 +187,7 @@ export default {
       // document.querySelectorAll('table').forEach((tableItem) => {
       //   tableItem.textContent = ''
       // })
+      this.visibleBookmark = false
       this.$emit('changePivotTable', value)
     }
   }
