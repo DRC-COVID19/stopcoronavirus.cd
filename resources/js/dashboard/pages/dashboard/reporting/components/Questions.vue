@@ -64,7 +64,7 @@
                 v-for="(field, index) in formFieldsFiltered"
                 :key="index"
                 :value="{ id: field.id, name: field.name, type:'form_field' }"
-                >{{ field.name }}</b-form-checkbox
+                >{{ field.name.charAt(0).toUpperCase()+ field.name.slice(1)}}</b-form-checkbox
               >
             </b-form-checkbox-group>
           </b-form-group>
