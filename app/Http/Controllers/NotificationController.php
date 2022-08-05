@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\AdminUserNotification;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
@@ -54,6 +55,18 @@ class NotificationController extends Controller
                                     ->whereIn('form_id', $this->getFormByHospital($hospital_id)->pluck('id'))
                                     ->get();
         return response()->json($notifications);
+    }
+    public function notificationHospitalByDate($hospital_id){
+        $notifications = Notification::with(['form' => function($query) {
+                                        $query->select('id', 'title');
+                                    }])
+                                    ->whereIn('form_id', $this->getFormByHospital($hospital_id)->pluck('id'))
+                                    ->select('*')
+                                    ->selectRaw(DB::raw('CAST( created_at AS DATE) as date'))
+                                    ->orderBy('date', 'desc')
+                                    ->get();
+        $notificationsByDate = $notifications->groupBy('date');
+        return response()->json($notificationsByDate);
     }
 
     public function indexNotificationByPaginate($hospital_id){
