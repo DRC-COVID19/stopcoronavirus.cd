@@ -278,6 +278,7 @@ export default {
             }
           })
           .then(({ data }) => {
+            console.log('data is there ', data)
             commit('SET_COMPLETED_FORM_ALL', data)
             commit('SET_IS_LOADING', false)
             resolve(data)
