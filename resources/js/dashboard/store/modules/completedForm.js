@@ -37,7 +37,6 @@ export default {
     SET_COMPLETED_FORMS_DATA (state, payload) {
       state.completedFormsData = payload
       console.log('data ->', state.completedFormsData)
-
     },
     SET_FILTER__DATA (state, payload) {
       state.filterData = payload
@@ -290,5 +289,28 @@ export default {
           })
       })
     },
+    completedForm__getAllAndOptimizeQuery ({ commit }, payload) {
+      commit('SET_IS_LOADING', true)
+      return new Promise((resolve, reject) => {
+        // eslint-disable-next-line no-undef
+        axios
+          .get('/api/dashboard/completed_forms/get_all_and_optimize_query', {
+            params: {
+              form_id: payload.form_id
+            }
+          })
+          .then(({ data }) => {
+            commit('SET_COMPLETED_FORM_ALL', data)
+            commit('SET_IS_LOADING', false)
+            resolve(data)
+          })
+          .catch((response) => {
+            reject(response)
+          })
+          .finally(() => {
+            commit('SET_IS_LOADING', false)
+          })
+      })
+    }
   }
 }
