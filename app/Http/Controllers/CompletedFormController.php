@@ -50,6 +50,33 @@ class CompletedFormController extends Controller
         $completedForms = $query->get();
         return response()->json($completedForms, 200);
     }
+    
+    public function getAllAndOptimizeQuery (Request $request) 
+    {
+       $form_id = $request->query('form_id');
+        $query = CompletedForm::with(
+        [
+            'completedFormFields' => function ($query) {
+                $query->select('id', 'value', 'completed_form_id', 'form_field_id')
+                    ->whereHas('formField');
+            },
+            'completedFormFields.formField' => function ($query) {
+                $query->select('id', 'name');
+            },
+            'hospital' => function ($query) {
+                $query->select('id', 'name', 'township_id');
+            },
+            'hospital.township' => function ($query) {
+                $query->select('id', 'name');
+            },
+           
+        ])
+        ->select('id','hospital_id')
+        ->where('form_id', $form_id);
+        
+        return response()->json($query->get(), 200);
+    }
+    
     public function indexByHospital(int $hospital_id, int $paginate = 15)
     {
         try {
@@ -126,13 +153,13 @@ class CompletedFormController extends Controller
             return response(['succès' => 'réussie'])->setStatusCode(200);
         }
         if($conflictResolutionMode->conflictResolutionMode->slug =='old_submission'){
-            Log::info("message",['nous somme bel et bien dans le controller old_submission']);
+          
             $completedFormHistory_controller = new CompletedFormHistoryController;
             $completedFormHistory_controller->storeOldCompletedForm($request);
             return response(['succès' => 'réussie'])->setStatusCode(200);
         }
         if($conflictResolutionMode->conflictResolutionMode->slug =='new_submission'){
-            Log::info("message",['nous somme bel et bien dans le controller new_submission']);
+           
             $completedFormHistory_controller = new CompletedFormHistoryController;
             $completedFormHistory_controller->storeNewCompletedForm($request);
             CompletedForm::destroy($completedForm->id);
