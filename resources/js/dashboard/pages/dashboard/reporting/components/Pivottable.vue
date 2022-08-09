@@ -70,7 +70,7 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .pivot-table-ui::v-deep{
-  @media screen and (max-width:576px) {
+  @media screen and (max-width:768px) {
      &{
       width: 100vw !important;
      }
@@ -85,6 +85,9 @@ export default {
       }
   }
   @media screen and (width: 768px) {
+     &{
+        width: 90vw !important;
+     }
       .pvtRenderers{
           width: 40% !important;
      }
