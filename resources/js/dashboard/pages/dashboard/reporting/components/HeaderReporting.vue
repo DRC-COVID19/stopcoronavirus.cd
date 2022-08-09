@@ -182,7 +182,7 @@ export default {
     ...mapActions([
       'getFormFields',
       'hospitals__townships',
-      'completedForm__getAll',
+      'completedForm__getAllAndOptimizeQuery',
       'getBookmarks',
       'createBookmark',
       'reporting__editLines',
@@ -271,7 +271,7 @@ export default {
       this.formSelected = value
       this.getFormFields(formId)
       this.isDataSourceSelected = true
-      await this.completedForm__getAll(formId)
+      await this.completedForm__getAllAndOptimizeQuery(formId)
       this.getCompletedFormAll()
       this.isLoading = false
       this.$nextTick(() => {
@@ -287,7 +287,7 @@ export default {
       const formId = { form_id: value }
       this.getFormFields(formId)
       this.isDataSourceSelected = true
-      await this.completedForm__getAll(formId)
+      await this.completedForm__getAllAndOptimizeQuery(formId)
       this.getCompletedFormAll()
     },
 
