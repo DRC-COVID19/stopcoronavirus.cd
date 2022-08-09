@@ -196,7 +196,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@~/sass/_variables";
+@media (width: 1024px) {
 .bookmark__overflow{
 overflow-y: scroll !important;
+}
+ .v-select {
+    &::v-deep {
+      .vs__dropdown-toggle {
+        height: 50px;
+      }
+      .vs__selected {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
 }
 </style>
