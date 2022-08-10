@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col lg="3" class="bg-white pb-5 sm-display">
+    <b-col lg="3" class="bg-white pb-5 sm-display reporting-form">
       <CreateReporting
         :activeItem="activeItem"
         :bookmarks="bookmarks"
@@ -426,6 +426,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+.reporting-form{
+ max-height: 135vh;
+}
 hr {
   width: 105%;
 }
