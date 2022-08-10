@@ -36,7 +36,6 @@ export default {
     },
     SET_COMPLETED_FORMS_DATA (state, payload) {
       state.completedFormsData = payload
-      console.log('data ->', state.completedFormsData)
     },
     SET_FILTER__DATA (state, payload) {
       state.filterData = payload

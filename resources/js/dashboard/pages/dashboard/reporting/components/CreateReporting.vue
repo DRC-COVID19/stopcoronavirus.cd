@@ -51,7 +51,7 @@
                  </div>
                 </b-row>
               </b-col>
-              <b-col class="mt-1 d-flex justify-content-around" lg="12">
+              <b-col class="mt-1 d-flex justify-content-around actions-container" lg="12">
               <div>
               <b-button
                   type="reset"
@@ -197,7 +197,13 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+
 @media (width: 1024px) {
+.actions-container{
+    flex-direction: column-reverse;
+    padding-bottom: 100rem;
+    align-items: center;
+}
 .bookmark__overflow{
 overflow-y: scroll !important;
 }
