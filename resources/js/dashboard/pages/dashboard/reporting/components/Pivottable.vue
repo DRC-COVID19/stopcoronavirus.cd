@@ -70,12 +70,16 @@ export default {
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
 .pivot-table-ui::v-deep{
+    & .pvtDropdown{
+        border-radius: 5px;
+    }
   @media screen and (max-width:768px) {
      &{
       width: 100vw !important;
      }
       .pvtRenderers{
            width: 100% !important;
+           padding: 2rem 0;
       }
       .pvtAxisContainer{
         display: none !important;
