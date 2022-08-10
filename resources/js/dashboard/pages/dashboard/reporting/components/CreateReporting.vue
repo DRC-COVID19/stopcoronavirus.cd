@@ -203,6 +203,9 @@ export default {
     flex-direction: column-reverse;
     padding-bottom: 100rem;
     align-items: center;
+    & div:nth-child(1){
+     padding: 1rem 0;
+    }
 }
 .bookmark__overflow{
 overflow-y: scroll !important;
