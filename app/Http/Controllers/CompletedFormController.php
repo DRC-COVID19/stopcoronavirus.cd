@@ -52,13 +52,13 @@ class CompletedFormController extends Controller
     }
     
     public function getAllAndOptimizeQuery (Request $request) 
-    {
-       $form_id = $request->query('form_id');
+    {  
+        $form_id = $request->query('form_id');
         $query = CompletedForm::with(
         [
             'completedFormFields' => function ($query) {
                 $query->select('id', 'value', 'completed_form_id', 'form_field_id')
-                    ->whereHas('formField');
+                      ->whereHas('formField');
             },
             'completedFormFields.formField' => function ($query) {
                 $query->select('id', 'name');
@@ -72,9 +72,10 @@ class CompletedFormController extends Controller
            
         ])
         ->select('id','hospital_id')
-        ->where('form_id', $form_id);
-        
-        return response()->json($query->get(), 200);
+        ->where('form_id', $form_id)
+        ->get();
+
+        return response()->json($query, 200);
     }
     
     public function indexByHospital(int $hospital_id, int $paginate = 15)
