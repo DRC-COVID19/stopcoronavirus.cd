@@ -71,7 +71,7 @@ class CompletedFormController extends Controller
             },
            
         ])
-        ->select('id','hospital_id')
+        ->select('id','hospital_id','last_update')
         ->where('form_id', $form_id)
         ->get();
 
