@@ -1,10 +1,11 @@
 <template>
    <vue-pivottable-ui
-            :data="arrayAxeValue"
-            :rows="linesSelected.map(line=>line.name)"
-            :cols="columnsSelected.map(column=>column.name)"
-            :locales="locales"
-            :locale="locale"
+    :data="arrayAxeValue"
+    :rows="linesSelected.map(line=>line.name)"
+    :cols="columnsSelected.map(column=>column.name)"
+    :locales="locales"
+    :locale="locale"
+    class="pivot-table-ui"
           >
   </vue-pivottable-ui>
 </template>
@@ -68,4 +69,33 @@ export default {
 
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+.pivot-table-ui::v-deep{
+    & .pvtDropdown{
+        border-radius: 5px;
+    }
+  @media screen and (max-width:768px) {
+     &{
+      width: 100vw !important;
+     }
+      .pvtRenderers{
+           width: 100% !important;
+           padding: 2rem 0;
+      }
+      .pvtAxisContainer{
+        display: none !important;
+      }
+      .pvtOutput{
+        width: 100% !important;
+      }
+  }
+  @media screen and (width: 768px) {
+     &{
+        width: 90vw !important;
+     }
+      .pvtRenderers{
+          width: 40% !important;
+     }
+  }
+}
+
 </style>
