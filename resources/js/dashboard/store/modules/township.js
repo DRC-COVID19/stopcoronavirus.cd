@@ -22,7 +22,6 @@ export default {
         axios
           .get('/api/dashboard/townships')
           .then(({ data }) => {
-            console.log('data-----', data)
             commit('SET_TOWNSHIPS', data)
             commit('SET_IS_LOADING', false)
             resolve(data)
