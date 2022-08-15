@@ -50,7 +50,7 @@ class BookmarkController extends Controller
 
     public function validator(){
         return request()->validate([
-            'name'                           => 'required|string|max:255',
+            'name'                           => 'required|unique:bookmarks|string|max:255',
             'form_id'                        => 'required|integer',
             'row'                            => 'required',
             'column'                         => 'required',

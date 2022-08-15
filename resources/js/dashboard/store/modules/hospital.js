@@ -414,7 +414,6 @@ export default {
         axios
           .get('/api/dashboard/hospitals/townships/')
           .then(({ data }) => {
-            console.log('data ->', data)
             resolve(data)
           })
           .catch((response) => {

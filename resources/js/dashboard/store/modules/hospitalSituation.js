@@ -152,7 +152,6 @@ export default {
       })
     },
     getHospitalSituationsDetail ({ state, commit }, payload) {
-      console.log('mon payload de bon:', payload)
       commit('SET_IS_LOADING', payload.isLoading)
       return new Promise((resolve, reject) => {
         axios
