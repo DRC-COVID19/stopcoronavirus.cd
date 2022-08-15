@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col lg="3" class="bg-white pb-5 sm-display">
+    <b-col lg="3" class="bg-white pb-5 sm-display reporting-form">
       <CreateReporting
         :activeItem="activeItem"
         :bookmarks="bookmarks"
@@ -182,7 +182,7 @@ export default {
     ...mapActions([
       'getFormFields',
       'hospitals__townships',
-      'completedForm__getAll',
+      'completedForm__getAllAndOptimizeQuery',
       'getBookmarks',
       'createBookmark',
       'reporting__editLines',
@@ -271,7 +271,7 @@ export default {
       this.formSelected = value
       this.getFormFields(formId)
       this.isDataSourceSelected = true
-      await this.completedForm__getAll(formId)
+      await this.completedForm__getAllAndOptimizeQuery(formId)
       this.getCompletedFormAll()
       this.isLoading = false
       this.$nextTick(() => {
@@ -287,7 +287,7 @@ export default {
       const formId = { form_id: value }
       this.getFormFields(formId)
       this.isDataSourceSelected = true
-      await this.completedForm__getAll(formId)
+      await this.completedForm__getAllAndOptimizeQuery(formId)
       this.getCompletedFormAll()
     },
 
@@ -426,6 +426,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@~/sass/_variables";
+.reporting-form{
+ max-height: 135vh;
+}
 hr {
   width: 105%;
 }
