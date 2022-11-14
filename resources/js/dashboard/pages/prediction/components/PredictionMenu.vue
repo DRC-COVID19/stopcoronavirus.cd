@@ -8,7 +8,7 @@
         $route.name.startsWith('prediction.home')
       "
     >
-      <i class="fas fa-users" aria-hidden="true"></i>
+      <i class="fa-solid fa-chart-line" aria-hidden="true"></i>
       <span v-if="showLabel">&nbsp; Prédiction sur les données existantes</span>
     </b-nav-item>
     <b-nav-item
@@ -16,7 +16,7 @@
       :to="{ name: 'prediction.freeData' }"
       :active="$route.name.startsWith('prediction.freeData')"
     >
-      <i class="fa fa-history" aria-hidden="true"></i>
+      <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i>
       <span v-if="showLabel">&nbsp; Prédiction libre</span>
     </b-nav-item>
     <b-nav-item
@@ -24,7 +24,7 @@
       :to="{ name: 'prediction.caseSimulation' }"
       :active="$route.name.startsWith('prediction.caseSimulation')"
     >
-      <i class="fa fa-address-card" aria-hidden="true"></i>
+      <i class="fa-solid fa-crop-simple" aria-hidden="true"></i>
       <span v-if="showLabel">&nbsp; Simulation des cas</span>
     </b-nav-item>
   </b-nav>
