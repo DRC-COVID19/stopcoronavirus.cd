@@ -3,11 +3,7 @@
     <b-col cols="12" class="map-form-header">
       <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-md-5">
-          <h1
-            class="title m-0"
-          >
-            Dashboard Covid-19
-          </h1>
+          <h1 class="title m-0">Dashboard Covid-19</h1>
         </b-navbar-brand>
         <b-navbar-toggle target="nav-collapse" class="default-border">
           <span class="fa fa-bars"></span>
@@ -16,35 +12,44 @@
           <b-navbar-nav class="nav-container">
             <b-nav-item
               v-if="canViewDashBoard"
-              :to="{name: 'main.dashboard'}"
+              :to="{ name: 'main.dashboard' }"
               :active="this.$route.name.startsWith('main.dashboard')"
             >
               Dashboard
             </b-nav-item>
             <b-nav-item
               v-if="canViewAdministration"
-              :to="{name: 'administrator'}"
+              :to="{ name: 'administrator' }"
               :active="this.$route.name.startsWith('administrator')"
             >
               Administration
             </b-nav-item>
             <b-nav-item
               v-if="canViewCTCOS"
-              :to="{name: 'hospitals'}"
+              :to="{ name: 'hospitals' }"
               :active="this.$route.name.startsWith('hospital')"
             >
               CTCOS
             </b-nav-item>
-                <b-nav-item
-              :to="{name: 'bug_tracker'}"
+            <b-nav-item
+              :to="{ name: 'bug_tracker' }"
               :active="this.$route.name.startsWith('bug_tracker')"
             >
               Signaler un problème
             </b-nav-item>
+            <b-nav-item
+              v-if="canViewDashBoard"
+              :to="{ name: 'prediction' }"
+              :active="this.$route.name.startsWith('prediction')"
+            >
+              Prédiction
+            </b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
-            <b-nav-item class="position-relative nav-item d-flex align-items-center">
-            <div class="d-flex">
+            <b-nav-item
+              class="position-relative nav-item d-flex align-items-center"
+            >
+              <div class="d-flex">
                 <a
                   class="nav-link position-relative"
                   href="#"
@@ -56,7 +61,9 @@
                   >
                     <i class="fa fa-history" aria-hidden="true"></i>
                   </div>
-                  <span class="notification-count"> {{ getChangeLogNotRead.length }} </span>
+                  <span class="notification-count">
+                    {{ getChangeLogNotRead.length }}
+                  </span>
                 </a>
                 <a
                   v-if="canViewAgent"
@@ -69,7 +76,9 @@
                   >
                     <i class="fas fa-bell" aria-hidden="true"></i>
                   </div>
-                  <span class="notification-count"> {{ notificationNotReads.length }} </span>
+                  <span class="notification-count">
+                    {{ notificationNotReads.length }}
+                  </span>
                 </a>
                 <a
                   v-if="canViewAdministration"
@@ -80,9 +89,14 @@
                   <div
                     class="icon-hallo d-flex justify-content-center align-items-center"
                   >
-                    <i class="fas fa-triangle-exclamation" aria-hidden="true"></i>
+                    <i
+                      class="fas fa-triangle-exclamation"
+                      aria-hidden="true"
+                    ></i>
                   </div>
-                  <span class="notification-count"> {{ notificationConflicts.length }} </span>
+                  <span class="notification-count">
+                    {{ notificationConflicts.length }}
+                  </span>
                 </a>
               </div>
               <div class="dropdown-nav" v-show="showHeaderNotification">
@@ -103,7 +117,7 @@
                     </div>
                     <div class="media-body space-sm">
                       <div class="post-title">{{ item.title }}</div>
-                      <span>{{ moment(item.from).format("DD.MM.YYYY") }}</span>
+                      <span>{{ moment(item.from).format('DD.MM.YYYY') }}</span>
                     </div>
                   </div>
                 </div>
@@ -123,11 +137,7 @@
               <div
                 class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
               >
-                <img
-                  src="/img/partener2.png"
-                  class="img-fluid"
-                  alt
-                />
+                <img src="/img/partener2.png" class="img-fluid" alt />
                 <div
                   @mouseleave="userAvatarMouseLeave"
                   @mouseenter="userAvatarMouseEnter"
@@ -146,7 +156,9 @@
                     <p>
                       <span class="d-block">{{ user.username }}</span>
                       <span class="d-block">{{ user.name }}</span>
-                      <span class="d-block" v-if="user.email">{{ user.email }}</span>
+                      <span class="d-block" v-if="user.email">{{
+                        user.email
+                      }}</span>
                     </p>
                     <b-button @click="userLogout" variant="danger" block>
                       Deconnexion
@@ -164,112 +176,135 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
-import { ADMINISTRATOR, ADMIN_DASHBOARD, ADMIN_HOSPITAL, AGENT_HOSPITAL, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC } from '../config/env'
+import {
+  ADMINISTRATOR,
+  ADMIN_DASHBOARD,
+  ADMIN_HOSPITAL,
+  AGENT_HOSPITAL,
+  CREATE_FORM,
+  EDIT_FORM,
+  MANANGER_EPIDEMIC,
+} from '../config/env'
 
 export default {
-  components: {
-  },
-  data () {
+  components: {},
+  data() {
     return {
       showUserCard: false,
       showHeaderNotification: false,
-      notificationNotReads: null
+      notificationNotReads: null,
     }
   },
   watch: {
-    user () {
+    user() {
       this.notificationNotRead()
     },
-    notificationCreated () {
+    notificationCreated() {
       this.notificationNotRead()
     },
-    countConflict () {
+    countConflict() {
       this.initCountConflict()
-    }
+    },
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       countConflict: (state) => state.completedFormHistory.countConflict,
       notificationCreated: (state) => state.notification.isCreated,
-      notificationConflicts: (state) => state.completedFormHistory.NotificationcompletedFormHistories,
+      notificationConflicts: (state) =>
+        state.completedFormHistory.NotificationcompletedFormHistories,
       activeMenu: (state) => state.nav.activeMenu,
-      changeLogs: (state) => state.app.changeLogs
+      changeLogs: (state) => state.app.changeLogs,
     }),
     ...mapGetters(['getChangeLogNotRead']),
-    canViewDashBoard () {
+    canViewDashBoard() {
       return this.userHaveRole(ADMIN_DASHBOARD)
     },
-    canViewAdministration () {
-      return this.userHaveRole(ADMINISTRATOR) || this.userHaveRole(MANANGER_EPIDEMIC) || this.userHaveRole(EDIT_FORM) || this.userHaveRole(CREATE_FORM)
+    canViewAdministration() {
+      return (
+        this.userHaveRole(ADMINISTRATOR) ||
+        this.userHaveRole(MANANGER_EPIDEMIC) ||
+        this.userHaveRole(EDIT_FORM) ||
+        this.userHaveRole(CREATE_FORM)
+      )
     },
-    canViewCTCOS () {
-      return this.userHaveRole(ADMIN_HOSPITAL) || this.userHaveRole(AGENT_HOSPITAL)
+    canViewCTCOS() {
+      return (
+        this.userHaveRole(ADMIN_HOSPITAL) || this.userHaveRole(AGENT_HOSPITAL)
+      )
     },
-    canViewAgent () {
+    canViewAgent() {
       if (this.user.hospital) {
         return this.userHaveRole(AGENT_HOSPITAL)
       }
       return ''
-    }
+    },
   },
-  mounted () {
+  mounted() {
     this.initCountConflict()
     this.notificationNotRead()
   },
   methods: {
-    ...mapActions(['logout', 'setChangeLogsRead', 'getnotificationNotRead', 'setNotification', 'getNotificationCompletedFormHistories']),
+    ...mapActions([
+      'logout',
+      'setChangeLogsRead',
+      'getnotificationNotRead',
+      'setNotification',
+      'getNotificationCompletedFormHistories',
+    ]),
     ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
-    userAvatarMouseEnter () {
+    userAvatarMouseEnter() {
       this.showUserCard = true
     },
-    userAvatarMouseLeave () {
+    userAvatarMouseLeave() {
       this.showUserCard = false
     },
-    userLogout () {
+    userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: 'login'
+          name: 'login',
         })
       })
     },
-    selectNotification (item) {
+    selectNotification(item) {
       this.setSelectedChangeLog(item)
       this.setActiveMenu(7)
     },
-    toggleHeaderNotification () {
+    toggleHeaderNotification() {
       this.showHeaderNotification = !this.showHeaderNotification
     },
-    clickOutsideNotification () {
+    clickOutsideNotification() {
       if (this.showHeaderNotification) {
         this.showHeaderNotification = false
         this.setChangeLogsRead()
       }
     },
-    async notificationNotRead () {
-      this.notificationNotReads = await this.getnotificationNotRead({ id: this.user.hospital.id })
+    async notificationNotRead() {
+      this.notificationNotReads = await this.getnotificationNotRead({
+        id: this.user.hospital.id,
+      })
     },
-    async goToPageNotification () {
+    async goToPageNotification() {
       await this.setNotification({ id: this.user.hospital.id })
       this.$router.push({
-        name: 'hospital.notification'
+        name: 'hospital.notification',
       })
       this.notificationNotRead()
     },
-    async initCountConflict () {
+    async initCountConflict() {
       await this.getNotificationCompletedFormHistories()
     },
-    goToPageConflict () {
+    goToPageConflict() {
       this.$router.push({
-        name: 'admin.conflict.form'
+        name: 'admin.conflict.form',
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .header {
   a {
     text-decoration: none;
@@ -306,7 +341,7 @@ export default {
     z-index: 20;
     background-color: #fff;
     :after {
-      content: "";
+      content: '';
       height: 0;
       width: 0;
       border-bottom: 10px solid $dash-blue;
@@ -406,7 +441,7 @@ export default {
     }
   }
 }
-.nav-item{
+.nav-item {
   a.active {
     color: $dash-blue !important;
   }
