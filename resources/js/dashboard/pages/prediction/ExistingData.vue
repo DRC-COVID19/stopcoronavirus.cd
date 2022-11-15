@@ -4,9 +4,7 @@
       <b-col cols="12" md="12" class="h-100">
         <b-card no-body class="h-100 rounded-0">
           <b-tabs content-class="mt-3" card>
-            <b-tab title="Nouvelle prédiction" active
-              ><p>Nouvelle prédiction</p></b-tab
-            >
+            <b-tab title="Nouvelle prédiction" active><ExistingData /></b-tab>
             <b-tab title="Prédictions enregistrée"
               ><p>Prédictions enregistrée</p></b-tab
             >
@@ -18,7 +16,10 @@
 </template>
 
 <script>
-export default {}
+import ExistingData from '../../components/prediction/ExistingData';
+export default {
+  components: { ExistingData },
+};
 </script>
 
 <style></style>
