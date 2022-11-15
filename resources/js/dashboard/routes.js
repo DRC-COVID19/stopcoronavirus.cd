@@ -1,44 +1,44 @@
-import Home from './pages/Home'
-import Login from './pages/auth/Login'
-import LostPassword from './pages/auth/LostPassword'
-import ResetPasswordThank from './pages/auth/ResetPasswordThank'
-import ResetPasseword from './pages/auth/ResetPassword'
-import PasswordResetComplete from './pages/auth/PasswordResetComplete'
-import HospitalsHome from './pages/hospital/Home'
-import HospitalNotification from './pages/hospital/Notification'
-import HospitalForm from './pages/hospital/HospitalForm'
-import BugTracker from './pages/bug_tracker/Index'
-import HospitalsDetail from './pages/hospital/HospitalDetail'
-import HospitalData from './pages/hospital/HospitalData'
-import HospitalAdmin from './pages/adminHospital/Home'
-import ConflictForm from './pages/conflictForm/Index'
-import ConflictFormDetail from './pages/conflictForm/ConflictFormDetail'
-import HospitalAdminData from './pages/adminHospital/HospitalData'
-import NotAcces from './pages/NotAccess'
-import Administrator from './pages/administrator/Administrator'
-import AdminUserIndex from './pages/administrator/users/Index'
-import AdminHospitalIndex from './pages/administrator/hospitals/Index'
-import PageNotFound from './pages/NotFound'
-import ChangeLogIndex from './pages/administrator/changeLog/index'
-import Epidemie from './pages/administrator/epidemy/Index'
-import FormIndex from './pages/administrator/forms2/index'
-import FormShow from './pages/administrator/forms/form'
-import FormShow2 from './pages/administrator/forms2/formDetail/index'
-import FormCreation from './pages/administrator/forms2/formDetail/formCreation'
-import FormFieldIndex from './pages/administrator/forms2/formDetail/components/formField/FormFieldIndex'
+import Home from './pages/Home';
+import Login from './pages/auth/Login';
+import LostPassword from './pages/auth/LostPassword';
+import ResetPasswordThank from './pages/auth/ResetPasswordThank';
+import ResetPasseword from './pages/auth/ResetPassword';
+import PasswordResetComplete from './pages/auth/PasswordResetComplete';
+import HospitalsHome from './pages/hospital/Home';
+import HospitalNotification from './pages/hospital/Notification';
+import HospitalForm from './pages/hospital/HospitalForm';
+import BugTracker from './pages/bug_tracker/Index';
+import HospitalsDetail from './pages/hospital/HospitalDetail';
+import HospitalData from './pages/hospital/HospitalData';
+import HospitalAdmin from './pages/adminHospital/Home';
+import ConflictForm from './pages/conflictForm/Index';
+import ConflictFormDetail from './pages/conflictForm/ConflictFormDetail';
+import HospitalAdminData from './pages/adminHospital/HospitalData';
+import NotAcces from './pages/NotAccess';
+import Administrator from './pages/administrator/Administrator';
+import AdminUserIndex from './pages/administrator/users/Index';
+import AdminHospitalIndex from './pages/administrator/hospitals/Index';
+import PageNotFound from './pages/NotFound';
+import ChangeLogIndex from './pages/administrator/changeLog/index';
+import Epidemie from './pages/administrator/epidemy/Index';
+import FormIndex from './pages/administrator/forms2/index';
+import FormShow from './pages/administrator/forms/form';
+import FormShow2 from './pages/administrator/forms2/formDetail/index';
+import FormCreation from './pages/administrator/forms2/formDetail/formCreation';
+import FormFieldIndex from './pages/administrator/forms2/formDetail/components/formField/FormFieldIndex';
 
-import FormSettings from './pages/administrator/forms2/formDetail/formSettings'
-import FormSchemas from './pages/administrator/forms2/formDetail/formSchemas'
-import FormResponse from './pages/administrator/forms2/formDetail/formResponse'
-import FormPreview from './pages/administrator/forms2/formDetail/formPreview'
-import Main from './pages/Main'
-import Dashboard from './pages/dashboard/Dashboard'
-import Reporting from './pages/dashboard/reporting/HomeReporting'
-import CTCO from './pages/ctco/CTCO'
+import FormSettings from './pages/administrator/forms2/formDetail/formSettings';
+import FormSchemas from './pages/administrator/forms2/formDetail/formSchemas';
+import FormResponse from './pages/administrator/forms2/formDetail/formResponse';
+import FormPreview from './pages/administrator/forms2/formDetail/formPreview';
+import Main from './pages/Main';
+import Dashboard from './pages/dashboard/Dashboard';
+import Reporting from './pages/dashboard/reporting/HomeReporting';
+import CTCO from './pages/ctco/CTCO';
 
-import Prediction from './pages/prediction/Prediction'
-import ExistingData from './pages/prediction/existingData/ExistingData'
-import FreeData from './pages/prediction/freeData/FreeData'
+import Prediction from './pages/prediction/Prediction';
+import ExistingData from './pages/prediction/ExistingData';
+import FreeData from './pages/prediction/FreeData';
 
 import {
   ADMIN_DASHBOARD,
@@ -48,7 +48,7 @@ import {
   MANANGER_EPIDEMIC,
   EDIT_FORM,
   CREATE_FORM,
-} from './config/env'
+} from './config/env';
 
 export default [
   {
@@ -462,4 +462,4 @@ export default [
     name: 'acces.denied',
     component: NotAcces,
   },
-]
+];

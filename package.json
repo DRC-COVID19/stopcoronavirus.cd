@@ -85,7 +85,7 @@
     "webpack-livereload-plugin": "^2.3.0"
   },
   "prettier": {
-    "semi": false,
-    "singleQuote": true
+    "singleQuote": true,
+    "tabWidth": 2
   }
 }

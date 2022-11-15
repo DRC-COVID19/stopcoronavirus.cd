@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 module.exports = {
   env: {
     browser: true,
@@ -10,6 +11,7 @@ module.exports = {
   },
   plugins: ['vue'],
   rules: {
-    'comma-dangle': ['never'],
+    'comma-dangle': ['always'],
+    semi: ['error', 'always'],
   },
-}
+};

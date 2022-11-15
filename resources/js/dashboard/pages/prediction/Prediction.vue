@@ -18,16 +18,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 import {
   ADMINISTRATOR,
   CREATE_FORM,
   EDIT_FORM,
   MANANGER_EPIDEMIC,
   ADMIN_DASHBOARD,
-} from '../../config/env'
-import MainHeader from '../../components/MainHeader'
-import PredictionMenu from './components/PredictionMenu'
+} from '../../config/env';
+import MainHeader from '../../components/MainHeader';
+import PredictionMenu from '../../components/prediction/PredictionMenu';
 
 export default {
   components: {
@@ -35,7 +35,7 @@ export default {
     MainHeader,
   },
   mounted() {
-    this.redirect(this.$route)
+    this.redirect(this.$route);
   },
   computed: {
     ...mapState({
@@ -44,30 +44,30 @@ export default {
   },
   watch: {
     $route(to, from) {
-      this.redirect(to)
+      this.redirect(to);
     },
     user() {
-      this.redirect(this.$route)
+      this.redirect(this.$route);
     },
   },
   methods: {
     redirect(route) {
-      console.log(this.user.roles)
+      console.log(this.user.roles);
       if (route.name !== 'prediction') {
-        return null
+        return null;
       }
       if (!this.user || this.user.roles === undefined) {
-        return null
+        return null;
       }
 
       if (this.user.roles.find((a) => a.name === ADMIN_DASHBOARD)) {
         this.$router.push({
           name: 'prediction.existingData',
-        })
+        });
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

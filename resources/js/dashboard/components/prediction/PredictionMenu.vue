@@ -31,14 +31,14 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 import {
   ADMINISTRATOR,
   CREATE_FORM,
   EDIT_FORM,
   MANANGER_EPIDEMIC,
   ADMIN_DASHBOARD,
-} from '../../../config/env'
+} from '../../config/env';
 
 export default {
   props: {
@@ -48,18 +48,18 @@ export default {
     },
   },
   data() {
-    return {}
+    return {};
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
     }),
     canPredict() {
-      return this.userHaveRole(ADMIN_DASHBOARD)
+      return this.userHaveRole(ADMIN_DASHBOARD);
     },
   },
   methods: {},
-}
+};
 </script>
 
 <style lang="scss" scoped>
