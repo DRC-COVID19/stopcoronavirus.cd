@@ -13,14 +13,15 @@
               >Source de données</label
             >
             <v-select
-              v-model="form.dataSource"
-              :options="dataSourceList"
-              :reduce="(item) => item.id"
-              label="name"
-              placeholder="Source de données"
-              class="style-chooser"
-              @input="formTownshipChanged"
-            />
+              v-model="selectedForm"
+              :options="formList"
+              :reduce="(form) => form.id"
+              :clearable="false"
+              :searchable="false"
+              label="title"
+              class="mr-2"
+            >
+            </v-select>
           </b-form-group>
         </b-col>
         <b-col
@@ -77,7 +78,7 @@
 
 <script>
 import DateRangePicker from '../common/DateRangePicker';
-import 'vue2-daterange-picker/dist/vue2-daterange-picker.css';
+import { mapActions, mapState, mapGetters } from 'vuex';
 export default {
   components: {
     DateRangePicker,
@@ -98,6 +99,9 @@ export default {
         { id: 0, name: 'Lits avec mousse occupés' },
         { id: 2, name: 'Nombre de Décès' },
       ],
+      completedForms: [],
+      isLoading: false,
+      selectedForm: null,
     };
   },
 
@@ -107,6 +111,52 @@ export default {
     },
     formFieldList() {
       return [...this.defaultFormField];
+    },
+    ...mapState({
+      completedForm__selectedForm: (state) => state.completedForm.selectedForm,
+    }),
+    completedFormsSorted() {
+      return this.completedForms
+        .slice()
+        .sort((a, b) => {
+          const hospitalNameA = a.name.toLowerCase();
+          const hospitalNameB = b.name.toLowerCase();
+          if (hospitalNameA < hospitalNameB) return -1;
+          if (hospitalNameA > hospitalNameB) return 1;
+          return 0;
+        })
+        .sort((a, b) => new Date(b.last_update) - new Date(a.last_update));
+    },
+    formList() {
+      return [{ id: null, title: 'Tous' }, ...this.form__publishedForms()];
+    },
+  },
+  mounted() {
+    this.selectedForm = this.completedForm__selectedForm;
+    this.getForms();
+    this.refreshData();
+  },
+  watch: {
+    selectedForm(value) {
+      this.completedForm__setSelectedForm(value);
+      this.refreshData();
+    },
+  },
+  methods: {
+    ...mapActions([
+      'completedForm__getAllByLastUpdate',
+      'completedForm__setSelectedForm',
+      'getForms',
+    ]),
+    ...mapGetters(['form__publishedForms']),
+    async refreshData() {
+      this.isLoading = true;
+      this.completedForms = await this.completedForm__getAllByLastUpdate({
+        form_id: this.completedForm__selectedForm,
+      });
+      if (this.completedForms.length > 0) {
+        this.isLoading = false;
+      }
     },
   },
 };
