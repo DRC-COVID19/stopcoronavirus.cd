@@ -410,13 +410,7 @@ export default [
     name: 'prediction',
     meta: {
       requiresAuth: true,
-      role: [
-        ADMINISTRATOR,
-        CREATE_FORM,
-        EDIT_FORM,
-        MANANGER_EPIDEMIC,
-        ADMIN_DASHBOARD,
-      ],
+      role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC],
     },
     children: [
       {
@@ -425,7 +419,7 @@ export default [
         component: AdminUserIndex,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, ADMIN_DASHBOARD],
+          role: [ADMINISTRATOR],
         },
       },
       {
@@ -434,7 +428,7 @@ export default [
         component: ExistingData,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, ADMIN_DASHBOARD],
+          role: [ADMINISTRATOR],
         },
       },
       {
@@ -443,7 +437,7 @@ export default [
         component: FreeData,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, ADMIN_DASHBOARD],
+          role: [ADMINISTRATOR],
         },
       },
       {
@@ -452,7 +446,7 @@ export default [
         component: ExistingData,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, ADMIN_DASHBOARD],
+          role: [ADMINISTRATOR],
         },
       },
     ],

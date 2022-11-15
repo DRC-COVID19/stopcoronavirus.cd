@@ -24,7 +24,6 @@ import {
   CREATE_FORM,
   EDIT_FORM,
   MANANGER_EPIDEMIC,
-  ADMIN_DASHBOARD,
 } from '../../config/env';
 import MainHeader from '../../components/MainHeader';
 import PredictionMenu from '../../components/prediction/PredictionMenu';
@@ -52,7 +51,6 @@ export default {
   },
   methods: {
     redirect(route) {
-      console.log(this.user.roles);
       if (route.name !== 'prediction') {
         return null;
       }
@@ -60,7 +58,15 @@ export default {
         return null;
       }
 
-      if (this.user.roles.find((a) => a.name === ADMIN_DASHBOARD)) {
+      if (
+        this.user.roles.find(
+          (a) =>
+            a.name === ADMINISTRATOR ||
+            a.name == CREATE_FORM ||
+            a.name == EDIT_FORM ||
+            a.name == MANANGER_EPIDEMIC
+        )
+      ) {
         this.$router.push({
           name: 'prediction.existingData',
         });

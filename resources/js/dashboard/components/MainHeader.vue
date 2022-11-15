@@ -38,7 +38,7 @@
               Signaler un problème
             </b-nav-item>
             <b-nav-item
-              v-if="canViewDashBoard"
+              v-if="canViewAdministration"
               :to="{ name: 'prediction' }"
               :active="this.$route.name.startsWith('prediction')"
             >
@@ -175,7 +175,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
 import {
   ADMINISTRATOR,
   ADMIN_DASHBOARD,
@@ -184,7 +184,7 @@ import {
   CREATE_FORM,
   EDIT_FORM,
   MANANGER_EPIDEMIC,
-} from '../config/env'
+} from '../config/env';
 
 export default {
   components: {},
@@ -193,17 +193,17 @@ export default {
       showUserCard: false,
       showHeaderNotification: false,
       notificationNotReads: null,
-    }
+    };
   },
   watch: {
     user() {
-      this.notificationNotRead()
+      this.notificationNotRead();
     },
     notificationCreated() {
-      this.notificationNotRead()
+      this.notificationNotRead();
     },
     countConflict() {
-      this.initCountConflict()
+      this.initCountConflict();
     },
   },
   computed: {
@@ -218,7 +218,7 @@ export default {
     }),
     ...mapGetters(['getChangeLogNotRead']),
     canViewDashBoard() {
-      return this.userHaveRole(ADMIN_DASHBOARD)
+      return this.userHaveRole(ADMIN_DASHBOARD);
     },
     canViewAdministration() {
       return (
@@ -226,23 +226,23 @@ export default {
         this.userHaveRole(MANANGER_EPIDEMIC) ||
         this.userHaveRole(EDIT_FORM) ||
         this.userHaveRole(CREATE_FORM)
-      )
+      );
     },
     canViewCTCOS() {
       return (
         this.userHaveRole(ADMIN_HOSPITAL) || this.userHaveRole(AGENT_HOSPITAL)
-      )
+      );
     },
     canViewAgent() {
       if (this.user.hospital) {
-        return this.userHaveRole(AGENT_HOSPITAL)
+        return this.userHaveRole(AGENT_HOSPITAL);
       }
-      return ''
+      return '';
     },
   },
   mounted() {
-    this.initCountConflict()
-    this.notificationNotRead()
+    this.initCountConflict();
+    this.notificationNotRead();
   },
   methods: {
     ...mapActions([
@@ -254,53 +254,53 @@ export default {
     ]),
     ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
     userAvatarMouseEnter() {
-      this.showUserCard = true
+      this.showUserCard = true;
     },
     userAvatarMouseLeave() {
-      this.showUserCard = false
+      this.showUserCard = false;
     },
     userLogout() {
       this.logout().then(() => {
         this.$router.push({
           name: 'login',
-        })
-      })
+        });
+      });
     },
     selectNotification(item) {
-      this.setSelectedChangeLog(item)
-      this.setActiveMenu(7)
+      this.setSelectedChangeLog(item);
+      this.setActiveMenu(7);
     },
     toggleHeaderNotification() {
-      this.showHeaderNotification = !this.showHeaderNotification
+      this.showHeaderNotification = !this.showHeaderNotification;
     },
     clickOutsideNotification() {
       if (this.showHeaderNotification) {
-        this.showHeaderNotification = false
-        this.setChangeLogsRead()
+        this.showHeaderNotification = false;
+        this.setChangeLogsRead();
       }
     },
     async notificationNotRead() {
       this.notificationNotReads = await this.getnotificationNotRead({
         id: this.user.hospital.id,
-      })
+      });
     },
     async goToPageNotification() {
-      await this.setNotification({ id: this.user.hospital.id })
+      await this.setNotification({ id: this.user.hospital.id });
       this.$router.push({
         name: 'hospital.notification',
-      })
-      this.notificationNotRead()
+      });
+      this.notificationNotRead();
     },
     async initCountConflict() {
-      await this.getNotificationCompletedFormHistories()
+      await this.getNotificationCompletedFormHistories();
     },
     goToPageConflict() {
       this.$router.push({
         name: 'admin.conflict.form',
-      })
+      });
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>
