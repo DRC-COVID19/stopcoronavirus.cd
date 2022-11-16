@@ -22,4 +22,7 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.card-header {
+}
+</style>

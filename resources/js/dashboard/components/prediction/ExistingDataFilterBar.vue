@@ -5,11 +5,11 @@
         <b-col
           cols="12"
           md="6"
-          lg="3"
+          lg="2"
           class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0"
         >
           <b-form-group lg="5" md="12" style="width: 100%" class="text-left">
-            <label for class="text-dash-color text-left"
+            <label for class="text-dash-color text-left filter-label"
               >Source de données</label
             >
             <v-select
@@ -29,7 +29,7 @@
           class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0"
         >
           <b-form-group lg="5" md="12" style="width: 100%" class="text-left">
-            <label for class="text-dash-color text-left"
+            <label for class="text-dash-color text-left filter-label"
               >Champ du formulaire</label
             >
             <v-select
@@ -49,10 +49,23 @@
           class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0"
         >
           <b-form-group lg="5" md="12" style="width: 100%" class="text-left">
-            <label for class="text-dash-color text-left"
+            <label for class="text-dash-color text-left filter-label date-label"
               >Plage d'observation</label
             >
-            <DateRangePicker />
+            <v-date-picker v-model="observationDateRange" is-range>
+              <template v-slot="{ inputValue, inputEvents }">
+                <b-form-input
+                  :value="
+                    (inputValue.end || '') + ' - ' + (inputValue.start || '')
+                  "
+                  v-on="inputEvents.end"
+                  class="date-range-picker-input"
+                  placeholder="Sélectionner une plage de date"
+                  readonly
+                >
+                </b-form-input>
+              </template>
+            </v-date-picker>
           </b-form-group>
         </b-col>
         <b-col
@@ -62,22 +75,39 @@
           class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0"
         >
           <b-form-group lg="5" md="12" style="width: 100%" class="text-left">
-            <label for class="text-dash-color text-left"
+            <label for class="text-dash-color text-left filter-label date-label"
               >Plage de prediction</label
             >
-            <DateRangePicker />
+            <v-date-picker v-model="predictionDateRange" is-range>
+              <template v-slot="{ inputValue, inputEvents }">
+                <b-form-input
+                  :value="
+                    (inputValue.end || '') + ' - ' + (inputValue.start || '')
+                  "
+                  v-on="inputEvents.end"
+                  class="date-range-picker-input"
+                  readonly
+                >
+                </b-form-input>
+              </template>
+            </v-date-picker>
           </b-form-group>
         </b-col>
         <b-col
           cols="12"
           md="6"
-          lg="2"
+          lg="3"
           class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0 d-flex align-items-center"
         >
           <div
-            class="d-flex align-items-center justify-content-between mt-3 btn-container"
+            class="d-flex align-items-center justify-content-between mt-2 btn-container"
           >
-            <b-button size="lg" variant="danger" @click="clearForm">
+            <b-button
+              size="lg"
+              variant="danger"
+              @click="clearForm"
+              class="predict-btn"
+            >
               <span class="fa fa-times"></span>
             </b-button>
 
@@ -85,7 +115,7 @@
               size="sm"
               class="btn btn-dash-blue btn-secondary predict-btn"
             >
-              Prédire
+              Lancer la prediction
             </b-button>
           </div>
         </b-col>
@@ -95,14 +125,12 @@
 </template>
 
 <script>
-import DateRangePicker from '../common/DateRangePicker';
 import { mapActions, mapState, mapGetters } from 'vuex';
 export default {
-  components: {
-    DateRangePicker,
-  },
   data() {
     return {
+      observationDateRange: null,
+      predictionDateRange: null,
       selectedFormId: null,
       selectedFormFields: [],
       isLoading: false,
@@ -138,6 +166,8 @@ export default {
 
     clearForm() {
       this.selectedFormId = null;
+      this.observationDateRange = null;
+      this.predictionDateRange = null;
       this.selectedFormFields = [];
     },
 
@@ -153,8 +183,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.date-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filter-label {
+  font-size: 12px;
+}
 .btn-container {
-  width: 140px;
+  width: 190px;
 }
 .v-select {
   &::v-deep {
@@ -163,5 +202,13 @@ export default {
       text-overflow: ellipsis;
     }
   }
+}
+
+.predict-btn {
+  font-size: 13px;
+}
+.date-range-picker-input {
+  background-color: white !important;
+  font-size: 12px !important;
 }
 </style>
