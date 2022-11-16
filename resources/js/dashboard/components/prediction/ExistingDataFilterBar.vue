@@ -1,12 +1,12 @@
 <template>
-  <b-card no-body class="text-center pt-3">
+  <b-card no-body class="text-center pt-3 px-2">
     <b-form class="flux-form mb-2" @submit.prevent="submit">
       <b-form-row class="d-flex justify-content-between ml-0 mr-0">
         <b-col
           cols="12"
           md="6"
           lg="3"
-          class="w-100 nav-zone pl-3 pr-3 mb-2 mb-lg-0"
+          class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0"
         >
           <b-form-group lg="5" md="12" style="width: 100%" class="text-left">
             <label for class="text-dash-color text-left"
@@ -26,7 +26,7 @@
           cols="12"
           md="6"
           lg="3"
-          class="w-100 nav-zone pl-3 pr-3 mb-2 mb-lg-0"
+          class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0"
         >
           <b-form-group lg="5" md="12" style="width: 100%" class="text-left">
             <label for class="text-dash-color text-left"
@@ -45,12 +45,12 @@
         <b-col
           cols="12"
           md="6"
-          lg="3"
-          class="w-100 nav-zone pl-3 pr-3 mb-2 mb-lg-0"
+          lg="2"
+          class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0"
         >
           <b-form-group lg="5" md="12" style="width: 100%" class="text-left">
             <label for class="text-dash-color text-left"
-              >Plage de date d'observation</label
+              >Plage d'observation</label
             >
             <DateRangePicker />
           </b-form-group>
@@ -58,8 +58,8 @@
         <b-col
           cols="12"
           md="6"
-          lg="3"
-          class="w-100 nav-zone pl-3 pr-3 mb-2 mb-lg-0"
+          lg="2"
+          class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0"
         >
           <b-form-group lg="5" md="12" style="width: 100%" class="text-left">
             <label for class="text-dash-color text-left"
@@ -67,6 +67,27 @@
             >
             <DateRangePicker />
           </b-form-group>
+        </b-col>
+        <b-col
+          cols="12"
+          md="6"
+          lg="2"
+          class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0 d-flex align-items-center"
+        >
+          <div
+            class="d-flex align-items-center justify-content-between mt-3 btn-container"
+          >
+            <b-button size="lg" variant="danger" @click="clearForm">
+              <span class="fa fa-times"></span>
+            </b-button>
+
+            <b-button
+              size="sm"
+              class="btn btn-dash-blue btn-secondary predict-btn"
+            >
+              Prédire
+            </b-button>
+          </div>
         </b-col>
       </b-form-row>
     </b-form>
@@ -115,6 +136,11 @@ export default {
     ...mapActions(['getFormFields', 'getForms']),
     ...mapGetters(['form__publishedForms']),
 
+    clearForm() {
+      this.selectedFormId = null;
+      this.selectedFormFields = [];
+    },
+
     async selectedForm(value) {
       this.isLoading = true;
       const selectedFormId = { form_id: value };
@@ -127,6 +153,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.btn-container {
+  width: 140px;
+}
 .v-select {
   &::v-deep {
     .vs__selected {
