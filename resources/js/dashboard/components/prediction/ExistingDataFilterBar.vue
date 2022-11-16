@@ -13,15 +13,13 @@
               >Source de données</label
             >
             <v-select
-              v-model="selectedForm"
+              v-model="selectedFormId"
               :options="formList"
-              :reduce="(form) => form.id"
-              :clearable="false"
-              :searchable="false"
+              :reduce="(item) => item.id"
               label="title"
-              class="mr-2"
-            >
-            </v-select>
+              class="style-chooser"
+              @input="selectedForm"
+            />
           </b-form-group>
         </b-col>
         <b-col
@@ -35,13 +33,12 @@
               >Champ du formulaire</label
             >
             <v-select
-              v-model="form.formField"
+              v-model="selectedFormFields"
               :options="formFieldList"
               :reduce="(item) => item.id"
               label="name"
-              placeholder="Champ du formulaire"
+              multiple
               class="style-chooser"
-              @input="formTownshipChanged"
             />
           </b-form-group>
         </b-col>
@@ -85,23 +82,10 @@ export default {
   },
   data() {
     return {
-      form: {
-        dataSource: 0,
-        formField: 0,
-      },
-
-      defaultDataSource: [
-        { id: 0, name: 'Formulaire d’enquette' },
-        { id: 1, name: 'Formulaire Choléra' },
-      ],
-
-      defaultFormField: [
-        { id: 0, name: 'Lits avec mousse occupés' },
-        { id: 2, name: 'Nombre de Décès' },
-      ],
-      completedForms: [],
+      selectedFormId: null,
+      selectedFormFields: [],
       isLoading: false,
-      selectedForm: null,
+      formFieldList: [],
     };
   },
 
@@ -109,57 +93,46 @@ export default {
     dataSourceList() {
       return [...this.defaultDataSource];
     },
-    formFieldList() {
-      return [...this.defaultFormField];
-    },
     ...mapState({
-      completedForm__selectedForm: (state) => state.completedForm.selectedForm,
+      formFields: (state) => state.formField.formFields,
     }),
-    completedFormsSorted() {
-      return this.completedForms
-        .slice()
-        .sort((a, b) => {
-          const hospitalNameA = a.name.toLowerCase();
-          const hospitalNameB = b.name.toLowerCase();
-          if (hospitalNameA < hospitalNameB) return -1;
-          if (hospitalNameA > hospitalNameB) return 1;
-          return 0;
-        })
-        .sort((a, b) => new Date(b.last_update) - new Date(a.last_update));
-    },
+
     formList() {
-      return [{ id: null, title: 'Tous' }, ...this.form__publishedForms()];
+      return [...this.form__publishedForms()];
     },
   },
   mounted() {
-    this.selectedForm = this.completedForm__selectedForm;
     this.getForms();
-    this.refreshData();
   },
   watch: {
-    selectedForm(value) {
-      this.completedForm__setSelectedForm(value);
-      this.refreshData();
+    formFields(v) {
+      this.formFieldList = [];
+      this.selectedFormFields = [];
+      if (this.selectedFormId !== null) this.formFieldList = v;
     },
   },
   methods: {
-    ...mapActions([
-      'completedForm__getAllByLastUpdate',
-      'completedForm__setSelectedForm',
-      'getForms',
-    ]),
+    ...mapActions(['getFormFields', 'getForms']),
     ...mapGetters(['form__publishedForms']),
-    async refreshData() {
+
+    async selectedForm(value) {
       this.isLoading = true;
-      this.completedForms = await this.completedForm__getAllByLastUpdate({
-        form_id: this.completedForm__selectedForm,
-      });
-      if (this.completedForms.length > 0) {
-        this.isLoading = false;
-      }
+      const selectedFormId = { form_id: value };
+      this.formSelected = value;
+      this.getFormFields(selectedFormId);
+      this.isLoading = false;
     },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.v-select {
+  &::v-deep {
+    .vs__selected {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}
+</style>
