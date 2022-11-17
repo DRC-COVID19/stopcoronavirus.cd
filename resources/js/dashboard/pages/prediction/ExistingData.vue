@@ -23,6 +23,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.card-header {
+.tabs {
+  .card-header {
+    background-color: #dee2e6 !important;
+  }
 }
 </style>

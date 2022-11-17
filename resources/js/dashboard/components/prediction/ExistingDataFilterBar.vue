@@ -52,7 +52,11 @@
             <label for class="text-dash-color text-left filter-label date-label"
               >Plage d'observation</label
             >
-            <v-date-picker v-model="observationDateRange" is-range>
+            <v-date-picker
+              v-model="observationDateRange"
+              is-range
+              :available-dates="availableDateRange"
+            >
               <template v-slot="{ inputValue, inputEvents }">
                 <b-form-input
                   :value="
@@ -78,7 +82,11 @@
             <label for class="text-dash-color text-left filter-label date-label"
               >Plage de prediction</label
             >
-            <v-date-picker v-model="predictionDateRange" is-range>
+            <v-date-picker
+              v-model="predictionDateRange"
+              :min-date="availableDateRange.end"
+              is-range
+            >
               <template v-slot="{ inputValue, inputEvents }">
                 <b-form-input
                   :value="
@@ -114,6 +122,7 @@
             <b-button
               size="sm"
               class="btn btn-dash-blue btn-secondary predict-btn"
+              :disabled="!canMakePrediction"
             >
               Lancer la prediction
             </b-button>
@@ -135,6 +144,10 @@ export default {
       selectedFormFields: [],
       isLoading: false,
       formFieldList: [],
+      availableDateRange: {
+        start: null,
+        end: null,
+      },
     };
   },
 
@@ -149,11 +162,33 @@ export default {
     formList() {
       return [...this.form__publishedForms()];
     },
+    canSelectDate() {
+      return !!(this.availableDateRange.start && this.availableDateRange.end);
+    },
+    canMakePrediction() {
+      return !!(
+        this.canSelectDate &&
+        this.selectedFormFields?.length &&
+        this.observationDateRange &&
+        this.predictionDateRange
+      );
+    },
   },
   mounted() {
     this.getForms();
   },
   watch: {
+    selectedFormId(v) {
+      if (!v) {
+        this.selectedFormFields = [];
+        this.availableDateRange = {
+          start: null,
+          end: null,
+        };
+      }
+      this.observationDateRange = null;
+      this.predictionDateRange = null;
+    },
     formFields(v) {
       this.formFieldList = [];
       this.selectedFormFields = [];
@@ -161,7 +196,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['getFormFields', 'getForms']),
+    ...mapActions(['getFormFields', 'getForms', 'getAllDateRange']),
     ...mapGetters(['form__publishedForms']),
 
     clearForm() {
@@ -169,13 +204,19 @@ export default {
       this.observationDateRange = null;
       this.predictionDateRange = null;
       this.selectedFormFields = [];
+      this.availableDateRange = {
+        start: null,
+        end: null,
+      };
     },
 
     async selectedForm(value) {
+      this.formSelected = value;
+      if (!value) return;
       this.isLoading = true;
       const selectedFormId = { form_id: value };
-      this.formSelected = value;
       this.getFormFields(selectedFormId);
+      this.availableDateRange = await this.getAllDateRange(selectedFormId);
       this.isLoading = false;
     },
   },
