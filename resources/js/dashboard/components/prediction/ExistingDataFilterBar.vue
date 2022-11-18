@@ -49,7 +49,7 @@
             <v-select
               v-model="selectedFormFields"
               :options="formFieldList"
-              :reduce="(item) => item.id"
+              :reduce="(item) => ({ id: item.id, name: item.name })"
               label="name"
               multiple
               class="style-chooser"
@@ -137,8 +137,12 @@
               <span class="fa fa-times"></span>
             </b-button>
 
+            <b-spinner variant="primary" v-if="isPredict"></b-spinner>
+
             <b-button
+              v-else
               size="sm"
+              @click="makePrediction"
               class="btn btn-dash-blue btn-secondary predict-btn"
               :disabled="!canMakePrediction"
             >
@@ -161,6 +165,7 @@ export default {
       selectedFormId: null,
       selectedFormFields: [],
       isLoading: false,
+      isPredict: false,
       formFieldList: [],
       availableDateRange: {
         start: null,
@@ -175,6 +180,8 @@ export default {
     },
     ...mapState({
       formFields: (state) => state.formField.formFields,
+      predictedData: (state) => state.prediction.predictedData,
+      predictionFilter: (state) => state.prediction.predictionFilter,
     }),
 
     formHasNoData() {
@@ -220,7 +227,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['getFormFields', 'getForms', 'getAllDateRange']),
+    ...mapActions([
+      'getFormFields',
+      'getForms',
+      'getAllDateRange',
+      'prediction__GetPredictedData',
+    ]),
     ...mapGetters(['form__publishedForms']),
 
     getStartPredictionDate() {
@@ -238,6 +250,19 @@ export default {
         start: null,
         end: null,
       };
+    },
+
+    async makePrediction() {
+      if (this.isPredict || !this.canMakePrediction) return;
+      this.isPredict = true;
+      const predictionFilterData = {
+        observation_range: this.observationDateRange,
+        prediction_range: this.predictionDateRange,
+        prediction_fields: this.selectedFormFields,
+        form_id: this.selectedFormId,
+      };
+      await this.prediction__GetPredictedData(predictionFilterData);
+      this.isPredict = false;
     },
 
     async selectedForm(value) {
