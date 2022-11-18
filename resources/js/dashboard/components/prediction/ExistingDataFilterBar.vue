@@ -8,7 +8,12 @@
           lg="2"
           class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0"
         >
-          <b-form-group lg="5" md="12" style="width: 100%" class="text-left">
+          <b-form-group
+            lg="5"
+            md="12"
+            style="width: 100%"
+            class="text-left m-0"
+          >
             <label for class="text-dash-color text-left filter-label"
               >Source de données</label
             >
@@ -20,6 +25,15 @@
               class="style-chooser"
               @input="selectedForm"
             />
+            <label
+              for
+              class="text-left m-0 filter-label"
+              :class="{
+                'text-danger': formHasNoData,
+                'text-light': !formHasNoData,
+              }"
+              >Aucune donnée à prédire</label
+            >
           </b-form-group>
         </b-col>
         <b-col
@@ -60,12 +74,14 @@
               <template v-slot="{ inputValue, inputEvents }">
                 <b-form-input
                   :value="
-                    (inputValue.end || '') + ' - ' + (inputValue.start || '')
+                    (inputValue.start || '') + ' - ' + (inputValue.end || '')
                   "
                   v-on="inputEvents.end"
                   class="date-range-picker-input"
+                  :class="{ 'bg-white': !formHasNoData }"
                   placeholder="Sélectionner une plage de date"
                   readonly
+                  :disabled="formHasNoData"
                 >
                 </b-form-input>
               </template>
@@ -84,17 +100,19 @@
             >
             <v-date-picker
               v-model="predictionDateRange"
-              :min-date="availableDateRange.end"
+              :min-date="getStartPredictionDate()"
               is-range
             >
               <template v-slot="{ inputValue, inputEvents }">
                 <b-form-input
                   :value="
-                    (inputValue.end || '') + ' - ' + (inputValue.start || '')
+                    (inputValue.start || '') + ' - ' + (inputValue.end || '')
                   "
                   v-on="inputEvents.end"
                   class="date-range-picker-input"
+                  :class="{ 'bg-white': !formHasNoData }"
                   readonly
+                  :disabled="formHasNoData"
                 >
                 </b-form-input>
               </template>
@@ -159,15 +177,21 @@ export default {
       formFields: (state) => state.formField.formFields,
     }),
 
+    formHasNoData() {
+      return !!(
+        this.selectedFormId &&
+        !(this.availableDateRange.start && this.availableDateRange.end)
+      );
+    },
+
     formList() {
       return [...this.form__publishedForms()];
     },
-    canSelectDate() {
-      return !!(this.availableDateRange.start && this.availableDateRange.end);
-    },
+
     canMakePrediction() {
       return !!(
-        this.canSelectDate &&
+        this.selectedFormId &&
+        this.availableDateRange.start &&
         this.selectedFormFields?.length &&
         this.observationDateRange &&
         this.predictionDateRange
@@ -198,6 +222,12 @@ export default {
   methods: {
     ...mapActions(['getFormFields', 'getForms', 'getAllDateRange']),
     ...mapGetters(['form__publishedForms']),
+
+    getStartPredictionDate() {
+      const date = new Date(this.availableDateRange?.end);
+      date.setDate(date.getDate() + 1);
+      return date || new Date();
+    },
 
     clearForm() {
       this.selectedFormId = null;
@@ -249,7 +279,6 @@ export default {
   font-size: 13px;
 }
 .date-range-picker-input {
-  background-color: white !important;
   font-size: 12px !important;
 }
 </style>
