@@ -50,9 +50,9 @@ class CompletedFormController extends Controller
         $completedForms = $query->get();
         return response()->json($completedForms, 200);
     }
-    
-    public function getAllAndOptimizeQuery (Request $request) 
-    {  
+
+    public function getAllAndOptimizeQuery (Request $request)
+    {
         $form_id = $request->query('form_id');
         $query = CompletedForm::with(
         [
@@ -69,7 +69,7 @@ class CompletedFormController extends Controller
             'hospital.township' => function ($query) {
                 $query->select('id', 'name');
             },
-           
+
         ])
         ->select('id','hospital_id','last_update')
         ->where('form_id', $form_id)
@@ -77,7 +77,7 @@ class CompletedFormController extends Controller
 
         return response()->json($query, 200);
     }
-    
+
     public function indexByHospital(int $hospital_id, int $paginate = 15)
     {
         try {
@@ -154,13 +154,13 @@ class CompletedFormController extends Controller
             return response(['succès' => 'réussie'])->setStatusCode(200);
         }
         if($conflictResolutionMode->conflictResolutionMode->slug =='old_submission'){
-          
+
             $completedFormHistory_controller = new CompletedFormHistoryController;
             $completedFormHistory_controller->storeOldCompletedForm($request);
             return response(['succès' => 'réussie'])->setStatusCode(200);
         }
         if($conflictResolutionMode->conflictResolutionMode->slug =='new_submission'){
-           
+
             $completedFormHistory_controller = new CompletedFormHistoryController;
             $completedFormHistory_controller->storeNewCompletedForm($request);
             CompletedForm::destroy($completedForm->id);
@@ -529,6 +529,40 @@ class CompletedFormController extends Controller
         $data = $query->paginate($perPage);
 
         return response()->json($data, 200, [], JSON_NUMERIC_CHECK);
+    }
+
+    public function getAllDateRange (Request $request)
+    {
+      $formId = $request->query('form_id');
+      $hospitalId = $request->query('hospital_id');
+
+      $startQuery = CompletedForm::orderBy('last_update', 'asc')
+      ->select('last_update')
+      ->where('form_id', $formId);
+
+      $endQuery = CompletedForm::orderBy('last_update', 'desc')
+      ->select('last_update')
+      ->where('form_id', $formId);
+
+      if ($hospitalId){
+        $startQuery =  $startQuery->where('hospital_id', $hospitalId);
+        $endQuery =  $endQuery->where('hospital_id', $hospitalId);
+      }
+
+      $data = [];
+
+      if (!$startQuery->count()){
+        $data = [
+          "start" => null,
+          "end" => null
+        ];
+      }else{
+         $data = [
+          "start" => $startQuery->first()['last_update'],
+          "end" => $endQuery->first()['last_update']
+        ];
+      }
+      return response()->json($data, 200);
     }
 
     public function getCompletedFormConflict(Request $request){
