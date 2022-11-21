@@ -1,0 +1,22 @@
+[
+  { "date": "2022-11-19", "lit_dispo": 20, "cas_conf": 49, "lit_occ": 2 },
+  { "date": "2022-11-20", "lit_dispo": 22, "cas_conf": 23, "lit_occ": 15 },
+  { "date": "2022-11-21", "lit_dispo": 24, "cas_conf": 49, "lit_occ": 28 },
+  { "date": "2022-11-22", "lit_dispo": 27, "cas_conf": 18, "lit_occ": 34 },
+  { "date": "2022-11-23", "lit_dispo": 21, "cas_conf": 27, "lit_occ": 60 },
+  { "date": "2022-11-24", "lit_dispo": 28, "cas_conf": 43, "lit_occ": 21 },
+  { "date": "2022-11-25", "lit_dispo": 28, "cas_conf": 42, "lit_occ": 34 },
+  { "date": "2022-11-26", "lit_dispo": 29, "cas_conf": 97, "lit_occ": 46 },
+  { "date": "2022-11-27", "lit_dispo": 30, "cas_conf": 23, "lit_occ": 31 },
+  { "date": "2022-11-28", "lit_dispo": 29, "cas_conf": 45, "lit_occ": 32 },
+  { "date": "2022-11-29", "lit_dispo": 42, "cas_conf": 87, "lit_occ": 34 },
+  { "date": "2022-11-30", "lit_dispo": 21, "cas_conf": 34, "lit_occ": 24 },
+  { "date": "2022-12-1", "lit_dispo": 27, "cas_conf": 45, "lit_occ": 35 },
+  { "date": "2022-12-2", "lit_dispo": 40, "cas_conf": 42, "lit_occ": 11 },
+  { "date": "2022-12-3", "lit_dispo": 21, "cas_conf": 56, "lit_occ": 19 },
+  { "date": "2022-12-4", "lit_dispo": 43, "cas_conf": 32, "lit_occ": 34 },
+  { "date": "2022-12-5", "lit_dispo": 20, "cas_conf": 47, "lit_occ": 42 },
+  { "date": "2022-12-6", "lit_dispo": 20, "cas_conf": 42, "lit_occ": 47 },
+  { "date": "2022-12-7", "lit_dispo": 20, "cas_conf": 56, "lit_occ": 61 },
+  { "date": "2022-12-8", "lit_dispo": 20, "cas_conf": 35, "lit_occ": 50 }
+]

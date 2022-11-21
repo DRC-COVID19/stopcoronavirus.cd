@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+
 import auth from './modules/auth';
 import flux from './modules/flux';
 import hospital from './modules/hospital';
@@ -21,6 +22,7 @@ import adminUser from './modules/adminUser';
 import notification from './modules/notification';
 import bookmark from './modules/bookmark';
 import reporting from './modules/reporting';
+import prediction from './modules/prediction';
 
 Vue.use(Vuex);
 
@@ -49,5 +51,6 @@ export default new Vuex.Store({
     notification,
     bookmark,
     reporting,
+    prediction,
   },
 });
