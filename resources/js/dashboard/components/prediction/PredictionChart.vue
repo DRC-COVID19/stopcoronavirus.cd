@@ -59,28 +59,29 @@ export default {
           xaxis: [
             {
               x: new Date('2022-11-30').getTime(),
-              strokeDashArray: 0,
-              borderColor: '#775DD0',
+              strokeDashArray: 2,
+              borderColor: '#444',
               label: {
-                borderColor: '#775DD0',
+                borderColor: '#444',
                 style: {
                   color: '#fff',
-                  background: '#775DD0',
+                  background: '#444',
                 },
+                textAnchor: 'middle',
                 text: 'Données prédite',
               },
             },
             {
               x: new Date('2022-12-4').getTime(),
               x2: new Date('2022-12-6').getTime(),
-              fillColor: '#B3F7CA',
+              fillColor: '#EEE',
               opacity: 0.4,
               label: {
-                borderColor: '#B3F7CA',
+                borderColor: '#EEE',
                 style: {
                   fontSize: '10px',
                   color: '#fff',
-                  background: '#00E396',
+                  background: 'tomato',
                 },
                 offsetY: -10,
                 text: 'Surcharge',
