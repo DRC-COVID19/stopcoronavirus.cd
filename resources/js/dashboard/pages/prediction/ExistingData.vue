@@ -1,9 +1,9 @@
 <template>
   <b-container fluid class="p-0">
-    <b-row class="flex-md-row-reverse h-100" no-gutters>
+    <b-row class="flex-md-row-reverse" no-gutters>
       <b-col cols="12" md="12" class="h-100">
-        <b-card no-body class="h-100 rounded-0">
-          <b-tabs content-class="mt-3" card>
+        <b-card no-body class="h-100 border-0">
+          <b-tabs content-class="mt-3 h-100" card>
             <b-tab title="Nouvelle prédiction" active>
               <ExistingData />
             </b-tab>
