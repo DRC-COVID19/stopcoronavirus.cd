@@ -20,12 +20,12 @@
 </template>
 
 <script>
-import VueApexCharts from 'vue-apexcharts';
+import ApexCharts from 'vue-apexcharts';
 import { mapActions, mapState, mapGetters } from 'vuex';
 
 export default {
   components: {
-    ApexCharts: VueApexCharts,
+    ApexCharts,
   },
   data() {
     return {};
