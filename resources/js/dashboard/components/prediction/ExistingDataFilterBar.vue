@@ -32,7 +32,7 @@
                 'text-danger': formHasNoData,
                 'text-light': !formHasNoData,
               }"
-              >Aucune donnée à prédire</label
+              >Aucune donnée existante</label
             >
           </b-form-group>
         </b-col>
@@ -78,10 +78,10 @@
                   "
                   v-on="inputEvents.end"
                   class="date-range-picker-input"
-                  :class="{ 'bg-white': !formHasNoData }"
+                  :class="{ 'bg-white': availableDateRange.start }"
                   placeholder="Sélectionner une plage de date"
                   readonly
-                  :disabled="formHasNoData"
+                  :disabled="!availableDateRange.start"
                 >
                 </b-form-input>
               </template>
@@ -110,9 +110,9 @@
                   "
                   v-on="inputEvents.end"
                   class="date-range-picker-input"
-                  :class="{ 'bg-white': !formHasNoData }"
+                  :class="{ 'bg-white': availableDateRange.start }"
                   readonly
-                  :disabled="formHasNoData"
+                  :disabled="!availableDateRange.start"
                 >
                 </b-form-input>
               </template>
@@ -261,6 +261,7 @@ export default {
         prediction_fields: this.selectedFormFields,
         form_id: this.selectedFormId,
       };
+
       await this.prediction__GetPredictedData(predictionFilterData);
       this.isPredict = false;
     },
@@ -272,6 +273,7 @@ export default {
       const selectedFormId = { form_id: value };
       this.getFormFields(selectedFormId);
       this.availableDateRange = await this.getAllDateRange(selectedFormId);
+      this.observationDateRange = this.availableDateRange;
       this.isLoading = false;
     },
   },

@@ -29,6 +29,8 @@ export default {
           .fetchPredictions()
           .then(({ data }) => {
             commit('SET_PREDICTED_DATA', data);
+            console.log('PREDICTED_DATA', data);
+            console.log('PREDICTION_FILTER', payload);
             commit('SET_PREDICTION_FILTER', payload);
             commit('SET_IS_LOADING', false);
             resolve(data);
