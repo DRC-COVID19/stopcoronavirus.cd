@@ -1,12 +1,24 @@
 <template>
   <b-card no-body class="text-center pt-3 px-2">
-    <ApexCharts
-      type="line"
-      height="350"
-      :options="chartOptions"
-      :series="chartSeries"
-      v-if="predictedData?.length"
-    ></ApexCharts>
+    <div v-if="predictedData?.length">
+      <ApexCharts
+        type="line"
+        height="350"
+        :options="chartOptions"
+        :series="chartSeries"
+      ></ApexCharts>
+      <div class="d-flex justify-content-center align-items-center mb-3">
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="circle-indicator"></div>
+          <div class="indicator-label">Valeur modifié</div>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center ml-3">
+          <div class="square-indicator"></div>
+          <div class="indicator-label">Zone de surcharge</div>
+        </div>
+      </div>
+    </div>
     <div
       v-else
       class="d-flex justify-content-center align-items-center"
@@ -43,6 +55,14 @@ export default {
           type: 'line',
           zoom: {
             enabled: false,
+          },
+          events: {
+            click: function (event, chartContext, config) {
+              console.log('event', event);
+              console.log('chartContext', chartContext);
+              console.log('config', config);
+              // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
+            },
           },
         },
         dataLabels: {
@@ -113,6 +133,12 @@ export default {
           ],
         },
 
+        forecastDataPoints: {
+          count: 8,
+          dashArray: 2,
+          fillOpacity: 0.5,
+        },
+
         legend: {
           tooltipHoverFormatter: function (val, opts) {
             return (
@@ -156,5 +182,27 @@ export default {
 .img-fluid {
   width: 200px;
   height: auto;
+}
+.circle-indicator {
+  width: 15px;
+  height: 15px;
+  border: 2px solid rgb(255, 69, 96);
+  border-radius: 15px;
+}
+
+.square-indicator {
+  width: 15px;
+  height: 20px;
+  border-left: 1px solid rgb(220, 218, 218);
+  border-right: 1px solid rgb(220, 218, 218);
+  background-color: rgb(245, 245, 245);
+}
+
+.indicator-label {
+  color: rgb(55, 61, 63);
+  font-size: 12px;
+  font-weight: 400;
+  font-family: Helvetica, Arial, sans-serif;
+  padding-left: 8px;
 }
 </style>
