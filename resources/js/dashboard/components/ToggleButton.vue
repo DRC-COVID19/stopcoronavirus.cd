@@ -44,7 +44,7 @@ export default {
     },
     bgColor: {
       type: String,
-      default: "#f9faff",
+      default: '#f9faff',
     },
     globalProgress: {
       type: Number,
@@ -53,7 +53,7 @@ export default {
   },
   data() {
     return {
-      dataValue: "",
+      dataValue: '',
     };
   },
   mounted() {
@@ -67,7 +67,7 @@ export default {
   methods: {
     setValue(value) {
       this.dataValue = value;
-      this.$emit("input", value);
+      this.$emit('input', value);
     },
   },
   computed: {
@@ -76,7 +76,7 @@ export default {
         (data) => data.val == this.dataValue
       );
       if (selectedIndex == -1) return { opacity: 0 };
-      else return { left: selectedIndex * 62 + "px", opacity: 1 };
+      else return { left: selectedIndex * 62 + 'px', opacity: 1 };
     },
   },
 };

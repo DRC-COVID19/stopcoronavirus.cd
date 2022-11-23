@@ -73,7 +73,6 @@ class ChangeLogController extends Controller
   {
     $data = $this->validate_form($request->all());
     try {
-
       $data['published_by'] = Auth::user()->id;
       $change_log = ChangeLog::create($data);
       if ($change_log) {
@@ -86,7 +85,9 @@ class ChangeLogController extends Controller
             if (!$user->email) {
               return;
             }
-            Mail::to($user->email)->queue(new changeLogEmail($user, $change_log));
+            Mail::to($user->email)->queue(
+              new changeLogEmail($user, $change_log)
+            );
           } catch (\Throwable $th) {
             Log::error($th->getMessage());
           }
@@ -156,11 +157,11 @@ class ChangeLogController extends Controller
     return Validator::make($data, [
       'title' => 'required|string',
       'description' => 'nullable|string',
-      'publish_date' => 'date|required'
+      'publish_date' => 'date|required',
     ])->validate();
   }
 
-  public function filter (Request $request)
+  public function filter(Request $request)
   {
     try {
       $date = $request->get('date');
@@ -173,5 +174,4 @@ class ChangeLogController extends Controller
       return response($th->getMessage())->setStatusCode(500);
     }
   }
-
 }

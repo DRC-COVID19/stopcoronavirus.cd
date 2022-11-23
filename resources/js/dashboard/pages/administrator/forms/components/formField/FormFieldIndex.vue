@@ -25,9 +25,9 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import FormFieldForm from "./FormFieldForm";
-import FormFieldList from "./FormFieldList";
+import { mapActions } from 'vuex';
+import FormFieldForm from './FormFieldForm';
+import FormFieldList from './FormFieldList';
 export default {
   props: {
     form: {
@@ -46,15 +46,15 @@ export default {
     FormFieldList,
   },
   methods: {
-    ...mapActions(["formShow"]),
+    ...mapActions(['formShow']),
     onCreatedFormField() {
-      this.$emit("formFieldCreated");
+      this.$emit('formFieldCreated');
     },
     onDeletedFormField() {
-      this.$emit("formFieldDeleted");
+      this.$emit('formFieldDeleted');
     },
     onUpdateFormField() {
-      this.$emit("formFieldUpdated");
+      this.$emit('formFieldUpdated');
       this.isEditingMode = false;
     },
     toUpdateFormField(item) {

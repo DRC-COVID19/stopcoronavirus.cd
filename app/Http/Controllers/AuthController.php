@@ -29,7 +29,11 @@ class AuthController extends Controller
    */
   public function __construct()
   {
-    $this->middleware('auth:dashboard')->except(['login', 'asKResetPassword', 'checkResetPasswordToken']);
+    $this->middleware('auth:dashboard')->except([
+      'login',
+      'asKResetPassword',
+      'checkResetPasswordToken',
+    ]);
   }
 
   /**
@@ -41,17 +45,32 @@ class AuthController extends Controller
    */
   public function login(Request $request)
   {
-
     $credentials = $request->only('email', 'password');
     $user = Administrator::where('email', $credentials['email'])
       ->orWhere('username', $credentials['email'])
       ->orWhere('phone_number', $credentials['email'])
       ->first();
     if (!$user || !Hash::check($credentials['password'], $user->password)) {
-      return response()->json(['error' => 'Mot de passe incorrecte ou login ne correspondent à aucun utilisateur enregistré'], 401);
+      return response()->json(
+        [
+          'error' =>
+            'Mot de passe incorrecte ou login ne correspondent à aucun utilisateur enregistré',
+        ],
+        401
+      );
     }
-    if (!$user->inRoles(['agent-hospital', 'admin-dashboard', 'admin-hospital', 'manager_epidemic'])) {
-      return response()->json(['error' => "L'utilisateur n'est pas autorisé à se connecter"], 401);
+    if (
+      !$user->inRoles([
+        'agent-hospital',
+        'admin-dashboard',
+        'admin-hospital',
+        'manager_epidemic',
+      ])
+    ) {
+      return response()->json(
+        ['error' => "L'utilisateur n'est pas autorisé à se connecter"],
+        401
+      );
     }
     $token = auth('dashboard')->login($user);
 
@@ -65,7 +84,7 @@ class AuthController extends Controller
    */
   public function me()
   {
-    return response()->json(new AdministratorResource(($this->guard()->user())));
+    return response()->json(new AdministratorResource($this->guard()->user()));
   }
 
   /**
@@ -101,9 +120,12 @@ class AuthController extends Controller
   {
     return response()->json([
       'token_type' => 'bearer',
-      'expires_in' => $this->guard()->factory()->getTTL() * 60,
+      'expires_in' =>
+        $this->guard()
+          ->factory()
+          ->getTTL() * 60,
       'token' => $token,
-      'user' => new AdministratorResource($this->guard()->user())
+      'user' => new AdministratorResource($this->guard()->user()),
     ]);
   }
 
@@ -135,18 +157,20 @@ class AuthController extends Controller
 
   public function checkResetPasswordToken($token)
   {
-    $hashids = new Hashids("reset_pass");
+    $hashids = new Hashids('reset_pass');
     $data = $hashids->decode($token);
     if (!$data || count($data) != 2 || !isset($data[0]) || !isset($data[1])) {
       return response()->json(['response' => 'Resource not found'], 410);
     }
     $currentDate = strtotime(date('Y-m-d H:i:s'));
-    $dateDifference = ($currentDate - $data[1]) / (60);
+    $dateDifference = ($currentDate - $data[1]) / 60;
 
     if ($dateDifference > 1440) {
       return response()->json(['response' => 'token expired'], 401);
     }
-    $user = Administrator::where('id', $data[0])->where('reset_password_token', $token)->first();
+    $user = Administrator::where('id', $data[0])
+      ->where('reset_password_token', $token)
+      ->first();
     if (!$user) {
       return response()->json(['response' => 'Resource not found'], 410);
     }
@@ -159,7 +183,7 @@ class AuthController extends Controller
     $data = Validator::make(request()->all(), [
       'email' => 'required|email',
     ])->validate();
-    $hashids = new Hashids("reset_pass");
+    $hashids = new Hashids('reset_pass');
     $user = Administrator::where('email', $data['email'])->first();
     if (!$user) {
       return response('user not found', 410);

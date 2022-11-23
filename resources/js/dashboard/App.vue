@@ -4,12 +4,11 @@
       <router-view></router-view>
     </transition>
     <Waiting v-if="isLoading" />
-
   </div>
 </template>
 <script>
-import { mapActions, mapState } from "vuex";
-import Waiting from "./components/Waiting";
+import { mapActions, mapState } from 'vuex';
+import Waiting from './components/Waiting';
 export default {
   components: {
     Waiting,
@@ -32,16 +31,16 @@ export default {
         if (
           error &&
           error.response.status == 401 &&
-          this.$route.name != "login"
+          this.$route.name != 'login'
         ) {
-          console.log("login", "login-true");
-          this.$gtag.event("auto-logout", {
-            event_category: "logout",
-            event_label: "auto-logout",
+          console.log('login', 'login-true');
+          this.$gtag.event('auto-logout', {
+            event_category: 'logout',
+            event_label: 'auto-logout',
           });
-          this.$store.commit("logoutSuccess");
+          this.$store.commit('logoutSuccess');
           this.$router.push({
-            name: "login",
+            name: 'login',
           });
         }
         return Promise.reject(error);
@@ -64,7 +63,7 @@ export default {
           // console.log("user.email", user);
 
           this.$gtag.set({
-            user_id: `${user.name.replace(" ", "_")}_kd_${user.id}`,
+            user_id: `${user.name.replace(' ', '_')}_kd_${user.id}`,
           });
           //  ga("set", "userId", user.email)
           // gtag('set', {'user_id': `${user.name.replace(" ", "_")}_kd_${user.id}`}); // Set the user ID using signed-in user_id.
@@ -77,12 +76,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["userMe", "getListChangedLogs"]),
+    ...mapActions(['userMe', 'getListChangedLogs']),
   },
 };
 </script>
 <style scoped>
-.container-dash{
+.container-dash {
   overflow: hidden;
 }
 </style>

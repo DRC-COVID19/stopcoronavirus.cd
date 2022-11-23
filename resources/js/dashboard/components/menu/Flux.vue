@@ -110,9 +110,9 @@
                       :class="{ 'style-picker-has-error': referenceHasError }"
                     >
                       <template v-slot:input="picker">
-                        {{ picker.startDate | date }} - {{ picker.endDate | date }}
-                      </template
-                      >
+                        {{ picker.startDate | date }} -
+                        {{ picker.endDate | date }}
+                      </template>
                     </date-range-picker>
                     <span
                       class="range-lbl"
@@ -134,7 +134,6 @@
                       v-model="dateRangeObservation"
                       :appendToBody="true"
                       opens="center"
-
                       :singleDatePicker="singleDatePicker"
                       :timePicker24Hour="isHotspot"
                       :min-date="dateRangePreference.endDate"
@@ -184,7 +183,7 @@
 </template>
 
 <script>
-import DateRangePicker from "vue2-daterange-picker";
+import DateRangePicker from 'vue2-daterange-picker';
 import {
   PREFERENCE_START,
   PREFERENCE_END,
@@ -204,10 +203,10 @@ import {
   AFRICELL_OBSERVATION_END,
   HOTSPOT_TYPE,
   OBSERVATION_END_PROVINCE,
-} from "../../config/env";
-import { mapMutations, mapState, mapActions } from "vuex";
-import moment from "moment";
-import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
+} from '../../config/env';
+import { mapMutations, mapState, mapActions } from 'vuex';
+import moment from 'moment';
+import 'vue2-daterange-picker/dist/vue2-daterange-picker.css';
 export default {
   components: {
     DateRangePicker,
@@ -234,17 +233,17 @@ export default {
       },
       Observation_max_date: new Date(FLUX_LAST_UPDATE),
       reference_min_date: moment(PREFERENCE_START)
-        .subtract(1, "days")
-        .format("YYYY-MM-DD"),
+        .subtract(1, 'days')
+        .format('YYYY-MM-DD'),
       fluxForm: {
         preference_start: PREFERENCE_START,
         preference_end: PREFERENCE_END,
-        observation_start: "2020-03-19",
-        observation_end: "2020-08-12",
+        observation_start: '2020-03-19',
+        observation_end: '2020-08-12',
         fluxGeoGranularity: 1,
         fluxTimeGranularity: 1,
-        time_start: "06:00",
-        time_end: "23:30",
+        time_start: '06:00',
+        time_end: '23:30',
         selectedFluxSource: 1,
       },
       dateRangeObservation: {
@@ -252,8 +251,8 @@ export default {
         endDate: new Date(`${OBSERVATION_END} 23:30`),
       },
       fluxPredefinedInput: FLUX_PREDEFINED_INPUT,
-      fluxFilterInput: "",
-      fluxFilterInputProvince: "",
+      fluxFilterInput: '',
+      fluxFilterInputProvince: '',
       fluxZonesArray: [],
       fluxProvincesArray: [],
       fluxGeoGranularity: null,
@@ -262,7 +261,7 @@ export default {
       fluxTimeGranularities: [
         {
           id: 1,
-          name: "24h",
+          name: '24h',
         },
         {
           id: 2,
@@ -282,11 +281,11 @@ export default {
       fluxSource: [
         {
           id: 1,
-          name: "Orange",
+          name: 'Orange',
         },
         {
           id: 2,
-          name: "Africell",
+          name: 'Africell',
         },
       ],
       fluxFormCached: {},
@@ -294,21 +293,21 @@ export default {
   },
   filters: {
     date: (val) => {
-      return val ? moment(val).format("DD.MM.YYYY") : "";
+      return val ? moment(val).format('DD.MM.YYYY') : '';
     },
   },
   mounted() {
-    this.fillParametersFromUrlParams()
+    this.fillParametersFromUrlParams();
     this.$store.watch(
       (state) => state.flux.fluxGeoOptions,
       (value) => {
-        this.$set(this.fluxForm, "fluxGeoOptions", value);
+        this.$set(this.fluxForm, 'fluxGeoOptions', value);
         if (
           this.fluxForm.observation_start &&
           this.fluxForm.observation_end &&
           this.fluxForm.fluxTimeGranularity
         ) {
-          this.$emit("submitFluxForm", this.fluxForm);
+          this.$emit('submitFluxForm', this.fluxForm);
         }
       }
     );
@@ -319,7 +318,7 @@ export default {
           this.fluxFormCached.fluxGeoOptions = [value];
           this.fluxForm = this.fluxFormCached;
           this.setFluxGeoOptions(this.fluxFormCached.fluxGeoOptions);
-          this.$emit("submitFluxForm", this.fluxFormCached);
+          this.$emit('submitFluxForm', this.fluxFormCached);
         }
       }
     );
@@ -334,7 +333,7 @@ export default {
         this.fluxForm.observation_start = this.moment(value.x).format(
           DATEFORMAT
         );
-        this.$set(this.dateRangeObservation, "startDate", value.x);
+        this.$set(this.dateRangeObservation, 'startDate', value.x);
         this.submitFluxForm();
       }
     );
@@ -342,7 +341,7 @@ export default {
   computed: {
     ...mapState({
       fluxHotSpot: (state) => state.app.fluxHotSpot,
-      activeMenu: (state) => state.nav.activeMenu
+      activeMenu: (state) => state.nav.activeMenu,
     }),
     isDesibledFluxTimeGranularity() {
       return !(
@@ -374,21 +373,21 @@ export default {
     rangeData() {
       return {
         firstDay: 1,
-        format: this.isHotspot ? "dd-mm-yyyy HH:mm" : "dd-mm-yyyy",
-        drops: "up",
+        format: this.isHotspot ? 'dd-mm-yyyy HH:mm' : 'dd-mm-yyyy',
+        drops: 'up',
       };
     },
     referenceHasError() {
       return this.referenceThrowError;
     },
     messaGeoOptionsNull() {
-      let geoGanularity = "une province";
+      let geoGanularity = 'une province';
       switch (this.fluxForm.fluxGeoGranularity) {
         case 2:
-          geoGanularity = "une zone";
+          geoGanularity = 'une zone';
           break;
         case 3:
-          geoGanularity = "un hotspot";
+          geoGanularity = 'un hotspot';
           break;
       }
       return `Sélectionnez ${geoGanularity}`;
@@ -412,32 +411,32 @@ export default {
     },
     dateRangeObservation() {
       this.addDateRangeObservationToUrl();
-    }
+    },
   },
   methods: {
     ...mapMutations([
-      "setFluxGeoGranularity",
-      "setFluxGeoOptions",
-      "setFluxEnabled",
-      "setFluxGeoOptionsTmp",
-      "setFluxGeoGranularityTemp",
-      "setFluxTimeGranularity",
-      "setSelectedSource",
-      "setFluxHotspotType",
-      "setFluxHotspotClicked",
+      'setFluxGeoGranularity',
+      'setFluxGeoOptions',
+      'setFluxEnabled',
+      'setFluxGeoOptionsTmp',
+      'setFluxGeoGranularityTemp',
+      'setFluxTimeGranularity',
+      'setSelectedSource',
+      'setFluxHotspotType',
+      'setFluxHotspotClicked',
     ]),
-    ...mapActions(["resetState"]),
-    fillParametersFromUrlParams () {
+    ...mapActions(['resetState']),
+    fillParametersFromUrlParams() {
       const url = new URL(window.location.href);
       const fluxSource = url.searchParams.get('source');
       if (fluxSource) {
-        this.$set(this.fluxForm, 'selectedFluxSource', +fluxSource)
+        this.$set(this.fluxForm, 'selectedFluxSource', +fluxSource);
       }
 
       const fluxGeoGranularity = url.searchParams.get('geo-granularity');
       if (fluxGeoGranularity) {
-        this.$set(this.fluxForm, 'fluxGeoGranularity', +fluxGeoGranularity)
-        this.fluxGeoGranularityChange(+fluxGeoGranularity)
+        this.$set(this.fluxForm, 'fluxGeoGranularity', +fluxGeoGranularity);
+        this.fluxGeoGranularityChange(+fluxGeoGranularity);
       } else {
         this.fluxGeoGranularityChange(1);
       }
@@ -445,50 +444,67 @@ export default {
       const fluxGeoOptions = url.searchParams.get('geo-options');
       if (fluxGeoOptions) {
         try {
-          this.$set(this.fluxForm, 'fluxGeoOptions', JSON.parse(fluxGeoOptions))
+          this.$set(
+            this.fluxForm,
+            'fluxGeoOptions',
+            JSON.parse(fluxGeoOptions)
+          );
         } catch (e) {
-          console.log( e)
+          console.log(e);
         }
       }
 
       const fluxTimeGranularity = url.searchParams.get('time-granularity');
       if (fluxTimeGranularity) {
-        this.$set(this.fluxForm, 'fluxTimeGranularity', +fluxTimeGranularity)
-        this.addParamToUrlWhenInThisMenu('time-granularity', this.fluxForm.fluxTimeGranularity)
+        this.$set(this.fluxForm, 'fluxTimeGranularity', +fluxTimeGranularity);
+        this.addParamToUrlWhenInThisMenu(
+          'time-granularity',
+          this.fluxForm.fluxTimeGranularity
+        );
       }
 
       const referenceStartDate = url.searchParams.get('reference-start-date');
       const referenceEndDate = url.searchParams.get('reference-end-date');
-      try{
+      try {
         this.dateRangePreference = {
-          startDate: referenceStartDate ? new Date(`${referenceStartDate} 06:00`) : null,
-          endDate: referenceEndDate ? new Date(`${referenceEndDate} 23:30`) : null,
-        }
-        this.fluxForm.preference_start = referenceStartDate
-        this.fluxForm.preference_end = referenceEndDate
+          startDate: referenceStartDate
+            ? new Date(`${referenceStartDate} 06:00`)
+            : null,
+          endDate: referenceEndDate
+            ? new Date(`${referenceEndDate} 23:30`)
+            : null,
+        };
+        this.fluxForm.preference_start = referenceStartDate;
+        this.fluxForm.preference_end = referenceEndDate;
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
 
-      const observationStartDate = url.searchParams.get('observation-start-date');
+      const observationStartDate = url.searchParams.get(
+        'observation-start-date'
+      );
       const observationEndDate = url.searchParams.get('observation-end-date');
-      try{
+      try {
         this.dateRangeObservation = {
-          startDate: observationStartDate ? new Date(`${observationStartDate} 06:00`) : null,
-          endDate: observationEndDate ? new Date(`${observationEndDate} 23:30`) : null,
-        }
-        this.fluxForm.observation_start = observationStartDate
-        this.fluxForm.observation_end = observationEndDate
+          startDate: observationStartDate
+            ? new Date(`${observationStartDate} 06:00`)
+            : null,
+          endDate: observationEndDate
+            ? new Date(`${observationEndDate} 23:30`)
+            : null,
+        };
+        this.fluxForm.observation_start = observationStartDate;
+        this.fluxForm.observation_end = observationEndDate;
       } catch (e) {
-        console.log(e)
+        console.log(e);
       }
     },
     populationFluxToggle(checked) {
-      this.$root.$emit("bv::toggle::collapse", "populationFluxcollapse");
-      this.$emit("populationFluxChecked", checked);
+      this.$root.$emit('bv::toggle::collapse', 'populationFluxcollapse');
+      this.$emit('populationFluxChecked', checked);
       if (!checked) {
         this.fluxForm.filter_zone = [];
-        this.fluxFilterInput = "";
+        this.fluxFilterInput = '';
         this.fluxForm.origin = null;
         this.fluxForm.destination = null;
         this.IsfluxParameterCollapse = false;
@@ -500,15 +516,15 @@ export default {
     UpdatePreferenceDate({ startDate, endDate }) {
       const localStartDate = moment(startDate);
       const localEndDate = moment(endDate);
-      const dateDiff = localEndDate.diff(localStartDate, "days");
+      const dateDiff = localEndDate.diff(localStartDate, 'days');
       this.referenceThrowError = false;
       this.referenceErrorMessage = null;
       if (dateDiff + 1 < 7) {
         this.referenceThrowError = true;
-        this.referenceErrorMessage = "La plage doit avoir au moins 7 jours";
+        this.referenceErrorMessage = 'La plage doit avoir au moins 7 jours';
       }
-      this.fluxForm.preference_start = localStartDate.format("YYYY/MM/DD");
-      this.fluxForm.preference_end = localEndDate.format("YYYY/MM/DD");
+      this.fluxForm.preference_start = localStartDate.format('YYYY/MM/DD');
+      this.fluxForm.preference_end = localEndDate.format('YYYY/MM/DD');
       this.dateRangeObservation = { startDate: null, endDate: null };
       this.fluxForm.observation_start = null;
       this.fluxForm.observation_end = null;
@@ -518,57 +534,59 @@ export default {
       if (this.dateRangePreference.startDate) {
         this.addParamToUrlWhenInThisMenu(
           'reference-start-date',
-          moment(this.dateRangePreference.startDate).format("YYYY/MM/DD")
-        )
+          moment(this.dateRangePreference.startDate).format('YYYY/MM/DD')
+        );
       } else {
-        this.addParamToUrlWhenInThisMenu('reference-start-date', null)
+        this.addParamToUrlWhenInThisMenu('reference-start-date', null);
       }
       if (this.dateRangePreference.endDate) {
         this.addParamToUrlWhenInThisMenu(
           'reference-end-date',
-          moment(this.dateRangePreference.endDate).format("YYYY/MM/DD")
-        )
+          moment(this.dateRangePreference.endDate).format('YYYY/MM/DD')
+        );
       } else {
-        this.addParamToUrlWhenInThisMenu('reference-end-date', null)
+        this.addParamToUrlWhenInThisMenu('reference-end-date', null);
       }
     },
     UpdateObservationDate({ startDate, endDate }) {
-      this.fluxForm.observation_start = moment(startDate).format("YYYY-MM-DD");
-      this.fluxForm.observation_end = moment(endDate).format("YYYY-MM-DD");
-      this.fluxForm.time_start = moment(startDate).format("HH:mm");
-      this.fluxForm.time_end = moment(endDate).format("HH:mm");
+      this.fluxForm.observation_start = moment(startDate).format('YYYY-MM-DD');
+      this.fluxForm.observation_end = moment(endDate).format('YYYY-MM-DD');
+      this.fluxForm.time_start = moment(startDate).format('HH:mm');
+      this.fluxForm.time_end = moment(endDate).format('HH:mm');
       this.resetFluxPredefinedControl();
     },
     addDateRangeObservationToUrl() {
       if (this.dateRangeObservation.startDate) {
         this.addParamToUrlWhenInThisMenu(
           'observation-start-date',
-          moment(this.dateRangeObservation.startDate).format("YYYY/MM/DD")
-        )
+          moment(this.dateRangeObservation.startDate).format('YYYY/MM/DD')
+        );
       } else {
-        this.addParamToUrlWhenInThisMenu('observation-start-date', null)
+        this.addParamToUrlWhenInThisMenu('observation-start-date', null);
       }
       if (this.dateRangeObservation.endDate) {
         this.addParamToUrlWhenInThisMenu(
           'observation-end-date',
-          moment(this.dateRangeObservation.endDate).format("YYYY/MM/DD")
-        )
+          moment(this.dateRangeObservation.endDate).format('YYYY/MM/DD')
+        );
       } else {
-        this.addParamToUrlWhenInThisMenu('observation-end-date', null)
+        this.addParamToUrlWhenInThisMenu('observation-end-date', null);
       }
     },
     submitFluxForm() {
-
-      if ( this.fluxForm.fluxGeoGranularity ==
-          GEO_GRANULARITIES.find((x) => x.id == 3).id && this.fluxForm.observation_start == this.fluxForm.observation_end) {
-        this.$set(this.fluxForm, "fluxTimeGranularity", 2);
+      if (
+        this.fluxForm.fluxGeoGranularity ==
+          GEO_GRANULARITIES.find((x) => x.id == 3).id &&
+        this.fluxForm.observation_start == this.fluxForm.observation_end
+      ) {
+        this.$set(this.fluxForm, 'fluxTimeGranularity', 2);
       }
 
       const fluxForm = { ...this.fluxForm };
       this.setSelectedSource(fluxForm.selectedFluxSource);
       this.fluxFormCached = fluxForm;
 
-      this.$emit("submitFluxForm", fluxForm);
+      this.$emit('submitFluxForm', fluxForm);
       this.setFluxGeoOptions(fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularityTemp(fluxForm.fluxGeoGranularity);
       this.setFluxTimeGranularity(fluxForm.fluxTimeGranularity);
@@ -576,7 +594,7 @@ export default {
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
       dropdownList.style.top = `${top}px`;
-      if (component.$attrs.id == "picker1") {
+      if (component.$attrs.id == 'picker1') {
         dropdownList.style.left = `${
           Number(left) + Number(this.isSmOrMd ? 110 : 0)
         }px`;
@@ -638,8 +656,8 @@ export default {
           ? PREFERENCE_END
           : AFRICELL_PREFERENCE_END
       )
-        .subtract(1, "days")
-        .format("YYYY-MM-DD");
+        .subtract(1, 'days')
+        .format('YYYY-MM-DD');
       this.fluxForm.preference_start =
         this.fluxForm.selectedFluxSource == 1
           ? PREFERENCE_START
@@ -660,9 +678,9 @@ export default {
     fluxGeoGranularityChange(value, triggerChangeCalendarLimit = true) {
       this.resetFluxPredefinedControl();
       this.setFluxGeoGranularity(value);
-      this.addParamToUrlWhenInThisMenu('geo-granularity', value)
-      this.$set(this.fluxForm, "fluxGeoOptions", []);
-      this.$set(this.fluxForm, "fluxTimeGranularity", 1);
+      this.addParamToUrlWhenInThisMenu('geo-granularity', value);
+      this.$set(this.fluxForm, 'fluxGeoOptions', []);
+      this.$set(this.fluxForm, 'fluxTimeGranularity', 1);
       this.isHotspot = false;
       this.referenceThrowError = false;
       this.referenceErrorMessage = null;
@@ -688,29 +706,32 @@ export default {
           );
           this.isHotspot = true;
           const geoOptions = [
-            { origin: "Tout", id: "0" },
-            { isTitle: true, origin: "Type Hotspot" },
+            { origin: 'Tout', id: '0' },
+            { isTitle: true, origin: 'Type Hotspot' },
           ];
           geoOptions.push(
             ...HOTSPOT_TYPE.map((x) => ({ origin: x.pseudo, id: x.id }))
           );
-          geoOptions.push({ isTitle: true, origin: "Hotspot" });
+          geoOptions.push({ isTitle: true, origin: 'Hotspot' });
           geoOptions.push(
             ...this.fluxHotSpot
-              .filter((x) => x.name != "ZoneGlobale")
+              .filter((x) => x.name != 'ZoneGlobale')
               .map((x) => ({ origin: x.name, id: x.id }))
           );
           this.fluxGeoOptions = geoOptions;
-          this.$set(this.fluxForm, "fluxGeoOptions", ["Tout"]);
-          this.$set(this.fluxForm, "fluxTimeGranularity", 2);
+          this.$set(this.fluxForm, 'fluxGeoOptions', ['Tout']);
+          this.$set(this.fluxForm, 'fluxTimeGranularity', 2);
           break;
         default:
           break;
       }
-      this.addParamToUrlWhenInThisMenu('time-granularity', this.fluxForm.fluxTimeGranularity)
+      this.addParamToUrlWhenInThisMenu(
+        'time-granularity',
+        this.fluxForm.fluxTimeGranularity
+      );
     },
     fluxTimeGranularityChange(value) {
-      this.addParamToUrlWhenInThisMenu('time-granularity', value)
+      this.addParamToUrlWhenInThisMenu('time-granularity', value);
       if (
         this.fluxForm.fluxGeoGranularity ==
         GEO_GRANULARITIES.find((x) => x.id == 3).id
@@ -739,8 +760,8 @@ export default {
         endDate: new Date(`${localObservationEnd} 23:30`),
       };
       this.reference_min_date = moment(preferenceStart)
-        .subtract(1, "days")
-        .format("YYYY-MM-DD");
+        .subtract(1, 'days')
+        .format('YYYY-MM-DD');
       this.fluxForm.preference_start = preferenceStart;
       this.fluxForm.preference_end = localPreferenceEnd;
       this.fluxForm.observation_start = observationStart;
@@ -753,11 +774,11 @@ export default {
           this.clearObservationDate();
           const referenceStart = hotspot.min_date;
           const referenceEnd = moment(referenceStart)
-            .add(7, "days")
-            .format("YYYY-MM-DD");
+            .add(7, 'days')
+            .format('YYYY-MM-DD');
           const observationStart = moment(referenceStart)
-            .add(8, "days")
-            .format("YYYY-MM-DD");
+            .add(8, 'days')
+            .format('YYYY-MM-DD');
 
           this.fluxHostpotSwitchPeriode(
             referenceStart,
@@ -775,8 +796,8 @@ export default {
         }
       }
       const newVal = value === null ? [] : [value];
-      this.$set(this.fluxForm, "fluxGeoOptions", newVal);
-      this.addParamToUrlWhenInThisMenu('geo-options', JSON.stringify(newVal))
+      this.$set(this.fluxForm, 'fluxGeoOptions', newVal);
+      this.addParamToUrlWhenInThisMenu('geo-options', JSON.stringify(newVal));
       this.resetFluxPredefinedControl();
       this.setFluxGeoOptionsTmp(newVal);
     },
@@ -788,7 +809,7 @@ export default {
       let preference_end = PREFERENCE_END;
       let observation_start = null;
       let observation_end = null;
-      let fluxGeoOptions = ["Gombe"];
+      let fluxGeoOptions = ['Gombe'];
       this.fluxGeoGranularityChange(2);
 
       // if (value != 7) this.$emit("toggleShowMobiliteGenerale", false);
@@ -799,37 +820,37 @@ export default {
           observation_end = this.moment().format(DATEFORMAT);
           break;
         case 2:
-          observation_start = this.moment().startOf("week").format(DATEFORMAT);
-          observation_end = this.moment().endOf("week").format(DATEFORMAT);
+          observation_start = this.moment().startOf('week').format(DATEFORMAT);
+          observation_end = this.moment().endOf('week').format(DATEFORMAT);
           break;
         case 3:
           observation_start = this.moment(new Date())
-            .startOf("month")
+            .startOf('month')
             .format(DATEFORMAT);
           observation_end = this.moment(new Date())
-            .endOf("month")
+            .endOf('month')
             .format(DATEFORMAT);
           break;
         case 4:
           observation_start = this.moment()
-            .subtract(1, "months")
-            .startOf("month")
+            .subtract(1, 'months')
+            .startOf('month')
             .format(DATEFORMAT);
           observation_end = this.moment()
-            .subtract(1, "months")
-            .endOf("month")
+            .subtract(1, 'months')
+            .endOf('month')
             .format(DATEFORMAT);
           break;
         case 5:
-          observation_start = "2020-03-19";
+          observation_start = '2020-03-19';
           observation_end = this.moment().format(DATEFORMAT);
           break;
         case 6:
-          observation_start = "2020-03-19";
-          observation_end = "2020-03-28";
+          observation_start = '2020-03-19';
+          observation_end = '2020-03-28';
           break;
         case 7:
-          observation_start = "2020-03-19";
+          observation_start = '2020-03-19';
           observation_end = this.moment().format(DATEFORMAT);
           // this.$emit("toggleShowMobiliteGenerale", true);
           break;
@@ -858,10 +879,10 @@ export default {
       this.setFluxGeoOptionsTmp(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularityTemp(this.fluxForm.fluxGeoGranularity);
       this.setFluxTimeGranularity(this.fluxForm.fluxTimeGranularity);
-      this.$emit("submitFluxForm", this.fluxForm);
+      this.$emit('submitFluxForm', this.fluxForm);
     },
     mobilityDetailToggle() {
-      this.$root.$emit("bv::toggle::collapse", "mobilityDetail");
+      this.$root.$emit('bv::toggle::collapse', 'mobilityDetail');
       this.IsfluxParameterCollapse = !this.IsfluxParameterCollapse;
     },
     resetFluxPredefinedControl() {
@@ -869,18 +890,18 @@ export default {
     },
     selectedFluxSourceChanged(value) {
       // this.setSelectedSource(value);
-      this.addParamToUrlWhenInThisMenu('source', value)
+      this.addParamToUrlWhenInThisMenu('source', value);
       if (value == 2) {
         // source africell only support geo-granularity "zone des santés"
-        this.$set(this.fluxForm, "fluxGeoGranularity", 2);
+        this.$set(this.fluxForm, 'fluxGeoGranularity', 2);
       }
       this.fluxGeoGranularityChange(this.fluxForm.fluxGeoGranularity);
     },
     addParamToUrlWhenInThisMenu(param, value) {
       if (this.activeMenu == 1) {
-        this.addParamToUrl(param, value)
+        this.addParamToUrl(param, value);
       }
-    }
+    },
   },
 };
 </script>
@@ -900,7 +921,7 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .flux-form {
   margin: 0;
   .nav-zone {

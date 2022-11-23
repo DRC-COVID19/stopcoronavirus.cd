@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FormFieldType extends Model
 {
-
   use SoftDeletes;
 
   const TYPE_TEXT = 1;
@@ -15,13 +14,10 @@ class FormFieldType extends Model
   const TYP_BOOLEAN = 3;
   const TYPE_DATE = 1;
 
-    protected $fillable = [
-        'name'
-    ];
+  protected $fillable = ['name'];
 
-
-    public function formFields()
-    {
-        return $this->hasMany(FormField::class);
-    }
+  public function formFields()
+  {
+    return $this->hasMany(FormField::class);
+  }
 }

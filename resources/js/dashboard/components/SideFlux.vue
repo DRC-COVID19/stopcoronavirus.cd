@@ -9,13 +9,13 @@
 </template>
 
 <script>
-import * as d3 from "d3";
+import * as d3 from 'd3';
 export default {
   props: {
     flux24: {
       type: Array,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {
@@ -26,10 +26,10 @@ export default {
   },
   watch: {
     flux24() {
-     this.show().then(({ fluxHeader, fluxDestination, fluxValues }) => {
-      this.drawChart(fluxValues, fluxHeader, fluxDestination);
-    });
-    }
+      this.show().then(({ fluxHeader, fluxDestination, fluxValues }) => {
+        this.drawChart(fluxValues, fluxHeader, fluxDestination);
+      });
+    },
   },
   mounted() {
     this.show().then(({ fluxHeader, fluxDestination, fluxValues }) => {
@@ -46,37 +46,37 @@ export default {
 
           for (const key in this.flux24) {
             let item = this.flux24[key];
-            const element = fluxHeader.find(x => x == item.origin);
+            const element = fluxHeader.find((x) => x == item.origin);
             if (!element) {
               fluxHeader.push(item.origin);
             }
             const destination = fluxDestination.find(
-              x => x == item.destination
+              (x) => x == item.destination
             );
             if (!destination) {
               fluxDestination.push(item.destination);
             }
           }
 
-          fluxDestination.forEach(destination => {
-            fluxHeader.forEach(itemOrigin => {
+          fluxDestination.forEach((destination) => {
+            fluxHeader.forEach((itemOrigin) => {
               if (!itemOrigin) {
                 return;
               }
               let value = this.flux24.find(
-                x => x.origin == itemOrigin && x.destination == destination
+                (x) => x.origin == itemOrigin && x.destination == destination
               );
               if (value) {
                 fluxValues.push({
                   origin: itemOrigin,
                   destination: destination,
                   volume: value.volume,
-                  reference_volume: value?.reference_volume
+                  reference_volume: value?.reference_volume,
                 });
               } else {
                 fluxValues.push({
                   origin: itemOrigin,
-                  destination: destination
+                  destination: destination,
                 });
               }
             });
@@ -84,7 +84,7 @@ export default {
           resolver({
             fluxHeader,
             fluxDestination,
-            fluxValues
+            fluxValues,
           });
         }
       });
@@ -97,95 +97,89 @@ export default {
 
       // append the svg object to the body of the page
       var svg = d3
-        .select("#site_flux")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        .select('#site_flux')
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+        .append('g')
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
       // Build X scales and axis:
-      var x = d3
-        .scaleBand()
-        .range([0, width])
-        .domain(groupX)
-        .padding(0.01);
+      var x = d3.scaleBand().range([0, width]).domain(groupX).padding(0.01);
       svg
-        .append("g")
-        .attr("transform", "translate(0," + height + ")")
+        .append('g')
+        .attr('transform', 'translate(0,' + height + ')')
         .call(d3.axisBottom(x).tickSizeOuter(0))
-        .selectAll("text")
-        .attr("transform", "translate(-10,0)rotate(-45)")
-        .style("text-anchor", "end");
+        .selectAll('text')
+        .attr('transform', 'translate(-10,0)rotate(-45)')
+        .style('text-anchor', 'end');
 
       // Build X scales and axis:
-      var y = d3
-        .scaleBand()
-        .range([height, 0])
-        .domain(groupY)
-        .padding(0.01);
-      svg.append("g").call(d3.axisLeft(y));
+      var y = d3.scaleBand().range([height, 0]).domain(groupY).padding(0.01);
+      svg.append('g').call(d3.axisLeft(y));
 
       // Build color scale
       var myColor = d3
         .scaleLinear()
-        .range(["#f1f1f1", "#00b065"])
-        .domain([0, d3.max(data, d => d.volume)]);
+        .range(['#f1f1f1', '#00b065'])
+        .domain([0, d3.max(data, (d) => d.volume)]);
 
       // create a tooltip
       var tooltip = d3
-        .select("#site_flux")
-        .append("div")
-        .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "2px")
-        .style("border-radius", "5px")
-        .style("padding", "5px");
+        .select('#site_flux')
+        .append('div')
+        .style('opacity', 0)
+        .attr('class', 'tooltip')
+        .style('background-color', 'white')
+        .style('border', 'solid')
+        .style('border-width', '2px')
+        .style('border-radius', '5px')
+        .style('padding', '5px');
 
       // Three function that change the tooltip when user hover / move / leave a cell
-      var mouseover = function(d) {
-        tooltip.style("opacity", 1);
+      var mouseover = function (d) {
+        tooltip.style('opacity', 1);
       };
-      var mousemove = function(d) {
+      var mousemove = function (d) {
         tooltip
-          .html(`${d.origin} - ${d.destination} ${d.volume?`:${d.volume}`:''}`)
-          .style("left", d3.mouse(this)[0] + 70 + "px")
-          .style("top", d3.mouse(this)[1] + "px")
-          .style("cursor", "pointer");
+          .html(
+            `${d.origin} - ${d.destination} ${d.volume ? `:${d.volume}` : ''}`
+          )
+          .style('left', d3.mouse(this)[0] + 70 + 'px')
+          .style('top', d3.mouse(this)[1] + 'px')
+          .style('cursor', 'pointer');
       };
-      var mouseleave = function(d) {
+      var mouseleave = function (d) {
         // tooltip.style("opacity", 0);
       };
 
       svg
         .selectAll()
-        .data(data, function(d) {
-          return d.origin + ":" + d.destination;
+        .data(data, function (d) {
+          return d.origin + ':' + d.destination;
         })
         .enter()
-        .append("rect")
-        .attr("x", function(d) {
+        .append('rect')
+        .attr('x', function (d) {
           return x(d.origin);
         })
-        .attr("y", function(d) {
+        .attr('y', function (d) {
           return y(d.destination);
         })
-        .attr("width", x.bandwidth())
-        .attr("height", y.bandwidth())
-        .style("fill", function(d) {
+        .attr('width', x.bandwidth())
+        .attr('height', y.bandwidth())
+        .style('fill', function (d) {
           return myColor(d.volume);
         })
-        .on("mouseover", mouseover)
-        .on("mousemove", mousemove)
-        .on("mouseleave", mouseleave);
-    }
-  }
+        .on('mouseover', mouseover)
+        .on('mousemove', mousemove)
+        .on('mouseleave', mouseleave);
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .side-case-covid-container {
   h3 {
     font-size: 0.8rem;

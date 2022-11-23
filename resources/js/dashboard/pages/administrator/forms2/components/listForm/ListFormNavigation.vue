@@ -44,15 +44,7 @@
         >
           <template v-slot="{ inputEvents, inputValue }">
             <div
-              class="
-                d-flex
-                flex-col
-                sm:flex-row
-                justify-content-center
-                text-center
-                item-center
-                btn-container-calendar
-              "
+              class="d-flex flex-col sm:flex-row justify-content-center text-center item-center btn-container-calendar"
             >
               <input
                 id="last_update"
@@ -105,20 +97,20 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex';
 export default {
   props: {
     paginate: {
       type: Object,
       default: () => ({}),
-      required: false
+      required: false,
     },
     errors: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
-  data () {
+  data() {
     return {
       filter: 'all',
       max: new Date(),
@@ -132,78 +124,78 @@ export default {
         form_recurrence_id: null,
         publish: false,
         unpublish: false,
-        last_update: null
+        last_update: null,
       },
       show: true,
       showWarning: false,
       toBeCanceled: true,
-      formRecurrenceSelected: null
-    }
+      formRecurrenceSelected: null,
+    };
   },
-  async mounted () {
-    this.resetForm()
-    await this.getFormsRecurrences()
+  async mounted() {
+    this.resetForm();
+    await this.getFormsRecurrences();
   },
   computed: {
     ...mapState({
-      formRecurrences: (state) => state.form.formsRecurrences
-    })
+      formRecurrences: (state) => state.form.formsRecurrences,
+    }),
   },
   watch: {
-    title () {
-      this.search()
+    title() {
+      this.search();
     },
-    filter () {
-      this.getfilter()
-    }
+    filter() {
+      this.getfilter();
+    },
   },
   methods: {
     ...mapActions(['getFormsRecurrences']),
-    getfilter (value) {
+    getfilter(value) {
       if (value === 'publish') {
-        this.form.publish = true
-        delete this.form.unpublish
+        this.form.publish = true;
+        delete this.form.unpublish;
       } else if (value === 'unpublish') {
-        this.form.unpublish = true
-        delete this.form.publish
+        this.form.unpublish = true;
+        delete this.form.publish;
       } else if (value === 'all') {
-        delete this.form.publish
-        delete this.form.unpublish
-        delete this.form.last_update
-        delete this.form.form_recurrence_id
+        delete this.form.publish;
+        delete this.form.unpublish;
+        delete this.form.last_update;
+        delete this.form.form_recurrence_id;
       }
-      this.setFormAndEmmit()
+      this.setFormAndEmmit();
     },
-    getFormsByDate () {
-      this.setFormAndEmmit()
+    getFormsByDate() {
+      this.setFormAndEmmit();
     },
-    selectRecurrence () {
-      this.setFormAndEmmit()
+    selectRecurrence() {
+      this.setFormAndEmmit();
     },
-    search () {
-      this.$emit('onSearch', this.title.trim())
+    search() {
+      this.$emit('onSearch', this.title.trim());
     },
-    setFormAndEmmit () {
+    setFormAndEmmit() {
       const form = {
         form_date: this.form.last_update ?? null,
         published_form: this.form.publish ?? null,
         unpublished_form: this.form.unpublish ?? null,
-        recurrence_form: this.form.form_recurrence_id ?? null
-      }
+        recurrence_form: this.form.form_recurrence_id ?? null,
+      };
       if (form.published_form === false) {
-        delete form.published_form
+        delete form.published_form;
       }
       if (form.unpublished_form === false) {
-        delete form.unpublished_form
+        delete form.unpublished_form;
       }
-      this.$emit('filterForms', form)
-    }
-  }
-}
+      this.$emit('filterForms', form);
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 
 .form__navigation-container {
   display: flex;
@@ -220,7 +212,7 @@ export default {
     }
   } /* color of the tracking area */
 }
-.input__date{
+.input__date {
   color: #535356 !important;
   font-style: italic !important;
 }
@@ -285,7 +277,7 @@ export default {
     transition: all 0.2s ease-in;
     color: #3767fa;
     &::after {
-      content: "";
+      content: '';
       display: block;
       border: 1px solid #3767fa;
     }

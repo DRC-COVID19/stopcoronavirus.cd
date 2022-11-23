@@ -15,7 +15,6 @@ class ChangeLogResource extends JsonResource
    */
   public function toArray($request)
   {
-
     return [
       'id' => $this->id,
       'from' => $this->publish_date,
@@ -23,7 +22,7 @@ class ChangeLogResource extends JsonResource
       'description' => $this->description,
       'showDayAndMonth' => true,
       'notRead' => !$this->administratorRead()->find(Auth::user()->id),
-      "color"=> '#e74c3c'
+      'color' => '#e74c3c',
     ];
   }
 }

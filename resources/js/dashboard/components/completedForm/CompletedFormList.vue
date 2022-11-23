@@ -22,7 +22,9 @@
           </b-form-input>
         </div>
         <div v-if="showFormFilter" class="ml-md-2">
-          <label for="input-formulaire" class="small text-muted">Filter par formulaire</label>
+          <label for="input-formulaire" class="small text-muted"
+            >Filter par formulaire</label
+          >
           <br />
           <v-select
             v-model="form.form_id"
@@ -38,7 +40,9 @@
           </v-select>
         </div>
         <div v-if="showHospitalFilter" class="ml-md-2">
-          <label for="input-ctco" class="small text-muted">Filter par CTCO</label>
+          <label for="input-ctco" class="small text-muted"
+            >Filter par CTCO</label
+          >
           <br />
           <v-select
             v-model="form.hospital_id"
@@ -118,7 +122,7 @@
             <span> {{ data.index + 1 + perPage * (currentPage - 1) }} </span>
           </template>
           <template v-slot:cell(last_update)="data">
-            <span>{{ moment(data.item.last_update).format("DD.MM.Y") }}</span>
+            <span>{{ moment(data.item.last_update).format('DD.MM.Y') }}</span>
           </template>
           <template v-slot:cell(form)="data">
             <span v-if="data.item.form">{{ data.item.form.title }}</span>
@@ -206,9 +210,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from "vuex";
-import { ADMIN_HOSPITAL } from "../../config/env";
-import Pagination from "../Pagination.vue";
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex';
+import { ADMIN_HOSPITAL } from '../../config/env';
+import Pagination from '../Pagination.vue';
 
 export default {
   props: {
@@ -263,7 +267,7 @@ export default {
       allCurrentFilters: {},
       deleteModalVisible: false,
       completedFormIdToDelete: null,
-      sortBy: "last_update",
+      sortBy: 'last_update',
       sortDesc: true,
     };
   },
@@ -283,33 +287,33 @@ export default {
       return this.completedForms?.current_page || 1;
     },
     formList() {
-      return [{ id: null, title: "Tous" }, ...this.form__publishedForms()];
+      return [{ id: null, title: 'Tous' }, ...this.form__publishedForms()];
     },
     hospitalList() {
-      return [{ id: null, name: "Tous" }, ...this.hospital__allHospitals];
+      return [{ id: null, name: 'Tous' }, ...this.hospital__allHospitals];
     },
     usersList() {
-      return [{ id: null, name: "Tous" }, ...this.agentsHospitals];
+      return [{ id: null, name: 'Tous' }, ...this.agentsHospitals];
     },
     fields() {
       const data = [
-        { key: "numero", label: "#" },
-        { key: "last_update", label: "Date", sortable: true },
-        { key: "created_manager_name", label: "Nom", sortable: true },
-        { key: "created_manager_first_name", label: "Prénom", sortable: true },
+        { key: 'numero', label: '#' },
+        { key: 'last_update', label: 'Date', sortable: true },
+        { key: 'created_manager_name', label: 'Nom', sortable: true },
+        { key: 'created_manager_first_name', label: 'Prénom', sortable: true },
       ];
       if (this.showFormColumn) {
-        data.push({ key: "form", label: "Formulaire", sortable: true });
+        data.push({ key: 'form', label: 'Formulaire', sortable: true });
       }
       if (this.showHospitalColumn) {
-        data.push({ key: "hospital", label: "CTCO", sortable: true });
+        data.push({ key: 'hospital', label: 'CTCO', sortable: true });
       }
-      data.push({ key: "actions", label: "Actions" });
+      data.push({ key: 'actions', label: 'Actions' });
       return data;
     },
   },
   async mounted() {
-    this.$set(this.form, "form_id", this.completedForm__selectedForm);
+    this.$set(this.form, 'form_id', this.completedForm__selectedForm);
     this.getForms();
     this.hospital__getAll();
     this.getCompletedForms();
@@ -320,20 +324,20 @@ export default {
       this.getCompletedForms();
     },
     totalRows(value) {
-      this.$emit("totalChanged", value);
+      this.$emit('totalChanged', value);
     },
   },
   methods: {
     ...mapActions([
-      "completedForm__getAllFiltered",
-      "getForms",
-      "completedForm__setSelectedForm",
-      "hospital__getAll",
-      "adminUser__getAgentHospitals",
-      "completedForm__delete",
+      'completedForm__getAllFiltered',
+      'getForms',
+      'completedForm__setSelectedForm',
+      'hospital__getAll',
+      'adminUser__getAgentHospitals',
+      'completedForm__delete',
     ]),
-    ...mapMutations(["setDetailHospital", "setHospitalManagerName"]),
-    ...mapGetters(["form__publishedForms"]),
+    ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
+    ...mapGetters(['form__publishedForms']),
     async getCompletedForms(page = 1) {
       this.isLoading = true;
       try {
@@ -385,24 +389,24 @@ export default {
       this.completedFormIdToDelete = null;
     },
     onValidateDeletion() {
-      this.$bvModal.show("confirmation-box");
+      this.$bvModal.show('confirmation-box');
       this.completedForm__delete(this.completedFormIdToDelete)
         .then(() => {
           this.$notify({
-            group: "alert",
-            title: "Suppression...",
-            text: "Soumission supprimer avec succès",
-            type: "success",
+            group: 'alert',
+            title: 'Suppression...',
+            text: 'Soumission supprimer avec succès',
+            type: 'success',
           });
           this.deleteModalVisible = false;
           this.getCompletedForms();
         })
         .catch(() => {
           this.$notify({
-            group: "alert",
-            title: "Suppression...",
-            text: "Une erreur est survenu",
-            type: "error",
+            group: 'alert',
+            title: 'Suppression...',
+            text: 'Une erreur est survenu',
+            type: 'error',
           });
         });
     },
@@ -416,7 +420,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 
 .completed-form-table {
   &::v-deep {

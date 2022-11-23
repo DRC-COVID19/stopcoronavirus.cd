@@ -13,7 +13,6 @@ use Illuminate\Http\Request;
 
 class AdminRoleController extends Controller
 {
-
   /**
    * Create a new AuthController instance.
    *

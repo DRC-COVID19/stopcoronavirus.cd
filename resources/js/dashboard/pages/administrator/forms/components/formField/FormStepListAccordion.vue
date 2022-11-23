@@ -48,7 +48,7 @@
                     aria-hidden="true"
                   ></i>
                   <i
-                  @click="updateField(formField)"
+                    @click="updateField(formField)"
                     class="mx-2 my-1 fas fa-pencil-alt color-green btn"
                     aria-hidden="true"
                   ></i>
@@ -73,8 +73,8 @@
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex'
-import FormFieldInput from '../../../../../components/forms/FormFieldInput'
+import { mapActions } from 'vuex';
+import FormFieldInput from '../../../../../components/forms/FormFieldInput';
 
 export default {
   name: 'FormStepListAccordion',
@@ -82,63 +82,62 @@ export default {
     targetForm: {
       type: Object,
       required: true,
-    }
+    },
   },
   components: {
-    FormFieldInput
+    FormFieldInput,
   },
-  data () {
+  data() {
     return {
       isDeleteModalShown: false,
-      formFieldToDelete: ''
-    }
+      formFieldToDelete: '',
+    };
   },
   computed: {
-    formListSteps () {
+    formListSteps() {
       return this.targetForm.form_steps.slice().sort((a, b) => a.step - b.step);
-    }
+    },
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     ...mapActions(['removeFormField']),
-    deleteField (formField) {
-      this.isDeleteModalShown = true
-      this.formFieldToDelete = formField
+    deleteField(formField) {
+      this.isDeleteModalShown = true;
+      this.formFieldToDelete = formField;
     },
     onValidateDeletion() {
-      this.$bvModal.show("confirmation-box");
+      this.$bvModal.show('confirmation-box');
       this.removeFormField(this.formFieldToDelete.id)
         .then(() => {
           this.$notify({
             group: 'alert',
             title: 'Supprimer ce champ',
             text: 'Supprimer avec succès',
-            type: 'Supprimer avec succès'
-          })
-          this.isDeleteModalShown = false
-          this.$emit('deleted')
+            type: 'Supprimer avec succès',
+          });
+          this.isDeleteModalShown = false;
+          this.$emit('deleted');
         })
         .catch(() => {
           this.$notify({
             group: 'alert',
             title: "Supprimer  l'étape",
             text: 'Une erreur est survenus',
-            type: 'error'
-          })
-        })
+            type: 'error',
+          });
+        });
     },
-    onCancelDeletion () {
-      this.isDeleteModalShown = false
+    onCancelDeletion() {
+      this.isDeleteModalShown = false;
     },
-    updateField (formField) {
-      this.$emit('updateField', formField)
-    }
-  }
-}
+    updateField(formField) {
+      this.$emit('updateField', formField);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .btn {
   cursor: pointer;
   padding: 0.5rem;

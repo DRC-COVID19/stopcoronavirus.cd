@@ -44,14 +44,7 @@
         >
           <template #table-busy>
             <div
-              class="
-                align-items-center
-                d-flex
-                justify-content-center
-                my-2
-                text-center text-danger
-                loading-height
-              "
+              class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height"
             >
               <b-spinner class="align-middle"></b-spinner>
               <strong>Loading...</strong>
@@ -96,7 +89,7 @@
             {{ (currentPage - 1) * perPage + data.index + 1 }}
           </template>
           <template v-slot:cell(publish)="data">
-            <p>{{ data.item.publish === true ? "Oui" : "Non" }}</p>
+            <p>{{ data.item.publish === true ? 'Oui' : 'Non' }}</p>
           </template>
           <template v-slot:cell(created_at)="data">
             <p>{{ formatDateFns(data.item.created_at) }}</p>
@@ -127,81 +120,81 @@ export default {
   props: {
     forms: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     isLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     currentPage: {
       type: Number,
-      default: 1
+      default: 1,
     },
     perPage: {
       type: Number,
-      default: 15
-    }
+      default: 15,
+    },
   },
-  data () {
+  data() {
     return {
       fields: [
         { key: 'title', label: 'Titre' },
         { key: 'created_at', label: 'Date création' },
-        'actions'
+        'actions',
       ],
       filter: '',
       isDeleteModalShown: false,
       currentForm: {
         id: -1,
-        title: ''
+        title: '',
       },
-      editModalShow: false
-    }
+      editModalShow: false,
+    };
   },
 
   computed: {
-    rows () {
-      return this.forms.length
-    }
+    rows() {
+      return this.forms.length;
+    },
   },
   watch: {
-    filter () {
-      this.search()
-    }
+    filter() {
+      this.search();
+    },
   },
   methods: {
-    openToogle () {
-      this.$emit('openToogle', false)
+    openToogle() {
+      this.$emit('openToogle', false);
     },
-    search () {
-      this.$emit('onSearch', this.filter.trim())
+    search() {
+      this.$emit('onSearch', this.filter.trim());
     },
-    deleteForm (formId) {
-      this.isDeleteModalShown = true
-      this.currentForm.id = formId
+    deleteForm(formId) {
+      this.isDeleteModalShown = true;
+      this.currentForm.id = formId;
     },
-    onValidateDelection () {
-      this.$emit('onDeleteForm', this.currentForm.id)
-      this.isDeleteModalShown = false
+    onValidateDelection() {
+      this.$emit('onDeleteForm', this.currentForm.id);
+      this.isDeleteModalShown = false;
     },
-    onCancelDelection () {
-      this.isDeleteModalShown = false
+    onCancelDelection() {
+      this.isDeleteModalShown = false;
     },
-    updateForm (id, title, form_recurrence_value, form_recurrence_id, publish) {
+    updateForm(id, title, form_recurrence_value, form_recurrence_id, publish) {
       this.currentForm = {
         id,
         title,
         form_recurrence_value,
         form_recurrence_id,
-        publish
-      }
-      this.$emit('onUpdateForm', this.currentForm)
-    }
-  }
-}
+        publish,
+      };
+      this.$emit('onUpdateForm', this.currentForm);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .input-filter {
   background: white;
 }

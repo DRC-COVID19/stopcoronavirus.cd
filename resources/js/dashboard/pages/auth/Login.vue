@@ -66,14 +66,14 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState } from 'vuex';
 import {
   ADMIN_DASHBOARD,
   AGENT_HOSPITAL,
   ADMIN_HOSPITAL,
   MANANGER_EPIDEMIC,
-} from "../../config/env";
-import Logo from "../../components/LogoComponent";
+} from '../../config/env';
+import Logo from '../../components/LogoComponent';
 export default {
   components: {
     Logo,
@@ -92,16 +92,16 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(["logUserIn"]),
+    ...mapActions(['logUserIn']),
     submitLogin() {
       this.logUserIn(this.form)
         .then(({ user }) => {
           let dashboardRole = user.roles.find(
-            (x) => x.name == "admin-dashboard"
+            (x) => x.name == 'admin-dashboard'
           );
-          let hospitalRole = user.roles.find((x) => x.name == "agent-hospital");
+          let hospitalRole = user.roles.find((x) => x.name == 'agent-hospital');
           let adminHospitalRole = user.roles.find(
-            (x) => x.name == "admin-hospital"
+            (x) => x.name == 'admin-hospital'
           );
           // this.$gtag.set({userId: user.email});
           if (
@@ -112,14 +112,14 @@ export default {
           ) {
             this.$router
               .push({
-                name: "main",
+                name: 'main',
               })
               .catch((e) => {
                 console.log(e);
               });
           } else {
             this.$router.push({
-              name: "acces.denied",
+              name: 'acces.denied',
             });
           }
         })
@@ -132,7 +132,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .dash-password-lost-link {
   text-decoration: none;
   color: $dash-text;
@@ -140,23 +140,23 @@ export default {
     text-decoration: underline;
   }
 }
-.login{
+.login {
   padding: 0 2rem;
 }
 .bg-dash {
   /* box-shadow: -5px 5px 205px -1px rgba(0, 0, 0, 0.1); */
-box-shadow: 0px 4px 20px -3px rgba(0,0,0,0.1);
+  box-shadow: 0px 4px 20px -3px rgba(0, 0, 0, 0.1);
   border: 0 !important;
   margin: 2rem 0;
-  border-radius: .8rem;
+  border-radius: 0.8rem;
 }
-@media screen and($small){
-    h2{
-      font-size: 1.6rem;
-      margin-top: 1rem;
-    }
-    .login{
-       padding: 0;
+@media screen and($small) {
+  h2 {
+    font-size: 1.6rem;
+    margin-top: 1rem;
   }
+  .login {
+    padding: 0;
   }
+}
 </style>

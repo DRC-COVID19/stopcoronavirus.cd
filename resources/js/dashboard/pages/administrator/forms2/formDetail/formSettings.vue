@@ -17,11 +17,13 @@
                   v-b-modal.updateFormTitleModal
                 />
               </div>
-              <h6>Cliquer sur l'icon à droite pour modifier le titre du formulaire</h6>
+              <h6>
+                Cliquer sur l'icon à droite pour modifier le titre du formulaire
+              </h6>
               <hr />
               <update-form-modal
-               :formToPopulate="form"
-              @onUpdateFormTitle="updateForm"
+                :formToPopulate="form"
+                @onUpdateFormTitle="updateForm"
               />
             </div>
             <div class="mt-5">
@@ -33,7 +35,9 @@
                   v-b-modal.updateFormRecurrenceModal
                 />
               </div>
-              <h6>Pour mettre à jour la récurrence, cliquer sur l'icon à droite</h6>
+              <h6>
+                Pour mettre à jour la récurrence, cliquer sur l'icon à droite
+              </h6>
               <hr />
               <update-form-recurrence-modal
                 :formToPopulate="form"
@@ -49,7 +53,10 @@
                   v-b-modal.updateConflictResolutionMode
                 />
               </div>
-              <h6>Pour mettre à jour le mode de résolution de conflict, cliquer sur l'icon à droite</h6>
+              <h6>
+                Pour mettre à jour le mode de résolution de conflict, cliquer
+                sur l'icon à droite
+              </h6>
               <hr />
               <update-conflict-resolution-modal
                 :formToPopulate="form"
@@ -67,7 +74,7 @@
               </div>
               <h6>Cette action supprimera le formulaire définitivement</h6>
               <hr />
-              <delete-form-modal :formId="getFormId"/>
+              <delete-form-modal :formId="getFormId" />
             </div>
             <div class="mt-5">
               <div class="d-flex justify-content-between">
@@ -83,7 +90,7 @@
                 formulaire
               </h6>
               <hr />
-              <update-form-visibility-modal :formToPopulate="form"/>
+              <update-form-visibility-modal :formToPopulate="form" />
             </div>
           </div>
         </b-container>
@@ -92,51 +99,51 @@
   </b-container>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
-import DeleteFormModal from './components/formSettingsModals/deleteFormModal'
-import UpdateFormVisibilityModal from './components/formSettingsModals/UpdateFormVisibilityModal'
-import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal'
-import updateConflictResolutionModal from './components/formSettingsModals/updateConflictResolutionModal'
-import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal'
+import { mapActions, mapState } from 'vuex';
+import DeleteFormModal from './components/formSettingsModals/deleteFormModal';
+import UpdateFormVisibilityModal from './components/formSettingsModals/UpdateFormVisibilityModal';
+import UpdateFormRecurrenceModal from './components/formSettingsModals/updateFormRecurrenceModal';
+import updateConflictResolutionModal from './components/formSettingsModals/updateConflictResolutionModal';
+import UpdateFormModal from './components/formSettingsModals/updateFormTitleModal';
 export default {
   components: {
     UpdateFormModal,
     UpdateFormRecurrenceModal,
     DeleteFormModal,
     UpdateFormVisibilityModal,
-    updateConflictResolutionModal
+    updateConflictResolutionModal,
   },
-  data () {
+  data() {
     return {
       isLoading: false,
       isUpdatingFormTile: false,
       formUpdated: false,
-      updating: false
-    }
+      updating: false,
+    };
   },
-  mounted () {
-    this.getForm()
+  mounted() {
+    this.getForm();
   },
   computed: {
     ...mapState({
-      form: (state) => state.form.form
+      form: (state) => state.form.form,
     }),
-    getFormId () {
-      return this.$route.params.form_id ?? null
+    getFormId() {
+      return this.$route.params.form_id ?? null;
     },
-    checkCompletedForms () {
-      return this.form.completed_forms.length === 0
-    }
+    checkCompletedForms() {
+      return this.form.completed_forms.length === 0;
+    },
   },
   methods: {
     ...mapActions(['formShow', 'form__Update']),
-    async getForm () {
-      await this.formShow({ id: this.getFormId })
+    async getForm() {
+      await this.formShow({ id: this.getFormId });
     },
-    async updateForm (currentForm) {
-      this.isLoading = true
-      this.formUpdated = false
-      this.updating = true
+    async updateForm(currentForm) {
+      this.isLoading = true;
+      this.formUpdated = false;
+      this.updating = true;
       const form = {
         title: currentForm.title,
         form_recurrence_value: currentForm.form_recurrence_value,
@@ -144,36 +151,36 @@ export default {
         conflict_resolution_mode_id: currentForm.conflict_resolution_mode_id,
         publish: currentForm.publish,
         hospitals_id: currentForm.hospitals ?? [],
-        visible_all_hospitals: currentForm.visibleAllHospitals
-      }
+        visible_all_hospitals: currentForm.visibleAllHospitals,
+      };
 
       this.form__Update({ form, id: this.getFormId })
         .then(() => {
-          this.formUpdated = true
-          this.isLoading = false
-          this.updating = false
+          this.formUpdated = true;
+          this.isLoading = false;
+          this.updating = false;
           this.$notify({
             group: 'alert',
             title: 'Modification du Formulaire',
             text: currentForm.formFieldmodalMessage,
-            type: 'success'
-          })
+            type: 'success',
+          });
         })
         .catch(({ response }) => {
-          this.$gtag.exception(response)
+          this.$gtag.exception(response);
           this.$notify({
             group: 'alert',
             title: 'Modification du Formulaire',
             text: 'Une erreur est survenu',
-            type: 'error'
-          })
-        })
-    }
-  }
-}
+            type: 'error',
+          });
+        });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .form__settings-container {
   padding-top: 60px;
   .form__settings-body {
@@ -189,27 +196,26 @@ export default {
     .form__settings-icon {
       cursor: pointer;
       padding: 2px;
-      transition: all .3s ease-in-out;
-      &:hover{
+      transition: all 0.3s ease-in-out;
+      &:hover {
         background-color: #e6e6e7;
         border-radius: 5px;
-
       }
     }
   }
 }
- @media (max-width: $max-width) {
+@media (max-width: $max-width) {
   .form__settings-container {
-  .form__settings-body {
-    h3,
-    h4 {
-      font-size: 16px;
-      font-weight: 600;
-    }
-    h6 {
-      font-size: 12px;
+    .form__settings-body {
+      h3,
+      h4 {
+        font-size: 16px;
+        font-weight: 600;
+      }
+      h6 {
+        font-size: 12px;
+      }
     }
   }
 }
- }
 </style>

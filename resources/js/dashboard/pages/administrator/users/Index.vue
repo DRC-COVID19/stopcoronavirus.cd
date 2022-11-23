@@ -27,21 +27,13 @@
             />
             <template #header="{ hide }" fluid>
               <div
-                class="
-                  w-100
-                  d-flex
-                  align-items-center
-                  justify-content-between
-                  py-0
-                  px-0
-                  bg-white
-                "
+                class="w-100 d-flex align-items-center justify-content-between py-0 px-0 bg-white"
               >
                 <h2 class="h2">
                   {{
                     Object.keys(formToPopulate).length !== 0
                       ? "Modification de l'utilisateur"
-                      : "Nouveau Utilisateur"
+                      : 'Nouveau Utilisateur'
                   }}
                 </h2>
                 <b-button
@@ -83,16 +75,16 @@
 </template>
 
 <script>
-import Header from '../components/Header'
-import ListUser from './components/ListUsers'
-import Create from './components/Create'
+import Header from '../components/Header';
+import ListUser from './components/ListUsers';
+import Create from './components/Create';
 export default {
   components: {
     Header,
     Create,
-    ListUser
+    ListUser,
   },
-  data () {
+  data() {
     return {
       title: 'Utilisateurs',
       iconClass: 'fas fa-users',
@@ -108,16 +100,16 @@ export default {
       errors: {},
       currentPage: 1,
       roles: [],
-      hospitals: []
-    }
+      hospitals: [],
+    };
   },
-  mounted () {
-    this.getUserList()
-    this.getUserRoles()
-    this.getHospitalsWithoutAgent()
+  mounted() {
+    this.getUserList();
+    this.getUserRoles();
+    this.getHospitalsWithoutAgent();
   },
   computed: {
-    userMeta () {
+    userMeta() {
       if (!this.users.meta) {
         return {
           current_page: 1,
@@ -126,128 +118,128 @@ export default {
           path: '#',
           per_page: 1,
           to: 1,
-          total: 1
-        }
+          total: 1,
+        };
       }
-      return this.users.meta
-    }
+      return this.users.meta;
+    },
   },
   methods: {
-    search (filter) {
-      this.isLoading = true
+    search(filter) {
+      this.isLoading = true;
       if (filter !== '') {
         // eslint-disable-next-line no-undef
         axios
           .get('api/admin_users/filter?key_words=' + filter)
           .then(({ data }) => {
-            this.users = data
-            this.isLoading = false
+            this.users = data;
+            this.isLoading = false;
           })
           .catch(({ response }) => {
-            this.$gtag.exception(response)
-            this.isLoading = false
-          })
+            this.$gtag.exception(response);
+            this.isLoading = false;
+          });
       } else {
-        this.getUserList()
-        this.isLoading = false
+        this.getUserList();
+        this.isLoading = false;
       }
     },
-    deleteUser (currentUserId) {
+    deleteUser(currentUserId) {
       // eslint-disable-next-line no-undef
       axios
         .delete('/api/admin_users/' + currentUserId)
         .then(() => {
-          this.getUserList()
-          this.isUserDeleted = true
+          this.getUserList();
+          this.isUserDeleted = true;
           this.$notify({
             group: 'alert',
             title: 'Supprimer utilisateur',
             text: 'Supprimer avec succès',
-            type: 'success'
-          })
+            type: 'success',
+          });
         })
         .catch(({ response }) => {
-          this.$gtag.exception(response)
+          this.$gtag.exception(response);
           this.$notify({
             group: 'alert',
             title: 'Supprimer utilisateur',
             text: 'Une erreur est survenue',
-            type: 'error'
-          })
-        })
+            type: 'error',
+          });
+        });
     },
-    populateForm (currentUser) {
-      this.userUpdated = true
-      this.formToPopulate = currentUser
-      this.errors = {}
+    populateForm(currentUser) {
+      this.userUpdated = true;
+      this.formToPopulate = currentUser;
+      this.errors = {};
     },
-    cancelUpdate () {
-      this.errors = {}
-      this.userUpdated = false
-      this.updating = false
-      this.formToPopulate = {}
+    cancelUpdate() {
+      this.errors = {};
+      this.userUpdated = false;
+      this.updating = false;
+      this.formToPopulate = {};
     },
-    reset () {
-      this.errors = {}
-      this.updating = false
-      this.userUpdated = false
+    reset() {
+      this.errors = {};
+      this.updating = false;
+      this.userUpdated = false;
     },
-    openToogle () {
-      this.formToPopulate = {}
-      this.updating = false
+    openToogle() {
+      this.formToPopulate = {};
+      this.updating = false;
     },
-    updateUser (currentUser) {
-      this.isLoading = true
-      this.userUpdated = true
-      this.updating = true
+    updateUser(currentUser) {
+      this.isLoading = true;
+      this.userUpdated = true;
+      this.updating = true;
 
-      this.errors = {}
+      this.errors = {};
       const form = {
         username: currentUser.username,
         name: currentUser.name,
         email: currentUser.email,
         roles_id: currentUser.roles,
         hospitals_id: currentUser.hospitals,
-        phone_number: currentUser.phoneNumber
-      }
+        phone_number: currentUser.phoneNumber,
+      };
       if (currentUser && currentUser.password) {
-        form.password = currentUser.password
-        form.password_confirmation = currentUser.confirmPassword
+        form.password = currentUser.password;
+        form.password_confirmation = currentUser.confirmPassword;
       }
       // eslint-disable-next-line no-undef
       axios
         .put('/api/admin_users/' + currentUser.id, form)
         .then(() => {
-          this.userUpdated = true
-          this.showSuccess = true
-          this.isLoading = false
-          this.updating = false
-          this.getUserList(this.currentPage)
+          this.userUpdated = true;
+          this.showSuccess = true;
+          this.isLoading = false;
+          this.updating = false;
+          this.getUserList(this.currentPage);
           this.$notify({
             group: 'alert',
             title: "Modification d'un utilisateur",
             text: 'Modifier avec succès',
-            type: 'success'
-          })
+            type: 'success',
+          });
         })
         .catch(({ response }) => {
-          this.$gtag.exception(response)
-          this.isLoading = false
-          this.errors = response.data.errors
-          const messages = this.renderErrorsMessages(this.errors).join(',')
+          this.$gtag.exception(response);
+          this.isLoading = false;
+          this.errors = response.data.errors;
+          const messages = this.renderErrorsMessages(this.errors).join(',');
           this.$notify({
             group: 'alert',
             title: "Modification d'un utilisateur",
             text: 'Oups! Une erreur est survenue :\r\n' + messages,
-            type: 'error'
-          })
-        })
+            type: 'error',
+          });
+        });
     },
 
-    createUser (form) {
-      this.userAdded = false
-      this.isLoading = true
-      this.errors = {}
+    createUser(form) {
+      this.userAdded = false;
+      this.isLoading = true;
+      this.errors = {};
       // eslint-disable-next-line no-undef
       axios
         .post('/api/admin_users', {
@@ -258,98 +250,98 @@ export default {
           email: form.email,
           roles_id: form.roles,
           hospitals_id: form.hospitals,
-          phone_number: form.phoneNumber
+          phone_number: form.phoneNumber,
         })
         .then(() => {
-          this.userAdded = true
-          this.showSuccess = true
-          this.isLoading = false
-          this.getUserList(1)
+          this.userAdded = true;
+          this.showSuccess = true;
+          this.isLoading = false;
+          this.getUserList(1);
           this.$notify({
             group: 'alert',
             title: 'Nouvel utilisateur',
             text: 'Ajouter avec succès',
-            type: 'success'
-          })
+            type: 'success',
+          });
         })
         .catch(({ response }) => {
-          this.$gtag.exception(response)
-          this.isLoading = false
-          this.errors = response.data.errors
-          const messages = this.renderErrorsMessages(this.errors).join(',')
+          this.$gtag.exception(response);
+          this.isLoading = false;
+          this.errors = response.data.errors;
+          const messages = this.renderErrorsMessages(this.errors).join(',');
           this.$notify({
             group: 'alert',
             title: 'Nouvel utilisateur',
             text: 'Oups! Une erreur est survenue :\r\n' + messages,
-            type: 'error'
-          })
-        })
+            type: 'error',
+          });
+        });
     },
 
-    getUserList (page = 1) {
-      this.isLoading = true
+    getUserList(page = 1) {
+      this.isLoading = true;
       // eslint-disable-next-line no-undef
       axios
         .get('/api/admin_users', {
-          params: { page }
+          params: { page },
         })
         .then(({ data }) => {
-          this.users = data
-          this.isLoading = false
+          this.users = data;
+          this.isLoading = false;
         })
         .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
+          this.$gtag.exception(response);
+        });
     },
 
-    getUserRoles () {
+    getUserRoles() {
       // eslint-disable-next-line no-undef
       axios
         .get('/api/admin_roles')
         .then(({ data }) => {
-          this.roles = data
+          this.roles = data;
         })
         .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
+          this.$gtag.exception(response);
+        });
     },
-    getHospitalsWithoutAgent () {
+    getHospitalsWithoutAgent() {
       // eslint-disable-next-line no-undef
       axios
         .get('/api/dashboard/hospitals/all-Without-agent')
         .then(({ data }) => {
-          this.hospitals = data
+          this.hospitals = data;
         })
         .catch(({ response }) => {
-          this.$gtag.exception(response)
-        })
+          this.$gtag.exception(response);
+        });
     },
-    switchPage (page) {
-      this.getUserList(page)
+    switchPage(page) {
+      this.getUserList(page);
     },
-    renderErrorsMessages (errors) {
-      const errorsMessage = []
+    renderErrorsMessages(errors) {
+      const errorsMessage = [];
       if (errors.roles_id) {
-        errorsMessage.push("Le Role d'un utilisateur est obligatoire.")
+        errorsMessage.push("Le Role d'un utilisateur est obligatoire.");
       } else if (errors.username) {
-        errorsMessage.push("Ce nom d'utilisateur est déjà utilisé.")
+        errorsMessage.push("Ce nom d'utilisateur est déjà utilisé.");
       } else if (errors.email) {
-        errorsMessage.push("L'adresse email doit être unique et obligatoire ")
+        errorsMessage.push("L'adresse email doit être unique et obligatoire ");
       } else if (errors.password) {
-        errorsMessage.push('Le Mot de passe de passe est obligatoire ')
+        errorsMessage.push('Le Mot de passe de passe est obligatoire ');
       } else if (errors.phone_number) {
-        errorsMessage.push('Ce numéro de téléphone est déjà utilisé ')
+        errorsMessage.push('Ce numéro de téléphone est déjà utilisé ');
       }
 
-      return errorsMessage
-    }
+      return errorsMessage;
+    },
   },
-  watch: {}
-}
+  watch: {},
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .fa-plus {
   color: white;
   font-size: 14px;

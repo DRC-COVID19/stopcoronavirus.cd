@@ -18,7 +18,7 @@
           :disable="orientationChecked"
           :options="OrientationLIst"
           label="name"
-          :reduce="item=>item.id"
+          :reduce="(item) => item.id"
           @input="orientationChange"
         />
       </b-col>
@@ -28,45 +28,43 @@
 
 <script>
 export default {
-  props: {
-  },
+  props: {},
   data() {
     return {
       OrientationLIst: [
         {
-          id: "ALL",
-          name: "Tout"
+          id: 'ALL',
+          name: 'Tout',
         },
         {
-          id: "FIN",
-          name: "Probable"
+          id: 'FIN',
+          name: 'Probable',
         },
         {
-          id: "FIN8",
-          name: "Peu probable"
+          id: 'FIN8',
+          name: 'Peu probable',
         },
         {
-          id: "FIN5",
-          name: "Très probable"
-        }
+          id: 'FIN5',
+          name: 'Très probable',
+        },
       ],
       orientationChecked: false,
-      orientationSelected: "ALL"
+      orientationSelected: 'ALL',
     };
   },
   methods: {
     medicalOrientationToggle(checked) {
       if (checked) {
-        this.orientationSelected = "ALL";
+        this.orientationSelected = 'ALL';
       }
-      this.$emit("medicalOrientationChecked", checked);
+      this.$emit('medicalOrientationChecked', checked);
     },
     orientationChange(item) {
-      this.$emit("medicalOrientationChanged", item);
-    }
-  }
+      this.$emit('medicalOrientationChanged', item);
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

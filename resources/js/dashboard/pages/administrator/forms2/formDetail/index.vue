@@ -28,9 +28,9 @@
   </div>
 </template>
 <script>
-import Header from "./components/formDetailHeader/FormDetailHeaderIndex.vue";
-import MainHeader from "../../../../components/MainHeader.vue";
-import AdministratorMenu from "../../components/AdministratorMenu.vue";
+import Header from './components/formDetailHeader/FormDetailHeaderIndex.vue';
+import MainHeader from '../../../../components/MainHeader.vue';
+import AdministratorMenu from '../../components/AdministratorMenu.vue';
 export default {
   components: {
     MainHeader,
@@ -51,7 +51,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 
 .form-container {
   background: #f4f6fc;
@@ -69,7 +69,7 @@ export default {
   }
   &-header-detail-container {
     @media (max-width: 992px) {
-      padding:  0px !important;
+      padding: 0px !important;
     }
   }
   &-header-administration {

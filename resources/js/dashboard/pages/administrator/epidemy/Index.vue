@@ -33,21 +33,13 @@
           />
           <template #header="{ hide }" fluid>
             <div
-              class="
-                w-100
-                d-flex
-                bg-white
-                align-items-center
-                justify-content-between
-                py-0
-                px-0
-              "
+              class="w-100 d-flex bg-white align-items-center justify-content-between py-0 px-0"
             >
               <h2 class="h2">
                 {{
                   Object.keys(formToPopulate).length !== 0
-                    ? "Modification de la Situation"
-                    : "Nouvelle Situation"
+                    ? 'Modification de la Situation'
+                    : 'Nouvelle Situation'
                 }}
               </h2>
               <b-button
@@ -92,11 +84,11 @@
 </template>
 
 <script>
-import Header from "../components/Header";
-import Waiting from "../../../components/Waiting";
-import ListSituation from "./components/ListSituation";
-import CreateSituation from "./components/CreateSituation";
-import moment from "moment";
+import Header from '../components/Header';
+import Waiting from '../../../components/Waiting';
+import ListSituation from './components/ListSituation';
+import CreateSituation from './components/CreateSituation';
+import moment from 'moment';
 export default {
   components: {
     Header,
@@ -109,8 +101,8 @@ export default {
   },
   data() {
     return {
-      title: "Situation épidémiologique",
-      iconClass: "fas fa-virus",
+      title: 'Situation épidémiologique',
+      iconClass: 'fas fa-virus',
       isSituationAdded: false,
       isSituationUpdated: false,
       isSituationDeleted: false,
@@ -118,7 +110,7 @@ export default {
       errors: {},
       showSuccess: 0,
       showWarning: 0,
-      WarningMessageCreate: "",
+      WarningMessageCreate: '',
       timeOut: 3,
       situations: {},
       isUpdating: false,
@@ -133,7 +125,7 @@ export default {
           current_page: 1,
           from: 1,
           last_page: 1,
-          path: "#",
+          path: '#',
           per_page: 1,
           to: 1,
           total: 1,
@@ -148,14 +140,14 @@ export default {
     },
     search(filter) {
       this.isLoading = true;
-      const filterDate = moment(filter).format("YYYY-MM-DD");
-      if (filter !== "") {
+      const filterDate = moment(filter).format('YYYY-MM-DD');
+      if (filter !== '') {
         axios
-          .get("api/pandemic-stats/filter?date=" + filterDate)
+          .get('api/pandemic-stats/filter?date=' + filterDate)
           .then(({ data }) => {
             this.situations = data;
             this.isLoading = false;
-            console.log("this.situations", this.situations);
+            console.log('this.situations', this.situations);
           })
           .catch(({ response }) => {
             this.$gtag.exception(response);
@@ -182,7 +174,7 @@ export default {
     deleteSituation(currentSituationId) {
       this.errors = {};
       axios
-        .delete("/api/pandemic-stats/" + currentSituationId)
+        .delete('/api/pandemic-stats/' + currentSituationId)
         .then(() => {
           this.getSituationList;
           this.isSituationDeleted = true;
@@ -195,7 +187,7 @@ export default {
       this.isLoading = true;
       this.isSituationUpdated = false;
       axios
-        .put("/api/pandemic-stats/" + form.id, {
+        .put('/api/pandemic-stats/' + form.id, {
           confirmed: form.confirmed,
           local: form.local,
           imported: form.imported,
@@ -222,7 +214,7 @@ export default {
       this.isLoading = true;
       this.errors = {};
       axios
-        .post("/api/pandemic-stats", {
+        .post('/api/pandemic-stats', {
           confirmed: form.confirmed,
           local: form.local,
           imported: form.imported,
@@ -255,7 +247,7 @@ export default {
     getSituationList(page = 1) {
       this.isLoading = true;
       axios
-        .get("/api/pandemic-stats", {
+        .get('/api/pandemic-stats', {
           params: { page },
         })
         .then(({ data }) => {
@@ -277,7 +269,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .mask {
   position: absolute;
   z-index: 100;

@@ -47,14 +47,14 @@
         ></square-skeleton>
       </skeleton-loading>
 
-      <div v-if="!isLoading" :class="{'isOpacity':loaderBookmark}">
+      <div v-if="!isLoading" :class="{ isOpacity: loaderBookmark }">
         <pivottable
           :arrayAxeValue="arrayAxeValue"
           :linesSelected="linesSelected"
           :columnsSelected="columnsSelected"
           :key="'pivot-table' + keyPivotTable"
         >
-      </pivottable>
+        </pivottable>
       </div>
     </b-col>
     <NameBookmarkModal
@@ -65,33 +65,33 @@
   </b-row>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-import CreateReporting from './CreateReporting'
-import NameBookmarkModal from './NameBookmarkModal'
-import Pivottable from './Pivottable'
+import { mapState, mapActions } from 'vuex';
+import CreateReporting from './CreateReporting';
+import NameBookmarkModal from './NameBookmarkModal';
+import Pivottable from './Pivottable';
 
 export default {
   name: 'HeaderReporting',
   components: {
     CreateReporting,
     Pivottable,
-    NameBookmarkModal
+    NameBookmarkModal,
   },
   props: {
     forms: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     hospitals: {
       type: Array,
       default: () => {
-        return []
-      }
-    }
+        return [];
+      },
+    },
   },
-  data () {
+  data() {
     return {
       arrayAxeValue: [],
       activeItem: null,
@@ -109,7 +109,7 @@ export default {
         'Dot Chart': 'Graphique en points',
         'Area Chart': 'Diagramme de zone',
         'Scatter Chart': 'Graphique en nuage de points',
-        'Multiple Pie Chart': 'Graphique circulaire multiple'
+        'Multiple Pie Chart': 'Graphique circulaire multiple',
       },
       translateAggregatorsRenders: {
         Count: 'Compte',
@@ -132,7 +132,7 @@ export default {
         'Count as Fraction of Total': 'Comptage en tant que fraction du total',
         'Count as Fraction of Rows': 'Comptage en tant que fraction de lignes',
         'Count as Fraction of Columns':
-          'Comptage en tant que fraction de colonnes'
+          'Comptage en tant que fraction de colonnes',
       },
       isLoading: false,
       keyPivotTable: 0,
@@ -145,15 +145,15 @@ export default {
       dataBookmark: {},
       modalShow: false,
       reporting: {
-        formId: null
+        formId: null,
       },
       cloneOptionQuestions: [],
       completedFormFields: [],
       oldArrayAxeValue: [],
       formSelected: null,
       htmlElement: null,
-      loaderBookmark: false
-    }
+      loaderBookmark: false,
+    };
   },
   computed: {
     ...mapState({
@@ -161,22 +161,22 @@ export default {
       completedFormAll: (state) => state.completedForm.completedFormAll,
       bookmarks: (state) => state.bookmark.bookmarks,
       linesSelected: (state) => state.reporting.linesSelected,
-      columnsSelected: (state) => state.reporting.columnsSelected
+      columnsSelected: (state) => state.reporting.columnsSelected,
     }),
-    getForms () {
+    getForms() {
       return this.forms.map((form) => ({
         id: form.id,
-        title: form.title.charAt(0).toUpperCase() + form.title.slice(1)
-      }))
-    }
+        title: form.title.charAt(0).toUpperCase() + form.title.slice(1),
+      }));
+    },
   },
-  mounted () {
-    this.initBookMark()
+  mounted() {
+    this.initBookMark();
   },
   watch: {
-    formFields () {
-      this.cloneOptionQuestions = this.formFields.slice()
-    }
+    formFields() {
+      this.cloneOptionQuestions = this.formFields.slice();
+    },
   },
   methods: {
     ...mapActions([
@@ -186,17 +186,17 @@ export default {
       'getBookmarks',
       'createBookmark',
       'reporting__editLines',
-      'reporting__editColumns'
+      'reporting__editColumns',
     ]),
 
-    addPvtValsHTMLBadge () {
-      const pvtVals = document.querySelector('.pvtVals')
-      const pvtValsBadge = document.createElement('div')
-      pvtValsBadge.classList.add('mb-2')
-      pvtValsBadge.classList.add('mt-5')
+    addPvtValsHTMLBadge() {
+      const pvtVals = document.querySelector('.pvtVals');
+      const pvtValsBadge = document.createElement('div');
+      pvtValsBadge.classList.add('mb-2');
+      pvtValsBadge.classList.add('mt-5');
       pvtValsBadge.innerHTML =
-        '<label class="text-dash-color"><span class="badge badge-secondary px-2">Étape 4</span> : Valeurs </label> '
-      pvtVals.prepend(pvtValsBadge)
+        '<label class="text-dash-color"><span class="badge badge-secondary px-2">Étape 4</span> : Valeurs </label> ';
+      pvtVals.prepend(pvtValsBadge);
     },
     // addPvtRenderersHTMLBadge () {
     //   const pvtRenderers = this.selectPvtRenderers()
@@ -206,118 +206,121 @@ export default {
     //   pvtRenderersBadge.innerHTML = '<label class="text-dash-color"><span class="badge badge-secondary px-2">Étape 5</span> : Type des Graphiques et tableaux </label> '
     //   pvtRenderers.prepend(pvtRenderersBadge)
     // },
-    customPvtDropdownStyles () {
-      const pvtDropdown = document.querySelectorAll('.pvtDropdown')
+    customPvtDropdownStyles() {
+      const pvtDropdown = document.querySelectorAll('.pvtDropdown');
       pvtDropdown.forEach((dropDown) => {
-        dropDown.style.width = '95%'
-        dropDown.style.border = 'solid 1px #a2b1c6'
-      })
+        dropDown.style.width = '95%';
+        dropDown.style.border = 'solid 1px #a2b1c6';
+      });
     },
-    customRenderersStyles () {
-      const pvtRenderers = this.selectPvtRenderers()
-      pvtRenderers.style.width = '30%'
-      pvtRenderers.style.backgroundColor = '#ffff'
+    customRenderersStyles() {
+      const pvtRenderers = this.selectPvtRenderers();
+      pvtRenderers.style.width = '30%';
+      pvtRenderers.style.backgroundColor = '#ffff';
     },
-    frTranslatePvtValsRenderers () {
+    frTranslatePvtValsRenderers() {
       const aggregatorsRendersSelected = document.querySelector(
         '.pvtVals .pvtDropdown'
-      )
+      );
       aggregatorsRendersSelected.forEach((option) => {
         option.textContent =
-          this.translateAggregatorsRenders[option.textContent]
-      })
+          this.translateAggregatorsRenders[option.textContent];
+      });
     },
-    frTranslateTableRenderers () {
+    frTranslateTableRenderers() {
       const tableRendersSelected = document.querySelector(
         '.pvtRenderers>.pvtDropdown'
-      )
-      tableRendersSelected.style.marginLeft = '6px'
+      );
+      tableRendersSelected.style.marginLeft = '6px';
       tableRendersSelected.forEach((option) => {
-        option.textContent = this.translateTableRenders[option.textContent]
-      })
+        option.textContent = this.translateTableRenders[option.textContent];
+      });
     },
-    getCompletedFormAll () {
+    getCompletedFormAll() {
       this.arrayAxeValue = this.completedFormAll.map((completedForm) => {
         const data = {
           Hopital: completedForm.hospital.name,
           Commune: completedForm.hospital.township.name,
-          Date: completedForm.last_update
-        }
+          Date: completedForm.last_update,
+        };
         completedForm.completed_form_fields.forEach((completedFormField) => {
-          data[completedFormField.form_field.name.charAt(0).toUpperCase() + completedFormField.form_field.name.slice(1)] = completedFormField.value
-        })
-        return data
-      })
+          data[
+            completedFormField.form_field.name.charAt(0).toUpperCase() +
+              completedFormField.form_field.name.slice(1)
+          ] = completedFormField.value;
+        });
+        return data;
+      });
     },
-    async initBookMark () {
-      await this.getBookmarks()
+    async initBookMark() {
+      await this.getBookmarks();
     },
-    changePivotTable (value) {
-      this.keyPivotTable++
-      this.oldArrayAxeValue = [...this.arrayAxeValue]
+    changePivotTable(value) {
+      this.keyPivotTable++;
+      this.oldArrayAxeValue = [...this.arrayAxeValue];
       if (value.match('bookmark')) {
-        this.arrayAxeValue = []
+        this.arrayAxeValue = [];
       } else {
-        this.arrayAxeValue = [...this.oldArrayAxeValue]
-        this.selectedForm(this.formSelected)
+        this.arrayAxeValue = [...this.oldArrayAxeValue];
+        this.selectedForm(this.formSelected);
       }
     },
-    onSubmitBookmark () {
-      this.initBookMark()
+    onSubmitBookmark() {
+      this.initBookMark();
     },
-    async selectedForm (value) {
-      this.isLoading = true
-      const formId = { form_id: value }
-      this.formSelected = value
-      this.getFormFields(formId)
-      this.isDataSourceSelected = true
-      await this.completedForm__getAllAndOptimizeQuery(formId)
-      this.getCompletedFormAll()
-      this.isLoading = false
+    async selectedForm(value) {
+      this.isLoading = true;
+      const formId = { form_id: value };
+      this.formSelected = value;
+      this.getFormFields(formId);
+      this.isDataSourceSelected = true;
+      await this.completedForm__getAllAndOptimizeQuery(formId);
+      this.getCompletedFormAll();
+      this.isLoading = false;
       this.$nextTick(() => {
-        this.customRenderersStyles()
-        this.frTranslateTableRenderers()
+        this.customRenderersStyles();
+        this.frTranslateTableRenderers();
         // this.addPvtRenderersHTMLBadge()
-        this.frTranslatePvtValsRenderers()
-        this.addPvtValsHTMLBadge()
-        this.customPvtDropdownStyles()
-      })
+        this.frTranslatePvtValsRenderers();
+        this.addPvtValsHTMLBadge();
+        this.customPvtDropdownStyles();
+      });
     },
-    async selectedFormBookmark (value) {
-      const formId = { form_id: value }
-      this.getFormFields(formId)
-      this.isDataSourceSelected = true
-      await this.completedForm__getAllAndOptimizeQuery(formId)
-      this.getCompletedFormAll()
+    async selectedFormBookmark(value) {
+      const formId = { form_id: value };
+      this.getFormFields(formId);
+      this.isDataSourceSelected = true;
+      await this.completedForm__getAllAndOptimizeQuery(formId);
+      this.getCompletedFormAll();
     },
 
-    selectPvtRenderers () {
-      return document.querySelector('.pvtRenderers')
+    selectPvtRenderers() {
+      return document.querySelector('.pvtRenderers');
     },
-    savedBookmark () {
-      const displayTypes = document.querySelector('.pvtRenderers>.pvtDropdown')
+    savedBookmark() {
+      const displayTypes = document.querySelector('.pvtRenderers>.pvtDropdown');
       displayTypes.forEach((element) => {
         if (element.selected) {
-          this.displayTypeValue = element.value
+          this.displayTypeValue = element.value;
         }
-      })
+      });
       const aggregatorsRendersSelected = document.querySelector(
         '.pvtVals>div>.pvtDropdown'
-      )
+      );
       aggregatorsRendersSelected.forEach((element) => {
         if (element.selected) {
-          this.displayAggregatorType = element.value
+          this.displayAggregatorType = element.value;
         }
-      })
+      });
       const paramsAggregatorSelected = document.querySelector(
         '.pvtVals>.pvtDropdown'
-      )
+      );
       if (paramsAggregatorSelected) {
         paramsAggregatorSelected.forEach((element) => {
           if (element.selected) {
-            this.displayParamsAggregator = element.value
+            this.displayParamsAggregator = element.value;
           }
-        })
+        });
       }
       this.dataBookmark = {
         form_id: this.reporting.formId,
@@ -330,40 +333,40 @@ export default {
           : '',
         params2: this.displayParamsAggregator
           ? this.displayParamsAggregator
-          : ''
-      }
-      this.modalShow = !this.modalShow
+          : '',
+      };
+      this.modalShow = !this.modalShow;
     },
-    selectedBookmark (item) {
-      this.loaderBookmark = true
-      this.activeItem = item.id
-      this.selectedFormBookmark(item.form_id)
-      this.reporting__editLines(JSON.parse(item.row))
-      this.reporting__editColumns(JSON.parse(item.column))
+    selectedBookmark(item) {
+      this.loaderBookmark = true;
+      this.activeItem = item.id;
+      this.selectedFormBookmark(item.form_id);
+      this.reporting__editLines(JSON.parse(item.row));
+      this.reporting__editColumns(JSON.parse(item.column));
       // this.isLoading = false
       this.$nextTick(() => {
         const displayTypes = document.querySelector(
           '.pvtRenderers>.pvtDropdown'
-        )
+        );
         if (displayTypes) {
-          displayTypes.options[0].removeAttribute('selected')
+          displayTypes.options[0].removeAttribute('selected');
           for (let index = 0; index < displayTypes.length; index++) {
             if (displayTypes.options[index].value === item.display_type) {
               setTimeout(() => {
                 // this.isLoading = false
-                displayTypes.options[index].setAttribute('selected', 'seleted')
-                displayTypes.dispatchEvent(new Event('change'))
-              }, 1000)
-              break
+                displayTypes.options[index].setAttribute('selected', 'seleted');
+                displayTypes.dispatchEvent(new Event('change'));
+              }, 1000);
+              break;
             }
           }
         }
         if (item.aggregator_type) {
           const aggregatorsRendersSelected = document.querySelector(
             '.pvtVals>div>.pvtDropdown'
-          )
+          );
           if (aggregatorsRendersSelected) {
-            aggregatorsRendersSelected.options[0].removeAttribute('selected')
+            aggregatorsRendersSelected.options[0].removeAttribute('selected');
             for (
               let index = 0;
               index < aggregatorsRendersSelected.length;
@@ -371,16 +374,16 @@ export default {
             ) {
               if (
                 aggregatorsRendersSelected.options[index].value ===
-              item.aggregator_type
+                item.aggregator_type
               ) {
                 setTimeout(() => {
                   aggregatorsRendersSelected.options[index].setAttribute(
                     'selected',
                     'seleted'
-                  )
-                  aggregatorsRendersSelected.dispatchEvent(new Event('change'))
-                }, 1100)
-                break
+                  );
+                  aggregatorsRendersSelected.dispatchEvent(new Event('change'));
+                }, 1100);
+                break;
               }
             }
           }
@@ -389,9 +392,9 @@ export default {
           if (item.params1) {
             const paramsAggregatorSelected = document.querySelector(
               '.pvtVals>.pvtDropdown'
-            )
+            );
             if (paramsAggregatorSelected) {
-              paramsAggregatorSelected.options[0].removeAttribute('selected')
+              paramsAggregatorSelected.options[0].removeAttribute('selected');
               for (
                 let index = 0;
                 index < paramsAggregatorSelected.length;
@@ -403,36 +406,36 @@ export default {
                   paramsAggregatorSelected.options[index].setAttribute(
                     'selected',
                     'seleted'
-                  )
-                  window.paramsAggregatorSelected = paramsAggregatorSelected
-                  paramsAggregatorSelected.dispatchEvent(new Event('change'))
+                  );
+                  window.paramsAggregatorSelected = paramsAggregatorSelected;
+                  paramsAggregatorSelected.dispatchEvent(new Event('change'));
 
-                  break
+                  break;
                 }
               }
             }
           }
-          this.loaderBookmark = false
-        }, 4000)
-      })
-      this.customRenderersStyles()
+          this.loaderBookmark = false;
+        }, 4000);
+      });
+      this.customRenderersStyles();
       // this.frTranslateTableRenderers()
       // this.frTranslatePvtValsRenderers()
-      this.customPvtDropdownStyles()
+      this.customPvtDropdownStyles();
       // this.isLoading = false
-    }
-  }
-}
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
-.reporting-form{
- max-height: 135vh;
+@import '@~/sass/_variables';
+.reporting-form {
+  max-height: 135vh;
 }
 hr {
   width: 105%;
 }
-.isOpacity{
+.isOpacity {
   opacity: 0;
 }
 .header-responsive {
@@ -517,7 +520,7 @@ hr {
   width: 80%;
 }
 
-.style-chooser[disabled="disabled"] {
+.style-chooser[disabled='disabled'] {
   pointer-events: none;
   color: #bfcbd9;
   cursor: not-allowed;

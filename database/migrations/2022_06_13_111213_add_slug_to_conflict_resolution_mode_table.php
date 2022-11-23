@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddSlugToConflictResolutionModeTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('conflict_resolution_modes', function (Blueprint $table) {
-            $table->string('slug')->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('conflict_resolution_modes', function (Blueprint $table) {
+      $table->string('slug')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('conflict_resolution_modes', function (Blueprint $table) {
-            $table->dropColumn('slug');
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('conflict_resolution_modes', function (Blueprint $table) {
+      $table->dropColumn('slug');
+    });
+  }
 }

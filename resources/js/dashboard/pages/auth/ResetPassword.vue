@@ -1,5 +1,8 @@
 <template>
-  <section id="login" class="d-flex app_form justify-content-center align-items-center">
+  <section
+    id="login"
+    class="d-flex app_form justify-content-center align-items-center"
+  >
     <b-container>
       <b-row v-if="is_seeking" align-h="center">
         <Loading message />
@@ -10,9 +13,11 @@
         <b-row align-h="center" v-if="expired_link">
           <b-col cols="12" md="4">
             <h1 class="dash-login-title">Réinitialisez votre mot de passe</h1>
-            <p class="text-dash-color">Votre lien de réinitialisation n'est plus valide.</p>
             <p class="text-dash-color">
-              <b-link :to="{name:'login'}">Retournez à la connexion</b-link>
+              Votre lien de réinitialisation n'est plus valide.
+            </p>
+            <p class="text-dash-color">
+              <b-link :to="{ name: 'login' }">Retournez à la connexion</b-link>
             </p>
           </b-col>
         </b-row>
@@ -35,7 +40,9 @@
                 </b-form-group>
 
                 <b-form-group>
-                  <label for="password_confirmation">Confirmation mot de passe</label>
+                  <label for="password_confirmation"
+                    >Confirmation mot de passe</label
+                  >
                   <b-input
                     v-model="user.password_confirmation"
                     type="password"
@@ -47,13 +54,13 @@
                 </b-form-group>
 
                 <b-form-group>
-                  <b-button
-                    class="btn-dash-blue"
-                    type="submit"
-                    :block="true"
-                  >{{ is_submitting ? 'En cours ...' : 'Envoyer' }}</b-button>
+                  <b-button class="btn-dash-blue" type="submit" :block="true">{{
+                    is_submitting ? 'En cours ...' : 'Envoyer'
+                  }}</b-button>
                 </b-form-group>
-                <b-alert :show="submit_error" variant="danger">Your adresse e-mail</b-alert>
+                <b-alert :show="submit_error" variant="danger"
+                  >Your adresse e-mail</b-alert
+                >
               </form>
             </div>
           </b-col>
@@ -64,8 +71,8 @@
 </template>
 
 <script>
-import Logo from "../../components/LogoComponent";
-import { mapState, mapActions, mapGetters } from "vuex";
+import Logo from '../../components/LogoComponent';
+import { mapState, mapActions, mapGetters } from 'vuex';
 export default {
   components: { Logo },
   data() {
@@ -75,7 +82,7 @@ export default {
       is_submitting: false,
       submit_error: false,
       expired_link: false,
-      token: null
+      token: null,
     };
   },
   mounted() {
@@ -88,15 +95,15 @@ export default {
       axios
         .post(`/api/dashboard/auth/reset-password/${this.user.id}`, this.user, {
           headers: {
-            authorization: `Bearer ${this.token}`
-          }
+            authorization: `Bearer ${this.token}`,
+          },
         })
         .then(({ data }) => {
           this.$router.push({
-            name: "password.reset.complete.thanks"
+            name: 'password.reset.complete.thanks',
           });
         })
-        .catch(response => {
+        .catch((response) => {
           this.hasError = true;
         })
         .finally(() => {
@@ -113,17 +120,16 @@ export default {
           this.user.id = data.user_id;
           this.token = data.token;
         })
-        .catch(response => {
+        .catch((response) => {
           this.expired_link = true;
           this.is_seeking = false;
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
-
-<style scoped lang="scss" >
+<style scoped lang="scss">
 #login {
   min-height: 100vh;
   display: flex;

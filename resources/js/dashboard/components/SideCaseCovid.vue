@@ -23,7 +23,7 @@
           <template v-slot:cell(last_update)="data">
             <div class="text-right">
               {{
-                moment(data.item.properties.last_update).format("DD.MM.YYYY")
+                moment(data.item.properties.last_update).format('DD.MM.YYYY')
               }}
             </div>
           </template>
@@ -59,28 +59,28 @@ export default {
     return {
       fields: [
         {
-          key: "name",
-          label: "Nom",
+          key: 'name',
+          label: 'Nom',
         },
         {
-          key: "last_update",
-          label: "Mise à jour",
-          variant: "info",
+          key: 'last_update',
+          label: 'Mise à jour',
+          variant: 'info',
         },
         {
-          key: "confirmed",
-          label: "Confirmés",
-          variant: "warning",
+          key: 'confirmed',
+          label: 'Confirmés',
+          variant: 'warning',
         },
         {
-          key: "Healed",
-          label: "Guéris",
-          variant: "success",
+          key: 'Healed',
+          label: 'Guéris',
+          variant: 'success',
         },
         {
-          key: "dead",
-          label: "Décès",
-          variant: "danger",
+          key: 'dead',
+          label: 'Décès',
+          variant: 'danger',
         },
       ],
     };
@@ -95,7 +95,7 @@ export default {
       let width = (item[type] * 100) / item.confirmed;
       if (width == 0) {
         return {
-          width: "10px",
+          width: '10px',
         };
       }
       return {

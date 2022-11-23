@@ -1,5 +1,5 @@
 <template>
-  <div class="fullscreen-container" :class="{'noFlex' : noFlex}">
+  <div class="fullscreen-container" :class="{ noFlex: noFlex }">
     <Fullscreen :ref="id" @change="fullscreenChange" class="col-12 p-0">
       <slot></slot>
     </Fullscreen>
@@ -10,38 +10,38 @@
 </template>
 
 <script>
-import { component } from 'vue-fullscreen'
+import { component } from 'vue-fullscreen';
 export default {
   components: {
-    Fullscreen: component
+    Fullscreen: component,
   },
   props: {
     id: {
       type: String,
-      required: true
+      required: true,
     },
     link: {
       type: String,
-      required: true
+      required: true,
     },
     noFlex: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   methods: {
-    toggleFullscreen () {
+    toggleFullscreen() {
       this.$nextTick(() => {
-        this.$refs[this.id].toggle()
-      })
+        this.$refs[this.id].toggle();
+      });
     },
-    fullscreenChange (fullscreen) {
+    fullscreenChange(fullscreen) {
       this.$nextTick(() => {
-        this.$emit('change', fullscreen, this.link)
-      })
-    }
-  }
-}
+        this.$emit('change', fullscreen, this.link);
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .fullscreen-container {

@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateFiedInFormFielMigration extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('form_fields', function (Blueprint $table) {
-            $table->bigInteger('capacity')->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('form_fields', function (Blueprint $table) {
+      $table->bigInteger('capacity')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('form_fields', function (Blueprint $table) {
-            $table->bigInteger('capacity')->nullable();
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('form_fields', function (Blueprint $table) {
+      $table->bigInteger('capacity')->nullable();
+    });
+  }
 }

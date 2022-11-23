@@ -210,7 +210,7 @@
   background-image: linear-gradient(to right, $fin-8 50%, $fin 0);
 
   &::before {
-    content: "";
+    content: '';
     display: block;
     margin-left: 50%;
     height: 112%;
@@ -334,7 +334,7 @@
 
   .styled-checkbox {
     padding-left: unset;
-    input[type="checkbox"] {
+    input[type='checkbox'] {
       position: absolute; // take it out of document flow
       opacity: 0; // hide it
 
@@ -349,7 +349,7 @@
       // Box.
       & + label:before {
         left: 0;
-        content: "";
+        content: '';
         position: absolute;
         margin-right: 10px;
         display: inline-block;
@@ -389,7 +389,7 @@
 
       // Checkmark. Could be replaced with an image
       &:checked + label:after {
-        content: "";
+        content: '';
         position: absolute;
         left: 5px;
         top: 12px;
@@ -562,7 +562,7 @@
   }
   &::before,
   &::after {
-    content: "";
+    content: '';
     display: block;
     position: absolute;
     border-radius: 100%;
@@ -1000,7 +1000,8 @@
     box-shadow: 0 0 0 0.2rem $dash-blue-7d;
   }
 }
-.btn-outline-primary:focus, .btn-outline-primary.focus {
+.btn-outline-primary:focus,
+.btn-outline-primary.focus {
   box-shadow: 0 0 0 0.2rem $dash-blue-7d;
 }
 

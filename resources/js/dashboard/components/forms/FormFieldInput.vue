@@ -18,7 +18,7 @@
             :required="isRequired || required"
           ></b-form-radio-group>
         </b-form-group>
-        <input type="hidden" v-model="formFieldValue">
+        <input type="hidden" v-model="formFieldValue" />
       </div>
 
       <v-date-picker
@@ -31,9 +31,13 @@
       >
         <template v-slot="{ inputEvents, inputValue }">
           <div class="w-100 d-flex">
-            <input type="hidden" v-model="formFieldValue">
+            <input type="hidden" v-model="formFieldValue" />
             <b-form-input
-              :value="inputValue ? moment(formFieldValue).format('DD/MM/YYYY') : 'Sélectionner la date'"
+              :value="
+                inputValue
+                  ? moment(formFieldValue).format('DD/MM/YYYY')
+                  : 'Sélectionner la date'
+              "
               :required="isRequired || required"
               :state="errors[0] ? false : null || state"
               :id="id"
@@ -46,7 +50,7 @@
             </b-form-input>
             <b-button
               v-if="!disabled"
-              class='button-icon'
+              class="button-icon"
               variant="primary"
               :disabled="!formFieldValue"
               @click="formFieldValue = null"
@@ -77,121 +81,121 @@
   </div>
 </template>
 <script>
-import { ValidationProvider } from 'vee-validate'
+import { ValidationProvider } from 'vee-validate';
 export default {
   name: 'FormFieldInput',
   components: {
-    ValidationProvider
+    ValidationProvider,
   },
   props: {
     type: {
       type: String,
-      required: true
+      required: true,
     },
     value: {
       type: [String, Date, Number],
-      default: null
+      default: null,
     },
     placeholder: {
       type: String,
-      required: false
+      required: false,
     },
     rules: {
       type: String,
       required: false,
-      default: ''
+      default: '',
     },
     id: {
       type: [String, Number],
-      required: true
+      required: true,
     },
     required: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     state: {
       type: Boolean,
       required: false,
       default: () => {
-        return null
-      }
+        return null;
+      },
     },
     disabled: {
       type: Boolean,
-      required: false
+      required: false,
     },
     name: {
       type: String,
-      required: false
+      required: false,
     },
     vid: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     mode: {
       type: String,
       required: false,
-      default: 'date'
+      default: 'date',
     },
     maxDate: {
       type: Date,
       required: false,
-      default: null
+      default: null,
     },
     defaultValue: {
       type: String,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
+  data() {
     return {
       requiredOptions: [
         { text: 'Oui', value: '1' },
-        { text: 'Non', value: '0' }
+        { text: 'Non', value: '0' },
       ],
-      formFieldValue: this.value
-    }
+      formFieldValue: this.value,
+    };
   },
   computed: {
-    isRequired () {
-      return !!this.rules?.match(/required/i) || false
+    isRequired() {
+      return !!this.rules?.match(/required/i) || false;
     },
-    getType () {
-      return this.type === 'number' ? 'text' : this.type
+    getType() {
+      return this.type === 'number' ? 'text' : this.type;
     },
-    matchRules () {
-      let rules = this.rules ? this.rules + '' : ''
+    matchRules() {
+      let rules = this.rules ? this.rules + '' : '';
       if (this.type === 'number') {
-        rules += '|double'
+        rules += '|double';
       }
-      return rules
-    }
+      return rules;
+    },
   },
-  mounted () {
+  mounted() {
     if (this.value === null) {
-      this.formFieldValue = this.defaultValue
+      this.formFieldValue = this.defaultValue;
     }
   },
   watch: {
-    formFieldValue (value) {
-      this.$emit('input', value)
+    formFieldValue(value) {
+      this.$emit('input', value);
     },
-    value (value) {
-      this.formFieldValue = value
+    value(value) {
+      this.formFieldValue = value;
     },
-    defaultValue (value) {
+    defaultValue(value) {
       if (this.value === null) {
-        this.formFieldValue = value
+        this.formFieldValue = value;
       }
-    }
+    },
   },
-  methods: {}
-}
+  methods: {},
+};
 </script>
 <style lang="scss">
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 
 ::placeholder {
   font-size: 0.85rem;
@@ -202,13 +206,13 @@ export default {
   }
 }
 .input-error {
-  font-family: "Lato", sans-serif;
+  font-family: 'Lato', sans-serif;
   font-size: 12px;
 }
 .date-picker-input {
   border-top-right-radius: 0px;
   border-bottom-right-radius: 0px;
-  &.form-control[readonly]{
+  &.form-control[readonly] {
     background-color: white;
   }
 }

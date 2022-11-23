@@ -1,46 +1,43 @@
 <template>
   <b-container fluid class="px-0 mx-0 containerReporting h-100">
     <b-row class="d-flex mx-0">
-     <b-button
-          v-b-toggle.sidebar-header-reporting
-          class="btn-dash-blue btn-sidebar"
-          ><i class="fas fa-chart-line"></i>
-        </b-button>
+      <b-button
+        v-b-toggle.sidebar-header-reporting
+        class="btn-dash-blue btn-sidebar"
+        ><i class="fas fa-chart-line"></i>
+      </b-button>
       <b-col lg="12" class="mx-0 px-0">
-        <HeaderReporting
-          :forms="forms"
-          class="w-100 h-100"
-        />
+        <HeaderReporting :forms="forms" class="w-100 h-100" />
       </b-col>
     </b-row>
   </b-container>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
-import HeaderReporting from './components/HeaderReporting'
+import { mapState, mapActions } from 'vuex';
+import HeaderReporting from './components/HeaderReporting';
 
 export default {
   name: 'Reporting',
   components: {
     HeaderReporting,
   },
-  mounted () {
-    this.getForms()
+  mounted() {
+    this.getForms();
   },
   computed: {
     ...mapState({
-      forms: (state) => state.form.forms
-    })
+      forms: (state) => state.form.forms,
+    }),
   },
   methods: {
     ...mapActions(['getForms']),
-  }
-}
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
-.sm-display{
+@import '@~/sass/_variables';
+.sm-display {
   display: none;
 }
 .containerReporting {
@@ -58,7 +55,7 @@ export default {
 .btn-sidebar {
   display: none;
 }
-.btn-title[disabled="disabled"] {
+.btn-title[disabled='disabled'] {
   pointer-events: none;
   color: #bfcbd9;
   cursor: not-allowed;
@@ -78,7 +75,7 @@ export default {
   .header-responsive {
     display: none;
   }
-  .sm-display{
+  .sm-display {
     display: block;
   }
 }

@@ -40,7 +40,7 @@ class FluxLoadDataCommand extends Command
   public function handle()
   {
     try {
-      $this->output->title("Starting import");
+      $this->output->title('Starting import');
       $pdo = DB::connection()->getpdo();
       $pdo->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
       $pdo->setAttribute(PDO::MYSQL_ATTR_LOCAL_INFILE, true);

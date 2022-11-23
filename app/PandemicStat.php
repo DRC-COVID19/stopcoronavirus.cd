@@ -14,6 +14,6 @@ class PandemicStat extends Model
     'seriously',
     'healed',
     'dead',
-    'last_update'
+    'last_update',
   ];
 }

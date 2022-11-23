@@ -16,10 +16,10 @@
 </template>
 
 <script>
-import Chart from "chart.js";
-import "chartjs-plugin-annotation";
-Chart.defaults.global.defaultFontFamily = "Rubik,sans-serif";
-import { PALETTE } from "../../config/env";
+import Chart from 'chart.js';
+import 'chartjs-plugin-annotation';
+Chart.defaults.global.defaultFontFamily = 'Rubik,sans-serif';
+import { PALETTE } from '../../config/env';
 export default {
   props: {
     globalData: {
@@ -33,7 +33,7 @@ export default {
     },
     color: {
       type: String,
-      default: "33ac2e",
+      default: '33ac2e',
     },
     title: {
       type: String,
@@ -92,9 +92,7 @@ export default {
           percent: result.percent,
           difference: result.difference,
         });
-
       });
-
 
       localData.sort((a, b) => {
         return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
@@ -111,7 +109,7 @@ export default {
           //   data: localData.map((d) => d.volume_reference),
           // },
           {
-            label: "Observation",
+            label: 'Observation',
             backgroundColor: this.color,
             borderColor: this.color,
             barThickness: 12,
@@ -122,14 +120,14 @@ export default {
       };
 
       this.configBarChart = {
-        type: "horizontalBar",
+        type: 'horizontalBar',
         data: dataChart,
         options: {
           responsive: true,
           maintainAspectRatio: false,
           legend: {
             display: true,
-            position: "bottom",
+            position: 'bottom',
             labels: {
               fontSize: 9,
             },
@@ -137,7 +135,7 @@ export default {
           title: {
             display: false,
             text: this.title,
-            color: "#6c757d",
+            color: '#6c757d',
             fontSize: 9,
           },
           scales: {
@@ -147,7 +145,7 @@ export default {
                   beginAtZero: false,
                   fontSize: 9,
                   callback: (value, index, values) => {
-                    const sign = value < 0 ? "-" : "";
+                    const sign = value < 0 ? '-' : '';
                     return `${sign}${this.formatCash(value)}`;
                   },
                 },
@@ -178,30 +176,30 @@ export default {
 
       if (this.barChart) this.barChart.destroy();
       this.barChart = new Chart(
-        this.$refs[this.reference].getContext("2d"),
+        this.$refs[this.reference].getContext('2d'),
         this.configBarChart
       );
       if (localData && localData.length <= 5) {
-        this.configBarChart.height = "200px";
-        this.$refs[this.reference].style.height = "200px";
-        this.$refs[this.reference].style.maxHeight = "200px";
+        this.configBarChart.height = '200px';
+        this.$refs[this.reference].style.height = '200px';
+        this.$refs[this.reference].style.maxHeight = '200px';
       } else {
-        this.configBarChart.height = "600px";
-        this.$refs[this.reference].style.height = "600px";
-        this.$refs[this.reference].style.maxHeight = "600px";
+        this.configBarChart.height = '600px';
+        this.$refs[this.reference].style.height = '600px';
+        this.$refs[this.reference].style.maxHeight = '600px';
       }
     },
     fullscreenChange(fullscreen, ref) {
       const element = this.$refs[ref];
       const parent_2 = element.parentElement.parentElement;
       if (!fullscreen) {
-        element.style.height = "400px";
-        element.height = "400px";
-        element.style.width = "700px";
-        element.parentElement.style.width = "auto";
-        parent_2.style.display = "";
-        parent_2.style.alignItem = "";
-        parent_2.style.justifyContent = "";
+        element.style.height = '400px';
+        element.height = '400px';
+        element.style.width = '700px';
+        element.parentElement.style.width = 'auto';
+        parent_2.style.display = '';
+        parent_2.style.alignItem = '';
+        parent_2.style.justifyContent = '';
 
         this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 9;
         this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 9;
@@ -209,11 +207,11 @@ export default {
 
         this.barChart.update();
       } else {
-        element.style.width = "700px";
-        element.parentElement.style.width = "100%";
-        parent_2.style.display = "flex";
-        parent_2.style.alignItems = "center";
-        parent_2.style.justifyContent = "center";
+        element.style.width = '700px';
+        element.parentElement.style.width = '100%';
+        parent_2.style.display = 'flex';
+        parent_2.style.alignItems = 'center';
+        parent_2.style.justifyContent = 'center';
 
         this.configBarChart.options.scales.xAxes[0].ticks.fontSize = 12;
         this.configBarChart.options.scales.yAxes[0].ticks.fontSize = 12;

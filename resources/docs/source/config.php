@@ -1,9 +1,7 @@
 <?php
 
 return [
-
-
-    /*
+  /*
     |--------------------------------------------------------------------------
     | Deployment configuration
     |--------------------------------------------------------------------------
@@ -12,15 +10,13 @@ return [
     | Right now, the only deployment type available is "git"
     |
     */
-    'deployment' => [
-        
-        'type' => 'git',
+  'deployment' => [
+    'type' => 'git',
 
-        'repository' => '',
+    'repository' => '',
 
-        'branch' => 'gh-pages',
+    'branch' => 'gh-pages',
 
-        'message' => 'Site updated: ' . strftime('%YYYY-%MM-%DD %HH:%mm:%ss')
-        
-    ]
+    'message' => 'Site updated: ' . strftime('%YYYY-%MM-%DD %HH:%mm:%ss'),
+  ],
 ];

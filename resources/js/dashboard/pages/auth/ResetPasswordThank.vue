@@ -8,9 +8,11 @@
       <b-row align-h="center">
         <b-col md="4">
           <h1 class="dash-login-title">Demande envoyée</h1>
-          <p class="text-dash-color"> Un mail vous a été envoyé avec le lien de réinitialisation</p>
+          <p class="text-dash-color">
+            Un mail vous a été envoyé avec le lien de réinitialisation
+          </p>
           <p>
-            <b-link :to="{name:'login'}">Retournez à la connexion</b-link>
+            <b-link :to="{ name: 'login' }">Retournez à la connexion</b-link>
           </p>
         </b-col>
       </b-row>
@@ -19,7 +21,7 @@
 </template>
 
 <script>
-import Logo from "../../components/LogoComponent";
+import Logo from '../../components/LogoComponent';
 export default {
   components: { Logo },
   data() {
@@ -31,8 +33,8 @@ export default {
   methods: {
     sendMail() {
       axios.post(`participant/`);
-    }
-  }
+    },
+  },
 };
 </script>
 

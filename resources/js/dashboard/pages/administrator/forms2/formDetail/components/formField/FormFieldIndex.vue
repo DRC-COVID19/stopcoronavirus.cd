@@ -2,43 +2,55 @@
   <b-container>
     <div class="row">
       <div class="col-12">
-          <div class="text-right">
-            <b-button
-              class="btn-dash-blue btn-create-field"
-              @click="onResetModalCreate"
-            >
-              <small>Ajouter un champ</small>
-            </b-button>
-            <FormFieldCreate
-              :form-to-populate="formFieldKey"
-              :form-field-order="form_field_order"
-              :order-field-end="order_field_end"
-              @created="onCreatedField"
-              @updated="onUpdatedField"
-            />
-            <FormFieldCardOrder
-              :form-to-populate="formFieldKey"
-              :form-fields="formFields"
-              @createdField="onCallCreatedFieldCard"
-              @createdFieldAfter="onCallCreatedFieldAfter"
-              @createdFieldEnd="onCreatedFieldEnd"
-            />
-          </div>
+        <div class="text-right">
+          <b-button
+            class="btn-dash-blue btn-create-field"
+            @click="onResetModalCreate"
+          >
+            <small>Ajouter un champ</small>
+          </b-button>
+          <FormFieldCreate
+            :form-to-populate="formFieldKey"
+            :form-field-order="form_field_order"
+            :order-field-end="order_field_end"
+            @created="onCreatedField"
+            @updated="onUpdatedField"
+          />
+          <FormFieldCardOrder
+            :form-to-populate="formFieldKey"
+            :form-fields="formFields"
+            @createdField="onCallCreatedFieldCard"
+            @createdFieldAfter="onCallCreatedFieldAfter"
+            @createdFieldEnd="onCreatedFieldEnd"
+          />
+        </div>
       </div>
     </div>
 
     <div class="row">
       <div class="col-12">
-         <transition-group name="form-field-list" tag="div">
+        <transition-group name="form-field-list" tag="div">
           <div
             v-for="(field, index) in formFields"
             :key="'form-field' + field.id"
-            :class="{'container-component-field-skeleton' : field.animateVisibility, 'animate-in-leave': selectedFormKey || deleteContext}"
+            :class="{
+              'container-component-field-skeleton': field.animateVisibility,
+              'animate-in-leave': selectedFormKey || deleteContext,
+            }"
             class="container-component-field d-sm-flex justify-content-between mt-4"
           >
-            <div class="d-flex justify-content-between w-100" v-if="field.skeleton">
-              <b-skeleton-img no-aspect class="skeleton-form-field"></b-skeleton-img>
-              <b-skeleton-img no-aspect class="skeleton-form-field-actions"></b-skeleton-img>
+            <div
+              class="d-flex justify-content-between w-100"
+              v-if="field.skeleton"
+            >
+              <b-skeleton-img
+                no-aspect
+                class="skeleton-form-field"
+              ></b-skeleton-img>
+              <b-skeleton-img
+                no-aspect
+                class="skeleton-form-field-actions"
+              ></b-skeleton-img>
             </div>
             <div v-if="!field.skeleton" class="field-card">
               <FormFieldList
@@ -60,173 +72,192 @@
               />
             </div>
           </div>
-         </transition-group>
+        </transition-group>
       </div>
     </div>
   </b-container>
 </template>
 
 <script>
-import FormFieldList from './FormFieldList.vue'
-import FormFieldCard from './FormFieldCard.vue'
-import FormFieldCreate from './FormFieldCreate.vue'
-import FormFieldCardOrder from './FormFieldCardOrder.vue'
-import Loading from '../../../../../../components/Loading.vue'
-import { mapActions } from 'vuex'
+import FormFieldList from './FormFieldList.vue';
+import FormFieldCard from './FormFieldCard.vue';
+import FormFieldCreate from './FormFieldCreate.vue';
+import FormFieldCardOrder from './FormFieldCardOrder.vue';
+import Loading from '../../../../../../components/Loading.vue';
+import { mapActions } from 'vuex';
 export default {
   components: {
     FormFieldCard,
     FormFieldList,
     FormFieldCreate,
     Loading,
-    FormFieldCardOrder
+    FormFieldCardOrder,
   },
-  data () {
+  data() {
     return {
       isLoading: false,
       formFields: [
         { id: 1, skeleton: true },
         { id: 2, skeleton: true },
-        { id: 3, skeleton: true }
+        { id: 3, skeleton: true },
       ],
       fieldForms: [],
       selectedFormKey: null,
       form_field_order: null,
       order_field_end: null,
-      deleteContext: false
-    }
+      deleteContext: false,
+    };
   },
-  async  mounted () {
-    this.init()
+  async mounted() {
+    this.init();
   },
   watch: {
-    step_id () {
-      this.init()
-    }
+    step_id() {
+      this.init();
+    },
   },
   computed: {
-    form_id () {
-      return this.$route.params.form_id
+    form_id() {
+      return this.$route.params.form_id;
     },
-    step_id () {
-      return this.$route.params.step_id
+    step_id() {
+      return this.$route.params.step_id;
     },
-    lastField () {
-      return this.formFields.length - 1
+    lastField() {
+      return this.formFields.length - 1;
     },
-    formFieldKey () {
+    formFieldKey() {
       if (this.selectedFormKey && this.selectedFormKey > -1) {
-        const index = this.formFields.findIndex((field) => this.selectedFormKey === field.id)
-        return this.formFields[index]
+        const index = this.formFields.findIndex(
+          (field) => this.selectedFormKey === field.id
+        );
+        return this.formFields[index];
       } else {
-        return null
+        return null;
       }
-    }
+    },
   },
   methods: {
     ...mapActions(['getFormFields']),
-    async init () {
-      this.form_field_order = null
-      this.order_field_end = null
+    async init() {
+      this.form_field_order = null;
+      this.order_field_end = null;
       setTimeout(() => {
-        this.selectedFormKey = null
-        this.deleteContext = false
-      }, 2000)
-      this.formFields = await this.getFormFields({ form_id: this.form_id, step_id: this.step_id })
+        this.selectedFormKey = null;
+        this.deleteContext = false;
+      }, 2000);
+      this.formFields = await this.getFormFields({
+        form_id: this.form_id,
+        step_id: this.step_id,
+      });
     },
-    onCreatedField (formFieldCreated) {
-      formFieldCreated.skeleton = true
-      formFieldCreated.animateVisibility = true
+    onCreatedField(formFieldCreated) {
+      formFieldCreated.skeleton = true;
+      formFieldCreated.animateVisibility = true;
 
-      let indexToPlace = this.formFields.findIndex((field) => field.order_field > formFieldCreated.order_field)
-      indexToPlace = indexToPlace === -1 ? this.formFields.length : indexToPlace - 1
-      this.formFields.splice(indexToPlace, 0, formFieldCreated)
+      let indexToPlace = this.formFields.findIndex(
+        (field) => field.order_field > formFieldCreated.order_field
+      );
+      indexToPlace =
+        indexToPlace === -1 ? this.formFields.length : indexToPlace - 1;
+      this.formFields.splice(indexToPlace, 0, formFieldCreated);
       setTimeout(() => {
-        this.init()
-      }, 1000)
+        this.init();
+      }, 1000);
     },
-    onUpdatedField (formFieldUpdated) {
-      formFieldUpdated.skeleton = true
+    onUpdatedField(formFieldUpdated) {
+      formFieldUpdated.skeleton = true;
 
-      const targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formFieldUpdated.id)
-      if (formFieldUpdated.order_field === this.formFields[targetFormFieldIndex].order_field) {
-        this.$set(this.formFields, targetFormFieldIndex, formFieldUpdated)
-        this.init()
+      const targetFormFieldIndex = this.formFields.findIndex(
+        (field) => field.id === formFieldUpdated.id
+      );
+      if (
+        formFieldUpdated.order_field ===
+        this.formFields[targetFormFieldIndex].order_field
+      ) {
+        this.$set(this.formFields, targetFormFieldIndex, formFieldUpdated);
+        this.init();
       } else {
-        let newFormFields = this.formFields.slice()
-        newFormFields.splice(targetFormFieldIndex, 1)
+        let newFormFields = this.formFields.slice();
+        newFormFields.splice(targetFormFieldIndex, 1);
         newFormFields = newFormFields.map((formField) => {
           if (formField.order_field >= formFieldUpdated.order_field) {
-            formField.order_field++
+            formField.order_field++;
           }
-          return formField
-        })
-        newFormFields.push(formFieldUpdated)
-        newFormFields.sort((a, b) => a.order_field - b.order_field)
-        this.formFields = newFormFields
+          return formField;
+        });
+        newFormFields.push(formFieldUpdated);
+        newFormFields.sort((a, b) => a.order_field - b.order_field);
+        this.formFields = newFormFields;
         setTimeout(() => {
-          this.init()
-        }, 1000)
+          this.init();
+        }, 1000);
       }
     },
-    onDeletedField (formFieldDeleted) {
-      formFieldDeleted.animateVisibility = true
-      const targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formFieldDeleted.id)
-      this.$set(this.formFields, targetFormFieldIndex, formFieldDeleted)
-      this.deleteContext = true
+    onDeletedField(formFieldDeleted) {
+      formFieldDeleted.animateVisibility = true;
+      const targetFormFieldIndex = this.formFields.findIndex(
+        (field) => field.id === formFieldDeleted.id
+      );
+      this.$set(this.formFields, targetFormFieldIndex, formFieldDeleted);
+      this.deleteContext = true;
       this.$nextTick(() => {
-        this.formFields.splice(targetFormFieldIndex, 1)
+        this.formFields.splice(targetFormFieldIndex, 1);
         setTimeout(() => {
-          this.init()
-        }, 1000)
-      })
+          this.init();
+        }, 1000);
+      });
     },
-    onUpdatedTypeForm (formFieldUpdated) {
-      formFieldUpdated.skeleton = true
-      formFieldUpdated.animateVisibility = true
-      const targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formFieldUpdated.id)
-      this.$set(this.formFields, targetFormFieldIndex, formFieldUpdated)
-      this.init()
+    onUpdatedTypeForm(formFieldUpdated) {
+      formFieldUpdated.skeleton = true;
+      formFieldUpdated.animateVisibility = true;
+      const targetFormFieldIndex = this.formFields.findIndex(
+        (field) => field.id === formFieldUpdated.id
+      );
+      this.$set(this.formFields, targetFormFieldIndex, formFieldUpdated);
+      this.init();
     },
-    onEditField (formId) {
-      this.selectedFormKey = formId
-      this.$bvModal.show('createResponse')
+    onEditField(formId) {
+      this.selectedFormKey = formId;
+      this.$bvModal.show('createResponse');
     },
-    onCallOrderFieldCrad (fieldId) {
-      this.selectedFormKey = fieldId
-      this.$bvModal.show('orderResponse')
+    onCallOrderFieldCrad(fieldId) {
+      this.selectedFormKey = fieldId;
+      this.$bvModal.show('orderResponse');
     },
-    onResetList ({ formField, newIndex }) {
-      const placeholderFormField = this.formFields[newIndex]
-      const targetFormFieldIndex = this.formFields.findIndex((field) => field.id === formField.id)
+    onResetList({ formField, newIndex }) {
+      const placeholderFormField = this.formFields[newIndex];
+      const targetFormFieldIndex = this.formFields.findIndex(
+        (field) => field.id === formField.id
+      );
 
-      this.$set(this.formFields, newIndex, formField)
-      this.$set(this.formFields, targetFormFieldIndex, placeholderFormField)
+      this.$set(this.formFields, newIndex, formField);
+      this.$set(this.formFields, targetFormFieldIndex, placeholderFormField);
       setTimeout(() => {
-        this.init()
-      }, 1000)
+        this.init();
+      }, 1000);
     },
-    onCallCreatedFieldCard (idField) {
-      this.selectedFormKey = null
-      this.form_field_order = idField
-      this.$bvModal.show('createResponse')
+    onCallCreatedFieldCard(idField) {
+      this.selectedFormKey = null;
+      this.form_field_order = idField;
+      this.$bvModal.show('createResponse');
     },
-    onCallCreatedFieldAfter (idField) {
-      this.selectedFormKey = null
-      this.form_field_order = idField
-      this.$bvModal.show('createResponse')
+    onCallCreatedFieldAfter(idField) {
+      this.selectedFormKey = null;
+      this.form_field_order = idField;
+      this.$bvModal.show('createResponse');
     },
-    onCreatedFieldEnd (field) {
-      this.selectedFormKey = null
-      this.order_field_end = field
-      this.$bvModal.show('createResponse')
+    onCreatedFieldEnd(field) {
+      this.selectedFormKey = null;
+      this.order_field_end = field;
+      this.$bvModal.show('createResponse');
     },
-    onResetModalCreate () {
-      this.selectedFormKey = null
-      this.$bvModal.show('createResponse')
-    }
-  }
-}
+    onResetModalCreate() {
+      this.selectedFormKey = null;
+      this.$bvModal.show('createResponse');
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
 .container {
@@ -243,7 +274,8 @@ export default {
 }
 
 .container-component-field {
-  .skeleton-form-field, .skeleton-form-field-actions {
+  .skeleton-form-field,
+  .skeleton-form-field-actions {
     height: 192px;
   }
   .skeleton-form-field {
@@ -260,14 +292,16 @@ export default {
     }
   }
 }
-.form-field-list-enter-active, .form-field-list-leave-active {
+.form-field-list-enter-active,
+.form-field-list-leave-active {
   &.container-component-field-skeleton {
     transition: all 1s;
     overflow: hidden;
     max-height: 1000px;
   }
 }
-.form-field-list-enter, .form-field-list-leave-to {
+.form-field-list-enter,
+.form-field-list-leave-to {
   &.container-component-field-skeleton {
     opacity: 0;
     transform: translateX(100%);

@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import { DRC_COVID_EVENT, PALETTE, PREFERENCE_END } from "../../config/env";
-import Chart from "chart.js";
-import "../../lib/chartjs-plugin-annotation.min.js";
-import { mapState, mapMutations } from "vuex";
+import { DRC_COVID_EVENT, PALETTE, PREFERENCE_END } from '../../config/env';
+import Chart from 'chart.js';
+import '../../lib/chartjs-plugin-annotation.min.js';
+import { mapState, mapMutations } from 'vuex';
 export default {
   props: {
     flux24Daily: {
@@ -77,7 +77,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["setTendanceChartSelectedValue"]),
+    ...mapMutations(['setTendanceChartSelectedValue']),
     isStartIsEnd() {
       return (
         this.observationDate.start &&
@@ -103,7 +103,7 @@ export default {
         (x) =>
           x.measures.some((z) =>
             z.zones.some(
-              (y) => [...this.fluxGeoOptions].includes(y) || y == "ALL"
+              (y) => [...this.fluxGeoOptions].includes(y) || y == 'ALL'
             )
           ) &&
           new Date(x.date) >= minDate &&
@@ -131,37 +131,37 @@ export default {
       });
 
       this.configChar = {
-        type: "line",
+        type: 'line',
         data: {
           // labels: labels,
           datasets: [
             {
-              label: "Volume",
+              label: 'Volume',
               fill: false,
-              borderColor: "rgb(51, 172, 46)",
-              backgroundColor: "rgb(166,180,205, 0.2)",
+              borderColor: 'rgb(51, 172, 46)',
+              backgroundColor: 'rgb(166,180,205, 0.2)',
               data: localData,
               interpolate: true,
               showLine: true,
               pointRadius: 1,
               borderWidth: 1.5,
               lineTension: 0.3,
-              xAxisID: "x-axis-0",
+              xAxisID: 'x-axis-0',
             },
             {
-              label: "Event",
+              label: 'Event',
               fill: true,
-              borderColor: "#225ea8",
-              backgroundColor: "#225ea8ad",
+              borderColor: '#225ea8',
+              backgroundColor: '#225ea8ad',
               data: mainEvent,
               interpolate: true,
               // showLine: false,
-              pointStyle: "circle",
+              pointStyle: 'circle',
               radius: 5,
               borderWidth: 1.5,
               lineTension: 0.3,
-              xAxisID: "x-axis-0",
-              type: "bubble",
+              xAxisID: 'x-axis-0',
+              type: 'bubble',
             },
           ],
         },
@@ -173,7 +173,7 @@ export default {
           },
           title: {
             display: true,
-            text: "Flux de tendance" + this.getZone,
+            text: 'Flux de tendance' + this.getZone,
             fontSize: 9,
           },
           scales: {
@@ -183,16 +183,16 @@ export default {
                 // id: "x-axis-0",
                 scaleLabel: {
                   display: false,
-                  labelString: "Month",
+                  labelString: 'Month',
                 },
-                type: "time",
+                type: 'time',
                 time: {
-                  unit: "day",
+                  unit: 'day',
                   unitStepSize: 1,
                   displayFormats: {
-                    day: "DD.MM",
-                    hour: "HH:mm",
-                    minute: "HH:mm",
+                    day: 'DD.MM',
+                    hour: 'HH:mm',
+                    minute: 'HH:mm',
                   },
                 },
                 ticks: {
@@ -201,7 +201,7 @@ export default {
                   min: minDate,
                   major: {
                     enabled: true,
-                    fontStyle: "bold",
+                    fontStyle: 'bold',
                     fontColor: PALETTE.flux_in_color,
                     fontSize: 10,
                   },
@@ -213,7 +213,7 @@ export default {
                 display: true,
                 scaleLabel: {
                   display: false,
-                  labelString: "Value",
+                  labelString: 'Value',
                 },
                 ticks: {
                   fontSize: 9,
@@ -233,7 +233,7 @@ export default {
             displayColors: false,
             callbacks: {
               title: (a, d) => {
-                return this.moment(a[0].xLabel).format("DD.MM.Y");
+                return this.moment(a[0].xLabel).format('DD.MM.Y');
               },
 
               label: (i, d) => {
@@ -242,7 +242,7 @@ export default {
                 }
                 const element = mainEvent.find(
                   (x) =>
-                    x.x.format("DD.MM.Y") == moment(i.xLabel).format("DD.MM.Y")
+                    x.x.format('DD.MM.Y') == moment(i.xLabel).format('DD.MM.Y')
                 );
                 const measures = [];
                 if (element) {
@@ -265,17 +265,17 @@ export default {
               },
               zoom: {
                 enabled: false, // enable zooming
-                zoomboxBackgroundColor: "rgba(66,133,244,0.2)", // background color of zoom box
-                zoomboxBorderColor: "#48F", // border color of zoom box
-                zoomButtonText: "Reset Zoom", // reset zoom button text
-                zoomButtonClass: "reset-zoom", // reset zoom button class
+                zoomboxBackgroundColor: 'rgba(66,133,244,0.2)', // background color of zoom box
+                zoomboxBorderColor: '#48F', // border color of zoom box
+                zoomButtonText: 'Reset Zoom', // reset zoom button text
+                zoomButtonClass: 'reset-zoom', // reset zoom button class
               },
             },
           },
         },
       };
       if (this.myLineChart) this.myLineChart.destroy();
-      this.myLineChart = new Chart(ref.getContext("2d"), this.configChar);
+      this.myLineChart = new Chart(ref.getContext('2d'), this.configChar);
       const myLineChart2 = this.myLineChart;
     },
     fullscreenChange(fullscreen, ref) {
@@ -286,8 +286,8 @@ export default {
           buttonResetZoom.click();
         }
         this.configChar.options.plugins.crosshair.zoom.enabled = false;
-        this.$refs.tendanceChart.style.height = "100%";
-        this.$refs.tendanceChart.height = "100%";
+        this.$refs.tendanceChart.style.height = '100%';
+        this.$refs.tendanceChart.height = '100%';
         this.myLineChart.update();
       } else {
         this.configChar.options.plugins.crosshair.zoom.enabled = true;
@@ -301,8 +301,8 @@ export default {
     }),
     getZone() {
       if (this.fluxGeoOptions && this.fluxGeoOptions.length > 0)
-        return " à " + this.fluxGeoOptions[0];
-      else return "";
+        return ' à ' + this.fluxGeoOptions[0];
+      else return '';
     },
   },
 };

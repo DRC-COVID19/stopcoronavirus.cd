@@ -27,7 +27,7 @@
               </p>
               <p class="small m-0">
                 <span class="text-muted">Mise à jour du</span>
-                <b>{{ moment(last_update).format("Y-MM-DD") }}</b>
+                <b>{{ moment(last_update).format('Y-MM-DD') }}</b>
               </p>
             </b-skeleton-wrapper>
           </div>
@@ -425,9 +425,7 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="cardtype2 p-2">
-                  <div class="general-top-title">
-                    Top 10 par provenance
-                  </div>
+                  <div class="general-top-title">Top 10 par provenance</div>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -542,9 +540,7 @@
                 v-show="!isLoading"
               >
                 <b-card no-body class="p-2 cardtype2">
-                  <div class="general-top-title">
-                    Top 10 par destination
-                  </div>
+                  <div class="general-top-title">Top 10 par destination</div>
                   <div class="chart-container">
                     <canvas
                       height="400"
@@ -659,9 +655,8 @@
 
       <b-row
         class="no-gutters"
-        v-show="fluxGeoGranularity !=3  && this.typeMobilite == 3"
+        v-show="fluxGeoGranularity != 3 && this.typeMobilite == 3"
       >
-
         <b-col cols="12" md="6" class="pr-2">
           <GlobalProvice
             title="Mobilité entrante par zone"
@@ -684,100 +679,100 @@
 </template>
 
 <script>
-import * as d3 from 'd3'
-import { mapState, mapMutations } from 'vuex'
-import { PALETTE, FLUX_LAST_UPDATE, HOTSPOT_TYPE } from '../config/env'
-import GlobalProvice from './flux/GLobalProvince'
-import ToggleButton from '../components/ToggleButton'
-import { difference } from '@turf/turf'
-import { debounce, includes } from 'lodash'
-import ChartToolTip from './ChartToolTip'
-import Chart from 'chart.js'
-import 'chartjs-plugin-annotation'
+import * as d3 from 'd3';
+import { mapState, mapMutations } from 'vuex';
+import { PALETTE, FLUX_LAST_UPDATE, HOTSPOT_TYPE } from '../config/env';
+import GlobalProvice from './flux/GLobalProvince';
+import ToggleButton from '../components/ToggleButton';
+import { difference } from '@turf/turf';
+import { debounce, includes } from 'lodash';
+import ChartToolTip from './ChartToolTip';
+import Chart from 'chart.js';
+import 'chartjs-plugin-annotation';
 
-Chart.defaults.global.defaultFontFamily = "'Rubik',sans-serif"
-Chart.defaults.global.defaultFontColor = '#7b7f88'
+Chart.defaults.global.defaultFontFamily = "'Rubik',sans-serif";
+Chart.defaults.global.defaultFontColor = '#7b7f88';
 
 export default {
   components: {
     GlobalProvice,
     ToggleButton,
-    ChartToolTip
+    ChartToolTip,
   },
   props: {
     flux24Daily: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux24PresenceDaily: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux24PresenceDailyIn: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     flux24DailyIn: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux24DailyOut: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux24DailyGenerale: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     fluxZoneGlobalIn: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     fluxZoneGlobalOut: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     mobiliteGenerale: {
       type: Boolean,
-      default: false
+      default: false,
     },
     fluxDataGroupedByDateIn: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     fluxDataGroupedByDateOut: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     fluxDataGroupedByDateGen: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     topHealthZoneConfirmed: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     globalProgress: {
-      default: null
+      default: null,
     },
     isLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     flux30Daily: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux30General: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     flux30MapsData: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
-  data () {
+  data() {
     return {
       last_update: new Date(FLUX_LAST_UPDATE),
       flux24DailyInLocal: [],
@@ -805,8 +800,8 @@ export default {
       fluxGeoGranularity: 2,
       areZoomable: [],
       toolTipItem: {},
-      hotspotType: HOTSPOT_TYPE
-    }
+      hotspotType: HOTSPOT_TYPE,
+    };
   },
   computed: {
     ...mapState({
@@ -816,16 +811,16 @@ export default {
       typePresence: (state) => state.flux.typePresence,
       fluxTimeGranularity: (state) => state.flux.fluxTimeGranularity,
       // fluxGeoGranularity: state=>state.flux.fluxGeoGranularity,
-      observationDate: (state) => state.flux.observationDate
+      observationDate: (state) => state.flux.observationDate,
     }),
-    typesMobilite () {
-      const types = [{ val: 1, lbl: 'Détails' }]
+    typesMobilite() {
+      const types = [{ val: 1, lbl: 'Détails' }];
       if (
         this.fluxGeoGranularity == 1 &&
         this.globalProgress &&
         this.globalProgress == 100
       ) {
-        types.push({ val: 2, lbl: 'Mobilité Totale (Entrée + sortie)' })
+        types.push({ val: 2, lbl: 'Mobilité Totale (Entrée + sortie)' });
       }
       if (
         (this.fluxZoneGlobalIn.length > 0 ||
@@ -834,38 +829,38 @@ export default {
         this.globalProgress &&
         this.globalProgress == 100
       ) {
-        types.push({ val: 3, lbl: 'Zones' })
+        types.push({ val: 3, lbl: 'Zones' });
       }
-      return types
-    }
+      return types;
+    },
   },
   watch: {
-    flux24DailyIn () {
-      this.typeMobilite = 1
-      this.updateFluxInMobility()
+    flux24DailyIn() {
+      this.typeMobilite = 1;
+      this.updateFluxInMobility();
     },
-    flux24DailyOut () {
-      this.updateFluxOutMobility()
+    flux24DailyOut() {
+      this.updateFluxOutMobility();
     },
-    flux24PresenceDailyIn () {
-      this.mobilePresence()
+    flux24PresenceDailyIn() {
+      this.mobilePresence();
     },
-    fluxDataGroupedByDateIn () {
-      this.mobileIn()
+    fluxDataGroupedByDateIn() {
+      this.mobileIn();
     },
-    fluxDataGroupedByDateOut () {
-      this.mobileOut()
+    fluxDataGroupedByDateOut() {
+      this.mobileOut();
     },
-    flux30Daily () {
+    flux30Daily() {
       this.$nextTick(() => {
         this.flux30Chart(
           this.flux30Daily,
           'flux_30_daily_chart',
           PALETTE.flux_presence
-        )
-      })
+        );
+      });
     },
-    fluxZoneGlobalIn () {
+    fluxZoneGlobalIn() {
       this.fluxMobilityFluxGeneralZone(
         this.fluxZoneGlobalIn,
         'general_top_asc',
@@ -875,10 +870,10 @@ export default {
         this.topHealthZoneConfirmed,
         'Impacte sur la mobilité pour les 5 zones de santé les plus affectées',
         'pandemic_top_desc'
-      )
-      this.updateGeneralMobilityDaily()
+      );
+      this.updateGeneralMobilityDaily();
     },
-    topHealthZoneConfirmed () {
+    topHealthZoneConfirmed() {
       // this.topHealthZonePandemics(
       //   this.topHealthZoneConfirmed,
       //   "pandemic_top_desc",
@@ -893,46 +888,46 @@ export default {
         this.topHealthZoneConfirmed,
         'Impacte sur la mobilité pour les 5 zones de santé les plus affectées',
         'pandemic_top_desc'
-      )
+      );
     },
-    mobiliteGenerale () {
+    mobiliteGenerale() {
       if (this.mobiliteGenerale) {
-        this.selectFluxType(4)
-        this.typeMobilite = 2
+        this.selectFluxType(4);
+        this.typeMobilite = 2;
       }
     },
-    typeMobilite () {
+    typeMobilite() {
       if (this.typeMobilite == 2) {
-        this.selectFluxType(4)
+        this.selectFluxType(4);
       } else if (this.typeMobilite == 1) {
-        this.selectFluxType(1)
+        this.selectFluxType(1);
       }
       if (this.typeMobilite == 3) {
-        this.setIsProvinceStatSeeing(true)
+        this.setIsProvinceStatSeeing(true);
       } else if (this.isProvinceStatSeeing) {
-        this.setIsProvinceStatSeeing(false)
+        this.setIsProvinceStatSeeing(false);
       }
-    }
+    },
   },
-  mounted () {
+  mounted() {
     if (this.mobiliteGenerale) {
-      this.selectFluxType(4)
-      this.typeMobilite = 2
+      this.selectFluxType(4);
+      this.typeMobilite = 2;
     } else if (this.isProvinceStatSeeing) {
-      this.typeMobilite = 3
-      this.selectFluxType(1)
+      this.typeMobilite = 3;
+      this.selectFluxType(1);
     } else {
-      this.selectFluxType(1)
+      this.selectFluxType(1);
     }
 
-    this.updateFluxInMobility()
-    this.updateFluxOutMobility()
+    this.updateFluxInMobility();
+    this.updateFluxOutMobility();
 
-    this.mobilePresence()
+    this.mobilePresence();
 
-    this.mobileOut()
+    this.mobileOut();
 
-    this.mobileIn()
+    this.mobileIn();
 
     this.fluxMobilityFluxGeneralZone(
       this.fluxZoneGlobalIn,
@@ -943,51 +938,51 @@ export default {
       this.topHealthZoneConfirmed,
       'Impacte sur la mobilité pour les 5 zones de santé les plus affectées',
       'pandemic_top_desc'
-    )
+    );
 
-    this.updateGeneralMobilityDaily()
-    this.targetZone = this.fluxGeoOptions[0]
+    this.updateGeneralMobilityDaily();
+    this.targetZone = this.fluxGeoOptions[0];
     this.$nextTick(() => {
       this.flux30Chart(
         this.flux30Daily,
         'flux_30_daily_chart',
         PALETTE.flux_presence
-      )
-    })
+      );
+    });
     this.$nextTick(() => {
-      const flux30MapsData = this.$store.state.flux.hotspotTopVariation
+      const flux30MapsData = this.$store.state.flux.hotspotTopVariation;
       if (flux30MapsData && flux30MapsData.length > 0) {
-        this.drawTopFlux30BarChar(flux30MapsData, 'hotspot_range')
+        this.drawTopFlux30BarChar(flux30MapsData, 'hotspot_range');
       }
-    })
+    });
 
     this.$store.watch(
       (state) => state.flux.fluxGeoOptions,
       (value) => {
-        this.targetZone = value[0]
+        this.targetZone = value[0];
       }
-    )
-    this.fluxGeoGranularity = this.$store.state.flux.fluxGeoGranularity
+    );
+    this.fluxGeoGranularity = this.$store.state.flux.fluxGeoGranularity;
     this.$store.watch(
       (state) => state.flux.fluxGeoGranularityTemp,
       (value) => {
-        this.fluxGeoGranularity = value
+        this.fluxGeoGranularity = value;
         if (this.fluxGeoGranularity == 2) {
-          this.typeMobilite = 1
+          this.typeMobilite = 1;
         }
       }
-    )
+    );
     this.$store.watch(
       (state) => state.flux.hotspotTopVariation, // get hotspot top variation from the store
       (flux30MapsData) => {
         this.$nextTick(async () => {
           // await this.sleep(1000);
           if (flux30MapsData && flux30MapsData.length > 0) {
-            this.drawTopFlux30BarChar(flux30MapsData, 'hotspot_range')
+            this.drawTopFlux30BarChar(flux30MapsData, 'hotspot_range');
           }
-        })
+        });
       }
-    )
+    );
   },
   methods: {
     ...mapMutations([
@@ -995,193 +990,193 @@ export default {
       'setIsProvinceStatSeeing',
       'setTypePresence',
       'setFluxHotspotType',
-      'setFluxHotspotClicked'
+      'setFluxHotspotClicked',
     ]),
-    isStartIsEnd () {
+    isStartIsEnd() {
       return (
         this.observationDate.start &&
         this.observationDate.start == this.observationDate.end
-      )
+      );
     },
-    selectFluxType (value) {
-      this.setFluxType(value)
+    selectFluxType(value) {
+      this.setFluxType(value);
     },
-    fluxInPercent ({ referencesByDate, observationsByDate }) {
+    fluxInPercent({ referencesByDate, observationsByDate }) {
       if (!referencesByDate || !observationsByDate) {
         return {
           percent: null,
-          difference: null
-        }
+          difference: null,
+        };
       }
       const result = this.formatFluxDataByMedian({
         references: referencesByDate,
-        observations: observationsByDate
-      })
+        observations: observationsByDate,
+      });
       return {
         percent: result.percent,
-        difference: result.difference
-      }
+        difference: result.difference,
+      };
     },
-    mobilePresence () {
+    mobilePresence() {
       this.$nextTick(() => {
         const result = this.fluxInPercent(
           Object.assign({}, this.flux24PresenceDailyIn)
-        )
-        this.percentPresence = result.percent
-        this.differencePresence = this.formatCash(result.difference)
+        );
+        this.percentPresence = result.percent;
+        this.differencePresence = this.formatCash(result.difference);
         this.mobileCalc(
           this.flux24PresenceDailyIn,
           'mobile_presence',
           PALETTE.flux_presence
-        )
-      })
+        );
+      });
     },
-    mobileOut () {
+    mobileOut() {
       this.$nextTick(() => {
         const result = this.fluxInPercent(
           Object.assign({}, this.fluxDataGroupedByDateOut)
-        )
-        this.percentOut = result.percent
-        this.differenceOut = this.formatCash(result.difference)
+        );
+        this.percentOut = result.percent;
+        this.differenceOut = this.formatCash(result.difference);
         this.mobileCalc(
           this.fluxDataGroupedByDateOut,
           'mobile_out',
           PALETTE.flux_out_color
-        )
-      })
+        );
+      });
     },
-    mobileIn () {
+    mobileIn() {
       this.$nextTick(() => {
         const result = this.fluxInPercent(
           Object.assign({}, this.fluxDataGroupedByDateIn)
-        )
-        this.percentIn = result.percent
-        this.differenceIn = this.formatCash(result.difference)
+        );
+        this.percentIn = result.percent;
+        this.differenceIn = this.formatCash(result.difference);
         this.mobileCalc(
           this.fluxDataGroupedByDateIn,
           'mobile_in',
           PALETTE.flux_in_color
-        )
-      })
+        );
+      });
     },
-    updateGeneralMobilityZone () {
+    updateGeneralMobilityZone() {
       this.$nextTick(() => {
-        const referencesByDateIn = this.flux24DailyIn.referencesByDate ?? []
+        const referencesByDateIn = this.flux24DailyIn.referencesByDate ?? [];
         const observationsByDateIn =
-          this.flux24DailyIn.observationsByDate ?? []
+          this.flux24DailyIn.observationsByDate ?? [];
 
-        const referencesByDateOut = this.flux24DailyOut.referencesByDate ?? []
+        const referencesByDateOut = this.flux24DailyOut.referencesByDate ?? [];
         const observationsByDateOut =
-          this.flux24DailyOut.observationsByDate ?? []
+          this.flux24DailyOut.observationsByDate ?? [];
 
-        const referencesByDate = []
+        const referencesByDate = [];
         const observationsByDate = [];
         [...referencesByDateIn, ...referencesByDateOut].map((item) => {
-          const element = referencesByDate.find((x) => x.date == item.date)
+          const element = referencesByDate.find((x) => x.date == item.date);
           if (element) {
-            element.volume += item.volume
+            element.volume += item.volume;
           } else {
             referencesByDate.push({
               volume: item.volume,
-              date: item.date
-            })
+              date: item.date,
+            });
           }
         });
 
         [...observationsByDateIn, ...observationsByDateOut].map((item) => {
-          const element = observationsByDate.find((x) => x.date == item.date)
+          const element = observationsByDate.find((x) => x.date == item.date);
           if (element) {
-            element.volume += item.volume
+            element.volume += item.volume;
           } else {
             observationsByDate.push({
               volume: item.volume,
-              date: item.date
-            })
+              date: item.date,
+            });
           }
-        })
+        });
         const general = {
           referencesByDate,
-          observationsByDate
-        }
-        const result = this.fluxInPercent(Object.assign({}, general))
-        this.percentGenerale = result.percent
-        this.differenceGenerale = this.formatCash(result.difference)
+          observationsByDate,
+        };
+        const result = this.fluxInPercent(Object.assign({}, general));
+        this.percentGenerale = result.percent;
+        this.differenceGenerale = this.formatCash(result.difference);
 
-        this.mobileCalc(general, 'general_flux', PALETTE.flux_in_color)
-      })
+        this.mobileCalc(general, 'general_flux', PALETTE.flux_in_color);
+      });
     },
-    updateGeneralMobilityDaily () {
+    updateGeneralMobilityDaily() {
       this.$nextTick(() => {
-        const referencesByDate = []
-        const observationsByDate = []
+        const referencesByDate = [];
+        const observationsByDate = [];
         this.fluxZoneGlobalIn.map(
           ({ general_observation, general_reference }) => {
             general_reference.map((item) => {
               const reference = referencesByDate.find(
                 (x) => x.date == item.date
-              )
+              );
               if (reference) {
-                reference.volume += item.volume
+                reference.volume += item.volume;
               } else {
                 referencesByDate.push({
                   volume: item.volume,
                   date: item.date,
-                  day: item.day
-                })
+                  day: item.day,
+                });
               }
-            })
+            });
 
             general_observation.map((item) => {
               const element = observationsByDate.find(
                 (x) => x.date == item.date
-              )
+              );
               if (element) {
-                element.volume += item.volume
+                element.volume += item.volume;
               } else {
                 observationsByDate.push({
                   volume: item.volume,
                   date: item.date,
-                  day: item.day
-                })
+                  day: item.day,
+                });
               }
-            })
+            });
           }
-        )
+        );
         const general = {
           referencesByDate,
-          observationsByDate
-        }
-        const result = this.fluxInPercent(Object.assign({}, general))
-        this.percentGenerale = result.percent
-        this.differenceGenerale = this.formatCash(result.difference)
+          observationsByDate,
+        };
+        const result = this.fluxInPercent(Object.assign({}, general));
+        this.percentGenerale = result.percent;
+        this.differenceGenerale = this.formatCash(result.difference);
         this.mobileCalc(
           Object.assign({}, general),
           'general_flux',
           PALETTE.flux_in_color
-        )
-      })
+        );
+      });
     },
-    updateFluxInMobility () {
+    updateFluxInMobility() {
       this.$nextTick(() => {
         this.fluxMobilityFluxZone(
           this.flux24DailyIn,
           'mobile_entrance_2_card',
           'origin',
           PALETTE.flux_in_color
-        )
-      })
+        );
+      });
     },
-    updateFluxOutMobility () {
+    updateFluxOutMobility() {
       this.$nextTick(() => {
         this.fluxMobilityFluxZone(
           this.flux24DailyOut,
           'mobile_out_2_card',
           'destination',
           PALETTE.flux_out_color
-        )
-      })
+        );
+      });
     },
-    mobileCalc (
+    mobileCalc(
       { referencesByDate, observationsByDate },
       ref,
       color,
@@ -1190,53 +1185,53 @@ export default {
       // set the dimensions and margins of the graph
 
       if (!referencesByDate || !observationsByDate) {
-        return
+        return;
       }
 
-      let data = []
-      const DataReference = []
-      const totalReference = 0
-      const referenceAverage = 0
+      let data = [];
+      const DataReference = [];
+      const totalReference = 0;
+      const referenceAverage = 0;
 
       referencesByDate.sort((a, b) => {
-        return new Date(a.date ?? 0) > new Date(b.date ?? 0) ? 1 : -1
-      })
+        return new Date(a.date ?? 0) > new Date(b.date ?? 0) ? 1 : -1;
+      });
       observationsByDate.sort((a, b) => {
-        return new Date(a.date ?? 0) > new Date(b.date ?? 0) ? 1 : -1
-      })
+        return new Date(a.date ?? 0) > new Date(b.date ?? 0) ? 1 : -1;
+      });
 
       data = observationsByDate.map((item) => {
-        const references = referencesByDate.filter((x) => x.day == item.day)
+        const references = referencesByDate.filter((x) => x.day == item.day);
         references.sort((a, b) => {
-          return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1
-        })
-        const count = references.length
+          return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
+        });
+        const count = references.length;
         if (count > 0) {
-          let referenceVolume = null
+          let referenceVolume = null;
           if (count % 2 == 0) {
-            let index = (count + 1) / 2
-            index = parseInt(index)
-            const volume1 = references[index].volume
-            const volume2 = references[index - 1].volume
-            referenceVolume = (volume1 + volume2) / 2
+            let index = (count + 1) / 2;
+            index = parseInt(index);
+            const volume1 = references[index].volume;
+            const volume2 = references[index - 1].volume;
+            referenceVolume = (volume1 + volume2) / 2;
           } else {
-            const index = (count + 1) / 2
-            referenceVolume = references[index - 1].volume
+            const index = (count + 1) / 2;
+            referenceVolume = references[index - 1].volume;
           }
-          item.volume_reference = referenceVolume
-          const difference = item.volume - referenceVolume
-          item.difference = difference
-          item.percent = (difference / referenceVolume) * 100
+          item.volume_reference = referenceVolume;
+          const difference = item.volume - referenceVolume;
+          item.difference = difference;
+          item.percent = (difference / referenceVolume) * 100;
         } else {
-          item.volume_reference = 0
-          item.difference = item.volume
-          item.percent = 0
+          item.volume_reference = 0;
+          item.difference = item.volume;
+          item.percent = 0;
         }
-        return Object.assign({}, item)
-      })
+        return Object.assign({}, item);
+      });
 
-      const max = d3.max(data.map((x) => x.percent))
-      const min = d3.min(data.map((x) => x.percent))
+      const max = d3.max(data.map((x) => x.percent));
+      const min = d3.min(data.map((x) => x.percent));
 
       this.configBarChart[ref] = {
         type: 'line',
@@ -1253,34 +1248,34 @@ export default {
               showLine: true,
               borderWidth: 1.5,
               pointRadius: 1,
-              lineTension: 0.08
-            }
-          ]
+              lineTension: 0.08,
+            },
+          ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           legend: {
-            display: false
+            display: false,
           },
           title: {
             display: !!title,
-            text: title
+            text: title,
           },
           plugins: {
             crosshair: {
               line: {
                 color: '#F66', // crosshair line color
                 width: 1, // crosshair line width
-                dashPattern: [5, 5] // crosshair line dash pattern
+                dashPattern: [5, 5], // crosshair line dash pattern
               },
               zoom: {
-                enabled: true
+                enabled: true,
               },
               sync: {
-                enabled: false // enable trace line syncing with other charts
-              }
-            }
+                enabled: false, // enable trace line syncing with other charts
+              },
+            },
           },
           tooltips: {
             enabled: true,
@@ -1309,34 +1304,34 @@ export default {
             // },
             callbacks: {
               title: (a, d) => {
-                return this.moment(a[0].xLabel).format('DD.MM')
+                return this.moment(a[0].xLabel).format('DD.MM');
               },
               label: (i, d) => {
                 const element = data.find(
                   (x) => x.date == i.xLabel.format('YYYY-MM-DD')
-                )
+                );
                 if (!element) {
-                  return
+                  return;
                 }
                 return [
                   `volume: ${this.formatCash(element.volume)}`,
                   `Médiane: ${this.formatCash(element.volume_reference)}`,
-                  `Vol. en %: ${Math.round(element.percent)}`
-                ]
-              }
-            }
+                  `Vol. en %: ${Math.round(element.percent)}`,
+                ];
+              },
+            },
           },
           scales: {
             xAxes: [
               {
                 display: true,
                 gridLines: {
-                  display: true
+                  display: true,
                 },
                 scaleLabel: {
                   display: true,
                   labelString: 'Période',
-                  fontSize: 9
+                  fontSize: 9,
                 },
                 type: 'time',
                 ticks: {
@@ -1346,17 +1341,17 @@ export default {
                     enabled: true,
                     fontStyle: 'bold',
                     fontColor: PALETTE.flux_in_color,
-                    fontSize: 10
-                  }
+                    fontSize: 10,
+                  },
                 },
                 time: {
                   unit: 'day',
                   unitStepSize: 1,
                   displayFormats: {
-                    day: 'DD.MM'
-                  }
-                }
-              }
+                    day: 'DD.MM',
+                  },
+                },
+              },
             ],
             yAxes: [
               {
@@ -1366,70 +1361,70 @@ export default {
                   min: min < -100 ? (min + 10).toFixed(0) : -100,
                   max: max >= 100 ? (max + 10).toFixed(0) : 100,
                   callback: function (value) {
-                    return value + '%'
-                  }
+                    return value + '%';
+                  },
                 },
                 scaleLabel: {
                   display: true,
                   labelString: 'Pourcentage',
-                  fontSize: 9
-                }
-              }
-            ]
-          }
-        }
-      }
-      const reference = this.$refs[ref]
-      reference.style.height = 200
-      if (this.lineCharts[ref]) this.lineCharts[ref].destroy()
+                  fontSize: 9,
+                },
+              },
+            ],
+          },
+        },
+      };
+      const reference = this.$refs[ref];
+      reference.style.height = 200;
+      if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
       this.lineCharts[ref] = new Chart(
         reference.getContext('2d'),
         this.configBarChart[ref]
-      )
-      reference.style.height = '200px'
-      reference.style.maxHeight = '200px'
+      );
+      reference.style.height = '200px';
+      reference.style.maxHeight = '200px';
     },
-    flux30Chart (data, ref, color, title = null) {
-      const dataFormatted = []
+    flux30Chart(data, ref, color, title = null) {
+      const dataFormatted = [];
       data.map((x) => {
         if (this.isStartIsEnd()) {
           x.map((item) => {
             dataFormatted.push({
               x: moment(`${item.date} ${item.hour}`),
-              y: item.percent
-            })
-          })
+              y: item.percent,
+            });
+          });
         } else {
-          let item = {}
+          let item = {};
           if (x.length % 2 == 0) {
-            const indice = x.length / 2
+            const indice = x.length / 2;
 
-            const volume_reference1 = x[indice].volume_reference
-            const volume_reference2 = x[indice - 1].volume_reference
-            const volume1 = x[indice].volume
-            const volume2 = x[indice - 1].volume
-            item.date = x[indice].date
-            item.volume = volume1 + volume2
-            item.volume_reference = volume_reference1 + volume_reference2
-            item.difference = item.volume - item.volume_reference
-            item.percent = (item.difference * 100) / item.volume_reference
+            const volume_reference1 = x[indice].volume_reference;
+            const volume_reference2 = x[indice - 1].volume_reference;
+            const volume1 = x[indice].volume;
+            const volume2 = x[indice - 1].volume;
+            item.date = x[indice].date;
+            item.volume = volume1 + volume2;
+            item.volume_reference = volume_reference1 + volume_reference2;
+            item.difference = item.volume - item.volume_reference;
+            item.percent = (item.difference * 100) / item.volume_reference;
           } else {
-            const indice = (x.length + 1) / 2
-            item = x[indice - 1]
+            const indice = (x.length + 1) / 2;
+            item = x[indice - 1];
           }
           dataFormatted.push({
             date: item.date,
             x: moment(item.date),
-            y: item.percent
-          })
+            y: item.percent,
+          });
         }
-      })
+      });
 
-      const max = d3.max(dataFormatted.map((x) => x.y))
-      const min = d3.min(dataFormatted.map((x) => x.y))
+      const max = d3.max(dataFormatted.map((x) => x.y));
+      const min = d3.min(dataFormatted.map((x) => x.y));
       dataFormatted.sort((a, b) => {
-        return a.x.toDate() - b.x.toDate()
-      })
+        return a.x.toDate() - b.x.toDate();
+      });
       this.configBarChart[ref] = {
         type: 'line',
         data: {
@@ -1445,51 +1440,51 @@ export default {
               showLine: true,
               borderWidth: 1.5,
               pointRadius: 1,
-              lineTension: 0.08
-            }
-          ]
+              lineTension: 0.08,
+            },
+          ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           legend: {
-            display: false
+            display: false,
           },
           title: {
             display: !!title,
-            text: title
+            text: title,
           },
           plugins: {
             crosshair: {
               line: {
                 color: '#F66', // crosshair line color
                 width: 1, // crosshair line width
-                dashPattern: [5, 5] // crosshair line dash pattern
+                dashPattern: [5, 5], // crosshair line dash pattern
               },
               zoom: {
                 enabled: true, // enable zooming
                 zoomboxBackgroundColor: 'rgba(66,133,244,0.2)', // background color of zoom box
                 zoomboxBorderColor: '#48F', // border color of zoom box
                 zoomButtonText: 'Reset Zoom', // reset zoom button text
-                zoomButtonClass: 'reset-zoom' // reset zoom button class
+                zoomButtonClass: 'reset-zoom', // reset zoom button class
               },
               sync: {
-                enabled: false // enable trace line syncing with other charts
-              }
-            }
+                enabled: false, // enable trace line syncing with other charts
+              },
+            },
           },
           tooltips: {
             mode: 'interpolate',
             intersect: false,
             callbacks: {
               title: (a, d) => {
-                let titleFormat = this.moment(a[0].xLabel).format('DD.MM.Y')
+                let titleFormat = this.moment(a[0].xLabel).format('DD.MM.Y');
                 if (this.fluxTimeGranularity == 2 && this.isStartIsEnd()) {
                   titleFormat = this.moment(a[0].xLabel).format(
                     'DD.MM.Y HH:mm'
-                  )
+                  );
                 }
-                return titleFormat
+                return titleFormat;
               },
 
               label: function (i, d) {
@@ -1497,12 +1492,12 @@ export default {
                   d.datasets[i.datasetIndex].label +
                   ': ' +
                   Math.round(i.yLabel, 0).toLocaleString(undefined, {
-                    minimumFractionDigits: 0
+                    minimumFractionDigits: 0,
                   }) +
                   '%'
-                )
-              }
-            }
+                );
+              },
+            },
           },
           scales: {
             xAxes: [
@@ -1511,7 +1506,7 @@ export default {
                 // id: "x-axis-0",
                 scaleLabel: {
                   display: false,
-                  labelString: 'Month'
+                  labelString: 'Month',
                 },
                 type: 'time',
                 time: {
@@ -1523,8 +1518,8 @@ export default {
                   displayFormats: {
                     day: 'DD.MM',
                     hour: 'HH:mm',
-                    minute: 'HH:mm'
-                  }
+                    minute: 'HH:mm',
+                  },
                 },
                 ticks: {
                   fontSize: 9,
@@ -1532,10 +1527,10 @@ export default {
                     enabled: true,
                     fontStyle: 'bold',
                     fontColor: PALETTE.flux_in_color,
-                    fontSize: 12
-                  }
-                }
-              }
+                    fontSize: 12,
+                  },
+                },
+              },
             ],
             yAxes: [
               {
@@ -1545,35 +1540,35 @@ export default {
                   min: min < -100 ? (min + 10).toFixed(0) : -100,
                   max: max >= 100 ? (max + 10).toFixed(0) : 100,
                   callback: function (value) {
-                    return value + '%'
-                  }
+                    return value + '%';
+                  },
                 },
                 scaleLabel: {
                   display: true,
                   labelString: 'Pourcentage',
-                  fontSize: 9
-                }
-              }
-            ]
-          }
-        }
-      }
+                  fontSize: 9,
+                },
+              },
+            ],
+          },
+        },
+      };
 
-      const reference = this.$refs[ref]
-      if (this.lineCharts[ref]) this.lineCharts[ref].destroy()
+      const reference = this.$refs[ref];
+      if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
       this.lineCharts[ref] = new Chart(
         reference.getContext('2d'),
         this.configBarChart[ref]
-      )
-      reference.style.height = '200px'
-      reference.style.maxHeight = '200px'
+      );
+      reference.style.height = '200px';
+      reference.style.maxHeight = '200px';
     },
-    drawTopFlux30BarChar (data, ref, height = 200) {
-      let localData = [...data]
+    drawTopFlux30BarChar(data, ref, height = 200) {
+      let localData = [...data];
       localData.sort((a, b) => {
-        return a.difference < b.difference ? 1 : -1
-      })
-      localData = localData.slice(0, 5)
+        return a.difference < b.difference ? 1 : -1;
+      });
+      localData = localData.slice(0, 5);
       this.configBarChart[ref] = {
         type: 'horizontalBar',
         data: {
@@ -1584,15 +1579,15 @@ export default {
               backgroundColor: PALETTE.flux_presence,
               borderColor: PALETTE.flux_presence,
               barThickness: 12,
-              data: localData.map((x) => x.difference)
-            }
-          ]
+              data: localData.map((x) => x.difference),
+            },
+          ],
         },
         options: {
           elements: {
             rectangle: {
-              borderWidth: 2
-            }
+              borderWidth: 2,
+            },
           },
           responsive: true,
           maintainAspectRatio: false,
@@ -1600,13 +1595,13 @@ export default {
             display: false,
             position: 'bottom',
             labels: {
-              fontSize: 9
-            }
+              fontSize: 9,
+            },
           },
           title: {
             display: false,
             text: '',
-            fontSize: 15
+            fontSize: 15,
           },
           scales: {
             xAxes: [
@@ -1615,67 +1610,67 @@ export default {
                   beginAtZero: true,
                   fontSize: 9,
                   callback: (value, index, values) => {
-                    const sign = value < 0 ? '-' : ''
-                    return `${sign}${this.formatCash(value)}`
-                  }
-                }
-              }
+                    const sign = value < 0 ? '-' : '';
+                    return `${sign}${this.formatCash(value)}`;
+                  },
+                },
+              },
             ],
             yAxes: [
               {
                 ticks: {
                   fontSize: 9,
                   callback: function (label, index, labels) {
-                    const value = data.find((x) => x.origin == label)
+                    const value = data.find((x) => x.origin == label);
                     if (value && value.percent) {
-                      return `${label} (${Math.round(value.percent)}%)`
+                      return `${label} (${Math.round(value.percent)}%)`;
                     } else {
-                      return label
+                      return label;
                     }
-                  }
-                }
-              }
-            ]
+                  },
+                },
+              },
+            ],
           },
           plugins: {
-            crosshair: false
-          }
-        }
-      }
-      const reference = this.$refs[ref]
+            crosshair: false,
+          },
+        },
+      };
+      const reference = this.$refs[ref];
       if (!reference) {
-        return
+        return;
       }
-      if (this.barChart[ref]) this.barChart[ref].destroy()
+      if (this.barChart[ref]) this.barChart[ref].destroy();
       this.barChart[ref] = new Chart(
         reference.getContext('2d'),
         this.configBarChart[ref]
-      )
-      this.configBarChart[ref].height = height
-      reference.style.height = `${height}px`
-      reference.style.maxHeight = `${height}px`
+      );
+      this.configBarChart[ref].height = height;
+      reference.style.height = `${height}px`;
+      reference.style.maxHeight = `${height}px`;
     },
-    fluxMobilityFluxZone (InputData, ref, key, color) {
+    fluxMobilityFluxZone(InputData, ref, key, color) {
       if (!InputData) {
-        return
+        return;
       }
-      const DataReference = []
-      const totalReference = 0
-      const referenceAverage = 0
-      let localData = []
+      const DataReference = [];
+      const totalReference = 0;
+      const referenceAverage = 0;
+      let localData = [];
 
       InputData.map(({ references, observations }) => {
         if (!observations || !references) {
           return {
             percent: null,
-            difference: null
-          }
+            difference: null,
+          };
         }
 
         const result = this.formatFluxDataByMedian({
           references,
-          observations
-        })
+          observations,
+        });
 
         localData.push({
           zone: observations[0][key],
@@ -1684,31 +1679,31 @@ export default {
           ),
           difference: result.difference,
           volume: result.observationVolume,
-          volume_reference: result.referenceVolume
-        })
-      })
-      localData = localData.filter((x) => x.percent)
+          volume_reference: result.referenceVolume,
+        });
+      });
+      localData = localData.filter((x) => x.percent);
       localData.sort((a, b) => {
-        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1
-      })
+        return Number(a.volume ?? 0) < Number(b.volume ?? 0) ? 1 : -1;
+      });
 
       localData.sort((a, b) => {
-        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1
-      })
+        return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
+      });
 
-      const localDataPercent = localData.map((x) => x.percent)
-      const minVal = d3.min(localDataPercent)
-      const maxVal = d3.max(localDataPercent)
-      localData = localData.slice(0, 10)
+      const localDataPercent = localData.map((x) => x.percent);
+      const minVal = d3.min(localDataPercent);
+      const maxVal = d3.max(localDataPercent);
+      localData = localData.slice(0, 10);
 
       // cond : key == origin
-      this.drawHorizontalChart(localData, 'zone', ref, color, 400)
+      this.drawHorizontalChart(localData, 'zone', ref, color, 400);
     },
-    topHealthZonePandemics (inPutData, ref, title = null) {
+    topHealthZonePandemics(inPutData, ref, title = null) {
       const data = inPutData.map((item) => ({
         zone: item.name,
-        volume: item.confirmed
-      }))
+        volume: item.confirmed,
+      }));
       this.drawHorizontalChart(
         data,
         'zone',
@@ -1716,9 +1711,9 @@ export default {
         PALETTE.flux_in_color,
         200,
         title
-      )
+      );
     },
-    async fluxMobilityFluxGeneralZone (
+    async fluxMobilityFluxGeneralZone(
       fluxDataIn,
       refAsc,
       refDesc,
@@ -1728,48 +1723,48 @@ export default {
       titleHelth,
       refHealth
     ) {
-      const generalData = [...fluxDataIn]
+      const generalData = [...fluxDataIn];
 
       const processing = new Promise((resolver, reject) => {
-        const data = []
+        const data = [];
         generalData.map(({ general_reference, general_observation, zone }) => {
           const result = this.formatFluxDataByMedian({
             references: general_reference,
-            observations: general_observation
-          })
+            observations: general_observation,
+          });
 
           data.push({
             zone: zone,
             volume: result.percent,
-            percent: result.percent
-          })
-        })
-        resolver(data)
-      })
+            percent: result.percent,
+          });
+        });
+        resolver(data);
+      });
 
       processing.then((data) => {
-        const localData = data.filter((x) => x.percent)
+        const localData = data.filter((x) => x.percent);
         localData.sort((a, b) => {
-          return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1
-        })
+          return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
+        });
 
-        const localDataPercent = localData.map((x) => x.percent)
-        const minVal = d3.min(localDataPercent)
-        const maxVal = d3.max(localDataPercent)
+        const localDataPercent = localData.map((x) => x.percent);
+        const minVal = d3.min(localDataPercent);
+        const maxVal = d3.max(localDataPercent);
 
-        const ascData = localData.slice(0, 5)
+        const ascData = localData.slice(0, 5);
 
         localData.sort((a, b) => {
-          return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1
-        })
+          return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
+        });
 
-        const descData = localData.slice(0, 5)
+        const descData = localData.slice(0, 5);
 
-        const healthZones = topHealthZoneConfirmed.map((x) => x.name)
+        const healthZones = topHealthZoneConfirmed.map((x) => x.name);
 
         const mobilityHealth = data.filter((x) =>
           includes(healthZones, x.zone)
-        )
+        );
 
         this.drawHorizontalChart(
           ascData,
@@ -1777,26 +1772,26 @@ export default {
           refAsc,
           PALETTE.flux_in_color,
           200
-        )
+        );
         this.drawHorizontalChart(
           descData,
           'zone',
           refDesc,
           PALETTE.flux_in_color,
           200
-        )
+        );
         this.drawHorizontalChart(
           mobilityHealth,
           'zone',
           refHealth,
           PALETTE.flux_in_color,
           200
-        )
-      })
+        );
+      });
     },
-    drawHorizontalChart (localData, key, ref, color, height, title = null) {
-      const datasets = []
-      const volumeReferences = localData.map((d) => d.volume_reference)
+    drawHorizontalChart(localData, key, ref, color, height, title = null) {
+      const datasets = [];
+      const volumeReferences = localData.map((d) => d.volume_reference);
       if (volumeReferences.some((x) => x)) {
         datasets.push({
           label: 'Référence',
@@ -1804,8 +1799,8 @@ export default {
           borderColor: '#33ac2e',
           borderWidth: 1,
           barThickness: 12,
-          data: volumeReferences
-        })
+          data: volumeReferences,
+        });
       }
 
       datasets.push({
@@ -1813,12 +1808,12 @@ export default {
         backgroundColor: color,
         borderColor: color,
         barThickness: 12,
-        data: localData.map((d) => d.volume)
-      })
+        data: localData.map((d) => d.volume),
+      });
       const dataChart = {
         labels: localData.map((d) => d[key]),
-        datasets: datasets
-      }
+        datasets: datasets,
+      };
 
       this.configBarChart[ref] = {
         type: 'horizontalBar',
@@ -1826,21 +1821,21 @@ export default {
         options: {
           elements: {
             rectangle: {
-              borderWidth: 2
-            }
+              borderWidth: 2,
+            },
           },
           responsive: true,
           maintainAspectRatio: false,
           legend: {
             position: 'bottom',
             labels: {
-              fontSize: 9
-            }
+              fontSize: 9,
+            },
           },
           title: {
             display: !!title,
             text: title,
-            fontSize: 15
+            fontSize: 15,
           },
           scales: {
             xAxes: [
@@ -1849,167 +1844,167 @@ export default {
                   beginAtZero: true,
                   fontSize: 9,
                   callback: (value, index, values) => {
-                    const sign = value < 0 ? '-' : ''
-                    return `${sign}${this.formatCash(value)}`
-                  }
-                }
-              }
+                    const sign = value < 0 ? '-' : '';
+                    return `${sign}${this.formatCash(value)}`;
+                  },
+                },
+              },
             ],
             yAxes: [
               {
                 ticks: {
                   fontSize: 9,
                   callback: function (label, index, labels) {
-                    const value = localData.find((x) => x.zone == label)
+                    const value = localData.find((x) => x.zone == label);
                     if (value && value.percent) {
-                      return `${label} (${value.percent}%)`
+                      return `${label} (${value.percent}%)`;
                     } else {
-                      return label
+                      return label;
                     }
-                  }
-                }
-              }
-            ]
+                  },
+                },
+              },
+            ],
           },
           plugins: {
-            crosshair: false
-          }
-        }
-      }
-      const reference = this.$refs[ref]
-      if (this.barChart[ref]) this.barChart[ref].destroy()
+            crosshair: false,
+          },
+        },
+      };
+      const reference = this.$refs[ref];
+      if (this.barChart[ref]) this.barChart[ref].destroy();
       this.barChart[ref] = new Chart(
         reference.getContext('2d'),
         this.configBarChart[ref]
-      )
-      this.configBarChart[ref].height = height
-      reference.style.height = `${height}px`
-      reference.style.maxHeight = `${height}px`
+      );
+      this.configBarChart[ref].height = height;
+      reference.style.height = `${height}px`;
+      reference.style.maxHeight = `${height}px`;
     },
-    getRangeColors (
+    getRangeColors(
       data,
       color,
       colorNeg = null,
       domaineMin = null,
       domaineMax = null
     ) {
-      domaineMin = domaineMin == null ? d3.min(data) : domaineMin
-      domaineMax = domaineMax == null ? d3.max(data) : domaineMax
+      domaineMin = domaineMin == null ? d3.min(data) : domaineMin;
+      domaineMax = domaineMax == null ? d3.max(data) : domaineMax;
 
-      let colorScale = null
-      let colorScaleNeg = null
+      let colorScale = null;
+      let colorScaleNeg = null;
 
       if (colorNeg) {
-        colorScale = d3.scaleQuantile().domain([0, domaineMax]).range(color)
+        colorScale = d3.scaleQuantile().domain([0, domaineMax]).range(color);
 
         colorScaleNeg = d3
           .scaleQuantile()
           .domain([domaineMin, 0])
-          .range(colorNeg)
+          .range(colorNeg);
       } else {
         colorScale = d3
           .scaleQuantile()
           .domain([domaineMin, domaineMax])
-          .range(color)
+          .range(color);
       }
 
       const getColorRange = (data) => {
         if (data < 0 && colorNeg) {
-          return colorScaleNeg(data)
+          return colorScaleNeg(data);
         } else {
-          return colorScale(data)
+          return colorScale(data);
         }
-      }
+      };
 
       const rangeColors = data.map((d) => {
-        return getColorRange(d)
-      })
+        return getColorRange(d);
+      });
 
-      return rangeColors
+      return rangeColors;
     },
-    fullscreenMobileDaily (fullscreen, ref) {
+    fullscreenMobileDaily(fullscreen, ref) {
       if (!fullscreen) {
-        const buttonResetZoom = this.lineCharts[ref].crosshair.button
+        const buttonResetZoom = this.lineCharts[ref].crosshair.button;
         if (buttonResetZoom) {
-          buttonResetZoom.click()
+          buttonResetZoom.click();
         }
 
         // this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = false;
-        this.$refs[ref].style.MaxHeight = '200px'
-        this.$refs[ref].style.height = '200px'
-        this.$refs[ref].height = '200px'
+        this.$refs[ref].style.MaxHeight = '200px';
+        this.$refs[ref].style.height = '200px';
+        this.$refs[ref].height = '200px';
 
-        this.lineCharts[ref].update()
+        this.lineCharts[ref].update();
       } else {
-        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = true
-        this.$refs[ref].style.MaxHeight = '400px'
-        this.$refs[ref].style.height = '400px'
-        this.$refs[ref].height = '400px'
+        this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = true;
+        this.$refs[ref].style.MaxHeight = '400px';
+        this.$refs[ref].style.height = '400px';
+        this.$refs[ref].height = '400px';
 
         // console.log('this.$refs[ref].style.MaxHeight',this.$refs[ref].style);
 
-        this.lineCharts[ref].update()
+        this.lineCharts[ref].update();
       }
     },
-    fullscreenFluxInOut (fullscreen, ref) {
+    fullscreenFluxInOut(fullscreen, ref) {
       // this.fullscreen = fullscreen
-      const element = this.$refs[ref]
-      const parent_2 = element.parentElement.parentElement
+      const element = this.$refs[ref];
+      const parent_2 = element.parentElement.parentElement;
       if (!fullscreen) {
-        element.style.height = this.configBarChart[ref].height
-        element.height = this.configBarChart[ref].height
-        element.parentElement.style.width = ''
-        parent_2.style.display = ''
-        parent_2.style.alignItem = ''
-        parent_2.style.justifyContent = ''
-        this.configBarChart[ref].options.legend.labels.fontSize = 9
-        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 9
-        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9
-        this.barChart[ref].update()
+        element.style.height = this.configBarChart[ref].height;
+        element.height = this.configBarChart[ref].height;
+        element.parentElement.style.width = '';
+        parent_2.style.display = '';
+        parent_2.style.alignItem = '';
+        parent_2.style.justifyContent = '';
+        this.configBarChart[ref].options.legend.labels.fontSize = 9;
+        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 9;
+        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9;
+        this.barChart[ref].update();
       } else {
         // element.parentElement.style.width = "80%";
         // parent_2.style.display = "flex";
         // parent_2.style.alignItems = "center";
         // parent_2.style.justifyContent = "center";
 
-        this.configBarChart[ref].options.legend.labels.fontSize = 12
-        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 12
-        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 12
-        this.barChart[ref].update()
+        this.configBarChart[ref].options.legend.labels.fontSize = 12;
+        this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 12;
+        this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 12;
+        this.barChart[ref].update();
       }
     },
-    fullscreenOutChange (fullscreen) {
+    fullscreenOutChange(fullscreen) {
       // this.fullscreen = fullscreen
       if (!fullscreen) {
-        this.$refs.mobile_out.style.height = '200px'
-        this.$refs.mobile_out.height = '200px'
+        this.$refs.mobile_out.style.height = '200px';
+        this.$refs.mobile_out.height = '200px';
       }
     },
-    fullscreenOut2Change (fullscreen) {
+    fullscreenOut2Change(fullscreen) {
       // this.fullscreen = fullscreen
-      const barChart2 = this.barChart2.mobile_out_2_card
-      const configBarChart2 = this.configBarChart2.mobile_out_2_card
+      const barChart2 = this.barChart2.mobile_out_2_card;
+      const configBarChart2 = this.configBarChart2.mobile_out_2_card;
       if (!fullscreen) {
-        this.$refs.mobile_out_2_card.style.height = '400px'
-        this.$refs.mobile_out_2_card.height = '400px'
+        this.$refs.mobile_out_2_card.style.height = '400px';
+        this.$refs.mobile_out_2_card.height = '400px';
 
-        configBarChart2.options.legend.labels.fontSize = 9
-        configBarChart2.options.scales.xAxes[0].ticks.fontSize = 9
-        configBarChart2.options.scales.yAxes[0].ticks.fontSize = 9
-        barChart2.update()
+        configBarChart2.options.legend.labels.fontSize = 9;
+        configBarChart2.options.scales.xAxes[0].ticks.fontSize = 9;
+        configBarChart2.options.scales.yAxes[0].ticks.fontSize = 9;
+        barChart2.update();
       } else {
-        configBarChart2.options.legend.labels.fontSize = 12
-        configBarChart2.options.scales.xAxes[0].ticks.fontSize = 12
-        configBarChart2.options.scales.yAxes[0].ticks.fontSize = 12
-        barChart2.update()
+        configBarChart2.options.legend.labels.fontSize = 12;
+        configBarChart2.options.scales.xAxes[0].ticks.fontSize = 12;
+        configBarChart2.options.scales.yAxes[0].ticks.fontSize = 12;
+        barChart2.update();
       }
     },
-    fullscreenGeneraleChange (fullscreen, ref) {
+    fullscreenGeneraleChange(fullscreen, ref) {
       if (!fullscreen) {
-        this.$refs[ref].style.height = '200px'
+        this.$refs[ref].style.height = '200px';
       }
     },
-    fullscreenGenerale2Change (fullscreen, ref) {
+    fullscreenGenerale2Change(fullscreen, ref) {
       this.$nextTick(() => {
         if (!fullscreen) {
           //   // ref.style.height = "400px";
@@ -2023,42 +2018,42 @@ export default {
           //   this.configBarChartGen.options.scales.yAxes[0].ticks.fontSize = 12;
           //   this.barChartGen.update();
         }
-      })
+      });
     },
-    toggleGlobalMobility () {
-      this.showMobiliteGenerale = !this.showMobiliteGenerale
+    toggleGlobalMobility() {
+      this.showMobiliteGenerale = !this.showMobiliteGenerale;
     },
-    toggleTypePresence (type) {
+    toggleTypePresence(type) {
       if (this.typePresence == 1) {
         if (type == 2) {
-          this.setTypePresence(1)
+          this.setTypePresence(1);
         }
         switch (type) {
           case 2:
-            this.setTypePresence(3)
-            break
+            this.setTypePresence(3);
+            break;
           case 3:
-            this.setTypePresence(2)
+            this.setTypePresence(2);
           default:
-            break
+            break;
         }
-        return
+        return;
       }
       if (this.typePresence != type) {
-        type = 1
+        type = 1;
       }
-      this.setTypePresence(type)
+      this.setTypePresence(type);
     },
-    defineTypePresence (type) {
-      this.setTypePresence(type)
-    }
-  }
-}
+    defineTypePresence(type) {
+      this.setTypePresence(type);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
-@import "@~/sass/_mixins";
+@import '@~/sass/_variables';
+@import '@~/sass/_mixins';
 
 .flux-chart {
   @include card-style;

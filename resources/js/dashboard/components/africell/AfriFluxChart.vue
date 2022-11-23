@@ -23,17 +23,13 @@
               </p>
               <p class="small m-0">
                 <span class="text-muted">Mise à jour du</span>
-                <b>{{ moment(last_update).format("Y-MM-DD") }}</b>
+                <b>{{ moment(last_update).format('Y-MM-DD') }}</b>
               </p>
             </b-skeleton-wrapper>
           </div>
           <div>
             <div class="logoPartenaire" v-if="isLoading">
-              <b-skeleton-img
-                width="35"
-                height="38"
-
-              ></b-skeleton-img>
+              <b-skeleton-img width="35" height="38"></b-skeleton-img>
             </div>
 
             <b-img
@@ -75,7 +71,7 @@
               </h5>
 
               <div class="percent flux-presence">
-                {{ volume ? volume.toFixed(2) : "NAN" }}%​
+                {{ volume ? volume.toFixed(2) : 'NAN' }}%​
               </div>
             </b-card>
           </b-skeleton-wrapper>
@@ -133,7 +129,7 @@
               <h5 class="percent-title">% de changement du nombre d'entrées</h5>
 
               <div class="percent flux-in-color">
-                {{ flow_in ? flow_in.toFixed(2) : "NAN" }}%​
+                {{ flow_in ? flow_in.toFixed(2) : 'NAN' }}%​
               </div>
             </b-card>
           </b-skeleton-wrapper>
@@ -231,7 +227,7 @@
               </h5>
 
               <div class="percent flux-out-color">
-                {{ flow_out ? flow_out.toFixed(2) : "NAN" }}%​
+                {{ flow_out ? flow_out.toFixed(2) : 'NAN' }}%​
               </div>
             </b-card>
           </b-skeleton-wrapper>
@@ -329,7 +325,7 @@
               </h5>
 
               <div class="percent dash-green">
-                {{ flow_tot ? flow_tot.toFixed(2) : "NAN" }}%​
+                {{ flow_tot ? flow_tot.toFixed(2) : 'NAN' }}%​
               </div>
             </b-card>
           </b-skeleton-wrapper>
@@ -415,8 +411,8 @@
 </template>
 
 <script>
-import { PALETTE, AFRICELL_LAST_UPDATE } from "../../config/env";
-import { mapMutations, mapState } from "vuex";
+import { PALETTE, AFRICELL_LAST_UPDATE } from '../../config/env';
+import { mapMutations, mapState } from 'vuex';
 export default {
   components: {},
   props: {
@@ -442,15 +438,15 @@ export default {
       // targetZone: null,
       mobilityTypes: [
         {
-          lbl: "Inter zone",
+          lbl: 'Inter zone',
           val: 1,
         },
         {
-          lbl: "Hors zone",
+          lbl: 'Hors zone',
           val: 2,
         },
         {
-          lbl: "Général",
+          lbl: 'Général',
           val: 3,
         },
       ],
@@ -470,33 +466,33 @@ export default {
     this.$nextTick(() => {
       this.mobileCalc(
         this.fluxAfricellDaily,
-        "mobile_out_in_tot",
+        'mobile_out_in_tot',
         PALETTE.dash_green,
-        "flow_tot"
+        'flow_tot'
       );
     });
     this.$nextTick(() => {
       this.mobileCalc(
         this.fluxAfricellDaily,
-        "mobile_in",
+        'mobile_in',
         PALETTE.flux_in_color,
-        "flow_in"
+        'flow_in'
       );
     });
     this.$nextTick(() => {
       this.mobileCalc(
         this.fluxAfricellDaily,
-        "mobile_out",
+        'mobile_out',
         PALETTE.flux_out_color,
-        "flow_out"
+        'flow_out'
       );
     });
     this.$nextTick(() => {
       this.mobileCalc(
         this.fluxAfricelPresence,
-        "africell_prensence",
+        'africell_prensence',
         PALETTE.flux_presence,
-        "volume"
+        'volume'
       );
     });
     this.$nextTick(() => {
@@ -508,25 +504,25 @@ export default {
       this.$nextTick(() => {
         this.mobileCalc(
           this.fluxAfricellDaily,
-          "mobile_out_in_tot",
+          'mobile_out_in_tot',
           PALETTE.dash_green,
-          "flow_tot"
+          'flow_tot'
         );
       });
       this.$nextTick(() => {
         this.mobileCalc(
           this.fluxAfricellDaily,
-          "mobile_in",
+          'mobile_in',
           PALETTE.flux_in_color,
-          "flow_in"
+          'flow_in'
         );
       });
       this.$nextTick(() => {
         this.mobileCalc(
           this.fluxAfricellDaily,
-          "mobile_out",
+          'mobile_out',
           PALETTE.flux_out_color,
-          "flow_out"
+          'flow_out'
         );
       });
     },
@@ -534,9 +530,9 @@ export default {
       this.$nextTick(() => {
         this.mobileCalc(
           this.fluxAfricelPresence,
-          "africell_prensence",
+          'africell_prensence',
           PALETTE.flux_presence,
-          "volume"
+          'volume'
         );
       });
     },
@@ -557,7 +553,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["setAfriFluxType"]),
+    ...mapMutations(['setAfriFluxType']),
     africellDataInOut(data) {
       if (!this.isStartEnd || data.length == 0) {
         return;
@@ -567,27 +563,27 @@ export default {
 
       this.drawHorizontalChart(
         inData,
-        "affricel_mobile_in",
-        "zoneA",
-        "flow_AB",
+        'affricel_mobile_in',
+        'zoneA',
+        'flow_AB',
         PALETTE.flux_in_color,
-        "flow_tot"
+        'flow_tot'
       );
       this.drawHorizontalChart(
         outData,
-        "affricel_mobile_out",
-        "zoneB",
-        "flow_AB",
+        'affricel_mobile_out',
+        'zoneB',
+        'flow_AB',
         PALETTE.flux_out_color,
-        "flow_tot"
+        'flow_tot'
       );
       this.drawHorizontalChart(
         outData,
-        "affricel_mobile_tot",
-        "zoneB",
-        "flow_tot",
+        'affricel_mobile_tot',
+        'zoneB',
+        'flow_tot',
         PALETTE.dash_green,
-        "flow_tot"
+        'flow_tot'
       );
     },
     selectFluxType(value) {
@@ -603,15 +599,15 @@ export default {
         this[attribut] = Number(data[0][attribut]);
       }
       this.configBarChart[ref] = {
-        type: "line",
+        type: 'line',
         data: {
           // labels: data.map((x) => new Date(x.date)),
           datasets: [
             {
-              label: "Volume",
+              label: 'Volume',
               fill: false,
               borderColor: color,
-              backgroundColor: "rgb(166,180,205, 0.2)",
+              backgroundColor: 'rgb(166,180,205, 0.2)',
               data: data.map((x) => ({ x: new Date(x.date), y: x[attribut] })),
               interpolate: true,
               showLine: true,
@@ -634,7 +630,7 @@ export default {
           plugins: {
             crosshair: {
               line: {
-                color: "#F66", // crosshair line color
+                color: '#F66', // crosshair line color
                 width: 1, // crosshair line width
                 dashPattern: [5, 5], // crosshair line dash pattern
               },
@@ -648,15 +644,15 @@ export default {
           },
           tooltips: {
             enabled: true,
-            mode: "interpolate",
+            mode: 'interpolate',
             intersect: false,
             callbacks: {
               title: (a, d) => {
-                return this.moment(a[0].xLabel).format("DD.MM");
+                return this.moment(a[0].xLabel).format('DD.MM');
               },
               label: (i, d) => {
                 const element = data.find(
-                  (x) => x.date == i.xLabel.format("YYYY-MM-DD")
+                  (x) => x.date == i.xLabel.format('YYYY-MM-DD')
                 );
                 if (!element) {
                   return;
@@ -678,25 +674,25 @@ export default {
                 },
                 scaleLabel: {
                   display: true,
-                  labelString: "Période",
+                  labelString: 'Période',
                   fontSize: 9,
                 },
-                type: "time",
+                type: 'time',
                 ticks: {
                   fontSize: 9,
                   beginAtZero: true,
                   major: {
                     enabled: true,
-                    fontStyle: "bold",
+                    fontStyle: 'bold',
                     // fontColor: PALETTE.flux_in_color,
                     fontSize: 10,
                   },
                 },
                 time: {
-                  unit: "day",
+                  unit: 'day',
                   unitStepSize: 1,
                   displayFormats: {
-                    day: "DD.MM",
+                    day: 'DD.MM',
                   },
                 },
               },
@@ -709,12 +705,12 @@ export default {
                   // min: min < -100 ? (min + 10).toFixed(0) : -100,
                   // max: max >= 100 ? (max + 10).toFixed(0) : 100,
                   callback: function (value) {
-                    return value + "%";
+                    return value + '%';
                   },
                 },
                 scaleLabel: {
                   display: true,
-                  labelString: "Pourcentage",
+                  labelString: 'Pourcentage',
                   fontSize: 9,
                 },
               },
@@ -726,21 +722,21 @@ export default {
       reference.style.height = 200;
       if (this.lineCharts[ref]) this.lineCharts[ref].destroy();
       this.lineCharts[ref] = new Chart(
-        reference.getContext("2d"),
+        reference.getContext('2d'),
         this.configBarChart[ref]
       );
-      reference.style.height = "200px";
-      reference.style.maxHeight = "200px";
+      reference.style.height = '200px';
+      reference.style.maxHeight = '200px';
     },
     drawHorizontalChart(data, ref, YKey, XKey, color, title = null) {
       const localData = data.map((d) => ({ x: d[XKey], y: d[YKey] }));
       this.configBarChart[ref] = {
-        type: "horizontalBar",
+        type: 'horizontalBar',
         data: {
           labels: localData.map((d) => d.y),
           datasets: [
             {
-              label: "Observation",
+              label: 'Observation',
               backgroundColor: color,
               borderColor: color,
               data: localData,
@@ -757,7 +753,7 @@ export default {
           maintainAspectRatio: false,
           legend: {
             display: false,
-            position: "bottom",
+            position: 'bottom',
             labels: {
               fontSize: 9,
             },
@@ -807,11 +803,11 @@ export default {
       const reference = this.$refs[ref];
       if (this.barChart[ref]) this.barChart[ref].destroy();
       this.barChart[ref] = new Chart(
-        reference.getContext("2d"),
+        reference.getContext('2d'),
         this.configBarChart[ref]
       );
-      reference.style.height = "400px";
-      reference.style.maxHeight = "400px";
+      reference.style.height = '400px';
+      reference.style.maxHeight = '400px';
     },
     fullscreenMobileDaily(fullscreen, ref) {
       //this.fullscreen = fullscreen
@@ -822,15 +818,15 @@ export default {
         }
 
         this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = false;
-        this.$refs[ref].style.height = "200px";
-        this.$refs[ref].style.MaxHeight = "200px";
-        this.$refs[ref].height = "200px";
+        this.$refs[ref].style.height = '200px';
+        this.$refs[ref].style.MaxHeight = '200px';
+        this.$refs[ref].height = '200px';
 
         this.lineCharts[ref].update();
       } else {
         this.configBarChart[ref].options.plugins.crosshair.zoom.enabled = true;
-        this.$refs[ref].style.height = "400px";
-        this.$refs[ref].height = "400px";
+        this.$refs[ref].style.height = '400px';
+        this.$refs[ref].height = '400px';
 
         this.lineCharts[ref].update();
       }
@@ -840,12 +836,12 @@ export default {
       const element = this.$refs[ref];
       const parent_2 = element.parentElement.parentElement;
       if (!fullscreen) {
-        element.style.height = "400px";
-        element.height = "400px";
-        element.parentElement.style.width = "";
-        parent_2.style.display = "";
-        parent_2.style.alignItem = "";
-        parent_2.style.justifyContent = "";
+        element.style.height = '400px';
+        element.height = '400px';
+        element.parentElement.style.width = '';
+        parent_2.style.display = '';
+        parent_2.style.alignItem = '';
+        parent_2.style.justifyContent = '';
         this.configBarChart[ref].options.legend.labels.fontSize = 9;
         this.configBarChart[ref].options.scales.xAxes[0].ticks.fontSize = 9;
         this.configBarChart[ref].options.scales.yAxes[0].ticks.fontSize = 9;
@@ -867,8 +863,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
-@import "@~/sass/_mixins";
+@import '@~/sass/_variables';
+@import '@~/sass/_mixins';
 .logoPartenaire {
   height: 38px;
   width: auto;

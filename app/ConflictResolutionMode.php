@@ -7,16 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ConflictResolutionMode extends Model
 {
-    use SoftDeletes;
+  use SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'slug'
-    ];
+  protected $fillable = ['name', 'slug'];
 
-    public function forms()
-    {
-        return $this->hasMany(Form::class);
-    }
-
+  public function forms()
+  {
+    return $this->hasMany(Form::class);
+  }
 }

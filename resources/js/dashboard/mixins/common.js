@@ -1,10 +1,10 @@
-import moment from 'moment'
-import { format } from 'date-fns'
+import moment from 'moment';
+import { format } from 'date-fns';
 
 export default {
   computed: {
     isSmOrMd() {
-      return this.$mq == "md" || this.$mq == "sm";
+      return this.$mq == 'md' || this.$mq == 'sm';
     },
   },
   methods: {
@@ -13,19 +13,19 @@ export default {
       return moment(value);
     },
     sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
+      return new Promise((resolve) => setTimeout(resolve, ms));
     },
     formatCash(n) {
-      if (n == 0) return 0
+      if (n == 0) return 0;
       else if (!n) {
         return null;
       }
       n = Math.abs(n);
       if (n < 1e3) return n;
-      if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
-      if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
-      if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + "B";
-      if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
+      if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + 'K';
+      if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + 'M';
+      if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + 'B';
+      if (n >= 1e12) return +(n / 1e12).toFixed(1) + 'T';
     },
     formatFluxDataByMedian({ references, observations }) {
       if (!observations || !references) {
@@ -77,22 +77,25 @@ export default {
         difference,
         observationVolume,
         referenceVolume,
-        percent: Math.round((difference / referenceVolume) * 100)
+        percent: Math.round((difference / referenceVolume) * 100),
       };
     },
     formatFluxGeneralData(flux24DailyIn, flux24DailyOut) {
       const referencesByDateIn = flux24DailyIn.referencesByDate ?? [];
-      const observationsByDateIn =
-        flux24DailyIn.observationsByDate ?? [];
+      const observationsByDateIn = flux24DailyIn.observationsByDate ?? [];
 
       const referencesByDateOut = flux24DailyOut.referencesByDate ?? [];
-      const observationsByDateOut =
-        flux24DailyOut.observationsByDate ?? [];
+      const observationsByDateOut = flux24DailyOut.observationsByDate ?? [];
 
       const referencesByDate = [];
       const observationsByDate = [];
       [...referencesByDateIn, ...referencesByDateOut].map((item) => {
-        const element = referencesByDate.find((x) => x.date == item.date && x.origin == item.origin && x.destination == item.destination);
+        const element = referencesByDate.find(
+          (x) =>
+            x.date == item.date &&
+            x.origin == item.origin &&
+            x.destination == item.destination
+        );
         if (element) {
           element.volume += item.volume;
         } else {
@@ -100,7 +103,7 @@ export default {
             volume: item.volume,
             date: item.date,
             origin: item.origin,
-            destination: item.destination
+            destination: item.destination,
           });
         }
       });
@@ -114,7 +117,7 @@ export default {
             volume: item.volume,
             date: item.date,
             origin: item.origin,
-            destination: item.destination
+            destination: item.destination,
           });
         }
       });
@@ -124,14 +127,14 @@ export default {
         labels: localData.map((d) => d[key]),
         datasets: [
           {
-            label: "Référence",
-            backgroundColor: "#33ac2e",
-            borderColor: "#33ac2e",
+            label: 'Référence',
+            backgroundColor: '#33ac2e',
+            borderColor: '#33ac2e',
             borderWidth: 1,
             data: localData.map((d) => d.volume_reference),
           },
           {
-            label: "Observation",
+            label: 'Observation',
             backgroundColor: color,
             borderColor: color,
             data: localData.map((d) => d.volume),
@@ -140,7 +143,7 @@ export default {
       };
 
       this.configBarChart2 = {
-        type: "horizontalBar",
+        type: 'horizontalBar',
         data: dataChart,
         options: {
           elements: {
@@ -150,7 +153,7 @@ export default {
           },
           responsive: true,
           legend: {
-            position: "bottom",
+            position: 'bottom',
             labels: {
               fontSize: 9,
             },
@@ -158,7 +161,7 @@ export default {
           title: {
             display: !!title,
             text: title,
-            color: "#6c757d",
+            color: '#6c757d',
           },
           scales: {
             xAxes: [
@@ -189,12 +192,12 @@ export default {
 
       if (this.barChart2[ref]) this.barChart2[ref].destroy();
       this.barChart2[ref] = new Chart(
-        this.$refs[ref].getContext("2d"),
+        this.$refs[ref].getContext('2d'),
         this.configBarChart2
       );
     },
-    formatDateFns (date) {
-      return format(new Date(date), 'dd/MM/yyyy à HH:mm:ss')
+    formatDateFns(date) {
+      return format(new Date(date), 'dd/MM/yyyy à HH:mm:ss');
     },
     addParamToUrl(param, value) {
       const url = new URL(window.location.href);
@@ -206,11 +209,15 @@ export default {
     },
     removeAllParamsFromUrl() {
       const url = new URL(window.location.href);
-      url.search = ''
+      url.search = '';
       window.history.replaceState(null, null, url);
     },
     userHaveRole(role) {
-      return this.user && this.user.roles && this.user.roles.find((a) => a.name == role)
-    }
-  }
-}
+      return (
+        this.user &&
+        this.user.roles &&
+        this.user.roles.find((a) => a.name == role)
+      );
+    },
+  },
+};

@@ -22,11 +22,11 @@ export default {
   },
   actions: {
     createFormStep({ state, commit, dispatch }, payload = {}) {
-      commit("SET_IS_CREATING", true);
+      commit('SET_IS_CREATING', true);
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
-          .post("api/dashboard/form-steps", payload)
+          .post('api/dashboard/form-steps', payload)
           .then(({ data }) => {
             resolve(true);
           })
@@ -35,12 +35,12 @@ export default {
             reject(response);
           })
           .finally(() => {
-            commit("SET_IS_CREATING", false);
+            commit('SET_IS_CREATING', false);
           });
       });
     },
     updateFormStep({ state, commit, dispatch }, payload = {}) {
-      commit("SET_IS_CREATING", true);
+      commit('SET_IS_CREATING', true);
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
@@ -53,12 +53,12 @@ export default {
             reject(response);
           })
           .finally(() => {
-            commit("SET_IS_CREATING", false);
+            commit('SET_IS_CREATING', false);
           });
       });
     },
     removeFormStep({ state, commit, dispatch }, payload = {}) {
-      commit("SET_IS_CREATING", true);
+      commit('SET_IS_CREATING', true);
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
@@ -71,7 +71,7 @@ export default {
             reject(response);
           })
           .finally(() => {
-            commit("SET_IS_CREATING", false);
+            commit('SET_IS_CREATING', false);
           });
       });
     },
@@ -80,9 +80,9 @@ export default {
         if (payload) {
           // eslint-disable-next-line no-undef
           axios
-            .get("api/dashboard/form-steps/filter?date=" + payload)
+            .get('api/dashboard/form-steps/filter?date=' + payload)
             .then(({ data }) => {
-              commit("SET_FORM_STEP", data);
+              commit('SET_FORM_STEP', data);
               resolve(true);
             })
             .catch(({ response }) => {
@@ -91,20 +91,20 @@ export default {
             });
         } else {
           // eslint-disable-next-line no-undef
-          dispatch("getFormSteps", { id });
+          dispatch('getFormSteps', { id });
           resolve(true);
         }
       });
     },
     getFormSteps({ state, commit }, payload = {}) {
-      commit("SET_IS_LOADING", true);
+      commit('SET_IS_LOADING', true);
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios
           .get(`api/dashboard/form-steps/get-form/${payload.id}`)
           .then(({ data }) => {
-            commit("SET_FORM_STEP", data);
-            commit("SET_IS_LOADING", false);
+            commit('SET_FORM_STEP', data);
+            commit('SET_IS_LOADING', false);
             resolve(true);
           })
           .catch((response) => {

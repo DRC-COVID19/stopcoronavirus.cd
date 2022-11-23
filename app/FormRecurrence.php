@@ -7,16 +7,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class FormRecurrence extends Model
 {
-    use SoftDeletes;
+  use SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'slug',
-        'required_value'
-    ];
+  protected $fillable = ['name', 'slug', 'required_value'];
 
-    public function forms(): HasMany
-    {
-        return $this->hasMany(Form::class);
-    }
+  public function forms(): HasMany
+  {
+    return $this->hasMany(Form::class);
+  }
 }

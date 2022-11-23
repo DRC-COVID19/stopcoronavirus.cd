@@ -12,20 +12,20 @@
 </template>
 
 <script>
-import FormView from '../../components/forms/FormView'
-import { mapState, mapActions } from 'vuex'
+import FormView from '../../components/forms/FormView';
+import { mapState, mapActions } from 'vuex';
 
 export default {
   components: {
-    FormView
+    FormView,
   },
-  data () {
-    const now = new Date()
+  data() {
+    const now = new Date();
     return {
       dateFormatted: { day: 'numeric', year: 'numeric', month: 'numeric' },
       completedForm: {
         completed_form_fields: {},
-        checkLastUpdate: null
+        checkLastUpdate: null,
       },
       max: now,
       errors: {},
@@ -34,13 +34,13 @@ export default {
       targetForm: {},
       completedFormFields: {},
       formTitle: 'Formulaire',
-      prevRoute: null
-    }
+      prevRoute: null,
+    };
   },
-  beforeRouteEnter (to, from, next) {
-    next(vm => {
-      vm.prevRoute = from
-    })
+  beforeRouteEnter(to, from, next) {
+    next((vm) => {
+      vm.prevRoute = from;
+    });
   },
   computed: {
     ...mapState({
@@ -50,44 +50,44 @@ export default {
         state.hospital.hospitalManagerFirstName,
       formSteps: (state) => state.formStep.formSteps,
       isHospitalSituationLoading: (state) => state.hospitalSituation.isLoading,
-      isUpdateMode () {
-        return !!this.$route.params.completed_form_id
+      isUpdateMode() {
+        return !!this.$route.params.completed_form_id;
       },
-      getHospitalId () {
+      getHospitalId() {
         return this.$route.params.hospital_id
           ? this.$route.params.hospital_id
-          : this.user.hospital.id
+          : this.user.hospital.id;
       },
-      ctcoContainerBody () {
-        return document.querySelector('.ctco-container-body')
-      }
+      ctcoContainerBody() {
+        return document.querySelector('.ctco-container-body');
+      },
     }),
-    backRoute () {
+    backRoute() {
       if (this.prevRoute && this.prevRoute.name) {
         return {
           name: this.prevRoute.name,
-          params: this.prevRoute.params
-        }
+          params: this.prevRoute.params,
+        };
       } else if (this.user.isHospitalAdmin) {
         return {
           name: 'hospital.admin.data',
-          params: { hospital_id: this.$route.params.hospital_id }
-        }
-      } else return { name: 'hospital.home' }
-    }
+          params: { hospital_id: this.$route.params.hospital_id },
+        };
+      } else return { name: 'hospital.home' };
+    },
   },
-  async mounted () {
-    this.isLoading = true
-    this.targetForm = await this.formShow({ id: this.$route.params.form_id })
-    this.formTitle = this.targetForm.title.toUpperCase()
+  async mounted() {
+    this.isLoading = true;
+    this.targetForm = await this.formShow({ id: this.$route.params.form_id });
+    this.formTitle = this.targetForm.title.toUpperCase();
     if (this.targetForm) {
-      this.isLoading = false
+      this.isLoading = false;
     }
     if (this.isUpdateMode) {
-      this.getCompletedFormFields()
+      this.getCompletedFormFields();
     }
     if (!this.hospitalManagerName) {
-      this.$bvModal.show('nameModal')
+      this.$bvModal.show('nameModal');
     }
   },
   methods: {
@@ -98,18 +98,18 @@ export default {
       'completedForm__show',
       'completedForm__store',
       'completedForm__update',
-      'completedForm__checkLastUpdate'
+      'completedForm__checkLastUpdate',
     ]),
-    async selectLastUpdate () {
-      this.isLastUpdateChecking = true
+    async selectLastUpdate() {
+      this.isLastUpdateChecking = true;
       this.completedForm.checkLastUpdate =
         await this.completedForm__checkLastUpdate({
           hospital_id: this.getHospitalId,
           last_update: this.moment(this.completedForm.last_update).format(
             'YYYY-MM-DD'
-          )
-        })
-      this.isLastUpdateChecking = false
+          ),
+        });
+      this.isLastUpdateChecking = false;
       if (this.completedForm.checkLastUpdate && !this.isUpdateMode) {
         this.$bvToast.toast(
           `Le ${this.moment(this.completedForm.last_update).format(
@@ -120,9 +120,9 @@ export default {
             autoHideDelay: 4000,
             appendToast: true,
             variant: 'danger',
-            solid: true
+            solid: true,
           }
-        )
+        );
       }
       if (this.completedForm.checkLastUpdate === 0 && !this.isUpdateMode) {
         this.$bvToast.toast('Aucune soumission constatée en cette date.', {
@@ -130,40 +130,40 @@ export default {
           autoHideDelay: 4000,
           appendToast: true,
           variant: 'success',
-          solid: true
-        })
+          solid: true,
+        });
       }
     },
-    async getCompletedFormFields () {
+    async getCompletedFormFields() {
       const completedForm = await this.completedForm__show({
-        completed_form_id: this.$route.params.completed_form_id
-      })
-      this.completedFormFields = completedForm.completed_form_fields
-      this.$set(this.completedForm, 'last_update', completedForm.last_update)
-      this.laodFormData()
+        completed_form_id: this.$route.params.completed_form_id,
+      });
+      this.completedFormFields = completedForm.completed_form_fields;
+      this.$set(this.completedForm, 'last_update', completedForm.last_update);
+      this.laodFormData();
     },
-    laodFormData () {
+    laodFormData() {
       this.completedFormFields.forEach((item) => {
         this.$set(
           this.completedForm.completed_form_fields,
           item.form_field.id,
           item.value
-        )
-      })
+        );
+      });
     },
-    onComplete () {
-      this.isLoading = true
-      this.errors = {}
+    onComplete() {
+      this.isLoading = true;
+      this.errors = {};
       if (this.isUpdateMode) {
-        this.completedForm._method = 'PUT'
-        this.completedForm.updated_manager_name = this.hospitalManagerName
+        this.completedForm._method = 'PUT';
+        this.completedForm.updated_manager_name = this.hospitalManagerName;
         this.completedForm.updated_manager_first_name =
-          this.hospitalManagerFirstName
-        this.completedForm.id = this.$route.params.completed_form_id
+          this.hospitalManagerFirstName;
+        this.completedForm.id = this.$route.params.completed_form_id;
       } else {
-        this.completedForm.created_manager_name = this.hospitalManagerName
+        this.completedForm.created_manager_name = this.hospitalManagerName;
         this.completedForm.created_manager_first_name =
-          this.hospitalManagerFirstName
+          this.hospitalManagerFirstName;
       }
       this.submitCompletedForm(
         this.isUpdateMode
@@ -174,44 +174,44 @@ export default {
           if (this.user.isHospitalAdmin) {
             const additionalRoute = this.isUpdateMode
               ? `/${this.$route.params.hospital_id}`
-              : ''
-            this.$router.push(`/admin/hospitals${additionalRoute}`)
+              : '';
+            this.$router.push(`/admin/hospitals${additionalRoute}`);
           } else {
-            this.$router.push('/hospitals')
+            this.$router.push('/hospitals');
           }
         })
         .finally(() => {
-          this.isLoading = false
-        })
+          this.isLoading = false;
+        });
     },
-    submitCompletedForm (method) {
+    submitCompletedForm(method) {
       return new Promise((resolve, reject) => {
-        this.completedForm.hospital_id = this.getHospitalId
-        this.completedForm.form_id = this.targetForm.id
+        this.completedForm.hospital_id = this.getHospitalId;
+        this.completedForm.form_id = this.targetForm.id;
         method(this.completedForm)
           .then(() => {
             this.$bvToast.toast('Formulaire soumis avec succès', {
               title: 'Formulaire de soumission',
               appendToast: true,
               variant: 'success',
-              solid: true
-            })
-            resolve(true)
+              solid: true,
+            });
+            resolve(true);
           })
           .catch(({ response }) => {
-            this.errors = response.data.errors
-            reject(response)
+            this.errors = response.data.errors;
+            reject(response);
             this.$bvToast.toast('Une erreur est survenue!', {
               title: 'Erreur de soumission de reponses',
               appendToast: true,
               variant: 'danger',
-              solid: true
-            })
-          })
-      })
-    }
-  }
-}
+              solid: true,
+            });
+          });
+      });
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

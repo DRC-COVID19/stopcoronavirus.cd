@@ -46,12 +46,7 @@
           <b-navbar-nav class="ml-auto">
             <b-nav-item>
               <div
-                class="
-                  map-form-logo
-                  d-flex
-                  justify-content-center justify-content-md-end
-                  align-items-center
-                "
+                class="map-form-logo d-flex justify-content-center justify-content-md-end align-items-center"
               >
                 <img
                   src="/img/partener2.png"
@@ -101,7 +96,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions, mapMutations } from 'vuex';
 export default {
   data() {
     return {
@@ -115,28 +110,28 @@ export default {
     }),
     canViewFormsPage() {
       return this.user.roles.find((role) =>
-        ["create_form", "edit_form"].includes(role.slug)
+        ['create_form', 'edit_form'].includes(role.slug)
       );
     },
     canViewUsersPage() {
       return this.user.roles.find((role) =>
-        ["administrator"].includes(role.slug)
+        ['administrator'].includes(role.slug)
       );
     },
     canViewChangeLogPage() {
       return this.user.roles.find((role) =>
-        ["administrator"].includes(role.slug)
+        ['administrator'].includes(role.slug)
       );
     },
     canViewEpidemicPage() {
       return this.user.roles.find((role) =>
-        ["manager_epidemic"].includes(role.slug)
+        ['manager_epidemic'].includes(role.slug)
       );
     },
   },
   methods: {
-    ...mapActions(["logout"]),
-    ...mapMutations(["setActiveMenu"]),
+    ...mapActions(['logout']),
+    ...mapMutations(['setActiveMenu']),
     userAvatarMouseEnter() {
       this.showUserCard = true;
     },
@@ -146,7 +141,7 @@ export default {
     userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
+          name: 'login',
         });
       });
     },
@@ -158,7 +153,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 b-link {
   padding: 10px;
 }

@@ -1,5 +1,5 @@
 @mixin collapse-content {
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     display: none;
   }
   .lbl-toggle {
@@ -27,7 +27,7 @@
 
   .lbl-toggle {
     &::before {
-      content: " ";
+      content: ' ';
       display: inline-block;
 
       border-top: 5px solid transparent;
