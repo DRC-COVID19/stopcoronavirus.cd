@@ -1,6 +1,6 @@
 <template>
   <b-card no-body class="text-center pt-3 px-2">
-    <b-form class="flux-form mb-2" @submit.prevent="submit">
+    <b-form class="flux-form mb-2" @submit.prevent>
       <b-form-row class="d-flex justify-content-between ml-0 mr-0">
         <b-col
           cols="12"
@@ -167,6 +167,7 @@ export default {
       isLoading: false,
       isPredict: false,
       formFieldList: [],
+
       availableDateRange: {
         start: null,
         end: null,

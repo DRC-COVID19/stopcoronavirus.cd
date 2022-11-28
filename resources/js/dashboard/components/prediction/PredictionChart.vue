@@ -1,6 +1,6 @@
 <template>
   <b-card no-body class="text-center pt-3 px-2">
-    <div v-if="predictedData?.length">
+    <div v-if="formattedPredictedData?.length">
       <ApexCharts
         type="line"
         height="350"
@@ -14,9 +14,41 @@
         </div>
 
         <div class="d-flex justify-content-center align-items-center ml-3">
+          <div class="circle-indicator add"></div>
+          <div class="indicator-label">Valeur ajouté</div>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center ml-3">
           <div class="square-indicator"></div>
           <div class="indicator-label">Zone de surcharge</div>
         </div>
+      </div>
+      <div class="d-flex justify-content-end mb-2 pt-2 border-top">
+        <b-button
+          size="sm"
+          variant="danger"
+          class="modal-btn mr-3"
+          @click="handleResetAll"
+          v-if="canRecalculatePrediction"
+        >
+          Tout réinitialiser
+        </b-button>
+        <b-button
+          size="sm"
+          variant="success"
+          class="modal-btn mr-3"
+          v-if="canRecalculatePrediction"
+        >
+          Recalculer la prediction
+        </b-button>
+        <b-button
+          size="sm"
+          variant="primary"
+          @click="handleOpenAddValueModal"
+          class="modal-btn"
+        >
+          Ajouter une valeur
+        </b-button>
       </div>
     </div>
     <div
@@ -28,6 +60,11 @@
         <img alt="" src="/img/no-data.png" class="img-fluid" />
       </p>
     </div>
+
+    <PredictionModal
+      @submit="handleSubmitModalData"
+      :modalData="modalPredictionData"
+    />
   </b-card>
 </template>
 
@@ -35,12 +72,106 @@
 import ApexCharts from 'vue-apexcharts';
 import { mapActions, mapState, mapGetters } from 'vuex';
 
+import PredictionModal from './PredictionModal';
+
 export default {
   components: {
     ApexCharts,
+    PredictionModal,
   },
   data() {
-    return {};
+    return {
+      fields: ['lit_dispo', 'cas_conf', 'lit_occ'],
+      modalPredictionData: null,
+      tampPredictedData: [],
+    };
+  },
+  methods: {
+    handleResetAll() {
+      this.$bvModal
+        .msgBoxConfirm(
+          'Toute vos modification et ajout seront perdu, êtes vous sur ?',
+          {
+            title: 'Réinitialisation des données',
+            size: 'sm',
+            buttonSize: 'sm',
+            okVariant: 'success',
+            okTitle: 'OUI',
+            cancelTitle: 'NON',
+            cancelVariant: 'danger',
+            footerClass: 'p-2 confirm-btn text-sm',
+            hideHeaderClose: true,
+            centered: true,
+          }
+        )
+        .then((value) => {
+          if (!!value) {
+            const newFormattedPredictedData = this.formattedPredictedData
+              .map((d) => {
+                const newValue = {};
+                this.fields.forEach((f) => {
+                  if (d[f].updated) {
+                    newValue[f] = {
+                      ...d[f],
+                      value: d[f].oldValue,
+                      updated: false,
+                    };
+                  }
+                });
+                return { ...d, ...newValue };
+              })
+              .filter((d) => !this.fields.some((f) => d[f].added));
+            this.formattedPredictedData = newFormattedPredictedData;
+          }
+        })
+        .catch((err) => {});
+    },
+    handleOpenAddValueModal() {
+      console.log('cli');
+      const fields = this.fields.map((f) => ({
+        name: f,
+        value: 0,
+        updated: false,
+      }));
+      this.modalPredictionData = { date: null, type: 'add', fields };
+      this.$bvModal.show('prediction-modal');
+    },
+    handleSubmitModalData(data) {
+      if (data.type === 'update') {
+        const newFormattedPredictedData = this.formattedPredictedData.map(
+          (d) => {
+            if (d.date === data.date) {
+              const newValue = {};
+              data.fields.forEach((f) => {
+                const value = parseInt(f.value);
+                if (value !== parseInt(d[f.name].value)) {
+                  newValue[f.name] = {
+                    ...d[f.name],
+                    value,
+                    oldValue: parseInt(d[f.name].value),
+                    updated: true,
+                  };
+                }
+                if (value === parseInt(d[f.name].oldValue)) {
+                  newValue[f.name] = { ...d[f.name], value, updated: false };
+                }
+              });
+              return { ...d, ...newValue };
+            }
+            return d;
+          }
+        );
+        this.formattedPredictedData = newFormattedPredictedData;
+      } else {
+        const newData = { date: data.date };
+        data.fields.forEach((f) => {
+          const value = parseInt(f.value);
+          newData[f.name] = { value, added: true };
+        });
+        this.formattedPredictedData = [...this.formattedPredictedData, newData];
+      }
+      this.$bvModal.hide('prediction-modal');
+    },
   },
   computed: {
     ...mapState({
@@ -48,20 +179,77 @@ export default {
       predictionFilter: (state) => state.prediction.predictionFilter,
     }),
 
+    formattedPredictedData: {
+      get: function () {
+        const data = this.tampPredictedData.length
+          ? this.tampPredictedData
+          : this.predictedData.map((d) => {
+              const newFields = {};
+              this.fields.forEach((f) => {
+                newFields[f] = { value: parseInt(d[f]), updated: false };
+              });
+              return { ...d, ...newFields };
+            });
+        return data;
+      },
+      set: function (newValue) {
+        this.tampPredictedData = newValue;
+      },
+    },
+
+    canRecalculatePrediction() {
+      return this.formattedPredictedData.some((d) => {
+        let canRecalculatePrediction = false;
+        this.fields.forEach((f) => {
+          if (d[f].updated || d[f].added) canRecalculatePrediction = true;
+        });
+        return canRecalculatePrediction;
+      });
+    },
+
+    annotationPoints() {
+      const annotationPoints = [];
+      this.formattedPredictedData.forEach((d) => {
+        this.fields.forEach((f) => {
+          if (d[f].updated || d[f].added) {
+            annotationPoints.push({
+              x: new Date(d.date).getTime(),
+              y: d[f].value,
+              marker: {
+                size: 7,
+                fillColor: '#fff',
+                strokeColor: d[f].updated ? '#FF4560' : '#3868fa',
+                radius: 2,
+                cssClass: 'apexcharts-custom-class',
+              },
+            });
+          }
+        });
+      });
+      return annotationPoints;
+    },
+
     chartOptions() {
       return {
         chart: {
+          id: 'predictionChart',
           height: 350,
           type: 'line',
           zoom: {
             enabled: false,
           },
           events: {
-            click: function (event, chartContext, config) {
-              console.log('event', event);
-              console.log('chartContext', chartContext);
-              console.log('config', config);
-              // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
+            click: (event, chartContext, config) => {
+              if (config.dataPointIndex > -1) {
+                const date =
+                  this.formattedPredictedData[config.dataPointIndex]['date'];
+                const fields = this.chartSeries.map((s) => ({
+                  name: s.name,
+                  ...this.formattedPredictedData[config.dataPointIndex][s.name],
+                }));
+                this.modalPredictionData = { date, type: 'update', fields };
+                this.$bvModal.show('prediction-modal');
+              }
             },
           },
         },
@@ -91,7 +279,7 @@ export default {
                 text: 'Données prédite',
               },
             },
-            {
+            /* {
               x: new Date('2022-12-4').getTime(),
               x2: new Date('2022-12-6').getTime(),
               fillColor: '#EEE',
@@ -106,39 +294,16 @@ export default {
                 offsetY: -10,
                 text: 'Surcharge',
               },
-            },
+            }, */
           ],
-          points: [
-            {
-              x: new Date('2022-12-2').getTime(),
-              y: 11,
-              marker: {
-                size: 8,
-                fillColor: '#fff',
-                strokeColor: 'red',
-                radius: 2,
-                cssClass: 'apexcharts-custom-class',
-              },
-              label: {
-                borderColor: '#FF4560',
-                offsetY: 0,
-                style: {
-                  color: '#fff',
-                  background: '#FF4560',
-                },
 
-                text: 'Modifié',
-              },
-            },
-          ],
+          points: this.annotationPoints,
         },
-
         forecastDataPoints: {
           count: 8,
           dashArray: 2,
           fillOpacity: 0.5,
         },
-
         legend: {
           tooltipHoverFormatter: function (val, opts) {
             return (
@@ -157,23 +322,26 @@ export default {
         },
         xaxis: {
           type: 'datetime',
-          categories: this.predictedData.map((data) => data['date']),
+          categories: this.formattedPredictedData.map((data) => data?.date),
         },
-
         grid: {
           borderColor: '#f1f1f1',
         },
       };
     },
     chartSeries() {
-      const fields = ['lit_dispo', 'cas_conf', 'lit_occ'];
-      return fields.map((field) => {
+      return this.fields.map((field) => {
         return {
           name: field,
-          data: this.predictedData.map((data) => data[field]),
+          data: this.formattedPredictedData.map((data) => data[field]?.value),
         };
       });
     },
+  },
+  watch: {
+    /*  predictedData(value) {
+      this.predictedData = [...value];
+    }, */
   },
 };
 </script>
@@ -188,6 +356,9 @@ export default {
   height: 15px;
   border: 2px solid rgb(255, 69, 96);
   border-radius: 15px;
+  &.add {
+    border: 2px solid rgb(56, 104, 250);
+  }
 }
 
 .square-indicator {
@@ -204,5 +375,15 @@ export default {
   font-weight: 400;
   font-family: Helvetica, Arial, sans-serif;
   padding-left: 8px;
+}
+
+.modal-btn {
+  font-size: 13px;
+}
+
+.confirm-btn {
+  .btn {
+    font-size: 13px !important;
+  }
 }
 </style>
