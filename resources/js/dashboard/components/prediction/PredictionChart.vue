@@ -127,13 +127,20 @@ export default {
         .catch((err) => {});
     },
     handleOpenAddValueModal() {
-      console.log('cli');
       const fields = this.fields.map((f) => ({
         name: f,
         value: 0,
         updated: false,
       }));
-      this.modalPredictionData = { date: null, type: 'add', fields };
+
+      const minDate = new Date(this.formattedPredictedData.slice(-1)[0]?.date);
+      minDate.setDate(minDate.getDate() + 1);
+      this.modalPredictionData = {
+        date: null,
+        minDate,
+        type: 'add',
+        fields,
+      };
       this.$bvModal.show('prediction-modal');
     },
     handleSubmitModalData(data) {

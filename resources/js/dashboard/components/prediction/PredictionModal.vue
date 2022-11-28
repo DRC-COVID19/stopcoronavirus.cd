@@ -18,7 +18,10 @@
             <label for class="text-dash-color text-left filter-label date-label"
               >Date</label
             >
-            <v-date-picker v-model="modalData.date">
+            <v-date-picker
+              v-model="modalData.date"
+              :min-date="modalData.minDate"
+            >
               <template v-slot="{ inputValue, inputEvents }">
                 <b-form-input
                   :value="inputValue || '-'"
