@@ -19,7 +19,49 @@ export default {
       state.isLoading = payload;
     },
   },
-  getters: {},
+  getters: {
+    prediction__GetFormattedData: (state) => {
+      let formattedData = [];
+
+      /* data = {
+      form_field_id: 2,
+      form_field_name: "",
+      originals: [
+        { date: '2022-11-17', value: 10},
+        { date: '2022-11-18', value: 10}
+      ],
+      predicted: [
+        { date: '2022-11-20', value: 10},
+        { date: '2022-11-22', value: 11},
+        { date: '2022-11-23', value: 12}
+      ]
+    } */
+      state.predictedData.forEach((data) => {
+        const originals = data.originals.map((d) => ({
+          date: d.date,
+          [data.form_field_name]: d.value,
+        }));
+
+        const predicted = data.predicted.map((d) => ({
+          date: d.date,
+          [data.form_field_name]: d.value,
+        }));
+
+        [...originals, ...predicted].forEach((d) => {
+          const currentData = formattedData.find((f) => f.date === d.date);
+          if (!!currentData) {
+            formattedData = formattedData.map((f) =>
+              f.date === currentData.date ? { ...f, ...currentData } : f
+            );
+          } else {
+            formattedData.push(d);
+          }
+        });
+      });
+
+      return formattedData;
+    },
+  },
   actions: {
     prediction__GetPredictedData({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true);

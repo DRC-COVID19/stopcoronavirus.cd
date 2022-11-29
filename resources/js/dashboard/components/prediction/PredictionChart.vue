@@ -87,6 +87,7 @@ export default {
     };
   },
   methods: {
+    ...mapGetters(['prediction__GetFormattedData']),
     handleResetAll() {
       this.$bvModal
         .msgBoxConfirm(
@@ -190,7 +191,7 @@ export default {
       get: function () {
         const data = this.tampPredictedData.length
           ? this.tampPredictedData
-          : this.predictedData.map((d) => {
+          : this.prediction__GetFormattedData().map((d) => {
               const newFields = {};
               this.fields.forEach((f) => {
                 newFields[f] = { value: parseInt(d[f]), updated: false };
