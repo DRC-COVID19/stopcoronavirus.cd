@@ -81,7 +81,6 @@ export default {
   },
   data() {
     return {
-      fields: ['lit_dispo', 'cas_conf', 'lit_occ'],
       modalPredictionData: null,
       tampPredictedData: [],
     };
@@ -186,7 +185,9 @@ export default {
       predictedData: (state) => state.prediction.predictedData,
       predictionFilter: (state) => state.prediction.predictionFilter,
     }),
-
+    fields() {
+      return this.predictedData.map((d) => d.form_field_name);
+    },
     formattedPredictedData: {
       get: function () {
         const data = this.tampPredictedData.length
@@ -274,7 +275,7 @@ export default {
         annotations: {
           xaxis: [
             {
-              x: new Date('2022-11-30').getTime(),
+              x: new Date(this.predictedData[0]?.predicted[1]?.date).getTime(),
               strokeDashArray: 2,
               borderColor: '#444',
               label: {
@@ -308,7 +309,7 @@ export default {
           points: this.annotationPoints,
         },
         forecastDataPoints: {
-          count: 8,
+          count: this.predictedData[0]?.predicted?.length - 2,
           dashArray: 2,
           fillOpacity: 0.5,
         },

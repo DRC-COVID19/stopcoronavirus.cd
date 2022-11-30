@@ -55,7 +55,7 @@ export default {
       user: (state) => state.auth.user,
     }),
     canPredict() {
-      return this.userHaveRole(ADMIN_DASHBOARD);
+      return this.userHaveRole(ADMINISTRATOR);
     },
   },
   methods: {},

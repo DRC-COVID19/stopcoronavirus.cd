@@ -1,4 +1,5 @@
 import mock from '../../mock';
+import axios2 from 'axios';
 
 export default {
   state: {
@@ -51,7 +52,7 @@ export default {
           const currentData = formattedData.find((f) => f.date === d.date);
           if (!!currentData) {
             formattedData = formattedData.map((f) =>
-              f.date === currentData.date ? { ...f, ...currentData } : f
+              f.date === currentData.date ? { ...f, ...d } : f
             );
           } else {
             formattedData.push(d);
@@ -67,8 +68,8 @@ export default {
       commit('SET_IS_LOADING', true);
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
-        mock
-          .fetchPredictions()
+        axios2
+          .post('http://127.0.0.1:8001/prediction/', payload)
           .then(({ data }) => {
             commit('SET_PREDICTED_DATA', data);
             console.log('PREDICTED_DATA', data);

@@ -112,7 +112,7 @@
                   class="date-range-picker-input"
                   :class="{ 'bg-white': availableDateRange.start }"
                   readonly
-                  :disabled="!availableDateRange.start"
+                  :disabled="!observationDateRange?.end"
                 >
                 </b-form-input>
               </template>
@@ -157,6 +157,7 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex';
+import { getFormattedDates } from '../../functions/formatDateRange';
 export default {
   data() {
     return {
@@ -237,7 +238,7 @@ export default {
     ...mapGetters(['form__publishedForms']),
 
     getStartPredictionDate() {
-      const date = new Date(this.availableDateRange?.end);
+      const date = new Date(this.observationDateRange?.end);
       date.setDate(date.getDate() + 1);
       return date || new Date();
     },
@@ -257,9 +258,9 @@ export default {
       if (this.isPredict || !this.canMakePrediction) return;
       this.isPredict = true;
       const predictionFilterData = {
-        observation_range: this.observationDateRange,
-        prediction_range: this.predictionDateRange,
-        prediction_fields: this.selectedFormFields,
+        observation_range: getFormattedDates(this.observationDateRange),
+        prediction_range: getFormattedDates(this.predictionDateRange),
+        prediction_fields: this.selectedFormFields.map((f) => f.id),
         form_id: this.selectedFormId,
       };
 
