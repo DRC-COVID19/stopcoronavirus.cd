@@ -29,12 +29,14 @@ import VueTimeline from '@growthbunker/vuetimeline';
 import Notifications from 'vue-notification';
 import VCalendar from 'v-calendar';
 import VueApexCharts from 'vue-apexcharts';
+import Multiselect from 'vue-multiselect';
 import './validation';
 import './directive';
 
 Vue.use(VueApexCharts);
 
 Vue.component('apexchart', VueApexCharts);
+Vue.component('multiselect', Multiselect);
 require('./helper');
 
 Vue.use(BootstrapVue);

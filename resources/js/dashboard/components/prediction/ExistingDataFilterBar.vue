@@ -17,14 +17,31 @@
             <label for class="text-dash-color text-left filter-label"
               >Source de données</label
             >
-            <v-select
-              v-model="selectedFormId"
+
+            <multiselect
+              v-model="selectedForm"
               :options="formList"
-              :reduce="(item) => item.id"
               label="title"
-              class="style-chooser"
-              @input="selectedForm"
-            />
+              track-by="title"
+              placeholder=""
+              :preserve-search="true"
+              :showPointer="false"
+              @input="handleDataSourceChange"
+            >
+              <template slot="singleLabel" slot-scope="props"
+                ><span class="option__desc"
+                  ><span class="option__title">{{
+                    props.option.title
+                  }}</span></span
+                ></template
+              >
+              <template slot="singleLabel" slot-scope="{ option }">
+                <p class="multiselect__single__container">
+                  <span class="multiselect__single">{{ option.title }}</span>
+                </p>
+              </template>
+            </multiselect>
+
             <label
               for
               class="text-left m-0 filter-label"
@@ -46,14 +63,31 @@
             <label for class="text-dash-color text-left filter-label"
               >Champ du formulaire</label
             >
-            <v-select
+
+            <multiselect
               v-model="selectedFormFields"
               :options="formFieldList"
-              :reduce="(item) => ({ id: item.id, name: item.name })"
+              :multiple="true"
+              :close-on-select="false"
+              :clear-on-select="false"
+              :preserve-search="true"
+              :limit="6"
+              :limitText="(count) => `et ${count} encore`"
+              placeholder=""
               label="name"
-              multiple
-              class="style-chooser"
-            />
+              track-by="name"
+            >
+              <template
+                slot="selection"
+                slot-scope="{ values, search, isOpen }"
+              >
+                <span
+                  class="multiselect__single"
+                  v-if="values.length && !isOpen"
+                  >{{ values.length }} champs sélectionnés</span
+                >
+              </template>
+            </multiselect>
           </b-form-group>
         </b-col>
         <b-col
@@ -81,6 +115,7 @@
                   :class="{ 'bg-white': availableDateRange.start }"
                   placeholder="Sélectionner une plage de date"
                   readonly
+                  size="lg"
                   :disabled="!availableDateRange.start"
                 >
                 </b-form-input>
@@ -111,6 +146,7 @@
                   v-on="inputEvents.end"
                   class="date-range-picker-input"
                   :class="{ 'bg-white': availableDateRange.start }"
+                  size="lg"
                   readonly
                   :disabled="!observationDateRange?.end"
                 >
@@ -123,10 +159,10 @@
           cols="12"
           md="6"
           lg="3"
-          class="w-100 nav-zone pl-1 pr-1 mb-2 mb-lg-0 d-flex align-items-center"
+          class="w-100 nav-zone pl-1 pr-1 pt-4 mb-2 mb-lg-0 d-flex align-items-start"
         >
           <div
-            class="d-flex align-items-center justify-content-between mt-2 btn-container"
+            class="d-flex align-items-center justify-content-between btn-container"
           >
             <b-button
               size="lg"
@@ -158,12 +194,13 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex';
 import { getFormattedDates } from '../../functions/formatDateRange';
+import { addDays } from 'date-fns';
 export default {
   data() {
     return {
       observationDateRange: null,
       predictionDateRange: null,
-      selectedFormId: null,
+      selectedForm: null,
       selectedFormFields: [],
       isLoading: false,
       isPredict: false,
@@ -188,7 +225,7 @@ export default {
 
     formHasNoData() {
       return !!(
-        this.selectedFormId &&
+        this.selectedForm &&
         !(this.availableDateRange.start && this.availableDateRange.end)
       );
     },
@@ -199,7 +236,7 @@ export default {
 
     canMakePrediction() {
       return !!(
-        this.selectedFormId &&
+        this.selectedForm &&
         this.availableDateRange.start &&
         this.selectedFormFields?.length &&
         this.observationDateRange &&
@@ -211,7 +248,7 @@ export default {
     this.getForms();
   },
   watch: {
-    selectedFormId(v) {
+    selectedForm(v) {
       if (!v) {
         this.selectedFormFields = [];
         this.availableDateRange = {
@@ -225,7 +262,13 @@ export default {
     formFields(v) {
       this.formFieldList = [];
       this.selectedFormFields = [];
-      if (this.selectedFormId !== null) this.formFieldList = v;
+      if (this.selectedForm !== null) this.formFieldList = v;
+    },
+    observationDateRange(v) {
+      this.predictionDateRange = {
+        start: addDays(new Date(v.end), 1),
+        end: addDays(new Date(v.end), 31),
+      };
     },
   },
   methods: {
@@ -238,13 +281,11 @@ export default {
     ...mapGetters(['form__publishedForms']),
 
     getStartPredictionDate() {
-      const date = new Date(this.observationDateRange?.end);
-      date.setDate(date.getDate() + 1);
-      return date || new Date();
+      return addDays(new Date(this.observationDateRange?.end), 1) || new Date();
     },
 
     clearForm() {
-      this.selectedFormId = null;
+      this.selectedForm = null;
       this.observationDateRange = null;
       this.predictionDateRange = null;
       this.selectedFormFields = [];
@@ -261,18 +302,18 @@ export default {
         observation_range: getFormattedDates(this.observationDateRange),
         prediction_range: getFormattedDates(this.predictionDateRange),
         prediction_fields: this.selectedFormFields.map((f) => f.id),
-        form_id: this.selectedFormId,
+        form_id: this.selectedForm?.id,
       };
 
       await this.prediction__GetPredictedData(predictionFilterData);
       this.isPredict = false;
     },
 
-    async selectedForm(value) {
+    async handleDataSourceChange(value) {
       this.formSelected = value;
       if (!value) return;
       this.isLoading = true;
-      const selectedFormId = { form_id: value };
+      const selectedFormId = { form_id: value?.id };
       this.getFormFields(selectedFormId);
       this.availableDateRange = await this.getAllDateRange(selectedFormId);
       this.observationDateRange = this.availableDateRange;
@@ -293,12 +334,18 @@ export default {
   font-size: 12px;
 }
 .btn-container {
+  padding-top: 0.1em;
   width: 190px;
 }
+
 .v-select {
   &::v-deep {
     .vs__selected {
       overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .vs__selected-options {
+      height: auto;
       text-overflow: ellipsis;
     }
   }
@@ -306,8 +353,26 @@ export default {
 
 .predict-btn {
   font-size: 13px;
+  height: 40px !important;
 }
 .date-range-picker-input {
   font-size: 12px !important;
+  height: 40px !important;
+}
+
+.multiselect {
+  .multiselect__single__container {
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+  .multiselect__single {
+    font-size: 0.85rem !important;
+    text-overflow: ellipsis;
+    padding: 0;
+    margin: 0;
+  }
 }
 </style>
