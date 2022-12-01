@@ -1,4 +1,4 @@
-import mock from '../../mock';
+import { PREDICTION_API_URL } from '../../config/env';
 import axios2 from 'axios';
 
 export default {
@@ -69,16 +69,15 @@ export default {
       return new Promise((resolve, reject) => {
         // eslint-disable-next-line no-undef
         axios2
-          .post('http://127.0.0.1:8001/prediction/', payload)
+          .post(`${PREDICTION_API_URL}/prediction/`, payload)
           .then(({ data }) => {
             commit('SET_PREDICTED_DATA', data);
-            console.log('PREDICTED_DATA', data);
-            console.log('PREDICTION_FILTER', payload);
             commit('SET_PREDICTION_FILTER', payload);
             commit('SET_IS_LOADING', false);
             resolve(data);
           })
           .catch((response) => {
+            commit('SET_IS_LOADING', false);
             reject(response);
           });
       });

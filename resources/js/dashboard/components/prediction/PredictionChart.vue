@@ -13,10 +13,10 @@
           <div class="indicator-label">Valeur modifié</div>
         </div>
 
-        <div class="d-flex justify-content-center align-items-center ml-3">
+        <!--   <div class="d-flex justify-content-center align-items-center ml-3">
           <div class="circle-indicator add"></div>
           <div class="indicator-label">Valeur ajouté</div>
-        </div>
+        </div> -->
 
         <div class="d-flex justify-content-center align-items-center ml-3">
           <div class="square-indicator"></div>
@@ -29,15 +29,21 @@
           variant="danger"
           class="modal-btn mr-3"
           @click="handleResetAll"
-          v-if="canRecalculatePrediction"
+          v-if="canRecalculatePrediction && !isPredictionLoading"
         >
           Tout réinitialiser
         </b-button>
+        <b-spinner
+          variant="primary"
+          class="mr-3"
+          v-if="canRecalculatePrediction && isPredictionLoading"
+        ></b-spinner>
         <b-button
           size="sm"
           variant="success"
           class="modal-btn mr-3"
-          v-if="canRecalculatePrediction"
+          @click="handleRecalculatePrediction"
+          v-if="canRecalculatePrediction && !isPredictionLoading"
         >
           Recalculer la prediction
         </b-button>
@@ -71,7 +77,7 @@
 <script>
 import ApexCharts from 'vue-apexcharts';
 import { mapActions, mapState, mapGetters } from 'vuex';
-
+import { getFormattedDate } from '../../functions/formatDateRange';
 import PredictionModal from './PredictionModal';
 
 export default {
@@ -85,105 +91,11 @@ export default {
       tampPredictedData: [],
     };
   },
-  methods: {
-    ...mapGetters(['prediction__GetFormattedData']),
-    handleResetAll() {
-      this.$bvModal
-        .msgBoxConfirm(
-          'Toute vos modification et ajout seront perdu, êtes vous sur ?',
-          {
-            title: 'Réinitialisation des données',
-            size: 'sm',
-            buttonSize: 'sm',
-            okVariant: 'success',
-            okTitle: 'OUI',
-            cancelTitle: 'NON',
-            cancelVariant: 'danger',
-            footerClass: 'p-2 confirm-btn text-sm',
-            hideHeaderClose: true,
-            centered: true,
-          }
-        )
-        .then((value) => {
-          if (!!value) {
-            const newFormattedPredictedData = this.formattedPredictedData
-              .map((d) => {
-                const newValue = {};
-                this.fields.forEach((f) => {
-                  if (d[f].updated) {
-                    newValue[f] = {
-                      ...d[f],
-                      value: d[f].oldValue,
-                      updated: false,
-                    };
-                  }
-                });
-                return { ...d, ...newValue };
-              })
-              .filter((d) => !this.fields.some((f) => d[f].added));
-            this.formattedPredictedData = newFormattedPredictedData;
-          }
-        })
-        .catch((err) => {});
-    },
-    handleOpenAddValueModal() {
-      const fields = this.fields.map((f) => ({
-        name: f,
-        value: 0,
-        updated: false,
-      }));
-
-      const minDate = new Date(this.formattedPredictedData.slice(-1)[0]?.date);
-      minDate.setDate(minDate.getDate() + 1);
-      this.modalPredictionData = {
-        date: null,
-        minDate,
-        type: 'add',
-        fields,
-      };
-      this.$bvModal.show('prediction-modal');
-    },
-    handleSubmitModalData(data) {
-      if (data.type === 'update') {
-        const newFormattedPredictedData = this.formattedPredictedData.map(
-          (d) => {
-            if (d.date === data.date) {
-              const newValue = {};
-              data.fields.forEach((f) => {
-                const value = parseInt(f.value);
-                if (value !== parseInt(d[f.name].value)) {
-                  newValue[f.name] = {
-                    ...d[f.name],
-                    value,
-                    oldValue: parseInt(d[f.name].value),
-                    updated: true,
-                  };
-                }
-                if (value === parseInt(d[f.name].oldValue)) {
-                  newValue[f.name] = { ...d[f.name], value, updated: false };
-                }
-              });
-              return { ...d, ...newValue };
-            }
-            return d;
-          }
-        );
-        this.formattedPredictedData = newFormattedPredictedData;
-      } else {
-        const newData = { date: data.date };
-        data.fields.forEach((f) => {
-          const value = parseInt(f.value);
-          newData[f.name] = { value, added: true };
-        });
-        this.formattedPredictedData = [...this.formattedPredictedData, newData];
-      }
-      this.$bvModal.hide('prediction-modal');
-    },
-  },
   computed: {
     ...mapState({
       predictedData: (state) => state.prediction.predictedData,
       predictionFilter: (state) => state.prediction.predictionFilter,
+      isPredictionLoading: (state) => state.prediction.isLoading,
     }),
     fields() {
       return this.predictedData.map((d) => d.form_field_name);
@@ -210,7 +122,7 @@ export default {
       return this.formattedPredictedData.some((d) => {
         let canRecalculatePrediction = false;
         this.fields.forEach((f) => {
-          if (d[f].updated || d[f].added) canRecalculatePrediction = true;
+          if (d[f]?.updated || d[f]?.added) canRecalculatePrediction = true;
         });
         return canRecalculatePrediction;
       });
@@ -220,7 +132,7 @@ export default {
       const annotationPoints = [];
       this.formattedPredictedData.forEach((d) => {
         this.fields.forEach((f) => {
-          if (d[f].updated || d[f].added) {
+          if (d[f]?.updated || d[f]?.added) {
             annotationPoints.push({
               x: new Date(d.date).getTime(),
               y: d[f].value,
@@ -347,10 +259,125 @@ export default {
       });
     },
   },
-  watch: {
-    /*  predictedData(value) {
-      this.predictedData = [...value];
-    }, */
+  methods: {
+    ...mapActions(['prediction__GetPredictedData']),
+    ...mapGetters(['prediction__GetFormattedData']),
+    handleResetAll() {
+      this.$bvModal
+        .msgBoxConfirm(
+          'Toute vos modification et ajout seront perdu, êtes vous sur ?',
+          {
+            title: 'Réinitialisation des données',
+            size: 'sm',
+            buttonSize: 'sm',
+            okVariant: 'success',
+            okTitle: 'OUI',
+            cancelTitle: 'NON',
+            cancelVariant: 'danger',
+            footerClass: 'p-2 confirm-btn text-sm',
+            hideHeaderClose: true,
+            centered: true,
+          }
+        )
+        .then((value) => {
+          if (!!value) {
+            const newFormattedPredictedData = this.formattedPredictedData
+              .map((d) => {
+                const newValue = {};
+                this.fields.forEach((f) => {
+                  if (d[f].updated) {
+                    newValue[f] = {
+                      ...d[f],
+                      value: d[f].oldValue,
+                      updated: false,
+                    };
+                  }
+                });
+                return { ...d, ...newValue };
+              })
+              .filter((d) => !this.fields.some((f) => d[f].added));
+            this.formattedPredictedData = newFormattedPredictedData;
+          }
+        })
+        .catch((err) => {});
+    },
+    handleOpenAddValueModal() {
+      const fields = this.fields.map((f) => ({
+        name: f,
+        value: 0,
+        updated: false,
+      }));
+
+      const minDate = new Date(this.formattedPredictedData.slice(-1)[0]?.date);
+      minDate.setDate(minDate.getDate() + 1);
+      this.modalPredictionData = {
+        date: null,
+        minDate,
+        type: 'add',
+        fields,
+      };
+      this.$bvModal.show('prediction-modal');
+    },
+    handleSubmitModalData(data) {
+      if (data.type === 'update') {
+        const newFormattedPredictedData = this.formattedPredictedData.map(
+          (d) => {
+            if (d.date === data.date) {
+              const newValue = {};
+              data.fields.forEach((f) => {
+                const value = parseInt(f.value);
+                if (value !== parseInt(d[f.name].value)) {
+                  newValue[f.name] = {
+                    ...d[f.name],
+                    value,
+                    oldValue: parseInt(d[f.name].value),
+                    updated: true,
+                  };
+                }
+                if (value === parseInt(d[f.name].oldValue)) {
+                  newValue[f.name] = { ...d[f.name], value, updated: false };
+                }
+              });
+              return { ...d, ...newValue };
+            }
+            return d;
+          }
+        );
+        this.formattedPredictedData = newFormattedPredictedData;
+      } else {
+        const newData = { date: data.date };
+        data.fields.forEach((f) => {
+          const value = parseInt(f.value);
+          newData[f.name] = { value, added: true };
+        });
+        this.formattedPredictedData = [...this.formattedPredictedData, newData];
+      }
+      this.$bvModal.hide('prediction-modal');
+    },
+    async handleRecalculatePrediction() {
+      if (this.isPredictionLoading || !this.predictionFilter) return;
+
+      const changedObservations = [];
+      this.formattedPredictedData.forEach((d) => {
+        this.fields.forEach((f) => {
+          if (d[f].updated) {
+            changedObservations.push({
+              date: getFormattedDate(d.date),
+              value: d[f].value,
+              form_field_id: this.predictedData?.find(
+                (p) => p.form_field_name === f
+              )?.form_field_id,
+            });
+          }
+        });
+      });
+
+      const predictionFilter = {
+        ...this.predictionFilter,
+        changed_observations: changedObservations,
+      };
+      await this.prediction__GetPredictedData(predictionFilter);
+    },
   },
 };
 </script>

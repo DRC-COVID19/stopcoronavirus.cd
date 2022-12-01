@@ -2,6 +2,7 @@ export const GOOGLE_ANALYTICS_ID = 'UA-113285849-15';
 export const MAPBOX_TOKEN =
   'pk.eyJ1IjoibWVya2kyMzAiLCJhIjoiY2s5aWdkejJzMDhybTNkcWxtMm9la2h4aCJ9.5NwFpUn264STu43zxmTyOw';
 export const ASANA_API_URL = 'https://app.asana.com/api/1.0';
+export const PREDICTION_API_URL = 'http://127.0.0.1:8001';
 export const ASANA_TOKEN =
   '1/1201337579622176:27020d37454f7274f0e1cdbac25b2997';
 export const MAPBOX_DEFAULT_STYLE =

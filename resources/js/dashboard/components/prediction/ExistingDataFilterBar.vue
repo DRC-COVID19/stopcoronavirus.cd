@@ -173,12 +173,12 @@
               <span class="fa fa-times"></span>
             </b-button>
 
-            <b-spinner variant="primary" v-if="isPredict"></b-spinner>
+            <b-spinner variant="primary" v-if="isPredictionLoading"></b-spinner>
 
             <b-button
               v-else
               size="sm"
-              @click="makePrediction"
+              @click="handleLaunchPrediction"
               class="btn btn-dash-blue btn-secondary predict-btn"
               :disabled="!canMakePrediction"
             >
@@ -203,9 +203,7 @@ export default {
       selectedForm: null,
       selectedFormFields: [],
       isLoading: false,
-      isPredict: false,
       formFieldList: [],
-
       availableDateRange: {
         start: null,
         end: null,
@@ -216,8 +214,7 @@ export default {
   computed: {
     ...mapState({
       formFields: (state) => state.formField.formFields,
-      predictedData: (state) => state.prediction.predictedData,
-      predictionFilter: (state) => state.prediction.predictionFilter,
+      isPredictionLoading: (state) => state.prediction.isLoading,
     }),
 
     formHasNoData() {
@@ -296,18 +293,15 @@ export default {
       };
     },
 
-    async makePrediction() {
-      if (this.isPredict || !this.canMakePrediction) return;
-      this.isPredict = true;
-      const predictionFilterData = {
+    async handleLaunchPrediction() {
+      if (this.isPredictionLoading || !this.canMakePrediction) return;
+      const predictionFilter = {
         observation_range: getFormattedDates(this.observationDateRange),
         prediction_range: getFormattedDates(this.predictionDateRange),
         prediction_fields: this.selectedFormFields.map((f) => f.id),
         form_id: this.selectedForm?.id,
       };
-
-      await this.prediction__GetPredictedData(predictionFilterData);
-      this.isPredict = false;
+      await this.prediction__GetPredictedData(predictionFilter);
     },
 
     async handleDataSourceChange(value) {
