@@ -214,9 +214,6 @@ export default {
   },
 
   computed: {
-    dataSourceList() {
-      return [...this.defaultDataSource];
-    },
     ...mapState({
       formFields: (state) => state.formField.formFields,
       predictedData: (state) => state.prediction.predictedData,
@@ -262,7 +259,11 @@ export default {
     formFields(v) {
       this.formFieldList = [];
       this.selectedFormFields = [];
-      if (this.selectedForm !== null) this.formFieldList = v;
+      if (this.selectedForm !== null) {
+        this.formFieldList = v?.filter(
+          (d) => d.form_field_type.name === 'number'
+        );
+      }
     },
     observationDateRange(v) {
       this.predictionDateRange = {
