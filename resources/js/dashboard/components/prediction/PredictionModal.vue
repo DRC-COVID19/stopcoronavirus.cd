@@ -2,11 +2,7 @@
   <b-modal
     :id="id"
     ref="predictionModal"
-    :title="
-      modalData.type === 'update'
-        ? 'Modification des valeurs'
-        : 'Ajout des valeurs'
-    "
+    title="Modification des valeurs"
     centered
     size="sm"
     button-size="xs"
@@ -20,7 +16,9 @@
             >
             <v-date-picker
               v-model="modalData.date"
-              :min-date="modalData.minDate"
+              :min-date="minDate"
+              :max-date="maxDate"
+              @input="handleDateChange"
             >
               <template v-slot="{ inputValue, inputEvents }">
                 <b-form-input
@@ -48,7 +46,7 @@
               >{{ field.name }}
               <span v-if="field.updated" class="fa fa-pencil pl-1"></span
             ></label>
-            <b-form-input v-model="field.value"> </b-form-input>
+            <b-form-input v-model="field.value" type="number"> </b-form-input>
           </b-form-group>
         </b-form-row>
       </b-form>
@@ -82,7 +80,7 @@
             variant="primary"
             class="modal-btn"
           >
-            {{ modalData.type === 'update' ? 'Modifier' : 'Ajouter' }}
+            Modifier
           </b-button>
         </div>
       </div>
@@ -92,6 +90,7 @@
 
 <script>
 import { format } from 'date-fns';
+import { mapGetters } from 'vuex';
 
 export default {
   props: {
@@ -113,15 +112,33 @@ export default {
         this.modalData.fields = newValue;
       },
     },
+    minDate() {
+      return this.prediction__GetFormattedData()[0]?.date;
+    },
+    maxDate() {
+      return this.prediction__GetFormattedData()?.slice(-1)[0]?.date;
+    },
   },
   methods: {
+    ...mapGetters(['prediction__GetFormattedData']),
     handleSubmit() {
       const data = {
         date: format(new Date(this.modalData.date), 'yyyy-MM-dd'),
         fields: this.fields,
-        type: this.modalData.type,
+        type: 'update',
       };
       this.$emit('submit', data);
+    },
+    handleDateChange(v) {
+      const data = this.prediction__GetFormattedData()?.find(
+        (d) => d.date === format(v, 'yyyy-MM-dd')
+      );
+      if (data) {
+        this.fields = this.fields.map((d) => ({
+          ...d,
+          value: parseInt(data[d.name]),
+        }));
+      }
     },
     handleReset() {
       this.fields = this.fields.map((f) => ({
