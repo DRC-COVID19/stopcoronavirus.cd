@@ -10,13 +10,13 @@
       <div class="d-flex justify-content-center align-items-center mb-3">
         <div class="d-flex justify-content-center align-items-center">
           <div class="circle-indicator"></div>
-          <div class="indicator-label">Valeur modifié</div>
+          <div class="indicator-label">Valeur modifié (en local)</div>
         </div>
 
-        <!--   <div class="d-flex justify-content-center align-items-center ml-3">
+        <div class="d-flex justify-content-center align-items-center ml-3">
           <div class="circle-indicator add"></div>
-          <div class="indicator-label">Valeur ajouté</div>
-        </div> -->
+          <div class="indicator-label">Valeur modifié</div>
+        </div>
 
         <div class="d-flex justify-content-center align-items-center ml-3">
           <div class="square-indicator"></div>
@@ -88,8 +88,23 @@ export default {
   data() {
     return {
       modalPredictionData: null,
-      tampPredictedData: [],
+      formattedPredictedData: [],
     };
+  },
+  watch: {
+    predictedData() {
+      this.formattedPredictedData =
+        this.prediction__GetFormattedData()?.map((d) => {
+          const newFields = {};
+          this.fields.forEach((f) => {
+            newFields[f] = {
+              value: parseInt(d[f]?.value),
+              recalculate: d[f]?.updated,
+            };
+          });
+          return { ...d, ...newFields };
+        }) || [];
+    },
   },
   computed: {
     ...mapState({
@@ -97,25 +112,9 @@ export default {
       predictionFilter: (state) => state.prediction.predictionFilter,
       isPredictionLoading: (state) => state.prediction.isLoading,
     }),
+
     fields() {
       return this.predictedData.map((d) => d.form_field_name);
-    },
-    formattedPredictedData: {
-      get: function () {
-        const data = this.tampPredictedData.length
-          ? this.tampPredictedData
-          : this.prediction__GetFormattedData().map((d) => {
-              const newFields = {};
-              this.fields.forEach((f) => {
-                newFields[f] = { value: parseInt(d[f]), updated: false };
-              });
-              return { ...d, ...newFields };
-            });
-        return data;
-      },
-      set: function (newValue) {
-        this.tampPredictedData = newValue;
-      },
     },
 
     canRecalculatePrediction() {
@@ -132,7 +131,7 @@ export default {
       const annotationPoints = [];
       this.formattedPredictedData.forEach((d) => {
         this.fields.forEach((f) => {
-          if (d[f]?.updated || d[f]?.added) {
+          if (d[f]?.updated || d[f]?.recalculate) {
             annotationPoints.push({
               x: new Date(d.date).getTime(),
               y: d[f].value,
@@ -376,6 +375,7 @@ export default {
         ...this.predictionFilter,
         changed_observations: changedObservations,
       };
+      console.log('predictionFilter', predictionFilter);
       await this.prediction__GetPredictedData(predictionFilter);
     },
   },

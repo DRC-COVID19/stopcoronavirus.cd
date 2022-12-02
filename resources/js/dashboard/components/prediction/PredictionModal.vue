@@ -136,7 +136,7 @@ export default {
       if (data) {
         this.fields = this.fields.map((d) => ({
           ...d,
-          value: parseInt(data[d.name]),
+          value: parseInt(data[d.name]?.value),
         }));
       }
     },

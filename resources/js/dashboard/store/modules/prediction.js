@@ -40,12 +40,12 @@ export default {
       state.predictedData.forEach((data) => {
         const originals = data.originals.map((d) => ({
           date: d.date,
-          [data.form_field_name]: d.value,
+          [data.form_field_name]: { value: d.value, updated: d.updated },
         }));
 
         const predicted = data.predicted.map((d) => ({
           date: d.date,
-          [data.form_field_name]: d.value,
+          [data.form_field_name]: { value: d.value, updated: d.updated },
         }));
 
         [...originals, ...predicted].forEach((d) => {
