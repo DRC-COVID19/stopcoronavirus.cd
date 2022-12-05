@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateAdminUser extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('admin_users', function (Blueprint $table) {
-            $table->boolean('affected')->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('admin_users', function (Blueprint $table) {
+      $table->boolean('affected')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('admin_users', function (Blueprint $table) {
-            $table->dropColumn('affected');
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('admin_users', function (Blueprint $table) {
+      $table->dropColumn('affected');
+    });
+  }
 }

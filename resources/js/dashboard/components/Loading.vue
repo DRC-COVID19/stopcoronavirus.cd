@@ -1,13 +1,6 @@
 <template>
-  <b-row
-    align-h="center"
-    align-v="center"
-    class="wrap"
-  >
-    <b-col
-      cols="12"
-      class="loading-row"
-    >
+  <b-row align-h="center" align-v="center" class="wrap">
+    <b-col cols="12" class="loading-row">
       <div class="lds-dual-ring" />
       <span class="text">{{ message }}</span>
     </b-col>
@@ -18,25 +11,24 @@ export default {
   props: {
     message: {
       type: String,
-      default: 'Loading...'
-    }
-  }
-}
+      default: 'Loading...',
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
-.loading-row{
+@import '@~/sass/_variables';
+.loading-row {
   height: 100%;
   align-items: center;
   justify-content: center;
   display: flex;
-  .spinner{
-      width: 3rem;
-      height: 3rem;
+  .spinner {
+    width: 3rem;
+    height: 3rem;
   }
-  .text{
-      font-size: 1.5rem;
-
+  .text {
+    font-size: 1.5rem;
   }
 }
 
@@ -46,7 +38,7 @@ export default {
   height: 64px;
 }
 .lds-dual-ring:after {
-  content: " ";
+  content: ' ';
   display: block;
   width: 46px;
   height: 46px;
@@ -64,13 +56,11 @@ export default {
     transform: rotate(360deg);
   }
 }
-@media screen and($small){
-  .loading-row{
-    .text{
+@media screen and($small) {
+  .loading-row {
+    .text {
       font-size: 2rem;
-
+    }
   }
-  }
-  }
-
+}
 </style>

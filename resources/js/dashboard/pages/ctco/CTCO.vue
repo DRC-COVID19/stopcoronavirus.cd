@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { ADMIN_HOSPITAL, AGENT_HOSPITAL } from "../../config/env";
-import CTCOMenu from "./components/CTCOMenu";
+import { mapState } from 'vuex';
+import { ADMIN_HOSPITAL, AGENT_HOSPITAL } from '../../config/env';
+import CTCOMenu from './components/CTCOMenu';
 export default {
   components: {
     CTCOMenu,
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     redirect(route) {
-      if (route.name !== "hospitals") {
+      if (route.name !== 'hospitals') {
         return null;
       }
       if (!this.user || this.user.roles === undefined) {
@@ -44,14 +44,14 @@ export default {
 
       if (this.user.roles.find((a) => a.name == ADMIN_HOSPITAL)) {
         this.$router.push({
-          name: "hospital.admin",
+          name: 'hospital.admin',
         });
       } else if (
         this.user.hospital &&
         this.user.roles.find((a) => a.name == AGENT_HOSPITAL)
       ) {
         this.$router.push({
-          name: "hospital.home",
+          name: 'hospital.home',
         });
       }
     },
@@ -60,7 +60,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .ctco-container {
   &-body {
     overflow-y: scroll;

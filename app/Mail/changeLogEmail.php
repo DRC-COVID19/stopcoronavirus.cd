@@ -32,6 +32,9 @@ class changeLogEmail extends Mailable
    */
   public function build()
   {
-    return $this->markdown('mails.change_log_email', ['user' => $this->user, 'changeLog' => $this->changeLog]);
+    return $this->markdown('mails.change_log_email', [
+      'user' => $this->user,
+      'changeLog' => $this->changeLog,
+    ]);
   }
 }

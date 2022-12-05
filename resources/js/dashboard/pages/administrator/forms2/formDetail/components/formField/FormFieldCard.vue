@@ -67,130 +67,134 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
 export default {
   props: {
     formField: {
       type: Object,
       default: () => ({}),
-      required: false
+      required: false,
     },
     fieldForms: {
       type: Array,
       default: () => [],
-      required: false
+      required: false,
     },
     fieldKey: {
       type: Number,
       default: null,
-      required: false
+      required: false,
     },
     indexField: {
       type: Number,
       default: null,
-      required: false
+      required: false,
     },
     lastField: {
       type: Number,
       default: null,
-      required: false
-    }
+      required: false,
+    },
   },
-  data () {
+  data() {
     return {
       isDeleteModalShown: false,
       fillInFormField: {},
-      inMoving: false
-    }
+      inMoving: false,
+    };
   },
   computed: {
-    isFirstField () {
-      return this.indexField !== 0
+    isFirstField() {
+      return this.indexField !== 0;
     },
-    isLastField () {
-      return this.indexField !== this.lastField
-    }
+    isLastField() {
+      return this.indexField !== this.lastField;
+    },
   },
   methods: {
     ...mapActions(['removeFormField', 'updateFormField']),
-    setPopulateForm () {
-      this.$emit('edit', this.fieldKey)
+    setPopulateForm() {
+      this.$emit('edit', this.fieldKey);
     },
-    callCardOrderField () {
-      this.$emit('orderFieldCard', this.fieldKey)
+    callCardOrderField() {
+      this.$emit('orderFieldCard', this.fieldKey);
     },
-    deleteHospital () {
-      this.isDeleteModalShown = true
+    deleteHospital() {
+      this.isDeleteModalShown = true;
     },
-    onValidateDelete () {
+    onValidateDelete() {
       this.removeFormField(this.formField.id)
         .then((formFieldDeleted) => {
           this.$notify({
             group: 'alert',
             title: 'Supprimer ce champ',
             text: 'Supprimer avec succès',
-            type: 'Supprimer avec succès'
-          })
-          this.isDeleteModalShown = false
-          this.$emit('deleted', formFieldDeleted)
+            type: 'Supprimer avec succès',
+          });
+          this.isDeleteModalShown = false;
+          this.$emit('deleted', formFieldDeleted);
         })
         .catch(() => {
           this.$notify({
             group: 'alert',
             title: "Supprimer  l'étape",
             text: 'Une erreur est survenus',
-            type: 'error'
-          })
-        })
+            type: 'error',
+          });
+        });
     },
-    onCancelDelete () {
-      this.isDeleteModalShown = false
+    onCancelDelete() {
+      this.isDeleteModalShown = false;
     },
-    dropUpField () {
+    dropUpField() {
       if (this.inMoving) {
-        return false
+        return false;
       }
-      this.inMoving = true
-      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) - 1
+      this.inMoving = true;
+      const index =
+        this.fieldForms.findIndex((field) => field.id === this.formField.id) -
+        1;
       Promise.all([
         this.updateFormField({
           id: this.formField.id,
-          order_field: this.fieldForms[index].order_field
+          order_field: this.fieldForms[index].order_field,
         }),
         this.updateFormField({
           id: this.fieldForms[index].id,
-          order_field: this.formField.order_field
-        })
+          order_field: this.formField.order_field,
+        }),
       ]).then(() => {
-        this.$emit('resetList', { formField: this.formField, newIndex: index})
-        this.inMoving = false
-      })
+        this.$emit('resetList', { formField: this.formField, newIndex: index });
+        this.inMoving = false;
+      });
     },
-    dropDownField () {
+    dropDownField() {
       if (this.inMoving) {
-        return false
+        return false;
       }
-      this.inMoving = true
-      const index = this.fieldForms.findIndex((field) => field.id === this.formField.id) + 1
+      this.inMoving = true;
+      const index =
+        this.fieldForms.findIndex((field) => field.id === this.formField.id) +
+        1;
       Promise.all([
         this.updateFormField({
           id: this.formField.id,
-          order_field: this.fieldForms[index].order_field
+          order_field: this.fieldForms[index].order_field,
         }),
         this.updateFormField({
           id: this.fieldForms[index].id,
-          order_field: this.formField.order_field
-        })
+          order_field: this.formField.order_field,
+        }),
       ]).then(() => {
-        this.$emit('resetList', { formField: this.formField, newIndex: index})
-        this.inMoving = false
-      })
-    }
-  }
-}
+        this.$emit('resetList', { formField: this.formField, newIndex: index });
+        this.inMoving = false;
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 
 .container-icon {
   background-color: white;

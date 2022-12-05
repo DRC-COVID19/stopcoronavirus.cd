@@ -48,7 +48,7 @@
     font-weight: bold;
     justify-content: flex-start;
     margin-bottom: 20px;
-    
+
     width: 100%;
     @media screen and (max-width: 575px) {
       padding: 0;
@@ -82,28 +82,28 @@
     @media (min-width: 768px) {
       padding: 47px 40px 11px;
     }
-    .custom-text-label{
+    .custom-text-label {
       font-size: 1.3rem;
       @media screen and (max-width: 575px) {
         font-size: 1rem;
       }
     }
     .custom-control {
-      input[type="radio"] {
+      input[type='radio'] {
         box-sizing: border-box;
         padding: 0;
       }
       margin-bottom: 10px;
 
-      [type="radio"]:checked,
-      [type="radio"]:not(:checked),
-      [type="checkbox"]:checked,
-      [type="checkbox"]:not(:checked) {
+      [type='radio']:checked,
+      [type='radio']:not(:checked),
+      [type='checkbox']:checked,
+      [type='checkbox']:not(:checked) {
         display: none;
       }
 
-      [type="radio"]:checked,
-      [type="checkbox"]:checked {
+      [type='radio']:checked,
+      [type='checkbox']:checked {
         + label {
           &::after {
             opacity: 1;
@@ -112,8 +112,8 @@
         }
       }
 
-      [type="radio"]:not(:checked),
-      [type="checkbox"]:not(:checked) {
+      [type='radio']:not(:checked),
+      [type='checkbox']:not(:checked) {
         + label {
           &::after {
             opacity: 0;
@@ -122,13 +122,13 @@
         }
       }
 
-      [type="radio"]:checked,
-      [type="radio"]:not(:checked),
-      [type="checkbox"]:checked,
-      [type="checkbox"]:not(:checked) {
+      [type='radio']:checked,
+      [type='radio']:not(:checked),
+      [type='checkbox']:checked,
+      [type='checkbox']:not(:checked) {
         + label {
           &::before {
-            content: "";
+            content: '';
             position: absolute;
             left: 0;
             top: 0px;
@@ -139,7 +139,7 @@
             background: #fff;
           }
           &::after {
-            content: "";
+            content: '';
             width: 20px;
             height: 20px;
             background: #333;
@@ -186,10 +186,10 @@
     border: 4px solid transparent;
     box-sizing: border-box;
   }
-  input[type="number"] {
+  input[type='number'] {
     text-align: right;
   }
-  .input-text-area{
+  .input-text-area {
     height: 200px;
     width: 100%;
     padding: 0 16px;

@@ -115,7 +115,7 @@
                     :disabled="isCreating"
                     class="ml-4"
                     @click="resetForm()"
-                    >{{ isEditingMode ? "Annuler" : "Réinitialiser" }}</b-button
+                    >{{ isEditingMode ? 'Annuler' : 'Réinitialiser' }}</b-button
                   >
                 </div>
               </b-form>
@@ -123,18 +123,10 @@
           </b-card>
           <template #header="{ hide }">
             <div
-              class="
-                w-100
-                d-flex
-                bg-white
-                align-items-center
-                justify-content-between
-                py-0
-                px-0
-              "
+              class="w-100 d-flex bg-white align-items-center justify-content-between py-0 px-0"
             >
               <h2 class="h2">
-                {{ isEditingMode ? "Modifier log" : "Nouveau log" }}
+                {{ isEditingMode ? 'Modifier log' : 'Nouveau log' }}
               </h2>
               <b-button
                 size="sm"
@@ -241,7 +233,7 @@
                   {{ data.index + 1 }}
                 </template>
                 <template #cell(from)="data">
-                  {{ moment(data.item.from).format("DD.MM.YYYY") }}
+                  {{ moment(data.item.from).format('DD.MM.YYYY') }}
                 </template>
                 <template #cell(Titre)="data">
                   {{ data.title }}
@@ -306,11 +298,11 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
-import Header from "../components/Header";
-import FormFieldInput from "../../../components/forms/FormFieldInput";
-import FormFieldTextArea from "../../../components/forms/FormFieldTextArea";
-import { ValidationObserver } from "vee-validate";
+import { mapActions, mapState } from 'vuex';
+import Header from '../components/Header';
+import FormFieldInput from '../../../components/forms/FormFieldInput';
+import FormFieldTextArea from '../../../components/forms/FormFieldTextArea';
+import { ValidationObserver } from 'vee-validate';
 
 export default {
   components: {
@@ -324,16 +316,16 @@ export default {
       filter: null,
       fields: [
         {
-          key: "from",
-          label: "Date",
+          key: 'from',
+          label: 'Date',
         },
         {
-          key: "title",
-          label: "Titre",
+          key: 'title',
+          label: 'Titre',
         },
         {
-          key: "action",
-          label: "Actions",
+          key: 'action',
+          label: 'Actions',
         },
       ],
       form: {},
@@ -372,7 +364,7 @@ export default {
             current_page: 1,
             from: 1,
             last_page: 1,
-            path: "#",
+            path: '#',
             per_page: 1,
             to: 1,
             total: 1,
@@ -381,12 +373,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(["createChangeLog"]),
+    ...mapActions(['createChangeLog']),
     ...mapActions([
-      "getListChangedLogs",
-      "updateChangeLog",
-      "removeChangeLog",
-      "searchChangeLog",
+      'getListChangedLogs',
+      'updateChangeLog',
+      'removeChangeLog',
+      'searchChangeLog',
     ]),
     submit_form() {
       if (this.isEditingMode) {
@@ -397,7 +389,7 @@ export default {
       this.resetForm();
     },
     throwError() {
-      throw new Error("Sentry Error");
+      throw new Error('Sentry Error');
     },
     submitcreateChangeLog() {
       this.errors = {};
@@ -406,18 +398,18 @@ export default {
           this.form = {};
           this.isEditingMode = false;
           this.$notify({
-            group: "alert",
-            title: "Nouveau log",
-            text: "Ajouter avec succès",
-            type: "success",
+            group: 'alert',
+            title: 'Nouveau log',
+            text: 'Ajouter avec succès',
+            type: 'success',
           });
         })
         .catch(({ response }) => {
           this.$notify({
-            group: "alert",
-            title: "Nouveau log",
-            text: "Une erreur est surveni",
-            type: "error",
+            group: 'alert',
+            title: 'Nouveau log',
+            text: 'Une erreur est surveni',
+            type: 'error',
           });
           if (response.status == 422) {
             this.errors = response.data.errors;
@@ -431,18 +423,18 @@ export default {
           this.form = {};
           this.isEditingMode = false;
           this.$notify({
-            group: "alert",
-            title: "Modifer log",
-            text: "Modifier avec succès",
-            type: "success",
+            group: 'alert',
+            title: 'Modifer log',
+            text: 'Modifier avec succès',
+            type: 'success',
           });
         })
         .catch(({ response }) => {
           this.$notify({
-            group: "alert",
-            title: "Modifer log",
-            text: "Une erreur est survenue",
-            type: "error",
+            group: 'alert',
+            title: 'Modifer log',
+            text: 'Une erreur est survenue',
+            type: 'error',
           });
           if (response.status == 422) {
             this.errors = response.data.errors;
@@ -476,35 +468,35 @@ export default {
       this.$refs.form.reset();
     },
     search() {
-      this.searchChangeLog(moment(this.filter).format("DD.MM.YYYY")).catch(
+      this.searchChangeLog(moment(this.filter).format('DD.MM.YYYY')).catch(
         (error) => {
           console.log(error);
         }
       );
     },
     onValidate() {
-      this.$bvModal.hide("confirmation-box");
+      this.$bvModal.hide('confirmation-box');
       this.removeChangeLog(this.itemToRemove)
         .then(() => {
           this.$notify({
-            group: "alert",
-            title: "Supprimer log",
-            text: "Supprimer avec succès",
-            type: "success",
+            group: 'alert',
+            title: 'Supprimer log',
+            text: 'Supprimer avec succès',
+            type: 'success',
           });
         })
         .catch(() => {
           this.$notify({
-            group: "alert",
-            title: "Supprimer log",
-            text: "Une erreur est surveni",
-            type: "error",
+            group: 'alert',
+            title: 'Supprimer log',
+            text: 'Une erreur est surveni',
+            type: 'error',
           });
         });
     },
     remove(item) {
       this.itemToRemove = item;
-      this.$bvModal.show("confirmation-box");
+      this.$bvModal.show('confirmation-box');
     },
     onRangeDateObservation(inputValueDate) {
       // this.filter = inputValueDate
@@ -518,7 +510,7 @@ export default {
     btnToday() {
       this.filter = new Date();
       this.attrs.push({
-        key: "today",
+        key: 'today',
         dates: new Date(),
         highlight: true,
       });
@@ -528,7 +520,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .btn-action {
   cursor: pointer;
 }

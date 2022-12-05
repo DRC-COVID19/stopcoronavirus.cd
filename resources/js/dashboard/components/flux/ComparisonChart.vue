@@ -1,7 +1,11 @@
 <template>
   <div class="fullscreen-container">
     <fullscreen ref="fullscreen" @change="fullscreenChange">
-      <b-container fluid class="p-0 container-comparisonChart" ref="tendanceContainer">
+      <b-container
+        fluid
+        class="p-0 container-comparisonChart"
+        ref="tendanceContainer"
+      >
         <b-row no-gutters>
           <b-col cols="12" class="pl-0 pr-2">
             <canvas width="100vh" ref="comparisonChart" id="comparisonChart" />
@@ -16,10 +20,10 @@
 </template>
 
 <script>
-import Chart from "chart.js";
-import "chartjs-plugin-annotation";
-import { groupBy } from "lodash";
-import { DRC_COVID_EVENT, PALETTE } from "../../config/env";
+import Chart from 'chart.js';
+import 'chartjs-plugin-annotation';
+import { groupBy } from 'lodash';
+import { DRC_COVID_EVENT, PALETTE } from '../../config/env';
 export default {
   props: {
     flux24DailyComparison: {
@@ -68,12 +72,12 @@ export default {
         Object.keys(groupData).map((keys) => {
           const item = groupData[keys];
           let borderWidth = 2;
-          let borderColor = "rgb(166,180,205)";
+          let borderColor = 'rgb(166,180,205)';
           let borderDash = [5];
           let order = 1;
           if (this.fluxGeoOptions.indexOf(keys) != -1) {
             borderWidth = 2;
-            borderColor = "rgb(51, 172, 46)";
+            borderColor = 'rgb(51, 172, 46)';
             borderDash = [0];
             order = 0;
           }
@@ -81,11 +85,11 @@ export default {
             label: keys,
             fill: false,
             borderColor: borderColor,
-            backgroundColor: "rgb(166,180,205, 0.2)",
+            backgroundColor: 'rgb(166,180,205, 0.2)',
             data: item.map((x) => ({ x: new Date(x.date), y: x.volume })),
             interpolate: true,
             showLine: true,
-            hoverBorderColor: "rgb(46, 91, 255);",
+            hoverBorderColor: 'rgb(46, 91, 255);',
             pointRadius: 0,
             borderWidth: borderWidth,
             lineTension: 0.5,
@@ -108,7 +112,7 @@ export default {
 
       process.then(({ datasets, labels, maxDate }) => {
         const tempData = {
-          type: "line",
+          type: 'line',
           data: {
             labels: labels,
             datasets: datasets,
@@ -121,7 +125,7 @@ export default {
             },
             title: {
               display: true,
-              text: "Flux de comparaison" + this.getZone,
+              text: 'Flux de comparaison' + this.getZone,
               fontSize: 9,
             },
             scales: {
@@ -131,17 +135,17 @@ export default {
                   gridLines: {
                     display: true,
                   },
-                  id: "x-axis-0",
+                  id: 'x-axis-0',
                   scaleLabel: {
                     display: false,
-                    labelString: "Month",
+                    labelString: 'Month',
                   },
-                  type: "time",
+                  type: 'time',
                   time: {
-                    unit: "day",
+                    unit: 'day',
                     unitStepSize: 1,
                     displayFormats: {
-                      day: "DD.MM",
+                      day: 'DD.MM',
                     },
                   },
                 },
@@ -151,7 +155,7 @@ export default {
                   display: true,
                   scaleLabel: {
                     display: false,
-                    labelString: "Value",
+                    labelString: 'Value',
                   },
                   ticks: {
                     beginAtZero: false,
@@ -179,7 +183,7 @@ export default {
             //   },
             tooltips: {
               enabled: true,
-              mode: "interpolate",
+              mode: 'interpolate',
               intersect: false,
               callbacks: {
                 title: function (tooltipItem, data) {
@@ -189,25 +193,25 @@ export default {
               },
             },
             hover: {
-              mode: "nearest",
+              mode: 'nearest',
               intersect: false,
             },
             annotation: {
-              events: ["mouseenter", "mouseleave"],
-              drawTime: "afterDraw",
+              events: ['mouseenter', 'mouseleave'],
+              drawTime: 'afterDraw',
               annotations: DRC_COVID_EVENT.filter(
                 (x) =>
                   x.measures.some((z) =>
                     z.zones.some((y) =>
-                      [...this.fluxGeoOptions, "ALL"].includes(y)
+                      [...this.fluxGeoOptions, 'ALL'].includes(y)
                     )
                   ) && new Date(x.date) <= maxDate
               ).map((item, index) => {
                 return {
-                  id: "line" + index,
-                  type: "line",
-                  mode: "vertical",
-                  scaleID: "x-axis-0",
+                  id: 'line' + index,
+                  type: 'line',
+                  mode: 'vertical',
+                  scaleID: 'x-axis-0',
                   value: new Date(item.date),
                   borderColor: item.isImportant
                     ? PALETTE.flux_presence
@@ -217,12 +221,12 @@ export default {
                     content: item.measures
                       .filter((x) =>
                         x.zones.some((y) =>
-                          [...this.fluxGeoOptions, "ALL"].includes(y)
+                          [...this.fluxGeoOptions, 'ALL'].includes(y)
                         )
                       )
                       .map((x) => x.item),
                     enabled: false,
-                    position: "top",
+                    position: 'top',
                   },
                   onMouseenter(e) {
                     this.options.borderColor = PALETTE.flux_in_color;
@@ -246,37 +250,37 @@ export default {
                 },
                 zoom: {
                   enabled: true, // enable zooming
-                  zoomboxBackgroundColor: "rgba(66,133,244,0.2)", // background color of zoom box
-                  zoomboxBorderColor: "#48F", // border color of zoom box
-                  zoomButtonText: "Reset Zoom", // reset zoom button text
-                  zoomButtonClass: "reset-zoom", // reset zoom button class
+                  zoomboxBackgroundColor: 'rgba(66,133,244,0.2)', // background color of zoom box
+                  zoomboxBorderColor: '#48F', // border color of zoom box
+                  zoomButtonText: 'Reset Zoom', // reset zoom button text
+                  zoomButtonClass: 'reset-zoom', // reset zoom button class
                 },
               },
             },
           },
         };
         if (this.myLineChart) this.myLineChart.destroy();
-        this.myLineChart = new Chart(ref.getContext("2d"), tempData);
+        this.myLineChart = new Chart(ref.getContext('2d'), tempData);
         const myLineChart2 = this.myLineChart;
         console.log(new Date().toTimeString());
       });
     },
     toggleFullscreen() {
-      this.$refs["fullscreen"].toggle();
+      this.$refs['fullscreen'].toggle();
     },
     fullscreenChange(fullscreen) {
       this.fullscreen = fullscreen;
       if (!fullscreen) {
-        this.$refs.comparisonChart.style.height = "100%";
-        this.$refs.comparisonChart.height = "100%";
+        this.$refs.comparisonChart.style.height = '100%';
+        this.$refs.comparisonChart.height = '100%';
       }
     },
   },
   computed: {
     getZone() {
       if (this.fluxGeoOptions && this.fluxGeoOptions.length > 0)
-        return " par rapport à " + this.fluxGeoOptions[0];
-      else return "";
+        return ' par rapport à ' + this.fluxGeoOptions[0];
+      else return '';
     },
   },
 };

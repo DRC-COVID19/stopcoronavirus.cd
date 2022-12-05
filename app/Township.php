@@ -6,16 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Township extends Model
 {
-    protected $fillable = [
-        "name"
-    ];
+  protected $fillable = ['name'];
 
-    public function hospitalLogs()
-    {
-        return $this->hasMany(HospitalLog::class);
-    }
-    public function hospital()
-    {
-        return $this->hasMany(Hospital::class);
-    }
+  public function hospitalLogs()
+  {
+    return $this->hasMany(HospitalLog::class);
+  }
+  public function hospital()
+  {
+    return $this->hasMany(Hospital::class);
+  }
 }

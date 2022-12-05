@@ -22,10 +22,18 @@ class AfricelTravelProvinceController extends Controller
   {
     $data = $this->fluxValidator($request->all());
     try {
-      $provinceData = AfricelTravelProvince::select(['province_name as name', 'date', 'volume'])
+      $provinceData = AfricelTravelProvince::select([
+        'province_name as name',
+        'date',
+        'volume',
+      ])
         ->where('province_name', $data['fluxGeoOptions'])
-        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])->get();
-      return response()->json($provinceData,200,[],JSON_NUMERIC_CHECK);
+        ->whereBetween('Date', [
+          $data['observation_start'],
+          $data['observation_end'],
+        ])
+        ->get();
+      return response()->json($provinceData, 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -84,8 +92,10 @@ class AfricelTravelProvinceController extends Controller
    * @param  \App\AfricelTravelProvince  $africelTravelProvince
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, AfricelTravelProvince $africelTravelProvince)
-  {
+  public function update(
+    Request $request,
+    AfricelTravelProvince $africelTravelProvince
+  ) {
     //
   }
 
@@ -102,10 +112,11 @@ class AfricelTravelProvinceController extends Controller
 
   public function fluxValidator($inputData)
   {
-    return  Validator::make($inputData, [
+    return Validator::make($inputData, [
       'fluxGeoOptions' => 'required',
       'preference_start' => 'nullable|date|before_or_equal:preference_end',
-      'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
+      'preference_end' =>
+        'nullable|date|before:observation_start|required_with:preference_start',
       'observation_start' => 'date|required|before_or_equal:observation_end',
       'observation_end' => 'date|required|after_or_equal:observation_start',
     ])->validate();

@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import Chart from "chart.js";
+import Chart from 'chart.js';
 
 export default {
   props: {
@@ -58,12 +58,12 @@ export default {
     this.show(
       this.covidCasesStat,
       this.$refs.CovidCaseChart,
-      "Graphique Cumule"
+      'Graphique Cumule'
     );
     this.show(
       this.covidCasesStatDaily,
       this.$refs.covidCasesStatDaily,
-      "Graphique Journalier"
+      'Graphique Journalier'
     );
   },
   watch: {
@@ -72,7 +72,7 @@ export default {
         this.show(
           this.covidCasesStat,
           this.$refs.CovidCaseChart,
-          "Graphique Cumule"
+          'Graphique Cumule'
         );
       });
     },
@@ -81,7 +81,7 @@ export default {
         this.show(
           this.covidCasesStatDaily,
           this.$refs.covidCasesStatDaily,
-          "Graphique Journalier"
+          'Graphique Journalier'
         );
       });
     },
@@ -92,32 +92,32 @@ export default {
         return;
       }
 
-      console.log('data',data.labels);
+      console.log('data', data.labels);
 
       let tempData = {
-        type: "line",
+        type: 'line',
         data: {
           labels: data.labels,
           datasets: [
             {
-              label: "Confirmés",
+              label: 'Confirmés',
               fill: true,
-              borderColor: "rgb(166,180,205)",
-              backgroundColor: "rgb(166,180,205, 0.2)",
-              data: data.confirmed
+              borderColor: 'rgb(166,180,205)',
+              backgroundColor: 'rgb(166,180,205, 0.2)',
+              data: data.confirmed,
             },
             {
-              label: "Guéris",
+              label: 'Guéris',
               fill: true,
-              borderColor: "rgba(0,176,101,1)",
-              backgroundColor: "rgba(0,176,101,0.8)",
+              borderColor: 'rgba(0,176,101,1)',
+              backgroundColor: 'rgba(0,176,101,0.8)',
               data: data.healed,
             },
             {
-              label: "Décès",
+              label: 'Décès',
               fill: true,
-              borderColor: "rgba(10,10,10,0.2)",
-              backgroundColor: "rgba(10,10,10,1)",
+              borderColor: 'rgba(10,10,10,0.2)',
+              backgroundColor: 'rgba(10,10,10,1)',
               data: data.dead,
             },
           ],
@@ -133,7 +133,7 @@ export default {
             text: title,
           },
           tooltips: {
-            mode: "index",
+            mode: 'index',
             intersect: false,
             callbacks: {
               title: function (tooltipItem, data) {
@@ -143,7 +143,7 @@ export default {
             },
           },
           hover: {
-            mode: "nearest",
+            mode: 'nearest',
             intersect: true,
           },
           scales: {
@@ -155,14 +155,14 @@ export default {
                 },
                 scaleLabel: {
                   display: false,
-                  labelString: "Month",
+                  labelString: 'Month',
                 },
-                type: "time",
+                type: 'time',
                 time: {
-                  unit: "day",
+                  unit: 'day',
                   unitStepSize: 2,
                   displayFormats: {
-                    day: "DD.MM",
+                    day: 'DD.MM',
                   },
                 },
               },
@@ -178,7 +178,7 @@ export default {
                 },
                 scaleLabel: {
                   display: false,
-                  labelString: "Value",
+                  labelString: 'Value',
                 },
               },
             ],

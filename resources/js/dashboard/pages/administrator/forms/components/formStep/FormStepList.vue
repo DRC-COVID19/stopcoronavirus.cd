@@ -2,9 +2,7 @@
   <b-card>
     <b-card-header v-b-toggle.collapse-form-step-list>
       <div class="d-flex justify-content-between align-items-center">
-        <span class="text-muted">
-          Liste des étapes
-        </span>
+        <span class="text-muted"> Liste des étapes </span>
         <i class="fas fa-chevron-down" aria-hidden="true"></i>
       </div>
     </b-card-header>
@@ -27,7 +25,11 @@
               v-if="isLoading"
               :rows="15"
               :columns="5"
-              :table-props="{ bordered: false, striped: true, responsive: true }"
+              :table-props="{
+                bordered: false,
+                striped: true,
+                responsive: true,
+              }"
             ></b-skeleton-table>
 
             <b-table
@@ -52,21 +54,21 @@
               </template>
               <template v-slot:cell(actions)="data" class="action-btn-group">
                 <b-button
-               variant="outline-success mb-1"
-               class="btn-dash btn-btn-dash-form-step"
-                 @click="
-                    updateStep(
-                      data.item
-                    )
-                  "
-              >Editer</b-button>
-              <b-button variant="outline-danger mb-1" class="btn-dash btn-dash-form-step"  @click="deleteStep(data.item)">
-             Supprimer
-            </b-button>
-
+                  variant="outline-success mb-1"
+                  class="btn-dash btn-btn-dash-form-step"
+                  @click="updateStep(data.item)"
+                  >Editer</b-button
+                >
+                <b-button
+                  variant="outline-danger mb-1"
+                  class="btn-dash btn-dash-form-step"
+                  @click="deleteStep(data.item)"
+                >
+                  Supprimer
+                </b-button>
               </template>
               <template v-slot:cell(index)="data">
-                {{ ((currentPage - 1) * perPage) + data.index + 1 }}
+                {{ (currentPage - 1) * perPage + data.index + 1 }}
               </template>
             </b-table>
           </b-col>
@@ -84,7 +86,11 @@
         <b-modal v-model="isDeleteModalShown">
           Voulez-vous vraiment supprimer cette ligne
           <template #modal-footer>
-            <b-button size="sm" variant="success" @click="onValidateDelection()">
+            <b-button
+              size="sm"
+              variant="success"
+              @click="onValidateDelection()"
+            >
               Accepter
             </b-button>
             <b-button size="sm" variant="danger" @click="onCancelDelection()">
@@ -98,113 +104,108 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex';
 export default {
   props: {
     formId: {
       type: Number,
-      required: true
+      required: true,
     },
     isLoading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     perPage: {
       type: Number,
-      default: 15
+      default: 15,
     },
     totalRows: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
-  data () {
+  data() {
     return {
       fields: [
         { key: 'step', label: 'Etape' },
         { key: 'title', label: 'Titre' },
-        'actions'
+        'actions',
       ],
       filter: '',
       isDeleteModalShown: false,
       currentForm: {
         id: -1,
-        title: ''
+        title: '',
       },
       formStepId: null,
       editModalShow: false,
-      currentPage: 1
-    }
+      currentPage: 1,
+    };
   },
 
-  mounted () {
-    this.getFormSteps({ id: this.formId })
+  mounted() {
+    this.getFormSteps({ id: this.formId });
   },
   computed: {
     ...mapState({
-      formSteps: (state) => state.formStep.formSteps
+      formSteps: (state) => state.formStep.formSteps,
     }),
-    formStepsSorted () {
-      return this.formSteps.slice().sort((a, b) => a.step - b.step)
+    formStepsSorted() {
+      return this.formSteps.slice().sort((a, b) => a.step - b.step);
     },
-    rows () {
-      return this.formSteps.length
-    }
+    rows() {
+      return this.formSteps.length;
+    },
   },
   watch: {
-    filter () {
-      this.search()
-    }
+    filter() {
+      this.search();
+    },
   },
   methods: {
-    ...mapActions([
-      'getFormSteps',
-      'removeFormStep',
-      'searchFormStep'
-    ]),
-    search () {
-      this.searchFormStep(this.filter.trim())
-        .catch((error) => {
-          console.log(error)
-        })
+    ...mapActions(['getFormSteps', 'removeFormStep', 'searchFormStep']),
+    search() {
+      this.searchFormStep(this.filter.trim()).catch((error) => {
+        console.log(error);
+      });
     },
-    deleteStep (formId) {
-      this.isDeleteModalShown = true
-      this.formStepId = formId.id
+    deleteStep(formId) {
+      this.isDeleteModalShown = true;
+      this.formStepId = formId.id;
     },
-    onValidateDelection () {
-      this.$bvModal.show('confirmation-box')
+    onValidateDelection() {
+      this.$bvModal.show('confirmation-box');
       this.removeFormStep(this.formStepId)
         .then(() => {
           this.$notify({
             group: 'alert',
             title: "Supprimer l'étape",
             text: 'Supprimer avec succès',
-            type: 'success'
-          })
-          this.isDeleteModalShown = false
-          this.getFormSteps({ id: this.formId })
+            type: 'success',
+          });
+          this.isDeleteModalShown = false;
+          this.getFormSteps({ id: this.formId });
         })
         .catch(() => {
           this.$notify({
             group: 'alert',
             title: "Supprimer  l'étape",
             text: 'Une erreur est survenus',
-            type: 'error'
-          })
-        })
+            type: 'error',
+          });
+        });
     },
-    onCancelDelection () {
-      this.isDeleteModalShown = false
+    onCancelDelection() {
+      this.isDeleteModalShown = false;
     },
-    updateStep (form) {
-      this.$emit('onUpdateStep', form)
-    }
-  }
-}
+    updateStep(form) {
+      this.$emit('onUpdateStep', form);
+    },
+  },
+};
 </script>
-<style lang='scss' scoped>
-@import "@~/sass/_variables";
+<style lang="scss" scoped>
+@import '@~/sass/_variables';
 .input-filter {
   background: white;
 }
@@ -229,12 +230,12 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-    .btn{
-    border:none ;
-    background-color:transparent ;
-    &:focus{
-      border:none;
-          }
+  .btn {
+    border: none;
+    background-color: transparent;
+    &:focus {
+      border: none;
+    }
   }
 }
 </style>

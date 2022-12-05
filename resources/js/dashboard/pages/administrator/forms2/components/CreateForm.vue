@@ -39,14 +39,14 @@
             <span class="text-recurrence">Chaque</span>
           </b-col>
           <b-col md="3" xs="12">
-              <b-form-input
-                v-if="isNumber"
-                v-model="form.form_recurrence_number"
-                type="number"
-                class="mt-2 input-recurrence"
-                min="0"
-                >
-              </b-form-input>
+            <b-form-input
+              v-if="isNumber"
+              v-model="form.form_recurrence_number"
+              type="number"
+              class="mt-2 input-recurrence"
+              min="0"
+            >
+            </b-form-input>
           </b-col>
           <b-col md="6" xs="12">
             <FomFieldSelect
@@ -67,26 +67,61 @@
           <b-col>Répété sur</b-col>
         </b-row>
         <div class="row-week-day" v-if="isWeek">
-           <div>
-            <span :class="showColorDim?styleBlue:styleGrey" disabled="true" @click="onclickWeek('0')">D</span>
+          <div>
+            <span
+              :class="showColorDim ? styleBlue : styleGrey"
+              disabled="true"
+              @click="onclickWeek('0')"
+              >D</span
+            >
           </div>
           <div>
-            <span :class="showColorLun?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('1')">L</span>
+            <span
+              :class="showColorLun ? styleBlue : styleGrey"
+              class="left-cell"
+              @click="onclickWeek('1')"
+              >L</span
+            >
           </div>
           <div>
-            <span :class="showColorMar?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('2')">M</span>
+            <span
+              :class="showColorMar ? styleBlue : styleGrey"
+              class="left-cell"
+              @click="onclickWeek('2')"
+              >M</span
+            >
           </div>
           <div>
-            <span :class="showColorMer?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('3')">M</span>
+            <span
+              :class="showColorMer ? styleBlue : styleGrey"
+              class="left-cell"
+              @click="onclickWeek('3')"
+              >M</span
+            >
           </div>
           <div>
-            <span :class="showColorJeu?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('4')">J</span>
+            <span
+              :class="showColorJeu ? styleBlue : styleGrey"
+              class="left-cell"
+              @click="onclickWeek('4')"
+              >J</span
+            >
           </div>
           <div>
-            <span :class="showColorVen?styleBlue:styleGrey"  class="left-cell"  @click="onclickWeek('5')">V</span>
+            <span
+              :class="showColorVen ? styleBlue : styleGrey"
+              class="left-cell"
+              @click="onclickWeek('5')"
+              >V</span
+            >
           </div>
           <div>
-            <span :class="showColorSam?styleBlue:styleGrey"  class="left-cell" @click="onclickWeek('6')">S</span>
+            <span
+              :class="showColorSam ? styleBlue : styleGrey"
+              class="left-cell"
+              @click="onclickWeek('6')"
+              >S</span
+            >
           </div>
         </div>
         <b-row v-if="isMonth" class="mt-3">
@@ -98,7 +133,7 @@
               v-model="form.form_recurrence_value"
               :options="dayofMonth"
               label="label"
-              :reduce="(item)=>item.label"
+              :reduce="(item) => item.label"
               :searchable="false"
               id="form.form_recurrence_value"
             >
@@ -114,7 +149,7 @@
               v-model="form.form_recurrence_value"
               :options="monthsofYear"
               label="label"
-              :reduce="(item)=>item.id"
+              :reduce="(item) => item.id"
               :searchable="false"
               id="form.form_recurrence_value"
             >
@@ -157,7 +192,7 @@
             variant="outline-danger"
             class="ml-4"
             @click="resetForm()"
-            >{{ updating ? "Annuler" : "Réinitialiser" }}</b-button
+            >{{ updating ? 'Annuler' : 'Réinitialiser' }}</b-button
           >
         </b-row>
       </b-form>
@@ -166,41 +201,41 @@
 </template>
 
 <script>
-import FormFieldInput from '../../../../components/forms/FormFieldInput'
-import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue'
-import { formRecurrences } from '../../../../plugins/variables'
-import { ValidationObserver } from 'vee-validate'
-import { mapState, mapActions } from 'vuex'
+import FormFieldInput from '../../../../components/forms/FormFieldInput';
+import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue';
+import { formRecurrences } from '../../../../plugins/variables';
+import { ValidationObserver } from 'vee-validate';
+import { mapState, mapActions } from 'vuex';
 export default {
   components: {
     FormFieldInput,
     ValidationObserver,
-    FomFieldSelect
+    FomFieldSelect,
   },
   props: {
     formAdded: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     formUpdated: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     errors: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
-  data () {
+  data() {
     return {
       title: 'Nouveau Formulaire',
       btnTitle: 'Enregistrer',
@@ -212,178 +247,178 @@ export default {
       dayofMonth: [
         {
           id: 1,
-          label: '1'
+          label: '1',
         },
         {
           id: 2,
-          label: '2'
+          label: '2',
         },
         {
           id: 3,
-          label: '3'
+          label: '3',
         },
         {
           id: 4,
-          label: '4'
+          label: '4',
         },
         {
           id: 5,
-          label: '5'
+          label: '5',
         },
         {
           id: 6,
-          label: '6'
+          label: '6',
         },
         {
           id: 7,
-          label: '7'
+          label: '7',
         },
         {
           id: 8,
-          label: '8'
+          label: '8',
         },
         {
           id: 9,
-          label: '9'
+          label: '9',
         },
         {
           id: 10,
-          label: '10'
+          label: '10',
         },
         {
           id: 11,
-          label: '11'
+          label: '11',
         },
         {
           id: 12,
-          label: '12'
+          label: '12',
         },
         {
           id: 13,
-          label: '13'
+          label: '13',
         },
         {
           id: 14,
-          label: '14'
+          label: '14',
         },
         {
           id: 15,
-          label: '15'
+          label: '15',
         },
         {
           id: 16,
-          label: '16'
+          label: '16',
         },
         {
           id: 17,
-          label: '17'
+          label: '17',
         },
         {
           id: 18,
-          label: '18'
+          label: '18',
         },
         {
           id: 19,
-          label: '19'
+          label: '19',
         },
         {
           id: 20,
-          label: '20'
+          label: '20',
         },
         {
           id: 21,
-          label: '21'
+          label: '21',
         },
         {
           id: 22,
-          label: '22'
+          label: '22',
         },
         {
           id: 23,
-          label: '23'
+          label: '23',
         },
         {
           id: 24,
-          label: '24'
+          label: '24',
         },
         {
           id: 25,
-          label: '25'
+          label: '25',
         },
         {
           id: 26,
-          label: '26'
+          label: '26',
         },
         {
           id: 27,
-          label: '27'
+          label: '27',
         },
         {
           id: 28,
-          label: '28'
+          label: '28',
         },
         {
           id: 29,
-          label: '29'
+          label: '29',
         },
         {
           id: 30,
-          label: '30'
+          label: '30',
         },
         {
           id: 31,
-          label: '31'
-        }
+          label: '31',
+        },
       ],
       monthsofYear: [
         {
           id: '1',
-          label: 'Janvier'
+          label: 'Janvier',
         },
         {
           id: '2',
-          label: 'Février'
+          label: 'Février',
         },
         {
           id: '3',
-          label: 'Mars'
+          label: 'Mars',
         },
         {
           id: '4',
-          label: 'Avril'
+          label: 'Avril',
         },
         {
           id: '5',
-          label: 'Mai'
+          label: 'Mai',
         },
         {
           id: '6',
-          label: 'Juin'
+          label: 'Juin',
         },
         {
           id: '7',
-          label: 'Juillet'
+          label: 'Juillet',
         },
         {
           id: '8',
-          label: 'Août'
+          label: 'Août',
         },
         {
           id: '9',
-          label: 'Septembre'
+          label: 'Septembre',
         },
         {
           id: '10',
-          label: 'Octobre'
+          label: 'Octobre',
         },
         {
           id: '11',
-          label: 'Novembre'
+          label: 'Novembre',
         },
         {
           id: '12',
-          label: 'Décembre'
-        }
+          label: 'Décembre',
+        },
       ],
       form: {
         title: '',
@@ -391,7 +426,7 @@ export default {
         form_recurrence_number: null,
         form_recurrence_id: '',
         conflict_resolution_mode_id: '',
-        publish: false
+        publish: false,
       },
       isNumber: false,
       show: true,
@@ -406,160 +441,176 @@ export default {
       toBeCanceled: true,
       formRecurrenceSelected: null,
       styleGrey: 'week-day-grey',
-      styleBlue: 'week-day-blue'
-    }
+      styleBlue: 'week-day-blue',
+    };
   },
-  async mounted () {
-    this.resetForm()
-    await this.getFormsRecurrences()
-    await this.getConflictResolutionModes()
+  async mounted() {
+    this.resetForm();
+    await this.getFormsRecurrences();
+    await this.getConflictResolutionModes();
   },
   computed: {
     ...mapState({
-      formRecurrences: (state) => state.form.formsRecurrences
+      formRecurrences: (state) => state.form.formsRecurrences,
     }),
     ...mapState({
-      conflictResolutionModes: (state) => state.form.conflictResolutionModes
+      conflictResolutionModes: (state) => state.form.conflictResolutionModes,
     }),
-    isWeek () {
-      return this.form.form_recurrence_id === this.formRecurrences.find((recurrence) => recurrence.id === formRecurrences.WEEK).id
+    isWeek() {
+      return (
+        this.form.form_recurrence_id ===
+        this.formRecurrences.find(
+          (recurrence) => recurrence.id === formRecurrences.WEEK
+        ).id
+      );
     },
-    isMonth () {
-      return this.form.form_recurrence_id === this.formRecurrences.find((recurrence) => recurrence.id === formRecurrences.MONTH).id
+    isMonth() {
+      return (
+        this.form.form_recurrence_id ===
+        this.formRecurrences.find(
+          (recurrence) => recurrence.id === formRecurrences.MONTH
+        ).id
+      );
     },
-    isYear () {
-      return this.form.form_recurrence_id === this.formRecurrences.find((recurrence) => recurrence.id === formRecurrences.YEAR).id
-    }
-
+    isYear() {
+      return (
+        this.form.form_recurrence_id ===
+        this.formRecurrences.find(
+          (recurrence) => recurrence.id === formRecurrences.YEAR
+        ).id
+      );
+    },
   },
   watch: {
-    formAdded () {
-      this.resetForm()
+    formAdded() {
+      this.resetForm();
     },
-    formUpdated () {
-      this.resetForm()
+    formUpdated() {
+      this.resetForm();
     },
-    formToPopulate () {
-      this.resetForm()
-      this.populateForm()
-    }
+    formToPopulate() {
+      this.resetForm();
+      this.populateForm();
+    },
   },
   methods: {
     ...mapActions(['getFormsRecurrences', 'getConflictResolutionModes']),
-    onclickWeek (week) {
-      this.form.form_recurrence_value = week
+    onclickWeek(week) {
+      this.form.form_recurrence_value = week;
       if (week === '0') {
-        this.showColorDim = true
+        this.showColorDim = true;
       }
       if (week === '1') {
-        this.showColorLun = true
-        this.showColorDim = false
+        this.showColorLun = true;
+        this.showColorDim = false;
       }
       if (week === '2') {
-        this.showColorMar = true
-        this.showColorLun = false
-        this.showColorDim = false
+        this.showColorMar = true;
+        this.showColorLun = false;
+        this.showColorDim = false;
       }
       if (week === '3') {
-        this.showColorMer = true
-        this.showColorMar = false
-        this.showColorLun = false
-        this.showColorDim = false
+        this.showColorMer = true;
+        this.showColorMar = false;
+        this.showColorLun = false;
+        this.showColorDim = false;
       }
       if (week === '4') {
-        this.showColorJeu = true
-        this.showColorMer = false
-        this.showColorMar = false
-        this.showColorLun = false
-        this.showColorDim = false
+        this.showColorJeu = true;
+        this.showColorMer = false;
+        this.showColorMar = false;
+        this.showColorLun = false;
+        this.showColorDim = false;
       }
       if (week === '5') {
-        this.showColorVen = true
-        this.showColorJeu = false
-        this.showColorMer = false
-        this.showColorMar = false
-        this.showColorLun = false
-        this.showColorDim = false
+        this.showColorVen = true;
+        this.showColorJeu = false;
+        this.showColorMer = false;
+        this.showColorMar = false;
+        this.showColorLun = false;
+        this.showColorDim = false;
       }
       if (week === '6') {
-        this.showColorSam = true
-        this.showColorVen = false
-        this.showColorJeu = false
-        this.showColorMer = false
-        this.showColorMar = false
-        this.showColorLun = false
-        this.showColorDim = false
+        this.showColorSam = true;
+        this.showColorVen = false;
+        this.showColorJeu = false;
+        this.showColorMer = false;
+        this.showColorMar = false;
+        this.showColorLun = false;
+        this.showColorDim = false;
       }
     },
-    onSubmit () {
-      this.isLoading = true
+    onSubmit() {
+      this.isLoading = true;
       if (this.btnTitle === 'Enregistrer') {
-        this.$emit('onCreate', this.form)
+        this.$emit('onCreate', this.form);
       } else {
-        this.$emit('onUpdate', this.form)
+        this.$emit('onUpdate', this.form);
       }
     },
 
-    onReset () {
-      this.$refs.form.reset()
+    onReset() {
+      this.$refs.form.reset();
 
-      this.toToCanceled = true
-      this.form = {}
-      this.title = 'Nouveau Formulaire'
-      this.btnTitle = 'Enregistrer'
-      this.$emit('onCancelUpdate', {})
+      this.toToCanceled = true;
+      this.form = {};
+      this.title = 'Nouveau Formulaire';
+      this.btnTitle = 'Enregistrer';
+      this.$emit('onCancelUpdate', {});
     },
 
-    resetForm () {
-      this.$refs.form.reset()
+    resetForm() {
+      this.$refs.form.reset();
 
-      this.updating = false
-      this.isLoading = false
+      this.updating = false;
+      this.isLoading = false;
       this.form = {
         title: '',
         form_recurrence_value: null,
         form_recurrence_id: '',
-        publish: false
-      }
-      this.btnTitle = 'Enregistrer'
-      this.title = 'Nouveau Formulaire'
-      this.showColorSam = false
-      this.showColorVen = false
-      this.showColorJeu = false
-      this.showColorMer = false
-      this.showColorMar = false
-      this.showColorLun = false
-      this.showColorDim = false
+        publish: false,
+      };
+      this.btnTitle = 'Enregistrer';
+      this.title = 'Nouveau Formulaire';
+      this.showColorSam = false;
+      this.showColorVen = false;
+      this.showColorJeu = false;
+      this.showColorMer = false;
+      this.showColorMar = false;
+      this.showColorLun = false;
+      this.showColorDim = false;
     },
 
-    populateForm () {
-      this.updating = false
+    populateForm() {
+      this.updating = false;
 
       if (Object.keys(this.formToPopulate).length !== 0) {
-        this.updating = true
-        this.form.id = this.formToPopulate.id
-        this.form.title = this.formToPopulate.title
-        this.form.form_recurrence_value = this.formToPopulate.form_recurrence_value
-        this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id
-        this.form.form_recurrence_number = this.formToPopulate.form_recurrence_number
-        this.form.publish = this.formToPopulate.publish
-        this.title = 'Modification du formulaire'
-        this.btnTitle = 'Modifier'
+        this.updating = true;
+        this.form.id = this.formToPopulate.id;
+        this.form.title = this.formToPopulate.title;
+        this.form.form_recurrence_value =
+          this.formToPopulate.form_recurrence_value;
+        this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id;
+        this.form.form_recurrence_number =
+          this.formToPopulate.form_recurrence_number;
+        this.form.publish = this.formToPopulate.publish;
+        this.title = 'Modification du formulaire';
+        this.btnTitle = 'Modifier';
       }
     },
 
-    onFormRecurrenceChange (formRecurrenceId) {
-      this.form.form_recurrence_value = null
+    onFormRecurrenceChange(formRecurrenceId) {
+      this.form.form_recurrence_value = null;
       this.formRecurrenceSelected = this.formRecurrences.find(
         (formRecurrence) => formRecurrence.id === formRecurrenceId
-      )
-    }
-  }
-}
+      );
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .main {
   background-color: white;
   border-radius: 10px;
@@ -567,25 +618,23 @@ export default {
     margin-bottom: 20px;
   }
 }
-.row-week-day{
+.row-week-day {
   display: flex;
-.week-day-blue{
-  padding: 3px 9px;
-  border-radius: 50%;
-  cursor: pointer;
-  background-color:#1a73e8;
-  pointer-events: none;
+  .week-day-blue {
+    padding: 3px 9px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #1a73e8;
+    pointer-events: none;
+  }
+  .week-day-grey {
+    padding: 3px 9px;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #ced4da;
+  }
+  .left-cell {
+    margin-left: 5px;
+  }
 }
-.week-day-grey{
-  padding: 3px 9px;
-  border-radius: 50%;
-  cursor: pointer;
-  background-color:#ced4da;
-}
-.left-cell{
-  margin-left:5px;
-}
-
-}
-
 </style>

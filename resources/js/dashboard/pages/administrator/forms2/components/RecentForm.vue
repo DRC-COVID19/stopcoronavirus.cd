@@ -1,52 +1,44 @@
 <template>
-   <div class="card__Scroll">
-     <div v-if="isLoading">
-       <b-spinner :show="true" variant="danger" class="mr-5">Chargement des fomulaires Récents...</b-spinner>
-     </div>
-     <div
-     v-else
-     v-for="(form, index) in recentForms" :key="index"
-     class="px-2"
-     >
-     <card-form-recent
-       :route="getRoute(form)"
-       :form="form"
-     />
-        </div>
+  <div class="card__Scroll">
+    <div v-if="isLoading">
+      <b-spinner :show="true" variant="danger" class="mr-5"
+        >Chargement des fomulaires Récents...</b-spinner
+      >
     </div>
+    <div v-else v-for="(form, index) in recentForms" :key="index" class="px-2">
+      <card-form-recent :route="getRoute(form)" :form="form" />
+    </div>
+  </div>
 </template>
 
 <script>
-import CardFormRecent from '../../../../components/forms/CardForm.vue'
+import CardFormRecent from '../../../../components/forms/CardForm.vue';
 export default {
   components: {
-    CardFormRecent
+    CardFormRecent,
   },
   props: {
     recentForms: {
-
       CardFormRecenttype: Array,
-      default: () => ([])
+      default: () => [],
     },
     isLoading: {
       type: Boolean,
       default: () => false,
-      required: false
-    }
+      required: false,
+    },
   },
   methods: {
-    getRoute (form) {
+    getRoute(form) {
       return {
         name: 'administrator.forms.show.creation',
         params: {
-          form_id: form.id
-        }
-      }
-    }
-  }
-
-}
+          form_id: form.id,
+        },
+      };
+    },
+  },
+};
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>

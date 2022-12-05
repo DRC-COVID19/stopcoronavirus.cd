@@ -6,27 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 class HospitalsAgent extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('hospitals', function (Blueprint $table) {
-             $table->integer('agent_id')->index()->unsigned()->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('hospitals', function (Blueprint $table) {
+      $table
+        ->integer('agent_id')
+        ->index()
+        ->unsigned()
+        ->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('hospitals', function (Blueprint $table) {
-            $table->dropColumn('agent_id');
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('hospitals', function (Blueprint $table) {
+      $table->dropColumn('agent_id');
+    });
+  }
 }

@@ -24,21 +24,13 @@
           />
           <template #header="{ hide }" fluid>
             <div
-              class="
-                w-100
-                d-flex
-                bg-white
-                align-items-center
-                justify-content-between
-                py-0
-                px-0
-              "
+              class="w-100 d-flex bg-white align-items-center justify-content-between py-0 px-0"
             >
               <h2 class="h2">
                 {{
                   Object.keys(formToPopulate).length !== 0
-                    ? "Modification du Formulaire"
-                    : "Nouveau Formulaire"
+                    ? 'Modification du Formulaire'
+                    : 'Nouveau Formulaire'
                 }}
               </h2>
               <b-button
@@ -66,7 +58,7 @@
           @onSearch="search"
           @onDeleteForm="deleteForm"
           @onUpdateForm="populateForm"
-           @openToogle="openToogle"
+          @openToogle="openToogle"
         />
         <b-col cols="12" class="d-flex justify-content-end">
           <b-pagination
@@ -84,9 +76,9 @@
 </template>
 
 <script>
-import Header from "../components/Header";
-import ListForms from "./components/ListForms";
-import Create from "./components/Create";
+import Header from '../components/Header';
+import ListForms from './components/ListForms';
+import Create from './components/Create';
 export default {
   components: {
     Header,
@@ -95,8 +87,8 @@ export default {
   },
   data() {
     return {
-      title: "Formulaires",
-      iconClass: "fa fa-address-card",
+      title: 'Formulaires',
+      iconClass: 'fa fa-address-card',
       isLoading: false,
       forms: [],
       formUpdated: false,
@@ -127,9 +119,9 @@ export default {
   methods: {
     search(filter) {
       this.isLoading = true;
-      if (filter !== "") {
+      if (filter !== '') {
         axios
-          .get("api/dashboard/forms/filter?key_words=" + filter)
+          .get('api/dashboard/forms/filter?key_words=' + filter)
           .then(({ data }) => {
             this.forms = data;
             this.isLoading = false;
@@ -149,24 +141,24 @@ export default {
     },
     deleteForm(currentFormId) {
       axios
-        .delete("/api/dashboard/forms/" + currentFormId)
+        .delete('/api/dashboard/forms/' + currentFormId)
         .then(() => {
           this.getFormList();
           this.isFormDeleted = true;
           this.$notify({
-            group: "alert",
-            title: "Supprimer formulaire",
-            text: "Supprimer avec succès",
-            type: "success",
+            group: 'alert',
+            title: 'Supprimer formulaire',
+            text: 'Supprimer avec succès',
+            type: 'success',
           });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
           this.$notify({
-            group: "alert",
-            title: "Supprimer formulaire",
-            text: "Une erreur est surveni",
-            type: "error",
+            group: 'alert',
+            title: 'Supprimer formulaire',
+            text: 'Une erreur est surveni',
+            type: 'error',
           });
         });
     },
@@ -176,7 +168,7 @@ export default {
     },
     cancelUpdate() {
       this.updating = false;
-      this.formToPopulate={}
+      this.formToPopulate = {};
     },
     updateForm(currentForm) {
       this.isLoading = true;
@@ -189,7 +181,7 @@ export default {
       };
 
       axios
-        .put("/api/dashboard/forms/" + currentForm.id, form)
+        .put('/api/dashboard/forms/' + currentForm.id, form)
         .then(() => {
           this.formUpdated = true;
           this.showSuccess = true;
@@ -197,19 +189,19 @@ export default {
           this.updating = false;
           this.getFormList(1);
           this.$notify({
-            group: "alert",
-            title: "Modification du  Formulaire",
-            text: "Modifier avec succès",
-            type: "success",
+            group: 'alert',
+            title: 'Modification du  Formulaire',
+            text: 'Modifier avec succès',
+            type: 'success',
           });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
           this.$notify({
-            group: "alert",
-            title: "Modification du  Formulaire",
-            text: "Une erreur est survenus",
-            type: "error",
+            group: 'alert',
+            title: 'Modification du  Formulaire',
+            text: 'Une erreur est survenus',
+            type: 'error',
           });
         });
     },
@@ -219,12 +211,12 @@ export default {
       this.isLoading = true;
       this.errors = {};
       axios
-        .post("/api/dashboard/forms", {
+        .post('/api/dashboard/forms', {
           title: form.title,
           form_recurrence_value: form.form_recurrence_value,
           form_recurrence_id: form.form_recurrence_id,
           form_recurrence_number: form.form_recurrence_number,
-          publish: form.publish
+          publish: form.publish,
         })
         .then(() => {
           this.formAdded = true;
@@ -232,10 +224,10 @@ export default {
           this.isLoading = false;
           this.getFormList(1);
           this.$notify({
-            group: "alert",
-            title: "Nouveau Formulaire",
-            text: "Ajouter avec succès",
-            type: "success",
+            group: 'alert',
+            title: 'Nouveau Formulaire',
+            text: 'Ajouter avec succès',
+            type: 'success',
           });
         })
         .catch(({ response }) => {
@@ -243,10 +235,10 @@ export default {
           this.isLoading = false;
           this.errors = response.data.errors;
           this.$notify({
-            group: "alert",
-            title: "Nouveau Formulaire",
-            text: "Une erreur est survenus",
-            type: "error",
+            group: 'alert',
+            title: 'Nouveau Formulaire',
+            text: 'Une erreur est survenus',
+            type: 'error',
           });
         });
     },
@@ -254,7 +246,7 @@ export default {
     getFormList(page = 1) {
       this.isLoading = true;
       axios
-        .get("api/dashboard/forms", {
+        .get('api/dashboard/forms', {
           params: { page },
         })
         .then(({ data }) => {
@@ -268,7 +260,7 @@ export default {
 
     getFormRecurrence() {
       axios
-        .get("/api/dashboard/form-recurrences")
+        .get('/api/dashboard/form-recurrences')
         .then(({ data }) => {
           this.formRecurrences = data;
         })
@@ -285,7 +277,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .fa-plus {
   color: white;
   font-size: 14px;

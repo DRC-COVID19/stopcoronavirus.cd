@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import FormFieldInput from "../../../../../../components/forms/FormFieldInput.vue";
-import { mapState, mapActions } from "vuex";
+import FormFieldInput from '../../../../../../components/forms/FormFieldInput.vue';
+import { mapState, mapActions } from 'vuex';
 export default {
   props: {
     formField: {
@@ -90,7 +90,7 @@ export default {
     }),
   },
   methods: {
-    ...mapActions(["formFieldTypeIndex", "updateFormField"]),
+    ...mapActions(['formFieldTypeIndex', 'updateFormField']),
     updateFormFieldType() {
       this.updateFormField({
         id: this.formField.id,
@@ -98,19 +98,19 @@ export default {
       })
         .then((formFieldUpdated) => {
           this.$notify({
-            group: "alert",
-            title: "Champs du Formulaire",
-            text: "Modifier avec succès",
-            type: "success",
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Modifier avec succès',
+            type: 'success',
           });
-          this.$emit("updatedTypeForm", formFieldUpdated);
+          this.$emit('updatedTypeForm', formFieldUpdated);
         })
         .catch(({ response }) => {
           this.$notify({
-            group: "alert",
-            title: "Champs du Formulaire",
-            text: "Une erreur est survenus",
-            type: "error",
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Une erreur est survenus',
+            type: 'error',
           });
           if (response.status === 422) {
             this.errors = response.data.errors;
@@ -120,22 +120,22 @@ export default {
     updateRequiredFormField() {
       this.updateFormField({
         id: this.formField.id,
-        rules: this.form.require ? "required" : "",
+        rules: this.form.require ? 'required' : '',
       })
         .then(() => {
           this.$notify({
-            group: "alert",
-            title: "Champs du Formulaire",
-            text: "Modifier avec succès",
-            type: "success",
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Modifier avec succès',
+            type: 'success',
           });
         })
         .catch(({ response }) => {
           this.$notify({
-            group: "alert",
-            title: "Champs du Formulaire",
-            text: "Une erreur est survenus",
-            type: "error",
+            group: 'alert',
+            title: 'Champs du Formulaire',
+            text: 'Une erreur est survenus',
+            type: 'error',
           });
           if (response.status === 422) {
             this.errors = response.data.errors;
@@ -146,7 +146,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 
 .card {
   @media (max-width: 575px) {

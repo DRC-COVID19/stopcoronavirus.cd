@@ -6,28 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class UpdateAdminRole extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('admin_roles', function (Blueprint $table) {
-            $table->string('label')->nullable();
-        });
-        
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('admin_roles', function (Blueprint $table) {
+      $table->string('label')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('admin_roles', function (Blueprint $table) {
-          $table->dropColumn('label');
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('admin_roles', function (Blueprint $table) {
+      $table->dropColumn('label');
+    });
+  }
 }

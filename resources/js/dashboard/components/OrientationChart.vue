@@ -5,14 +5,14 @@
 </template>
 
 <script>
-import Chart from "chart.js";
+import Chart from 'chart.js';
 
 export default {
   props: {
     medicalOrientationsStat: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
   data() {
     return {};
@@ -21,7 +21,7 @@ export default {
   watch: {
     medicalOrientationsStat() {
       this.show();
-    }
+    },
   },
   mounted() {
     this.show();
@@ -32,98 +32,98 @@ export default {
         return;
       }
       let tempData = {
-        type: "line",
+        type: 'line',
         data: {
           labels: this.medicalOrientationsStat.labels,
           datasets: [
             {
-              label: "Peu probable",
+              label: 'Peu probable',
               fill: true,
-              borderColor: "rgba(0, 128, 0,0.2)",
-              backgroundColor: "rgba(0, 128, 0,1)",
-              data: this.medicalOrientationsStat.fin8
+              borderColor: 'rgba(0, 128, 0,0.2)',
+              backgroundColor: 'rgba(0, 128, 0,1)',
+              data: this.medicalOrientationsStat.fin8,
             },
             {
-              label: "Probables",
+              label: 'Probables',
               fill: true,
-              borderColor: "rgb(255, 165, 0)",
-              backgroundColor: "rgb(255, 165, 0, 0.2)",
-              data: this.medicalOrientationsStat.fin
+              borderColor: 'rgb(255, 165, 0)',
+              backgroundColor: 'rgb(255, 165, 0, 0.2)',
+              data: this.medicalOrientationsStat.fin,
             },
             {
-              label: "Très probable",
+              label: 'Très probable',
               fill: true,
-              backgroundColor: "rgba(255, 0, 0,0.8)",
-              borderColor: "rgba(255, 0, 0,1)",
-              data: this.medicalOrientationsStat.fin5
-            }
-          ]
+              backgroundColor: 'rgba(255, 0, 0,0.8)',
+              borderColor: 'rgba(255, 0, 0,1)',
+              data: this.medicalOrientationsStat.fin5,
+            },
+          ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           legend: {
-            display: false
+            display: false,
           },
           title: {
             display: false,
-            text: ""
+            text: '',
           },
           tooltips: {
-            mode: "index",
+            mode: 'index',
             intersect: false,
             callbacks: {
-              title: function(tooltipItem, data) {
+              title: function (tooltipItem, data) {
                 let d = new Date(tooltipItem[0].label);
                 return d.formatD();
-              }
-            }
+              },
+            },
           },
           hover: {
-            mode: "nearest",
-            intersect: true
+            mode: 'nearest',
+            intersect: true,
           },
           scales: {
             xAxes: [
               {
                 display: true,
                 gridLines: {
-                  display: true
+                  display: true,
                 },
                 scaleLabel: {
                   display: false,
-                  labelString: "Month"
+                  labelString: 'Month',
                 },
-                type: "time",
+                type: 'time',
                 time: {
-                  unit: "day",
+                  unit: 'day',
                   unitStepSize: 2,
                   displayFormats: {
-                    day: "DD.MM"
-                  }
-                }
-              }
+                    day: 'DD.MM',
+                  },
+                },
+              },
             ],
             yAxes: [
               {
                 display: true,
                 ticks: {
-                  beginAtZero: true
+                  beginAtZero: true,
                 },
                 scaleLabel: {
                   display: false,
-                  labelString: "Value"
-                }
-              }
-            ]
-          }
-        }
+                  labelString: 'Value',
+                },
+              },
+            ],
+          },
+        },
       };
       var ctx = this.$refs.orientationChart;
       // Instantiate a new chart
       var myLineChart = new Chart(ctx, tempData);
-    }
-  }
+    },
+  },
 };
 </script>
 

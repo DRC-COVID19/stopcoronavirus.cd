@@ -6,35 +6,38 @@ use Illuminate\Support\Facades\Schema;
 
 class CreateFlux30ZonesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('flux30_zones', function (Blueprint $table) {
-            $table->id();
-            $table->date('Date')->nullable();
-            $table->string('Origin')->nullable();
-            $table->string('Destination')->nullable();
-            $table->string('Immobility')->nullable();
-            $table->string('Home_Category')->nullable();
-            $table->string('Activity_Category')->nullable();
-            $table->string('Observation_Zone')->nullable();
-            $table->string("Mode")->nullable();
-            $table->float('Volume')->default(0)->nullable();
-            $table->timestamps();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::create('flux30_zones', function (Blueprint $table) {
+      $table->id();
+      $table->date('Date')->nullable();
+      $table->string('Origin')->nullable();
+      $table->string('Destination')->nullable();
+      $table->string('Immobility')->nullable();
+      $table->string('Home_Category')->nullable();
+      $table->string('Activity_Category')->nullable();
+      $table->string('Observation_Zone')->nullable();
+      $table->string('Mode')->nullable();
+      $table
+        ->float('Volume')
+        ->default(0)
+        ->nullable();
+      $table->timestamps();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::dropIfExists('flux30_zones');
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::dropIfExists('flux30_zones');
+  }
 }

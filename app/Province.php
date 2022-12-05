@@ -6,17 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Province extends Model
 {
-    protected $fillable = [
-        "name"
-    ];
+  protected $fillable = ['name'];
 
-    public function smsDiffusions()
-    {
-        return $this->belongsToMany(SmsDiffusion::class);
-    }
+  public function smsDiffusions()
+  {
+    return $this->belongsToMany(SmsDiffusion::class);
+  }
 
-    public function healthZones()
-    {
-        return $this->hasMany(HealthZone::class);
-    }
+  public function healthZones()
+  {
+    return $this->hasMany(HealthZone::class);
+  }
 }

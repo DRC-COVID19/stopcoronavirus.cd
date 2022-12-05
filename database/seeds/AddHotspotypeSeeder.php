@@ -419,12 +419,12 @@ class AddHotspotypeSeeder extends Seeder
       ],
       101 => [
         'type' => 'Aéroport',
-        'name'=>'Aéroport Ndolo'
+        'name' => 'Aéroport Ndolo',
       ],
       102 => [
         'type' => 'Aéroport',
-        'name'=>'Aéroport Ndjili'
-      ]
+        'name' => 'Aéroport Ndjili',
+      ],
     ];
 
     foreach ($hotspots as $value) {

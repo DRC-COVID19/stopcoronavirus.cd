@@ -163,7 +163,7 @@
             class="ml-4"
             @click="resetForm()"
           >
-            {{ updating ? "Annuler" : "Réinitialiser" }}</b-button
+            {{ updating ? 'Annuler' : 'Réinitialiser' }}</b-button
           >
         </b-row>
       </form>
@@ -172,53 +172,53 @@
 </template>
 
 <script>
-import FormFieldInput from '../../../../components/forms/FormFieldInput'
-import FomFieldSelect from '../../../../components/forms/FomFieldSelect'
-import { ValidationObserver } from 'vee-validate'
-import { ADMIN_ID } from '../../../../config/env.js'
+import FormFieldInput from '../../../../components/forms/FormFieldInput';
+import FomFieldSelect from '../../../../components/forms/FomFieldSelect';
+import { ValidationObserver } from 'vee-validate';
+import { ADMIN_ID } from '../../../../config/env.js';
 
 export default {
   components: {
     FormFieldInput,
     FomFieldSelect,
-    ValidationObserver
+    ValidationObserver,
   },
   props: {
     userAdded: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     userUpdated: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     roles: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     hospitals: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     errors: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
-  data () {
+  data() {
     return {
       title: 'Nouveau Utilisateur',
       btnTitle: 'Enregistrer',
@@ -228,7 +228,7 @@ export default {
       validatedMessage: {
         mail: null,
         phoneNumber: null,
-        password: null
+        password: null,
       },
       disablePassword: false,
       rules: [],
@@ -239,7 +239,7 @@ export default {
         email: null,
         password: null,
         confirmPassword: null,
-        phoneNumber: null
+        phoneNumber: null,
       },
       form: {
         username: '',
@@ -249,157 +249,157 @@ export default {
         email: '',
         password: '',
         confirmPassword: '',
-        phoneNumber: ''
+        phoneNumber: '',
       },
       show: true,
       showWarning: false,
-      toBeCanceled: true
-    }
+      toBeCanceled: true,
+    };
   },
-  mounted () {
-    this.resetForm()
+  mounted() {
+    this.resetForm();
   },
   watch: {
-    userAdded () {
-      this.resetForm()
+    userAdded() {
+      this.resetForm();
     },
-    userUpdated () {
-      this.resetForm()
+    userUpdated() {
+      this.resetForm();
     },
-    formToPopulate () {
-      this.resetForm()
-      this.populateForm()
+    formToPopulate() {
+      this.resetForm();
+      this.populateForm();
     },
-    errors () {
-      this.errorForm()
-    }
+    errors() {
+      this.errorForm();
+    },
   },
   methods: {
-    async onSubmit () {
-      this.isLoading = true
+    async onSubmit() {
+      this.isLoading = true;
 
       if (typeof this.form.hospitals !== 'object') {
-        this.form.hospitals = [this.form.hospitals]
+        this.form.hospitals = [this.form.hospitals];
       }
       if (typeof this.rules !== 'object') {
-        this.rules = [this.rules]
+        this.rules = [this.rules];
       }
 
       if (this.rules.find((rule) => rule === ADMIN_ID)) {
         this.form.roles = this.roles
           .filter((rule) => {
             if (rule.label === 'Administrateur') {
-              return rule.id
+              return rule.id;
             }
           })
-          .map((rule) => rule.id)
+          .map((rule) => rule.id);
       } else {
-        this.form.roles = this.rules
+        this.form.roles = this.rules;
       }
       if (this.btnTitle === 'Enregistrer') {
-        this.$emit('onCreate', this.form)
+        this.$emit('onCreate', this.form);
       } else {
-        this.$emit('onUpdate', this.form)
+        this.$emit('onUpdate', this.form);
       }
-      this.isLoading = false
+      this.isLoading = false;
     },
 
-    onReset () {
-      this.$refs.form.reset()
-      this.toToCanceled = true
-      this.validatedMessage = {}
-      this.form = {}
-      this.rules = []
+    onReset() {
+      this.$refs.form.reset();
+      this.toToCanceled = true;
+      this.validatedMessage = {};
+      this.form = {};
+      this.rules = [];
 
-      this.stateForm.email = null
-      this.stateForm.confirmPassword = null
-      this.stateForm.username = null
-      this.stateForm.name = null
-      this.stateForm.phoneNumber = null
+      this.stateForm.email = null;
+      this.stateForm.confirmPassword = null;
+      this.stateForm.username = null;
+      this.stateForm.name = null;
+      this.stateForm.phoneNumber = null;
 
-      this.title = 'Nouveau Utilisateur'
-      this.btnTitle = 'Enregistrer'
-      this.$emit('onCancelUpdate', {})
+      this.title = 'Nouveau Utilisateur';
+      this.btnTitle = 'Enregistrer';
+      this.$emit('onCancelUpdate', {});
     },
 
-    resetForm () {
-      this.$refs.form.reset()
-      this.updating = false
-      this.isLoading = false
-      this.disablePassword = false
+    resetForm() {
+      this.$refs.form.reset();
+      this.updating = false;
+      this.isLoading = false;
+      this.disablePassword = false;
 
-      this.validatedMessage = {}
+      this.validatedMessage = {};
 
-      this.stateForm.email = null
-      this.stateForm.confirmPassword = null
-      this.stateForm.phoneNumber = null
-      this.stateForm.username = null
-      this.stateForm.name = null
-      this.form = {}
-      this.rules = []
+      this.stateForm.email = null;
+      this.stateForm.confirmPassword = null;
+      this.stateForm.phoneNumber = null;
+      this.stateForm.username = null;
+      this.stateForm.name = null;
+      this.form = {};
+      this.rules = [];
 
-      this.btnTitle = 'Enregistrer'
-      this.title = 'Nouveau Utilisateur'
-      this.$emit('onReset')
+      this.btnTitle = 'Enregistrer';
+      this.title = 'Nouveau Utilisateur';
+      this.$emit('onReset');
     },
 
-    populateForm () {
-      this.updating = false
+    populateForm() {
+      this.updating = false;
 
       if (Object.keys(this.formToPopulate).length !== 0) {
-        this.updating = true
-        this.form.id = this.formToPopulate.id
-        this.form.username = this.formToPopulate.usernmae
-        this.form.email = this.formToPopulate.email
-        this.form.phoneNumber = this.formToPopulate.phone_number
+        this.updating = true;
+        this.form.id = this.formToPopulate.id;
+        this.form.username = this.formToPopulate.usernmae;
+        this.form.email = this.formToPopulate.email;
+        this.form.phoneNumber = this.formToPopulate.phone_number;
         this.form.roles = this.formToPopulate.roles.filter((v) =>
           this.filterRole.find((t) => t.id === v.id)
-        )
-        this.rules = this.form.roles.map((rule) => rule.id)
-        this.form.hospitals = this.formToPopulate.hospital
-        this.form.name = this.formToPopulate.name
+        );
+        this.rules = this.form.roles.map((rule) => rule.id);
+        this.form.hospitals = this.formToPopulate.hospital;
+        this.form.name = this.formToPopulate.name;
 
-        this.title = "Modification de l'utilisateur"
-        this.btnTitle = 'Modifier'
+        this.title = "Modification de l'utilisateur";
+        this.btnTitle = 'Modifier';
       }
     },
 
-    errorForm () {
+    errorForm() {
       if (this.errors.username) {
-        this.stateForm.username = false
+        this.stateForm.username = false;
       }
       if (this.errors.phone_number) {
-        this.stateForm.phoneNumber = false
+        this.stateForm.phoneNumber = false;
       }
       if (this.errors.name) {
-        this.stateForm.name = false
+        this.stateForm.name = false;
       }
       if (!this.errors.username && this.form.username) {
-        this.stateForm.username = null
+        this.stateForm.username = null;
       }
       if (!this.errors.phone_number && this.form.phoneNumber) {
-        this.stateForm.phoneNumber = null
+        this.stateForm.phoneNumber = null;
       }
       if (!this.errors.name && this.form.name) {
-        this.stateForm.name = null
+        this.stateForm.name = null;
       }
-    }
+    },
   },
 
   computed: {
-    filterRole () {
+    filterRole() {
       return this.roles.filter(
         (v, i, a) =>
           a.findIndex((t) => t.label === v.label) === i &&
           (v.label === 'Administrateur' || v.label === 'Agent Point Focal')
-      )
-    }
-  }
-}
+      );
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .main {
   background-color: white;
   border-radius: 10px;
@@ -407,7 +407,7 @@ export default {
     margin-bottom: 20px;
   }
 }
-.btn-submit[disabled="disabled"] {
+.btn-submit[disabled='disabled'] {
   opacity: 0.6;
   cursor: not-allowed;
 }

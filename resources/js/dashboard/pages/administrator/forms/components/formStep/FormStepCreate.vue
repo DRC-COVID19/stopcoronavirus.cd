@@ -49,20 +49,20 @@
             ></b-form-input>
           </b-form-group>
           <b-row class="px-3 pt-4 d-flex justify-content-start">
-              <b-button
-                type="submit"
-                variant="primary"
-                class="btn-dash-sucess"
-                size="sm"
-              >
-                <span v-if="isLoading"
+            <b-button
+              type="submit"
+              variant="primary"
+              class="btn-dash-sucess"
+              size="sm"
+            >
+              <span v-if="isLoading"
                 ><b-spinner class="align-middle"></b-spinner>
-                  <span>en cours ...</span>
-                </span>
-                <div v-else>
-                  <small>{{btnTitle }}</small>
-                </div>
-              </b-button>
+                <span>en cours ...</span>
+              </span>
+              <div v-else>
+                <small>{{ btnTitle }}</small>
+              </div>
+            </b-button>
             <b-button
               v-if="updating"
               type="reset"
@@ -79,25 +79,25 @@
   </b-card>
 </template>
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from 'vuex';
 export default {
   props: {
     rowFormStep: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     formId: {
       type: Number,
-      required: true
+      required: true,
     },
     errors: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
-  data () {
+  data() {
     return {
       title: "Creation d'un formulaire",
       btnTitle: 'Enregistrer',
@@ -108,97 +108,93 @@ export default {
       form: {
         title: '',
         step: null,
-        form_id: null
+        form_id: null,
       },
       show: true,
       showWarning: false,
       toBeCanceled: true,
-      formRecurrenceSelected: null
-    }
+      formRecurrenceSelected: null,
+    };
   },
   watch: {
-    rowFormStep () {
-      this.form = { ...this.rowFormStep }
-      this.updating = true
-      this.title = "Modification de l'étape"
-      this.btnTitle = 'Modifier'
-    }
+    rowFormStep() {
+      this.form = { ...this.rowFormStep };
+      this.updating = true;
+      this.title = "Modification de l'étape";
+      this.btnTitle = 'Modifier';
+    },
   },
   methods: {
-    ...mapActions([
-      'createFormStep',
-      'updateFormStep'
-
-    ]),
-    onSubmit () {
+    ...mapActions(['createFormStep', 'updateFormStep']),
+    onSubmit() {
       if (this.btnTitle === 'Enregistrer') {
-        this.errors = {}
+        this.errors = {};
         const formStape = {
           ...this.form,
-          form_id: this.formId
-        }
+          form_id: this.formId,
+        };
         this.createFormStep(formStape)
           .then(() => {
             this.$notify({
               group: 'alert',
               title: 'Nouvelle Etape du Formulaire',
               text: 'Ajouter avec succès',
-              type: 'success'
-            })
-            this.$emit('created')
-            this.onReset()
+              type: 'success',
+            });
+            this.$emit('created');
+            this.onReset();
           })
           .catch(({ response }) => {
             this.$notify({
               group: 'alert',
               title: 'Nouvelle Etape du Formulaire',
               text: 'Une erreur est survenus',
-              type: 'error'
-            })
+              type: 'error',
+            });
             if (response.status == 422) {
-              this.errors = response.data.errors
+              this.errors = response.data.errors;
             }
-          })
+          });
       } else {
         this.updateFormStep(this.form)
           .then(() => {
-            this.formStepUpdated = true
+            this.formStepUpdated = true;
             this.$notify({
               group: 'alert',
               title: "Modication d'un Etape du Formulaire",
               text: 'Modifier avec succès',
-              type: 'success'
-            })
-            this.$emit('updated')
-            this.onReset()
+              type: 'success',
+            });
+            this.$emit('updated');
+            this.onReset();
           })
           .catch(({ response }) => {
             this.$notify({
               group: 'alert',
               title: 'Modifer log',
               text: 'Une erreur est surveni',
-              type: 'error'
-            })
+              type: 'error',
+            });
             if (response.status == 422) {
-              this.errors = response.data.errors
+              this.errors = response.data.errors;
             }
-          })
+          });
       }
     },
 
-    onReset () {
-      this.toToCanceled = true
-      this.form = {}
-      this.title = "Creation d'un étape"
-      this.btnTitle = 'Enregistrer'
-      this.$emit('onCancelUpdate', {})
-    }
-  }
-}
+    onReset() {
+      this.toToCanceled = true;
+      this.form = {};
+      this.title = "Creation d'un étape";
+      this.btnTitle = 'Enregistrer';
+      this.$emit('onCancelUpdate', {});
+    },
+  },
+};
 </script>
 
-<style lang='scss' scoped>
-@import "@~/sass/_variables";
+<style lang="scss" scoped>
+@import '@~/sass/_variables';
 .main {
   background-color: white;
   border-radius: 10px;

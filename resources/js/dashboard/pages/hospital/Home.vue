@@ -21,7 +21,10 @@
               <p v-if="user.hospital.address" class="">
                 {{ `Adresse: ${user.hospital.address}` }}
               </p>
-              <p v-if="hospitalManagerName && hospitalManagerFirstName" class="text-muted mb-0">
+              <p
+                v-if="hospitalManagerName && hospitalManagerFirstName"
+                class="text-muted mb-0"
+              >
                 Connecté en tant que:
                 <strong>{{ hospitalManagerName }} - </strong>
                 <strong>{{ hospitalManagerFirstName }}</strong>
@@ -29,12 +32,7 @@
             </b-card-header>
             <b-card-body class="px-0">
               <b-row
-                class="
-                  hospital__home-form
-                  d-flex
-                  justify-content-start
-                  align-items-center
-                "
+                class="hospital__home-form d-flex justify-content-start align-items-center"
               >
                 <b-col sm="12">
                   <h4 class="ml-2 mb-4">Mes Formulaires</h4>
@@ -46,12 +44,7 @@
                 </b-col>
                 <b-col
                   v-else
-                  class="
-                    d-flex
-                    flex-column
-                    align-items-lg-start
-                    col-md-8 col-sm-12
-                  "
+                  class="d-flex flex-column align-items-lg-start col-md-8 col-sm-12"
                 >
                   <b-col
                     class="card__Scroll px-0 mx-0 flex-md-wrap d-flex"
@@ -91,23 +84,23 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
-import ManagerUserName from '../../components/hospital/ManagerUserName'
-import CompletedFormList from '../../components/completedForm/CompletedFormList'
-import CardForm from '../../components/forms/CardForm.vue'
+import { mapState, mapMutations, mapActions } from 'vuex';
+import ManagerUserName from '../../components/hospital/ManagerUserName';
+import CompletedFormList from '../../components/completedForm/CompletedFormList';
+import CardForm from '../../components/forms/CardForm.vue';
 
 export default {
   components: {
     ManagerUserName,
     CompletedFormList,
-    CardForm
+    CardForm,
   },
-  data () {
+  data() {
     return {
       alertVariant: 'secondary',
       isHospitalFormsLoading: false,
-      hospitalForms: {}
-    }
+      hospitalForms: {},
+    };
   },
   computed: {
     ...mapState({
@@ -115,39 +108,39 @@ export default {
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
       hospitalManagerFirstName: (state) =>
         state.hospital.hospitalManagerFirstName,
-      isLoading: (state) => state.hospital.isLoading
-    })
+      isLoading: (state) => state.hospital.isLoading,
+    }),
   },
-  mounted () {
+  mounted() {
     if (!this.hospitalManagerName) {
-      this.$bvModal.show('nameModal')
+      this.$bvModal.show('nameModal');
     }
-    this.$store.commit('SET_COMPLETED_FORMS', { isLoading: true })
-    this.getHospitalForms()
+    this.$store.commit('SET_COMPLETED_FORMS', { isLoading: true });
+    this.getHospitalForms();
   },
   watch: {
-    user () {
-      this.getHospitalForms()
-    }
+    user() {
+      this.getHospitalForms();
+    },
   },
   methods: {
     ...mapActions(['completedForm__getByHospital', 'getHospital']),
     ...mapMutations(['setDetailHospital', 'setHospitalManagerName']),
-    async getHospitalForms () {
-      this.isHospitalFormsLoading = true
+    async getHospitalForms() {
+      this.isHospitalFormsLoading = true;
       if (this.user && this.user.hospital) {
         this.hospitalForms = await this.getHospital({
-          hospital_id: this.user.hospital.id
-        })
+          hospital_id: this.user.hospital.id,
+        });
 
-        this.isHospitalFormsLoading = false
+        this.isHospitalFormsLoading = false;
       }
     },
-    getFormRoute (formId) {
-      return { name: 'hospital.create', params: { form_id: formId } }
-    }
-  }
-}
+    getFormRoute(formId) {
+      return { name: 'hospital.create', params: { form_id: formId } };
+    },
+  },
+};
 </script>
 
 <style lang="scss">

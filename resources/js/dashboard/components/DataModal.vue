@@ -14,8 +14,14 @@
           <b-tab title="Orientation" v-if="hasOrientation">
             <SideOrientation :medicalOrientations="medicalOrientations" />
           </b-tab>
-          <b-tab title="Orientation chart" v-if="hasOrientation" :active="hasOrientation">
-            <OrientationChart :medicalOrientationsStat="medicalOrientationsStat" />
+          <b-tab
+            title="Orientation chart"
+            v-if="hasOrientation"
+            :active="hasOrientation"
+          >
+            <OrientationChart
+              :medicalOrientationsStat="medicalOrientationsStat"
+            />
           </b-tab>
           <b-tab title="FLux chart" v-if="hasFlux24Daily">
             <FluxChart
@@ -32,8 +38,9 @@
           </b-tab>
           <b-tab title="Covid-19 chart" v-if="covidCases">
             <CovidCaseChart
-            :covidCasesStat="covidCasesStat"
-            :covidCasesStatDaily="covidCasesStatDaily" />
+              :covidCasesStat="covidCasesStat"
+              :covidCasesStatDaily="covidCasesStatDaily"
+            />
           </b-tab>
         </b-tabs>
       </b-col>
@@ -42,12 +49,12 @@
 </template>
 
 <script>
-import SideFluxChart from './SideFlux'
-import FluxChart from './FluxChart'
-import SideCaseCovid from './SideCaseCovid'
-import CovidCaseChart from './CovidCaseChart'
-import SideOrientation from './SideOrientation'
-import OrientationChart from './OrientationChart'
+import SideFluxChart from './SideFlux';
+import FluxChart from './FluxChart';
+import SideCaseCovid from './SideCaseCovid';
+import CovidCaseChart from './CovidCaseChart';
+import SideOrientation from './SideOrientation';
+import OrientationChart from './OrientationChart';
 export default {
   components: {
     SideFluxChart,
@@ -55,82 +62,81 @@ export default {
     SideCaseCovid,
     SideOrientation,
     OrientationChart,
-    CovidCaseChart
+    CovidCaseChart,
   },
   props: {
     id: {
       type: String,
-      default: 'data-modal'
+      default: 'data-modal',
     },
     flux24: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux24Daily: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux24DailyIn: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux24DailyOut: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     covidCases: {
       type: Object,
-      default: null
+      default: null,
     },
     covidCasesStat: {
       type: Object,
-      default: null
+      default: null,
     },
     covidCasesStatDaily: {
       type: Object,
-      default: null
+      default: null,
     },
     medicalOrientations: {
       type: Array,
-      default: null
+      default: null,
     },
     medicalOrientationsStat: {
       type: Object,
-      default: null
-    }
+      default: null,
+    },
   },
-  data () {
+  data() {
     return {
-      flux24Local: []
-    }
+      flux24Local: [],
+    };
   },
   computed: {
-    hasFlux24 () {
-      return this.flux24.length > 0
+    hasFlux24() {
+      return this.flux24.length > 0;
     },
-    hasFlux24Daily () {
-      return this.flux24Daily.length > 0
+    hasFlux24Daily() {
+      return this.flux24Daily.length > 0;
     },
-    hasCovidCases () {
-      return this.getHasCoviCases()
+    hasCovidCases() {
+      return this.getHasCoviCases();
     },
-    hasOrientation () {
-      return this.getHasOrientation()
-    }
+    hasOrientation() {
+      return this.getHasOrientation();
+    },
   },
   methods: {
-    show () {
-      this.flux24Local = this.flux24
+    show() {
+      this.flux24Local = this.flux24;
     },
-    getHasCoviCases () {
-      return this.covidCases && this.covidCases.data.features.length > 0
+    getHasCoviCases() {
+      return this.covidCases && this.covidCases.data.features.length > 0;
     },
-    getHasOrientation () {
-      return this.medicalOrientations && this.medicalOrientations.length > 0
-    }
-  }
-}
+    getHasOrientation() {
+      return this.medicalOrientations && this.medicalOrientations.length > 0;
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

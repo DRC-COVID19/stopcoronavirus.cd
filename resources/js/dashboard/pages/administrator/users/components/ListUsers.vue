@@ -48,14 +48,7 @@
           >
             <template #table-busy>
               <div
-                class="
-                  align-items-center
-                  d-flex
-                  justify-content-center
-                  my-2
-                  text-center text-danger
-                  loading-height
-                "
+                class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height"
               >
                 <b-spinner class="align-middle"></b-spinner>
                 <strong>Loading...</strong>
@@ -125,21 +118,21 @@ export default {
   props: {
     users: {
       type: Object,
-      default: () => ({})
+      default: () => ({}),
     },
     isLoading: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
       fields: [
         { key: 'usernmae', sortable: false, label: 'Nom utilisateur' }, // usernmae instead of username (see backend response)
         { key: 'phone_number', sortable: false, label: 'N°Téléphone' },
         { key: 'role', sortable: false, label: 'Rôle' },
         { key: 'hospital', sortable: false, label: 'Hôpital' },
-        { key: 'actions', sortable: false, label: 'Actions' }
+        { key: 'actions', sortable: false, label: 'Actions' },
       ],
       filter: '',
       perPage: 15,
@@ -147,17 +140,17 @@ export default {
       isDeleteModalShown: false,
       currentUser: {
         id: -1,
-        name: ''
+        name: '',
       },
-      editModalShow: false
-    }
+      editModalShow: false,
+    };
   },
   computed: {
-    rows () {
-      return this.users.length
+    rows() {
+      return this.users.length;
     },
 
-    userFilter () {
+    userFilter() {
       return (
         (this.users.data &&
           this.users.data
@@ -169,38 +162,38 @@ export default {
                   a.findIndex((t) => t.label === v.label) === i &&
                   (v.label === 'Administrateur' ||
                     v.label === 'Agent Point Focal')
-              )
-              return user
+              );
+              return user;
             })) ??
         []
-      )
-    }
+      );
+    },
   },
   watch: {
-    filter () {
-      this.search()
-    }
+    filter() {
+      this.search();
+    },
   },
   methods: {
-    search () {
-      this.$emit('onSearch', this.filter.trim())
+    search() {
+      this.$emit('onSearch', this.filter.trim());
     },
-    deleteUser (name, userId) {
-      this.isDeleteModalShown = true
-      this.currentUser.id = userId
-      this.currentUser.name = name
+    deleteUser(name, userId) {
+      this.isDeleteModalShown = true;
+      this.currentUser.id = userId;
+      this.currentUser.name = name;
     },
-    onValidateDelection () {
-      this.$emit('onDeleteUser', this.currentUser.id)
-      this.isDeleteModalShown = false
+    onValidateDelection() {
+      this.$emit('onDeleteUser', this.currentUser.id);
+      this.isDeleteModalShown = false;
     },
-    onCancelDelection () {
-      this.isDeleteModalShown = false
+    onCancelDelection() {
+      this.isDeleteModalShown = false;
     },
-    openToogle () {
-      this.$emit('openToogle', false)
+    openToogle() {
+      this.$emit('openToogle', false);
     },
-    updateUser (name, id, usernmae, roles, hospital, email, phone_number) {
+    updateUser(name, id, usernmae, roles, hospital, email, phone_number) {
       this.currentUser = {
         id,
         name,
@@ -208,15 +201,15 @@ export default {
         roles,
         hospital,
         email,
-        phone_number
-      }
-      this.$emit('onUpdateUser', this.currentUser)
-    }
-  }
-}
+        phone_number,
+      };
+      this.$emit('onUpdateUser', this.currentUser);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .fa-user-times {
   color: $dash-red;
   font-size: 16px;

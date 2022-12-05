@@ -4,12 +4,12 @@
     class="d-flex mh-100 app_form justify-content-center align-items-center"
   >
     <b-container>
-      <Logo/>
+      <Logo />
       <b-row align-h="center">
         <b-col md="4">
           <h1 class="dash-login-title">Mot de passe changé avec succes</h1>
           <p>
-            <b-link :to="{name:'login'}">Retournez à la connexion</b-link>
+            <b-link :to="{ name: 'login' }">Retournez à la connexion</b-link>
           </p>
         </b-col>
       </b-row>
@@ -17,15 +17,15 @@
   </section>
 </template>
 <script>
-import Logo from "../../components/LogoComponent";
+import Logo from '../../components/LogoComponent';
 export default {
-  name: "EventRegistrationThank",
+  name: 'EventRegistrationThank',
   components: { Logo },
   data() {
     return {};
   },
   mounted() {},
-  methods: {}
+  methods: {},
 };
 </script>
 

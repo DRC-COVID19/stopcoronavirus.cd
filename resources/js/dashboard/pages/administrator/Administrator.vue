@@ -1,12 +1,6 @@
 <template>
   <b-row
-    class="
-      administrator-container
-      d-block d-lg-flex
-      no-gutters
-      flex-lg-nowrap
-      justify-content-between
-    "
+    class="administrator-container d-block d-lg-flex no-gutters flex-lg-nowrap justify-content-between"
   >
     <b-col cols="12" lg="auto">
       <AdministratorMenu />
@@ -19,14 +13,14 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 import {
   ADMINISTRATOR,
   CREATE_FORM,
   EDIT_FORM,
   MANANGER_EPIDEMIC,
-} from "../../config/env";
-import AdministratorMenu from "./components/AdministratorMenu";
+} from '../../config/env';
+import AdministratorMenu from './components/AdministratorMenu';
 
 export default {
   components: {
@@ -50,7 +44,7 @@ export default {
   },
   methods: {
     redirect(route) {
-      if (route.name !== "administrator") {
+      if (route.name !== 'administrator') {
         return null;
       }
       if (!this.user || this.user.roles === undefined) {
@@ -59,11 +53,11 @@ export default {
 
       if (this.user.roles.find((a) => a.name == ADMINISTRATOR)) {
         this.$router.push({
-          name: "administrator.users",
+          name: 'administrator.users',
         });
       } else if (this.user.roles.find((a) => a.name == MANANGER_EPIDEMIC)) {
         this.$router.push({
-          name: "administrator.epidemie",
+          name: 'administrator.epidemie',
         });
       } else if (
         this.user.roles.find(
@@ -71,7 +65,7 @@ export default {
         )
       ) {
         this.$router.push({
-          name: "administrator.forms",
+          name: 'administrator.forms',
         });
       }
     },
@@ -80,8 +74,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
+@import '@~/sass/_variables';
 
 .administrator-container {
   &-body {

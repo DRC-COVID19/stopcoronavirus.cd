@@ -1,13 +1,10 @@
-<template>
-
-</template>
+<template></template>
 
 <script>
 export default {
   props: {
-    id:{
-      type:String,
-
+    id: {
+      type: String,
     },
     message: {
       type: String,
@@ -15,16 +12,15 @@ export default {
     },
   },
 
-  methods:{
-    onValidate(){
-      this.$emit('onValidate')
+  methods: {
+    onValidate() {
+      this.$emit('onValidate');
     },
-    onCancel(){
+    onCancel() {
       this.$emit('onCancel');
-    }
-  }
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

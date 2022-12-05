@@ -10,30 +10,28 @@ use Illuminate\Support\Facades\Log;
 
 trait GClientSheet
 {
-    /**
-     * Returns an authorized API client.
-     * @return Google_Client the authorized client object
-     */
-    function getClient()
-    {
-        $httpClient  = new Client(
-            [
-                'verify' => false
-            ]
-        );
-        $client = new Google_Client();
-        $client->setHttpClient($httpClient);
-        $client->setApplicationName('Google Sheets API PHP Quickstart');
-        $client->setScopes(Google_Service_Sheets::SPREADSHEETS_READONLY);
-        $client->setAccessType('offline');
-        $client->setDeveloperKey(env('GOOGLE_KEY'));
-        // $client->setAuthConfig(storage_path('app/credentials.json'));
-        //$client->setPrompt('select_account consent');
-        // Load previously authorized token from a file, if it exists.
-        // The file token.json stores the user's access and refresh tokens, and is
-        // created automatically when the authorization flow completes for the first
-        // time.
-        /*$tokenPath = storage_path('app/token.json');
+  /**
+   * Returns an authorized API client.
+   * @return Google_Client the authorized client object
+   */
+  function getClient()
+  {
+    $httpClient = new Client([
+      'verify' => false,
+    ]);
+    $client = new Google_Client();
+    $client->setHttpClient($httpClient);
+    $client->setApplicationName('Google Sheets API PHP Quickstart');
+    $client->setScopes(Google_Service_Sheets::SPREADSHEETS_READONLY);
+    $client->setAccessType('offline');
+    $client->setDeveloperKey(env('GOOGLE_KEY'));
+    // $client->setAuthConfig(storage_path('app/credentials.json'));
+    //$client->setPrompt('select_account consent');
+    // Load previously authorized token from a file, if it exists.
+    // The file token.json stores the user's access and refresh tokens, and is
+    // created automatically when the authorization flow completes for the first
+    // time.
+    /*$tokenPath = storage_path('app/token.json');
         if (file_exists($tokenPath)) {
             $accessToken = json_decode(file_get_contents($tokenPath), true);
             $client->setAccessToken($accessToken);
@@ -66,39 +64,41 @@ trait GClientSheet
             }
             file_put_contents($tokenPath, json_encode($client->getAccessToken()));
         }*/
-        return $client;
-    }
+    return $client;
+  }
 
-    public function writeSheetValue($spreadsheetId, Google_Service_Sheets_ValueRange  $values, $valueInputOption = "USER_ENTERED")
-    {
+  public function writeSheetValue(
+    $spreadsheetId,
+    Google_Service_Sheets_ValueRange $values,
+    $valueInputOption = 'USER_ENTERED'
+  ) {
+    // Get the API client and construct the service object.
+    $client = $this->getClient();
+    $service = new Google_Service_Sheets($client);
 
-        // Get the API client and construct the service object.
-        $client = $this->getClient();
-        $service = new Google_Service_Sheets($client);
+    $body = new Google_Service_Sheets_ValueRange([
+      'values' => $values,
+    ]);
+    $params = [
+      'valueInputOption' => $valueInputOption,
+      'insertDataOption' => 'INSERT_ROWS',
+    ];
+    $result = $service->spreadsheets_values->append(
+      $spreadsheetId,
+      'A2',
+      $body,
+      $params
+    );
+    return $result;
+    Log::debug($result->getSpreadsheetId());
+    //printf("%d cells updated.", $result->getUpdatedCells());
+  }
 
-        $body = new Google_Service_Sheets_ValueRange([
-            'values' => $values
-        ]);
-        $params = [
-            'valueInputOption' => $valueInputOption,
-            "insertDataOption" => "INSERT_ROWS",
-        ];
-        $result = $service->spreadsheets_values->append(
-            $spreadsheetId,
-            "A2",
-            $body,
-            $params
-        );
-        return $result;
-        Log::debug($result->getSpreadsheetId());
-        //printf("%d cells updated.", $result->getUpdatedCells());
-    }
-
-    public function readSheetValue($spreadsheetId,$range)
-    {
-        $client = $this->getClient();
-        $service = new Google_Service_Sheets($client);
-        $response = $service->spreadsheets_values->get($spreadsheetId, $range);
-        return $response->getValues();
-    }
+  public function readSheetValue($spreadsheetId, $range)
+  {
+    $client = $this->getClient();
+    $service = new Google_Service_Sheets($client);
+    $response = $service->spreadsheets_values->get($spreadsheetId, $range);
+    return $response->getValues();
+  }
 }

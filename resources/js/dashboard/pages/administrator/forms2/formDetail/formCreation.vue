@@ -3,15 +3,7 @@
     <b-row class="h-100 px-0 mx-0">
       <b-col
         lg="2"
-        class="
-          w-100
-          d-flex
-          justify-content-start
-          bg-white
-          container-creation-list
-          px-0
-          mx-0
-        "
+        class="w-100 d-flex justify-content-start bg-white container-creation-list px-0 mx-0"
       >
         <FormStepIndex :formId="+$route.params.form_id" />
       </b-col>
@@ -46,19 +38,19 @@
 </template>
 
 <script>
-import FormStepIndex from './components/formStep/FormStepIndex'
+import FormStepIndex from './components/formStep/FormStepIndex';
 
 export default {
   components: {
-    FormStepIndex
+    FormStepIndex,
   },
-  mounted () {},
-  methods: {}
-}
+  mounted() {},
+  methods: {},
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .container-fluid {
   @media (min-width: 992px) {
     margin-left: 70px !important;
