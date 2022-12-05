@@ -27,19 +27,25 @@ class HospitalController extends Controller
    */
   public function index()
   {
-    $hospitals = Hospital::with(['agent', 'township'])->orderBy('name')->get();
+    $hospitals = Hospital::with(['agent', 'township'])
+      ->orderBy('name')
+      ->get();
     return response()->json($hospitals, 200);
   }
 
   public function allWithoutAgent()
   {
-    $hospitals = Hospital::with(['agent', 'township'])->where('agent_id', null)->get();
+    $hospitals = Hospital::with(['agent', 'township'])
+      ->where('agent_id', null)
+      ->get();
     return response()->json($hospitals, 200);
   }
 
   public function indexByPaginate()
   {
-    $hospitals = Hospital::with(['agent', 'township'])->orderBy('name')->paginate(15);
+    $hospitals = Hospital::with(['agent', 'township'])
+      ->orderBy('name')
+      ->paginate(15);
     return response()->json($hospitals, 200);
   }
 
@@ -94,14 +100,14 @@ class HospitalController extends Controller
 
     $hospitalForms = Hospital::with([
       'forms' => function ($query) {
-        $query->where('visible_all_hospitals', '<>', true)
+        $query
+          ->where('visible_all_hospitals', '<>', true)
           ->where('publish', true);
       },
-      'forms.formRecurrence'
+      'forms.formRecurrence',
     ])
       ->find($hospital_id)
-      ->forms
-      ->filter(fn ($form) => $form->publish)
+      ->forms->filter(fn($form) => $form->publish)
       ->merge($formsAllVisibility);
 
     $hospital = Hospital::find($hospital_id);
@@ -112,37 +118,58 @@ class HospitalController extends Controller
 
   public function showDeep($hospital_id)
   {
-    $formsAllVisibility = Form::with(
-      [
-        'formRecurrence',
-        'completedForms' => function ($query) use ($hospital_id) {
-          $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
-          $query->where('hospital_id', $hospital_id);
-          $query->orderBy('last_update', 'desc');
-        },
-        'formSteps' => function ($query) {
-          $query->select('id', 'form_id', 'title', 'step');
-        },
-        'formSteps.formFields' => function ($query) {
-          $query->select('id', 'name', 'order_field', 'rules', 'form_step_id', 'default_value', 'form_field_type_id');
-        },
-        'formSteps.formFields.formFieldType' => function ($query) {
-          $query->select('id', 'name');
-        }
-      ]
-    )
+    $formsAllVisibility = Form::with([
+      'formRecurrence',
+      'completedForms' => function ($query) use ($hospital_id) {
+        $query->select(
+          'id',
+          'created_manager_name',
+          'form_id',
+          'hospital_id',
+          'last_update',
+          'created_manager_first_name'
+        );
+        $query->where('hospital_id', $hospital_id);
+        $query->orderBy('last_update', 'desc');
+      },
+      'formSteps' => function ($query) {
+        $query->select('id', 'form_id', 'title', 'step');
+      },
+      'formSteps.formFields' => function ($query) {
+        $query->select(
+          'id',
+          'name',
+          'order_field',
+          'rules',
+          'form_step_id',
+          'default_value',
+          'form_field_type_id'
+        );
+      },
+      'formSteps.formFields.formFieldType' => function ($query) {
+        $query->select('id', 'name');
+      },
+    ])
       ->where('visible_all_hospitals', true)
       ->where('publish', true)
       ->get();
 
     $hospitalForms = Hospital::with([
       'forms' => function ($query) {
-        $query->where('visible_all_hospitals', '<>', true)
+        $query
+          ->where('visible_all_hospitals', '<>', true)
           ->where('publish', true);
       },
       'forms.formRecurrence',
-      'forms.completedForms' => function ($query)  use ($hospital_id) {
-        $query->select('id', 'created_manager_name', 'form_id', 'hospital_id', 'last_update', 'created_manager_first_name');
+      'forms.completedForms' => function ($query) use ($hospital_id) {
+        $query->select(
+          'id',
+          'created_manager_name',
+          'form_id',
+          'hospital_id',
+          'last_update',
+          'created_manager_first_name'
+        );
         $query->where('hospital_id', $hospital_id);
         $query->orderBy('last_update', 'desc');
       },
@@ -150,15 +177,22 @@ class HospitalController extends Controller
         $query->select('id', 'form_id', 'title', 'step');
       },
       'forms.formSteps.formFields' => function ($query) {
-        $query->select('id', 'name', 'order_field', 'rules', 'form_step_id', 'default_value', 'form_field_type_id');
+        $query->select(
+          'id',
+          'name',
+          'order_field',
+          'rules',
+          'form_step_id',
+          'default_value',
+          'form_field_type_id'
+        );
       },
       'forms.formSteps.formFields.formFieldType' => function ($query) {
         $query->select('id', 'name');
-      }
+      },
     ])
       ->find($hospital_id)
-      ->forms
-      ->merge($formsAllVisibility);
+      ->forms->merge($formsAllVisibility);
 
     $hospital = Hospital::find($hospital_id);
     $hospital->forms = $hospitalForms;
@@ -200,18 +234,16 @@ class HospitalController extends Controller
   public function updateByAdmin(UpdateHospitalRequest $request, $id)
   {
     try {
-
       $data = $request->validated();
       $hospital = Hospital::find($id);
       if ($data['agent_id']) {
         $hospital->update(['agent_id' => $data['agent_id']]);
-      } else if ($data['agent_id'] === null) {
+      } elseif ($data['agent_id'] === null) {
         $hospital->update(['agent_id' => null]);
       }
 
       return response()->json($hospital, 201);
     } catch (\Throwable $th) {
-
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
       }
@@ -265,8 +297,9 @@ class HospitalController extends Controller
   public function getAgents()
   {
     try {
-
-      $users = AdministratorResource::collection(Administrator::with(['hospitalManager', 'roles'])->get());
+      $users = AdministratorResource::collection(
+        Administrator::with(['hospitalManager', 'roles'])->get()
+      );
       return response()->json($users, 200);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
@@ -278,10 +311,21 @@ class HospitalController extends Controller
   public function getHospitals(Request $request)
   {
     try {
-      $hospitalsCompletedFormsData = CompletedFormController::getHospitalsCompletedFormsData($request)['hospitalsData'];
-      foreach ($hospitalsCompletedFormsData as $index => $hospitalCompletedFormsData) {
-        $hospitalsCompletedFormsData[$index]->aggregated = CompletedFormController::getAggregatedHospitalsDatas([$hospitalCompletedFormsData]);
-        $hospitalsCompletedFormsData[$index]->last_update = collect($hospitalCompletedFormsData->completedForms)->max('last_update');
+      $hospitalsCompletedFormsData = CompletedFormController::getHospitalsCompletedFormsData(
+        $request
+      )['hospitalsData'];
+      foreach (
+        $hospitalsCompletedFormsData
+        as $index => $hospitalCompletedFormsData
+      ) {
+        $hospitalsCompletedFormsData[
+          $index
+        ]->aggregated = CompletedFormController::getAggregatedHospitalsDatas([
+          $hospitalCompletedFormsData,
+        ]);
+        $hospitalsCompletedFormsData[$index]->last_update = collect(
+          $hospitalCompletedFormsData->completedForms
+        )->max('last_update');
       }
       return response()->json($hospitalsCompletedFormsData, 200);
     } catch (\Throwable $th) {
@@ -295,9 +339,11 @@ class HospitalController extends Controller
   {
     try {
       $key_words = $request->get('key_words');
-      $forms = Hospital::where('name', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE', "%{$key_words}%")->paginate(15);
+      $forms = Hospital::where('name', 'LIKE', "%{$key_words}%")
+        ->orWhere('name', 'LIKE', "%{$key_words}%")
+        ->paginate(15);
       if (!$forms) {
-        return response()->json(['message' => "Au hopital trouvé!"], 404);
+        return response()->json(['message' => 'Au hopital trouvé!'], 404);
       }
       return response()->json($forms, 200);
     } catch (\Throwable $th) {
@@ -310,30 +356,42 @@ class HospitalController extends Controller
 
   private function getHospitalsFromFiltre($date_start, $date_end, $township)
   {
-    $hospitalLogs = HospitalLog::where(function ($query) use ($date_start, $date_end) {
+    $hospitalLogs = HospitalLog::where(function ($query) use (
+      $date_start,
+      $date_end
+    ) {
       $query
         ->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$date_start, $date_end])
         ->orWhereNull('updated_at');
     })
       ->where(function ($query) use ($township) {
-        if ($township) $query->where('township_id', $township);
+        if ($township) {
+          $query->where('township_id', $township);
+        }
       })
       ->orderBy('updated_at', 'desc')
       ->get();
 
-    $hospitals = Hospital::where(function ($query) use ($date_start, $date_end) {
+    $hospitals = Hospital::where(function ($query) use (
+      $date_start,
+      $date_end
+    ) {
       $query
         ->whereRaw('DATE(updated_at) BETWEEN ? AND ?', [$date_start, $date_end])
         ->orWhereNull('updated_at');
     })
       ->where(function ($query) use ($township) {
-        if ($township) $query->where('township_id', $township);
+        if ($township) {
+          $query->where('township_id', $township);
+        }
       })
       ->orderBy('updated_at', 'desc')
       ->get();
 
-    $hospitals =
-      $hospitals->concat($hospitalLogs)->sortByDesc('updated_at')->values();
+    $hospitals = $hospitals
+      ->concat($hospitalLogs)
+      ->sortByDesc('updated_at')
+      ->values();
 
     $hospitals = $hospitals->map(function ($item, $key) {
       if (!$item->hospital_id) {
@@ -353,7 +411,11 @@ class HospitalController extends Controller
       $observation_start = $request->query('observation_start');
       $township = $request->query('township');
 
-      $hospitalsFiltred = $this->getHospitalsFromFiltre($observation_start, $observation_end, $township);
+      $hospitalsFiltred = $this->getHospitalsFromFiltre(
+        $observation_start,
+        $observation_end,
+        $township
+      );
 
       $hospitals = collect([
         'beds' => $hospitalsFiltred->sum('beds'),
@@ -366,7 +428,11 @@ class HospitalController extends Controller
       ]);
 
       $hospitalsSituation1 = Hospital::where(function ($query) use ($township) {
-        if ($township) $query->whereRaw('township_id = :township ', ['township' => $township]);
+        if ($township) {
+          $query->whereRaw('township_id = :township ', [
+            'township' => $township,
+          ]);
+        }
       })
         ->selectRaw(
           '
@@ -402,29 +468,40 @@ class HospitalController extends Controller
                 ) AS oxygenator
                 ',
           [
-            'date_start1' => $observation_start, 'date_end1' => $observation_end,
-            'date_start2' => $observation_start, 'date_end2' => $observation_end,
-            'date_start3' => $observation_start, 'date_end3' => $observation_end,
-            'date_start4' => $observation_start, 'date_end4' => $observation_end,
-            'date_start5' => $observation_start, 'date_end5' => $observation_end
+            'date_start1' => $observation_start,
+            'date_end1' => $observation_end,
+            'date_start2' => $observation_start,
+            'date_end2' => $observation_end,
+            'date_start3' => $observation_start,
+            'date_end3' => $observation_end,
+            'date_start4' => $observation_start,
+            'date_end4' => $observation_end,
+            'date_start5' => $observation_start,
+            'date_end5' => $observation_end,
           ]
         )
         ->first();
 
-      $hospitalsSituation2 = HospitalSituation::whereRaw('DATE(last_update) BETWEEN ? AND ?', [$observation_start, $observation_end])
+      $hospitalsSituation2 = HospitalSituation::whereRaw(
+        'DATE(last_update) BETWEEN ? AND ?',
+        [$observation_start, $observation_end]
+      )
         ->where(function ($query) use ($township) {
-          if ($township)
+          if ($township) {
             $query->whereRaw(
               '(SELECT township_id FROM hospitals WHERE id = hospital_id) = ?',
               [$township]
             );
+          }
         })
         ->selectRaw(
           'SUM(confirmed) as confirmed, SUM(healed) as healed, SUM(dead) as dead, SUM(sick) as sick'
         )
         ->first();
 
-      $results = $hospitals->merge($hospitalsSituation1)->merge($hospitalsSituation2);
+      $results = $hospitals
+        ->merge($hospitalsSituation1)
+        ->merge($hospitalsSituation2);
 
       return response()->json($results, 200, [], JSON_NUMERIC_CHECK);
     } catch (\Throwable $th) {
@@ -438,7 +515,6 @@ class HospitalController extends Controller
   public function getHospitalEvolution($hospital = null, Request $request)
   {
     try {
-
       $observation_end = $request->query('observation_end');
       $observation_start = $request->query('observation_start');
       $township = $request->query('township');
@@ -446,45 +522,56 @@ class HospitalController extends Controller
       // On réccupère toutes les dates où une mise à jour a pu etre poster
       // Surtout utile pour l'evolution globale
 
-      $last_updates = HospitalSituation::where(function ($query) use ($hospital, $township) {
+      $last_updates = HospitalSituation::where(function ($query) use (
+        $hospital,
+        $township
+      ) {
         if ($hospital) {
           $query->where('hospital_id', intval($hospital));
-        } else if ($township) {
+        } elseif ($township) {
           $query->whereRaw(
             '(SELECT township_id FROM hospitals WHERE id = hospital_id) = ?',
             [$township]
           );
         }
       })
-        ->whereRaw('DATE(last_update) BETWEEN ? AND ? ', [$observation_start, $observation_end])
+        ->whereRaw('DATE(last_update) BETWEEN ? AND ? ', [
+          $observation_start,
+          $observation_end,
+        ])
         ->select('last_update')
         ->pluck('last_update')
-        ->unique()->sort()->values();
+        ->unique()
+        ->sort()
+        ->values();
 
       $results = [
         'last_update' => [],
         'occupied_respirators' => [],
         'occupied_resuscitation_beds' => [],
         'respirators' => [],
-        'resuscitation_beds' => []
+        'resuscitation_beds' => [],
       ];
 
       // A une date donné, on réccupera pour chaque hopital sa dernière situation
       // Dans le but d'en faire la somme pour chacune d'elle dans le cas du rapport
       // pour la situation globale
       foreach ($last_updates as $last_update) {
-
-        $hospitalSituation = HospitalSituation::where(function ($query) use ($hospital, $township) {
+        $hospitalSituation = HospitalSituation::where(function ($query) use (
+          $hospital,
+          $township
+        ) {
           if ($hospital) {
             $query->where('hospital_id', intval($hospital));
-          } else if ($township) {
+          } elseif ($township) {
             $query->whereRaw(
               '(SELECT township_id FROM hospitals WHERE id = hospital_id) = ?',
               [$township]
             );
           }
-        })->selectRaw(
-          ' SUM(occupied_respirators) AS occupied_respirators,
+        })
+          ->selectRaw(
+            ' SUM(occupied_respirators) AS occupied_respirators,
                   SUM(occupied_resuscitation_beds) AS occupied_resuscitation_beds,
                   SUM(
                     (SELECT respirators FROM
@@ -510,15 +597,20 @@ class HospitalController extends Controller
                     )
                   ) AS resuscitation_beds
               '
-        )
+          )
           ->where('last_update', '<=', $last_update)
-          ->whereRaw('DATE(last_update) BETWEEN ? AND ?', [$observation_start, $observation_end])
+          ->whereRaw('DATE(last_update) BETWEEN ? AND ?', [
+            $observation_start,
+            $observation_end,
+          ])
           ->whereNotExists(function ($query) use ($last_update) {
             // C'est ici qu'on s'assure que la situation actuellemnent lu est la dernière connu
             // pour l'hopital x à la date $last_update sur laquelle on boucle
-            $query->select(DB::raw(1))
-              ->from(DB::raw('hospital_situations AS h'))
-              ->whereRaw("h.hospital_id = hospital_situations.hospital_id
+            $query
+              ->select(DB::raw(1))
+              ->from(
+                DB::raw('hospital_situations AS h')
+              )->whereRaw("h.hospital_id = hospital_situations.hospital_id
                       AND h.last_update <='{$last_update}'
                       AND (
                         h.last_update > hospital_situations.last_update OR
@@ -529,10 +621,13 @@ class HospitalController extends Controller
           ->first();
 
         $results['last_update'][] = $last_update;
-        $results['occupied_respirators'][] = $hospitalSituation->occupied_respirators;
-        $results['occupied_resuscitation_beds'][] = $hospitalSituation->occupied_resuscitation_beds;
+        $results['occupied_respirators'][] =
+          $hospitalSituation->occupied_respirators;
+        $results['occupied_resuscitation_beds'][] =
+          $hospitalSituation->occupied_resuscitation_beds;
         $results['respirators'][] = $hospitalSituation->respirators;
-        $results['resuscitation_beds'][] = $hospitalSituation->resuscitation_beds;
+        $results['resuscitation_beds'][] =
+          $hospitalSituation->resuscitation_beds;
       }
 
       return response()->json($results, 200, [], JSON_NUMERIC_CHECK);
@@ -545,12 +640,15 @@ class HospitalController extends Controller
   }
   public function getHospitalByForm()
   {
-
     try {
-      $townships = Hospital::with(['township' => function ($query) {
-        $query->select('id', 'name')
-          ->orderBy('name');
-      }])->whereHas('completedForms')->select('id', 'name', 'township_id')->get();
+      $townships = Hospital::with([
+        'township' => function ($query) {
+          $query->select('id', 'name')->orderBy('name');
+        },
+      ])
+        ->whereHas('completedForms')
+        ->select('id', 'name', 'township_id')
+        ->get();
       return response()->json($townships);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
@@ -570,7 +668,7 @@ class HospitalController extends Controller
       'respirators' => 'numeric|required',
       'doctors' => 'numeric|required',
       'nurses' => 'numeric|required',
-      'para_medicals' => 'numeric|required'
+      'para_medicals' => 'numeric|required',
     ])->validate();
   }
 }

@@ -1,53 +1,53 @@
 .sondage-items {
-    .sondage-item {
-        font-weight: normal;
-        margin-bottom: 10px;
-        display: flex;
-        p{
-            margin: 0;
-        }
-        span {
-            font-size: 0.9rem;
-            font-weight: 600;
-            width: 45px;
-            flex: 0 0 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 45px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            border: 3px solid #00874ea6;
-            margin-right: 20px;
-        }
+  .sondage-item {
+    font-weight: normal;
+    margin-bottom: 10px;
+    display: flex;
+    p {
+      margin: 0;
     }
+    span {
+      font-size: 0.9rem;
+      font-weight: 600;
+      width: 45px;
+      flex: 0 0 45px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 45px;
+      background-color: #ffffff;
+      border-radius: 50%;
+      border: 3px solid #00874ea6;
+      margin-right: 20px;
+    }
+  }
 }
 .sondage-methods {
-    .sondage-methods-item {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-        .illustrator {
-            flex: 0 0 80px;
-            padding: 15px;
-            background: #e9ecef;
-            border-radius: 50%;
-            margin-right: 20px;
-            img {
-                width: 100%;
-            }
-        }
-        p {
-            margin: 0;
-        }
+  .sondage-methods-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    .illustrator {
+      flex: 0 0 80px;
+      padding: 15px;
+      background: #e9ecef;
+      border-radius: 50%;
+      margin-right: 20px;
+      img {
+        width: 100%;
+      }
     }
+    p {
+      margin: 0;
+    }
+  }
 }
 .btn-download {
-    border: 3px solid $bg-gray;
-    background: $success;
+  border: 3px solid $bg-gray;
+  background: $success;
+  color: white;
+  &:hover {
     color: white;
-    &:hover {
-        color: white;
-        background: #027f4b;
-    }
+    background: #027f4b;
+  }
 }

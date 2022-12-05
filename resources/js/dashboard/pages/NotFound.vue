@@ -5,7 +5,9 @@
         <h1>Oops!</h1>
         <h2>404 - Vous essayer d'accéder à une ressource qui n'existe pas</h2>
       </div>
-      <b-button class="btn-dash-blue" @click="goHome">Retournez à l'accueil</b-button>
+      <b-button class="btn-dash-blue" @click="goHome"
+        >Retournez à l'accueil</b-button
+      >
     </div>
   </div>
 </template>
@@ -15,10 +17,10 @@ export default {
   methods: {
     goHome() {
       this.$router.push({
-        name: "main"
+        name: 'main',
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -52,7 +54,7 @@ export default {
 }
 
 .notfound .notfound-404 h1 {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 236px;
   font-weight: 200;
   margin: 0px;
@@ -67,7 +69,7 @@ export default {
 }
 
 .notfound .notfound-404 h2 {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   font-size: 28px;
   font-weight: 400;
   text-transform: uppercase;

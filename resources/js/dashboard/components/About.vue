@@ -338,8 +338,8 @@
 </template>
 
 <script>
-import Timeline from "timeline-vuejs";
-import { mapActions, mapMutations, mapState } from "vuex";
+import Timeline from 'timeline-vuejs';
+import { mapActions, mapMutations, mapState } from 'vuex';
 
 export default {
   components: {
@@ -348,38 +348,38 @@ export default {
   data() {
     return {
       modalSourceImg: null,
-      messageWhenNoItems: "There are not items",
+      messageWhenNoItems: 'There are not items',
       currentPage: 1,
       rows: 10,
       perPage: 1,
       timelineItems: [
         {
           from: new Date(2018, 7),
-          title: "Name",
+          title: 'Name',
           description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.',
           showDayAndMonth: true,
         },
 
         {
           from: new Date(2016, 1),
-          title: "Name",
+          title: 'Name',
           description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.',
           showDayAndMonth: true,
         },
         {
           from: new Date(2016, 6),
-          title: "Name",
+          title: 'Name',
           description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.',
           showDayAndMonth: true,
         },
         {
           from: new Date(2012, 1),
-          title: "Name",
+          title: 'Name',
           description:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.",
+            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius earum architecto dolor, vitae magnam voluptate accusantium assumenda numquam error mollitia, officia facere consequuntur reprehenderit cum voluptates, ea tempore beatae unde.',
           showDayAndMonth: true,
         },
       ],
@@ -399,14 +399,13 @@ export default {
       return this.changeLogs.data;
     },
     changeLogsMeta() {
-
       return this.changeLogs.meta
         ? this.changeLogs.meta
         : {
             current_page: 1,
             from: 1,
             last_page: 1,
-            path: "#",
+            path: '#',
             per_page: 1,
             to: 1,
             total: 1,
@@ -414,11 +413,11 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["setSelectedChangeLog"]),
+    ...mapMutations(['setSelectedChangeLog']),
     ...mapActions([
-      "getListChangedLogs",
-      "setChangeLogsRead",
-      "getListChangedLogs",
+      'getListChangedLogs',
+      'setChangeLogsRead',
+      'getListChangedLogs',
     ]),
     activeItem(item) {
       if (this.selectedChangeLog && this.selectedChangeLog.id == item.id) {
@@ -432,7 +431,7 @@ export default {
     showModal(e) {
       console.log(e);
       this.modalSourceImg = e.target.src;
-      this.$bvModal.show("modal-img");
+      this.$bvModal.show('modal-img');
     },
     switchPage(page) {
       this.getListChangedLogs({ page }).then(() => {
@@ -443,8 +442,8 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped >
-@import "@~/sass/_variables";
+<style lang="scss" scoped>
+@import '@~/sass/_variables';
 .timeline-selected {
   background: $waiting_background;
 }

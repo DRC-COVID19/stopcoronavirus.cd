@@ -1,85 +1,85 @@
-.legend-container{
-    position : relative ;
-    top: -50px;
-    height: 0px;
-    z-index: 2;
-    @media screen and (max-width: 576px){
-      top:-70px;
-    }
+.legend-container {
+  position: relative;
+  top: -50px;
+  height: 0px;
+  z-index: 2;
+  @media screen and (max-width: 576px) {
+    top: -70px;
+  }
 
-    .legend{
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      position: relative;
-      bottom: 10px;
+  .legend {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    position: relative;
+    bottom: 10px;
+  }
+  .no-data {
+    margin-right: 25px;
+    @media screen and (max-width: 576px) {
+      margin-right: unset;
     }
-    .no-data{
-        margin-right: 25px;
-        @media screen and (max-width: 576px){
-          margin-right: unset;
-        }
+  }
+  .range {
+    width: 50px;
+    @media screen and (max-width: 576px) {
+      width: 25px;
     }
-    .range{
-        width: 50px;
-        @media screen and (max-width: 576px) {
-          width: 25px;
-        }
-        height: 12px;
-        border: 2px solid rgba(0, 0, 0, .3) ;
-        position: relative;
-        transition: border 0.3s ease-in-out;
+    height: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    position: relative;
+    transition: border 0.3s ease-in-out;
+  }
+  .range.hover {
+    border: 2px solid black;
+  }
+  .range.empty {
+    background-color: #eee;
+  }
+  .datas .inner:nth-child(2n + 1) .range::before,
+  .datas .inner:nth-last-child(2) .range::after {
+    content: '';
+    display: block;
+    height: 25px;
+    background-color: black;
+    width: 1px;
+    position: absolute;
+    bottom: 0px;
+  }
+  .datas .inner:nth-child(2n + 1) .range::before {
+    left: -2px;
+  }
+  .datas .inner:nth-last-child(2) .range::after {
+    right: -2px;
+  }
+  .datas {
+    display: flex;
+    align-items: flex-end;
+  }
+  .lbl {
+    max-width: 50px;
+    display: inline-block;
+    line-height: 12px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 3px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-size: 11px;
+    @media screen and (max-width: 576px) {
+      font-size: 0.5rem;
     }
-    .range.hover {
-        border: 2px solid black ;
-    }
-    .range.empty{
-        background-color: #eee ;
-    }
-    .datas .inner:nth-child(2n+1) .range::before,
-    .datas .inner:nth-last-child(2) .range::after{
-        content: "";
-        display: block;
-        height: 25px;
-        background-color: black ;
-        width: 1px;
-        position: absolute;
-        bottom: 0px;
-    }
-    .datas .inner:nth-child(2n+1) .range::before{
-        left: -2px;
-    }
-    .datas .inner:nth-last-child(2) .range::after {
-        right: -2px;
-    }
-    .datas{
-        display: flex;
-        align-items: flex-end;
-    }
-    .lbl{
-        max-width: 50px;
-        display: inline-block;
-        line-height: 12px;
-        background-color: rgba(255, 255, 255, .8);
-        padding: 3px;
-        box-sizing: border-box;
-        border-radius: 5px;
-        font-size: 11px;
-        @media screen and (max-width: 576px){
-          font-size: 0.5rem;
-        }
-    }
-    .datas .lbl{
-        transform: translateX(-50%);
-        transform-origin: center;
-        position: relative;
-        border-radius: 20px;
-    }
-    .datas .inner-last .lbl{
-        position: relative;
-        top: 0px;
-    }
-    .datas .inner:nth-child(2n+1) .lbl {
-        top: -17px;
-    }
+  }
+  .datas .lbl {
+    transform: translateX(-50%);
+    transform-origin: center;
+    position: relative;
+    border-radius: 20px;
+  }
+  .datas .inner-last .lbl {
+    position: relative;
+    top: 0px;
+  }
+  .datas .inner:nth-child(2n + 1) .lbl {
+    top: -17px;
+  }
 }

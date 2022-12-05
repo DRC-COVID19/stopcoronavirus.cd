@@ -1,98 +1,96 @@
 <template>
-    <b-container fluid class="form_list">
-         <div class="container">
-             <hr>
-        <list-form-navigation
-          @filterForms="filterForms"
-          @onSearch="search"
-          :paginate="paginate"
-        />
-          <list-forms
-          :isLoading = "isLoading"
-          :formsList="formsList"
-          :paginate="paginate"
-          @onPerPageChange ="onPerPageChange"
-          @switchPage="switchPage"
-          />
-         </div>
-      </b-container>
+  <b-container fluid class="form_list">
+    <div class="container">
+      <hr />
+      <list-form-navigation
+        @filterForms="filterForms"
+        @onSearch="search"
+        :paginate="paginate"
+      />
+      <list-forms
+        :isLoading="isLoading"
+        :formsList="formsList"
+        :paginate="paginate"
+        @onPerPageChange="onPerPageChange"
+        @switchPage="switchPage"
+      />
+    </div>
+  </b-container>
 </template>
 
 <script>
-import ListFormNavigation from './ListFormNavigation.vue'
-import ListForms from './ListForms.vue'
+import ListFormNavigation from './ListFormNavigation.vue';
+import ListForms from './ListForms.vue';
 export default {
   components: { ListForms, ListFormNavigation },
   props: {
     formsList: {
       type: Object,
       default: () => {},
-      required: false
+      required: false,
     },
     paginate: {
       type: Object,
       default: () => ({}),
-      required: false
+      required: false,
     },
     isLoading: {
       type: Boolean,
       default: () => {},
-      required: false
-    }
+      required: false,
+    },
   },
   methods: {
-    filterForms (value) {
-      this.$emit('filterForms', value)
+    filterForms(value) {
+      this.$emit('filterForms', value);
     },
-    search (value) {
-      this.$emit('onSearchForm', value)
+    search(value) {
+      this.$emit('onSearchForm', value);
     },
-    onPerPageChange (value) {
-      this.$emit('onPerPageChange', value)
+    onPerPageChange(value) {
+      this.$emit('onPerPageChange', value);
     },
-    switchPage (value) {
-      this.$emit('switchPage', value)
-    }
-  }
-
-}
+    switchPage(value) {
+      this.$emit('switchPage', value);
+    },
+  },
+};
 </script>
 
 <style lang="scss">
-@import "@~/sass/_variables";
-.form__card{
-        width: 100%;
-        height: 8rem;
-        cursor: pointer;
-        background: #FFFFFF;
-        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-         display: flex;
-        flex-direction: row;
-        align-content: center;
-        align-items: center;
+@import '@~/sass/_variables';
+.form__card {
+  width: 100%;
+  height: 8rem;
+  cursor: pointer;
+  background: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
 }
- .form_list{
-      background-color: #fff;
-      text-align: inherit;
-   .form_card-list{
-        background-color: #F4F6FC;
-        min-height: 40rem;
-   }
-}
-
-a{
-    text-decoration: none;
-}
-@media screen and($small){
-    .form__card{
-        width: 12rem;
-}
- .form__home{
-     height: 419px;
-     h4{
-         font-size: 24px;
-     }
+.form_list {
+  background-color: #fff;
+  text-align: inherit;
+  .form_card-list {
+    background-color: #f4f6fc;
+    min-height: 40rem;
   }
 }
 
+a {
+  text-decoration: none;
+}
+@media screen and($small) {
+  .form__card {
+    width: 12rem;
+  }
+  .form__home {
+    height: 419px;
+    h4 {
+      font-size: 24px;
+    }
+  }
+}
 </style>

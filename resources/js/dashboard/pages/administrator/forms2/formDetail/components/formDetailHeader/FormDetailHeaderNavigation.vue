@@ -26,24 +26,18 @@
                   class="ml-3"
                   :class="isPublish ? 'text-success' : 'text-danger'"
                 >
-                  {{ isPublish ? "publié" : "non publié" }}</span
+                  {{ isPublish ? 'publié' : 'non publié' }}</span
                 >
               </span>
             </b-navbar-nav>
             <b-navbar-nav
-              class="
-                d-flex
-                nav-container
-                align-center
-                justify-content-around
-                w-100
-              "
+              class="d-flex nav-container align-center justify-content-around w-100"
             >
               <b-button
                 class="d-block btn-dash-blue px-4 nav-btn-action"
                 @click="changeStatusPublishForm"
               >
-                {{ isPublish ? "Ne plus Publier" : "Publier" }}
+                {{ isPublish ? 'Ne plus Publier' : 'Publier' }}
               </b-button>
 
               <b-nav-item
@@ -134,12 +128,12 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
 import {
   ADMINISTRATOR,
   CREATE_FORM,
   EDIT_FORM,
-} from "../../../../../../config/env";
+} from '../../../../../../config/env';
 
 export default {
   components: {},
@@ -147,7 +141,7 @@ export default {
     return {
       showUserCard: false,
       showHeaderNotification: false,
-      titleForm: "Titre du Formulaire",
+      titleForm: 'Titre du Formulaire',
       isPublish: false,
     };
   },
@@ -159,7 +153,7 @@ export default {
       isUpdateFormTitle: (state) => state.form.isUpdateFormTitle,
       form: (state) => state.form.form,
     }),
-    ...mapGetters(["getChangeLogNotRead"]),
+    ...mapGetters(['getChangeLogNotRead']),
     stateTitleForm() {
       return this.form?.title?.length === 0 ? false : null;
     },
@@ -176,13 +170,13 @@ export default {
   },
   methods: {
     ...mapActions([
-      "logout",
-      "setChangeLogsRead",
-      "formShow",
-      "form__Update",
-      "changeStatusForm",
+      'logout',
+      'setChangeLogsRead',
+      'formShow',
+      'form__Update',
+      'changeStatusForm',
     ]),
-    ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
+    ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
     async init() {
       this.isLoading = true;
       await this.formShow({ id: this.$route.params.form_id });
@@ -210,7 +204,7 @@ export default {
     userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
+          name: 'login',
         });
       });
     },
@@ -232,7 +226,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 
 .header {
   a {
@@ -331,7 +325,7 @@ export default {
 }
 @media (max-width: $max-width) {
   .navbar {
-    .nav-brand-input-header{
+    .nav-brand-input-header {
       width: calc(100% - 60px);
     }
     input {

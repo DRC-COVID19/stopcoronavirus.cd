@@ -1,40 +1,45 @@
-import Home from './pages/Home'
-import Login from './pages/auth/Login'
-import LostPassword from './pages/auth/LostPassword'
-import ResetPasswordThank from './pages/auth/ResetPasswordThank'
-import ResetPasseword from './pages/auth/ResetPassword'
-import PasswordResetComplete from './pages/auth/PasswordResetComplete'
-import HospitalsHome from './pages/hospital/Home'
-import HospitalNotification from './pages/hospital/Notification'
-import HospitalForm from './pages/hospital/HospitalForm'
-import BugTracker from './pages/bug_tracker/Index'
-import HospitalsDetail from './pages/hospital/HospitalDetail'
-import HospitalData from './pages/hospital/HospitalData'
-import HospitalAdmin from './pages/adminHospital/Home'
-import ConflictForm from './pages/conflictForm/Index'
-import ConflictFormDetail from './pages/conflictForm/ConflictFormDetail'
-import HospitalAdminData from './pages/adminHospital/HospitalData'
-import NotAcces from './pages/NotAccess'
-import Administrator from './pages/administrator/Administrator'
-import AdminUserIndex from './pages/administrator/users/Index'
-import AdminHospitalIndex from './pages/administrator/hospitals/Index'
-import PageNotFound from './pages/NotFound'
-import ChangeLogIndex from './pages/administrator/changeLog/index'
-import Epidemie from './pages/administrator/epidemy/Index'
-import FormIndex from './pages/administrator/forms2/index'
-import FormShow from './pages/administrator/forms/form'
-import FormShow2 from './pages/administrator/forms2/formDetail/index'
-import FormCreation from './pages/administrator/forms2/formDetail/formCreation'
-import FormFieldIndex from './pages/administrator/forms2/formDetail/components/formField/FormFieldIndex'
+import Home from './pages/Home';
+import Login from './pages/auth/Login';
+import LostPassword from './pages/auth/LostPassword';
+import ResetPasswordThank from './pages/auth/ResetPasswordThank';
+import ResetPasseword from './pages/auth/ResetPassword';
+import PasswordResetComplete from './pages/auth/PasswordResetComplete';
+import HospitalsHome from './pages/hospital/Home';
+import HospitalNotification from './pages/hospital/Notification';
+import HospitalForm from './pages/hospital/HospitalForm';
+import BugTracker from './pages/bug_tracker/Index';
+import HospitalsDetail from './pages/hospital/HospitalDetail';
+import HospitalData from './pages/hospital/HospitalData';
+import HospitalAdmin from './pages/adminHospital/Home';
+import ConflictForm from './pages/conflictForm/Index';
+import ConflictFormDetail from './pages/conflictForm/ConflictFormDetail';
+import HospitalAdminData from './pages/adminHospital/HospitalData';
+import NotAcces from './pages/NotAccess';
+import Administrator from './pages/administrator/Administrator';
+import AdminUserIndex from './pages/administrator/users/Index';
+import AdminHospitalIndex from './pages/administrator/hospitals/Index';
+import PageNotFound from './pages/NotFound';
+import ChangeLogIndex from './pages/administrator/changeLog/index';
+import Epidemie from './pages/administrator/epidemy/Index';
+import FormIndex from './pages/administrator/forms2/index';
+import FormShow from './pages/administrator/forms/form';
+import FormShow2 from './pages/administrator/forms2/formDetail/index';
+import FormCreation from './pages/administrator/forms2/formDetail/formCreation';
+import FormFieldIndex from './pages/administrator/forms2/formDetail/components/formField/FormFieldIndex';
 
-import FormSettings from './pages/administrator/forms2/formDetail/formSettings'
-import FormSchemas from './pages/administrator/forms2/formDetail/formSchemas'
-import FormResponse from './pages/administrator/forms2/formDetail/formResponse'
-import FormPreview from './pages/administrator/forms2/formDetail/formPreview'
-import Main from './pages/Main'
-import Dashboard from './pages/dashboard/Dashboard'
-import Reporting from './pages/dashboard/reporting/HomeReporting'
-import CTCO from './pages/ctco/CTCO'
+import FormSettings from './pages/administrator/forms2/formDetail/formSettings';
+import FormSchemas from './pages/administrator/forms2/formDetail/formSchemas';
+import FormResponse from './pages/administrator/forms2/formDetail/formResponse';
+import FormPreview from './pages/administrator/forms2/formDetail/formPreview';
+import Main from './pages/Main';
+import Dashboard from './pages/dashboard/Dashboard';
+import Reporting from './pages/dashboard/reporting/HomeReporting';
+import CTCO from './pages/ctco/CTCO';
+
+import Prediction from './pages/prediction/Prediction';
+import ExistingData from './pages/prediction/ExistingData';
+import FreeData from './pages/prediction/FreeData';
+
 import {
   ADMIN_DASHBOARD,
   AGENT_HOSPITAL,
@@ -42,41 +47,41 @@ import {
   ADMINISTRATOR,
   MANANGER_EPIDEMIC,
   EDIT_FORM,
-  CREATE_FORM
-} from './config/env'
+  CREATE_FORM,
+} from './config/env';
 
 export default [
   {
     name: 'login',
     path: '/login',
-    component: Login
+    component: Login,
   },
   {
     name: 'lostPassword',
     path: '/lost-password',
-    component: LostPassword
+    component: LostPassword,
   },
   {
     name: 'password.reset.thanks',
     path: '/lost-password-send',
-    component: ResetPasswordThank
+    component: ResetPasswordThank,
   },
   {
     name: 'password.reset.token',
     path: '/password-reset/:token',
-    component: ResetPasseword
+    component: ResetPasseword,
   },
   {
     name: 'password.reset.complete.thanks',
     path: '/password-reset/complete',
-    component: PasswordResetComplete
+    component: PasswordResetComplete,
   },
   {
     path: '/',
     name: 'main',
     component: Main,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
     },
     children: [
       /**
@@ -93,8 +98,8 @@ export default [
             name: 'main.dashboard.mobility',
             meta: {
               requiresAuth: true,
-              role: [ADMIN_DASHBOARD]
-            }
+              role: [ADMIN_DASHBOARD],
+            },
           },
           {
             path: 'infrastructure',
@@ -102,8 +107,8 @@ export default [
             name: 'main.dashboard.infrastructure',
             meta: {
               requiresAuth: true,
-              role: [ADMIN_DASHBOARD]
-            }
+              role: [ADMIN_DASHBOARD],
+            },
           },
           {
             path: 'rapport',
@@ -111,8 +116,8 @@ export default [
             name: 'main.dashboard.rapport',
             meta: {
               requiresAuth: true,
-              role: [ADMIN_DASHBOARD]
-            }
+              role: [ADMIN_DASHBOARD],
+            },
           },
           {
             path: 'a-propos',
@@ -120,14 +125,14 @@ export default [
             name: 'main.dashboard.aPropos',
             meta: {
               requiresAuth: true,
-              role: [ADMIN_DASHBOARD]
-            }
+              role: [ADMIN_DASHBOARD],
+            },
           },
           {
             path: '*',
-            redirect: { name: 'main.dashboard.mobility' }
-          }
-        ]
+            redirect: { name: 'main.dashboard.mobility' },
+          },
+        ],
       },
 
       /**
@@ -139,7 +144,7 @@ export default [
         name: 'administrator',
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC]
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC],
         },
         children: [
           {
@@ -148,8 +153,8 @@ export default [
             component: AdminUserIndex,
             meta: {
               requiresAuth: true,
-              role: [ADMINISTRATOR]
-            }
+              role: [ADMINISTRATOR],
+            },
           },
           {
             path: 'users',
@@ -157,8 +162,8 @@ export default [
             component: AdminUserIndex,
             meta: {
               requiresAuth: true,
-              role: [ADMINISTRATOR]
-            }
+              role: [ADMINISTRATOR],
+            },
           },
           {
             path: 'hospitals',
@@ -166,8 +171,8 @@ export default [
             component: AdminHospitalIndex,
             meta: {
               requiresAuth: true,
-              role: [ADMINISTRATOR]
-            }
+              role: [ADMINISTRATOR],
+            },
           },
           {
             path: 'change-logs',
@@ -175,8 +180,8 @@ export default [
             name: 'administrator.changeLog',
             meta: {
               requiresAuth: true,
-              role: [ADMINISTRATOR]
-            }
+              role: [ADMINISTRATOR],
+            },
           },
           {
             path: 'forms',
@@ -184,8 +189,8 @@ export default [
             name: 'administrator.forms',
             meta: {
               requiresAuth: true,
-              role: [CREATE_FORM, EDIT_FORM]
-            }
+              role: [CREATE_FORM, EDIT_FORM],
+            },
           },
 
           {
@@ -194,10 +199,10 @@ export default [
             component: Epidemie,
             meta: {
               requiresAuth: true,
-              role: [MANANGER_EPIDEMIC]
-            }
-          }
-        ]
+              role: [MANANGER_EPIDEMIC],
+            },
+          },
+        ],
       },
       /**
        * CTCO routes
@@ -208,7 +213,7 @@ export default [
         component: CTCO,
         meta: {
           requiresAuth: true,
-          role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
+          role: [AGENT_HOSPITAL, ADMIN_HOSPITAL],
         },
         children: [
           {
@@ -217,8 +222,8 @@ export default [
             component: HospitalsHome,
             meta: {
               requiresAuth: true,
-              role: [AGENT_HOSPITAL]
-            }
+              role: [AGENT_HOSPITAL],
+            },
           },
           {
             path: '/notifications',
@@ -226,8 +231,8 @@ export default [
             component: HospitalNotification,
             meta: {
               requiresAuth: true,
-              role: [AGENT_HOSPITAL]
-            }
+              role: [AGENT_HOSPITAL],
+            },
           },
           {
             path: '/admin/hospitals',
@@ -235,8 +240,8 @@ export default [
             component: HospitalAdmin,
             meta: {
               requiresAuth: true,
-              role: [ADMIN_HOSPITAL]
-            }
+              role: [ADMIN_HOSPITAL],
+            },
           },
           {
             path: '/admin/conflicts/form',
@@ -244,8 +249,8 @@ export default [
             component: ConflictForm,
             meta: {
               requiresAuth: true,
-              role: [ADMIN_HOSPITAL]
-            }
+              role: [ADMIN_HOSPITAL],
+            },
           },
           {
             path: '/admin/conflicts/form/detail',
@@ -253,8 +258,8 @@ export default [
             component: ConflictFormDetail,
             meta: {
               requiresAuth: true,
-              role: [ADMIN_HOSPITAL]
-            }
+              role: [ADMIN_HOSPITAL],
+            },
           },
           {
             path: '/admin/hospitals/:hospital_id',
@@ -262,8 +267,8 @@ export default [
             component: HospitalAdminData,
             meta: {
               requiresAuth: true,
-              role: [ADMIN_HOSPITAL]
-            }
+              role: [ADMIN_HOSPITAL],
+            },
           },
           {
             path: '/hospitals/data',
@@ -271,8 +276,8 @@ export default [
             component: HospitalData,
             meta: {
               requiresAuth: true,
-              role: [AGENT_HOSPITAL]
-            }
+              role: [AGENT_HOSPITAL],
+            },
           },
           {
             path: '/hospitals/forms/:form_id',
@@ -280,8 +285,8 @@ export default [
             component: HospitalForm,
             meta: {
               requiresAuth: true,
-              role: [AGENT_HOSPITAL]
-            }
+              role: [AGENT_HOSPITAL],
+            },
           },
           {
             path: '/hospitals/:hospital_id/show/:completed_form_id',
@@ -289,8 +294,8 @@ export default [
             component: HospitalsDetail,
             meta: {
               requiresAuth: true,
-              role: [AGENT_HOSPITAL, ADMIN_HOSPITAL]
-            }
+              role: [AGENT_HOSPITAL, ADMIN_HOSPITAL],
+            },
           },
           {
             path: '/hospital/:hospital_id/edit/:completed_form_id/form/:form_id',
@@ -298,10 +303,10 @@ export default [
             component: HospitalForm,
             meta: {
               requiresAuth: true,
-              role: [AGENT_HOSPITAL]
-            }
-          }
-        ]
+              role: [AGENT_HOSPITAL],
+            },
+          },
+        ],
       },
 
       /**
@@ -319,11 +324,11 @@ export default [
             ADMINISTRATOR,
             CREATE_FORM,
             EDIT_FORM,
-            MANANGER_EPIDEMIC
-          ]
-        }
-      }
-    ]
+            MANANGER_EPIDEMIC,
+          ],
+        },
+      },
+    ],
   },
   /**
    * FormDetail routes
@@ -334,7 +339,7 @@ export default [
     component: FormShow2,
     meta: {
       requiresAuth: true,
-      role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+      role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
     },
     children: [
       {
@@ -343,7 +348,7 @@ export default [
         component: FormCreation,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
         },
         children: [
           {
@@ -352,10 +357,10 @@ export default [
             component: FormFieldIndex,
             meta: {
               requiresAuth: true,
-              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
-            }
-          }
-        ]
+              role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+            },
+          },
+        ],
       },
       {
         path: '/administration/forms/:form_id/response',
@@ -363,8 +368,8 @@ export default [
         component: FormResponse,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
-        }
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+        },
       },
       {
         path: '/administration/forms/:form_id/schema',
@@ -372,8 +377,8 @@ export default [
         component: FormSchemas,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
-        }
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+        },
       },
       {
         path: '/administration/forms/:form_id/setting',
@@ -381,10 +386,10 @@ export default [
         component: FormSettings,
         meta: {
           requiresAuth: true,
-          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
-        }
-      }
-    ]
+          role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+        },
+      },
+    ],
   },
   {
     path: '/administration/forms/:form_id/form-preview',
@@ -392,12 +397,63 @@ export default [
     component: FormPreview,
     meta: {
       requiresAuth: true,
-      role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM]
-    }
+      role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM],
+    },
+  },
+
+  /**
+   * Prediction routes
+   */
+  {
+    path: '/prediction',
+    component: Prediction,
+    name: 'prediction',
+    meta: {
+      requiresAuth: true,
+      role: [ADMINISTRATOR, CREATE_FORM, EDIT_FORM, MANANGER_EPIDEMIC],
+    },
+    children: [
+      {
+        path: '/',
+        name: 'prediction.home',
+        component: AdminUserIndex,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR],
+        },
+      },
+      {
+        path: 'existing-data',
+        name: 'prediction.existingData',
+        component: ExistingData,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR],
+        },
+      },
+      {
+        path: 'free-data',
+        name: 'prediction.freeData',
+        component: FreeData,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR],
+        },
+      },
+      {
+        path: 'case-simulation',
+        name: 'prediction.caseSimulation',
+        component: ExistingData,
+        meta: {
+          requiresAuth: true,
+          role: [ADMINISTRATOR],
+        },
+      },
+    ],
   },
   {
     path: '/acces-denied',
     name: 'acces.denied',
-    component: NotAcces
-  }
-]
+    component: NotAcces,
+  },
+];

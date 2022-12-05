@@ -15,8 +15,12 @@
           </b-form-group>
           <div>
             <b-form-group
-              :invalid-feedback="flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null"
-              :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
+              :invalid-feedback="
+                flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null
+              "
+              :state="
+                flux24Errors.filter_zone && flux24Errors.filter_zone.lenght > 0
+              "
             >
               <label class="text-dash-color" for>Option</label>
             </b-form-group>
@@ -28,7 +32,8 @@
                 <b-form-checkbox
                   v-model="allZoneChecked"
                   :indeterminate.sync="allZoneCheckedIndeterminate"
-                >Sélectionnez tout</b-form-checkbox>
+                  >Sélectionnez tout</b-form-checkbox
+                >
                 <hr />
                 <b-form-checkbox-group
                   v-model="fluxForm.filter_zone"
@@ -37,8 +42,15 @@
                   text-field="origin"
                   name="flavour-1"
                   stacked
-                  :invalid-feedback="flux24Errors.filter_zone ? flux24Errors.filter_zone[0] : null"
-                  :state="flux24Errors.filter_zone && flux24Errors.filter_zone.lenght>0"
+                  :invalid-feedback="
+                    flux24Errors.filter_zone
+                      ? flux24Errors.filter_zone[0]
+                      : null
+                  "
+                  :state="
+                    flux24Errors.filter_zone &&
+                    flux24Errors.filter_zone.lenght > 0
+                  "
                 ></b-form-checkbox-group>
               </b-list-group-item>
             </b-list-group>
@@ -54,15 +66,14 @@ export default {
   data() {
     return {
       flux24Errors: {},
-      fluxForm:{},
-      fluxZonesArray:[],
-      allZoneCheckedIndeterminate:false,
-      allZoneChecked:false,
-      fluxFilterInput:''
+      fluxForm: {},
+      fluxZonesArray: [],
+      allZoneCheckedIndeterminate: false,
+      allZoneChecked: false,
+      fluxFilterInput: '',
     };
-  }
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

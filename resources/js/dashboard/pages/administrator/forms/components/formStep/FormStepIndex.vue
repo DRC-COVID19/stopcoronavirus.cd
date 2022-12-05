@@ -3,9 +3,7 @@
     <b-card class="my-4">
       <b-card-body class="py-0">
         <div class="d-flex justify-content-between align-items-center">
-          <strong class="mb-0">
-            ÉTAPES
-          </strong>
+          <strong class="mb-0"> ÉTAPES </strong>
           <i class="fas fa-list-ol" aria-hidden="true"></i>
         </div>
       </b-card-body>
@@ -31,86 +29,83 @@
   </div>
 </template>
 <script>
-import ListFormStep from '../formStep/FormStepList'
-import Create from '../formStep/FormStepCreate.vue'
-import { mapActions, mapState } from 'vuex'
+import ListFormStep from '../formStep/FormStepList';
+import Create from '../formStep/FormStepCreate.vue';
+import { mapActions, mapState } from 'vuex';
 export default {
   props: {
     formId: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
 
   components: {
     Create,
-    ListFormStep
+    ListFormStep,
   },
-  data () {
+  data() {
     return {
       isEditingMode: false,
       title: 'Les étapes du Formulaire',
       iconClass: 'fa fa-sliders',
-      rowformStep: {}
-    }
+      rowformStep: {},
+    };
   },
-  mounted () {
-    this.getFormSteps({ id: this.formId })
-    this.selectDefaultStep()
+  mounted() {
+    this.getFormSteps({ id: this.formId });
+    this.selectDefaultStep();
   },
 
   computed: {
     ...mapState({
       formSteps: (state) => state.formStep.formSteps,
       isCreating: (state) => state.formStep.isCreating,
-      isLoading: (state) => state.formStep.isLoading
+      isLoading: (state) => state.formStep.isLoading,
     }),
-    formStepData () {
-      return this.formSteps.data
+    formStepData() {
+      return this.formSteps.data;
     },
-    formStepMeta () {
+    formStepMeta() {
       return this.formSteps.meta
         ? this.formSteps.meta
         : {
             currentPage: 1,
             perPage: 16,
-            total: this.formSteps.length
-          }
-    }
+            total: this.formSteps.length,
+          };
+    },
   },
   watch: {
-    formSteps () {
-      this.selectDefaultStep()
-    }
+    formSteps() {
+      this.selectDefaultStep();
+    },
   },
   methods: {
-    ...mapActions([
-      'getFormSteps'
-    ]),
+    ...mapActions(['getFormSteps']),
 
-    onCreatedFormStep () {
-      this.getFormSteps({ id: this.formId })
+    onCreatedFormStep() {
+      this.getFormSteps({ id: this.formId });
     },
-    onUpdatedFormStep () {
-      this.getFormSteps({ id: this.formId })
+    onUpdatedFormStep() {
+      this.getFormSteps({ id: this.formId });
     },
-    toEdit (item) {
-      this.isEditingMode = true
-      this.rowformStep = { ...item }
+    toEdit(item) {
+      this.isEditingMode = true;
+      this.rowformStep = { ...item };
     },
-    cancelEditMode () {
-      this.isEditingMode = false
+    cancelEditMode() {
+      this.isEditingMode = false;
     },
-    selectDefaultStep () {
+    selectDefaultStep() {
       if (!this.$route.params.step_id) {
-        const steps = this.formSteps.slice().sort((a, b) => b.step - a.step)
+        const steps = this.formSteps.slice().sort((a, b) => b.step - a.step);
         this.$router.push({
           name: 'administrator.forms.show.creation.step',
-          params: { step_id: steps[0].id }
+          params: { step_id: steps[0].id },
         });
       }
-    }
-  }
-
-}
+    },
+  },
+};
 </script>

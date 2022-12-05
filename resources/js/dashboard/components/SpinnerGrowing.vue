@@ -1,9 +1,6 @@
 <template>
   <span>
-    <b-spinner
-      small
-      type="grow"
-    />
+    <b-spinner small type="grow" />
     <span>{{ message }}</span>
   </span>
 </template>
@@ -12,8 +9,8 @@ export default {
   props: {
     message: {
       type: String,
-      default: 'Loading...'
-    }
-  }
-}
+      default: 'Loading...',
+    },
+  },
+};
 </script>

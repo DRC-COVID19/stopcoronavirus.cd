@@ -20,113 +20,143 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Administrator extends Model implements JWTSubject, AuthenticatableContract
 {
-    use Authenticatable;
-    use HasPermissions;
-    use DefaultDatetimeFormat;
-    use Notifiable;
-    use SoftDeletes;
+  use Authenticatable;
+  use HasPermissions;
+  use DefaultDatetimeFormat;
+  use Notifiable;
+  use SoftDeletes;
 
-    protected $fillable = ['username', 'password', 'name', 'avatar', 'email', 'phone_number'];
+  protected $fillable = [
+    'username',
+    'password',
+    'name',
+    'avatar',
+    'email',
+    'phone_number',
+  ];
 
-    /**
-     * Create a new Eloquent model instance.
-     *
-     * @param array $attributes
-     */
-    public function __construct(array $attributes = [])
-    {
-        $connection = config('admin.database.connection') ?: config('database.default');
+  /**
+   * Create a new Eloquent model instance.
+   *
+   * @param array $attributes
+   */
+  public function __construct(array $attributes = [])
+  {
+    $connection =
+      config('admin.database.connection') ?: config('database.default');
 
-        $this->setConnection($connection);
+    $this->setConnection($connection);
 
-        $this->setTable(config('admin.database.users_table'));
+    $this->setTable(config('admin.database.users_table'));
 
-        parent::__construct($attributes);
+    parent::__construct($attributes);
+  }
+
+  /**
+   * Get avatar attribute.
+   *
+   * @param string $avatar
+   *
+   * @return string
+   */
+  public function getAvatarAttribute($avatar)
+  {
+    if (url()->isValidUrl($avatar)) {
+      return $avatar;
     }
 
-    /**
-     * Get avatar attribute.
-     *
-     * @param string $avatar
-     *
-     * @return string
-     */
-    public function getAvatarAttribute($avatar)
-    {
-        if (url()->isValidUrl($avatar)) {
-            return $avatar;
-        }
+    $disk = config('admin.upload.disk');
 
-        $disk = config('admin.upload.disk');
-
-        if ($avatar && array_key_exists($disk, config('filesystems.disks'))) {
-            return Storage::disk(config('admin.upload.disk'))->url($avatar);
-        }
-
-        $default = config('admin.default_avatar') ?: '/vendor/laravel-admin/AdminLTE/dist/img/user2-160x160.jpg';
-
-        return admin_asset($default);
+    if ($avatar && array_key_exists($disk, config('filesystems.disks'))) {
+      return Storage::disk(config('admin.upload.disk'))->url($avatar);
     }
 
-    /**
-     * A user has and belongs to many roles.
-     *
-     * @return BelongsToMany
-     */
-    public function roles(): BelongsToMany
-    {
-        $pivotTable = config('admin.database.role_users_table');
+    $default =
+      config('admin.default_avatar') ?:
+      '/vendor/laravel-admin/AdminLTE/dist/img/user2-160x160.jpg';
 
-        $relatedModel = config('admin.database.roles_model');
+    return admin_asset($default);
+  }
 
-        return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'role_id');
-    }
+  /**
+   * A user has and belongs to many roles.
+   *
+   * @return BelongsToMany
+   */
+  public function roles(): BelongsToMany
+  {
+    $pivotTable = config('admin.database.role_users_table');
 
-    /**
-     * A User has and belongs to many permissions.
-     *
-     * @return BelongsToMany
-     */
-    public function permissions(): BelongsToMany
-    {
-        $pivotTable = config('admin.database.user_permissions_table');
+    $relatedModel = config('admin.database.roles_model');
 
-        $relatedModel = config('admin.database.permissions_model');
+    return $this->belongsToMany(
+      $relatedModel,
+      $pivotTable,
+      'user_id',
+      'role_id'
+    );
+  }
 
-        return $this->belongsToMany($relatedModel, $pivotTable, 'user_id', 'permission_id');
-    }
+  /**
+   * A User has and belongs to many permissions.
+   *
+   * @return BelongsToMany
+   */
+  public function permissions(): BelongsToMany
+  {
+    $pivotTable = config('admin.database.user_permissions_table');
 
-    public function hospitalManager()
-    {
-        return $this->hasOne(Hospital::class, 'agent_id');
-    }
+    $relatedModel = config('admin.database.permissions_model');
 
-    public function changeLogsRead()
-    {
-        return $this->belongsToMany(ChangeLog::class, 'administrator_read_change_logs', 'administrator_id', 'change_log_id');
-    }
-    public function hospitals()
-    {
-        return $this->belongsToMany(Hospital::class, 'admin_user_hospital', 'admin_user_id', 'hospital_id');
-    }
+    return $this->belongsToMany(
+      $relatedModel,
+      $pivotTable,
+      'user_id',
+      'permission_id'
+    );
+  }
 
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
+  public function hospitalManager()
+  {
+    return $this->hasOne(Hospital::class, 'agent_id');
+  }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
+  public function changeLogsRead()
+  {
+    return $this->belongsToMany(
+      ChangeLog::class,
+      'administrator_read_change_logs',
+      'administrator_id',
+      'change_log_id'
+    );
+  }
+  public function hospitals()
+  {
+    return $this->belongsToMany(
+      Hospital::class,
+      'admin_user_hospital',
+      'admin_user_id',
+      'hospital_id'
+    );
+  }
+
+  /**
+   * Get the identifier that will be stored in the subject claim of the JWT.
+   *
+   * @return mixed
+   */
+  public function getJWTIdentifier()
+  {
+    return $this->getKey();
+  }
+
+  /**
+   * Return a key value array, containing any custom claims to be added to the JWT.
+   *
+   * @return array
+   */
+  public function getJWTCustomClaims()
+  {
+    return [];
+  }
 }

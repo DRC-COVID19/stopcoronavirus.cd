@@ -30,105 +30,107 @@
   </b-container>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex';
 
-import FormStepList from './FormStepList.vue'
-import FormStepCreate from './FormStepCreate.vue'
+import FormStepList from './FormStepList.vue';
+import FormStepCreate from './FormStepCreate.vue';
 
 export default {
   components: {
     FormStepList,
-    FormStepCreate
+    FormStepCreate,
   },
   props: {
     formId: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
 
-  data () {
+  data() {
     return {
       isEditingMode: false,
       title: 'Les étapes du Formulaire',
       iconClass: 'fa fa-sliders',
       rowformStep: {},
-      isCreatingStep: false
-    }
+      isCreatingStep: false,
+    };
   },
-  mounted () {
-    this.getFormSteps({ id: this.formId })
-    this.initStepIndex()
+  mounted() {
+    this.getFormSteps({ id: this.formId });
+    this.initStepIndex();
   },
 
   computed: {
     ...mapState({
       formSteps: (state) => state.formStep.formSteps,
       isCreating: (state) => state.formStep.isCreating,
-      isLoading: (state) => state.formStep.isLoading
-    })
+      isLoading: (state) => state.formStep.isLoading,
+    }),
   },
   watch: {
-    '$route.name' () {
+    '$route.name'() {
       if (this.$route.name === 'administrator.forms.show.creation') {
-        this.initStepIndex()
+        this.initStepIndex();
       }
     },
-    formSteps () {
-      this.initStepIndex()
-    }
+    formSteps() {
+      this.initStepIndex();
+    },
   },
   methods: {
     ...mapActions(['getFormSteps']),
-    formStepsSorted (formSteps) {
-      return formSteps.slice().sort((a, b) => a.step - b.step)
+    formStepsSorted(formSteps) {
+      return formSteps.slice().sort((a, b) => a.step - b.step);
     },
-    initStepIndex () {
+    initStepIndex() {
       if (
         this.formSteps.length !== 0 &&
         this.$route.path !==
-          `/administration/forms/${this.formId}/step/${this.formStepsSorted(this.formSteps)[0].id}`
+          `/administration/forms/${this.formId}/step/${
+            this.formStepsSorted(this.formSteps)[0].id
+          }`
       ) {
         this.$router.push({
           name: 'administrator.forms.show.creation.step',
           params: {
-            step_id: this.formStepsSorted(this.formSteps)[0].id
-          }
-        })
+            step_id: this.formStepsSorted(this.formSteps)[0].id,
+          },
+        });
       }
       if (
         this.formSteps.length === 0 &&
         this.$route.path !== `/administration/forms/${this.formId}/`
       ) {
         this.$router.push({
-          name: 'administrator.forms.show.creation'
-        })
+          name: 'administrator.forms.show.creation',
+        });
       }
     },
-    showModalCreatedModal () {
-      this.isCreatingStep = true
-      this.rowformStep = {}
-      this.$refs['modal-creation'].show()
+    showModalCreatedModal() {
+      this.isCreatingStep = true;
+      this.rowformStep = {};
+      this.$refs['modal-creation'].show();
     },
-    showModalUpdatedModal (form) {
-      this.isCreatingStep = false
-      this.rowformStep = { ...form }
-      this.$refs['modal-creation'].show()
+    showModalUpdatedModal(form) {
+      this.isCreatingStep = false;
+      this.rowformStep = { ...form };
+      this.$refs['modal-creation'].show();
     },
-    async onCreatedFormStep () {
-      await this.getFormSteps({ id: this.formId })
-      this.$refs['modal-creation'].hide()
+    async onCreatedFormStep() {
+      await this.getFormSteps({ id: this.formId });
+      this.$refs['modal-creation'].hide();
     },
-    async onUpdatedFormStep () {
-      await this.getFormSteps({ id: this.formId })
-      this.$refs['modal-creation'].hide()
+    async onUpdatedFormStep() {
+      await this.getFormSteps({ id: this.formId });
+      this.$refs['modal-creation'].hide();
     },
 
-    cancelEditMode () {
-      this.isEditingMode = false
-    }
-  }
-}
+    cancelEditMode() {
+      this.isEditingMode = false;
+    },
+  },
+};
 </script>
 <style scoped>
 .title {

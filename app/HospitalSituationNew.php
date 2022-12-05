@@ -11,21 +11,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class HospitalSituationNew extends Model
 {
-    use SoftDeletes;
-    protected $fillable = ['hospital_id', 'value', 'form_field_id','created_manager_name', 'updated_manager_name','hospital_id','last_update'];
+  use SoftDeletes;
+  protected $fillable = [
+    'hospital_id',
+    'value',
+    'form_field_id',
+    'created_manager_name',
+    'updated_manager_name',
+    'hospital_id',
+    'last_update',
+  ];
 
-    protected $table='hospital_situations_new';
+  protected $table = 'hospital_situations_new';
 
-    public function formField()
-    {
-        return $this->belongsTo(FormField::class);
-    }
-    public function hospital()
-    {
-        return $this->belongsTo(Hospital::class);
-    }
-    public function hospitalLog()
-    {
-        return $this->belongsTo(HospitalLog::class, 'hospital_id');
-    }
+  public function formField()
+  {
+    return $this->belongsTo(FormField::class);
+  }
+  public function hospital()
+  {
+    return $this->belongsTo(Hospital::class);
+  }
+  public function hospitalLog()
+  {
+    return $this->belongsTo(HospitalLog::class, 'hospital_id');
+  }
 }

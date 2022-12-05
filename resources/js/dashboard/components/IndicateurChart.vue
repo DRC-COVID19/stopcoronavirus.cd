@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { INDICATEUR_Y, INDICATEUR_X,PALETTE } from "../config/env";
+import { mapState } from 'vuex';
+import { INDICATEUR_Y, INDICATEUR_X, PALETTE } from '../config/env';
 
 export default {
   data() {
@@ -67,7 +67,7 @@ export default {
     },
     drawLeftChart(data) {
       let tempData = {
-        type: "scatter",
+        type: 'scatter',
         data: {
           datasets: [
             {
@@ -88,22 +88,22 @@ export default {
           },
           title: {
             display: false,
-            text: "",
+            text: '',
           },
           tooltips: {
-            mode: "index",
+            mode: 'index',
             intersect: false,
           },
           hover: {
-            mode: "nearest",
+            mode: 'nearest',
             intersect: true,
           },
           scales: {
             xAxes: [
               {
                 display: true,
-                type: "linear",
-                position: "bottom",
+                type: 'linear',
+                position: 'bottom',
                 scaleLabel: {
                   display: true,
                   labelString: INDICATEUR_X.find((x) => x.id == this.labelAxeX)
@@ -111,8 +111,8 @@ export default {
                 },
                 ticks: {
                   callback: (value, index, values) => {
-                    return this.formatCash(value)  ;
-                  }
+                    return this.formatCash(value);
+                  },
                 },
               },
             ],
@@ -122,8 +122,8 @@ export default {
                 ticks: {
                   beginAtZero: true,
                   callback: (value, index, values) => {
-                    return this.formatCash(value)  ;
-                  }
+                    return this.formatCash(value);
+                  },
                 },
                 scaleLabel: {
                   display: true,
@@ -152,14 +152,14 @@ export default {
     },
     drawRightChart(data) {
       let tempData = {
-        type: "line",
+        type: 'line',
         data: {
           datasets: [
             {
-              label: "Confirmés",
+              label: 'Confirmés',
               fill: false,
-              borderColor: "rgb(166,180,205)",
-              backgroundColor: "rgb(166,180,205, 0.2)",
+              borderColor: 'rgb(166,180,205)',
+              backgroundColor: 'rgb(166,180,205, 0.2)',
               data: data.map((item) => ({ x: new Date(item.date), y: item.x })),
             },
           ],
@@ -172,29 +172,29 @@ export default {
           },
           title: {
             display: false,
-            text: "",
+            text: '',
           },
           tooltips: {
-            mode: "index",
+            mode: 'index',
             intersect: false,
           },
           hover: {
-            mode: "nearest",
+            mode: 'nearest',
             intersect: true,
           },
           scales: {
             xAxes: [
               {
                 display: true,
-                type: "time",
+                type: 'time',
                 time: {
-                  unit: "day",
+                  unit: 'day',
                   unitStepSize: 1,
                   displayFormats: {
-                    day: "DD.MM",
+                    day: 'DD.MM',
                   },
                 },
-                position: "bottom",
+                position: 'bottom',
               },
             ],
             yAxes: [
@@ -203,12 +203,13 @@ export default {
                 ticks: {
                   beginAtZero: false,
                   callback: (value, index, values) => {
-                    return this.formatCash(value)  ;
-                  }
+                    return this.formatCash(value);
+                  },
                 },
                 scaleLabel: {
                   display: true,
-                  labelString: INDICATEUR_X.find((x) => x.id == this.labelAxeX).name,
+                  labelString: INDICATEUR_X.find((x) => x.id == this.labelAxeX)
+                    .name,
                 },
               },
             ],

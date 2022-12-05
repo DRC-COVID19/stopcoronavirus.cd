@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class AddColunsNameFirstNameCompletedFormFields extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('completed_form_fields', function (Blueprint $table) {
-            $table->string('updated_manager_first_name')->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('completed_form_fields', function (Blueprint $table) {
+      $table->string('updated_manager_first_name')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('completed_form_fields', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('completed_form_fields', function (Blueprint $table) {
+      //
+    });
+  }
 }

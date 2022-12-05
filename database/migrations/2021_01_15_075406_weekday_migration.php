@@ -17,8 +17,9 @@ class WeekdayMigration extends Migration
     //we create function Weekday for pgsql
 
     if (env('DB_CONNECTION') == 'pgsql') {
-      DB::statement("CREATE OR REPLACE FUNCTION WEEKDAY(date) RETURNS double precision LANGUAGE 'sql' COST 100 VOLATILE AS $$ SELECT EXTRACT(isodow FROM cast($1 as date))-1; $$;");
-
+      DB::statement(
+        "CREATE OR REPLACE FUNCTION WEEKDAY(date) RETURNS double precision LANGUAGE 'sql' COST 100 VOLATILE AS $$ SELECT EXTRACT(isodow FROM cast($1 as date))-1; $$;"
+      );
     }
     // if (env('APP_ENV') == 'testing') {
     //   function WEEKDAY($string)
@@ -28,7 +29,6 @@ class WeekdayMigration extends Migration
     //   $db=DB::connection()->getPdo();
     //   $db->createFunction('WEEKDAY', 'WEEKDAY');
     // }
-
   }
 
   /**

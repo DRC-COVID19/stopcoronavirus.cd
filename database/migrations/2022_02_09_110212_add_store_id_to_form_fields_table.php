@@ -6,27 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 class AddStoreIdToFormFieldsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('form_fields', function (Blueprint $table) {
-            $table->boolean('agreggation')->default(false)->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('form_fields', function (Blueprint $table) {
+      $table
+        ->boolean('agreggation')
+        ->default(false)
+        ->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('form_fields', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('form_fields', function (Blueprint $table) {
+      //
+    });
+  }
 }

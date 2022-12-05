@@ -1,5 +1,7 @@
 <template>
-  <b-row class="dashboard-container d-block d-lg-flex no-gutters flex-lg-nowrap">
+  <b-row
+    class="dashboard-container d-block d-lg-flex no-gutters flex-lg-nowrap"
+  >
     <b-col cols="12" lg="auto">
       <DashboardMenu />
     </b-col>
@@ -10,40 +12,40 @@
 </template>
 
 <script>
-import DashboardMenu from './components/DashboardMenu'
+import DashboardMenu from './components/DashboardMenu';
 
 export default {
   components: {
-    DashboardMenu
+    DashboardMenu,
   },
-  mounted () {
-    this.redirect(this.$route)
+  mounted() {
+    this.redirect(this.$route);
   },
   watch: {
-    '$route' (to, from) {
-      this.redirect(to)
-    }
+    $route(to, from) {
+      this.redirect(to);
+    },
   },
   methods: {
-    redirect (route) {
+    redirect(route) {
       if (route.name === 'main.dashboard') {
-        this.$router.push({ name: 'main.dashboard.mobility' })
+        this.$router.push({ name: 'main.dashboard.mobility' });
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-  .dashboard-container {
-    @media (min-width: 1024px)  {
-      height: calc(100vh - 87px);
-      > div {
-        height: 100%;
-      }
-      .col-router-view {
-        width: calc(100% - 160px);
-      }
+.dashboard-container {
+  @media (min-width: 1024px) {
+    height: calc(100vh - 87px);
+    > div {
+      height: 100%;
+    }
+    .col-router-view {
+      width: calc(100% - 160px);
     }
   }
+}
 </style>

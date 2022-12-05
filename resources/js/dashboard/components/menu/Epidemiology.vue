@@ -1,8 +1,12 @@
 <template>
   <b-card>
-    <b-form-checkbox class="styled-checkbox" name="covid_case" @change="covidCaseToggle">
+    <b-form-checkbox
+      class="styled-checkbox"
+      name="covid_case"
+      @change="covidCaseToggle"
+    >
       Situation épidemologique
-      <b-badge v-if="covidCasesCount">{{covidCasesCount}}</b-badge>
+      <b-badge v-if="covidCasesCount">{{ covidCasesCount }}</b-badge>
     </b-form-checkbox>
   </b-card>
 </template>
@@ -12,16 +16,15 @@ export default {
   props: {
     covidCasesCount: {
       type: Number,
-      default: null
-    }
+      default: null,
+    },
   },
   methods: {
     covidCaseToggle(checked) {
-      this.$emit("covidCaseChecked", checked);
-    }
-  }
+      this.$emit('covidCaseChecked', checked);
+    },
+  },
 };
 </script>
 
-<style>
-</style>
+<style></style>

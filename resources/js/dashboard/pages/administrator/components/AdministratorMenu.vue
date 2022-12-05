@@ -50,13 +50,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 import {
   ADMINISTRATOR,
   CREATE_FORM,
   EDIT_FORM,
   MANANGER_EPIDEMIC,
-} from "../../../config/env";
+} from '../../../config/env';
 
 export default {
   props: {
@@ -90,7 +90,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 
 .nav {
   border-right: 8px solid $dash-background;

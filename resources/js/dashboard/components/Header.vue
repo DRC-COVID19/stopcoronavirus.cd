@@ -3,10 +3,7 @@
     <b-col cols="12" class="map-form-header">
       <b-navbar toggleable="lg" type="light">
         <b-navbar-brand class="mr-5">
-          <h1
-            class="title m-0"
-            @click="changeActiveMenuTo('home', 1)"
-          >
+          <h1 class="title m-0" @click="changeActiveMenuTo('home', 1)">
             Dashboard Covid-19
           </h1>
         </b-navbar-brand>
@@ -43,8 +40,7 @@
               @click="changeActiveMenuTo('dashboard.aPropos', 7)"
             >
               A propos
-            </b-nav-item
-            >
+            </b-nav-item>
           </b-navbar-nav>
           <b-navbar-nav class="ml-auto" align="center">
             <li class="position-relative nav-item d-flex align-items-center">
@@ -82,7 +78,7 @@
                     </div>
                     <div class="media-body space-sm">
                       <div class="post-title">{{ item.title }}</div>
-                      <span>{{ moment(item.from).format("DD.MM.YYYY") }}</span>
+                      <span>{{ moment(item.from).format('DD.MM.YYYY') }}</span>
                     </div>
                   </div>
                 </div>
@@ -150,50 +146,49 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
 
 export default {
-  components:{
-  },
-  data () {
+  components: {},
+  data() {
     return {
       showUserCard: false,
-      showHeaderNotification: false
-    }
+      showHeaderNotification: false,
+    };
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       activeMenu: (state) => state.nav.activeMenu,
-      changeLogs: (state) => state.app.changeLogs
+      changeLogs: (state) => state.app.changeLogs,
     }),
     ...mapGetters(['getChangeLogNotRead']),
-    countReadChangeLogs () {
-      return getChangeLogNotRead.length
-    }
+    countReadChangeLogs() {
+      return getChangeLogNotRead.length;
+    },
   },
   mounted() {
-    this.fillParametersFromUrlParams()
+    this.fillParametersFromUrlParams();
   },
   methods: {
     ...mapActions(['logout', 'setChangeLogsRead']),
     ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
-    userAvatarMouseEnter () {
-      this.showUserCard = true
+    userAvatarMouseEnter() {
+      this.showUserCard = true;
     },
-    userAvatarMouseLeave () {
-      this.showUserCard = false
+    userAvatarMouseLeave() {
+      this.showUserCard = false;
     },
-    userLogout () {
+    userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: 'login'
-        })
-      })
+          name: 'login',
+        });
+      });
     },
-    selectNotification (item) {
-      this.setSelectedChangeLog(item)
-      this.setActiveMenu(7)
+    selectNotification(item) {
+      this.setSelectedChangeLog(item);
+      this.setActiveMenu(7);
     },
     selectMenu(value) {
       if (this.activeMenu !== null) {
@@ -202,34 +197,34 @@ export default {
       // this.addParamToUrl('menu', value);
       this.setActiveMenu(value);
     },
-    toggleHeaderNotification () {
-      this.showHeaderNotification = !this.showHeaderNotification
+    toggleHeaderNotification() {
+      this.showHeaderNotification = !this.showHeaderNotification;
     },
-    clickOutsideNotification () {
+    clickOutsideNotification() {
       if (this.showHeaderNotification) {
-        this.showHeaderNotification = false
-        this.setChangeLogsRead()
+        this.showHeaderNotification = false;
+        this.setChangeLogsRead();
       }
     },
-    fillParametersFromUrlParams () {
+    fillParametersFromUrlParams() {
       if (this.$route.path === '/dashboard/infrastructure') {
-        this.selectMenu(5)
+        this.selectMenu(5);
       } else if (this.$route.path === '/dashboard/a-propos') {
-        this.selectMenu(7)
+        this.selectMenu(7);
       } else {
-        this.selectMenu(1)
+        this.selectMenu(1);
       }
     },
-    changeActiveMenuTo (pathname, menu) {
-      this.selectMenu(menu)
-      this.$router.push({name: pathname})
-    }
+    changeActiveMenuTo(pathname, menu) {
+      this.selectMenu(menu);
+      this.$router.push({ name: pathname });
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .header {
   a {
     text-decoration: none;
@@ -266,7 +261,7 @@ export default {
     z-index: 20;
     background-color: #fff;
     :after {
-      content: "";
+      content: '';
       height: 0;
       width: 0;
       border-bottom: 10px solid $dash-blue;

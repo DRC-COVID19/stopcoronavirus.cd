@@ -6,31 +6,31 @@ use Illuminate\Support\Facades\Schema;
 
 class HourFlux30Zones extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('flux30_zones', function (Blueprint $table) {
-            $table->time('Hour')->nullable();
-            $table->string('Day_type')->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('flux30_zones', function (Blueprint $table) {
+      $table->time('Hour')->nullable();
+      $table->string('Day_type')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('flux30_zones', function (Blueprint $table) {
-            $table->dropColumn('Hour');
-        });
-        Schema::table('flux30_zones', function (Blueprint $table) {
-          $table->dropColumn('Day_type');
-      });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('flux30_zones', function (Blueprint $table) {
+      $table->dropColumn('Hour');
+    });
+    Schema::table('flux30_zones', function (Blueprint $table) {
+      $table->dropColumn('Day_type');
+    });
+  }
 }

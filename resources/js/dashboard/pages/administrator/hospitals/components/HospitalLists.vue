@@ -43,14 +43,7 @@
         >
           <template #table-busy>
             <div
-              class="
-                align-items-center
-                d-flex
-                justify-content-center
-                my-2
-                text-center text-danger
-                loading-height
-              "
+              class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height"
             >
               <b-spinner class="align-middle"></b-spinner>
               <strong>Loading...</strong>
@@ -119,20 +112,20 @@ export default {
     hospitals: {
       type: Object,
       default: () => ({}),
-      required: false
+      required: false,
     },
     isLoading: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
       fields: [
         { key: 'name', label: 'Nom' },
         { key: 'township', label: 'Commune' },
         { key: 'agent', label: ' Agent Attitré' },
-        { key: 'actions', label: 'Action' }
+        { key: 'actions', label: 'Action' },
       ],
       filter: '',
       perPage: 15,
@@ -140,61 +133,61 @@ export default {
       isDeleteModalShown: false,
       currentHospital: {
         id: -1,
-        name: ''
+        name: '',
       },
       currentAgent: {
         id: -1,
-        name: ''
+        name: '',
       },
-      editModalShow: false
-    }
+      editModalShow: false,
+    };
   },
   computed: {
-    rows () {
-      return this.hospitals.length
-    }
+    rows() {
+      return this.hospitals.length;
+    },
   },
   watch: {
-    filter () {
-      this.search()
-    }
+    filter() {
+      this.search();
+    },
   },
   methods: {
-    search () {
-      this.$emit('onSearch', this.filter.trim())
+    search() {
+      this.$emit('onSearch', this.filter.trim());
     },
-    deleteHospital (name, HospitalId, agent) {
-      this.isDeleteModalShown = true
-      this.currentHospital.id = HospitalId
-      this.currentHospital.name = name
-      this.currentAgent.name = agent.name
+    deleteHospital(name, HospitalId, agent) {
+      this.isDeleteModalShown = true;
+      this.currentHospital.id = HospitalId;
+      this.currentHospital.name = name;
+      this.currentAgent.name = agent.name;
     },
-    openToogle () {
-      this.$emit('openToogle', false)
+    openToogle() {
+      this.$emit('openToogle', false);
     },
-    onValidateDelection () {
-      this.$emit('onDeleteHospital', this.currentHospital.id)
-      this.isDeleteModalShown = false
+    onValidateDelection() {
+      this.$emit('onDeleteHospital', this.currentHospital.id);
+      this.isDeleteModalShown = false;
     },
-    onCancelDelection () {
-      this.isDeleteModalShown = false
+    onCancelDelection() {
+      this.isDeleteModalShown = false;
     },
-    updateHospital (name, id, longitude, latitude, township, agent) {
+    updateHospital(name, id, longitude, latitude, township, agent) {
       this.currentHospital = {
         id,
         name,
         longitude,
         latitude,
         township,
-        agent
-      }
-      this.$emit('onUpdateHospital', this.currentHospital)
-    }
-  }
-}
+        agent,
+      };
+      this.$emit('onUpdateHospital', this.currentHospital);
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .input-filter {
   background: white;
 }

@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class WidthPost extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->integer('width')->default(4);
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('posts', function (Blueprint $table) {
+      $table->integer('width')->default(4);
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->dropColumn('width');
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('posts', function (Blueprint $table) {
+      $table->dropColumn('width');
+    });
+  }
 }

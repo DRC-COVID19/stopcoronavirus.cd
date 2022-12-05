@@ -1,28 +1,30 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import auth from './modules/auth'
-import flux from './modules/flux'
-import hospital from './modules/hospital'
-import nav from './modules/nav'
-import epidemic from './modules/epidemic'
-import indicator from './modules/indicator'
-import app from './modules/app'
-import changeLog from './modules/changeLog'
-import form from './modules/form'
-import formFieldType from './modules/formFieldType'
-import formField from './modules/formField'
-import formStep from './modules/formStep'
-import hospitalSituation from './modules/hospitalSituation'
-import completedForm from './modules/completedForm'
-import completedFormHistory from './modules/completedFormHistory'
-import township from './modules/township'
-import bugTracker from './modules/bugTracker'
-import adminUser from './modules/adminUser'
-import notification from './modules/notification'
-import bookmark from './modules/bookmark'
-import reporting from './modules/reporting'
+import Vue from 'vue';
+import Vuex from 'vuex';
 
-Vue.use(Vuex)
+import auth from './modules/auth';
+import flux from './modules/flux';
+import hospital from './modules/hospital';
+import nav from './modules/nav';
+import epidemic from './modules/epidemic';
+import indicator from './modules/indicator';
+import app from './modules/app';
+import changeLog from './modules/changeLog';
+import form from './modules/form';
+import formFieldType from './modules/formFieldType';
+import formField from './modules/formField';
+import formStep from './modules/formStep';
+import hospitalSituation from './modules/hospitalSituation';
+import completedForm from './modules/completedForm';
+import completedFormHistory from './modules/completedFormHistory';
+import township from './modules/township';
+import bugTracker from './modules/bugTracker';
+import adminUser from './modules/adminUser';
+import notification from './modules/notification';
+import bookmark from './modules/bookmark';
+import reporting from './modules/reporting';
+import prediction from './modules/prediction';
+
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {},
@@ -48,6 +50,7 @@ export default new Vuex.Store({
     adminUser,
     notification,
     bookmark,
-    reporting
-  }
-})
+    reporting,
+    prediction,
+  },
+});

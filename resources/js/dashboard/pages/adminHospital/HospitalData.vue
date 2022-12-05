@@ -3,16 +3,16 @@
     <b-container fluid class="px-3 mt-4">
       <b-row>
         <b-col cols="12" class="mb-3">
-          <b-link :to="{
-            name:'hospital.admin'
-          }">
+          <b-link
+            :to="{
+              name: 'hospital.admin',
+            }"
+          >
             <span class="fa fa-chevron-left"> Retour</span>
           </b-link>
         </b-col>
         <b-col v-if="hospital">
-          <h3>
-             Historique mise à jour : {{ hospital.name }}
-          </h3>
+          <h3>Historique mise à jour : {{ hospital.name }}</h3>
         </b-col>
       </b-row>
 
@@ -26,31 +26,30 @@
 </template>
 
 <script>
-import CompletedFormList from '../../components/completedForm/CompletedFormList'
-import { mapState, mapActions } from 'vuex'
+import CompletedFormList from '../../components/completedForm/CompletedFormList';
+import { mapState, mapActions } from 'vuex';
 export default {
   components: {
-    CompletedFormList
+    CompletedFormList,
   },
-  data () {
+  data() {
     return {
       completedForms: {},
-      isLoading: false
-    }
+      isLoading: false,
+    };
   },
   computed: {
     ...mapState({
-      hospital: (state) => state.hospital.hospitalData
-    })
+      hospital: (state) => state.hospital.hospitalData,
+    }),
   },
-  async mounted () {
-    await this.getHospital({ hospital_id: this.$route.params.hospital_id })
+  async mounted() {
+    await this.getHospital({ hospital_id: this.$route.params.hospital_id });
   },
   methods: {
-    ...mapActions(['getHospital'])
-  }
-}
+    ...mapActions(['getHospital']),
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

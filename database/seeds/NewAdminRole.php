@@ -14,10 +14,10 @@ class NewAdminRole extends Seeder
   {
     DB::table('admin_roles')->insert([
       [
-        "name" => "manager_epidemic",
-        "slug" => 'manager_epidemic',
+        'name' => 'manager_epidemic',
+        'slug' => 'manager_epidemic',
         'created_at' => date('Y-m-d H:i:s'),
-        'updated_at' => date('Y-m-d H:i:s')
+        'updated_at' => date('Y-m-d H:i:s'),
       ],
     ]);
   }

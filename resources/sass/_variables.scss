@@ -30,8 +30,8 @@ $flag-yellow: #eede4e;
 
 // Typography
 $font-family-serif: serif;
-$font-family-sans-serif: "Helvetica", sans-serif;
-$font-family-base: "Lato", sans-serif;
+$font-family-sans-serif: 'Helvetica', sans-serif;
+$font-family-base: 'Lato', sans-serif;
 
 //jumbotron
 $jumbotron-bg: $bg-gray;
@@ -46,10 +46,10 @@ $antibacterial_gel: red;
 $waiting_background: #00000052;
 
 // brackpoints
-$small:'min-width:576px';
-$medium:'min-width:768px';
-$large:'min-width:992px';
-$x-large:'min-width:1200px';
+$small: 'min-width:576px';
+$medium: 'min-width:768px';
+$large: 'min-width:992px';
+$x-large: 'min-width:1200px';
 
 $max-width: 991px;
 .dash-green {
@@ -67,4 +67,3 @@ $max-width: 991px;
 .flux-presence {
   color: $flux-presence;
 }
-

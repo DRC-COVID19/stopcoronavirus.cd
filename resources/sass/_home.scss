@@ -1,89 +1,88 @@
-
 .jumbotron-alert {
-    text-align: center;
-    padding: 2rem 1.5rem !important;
-    background-color: $flag-blue;
-    color: $white;
-    i {
-        font-size: 2rem;
-    }
+  text-align: center;
+  padding: 2rem 1.5rem !important;
+  background-color: $flag-blue;
+  color: $white;
+  i {
+    font-size: 2rem;
+  }
 }
 
 .jumbotron-diagnostic {
-    text-align: center;
-    padding: 2rem 1.5rem !important;
-    background-color: $gray-600;
-    color: $white;
-    i {
-        font-size: 2rem;
-    }
+  text-align: center;
+  padding: 2rem 1.5rem !important;
+  background-color: $gray-600;
+  color: $white;
+  i {
+    font-size: 2rem;
+  }
 }
 
 .home-consignes {
-    > div {
-        text-align: center;
+  > div {
+    text-align: center;
 
-        .ico {
-            font-size: 4rem;
-            color: $flag-blue;
-            display: block;
-        }
+    .ico {
+      font-size: 4rem;
+      color: $flag-blue;
+      display: block;
     }
+  }
 }
 
 #statsChartContainer {
-    height: 30vh;
-    @media screen and (max-width: 767px) {
-        height: 50vh;
-    }
-    @media screen and (max-width: 575px) {
-    }
-    #statsChart {
-    }
+  height: 30vh;
+  @media screen and (max-width: 767px) {
+    height: 50vh;
+  }
+  @media screen and (max-width: 575px) {
+  }
+  #statsChart {
+  }
 }
 
 .container-directive {
-    background: #eee;
+  background: #eee;
 }
 
 .home-directives {
-    > div {
-        text-align: center;
+  > div {
+    text-align: center;
 
-        .ico {
-            font-size: 4rem;
-            color: darken($primary, 20%);
-            display: block;
-        }
-
-        .ico .fa-shopping-basket {
-            color: $flag-blue;
-        }
-
-        strong {
-            display: block;
-        }
+    .ico {
+      font-size: 4rem;
+      color: darken($primary, 20%);
+      display: block;
     }
+
+    .ico .fa-shopping-basket {
+      color: $flag-blue;
+    }
+
+    strong {
+      display: block;
+    }
+  }
 }
 
 .home-symptome {
-    .card {
-        height: 100px;
-        background: $bg-gray;
-        @media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
-            height: 200px;
-        }
-        .card-body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-weight: 700;
-        }
+  .card {
+    height: 100px;
+    background: $bg-gray;
+    @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+      height: 200px;
     }
+    .card-body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 700;
+    }
+  }
 }
-.covid-test-title{
-    @media screen and (max-width: 575px) {
-        font-size: 1.8rem;
-    }
+.covid-test-title {
+  @media screen and (max-width: 575px) {
+    font-size: 1.8rem;
+  }
 }
