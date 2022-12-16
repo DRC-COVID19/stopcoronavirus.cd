@@ -15,8 +15,12 @@ class Flux30ZoneSumsAddNewIndex extends Migration
   public function up()
   {
     Schema::table('flux30_zone_sums', function (Blueprint $table) {
-      DB::statement('CREATE INDEX flux30_zone_sums_date_hour ON flux30_zone_sums("Date", "Hour")');
-      DB::statement('CREATE INDEX flux30_zone_sums_date_hour_Observation_Zone ON flux30_zone_sums("Date", "Hour", "Observation_Zone")');
+      DB::statement(
+        'CREATE INDEX flux30_zone_sums_date_hour ON flux30_zone_sums("Date", "Hour")'
+      );
+      DB::statement(
+        'CREATE INDEX flux30_zone_sums_date_hour_Observation_Zone ON flux30_zone_sums("Date", "Hour", "Observation_Zone")'
+      );
     });
   }
 
@@ -31,11 +35,17 @@ class Flux30ZoneSumsAddNewIndex extends Migration
       switch (env('DB_CONNECTION')) {
         case 'pgsql':
           DB::statement('DROP INDEX flux30_zone_sums_date_hour');
-          DB::statement('DROP INDEX flux30_zone_sums_date_hour_Observation_Zone');
+          DB::statement(
+            'DROP INDEX flux30_zone_sums_date_hour_Observation_Zone'
+          );
           break;
         default:
-          DB::statement('DROP INDEX flux30_zone_sums_date_hour ON flux30_zone_sums');
-          DB::statement('DROP INDEX flux30_zone_sums_date_hour_Observation_Zone ON flux30_zone_sums');
+          DB::statement(
+            'DROP INDEX flux30_zone_sums_date_hour ON flux30_zone_sums'
+          );
+          DB::statement(
+            'DROP INDEX flux30_zone_sums_date_hour_Observation_Zone ON flux30_zone_sums'
+          );
           break;
       }
     });

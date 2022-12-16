@@ -13,13 +13,25 @@ class CreateAdministratorReadChangeLogsTable extends Migration
    */
   public function up()
   {
-    Schema::create('administrator_read_change_logs', function (Blueprint $table) {
+    Schema::create('administrator_read_change_logs', function (
+      Blueprint $table
+    ) {
       $table->id();
       $table->unsignedInteger('administrator_id');
       $table->unsignedBigInteger('change_log_id');
 
-      $table->foreign('administrator_id')->on('admin_users')->references('id')->onDelete('CASCADE')->onUpdate('CASCADE');
-      $table->foreign('change_log_id')->on('change_logs')->references('id')->onDelete('CASCADE')->onUpdate('CASCADE');
+      $table
+        ->foreign('administrator_id')
+        ->on('admin_users')
+        ->references('id')
+        ->onDelete('CASCADE')
+        ->onUpdate('CASCADE');
+      $table
+        ->foreign('change_log_id')
+        ->on('change_logs')
+        ->references('id')
+        ->onDelete('CASCADE')
+        ->onUpdate('CASCADE');
       $table->timestamps();
     });
   }

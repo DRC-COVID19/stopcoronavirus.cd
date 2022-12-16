@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class PostOrder extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->integer('order')->nullable();
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('posts', function (Blueprint $table) {
+      $table->integer('order')->nullable();
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('posts', function (Blueprint $table) {
-            $table->dropColumn('order');
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('posts', function (Blueprint $table) {
+      $table->dropColumn('order');
+    });
+  }
 }

@@ -3,11 +3,11 @@
     class="tooltip-map"
     :style="{ left: position.left + 15, top: position.top }"
   >
-    <div v-if="item.type">{{`Type ${item.type}`}}</div>
+    <div v-if="item.type">{{ `Type ${item.type}` }}</div>
     <div v-if="item.destination">
       {{
         `${item.origin} => ${item.destination}: ${Math.round(item.percent)}${
-          !item.isAbsolute ? "%" : ""
+          !item.isAbsolute ? '%' : ''
         }`
       }}
     </div>
@@ -15,8 +15,8 @@
       {{
         `${item.origin} ${
           item.percent
-            ? `: ${Math.round(item.percent)}${!item.isAbsolute ? "%" : ""}`
-            : ""
+            ? `: ${Math.round(item.percent)}${!item.isAbsolute ? '%' : ''}`
+            : ''
         }`
       }}
     </div>

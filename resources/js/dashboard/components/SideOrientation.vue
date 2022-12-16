@@ -5,9 +5,9 @@
         <skeleton-loading>
           <square-skeleton
             :boxProperties="{
-                                width: '100%',
-                                height: '830px'
-                            }"
+              width: '100%',
+              height: '830px',
+            }"
           ></square-skeleton>
         </skeleton-loading>
       </b-col>
@@ -22,13 +22,13 @@
           :fields="fields"
         >
           <template v-slot:cell(FIN8)="data">
-            <div class="text-right">{{ data.item.FIN8 || "0"}}</div>
+            <div class="text-right">{{ data.item.FIN8 || '0' }}</div>
           </template>
           <template v-slot:cell(FIN5)="data">
-            <div class="text-right">{{ data.item.FIN5 || "0"}}</div>
+            <div class="text-right">{{ data.item.FIN5 || '0' }}</div>
           </template>
           <template v-slot:cell(FIN)="data">
-            <div class="text-right">{{ data.item.FIN || "0"}}</div>
+            <div class="text-right">{{ data.item.FIN || '0' }}</div>
           </template>
         </b-table>
       </b-col>
@@ -52,26 +52,26 @@ export default {
     return {
       fields: [
         {
-          key: "province",
+          key: 'province',
         },
         {
-          key: "township",
-          label: "Ville/Commune",
+          key: 'township',
+          label: 'Ville/Commune',
         },
         {
-          key: "FIN8",
-          label: "Peu probale",
-          variant: "success",
+          key: 'FIN8',
+          label: 'Peu probale',
+          variant: 'success',
         },
         {
-          key: "FIN",
-          label: "Probale",
-          variant: "warning",
+          key: 'FIN',
+          label: 'Probale',
+          variant: 'warning',
         },
         {
-          key: "FIN5",
-          label: "Très Probale",
-          variant: "danger",
+          key: 'FIN5',
+          label: 'Très Probale',
+          variant: 'danger',
         },
       ],
     };
@@ -108,7 +108,7 @@ export default {
         (item[type] * 100) / (item.FIN ?? 0 + item.FIN5 ?? 0 + item.FIN8 ?? 0);
       if (width == 0) {
         return {
-          width: "10px",
+          width: '10px',
         };
       }
       return {

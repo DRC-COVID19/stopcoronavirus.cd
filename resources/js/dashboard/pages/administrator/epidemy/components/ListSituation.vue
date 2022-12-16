@@ -78,14 +78,7 @@
         >
           <template #table-busy>
             <div
-              class="
-                align-items-center
-                d-flex
-                justify-content-center
-                my-2
-                text-center text-danger
-                loading-height
-              "
+              class="align-items-center d-flex justify-content-center my-2 text-center text-danger loading-height"
             >
               <b-spinner class="align-middle"></b-spinner>
               <strong>Loading...</strong>
@@ -120,7 +113,7 @@
             </b-button>
           </template>
           <template v-slot:cell(last_update)="data">
-            {{ moment(data.item.last_update).format("DD.MM.YYYY") }}
+            {{ moment(data.item.last_update).format('DD.MM.YYYY') }}
           </template>
         </b-table>
       </b-col>
@@ -158,22 +151,22 @@ export default {
   data() {
     return {
       fields: [
-        { key: "last_update", label: "Date" },
-        { key: "confirmed", label: "Confirme", sortable: true },
-        { key: "sick", label: "Actifs", sortable: true },
-        { key: "seriously", label: "Grave", sortable: true },
-        { key: "healed", label: "Gueris", sortable: true },
-        { key: "dead", label: "Deces", sortable: true },
-        { key: "imported", label: "Importes", sortable: true },
-        { key: "local", label: "Local", sortable: true },
-        "actions",
+        { key: 'last_update', label: 'Date' },
+        { key: 'confirmed', label: 'Confirme', sortable: true },
+        { key: 'sick', label: 'Actifs', sortable: true },
+        { key: 'seriously', label: 'Grave', sortable: true },
+        { key: 'healed', label: 'Gueris', sortable: true },
+        { key: 'dead', label: 'Deces', sortable: true },
+        { key: 'imported', label: 'Importes', sortable: true },
+        { key: 'local', label: 'Local', sortable: true },
+        'actions',
       ],
-      filter: "",
+      filter: '',
       perPage: 15,
       currentPage: 1,
       isDeleteModalShown: false,
       currentSituation: {
-        last_update: "",
+        last_update: '',
       },
       editModalShow: false,
       attrs: [],
@@ -191,7 +184,7 @@ export default {
   },
   methods: {
     search() {
-      this.$emit("onSearch", this.filter);
+      this.$emit('onSearch', this.filter);
     },
     deleteSituation(id) {
       this.isDeleteModalShown = true;
@@ -219,17 +212,17 @@ export default {
         seriously,
         healed,
       };
-      this.$emit("onEditSituation", this.currentSituation);
+      this.$emit('onEditSituation', this.currentSituation);
     },
     onValidateDelection() {
-      this.$emit("onDeleteSituation", this.currentSituation.last_update);
+      this.$emit('onDeleteSituation', this.currentSituation.last_update);
       this.isDeleteModalShown = false;
     },
     onCancelDelection() {
       this.isDeleteModalShown = false;
     },
     openToogle() {
-      this.$emit("openToogle", false);
+      this.$emit('openToogle', false);
     },
     onRangeDateObservation(inputValueDate) {
       // this.filter = inputValueDate
@@ -238,12 +231,12 @@ export default {
     btnReset() {
       this.attrs = [];
       this.filter = null;
-      this.$emit("onGetSituations");
+      this.$emit('onGetSituations');
     },
     btnToday() {
       this.filter = new Date();
       this.attrs.push({
-        key: "today",
+        key: 'today',
         dates: new Date(),
         highlight: true,
       });
@@ -252,7 +245,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .loading-height {
   height: 660px;
 }

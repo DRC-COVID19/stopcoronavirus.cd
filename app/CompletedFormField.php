@@ -7,24 +7,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CompletedFormField extends Model
 {
-    use SoftDeletes;
+  use SoftDeletes;
 
-    protected $fillable = [
-        'value',
-        'completed_form_id',
-        'form_field_id',
-        'updated_manager_name',
-        'updated_manager_first_name'
-    ];
+  protected $fillable = [
+    'value',
+    'completed_form_id',
+    'form_field_id',
+    'updated_manager_name',
+    'updated_manager_first_name',
+  ];
 
+  public function completedForm()
+  {
+    return $this->belongsTo(CompletedForm::class);
+  }
 
-    public function completedForm()
-    {
-        return $this->belongsTo(CompletedForm::class);
-    }
-
-    public function formField()
-    {
-        return $this->belongsTo(FormField::class);
-    }
+  public function formField()
+  {
+    return $this->belongsTo(FormField::class);
+  }
 }

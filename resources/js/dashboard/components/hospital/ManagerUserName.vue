@@ -19,9 +19,7 @@
           >
             <b-form @submit.prevent="hospitalManagerNameSubmit">
               <b-form-group>
-                <label class="text-dash-color" for="text-name"
-                  > Nom:</label
-                >
+                <label class="text-dash-color" for="text-name"> Nom:</label>
                 <FormFieldInput
                   v-model="identity.name"
                   type="text"
@@ -58,51 +56,51 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
-import FormFieldInput from '../forms/FormFieldInput'
-import { ValidationObserver } from 'vee-validate'
+import { mapMutations } from 'vuex';
+import FormFieldInput from '../forms/FormFieldInput';
+import { ValidationObserver } from 'vee-validate';
 
 export default {
   components: {
     FormFieldInput,
-    ValidationObserver
+    ValidationObserver,
   },
   props: {
     id: {
       type: String,
-      default: 'nameModal'
-    }
+      default: 'nameModal',
+    },
   },
-  data () {
+  data() {
     return {
       identity: {
         name: null,
-        firstName: null
+        firstName: null,
       },
       validateNameMessage: '',
-      validateFirstNameMessage: ''
-    }
+      validateFirstNameMessage: '',
+    };
   },
   computed: {
-    localhospitalManager () {
+    localhospitalManager() {
       if (
         this.validateNameMessage.length === 0 &&
         this.validateNameMessage.length === 0
       ) {
-        return this.identity
+        return this.identity;
       } else {
-        return null
+        return null;
       }
-    }
+    },
   },
   methods: {
     ...mapMutations(['setHospitalManagerName']),
-    hospitalManagerNameSubmit () {
-      this.setHospitalManagerName(this.localhospitalManager)
-      this.$bvModal.hide(this.id)
-    }
-  }
-}
+    hospitalManagerNameSubmit() {
+      this.setHospitalManagerName(this.localhospitalManager);
+      this.$bvModal.hide(this.id);
+    },
+  },
+};
 </script>
 
 <style></style>

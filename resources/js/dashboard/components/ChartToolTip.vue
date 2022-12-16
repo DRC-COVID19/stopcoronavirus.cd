@@ -4,7 +4,7 @@
     :style="{ left: position.left + 15, top: position.top }"
   >
     <div>
-      <strong> {{ moment(item.date).format("DD.MM.YY") }}</strong>
+      <strong> {{ moment(item.date).format('DD.MM.YY') }}</strong>
     </div>
     <div>{{ `volume: ${item.volume}` }}</div>
     <div>{{ `Mediane: ${item.volume_reference}` }}</div>

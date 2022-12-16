@@ -1,87 +1,86 @@
 .App-Header {
-    .App-Header--notice {
-        background-color: darken($success, 8%);
+  .App-Header--notice {
+    background-color: darken($success, 8%);
+  }
+  .App-Header--logo {
+  }
 
-    }
-    .App-Header--logo {
+  .App-Header--navbar {
+    a {
+      color: $dark;
+      &.active {
+        font-weight: bold;
+      }
     }
 
-    .App-Header--navbar {
-        a {
-            color: $dark;
-            &.active {
-                font-weight: bold;
-            }
-        }
-
-        @media screen and (max-width: 575px) {
-            a {
-                display: block;
-            }
-        }
+    @media screen and (max-width: 575px) {
+      a {
+        display: block;
+      }
     }
+  }
 }
 
 .display-4 {
-    @media screen and (max-width: 575px) {
-        & {
-            font-size: 2.5rem;
-        }
+  @media screen and (max-width: 575px) {
+    & {
+      font-size: 2.5rem;
     }
+  }
 }
 a {
-    overflow-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .contenaire-float {
-    position: fixed;
-    bottom: 50px;
-    right: 30px;
-    .float {
-        display: flex;
-        margin: 5px;
-        width: 60px;
-        height: 60px;
-        bottom: 40px;
-        right: 40px;
-        background-color: #0c9;
-        color: #fff;
-        border-radius: 50px;
-        text-align: center;
-        text-decoration: none;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 2px 2px 3px #999;
-        transition: all 500ms ease;
-        &:hover{
-            transform: scale(1.03);
-        }
+  position: fixed;
+  bottom: 50px;
+  right: 30px;
+  .float {
+    display: flex;
+    margin: 5px;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    right: 40px;
+    background-color: #0c9;
+    color: #fff;
+    border-radius: 50px;
+    text-align: center;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 2px 2px 3px #999;
+    transition: all 500ms ease;
+    &:hover {
+      transform: scale(1.03);
     }
+  }
 }
-.xs-share-container{
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    background-color: white;
-    box-shadow: 0px 0px 2px #00874e;
-    .xs-share{
-        color: white;
-    }
-    .col-4{
-        padding: 5px;
-    }
+.xs-share-container {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: white;
+  box-shadow: 0px 0px 2px #00874e;
+  .xs-share {
+    color: white;
+  }
+  .col-4 {
+    padding: 5px;
+  }
 }
-.whatsapp{
-    background-color: #25D366 !important;
+.whatsapp {
+  background-color: #25d366 !important;
 }
-.facebook{
-    background-color: #3b5998 !important;
+.facebook {
+  background-color: #3b5998 !important;
 }
-.twitter{
-    background-color: #76c5f5 !important;
+.twitter {
+  background-color: #76c5f5 !important;
 }
-.div-radio{
-    img{
-        width: 20px;
-    }
+.div-radio {
+  img {
+    width: 20px;
+  }
 }

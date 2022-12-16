@@ -65,22 +65,30 @@ class PandemicStatController extends Controller
   public function index(Request $request)
   {
     $order = $request->get('order', 'ASC');
-    return PandemicStatResource::collection(PandemicStat::orderBy('last_update', $order)->paginate(15));
+    return PandemicStatResource::collection(
+      PandemicStat::orderBy('last_update', $order)->paginate(15)
+    );
   }
 
   public function index_asc()
   {
-    return new PandemicStatResource(PandemicStat::orderBy('last_update', 'ASC')->get());
+    return new PandemicStatResource(
+      PandemicStat::orderBy('last_update', 'ASC')->get()
+    );
   }
 
   public function index_desc()
   {
-    return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->get());
+    return new PandemicStatResource(
+      PandemicStat::orderBy('last_update', 'DESC')->get()
+    );
   }
 
   public function get_last_situation()
   {
-    return new PandemicStatResource(PandemicStat::orderBy('last_update', 'DESC')->first());
+    return new PandemicStatResource(
+      PandemicStat::orderBy('last_update', 'DESC')->first()
+    );
   }
 
   /**
@@ -143,7 +151,9 @@ class PandemicStatController extends Controller
   public function show($pandemic_stat_id)
   {
     try {
-      return response()->json(PandemicStatResource::make(PandemicStat::find($pandemic_stat_id)));
+      return response()->json(
+        PandemicStatResource::make(PandemicStat::find($pandemic_stat_id))
+      );
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -151,7 +161,6 @@ class PandemicStatController extends Controller
       return response($th->getMessage())->setStatusCode(500);
     }
   }
-
 
   /**
    * Update the specified PandemicStat in storage.
@@ -186,7 +195,7 @@ class PandemicStatController extends Controller
     try {
       $pandemicStat = PandemicStat::find($pandemic_stat_id);
       if (!$pandemicStat) {
-        return response()->json(["message" => "Resource not found",], 404);
+        return response()->json(['message' => 'Resource not found'], 404);
       }
       $check = $pandemicStat->update(Arr::except($data, 'last_update'));
       if (!$check) {
@@ -212,7 +221,7 @@ class PandemicStatController extends Controller
     try {
       $pandemicStat = PandemicStat::find($pandemic_stat_id);
       if (!$pandemicStat) {
-        return response()->json(["message" => "Resource not found",], 404);
+        return response()->json(['message' => 'Resource not found'], 404);
       }
       $pandemicStat->delete();
       return response()->json([], 202);
@@ -241,11 +250,11 @@ class PandemicStatController extends Controller
       'seriously' => 'nullable|numeric',
       'healed' => 'nullable|numeric',
       'dead' => 'nullable|numeric',
-      'last_update' => "date|required|unique:pandemic_stats,last_update" . ($id ? ",{$id}" : ""),
+      'last_update' =>
+        'date|required|unique:pandemic_stats,last_update' .
+        ($id ? ",{$id}" : ''),
     ])->validate();
   }
-
-
 
   public function filter(Request $request)
   {
@@ -253,7 +262,10 @@ class PandemicStatController extends Controller
       $date = $request->get('date');
       $situation = PandemicStat::whereDate('last_update', $date)->paginate(15);
       if (!$situation) {
-        return response()->json(["message" => "Not situation found", "success" => false], 404);
+        return response()->json(
+          ['message' => 'Not situation found', 'success' => false],
+          404
+        );
       }
       return PandemicStatResource::collection($situation);
     } catch (\Throwable $th) {

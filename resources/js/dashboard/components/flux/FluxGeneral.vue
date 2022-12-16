@@ -2,23 +2,28 @@
   <b-container fluid>
     <b-row>
       <b-col>
-        <b-card class="mb-3 flux-mobility" :class="{'active':fluxType==4}">
+        <b-card class="mb-3 flux-mobility" :class="{ active: fluxType == 4 }">
           <h5 class="percent-title">Mobilité générale</h5>
-          <div class="percent flux-in-color">{{percentGenerale}}%​</div>
+          <div class="percent flux-in-color">{{ percentGenerale }}%​</div>
 
-          <p v-if="differenceGenerale>0" class="percent-p text-dash-color">
-            {{differenceGenerale}} personnes de plus sont
-            <br />entrées et sorties de la zone
+          <p v-if="differenceGenerale > 0" class="percent-p text-dash-color">
+            {{ differenceGenerale }} personnes de plus sont <br />entrées et
+            sorties de la zone
           </p>
           <p v-else class="percent-p text-dash-color">
-            {{ `${differenceGenerale}`}} personnes de moins sont
-            <br />entrées et sorties de la zone
+            {{ `${differenceGenerale}` }} personnes de moins sont <br />entrées
+            et sorties de la zone
           </p>
         </b-card>
         <FullScreen id="mobile_generale_full" link="general_flux">
           <b-card no-body class="cardtype1 mb-3 p-2">
             <div class="chart-container">
-              <canvas height="200" width="100vh" ref="general_flux" id="general_flux"></canvas>
+              <canvas
+                height="200"
+                width="100vh"
+                ref="general_flux"
+                id="general_flux"
+              ></canvas>
             </div>
           </b-card>
         </FullScreen>
@@ -28,14 +33,24 @@
       <b-col cols="12" md="4">
         <FullScreen id="general_top_asc" link="general_top_asc">
           <b-card no-body class="cardtype2 p-2">
-            <canvas height="200" width="100vh" ref="general_top_asc" id="general_top_asc"></canvas>
+            <canvas
+              height="200"
+              width="100vh"
+              ref="general_top_asc"
+              id="general_top_asc"
+            ></canvas>
           </b-card>
         </FullScreen>
       </b-col>
       <b-col cols="12" md="4">
         <FullScreen id="general_top_desc" link="general_top_desc">
           <b-card no-body class="cardtype2 p-2">
-            <canvas height="200" width="100vh" ref="general_top_desc" id="general_top_desc"></canvas>
+            <canvas
+              height="200"
+              width="100vh"
+              ref="general_top_desc"
+              id="general_top_desc"
+            ></canvas>
           </b-card>
         </FullScreen>
       </b-col>
@@ -45,8 +60,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { PALETTE } from "../../config/env";
+import { mapState } from 'vuex';
+import { PALETTE } from '../../config/env';
 export default {
   props: {
     flux24DailyIn: {
@@ -84,14 +99,14 @@ export default {
       this.fluxMobilityFluxGeneralZone(
         this.flux24DailyIn,
         this.flux24DailyOut,
-        "general_top_asc",
-        "asc"
+        'general_top_asc',
+        'asc'
       );
       this.fluxMobilityFluxGeneralZone(
         this.flux24DailyIn,
         this.flux24DailyOut,
-        "general_top_desc",
-        "desc"
+        'general_top_desc',
+        'desc'
       );
     },
     flux24DailyOut() {
@@ -99,14 +114,14 @@ export default {
       this.fluxMobilityFluxGeneralZone(
         this.flux24DailyIn,
         this.flux24DailyOut,
-        "general_top_asc",
-        "asc"
+        'general_top_asc',
+        'asc'
       );
       this.fluxMobilityFluxGeneralZone(
         this.flux24DailyIn,
         this.flux24DailyOut,
-        "general_top_desc",
-        "desc"
+        'general_top_desc',
+        'desc'
       );
     },
   },
@@ -114,14 +129,14 @@ export default {
     this.fluxMobilityFluxGeneralZone(
       this.flux24DailyIn,
       this.flux24DailyOut,
-      "general_top_asc",
-      "asc"
+      'general_top_asc',
+      'asc'
     );
     this.fluxMobilityFluxGeneralZone(
       this.flux24DailyIn,
       this.flux24DailyOut,
-      "general_top_desc",
-      "desc"
+      'general_top_desc',
+      'desc'
     );
 
     this.updateGeneralMobilityDaily();
@@ -228,7 +243,7 @@ export default {
       fluxDataOut,
       ref,
       title = null,
-      order = "asc"
+      order = 'asc'
     ) {
       const generalData = [...fluxDataIn];
       let localData = [];
@@ -282,7 +297,7 @@ export default {
       });
 
       localData.sort((a, b) => {
-        if (order == "asc") {
+        if (order == 'asc') {
           return Number(a.percent ?? 0) < Number(b.percent ?? 0) ? 1 : -1;
         } else {
           return Number(a.percent ?? 0) > Number(b.percent ?? 0) ? 1 : -1;
@@ -293,7 +308,7 @@ export default {
 
       this.drawHorizontalChart(
         localData,
-        "zone",
+        'zone',
         ref,
         PALETTE.flux_in_color,
         title
@@ -304,14 +319,14 @@ export default {
         labels: localData.map((d) => d[key]),
         datasets: [
           {
-            label: "Référence",
-            backgroundColor: "#33ac2e",
-            borderColor: "#33ac2e",
+            label: 'Référence',
+            backgroundColor: '#33ac2e',
+            borderColor: '#33ac2e',
             borderWidth: 1,
             data: localData.map((d) => d.volume_reference),
           },
           {
-            label: "Observation",
+            label: 'Observation',
             backgroundColor: color,
             borderColor: color,
             data: localData.map((d) => d.volume),
@@ -320,7 +335,7 @@ export default {
       };
 
       this.configBarChart2 = {
-        type: "horizontalBar",
+        type: 'horizontalBar',
         data: dataChart,
         options: {
           elements: {
@@ -330,7 +345,7 @@ export default {
           },
           responsive: true,
           legend: {
-            position: "bottom",
+            position: 'bottom',
             labels: {
               fontSize: 9,
             },
@@ -338,7 +353,7 @@ export default {
           title: {
             display: !!title,
             text: title,
-            color: "#6c757d",
+            color: '#6c757d',
           },
           scales: {
             xAxes: [
@@ -369,7 +384,7 @@ export default {
 
       if (this.barChart2[ref]) this.barChart2[ref].destroy();
       this.barChart2[ref] = new Chart(
-        this.$refs[ref].getContext("2d"),
+        this.$refs[ref].getContext('2d'),
         this.configBarChart2
       );
     },
@@ -377,5 +392,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

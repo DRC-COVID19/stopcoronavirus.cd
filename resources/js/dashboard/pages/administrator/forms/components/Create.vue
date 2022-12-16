@@ -99,7 +99,7 @@
             variant="outline-danger"
             class="ml-4"
             @click="resetForm()"
-            >{{ updating ? "Annuler" : "Réinitialiser" }}</b-button
+            >{{ updating ? 'Annuler' : 'Réinitialiser' }}</b-button
           >
         </b-row>
       </b-form>
@@ -108,46 +108,46 @@
 </template>
 
 <script>
-import FormFieldInput from '../../../../components/forms/FormFieldInput'
-import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue'
-import { ValidationObserver } from 'vee-validate'
+import FormFieldInput from '../../../../components/forms/FormFieldInput';
+import FomFieldSelect from '../../../../components/forms/FomFieldSelect.vue';
+import { ValidationObserver } from 'vee-validate';
 
 export default {
   components: {
     FormFieldInput,
     ValidationObserver,
-    FomFieldSelect
+    FomFieldSelect,
   },
   props: {
     formAdded: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     formUpdated: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     formToPopulate: {
       type: Object,
       required: false,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     formRecurrences: {
       type: Array,
       default: () => {
-        return []
-      }
+        return [];
+      },
     },
     errors: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
-  data () {
+  data() {
     return {
       title: 'Nouveau Formulaire',
       btnTitle: 'Enregistrer',
@@ -160,93 +160,93 @@ export default {
         title: '',
         form_recurrence_value: null,
         form_recurrence_id: '',
-        publish: false
+        publish: false,
       },
       show: true,
       showWarning: false,
       toBeCanceled: true,
-      formRecurrenceSelected: null
-    }
+      formRecurrenceSelected: null,
+    };
   },
-  mounted () {
-    this.resetForm()
+  mounted() {
+    this.resetForm();
   },
   watch: {
-    formAdded () {
-      this.resetForm()
+    formAdded() {
+      this.resetForm();
     },
-    formUpdated () {
-      this.resetForm()
+    formUpdated() {
+      this.resetForm();
     },
-    formToPopulate () {
-      this.resetForm()
-      this.populateForm()
-    }
+    formToPopulate() {
+      this.resetForm();
+      this.populateForm();
+    },
   },
   methods: {
-    onSubmit () {
-      this.isLoading = true
+    onSubmit() {
+      this.isLoading = true;
       if (this.btnTitle === 'Enregistrer') {
-        this.$emit('onCreate', this.form)
+        this.$emit('onCreate', this.form);
       } else {
-        this.$emit('onUpdate', this.form)
+        this.$emit('onUpdate', this.form);
       }
     },
 
-    onReset () {
-      this.$refs.form.reset()
+    onReset() {
+      this.$refs.form.reset();
 
-      this.toToCanceled = true
-      this.form = {}
-      this.title = 'Nouveau Formulaire'
-      this.btnTitle = 'Enregistrer'
-      this.$emit('onCancelUpdate', {})
+      this.toToCanceled = true;
+      this.form = {};
+      this.title = 'Nouveau Formulaire';
+      this.btnTitle = 'Enregistrer';
+      this.$emit('onCancelUpdate', {});
     },
 
-    resetForm () {
-      this.$refs.form.reset()
+    resetForm() {
+      this.$refs.form.reset();
 
-      this.updating = false
-      this.isLoading = false
+      this.updating = false;
+      this.isLoading = false;
       this.form = {
         title: '',
         form_recurrence_value: null,
         form_recurrence_id: '',
-        publish: false
-      }
-      this.btnTitle = 'Enregistrer'
-      this.title = 'Nouveau Formulaire'
+        publish: false,
+      };
+      this.btnTitle = 'Enregistrer';
+      this.title = 'Nouveau Formulaire';
     },
 
-    populateForm () {
-      this.updating = false
+    populateForm() {
+      this.updating = false;
 
       if (Object.keys(this.formToPopulate).length !== 0) {
-        this.updating = true
-        this.form.id = this.formToPopulate.id
-        this.form.title = this.formToPopulate.title
+        this.updating = true;
+        this.form.id = this.formToPopulate.id;
+        this.form.title = this.formToPopulate.title;
         this.form.form_recurrence_value =
-          this.formToPopulate.form_recurrence_value
-        this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id
-        this.form.publish = this.formToPopulate.publish
-        this.title = 'Modification du formulaire'
-        this.btnTitle = 'Modifier'
+          this.formToPopulate.form_recurrence_value;
+        this.form.form_recurrence_id = this.formToPopulate.form_recurrence_id;
+        this.form.publish = this.formToPopulate.publish;
+        this.title = 'Modification du formulaire';
+        this.btnTitle = 'Modifier';
       }
     },
 
-    onFormRecurrenceChange (formRecurrenceId) {
-      this.form.form_recurrence_value = null
+    onFormRecurrenceChange(formRecurrenceId) {
+      this.form.form_recurrence_value = null;
       this.formRecurrenceSelected = this.formRecurrences.find(
         (formRecurrence) => formRecurrence.id === formRecurrenceId
-      )
-      console.log(this.formRecurrenceSelected.name)
-    }
-  }
-}
+      );
+      console.log(this.formRecurrenceSelected.name);
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .main {
   background-color: white;
   border-radius: 10px;

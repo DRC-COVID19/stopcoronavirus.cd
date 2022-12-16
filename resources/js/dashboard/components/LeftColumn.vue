@@ -3,9 +3,13 @@
     <b-row class="mb-3">
       <b-col cols="12">
         <b-card>
-          <b-form-checkbox class="styled-checkbox" name="covid_case" @change="covidCaseToggle">
+          <b-form-checkbox
+            class="styled-checkbox"
+            name="covid_case"
+            @change="covidCaseToggle"
+          >
             Situation épidemologique
-            <b-badge v-if="covidCasesCount">{{covidCasesCount}}</b-badge>
+            <b-badge v-if="covidCasesCount">{{ covidCasesCount }}</b-badge>
           </b-form-checkbox>
         </b-card>
       </b-col>
@@ -17,7 +21,8 @@
             @change="populationFluxToggle"
             class="styled-checkbox"
             name="has_sondage"
-          >Mobilité</b-form-checkbox>
+            >Mobilité</b-form-checkbox
+          >
 
           <b-collapse id="populationFluxcollapse">
             <hr />
@@ -30,7 +35,7 @@
                   @input="fluxPredefinedInputChanged"
                   :options="fluxPredefinedInput"
                   label="name"
-                  :reduce="item=>item.id"
+                  :reduce="(item) => item.id"
                 />
               </b-form-group>
 
@@ -38,10 +43,13 @@
                 Paramètres détailés
                 <span
                   class="chevron fa fa-chevron-down"
-                  :class="{'rotation':IsfluxParameterCollapse}"
+                  :class="{ rotation: IsfluxParameterCollapse }"
                 ></span>
               </h4>
-              <b-collapse id="mobilityDetail" :visible="IsfluxParameterCollapse">
+              <b-collapse
+                id="mobilityDetail"
+                :visible="IsfluxParameterCollapse"
+              >
                 <div>
                   <p>Géographiques</p>
                   <b-form-group>
@@ -51,12 +59,19 @@
                       v-model="fluxForm.fluxGeoGranularity"
                       :options="fluxGeoGranularities"
                       label="name"
-                      :reduce="item=>item.id"
+                      :reduce="(item) => item.id"
                     />
                   </b-form-group>
                   <b-form-group
-                    :invalid-feedback="flux24Errors.fluxGeoOptions ? flux24Errors.fluxGeoOptions[0] : null"
-                    :state="flux24Errors.fluxGeoOptions && flux24Errors.fluxGeoOptions.lenght>0"
+                    :invalid-feedback="
+                      flux24Errors.fluxGeoOptions
+                        ? flux24Errors.fluxGeoOptions[0]
+                        : null
+                    "
+                    :state="
+                      flux24Errors.fluxGeoOptions &&
+                      flux24Errors.fluxGeoOptions.lenght > 0
+                    "
                   >
                     <label for class="text-dash-color">Option</label>
                     <v-select
@@ -65,7 +80,7 @@
                       :disabled="!fluxForm.fluxGeoGranularity"
                       :options="fluxGeoOptions"
                       label="origin"
-                      :reduce="item=>item.origin"
+                      :reduce="(item) => item.origin"
                     />
                   </b-form-group>
                   <!--  <b-list-group :class="{'disabled':fluxForm.filter!='filter_1'}">
@@ -94,16 +109,35 @@
                 <div class="flux-move">
                   <p>Temporel</p>
                   <b-form-group
-                    :invalid-feedback="flux24Errors.observation_start|| flux24Errors.observation_end ? `${flux24Errors.observation_start?flux24Errors.observation_start[0]:''} ${flux24Errors.observation_end?flux24Errors.observation_end[0]:''}` : null"
-                    :state="(flux24Errors.observation_start && flux24Errors.observation_start.lenght>0)|| (flux24Errors.observation_end && flux24Errors.observation_end.lenght>0)"
+                    :invalid-feedback="
+                      flux24Errors.observation_start ||
+                      flux24Errors.observation_end
+                        ? `${
+                            flux24Errors.observation_start
+                              ? flux24Errors.observation_start[0]
+                              : ''
+                          } ${
+                            flux24Errors.observation_end
+                              ? flux24Errors.observation_end[0]
+                              : ''
+                          }`
+                        : null
+                    "
+                    :state="
+                      (flux24Errors.observation_start &&
+                        flux24Errors.observation_start.lenght > 0) ||
+                      (flux24Errors.observation_end &&
+                        flux24Errors.observation_end.lenght > 0)
+                    "
                   >
                     <label class="text-dash-color">Période d'observation</label>
                     <date-range-picker
                       ref="picker2"
-                      :locale-data="{ 
-                        firstDay: 1, 
-                      format: 'dd-mm-yyyy', 
-                      drops: 'up' }"
+                      :locale-data="{
+                        firstDay: 1,
+                        format: 'dd-mm-yyyy',
+                        drops: 'up',
+                      }"
                       v-model="dateRangeObservation"
                       :appendToBody="true"
                       opens="right"
@@ -111,11 +145,15 @@
                       @update="UpdateObservationDate"
                       :calculate-position="dateRangerPosition"
                     >
-                      <template
-                        v-slot:input="picker"
-                      >{{ picker.startDate|date }} - {{ picker.endDate|date }}</template>
+                      <template v-slot:input="picker"
+                        >{{ picker.startDate | date }} -
+                        {{ picker.endDate | date }}</template
+                      >
                     </date-range-picker>
-                    <b-button @click="clearObservationDate" class="btn-dash-blue">
+                    <b-button
+                      @click="clearObservationDate"
+                      class="btn-dash-blue"
+                    >
                       <span class="fa fa-times"></span>
                     </b-button>
                   </b-form-group>
@@ -126,11 +164,13 @@
                       v-model="fluxForm.fluxTimeGranularity"
                       :options="fluxTimeGranularities"
                       label="name"
-                      :reduce="item=>item.id"
+                      :reduce="(item) => item.id"
                     />
                   </b-form-group>
                 </div>
-                <b-button type="submit" block class="mt-2 btn-dash-blue">Filtrer les données</b-button>
+                <b-button type="submit" block class="mt-2 btn-dash-blue"
+                  >Filtrer les données</b-button
+                >
               </b-collapse>
             </b-form>
           </b-collapse>
@@ -141,9 +181,13 @@
     <b-row class="mb-3">
       <b-col cols="12">
         <b-card>
-          <b-form-checkbox class="styled-checkbox" name="list_hospital" @change="hospitalToggle">
+          <b-form-checkbox
+            class="styled-checkbox"
+            name="list_hospital"
+            @change="hospitalToggle"
+          >
             Infrastructure médicales
-            <b-badge v-if="hospitalCount">{{hospitalCount}}</b-badge>
+            <b-badge v-if="hospitalCount">{{ hospitalCount }}</b-badge>
           </b-form-checkbox>
         </b-card>
       </b-col>
@@ -158,7 +202,7 @@
             name="medical_orientation"
           >
             Cas probables (issus du formulaire d'orientation médicale)
-            <b-badge v-if="orientationCount">{{orientationCount}}</b-badge>
+            <b-badge v-if="orientationCount">{{ orientationCount }}</b-badge>
           </b-form-checkbox>
           <b-collapse id="orientation_result_collapse">
             <hr />
@@ -168,7 +212,7 @@
               :disable="orientationChecked"
               :options="OrientationLIst"
               label="name"
-              :reduce="item=>item.id"
+              :reduce="(item) => item.id"
               @input="orientationChange"
             />
             <h4>Legende</h4>
@@ -176,17 +220,17 @@
               <div>
                 <span class="fin-8 legende-color"></span>
                 <span>Peu probale</span>
-                <b-badge v-if="fin8Count">{{fin8Count}}</b-badge>
+                <b-badge v-if="fin8Count">{{ fin8Count }}</b-badge>
               </div>
               <div>
                 <span class="fin legende-color"></span>
                 <span>Probable</span>
-                <b-badge v-if="finCount">{{finCount}}</b-badge>
+                <b-badge v-if="finCount">{{ finCount }}</b-badge>
               </div>
               <div>
                 <span class="fin-5 legende-color"></span>
                 <span>Très probable</span>
-                <b-badge v-if="fin5Count">{{fin5Count}}</b-badge>
+                <b-badge v-if="fin5Count">{{ fin5Count }}</b-badge>
               </div>
               <div class="d-block text-right">
                 <a href="#" target="_blank">Voir formulaire</a>
@@ -275,170 +319,171 @@
 </template>
 
 <script>
-import DateRangePicker from "vue2-daterange-picker";
-import { PREFERENCE_START, PREFERENCE_END, DATEFORMAT } from "../config/env";
-import { mapMutations, mapState, mapActions } from "vuex";
-import moment from "moment";
-import "vue2-daterange-picker/dist/vue2-daterange-picker.css";
+import DateRangePicker from 'vue2-daterange-picker';
+import { PREFERENCE_START, PREFERENCE_END, DATEFORMAT } from '../config/env';
+import { mapMutations, mapState, mapActions } from 'vuex';
+import moment from 'moment';
+import 'vue2-daterange-picker/dist/vue2-daterange-picker.css';
 export default {
   components: {
-    DateRangePicker
+    DateRangePicker,
   },
   props: {
     covidCasesCount: {
       type: Number,
-      default: null
+      default: null,
     },
     hospitalCount: {
       type: Number,
-      default: null
+      default: null,
     },
     orientationCount: {
       type: Number,
-      default: null
+      default: null,
     },
     finCount: {
       type: Number,
-      default: null
+      default: null,
     },
     fin8Count: {
       type: Number,
-      default: null
+      default: null,
     },
     fin5Count: {
       type: Number,
-      default: null
+      default: null,
     },
     fluxZones: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     fluxProvinces: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     flux24Errors: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
   data() {
     return {
       OrientationLIst: [
         {
-          id: "ALL",
-          name: "Tout"
+          id: 'ALL',
+          name: 'Tout',
         },
         {
-          id: "FIN",
-          name: "Probable"
+          id: 'FIN',
+          name: 'Probable',
         },
         {
-          id: "FIN8",
-          name: "Peu probable"
+          id: 'FIN8',
+          name: 'Peu probable',
         },
         {
-          id: "FIN5",
-          name: "Très probable"
-        }
+          id: 'FIN5',
+          name: 'Très probable',
+        },
       ],
       orientationChecked: false,
-      orientationSelected: "ALL",
+      orientationSelected: 'ALL',
       dateRangePreference: {
-        startDate: new Date("02/18/2020"),
-        endDate: new Date("03/18/2020")
+        startDate: new Date('02/18/2020'),
+        endDate: new Date('03/18/2020'),
       },
       fluxForm: {
-        preference_start: "2020-02-18",
-        preference_end: "2020-03-18"
+        preference_start: '2020-02-18',
+        preference_end: '2020-03-18',
       },
       dateRangeObservation: {
         startDate: null,
-        endDate: null
+        endDate: null,
       },
       fluxPredefinedInput: [
         {
           id: 1,
-          name: "Aujourd'hui"
+          name: "Aujourd'hui",
         },
         {
           id: 2,
-          name: "Semaine en cours"
+          name: 'Semaine en cours',
         },
         {
           id: 3,
-          name: "Mois en cours"
+          name: 'Mois en cours',
         },
         {
           id: 4,
-          name: "Mois passé"
+          name: 'Mois passé',
         },
         {
           id: 6,
-          name:
-            "Mobilité à la Gombe une semaine après le debut du confinement (24h)"
+          name: 'Mobilité à la Gombe une semaine après le debut du confinement (24h)',
         },
         {
           id: 5,
-          name: "Mobilité à la Gombe depuis le début du confinement"
-        }
+          name: 'Mobilité à la Gombe depuis le début du confinement',
+        },
       ],
-      fluxFilterInput: "",
-      fluxFilterInputProvince: "",
+      fluxFilterInput: '',
+      fluxFilterInputProvince: '',
       fluxZonesArray: [],
       fluxProvincesArray: [],
       fluxGeoGranularity: null,
       fluxGeoGranularities: [
         {
           id: 1,
-          name: "Provinces"
+          name: 'Provinces',
         },
         {
           id: 2,
-          name: "Zones des santés"
-        }
+          name: 'Zones des santés',
+        },
       ],
       fluxGeoOptions: [],
       fluxTimeGranularities: [
         {
           id: 1,
-          name: "24h"
+          name: '24h',
         },
         {
           id: 2,
-          name: "30'"
-        }
+          name: "30'",
+        },
       ],
       fluxTimeGranularity: null,
       allZoneChecked: false,
       allProvinceChecked: false,
       allZoneCheckedIndeterminate: false,
       allProvincesCheckedIndeterminate: false,
-      IsfluxParameterCollapse: false
+      IsfluxParameterCollapse: false,
     };
   },
 
   filters: {
-    date: val => {
-      return val ? moment(val).format("DD.MM.YYYY") : "";
-    }
+    date: (val) => {
+      return val ? moment(val).format('DD.MM.YYYY') : '';
+    },
   },
   watch: {
     allZoneChecked() {
       if (this.allZoneChecked) {
-        this.fluxForm.filter_zone = this.fluxZones.map(x => x.origin);
+        this.fluxForm.filter_zone = this.fluxZones.map((x) => x.origin);
       } else {
         this.fluxForm.filter_zone = [];
       }
     },
     allProvinceChecked() {
       if (this.allProvinceChecked) {
-        this.fluxForm.filter_provinces = this.fluxProvinces.map(x => x.origin);
+        this.fluxForm.filter_provinces = this.fluxProvinces.map(
+          (x) => x.origin
+        );
       } else {
         this.fluxForm.filter_provinces = [];
       }
     },
-    "fluxForm.filter_zone"() {
+    'fluxForm.filter_zone'() {
       if (
         this.fluxForm.filter_zone &&
         this.fluxForm.filter_zone.length > 0 &&
@@ -449,7 +494,7 @@ export default {
         this.allZoneCheckedIndeterminate = false;
       }
     },
-    "fluxForm.filter_provinces"() {
+    'fluxForm.filter_provinces'() {
       if (
         this.fluxForm.filter_provinces &&
         this.fluxForm.filter_provinces.length > 0 &&
@@ -460,13 +505,13 @@ export default {
         this.allProvincesCheckedIndeterminate = false;
       }
     },
-    "fluxForm.filter"() {
+    'fluxForm.filter'() {
       this.fluxForm.origin = null;
       this.fluxForm.destination = null;
       this.fluxForm.filter_provinces = [];
-      this.fluxFilterInputProvince = "";
+      this.fluxFilterInputProvince = '';
       this.fluxForm.filter_zone = [];
-      this.fluxFilterInput = "";
+      this.fluxFilterInput = '';
     },
     fluxZones() {
       this.fluxZonesArray = this.fluxZones;
@@ -475,87 +520,87 @@ export default {
       this.fluxProvincesArray = this.fluxProvinces;
     },
     fluxFilterInput() {
-      this.fluxZonesArray = this.fluxZones.filter(x =>
+      this.fluxZonesArray = this.fluxZones.filter((x) =>
         x.origin.toUpperCase().startsWith(this.fluxFilterInput.toUpperCase())
       );
     },
     fluxFilterInputProvince() {
-      this.fluxProvincesArray = this.fluxProvinces.filter(x =>
+      this.fluxProvincesArray = this.fluxProvinces.filter((x) =>
         x.origin
           .toUpperCase()
           .startsWith(this.fluxFilterInputProvince.toUpperCase())
       );
-    }
+    },
   },
   mounted() {
     this.$store.watch(
-      state => state.flux.fluxGeoOptions,
-      value => {
-        this.$set(this.fluxForm, "fluxGeoOptions", value);
+      (state) => state.flux.fluxGeoOptions,
+      (value) => {
+        this.$set(this.fluxForm, 'fluxGeoOptions', value);
         if (
           this.fluxForm.observation_start &&
           this.fluxForm.observation_end &&
           this.fluxForm.fluxTimeGranularity
         ) {
-          this.$emit("submitFluxForm", this.fluxForm);
+          this.$emit('submitFluxForm', this.fluxForm);
         }
       }
     );
   },
   methods: {
     ...mapMutations([
-      "setFluxGeoGranularity",
-      "setFluxGeoOptions",
-      "setFluxEnabled"
+      'setFluxGeoGranularity',
+      'setFluxGeoOptions',
+      'setFluxEnabled',
     ]),
-    ...mapActions(["resetState"]),
+    ...mapActions(['resetState']),
     covidCaseToggle(checked) {
-      this.$emit("covidCaseChecked", checked);
+      this.$emit('covidCaseChecked', checked);
     },
     hospitalToggle(checked) {
-      this.$emit("hopitalChecked", checked);
+      this.$emit('hopitalChecked', checked);
     },
     medicalOrientationToggle(checked) {
-      this.$root.$emit("bv::toggle::collapse", "orientation_result_collapse");
+      this.$root.$emit('bv::toggle::collapse', 'orientation_result_collapse');
       if (checked) {
-        this.orientationSelected = "ALL";
+        this.orientationSelected = 'ALL';
       }
-      this.$emit("medicalOrientationChecked", checked);
+      this.$emit('medicalOrientationChecked', checked);
     },
     orientationChange(item) {
-      this.$emit("medicalOrientationChanged", item);
+      this.$emit('medicalOrientationChanged', item);
     },
     hasSondageToggle(checked) {
-      this.$root.$emit("bv::toggle::collapse", "has_sondage_collapse");
-      this.$emit("hasSondageChecked", checked);
+      this.$root.$emit('bv::toggle::collapse', 'has_sondage_collapse');
+      this.$emit('hasSondageChecked', checked);
     },
     worriedToggle(checked) {
-      this.$emit("worriedChecked", checked);
+      this.$emit('worriedChecked', checked);
     },
     catchVirusToggle(checked) {
-      this.$emit("catchVirusChecked", checked);
+      this.$emit('catchVirusChecked', checked);
     },
     price_increaseToggle(checked) {
-      this.$emit("priceIncreaseChecked", checked);
+      this.$emit('priceIncreaseChecked', checked);
     },
     maskToggle(checked) {
-      this.$emit("maskChecked", checked);
+      this.$emit('maskChecked', checked);
     },
     makalaToggle(checked) {
-      this.$emit("makalaChecked", checked);
+      this.$emit('makalaChecked', checked);
     },
     flourToggle(checked) {
-      this.$emit("flourChecked", checked);
+      this.$emit('flourChecked', checked);
     },
     antibacterial_gelToggle(checked) {
-      this.$emit("antiBacterialGelChecked", checked);
+      this.$emit('antiBacterialGelChecked', checked);
     },
     populationFluxToggle(checked) {
-      this.$root.$emit("bv::toggle::collapse", "populationFluxcollapse");
-      this.$emit("populationFluxChecked", checked);
+      this.$root.$emit('bv::toggle::collapse', 'populationFluxcollapse');
+      this.$emit('populationFluxChecked', checked);
       if (!checked) {
         this.fluxForm.filter_zone = [];
-        this.fluxFilterInput = "";
+        this.fluxFilterInput = '';
         this.fluxForm.origin = null;
         this.fluxForm.destination = null;
         this.IsfluxParameterCollapse = false;
@@ -565,15 +610,15 @@ export default {
       }
     },
     UpdatePreferenceDate({ startDate, endDate }) {
-      this.fluxForm.preference_start = moment(startDate).format("YYYY/MM/DD");
-      this.fluxForm.preference_end = moment(endDate).format("YYYY/MM/DD");
+      this.fluxForm.preference_start = moment(startDate).format('YYYY/MM/DD');
+      this.fluxForm.preference_end = moment(endDate).format('YYYY/MM/DD');
     },
     UpdateObservationDate({ startDate, endDate }) {
-      this.fluxForm.observation_start = moment(startDate).format("YYYY/MM/DD");
-      this.fluxForm.observation_end = moment(endDate).format("YYYY/MM/DD");
+      this.fluxForm.observation_start = moment(startDate).format('YYYY/MM/DD');
+      this.fluxForm.observation_end = moment(endDate).format('YYYY/MM/DD');
     },
     submitFluxForm() {
-      this.$emit("submitFluxForm", this.fluxForm);
+      this.$emit('submitFluxForm', this.fluxForm);
       this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
     },
     dateRangerPosition(dropdownList, component, { width, top, left, right }) {
@@ -607,45 +652,41 @@ export default {
       let preference_end = PREFERENCE_END;
       let observation_start = null;
       let observation_end = null;
-      let fluxGeoOptions = ["Gombe"];
+      let fluxGeoOptions = ['Gombe'];
       switch (value) {
         case 1:
           observation_start = this.moment().format(DATEFORMAT);
           observation_end = this.moment().format(DATEFORMAT);
           break;
         case 2:
-          observation_start = this.moment()
-            .startOf("week")
-            .format(DATEFORMAT);
-          observation_end = this.moment()
-            .endOf("week")
-            .format(DATEFORMAT);
+          observation_start = this.moment().startOf('week').format(DATEFORMAT);
+          observation_end = this.moment().endOf('week').format(DATEFORMAT);
           break;
         case 3:
           observation_start = this.moment(new Date())
-            .startOf("month")
+            .startOf('month')
             .format(DATEFORMAT);
           observation_end = this.moment(new Date())
-            .endOf("month")
+            .endOf('month')
             .format(DATEFORMAT);
           break;
         case 4:
           observation_start = this.moment()
-            .subtract(1, "months")
-            .startOf("month")
+            .subtract(1, 'months')
+            .startOf('month')
             .format(DATEFORMAT);
           observation_end = this.moment()
-            .subtract(1, "months")
-            .endOf("month")
+            .subtract(1, 'months')
+            .endOf('month')
             .format(DATEFORMAT);
           break;
         case 5:
-          observation_start = "2020-03-19";
+          observation_start = '2020-03-19';
           observation_end = this.moment().format(DATEFORMAT);
           break;
         case 6:
-          observation_start = "2020-03-19";
-          observation_end = "2020-08-12";
+          observation_start = '2020-03-19';
+          observation_end = '2020-08-12';
           break;
       }
 
@@ -656,27 +697,27 @@ export default {
         observation_start,
         observation_end,
         fluxTimeGranularity: 1,
-        fluxGeoGranularity: 2
+        fluxGeoGranularity: 2,
       };
 
       (this.dateRangeObservation = {
         startDate: new Date(observation_start),
-        endDate: new Date(observation_end)
+        endDate: new Date(observation_end),
       }),
         this.setFluxGeoOptions(this.fluxForm.fluxGeoOptions);
       this.setFluxGeoGranularity(this.fluxForm.fluxGeoGranularity);
-      this.$emit("submitFluxForm", this.fluxForm);
+      this.$emit('submitFluxForm', this.fluxForm);
     },
     mobilityDetailToggle() {
-      this.$root.$emit("bv::toggle::collapse", "mobilityDetail");
+      this.$root.$emit('bv::toggle::collapse', 'mobilityDetail');
       this.IsfluxParameterCollapse = !this.IsfluxParameterCollapse;
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .column-left {
   padding-top: 15px;
   padding-bottom: 15px;

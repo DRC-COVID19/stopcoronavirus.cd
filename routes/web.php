@@ -13,5 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/password-reset/{any}','DashBoardController@index')->name('dashboad.password.reset');
-Route::get('/{any?}','DashBoardController@index')->where('any', '^(?!api.*$).*');;
+Route::get('/password-reset/{any}', 'DashBoardController@index')->name(
+  'dashboad.password.reset'
+);
+Route::get('/{any?}', 'DashBoardController@index')->where(
+  'any',
+  '^(?!api.*$).*'
+);

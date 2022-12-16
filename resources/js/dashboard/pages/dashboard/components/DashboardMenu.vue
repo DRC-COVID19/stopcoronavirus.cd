@@ -25,7 +25,6 @@
         v-if="showLabel"
         >Rapport</span
       >
-
     </b-nav-item>
     <b-nav-item
       :active="activeMenu === 7"
@@ -33,61 +32,57 @@
       @click="selectMenu(7)"
     >
       <i class="fas fa-info-circle" aria-hidden="true"></i> &nbsp;
-      <span
-        v-if="showLabel"
-        >A propos</span
-      >
-
+      <span v-if="showLabel">A propos</span>
     </b-nav-item>
   </b-nav>
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex';
 
 export default {
-  data () {
+  data() {
     return {
-      showLabel: false
-    }
+      showLabel: false,
+    };
   },
   computed: {
     ...mapState({
-      activeMenu: (state) => state.nav.activeMenu
-    })
+      activeMenu: (state) => state.nav.activeMenu,
+    }),
   },
-  mounted () {
-    this.fillParametersFromUrlParams()
+  mounted() {
+    this.fillParametersFromUrlParams();
   },
   methods: {
     ...mapMutations(['setActiveMenu']),
-    selectMenu (value) {
-      this.showLabel = true
+    selectMenu(value) {
+      this.showLabel = true;
       if (this.activeMenu !== null) {
-        this.removeAllParamsFromUrl()
+        this.removeAllParamsFromUrl();
       }
-      this.setActiveMenu(value)
+      this.setActiveMenu(value);
       if (this.$route.name.match('main.dashboard.rapport')) {
-        this.showLabel = false
+        this.showLabel = false;
       }
     },
-    fillParametersFromUrlParams () {
+    fillParametersFromUrlParams() {
       if (this.$route.name === 'main.dashboard.infrastructure') {
-        this.selectMenu(5)
+        this.selectMenu(5);
       } else if (this.$route.name === 'main.dashboard.aPropos') {
-        this.selectMenu(7)
+        this.selectMenu(7);
       } else if (this.$route.name === 'main.dashboard.rapport') {
-        this.selectMenu(9)
+        this.selectMenu(9);
       } else {
-        this.selectMenu(1)
+        this.selectMenu(1);
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .nav {
   border-right: 8px solid $dash-background;
   height: 100%;

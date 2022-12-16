@@ -18,7 +18,6 @@ use App\Http\Resources\AdministratorResource;
  */
 class AdministratorController extends Controller
 {
-
   /**
    * Create a new instance.
    *
@@ -94,7 +93,8 @@ class AdministratorController extends Controller
     try {
       $administrators = Administrator::with(['roles'])
         // ->where('admin_role_users', '=', 'agent-hospital')
-        ->orderBy('name')->get();
+        ->orderBy('name')
+        ->get();
       return response()->json($administrators, 200);
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
@@ -123,7 +123,9 @@ class AdministratorController extends Controller
   public function store(Request $request)
   {
     if (!Auth::user()->isRole('administrator')) {
-      return response()->json(["message" => "Unauthenticated"])->setStatusCode(401);
+      return response()
+        ->json(['message' => 'Unauthenticated'])
+        ->setStatusCode(401);
     }
     $data = $this->form_validate($request->all());
     try {
@@ -180,9 +182,13 @@ class AdministratorController extends Controller
   public function show($admin_user_id)
   {
     try {
-
       $administrator = Administrator::find($admin_user_id);
-      return response()->json(AdministratorResource::make($administrator), 200, [], JSON_NUMERIC_CHECK);
+      return response()->json(
+        AdministratorResource::make($administrator),
+        200,
+        [],
+        JSON_NUMERIC_CHECK
+      );
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -233,16 +239,19 @@ class AdministratorController extends Controller
   public function update(Request $request, $admin_user_id)
   {
     $data = Validator::make($request->all(), [
-      'username'        => 'sometimes|string|unique:admin_users,username' . ($admin_user_id ? ",$admin_user_id" : ""),
-      'name'            => 'sometimes|string',
-      'avatar'          => 'nullable',
-      'remember_token'  => 'nullable',
-      'email'           => 'required|email',
-      'roles_id'        => 'required|array',
-      'hospitals_id'    => 'nullable|array',
-      'password'        => 'sometimes|confirmed',
-      'phone_number'    => 'sometimes|string|unique:admin_users,phone_number' . ($admin_user_id ? ",$admin_user_id" : ""),
-
+      'username' =>
+        'sometimes|string|unique:admin_users,username' .
+        ($admin_user_id ? ",$admin_user_id" : ''),
+      'name' => 'sometimes|string',
+      'avatar' => 'nullable',
+      'remember_token' => 'nullable',
+      'email' => 'required|email',
+      'roles_id' => 'required|array',
+      'hospitals_id' => 'nullable|array',
+      'password' => 'sometimes|confirmed',
+      'phone_number' =>
+        'sometimes|string|unique:admin_users,phone_number' .
+        ($admin_user_id ? ",$admin_user_id" : ''),
     ])->validate();
     try {
       DB::beginTransaction();
@@ -263,12 +272,18 @@ class AdministratorController extends Controller
           $hospital->update(['agent_id' => null]);
         }
       } else {
-        $hospital = Hospital::where('id', $data['hospitals_id'])
-          ->update(['agent_id' => $administrator->id]);
+        $hospital = Hospital::where('id', $data['hospitals_id'])->update([
+          'agent_id' => $administrator->id,
+        ]);
       }
 
       DB::commit();
-      return response()->json(AdministratorResource::make($administrator), 200, [], JSON_NUMERIC_CHECK);
+      return response()->json(
+        AdministratorResource::make($administrator),
+        200,
+        [],
+        JSON_NUMERIC_CHECK
+      );
     } catch (\Throwable $th) {
       DB::rollback();
       if (env('APP_DEBUG') == true) {
@@ -309,22 +324,25 @@ class AdministratorController extends Controller
   public function form_validate($data, $id = null)
   {
     return Validator::make($data, [
-      'username'        => 'required|string|unique:admin_users,username' . ($id ? ",$id" : ""),
-      'password'        => 'required|confirmed',
-      'name'            => 'required|string',
-      'avatar'          => 'nullable',
-      'remember_token'  => 'nullable',
-      'email'           => 'required|email',
-      'roles_id'        => 'required|array',
-      'hospitals_id'    => 'nullable|array',
-      'phone_number'    => 'required|string|unique:admin_users,phone_number',
+      'username' =>
+        'required|string|unique:admin_users,username' . ($id ? ",$id" : ''),
+      'password' => 'required|confirmed',
+      'name' => 'required|string',
+      'avatar' => 'nullable',
+      'remember_token' => 'nullable',
+      'email' => 'required|email',
+      'roles_id' => 'required|array',
+      'hospitals_id' => 'nullable|array',
+      'phone_number' => 'required|string|unique:admin_users,phone_number',
     ])->validate();
   }
 
   public function check_is_admin_user()
   {
     if (!Auth::user()->isRole('administrator')) {
-      return response()->json(["message" => "Unauthenticated"])->setStatusCode(401);
+      return response()
+        ->json(['message' => 'Unauthenticated'])
+        ->setStatusCode(401);
     }
     return null;
   }
@@ -333,9 +351,11 @@ class AdministratorController extends Controller
   {
     try {
       $key_words = $request->get('key_words');
-      $admins = Administrator::where('username', 'LIKE', "%{$key_words}%")->orWhere('name', 'LIKE', "%{$key_words}%")->paginate(15);
+      $admins = Administrator::where('username', 'LIKE', "%{$key_words}%")
+        ->orWhere('name', 'LIKE', "%{$key_words}%")
+        ->paginate(15);
       if (!$admins) {
-        return response()->json(['message' => "No admin found"], 404);
+        return response()->json(['message' => 'No admin found'], 404);
       }
       return AdministratorResource::collection($admins);
     } catch (\Throwable $th) {

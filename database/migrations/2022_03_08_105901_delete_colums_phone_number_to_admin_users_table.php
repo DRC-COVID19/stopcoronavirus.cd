@@ -6,27 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 class DeleteColumsPhoneNumberToAdminUsersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            //
-        });
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::table('users', function (Blueprint $table) {
+      //
+    });
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('phoneNumber');
-        });
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    Schema::table('users', function (Blueprint $table) {
+      $table->dropColumn('phoneNumber');
+    });
+  }
 }

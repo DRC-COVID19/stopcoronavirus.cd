@@ -1,52 +1,52 @@
 <template>
   <b-row class="legend-container">
     <b-col cols="12">
-        <div class="legend">
-          <div class="no-data">
-            <span class="lbl mb-1">Aucune donnée</span>
+      <div class="legend">
+        <div class="no-data">
+          <span class="lbl mb-1">Aucune donnée</span>
+          <div
+            class="range empty"
+            :style="'background-color : ' + color_nodata"
+            :class="{
+              hover: legendHover !== null && legendHover.de === null,
+            }"
+            @mouseenter="setLegendHover({ de: null, a: null })"
+            @mouseleave="setLegendHover(null)"
+          ></div>
+        </div>
+        <div class="datas">
+          <div class="inner" v-for="(data, i) in colors[color]" :key="i">
+            <span class="lbl">
+              {{ valDe(i) }}
+            </span>
+
             <div
-              class="range empty"
-              :style="'background-color : ' + color_nodata"
+              class="range"
+              :style="'background-color :' + data"
               :class="{
-                hover: legendHover !== null && legendHover.de === null,
+                hover: legendHover !== null && legendHover.de == valDe(i),
               }"
-              @mouseenter="setLegendHover({ de: null, a: null })"
+              @mouseenter="setLegendHover({ de: valDe(i), a: valDe(i + 1) })"
               @mouseleave="setLegendHover(null)"
             ></div>
           </div>
-          <div class="datas">
-            <div class="inner" v-for="(data, i) in colors[color]" :key="i">
-              <span class="lbl">
-                {{ valDe(i) }}
-              </span>
-
-              <div
-                class="range"
-                :style="'background-color :' + data"
-                :class="{
-                  hover: legendHover !== null && legendHover.de == valDe(i),
-                }"
-                @mouseenter="setLegendHover({ de: valDe(i), a: valDe(i + 1) })"
-                @mouseleave="setLegendHover(null)"
-              ></div>
-            </div>
-            <div class="inner inner-last">
-              <span class="lbl">
-                {{ lastValue }}
-              </span>
-            </div>
+          <div class="inner inner-last">
+            <span class="lbl">
+              {{ lastValue }}
+            </span>
           </div>
         </div>
+      </div>
     </b-col>
   </b-row>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState } from "vuex";
-import { PALETTE } from "../config/env";
+import { mapGetters, mapMutations, mapState } from 'vuex';
+import { PALETTE } from '../config/env';
 
 export default {
-  name: "Legend",
+  name: 'Legend',
   data: function () {
     return {
       colors: [
@@ -59,14 +59,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["fluxType", "legendHover"]),
+    ...mapGetters(['fluxType', 'legendHover']),
     ...mapState({
       domaineExtValues: (state) => state.flux.domaineExtValues,
       afriFluxType: (state) => state.flux.afriFluxType,
       selectedSource: (state) => state.flux.selectedSource,
     }),
     suffix: function () {
-      return this.domaineExtValues.isPercent ? "%" : "";
+      return this.domaineExtValues.isPercent ? '%' : '';
     },
     color: function () {
       if (this.selectedSource == 1) {
@@ -94,38 +94,38 @@ export default {
       if (this.domaineExtValues.max <= 0) return 100;
       else {
         const value = Math.ceil(this.domaineExtValues.max);
-        return isNaN(value) ? "" : value + this.suffix;
+        return isNaN(value) ? '' : value + this.suffix;
       }
     },
   },
   methods: {
-    ...mapMutations(["setLegendHover"]),
+    ...mapMutations(['setLegendHover']),
     valDe: function (i) {
       if (this.domaineExtValues.min >= 0) {
         switch (i) {
           case 0:
-            return "-100%";
+            return '-100%';
           case 1:
-            return "-80%";
+            return '-80%';
           case 2:
-            return "-60%";
+            return '-60%';
           case 3:
-            return "-40%";
+            return '-40%';
           case 4:
-            return "-20%";
+            return '-20%';
         }
       } else if (this.domaineExtValues.max <= 0) {
         switch (i) {
           case 5:
-            return "0%";
+            return '0%';
           case 6:
-            return "20%";
+            return '20%';
           case 7:
-            return "40%";
+            return '40%';
           case 8:
-            return "60%";
+            return '60%';
           case 9:
-            return "80%";
+            return '80%';
         }
       }
 
@@ -135,10 +135,10 @@ export default {
         const value = Math.floor(
           this.domaineExtValues.min + i * this.pourcentNegatif
         );
-        return isNaN(value) ? "" : value + this.suffix;
+        return isNaN(value) ? '' : value + this.suffix;
       } else {
         const value = Math.floor((i - 5) * this.pourcentPositif);
-        return isNaN(value) ? "" : value + this.suffix;
+        return isNaN(value) ? '' : value + this.suffix;
       }
     },
   },
@@ -146,4 +146,3 @@ export default {
 </script>
 
 <style scoped></style>
-

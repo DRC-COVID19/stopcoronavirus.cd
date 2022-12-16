@@ -1,5 +1,11 @@
 <template>
-  <b-modal centered id="my-modal-bookmark" v-model="showModalAxe" hide-header hide-footer>
+  <b-modal
+    centered
+    id="my-modal-bookmark"
+    v-model="showModalAxe"
+    hide-header
+    hide-footer
+  >
     <b-row>
       <ValidationObserver
         v-slot="{ invalid }"
@@ -8,30 +14,30 @@
         novalidate
         @submit.prevent="onSubmit"
       >
-        <b-form
-          @submit.prevent="onSubmit"
-        >
-        <b-form-group>
-        <label for="titleId"
-          >Saisir le nom du Bookmark <span class="text-danger">*</span></label>
-          <FormFieldInput
-            v-model="form.title"
-            type="text"
-            id="input-1"
-            rules="required"
-            name="Titre du Bookmark"
-            mode="aggressive"
-            style="width:435px"
-          />
-          <b-form-text id="title-help-block" class="mb-1"
-            ><span class="text-danger"></span
-          ></b-form-text>
-        </b-form-group>
+        <b-form @submit.prevent="onSubmit">
+          <b-form-group>
+            <label for="titleId"
+              >Saisir le nom du Bookmark
+              <span class="text-danger">*</span></label
+            >
+            <FormFieldInput
+              v-model="form.title"
+              type="text"
+              id="input-1"
+              rules="required"
+              name="Titre du Bookmark"
+              mode="aggressive"
+              style="width: 435px"
+            />
+            <b-form-text id="title-help-block" class="mb-1"
+              ><span class="text-danger"></span
+            ></b-form-text>
+          </b-form-group>
           <b-row>
             <b-button
-            type="submit"
-            variant="primary"
-            :disabled="invalid ? true : false"
+              type="submit"
+              variant="primary"
+              :disabled="invalid ? true : false"
             >
               <small>Enregistrer</small>
             </b-button>
@@ -42,69 +48,67 @@
   </b-modal>
 </template>
 <script>
-import { mapActions } from 'vuex'
-import { ValidationObserver } from 'vee-validate'
-import FormFieldInput from '../../../../components/forms/FormFieldInput.vue'
+import { mapActions } from 'vuex';
+import { ValidationObserver } from 'vee-validate';
+import FormFieldInput from '../../../../components/forms/FormFieldInput.vue';
 export default {
   components: {
     ValidationObserver,
-    FormFieldInput
+    FormFieldInput,
   },
   props: {
     dataBookmark: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     modalShow: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
-  data () {
+  data() {
     return {
       form: {
-        title: ''
+        title: '',
       },
-      showModalAxe: this.modalShow
-    }
+      showModalAxe: this.modalShow,
+    };
   },
   watch: {
-    modalShow () {
-      this.showModalAxe = this.modalShow
-    }
+    modalShow() {
+      this.showModalAxe = this.modalShow;
+    },
   },
   methods: {
-    ...mapActions([
-      'createBookmark'
-    ]),
-    onSubmit () {
+    ...mapActions(['createBookmark']),
+    onSubmit() {
       this.createBookmark({
         ...this.dataBookmark,
-        name: this.form.title
+        name: this.form.title,
       })
         .then(() => {
           this.$notify({
             group: 'alert',
             title: 'Bookmark',
             text: 'Bookmark ajouter avec succès',
-            type: 'success'
-          })
-          this.$bvModal.hide('my-modal-bookmark')
-          this.$emit('onSubmitBookmark')
+            type: 'success',
+          });
+          this.$bvModal.hide('my-modal-bookmark');
+          this.$emit('onSubmitBookmark');
         })
         .catch(({ response }) => {
           this.$notify({
             group: 'alert',
             title: 'Bookmark',
             text: 'Une erreur est survenus',
-            type: 'error'
-          })
-          this.$bvModal.hide('my-modal-bookmark')
-          console.log(response)
-        })
-    }
-  }
-}
+            type: 'error',
+          });
+          this.$bvModal.hide('my-modal-bookmark');
+          console.log(response);
+        });
+    },
+  },
+};
 </script>

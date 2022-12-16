@@ -6,15 +6,15 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from "vuex";
-import HeaderNavigation from "./FormDetailHeaderNavigation.vue";
-import HeaderMenu from "./FormDetailHeaderMenu.vue";
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex';
+import HeaderNavigation from './FormDetailHeaderNavigation.vue';
+import HeaderMenu from './FormDetailHeaderMenu.vue';
 
 import {
   ADMINISTRATOR,
   CREATE_FORM,
   EDIT_FORM,
-} from "../../../../../../config/env";
+} from '../../../../../../config/env';
 
 export default {
   components: {
@@ -33,7 +33,7 @@ export default {
       activeMenu: (state) => state.nav.activeMenu,
       changeLogs: (state) => state.app.changeLogs,
     }),
-    ...mapGetters(["getChangeLogNotRead"]),
+    ...mapGetters(['getChangeLogNotRead']),
 
     canViewForm() {
       return (
@@ -45,8 +45,8 @@ export default {
   },
   mounted() {},
   methods: {
-    ...mapActions(["logout", "setChangeLogsRead"]),
-    ...mapMutations(["setActiveMenu", "setSelectedChangeLog"]),
+    ...mapActions(['logout', 'setChangeLogsRead']),
+    ...mapMutations(['setActiveMenu', 'setSelectedChangeLog']),
     userAvatarMouseEnter() {
       this.showUserCard = true;
     },
@@ -56,7 +56,7 @@ export default {
     userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: "login",
+          name: 'login',
         });
       });
     },
@@ -78,7 +78,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .form-detail-header {
   top: 0;
 }

@@ -9,7 +9,13 @@
         md="6"
         class="map-form-logo d-flex justify-content-center justify-content-md-end"
       >
-        <img src="/img/partener2.png" height="30" width="100" class="img-fluid" alt />
+        <img
+          src="/img/partener2.png"
+          height="30"
+          width="100"
+          class="img-fluid"
+          alt
+        />
         <div
           @mouseleave="userAvatarMouseLeave"
           @mouseenter="userAvatarMouseEnter"
@@ -26,13 +32,17 @@
           />
           <b-card class="user-card text-center" v-if="showUserCard">
             <p>
-              <span class="d-block">{{user.username}}</span>
-              <span class="d-block">{{user.name}}</span>
-              <span class="d-block" v-if="user.email">{{user.email}}</span>
+              <span class="d-block">{{ user.username }}</span>
+              <span class="d-block">{{ user.name }}</span>
+              <span class="d-block" v-if="user.email">{{ user.email }}</span>
 
-              <router-link class="small" :to="{name : 'main'}">Revenir à l'accueil</router-link>
+              <router-link class="small" :to="{ name: 'main' }"
+                >Revenir à l'accueil</router-link
+              >
             </p>
-            <b-button @click="userLogout" variant="danger" block>Deconnexion</b-button>
+            <b-button @click="userLogout" variant="danger" block
+              >Deconnexion</b-button
+            >
           </b-card>
         </div>
       </b-col>
@@ -41,20 +51,20 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from 'vuex';
 export default {
   data() {
     return {
-      showUserCard: false
+      showUserCard: false,
     };
   },
   computed: {
     ...mapState({
-      user: state => state.auth.user
-    })
+      user: (state) => state.auth.user,
+    }),
   },
   methods: {
-    ...mapActions(["logout"]),
+    ...mapActions(['logout']),
     userAvatarMouseEnter() {
       this.showUserCard = true;
     },
@@ -64,17 +74,16 @@ export default {
     userLogout() {
       this.logout().then(() => {
         this.$router.push({
-          name: "login"
+          name: 'login',
         });
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
-
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .header {
   padding: 12px 24px;
   background: white;

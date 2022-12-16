@@ -6,23 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 class DropTableProvinceSmsDiffusions extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::dropIfExists('province_sms_diffusions');
-    }
+  /**
+   * Run the migrations.
+   *
+   * @return void
+   */
+  public function up()
+  {
+    Schema::dropIfExists('province_sms_diffusions');
+  }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        //
-    }
+  /**
+   * Reverse the migrations.
+   *
+   * @return void
+   */
+  public function down()
+  {
+    //
+  }
 }

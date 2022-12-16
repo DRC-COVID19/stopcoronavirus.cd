@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
-import Timeline from "timeline-vuejs";
+import { mapGetters, mapMutations } from 'vuex';
+import Timeline from 'timeline-vuejs';
 
 export default {
   components: {
@@ -40,19 +40,19 @@ export default {
   props: {
     id: {
       type: String,
-      default: "message-modal-id",
+      default: 'message-modal-id',
     },
   },
   data() {
     return {
-      messageWhenNoItems: "There are not items",
+      messageWhenNoItems: 'There are not items',
     };
   },
   computed: {
-    ...mapGetters(["getChangeLogNotRead"]),
+    ...mapGetters(['getChangeLogNotRead']),
   },
   methods: {
-    ...mapMutations(["setActiveMenu"]),
+    ...mapMutations(['setActiveMenu']),
     gotoAboutPage() {
       this.setActiveMenu(7);
       this.$bvModal.hide(this.id);
@@ -61,5 +61,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

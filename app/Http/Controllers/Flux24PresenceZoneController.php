@@ -19,15 +19,20 @@ class Flux24PresenceZoneController extends Controller
     //
   }
 
-
-
-
   public function getFlux24PresenceDailyInZone(Request $request)
   {
     $data = $this->fluxValidator($request->all());
     try {
-      $flux = Flux24PresenceZone::select(['Date as date', 'Zone as zone', 'PresenceType', DB::raw('sum("Volume")as volume,WEEKDAY("Date") AS day')])
-        ->whereBetween('Date', [$data['observation_start'], $data['observation_end']])
+      $flux = Flux24PresenceZone::select([
+        'Date as date',
+        'Zone as zone',
+        'PresenceType',
+        DB::raw('sum("Volume")as volume,WEEKDAY("Date") AS day'),
+      ])
+        ->whereBetween('Date', [
+          $data['observation_start'],
+          $data['observation_end'],
+        ])
         ->WhereIn('Zone', $data['fluxGeoOptions'])
         ->groupBy('Date', 'Zone', 'day', 'PresenceType')
         ->orderBy('Date')
@@ -35,17 +40,30 @@ class Flux24PresenceZoneController extends Controller
 
       $fluxRefences = [];
       if (isset($data['preference_start']) && isset($data['preference_end'])) {
-        $fluxRefences = Flux24PresenceZone::select(['Zone as zone', 'Date as date', 'PresenceType', DB::raw('sum("Volume")as volume,WEEKDAY("Date") AS day')])
-          ->whereBetween('Date', [$data['preference_start'], $data['preference_end']])
+        $fluxRefences = Flux24PresenceZone::select([
+          'Zone as zone',
+          'Date as date',
+          'PresenceType',
+          DB::raw('sum("Volume")as volume,WEEKDAY("Date") AS day'),
+        ])
+          ->whereBetween('Date', [
+            $data['preference_start'],
+            $data['preference_end'],
+          ])
           ->WhereIn('Zone', $data['fluxGeoOptions'])
           ->groupBy('day', 'Zone', 'Date', 'PresenceType')
           ->orderBy('Date')
           ->get();
       }
-      return response()->json([
-        'references' => $fluxRefences,
-        'observations' => $flux,
-      ],200,[],JSON_NUMERIC_CHECK);
+      return response()->json(
+        [
+          'references' => $fluxRefences,
+          'observations' => $flux,
+        ],
+        200,
+        [],
+        JSON_NUMERIC_CHECK
+      );
     } catch (\Throwable $th) {
       if (env('APP_DEBUG') == true) {
         return response($th)->setStatusCode(500);
@@ -82,8 +100,10 @@ class Flux24PresenceZoneController extends Controller
    * @param  \App\Flux24PresenceZone  $flux24PresenceZone
    * @return \Illuminate\Http\Response
    */
-  public function update(Request $request, Flux24PresenceZone $flux24PresenceZone)
-  {
+  public function update(
+    Request $request,
+    Flux24PresenceZone $flux24PresenceZone
+  ) {
     //
   }
 
@@ -98,13 +118,13 @@ class Flux24PresenceZoneController extends Controller
     //
   }
 
-
   public function fluxValidator($inputData)
   {
-    return  Validator::make($inputData, [
+    return Validator::make($inputData, [
       'fluxGeoOptions' => 'required|array',
       'preference_start' => 'nullable|date|before_or_equal:preference_end',
-      'preference_end' => 'nullable|date|before:observation_start|required_with:preference_start',
+      'preference_end' =>
+        'nullable|date|before:observation_start|required_with:preference_start',
       'observation_start' => 'date|required|before_or_equal:observation_end',
       'observation_end' => 'date|required|after_or_equal:observation_start',
     ])->validate();

@@ -17,7 +17,10 @@ class CreateFlux24ZoneHotspotTable extends Migration
       $table->id();
       $table->date('date')->nullable();
       $table->string('Observation_Zone')->nullable();
-      $table->float('volume')->default(0)->nullable();
+      $table
+        ->float('volume')
+        ->default(0)
+        ->nullable();
       $table->timestamps();
     });
   }

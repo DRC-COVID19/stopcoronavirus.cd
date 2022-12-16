@@ -14,11 +14,10 @@
     <b-nav-item
       v-if="canViewAdmin"
       :to="{ name: 'admin.conflict.form' }"
-      :active="
-        $route.name.startsWith('admin.conflict.form')
-      "
+      :active="$route.name.startsWith('admin.conflict.form')"
     >
-      <i class="fas fa-close" aria-hidden="true"></i> &nbsp; Gestion des conflicts
+      <i class="fas fa-close" aria-hidden="true"></i> &nbsp; Gestion des
+      conflicts
     </b-nav-item>
     <b-nav-item
       v-if="canViewAgent"
@@ -39,37 +38,36 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
-import { ADMIN_HOSPITAL, AGENT_HOSPITAL } from '../../../config/env'
+import { mapState, mapActions } from 'vuex';
+import { ADMIN_HOSPITAL, AGENT_HOSPITAL } from '../../../config/env';
 export default {
   computed: {
     ...mapState({
-      user: (state) => state.auth.user
+      user: (state) => state.auth.user,
     }),
-    canViewAdmin () {
-      return this.userHaveRole(ADMIN_HOSPITAL)
+    canViewAdmin() {
+      return this.userHaveRole(ADMIN_HOSPITAL);
     },
-    canViewAgent () {
+    canViewAgent() {
       if (this.user.hospital) {
-        return this.userHaveRole(AGENT_HOSPITAL)
+        return this.userHaveRole(AGENT_HOSPITAL);
       }
-      return ''
-    }
+      return '';
+    },
   },
 
   methods: {
     ...mapActions(['setNotification', 'notificationCreated']),
-    async setNotificationToRead () {
-      await this.setNotification({ id: this.user.hospital.id })
-      this.notificationCreated()
-    }
-  }
-
-}
+    async setNotificationToRead() {
+      await this.setNotification({ id: this.user.hospital.id });
+      this.notificationCreated();
+    },
+  },
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .nav {
   border-right: 8px solid $dash-background;
   height: 100%;

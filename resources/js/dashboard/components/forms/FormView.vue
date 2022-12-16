@@ -16,10 +16,16 @@
         </b-row>
 
         <b-row>
-          <b-col lg="8" class="d-flex justify-content-center container-preview-title-form w-100 mb-3 flex-wrap">
-            <h3 v-if="targetForm.title" class="text-white text-center w-100"> {{ targetForm.title.toUpperCase() || 'Formulaire'}} </h3>
+          <b-col
+            lg="8"
+            class="d-flex justify-content-center container-preview-title-form w-100 mb-3 flex-wrap"
+          >
+            <h3 v-if="targetForm.title" class="text-white text-center w-100">
+              {{ targetForm.title.toUpperCase() || 'Formulaire' }}
+            </h3>
             <h4 v-if="isUpdateMode">
-              Modifier la mise à jour du {{ moment(completedForm.last_update).format("DD/MM/Y") }}
+              Modifier la mise à jour du
+              {{ moment(completedForm.last_update).format('DD/MM/Y') }}
             </h4>
           </b-col>
         </b-row>
@@ -27,9 +33,17 @@
         <ValidationObserver v-slot="{ handleSubmit, valid }" ref="form">
           <form @submit.prevent="handleSubmit()">
             <b-row class="mt-4">
-              <b-col lg="8" v-if="targetForm.form_steps && targetForm.form_steps.length > 0" class="px-0">
+              <b-col
+                lg="8"
+                v-if="targetForm.form_steps && targetForm.form_steps.length > 0"
+                class="px-0"
+              >
                 <b-card class="text-center card-step default-card">
-                  <span v-if="!submitStep"> {{ targetForm.form_steps[currentStep - 1].title.toUpperCase() }}</span>
+                  <span v-if="!submitStep">
+                    {{
+                      targetForm.form_steps[currentStep - 1].title.toUpperCase()
+                    }}</span
+                  >
                   <span v-else> Confirmation </span>
                 </b-card>
 
@@ -37,30 +51,44 @@
                   <strong>*</strong> Champs requis
                 </b-card>
 
-                <div v-if="!submitStep && targetForm.form_steps[currentStep - 1].form_fields.length > 0">
+                <div
+                  v-if="
+                    !submitStep &&
+                    targetForm.form_steps[currentStep - 1].form_fields.length >
+                      0
+                  "
+                >
                   <b-card
-                    v-for="(formField, counter) in targetForm.form_steps[currentStep - 1].form_fields"
+                    v-for="(formField, counter) in targetForm.form_steps[
+                      currentStep - 1
+                    ].form_fields"
                     :key="counter"
                     class="default-card mb-3 field-card"
                   >
-                      <b-form-group
-                        :label="formField.rules && formField.rules.match(/required/i)  ? formField.name + ' * ' : formField.name"
-                        :label-for="formField.name"
-                      >
-                        <b-row>
-                          <b-col class="col-sm-12 col-md-12">
-                            <FormFieldInput
-                              v-model=" completedForm.completed_form_fields[formField.id]"
-                              :type="formField.form_field_type.name"
-                              :placeholder="`Entrer ${formField.name}`"
-                              :id="formField.name"
-                              :name="formField.name"
-                              :rules="formField.rules"
-                              :default-value="formField.default_value"
-                            />
-                          </b-col>
-                        </b-row>
-                      </b-form-group>
+                    <b-form-group
+                      :label="
+                        formField.rules && formField.rules.match(/required/i)
+                          ? formField.name + ' * '
+                          : formField.name
+                      "
+                      :label-for="formField.name"
+                    >
+                      <b-row>
+                        <b-col class="col-sm-12 col-md-12">
+                          <FormFieldInput
+                            v-model="
+                              completedForm.completed_form_fields[formField.id]
+                            "
+                            :type="formField.form_field_type.name"
+                            :placeholder="`Entrer ${formField.name}`"
+                            :id="formField.name"
+                            :name="formField.name"
+                            :rules="formField.rules"
+                            :default-value="formField.default_value"
+                          />
+                        </b-col>
+                      </b-row>
+                    </b-form-group>
                   </b-card>
                 </div>
                 <div v-else-if="submitStep">
@@ -70,7 +98,10 @@
                       variant="warning"
                       v-if="!user.isHospitalAdmin"
                     >
-                      <p class="text-center mb-0"> NB: Une soumission ne peut plus être modifiée après 24 heures! </p>
+                      <p class="text-center mb-0">
+                        NB: Une soumission ne peut plus être modifiée après 24
+                        heures!
+                      </p>
                     </b-alert>
                     <b-form-group class="no-border">
                       <div
@@ -78,9 +109,13 @@
                         v-if="isLastUpdateChecking"
                       >
                         <b-spinner class="align-middle" />
-                        <strong>Verification de la date de Mise a jour...</strong>
+                        <strong
+                          >Verification de la date de Mise a jour...</strong
+                        >
                       </div>
-                      <label for="last_update" class="text-dash-color">Sélectionnez la date *</label>
+                      <label for="last_update" class="text-dash-color"
+                        >Sélectionnez la date *</label
+                      >
                       <FormFieldInput
                         v-model="completedForm.last_update"
                         :max-date="maxDate"
@@ -95,15 +130,20 @@
                     </b-form-group>
                   </b-card>
                 </div>
-                <b-card v-else class="default-card text-muted text-center">Aucun champ créer pour l'instant</b-card>
+                <b-card v-else class="default-card text-muted text-center"
+                  >Aucun champ créer pour l'instant</b-card
+                >
               </b-col>
               <b-col lg="8" v-else-if="!isLoading">
                 <p>Aucune étape n'a été créée pour l'instant</p>
               </b-col>
             </b-row>
 
-            <b-row  class="mt-4">
-              <b-col lg="8" class="px-0 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+            <b-row class="mt-4">
+              <b-col
+                lg="8"
+                class="px-0 d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center"
+              >
                 <b-col lg="auto" class="px-0 text-center text-md-left mr-md-3">
                   <b-button
                     :disabled="currentStep === 1"
@@ -116,8 +156,13 @@
                   </b-button>
                 </b-col>
 
-                <b-col lg class="d-flex flex-wrap align-items-center justify-content-center my-4 my-md-0">
-                  <div class="mx-4 my-2 d-flex col align-items-center justify-content-center">
+                <b-col
+                  lg
+                  class="d-flex flex-wrap align-items-center justify-content-center my-4 my-md-0"
+                >
+                  <div
+                    class="mx-4 my-2 d-flex col align-items-center justify-content-center"
+                  >
                     <div class="col d-none d-lg-block">
                       <b-progress
                         :value="currentStep"
@@ -127,7 +172,10 @@
                       >
                       </b-progress>
                     </div>
-                    <small class="font-weight-bold">Etape {{ currentStep }} sur {{ targetForm.form_steps.length + 1 }}</small>
+                    <small class="font-weight-bold"
+                      >Etape {{ currentStep }} sur
+                      {{ targetForm.form_steps.length + 1 }}</small
+                    >
                   </div>
                   <div class="my-2">
                     <b-pagination
@@ -162,19 +210,19 @@
               </b-col>
             </b-row>
           </form>
-      </ValidationObserver>
+        </ValidationObserver>
       </div>
     </b-container>
     <ManagerUserName />
   </b-container>
 </template>
 <script>
-import FormFieldInput from './FormFieldInput.vue'
-import Loading from '../Loading'
-import ManagerUserName from '../hospital/ManagerUserName'
+import FormFieldInput from './FormFieldInput.vue';
+import Loading from '../Loading';
+import ManagerUserName from '../hospital/ManagerUserName';
 
-import { mapState, mapActions } from 'vuex'
-import { ValidationObserver } from 'vee-validate'
+import { mapState, mapActions } from 'vuex';
+import { ValidationObserver } from 'vee-validate';
 
 export default {
   components: { FormFieldInput, Loading, ValidationObserver, ManagerUserName },
@@ -186,10 +234,12 @@ export default {
     formId: [Number, String],
     containerToScroll: {
       type: [HTMLDivElement, Window],
-      default: () => { return window }
-    }
+      default: () => {
+        return window;
+      },
+    },
   },
-  data () {
+  data() {
     return {
       targetForm: {},
       currentStep: 1,
@@ -197,74 +247,80 @@ export default {
       maxStepReached: 1,
       completedForm: {
         completed_form_fields: {},
-        checkLastUpdate: null
+        checkLastUpdate: null,
       },
       isLoading: false,
       isLastUpdateChecking: false,
       maxDate: new Date(),
-      completedFormFields: []
-    }
+      completedFormFields: [],
+    };
   },
-  async mounted () {
-    this.isLoading = true
-    this.targetForm = await this.formShow({ id: this.formId })
+  async mounted() {
+    this.isLoading = true;
+    this.targetForm = await this.formShow({ id: this.formId });
     if (this.isUpdateMode) {
-      this.getCompletedFormFields()
+      this.getCompletedFormFields();
     }
     if (!this.hospitalManagerName && !this.preview) {
-      this.$bvModal.show('nameModal')
+      this.$bvModal.show('nameModal');
     }
-    this.isLoading = false
+    this.isLoading = false;
   },
   computed: {
     ...mapState({
       user: (state) => state.auth.user,
       hospitalManagerName: (state) => state.hospital.hospitalManagerName,
-      hospitalManagerFirstName: (state) => state.hospital.hospitalManagerFirstName
+      hospitalManagerFirstName: (state) =>
+        state.hospital.hospitalManagerFirstName,
     }),
-    submitStep () {
-      return this.currentStep === this.targetForm.form_steps.length + 1
+    submitStep() {
+      return this.currentStep === this.targetForm.form_steps.length + 1;
     },
-    isUpdateMode () {
-      return !!this.completedFormId
-    }
+    isUpdateMode() {
+      return !!this.completedFormId;
+    },
   },
   watch: {
-    currentStep (value) {
-      this.currentStepPaginate = value
+    currentStep(value) {
+      this.currentStepPaginate = value;
       if (value > this.maxStepReached) {
-        this.maxStepReached = value
+        this.maxStepReached = value;
       }
-      this.$refs.form.reset()
-      this.containerToScroll.scrollTo({ top: 0, behavior: 'smooth' })
+      this.$refs.form.reset();
+      this.containerToScroll.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    currentStepPaginate (value) {
+    currentStepPaginate(value) {
       if (value === this.currentStep) {
-        return true
+        return true;
       }
-      if (this.currentStep === this.maxStepReached && value < this.currentStep) {
-        this.currentStep = value
+      if (
+        this.currentStep === this.maxStepReached &&
+        value < this.currentStep
+      ) {
+        this.currentStep = value;
       } else {
-        this.$refs.form.validate().then(success => {
+        this.$refs.form.validate().then((success) => {
           if (success) {
             if (this.maxStepReached + 1 < value && !this.isUpdateMode) {
               this.$notify({
                 group: 'alert',
                 title: 'Attention',
-                text: "Vous n'avez pas encore soumis l'étape " + this.maxStepReached,
-                type: 'error'
-              })
-              this.currentStepPaginate = this.currentStep
+                text:
+                  "Vous n'avez pas encore soumis l'étape " +
+                  this.maxStepReached,
+                type: 'error',
+              });
+              this.currentStepPaginate = this.currentStep;
             } else {
-              this.currentStep = value
+              this.currentStep = value;
             }
           } else {
-            this.showWarningErrorOnForm()
-            this.currentStepPaginate = this.currentStep
+            this.showWarningErrorOnForm();
+            this.currentStepPaginate = this.currentStep;
           }
-        })
+        });
       }
-    }
+    },
   },
   methods: {
     ...mapActions([
@@ -272,114 +328,135 @@ export default {
       'completedForm__store',
       'completedForm__update',
       'completedForm__checkLastUpdate',
-      'completedForm__show'
+      'completedForm__show',
     ]),
-    onNextStep () {
-      this.$refs.form.validate().then(success => {
+    onNextStep() {
+      this.$refs.form.validate().then((success) => {
         if (success) {
           if (this.currentStep + 1 <= this.targetForm.form_steps.length + 1) {
-            this.currentStep++
+            this.currentStep++;
           }
         } else {
-          this.showWarningErrorOnForm()
+          this.showWarningErrorOnForm();
         }
-      })
+      });
     },
-    onPrevStep () {
-      if (this.currentStep - 1 >= 1 && this.currentStep === this.maxStepReached) {
-        this.currentStep--
+    onPrevStep() {
+      if (
+        this.currentStep - 1 >= 1 &&
+        this.currentStep === this.maxStepReached
+      ) {
+        this.currentStep--;
       } else {
-        this.$refs.form.validate().then(success => {
+        this.$refs.form.validate().then((success) => {
           if (success) {
             if (this.currentStep - 1 >= 1) {
-              this.currentStep--
+              this.currentStep--;
             }
           } else {
-            this.showWarningErrorOnForm()
+            this.showWarningErrorOnForm();
           }
-        })
+        });
       }
     },
-    showWarningErrorOnForm () {
+    showWarningErrorOnForm() {
       this.$notify({
         group: 'alert',
         title: 'Attention',
         text: "Veuillez tout d'abord corriger les erreurs sur le formulaire",
-        type: 'error'
-      })
+        type: 'error',
+      });
     },
-    async selectLastUpdate () {
+    async selectLastUpdate() {
       if (this.preview || !this.completedForm.last_update) {
-        return false
+        return false;
       }
-      this.isLastUpdateChecking = true
+      this.isLastUpdateChecking = true;
       try {
-        this.completedForm.checkLastUpdate = await this.completedForm__checkLastUpdate({
-          hospital_id: this.hospitalId,
-          form_id: this.formId,
-          last_update: this.moment(this.completedForm.last_update).format('YYYY-MM-DD')
-        })
-        this.isLastUpdateChecking = false
+        this.completedForm.checkLastUpdate =
+          await this.completedForm__checkLastUpdate({
+            hospital_id: this.hospitalId,
+            form_id: this.formId,
+            last_update: this.moment(this.completedForm.last_update).format(
+              'YYYY-MM-DD'
+            ),
+          });
+        this.isLastUpdateChecking = false;
       } catch (error) {
-        this.isLastUpdateChecking = false
+        this.isLastUpdateChecking = false;
       }
 
       if (this.completedForm.checkLastUpdate && !this.isUpdateMode) {
         this.$notify({
           group: 'alert',
           title: 'Erreur',
-          text: `Le ${this.moment(this.completedForm.last_update).format('DD/MM/Y')} a déjà une soumission. Veuillez choisir une autre date SVP!`,
-          type: 'error'
-        })
-        this.$set(this.completedForm, 'last_update', null)
-      } else if (this.completedForm.checkLastUpdate === 0 && !this.isUpdateMode) {
+          text: `Le ${this.moment(this.completedForm.last_update).format(
+            'DD/MM/Y'
+          )} a déjà une soumission. Veuillez choisir une autre date SVP!`,
+          type: 'error',
+        });
+        this.$set(this.completedForm, 'last_update', null);
+      } else if (
+        this.completedForm.checkLastUpdate === 0 &&
+        !this.isUpdateMode
+      ) {
         this.$notify({
           group: 'alert',
           title: 'Success',
           text: 'Aucune soumission constatée en cette date',
-          type: 'success'
-        })
+          type: 'success',
+        });
       }
     },
-    async getCompletedFormFields () {
+    async getCompletedFormFields() {
       this.completedForm = await this.completedForm__show({
-        completed_form_id: this.completedFormId
-      })
-      this.completedFormFields = this.completedForm.completed_form_fields
-      this.completedForm.completed_form_fields = {}
-      this.setCompletedFormFields()
+        completed_form_id: this.completedFormId,
+      });
+      this.completedFormFields = this.completedForm.completed_form_fields;
+      this.completedForm.completed_form_fields = {};
+      this.setCompletedFormFields();
     },
-    setCompletedFormFields () {
+    setCompletedFormFields() {
       this.completedFormFields.forEach((item) => {
-        this.$set(this.completedForm.completed_form_fields, item.form_field.id, item.value)
-      })
+        this.$set(
+          this.completedForm.completed_form_fields,
+          item.form_field.id,
+          item.value
+        );
+      });
     },
-    onComplete () {
+    onComplete() {
       if (this.preview) {
-        return false
+        return false;
       }
-      this.isLoading = true
-      this.errors = {}
+      this.isLoading = true;
+      this.errors = {};
       if (this.isUpdateMode) {
-        this.completedForm._method = 'PUT'
-        this.completedForm.updated_manager_name = this.hospitalManagerName
-        this.completedForm.updated_manager_first_name = this.hospitalManagerFirstName
-        this.completedForm.id = this.completedFormId
+        this.completedForm._method = 'PUT';
+        this.completedForm.updated_manager_name = this.hospitalManagerName;
+        this.completedForm.updated_manager_first_name =
+          this.hospitalManagerFirstName;
+        this.completedForm.id = this.completedFormId;
       } else {
-        this.completedForm.created_manager_name = this.hospitalManagerName
-        this.completedForm.created_manager_first_name = this.hospitalManagerFirstName
-        this.completedForm.hospital_id = this.hospitalId
-        this.completedForm.form_id = this.targetForm.id
+        this.completedForm.created_manager_name = this.hospitalManagerName;
+        this.completedForm.created_manager_first_name =
+          this.hospitalManagerFirstName;
+        this.completedForm.hospital_id = this.hospitalId;
+        this.completedForm.form_id = this.targetForm.id;
       }
-      this.submitCompletedForm(this.isUpdateMode ? this.completedForm__update : this.completedForm__store)
+      this.submitCompletedForm(
+        this.isUpdateMode
+          ? this.completedForm__update
+          : this.completedForm__store
+      )
         .then(() => {
-          this.$router.push(this.backRoute)
+          this.$router.push(this.backRoute);
         })
         .finally(() => {
-          this.isLoading = false
-        })
+          this.isLoading = false;
+        });
     },
-    submitCompletedForm (method) {
+    submitCompletedForm(method) {
       return new Promise((resolve, reject) => {
         method(this.completedForm)
           .then(() => {
@@ -387,28 +464,29 @@ export default {
               group: 'alert',
               title: 'Statut de la soumission',
               text: 'Formulaire soumis avec succès',
-              type: 'success'
-            })
-            resolve(true)
+              type: 'success',
+            });
+            resolve(true);
           })
           .catch(({ response }) => {
-            this.errors = response.data.errors
-            reject(response)
+            this.errors = response.data.errors;
+            reject(response);
             this.$notify({
               group: 'alert',
-              title: 'Une erreur s\'est produite, veuillez contacter l\'administrateur !',
+              title:
+                "Une erreur s'est produite, veuillez contacter l'administrateur !",
               text: 'Impossible de soumettre vos réponses',
               type: 'error',
-              duration: 10000
-            })
-          })
-      })
-    }
-  }
-}
+              duration: 10000,
+            });
+          });
+      });
+    },
+  },
+};
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .container-preview {
   padding-top: 3%;
   background: #f4f6fc;
@@ -443,7 +521,8 @@ export default {
     padding: 5px 20px;
   }
 }
-.field-card, .meta-info-card {
+.field-card,
+.meta-info-card {
   border-radius: 15px;
   .card-body {
     padding: 30px;
@@ -453,17 +532,17 @@ export default {
   border-radius: 0px 0px 15px 15px;
 }
 .date-picker-input {
-  &.form-control[readonly]{
+  &.form-control[readonly] {
     background-color: white;
   }
   &.form-control[disabled] {
     background-color: #e9ecef;
   }
 }
-.pagination  {
+.pagination {
   margin-bottom: 0px;
 }
 .form-progress {
-  background-color: rgba(0,0,0,.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>

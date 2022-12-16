@@ -318,12 +318,7 @@
         <b-col cols="12" class="d-flex justify-content-center">
           <div
             @click="toggleBottomBar"
-            class="
-              bottom-bar-button
-              d-flex
-              align-items-center
-              justify-content-center
-            "
+            class="bottom-bar-button d-flex align-items-center justify-content-center"
             :class="{ 'bottom-collapse': !showBottom }"
           >
             <span
@@ -380,31 +375,31 @@
 </template>
 
 <script>
-import ChangeLogModal from "../components/ChangeLogModal";
-import Maps from "../components/Maps";
-import MapsLegend from "../components/MapsLegend";
-import MapsLegendEpidemic from "../components/MapsLegendEpidemic";
-import LeftColumn from "../components/LeftColumn";
-import Waiting from "../components/Waiting";
-import SideCaseCovid from "../components/SideCaseCovid";
-import CovidCaseChart from "../components/CovidCaseChart";
-import OrientationChart from "../components/OrientationChart";
-import IndicateurChart from "../components/IndicateurChart";
-import SideOrientation from "../components/SideOrientation";
-import DataModal from "../components/DataModal";
-import SideFluxChart from "../components/SideFlux";
-import FluxChart from "../components/FluxChart";
-import HospitalSituation from "../components/HospitalSituation";
-import FluxTendanceChart from "../components/flux/TendanceChart";
-import FluxComparisonChart from "../components/flux/ComparisonChart";
-import MenuFlux from "../components/menu/Flux";
-import MenuEpidemology from "../components/menu/Epidemiology";
-import MenuInfrastructure from "../components/menu/Infrastructure";
-import MenuOrientation from "../components/menu/Orientation";
-import MenuIndicateur from "../components/menu/Indicateur";
-import GlobalProvince from "../components/flux/GLobalProvince";
-import About from "../components/About";
-import { groupBy } from "lodash";
+import ChangeLogModal from '../components/ChangeLogModal';
+import Maps from '../components/Maps';
+import MapsLegend from '../components/MapsLegend';
+import MapsLegendEpidemic from '../components/MapsLegendEpidemic';
+import LeftColumn from '../components/LeftColumn';
+import Waiting from '../components/Waiting';
+import SideCaseCovid from '../components/SideCaseCovid';
+import CovidCaseChart from '../components/CovidCaseChart';
+import OrientationChart from '../components/OrientationChart';
+import IndicateurChart from '../components/IndicateurChart';
+import SideOrientation from '../components/SideOrientation';
+import DataModal from '../components/DataModal';
+import SideFluxChart from '../components/SideFlux';
+import FluxChart from '../components/FluxChart';
+import HospitalSituation from '../components/HospitalSituation';
+import FluxTendanceChart from '../components/flux/TendanceChart';
+import FluxComparisonChart from '../components/flux/ComparisonChart';
+import MenuFlux from '../components/menu/Flux';
+import MenuEpidemology from '../components/menu/Epidemiology';
+import MenuInfrastructure from '../components/menu/Infrastructure';
+import MenuOrientation from '../components/menu/Orientation';
+import MenuIndicateur from '../components/menu/Indicateur';
+import GlobalProvince from '../components/flux/GLobalProvince';
+import About from '../components/About';
+import { groupBy } from 'lodash';
 
 import {
   OBSERVATION_START,
@@ -414,14 +409,14 @@ import {
   PREFERENCE_END,
   HOTSPOT_TYPE,
   INFRASTRUCTURE_FIRST_UPDATE,
-} from "../config/env";
+} from '../config/env';
 
-import { mapState, mapActions, mapMutations } from "vuex";
-import { difference } from "@turf/turf";
-import ToggleButton from "../components/ToggleButton";
-import AfriFluxChart from "../components/africell/AfriFluxChart";
-const preference_start = "2020-02-01";
-const preference_end = "2020-03-18";
+import { mapState, mapActions, mapMutations } from 'vuex';
+import { difference } from '@turf/turf';
+import ToggleButton from '../components/ToggleButton';
+import AfriFluxChart from '../components/africell/AfriFluxChart';
+const preference_start = '2020-02-01';
+const preference_end = '2020-03-18';
 
 export default {
   components: {
@@ -514,11 +509,11 @@ export default {
       flux30Daily: [],
       fluxDataProvider: [
         {
-          lbl: "Orange",
+          lbl: 'Orange',
           val: 1,
         },
         {
-          lbl: "Africell",
+          lbl: 'Africell',
           val: 2,
         },
       ],
@@ -529,7 +524,7 @@ export default {
       fluxAfricelInOut: [],
       showMobileMaps: true,
       activeRightSide: 0,
-      mapMdTop: 46.4
+      mapMdTop: 46.4,
     };
   },
   computed: {
@@ -572,13 +567,13 @@ export default {
       return true;
     },
     titleMobility() {
-      let name = "Provinces";
+      let name = 'Provinces';
       switch (this.fluxGeoGranularity) {
         case 2:
-          name = "Zone de santé";
+          name = 'Zone de santé';
           break;
         case 3:
-          name = "Hotspot";
+          name = 'Hotspot';
           break;
       }
       return name;
@@ -636,8 +631,8 @@ export default {
       return {
         height:
           this.getHasCoviCases() || this.getHasOrientation()
-            ? "64vh"
-            : "calc(100vh - 52.5px)",
+            ? '64vh'
+            : 'calc(100vh - 52.5px)',
       };
     },
     isLoading() {
@@ -675,12 +670,12 @@ export default {
       }
 
       this.flux24PresenceDailyInDay = this.computedFluxPresenceDataByDate(
-        data.observations.filter((x) => x.PresenceType == "Jour"),
-        data.references.filter((x) => x.PresenceType == "Jour")
+        data.observations.filter((x) => x.PresenceType == 'Jour'),
+        data.references.filter((x) => x.PresenceType == 'Jour')
       );
       this.flux24PresenceDailyInNight = this.computedFluxPresenceDataByDate(
-        data.observations.filter((x) => x.PresenceType == "Nuit"),
-        data.references.filter((x) => x.PresenceType == "Nuit")
+        data.observations.filter((x) => x.PresenceType == 'Nuit'),
+        data.references.filter((x) => x.PresenceType == 'Nuit')
       );
       this.flux24PresenceDailyIn = this.computedFluxPresenceDataByDate(
         data.observations,
@@ -689,10 +684,10 @@ export default {
     },
   },
   mounted() {
-    this.$set(this.loadings, "healthZoneGeo", true);
-    this.$set(this.loadings, "provinceGeo", true);
-    this.$set(this.loadings, "hotspotGeo", true);
-    this.$set(this.loadings, "hotspotPointGeo", true);
+    this.$set(this.loadings, 'healthZoneGeo', true);
+    this.$set(this.loadings, 'provinceGeo', true);
+    this.$set(this.loadings, 'hotspotGeo', true);
+    this.$set(this.loadings, 'hotspotPointGeo', true);
     this.initForm();
 
     this.getFluxZone();
@@ -704,13 +699,13 @@ export default {
     this.$store.watch(
       (state) => state.hospital.isLoading,
       (value) => {
-        this.$set(this.loadings, "hospital", value);
+        this.$set(this.loadings, 'hospital', value);
       }
     );
     this.$store.watch(
       (state) => state.indicator.isLoading,
       (value) => {
-        this.$set(this.loadings, "indicator", value);
+        this.$set(this.loadings, 'indicator', value);
       }
     );
     this.loadFluxGLobalData();
@@ -734,7 +729,7 @@ export default {
 
     // Prefetch infranstructure data
     this.getHospitalsData({
-      observation_end: moment().format("YYYY-MM-DD"),
+      observation_end: moment().format('YYYY-MM-DD'),
       township: 0,
       isLoading: false,
     });
@@ -756,29 +751,29 @@ export default {
           value.data.filter((x) => x.notRead).length &&
           this.activeMenu != 7
         ) {
-          this.$bvModal.show("change-log-modal");
+          this.$bvModal.show('change-log-modal');
         }
       }
     );
   },
   methods: {
     ...mapActions([
-      "userMe",
-      "getHospitalsData",
-      "getHealthZone",
-      "getFluxHotSpot",
-      "getSituationHospital",
-      "getHospitals",
-      "completedForm__getAggregatedByHospitals",
-      "completedForm__getDataByHospitals",
+      'userMe',
+      'getHospitalsData',
+      'getHealthZone',
+      'getFluxHotSpot',
+      'getSituationHospital',
+      'getHospitals',
+      'completedForm__getAggregatedByHospitals',
+      'completedForm__getDataByHospitals',
     ]),
     ...mapMutations([
-      "setMapStyle",
-      "setFluxType",
-      "setObservationDate",
-      "setCanShowNavMobile",
-      "SET_FILTER__DATA",
-      "SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING",
+      'setMapStyle',
+      'setFluxType',
+      'setObservationDate',
+      'setCanShowNavMobile',
+      'SET_FILTER__DATA',
+      'SET_IS_COMPLETED_FORMS_AGGREGATED_LOADING',
     ]),
     toggleBottomBar() {
       this.showBottom = !this.showBottom;
@@ -791,7 +786,7 @@ export default {
       this.setMapStyle(value);
     },
     LeftColumnStyle() {
-      let height = "100vh";
+      let height = '100vh';
       if (this.$refs.dash_home_page) {
         height = this.$refs.dash_home_page.clientHeight;
       }
@@ -813,14 +808,14 @@ export default {
       if (checked) {
         let confirmedCount = 0;
 
-        this.$gtag.event("fetch_epidemioloy_data_request", {
-          event_category: "fetch_epidemioloy_data",
-          event_label: "covid_data_req_send",
+        this.$gtag.event('fetch_epidemioloy_data_request', {
+          event_category: 'fetch_epidemioloy_data',
+          event_label: 'covid_data_req_send',
         });
 
-        this.$set(this.loadings, "getCovidCases_stat", true);
+        this.$set(this.loadings, 'getCovidCases_stat', true);
         axios
-          .get("/api/dashboard/cavid-cases/statistics")
+          .get('/api/dashboard/cavid-cases/statistics')
           .then(({ data }) => {
             const labels = [];
             const sick = [];
@@ -843,21 +838,21 @@ export default {
               healed,
               labels,
             };
-            this.$set(this.loadings, "getCovidCases_stat", false);
+            this.$set(this.loadings, 'getCovidCases_stat', false);
 
-            this.$gtag.event("fetch_epidemioloy_data_response", {
-              event_category: "fetch_epidemioloy_data",
-              event_label: "getCovidCases_stat",
+            this.$gtag.event('fetch_epidemioloy_data_response', {
+              event_category: 'fetch_epidemioloy_data',
+              event_label: 'getCovidCases_stat',
             });
           })
           .catch(({ response }) => {
-            this.$set(this.loadings, "getCovidCases_stat", false);
+            this.$set(this.loadings, 'getCovidCases_stat', false);
             this.$gtag.exception(response);
           });
 
-        this.$set(this.loadings, "getCovidCases_statdaily", true);
+        this.$set(this.loadings, 'getCovidCases_statdaily', true);
         axios
-          .get("/api/dashboard/cavid-cases/statistics/daily")
+          .get('/api/dashboard/cavid-cases/statistics/daily')
           .then(({ data }) => {
             const labels = [];
             const sick = [];
@@ -879,28 +874,28 @@ export default {
               healed,
               labels,
             };
-            this.$set(this.loadings, "getCovidCases_statdaily", false);
-            this.$gtag.event("fetch_epidemioloy_data_response", {
-              event_category: "fetch_epidemioloy_data",
-              event_label: "getCovidCases_statdaily",
+            this.$set(this.loadings, 'getCovidCases_statdaily', false);
+            this.$gtag.event('fetch_epidemioloy_data_response', {
+              event_category: 'fetch_epidemioloy_data',
+              event_label: 'getCovidCases_statdaily',
             });
           })
           .catch(({ response }) => {
-            this.$set(this.loadings, "getCovidCases_statdaily", false);
+            this.$set(this.loadings, 'getCovidCases_statdaily', false);
             this.$gtag.exception(response);
           });
 
-        this.$set(this.loadings, "getCovidCases_cases", true);
+        this.$set(this.loadings, 'getCovidCases_cases', true);
 
         axios
-          .get("/api/dashboard/cavid-cases")
+          .get('/api/dashboard/cavid-cases')
           .then(({ data }) => {
             const Features = data.map((value) => {
               confirmedCount += Number(value.confirmed);
               return {
-                type: "Feature",
+                type: 'Feature',
                 geometry: {
-                  type: "Point",
+                  type: 'Point',
                   coordinates: [value.longitude, value.latitude],
                 },
                 properties: {
@@ -911,27 +906,27 @@ export default {
                   sick: Number(value.sick ?? 0),
                   last_update: value.last_update,
                   seriously: Number(value.seriously ?? 0),
-                  color: "#ED5F68",
+                  color: '#ED5F68',
                 },
               };
             });
             this.covidCases = {
-              type: "geojson",
+              type: 'geojson',
               data: {
-                type: "FeatureCollection",
+                type: 'FeatureCollection',
                 features: Features,
               },
             };
 
             this.covidCasesCount = confirmedCount;
-            this.$set(this.loadings, "getCovidCases_cases", false);
-            this.$gtag.event("fetch_epidemioloy_data_response", {
-              event_category: "fetch_epidemioloy_data",
-              event_label: "getCovidCases_cases",
+            this.$set(this.loadings, 'getCovidCases_cases', false);
+            this.$gtag.event('fetch_epidemioloy_data_response', {
+              event_category: 'fetch_epidemioloy_data',
+              event_label: 'getCovidCases_cases',
             });
           })
           .catch(({ response }) => {
-            this.$set(this.loadings, "getCovidCases_cases", false);
+            this.$set(this.loadings, 'getCovidCases_cases', false);
             this.$gtag.exception(response);
           });
       } else {
@@ -942,14 +937,14 @@ export default {
     },
     getmedicalOrientations(checked) {
       if (checked) {
-        this.$set(this.loadings, "orientation_medical", true);
+        this.$set(this.loadings, 'orientation_medical', true);
 
-        this.$gtag.event("fetch_medical_orientation_data_request", {
-          event_category: "fetch_medical_orientation",
-          event_label: "medical_orientation_req_send",
+        this.$gtag.event('fetch_medical_orientation_data_request', {
+          event_category: 'fetch_medical_orientation',
+          event_label: 'medical_orientation_req_send',
         });
         axios
-          .get("/api/dashboard/orientation-medical-result")
+          .get('/api/dashboard/orientation-medical-result')
           .then(({ data }) => {
             this.medicalOrientations = data;
             let total_fin = 0;
@@ -969,23 +964,23 @@ export default {
               this.fin8Count
             );
 
-            this.$set(this.loadings, "orientation_medical", false);
+            this.$set(this.loadings, 'orientation_medical', false);
             this.orientationCount = total_fin + total_fin8 + total_fin5;
 
-            this.$gtag.event("fetch_medical_orientation_data_response", {
-              event_category: "fetch_medical_orientation",
-              event_label: "orientation_medical",
+            this.$gtag.event('fetch_medical_orientation_data_response', {
+              event_category: 'fetch_medical_orientation',
+              event_label: 'orientation_medical',
             });
           })
           .catch(({ response }) => {
-            this.$set(this.loadings, "orientation_medical", false);
+            this.$set(this.loadings, 'orientation_medical', false);
             this.orientationCount = null;
             this.$gtag.exception(response);
           });
 
-        this.$set(this.loadings, "orientation_medical_stats", true);
+        this.$set(this.loadings, 'orientation_medical_stats', true);
         axios
-          .get("/api/dashboard/orientation-medical-stats")
+          .get('/api/dashboard/orientation-medical-stats')
           .then(({ data }) => {
             const fin = [];
             const fin5 = [];
@@ -1003,15 +998,15 @@ export default {
               fin8,
               labels,
             };
-            this.$set(this.loadings, "orientation_medical_stats", false);
+            this.$set(this.loadings, 'orientation_medical_stats', false);
 
-            this.$gtag.event("fetch_medical_orientation_data_response", {
-              event_category: "fetch_medical_orientation",
-              event_label: "orientation_medical_stats",
+            this.$gtag.event('fetch_medical_orientation_data_response', {
+              event_category: 'fetch_medical_orientation',
+              event_label: 'orientation_medical_stats',
             });
           })
           .catch(({ response }) => {
-            this.$set(this.loadings, "orientation_medical_stats", false);
+            this.$set(this.loadings, 'orientation_medical_stats', false);
             this.$gtag.exception(response);
           });
       } else {
@@ -1021,9 +1016,9 @@ export default {
     },
     setDataOrientationLegend(a, b, c) {
       this.orientationLegend = [
-        { color: "#3b9d3b", label: "Peu probale", caption: a },
-        { color: "#ffb93b", label: "Probale", caption: b },
-        { color: "#ff3b3b", label: "Très probale", caption: c },
+        { color: '#3b9d3b', label: 'Peu probale', caption: a },
+        { color: '#ffb93b', label: 'Probale', caption: b },
+        { color: '#ff3b3b', label: 'Très probale', caption: c },
       ];
     },
     medicalOrientationChanged(item) {
@@ -1031,15 +1026,15 @@ export default {
     },
     hasSondageChecked(checked) {
       if (checked) {
-        this.$set(this.loadings, "hasSondageChecked", true);
+        this.$set(this.loadings, 'hasSondageChecked', true);
         axios
-          .get("/api/dashboard/sondages")
+          .get('/api/dashboard/sondages')
           .then(({ data }) => {
-            this.$set(this.loadings, "hasSondageChecked", false);
+            this.$set(this.loadings, 'hasSondageChecked', false);
             this.sondages = data;
           })
           .catch(() => {
-            this.$set(this.loadings, "hasSondageChecked", false);
+            this.$set(this.loadings, 'hasSondageChecked', false);
           });
       } else {
         this.sondages = null;
@@ -1077,12 +1072,12 @@ export default {
       }
     },
     getFluxZone() {
-      axios.get("api/dashboard/flux-zone").then(({ data }) => {
+      axios.get('api/dashboard/flux-zone').then(({ data }) => {
         this.fluxZones = data;
       });
     },
     getFluxProvinces() {
-      axios.get("api/dashboard/flux-provinces").then(({ data }) => {
+      axios.get('api/dashboard/flux-provinces').then(({ data }) => {
         this.fluxProvinces = data;
       });
     },
@@ -1113,110 +1108,110 @@ export default {
 
       this.flux24Errors = {};
 
-      let url = "api/dashboard/flux/origin";
-      let urlDaily = "api/dashboard/flux/origin";
-      let urlDailyCompare = "api/dashboard/flux/origin";
-      let urlDailyIn = "api/dashboard/flux/origin";
-      let urlDailyOut = "api/dashboard/flux/origin";
+      let url = 'api/dashboard/flux/origin';
+      let urlDaily = 'api/dashboard/flux/origin';
+      let urlDailyCompare = 'api/dashboard/flux/origin';
+      let urlDailyIn = 'api/dashboard/flux/origin';
+      let urlDailyOut = 'api/dashboard/flux/origin';
 
-      let urlPresence = "api/dashboard/flux/origin";
-      let urlPresenceDaily = "api/dashboard/flux/origin";
-      let urlPresenceDailyIn = "api/dashboard/flux/origin";
+      let urlPresence = 'api/dashboard/flux/origin';
+      let urlPresenceDaily = 'api/dashboard/flux/origin';
+      let urlPresenceDailyIn = 'api/dashboard/flux/origin';
 
       switch (values.fluxGeoGranularity) {
         case 1:
-          url += "/provinces";
-          urlDaily += "/provinces";
-          urlDailyIn += "/provinces";
-          urlDailyOut += "/provinces";
-          urlDailyCompare += "/provinces";
-          urlPresence += "/provinces";
-          urlPresenceDaily += "/provinces";
-          urlPresenceDailyIn += "/provinces";
+          url += '/provinces';
+          urlDaily += '/provinces';
+          urlDailyIn += '/provinces';
+          urlDailyOut += '/provinces';
+          urlDailyCompare += '/provinces';
+          urlPresence += '/provinces';
+          urlPresenceDaily += '/provinces';
+          urlPresenceDailyIn += '/provinces';
           break;
         case 2:
         default:
-          url += "/zones";
-          urlDaily += "/zones";
-          urlDailyIn += "/zones";
-          urlDailyOut += "/zones";
-          urlDailyCompare += "/zones";
-          urlPresence += "/zones";
-          urlPresenceDaily += "/zones";
-          urlPresenceDailyIn += "/zones";
+          url += '/zones';
+          urlDaily += '/zones';
+          urlDailyIn += '/zones';
+          urlDailyOut += '/zones';
+          urlDailyCompare += '/zones';
+          urlPresence += '/zones';
+          urlPresenceDaily += '/zones';
+          urlPresenceDailyIn += '/zones';
           break;
       }
 
-      urlPresence += "/presence";
-      urlPresenceDaily += "/presence";
-      urlPresenceDailyIn += "/presence";
+      urlPresence += '/presence';
+      urlPresenceDaily += '/presence';
+      urlPresenceDailyIn += '/presence';
 
       switch (values.fluxTimeGranularity) {
         case 1:
-          url += "/h-24";
-          urlDaily += "/h-24";
-          urlDailyIn += "/h-24";
-          urlDailyOut += "/h-24";
-          urlDailyCompare += "/h-24";
+          url += '/h-24';
+          urlDaily += '/h-24';
+          urlDailyIn += '/h-24';
+          urlDailyOut += '/h-24';
+          urlDailyCompare += '/h-24';
 
-          urlPresence += "/h-24";
-          urlPresenceDaily += "/h-24";
-          urlPresenceDailyIn += "/h-24";
+          urlPresence += '/h-24';
+          urlPresenceDaily += '/h-24';
+          urlPresenceDailyIn += '/h-24';
           break;
         case 2:
         default:
-          url += "/m-30";
-          urlDaily += "/m-30";
-          urlDailyIn += "/m-30";
-          urlDailyOut += "/m-30";
-          urlDailyCompare += "/m-30";
+          url += '/m-30';
+          urlDaily += '/m-30';
+          urlDailyIn += '/m-30';
+          urlDailyOut += '/m-30';
+          urlDailyCompare += '/m-30';
 
-          urlPresence += "/m-30";
-          urlPresenceDaily += "/m-30";
-          urlPresenceDailyIn += "/m-30";
+          urlPresence += '/m-30';
+          urlPresenceDaily += '/m-30';
+          urlPresenceDailyIn += '/m-30';
           break;
       }
 
-      urlPresenceDaily += "/daily";
-      urlPresenceDailyIn += "/daily-in";
+      urlPresenceDaily += '/daily';
+      urlPresenceDailyIn += '/daily-in';
 
-      urlDaily += "/daily";
-      urlDailyIn += "/daily-in";
-      urlDailyOut += "/daily-out";
-      urlDailyCompare += "/daily-compare";
+      urlDaily += '/daily';
+      urlDailyIn += '/daily-in';
+      urlDailyOut += '/daily-out';
+      urlDailyCompare += '/daily-compare';
 
       this.flux24DailyComparison = [];
       this.fluxGeoOptions = [];
 
-      this.$gtag.event("fetch_orange_flux_data_request", {
-        event_category: "fetch_orange_flux",
-        event_label: "fetch_orange_flux_req_send",
+      this.$gtag.event('fetch_orange_flux_data_request', {
+        event_category: 'fetch_orange_flux',
+        event_label: 'fetch_orange_flux_req_send',
       });
 
       this.flux24Daily = [];
-      this.$set(this.loadings, "urlDaily", true);
+      this.$set(this.loadings, 'urlDaily', true);
       axios
         .get(urlDaily, {
           params: values,
         })
         .then(({ data }) => {
           this.flux24Daily = data;
-          this.$set(this.loadings, "urlDaily", false);
+          this.$set(this.loadings, 'urlDaily', false);
 
-          this.$gtag.event("fetch_orange_flux_data_response", {
-            event_category: "fetch_orange_flux",
-            event_label: "urlDaily",
+          this.$gtag.event('fetch_orange_flux_data_response', {
+            event_category: 'fetch_orange_flux',
+            event_label: 'urlDaily',
           });
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, "urlDaily", false);
+          this.$set(this.loadings, 'urlDaily', false);
           this.$gtag.exception(response);
         });
 
       // get flux data in
 
       this.flux24DailyIn = [];
-      this.$set(this.loadings, "urlDailyIn", true);
+      this.$set(this.loadings, 'urlDailyIn', true);
       axios
         .get(urlDailyIn, {
           params: values,
@@ -1234,24 +1229,24 @@ export default {
           this.fluxDataGroupedByDateIn = computedFluxDataByDate(
             data.observations,
             data.references,
-            "destination"
+            'destination'
           );
-          this.$set(this.loadings, "urlDailyIn", false);
+          this.$set(this.loadings, 'urlDailyIn', false);
 
-          this.$gtag.event("fetch_orange_flux_data_response", {
-            event_category: "fetch_orange_flux",
-            event_label: "urlDailyIn",
+          this.$gtag.event('fetch_orange_flux_data_response', {
+            event_category: 'fetch_orange_flux',
+            event_label: 'urlDailyIn',
           });
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, "urlDailyIn", false);
+          this.$set(this.loadings, 'urlDailyIn', false);
           this.$gtag.exception(response);
         });
 
       // get flux data out
 
       this.flux24DailyOut = [];
-      this.$set(this.loadings, "urlDailyOut", true);
+      this.$set(this.loadings, 'urlDailyOut', true);
       axios
         .get(urlDailyOut, {
           params: values,
@@ -1291,24 +1286,24 @@ export default {
           this.fluxDataGroupedByDateOut = computedFluxDataByDate(
             data.observations,
             data.references,
-            "origin"
+            'origin'
           );
 
-          this.$set(this.loadings, "urlDailyOut", false);
-          this.$gtag.event("fetch_orange_flux_data_response", {
-            event_category: "fetch_orange_flux",
-            event_label: "urlDailyOut",
+          this.$set(this.loadings, 'urlDailyOut', false);
+          this.$gtag.event('fetch_orange_flux_data_response', {
+            event_category: 'fetch_orange_flux',
+            event_label: 'urlDailyOut',
           });
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, "urlDailyOut", false);
+          this.$set(this.loadings, 'urlDailyOut', false);
           this.$gtag.exception(response);
         });
 
       this.flux24Presence = [];
 
       this.flux24PresenceDailyInData = {};
-      this.$set(this.loadings, "urlPresenceDailyIn", true);
+      this.$set(this.loadings, 'urlPresenceDailyIn', true);
       axios
         .get(urlPresenceDailyIn, {
           params: values,
@@ -1316,15 +1311,15 @@ export default {
         .then(({ data }) => {
           this.flux24PresenceDailyInData = data;
 
-          this.$set(this.loadings, "urlPresenceDailyIn", false);
+          this.$set(this.loadings, 'urlPresenceDailyIn', false);
 
-          this.$gtag.event("fetch_orange_flux_data_response", {
-            event_category: "fetch_orange_flux",
-            event_label: "urlPresenceDailyIn",
+          this.$gtag.event('fetch_orange_flux_data_response', {
+            event_category: 'fetch_orange_flux',
+            event_label: 'urlPresenceDailyIn',
           });
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, "urlPresenceDailyIn", false);
+          this.$set(this.loadings, 'urlPresenceDailyIn', false);
           this.$gtag.exception(response);
         });
 
@@ -1336,22 +1331,22 @@ export default {
       if (values.fluxGeoGranularity == 2) {
         return;
       }
-      this.$gtag.event("fetch_pandemics_top_confirmed_data_request", {
-        event_category: "fetch_pandemics_top_confirmed",
-        event_label: "top_confirmed_req_send",
+      this.$gtag.event('fetch_pandemics_top_confirmed_data_request', {
+        event_category: 'fetch_pandemics_top_confirmed',
+        event_label: 'top_confirmed_req_send',
       });
       const pandemicParams = Object.assign({}, values);
       pandemicParams.fluxGeoOptions = pandemicParams.fluxGeoOptions[0];
       axios
-        .get("/api/dashboard/pandemics/top-confirmed", {
+        .get('/api/dashboard/pandemics/top-confirmed', {
           params: pandemicParams,
         })
         .then(({ data }) => {
           this.topHealthZoneConfirmed = data;
 
-          this.$gtag.event("fetch_pandemics_top_confirmed_data_response", {
-            event_category: "fetch_pandemics_top_confirmed",
-            event_label: "top_confirmed",
+          this.$gtag.event('fetch_pandemics_top_confirmed_data_response', {
+            event_category: 'fetch_pandemics_top_confirmed',
+            event_label: 'top_confirmed',
           });
         });
 
@@ -1383,7 +1378,7 @@ export default {
 
           // Get  zone in by province
           axios
-            .get("/api/dashboard/flux/origin/zones/h-24/global-in/province", {
+            .get('/api/dashboard/flux/origin/zones/h-24/global-in/province', {
               params: healthZoneValues,
             })
             .then(async (response) => {
@@ -1391,7 +1386,7 @@ export default {
               countIn++;
               this.globalProgress =
                 ((countIn + countOut) / (countAll * 2)) * 100;
-              if (Number(response.headers["x-ratelimit-remaining"]) < 7) {
+              if (Number(response.headers['x-ratelimit-remaining']) < 7) {
                 await this.sleep(25000);
               }
               healthZonesWorkingIn = healthZones.slice(
@@ -1403,9 +1398,9 @@ export default {
               if (healthIndexIn <= healthZones.length) {
                 globalInFunc();
               }
-              this.$gtag.event("fetch_orange_flux_data_request", {
-                event_category: "fetch_orange_flux",
-                event_label: "global_in_provinces",
+              this.$gtag.event('fetch_orange_flux_data_request', {
+                event_category: 'fetch_orange_flux',
+                event_label: 'global_in_provinces',
               });
             })
             .catch(({ error }) => {
@@ -1435,7 +1430,7 @@ export default {
 
           // Get  zone out by province
           axios
-            .get("/api/dashboard/flux/origin/zones/h-24/global-out/province", {
+            .get('/api/dashboard/flux/origin/zones/h-24/global-out/province', {
               params: healthZoneValues,
             })
             .then(async (response) => {
@@ -1443,7 +1438,7 @@ export default {
               countOut++;
               this.globalProgress =
                 ((countIn + countOut) / (countAll * 2)) * 100;
-              if (Number(response.headers["x-ratelimit-remaining"]) < 7) {
+              if (Number(response.headers['x-ratelimit-remaining']) < 7) {
                 await this.sleep(25000);
               }
               healthZonesWorkingOut = healthZones.slice(
@@ -1456,9 +1451,9 @@ export default {
                 globalOutFunc();
               }
 
-              this.$gtag.event("fetch_orange_flux_data_response", {
-                event_category: "fetch_orange_flux",
-                event_label: "global_out_provinces",
+              this.$gtag.event('fetch_orange_flux_data_response', {
+                event_category: 'fetch_orange_flux',
+                event_label: 'global_out_provinces',
               });
             })
             .catch((error) => {
@@ -1484,11 +1479,11 @@ export default {
       globalOutFunc();
     },
     submitFluxAfricell(values) {
-      const urlDaily = "api/dashboard/flux/africell/hors-zone/zones";
-      const urlPresenceZone = "api/dashboard/flux/africell/presence/zones";
-      const urlInOutZone = "api/dashboard/flux/africell/in-out/zones";
+      const urlDaily = 'api/dashboard/flux/africell/hors-zone/zones';
+      const urlPresenceZone = 'api/dashboard/flux/africell/presence/zones';
+      const urlInOutZone = 'api/dashboard/flux/africell/in-out/zones';
 
-      this.$set(this.loadings, "urlFluxAfricell", true);
+      this.$set(this.loadings, 'urlFluxAfricell', true);
 
       const dailyRequest = axios.get(urlDaily, {
         params: values,
@@ -1517,9 +1512,9 @@ export default {
       this.fluxAfricelPresence = [];
       this.fluxAfricelInOut = [];
 
-      this.$gtag.event("fetch_africell_flux_data_request", {
-        event_category: "fetch_africell_flux",
-        event_label: "fluxAfricell_req_send",
+      this.$gtag.event('fetch_africell_flux_data_request', {
+        event_category: 'fetch_africell_flux',
+        event_label: 'fluxAfricell_req_send',
       });
 
       Promise.all(allRequest)
@@ -1533,23 +1528,23 @@ export default {
           if (response[2]) {
             this.fluxAfricelInOut = response[2].data;
           }
-          this.$gtag.event("fetch_africell_flux_data_response", {
-            event_category: "fetch_africell_flux",
-            event_label: "fluxAfricell_response",
+          this.$gtag.event('fetch_africell_flux_data_response', {
+            event_category: 'fetch_africell_flux',
+            event_label: 'fluxAfricell_response',
           });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
         })
         .finally(() => {
-          this.$set(this.loadings, "urlFluxAfricell", false);
+          this.$set(this.loadings, 'urlFluxAfricell', false);
         });
     },
     submitFlux30Form(input) {
-      let urlMaps = "api/dashboard/flux/hotspots";
-      let urlDaily = "api/dashboard/flux/hotspots";
-      let urlTendance = "api/dashboard/flux/hotspots";
-      let urlGeneral = "api/dashboard/flux/hotspots";
+      let urlMaps = 'api/dashboard/flux/hotspots';
+      let urlDaily = 'api/dashboard/flux/hotspots';
+      let urlTendance = 'api/dashboard/flux/hotspots';
+      let urlGeneral = 'api/dashboard/flux/hotspots';
 
       const values = { ...input };
       const hotspot = HOTSPOT_TYPE.find(
@@ -1557,21 +1552,21 @@ export default {
       );
       if (hotspot) {
         // urlMaps += `/types`;
-        urlDaily += "/types";
-        urlTendance += "/types";
-        urlGeneral += "/types";
+        urlDaily += '/types';
+        urlTendance += '/types';
+        urlGeneral += '/types';
         values.fluxGeoOptions = [hotspot.name];
       }
 
-      urlMaps += "/maps";
+      urlMaps += '/maps';
       if (values.observation_start == values.observation_end) {
-        urlDaily += "/daily";
+        urlDaily += '/daily';
       } else {
-        urlDaily += "/daily-date";
+        urlDaily += '/daily-date';
       }
 
-      urlTendance += "/tendance";
-      urlGeneral += "/general";
+      urlTendance += '/tendance';
+      urlGeneral += '/general';
 
       const dailyRequest = axios.get(urlDaily, {
         params: values,
@@ -1587,7 +1582,7 @@ export default {
       let mapsValues = values;
       if (hotspot) {
         mapsValues = { ...values };
-        mapsValues.fluxGeoOptions = ["Tout"];
+        mapsValues.fluxGeoOptions = ['Tout'];
       }
       const mapsRequest = axios.get(urlMaps, {
         params: mapsValues,
@@ -1595,7 +1590,7 @@ export default {
 
       this.isFirstLoad = false;
 
-      this.$set(this.loadings, "urlFluxTIme30", true);
+      this.$set(this.loadings, 'urlFluxTIme30', true);
       this.flux30MapsData = [];
       this.flux24Daily = [];
       this.flux24DailyIn = [];
@@ -1607,9 +1602,9 @@ export default {
       this.fluxZoneGlobalOut = [];
       this.topHealthZoneConfirmed = [];
 
-      this.$gtag.event("fetch_orange_flux_hotspot_data_request", {
-        event_category: "fetch_orange_flux_hotspot",
-        event_label: "fetch_orange_flux_hotspot_req_send",
+      this.$gtag.event('fetch_orange_flux_hotspot_data_request', {
+        event_category: 'fetch_orange_flux_hotspot',
+        event_label: 'fetch_orange_flux_hotspot_req_send',
       });
 
       tendanceRequest
@@ -1688,16 +1683,16 @@ export default {
             };
           }
 
-          this.$gtag.event("fetch_orange_flux_hotspot_data_response", {
-            event_category: "fetch_orange_flux_hotspot",
-            event_label: "fetch_orange_flux_hotspot_response",
+          this.$gtag.event('fetch_orange_flux_hotspot_data_response', {
+            event_category: 'fetch_orange_flux_hotspot',
+            event_label: 'fetch_orange_flux_hotspot_response',
           });
         })
         .catch(({ response }) => {
           this.$gtag.exception(response);
         })
         .finally(() => {
-          this.$set(this.loadings, "urlFluxTIme30", false);
+          this.$set(this.loadings, 'urlFluxTIme30', false);
         });
     },
     initForm() {
@@ -1708,14 +1703,14 @@ export default {
     submitInfrastructureForm(values) {
       this.setCanShowNavMobile(false);
       values.isLoading = true;
-      values.activeFilter=true;
+      values.activeFilter = true;
       this.getHospitalsData(values);
       this.SET_FILTER__DATA(values);
       this.completedForm__getAggregatedByHospitals(values);
       this.initForm();
     },
     seeSide() {
-      this.$bvModal.show("data-modal");
+      this.$bvModal.show('data-modal');
     },
     fluxPredefinedChanged(value) {
       if (!value) {
@@ -1733,38 +1728,38 @@ export default {
       };
       this.flux24Errors = {};
 
-      const url = "api/dashboard/flux/predefined/zones/h-24/";
-      const urlDaily = "api/dashboard/flux/predefined/zones/h-24/daily";
-      const urlDailyIn = "api/dashboard/flux/predefined/zones/h-24/daily-in";
-      const urlDailyOut = "api/dashboard/flux/predefined/zones/h-24/daily-out";
+      const url = 'api/dashboard/flux/predefined/zones/h-24/';
+      const urlDaily = 'api/dashboard/flux/predefined/zones/h-24/daily';
+      const urlDailyIn = 'api/dashboard/flux/predefined/zones/h-24/daily-in';
+      const urlDailyOut = 'api/dashboard/flux/predefined/zones/h-24/daily-out';
       const urlDailyCompare =
-        "api/dashboard/flux/predefined/zones/h-24/daily-compare";
+        'api/dashboard/flux/predefined/zones/h-24/daily-compare';
 
-      this.$set(this.loadings, "fluxPC_urlDailyCompare", true);
+      this.$set(this.loadings, 'fluxPC_urlDailyCompare', true);
       axios
         .get(urlDailyCompare, {
           params: values,
         })
         .then(({ data }) => {
           this.flux24DailyComparison = data;
-          this.$set(this.loadings, "fluxPC_urlDailyCompare", false);
+          this.$set(this.loadings, 'fluxPC_urlDailyCompare', false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, "fluxPC_urlDailyCompare", false);
+          this.$set(this.loadings, 'fluxPC_urlDailyCompare', false);
         });
 
       this.flux24Daily = [];
-      this.$set(this.loadings, "fluxPC_urlDaily", true);
+      this.$set(this.loadings, 'fluxPC_urlDaily', true);
       axios
         .get(urlDaily, {
           params: values,
         })
         .then(({ data }) => {
           this.flux24Daily = data;
-          this.$set(this.loadings, "fluxPC_urlDaily", false);
+          this.$set(this.loadings, 'fluxPC_urlDaily', false);
         })
         .catch(({ response }) => {
-          this.$set(this.loadings, "fluxPC_urlDaily", false);
+          this.$set(this.loadings, 'fluxPC_urlDaily', false);
         });
 
       // get flux data in
@@ -1792,18 +1787,18 @@ export default {
       //   .catch(({ response }) => {});
 
       this.flux24 = [];
-      this.$set(this.loadings, "fluxPC_flux24", true);
+      this.$set(this.loadings, 'fluxPC_flux24', true);
       axios
         .get(url, {
           params: values,
         })
         .then(({ data }) => {
           this.flux24 = data;
-          this.$set(this.loadings, "fluxPC_flux24", false);
+          this.$set(this.loadings, 'fluxPC_flux24', false);
         })
         .catch(({ response }) => {
           this.flux24Errors = response.data.errors;
-          this.$set(this.loadings, "fluxPC_flux24", false);
+          this.$set(this.loadings, 'fluxPC_flux24', false);
         });
     },
     toggleShowMobiliteGenerale(checked) {
@@ -1832,10 +1827,10 @@ export default {
       });
     },
     loadFluxGLobalData() {
-      this.$set(this.isFluxGlobalProvinceloading, "in", true);
+      this.$set(this.isFluxGlobalProvinceloading, 'in', true);
 
       axios
-        .get("/api/dashboard/flux/origin/provinces/h-24/global-in", {
+        .get('/api/dashboard/flux/origin/provinces/h-24/global-in', {
           params: {
             observation_start: OBSERVATION_START,
             observation_end: OBSERVATION_END,
@@ -1852,12 +1847,12 @@ export default {
               observations: groupObservations[key],
             });
           });
-          this.$set(this.isFluxGlobalProvinceloading, "in", false);
+          this.$set(this.isFluxGlobalProvinceloading, 'in', false);
         });
 
-      this.$set(this.isFluxGlobalProvinceloading, "out", true);
+      this.$set(this.isFluxGlobalProvinceloading, 'out', true);
       axios
-        .get("/api/dashboard/flux/origin/provinces/h-24/global-out", {
+        .get('/api/dashboard/flux/origin/provinces/h-24/global-out', {
           params: {
             observation_start: OBSERVATION_START,
             observation_end: OBSERVATION_END,
@@ -1874,7 +1869,7 @@ export default {
               observations: groupObservations[key],
             });
           });
-          this.$set(this.isFluxGlobalProvinceloading, "out", false);
+          this.$set(this.isFluxGlobalProvinceloading, 'out', false);
         });
     },
     updateflux24DailyGenerale() {
@@ -1926,7 +1921,7 @@ export default {
       this.fluxDataGroupedByDateGen = this.computedFluxDataByDate(
         temp.observationsByDate,
         temp.referencesByDate,
-        "zone"
+        'zone'
       );
     },
     computedFluxDataByDate(dataObservations, dataReferences, key) {
@@ -2036,7 +2031,7 @@ export default {
     },
 
     loadTownships() {
-      axios.get("/api/dashboard/townships").then(({ data }) => {
+      axios.get('/api/dashboard/townships').then(({ data }) => {
         this.townships = data;
       });
     },
@@ -2063,7 +2058,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "@~/sass/_variables";
+@import '@~/sass/_variables';
 .dash-home-page {
   // height: 100vh;
   background: $dash-background;
