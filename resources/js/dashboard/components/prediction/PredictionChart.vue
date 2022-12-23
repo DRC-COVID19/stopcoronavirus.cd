@@ -1,77 +1,107 @@
 <template>
-  <b-card no-body class="text-center pt-3 px-2">
-    <div v-if="formattedPredictedData?.length">
-      <ApexCharts
-        type="line"
-        height="350"
-        :options="chartOptions"
-        :series="chartSeries"
-      ></ApexCharts>
-      <div class="d-flex justify-content-center align-items-center mb-3">
-        <div class="d-flex justify-content-center align-items-center">
-          <div class="circle-indicator"></div>
-          <div class="indicator-label">Valeur modifié (en local)</div>
-        </div>
+  <div>
+    <b-card no-body class="text-center pt-3 px-2">
+      <div v-if="formattedPredictedData?.length">
+        <ApexCharts
+          type="line"
+          height="350"
+          :options="chartOptions"
+          :series="chartSeries"
+        ></ApexCharts>
+        <div class="d-flex justify-content-center align-items-center mb-3">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="circle-indicator"></div>
+            <div class="indicator-label">Valeur modifié (en local)</div>
+          </div>
 
-        <div class="d-flex justify-content-center align-items-center ml-3">
-          <div class="circle-indicator add"></div>
-          <div class="indicator-label">Valeur modifié</div>
-        </div>
+          <div class="d-flex justify-content-center align-items-center ml-3">
+            <div class="circle-indicator add"></div>
+            <div class="indicator-label">Valeur modifié</div>
+          </div>
 
-        <div class="d-flex justify-content-center align-items-center ml-3">
-          <div class="square-indicator"></div>
-          <div class="indicator-label">Zone de surcharge</div>
+          <div class="d-flex justify-content-center align-items-center ml-3">
+            <div class="square-indicator"></div>
+            <div class="indicator-label">Zone de surcharge</div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end mb-2 pt-2 border-top">
+          <b-button
+            size="sm"
+            variant="danger"
+            class="modal-btn mr-3"
+            @click="handleResetAll"
+            v-if="canRecalculatePrediction && !isPredictionLoading"
+          >
+            Tout réinitialiser
+          </b-button>
+          <b-spinner
+            variant="primary"
+            class="mr-3"
+            v-if="canRecalculatePrediction && isPredictionLoading"
+          ></b-spinner>
+          <b-button
+            size="sm"
+            variant="success"
+            class="modal-btn mr-3"
+            @click="handleRecalculatePrediction"
+            v-if="canRecalculatePrediction && !isPredictionLoading"
+          >
+            Recalculer la prediction
+          </b-button>
+          <b-button
+            size="sm"
+            variant="primary"
+            @click="handleOpenAddValueModal"
+            class="modal-btn"
+          >
+            Ajouter une valeur
+          </b-button>
         </div>
       </div>
-      <div class="d-flex justify-content-end mb-2 pt-2 border-top">
-        <b-button
-          size="sm"
-          variant="danger"
-          class="modal-btn mr-3"
-          @click="handleResetAll"
-          v-if="canRecalculatePrediction && !isPredictionLoading"
-        >
-          Tout réinitialiser
-        </b-button>
-        <b-spinner
-          variant="primary"
-          class="mr-3"
-          v-if="canRecalculatePrediction && isPredictionLoading"
-        ></b-spinner>
-        <b-button
-          size="sm"
-          variant="success"
-          class="modal-btn mr-3"
-          @click="handleRecalculatePrediction"
-          v-if="canRecalculatePrediction && !isPredictionLoading"
-        >
-          Recalculer la prediction
-        </b-button>
-        <b-button
-          size="sm"
-          variant="primary"
-          @click="handleOpenAddValueModal"
-          class="modal-btn"
-        >
-          Ajouter une valeur
-        </b-button>
+      <div
+        v-else
+        class="d-flex justify-content-center align-items-center"
+        style="height: 350px"
+      >
+        <p>
+          <img alt="" src="/img/no-data.png" class="img-fluid" />
+        </p>
       </div>
-    </div>
-    <div
-      v-else
-      class="d-flex justify-content-center align-items-center"
-      style="height: 350px"
-    >
-      <p>
-        <img alt="" src="/img/no-data.png" class="img-fluid" />
-      </p>
-    </div>
 
-    <PredictionModal
-      @submit="handleSubmitModalData"
-      :modalData="modalPredictionData"
-    />
-  </b-card>
+      <PredictionModal
+        @submit="handleSubmitModalData"
+        :modalData="modalPredictionData"
+      />
+    </b-card>
+
+    <b-card no-body class="text-center pt-3 mt-3" v-if="!!correlationData">
+      <div class="correlation-table">
+        <b-table
+          :fields="['_', ...Object.keys(correlationData)]"
+          :items="formattedCorrelationData"
+          caption-top
+          :busy="isPredictionLoading"
+        >
+          <template #table-busy>
+            <div class="text-center text-danger my-2">
+              <b-spinner class="align-middle"></b-spinner>
+              <strong>Loading...</strong>
+            </div>
+          </template>
+          <template #table-caption>
+            <span class="pl-2"
+              >Coefficient de corrélation de Pearson entre les champs.</span
+            >
+          </template>
+          <template #cell(_)="data">
+            <span class="bold">
+              {{ Object.keys(correlationData)[data.index] }}
+            </span>
+          </template>
+        </b-table>
+      </div>
+    </b-card>
+  </div>
 </template>
 
 <script>
@@ -88,10 +118,28 @@ export default {
   data() {
     return {
       modalPredictionData: null,
+      formattedCorrelationData: null,
       formattedPredictedData: [],
     };
   },
   watch: {
+    correlationData(value) {
+      if (value) {
+        this.formattedCorrelationData = Object.values(value).map((item) => {
+          const result = {};
+          const _cellVariants = {};
+          Object.keys(value).forEach((key, idx) => {
+            result[key] = item[idx];
+            if (parseFloat(item[idx]) <= 0) {
+              _cellVariants[key] = 'danger';
+            } else {
+              _cellVariants[key] = 'success';
+            }
+          });
+          return { ...result, _cellVariants };
+        });
+      }
+    },
     predictedData() {
       this.formattedPredictedData =
         this.prediction__GetFormattedData()?.map((d) => {
@@ -109,6 +157,7 @@ export default {
   computed: {
     ...mapState({
       predictedData: (state) => state.prediction.predictedData,
+      correlationData: (state) => state.prediction.correlationData,
       predictionFilter: (state) => state.prediction.predictionFilter,
       isPredictionLoading: (state) => state.prediction.isLoading,
     }),
@@ -359,7 +408,7 @@ export default {
       const changedObservations = [];
       this.formattedPredictedData.forEach((d) => {
         this.fields.forEach((f) => {
-          if (d[f].updated) {
+          if (d[f].updated || d[f].recalculate) {
             changedObservations.push({
               date: getFormattedDate(d.date),
               value: d[f].value,
@@ -403,6 +452,24 @@ export default {
   border-left: 1px solid rgb(220, 218, 218);
   border-right: 1px solid rgb(220, 218, 218);
   background-color: rgb(245, 245, 245);
+}
+
+.correlation-table * {
+  color: rgb(55, 61, 63);
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  font-family: Helvetica, Arial, sans-serif !important;
+}
+.correlation-table .bold {
+  font-family: 'Lato', sans-serif;
+  font-weight: 800 !important;
+  text-transform: capitalize;
+}
+
+.correlation-table table {
+  margin: 0;
+  overflow: hidden !important;
+  z-index: 100;
 }
 
 .indicator-label {

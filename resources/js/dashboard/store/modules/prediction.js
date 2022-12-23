@@ -5,11 +5,16 @@ export default {
   state: {
     isLoading: false,
     predictedData: [],
+    correlationData: null,
     predictionFilter: {},
   },
   mutations: {
     SET_PREDICTED_DATA(state, payload) {
       state.predictedData = payload;
+    },
+
+    SET_CORRELATION_DATA(state, payload) {
+      state.correlationData = payload;
     },
 
     SET_PREDICTION_FILTER(state, payload) {
@@ -67,11 +72,11 @@ export default {
     prediction__GetPredictedData({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true);
       return new Promise((resolve, reject) => {
-        // eslint-disable-next-line no-undef
         axios2
           .post(`${PREDICTION_API_URL}/prediction/`, payload)
           .then(({ data }) => {
-            commit('SET_PREDICTED_DATA', data);
+            commit('SET_PREDICTED_DATA', data.response);
+            commit('SET_CORRELATION_DATA', data.correlation);
             commit('SET_PREDICTION_FILTER', payload);
             commit('SET_IS_LOADING', false);
             resolve(data);
