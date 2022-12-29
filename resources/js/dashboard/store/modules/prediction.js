@@ -7,6 +7,7 @@ export default {
     predictedData: [],
     correlationData: null,
     predictionFilter: {},
+    error: false,
   },
   mutations: {
     SET_PREDICTED_DATA(state, payload) {
@@ -23,6 +24,9 @@ export default {
 
     SET_IS_LOADING(state, payload) {
       state.isLoading = payload;
+    },
+    SET_ERROR(state, payload) {
+      state.error = payload;
     },
   },
   getters: {
@@ -71,18 +75,24 @@ export default {
   actions: {
     prediction__GetPredictedData({ state, commit }, payload = {}) {
       commit('SET_IS_LOADING', true);
+      commit('SET_ERROR', false);
+
       return new Promise((resolve, reject) => {
         axios2
-          .post(`${PREDICTION_API_URL}/prediction/`, payload)
+          .post(`${PREDICTION_API_URL}/prediction/`, payload, {
+            timeout: 300000,
+          })
           .then(({ data }) => {
             commit('SET_PREDICTED_DATA', data.response);
             commit('SET_CORRELATION_DATA', data.correlation);
             commit('SET_PREDICTION_FILTER', payload);
             commit('SET_IS_LOADING', false);
+            commit('SET_ERROR', false);
             resolve(data);
           })
           .catch((response) => {
             commit('SET_IS_LOADING', false);
+            commit('SET_ERROR', true);
             reject(response);
           });
       });
