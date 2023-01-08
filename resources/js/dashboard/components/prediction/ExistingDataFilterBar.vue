@@ -245,18 +245,15 @@ export default {
   watch: {
     hasPredictionError(error) {
       if (error) {
-        this.$bvModal.msgBoxOk(
-          "Une erreur est survenu pendant l'operation veillez ressayer s'il vous plait.",
-          {
-            title: "L'operation a échoué",
-            size: 'sm',
-            buttonSize: 'sm',
-            okVariant: 'success',
-            headerClass: 'p-2 pl-3',
-            footerClass: 'p-2 border-top-0',
-            centered: true,
-          }
-        );
+        this.$bvModal.msgBoxOk(error, {
+          title: "L'operation a échoué",
+          size: 'sm',
+          buttonSize: 'sm',
+          okVariant: 'danger',
+          headerClass: 'p-2 pl-3 text-danger',
+          footerClass: 'p-2 border-top-0',
+          centered: true,
+        });
       }
     },
     selectedForm(v) {

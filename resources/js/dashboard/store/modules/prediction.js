@@ -73,29 +73,45 @@ export default {
     },
   },
   actions: {
-    prediction__GetPredictedData({ state, commit }, payload = {}) {
-      commit('SET_IS_LOADING', true);
-      commit('SET_ERROR', false);
-
-      return new Promise((resolve, reject) => {
-        axios2
-          .post(`${PREDICTION_API_URL}/prediction/`, payload, {
-            timeout: 300000,
-          })
-          .then(({ data }) => {
-            commit('SET_PREDICTED_DATA', data.response);
-            commit('SET_CORRELATION_DATA', data.correlation);
-            commit('SET_PREDICTION_FILTER', payload);
-            commit('SET_IS_LOADING', false);
-            commit('SET_ERROR', false);
-            resolve(data);
-          })
-          .catch((response) => {
-            commit('SET_IS_LOADING', false);
-            commit('SET_ERROR', true);
-            reject(response);
-          });
-      });
+    prediction__GetPredictedData(action, payload = {}) {
+      return requestAction('prediction/', action, payload);
+    },
+    prediction__RecalculatePredictedData(action, payload = {}) {
+      return requestAction('recompute/', action, payload);
     },
   },
 };
+
+async function requestAction(url, { state, commit }, payload = {}) {
+  commit('SET_IS_LOADING', true);
+  commit('SET_ERROR', false);
+
+  return new Promise((resolve, reject) => {
+    axios2
+      .post(`${PREDICTION_API_URL}/${url}`, payload, {
+        timeout: 300000,
+      })
+      .then(({ data }) => {
+        commit('SET_PREDICTED_DATA', data.response);
+        commit('SET_CORRELATION_DATA', data.correlation);
+        commit('SET_PREDICTION_FILTER', payload);
+        commit('SET_IS_LOADING', false);
+        commit('SET_ERROR', false);
+        resolve(data);
+      })
+      .catch((error) => {
+        commit('SET_IS_LOADING', false);
+
+        if (error.response?.data?.message) {
+          commit('SET_ERROR', error.response?.data?.message);
+        } else {
+          commit(
+            'SET_ERROR',
+            "Une erreur est survenu pendant l'opération veuillez ressayer s'il vous plaît."
+          );
+        }
+
+        reject(error);
+      });
+  });
+}

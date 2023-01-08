@@ -308,7 +308,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['prediction__GetPredictedData']),
+    ...mapActions(['prediction__RecalculatePredictedData']),
     ...mapGetters(['prediction__GetFormattedData']),
     handleResetAll() {
       this.$bvModal
@@ -423,9 +423,9 @@ export default {
       const predictionFilter = {
         ...this.predictionFilter,
         changed_observations: changedObservations,
+        old_response: this.predictedData,
       };
-      console.log('predictionFilter', predictionFilter);
-      await this.prediction__GetPredictedData(predictionFilter);
+      await this.prediction__RecalculatePredictedData(predictionFilter);
     },
   },
 };
