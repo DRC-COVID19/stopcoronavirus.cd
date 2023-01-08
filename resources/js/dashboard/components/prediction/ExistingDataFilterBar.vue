@@ -173,16 +173,17 @@
               <span class="fa fa-times"></span>
             </b-button>
 
-            <b-spinner variant="primary" v-if="isPredictionLoading"></b-spinner>
-
             <b-button
-              v-else
               size="sm"
               @click="handleLaunchPrediction"
-              class="btn btn-dash-blue btn-secondary predict-btn"
+              class="btn btn-dash-blue btn-secondary predict-btn main"
               :disabled="!canMakePrediction"
             >
-              Lancer la prediction
+              <SpinnerGrowing
+                v-if="isPredictionLoading || isFormLoading || isLoading"
+                message="En cours..."
+              />
+              <span v-else>Lancer la prediction</span>
             </b-button>
           </div>
         </b-col>
@@ -214,6 +215,7 @@ export default {
   computed: {
     ...mapState({
       formFields: (state) => state.formField.formFields,
+      isFormLoading: (state) => state.form.isLoading,
       isPredictionLoading: (state) => state.prediction.isLoading,
       hasPredictionError: (state) => state.prediction.error,
     }),
@@ -243,10 +245,29 @@ export default {
     this.getForms();
   },
   watch: {
+    isPredictionLoading(value) {
+      if (value === true) {
+        this.$bvToast.toast(
+          "Veuillez attendre, puisque l'opération peut prendre plusieurs minutes.",
+          {
+            title: `Calcul en cours...`,
+            variant: 'info',
+            toaster: 'b-toaster-bottom-right',
+            // autoHideDelay: 60000,
+            noAutoHide: true,
+            appendToast: true,
+            solid: true,
+          }
+        );
+      } else {
+        this.$bvToast.hide();
+      }
+    },
+
     hasPredictionError(error) {
       if (error) {
         this.$bvModal.msgBoxOk(error, {
-          title: "L'operation a échoué",
+          title: "Échec de l'opération.",
           size: 'sm',
           buttonSize: 'sm',
           okVariant: 'danger',
@@ -323,7 +344,7 @@ export default {
       if (!value) return;
       this.isLoading = true;
       const selectedFormId = { form_id: value?.id };
-      this.getFormFields(selectedFormId);
+      await this.getFormFields(selectedFormId);
       this.availableDateRange = await this.getAllDateRange(selectedFormId);
       this.observationDateRange = this.availableDateRange;
       this.isLoading = false;
@@ -364,6 +385,10 @@ export default {
   font-size: 13px;
   height: 40px !important;
 }
+.predict-btn.main {
+  min-width: 134px;
+}
+
 .date-range-picker-input {
   font-size: 12px !important;
   height: 40px !important;

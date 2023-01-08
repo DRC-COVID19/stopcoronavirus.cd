@@ -22,7 +22,7 @@ export default {
       state.predictionFilter = payload;
     },
 
-    SET_IS_LOADING(state, payload) {
+    SET_IS_PREDICTION_LOADING(state, payload) {
       state.isLoading = payload;
     },
     SET_ERROR(state, payload) {
@@ -83,10 +83,9 @@ export default {
 };
 
 async function requestAction(url, { state, commit }, payload = {}) {
-  commit('SET_IS_LOADING', true);
-  commit('SET_ERROR', false);
-
   return new Promise((resolve, reject) => {
+    commit('SET_IS_PREDICTION_LOADING', true);
+    commit('SET_ERROR', false);
     axios2
       .post(`${PREDICTION_API_URL}/${url}`, payload, {
         timeout: 300000,
@@ -95,13 +94,13 @@ async function requestAction(url, { state, commit }, payload = {}) {
         commit('SET_PREDICTED_DATA', data.response);
         commit('SET_CORRELATION_DATA', data.correlation);
         commit('SET_PREDICTION_FILTER', payload);
-        commit('SET_IS_LOADING', false);
+        commit('SET_IS_PREDICTION_LOADING', false);
         commit('SET_ERROR', false);
         resolve(data);
       })
       .catch((error) => {
-        commit('SET_IS_LOADING', false);
-
+        commit('SET_IS_PREDICTION_LOADING', false);
+        console.log('rr', error.response);
         if (error.response?.data?.message) {
           commit('SET_ERROR', error.response?.data?.message);
         } else {
